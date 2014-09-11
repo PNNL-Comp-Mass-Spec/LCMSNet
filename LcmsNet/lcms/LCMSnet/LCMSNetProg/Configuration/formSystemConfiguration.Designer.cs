@@ -38,6 +38,10 @@
             this.comboBoxAvailInstruments = new System.Windows.Forms.ComboBox();
             this.mgroupBox_instrument = new System.Windows.Forms.GroupBox();
             this.mgroupBox_cart = new System.Windows.Forms.GroupBox();
+            this.mcontrol_columnTwo = new LcmsNet.Configuration.controlColumn();
+            this.mcontrol_columnOne = new LcmsNet.Configuration.controlColumn();
+            this.mcontrol_columnFour = new LcmsNet.Configuration.controlColumn();
+            this.mcontrol_columnThree = new LcmsNet.Configuration.controlColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mbutton_acceptOperator = new System.Windows.Forms.Button();
             this.mcombo_Operator = new System.Windows.Forms.ComboBox();
@@ -47,18 +51,16 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboTimeZone = new System.Windows.Forms.ComboBox();
             this.txtPdfPath = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.comboTimeZone = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.mcontrol_columnTwo = new LcmsNet.Configuration.controlColumn();
-            this.mcontrol_columnOne = new LcmsNet.Configuration.controlColumn();
-            this.mcontrol_columnFour = new LcmsNet.Configuration.controlColumn();
-            this.mcontrol_columnThree = new LcmsNet.Configuration.controlColumn();
+            this.comboDmsTools = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.mgroupBox_instrument.SuspendLayout();
             this.mgroupBox_cart.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -182,6 +184,46 @@
             this.mgroupBox_cart.TabStop = false;
             this.mgroupBox_cart.Text = "LC-Cart";
             // 
+            // mcontrol_columnTwo
+            // 
+            this.mcontrol_columnTwo.ColumnData = null;
+            this.mcontrol_columnTwo.ColumnID = 2;
+            this.mcontrol_columnTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnTwo.Location = new System.Drawing.Point(432, 87);
+            this.mcontrol_columnTwo.Name = "mcontrol_columnTwo";
+            this.mcontrol_columnTwo.Size = new System.Drawing.Size(314, 81);
+            this.mcontrol_columnTwo.TabIndex = 12;
+            // 
+            // mcontrol_columnOne
+            // 
+            this.mcontrol_columnOne.ColumnData = null;
+            this.mcontrol_columnOne.ColumnID = 1;
+            this.mcontrol_columnOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnOne.Location = new System.Drawing.Point(6, 87);
+            this.mcontrol_columnOne.Name = "mcontrol_columnOne";
+            this.mcontrol_columnOne.Size = new System.Drawing.Size(354, 81);
+            this.mcontrol_columnOne.TabIndex = 0;
+            // 
+            // mcontrol_columnFour
+            // 
+            this.mcontrol_columnFour.ColumnData = null;
+            this.mcontrol_columnFour.ColumnID = 4;
+            this.mcontrol_columnFour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnFour.Location = new System.Drawing.Point(423, 174);
+            this.mcontrol_columnFour.Name = "mcontrol_columnFour";
+            this.mcontrol_columnFour.Size = new System.Drawing.Size(323, 63);
+            this.mcontrol_columnFour.TabIndex = 16;
+            // 
+            // mcontrol_columnThree
+            // 
+            this.mcontrol_columnThree.ColumnData = null;
+            this.mcontrol_columnThree.ColumnID = 3;
+            this.mcontrol_columnThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnThree.Location = new System.Drawing.Point(6, 174);
+            this.mcontrol_columnThree.Name = "mcontrol_columnThree";
+            this.mcontrol_columnThree.Size = new System.Drawing.Size(354, 69);
+            this.mcontrol_columnThree.TabIndex = 14;
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -290,6 +332,24 @@
             this.tabPage1.Text = "LC Cart";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(386, 351);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 20);
+            this.label6.TabIndex = 45;
+            this.label6.Text = "Time Zone:";
+            // 
+            // comboTimeZone
+            // 
+            this.comboTimeZone.FormattingEnabled = true;
+            this.comboTimeZone.Location = new System.Drawing.Point(480, 347);
+            this.comboTimeZone.Name = "comboTimeZone";
+            this.comboTimeZone.Size = new System.Drawing.Size(242, 28);
+            this.comboTimeZone.TabIndex = 44;
+            this.comboTimeZone.SelectedValueChanged += new System.EventHandler(this.comboTimeZone_SelectedValueChanged);
+            // 
             // txtPdfPath
             // 
             this.txtPdfPath.Enabled = false;
@@ -342,6 +402,8 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label7);
+            this.tabPage3.Controls.Add(this.comboDmsTools);
             this.tabPage3.Controls.Add(this.mgroupBox_autoUploads);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
@@ -350,63 +412,23 @@
             this.tabPage3.Text = "DMS";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // comboTimeZone
+            // comboDmsTools
             // 
-            this.comboTimeZone.FormattingEnabled = true;
-            this.comboTimeZone.Location = new System.Drawing.Point(480, 347);
-            this.comboTimeZone.Name = "comboTimeZone";
-            this.comboTimeZone.Size = new System.Drawing.Size(242, 28);
-            this.comboTimeZone.TabIndex = 44;
-            this.comboTimeZone.SelectedValueChanged += new System.EventHandler(this.comboTimeZone_SelectedValueChanged);
+            this.comboDmsTools.FormattingEnabled = true;
+            this.comboDmsTools.Location = new System.Drawing.Point(104, 163);
+            this.comboDmsTools.Name = "comboDmsTools";
+            this.comboDmsTools.Size = new System.Drawing.Size(265, 28);
+            this.comboDmsTools.TabIndex = 40;
+            this.comboDmsTools.SelectedIndexChanged += new System.EventHandler(this.comboDmsTools_SelectedIndexChanged);
             // 
-            // label6
+            // label7
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(386, 351);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 20);
-            this.label6.TabIndex = 45;
-            this.label6.Text = "Time Zone:";
-            // 
-            // mcontrol_columnTwo
-            // 
-            this.mcontrol_columnTwo.ColumnData = null;
-            this.mcontrol_columnTwo.ColumnID = 2;
-            this.mcontrol_columnTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnTwo.Location = new System.Drawing.Point(432, 87);
-            this.mcontrol_columnTwo.Name = "mcontrol_columnTwo";
-            this.mcontrol_columnTwo.Size = new System.Drawing.Size(314, 81);
-            this.mcontrol_columnTwo.TabIndex = 12;
-            // 
-            // mcontrol_columnOne
-            // 
-            this.mcontrol_columnOne.ColumnData = null;
-            this.mcontrol_columnOne.ColumnID = 1;
-            this.mcontrol_columnOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnOne.Location = new System.Drawing.Point(6, 87);
-            this.mcontrol_columnOne.Name = "mcontrol_columnOne";
-            this.mcontrol_columnOne.Size = new System.Drawing.Size(354, 81);
-            this.mcontrol_columnOne.TabIndex = 0;
-            // 
-            // mcontrol_columnFour
-            // 
-            this.mcontrol_columnFour.ColumnData = null;
-            this.mcontrol_columnFour.ColumnID = 4;
-            this.mcontrol_columnFour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnFour.Location = new System.Drawing.Point(423, 174);
-            this.mcontrol_columnFour.Name = "mcontrol_columnFour";
-            this.mcontrol_columnFour.Size = new System.Drawing.Size(323, 63);
-            this.mcontrol_columnFour.TabIndex = 16;
-            // 
-            // mcontrol_columnThree
-            // 
-            this.mcontrol_columnThree.ColumnData = null;
-            this.mcontrol_columnThree.ColumnID = 3;
-            this.mcontrol_columnThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnThree.Location = new System.Drawing.Point(6, 174);
-            this.mcontrol_columnThree.Name = "mcontrol_columnThree";
-            this.mcontrol_columnThree.Size = new System.Drawing.Size(354, 69);
-            this.mcontrol_columnThree.TabIndex = 14;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(15, 166);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(83, 20);
+            this.label7.TabIndex = 41;
+            this.label7.Text = "DMS Tool:";
             // 
             // formSystemConfiguration
             // 
@@ -434,6 +456,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -471,5 +494,7 @@
           private System.Windows.Forms.Label label5;
           private System.Windows.Forms.Label label6;
           private System.Windows.Forms.ComboBox comboTimeZone;
+          private System.Windows.Forms.Label label7;
+          private System.Windows.Forms.ComboBox comboDmsTools;
     }
 }

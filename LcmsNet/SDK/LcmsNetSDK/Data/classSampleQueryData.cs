@@ -13,7 +13,7 @@ using System;
 using System.Collections.Specialized;
 using System.Text;
 
-namespace LcmsNetDmsTools
+namespace LcmsNetDataClasses
 {
 	public class classSampleQueryData
 	{

@@ -11,7 +11,7 @@
 //*********************************************************************************************************
 using System;
 
-namespace LcmsNetDmsTools
+namespace LcmsNetSQLiteTools
 {
 	public class classDatabaseStoredProcException : Exception
 	{

@@ -63,6 +63,11 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             panel2.SendToBack();
+            if(classLCMSSettings.GetParameter("DMSTool") == string.Empty)
+            {
+                mbutton_addDMS.Visible = false;
+                mbutton_dmsEdit.Visible = false;
+            }
 
         }
         /// <summary>
@@ -89,6 +94,21 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             panel2.SendToBack();
+            if (classLCMSSettings.GetParameter("DMSTool") == string.Empty)
+            {
+                mbutton_addDMS.Visible = false;
+                mbutton_dmsEdit.Visible = false;
+            }
+            classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
+        }
+
+        void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
+        {
+            if(e.SettingName == "DMSTool" && e.SettingValue != string.Empty)
+            {
+                mbutton_addDMS.Visible = true;
+                mbutton_dmsEdit.Visible = true;
+            }
         }
         #endregion
 
@@ -600,7 +620,7 @@ namespace LcmsNet.SampleQueue.Forms
         private void m_selector_Load(object sender, EventArgs e)
         {
 
-        }
+        }       
 
     }
 }

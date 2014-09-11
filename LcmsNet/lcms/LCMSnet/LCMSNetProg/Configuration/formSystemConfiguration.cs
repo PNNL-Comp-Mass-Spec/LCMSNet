@@ -1,13 +1,14 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche, Christopher Walters for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2010, Battelle Memorial Institute
 // Created 07/23/2010
 //
-// Last modified 07/23/2010
+// Last modified 9/11/2014 
 //						08/20/2010 (DAC) - Modified to save config settings during program shutdown
 //						08/31/2010 (DAC) - Changes resulting from move to LcmsNet namespace
 //						09/01/2010 (DAC) - Modified to allow operator reload of column names
+//                      09/11/2014 (CJW) - Modified to use new classDMSToolsManager
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 
 using LcmsNetSQLiteTools;
-using LcmsNetDmsTools;
+using LcmsNetSDK;
 
 namespace LcmsNet.Configuration
 {
@@ -142,6 +143,21 @@ namespace LcmsNet.Configuration
             }
 
             comboTimeZone.SelectedIndex = comboTimeZone.FindStringExact(classLCMSSettings.GetParameter("TimeZone"));
+
+            //load dms tools into combobox
+            comboDmsTools.Items.AddRange(classDMSToolsManager.Instance.ListTools().ToArray());
+            try
+            {
+                comboDmsTools.SelectedIndex = comboDmsTools.Items.IndexOf(classLCMSSettings.GetParameter("DMSTool"));
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to select last selected Dms tool" + ex.Message);
+                if (comboDmsTools.Items.Count > 0)
+                {
+                    comboDmsTools.SelectedIndex = 0;
+                }
+            }
 		}
  
         void RegisterColumn(controlColumn column)
@@ -347,10 +363,18 @@ namespace LcmsNet.Configuration
                 classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter("SeparationType"));
 			}	
 		private void mbutton_Reload_Click(object sender, EventArgs e)
-			{
-				// Get a fresh list of columns from DMS and store it in the cache db
-				classDBTools.GetColumnListFromDMS();
-
+        {
+				// Get a fresh list of columns from DMS and store it in the cache db          
+                try
+                {
+                    classDMSToolsManager.Instance.SelectedTool.GetColumnListFromDMS();
+                }
+                catch(Exception ex)
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
+                }
+            
+                
 				// Get the new list of columns from the cache db
 				List<string> columnList = classSQLiteTools.GetColumnList(true);
 
@@ -377,7 +401,8 @@ namespace LcmsNet.Configuration
 				mcontrol_columnFour.ColumnNames     = columnList;
 
 				classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Column name lists updated");
-			}	
+		}
+	
 		private void buttonAccept_Click(object sender, EventArgs e)
         {
             if (!m_isLoading)
@@ -451,6 +476,24 @@ namespace LcmsNet.Configuration
         private void comboTimeZone_SelectedValueChanged(object sender, EventArgs e)
         {
             classLCMSSettings.SetParameter("TimeZone", comboTimeZone.SelectedItem.ToString());
+        }
+
+        private void comboDmsTools_SelectedIndexChanged(object sender, EventArgs e)
+        {            
+            ComboBox comboDmsTools = sender as ComboBox;
+            string selectedTool = comboDmsTools.Items[comboDmsTools.SelectedIndex].ToString();
+            string[] toolInfo = selectedTool.Split(new char[] { '-' });            
+            try
+            {
+                classDMSToolsManager.Instance.SelectTool(toolInfo[0], toolInfo[1]);
+                classLCMSSettings.SetParameter("DMSTool", selectedTool);
+            }
+            catch(Exception ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to select dms tool: " + ex.Message);
+            }
+            
+
         }
        
 

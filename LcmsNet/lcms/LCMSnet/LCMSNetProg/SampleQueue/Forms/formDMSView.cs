@@ -1,17 +1,17 @@
 ﻿
 //*********************************************************************************************************
-// Written by Dave Clark for the US Department of Energy 
+// Written by Dave Clark, Christopher Walters for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/08/2009
 //
-// Last modified 01/22/2009
+// Last modified 09/11/2014
 //						- 02/04/2009 (DAC) - Changed to use List<classSampleData> instead of classDMSData
 //						- 05/12/2009 (DAC) - Added handling of blocking and run order values
 //						- 08/11/2009 (DAC) - Added batch value
 //						- 02/18/2010 (DAC) - Added block value to sample query; restructured DMS sample query
 //						- 12/08/2010 (DAC) - Modified form caption to reflect DMS version in use
-//
+//                      - 09/11/2014 (CJW) - Modified to use new classDMSToolsManager
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Forms;
 using LcmsNetSQLiteTools;
-using LcmsNetDmsTools;
+using LcmsNetSDK;
 using LcmsNetDataClasses;
 using System.Runtime.Serialization;
 using System.Collections;
@@ -33,7 +33,6 @@ public partial class formDMSView : Form
 		//*********************************************************************************************************
 
 		#region "Class variables"
-			classDBTools mobj_DbTools;
 			List<classSampleData> mobj_DmsRequestList;
 			string mstring_MatchString;
 			string mstring_DMSConnStr;
@@ -202,9 +201,6 @@ public partial class formDMSView : Form
 			{
             FormClosing += new FormClosingEventHandler(formDMSView_FormClosing);
 
-				// Database tools
-				mobj_DbTools = new classDBTools();
-
 				// Form caption
 				string dbInUse;
 				if (Properties.Settings.Default.DMSVersion.Contains("_T3"))
@@ -354,7 +350,7 @@ public partial class formDMSView : Form
 				// Get a list of requests from DMS
 				try
 				{
-					tempRequestList = classDBTools.GetSamplesFromDMS(queryData);
+					tempRequestList = classDMSToolsManager.Instance.SelectedTool.GetSamplesFromDMS(queryData);
 				}
 				catch (classDatabaseConnectionStringException Ex)
 				{
@@ -617,7 +613,7 @@ public partial class formDMSView : Form
 				bool success = false;
 				try
 				{
-					success = classDBTools.UpdateDMSCartAssignment(reqIDs, mstring_CartName, true);
+					success = classDMSToolsManager.Instance.SelectedTool.UpdateDMSCartAssignment(reqIDs, mstring_CartName, true);
 				}	// End try
 				catch (classDatabaseConnectionStringException Ex)
 				{
@@ -645,7 +641,7 @@ public partial class formDMSView : Form
 
 				if (!success)
 				{
-					MessageBox.Show(classDBTools.ErrMsg, "LcmsNet", MessageBoxButtons.AbortRetryIgnore);
+					MessageBox.Show(classDMSToolsManager.Instance.SelectedTool.ErrMsg, "LcmsNet", MessageBoxButtons.AbortRetryIgnore);
 					return false;
 				}
 

@@ -5,7 +5,7 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-// Last modified 01/20/2009
+// Last modified 09/11/2014
 //						- 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
 //						- 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
 //						- 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<classSampleData>
@@ -24,7 +24,7 @@
 //						- 12/08/2010 (DAC) - Modified DMS connection string to use name/password authentication
 //						- 04/30/2013 (FCT) - Modified get carts sql command string to include "No_Cart" in the results.
 //						- 05/22/2014 (MEM) - Replace Select * with selection of specific columns
-//
+//                      - 09/11/2014 (CJW) - Modified to be an MEF Extension for lcmsnet
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -38,22 +38,24 @@ using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Data;
 using LcmsNetSQLiteTools;
-
+using System.ComponentModel.Composition;
 
 namespace LcmsNetDmsTools
 {
-    public class classDBTools
+    [Export(typeof(IDmsTools))]
+    [ExportMetadata("Name", "PrismDMSTools")]
+    public class classDBTools : LcmsNetDataClasses.IDmsTools
     {
         //*********************************************************************************************************
         // Class for interacting with DMS database
         //**********************************************************************************************************
 
         #region "Class variables"
-        static string mstring_ErrMsg = "";
+         string mstring_ErrMsg = "";
         #endregion
 
         #region "Properties"
-        public static string ErrMsg
+        public  string ErrMsg
         {
             get
             {
@@ -70,7 +72,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Constructor
         /// </summary>
-        static classDBTools()
+         classDBTools()
         {
         }
         #endregion
@@ -79,11 +81,11 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Loads all DMS data into cache
         /// </summary>
-        public static void LoadCacheFromDMS()
+        public void LoadCacheFromDMS()
         {
             LoadCacheFromDMS(true);
         }
-        public static void LoadCacheFromDMS(bool shouldLoadExperiment)
+        public void LoadCacheFromDMS(bool shouldLoadExperiment)
         {
             GetCartListFromDMS();
             GetSepTypeListFromDMS();
@@ -102,7 +104,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache
         /// </summary>
-        public static void GetCartListFromDMS()
+        public void GetCartListFromDMS()
         {
 
 
@@ -140,7 +142,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of LC columns from DMS and stores in the cache
         /// </summary>
-        public static void GetColumnListFromDMS()
+        public void GetColumnListFromDMS()
         {
             List<string> tmpColList = null;	// Temp list for holding return values
             string connStr = GetConnectionString();
@@ -171,7 +173,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        public static void GetEntireColumnListListFromDMS()
+        public void GetEntireColumnListListFromDMS()
         {
             string connStr = GetConnectionString();
             DataTable lcColumnTable;
@@ -224,7 +226,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of separation types from DMS and stores it in cache
         /// </summary>
-        public static void GetSepTypeListFromDMS()
+        public void GetSepTypeListFromDMS()
         {
             List<string> tmpRetVal;	// Temp list for holding separation types
             string connStr = GetConnectionString();
@@ -259,7 +261,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of dataset types from DMS ans stores it in cache
         /// </summary>
-        public static void GetDatasetTypeListFromDMS()
+        public void GetDatasetTypeListFromDMS()
         {
             List<string> tmpRetVal;	// Temp list for holding dataset types
             string connStr = GetConnectionString();
@@ -293,7 +295,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of active users from DMS and stores it in cache
         /// </summary>
-        public static void GetUserListFromDMS()
+        public void GetUserListFromDMS()
         {
             var tmpRetVal = new List<classUserInfo>();	// Temp list for holding user data
             string connStr = GetConnectionString();
@@ -338,7 +340,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        public static void GetExperimentListFromDMS()
+        public void GetExperimentListFromDMS()
         {
             string connStr = GetConnectionString();
             DataTable expTable;
@@ -393,7 +395,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        public static void GetProposalUsers()
+        public void GetProposalUsers()
         {
             string connStr = GetConnectionString();
             DataTable expTable;
@@ -479,7 +481,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of instruments from DMS
         /// </summary>
-        public static void GetInstrumentListFromDMS()
+        public void GetInstrumentListFromDMS()
         {
             var tmpRetVal = new List<classInstrumentInfo>();	// Temp list for holding instrument data
             string connStr = GetConnectionString();
@@ -526,7 +528,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of run requests from DMS
         /// </summary>
-        public static List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData)
+        public List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData)
         {
             var tmpReturnVal = new List<classSampleData>();	// Temp list for holding samples
             string connStr = GetConnectionString();
@@ -600,7 +602,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="FileIndxList">Comma-separated list of file indices needing data</param>
         /// <param name="fileData">List of file names and contents</param>
-        public static void GetMRMFilesFromDMS(string FileIndxList, ref List<classMRMFileData> fileData)
+        public void GetMRMFilesFromDMS(string FileIndxList, ref List<classMRMFileData> fileData)
         {
             DataTable dt;
             string sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + FileIndxList + ")";
@@ -639,7 +641,7 @@ namespace LcmsNetDmsTools
         /// <param name="MinID">Minimum request ID for MRM file search</param>
         /// <param name="MaxID"></param>
         /// <returns></returns>
-        public static Dictionary<int, int> GetMRMFileListFromDMS(int MinID, int MaxID)
+        public Dictionary<int, int> GetMRMFileListFromDMS(int MinID, int MaxID)
         {
             var retList = new Dictionary<int, int>();
 
@@ -677,7 +679,7 @@ namespace LcmsNetDmsTools
         /// Gets DMS connection sstring from config file
         /// </summary>
         /// <returns></returns>
-        private static string GetConnectionString()
+        private string GetConnectionString()
         {
             string retStr = "Data Source=gigasax;Initial Catalog="; //Base connection string
 
@@ -713,7 +715,7 @@ namespace LcmsNetDmsTools
         /// <param name="cartName">Name of cart to assign (ignored for removing aasignment)</param>
         /// <param name="updateMode">TRUE for updating assignment; FALSE to clear assignment</param>
         /// <returns>TRUE for success; FALSE for error</returns>
-        public static bool UpdateDMSCartAssignment(string requestList, string cartName, bool updateMode)
+        public bool UpdateDMSCartAssignment(string requestList, string cartName, bool updateMode)
         {
             string connStr = GetConnectionString();
             string returnMsg = "";
@@ -785,7 +787,7 @@ namespace LcmsNetDmsTools
         /// <param name="CmdStr">SQL command to execute</param>
         /// <param name="ConnStr">Database connection string</param>
         /// <returns>List containing the table's contents</returns>
-        private static List<string> GetSingleColumnTableFromDMS(string CmdStr, string ConnStr)
+        private List<string> GetSingleColumnTableFromDMS(string CmdStr, string ConnStr)
         {
             var retList = new List<string>();
             DataTable dbTable;
@@ -820,7 +822,7 @@ namespace LcmsNetDmsTools
         /// <param name="CmdStr">SQL command to retrieve table</param>
         /// <param name="ConnStr">DMS connection string</param>
         /// <returns>DataTable containing requested data</returns>
-        private static DataTable GetDataTable(string CmdStr, string ConnStr)
+        private DataTable GetDataTable(string CmdStr, string ConnStr)
         {
             var returnTable = new DataTable();
             using (var cn = new SqlConnection(ConnStr))
@@ -854,7 +856,7 @@ namespace LcmsNetDmsTools
         /// <param name="SpCmd">SQL command object containing SP parameters</param>
         /// <param name="ConnStr">Connection string</param>
         /// <returns>SP result code</returns>
-        private static int ExecuteSP(SqlCommand SpCmd, string ConnStr)
+        private int ExecuteSP(SqlCommand SpCmd, string ConnStr)
         {
             int resultCode = -9999;
             try
@@ -887,7 +889,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="inpStr">Input string</param>
         /// <returns>Integer position</returns>
-        private static int ConvertWellStringToInt(string inpStr)
+        private int ConvertWellStringToInt(string inpStr)
         {
             const string regexAlpha = @"^[a-hA-H]\d{1,2}$";
             const string regexNum = @"^\d{1,2}$";
@@ -948,7 +950,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="enPwd">Encoded password</param>
         /// <returns>Clear text password</returns>
-        private static string DecodePassword(string enPwd)
+        private string DecodePassword(string enPwd)
         {
             // Decrypts password received from ini file
             // Password was created by alternately subtracting or adding 1 to the ASCII value of each character
@@ -986,7 +988,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="InpObj">Object to convert</param>
         /// <returns>0 if null, otherwise integer version of InpObj</returns>
-        private static int DbCint(object InpObj)
+        private int DbCint(object InpObj)
         {            
             if (InpObj is DBNull)
             {

@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -60,9 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="classDMSToolsManager.cs" />
     <Compile Include="Data\classExperimentData.cs" />
     <Compile Include="Data\classLCColumn.cs" />
     <Compile Include="Data\classProposalUser.cs" />
+    <Compile Include="Data\classSampleQueryData.cs" />
     <Compile Include="Data\classTriggerFileTools.cs" />
     <Compile Include="Configuration\classColumnData.cs">
       <SubType>Code</SubType>
@@ -78,6 +81,8 @@
     <Compile Include="Data\classSampleData.cs" />
     <Compile Include="Data\classUserIDPIDCrossReferenceEntry.cs" />
     <Compile Include="Data\classUserInfo.cs" />
+    <Compile Include="Data\IDmsMetaData.cs" />
+    <Compile Include="Data\IDmsTools.cs" />
     <Compile Include="Data\IMethodWriter.cs" />
     <Compile Include="Data\MobilePhase.cs" />
     <Compile Include="Devices\classDeviceErrorEventArgs.cs" />

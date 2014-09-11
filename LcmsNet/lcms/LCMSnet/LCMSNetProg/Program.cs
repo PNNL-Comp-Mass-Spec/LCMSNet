@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using LcmsNetDataClasses;
 using LcmsNet.Configuration;
 using LcmsNetDataClasses.Configuration;
-using LcmsNetDmsTools;
+using LcmsNetSDK;
 using LcmsNetSQLiteTools;
 using LcmsNet.Method;
 using LcmsNet.Devices;
@@ -366,8 +366,15 @@ namespace LcmsNet
 				else classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
 
 				classApplicationLogger.LogMessage(-1, "Loading DMS data");
-				Application.DoEvents();				
-				classDBTools.LoadCacheFromDMS(false);
+				Application.DoEvents();
+                try
+                {
+                    classDMSToolsManager.Instance.SelectedTool.LoadCacheFromDMS(false);
+                }
+                catch(Exception ex)
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to load cache from DMS: " + ex.Message);
+                }
 
 				///
 				/// Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
@@ -430,6 +437,7 @@ namespace LcmsNet
                   Properties.Settings.Default.MinimumVolume         = classLCMSSettings.GetParameter("MinimumVolume");
                   Properties.Settings.Default.SeparationType        = classLCMSSettings.GetParameter("SeparationType");
                   Properties.Settings.Default.TimeZone              = classLCMSSettings.GetParameter("TimeZone");
+                  Properties.Settings.Default.DMSTool               = classLCMSSettings.GetParameter("DMSTool");
 				  Properties.Settings.Default.Save();
 
 				  classFileLogging.LogMessage(0, new classMessageLoggerArgs("---------------------------------------"));
