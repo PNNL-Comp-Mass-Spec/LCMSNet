@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{02E87DA8-7DD5-46BA-9344-B98408E2CF43}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ASUTGen</RootNamespace>
+    <AssemblyName>ASUTGen</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
+    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ExternalRelease|x86' ">
+    <OutputPath>bin\x86\ExternalRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLReleaseInstall|x86' ">
+    <OutputPath>bin\x86\PNNLReleaseInstall\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ExternalReleaseInstall|x86' ">
+    <OutputPath>bin\x86\ExternalReleaseInstall\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Buzzard WPF|x86'">
+    <OutputPath>bin\x86\Buzzard WPF\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'fluidicsrelease|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\fluidicsrelease\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Finch">
+      <HintPath>..\..\..\..\lib\Plugins\Finch.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\LcmsNetSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Devices\Detectors\UVDetector.cs" />
+    <Compile Include="Devices\Detectors\UVDetectorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Detectors\UVDetectorControl.Designer.cs">
+      <DependentUpon>UVDetectorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\ExternalMessageBuilder.cs" />
+    <Compile Include="Devices\Filtration\FilterChanger.cs" />
+    <Compile Include="Devices\Filtration\FilterChangerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Filtration\FilterChangerControl.Designer.cs">
+      <DependentUpon>FilterChangerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Modules\IDEXValvePumpModule.cs" />
+    <Compile Include="Devices\Modules\IDEXValvePumpModuleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Modules\IDEXValvePumpModuleControl.Designer.cs">
+      <DependentUpon>IDEXValvePumpModuleControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Pumps\IDEXPump.cs" />
+    <Compile Include="Devices\Pumps\IDEXPumpControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Pumps\IDEXPumpControl.Designer.cs">
+      <DependentUpon>IDEXPumpControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Valves\IDEXValveControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Valves\IDEXValveControl.Designer.cs">
+      <DependentUpon>IDEXValveControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Valves\IDEXValve.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Devices\Detectors\UVDetectorControl.resx">
+      <DependentUpon>UVDetectorControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Filtration\FilterChangerControl.resx">
+      <DependentUpon>FilterChangerControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Modules\IDEXValvePumpModuleControl.resx">
+      <DependentUpon>IDEXValvePumpModuleControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Pumps\IDEXPumpControl.resx">
+      <DependentUpon>IDEXPumpControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Valves\IDEXValveControl.resx">
+      <DependentUpon>IDEXValveControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>REM copy $(TargetPath) "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

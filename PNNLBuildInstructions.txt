@@ -1,0 +1,16 @@
+PNNL Internal Build Instructions:
+To build a fully functional and up-to-date LcmsNet use:
+Note: Build all solutions using the PNNLRelease configuration.
+1.      Build the SDK solution in \LcmsNet\SDK
+
+2.      Build the SQLiteTools solution in \LcmsNet\SQLiteTools
+
+3.      Build the plugin solution in \lcmsnetPlugins
+
+4.      Build the DMS solution in \LcmsNetDmsTools
+
+5.      Build LcmsNet main solution in \LcmsNet\lcms\LCMSnet
+
+6debug. Copy Files from \InternalLibs into the output directory of the main solution. Copy files from \pluginDLLs into the \Plugins directory of the output directory of the main solution.
+
+6deploy. Run LCMSNet_X86-pnnl.iss installer script in the \Installer directory to generate the install file. Inno Setup will be necessary.

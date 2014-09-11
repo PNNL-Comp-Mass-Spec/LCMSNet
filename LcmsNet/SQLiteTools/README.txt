@@ -1,0 +1,1 @@
+To build a deployment-ready library, build the PNNLRelease configuration, which will copy the .dll file to the \lib directory.

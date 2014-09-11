@@ -1,0 +1,1524 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Agilent.Licop</name>
+    </assembly>
+    <members>
+        <member name="M:Agilent.Licop.FileLogger.SetPath(Agilent.Licop.LogCategory,System.String)">
+            <summary>
+            Sets the path for the specified category.
+            Must be set before the first log entry is added.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.FileLogger.SetLevel(Agilent.Licop.LogCategory,Agilent.Licop.LogLevel)">
+            <summary>
+            Sets the level for the specified category.
+            Can be changed at any time.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.FileLogger.IsActive(Agilent.Licop.LogCategory,Agilent.Licop.LogLevel)">
+            <summary>
+            Returns true if the specified level was activated for the given category.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.Messages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ChannelCloseFailed">
+            <summary>
+              Looks up a localized string similar to Could not close channel {0}:{1} (0x{2:X4}). {3}.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ChannelDataFailed">
+            <summary>
+              Looks up a localized string similar to The DataReceived event of channel {0}:{1} threw an exception and was disabled..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ChannelOpenFailed">
+            <summary>
+              Looks up a localized string similar to Could not open channel {0}:{1}. {2}.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectError">
+            <summary>
+              Looks up a localized string similar to Could not connect..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectErrorAlreadyConnected">
+            <summary>
+              Looks up a localized string similar to A connection to the instrument has already been established..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectErrorInitFailed">
+            <summary>
+              Looks up a localized string similar to The instrument could not be initialized..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectErrorInvalidAddress">
+            <summary>
+              Looks up a localized string similar to The address to connect to is invalid..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectErrorNoConfiguration">
+            <summary>
+              Looks up a localized string similar to The instrument configuration could not be read..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectErrorNotReady">
+            <summary>
+              Looks up a localized string similar to The instrument is not ready to accept a connection..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ConnectErrorTimeout">
+            <summary>
+              Looks up a localized string similar to The attempt to connect timed out..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.Error">
+            <summary>
+              Looks up a localized string similar to Unspecified error..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorBufferTooShort">
+            <summary>
+              Looks up a localized string similar to The buffer is too short to hold the message..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorCouldNotConnectCu">
+            <summary>
+              Looks up a localized string similar to The channel is already open and cannot be opened another time -or- there is not enough memory available to open the channel..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorLastCu">
+            <summary>
+              Looks up a localized string similar to There is no next channel..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorLastModule">
+            <summary>
+              Looks up a localized string similar to There is no next module..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorNoCuRegistered">
+            <summary>
+              Looks up a localized string similar to The module has no channels registered..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorNoNewSocket">
+            <summary>
+              Looks up a localized string similar to There are no more free sockets to be associated with the channel..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorSocketFailed">
+            <summary>
+              Looks up a localized string similar to The message could not be delivered..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorUnknownCommand">
+            <summary>
+              Looks up a localized string similar to The command is unknown..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorUnknownCu">
+            <summary>
+              Looks up a localized string similar to The channel is unknown..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorUnknownModule">
+            <summary>
+              Looks up a localized string similar to The module is unknown..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorWrongFormat">
+            <summary>
+              Looks up a localized string similar to The format of the message is invalid..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ErrorWrongSocket">
+            <summary>
+              Looks up a localized string similar to The destination of the message is invalid..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.Event">
+            <summary>
+              Looks up a localized string similar to Unspecified event..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.EventConfigChange">
+            <summary>
+              Looks up a localized string similar to The instrument configuration has changed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.EventNoBuffers">
+            <summary>
+              Looks up a localized string similar to The channel has no more free buffers..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.EventOverflow">
+            <summary>
+              Looks up a localized string similar to There are too many messages pending..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.EventSocketFailed">
+            <summary>
+              Looks up a localized string similar to The message could not be delivered..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.EventWrongSocket">
+            <summary>
+              Looks up a localized string similar to The destination of the message is invalid..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.InstrumentConfigChangeFailed">
+            <summary>
+              Looks up a localized string similar to The ConfigurationChanged event of the instrument threw an exception.  The connection will be closed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.InstrumentDisconnected">
+            <summary>
+              Looks up a localized string similar to The connection to the instrument has been closed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.InstrumentErrorOccurredFailed">
+            <summary>
+              Looks up a localized string similar to The ErrorOccurred event of the instrument threw an exception. The connection will be closed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.InstrumentNotConnected">
+            <summary>
+              Looks up a localized string similar to There is no connection to the instrument established..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.InstrumentTimeout">
+            <summary>
+              Looks up a localized string similar to The connection to the instrument timed out..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.MessageInvalidSend">
+            <summary>
+              Looks up a localized string similar to The message to send is invalid..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.MessageLengthLimit">
+            <summary>
+              Looks up a localized string similar to The length of the received message exceeds the limit..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.MessageReceived">
+            <summary>
+              Looks up a localized string similar to Received {0} bytes..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.MessageSent">
+            <summary>
+              Looks up a localized string similar to Sent {0} bytes..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.MessageUnexpectedReply">
+            <summary>
+              Looks up a localized string similar to The received reply is unexpected..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ModuleRemoved">
+            <summary>
+              Looks up a localized string similar to The specified module has been removed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenError">
+            <summary>
+              Looks up a localized string similar to The channel could not be opened..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorChannelNotInstalled">
+            <summary>
+              Looks up a localized string similar to The channel is already open and cannot be opened another time -or- there is not enough memory available to open the channel..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorDisconnected">
+            <summary>
+              Looks up a localized string similar to The connection to the instrument has been closed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorInvalidFormat">
+            <summary>
+              Looks up a localized string similar to The format of the message is invalid..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorModuleRemoved">
+            <summary>
+              Looks up a localized string similar to The module which the channel belongs to has been removed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorNoChannelsRegistered">
+            <summary>
+              Looks up a localized string similar to The module has no channels registered..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorNoNewSocket">
+            <summary>
+              Looks up a localized string similar to There are no more free sockets to be associated with the channel..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorTimeout">
+            <summary>
+              Looks up a localized string similar to The attempt to open the channel timed out..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorUnknownChannel">
+            <summary>
+              Looks up a localized string similar to The channel is unknown..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorUnknownModule">
+            <summary>
+              Looks up a localized string similar to The module is unknown..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.OpenErrorUnspecified">
+            <summary>
+              Looks up a localized string similar to Unspecified Error..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterEmpty">
+            <summary>
+              Looks up a localized string similar to The parameter is an empty string..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterLengthLimit">
+            <summary>
+              Looks up a localized string similar to The length of the parameter exceeds the limit..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterLengthZero">
+            <summary>
+              Looks up a localized string similar to The length of the parameter is zero..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterNegative">
+            <summary>
+              Looks up a localized string similar to The parameter is negative..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterNoChannel">
+            <summary>
+              Looks up a localized string similar to The parameter does not represent an available channel..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterNoModule">
+            <summary>
+              Looks up a localized string similar to The parameter does not represent an available module..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ParameterNull">
+            <summary>
+              Looks up a localized string similar to The parameter is null..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadError">
+            <summary>
+              Looks up a localized string similar to The message could not be received..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorCannotRead">
+            <summary>
+              Looks up a localized string similar to The channel does not support reading..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorChannelNotOpen">
+            <summary>
+              Looks up a localized string similar to The channel has not been opened before reading..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorDisconnected">
+            <summary>
+              Looks up a localized string similar to The connection to the instrument has been closed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorInvalidFormat">
+            <summary>
+              Looks up a localized string similar to The channel data does not have the expected format..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorInvalidMode">
+            <summary>
+              Looks up a localized string similar to The channel was not opened in polling mode..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorModuleRemoved">
+            <summary>
+              Looks up a localized string similar to The module which the channel belongs to has been removed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.ReadErrorTimeout">
+            <summary>
+              Looks up a localized string similar to The attemt to read from the channel timed out..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteError">
+            <summary>
+              Looks up a localized string similar to The message could not be sent..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteErrorCannotWrite">
+            <summary>
+              Looks up a localized string similar to The channel does not support writing..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteErrorChannelNotOpen">
+            <summary>
+              Looks up a localized string similar to The channel has not been opened before writing..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteErrorDisconnected">
+            <summary>
+              Looks up a localized string similar to The connection to the instrument has been closed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteErrorInvalidFormat">
+            <summary>
+              Looks up a localized string similar to The channel data does not have the expected format..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteErrorModuleRemoved">
+            <summary>
+              Looks up a localized string similar to The module which the channel belongs to has been removed..
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Messages.WriteErrorTimeout">
+            <summary>
+              Looks up a localized string similar to The attemt to write to the channel timed out..
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ProtocolException">
+            <summary>
+            The exception that is thrown when an error occurs while handling the communication protocol.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ProtocolException.#ctor">
+            <summary>
+            Creates a new instance of the ProtocolException class.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ProtocolException.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the ProtocolException class.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ProtocolException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of the ProtocolException class.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ProtocolException.StackTrace">
+            <summary>
+            Gets a string representation of the frames on the call stack at the time the current exception was thrown.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ChannelException">
+            <summary>
+            The exception that is thrown when the channel encounters an error during I/O operations.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ChannelException.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of class ChannelException.
+            </summary>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="M:Agilent.Licop.ChannelException.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of class ChannelException.
+            </summary>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="P:Agilent.Licop.ChannelException.Identifier">
+            <summary>
+            Gets the identifier of the module which the channel belongs to.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ChannelException.Name">
+            <summary>
+            Gets the name of the channel.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ConfigurationEventArgs">
+            <summary>
+            Provides data for the Agilent.Licop.Instrument.ConfigurationChanged event.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ConfigurationEventArgs.#ctor(System.String[],System.String[],System.String[])">
+            <summary>
+            Initializes a new instance of the ConfigurationEventArgs class.
+            </summary>
+            <param name="newIds">The identifiers of the modules that have been added to the configuration.</param>
+            <param name="removedIds">The identifiers of the modules that have been removed from the configuration.</param>
+            <param name="currentIds">The identifiers of the modules that are available in the current configuration.</param>
+        </member>
+        <member name="P:Agilent.Licop.ConfigurationEventArgs.NewModuleIdentifiers">
+            <summary>
+            Gets the identifiers of the modules that have been added to the configuration.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConfigurationEventArgs.RemovedModuleIdentifiers">
+            <summary>
+            Gets the identifiers of the modules that have been removed from the configuration.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConfigurationEventArgs.CurrentModuleIdentifiers">
+            <summary>
+            Gets the identifiers of the modules that are available in the current configuration.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConfigurationEventArgs.HasRemovedModules">
+            <summary>
+            Gets a value indicating whether modules have been removed.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConfigurationEventArgs.HasNewModules">
+            <summary>
+            Gets a value indicating whether modules have been added.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConfigurationEventArgs.NumModules">
+            <summary>
+            Gets the number of modules currently available.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.DataFormat">
+            <summary>
+            Specifies the format that is used to represent the channel data.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.DataFormat.Binary">
+            <summary>
+            The data is represented in binary format.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.DataFormat.ASCII">
+            <summary>
+            The data is represented in ASCII format.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.DataEventArgs">
+            <summary>
+            Provides data for the Agilent.Licop.Channel.DataReceived event.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.DataEventArgs.#ctor(System.Byte[],Agilent.Licop.DataFormat,System.DateTime)">
+            <summary>
+            Creates a new instance of the DataEventArgs class.
+            </summary>
+            <param name="data">The data that was received.</param>
+            <param name="format">The data format of the channel.</param>
+            <param name="time">The time when the data was received.</param>
+        </member>
+        <member name="P:Agilent.Licop.DataEventArgs.BinaryData">
+            <summary>
+            Gets the received data in binary format.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.DataEventArgs.AsciiData">
+            <summary>
+            Gets the received data in ASCII format.
+            </summary>
+            <remarks>It is an error to call this method if the data format of the channel is not ASCII.</remarks>
+            <exception cref="T:System.NotSupportedException">The data format of the channel is not ASCII.</exception>
+        </member>
+        <member name="P:Agilent.Licop.DataEventArgs.Format">
+            <summary>
+            Gets the data format of the channel.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.DataEventArgs.Time">
+            <summary>
+            Gets the time when the data was received.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.#ctor">
+            <summary>
+            Creates a new descriptor map.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.Clear">
+            <summary>
+            Removes all modules from the map.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.Add(Agilent.Licop.ModuleDescriptor,System.Collections.Generic.List{Agilent.Licop.ChannelDescriptor})">
+            <summary>
+            Adds a module and its channels to the map.
+            </summary>
+            <param name="module">The module to add.</param>
+            <param name="channels">The list of channels belonging to the module.</param>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.Remove(Agilent.Licop.ModuleDescriptor)">
+            <summary>
+            Removes a module from the list.
+            </summary>
+            <param name="module">The module to remove.</param>
+            <returns>Returns true if the module was removed, false if not found.</returns>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.GetModules">
+            <summary>
+            Returns a list of the modules.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.GetNewModules(System.Collections.Generic.List{Agilent.Licop.ModuleDescriptor})">
+            <summary>
+            Compares the given modules to the existing modules
+            and returns a list of the modules that are new.
+            </summary>
+            <param name="modules">The modules to compare.</param>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.GetRemovedModules(System.Collections.Generic.List{Agilent.Licop.ModuleDescriptor})">
+            <summary>
+            Compares the given modules to the existing modules
+            and returns a list of the modules that have been removed.
+            </summary>
+            <param name="modules">The modules to compare.</param>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.ContainsKey(Agilent.Licop.ModuleDescriptor)">
+            <summary>
+            Determines whether the map containes the specified module.
+            </summary>
+            <param name="module">The module to look for.</param>
+            <returns>Returns true if the module was found, false otherwise.</returns>
+        </member>
+        <member name="M:Agilent.Licop.DescriptorMap.TryGetValue(Agilent.Licop.ModuleDescriptor,System.Collections.Generic.List{Agilent.Licop.ChannelDescriptor}@)">
+            <summary>
+            Gets the channels of the given module.
+            </summary>
+            <param name="module">The module of which the channels shall be returned..</param>
+            <param name="channels">The list of channels.</param>
+            <returns>Returns true if the module was found, false otherwise.</returns>
+        </member>
+        <member name="P:Agilent.Licop.DescriptorMap.Count">
+            <summary>
+            Returns the number of modules in the map.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.DescriptorMap.Item(Agilent.Licop.ModuleDescriptor)">
+            <summary>
+            Gets or sets the channels of the given module.
+            When set, adds the module to the map if it was not found.
+            </summary>
+            <param name="module">The module of which the channels shall be returned.</param>
+        </member>
+        <member name="T:Agilent.Licop.CommunicationError">
+            <summary>
+            Specifies the errors that can occur when communicating with the instrument.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.Unspecified">
+            <summary>
+            Unspecified error.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.Overflow">
+            <summary>
+            There are too many messages pending.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.WrongSocket">
+            <summary>
+            The destination of the message is invalid.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.OutOfBuffers">
+            <summary>
+            The channel has no more free buffers.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.SocketFailed">
+            <summary>
+            The message could not be delivered.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.Timeout">
+            <summary>
+            The connection to the instrument timed out.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.CommunicationError.Internal">
+            <summary>
+            An error which is internal to the program occurred.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ErrorEventArgs">
+            <summary>
+            Provides data for the Agilent.Licop.Instrument.ErrorOccurred event.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ErrorEventArgs.#ctor(Agilent.Licop.CommunicationError,System.String,System.Exception)">
+            <summary>
+            Creates a new instance of the ErrorEventArgs class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="message">The message that describes the error.</param>
+            <param name="exception">The exception that caused the error.</param>
+        </member>
+        <member name="P:Agilent.Licop.ErrorEventArgs.Error">
+            <summary>
+            Gets the error that occurred.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ErrorEventArgs.Message">
+            <summary>
+            Gets the message that describes the error.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ErrorEventArgs.ErrorException">
+            <summary>
+            Gets the exception that caused the error.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.OpenError">
+            <summary>
+            Specifies the errors that can occur when opening a channel.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.Unspecified">
+            <summary>
+            Unspecified Error.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.InvalidFormat">
+            <summary>
+            The format of the message is invalid.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.UnknownModule">
+            <summary>
+            The module is unknown.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.UnknownChannel">
+            <summary>
+            The channel is unknown.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.NoChannelsRegistered">
+            <summary>
+            The module has no channels registered.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.OpenRefused">
+            <summary>
+            The channel is already open and cannot be opened another time -or- there is not enough memory to open the channel.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.NoNewSocket">
+            <summary>
+            There are no more free sockets to be associated with the channel.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.Timeout">
+            <summary>
+            The attempt to open the channel timed out.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.ModuleRemoved">
+            <summary>
+            The module which the channel belongs to has been removed.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.OpenError.Disconnected">
+            <summary>
+            The connection to the instrument has been closed.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.OpenException">
+            <summary>
+            The exception that is thrown when opening a channel fails.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.OpenException.#ctor(Agilent.Licop.OpenError,System.String,System.String)">
+            <summary>
+            Creates a new instance of the OpenException class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="M:Agilent.Licop.OpenException.#ctor(Agilent.Licop.OpenError,System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of the OpenException class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="P:Agilent.Licop.OpenException.Error">
+            <summary>
+            Gets the error that occurred.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ReadMode">
+            <summary>
+            Specifies the mode which is used for receiving data from the channel.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadMode.Polling">
+            <summary>Data is received by calling method Read/TryRead.</summary>
+            <remarks>The DataReceived event will not be raised in this mode.</remarks>
+        </member>
+        <member name="F:Agilent.Licop.ReadMode.Events">
+            <summary>Data is received by registering to the DataReceived event.</summary>
+            <remarks>It is an error to call method Read/TryRead in this mode.</remarks>
+        </member>
+        <member name="T:Agilent.Licop.Channel">
+            <summary>
+            Represents a logical communication channel.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.Channel.#ctor(Agilent.Licop.ProtocolHandler,Agilent.Licop.ModuleDescriptor,Agilent.Licop.ChannelDescriptor)">
+            <summary>
+            Creates a new channel instance.
+            </summary>
+            <param name="handler">The instance that handles the protocol.</param>
+            <param name="moduleDesc">The descriptor of the module which the channel belongs to.</param>
+            <param name="channelDesc">The descriptor of the channel.</param>
+        </member>
+        <member name="M:Agilent.Licop.Channel.Open(Agilent.Licop.ReadMode)">
+            <summary>
+            Opens the channel for reading/writing.
+            </summary>
+            <param name="mode">The mode which is used for receiving data from the channel.</param>
+            <exception cref="T:Agilent.Licop.OpenException">The channel could not be opened.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Channel.TryOpen(Agilent.Licop.ReadMode)">
+            <summary>
+            Opens the channel for reading/writing. 
+            </summary>
+            <param name="mode">The mode which is used for receiving data from the channel.</param>
+            <returns>Returns true if the channel was opened.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Channel.Close">
+            <summary>
+            Closes the channel.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.Channel.Read(System.Byte[]@,System.Int32)">
+            <summary>
+            Reads data from the channel.
+            </summary>
+            <param name="data">An array of bytes that contains the data received.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be received.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Parameter timeout is negative.</exception>
+            <exception cref="T:Agilent.Licop.ReadException">The data could not be read.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Channel.TryRead(System.Byte[]@,System.Int32)">
+            <summary>
+            Reads data from the channel.
+            </summary>
+            <param name="data">An array of bytes that contains the data received.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be received.</param>
+            <returns>True if data was received.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Channel.Read(System.String@,System.Int32)">
+            <summary>
+            Reads data from the channel.
+            </summary>
+            <param name="data">The string that contains the data received.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be received.</param>
+            <remarks>It is an error to call this method if the data format of the channel is other than DataFormat.ASCII.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">Parameter timeout is negative.</exception>
+            <exception cref="T:Agilent.Licop.ReadException">The data could not be read.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Channel.TryRead(System.String@,System.Int32)">
+            <summary>
+            Reads data from the channel.
+            </summary>
+            <param name="data">The string that contains the data received.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be received.</param>
+            <returns>True if data was received.</returns>
+            <remarks>It is an error to call this method if the data format of the channel is other than DataFormat.ASCII.</remarks>
+        </member>
+        <member name="M:Agilent.Licop.Channel.Write(System.Byte[],System.Int32)">
+            <summary>
+            Writes data to the channel.
+            </summary>
+            <param name="data">The data to send.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be sent.</param>
+            <remarks>The length of the data to send must not exceed InBufferSize.</remarks>
+            <exception cref="T:System.ArgumentNullException">Parameter data is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The length of parameter data is zero or exceeds InBufferSize or parameter timeout is negative.</exception>
+            <exception cref="T:Agilent.Licop.WriteException">The data could not be written.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Channel.TryWrite(System.Byte[],System.Int32)">
+            <summary>
+            Writes data to the channel.
+            </summary>
+            <param name="data">The data to send.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be sent.</param>
+            <returns>True if the data was sent.</returns>
+            <remarks>The length of the data to send must not exceed InBufferSize.</remarks>
+        </member>
+        <member name="M:Agilent.Licop.Channel.Write(System.String,System.Int32)">
+            <summary>
+            Writes data to the channel.
+            </summary>
+            <param name="data">The data to send.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be sent.</param>
+            <remarks>The length of the data to send must not exceed InBufferSize. It is an error to call this method if the data format of the channel is other than DataFormat.ASCII.</remarks>
+            <exception cref="T:System.ArgumentNullException">Parameter data is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter data is an empty string.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The length of parameter data exceeds InBufferSize or parameter timeout is negative.</exception>
+            <exception cref="T:Agilent.Licop.WriteException">The data could not be written.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Channel.TryWrite(System.String,System.Int32)">
+            <summary>
+            Writes data to the channel.
+            </summary>
+            <param name="data">The data to send.</param>
+            <param name="timeout">The time in milliseconds to wait for the data to be sent.</param>
+            <returns>True if the data was sent.</returns>
+            <remarks>The length of the data to send must not exceed InBufferSize. It is an error to call this method if the data format of the channel is other than DataFormat.ASCII.</remarks>
+        </member>
+        <member name="E:Agilent.Licop.Channel.DataReceived">
+            <summary>
+            Occurs when data was received from the channel.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.IsOpen">
+            <summary>
+            Gets a value indicating whether the channel is open.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.Name">
+            <summary>
+            Gets the name of the channel.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.Identifier">
+            <summary>
+            Gets the identifier of the channel.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.CanRead">
+            <summary>
+            Gets a value indicating whether the channel supports reading.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.CanWrite">
+            <summary>
+            Gets a value indicating whether the channel supports writing.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.Format">
+            <summary>
+            Gets the format of the channel data.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.InBufferSize">
+            <summary>
+            Gets the input buffer size of the channel. 
+            This is the maximum number of bytes per message when writing.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.OutBufferSize">
+            <summary>
+            Gets the output buffer size of the channel. 
+            This is the maximum number of bytes per message when reading.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Channel.AvailableMessages">
+            <summary>
+            Gets the number of available messages that have been received.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.Instrument">
+            <summary>
+            Represents a physical instrument with its modules.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.#ctor">
+            <summary>
+            Creates a new instrument instance.
+            The device timeout defaults to 10000 ms, the controller timeout defaults to 30000 ms.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new instrument instance.
+            </summary>
+            <param name="deviceTimeout">The time in milliseconds until the connection is considered broken when the device does not respond anymore. Must be in the range from 3000 to 3600000.</param>
+            <param name="controllerTimeout">The time in milliseconds until the connection is considered broken when the controller does not respond anymore. Must be in the range from 3000 to 3600000.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Parameter deviceTimeout or parameter controllerTimeout is less than 3000 or greater than 3600000.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.Connect(System.String,System.Int32)">
+            <summary>
+            Establishes a connection to the instrument.
+            </summary>
+            <param name="address">The address of the physical instrument. This can be a hostname (e.g. "myhost1"), an IP address (e.g. "123.45.67.89") or the name of a serial port (e.g. "COM1").</param>
+            <param name="timeout">The time in milliseconds to wait for the connection to be established.</param>
+            <exception cref="T:System.ArgumentNullException">Parameter address is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter address is an empty string.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Parameter timeout is negative.</exception>
+            <exception cref="T:Agilent.Licop.ConnectException">The connection could not be established.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.TryConnect(System.String,System.Int32)">
+            <summary>
+            Establishes a connection to the instrument.
+            </summary>
+            <param name="address">The address of the physical instrument. This can be a hostname, an IP address or the name of a serial port.</param>
+            <param name="timeout">The time in milliseconds to wait for the connection to be established.</param>
+            <returns>True if the connection was established.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.Disconnect">
+            <summary>
+            Terminates the connection to the instrument.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.GetAccessPointIdentifier">
+            <summary>
+            Gets the identifier of the module that is the access point for the physical connection.
+            </summary>
+            <returns>The module identifier, an empty string if not connected.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.GetModuleIdentifiers">
+            <summary>
+            Gets the identifiers of all available modules.
+            </summary>
+            <returns>An array containing the module identifiers, an empty array if not connected.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.GetModuleIdentifiers(System.String)">
+            <summary>
+            Gets the identifiers of all modules with the given type.
+            </summary>
+            <param name="type">The type of the module.</param>
+            <returns>An array containing the module identifiers, an empty array if not connected.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter type is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter type is an empty string.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.GetModuleIdentifiers(System.Text.RegularExpressions.Regex)">
+            <summary>
+            Gets the identifiers of all modules whose type matches with the given regular expression.
+            </summary>
+            <param name="type">The regular expression to match with the module type.</param>
+            <returns>An array containing the module identifiers, an empty array if not connected.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter type is null.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.ModuleExists(System.String)">
+            <summary>
+            Checks whether a module exists.
+            </summary>
+            <param name="type">The type of the module to look for.</param>
+            <returns>True if a module with the given type exists.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter type is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter type is an empty string.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.ModuleExists(System.Text.RegularExpressions.Regex)">
+            <summary>
+            Checks whether a module exists.
+            </summary>
+            <param name="type">The type of the module to look for.</param>
+            <returns>True if a module with the given type exists.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter type is null.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.CreateModule(System.String)">
+            <summary>
+            Creates a new module instance.
+            </summary>
+            <param name="identifier">The identifier of the module to create.</param>
+            <returns>The module instance that was created.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter identifier is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter identifier is an empty string or does not represent an available module.</exception>
+            <exception cref="T:System.InvalidOperationException">There is no connection to the instrument established or the connection to the instrument has been closed or the specified module has been removed.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.TryCreateModule(System.String,Agilent.Licop.Module@)">
+            <summary>
+            Creates a new module instance.
+            </summary>
+            <param name="identifier">The identifier of the module to create.</param>
+            <param name="module">The module instance that was created.</param>
+            <returns>True if the module was created.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.CreateModules(System.String[])">
+            <summary>
+            Creates new module instances.
+            </summary>
+            <param name="identifiers">The identifiers of the modules to create.</param>
+            <returns>An array containing the created modules, an empty array if not connected.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter identifiers is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter identifiers contains a value that is an empty string or does not represent an available module.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.TryCreateModules(System.String[],Agilent.Licop.Module[]@)">
+            <summary>
+            Creates new module instances.
+            </summary>
+            <param name="identifiers">The identifiers of the modules to create.</param>
+            <param name="modules">The modules that were created.</param>
+            <returns>True if the modules were created.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.CreateModules">
+            <summary>
+            Creates new module instances of all available modules.
+            </summary>
+            <returns>An array containing the created modules, an empty array if not connected.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.TryCreateModules(Agilent.Licop.Module[]@)">
+            <summary>
+            Creates new module instances.
+            </summary>
+            <param name="modules">The modules that were created.</param>
+            <returns>True if the modules were created.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.CreateModules(System.String)">
+            <summary>
+            Creates new module instances.
+            </summary>
+            <param name="type">The type of the modules to create.</param>
+            <returns>An array containing the created modules, an empty array if not connected.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter type is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter type is an empty string.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Instrument.CreateModules(System.Text.RegularExpressions.Regex)">
+            <summary>
+            Creates new module instances.
+            </summary>
+            <param name="type">The type of the modules to create.</param>
+            <returns>An array containing the created modules, an empty array if not connected.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter type is null.</exception>
+        </member>
+        <member name="E:Agilent.Licop.Instrument.ErrorOccurred">
+            <summary>
+            Occurs when the connection was closed due to an error.
+            </summary>
+            <remarks>
+            When an error occurs the connection to the instrument will be
+            closed implicitely.
+            </remarks>
+        </member>
+        <member name="E:Agilent.Licop.Instrument.ConfigurationChanged">
+            <summary>
+            Occurs when a new module was added or an existing module was removed.
+            </summary>
+            <remarks>
+            It is possible that a module gets removed and re-added at the same time,
+            the channels of the module will be closed then. Best practice is to handle 
+            the removed modules first and cleeanup all resources associated with the module 
+            and to handle the added modules afterwards.
+            </remarks>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.IsConnected">
+            <summary>
+            Gets a value indicating whether a connection to the instrument is establiched.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.LinkInfo">
+            <summary>
+            Gets additional information about the physical link.
+            </summary>
+            <remarks>
+            The link information is stored as key value pairs.
+            The available information depends on the type of the physical link (e.g. LAN, RS232).
+            </remarks>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.NumModules">
+            <summary>
+            Gets the number of available modules.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.HasSlaves">
+            <summary>
+            Gets a value indicating whether slave modules (e.g. valves) are available.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.DeviceTimeout">
+            <summary>
+            Gets the time in milliseconds until the connection is considered broken in case the device does not react anymore.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.ControllerTimeout">
+            <summary>
+            Gets the time in milliseconds until the connection is considered broken in case the controller does not react anymore.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Instrument.Address">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.Module">
+            <summary>
+            Represents a physical module with its communication channels.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.Module.#ctor(Agilent.Licop.ProtocolHandler,Agilent.Licop.ModuleDescriptor,System.Collections.Generic.List{Agilent.Licop.ChannelDescriptor},System.Boolean)">
+            <summary>
+            Creates a new module instance.
+            </summary>
+            <param name="handler">The instance that handles the protocol.</param>
+            <param name="descriptor">The descriptor of the module.</param>
+            <param name="channels">The descriptors of the available channels.</param>
+            <param name="isAccessPoint">Determines whether the module is the access point for the physical connection.</param>
+        </member>
+        <member name="M:Agilent.Licop.Module.GetChannelNames">
+            <summary>
+            Gets the names of all available channels.
+            </summary>
+            <returns>An array containing the channel names.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Module.ChannelExists(System.String)">
+            <summary>
+            Checks whether a channel exists.
+            </summary>
+            <param name="name">The name of the channel to look for.</param>
+            <returns>True if the channel exists.</returns>
+            <exception cref="T:System.ArgumentNullException">Parameter name is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter name is an empty string.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Module.CreateChannel(System.String)">
+            <summary>
+            Creates a new channel instance.
+            </summary>
+            <param name="name">The name of the channel to create.</param>
+            <returns>The channel instance that was created.</returns>
+            <exception cref="T:System.InvalidOperationException">The connection to the instrument has been closed.</exception>
+            <exception cref="T:System.ArgumentNullException">Parameter name is null.</exception>
+            <exception cref="T:System.ArgumentException">Parameter name is an empty string or does not represent an available channel.</exception>
+        </member>
+        <member name="M:Agilent.Licop.Module.TryCreateChannel(System.String,Agilent.Licop.Channel@)">
+            <summary>
+            Creates a new channel instance.
+            </summary>
+            <param name="name">The name of the channel to create.</param>
+            <param name="channel">The channel instance that was created.</param>
+            <returns>True if the channel was created.</returns>
+        </member>
+        <member name="M:Agilent.Licop.Module.CreateChannels">
+            <summary>
+            Creates new channel instances for all available channels.
+            </summary>
+            <returns>An array containing the created channels, an empty array if not connected.</returns>
+        </member>
+        <member name="P:Agilent.Licop.Module.Type">
+            <summary>
+            Gets the device type of the module.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Module.Serial">
+            <summary>
+            Gets the serial number of the module.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Module.Identifier">
+            <summary>
+            Gets the unique identifier of the module.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Module.IsSlave">
+            <summary>
+            Gets a value indicating whether the module is a slave device.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.Module.IsAccessPoint">
+            <summary>
+            Gets a value indicating whether the module is the access point for the physical connection.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ConnectError">
+            <summary>
+            Specifies the errors that can occur when connecting to the instrument.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ConnectError.InvalidAddress">
+            <summary>
+            The address to connect to is invalid.
+            </summary>
+            <remarks>Possible reasons are: the hostname does not exist, the format of the IP address is invalid, the serial port is occupied or does not exist.</remarks>
+        </member>
+        <member name="F:Agilent.Licop.ConnectError.AlreadyConnected">
+            <summary>
+            A connection to the instrument has already been established.
+            </summary>
+            <remarks>The existing connection to the instrument must be terminated by calling method Disconnect before connecting again.</remarks>
+        </member>
+        <member name="F:Agilent.Licop.ConnectError.Timeout">
+            <summary>
+            The attempt to connect to the instrument timed out.
+            </summary>
+            <remarks>Possible reasons are: the device is switched off -or- the physical connection is unplugged.</remarks>
+        </member>
+        <member name="F:Agilent.Licop.ConnectError.NotReady">
+            <summary>
+            The instrument is not ready to accept a connection.
+            </summary>
+            <remarks>Possible reasons are: the instrument is still initializing -or- there are too many connections established.</remarks>
+        </member>
+        <member name="F:Agilent.Licop.ConnectError.InitFailed">
+            <summary>
+            The instrument could not be initialized.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ConnectError.NoConfiguration">
+            <summary>
+            The instrument configuration could not be read.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ConnectException">
+            <summary>
+            The exception that is thrown when connecting to the instrument fails.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ConnectException.#ctor(System.String,Agilent.Licop.ConnectError,System.String,System.Int32)">
+            <summary>
+            Creates a new instance of the ConnectException class.
+            </summary>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="error">The error that occurred when connecting.</param>
+            <param name="address">The physical address of the instrument.</param>
+            <param name="timeout">The time in milliseconds to wait for the connection to be established.</param>
+        </member>
+        <member name="M:Agilent.Licop.ConnectException.#ctor(System.String,Agilent.Licop.ConnectError,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Creates a new instance of the ConnectException class.
+            </summary>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="error">The error that occurred when connecting.</param>
+            <param name="address">The physical address of the instrument.</param>
+            <param name="timeout">The time in milliseconds to wait for the connection to be established.</param>
+            <param name="linkInfo">Additional information about the physical link.</param>
+        </member>
+        <member name="M:Agilent.Licop.ConnectException.#ctor(System.String,Agilent.Licop.ConnectError,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String},System.Exception)">
+            <summary>
+            Creates a new instance of the ConnectException class.
+            </summary>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="error">The error that occurred when connecting.</param>
+            <param name="address">The physical address of the instrument.</param>
+            <param name="timeout">The time in milliseconds to wait for the connection to be established.</param>
+            <param name="linkInfo">Additional information about the physical link.</param>
+            <param name="innerException">The exception that caused the current exception.</param>
+        </member>
+        <member name="P:Agilent.Licop.ConnectException.Error">
+            <summary>
+            Gets the error that caused the current exception.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConnectException.Address">
+            <summary>
+            Gets the physical address of the instrument.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConnectException.Timeout">
+            <summary>
+            Gets the time in milliseconds to wait for the connection to be established.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.ConnectException.LinkInfo">
+            <summary>
+            Gets additional information about the physical link.
+            </summary>
+            <remarks>
+            The link information is stored as key value pairs.
+            The available information depends on the type of the physical link (e.g. LAN, RS232).
+            If no link information could be retrieved, the collection is empty.
+            </remarks>
+        </member>
+        <member name="M:Agilent.Licop.IPhysicalLink.Connect(System.String,System.Int32)">
+            <summary>
+            Connects to the physical link.
+            </summary>
+            <param name="address">The address to connect to.</param>
+            <param name="timeout">The time in milliseconds to wait for the connect operation to complete.</param>
+        </member>
+        <member name="M:Agilent.Licop.IPhysicalLink.Disconnect">
+            <summary>
+            Disconnects the physical link.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.IPhysicalLink.Send(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Sends data to the physical link.
+            </summary>
+            <param name="buffer">Buffer that holds the data to send.</param>
+            <param name="offset">The position in the data buffer at which to begin sending data.</param>
+            <param name="count">The number of bytes to send.</param>
+        </member>
+        <member name="M:Agilent.Licop.IPhysicalLink.Receive(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Receives data from the physical link.
+            </summary>
+            <param name="buffer">Buffer that holds the received data.</param>
+            <param name="offset">The position in the data buffer at which to begin sending data.</param>
+            <param name="count">The number of bytes to receive.</param>
+            <returns>The number of bytes received</returns>
+        </member>
+        <member name="M:Agilent.Licop.IPhysicalLink.Poll(System.Int32)">
+            <summary>
+            Returns true if data is available in the receive buffer.
+            </summary>
+            <param name="timeout">Time in milliseconds to wait for data to be available.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Agilent.Licop.IPhysicalLink.SendTimeout">
+            <summary>
+            Sets or gets the timeout for a send opeation in milliseconds.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.IPhysicalLink.ReceiveTimeout">
+            <summary>
+            Sets or gets the timeout for a receive opeation in milliseconds.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.IPhysicalLink.Address">
+            <summary>
+            Gets the address of the link.
+            Returns an empty string if not connected.
+            </summary>
+        </member>
+        <member name="P:Agilent.Licop.IPhysicalLink.IsConnected">
+            <summary>
+            Returns true if the physical link is connected.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ReadError">
+            <summary>
+            Specifies the errors that can occur when reading data from the channel.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.InvalidFormat">
+            <summary>
+            The channel data does not have the expected format.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.InvalidMode">
+            <summary>
+            The channel was not opened in polling mode.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.CannotRead">
+            <summary>
+            The channel does not support reading.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.ChannelNotOpen">
+            <summary>
+            The channel has not been opened before reading.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.Timeout">
+            <summary>
+            The attemt to read from the channel timed out.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.ModuleRemoved">
+            <summary>
+            The module which the channel belongs to has been removed.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.ReadError.Disconnected">
+            <summary>
+            The connection to the instrument has been closed.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.ReadException">
+            <summary>
+            The exception that is thrown when reading data from the channel fails.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.ReadException.#ctor(Agilent.Licop.ReadError,System.String,System.String)">
+            <summary>
+            Creates a new instance of the ReadException class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="M:Agilent.Licop.ReadException.#ctor(Agilent.Licop.ReadError,System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of the ReadException class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="P:Agilent.Licop.ReadException.Error">
+            <summary>
+            Gets the error that occurred.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.WriteError">
+            <summary>
+            Specifies the errors that can occur when writing data to the channel.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.WriteError.InvalidFormat">
+            <summary>
+            The channel data does not have the expected format.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.WriteError.CannotWrite">
+            <summary>
+            The channel does not support writing.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.WriteError.ChannelNotOpen">
+            <summary>
+            The channel has not been opened before writing.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.WriteError.Timeout">
+            <summary>
+            The attemt to write to the channel timed out.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.WriteError.ModuleRemoved">
+            <summary>
+            The module which the channel belongs to has been removed.
+            </summary>
+        </member>
+        <member name="F:Agilent.Licop.WriteError.Disconnected">
+            <summary>
+            The connection to the instrument has been closed.
+            </summary>
+        </member>
+        <member name="T:Agilent.Licop.WriteException">
+            <summary>
+            The exception that is thrown when writing data to the channel fails.
+            </summary>
+        </member>
+        <member name="M:Agilent.Licop.WriteException.#ctor(Agilent.Licop.WriteError,System.String,System.String)">
+            <summary>
+            Creates a new instance of the WriteException class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="M:Agilent.Licop.WriteException.#ctor(Agilent.Licop.WriteError,System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of the WriteException class.
+            </summary>
+            <param name="error">The error that occurred.</param>
+            <param name="message">The message that describes the current exception.</param>
+            <param name="identifier">The identifier of the module which the channel belongs to.</param>
+            <param name="name">The name of the channel.</param>
+        </member>
+        <member name="P:Agilent.Licop.WriteException.Error">
+            <summary>
+            Gets the error that occurred.
+            </summary>
+        </member>
+    </members>
+</doc>

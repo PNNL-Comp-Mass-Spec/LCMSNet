@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{96BA0FF2-5C3C-4A64-A494-452D45FE0B3B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Eksigent</RootNamespace>
+    <AssemblyName>Eksigent</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
+    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ExternalRelease|x86' ">
+    <OutputPath>bin\x86\ExternalRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AxInterop.DirectControl, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\AxInterop.DirectControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.ctlMobilePhases, Version=12.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.ctlMobilePhases.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.DirectControl, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.DirectControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EkMethodEditorOCX, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.EkMethodEditorOCX.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EksigentMethodEditor, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.EksigentMethodEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EksigentNanoLC, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.EksigentNanoLC.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EKSIGENTSTATUSOCXLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.EKSIGENTSTATUSOCXLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EK_ConfigMenu, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.EK_ConfigMenu.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.EK_StatusBar, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\Interop.EK_StatusBar.dll</HintPath>
+    </Reference>
+    <Reference Include="PNNLDevices, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\PNNLDevices.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Plugins\PNNL\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Devices\Pumps\EksigentPump.cs" />
+    <Compile Include="Devices\Pumps\EksigentIPumpControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Pumps\EksigentIPumpControl.Designer.cs">
+      <DependentUpon>EksigentIPumpControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Pumps\EksigentIPumpGlyph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Pumps\EksigentIPumpGlyph.Designer.cs">
+      <DependentUpon>EksigentIPumpGlyph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LcmsNetDataClasses\LcmsNetDataClasses.csproj">
+      <Project>{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}</Project>
+      <Name>LcmsNetDataClasses</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Devices\Pumps\EksigentIPumpControl.resx">
+      <DependentUpon>EksigentIPumpControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Pumps\EksigentIPumpGlyph.resx">
+      <DependentUpon>EksigentIPumpGlyph.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\deviceGlyph.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetDir)*.dll "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
+copy $(TargetDir)*.dll "$(SolutionDir)..\lib\Plugins\PNNL"
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>

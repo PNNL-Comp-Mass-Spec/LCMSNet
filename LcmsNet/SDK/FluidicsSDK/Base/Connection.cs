@@ -1,0 +1,377 @@
+﻿/*********************************************************************************************************
+ * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
+ * Pacific Northwest National Laboratory, Richland, WA
+ * Copyright 2013 Battle Memorial Institute
+ * Created 9/5/2013
+ * 
+ * Last Modified 1/3/2013 By Christopher Walters 
+ ********************************************************************************************************/
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using FluidicsSDK.Graphic;
+using System.Drawing;
+
+namespace FluidicsSDK.Base
+{
+    public class Connection:IRenderable
+    {
+        #region Members
+        // the list of line primitives that make up the device
+        protected List<GraphicsPrimitive> m_prims;
+        // the device the connection belongs to, if it is a connection internal to a device.
+        protected FluidicsDevice m_device;
+        //max  variance is used to give users leeway when attempting to click on a connection, so they do not have to be pixel accurate with their clicks.
+        // 400 because the formula tell if a point is on a line uses derivatives, and 400 gives a few pixels worth of inaccuracy to users.
+        const int MAX_VARIANCE = 800;
+        // an id to identify the connection
+        protected long m_id;
+        //we want each connection to have a unique id, this tracks the next available id..first connection made will get ID 0, next connection 1, next connection 2, etc.
+        //no need for it to be a GUUID or such, since it's incredibly unlikely that any program would need 2^64 -1 ports.
+        protected static long availableId = 0;        
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// empty constructor..does not create a useful connection, must still have 
+        /// </summary>
+        public Connection()
+        {
+            //assign the availableId to this, and then increment it so the next class gets availableId+1 as its id.
+            m_id = availableId++;            
+            m_prims = new List<GraphicsPrimitive>();
+            ConnectionStyle = ConnectionStyles.Standard;
+            //TODO: Improve line start and end points so they touch the edge of the port circle at the proper points for the direction
+            //that the line will go.         
+        }
+
+        /// <summary>
+        /// class constructor
+        /// </summary>
+        /// <param name="from">a classPort object representing where the connection is coming from</param>
+        /// <param name="to">a classPort object repsenting where the connection is going to</param>
+        public Connection(Port from, Port to, FluidicsDevice device, ConnectionStyles? style = null)
+        {
+            //assign the availableId to this, and then increment it so the next class gets availableId+1 as its id.
+            m_id = availableId++;
+            from.AddConnection(m_id, this);
+            to.AddConnection(m_id, this);
+            ConnectionStyle = style == null ? ConnectionStyles.Standard : (ConnectionStyles)style;
+            m_prims = SetupLines(from, to);          
+            P1 = from;
+            P2 = to;
+            InternalConnectionOf = device;
+        }
+
+        /// <summary>
+        /// offset the line so that it doesn't enter the port graphics
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        protected virtual List<GraphicsPrimitive> SetupLines(Port from, Port to)
+        {
+            List<GraphicsPrimitive> lines = new List<GraphicsPrimitive>();
+            if (ConnectionStyle == ConnectionStyles.Elbow)
+            {
+                int diffX = Math.Abs(to.Center.X - from.Center.X);
+                int diffY = Math.Abs(to.Center.Y - from.Center.Y);
+                Point midPoint = new Point(0,0);
+                if (diffY > diffX)
+                {
+                    midPoint = new Point(from.Center.X, to.Center.Y);
+                }
+                else if (diffX > diffY)
+                {
+                    midPoint = new Point(to.Center.X, from.Center.Y);                  
+                }
+                FluidicsLine line = new FluidicsLine(from.Center, midPoint);
+                lines.Add(line);
+                // elbow off to port "to"
+                line = new FluidicsLine(midPoint, to.Center);
+                lines.Add(line);
+            }
+            else
+            {
+                FluidicsLine line = new FluidicsLine(new Point(from.Center.X, from.Center.Y), new Point(to.Center.X, to.Center.Y));                
+                lines.Add(line);
+            }
+            return lines;
+        }
+
+        /// <summary>
+        /// Render all connections
+        /// </summary>
+        /// <param name="g">a System.Drawing Graphics object</param>
+        /// <param name="alpha">a integer representing the alpha value to draw the connections with</param>
+        /// <param name="scale">a float representing the value to scale the connections by</param>
+        public virtual void Render(Graphics g, int alpha, float scale)
+        {
+            if (!Transparent)
+            {
+                foreach (FluidicsLine line in m_prims)
+                {
+                    line.Render(g, alpha, scale, Selected, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// move the connection with the port
+        /// </summary>
+        /// <param name="port">a classPort object</param>
+        /// <param name="oldLoc">A System.Drawing.Point representing the old location of the port</param>
+        public virtual void MoveWith(Port port)
+        {
+            if (ConnectionStyle == ConnectionStyles.Elbow)
+            {
+                int diffX = Math.Abs(P2.Center.X - P1.Center.X);
+                int diffY = Math.Abs(P2.Center.Y - P1.Center.Y);
+                Point midPoint = new Point(0,0);
+                if (diffY > diffX)
+                {
+                    midPoint = new Point(P1.Center.X, P2.Center.Y);
+                 
+                }
+                else if (diffX > diffY)
+                {
+                    midPoint = new Point(P2.Center.X, P1.Center.Y);
+                  
+                }
+                FluidicsLine line = m_prims[0] as FluidicsLine;
+                line.Origin = P1.Center;
+                line.Term = midPoint;
+                line = m_prims[1] as FluidicsLine;
+                line.Origin = midPoint;
+                line.Term = P2.Center;
+            }
+            else
+            {
+                FluidicsLine line = m_prims[0] as FluidicsLine;
+                line.Origin  = P1.Center;
+                line.Term = P2.Center;
+            }
+         
+            //if (port.ID == P1.ID)                 
+            //{
+            //    List<GraphicsPrimitive> prims = SetupLines(port, P2);
+            //    for (int i = 0; i < prims.Count; i++)
+            //    {
+            //        m_prims[i] = prims[i];
+            //    }      
+            //}
+            //else if (port.ID == P2.ID)
+            //{
+            //     List<GraphicsPrimitive> prims = SetupLines(P1,port);
+            //    for (int i = 0; i < prims.Count; i++)
+            //    {
+            //        m_prims[i] = prims[i];
+            //    }      
+            //}            
+            //else
+            //{
+            //    throw new Exception("Attempt to move connection not belonging to moving port detected!");
+            //}
+        }
+
+        /// <summary>
+        /// destroy this connection
+        /// </summary>
+        public virtual void Destroy()
+        {
+            P1.RemoveConnection(m_id);
+            P2.RemoveConnection(m_id);
+            InternalConnectionOf = null;
+        }
+
+        /// <summary>
+        ///  Determine if the connection occupies a location on screen
+        /// </summary>
+        /// <param name="location">a System.Drawing.Point object</param>
+        /// <returns>true if so, false if not</returns>
+        public virtual bool OnPoint(Point location)
+        {
+            //check to see if the point is on any of the lines that make up the connection
+            bool existsOnPoint = false;
+            if (!Transparent) // if the connection is transparent, we don't want to be able to select it
+            {
+                
+                foreach (FluidicsLine line in m_prims)
+                {
+                    existsOnPoint = line.Contains(location, MAX_VARIANCE);
+                    if (existsOnPoint) { return true; }
+                }
+                return existsOnPoint;
+            }
+            return existsOnPoint;
+        }
+
+        /// <summary>
+        /// Select the connection
+        /// </summary>
+        public virtual void Select()
+        {
+            if (!Transparent)
+            {
+                Selected = true;
+            }
+        }
+
+        /// <summary>
+        /// Deselect the connection
+        /// </summary>
+        public virtual void Deselect()
+        {
+            Selected = false;
+        }
+
+
+        public virtual void DoubleClicked()
+        {
+            if (!Transparent) //if transparent, we don't want to be able to do this
+            {
+                if (ConnectionStyle == ConnectionStyles.Standard)
+                {
+                    ConnectionStyle = ConnectionStyles.Elbow;
+                }
+                else
+                {
+                    ConnectionStyle = ConnectionStyles.Standard;
+                }
+                m_prims.Clear();
+                m_prims = SetupLines(P1, P2);
+            }
+        }
+
+        public Port FindOppositeEndOfConnection(Port p)
+        {
+            if(p.ID == P1.ID)
+            {
+                return P2;
+            }
+            else
+            {
+                return P1;
+            }
+        }
+        #endregion
+
+        #region Properties
+
+
+        /// <summary>
+        ///  This is used to make connections that are invisible.
+        /// </summary>
+        public bool Transparent
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// Property determining the Inbound port
+        /// </summary>
+        public Port P1
+        {
+            get;
+            protected set;
+        }
+
+
+        /// <summary>
+        /// Property determing the Outbound port.
+        /// </summary>
+        public Port P2
+        {
+            get;
+            protected set;
+        }
+
+        /// <summary>
+        /// Property to determine if this is a connection internal to a device
+        /// </summary>
+        public FluidicsDevice InternalConnectionOf
+        {
+            get
+            {
+                return m_device;
+            }
+            protected set
+            {
+                if (value is FluidicsDevice)
+                {
+                    m_device = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Property to determine the color of the connection, set only
+        /// </summary>
+        public Color Color
+        {
+            private get { return Color.Black; }
+            set
+            {
+                foreach (GraphicsPrimitive prim in m_prims)
+                {
+                    prim.Color = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Property to determine if the connection is selected or not.
+        /// </summary>
+        public bool Selected
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// ID to identify connection
+        /// </summary>
+        public long ID
+        {
+            get
+            {
+                return m_id;
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Internal volume of the connection
+        /// </summary>
+        public double Volume
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// length property of connection
+        /// </summary>
+        public double Length
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// diameter of the connection
+        /// </summary>
+        public double Diameter
+        {
+            get;
+            set;
+        }
+        
+        public ConnectionStyles ConnectionStyle { get; set; }
+        #endregion     
+    
+        
+    }
+}

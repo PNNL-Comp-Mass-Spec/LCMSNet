@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NetStartTestApp.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="InstName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BabyRuth</Value>
+    </Setting>
+    <Setting Name="BrokerURI" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">failover:(tcp:/prismdevii.pnl.gov:61616,tcp://proto-10.pnl.gov:61616)</Value>
+    </Setting>
+    <Setting Name="CmdQueueName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DAC.Control</Value>
+    </Setting>
+    <Setting Name="StatusTopicName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DAC.Status</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{150D2DD0-F6AE-4E64-9499-B91B7A01D5AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FluidicsSDK</RootNamespace>
+    <AssemblyName>FluidicsSDK</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
+    <OutputPath>bin\PNNLRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|x86'">
+    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Finch">
+      <HintPath>..\..\lib\Plugins\LCMSNet\Finch.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\Connection.cs" />
+    <Compile Include="Base\enumConnectionStyles.cs" />
+    <Compile Include="Base\enumValveErrors.cs" />
+    <Compile Include="Base\Fluid.cs" />
+    <Compile Include="Base\FluidicsDevChangeEventArgs.cs" />
+    <Compile Include="Base\FluidicsDevice.cs" />
+    <Compile Include="Base\Port.cs" />
+    <Compile Include="Base\ValveStates.cs" />
+    <Compile Include="Devices\ContactClosure.cs" />
+    <Compile Include="Devices\FluidicsDetector.cs" />
+    <Compile Include="Devices\FluidicsDeviceAddedEventArgs.cs" />
+    <Compile Include="Devices\FluidicsDeviceExistsException.cs" />
+    <Compile Include="Devices\FluidicsDeviceTypeFactory.cs" />
+    <Compile Include="Devices\FluidicsPump.cs" />
+    <Compile Include="Devices\FluidicsSampler.cs" />
+    <Compile Include="Devices\IContactClosure.cs" />
+    <Compile Include="Devices\IFluidicsClosure.cs" />
+    <Compile Include="Devices\IFluidicsDevice.cs" />
+    <Compile Include="Devices\IFluidicsPump.cs" />
+    <Compile Include="Devices\IFluidicsSampler.cs" />
+    <Compile Include="Devices\InvalidCustomFluidicsDeviceException.cs" />
+    <Compile Include="Devices\PumpEventArgs.cs" />
+    <Compile Include="Devices\Valves\ElevenPortValve.cs" />
+    <Compile Include="Devices\Valves\FourPortFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\IElevenPortValve.cs" />
+    <Compile Include="Devices\Valves\IFourPortValve.cs" />
+    <Compile Include="Devices\Valves\INinePortValve.cs" />
+    <Compile Include="Devices\Valves\ISixPortInjectionValve.cs" />
+    <Compile Include="Devices\Valves\ISixPortValve.cs" />
+    <Compile Include="Devices\Valves\ISixteenPortValve.cs" />
+    <Compile Include="Devices\Valves\ISolidPhaseExtractor.cs" />
+    <Compile Include="Devices\Valves\ITenPortValve.cs" />
+    <Compile Include="Devices\Valves\MultiPositionValveBase.cs" />
+    <Compile Include="Devices\Valves\NinePortValve.cs" />
+    <Compile Include="Devices\Valves\SixPortFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\SixPortInjectionFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\SixteenPortValve.cs" />
+    <Compile Include="Devices\Valves\SolidPhaseExtractor.cs" />
+    <Compile Include="Devices\Valves\TenPortValve.cs" />
+    <Compile Include="Devices\Valves\TwoPositionValveBase.cs" />
+    <Compile Include="Devices\Valves\ValvePositionEventArgs.cs" />
+    <Compile Include="enumLayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FluidicsModerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graphic\enumBrushType.cs" />
+    <Compile Include="Graphic\FludiicsLine.cs" />
+    <Compile Include="Graphic\FluidicsCircle.cs" />
+    <Compile Include="Graphic\FluidicsGraphicsError.cs" />
+    <Compile Include="Graphic\FluidicsPolygon.cs" />
+    <Compile Include="Graphic\FluidicsRectangle.cs" />
+    <Compile Include="Graphic\FluidicsTriangle.cs" />
+    <Compile Include="Graphic\GraphicsPrimitive.cs" />
+    <Compile Include="Graphic\StateControl.cs" />
+    <Compile Include="IRenderable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Managers\ConnectionChangedEventArgs.cs" />
+    <Compile Include="Managers\ConnectionManager.cs" />
+    <Compile Include="Managers\FluidicsDeviceManager.cs" />
+    <Compile Include="Managers\PortChangedEventArgs.cs" />
+    <Compile Include="Managers\PortManager.cs" />
+    <Compile Include="ModelCheckers\FluidicsCycleCheck.cs" />
+    <Compile Include="ModelCheckers\MultipleSourcesModelCheck.cs" />
+    <Compile Include="ModelCheckers\NoSinksModelCheck.cs" />
+    <Compile Include="ModelCheckers\TestModelCheck.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Drawing\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y "$(TargetDir)*.dll" "$(SolutionDir)..\lib"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

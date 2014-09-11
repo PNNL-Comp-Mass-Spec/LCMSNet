@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using FluidicsSDK;
+using LcmsNet.Method.Forms;
+
+namespace LcmsNet.Simulator
+{
+    public partial class formSimulatorCombined : Form
+    {
+        /// <summary>
+        /// dictionary that will hold methods queued for simulation.
+        /// </summary>
+        private Dictionary<string, LcmsNetDataClasses.Method.classLCMethod> m_queuedMethods;
+
+        private SimControlsAndChartsControl m_controls;
+        private SimConfigControl m_config;
+
+        public event EventHandler<TackEventArgs> Tack;
+
+        public formSimulatorCombined()
+        {
+            m_queuedMethods = new Dictionary<string, LcmsNetDataClasses.Method.classLCMethod>();                
+            InitializeComponent();           
+            m_controls = SimControlsAndChartsControl.GetInstance;
+            m_controls.Dock = DockStyle.Fill;
+            m_controls.Tack += new EventHandler<TackEventArgs>(controlsTack);
+            m_config = SimConfigControl.GetInstance;
+            m_config.Dock = DockStyle.Fill;
+            m_config.Tack += new EventHandler<TackEventArgs>(controlsTack);
+            splitFluidicsAndControls.Panel2.Controls.Add(m_controls);
+            splitFluidicsAndControls.Panel1.Controls.Add(m_config);  
+            this.Activated += formSimulatorCombined_Activated;
+        }
+
+        private void formSimulatorCombined_Activated(object sender, EventArgs e)
+        {
+            //work around to ensure that simulator shows config image when simulator gets focus.
+            m_config.UpdateImage();
+            m_config.Refresh();
+        }
+
+        void Setup()
+        {
+            m_controls = SimControlsAndChartsControl.GetInstance;
+            m_controls.Dock = DockStyle.Fill;
+            m_config = SimConfigControl.GetInstance;
+            m_config.Dock = DockStyle.Fill;
+            splitFluidicsAndControls.Panel2.Controls.Add(m_controls);
+            splitFluidicsAndControls.Panel1.Controls.Add(m_config);
+        }     
+
+        public new void Show()
+        {
+            Setup();
+            base.Show();
+        }
+
+        void controlsTack(object sender, TackEventArgs e)
+        {
+            if (Tack != null)
+            {
+                // this form is NOT triggering the tack, but rather the object this form is listening to is, so send THAT as the 
+                // sender of this event...we're just passing it up the chain to formMDIMain
+                Tack(sender, e);
+            }
+        }   
+    }
+}

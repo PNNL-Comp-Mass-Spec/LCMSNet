@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PDFGenUnitTests</RootNamespace>
+    <AssemblyName>PDFGenUnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|x86'">
+    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EMSL.DocumentGenerator.Core">
+      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EMSL.DocumentGenerator.PDFSharp">
+      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Finch">
+      <HintPath>..\..\..\lib\Plugins\LCMSNet\Finch.dll</HintPath>
+    </Reference>
+    <Reference Include="FluidicsSDK">
+      <HintPath>..\..\..\lib\Plugins\LCMSNet\FluidicsSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetSdk">
+      <HintPath>..\..\..\lib\Plugins\LCMSNet\LcmsNetSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\lib\Plugins\LCMSNet\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp-WPF">
+      <HintPath>..\..\..\lib\SDK\DocumentGenerator\PdfSharp-WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PDFGenTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LCMSNetProg\LCMSNetProg.csproj">
+      <Project>{51F59458-D3D7-41D6-8E09-19A12AD54B7A}</Project>
+      <Name>LCMSNetProg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PDFGen\PDFGen.csproj">
+      <Project>{76f845f5-fdc2-45e5-be2c-5efc6fe60e79}</Project>
+      <Name>PDFGen</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

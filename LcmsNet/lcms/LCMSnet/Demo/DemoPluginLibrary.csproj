@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestPluginLibrary</RootNamespace>
+    <AssemblyName>TestPluginLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|x86'">
+    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\FluidicsSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FluidicsSprayNeedle.cs" />
+    <Compile Include="FluidicsTee.cs" />
+    <Compile Include="FluidicsUnion.cs" />
+    <Compile Include="PluginTemplate\PluginTemplate.cs" />
+    <Compile Include="DemoClosure.cs" />
+    <Compile Include="DemoClosureAdvanceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemoClosureAdvanceControl.Designer.cs">
+      <DependentUpon>DemoClosureAdvanceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DemoPAL.cs" />
+    <Compile Include="DemoPALAdvancedControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemoPALAdvancedControl.Designer.cs">
+      <DependentUpon>DemoPALAdvancedControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DemoPump.cs" />
+    <Compile Include="DemoSPE.cs" />
+    <Compile Include="DemoSprayNeedle.cs" />
+    <Compile Include="DemoTee.cs" />
+    <Compile Include="DemoUnion.cs" />
+    <Compile Include="DemoValve.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DemoValve2.cs" />
+    <Compile Include="DemoValve2AdvancedControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemoValve2AdvancedControl.Designer.cs">
+      <DependentUpon>DemoValve2AdvancedControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DemoValveAdvancedControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemoValveAdvancedControl.Designer.cs">
+      <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DemoClosureAdvanceControl.resx">
+      <DependentUpon>DemoClosureAdvanceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DemoPALAdvancedControl.resx">
+      <DependentUpon>DemoPALAdvancedControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DemoValve2AdvancedControl.resx">
+      <DependentUpon>DemoValve2AdvancedControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DemoValveAdvancedControl.resx">
+      <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y "$(TargetDir)*.dll" "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
