@@ -21,7 +21,7 @@ AppVerName={#MyAppVerName}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputDir=D:\installers\{#MyDateTime}
+OutputDir=..\..\..\Installer\Installers\{#MyDateTime}
 OutputBaseFilename={#MyAppName}_{#MyAppVis}_{#MyAppVerName}_{#MyDateTime}
 SourceDir={#MySource}
 Compression=lzma
@@ -35,6 +35,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Dirs]        
 Name: "{userappdata}\{#MyAppName}\Log"
+Name: "{userappdata}\{#MyAppName}\dmsExtensions\"
 Name: "{app}\LCMethods"
 Name: "{app}\Plugins"
 Name: "{app}\cy-GB"
@@ -43,7 +44,9 @@ Name: "{app}\cy-GB"
 ; Exe
 Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                                                   DestDir: "{app}";          Flags: ignoreversion
 ; Internal Libraries
-Source: "..\..\..\InternalLibs\*";                                                                     DestDir: "{app}";          Flags: ignoreversion
+
+; dmstools
+Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\Release\*.dll";                DestDir: "{userappdata}\dmsExtensions";  Flags: ignoreversion
 ;SDK
 Source: "{#MyLib}\*";                                                                                  DestDir: "{app}";          Flags: ignoreversion
 

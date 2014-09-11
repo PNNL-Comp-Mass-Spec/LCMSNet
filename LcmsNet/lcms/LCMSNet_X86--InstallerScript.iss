@@ -20,7 +20,7 @@ AppVerName={#MyAppVerName}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputDir=.\installers\{#MyDateTime}
+OutputDir=..\installers\{#MyDateTime}
 OutputBaseFilename={#MyAppName}_{#MyAppVis}_{#MyAppVerName}_{#MyDateTime}
 SourceDir={#MySource}
 Compression=lzma
@@ -34,6 +34,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Dirs]        
 Name: "{userappdata}\{#MyAppName}\Log"
+Name: "{userappdata}\{#MyAppName}\dmsExtensions"
 Name: "{app}\LCMethods"
 Name: "{app}\Plugins"
 Name: "{app}\cy-GB"
