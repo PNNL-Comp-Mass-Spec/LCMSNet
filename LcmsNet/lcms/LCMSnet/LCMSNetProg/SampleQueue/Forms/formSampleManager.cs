@@ -479,7 +479,7 @@ namespace LcmsNet.SampleQueue.Forms
             /// This way they can validate if they need to all of this information.
             ///  
 
-            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && classDMSToolsManager.Instance.ToolCount > 0;   
+            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && classLCMSSettings.GetParameter("DMSTool") != string.Empty;   
             if (validateSamples == true)
             {
                 formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
@@ -508,6 +508,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             ExportMRMFiles();
         }
+
         private void buttonLogViewer_Click(object sender, EventArgs e)
         {
             //LogViewer.formLogViewerMain formLogViewer = new LogViewer.formLogViewerMain();
