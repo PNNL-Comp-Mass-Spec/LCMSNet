@@ -1,4 +1,5 @@
 # ignore everything in this directory
 *
-# except this file
+# except this file and Zedgraph
 !.gitignore
+!ZedGraph.dll
