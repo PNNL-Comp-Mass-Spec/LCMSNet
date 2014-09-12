@@ -30,7 +30,8 @@ using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
-using LcmsNetDmsTools;
+using LcmsNetSQLiteTools;
+using LcmsNetSDK;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -478,7 +479,7 @@ namespace LcmsNet.SampleQueue.Forms
             /// This way they can validate if they need to all of this information.
             ///  
 
-            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS"));   
+            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && classDMSToolsManager.Instance.ToolCount > 0;   
             if (validateSamples == true)
             {
                 formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
