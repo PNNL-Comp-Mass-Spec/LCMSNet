@@ -1,6 +1,7 @@
 PNNL Internal Build Instructions:
+Easy way: run buildall.bat with MSBuild in your PATH environment variable.
+Hard way:
 To build a fully functional and up-to-date LcmsNet use:
-Note: Build all solutions using the PNNLRelease configuration.
 1.      Build the SDK solution in \LcmsNet\SDK
 
 2.      Build the SQLiteTools solution in \LcmsNet\SQLiteTools

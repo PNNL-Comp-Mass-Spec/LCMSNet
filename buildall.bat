@@ -12,36 +12,36 @@ SET LOG=/fileLogger
 SET LOGFILE=%ROOTPATH%lcmsnetBuild.txt
 SET LGPARAMS=/fileloggerparameters:logfile=%LOGFILE%;append=true
 SET NOLOGO=/nologo
-SET BOPTS=%CONFIG% %VERB% %LOG% %LGPARAMS% %NOLOGO%
+SET BOPTS=%VERB% %LOG% %LGPARAMS% %NOLOGO%
 
 if exist %LOGFILE% DEL %LOGFILE%
 REM Build LcmsNetSDK solution
 ECHO Building LcmsNetSDK solution...
-MSBuild %BOPTS% %ROOTPATH%LcmsNet\SDK\LcmsNetSDKs.sln
+MSBuild %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\SDK\LcmsNetSDKs.sln
 if errorlevel 1 goto :ERROR
 ECHO Done.
 
 REM Build LcmsNetSQLiteTools solution
 ECHO Building LcmsNetSQLiteTools solution...
-MSBUILD %BOPTS% %ROOTPATH%LcmsNet\SQLiteTools\SQLiteTools.sln
+MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\SQLiteTools\SQLiteTools.sln
 if errorlevel 1 goto :ERROR
 ECHO Done.
 
 REM Build LcmsNetDMSTools
 ECHO Building LcmsNetDmsTools solution...
-MSBUILD %BOPTS% %ROOTPATH%LcmsNetDmsTools\LcmsNetDmsTools.sln
+MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNetDmsTools\LcmsNetDmsTools.sln
 if errorlevel 1 goto :ERROR
 ECHO Done.
 
 REM Build Plugins
 ECHO Building LcmsNetPlugins...
-MSBUILD %BOPTS% %ROOTPATH%lcmsNetPlugins\lcmsnetPlugins.sln
+MSBUILD %CONFIG% %BOPTS% %ROOTPATH%lcmsNetPlugins\lcmsnetPlugins.sln
 if errorlevel 1 goto :ERROR
 ECHO Done.
 
 REM Build Main solution.
 ECHO Building LcmsNet...
-MSBUILD %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln 
+MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln 
 if errorlevel 1 goto :ERROR
 ECHO Done.
 

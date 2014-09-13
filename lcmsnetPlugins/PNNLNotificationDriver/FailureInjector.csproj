@@ -78,11 +78,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "PNNLRelease"  goto :release
-else goto :end
-:release
+    <PostBuildEvent>
 xcopy /y "$(TargetDir)*.dll" "$(SolutionDir)..\pluginDLLs\"
-
-:end</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
