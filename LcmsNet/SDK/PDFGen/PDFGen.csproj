@@ -60,7 +60,7 @@
       <HintPath>.\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp-WPF">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\PdfSharp-WPF.dll</HintPath>
+      <HintPath>.\PdfSharp-WPF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,6 +78,7 @@
   <ItemGroup>
     <Content Include="EMSL.DocumentGenerator.Core.dll" />
     <Content Include="EMSL.DocumentGenerator.PDFSharp.dll" />
+    <Content Include="PdfSharp-WPF.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">

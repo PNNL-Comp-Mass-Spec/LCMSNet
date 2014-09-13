@@ -33,12 +33,6 @@
     <Reference Include="EMSL.DocumentGenerator.PDFSharp">
       <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Finch">
-      <HintPath>..\..\..\lib\Plugins\LCMSNet\Finch.dll</HintPath>
-    </Reference>
-    <Reference Include="FluidicsSDK">
-      <HintPath>..\..\..\lib\Plugins\LCMSNet\FluidicsSDK.dll</HintPath>
-    </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\..\lib\Plugins\LCMSNet\LcmsNetSdk.dll</HintPath>
     </Reference>

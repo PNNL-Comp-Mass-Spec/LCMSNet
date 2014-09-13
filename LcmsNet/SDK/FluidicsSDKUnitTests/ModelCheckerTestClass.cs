@@ -17,7 +17,7 @@ using FluidicsSDK.ModelCheckers;
 using FluidicsSDK;
 using NUnit.Framework;
 using LcmsNetDataClasses.Devices;
-using TestPluginLibrary;
+using DemoPluginLibrary;
 using LcmsNetDataClasses;
 
 namespace FluidicsSDKUnitTests
@@ -38,10 +38,10 @@ namespace FluidicsSDKUnitTests
             {
                 cm = ConnectionManager.GetConnectionManager;
                 dm = FluidicsDeviceManager.DeviceManager;
-                TestPump pump1 = new TestPump();
-                TestPump pump2 = new TestPump();
+                DemoPump pump1 = new DemoPump();
+                DemoPump pump2 = new DemoPump();
                 pump2.Name = "Stupid Pump2";
-                TestTee t = new TestTee();
+                DemoTee t = new DemoTee();
                 dm.Add(pump1);
                 dm.Add(pump2);
                 dm.Add(t);

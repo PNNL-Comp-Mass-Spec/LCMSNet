@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using FluidicsSDK.Base;
-using TestPluginLibrary;
+using DemoPluginLibrary;
 using FluidicsSDK.Managers;
 using FluidicsSDK;
 using System.Drawing;
@@ -44,7 +44,7 @@ namespace FluidicsSDKUnitTests
         public void DeviceManagerAddAndRemove()
         {
             //add
-            TestPump p = new TestPump();
+            DemoPump p = new DemoPump();
             FluidicsDeviceManager.DeviceManager.Add(p);
             Assert.AreEqual(1, FluidicsDeviceManager.DeviceManager.GetDevices().Count);
             //remove
@@ -123,7 +123,7 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void MoveDevice()
         {
-            TestPump p = new TestPump();
+            DemoPump p = new DemoPump();
             FluidicsDeviceManager.DeviceManager.Add(p);
             FluidicsDevice fp = FluidicsDeviceManager.DeviceManager.FindDevice(p);
             fp.MoveBy(new Point(10, 10));

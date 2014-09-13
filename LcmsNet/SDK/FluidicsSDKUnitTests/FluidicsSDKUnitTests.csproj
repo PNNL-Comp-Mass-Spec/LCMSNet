@@ -39,11 +39,8 @@
     <OutputPath>bin\x86\PNNLRelease\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\..\lib\SDK\LcmsNet\LcmsNetSdk.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\lib\Plugins\LCMSNet\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,6 +50,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TestPluginLibrary">
+      <HintPath>..\..\lcms\LCMSnet\Demo\bin\x86\PNNLRelease\TestPluginLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FluidicSDKUnitTests.cs" />
@@ -60,14 +60,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SDK\Finch\Finch.csproj">
-      <Project>{ea5f9049-0b00-4246-b123-90656b7ff2c0}</Project>
-      <Name>Finch</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">
       <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
       <Name>FluidicsSDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
