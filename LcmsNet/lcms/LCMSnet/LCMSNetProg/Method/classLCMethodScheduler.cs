@@ -544,6 +544,7 @@ namespace LcmsNet.Method
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;
                                             mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
                                             samples[columnID] = null;
+                                            Stop();
                                         }
                                     }
                                     /// 

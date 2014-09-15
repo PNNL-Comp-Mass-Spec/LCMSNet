@@ -373,11 +373,17 @@ namespace LcmsNet.Configuration
                 {
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
                 }
-            
-                
-				// Get the new list of columns from the cache db
-				List<string> columnList = classSQLiteTools.GetColumnList(true);
 
+                List<string> columnList = null;
+                try
+                {
+                    // Get the new list of columns from the cache db
+                    columnList = classSQLiteTools.GetColumnList(true);
+                }
+                catch(classDatabaseDataException ex)
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
+                }
 				// If a valid list was received, then update the display
 				if (columnList == null)
 				{

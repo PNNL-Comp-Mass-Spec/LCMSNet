@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluidicsSDK">
+      <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetSdk">
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -40,9 +46,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TestPluginLibrary">
+      <HintPath>..\..\lcms\LCMSnet\Demo\bin\x86\Debug\TestPluginLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OptimizerUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeKeeperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -14,7 +14,7 @@ using NUnit.Framework;
 using LcmsNet;
 using LcmsNetDataClasses.Method;
 using LcmsNet.Method;
-using TestPluginLibrary;
+using DemoPluginLibrary;
 
 namespace LcmsnetUnitTest
 {
@@ -41,7 +41,7 @@ namespace LcmsnetUnitTest
             methods.Add(new classLCMethod());
             methods.Add(new classLCMethod());
             classLCEvent[] events = { new classLCEvent(), new classLCEvent() }; //events for the methods
-            TestPump pump = new TestPump();
+            DemoPump pump = new DemoPump();
             events[0].Device = pump;
             events[1].Device = pump;
 
@@ -101,7 +101,7 @@ namespace LcmsnetUnitTest
         public void TwoMethodsOnTheSameColumnWithOverlapDifferentDevices()
         {
             //Changing method[1], Event[0] to use a different device.
-            TestValve valve = new TestValve();
+            DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -144,7 +144,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPreOverlap = false;
             methods[0].AllowPostOverlap = false;
             //Changing method[1], Event[0] to use a different device.         
-            TestValve valve = new TestValve();
+            DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -184,7 +184,7 @@ namespace LcmsnetUnitTest
         public void TwoMethodsOnDifferentColumnsWithOverlapDifferentDevice()
         {
             //Changing method[1], Event[0] to use a different device.         
-            TestValve valve = new TestValve();
+            DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -229,7 +229,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPostOverlap = false;
             methods[0].AllowPreOverlap = false;
             //Changing method[1], Event[0] to use a different device.  
-            TestValve valve = new TestValve();
+            DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
