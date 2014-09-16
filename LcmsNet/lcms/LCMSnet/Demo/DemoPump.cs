@@ -21,8 +21,8 @@ namespace DemoPluginLibrary
 {
     //TODO: Add a custom user control for this guy....maybe?                                 
     [classDeviceControlAttribute(null,
-                                 "Test Pump",
-                                 "Test")]
+                                 "Demo Pump",
+                                 "Demo")]
     public class DemoPump : IDevice, IPump, IFluidicsPump
     {
         #region Members
@@ -34,15 +34,15 @@ namespace DemoPluginLibrary
         #region Methods
         public DemoPump()
         {
-            Name = "Stupid Pump";
+            Name = "DemoPump";
             Version = "infinity.";
             Flowrate = 1;
             Pressure = 1;
             PercentB = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);
             MobilePhases = new List<MobilePhase>();
-            MobilePhases.Add(new MobilePhase("testPhase1", "A test mobile phase"));
-            MobilePhases.Add(new MobilePhase("testPhase2", "A test mobile phase"));
+            MobilePhases.Add(new MobilePhase("DemoPhase1", "A test mobile phase"));
+            MobilePhases.Add(new MobilePhase("DemoPhase2", "A test mobile phase"));
             
         }
 

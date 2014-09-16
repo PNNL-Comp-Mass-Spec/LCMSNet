@@ -225,7 +225,7 @@ namespace LcmsNet.Method
                         /// Tell the column thread to die..
                         /// 
 
-                        Print("Killing column: " + i.ToString(), CONST_VERBOSE_EVENTS);
+                        Print("Killing column: " + i.ToString(), CONST_VERBOSE_LEAST);
                         if (mlist_columnWorkers[i].IsBusy)
                         {
                             sampleEndTime[i] = DateTime.MinValue;
@@ -247,7 +247,7 @@ namespace LcmsNet.Method
                 }
                 catch(Exception)
                 {
-                    Print("Error occured while shutting down column" + i.ToString(), CONST_VERBOSE_EVENTS);
+                    Print("Error occured while shutting down column" + i.ToString(), CONST_VERBOSE_LEAST);
                 }
                 finally
                 {
@@ -486,7 +486,7 @@ namespace LcmsNet.Method
                     /// 
                     case CONST_EVENT_NUM_STOP_SAMPLES:
                         mobj_stopSamples.Reset();
-                        Print("Killing all samples on all columns.", CONST_VERBOSE_EVENTS);
+                        Print("Killing all samples on all columns.", CONST_VERBOSE_LEAST);
                         StopSamples();                       
                         if (m_notifyOnKill)
                         {
@@ -497,7 +497,7 @@ namespace LcmsNet.Method
                                 StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
                             }
                         }
-                        Print("Done killing columns.  ", CONST_VERBOSE_EVENTS);
+                        Print("Done killing columns.  ", CONST_VERBOSE_LEAST);
                         mobj_stoppedSamples.Set();
                         break;                                                                   
                     default:                        
@@ -533,7 +533,7 @@ namespace LcmsNet.Method
                                             mlist_columnWorkers[columnID].CancelAsync();
                                             classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID]];
                                             string message = string.Format(
-                                                                    "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1}",
+                                                                    "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1} Stopping all samples",
                                                                     columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                                                     sampleEndTime[columnID].ToString(),
                                                                     lcEvent.Device.Name,        

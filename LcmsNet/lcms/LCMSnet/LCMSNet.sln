@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsnetUnitTest", "LcmsnetU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoPluginLibrary", "Demo\DemoPluginLibrary.csproj", "{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoFiles", "DemoFiles", "{E21C9EE4-EDD6-46EE-9463-216933A81959}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,7 +56,6 @@ Global
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|Mixed Platforms.ActiveCfg = Debug|x86
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|Mixed Platforms.Build.0 = Debug|x86
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|x86.ActiveCfg = Debug|x86
-		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|x86.Build.0 = Debug|x86
 		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|Mixed Platforms.Build.0 = Debug|x86

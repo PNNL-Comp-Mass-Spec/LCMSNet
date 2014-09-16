@@ -2,11 +2,12 @@
 REM Build.bat 
 REM Batch file for building lcmsnet with dmstools and plugins as if using the PNNL internal installer.
 REM Written by Christopher Walters 9/12/2014
+REM Last Modified 9/15/2014
 REM Path to MSBuild must be in your PATH environment variable in order for this batch file to work.
 
 SETLOCAL
 SET ROOTPATH=%~dp0
-SET CONFIG=/p:Configuration=Debug /p:Platform=x86
+SET CONFIG=/p:Configuration=PNNLRelease /p:Platform=x86
 SET VERB=/verbosity:quiet
 SET LOG=/fileLogger
 SET LOGFILE=%ROOTPATH%lcmsnetBuild.txt

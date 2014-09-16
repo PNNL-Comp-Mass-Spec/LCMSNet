@@ -11,14 +11,14 @@ namespace DemoPluginLibrary
 {
     //TODO: Add a custom user control for this guy....maybe?                                 
     [classDeviceControlAttribute(typeof(DemoValve2AdvancedControl),
-                                    "Test Valve - Multipostion",
-                                    "Test")]
+                                    "Demo Valve - Multipostion",
+                                    "Demo")]
     public class DemoValve2 : IDevice, INinePortValve
     {
         #region Methods
         public DemoValve2()
         {
-            Name = "Stupid Valve";
+            Name = "Demo Valve";
             Version = "infinity.";
             Position = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);

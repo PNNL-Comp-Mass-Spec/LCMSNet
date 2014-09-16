@@ -9,14 +9,14 @@ using LcmsNetDataClasses.Method;
 namespace DemoPluginLibrary
 {
      [classDeviceControlAttribute(typeof(DemoClosureAdvanceControl),
-                                 "Test Closure",
-                                 "Test")]
+                                 "Demo Closure",
+                                 "Demo")]
 
     public class DemoClosure: IDevice, IFluidicsClosure
     {
         public DemoClosure()
         {
-            Name = "Test Closure Name";
+            Name = "Demo Closure";
         }
 
         #region Methods
@@ -66,10 +66,10 @@ namespace DemoPluginLibrary
         /// <param name="portName">The port to send the voltage on</param>
         /// <param name="voltage">The voltage to set</param>        
         [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
-        public int Trigger(int pulseLengthSeconds, string portName, double voltage)
+        public bool Trigger(int pulseLengthSeconds, string portName, double voltage)
         {
             //interact with hardware here.
-            return 0;
+            return true;
         }
         #endregion
 
@@ -126,7 +126,7 @@ namespace DemoPluginLibrary
 
         public string GetClosureType()
         {
-            return "Test Closure Type";
+            return "DemoClosure";
         }
     }
 }

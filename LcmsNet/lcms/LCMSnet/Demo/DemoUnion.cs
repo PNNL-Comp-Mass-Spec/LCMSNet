@@ -17,14 +17,14 @@ namespace DemoPluginLibrary
 {
      [classDeviceControlAttribute(null,
                                   typeof(FluidicsUnion),
-                                 "Test Union",
-                                 "Test")]
+                                 "Demo Union",
+                                 "Demo")]
     public class DemoUnion:IDevice
     {
         #region Methods
          public DemoUnion()
          {
-             Name = "Test Union";
+             Name = "Demo Union";
          }
 
         public bool Initialize(ref string errorMessage)

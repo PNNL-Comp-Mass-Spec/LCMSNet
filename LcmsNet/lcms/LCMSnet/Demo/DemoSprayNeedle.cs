@@ -19,13 +19,13 @@ namespace DemoPluginLibrary
 {
     [classDeviceControlAttribute(null,
                                  typeof(FluidicsSprayNeedle),
-                                 "Test Spray Needle",
-                                 "Test")]
+                                 "Demo Spray Needle",
+                                 "Demo")]
     public class DemoSprayNeedle:IDevice
     {
            public DemoSprayNeedle()
            {
-               Name = "Stupid Needle";
+               Name = "Demo Spray Needle";
                Version = "infinity.";
                Position = 1;
                AbortEvent = new System.Threading.ManualResetEvent(false);

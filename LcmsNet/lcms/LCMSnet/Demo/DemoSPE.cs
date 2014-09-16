@@ -18,8 +18,8 @@ using FluidicsSDK.Base;
 namespace DemoPluginLibrary
 {                            
     [classDeviceControlAttribute(typeof(DemoValveAdvancedControl),
-                                 "Test SPE",
-                                 "Test")]
+                                 "Demo SPE",
+                                 "Demo")]
     public class DemoSPE : IDevice, ISolidPhaseExtractor
     {
 
@@ -27,7 +27,7 @@ namespace DemoPluginLibrary
      
         public DemoSPE()
         {
-            Name = "Stupid SPE";
+            Name = "Demo SPE";
             Version = "infinity";
             Position = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);

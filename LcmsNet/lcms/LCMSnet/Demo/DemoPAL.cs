@@ -12,8 +12,8 @@ namespace DemoPluginLibrary
 {
     [Serializable]
     [classDeviceControlAttribute(typeof(DemoPALAdvancedControl),                                 
-                                 "TestPAL",
-                                 "Test")
+                                 "DemoPAL",
+                                 "Demo")
     ]
     public class DemoPAL: IDevice, IFluidicsSampler
     {
@@ -29,7 +29,7 @@ namespace DemoPluginLibrary
 
         public DemoPAL()
         {
-            Name = "Stupid PAL";
+            Name = "DemoPAL";
             Version = "infinity.";
             AbortEvent = new System.Threading.ManualResetEvent(false);
         }

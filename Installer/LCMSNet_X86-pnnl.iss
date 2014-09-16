@@ -46,12 +46,13 @@ Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                            
 ; Internal Libraries
 
 ; dmstools
-Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\Release\*.dll";                DestDir: "{userappdata}\dmsExtensions";  Flags: ignoreversion
+Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\Release\*.dll";                DestDir: "{userappdata}\dmsExtensions";      Flags: ignoreversion
 ;SDK
 Source: "{#MyLib}\*";                                                                                  DestDir: "{app}";          Flags: ignoreversion
 
 ;Plugins
-Source: "{#MyPlugins}\*";                                                                              DestDir: "{app}\Plugins\"; Flags: ignoreversion        
+Source: "{#MyPlugins}\*";                                                                              DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "..\..\..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";                                          DestDir: "{sys}";          Flags: ignoreversion
 
 ; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 

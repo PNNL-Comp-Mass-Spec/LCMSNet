@@ -10,14 +10,14 @@ namespace DemoPluginLibrary
 {
       [classDeviceControlAttribute(null,
                                    typeof(FluidicsTee),
-                                   "Test Tee",
-                                   "Test")]
+                                   "DemoTee",
+                                   "Demo")]
     public class DemoTee:IDevice
     {
         #region Methods
         public DemoTee()
         {
-            Name = "Test Tee";
+            Name = "Demo Tee";
         }
 
         public bool Initialize(ref string errorMessage)

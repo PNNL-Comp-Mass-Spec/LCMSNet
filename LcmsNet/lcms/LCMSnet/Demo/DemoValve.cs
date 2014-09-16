@@ -10,14 +10,14 @@ using FluidicsSDK.Base;
 namespace DemoPluginLibrary
 {                                 
     [classDeviceControlAttribute(typeof(DemoValveAdvancedControl),
-                                 "Test Valve - Two Position",
-                                 "Test")]
+                                 "Demo Valve - Two Position",
+                                 "Demo")]
     public class DemoValve : IDevice, IFourPortValve
     {
         #region Methods
         public DemoValve()
         {
-            Name = "Stupid Valve";
+            Name = "Demo Valve";
             Version = "infinity.";
             Position = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);
