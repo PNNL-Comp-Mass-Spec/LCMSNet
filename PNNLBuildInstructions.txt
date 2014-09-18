@@ -1,5 +1,8 @@
 PNNL Internal Build Instructions:
 Easy way: run buildall.bat with MSBuild in your PATH environment variable.
+
+For release: run buildall.bat with the command line parameter "release" without the quotes, and then run the installer script.
+
 Hard way:
 To build a fully functional and up-to-date LcmsNet use:
 1.      Build the SDK solution in \LcmsNet\SDK
