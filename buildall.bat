@@ -44,19 +44,7 @@ REM Build Main solution.
 IF [%1]==[] (
 ECHO Building LcmsNet...
 MSBUILD /p:Configuration=Debug /p:targetPlatform=x86 %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln 
-)
-IF %1==release (
-ECHO Building LcmsNet in release mode...
-MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln
-)
-if errorlevel 1 goto :ERROR
-ECHO Done.
 
-REM No need to do this copying if doing a release build, since we'll just be running the install script anyway, and it knows where to grab files from.
-IF %1==release (
-ECHO Skipping copy step...
-goto :COMPLETE)
-IF NOT %1==release (
 ECHO Copying DmsTools to %APPDATA%\LCMSNet\dmsExtensions
 xcopy /y /q %ROOTPATH%LcmsNetDmsTools\LcmsNetDmsTools\bin\x86\PNNLRelease\* %APPDATA%\LCMSNet\dmsExtensions\
 xcopy /y /q %ROOTPATH%LcmsNetDmsTools\LcmsNetDmsTools\prismDMS.config %APPDATA%\LCMSNet\dmsExtensions\
@@ -65,6 +53,13 @@ ECHO Done.
 
 ECHO Copying Plugins to %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug\plugins
 xcopy /y /q %ROOTPATH%pluginDLLs\*.dll %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug\plugins\
+if errorlevel 1 goto :ERROR
+ECHO Done.
+goto :COMPLETE)
+
+IF %1==release (
+ECHO Building LcmsNet in release mode...
+MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln
 if errorlevel 1 goto :ERROR
 ECHO Done.
 goto :COMPLETE)

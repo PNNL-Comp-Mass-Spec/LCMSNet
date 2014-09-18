@@ -82,6 +82,14 @@ namespace LcmsNetDmsTools
             }
         }	// End property
 
+        public string DMSVersion
+        {
+            get
+            {
+                return configuration[CONST_DMS_VERSION_KEY];
+            }
+        }
+
         private StringDictionary configuration;
      
         #endregion

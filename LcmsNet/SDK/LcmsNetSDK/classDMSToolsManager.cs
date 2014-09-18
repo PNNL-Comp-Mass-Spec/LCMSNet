@@ -117,7 +117,7 @@ namespace LcmsNetSDK
                         classLCMSSettings.SetParameter("DMSTool", DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
                     }
                 }
-                else
+                else if (DmsTools.Count() == 0)
                 {
                     throw new InvalidOperationException("No dms tools available");
                 }

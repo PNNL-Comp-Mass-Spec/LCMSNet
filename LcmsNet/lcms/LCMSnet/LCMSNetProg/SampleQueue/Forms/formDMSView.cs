@@ -203,7 +203,7 @@ public partial class formDMSView : Form
 
 				// Form caption
 				string dbInUse;
-				if (Properties.Settings.Default.DMSVersion.Contains("_T3"))
+				if (classDMSToolsManager.Instance.SelectedTool.DMSVersion.Contains("_T3"))
 				{
 					dbInUse = " (Using Development Database)";
 				}

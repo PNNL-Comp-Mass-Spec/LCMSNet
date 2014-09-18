@@ -4,6 +4,7 @@ namespace LcmsNetDataClasses
     public interface IDmsTools
     {
         string ErrMsg { get; set; }
+        string DMSVersion { get; }
         void GetCartListFromDMS();
         void GetColumnListFromDMS();
         void GetDatasetTypeListFromDMS();
