@@ -38,12 +38,11 @@ namespace LcmsNetSDK
             catalog.Catalogs.Add(new DirectoryCatalog(catalogPath));
             mmef_compositionContainer = new CompositionContainer(catalog);
             mmef_compositionContainer.ComposeParts(this);
-            if(ToolCount == 0)
+            if (ToolCount == 0)
             {
                 classLCMSSettings.SetParameter("DMSTool", string.Empty);
             }
-        }        
-      
+        }
         /// <summary>
         /// Select the Dms tool for future use
         /// </summary>
@@ -52,32 +51,30 @@ namespace LcmsNetSDK
         public void SelectTool(string toolName, string toolVersion)
         {
             bool toolSelected = false;
-            bool toolFound = false;            
-            foreach(Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
+            bool toolFound = false;
+            foreach (Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
             {
-                if(tool.Metadata.Name == toolName)
+                if (tool.Metadata.Name == toolName)
                 {
                     toolFound = true;
-                    if(tool.Metadata.Version == toolVersion)
-                    {                    
-                        toolSelected = true;                      
+                    if (tool.Metadata.Version == toolVersion)
+                    {
+                        toolSelected = true;
                         midmstools_selectedTools = tool.Value;
+                        classLCMSSettings.SetParameter("DMSTool", toolName + "-" + toolVersion);
                     }
                 }
             }
-            if(!toolSelected)
+            if (!toolSelected && !toolFound)
             {
-                if(!toolFound)
-                {
-                    // Tool name was not found.
-                    throw new ArgumentException("Tool " + toolName + " unavailable for selection", "toolName");
-                }
-                else
-                {
-                    // Tool was not found with specified version.
-                    throw new ArgumentException("Tool version " + toolVersion + " unavailable for selection, version not found.", "toolVersion");
-                }
+                // Tool name was not found.
+                throw new ArgumentException("Tool " + toolName + " unavailable for selection", "toolName");
             }
+            else if (!toolSelected)
+            {
+                // Tool was not found with specified version.
+                throw new ArgumentException("Tool version " + toolVersion + " unavailable for selection, version not found.", "toolVersion");
+            }                        
         }
 
         /// <summary>
@@ -86,8 +83,8 @@ namespace LcmsNetSDK
         /// <returns>a list of strings containing name and version for each detected IDmsTools extension.</returns>
         public List<string> ListTools()
         {
-            List<string> tools = new List<string>();            
-            foreach(Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
+            List<string> tools = new List<string>();
+            foreach (Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append(tool.Metadata.Name);
@@ -104,11 +101,21 @@ namespace LcmsNetSDK
         public IDmsTools SelectedTool
         {
             get
-            {           
+            {
                 // Check that we have a tool available, if not, report via exception otherwise, return the selected, or first available tool.
-                if(midmstools_selectedTools == null && DmsTools.Count() != 0)
+                if (midmstools_selectedTools == null && DmsTools.Count() != 0)
                 {
-                    midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
+                    string lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
+                    string[] toolTokens = lastSelectedTool.Split(new char[] { '-' });
+                    if (lastSelectedTool != string.Empty)
+                    {
+                            midmstools_selectedTools = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Value;                        
+                    }
+                    else
+                    {
+                        midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
+                        classLCMSSettings.SetParameter("DMSTool", DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
+                    }
                 }
                 else
                 {
@@ -117,11 +124,11 @@ namespace LcmsNetSDK
                 return midmstools_selectedTools;
             }
         }
-   
+
         /// <summary>
         /// Contains the MEF references to DmsTools
         /// </summary>
-        [ImportMany]        
+        [ImportMany]
         private IEnumerable<Lazy<IDmsTools, IDmsMetaData>> DmsTools
         {
             get;
@@ -136,7 +143,7 @@ namespace LcmsNetSDK
             get
             {
                 return DmsTools.Count();
-            }            
+            }
         }
 
         /// <summary>
@@ -146,13 +153,12 @@ namespace LcmsNetSDK
         {
             get
             {
-                if(m_instance == null)
+                if (m_instance == null)
                 {
                     m_instance = new classDMSToolsManager();
                 }
                 return m_instance;
             }
         }
-
     }
 }

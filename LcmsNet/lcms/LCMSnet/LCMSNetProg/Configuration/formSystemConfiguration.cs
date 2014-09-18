@@ -152,7 +152,7 @@ namespace LcmsNet.Configuration
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to select last selected Dms tool" + ex.Message);
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "SystemConfiguration: Unable to select last selected Dms tool" + ex.Message);
                 if (comboDmsTools.Items.Count > 0)
                 {
                     comboDmsTools.SelectedIndex = 0;
