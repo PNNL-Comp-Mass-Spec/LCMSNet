@@ -86,9 +86,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\TestTool\bin\x86\Debug\PrismDMS.config">
+    <None Include="PrismDMS.config">
       <SubType>Designer</SubType>
-      <Link>PrismDMS.config</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
