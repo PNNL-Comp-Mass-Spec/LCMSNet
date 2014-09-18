@@ -86,10 +86,10 @@ namespace LcmsNetSDK
         /// <returns>a list of strings containing name and version for each detected IDmsTools extension.</returns>
         public List<string> ListTools()
         {
-            List<string> tools = new List<string>();
-            StringBuilder sb = new StringBuilder();
+            List<string> tools = new List<string>();            
             foreach(Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
             {
+                StringBuilder sb = new StringBuilder();
                 sb.Append(tool.Metadata.Name);
                 sb.Append("-");
                 sb.Append(tool.Metadata.Version);

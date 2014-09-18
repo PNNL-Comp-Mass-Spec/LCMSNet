@@ -5,7 +5,7 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-// Last modified 09/11/2014
+// Last modified 09/17/2014
 //						- 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
 //						- 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
 //						- 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<classSampleData>
@@ -25,14 +25,19 @@
 //						- 04/30/2013 (FCT) - Modified get carts sql command string to include "No_Cart" in the results.
 //						- 05/22/2014 (MEM) - Replace Select * with selection of specific columns
 //                      - 09/11/2014 (CJW) - Modified to be an MEF Extension for lcmsnet
+//                      - 09/17/2014 (CJW) - Modified to use a stand-alone configuration file instead of the LcmsNet app configuration file.
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
 
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
@@ -44,6 +49,7 @@ namespace LcmsNetDmsTools
 {
     [Export(typeof(IDmsTools))]
     [ExportMetadata("Name", "PrismDMSTools")]
+    [ExportMetadata("Version", "1.0")]
     public class classDBTools : LcmsNetDataClasses.IDmsTools
     {
         //*********************************************************************************************************
@@ -52,6 +58,15 @@ namespace LcmsNetDmsTools
 
         #region "Class variables"
          string mstring_ErrMsg = "";
+
+         /// <summary>
+         /// key to access the DMS version string in the configuration dictionary.
+         /// </summary>
+         private const string CONST_DMS_VERSION_KEY = "DMSVersion";
+         /// <summary>
+         /// key to access the encoded DMS password string in the configuration dictionary.
+         /// </summary>
+         private const string CONST_DMS_PASSWORD_KEY = "DMSPwd";
         #endregion
 
         #region "Properties"
@@ -66,18 +81,63 @@ namespace LcmsNetDmsTools
                 mstring_ErrMsg = value;
             }
         }	// End property
+
+        private StringDictionary configuration;
+     
         #endregion
 
         #region "Constructors"
         /// <summary>
         /// Constructor
         /// </summary>
-         classDBTools()
+        public classDBTools()
         {
+            configuration = new StringDictionary();
+            LoadConfiguration();
         }
         #endregion
 
         #region "Methods"
+
+        /// <summary>
+        /// Loads DMS configuration from file
+        /// </summary>
+        private void LoadConfiguration()
+        {
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.ValidationType = ValidationType.Schema;
+            readerSettings.ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema;
+            readerSettings.ValidationEventHandler += settings_ValidationEventHandler;
+
+            string configurationPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\PrismDMS.config";
+            XmlReader reader = XmlReader.Create(configurationPath, readerSettings);
+            while(reader.Read())
+            {
+                switch(reader.NodeType)
+                {
+                    case XmlNodeType.Element:                         
+                        if(reader.GetAttribute("dmssetting") == "true")
+                        {
+                            string settingName = reader.Name.Remove(0,2);
+                            configuration[settingName] = reader.ReadString();
+                        }                 
+                        break;
+                }
+            }
+        }
+
+        void settings_ValidationEventHandler(object sender, ValidationEventArgs e)
+        {            
+            if(e.Severity == XmlSeverityType.Error)
+            {
+                throw new InvalidOperationException(e.Message, e.Exception);
+            }
+            else
+            {
+                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DmsTools Configuration warning: " + e.Message);
+            }
+        }
+
         /// <summary>
         /// Loads all DMS data into cache
         /// </summary>
@@ -684,7 +744,7 @@ namespace LcmsNetDmsTools
             string retStr = "Data Source=gigasax;Initial Catalog="; //Base connection string
 
             // Get DMS version and append to base string
-            string dmsVersion = classLCMSSettings.GetParameter("DMSVersion");
+            string dmsVersion = configuration[CONST_DMS_VERSION_KEY];
             if (dmsVersion != null)
             {
                 retStr += dmsVersion + ";User ID=LCMSNetUser;Password=";
@@ -695,7 +755,7 @@ namespace LcmsNetDmsTools
             }
 
             // Get password and append to return string
-            string dmsPassword = classLCMSSettings.GetParameter("DMSPwd");
+            string dmsPassword = configuration[CONST_DMS_PASSWORD_KEY];
             if (dmsPassword != null)
             {
                 retStr += DecodePassword(dmsPassword);

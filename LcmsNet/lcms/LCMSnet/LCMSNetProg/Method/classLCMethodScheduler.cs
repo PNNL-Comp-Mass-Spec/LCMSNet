@@ -3,7 +3,7 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009 Battle Memorial Institute
  * 
- * Last Modified 8/7/2014 By Christopher Walters 
+ * Last Modified 9/16/2014 By Christopher Walters 
  *********************************************************************************************************/
 using System;
 using System.Threading;
@@ -209,6 +209,15 @@ namespace LcmsNet.Method
 
             mbool_stopping = false;
         }
+
+        private void StopAllOnOverdue()
+        {
+            mbool_stopping = true;
+            StopSamples();
+            mobj_sampleQueue.StopRunningQueue();
+            mbool_stopping = false;
+        }
+
         /// <summary>
         /// Stops any running samples on all column threads but does not terminate them.
         /// </summary>
@@ -363,6 +372,11 @@ namespace LcmsNet.Method
             classMethodFileTools.WriteMethodFiles((classSampleData)sample);          
         }      
   
+        private static void WriteIncompleteSampleInformation(object sample)
+        {
+            classMethodFileTools.WriteIncompleteMethodFiles((classSampleData)sample);
+        }
+
         /// <summary>
         /// Alert listeners that an error has occurred.
         /// </summary>
@@ -543,8 +557,9 @@ namespace LcmsNet.Method
                                             sampleEndTime[columnID] = DateTime.MinValue;
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;
                                             mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
-                                            samples[columnID] = null;
-                                            Stop();
+                                            samples[columnID] = null;                                            
+                                            StopAllOnOverdue();
+                                            ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, mlist_columnThreads[columnID].Sample);
                                         }
                                     }
                                     /// 

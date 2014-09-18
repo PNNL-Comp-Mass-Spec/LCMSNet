@@ -46,7 +46,8 @@ Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                            
 ; Internal Libraries
 
 ; dmstools
-Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\Release\*.dll";                DestDir: "{userappdata}\dmsExtensions";      Flags: ignoreversion
+Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\x86\PNNLRelease\*.dll";        DestDir: "{userappdata}\dmsExtensions";      Flags: ignoreversion
+Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\*.config";                         DestDir: "{userappdata}\dmsExtensions";      Flags: ignoreversion
 ;SDK
 Source: "{#MyLib}\*";                                                                                  DestDir: "{app}";          Flags: ignoreversion
 

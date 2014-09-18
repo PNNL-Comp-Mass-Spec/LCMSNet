@@ -3,7 +3,7 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009 Battle Memorial Institute
  * 
- * Last Modified 8/7/2014 By Christopher Walters 
+ * Last Modified 9/16/2014 By Christopher Walters 
  *********************************************************************************************************/
 using System;
 using System.Threading;
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
+using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Method
 {
@@ -152,7 +153,7 @@ namespace LcmsNet.Method
                         classLCEvent actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
                         actualEvent.Start = DateTime.MinValue;
                         actualEvent.Duration = new TimeSpan(0, 0, 0);
-
+                        method.ActualEvents.Add(actualEvent);
                         DateTime finished = LcmsNetSDK.TimeKeeper.Instance.Now;
                         DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
                         classLCEvent lcEvent = methodEvents[eventNumber];
@@ -197,7 +198,7 @@ namespace LcmsNet.Method
                                                 exThrown.StackTrace,                // 3  Stack Trace
                                                 lcEvent.Name,
                                                 lcEvent.Device.Name),
-                                                CONST_VERBOSE_EVENTS);
+                                                CONST_VERBOSE_EVENTS);                            
                         }
                         actualEvent.Start = start;
                         actualEvent.Duration = finished.Subtract(start);
@@ -219,8 +220,11 @@ namespace LcmsNet.Method
                                                     mint_columnId,                            // 1  COL ID
                                                     span.TotalMilliseconds),
                                                     CONST_VERBOSE_EVENTS);
-
+                                DateTime timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
+                                ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString());
                                 timer.WaitMilliseconds(totalMilliseconds, mobj_abortEvent);
+                                long timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
+                                ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString());
                             }
                             decimal totalTimeInTicks =Convert.ToDecimal(method.End.Ticks);
                             long elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
@@ -257,7 +261,7 @@ namespace LcmsNet.Method
                             }
                             throw ex;
                         }
-                        method.ActualEvents.Add(actualEvent);
+                        //method.ActualEvents.Add(actualEvent);
                     }
                 }
             }
@@ -273,6 +277,11 @@ namespace LcmsNet.Method
             {
                 e.Cancel = true;                
             }
+        }
+
+        private void WriteTimeoutLog(object message)
+        {
+            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message as string);
         }
         #endregion
     }

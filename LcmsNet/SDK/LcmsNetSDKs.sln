@@ -14,10 +14,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6317C97-85E3-400C-B374-3FAA2A3226D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDKUnitTests", "LcmsNetSDKUnitTests\LcmsNetSDKUnitTests.csproj", "{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85} = {DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsSDKUnitTests", "FluidicsSDKUnitTests\FluidicsSDKUnitTests.csproj", "{3DE94267-3EEE-4B9D-887D-B97A6CD07698}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsPack", "FluidicsPack\FluidicsPack.csproj", "{6544BDEA-10AE-4867-AFC2-8113D7983D7D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{150D2DD0-F6AE-4E64-9499-B91B7A01D5AD} = {150D2DD0-F6AE-4E64-9499-B91B7A01D5AD}
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85} = {DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,7 +134,6 @@ Global
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.PNNLRelease|Mixed Platforms.ActiveCfg = PNNLRelease|x86
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.PNNLRelease|Mixed Platforms.Build.0 = PNNLRelease|x86
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.PNNLRelease|x86.ActiveCfg = PNNLRelease|x86
-		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.PNNLRelease|x86.Build.0 = PNNLRelease|x86
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.Release|Any CPU.ActiveCfg = PNNLRelease|Any CPU
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.Release|Any CPU.Build.0 = PNNLRelease|Any CPU
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.Release|Mixed Platforms.ActiveCfg = PNNLRelease|x86
