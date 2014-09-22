@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNetDataClasses.Devices

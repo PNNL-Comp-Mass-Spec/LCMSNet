@@ -12,6 +12,7 @@ using System.ComponentModel;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Method
 {

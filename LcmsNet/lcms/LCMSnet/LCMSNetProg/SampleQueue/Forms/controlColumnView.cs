@@ -330,7 +330,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="offset">Amount to move the samples (-1 for lower sequence numbers) (1 for higher sequence numbers)</param>
         protected override void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
-            int numEnabledColumns = LcmsNet.Configuration.classCartConfiguration.NumberOfEnabledColumns;
+            int numEnabledColumns = classCartConfiguration.NumberOfEnabledColumns;
 
             /// 
             /// We are moving the sample by N in the queue to offset for the enabled / disabled columns.

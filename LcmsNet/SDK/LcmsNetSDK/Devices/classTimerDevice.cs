@@ -4,9 +4,8 @@ using System.Threading;
 //using LcmsNet.Devices;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
 
-namespace LcmsNet.Method
+namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Class that handles low level timing.  Has one method to wait!

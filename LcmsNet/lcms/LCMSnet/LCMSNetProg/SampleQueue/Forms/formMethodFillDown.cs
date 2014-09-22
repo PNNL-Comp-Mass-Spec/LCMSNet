@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetSQLiteTools;
-using LcmsNet.Configuration;
+using LcmsNetDataClasses.Configuration;
 using LcmsNet.Method;
 namespace LcmsNet.SampleQueue.Forms
 {

@@ -91,9 +91,9 @@ namespace LcmsNet.Method.Forms
             /// 
             /// Register to listen for device additions or deletions.
             /// 
-            Devices.classDeviceManager.Manager.DeviceAdded   += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
-            Devices.classDeviceManager.Manager.DeviceRemoved += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
-            Devices.classDeviceManager.Manager.DeviceRenamed += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRenamed);
+            classDeviceManager.Manager.DeviceAdded   += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+            classDeviceManager.Manager.DeviceRemoved += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+            classDeviceManager.Manager.DeviceRenamed += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRenamed);
         }
 
         void controlBreakpoint1_Changed(object sender, BreakpointArgs e)
@@ -600,7 +600,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void RegisterDevices()
         {
-            foreach (IDevice device in Devices.classDeviceManager.Manager.Devices)
+            foreach (IDevice device in classDeviceManager.Manager.Devices)
             {
 
                 if (device.DeviceType == enumDeviceType.Fluidics)

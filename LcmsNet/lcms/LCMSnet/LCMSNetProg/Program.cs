@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using LcmsNetDataClasses;
 using LcmsNet.Configuration;
 using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
 using LcmsNetSQLiteTools;
 using LcmsNet.Method;
@@ -294,7 +295,7 @@ namespace LcmsNet
                     Application.DoEvents();
                     classDeviceManager deviceManager = classDeviceManager.Manager;
                     deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled"));
-                    deviceManager.AddDevice(new LcmsNet.Method.classTimerDevice());
+                    deviceManager.AddDevice(new LcmsNetDataClasses.Devices.classTimerDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classBlockDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classLogDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classApplicationDevice());

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using LcmsNet.Devices;
-using LcmsNet.Method;
+//using LcmsNet.Devices;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
-using LcmsNet.Configuration;
+using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNet.SampleQueue
 {
@@ -58,50 +57,18 @@ namespace LcmsNet.SampleQueue
                             {
                                 // Do nothing!
                             }
-                            else if (manager.Devices.Contains(device))
-                            {
-                               /*
-                                /// 
-                                /// See what kind of error was on the device.  This will help us make a 
-                                /// logical error message for the user.
-                                /// 
-                                switch (lcEvent.Device.ErrorType)
-                                {
-                                    case enumDeviceErrorStatus.ErrorAffectsThisColumn:
-                                        errors.Add(new classSampleValidationError(string.Format("The device {0} had an error that affected this column last time.",
-                                                                                    device.Name),
-                                                                                    enumSampleValidationError.Fatal));
-                                        break;
-                                    case enumDeviceErrorStatus.ErrorAffectsAllColumns:
-                                        errors.Add(new classSampleValidationError(string.Format("The device {0} had an error that affects all columns.",
-                                                                                    device.Name),
-                                                                                    enumSampleValidationError.Fatal));
-                                        break;
-                                    case enumDeviceErrorStatus.ErrorSampleOnly:
-                                        // who cares, it only affected the last sample...for now at least.
-                                        break;
-                                    case enumDeviceErrorStatus.NoError:
-                                        // do nothing!
-                                        break;
-                                    default:
-                                        // do nothing!
-                                        break;
-                                }
-                                */
-                            }
-                            else
+                            else if (!manager.Devices.Contains(device))                            
                             {
                                 errors.Add(new classSampleValidationError(
-                                                    string.Format("The device {0} in the LC-Method does not exist.  Make sure the method is valid.", 
-                                                                        device.Name),
-                                                                    enumSampleValidationError.DeviceDoesNotExist));
+                                                    string.Format("The device {0} in the LC-Method does not exist.  Make sure the method is valid.", device.Name),
+                                                    enumSampleValidationError.DeviceDoesNotExist));
                             }
                         }
                         else
                         {
-
-                            errors.Add(new classSampleValidationError(string.Format("The LC-Method {0} is invalid. Make sure the method is built correctly. ", sample.LCMethod.Name)
-                                                                        , enumSampleValidationError.LCMethodIncorrect));
+                            errors.Add(new classSampleValidationError(
+                                                string.Format("The LC-Method {0} is invalid. Make sure the method is built correctly. ", sample.LCMethod.Name),
+                                                enumSampleValidationError.LCMethodIncorrect));
                         }
                     }
                 }           

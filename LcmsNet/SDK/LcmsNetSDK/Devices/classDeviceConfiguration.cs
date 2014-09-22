@@ -17,10 +17,9 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
-using FluidicsSDK.Base;
 using LcmsNetDataClasses.Devices;
 
-namespace LcmsNet.Devices
+namespace LcmsNetDataClasses.Devices
 {
 
 

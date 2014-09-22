@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
 
-namespace LcmsNet.Configuration
+namespace LcmsNetDataClasses.Configuration
 {
     /// <summary>
     /// Class that encapsulates the configuration of the cart from

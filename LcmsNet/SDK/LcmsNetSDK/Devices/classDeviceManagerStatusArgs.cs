@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using LcmsNetDataClasses.Devices;
 
-namespace LcmsNet.Devices
+namespace LcmsNetDataClasses.Devices
 {
 
 

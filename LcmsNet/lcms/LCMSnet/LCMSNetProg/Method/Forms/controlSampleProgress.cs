@@ -85,7 +85,7 @@ namespace LcmsNet.Method.Forms
             // Synch to the device manager so we can construct device-to-color mappings.            
             try
             {
-                if (Devices.classDeviceManager.Manager != null)
+                if (classDeviceManager.Manager != null)
                 {
                     /// 
                     /// Maps device colors from device manager.
@@ -95,8 +95,8 @@ namespace LcmsNet.Method.Forms
                     /// 
                     /// Register device additions and deletions so that we remap color information for display.
                     /// 
-                    Devices.classDeviceManager.Manager.DeviceAdded += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
-                    Devices.classDeviceManager.Manager.DeviceRemoved += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+                    classDeviceManager.Manager.DeviceAdded += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+                    classDeviceManager.Manager.DeviceRemoved += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
                 }
             }
             catch
@@ -145,7 +145,7 @@ namespace LcmsNet.Method.Forms
             /// 
             /// Clear the list so we can re-adjust the mappings
             /// 
-            mdict_deviceColorMappings = classLCMethodRenderer.ConstructDeviceColorMap(LcmsNet.Devices.classDeviceManager.Manager.Devices);
+            mdict_deviceColorMappings = classLCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
         }
         #endregion
 

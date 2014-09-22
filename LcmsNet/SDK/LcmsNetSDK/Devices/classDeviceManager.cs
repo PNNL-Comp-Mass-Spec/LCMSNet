@@ -17,13 +17,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Devices.Pumps;
 using LcmsNetSDK.Data;
 using LcmsNetDataClasses;
 
-namespace LcmsNet.Devices
+namespace LcmsNetDataClasses.Devices
 {         
     /// <summary>
     /// Device manager class for maintaining a list of all devices used by the application.

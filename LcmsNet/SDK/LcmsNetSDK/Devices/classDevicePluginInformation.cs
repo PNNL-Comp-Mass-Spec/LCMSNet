@@ -1,8 +1,7 @@
 ﻿using System;
-using LcmsNetDataClasses.Devices;
 
 
-namespace LcmsNet.Devices
+namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Encapsulates a device type and other extracted properties.

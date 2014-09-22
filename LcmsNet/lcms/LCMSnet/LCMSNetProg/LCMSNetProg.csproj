@@ -97,7 +97,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\classCartConfiguration.cs" />
     <Compile Include="Configuration\classSystemData.cs" />
     <Compile Include="Configuration\controlColumn.cs">
       <SubType>UserControl</SubType>
@@ -149,7 +148,6 @@
     </Compile>
     <Compile Include="Devices\classApplicationDevice.cs" />
     <Compile Include="Devices\classBlockDevice.cs" />
-    <Compile Include="Devices\classDeviceConfiguration.cs" />
     <Compile Include="Devices\Dashboard\formResolveDeviceStatus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -218,15 +216,12 @@
     <Compile Include="Notification\NotificationManager.cs" />
     <Compile Include="Notification\NotificationSetting.cs" />
     <Compile Include="Notification\classNotifier.cs" />
-    <Compile Include="Devices\classDeviceManager.cs" />
-    <Compile Include="Devices\classDeviceManagerStatusArgs.cs" />
     <Compile Include="Devices\Dashboard\formDeviceAddForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Devices\Dashboard\formDeviceAddForm.Designer.cs">
       <DependentUpon>formDeviceAddForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Plugins\classDevicePluginInformation.cs" />
     <Compile Include="Devices\classErrorDevice.cs" />
     <Compile Include="formAbout.cs">
       <SubType>Form</SubType>
@@ -971,6 +966,9 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Devices\Plugins\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

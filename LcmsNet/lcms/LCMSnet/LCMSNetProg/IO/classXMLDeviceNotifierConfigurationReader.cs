@@ -57,7 +57,7 @@ namespace LcmsNet.Devices
         private static void ReadDevice(NotificationConfiguration configuration, XmlNode node)
         {
             string deviceName = node.Attributes.GetNamedItem("name").Value;
-            IDevice device = LcmsNet.Devices.classDeviceManager.Manager.FindDevice(deviceName);
+            IDevice device = classDeviceManager.Manager.FindDevice(deviceName);
 
 
             INotifier notifier = device;
