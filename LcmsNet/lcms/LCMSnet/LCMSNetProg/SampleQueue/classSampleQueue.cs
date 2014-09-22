@@ -29,6 +29,7 @@ using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Experiment;
 
 namespace LcmsNet.SampleQueue
 {

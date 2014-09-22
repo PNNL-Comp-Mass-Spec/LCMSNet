@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetDataClasses.Experiment
 {
 	/// <summary>
 	/// Enumeration detailing how severe the validation error is.

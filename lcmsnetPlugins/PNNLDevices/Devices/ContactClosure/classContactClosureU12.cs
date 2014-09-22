@@ -321,7 +321,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
-            LcmsNet.Method.classTimerDevice timer = new LcmsNet.Method.classTimerDevice();
+            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             if (AbortEvent != null)
             {
                 timer.AbortEvent = AbortEvent;
@@ -394,7 +394,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw ex;
             }
 
-            LcmsNet.Method.classTimerDevice timer = new LcmsNet.Method.classTimerDevice();
+            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try

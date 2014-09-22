@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//using LcmsNet.Devices;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Configuration;
@@ -12,7 +12,7 @@ namespace LcmsNet.SampleQueue
     /// <summary>
     /// Validates a sample for the basics before it can be run by LCMSNet.
     /// </summary>
-    public class classCoreSampleValidator
+    public class classCoreSampleValidator : LcmsNetDataClasses.Experiment.ISampleValidator
     {
         /// <summary>
         /// Validates a sample based on the methods being correct and not in error.

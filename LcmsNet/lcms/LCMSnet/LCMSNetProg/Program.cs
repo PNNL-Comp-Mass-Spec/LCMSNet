@@ -22,7 +22,7 @@ using LcmsNetDataClasses.Logging;
 namespace LcmsNet
 {    
 	 /// <summary>
-	 /// LCMS.net Program that controls LC-Cart hardware components and interfaces with the PRISM LIMS system (DMS).
+	 /// LCMS.net Program that controls LC-Cart hardware components.
 	 /// </summary>
 	static class Program
 	{
@@ -413,6 +413,7 @@ namespace LcmsNet
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;
 
+                    LcmsNetDataClasses.Experiment.classSampleValidatorManager valManager = new LcmsNetDataClasses.Experiment.classSampleValidatorManager();
                     try
                     {
                         Application.Run(main);

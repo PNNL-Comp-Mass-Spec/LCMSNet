@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
     /// Sample Validation Result

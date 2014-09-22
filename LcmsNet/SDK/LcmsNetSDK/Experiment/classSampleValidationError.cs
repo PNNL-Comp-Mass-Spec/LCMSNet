@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
     /// Holds information regarding the type of error that 

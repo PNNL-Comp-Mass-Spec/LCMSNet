@@ -35,7 +35,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Dirs]        
 Name: "{userappdata}\{#MyAppName}\Log"
-Name: "{userappdata}\{#MyAppName}\dmsExtensions\"
+Name: "{userappdata}\{#MyAppName}\dmsExtensions"
+Name: "{userappdata}\{#MyAppName}\SampleValidators"
 Name: "{app}\LCMethods"
 Name: "{app}\Plugins"
 Name: "{app}\cy-GB"

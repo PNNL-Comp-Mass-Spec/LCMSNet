@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Experiment;
 
 namespace LcmsNet.SampleQueue
 {

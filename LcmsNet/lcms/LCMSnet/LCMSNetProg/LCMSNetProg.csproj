@@ -75,6 +75,7 @@
       <HintPath>..\..\..\lib\PDFGen.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -389,10 +390,8 @@
     <Compile Include="SampleQueue\classSampleQueue.cs" />
     <Compile Include="SampleQueue\classSampleQueueArgs.cs" />
     <Compile Include="SampleQueue\classDMSSampleValidator.cs" />
-    <Compile Include="SampleQueue\classSampleValidationError.cs" />
     <Compile Include="SampleQueue\classSequenceComparer.cs" />
     <Compile Include="SampleQueue\codeFileTrayVialAssignmentDelegates.cs" />
-    <Compile Include="SampleQueue\enumSampleValidationError.cs" />
     <Compile Include="SampleQueue\Forms\controlDMSValidator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -413,7 +412,6 @@
     </Compile>
     <Compile Include="SampleQueue\enumListViewComparerMode.cs" />
     <Compile Include="SampleQueue\enumMoveType.cs" />
-    <Compile Include="SampleQueue\enumSampleValidResult.cs" />
     <Compile Include="SampleQueue\Forms\controlTray.cs">
       <SubType>UserControl</SubType>
     </Compile>

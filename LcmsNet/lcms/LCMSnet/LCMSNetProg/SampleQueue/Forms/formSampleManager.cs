@@ -30,6 +30,7 @@ using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
+using LcmsNetDataClasses.Experiment;
 using LcmsNetSQLiteTools;
 using LcmsNetSDK;
 

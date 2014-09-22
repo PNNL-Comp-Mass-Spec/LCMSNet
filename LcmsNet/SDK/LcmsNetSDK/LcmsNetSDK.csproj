@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classDMSToolsManager.cs" />
+    <Compile Include="Experiment\classSampleValidationError.cs" />
+    <Compile Include="Experiment\classSampleValidatorManager.cs" />
     <Compile Include="Configuration\classCartConfiguration.cs" />
     <Compile Include="Data\classExperimentData.cs" />
     <Compile Include="Data\classLCColumn.cs" />
@@ -142,6 +144,10 @@
     <Compile Include="Experiment\classLCExperimentData.cs" />
     <Compile Include="classPlugInDisplayNameAttribute.cs" />
     <Compile Include="classLCMSSettings.cs" />
+    <Compile Include="Experiment\enumSampleValidationError.cs" />
+    <Compile Include="Experiment\enumSampleValidResult.cs" />
+    <Compile Include="Experiment\ISampleValidator.cs" />
+    <Compile Include="Experiment\ISampleValidatorMetaData.cs" />
     <Compile Include="ICacheInterface.cs" />
     <Compile Include="IFluidicsModelChecker.cs" />
     <Compile Include="IModelCheckController.cs" />

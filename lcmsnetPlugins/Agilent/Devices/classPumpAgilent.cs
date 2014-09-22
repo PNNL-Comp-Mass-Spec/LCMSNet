@@ -82,13 +82,13 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
         /// </summary>
-        private Dictionary<string, string> mdict_methods;
+        private static Dictionary<string, string> mdict_methods;
         /// <summary>
         /// Status strings from the pumps.
         /// </summary>
-        private string[] m_notificationStrings;
-        private Dictionary<string, string> m_errorCodes;
-        private Dictionary<string, string> m_statusCodes;
+        private static string[] m_notificationStrings;
+        private static Dictionary<string, string> m_errorCodes;
+        private static Dictionary<string, string> m_statusCodes;
         #endregion 
 
         #region Constants 
@@ -191,7 +191,10 @@ namespace Agilent.Devices.Pumps
             CreateStatusCodes();
 
             PortName        = CONST_DEFAULTPORT;
-            mdict_methods   = new Dictionary<string, string>();
+            if (mdict_methods == null)
+            {
+                mdict_methods = new Dictionary<string, string>();
+            }
             mstring_name    = "pump";  
 
             mlist_flowrates = new List<double>();
@@ -203,12 +206,13 @@ namespace Agilent.Devices.Pumps
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
 
-
-            m_notificationStrings = new string[] 
+            if (m_notificationStrings == null)
             {
-                CONST_FLOW_CHANGE,
-                CONST_PRESSURE_VALUE
-            };
+                m_notificationStrings = new string[]{
+                    CONST_FLOW_CHANGE,
+                    CONST_PRESSURE_VALUE                
+                };
+            }
 
             MobilePhases = new List<MobilePhase>();
             MobilePhases.Add(new MobilePhase("A",   "This is a test"));
@@ -403,53 +407,59 @@ namespace Agilent.Devices.Pumps
         #region Pump Status Code Converters
         private void CreateErrorCodes()
         {
-            Dictionary<string, string> map = new Dictionary<string,string>();
+            if (m_errorCodes == null)
+            {
+                Dictionary<string, string> map = new Dictionary<string, string>();
 
 
-            map.Add("ER 2037", "STRT while purging");
-            map.Add("ER 2038", "STRT while fast composition change");
-            map.Add("ER 2039", "No calibration table with specified index existing");
-            map.Add("ER 2040", "Not an allowed index for a user-defined table");
-            map.Add("ER 2041", "Specified command allowed in test mode only");
-            map.Add("ER 2042", "Calibration table cannot be deleted while in use");
-            map.Add("ER 2043", "FCC not possible, no partner module connected");
-            map.Add("ER 2044", "FCC active, configuration change not allowed");
-            map.Add("ER 2045", "FCC not allowed in this mode");
-            map.Add("ER 2046", "FCC not possible, no column flow");
-            map.Add("ER 2047", "FSAC base points not specified in descending order.");
-            map.Add("ER 2048", "Attempt to specify more than 11 points in FSAC table.");
+                map.Add("ER 2037", "STRT while purging");
+                map.Add("ER 2038", "STRT while fast composition change");
+                map.Add("ER 2039", "No calibration table with specified index existing");
+                map.Add("ER 2040", "Not an allowed index for a user-defined table");
+                map.Add("ER 2041", "Specified command allowed in test mode only");
+                map.Add("ER 2042", "Calibration table cannot be deleted while in use");
+                map.Add("ER 2043", "FCC not possible, no partner module connected");
+                map.Add("ER 2044", "FCC active, configuration change not allowed");
+                map.Add("ER 2045", "FCC not allowed in this mode");
+                map.Add("ER 2046", "FCC not possible, no column flow");
+                map.Add("ER 2047", "FSAC base points not specified in descending order.");
+                map.Add("ER 2048", "Attempt to specify more than 11 points in FSAC table.");
 
 
-            m_errorCodes = map;
+                m_errorCodes = map;
+            }
         }
 
         private void CreateStatusCodes()
         {
-            Dictionary<string, string> map = new Dictionary<string, string>();
-            map.Add("EV 2227", "no start allowed while purging.");
-            map.Add("EV 2228", "no start allowed while fast composition change.");
-            map.Add("EV 2229", "Column flow in limit.");
-            map.Add("EV 2230", "Column flow out of limit.");
-            map.Add("EV 2231", "Fast composition change started.");
-            map.Add("EV 2232", "Fast composition change complete.");
-            map.Add("EV 2233", "Calibration table stored. Parameter: table reference, 1..10");
-            map.Add("EV 2234", "Calibration table deleted. Parameter: table reference, 1..10");
-            map.Add("EV 2235", "Fast Composition Change failed.");
-            map.Add("EE 2066", "Column flow unstable.");
-            map.Add("EE 2067", "No EMPV connected.");
-            map.Add("EE 2068", "No flow sensor connected.");
-            map.Add("EE 2069", "EMPV initialization failed.");
-            map.Add("EE 2090", "Flow sensor not supported by pump.");
-            map.Add("ES 2116", "Pump in normal mode.            ");
-            map.Add("ES 2117", "Pump in micro mode.             ");
-            map.Add("ES 2118", "Pump in test mode.              ");
-            map.Add("ES 2119", "Purge valve on.                 ");
-            map.Add("ES 2120", "Purge valve off.                ");
-            map.Add("ES 2121", "Column flow in sensor range.    ");
-            map.Add("ES 2122", "Column flow out of sensor range.");
+            if (m_statusCodes == null)
+            {
+                Dictionary<string, string> map = new Dictionary<string, string>();
+                map.Add("EV 2227", "no start allowed while purging.");
+                map.Add("EV 2228", "no start allowed while fast composition change.");
+                map.Add("EV 2229", "Column flow in limit.");
+                map.Add("EV 2230", "Column flow out of limit.");
+                map.Add("EV 2231", "Fast composition change started.");
+                map.Add("EV 2232", "Fast composition change complete.");
+                map.Add("EV 2233", "Calibration table stored. Parameter: table reference, 1..10");
+                map.Add("EV 2234", "Calibration table deleted. Parameter: table reference, 1..10");
+                map.Add("EV 2235", "Fast Composition Change failed.");
+                map.Add("EE 2066", "Column flow unstable.");
+                map.Add("EE 2067", "No EMPV connected.");
+                map.Add("EE 2068", "No flow sensor connected.");
+                map.Add("EE 2069", "EMPV initialization failed.");
+                map.Add("EE 2090", "Flow sensor not supported by pump.");
+                map.Add("ES 2116", "Pump in normal mode.            ");
+                map.Add("ES 2117", "Pump in micro mode.             ");
+                map.Add("ES 2118", "Pump in test mode.              ");
+                map.Add("ES 2119", "Purge valve on.                 ");
+                map.Add("ES 2120", "Purge valve off.                ");
+                map.Add("ES 2121", "Column flow in sensor range.    ");
+                map.Add("ES 2122", "Column flow out of sensor range.");
 
 
-            m_statusCodes = map;
+                m_statusCodes = map;
+            }
         }
         #endregion
 
@@ -978,7 +988,7 @@ namespace Agilent.Devices.Pumps
             /// 
             TimeSpan span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
 
-            LcmsNet.Method.classTimerDevice timer = new LcmsNet.Method.classTimerDevice();
+            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             timer.WaitSeconds(span.TotalSeconds);
         }
         /// <summary>
