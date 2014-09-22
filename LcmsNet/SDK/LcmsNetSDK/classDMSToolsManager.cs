@@ -106,7 +106,7 @@ namespace LcmsNetSDK
                 if (midmstools_selectedTools == null && DmsTools.Count() != 0)
                 {
                     string lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
-                    string[] toolTokens = lastSelectedTool.Split(new char[] { '-' });
+                    string[] toolTokens = lastSelectedTool.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                     if (lastSelectedTool != string.Empty)
                     {
                             midmstools_selectedTools = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Value;                        

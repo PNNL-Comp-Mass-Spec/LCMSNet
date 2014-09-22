@@ -234,7 +234,7 @@ namespace LcmsNet.Method
                         /// Tell the column thread to die..
                         /// 
 
-                        Print("Killing column: " + i.ToString(), CONST_VERBOSE_LEAST);
+                        Print("Killing column: " + i.ToString(), CONST_VERBOSE_EVENTS);
                         if (mlist_columnWorkers[i].IsBusy)
                         {
                             sampleEndTime[i] = DateTime.MinValue;
@@ -500,7 +500,7 @@ namespace LcmsNet.Method
                     /// 
                     case CONST_EVENT_NUM_STOP_SAMPLES:
                         mobj_stopSamples.Reset();
-                        Print("Killing all samples on all columns.", CONST_VERBOSE_LEAST);
+                        Print("Killing all samples on all columns.", CONST_VERBOSE_EVENTS);
                         StopSamples();                       
                         if (m_notifyOnKill)
                         {
@@ -511,7 +511,7 @@ namespace LcmsNet.Method
                                 StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
                             }
                         }
-                        Print("Done killing columns.  ", CONST_VERBOSE_LEAST);
+                        Print("Done killing columns.  ", CONST_VERBOSE_EVENTS);
                         mobj_stoppedSamples.Set();
                         break;                                                                   
                     default:                        
@@ -628,23 +628,22 @@ namespace LcmsNet.Method
             List<Object> columnState      = e.UserState as List<Object>;
             int columnID                  = (int)columnState[0];
             int columnCurrentEvent        = (int)columnState[1];
-            DateTime columnEndOfNextEvent = (DateTime)columnState[2];
+            DateTime columnEndOfCurrentEvent = (DateTime)columnState[2];
             lock (mlist_threadLocks[columnID]) //We want to block, so as to make sure this is done.
             {                
                 if (samples[columnID] != null && columnCurrentEvent >= 0)
                 {
-                    int nextEventNumber = columnCurrentEvent + 1;
                             
                     /// 
                     /// Make sure we have another event to process.
                     /// 
-                    if (samples[columnID].LCMethod.Events.Count > nextEventNumber)
+                    if (samples[columnID].LCMethod.Events.Count  > columnCurrentEvent)
                     {
                         /// 
-                        /// Now update the expected end time forthe next event.
+                        /// Now update the expected end time for the current event.
                         /// 
-                        sampleEndTime[columnID] = columnEndOfNextEvent;
-                        samples[columnID].LCMethod.CurrentEventNumber = nextEventNumber;
+                        sampleEndTime[columnID] = columnEndOfCurrentEvent;
+                        samples[columnID].LCMethod.CurrentEventNumber = columnCurrentEvent;
 
                         if (SampleProgress != null)
                         {
@@ -654,7 +653,7 @@ namespace LcmsNet.Method
                                                         samples[columnID],
                                                         enumSampleProgress.RunningNextEvent));
                         }
-                        currentEvent[columnID]++;
+                        //currentEvent[columnID]++;
                     }
 
                  }

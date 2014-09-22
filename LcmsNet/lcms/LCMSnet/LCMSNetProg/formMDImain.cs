@@ -665,9 +665,9 @@ namespace LcmsNet
                 case enumSampleProgress.RunningNextEvent:
                     lcMethod = sample.LCMethod;
 
-					if (lcMethod.CurrentEventNumber > 0)
+					/*if (lcMethod.CurrentEventNumber > 0)
 					{
-						lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber - 1];
+						lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
 						message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}: ",
 											sample.ColumnData.ID + 1,
 											sample.ColumnData.Name,
@@ -676,7 +676,7 @@ namespace LcmsNet
 											sample.DmsData.DatasetName);
 					}
 					else
-					{
+					{*/
 						lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
 						message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
 												sample.ColumnData.ID + 1,
@@ -684,7 +684,7 @@ namespace LcmsNet
 												lcEvent.Device.Name,
 												lcEvent.Name,
 												sample.DmsData.DatasetName);
-					}
+					//}
                     break;
                 case enumSampleProgress.Error:
                     message = "";

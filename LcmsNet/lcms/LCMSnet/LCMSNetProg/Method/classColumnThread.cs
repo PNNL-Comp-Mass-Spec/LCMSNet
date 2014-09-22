@@ -140,6 +140,24 @@ namespace LcmsNet.Method
                 // Main operation
                 for (int eventNumber = 0; eventNumber < methodEvents.Count; eventNumber++)
                 {
+                    //here we report progress, by notifying at the start of every new event.
+                    decimal totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
+                    long elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
+                    int percentComplete = (int)Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
+                    ///We send percentage(of time) complete and state of the column, currently consisting 
+                    ///of columnID, event number, and end time of the next event to the event handler
+                    List<Object> state = new List<object>();
+                    state.Add(mint_columnId);
+                    state.Add(eventNumber);
+                    if (eventNumber <= methodEvents.Count - 1)
+                    {
+                        state.Add(methodEvents[eventNumber].End);
+                    }
+                    else
+                    {
+                        state.Add(DateTime.MinValue);
+                    }
+                    mthread_worker.ReportProgress(percentComplete, state);
                     method.CurrentEventNumber = eventNumber;
                     // before every event, check to see if we need to cancel operations
                     if (mthread_worker.CancellationPending)
@@ -221,28 +239,11 @@ namespace LcmsNet.Method
                                                     span.TotalMilliseconds),
                                                     CONST_VERBOSE_EVENTS);
                                 DateTime timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
-                                ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString());
+                                //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
                                 timer.WaitMilliseconds(totalMilliseconds, mobj_abortEvent);
                                 long timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
-                                ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString());
-                            }
-                            decimal totalTimeInTicks =Convert.ToDecimal(method.End.Ticks);
-                            long elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
-                            int percentComplete = (int)Math.Round((elapsedTimeInTicks/totalTimeInTicks) * 100,                                                 MidpointRounding.AwayFromZero);
-                            ///We send percentage(of time) complete and state of the column, currently consisting 
-                            ///of columnID, event number, and end time of the next event to the event handler
-                            List<Object> state = new List<object>();
-                            state.Add(mint_columnId);
-                            state.Add(eventNumber);
-                            if (eventNumber < methodEvents.Count - 1)
-                            {
-                                state.Add(methodEvents[eventNumber + 1].End);
-                            }
-                            else
-                            {
-                                state.Add(DateTime.MinValue);
-                            }
-                            mthread_worker.ReportProgress(percentComplete, state);
+                                //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
+                            }                      
                         }
                         else if (!success)
                         {

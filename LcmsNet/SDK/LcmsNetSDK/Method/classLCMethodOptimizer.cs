@@ -224,6 +224,7 @@ namespace LcmsNet.Method
                 span            = aligneeMethod.End.Subtract(baselineMethod.Start);
                 isOverlapped    = (span.TotalMilliseconds >= 0); 
             }
+            System.Diagnostics.Debug.WriteLine("overlap check result: " + isOverlapped);
             return isOverlapped;
         }
         /// <summary>
@@ -355,7 +356,9 @@ namespace LcmsNet.Method
             if (methods.Count < 1)
                 return true;
 
-            return AlignMethods(methods);
+           bool done = AlignMethods(methods);
+           PrintAlignedMethods(methods);
+           return done;
         }
 		/// <summary>
 		/// Aligns a sample to the baseline samples.
@@ -376,9 +379,25 @@ namespace LcmsNet.Method
 			/// 
 			if (methods.Count < 1)
 				return true;
-
-			return AlignMethods(methods, aligneeSample.LCMethod);
+            bool done = AlignMethods(methods, aligneeSample.LCMethod);
+            PrintAlignedMethods(methods, aligneeSample.LCMethod);
+			return done;
 		}
+
+        private void PrintAlignedMethods(List<classLCMethod> methods, classLCMethod alignedMethod = null)
+        {
+            System.Diagnostics.Debug.WriteLine("Optimized Methods: ");
+            string formatStr = "method: {0} start time: {1} end time {2}";
+            foreach(classLCMethod m in methods)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format(formatStr, m.Name, m.Start, m.End));
+            }
+            if(alignedMethod != null)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format(formatStr, alignedMethod.Name, alignedMethod.Start, alignedMethod.End));
+            }
+            System.Diagnostics.Debug.WriteLine("Optimized Methods Done.");
+        }
         /// <summary>
         /// Aligns and adjusts the alignee method to the baseline method.
         /// </summary>
@@ -421,6 +440,7 @@ namespace LcmsNet.Method
                 ///     - Noting that the start time may be adjusted by seconds to add
                 ///     - Or that the start time may be running for the first time.
                 ///     
+                System.Diagnostics.Debug.WriteLine(string.Format("Checking Alignment method: {0} against baseline method.", aligneeMethod.Name));
                 aligneeMethod.SetStartTime(startTime.AddSeconds(secondsToAdd));
 
                 /// 
@@ -480,8 +500,8 @@ namespace LcmsNet.Method
                 {                    
                     UpdateRequired(this);
                 }
-            }
-            while (aligned == false);
+            }while (aligned == false);
+
             // Adjust for DST transition, if necessary
             if (LcmsNetSDK.TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(aligneeMethod.Start, aligneeMethod.End))
             {
@@ -528,7 +548,10 @@ namespace LcmsNet.Method
 		{
             // No need to align self to self.
             if (baselineMethods.Count == 0)
+            {
+                System.Diagnostics.Debug.WriteLine("No Baseline samples to align to");
                 return true;
+            }
 
 			int j = 0;
             /// 
@@ -551,23 +574,25 @@ namespace LcmsNet.Method
                                                 // start and end time are always before the start of j'
             try
             {
-                aligneeMethod.SetStartTime(baselineMethods[k].Start);   // Start at method k, the earliest possible being the method
+                System.Diagnostics.Debug.WriteLine("Setting start time to start time of previous method before moving to further optimization.");
+                aligneeMethod.SetStartTime(baselineMethods[k].Start);   // Start at method k, the earliest possible being the method before us. 
             }
             catch( ArgumentOutOfRangeException myException)
             {
                 throw myException;
             }
-                                                                // before us.  
 
-
+            System.Diagnostics.Debug.WriteLine("checking for overlap allowances...");
             // Easy alignment scenarious -- don't allow anything to overlap!
             if (!baselineMethods[k].AllowPostOverlap)
             {
+                System.Diagnostics.Debug.WriteLine(string.Format("Post Overlap not allowed, setting start time of Method: {0} to end of method at index {1} plus ten seconds", aligneeMethod.Name, k));
                 aligneeMethod.SetStartTime(baselineMethods[k].End.AddMilliseconds(CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS));
                 return true;
             }
             if (!aligneeMethod.AllowPreOverlap)
             {
+                System.Diagnostics.Debug.WriteLine(string.Format("Pre Overlap not allowed, setting start time of Method: {0} to end of method at index {1} plus ten seconds", aligneeMethod.Name, k));
                 aligneeMethod.SetStartTime(baselineMethods[k].End.AddMilliseconds(CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS));
                 return true;
             }
@@ -578,7 +603,7 @@ namespace LcmsNet.Method
             // but the structure of the way this works doesnt allow for that.  The only way for this to happen is to have 
             // more columns that is available for scheduling.
             //int batch = Math.Max(i - mint_numberOfColumns, 0);
-            for (j = k - 1; j >= 0; j--)
+            for (j = k; j >= 0; j--)
             {
                 classLCMethod methodK = baselineMethods[k];
                 classLCMethod methodJ = baselineMethods[j];
@@ -592,6 +617,7 @@ namespace LcmsNet.Method
                     {
                         lastColumnContention = j;
                         // We buffer the last of the sample
+                        System.Diagnostics.Debug.WriteLine(string.Format("Setting start time of Method due to having the same column as method {0} at index: {1} ", methodJ, j));
                         aligneeMethod.SetStartTime(baselineMethods[j].End.AddMilliseconds(CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS));
                     }
                 }
@@ -600,6 +626,7 @@ namespace LcmsNet.Method
                 // after method j (where j,n are integers) 
                 if (!IsMethodOverlapping(methodJ, methodK))
                 {
+                    System.Diagnostics.Debug.WriteLine("Overlap detected, further optimizing...");
                     lastOverlap = j;
                 }
             }
@@ -654,6 +681,7 @@ namespace LcmsNet.Method
             // resolved.  This is to also assist the animation parts for verification.            
             for (int i = 1; i < methods.Count; i++)                
             {
+                System.Diagnostics.Debug.WriteLine("Setting start time for current method to end of previous method.");
                 methods[i].SetStartTime(methods[i-1].End);
                 methods[i].HasNonDeterministicStart = false;
             }
@@ -685,22 +713,24 @@ namespace LcmsNet.Method
 
                 DateTime startOfPrevious = methods[i - 1].Start;
                 
+                classLCMethod methodI = methods[i];
+                classLCMethod methodJ = methods[j];
+                int colI = methods[i].Column;
+                int colJ = methods[j].Column;
                 if (!methods[i].AllowPreOverlap || !methods[i-1].AllowPostOverlap)
                 {
-                    classLCMethod methodI = methods[i];
-                    classLCMethod methodJ = methods[j];
-                    int colI = methods[i].Column;
-                    int colJ = methods[j].Column;
+                    
 
                     if (colI == colJ && j > lastColumnContention)
                     {
+                        System.Diagnostics.Debug.WriteLine(string.Format("Setting start time for method at index {0} due to same column", i));   
                         startOfPrevious = methods[i - 1].End.AddMilliseconds(CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS);
                     }
                     else
                     {
+                        System.Diagnostics.Debug.WriteLine(string.Format("Setting start time for method at index {0} to end time of previous method", i));
                         startOfPrevious = methods[i - 1].End;
-                    }                                  
-
+                    }
                     // Just because we dont have an overlap, does not mean that this guy shouldn't be re-started by the end guy...
                     classLCEvent iEvent = FindNonDeterministicEvent(methods[i - 1]);
                     if (iEvent != null)
@@ -710,15 +740,18 @@ namespace LcmsNet.Method
                         iEvent.RelativeMethod = new classLCEventRelative(methods[i],
                                                                          methods[i - 1].End.Subtract(iEvent.End));
                         methods[i].HasNonDeterministicStart = true;
+                        System.Diagnostics.Debug.WriteLine(string.Format("Setting start time for method at index {0} with nondeterministic start", i));
                         methods[i].SetStartTime(methods[i - 1].End);
                     }
                     else
                     {
+                        System.Diagnostics.Debug.WriteLine(string.Format("Setting start time for method at index {0} to end of previous method in queue", i));
                         methods[i].SetStartTime(startOfPrevious);
                     }
 
                     continue;
-                }                
+                }
+             
                 methods[i].SetStartTime(startOfPrevious);  // Start at method k, the earliest possible being the method
                                                            // before us.                
                 int lastOverlap = i - 1;
@@ -727,20 +760,15 @@ namespace LcmsNet.Method
                 // but the structure of the way this works doesnt allow for that.  The only way for this to happen is to have 
                 // more columns that is available for scheduling.
                 //int batch = Math.Max(i - mint_numberOfColumns, 0);
-                for (j = i - 1; j >= 0; j--)
+                for (j = lastOverlap; j >= 0; j--)
                 {
-                    classLCMethod methodI = methods[i];
-                    classLCMethod methodJ = methods[j];
-
-                    int colI = methods[i].Column;
-                    int colJ = methods[j].Column;
-
                     // If the two methods are running on the same column.
                     if (colI == colJ && j > lastColumnContention)
                     {
                         if (DateTime.Compare(methods[i].Start, methods[j].End) < 0)
                         {
                             lastColumnContention = j;
+                            System.Diagnostics.Debug.WriteLine(string.Format("Setting start time of method at index {0}  on same column as index {1}", i,j));
                             methods[i].SetStartTime(methods[j].End.AddMilliseconds(CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS));
                         }
                     }
@@ -797,7 +825,8 @@ namespace LcmsNet.Method
         /// <param name="methods"></param>
         public void AdjustForDaylightSavingsTransition(classLCMethod method)
         {
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "OPTIMIZATION occurred around a Daylight Savings Time Transition. Some methods have been moved to start one hour later in order to prevent odd behavior.");
+            System.Diagnostics.Debug.WriteLine(string.Format("Adjusting start time of method: {0} by 1 hour(forward) due to DST transition", method));
+            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "OPTIMIZATION occurred around a Daylight Savings Time Transition. Some methods have been moved to start one hour later in order to prevent odd behavior.");
             method.SetStartTime(method.Start.Add(new TimeSpan(1, 0, 0)));
         }
         #endregion

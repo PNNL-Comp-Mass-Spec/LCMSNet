@@ -1662,6 +1662,7 @@ namespace LcmsNet.SampleQueue
 
 			// We have not started to run so optimize this way.
 			classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
+            System.Diagnostics.Debug.WriteLine("Optimizing queued to run samples before starting");
 			optimizer.AlignSamples(mlist_runningQueue);
 
 			// Set the listening event so that time sensitive items will know that
@@ -1714,6 +1715,7 @@ namespace LcmsNet.SampleQueue
                 
 				if (mlist_runningQueue.Count > 0 && mint_nextAvailableSample > 0)
 				{
+                    System.Diagnostics.Debug.WriteLine("Optimizing sample against running queue.");
 					// We arent the first ones on the queue, but we are running,
 					// so we need to hurry up and go!
 					realSample.LCMethod.SetStartTime(next);
@@ -1721,6 +1723,7 @@ namespace LcmsNet.SampleQueue
 				}
 				else if (mlist_runningQueue.Count == 0)
 				{
+                    System.Diagnostics.Debug.WriteLine("Setting sample start time as it is first in running queue.");
 					// Otherwise we are the first ones on the queue, but we dont need to do anything
                     // for alignment.
 					realSample.LCMethod.SetStartTime(next);

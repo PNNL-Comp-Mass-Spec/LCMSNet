@@ -243,9 +243,14 @@ namespace LcmsNetDataClasses.Method
             /// Calculate the duration of the method.
             /// 
             if (Events.Count <= 0)
+            {
                 mspan_duration = new TimeSpan(0, 0, 0, 0, 0);
+            }
             else
+            {
                 mspan_duration = Events[Events.Count - 1].End.Subtract(mtime_start);
+            }
+            //System.Diagnostics.Debug.WriteLine(string.Format("Method {0} start time: {1} end time {2}", this.Name, start, this.End));
         }
         /// <summary>
         /// Updates the event start times.
