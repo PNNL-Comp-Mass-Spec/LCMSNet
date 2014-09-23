@@ -656,6 +656,15 @@ namespace LcmsnetUnitTest
         }
 
 
+        [Test]
+        public void TestNoDSTTransition()
+        {
+            methods[0].SetStartTime(new DateTime(2014, 11, 2, 1, 58, 0));
+            methods[1].SetStartTime(new DateTime(2014, 11, 2, 1, 58, 10));
+            optimizer.AlignMethods(methods[0], methods[1], false);
+            double expectedDifference = new TimeSpan(0, 0, 10).TotalMilliseconds;
+            CheckDifferenceInStartTimes(expectedDifference);
+        }
 
         /// <summary>
         /// used for all tests, since the only difference we care about is that the start time of method 2 is different from method 1.
