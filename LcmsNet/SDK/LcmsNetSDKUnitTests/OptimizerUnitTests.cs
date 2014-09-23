@@ -288,6 +288,7 @@ namespace LcmsnetUnitTest
             method3.Column = 0;
             optimizer.AlignMethods(methods);
             optimizer.AlignMethods(methods, method3);
+            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
             Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);            
         }
 
@@ -337,7 +338,8 @@ namespace LcmsnetUnitTest
             System.Diagnostics.Debug.WriteLine(methods[1].Start);
             System.Diagnostics.Debug.WriteLine(methods[1].End);
             System.Diagnostics.Debug.WriteLine(method3.Start);
-            Assert.AreEqual(0, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
+            // should start method 3 at end of methods[1]
+            Assert.AreEqual(methods[1].End, method3.Start);            
         }
 
         /// <summary>
@@ -386,6 +388,7 @@ namespace LcmsnetUnitTest
             System.Diagnostics.Debug.WriteLine(methods[1].Start);
             System.Diagnostics.Debug.WriteLine(methods[1].End);
             System.Diagnostics.Debug.WriteLine(method3.Start);
+            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
             Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
         }
 
@@ -436,6 +439,7 @@ namespace LcmsnetUnitTest
             System.Diagnostics.Debug.WriteLine(methods[1].Start);
             System.Diagnostics.Debug.WriteLine(methods[1].End);
             System.Diagnostics.Debug.WriteLine(method3.Start);
+            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET after methods[1] ends.
             Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
         }
 
@@ -486,6 +490,7 @@ namespace LcmsnetUnitTest
             System.Diagnostics.Debug.WriteLine(methods[1].Start);
             System.Diagnostics.Debug.WriteLine(methods[1].End);
             System.Diagnostics.Debug.WriteLine(method3.Start);
+            // should start method 3 at the same time as method 1
             Assert.AreEqual(methods[1].Start, method3.Start);
         }
 
@@ -531,6 +536,7 @@ namespace LcmsnetUnitTest
             method3.Column = 1;
             optimizer.AlignMethods(methods);
             optimizer.AlignMethods(methods, method3);
+            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
             Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
         }
 
@@ -581,6 +587,58 @@ namespace LcmsnetUnitTest
             System.Diagnostics.Debug.WriteLine(methods[1].Start);
             System.Diagnostics.Debug.WriteLine(methods[1].End);
             System.Diagnostics.Debug.WriteLine(method3.Start);
+            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET after end of methods[1]
+            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
+        }
+
+        /// <summary>
+        /// Simulates adding samples to already running queue.
+        /// specifically, the case in which multiple methods on different columns run with  no"overlap" settings and different devices.
+        /// </summary>
+        [Test]
+        public void TestAddThirdMethodWhileQueueRunningSameColumnsDifferentDeviceNoOverlap()
+        {
+            classLCMethod method3 = new classLCMethod();
+            method3.Events = new List<classLCEvent>();
+            method3.Events.Add(new classLCEvent());
+            methods[0].AllowPostOverlap = false;
+            methods[0].AllowPreOverlap = false;
+            //Changing method[1], Event[0] to use a different device.  
+            DemoValve valve = new DemoValve();
+            methods[1].AllowPreOverlap = false;
+            methods[1].AllowPostOverlap = false;
+            methods[1].Events[0].Device = valve;
+            methods[1].Events[0].HadError = false;
+            methods[1].Events[0].Name = "SetPosition";
+            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
+            methods[1].Events[0].ParameterNames = new string[1];
+            methods[1].Events[0].ParameterNames[0] = "SetPosition";
+            methods[1].Events[0].Parameters = new object[1];
+            methods[1].Events[0].Parameters[0] = 2;
+            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
+            methods[1].Column = 1;
+            method3.AllowPostOverlap = false;
+            method3.AllowPreOverlap = false;
+            DemoValve valve2 = new DemoValve();
+            method3.Events[0].Device = valve2;
+            method3.Events[0].HadError = false;
+            method3.Events[0].Name = "SetPosition";
+            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
+            method3.Events[0].ParameterNames = new string[1];
+            method3.Events[0].ParameterNames[0] = "SetPosition";
+            method3.Events[0].Parameters = new object[1];
+            method3.Events[0].Parameters[0] = 2;
+            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            method3.Events[0].Method = valve2.GetType().GetMethod("SetPosition");
+            method3.Column = 1;
+            optimizer.AlignMethods(methods);
+            optimizer.AlignMethods(methods, method3);
+            System.Diagnostics.Debug.WriteLine(methods[0].End);
+            System.Diagnostics.Debug.WriteLine(methods[1].Start);
+            System.Diagnostics.Debug.WriteLine(methods[1].End);
+            System.Diagnostics.Debug.WriteLine(method3.Start);
+            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
             Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
         }
 
