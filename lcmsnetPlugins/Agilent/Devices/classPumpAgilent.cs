@@ -92,7 +92,7 @@ namespace Agilent.Devices.Pumps
         #endregion 
 
         #region Constants 
-        #region Constants
+        #region COMConstants
         /// <summary>
         /// Status of the device.
         /// </summary>

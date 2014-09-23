@@ -139,7 +139,7 @@
     <Compile Include="Devices\IDeviceManager.cs" />
     <Compile Include="Devices\INetworkStart.cs" />
     <Compile Include="Devices\classMonitoringComponent.cs" />
-    <Compile Include="Devices\IPumpDisplay.cs" />
+    <Compile Include="Devices\IPump.cs" />
     <Compile Include="Devices\PumpDataReceivedHandler.cs" />
     <Compile Include="Experiment\classLCExperimentData.cs" />
     <Compile Include="classPlugInDisplayNameAttribute.cs" />

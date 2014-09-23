@@ -663,63 +663,29 @@ namespace LcmsNet
             {
                 case enumSampleProgress.RunningNextEvent:
                     lcMethod = sample.LCMethod;
-
-					/*if (lcMethod.CurrentEventNumber > 0)
-					{
-						lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
-						message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}: ",
+                    lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
+                    message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
 											sample.ColumnData.ID + 1,
 											sample.ColumnData.Name,
 											lcEvent.Device.Name,
 											lcEvent.Name,
 											sample.DmsData.DatasetName);
-					}
-					else
-					{*/
-						lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
-						message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
-												sample.ColumnData.ID + 1,
-												sample.ColumnData.Name,
-												lcEvent.Device.Name,
-												lcEvent.Name,
-												sample.DmsData.DatasetName);
-					//}
                     break;
                 case enumSampleProgress.Error:
                     message = "";
                     lcMethod = sample.LCMethod;
-                    int eventNumber     = lcMethod.CurrentEventNumber;
-                    //string errorMessage = "";                  
+                    int eventNumber     = lcMethod.CurrentEventNumber;                
                     if (eventNumber < lcMethod.Events.Count && eventNumber > -1)
                     {
-                        lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
-                        //errorMessage = string.Format("{0}.{1}", lcEvent.Device.Name, lcEvent.Name);
-                                
-                    }
-                    else
-                    {
-                        //errorMessage = "cannot resolve the lc event that this happened on, invalid lcEvent:" + lcMethod.CurrentEventNumber;
-                    }
-                   /* message = string.Format("Sample Error: Column={0}: ColumnID={1}: Device={2} Sample={3} StartTime={4} EndTime(Expected)={5} CurrentTime:{6}",
-                                            sample.ColumnData.ID,
-                                            sample.ColumnData.Name,
-                                            errorMessage,
-                                            sample.DmsData.DatasetName,
-                                            lcMethod.ActualStart,
-                                            lcMethod.End,
-                                            DateTime.Now);*/
+                        lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];                                
+                    }                         
                     mform_sampleProgress.UpdateError(sample, lcEvent);
                     isError = true;
                     break;
                 case enumSampleProgress.Stopped:
                     lcMethod = sample.LCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
-                    message = string.Empty; /*string.Format("Sample Stopped: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
-                                            sample.ColumnData.ID,
-                                            sample.ColumnData.Name,
-                                            lcEvent.Device.Name,
-                                            lcEvent.Name,
-                                            sample.DmsData.DatasetName);*/
+                    message = string.Empty;
                     mform_sampleProgress.UpdateError(sample, lcEvent);
                     isError = true;
                     break;
@@ -738,11 +704,7 @@ namespace LcmsNet
                     try
                     {
                         lcMethod = sample.LCMethod;
-                        message = string.Empty; /* string.Format("Sample Completed: Column={1}: ColumnID={2}: LC-Method={3}: Sample={0}",
-                                             sample.DmsData.DatasetName,
-                                             sample.ColumnData.ID,
-                                             sample.ColumnData.Name,
-                                             lcMethod.Name);*/
+                        message = string.Empty; 
                         if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
                         {
                             SampleQueue.IO.classMethodFileTools.MoveLocalMethodFiles();
@@ -759,11 +721,7 @@ namespace LcmsNet
                     break;
                 case enumSampleProgress.Started:
                     lcMethod = sample.LCMethod;
-					message = string.Empty; /*string.Format("Sample Started: Column={1}, ColumnID={2}: LC-Method={3}: Sample={0}",
-                                            sample.DmsData.DatasetName,
-                                            sample.ColumnData.ID,
-                                            sample.ColumnData.Name,
-                                            lcMethod.Name); */
+					message = string.Empty; 
                     break;
             }
             //This is a workaround until this can be addressed properly.
