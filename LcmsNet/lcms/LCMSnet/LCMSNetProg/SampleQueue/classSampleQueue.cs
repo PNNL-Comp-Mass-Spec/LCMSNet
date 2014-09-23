@@ -1663,7 +1663,7 @@ namespace LcmsNet.SampleQueue
 
 			// We have not started to run so optimize this way.
 			classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
-            System.Diagnostics.Debug.WriteLine("Optimizing queued to run samples before starting");
+            System.Diagnostics.Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
 			optimizer.AlignSamples(mlist_runningQueue);
 
 			// Set the listening event so that time sensitive items will know that
