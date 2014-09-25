@@ -82,7 +82,7 @@ namespace LcmsnetUnitTest
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods, when they are on the same column with overlap allowed, and both
         /// methods are using the same device.
-        /// This test should make the second method run after the first method completes(with an additional 500ms wait time)
+        /// This test should make the second method run after the first method completes(with an additional SAME_REQUIRED_LC_METHOD_OFFSET wait time)
         /// </summary>
         [Test]
         public void TwoMethodsOnSameColumnWithOverlapSameDevice()
@@ -95,7 +95,7 @@ namespace LcmsnetUnitTest
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods when they are on the same column, with overlap, and the methods
         /// are using different devices.
-        /// This test should make the second method run after the first method completes(with an additional 500ms wait time)
+        /// This test should make the second method run after the first method completes(with an additional SAME_REQUIRED_LC_METHOD_OFFSET wait time)
         /// </summary>
         [Test]
         public void TwoMethodsOnTheSameColumnWithOverlapDifferentDevices()
@@ -204,7 +204,7 @@ namespace LcmsnetUnitTest
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods when they are on different columns, with overlap disallowed, and both
         /// methods are using the same device.
-        /// This test should make the second method start after the first one completes(with no additional wait time)
+        /// This test should make the second method start after the first one completes(plus SAME_REQUIRED_LC_METHOD_OFFSET
         /// </summary>
         [Test]
         public void TwoMethodsOnDifferentColumnsWithOutOverlapSameDevice()
@@ -213,7 +213,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPostOverlap = false;
             methods[1].Column = 1;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds;
+            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }        
 
@@ -247,402 +247,6 @@ namespace LcmsnetUnitTest
         }
 
         /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on the same column run with "overlap" settings.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningSameColumnSameDeviceOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = true;
-            methods[0].AllowPreOverlap = true;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = true;
-            methods[1].AllowPostOverlap = true;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 0;
-            method3.AllowPostOverlap = true;
-            method3.AllowPreOverlap = true;
-            method3.Events[0].Device = valve;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            method3.Column = 0;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
-            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);            
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with "overlap" settings.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningDifferentColumnsSameDeviceOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = true;
-            methods[0].AllowPreOverlap = true;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = true;
-            methods[1].AllowPostOverlap = true;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 2;
-            method3.AllowPostOverlap = true;
-            method3.AllowPreOverlap = true;
-            method3.Events[0].Device = valve;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            method3.Column = 3;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            System.Diagnostics.Debug.WriteLine(methods[0].End);
-            System.Diagnostics.Debug.WriteLine(methods[1].Start);
-            System.Diagnostics.Debug.WriteLine(methods[1].End);
-            System.Diagnostics.Debug.WriteLine(method3.Start);
-            // should start method 3 at end of methods[1]
-            Assert.AreEqual(methods[1].End, method3.Start);            
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with  no"overlap" settings.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningDifferentColumnsSameDeviceNoOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = false;
-            methods[0].AllowPreOverlap = false;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = false;
-            methods[1].AllowPostOverlap = false;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 2;
-            method3.AllowPostOverlap = false;
-            method3.AllowPreOverlap = false;
-            method3.Events[0].Device = valve;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            method3.Column = 3;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            System.Diagnostics.Debug.WriteLine(methods[0].End);
-            System.Diagnostics.Debug.WriteLine(methods[1].Start);
-            System.Diagnostics.Debug.WriteLine(methods[1].End);
-            System.Diagnostics.Debug.WriteLine(method3.Start);
-            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
-            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with  no"overlap" settings and different devices.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningDifferentColumnsDifferentDeviceNoOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = false;
-            methods[0].AllowPreOverlap = false;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = false;
-            methods[1].AllowPostOverlap = false;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 2;
-            method3.AllowPostOverlap = false;
-            method3.AllowPreOverlap = false;
-            DemoValve valve2 = new DemoValve();
-            method3.Events[0].Device = valve2;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve2.GetType().GetMethod("SetPosition");
-            method3.Column = 3;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            System.Diagnostics.Debug.WriteLine(methods[0].End);
-            System.Diagnostics.Debug.WriteLine(methods[1].Start);
-            System.Diagnostics.Debug.WriteLine(methods[1].End);
-            System.Diagnostics.Debug.WriteLine(method3.Start);
-            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET after methods[1] ends.
-            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with "overlap" settings and different devices.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningDifferentColumnsDifferentDeviceOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = true;
-            methods[0].AllowPreOverlap = true;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = true;
-            methods[1].AllowPostOverlap = true;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 2;
-            method3.AllowPostOverlap = true;
-            method3.AllowPreOverlap = true;
-            DemoValve valve2 = new DemoValve();
-            method3.Events[0].Device = valve2;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve2.GetType().GetMethod("SetPosition");
-            method3.Column = 3;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            System.Diagnostics.Debug.WriteLine(methods[0].End);
-            System.Diagnostics.Debug.WriteLine(methods[1].Start);
-            System.Diagnostics.Debug.WriteLine(methods[1].End);
-            System.Diagnostics.Debug.WriteLine(method3.Start);
-            // should start method 3 at the same time as method 1
-            Assert.AreEqual(methods[1].Start, method3.Start);
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with no "overlap" settings.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningSameColumnsSameDeviceNoOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = false;
-            methods[0].AllowPreOverlap = false;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = false;
-            methods[1].AllowPostOverlap = false;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 1;
-            method3.AllowPostOverlap = false;
-            method3.AllowPreOverlap = false;
-            method3.Events[0].Device = valve;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            method3.Column = 1;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
-            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with  no"overlap" settings and different devices.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningSameColumnsDifferentDeviceOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = true;
-            methods[0].AllowPreOverlap = true;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = true;
-            methods[1].AllowPostOverlap = true;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 1;
-            method3.AllowPostOverlap = true;
-            method3.AllowPreOverlap = true;
-            DemoValve valve2 = new DemoValve();
-            method3.Events[0].Device = valve2;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve2.GetType().GetMethod("SetPosition");
-            method3.Column = 1;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            System.Diagnostics.Debug.WriteLine(methods[0].End);
-            System.Diagnostics.Debug.WriteLine(methods[1].Start);
-            System.Diagnostics.Debug.WriteLine(methods[1].End);
-            System.Diagnostics.Debug.WriteLine(method3.Start);
-            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET after end of methods[1]
-            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
-        }
-
-        /// <summary>
-        /// Simulates adding samples to already running queue.
-        /// specifically, the case in which multiple methods on different columns run with  no"overlap" settings and different devices.
-        /// </summary>
-        [Test]
-        public void TestAddThirdMethodWhileQueueRunningSameColumnsDifferentDeviceNoOverlap()
-        {
-            classLCMethod method3 = new classLCMethod();
-            method3.Events = new List<classLCEvent>();
-            method3.Events.Add(new classLCEvent());
-            methods[0].AllowPostOverlap = false;
-            methods[0].AllowPreOverlap = false;
-            //Changing method[1], Event[0] to use a different device.  
-            DemoValve valve = new DemoValve();
-            methods[1].AllowPreOverlap = false;
-            methods[1].AllowPostOverlap = false;
-            methods[1].Events[0].Device = valve;
-            methods[1].Events[0].HadError = false;
-            methods[1].Events[0].Name = "SetPosition";
-            methods[1].Events[0].Duration = new TimeSpan(0, 0, 1);
-            methods[1].Events[0].ParameterNames = new string[1];
-            methods[1].Events[0].ParameterNames[0] = "SetPosition";
-            methods[1].Events[0].Parameters = new object[1];
-            methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
-            methods[1].Column = 1;
-            method3.AllowPostOverlap = false;
-            method3.AllowPreOverlap = false;
-            DemoValve valve2 = new DemoValve();
-            method3.Events[0].Device = valve2;
-            method3.Events[0].HadError = false;
-            method3.Events[0].Name = "SetPosition";
-            method3.Events[0].Duration = new TimeSpan(0, 0, 1);
-            method3.Events[0].ParameterNames = new string[1];
-            method3.Events[0].ParameterNames[0] = "SetPosition";
-            method3.Events[0].Parameters = new object[1];
-            method3.Events[0].Parameters[0] = 2;
-            method3.Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
-            method3.Events[0].Method = valve2.GetType().GetMethod("SetPosition");
-            method3.Column = 1;
-            optimizer.AlignMethods(methods);
-            optimizer.AlignMethods(methods, method3);
-            System.Diagnostics.Debug.WriteLine(methods[0].End);
-            System.Diagnostics.Debug.WriteLine(methods[1].Start);
-            System.Diagnostics.Debug.WriteLine(methods[1].End);
-            System.Diagnostics.Debug.WriteLine(method3.Start);
-            // should start method 3 SAME_REQUIRED_LC_METHOD_OFFSET from the end of methods[1]
-            Assert.AreEqual(SAME_REQUIRED_LC_METHOD_OFFSET, method3.Start.Subtract(methods[1].End).TotalMilliseconds);
-        }
-
-        /// <summary>
         /// Test to see if the optimizer properly handles a DST transition that happens between two methods.
         /// </summary>
         [Test]
@@ -650,10 +254,12 @@ namespace LcmsnetUnitTest
         {
             methods[0].SetStartTime(new DateTime(2014, 11, 2, 1, 59, 59));
             methods[1].SetStartTime(new DateTime(2014, 11, 2, 2, 0, 10));
+            methods[0].Name = "Zero";
+            methods[1].Name = "One";
             optimizer.AlignMethods(methods[0], methods[1], true);
             double  expectedDifference = new TimeSpan(1,0,1).TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
-        }
+        } 
 
 
         [Test]
@@ -661,6 +267,8 @@ namespace LcmsnetUnitTest
         {
             methods[0].SetStartTime(new DateTime(2014, 11, 2, 1, 58, 0));
             methods[1].SetStartTime(new DateTime(2014, 11, 2, 1, 58, 10));
+            methods[0].Name = "Zero";
+            methods[1].Name = "One";
             optimizer.AlignMethods(methods[0], methods[1], false);
             double expectedDifference = new TimeSpan(0, 0, 10).TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
