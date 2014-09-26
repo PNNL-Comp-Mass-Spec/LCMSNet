@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Specialized;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetDataClasses.Data
 {
 	[Serializable]
     public class classPalData: classDataClassBase, ICloneable

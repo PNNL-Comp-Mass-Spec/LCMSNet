@@ -1,11 +1,12 @@
 ﻿
 //*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche, Christopher Walters for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //						- 03/16/2009 (BLL) - Added LC and PAL Methods
 //						- 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
+//                      - 9/26/2014  (CJW) - Modified to use MEF for DMS and sample validations
 //*********************************************************************************************************
 using System;
 using System.Data;
@@ -567,7 +568,7 @@ namespace LcmsNet.SampleQueue.Forms
                         return false;
                     }
                 }
-                else if(Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateDMS")))                
+                else if(Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")))                
                 {
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found, and validation enabled. Item not queued.");
                     return false;

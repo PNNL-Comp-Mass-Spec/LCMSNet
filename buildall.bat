@@ -55,7 +55,13 @@ ECHO Copying Plugins to %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug
 xcopy /y /q %ROOTPATH%pluginDLLs\*.dll %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug\plugins\
 if errorlevel 1 goto :ERROR
 ECHO Done.
+
+ECHO Copying PAL Validator to %APPDATA%\LCMSNet\SampleValidators
+xcopy /y /q %ROOTPATH%\LcmsNetPlugins\PalValidator\bin\x86\debug\*.dll %APPDATA%\LCMSNet\SampleValidators\
+ECHO Done.
 goto :COMPLETE)
+
+
 
 IF %1==release (
 ECHO Building LcmsNet in release mode...
