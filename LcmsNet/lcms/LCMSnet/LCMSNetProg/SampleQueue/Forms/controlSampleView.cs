@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using LcmsNetSQLiteTools;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
+using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Configuration;
@@ -557,17 +558,30 @@ namespace LcmsNet.SampleQueue.Forms
 
 				// Validate sample.
 				//TODO: Add toggle to see if we need to validate a sample or not. 
-				classDMSSampleValidator validator = new classDMSSampleValidator();
-				bool isSampleValid = validator.IsSampleValid(sample);
-				if (!isSampleValid && false)
-				{
-					return false;
-				}
-
+				IDMSValidator validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                if (validator != null)
+                {
+                    bool isSampleValid = validator.IsSampleValid(sample);
+                    if (!isSampleValid && false)
+                    {
+                        return false;
+                    }
+                }
+                else if(Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateDMS")))                
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found, and validation enabled. Item not queued.");
+                    return false;
+                }            
+                
 				// Validate other parts of the sample.
 				//TODO: is validation working?
-				classCoreSampleValidator coreValidator  = new classCoreSampleValidator();
-				List<classSampleValidationError> errors = coreValidator.ValidateSamples(sample);
+
+                List<classSampleValidationError> errors = new List<classSampleValidationError>();               
+                foreach(Lazy<ISampleValidator, ISampleValidatorMetaData> reference in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+                {
+                    ISampleValidator sampleValidator = reference.Value;
+                    errors.AddRange(sampleValidator.ValidateSamples(sample));
+                }
 				if (errors.Count > 0)
 				{
 					//TODO: Add notifications to what was wrong with the samples.
@@ -3188,16 +3202,23 @@ namespace LcmsNet.SampleQueue.Forms
                 return;
             }
 
-            formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
-            
-            /// We don't care what the result is..
-            if (dmsDisplay.ShowDialog() == DialogResult.Cancel)
-                return;
-
-            /// If samples are not valid...then what?
-            if (!dmsDisplay.AreSamplesValid)
+            try
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");                
+                formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
+                /// We don't care what the result is..
+                if (dmsDisplay.ShowDialog() == DialogResult.Cancel)
+                {
+                    return;
+                }
+                /// If samples are not valid...then what?
+                else if (!dmsDisplay.AreSamplesValid)
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
+                }
+            }
+            catch(InvalidOperationException ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to edit dmsdata:" + ex.Message, ex);
             }
 
             /// 

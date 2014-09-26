@@ -1,4 +1,4 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿namespace LcmsNetDmsTools
 {
     partial class controlDMSValidator
     {

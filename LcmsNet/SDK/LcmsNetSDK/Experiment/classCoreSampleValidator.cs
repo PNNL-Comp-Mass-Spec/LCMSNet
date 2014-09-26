@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Configuration;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
     /// Validates a sample for the basics before it can be run by LCMSNet.
     /// </summary>
-    public class classCoreSampleValidator : LcmsNetDataClasses.Experiment.ISampleValidator
+    [Export(typeof(ISampleValidator))]
+    [ExportMetadata("Name", "CoreSampleValidator")]
+    [ExportMetadata("Version", "1.0")]
+    public class classCoreSampleValidator : ISampleValidator
     {
         /// <summary>
         /// Validates a sample based on the methods being correct and not in error.
@@ -71,8 +74,9 @@ namespace LcmsNet.SampleQueue
                                                 enumSampleValidationError.LCMethodIncorrect));
                         }
                     }
-                }           
-     
+                }
+
+                #region MOVE THIS CODE TO A PAL ONLY SAMPLE VALIDATOR
                 /// 
                 /// We've validated the method, and the devices... Now we need to validate the PAL settings.
                 /// 
@@ -105,7 +109,7 @@ namespace LcmsNet.SampleQueue
                 if (sample.PAL.Well <= classPalData.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 96)
                     errors.Add(new classSampleValidationError("The PAL Well/Vial is not set.", enumSampleValidationError.PalVialNotSpecified));
             }
-
+                #endregion
             return errors;
         }
 

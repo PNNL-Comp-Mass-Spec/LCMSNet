@@ -75,6 +75,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,7 +85,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classDBTools.cs" />
+    <Compile Include="classDMSSampleValidator.cs" />
+    <Compile Include="controlDMSValidator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="controlDMSValidator.Designer.cs">
+      <DependentUpon>controlDMSValidator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="PrismDMS.config">
@@ -92,6 +106,21 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\x86\Debug\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="controlDMSValidator.resx">
+      <DependentUpon>controlDMSValidator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AllIsGood.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="button delete_161.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

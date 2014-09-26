@@ -434,43 +434,45 @@ namespace LcmsNet.SampleQueue.Forms
             /// been thrown on them.
             /// 
             Dictionary<classSampleData, List<classSampleValidationError>> errors = new Dictionary<classSampleData,List<classSampleValidationError>>();
-            
-            classCoreSampleValidator validator = new classCoreSampleValidator();
 
-            foreach (classSampleData sample in samples)
+            foreach (ISampleValidator validator in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
             {
-                List<classSampleValidationError> error = validator.ValidateSamples(sample);
-                if (error.Count > 0)
+
+                foreach (classSampleData sample in samples)
                 {
-                    errors.Add(sample, error);
+                    List<classSampleValidationError> error = validator.ValidateSamples(sample);
+                    if (error.Count > 0)
+                    {
+                        errors.Add(sample, error);
+                    }
                 }
-            }
 
-            /// 
-            /// Of course if we have an error, we just want to display and alert the user.  
-            /// But we dont let them continue, they must edit their queue and make it appropiate
-            /// before running.
-            /// 
-            if (errors.Count > 0)
-            {
-                formSampleValidatorErrorDisplay display = new formSampleValidatorErrorDisplay(errors);
-                display.ShowDialog();
-                return;
-            }
-
-            /// 
-            /// Then we also want to check for running blocks on the wrong column.
-            /// 
-
-            List<classSampleData> badBlocks = validator.ValidateBlocks(samples);
-            if (badBlocks.Count > 0)
-            {
-                //TODO: Add a notification.
-                formSampleBadBlockDisplay display = new formSampleBadBlockDisplay(badBlocks);
-                DialogResult result = display.ShowDialog();
-                if (result != DialogResult.OK)
+                /// 
+                /// Of course if we have an error, we just want to display and alert the user.  
+                /// But we dont let them continue, they must edit their queue and make it appropiate
+                /// before running.
+                /// 
+                if (errors.Count > 0)
                 {
+                    formSampleValidatorErrorDisplay display = new formSampleValidatorErrorDisplay(errors);
+                    display.ShowDialog();
                     return;
+                }
+
+                /// 
+                /// Then we also want to check for running blocks on the wrong column.
+                /// 
+
+                List<classSampleData> badBlocks = validator.ValidateBlocks(samples);
+                if (badBlocks.Count > 0)
+                {
+                    //TODO: Add a notification.
+                    formSampleBadBlockDisplay display = new formSampleBadBlockDisplay(badBlocks);
+                    DialogResult result = display.ShowDialog();
+                    if (result != DialogResult.OK)
+                    {
+                        return;
+                    }
                 }
             }
 

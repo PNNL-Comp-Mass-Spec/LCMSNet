@@ -2,12 +2,14 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Data;
 
-namespace LcmsNet.SampleQueue.Forms
-{
-    public partial class controlDMSValidator : UserControl
+namespace LcmsNetDmsTools
+{    
+    public partial class controlDMSValidator : classDMSBaseControl
     {
         #region Members
         /// <summary>
@@ -63,30 +65,7 @@ namespace LcmsNet.SampleQueue.Forms
             UpdateUserInterface();
 
             
-        }
-        public void SetFocusOn(DMSValidatorEventArgs args)
-        {
-            foreach(Control c in Controls)
-            {
-                if (c.Name == args.Name)
-                {
-                    if (c.Enabled == false)
-                    {
-                        if (EnterPressed != null)
-                        {
-                            EnterPressed(this, args);
-                        }
-                    }
-                    c.Focus();
-                    return;
-                }
-            }
-        }
-        public int ID
-        {
-            get;
-            set;
-        }
+        }               
         
         void KeyUpHandler(object sender, KeyEventArgs e)
         {
@@ -186,7 +165,7 @@ namespace LcmsNet.SampleQueue.Forms
                 mcomboBox_usageType.BackColor       = Color.LightGray;
                 mtextbox_user.Enabled               = false;
                 mtextbox_user.BackColor             = Color.LightGray;
-                mpictureBox_glyph.Image             = global::LcmsNet.Properties.Resources.AllIsGood;
+                mpictureBox_glyph.Image             = global::LcmsNetDmsTools.Properties.Resources.AllIsGood;
                 
 
 
@@ -225,11 +204,11 @@ namespace LcmsNet.SampleQueue.Forms
                 /// 
                 if (mbool_isOK == false)
                 {
-                    mpictureBox_glyph.Image = global::LcmsNet.Properties.Resources.ButtonDeleteRed;
+                    mpictureBox_glyph.Image = global::LcmsNetDmsTools.Properties.Resources.ButtonDeleteRed;
                 }
                 else
                 {
-                    mpictureBox_glyph.Image = global::LcmsNet.Properties.Resources.AllIsGood;
+                    mpictureBox_glyph.Image = global::LcmsNetDmsTools.Properties.Resources.AllIsGood;
                 }
             }
 
@@ -240,7 +219,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Gets to the flag indicating if this sample is valid or not.
         /// </summary>
-        public bool IsSampleValid
+        public override bool IsSampleValid
         {
             get
             {
@@ -281,24 +260,5 @@ namespace LcmsNet.SampleQueue.Forms
         }
         #endregion
 
-    }
-
-    public class DMSValidatorEventArgs: EventArgs
-    {
-        public DMSValidatorEventArgs(string name, Keys modifier)
-        {
-            Name        = name;
-            Modifiers   = modifier;
-        }
-        public string Name
-        {
-            get;
-            private set;
-        }
-        public Keys Modifiers
-        {
-            get;
-            private set;
-        }
-    }
+    }   
 }

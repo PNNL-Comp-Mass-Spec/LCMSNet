@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Data;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -11,7 +12,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// List of validator controls so we can check after editing if the samples are valid.
         /// </summary>
-        private List<controlDMSValidator> mlist_validatorControls;
+        private List<classDMSBaseControl> mlist_validatorControls;
 
         /// <summary>
         /// Constructor.
@@ -26,7 +27,7 @@ namespace LcmsNet.SampleQueue.Forms
             /// 
             AutoScroll = true;
 
-            mlist_validatorControls = new List<controlDMSValidator>();
+            mlist_validatorControls = new List<classDMSBaseControl>();
 
             /// 
             /// Create a sample validator control for each sample.
@@ -36,7 +37,11 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 try
                 {
-                    controlDMSValidator sampleControl   = new controlDMSValidator(sample);
+                    classDMSBaseControl sampleControl = Activator.CreateInstance(LcmsNetSDK.classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as classDMSBaseControl;//new controlDMSValidator(sample);
+                    if(sampleControl == null)
+                    {
+                        throw new InvalidOperationException("Sample control instantiation failed!");
+                    }
                     sampleControl.Dock                  = DockStyle.Top;
                     sampleControl.ID                    = i++;
                     sampleControl.EnterPressed          += new EventHandler<DMSValidatorEventArgs>(sampleControl_EnterPressed);
@@ -44,7 +49,7 @@ namespace LcmsNet.SampleQueue.Forms
                     panel1.Controls.Add(sampleControl);
                     
                     sampleControl.BringToFront(); 
-                }
+                }               
                 catch(Exception ex)
                 {
                     // We get this if the sample is null.  Just pass up the chain for now.
@@ -61,7 +66,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         void sampleControl_EnterPressed(object sender, DMSValidatorEventArgs e)
         {
-            controlDMSValidator validator = sender as controlDMSValidator;
+            classDMSBaseControl validator = sender as classDMSBaseControl;
             if (validator != null)
             {
                 int id = validator.ID;
@@ -128,7 +133,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         private bool CheckSamples()
         {            
-            foreach (controlDMSValidator validator in mlist_validatorControls)
+            foreach (classDMSBaseControl validator in mlist_validatorControls)
             {
                 if (validator.IsSampleValid == false)
                     return false;

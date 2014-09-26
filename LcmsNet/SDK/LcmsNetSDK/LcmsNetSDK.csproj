@@ -62,6 +62,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classDMSToolsManager.cs" />
+    <Compile Include="Data\classDMSBaseControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\classDMSBaseControl.Designer.cs">
+      <DependentUpon>classDMSBaseControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\DmsValidatorEventArgs.cs" />
+    <Compile Include="Data\IDMSValidator.cs" />
+    <Compile Include="Data\IDMSValidatorMetaData.cs" />
+    <Compile Include="Experiment\classCoreSampleValidator.cs" />
     <Compile Include="Experiment\classSampleValidationError.cs" />
     <Compile Include="Experiment\classSampleValidatorManager.cs" />
     <Compile Include="Configuration\classCartConfiguration.cs" />
@@ -223,6 +233,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\AllIsGood.bmp" />
+    <None Include="Resources\AllIsGood.png" />
+    <None Include="Resources\button delete_161.png" />
     <Content Include="x64\SQLite.Interop.dll" />
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
