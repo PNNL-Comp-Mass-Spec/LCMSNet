@@ -435,9 +435,9 @@ namespace LcmsNet.SampleQueue.Forms
             /// 
             Dictionary<classSampleData, List<classSampleValidationError>> errors = new Dictionary<classSampleData,List<classSampleValidationError>>();
 
-            foreach (ISampleValidator validator in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+            foreach (Lazy<ISampleValidator, ISampleValidatorMetaData> reference in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
             {
-
+                ISampleValidator validator = reference.Value;
                 foreach (classSampleData sample in samples)
                 {
                     List<classSampleValidationError> error = validator.ValidateSamples(sample);
