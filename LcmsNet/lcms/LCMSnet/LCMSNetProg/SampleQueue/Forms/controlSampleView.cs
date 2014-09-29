@@ -547,7 +547,7 @@ namespace LcmsNet.SampleQueue.Forms
 
 				if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
 					return false;
-                this.Validate(); //Validation call ensures that changes to datagridview have been commited, and that valid values exist in rows.                
+                this.Validate(); //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.                
 				classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
 
 				// Dont let us re-run something that has been run, errored, or is currently running.
@@ -558,35 +558,36 @@ namespace LcmsNet.SampleQueue.Forms
 				}
 
 				// Validate sample.
-				//TODO: Add toggle to see if we need to validate a sample or not. 
-				IDMSValidator validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
-                if (validator != null)
-                {
-                    bool isSampleValid = validator.IsSampleValid(sample);
-                    if (!isSampleValid && false)
-                    {
-                        return false;
-                    }
+                IDMSValidator validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                bool isSampleValid;
+                if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
+                {                  
+                   
+                        isSampleValid = validator.IsSampleValid(sample);
+                        if (!isSampleValid && false)
+                        {
+                            return false;
+                        }                       
                 }
-                else if(Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")))                
+                else
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found, and validation enabled. Item not queued.");
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found and DMS validation enabled. Item not queued.");
                     return false;
-                }            
+                }
                 
 				// Validate other parts of the sample.
-				//TODO: is validation working?
-
                 List<classSampleValidationError> errors = new List<classSampleValidationError>();               
                 foreach(Lazy<ISampleValidator, ISampleValidatorMetaData> reference in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
                 {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
+#endif
                     ISampleValidator sampleValidator = reference.Value;
                     errors.AddRange(sampleValidator.ValidateSamples(sample));
                 }
 				if (errors.Count > 0)
 				{
 					//TODO: Add notifications to what was wrong with the samples.
-
 					return false;
 				}
 

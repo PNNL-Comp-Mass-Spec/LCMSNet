@@ -13,10 +13,13 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         string RelatedToolName { get; }
         /// <summary>
-        /// Version of the Validator
+        /// Version of the Validator.
         /// </summary>
         [DefaultValue("1.0")]
         string Version { get; }
+        /// <summary>
+        /// The minimum version of the DMS tool that this validator works with.
+        /// </summary>
         [DefaultValue("1.0")]
         string RequiredDMSToolVersion { get; }
     }

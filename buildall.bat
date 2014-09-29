@@ -2,7 +2,7 @@
 REM Build.bat 
 REM Batch file for building lcmsnet with dmstools and plugins as if using the PNNL internal installer.
 REM Written by Christopher Walters 9/12/2014
-REM Last Modified 9/15/2014
+REM Last Modified 9/29/2014
 REM Path to MSBuild must be in your PATH environment variable in order for this batch file to work.
 
 SETLOCAL
@@ -41,6 +41,8 @@ if errorlevel 1 goto :ERROR
 ECHO Done.
 
 REM Build Main solution.
+REM If we're not building in release mode, make sure to copy library files into proper
+REM locations for testing purposes.
 IF [%1]==[] (
 ECHO Building LcmsNet...
 MSBUILD /p:Configuration=Debug /p:targetPlatform=x86 %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln 
@@ -56,13 +58,19 @@ xcopy /y /q %ROOTPATH%pluginDLLs\*.dll %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetPro
 if errorlevel 1 goto :ERROR
 ECHO Done.
 
+ECHO Copying Core Validator to %APPDATA%\LCMSNet\SampleValidators
+xcopy /y /q %ROOTPATH%\LcmsNet\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll %APPDATA%\LCMSNet\SampleValidators\
+ECHO Done.
+
 ECHO Copying PAL Validator to %APPDATA%\LCMSNet\SampleValidators
 xcopy /y /q %ROOTPATH%\LcmsNetPlugins\PalValidator\bin\x86\debug\*.dll %APPDATA%\LCMSNet\SampleValidators\
 ECHO Done.
 goto :COMPLETE)
 
 
-
+REM If we're building in release mode, we don't need to do all the copying of files, since the
+REM installer script already knows where to look for the library files, and knows where to put
+REM them during install.
 IF %1==release (
 ECHO Building LcmsNet in release mode...
 MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln
