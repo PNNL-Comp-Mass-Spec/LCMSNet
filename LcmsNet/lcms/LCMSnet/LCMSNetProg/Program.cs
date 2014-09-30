@@ -211,10 +211,10 @@ namespace LcmsNet
                 classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classFileLogging.LogMessage);
 
                 /*
-                Duplicate logging entries...disabling for now due to time spent for each log.
+                Duplicate logging entries...disabling for now due to time spent for each log. */
                 classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classDbLogger.LogError);
                 classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classDbLogger.LogMessage);
-                */
+                
 
                 /// Note that we used icons from here for the gears on the main form window.
                 ///     http://labs.chemist2dio.com/free-vector-gears.php/
@@ -412,8 +412,7 @@ namespace LcmsNet
                     mform_splashScreen.Hide();
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;
-
-                    //LcmsNetDataClasses.Experiment.classSampleValidatorManager valManager = LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance;
+                    
                     try
                     {
                         Application.Run(main);

@@ -680,6 +680,7 @@ namespace LcmsNet
                         lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];                                
                     }                         
                     mform_sampleProgress.UpdateError(sample, lcEvent);
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message, null, args.Sample);
                     isError = true;
                     break;
                 case enumSampleProgress.Stopped:
