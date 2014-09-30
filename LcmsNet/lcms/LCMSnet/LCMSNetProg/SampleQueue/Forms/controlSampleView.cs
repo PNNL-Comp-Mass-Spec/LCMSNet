@@ -576,12 +576,12 @@ namespace LcmsNet.SampleQueue.Forms
                     if (!isSampleValid && false)
                     {
                         return false;
-                    }
-                    else
-                    {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found and DMS validation enabled. Item not queued.");
-                        return false;
-                    }
+                    }                  
+                }
+                else
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found and DMS validation enabled. Item not queued.");
+                    return false;
                 }
                 
 				// Validate other parts of the sample.
