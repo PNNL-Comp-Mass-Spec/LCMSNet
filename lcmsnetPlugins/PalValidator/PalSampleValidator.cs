@@ -18,7 +18,7 @@ namespace PALAutoSampler.Validator
         public List<LcmsNetDataClasses.classSampleData> ValidateBlocks(List<LcmsNetDataClasses.classSampleData> samples)
         {
             // Blocks don't matter to the PAL.
-            return samples;
+            return new List<LcmsNetDataClasses.classSampleData>();
         }
 
         public List<classSampleValidationError> ValidateSamples(LcmsNetDataClasses.classSampleData sample)
