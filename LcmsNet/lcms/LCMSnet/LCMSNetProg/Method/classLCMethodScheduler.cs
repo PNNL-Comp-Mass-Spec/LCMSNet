@@ -271,16 +271,34 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="message">Message to print.</param>
         /// <param name="level">Level of message</param>
-        private void Print(string message, int level)
+        private void Print(string message, int level, Exception ex = null, classSampleData sample = null)
         {
             if (level <= VerboseLevel)
             {
                 System.Diagnostics.Trace.WriteLine(message);
                 System.Diagnostics.Trace.Flush();
-
+                Exception exVal = null;
+                bool error = ex != null;
+                classSampleData sampVal = null;
                 if (Logger != null)
                 {
-                    Logger.LogMessage(level, message);
+                    if (ex != null)
+                    {
+                        exVal = ex;
+                    }
+                    if(sample != null)
+                    {
+                        sampVal = sample;
+                    }
+                    if(!error)
+                    {
+                        Logger.LogMessage(level, message, sampVal);
+                    }
+                    else
+                    {
+                        Logger.LogError(level, message, exVal, sampVal);
+                    }
+                   
                 }
             }
         }
@@ -431,7 +449,7 @@ namespace LcmsNet.Method
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
                             data.DmsData.DatasetName,
                             data.ColumnData.ID + 1, data.LCMethod.Start),
-                            CONST_VERBOSE_LEAST);
+                            CONST_VERBOSE_LEAST, null, data);
                     /// 
                     /// Hold on to a copy of the sample 
                     ///                                 
@@ -552,7 +570,7 @@ namespace LcmsNet.Method
                                                                     sampleEndTime[columnID].ToString(),
                                                                     lcEvent.Device.Name,        
                                                                     lcEvent.Name);
-                                            Print(message, CONST_VERBOSE_LEAST);
+                                            Print(message, CONST_VERBOSE_LEAST, null, samples[columnID]);
                                             HandleError(samples[columnID], message);
                                             sampleEndTime[columnID] = DateTime.MinValue;
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;

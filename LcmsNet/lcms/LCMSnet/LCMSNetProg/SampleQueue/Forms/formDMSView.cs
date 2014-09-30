@@ -202,15 +202,21 @@ public partial class formDMSView : Form
             FormClosing += new FormClosingEventHandler(formDMSView_FormClosing);
 
 				// Form caption
-				string dbInUse;
-				if (classDMSToolsManager.Instance.SelectedTool.DMSVersion.Contains("_T3"))
-				{
-					dbInUse = " (Using Development Database)";
-				}
-				else
-				{
-					dbInUse = " (Using Production Database)";
-				}
+                string dbInUse = string.Empty;
+                try
+                {
+                    if (classDMSToolsManager.Instance.SelectedTool.DMSVersion.Contains("_T3"))
+                    {
+                        dbInUse = " (Using Development Database)";
+                    }
+                    else
+                    {
+                        dbInUse = " (Using Production Database)";
+                    }
+                }
+                catch(Exception ex)
+                {                   
+                }
 				this.Text = "LcmsNet V" + Application.ProductVersion + dbInUse;
 
 				//Listview information

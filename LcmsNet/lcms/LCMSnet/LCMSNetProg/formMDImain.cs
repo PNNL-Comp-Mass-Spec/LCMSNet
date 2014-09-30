@@ -703,7 +703,6 @@ namespace LcmsNet
                     }
                     try
                     {
-                        lcMethod = sample.LCMethod;
                         message = string.Empty; 
                         if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
                         {
@@ -712,15 +711,13 @@ namespace LcmsNet
                         string filePath = FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
                         m_pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample, classCartConfiguration.NumberOfEnabledColumns.ToString(), classCartConfiguration.Columns,
                             classDeviceManager.Manager.Devices, configImage);
-                        classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PDF written to: " + filePath);
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "PDF Generation Error on" + sample.DmsData.DatasetName + " " + ex.Message);
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "PDF Generation Error on" + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
                     }
                     break;
                 case enumSampleProgress.Started:
-                    lcMethod = sample.LCMethod;
 					message = string.Empty; 
                     break;
             }

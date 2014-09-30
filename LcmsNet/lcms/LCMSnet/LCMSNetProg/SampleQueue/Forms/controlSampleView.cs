@@ -558,21 +558,30 @@ namespace LcmsNet.SampleQueue.Forms
 				}
 
 				// Validate sample.
-                IDMSValidator validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                IDMSValidator validator;
+                try
+                { 
+                    validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                }
+                catch(Exception ex)
+                {
+                    // no dms tools validator
+                    validator = null;
+                }
                 bool isSampleValid;
                 if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
-                {                  
-                   
-                        isSampleValid = validator.IsSampleValid(sample);
-                        if (!isSampleValid && false)
-                        {
-                            return false;
-                        }                       
-                }
-                else
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found and DMS validation enabled. Item not queued.");
-                    return false;
+
+                    isSampleValid = validator.IsSampleValid(sample);
+                    if (!isSampleValid && false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DMS validator not found and DMS validation enabled. Item not queued.");
+                        return false;
+                    }
                 }
                 
 				// Validate other parts of the sample.

@@ -20,7 +20,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Time required to space the lc methods in milliseconds.
         /// </summary>
-        private const int CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS = 10000;
+        private const int CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS = 2000;
         /// <summary>
         /// Offset of non-overlapping events
         /// </summary>
