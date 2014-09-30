@@ -7,6 +7,7 @@
 //						- 03/16/2009 (BLL) - Added LC and PAL Methods
 //						- 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
 //                      - 9/26/2014  (CJW) - Modified to use MEF for DMS and sample validations
+//                      - 9/30/2014  (CJW) - bug fixes
 //*********************************************************************************************************
 using System;
 using System.Data;

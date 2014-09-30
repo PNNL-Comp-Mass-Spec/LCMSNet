@@ -1,9 +1,9 @@
 ﻿/*********************************************************************************************************
- * Written by Dave Clark?, Brian LaMarche for U.S. Department of Energy
+ * Written by Dave Clark?, Brian LaMarche, Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009 Battle Memorial Institute
  * 
- * Last Modified 9/16/2014 By Christopher Walters 
+ * Last Modified 9/30/2014 By Christopher Walters 
  *********************************************************************************************************/
 using System;
 using System.Threading;
