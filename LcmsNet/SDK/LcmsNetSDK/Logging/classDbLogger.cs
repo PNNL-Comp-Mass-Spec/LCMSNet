@@ -15,6 +15,7 @@ using System.Text;
 using System.IO;
 using System.Data;
 using System.Data.SQLite;
+using System.Threading;
 
 namespace LcmsNetDataClasses.Logging
 {
@@ -30,6 +31,8 @@ namespace LcmsNetDataClasses.Logging
 		#endregion
 
 		#region "Class variables"
+            private static object mobj_lock = "AstringToLockOn";
+            private static object mobj_writeLock = "AnotherStringToLockOn";
 			private static bool mbool_LogDbFileCreated = false;
 			private static string mstring_DbFileName;
 			private static string mstring_ConnStr;
@@ -73,8 +76,10 @@ namespace LcmsNetDataClasses.Logging
 				string exMsg = "";
 				if (args.Exception != null) { UnwrapExceptionMsgs(args.Exception, out exMsg); }
 				sqlCmdBlder.Append("'" + ReplaceQuotes(exMsg) + "')");
-
-				WriteLogMsgToDb(sqlCmdBlder.ToString(), mstring_ConnStr);
+                lock (mobj_writeLock)
+                {
+                    WriteLogMsgToDb(sqlCmdBlder.ToString(), mstring_ConnStr);
+                }
 			}	
 
 			/// <summary>
@@ -104,8 +109,10 @@ namespace LcmsNetDataClasses.Logging
 
 				// Create blank field for exception
 				sqlCmdBlder.Append("'')");
-
-				WriteLogMsgToDb(sqlCmdBlder.ToString(), mstring_ConnStr);
+                lock (mobj_writeLock)
+                {
+                    WriteLogMsgToDb(sqlCmdBlder.ToString(), mstring_ConnStr);
+                }
 			}	
 
 			/// <summary>
@@ -117,13 +124,16 @@ namespace LcmsNetDataClasses.Logging
 			{
 				try
 				{
-					// Verify logging db is ready
-					if (!mbool_LogDbFileCreated)
-					{
-						// Database wasn't ready, so try to create it
-						if (!InitLogDatabase()) { return; }
-					}
-
+                    // Verify logging db is ready
+                    while(!mbool_LogDbFileCreated)
+                    {
+                        bool check = Monitor.TryEnter(mobj_lock);
+                        if(check && !mbool_LogDbFileCreated)
+                        {
+                            // Database wasn't ready, so try to create it
+                            if (!InitLogDatabase()) { return; }
+                        }
+                    }                    
 					// Insert the log entry into the data table
 					ExecuteSQLiteCommand(sqlCmd, mstring_ConnStr);
 				}
@@ -167,10 +177,11 @@ namespace LcmsNetDataClasses.Logging
 			/// </summary>
 			private static void CreateDbFile()
 			{
-				FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
-				string logDir = Path.Combine(fi.DirectoryName, "Log");
+				//FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
+                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+				string logDir = Path.Combine(path, "LCMSNet\\Log");
                 //mstring_DbFileName = Path.Combine(logDir, "DbLog_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".db3");
-                mstring_DbFileName = Path.Combine(logDir, "DbLog_" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MMddyyyy_HHmmss") + ".db3");
+                mstring_DbFileName = Path.Combine(logDir, "LcmsNetDbLog.db3");
 				// Create the file if it doesn't already exist
 				if (!File.Exists(mstring_DbFileName))
 				{

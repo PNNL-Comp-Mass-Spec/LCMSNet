@@ -271,7 +271,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="message">Message to print.</param>
         /// <param name="level">Level of message</param>
-        private void Print(string message, int level)
+        private void Print(string message, int level, classSampleData sample = null)
         {
             if (level <= VerboseLevel)
             {

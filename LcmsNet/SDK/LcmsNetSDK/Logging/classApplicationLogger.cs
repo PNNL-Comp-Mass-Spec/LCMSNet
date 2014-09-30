@@ -1,17 +1,29 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace LcmsNetDataClasses.Logging
 {
+    public class ThreadPoolStateObject
+    {
+        public ThreadPoolStateObject(int messageLevel, object args)
+        {
+            MessageLevel = messageLevel;
+            EventArgs = args;
+        }
+        public int MessageLevel { get; set; }
+        public object EventArgs { get; set; }
+    }
+
     /// <summary>
     /// Class that marshalls messages from different components to different logging and streaming capabilities.
     /// </summary>
     public class classApplicationLogger: ILogger
     {
         /// <summary>
-        /// Critical and should always be loged.
+        /// Critical and should always be logged.
         /// </summary>
         public const int CONST_STATUS_LEVEL_CRITICAL = 0;
         /// <summary>
@@ -110,23 +122,33 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
         /// <param name="message">Error message to report.</param>
-        public static void LogError(int errorLevel, string message, classSampleData sample)
+        public static void LogError(int errorLevel, string message, classSampleData sample = null, Exception ex = null)
         {
-            if (errorLevel <= mint_errorLevel)
+            /*if (errorLevel <= mint_errorLevel)
                 if (Error != null)
-                    Error(errorLevel, new classErrorLoggerArgs(message, sample));
+                    Error(errorLevel, new classErrorLoggerArgs(message, sample));*/
+            classErrorLoggerArgs args;
+            if (sample != null)
+            {
+                args = new classErrorLoggerArgs(message, sample);
+            }
+            else
+            {
+                args = new classErrorLoggerArgs(message);
+            }
+            ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseErrorEvent), new ThreadPoolStateObject(errorLevel, args));
         }
         /// <summary>
         /// Logs an error to the listening error output streams.
         /// </summary>
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
         /// <param name="message">Error message to report.</param>
-        public static void LogError(int errorLevel, string message)
+        /*public static void LogError(int errorLevel, string message)
         {
             if (errorLevel <= mint_errorLevel)
                 if (Error != null)
                     Error(errorLevel, new classErrorLoggerArgs(message));
-        }
+        }*/
         #endregion
 
         #region Messages 
@@ -135,12 +157,12 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         /// <param name="messageLevel"></param>
         /// <param name="message"></param>
-        public static void LogMessage(int messageLevel, string message)
+        /*public static void LogMessage(int messageLevel, string message)
         {
             if (messageLevel <= mint_errorLevel)
                 if (Message != null)
                     Message(messageLevel, new classMessageLoggerArgs(message));            
-        }
+        }*/
 
         /// <summary>
         /// Logs a message to the listening message output streams.
@@ -148,11 +170,50 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="messageLevel"></param>
         /// <param name="message"></param>
         /// <param name="sample"></param>
-        public static void LogMessage(int messageLevel, string message, classSampleData sample)
-        {
-            if (messageLevel <= mint_errorLevel)
+        public static void LogMessage(int messageLevel, string message, classSampleData sample = null)
+        {            
+            /*if (messageLevel <= mint_errorLevel)
                 if (Message != null)
-                    Message(messageLevel, new classMessageLoggerArgs(message, sample));
+                    Message(messageLevel, new classMessageLoggerArgs(message, sample));*/
+            classMessageLoggerArgs args;
+            if(sample != null)
+            {
+                args = new classMessageLoggerArgs(message, sample);
+            }
+            else
+            {
+                args = new classMessageLoggerArgs(message);
+            }
+            ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseMessageEvent), new ThreadPoolStateObject(messageLevel, args));
+        }
+
+        /// <summary>
+        /// Raises the error event using a Threadpool thread to avoid interrupting other functions with I/O.
+        /// </summary>
+        /// <param name="errorInfo"></param>
+        public static void RaiseErrorEvent(object errorInfo)
+        {
+            ThreadPoolStateObject info = errorInfo as ThreadPoolStateObject;
+
+            if(info.MessageLevel <= mint_errorLevel && Error != null)
+            {
+                Error(info.MessageLevel, info.EventArgs as classErrorLoggerArgs);
+            }
+
+        }
+
+        /// <summary>
+        /// Raises the message event using a Threadpool thread to avoid interrupting other functions with I/O.
+        /// </summary>
+        /// <param name="errorInfo"></param>
+        private static void RaiseMessageEvent(object messageInfo)
+        {
+            ThreadPoolStateObject info = messageInfo as ThreadPoolStateObject;
+
+            if (info.MessageLevel <= mint_messageLevel && Message!= null)
+            {
+                Message(info.MessageLevel, info.EventArgs as classMessageLoggerArgs);
+            }
         }
         #endregion
 
