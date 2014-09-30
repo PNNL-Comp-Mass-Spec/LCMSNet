@@ -99,12 +99,12 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
         /// <param name="message">Error message to report.</param>
         /// <param name="ex">An associated exception</param>
-        public static void LogError(int errorLevel, string message, Exception ex, classSampleData sample)
+        /*public static void LogError(int errorLevel, string message, Exception ex, classSampleData sample)
         {
             if (errorLevel <= mint_errorLevel)
                 if (Error != null)
                     Error(errorLevel, new classErrorLoggerArgs(message, ex, sample));
-        }
+        }*/
         /// <summary>
         /// Logs an error to the listening error output streams.
         /// </summary>
@@ -122,7 +122,7 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
         /// <param name="message">Error message to report.</param>
-        public static void LogError(int errorLevel, string message, classSampleData sample = null, Exception ex = null)
+        public static void LogError(int errorLevel, string message, Exception ex = null, classSampleData sample = null)
         {
             /*if (errorLevel <= mint_errorLevel)
                 if (Error != null)
@@ -136,33 +136,15 @@ namespace LcmsNetDataClasses.Logging
             {
                 args = new classErrorLoggerArgs(message);
             }
+            if(ex != null)
+            {
+                args.Exception = ex;
+            }
             ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseErrorEvent), new ThreadPoolStateObject(errorLevel, args));
-        }
-        /// <summary>
-        /// Logs an error to the listening error output streams.
-        /// </summary>
-        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
-        /// <param name="message">Error message to report.</param>
-        /*public static void LogError(int errorLevel, string message)
-        {
-            if (errorLevel <= mint_errorLevel)
-                if (Error != null)
-                    Error(errorLevel, new classErrorLoggerArgs(message));
-        }*/
+        }  
         #endregion
 
         #region Messages 
-        /// <summary>
-        /// Logs a message to the listening message output streams.
-        /// </summary>
-        /// <param name="messageLevel"></param>
-        /// <param name="message"></param>
-        /*public static void LogMessage(int messageLevel, string message)
-        {
-            if (messageLevel <= mint_errorLevel)
-                if (Message != null)
-                    Message(messageLevel, new classMessageLoggerArgs(message));            
-        }*/
 
         /// <summary>
         /// Logs a message to the listening message output streams.
@@ -172,9 +154,6 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="sample"></param>
         public static void LogMessage(int messageLevel, string message, classSampleData sample = null)
         {            
-            /*if (messageLevel <= mint_errorLevel)
-                if (Message != null)
-                    Message(messageLevel, new classMessageLoggerArgs(message, sample));*/
             classMessageLoggerArgs args;
             if(sample != null)
             {
@@ -183,7 +162,7 @@ namespace LcmsNetDataClasses.Logging
             else
             {
                 args = new classMessageLoggerArgs(message);
-            }
+            }         
             ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseMessageEvent), new ThreadPoolStateObject(messageLevel, args));
         }
 
@@ -231,7 +210,7 @@ namespace LcmsNetDataClasses.Logging
 
         void ILogger.LogError(int errorLevel, string message, classSampleData sample)
         {
-            classApplicationLogger.LogError(errorLevel, message, sample);
+            classApplicationLogger.LogError(errorLevel, message, null, sample);
         }
 
         void ILogger.LogError(int errorLevel, string message)
