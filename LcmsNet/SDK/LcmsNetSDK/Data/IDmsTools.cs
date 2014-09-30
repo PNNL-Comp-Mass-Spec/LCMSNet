@@ -5,6 +5,7 @@ namespace LcmsNetDataClasses
     {
         string ErrMsg { get; set; }
         string DMSVersion { get; }
+        bool ForceValidation { get; } // determines if lcmsnet should attempt to force dmsvalidation, and refuse to queue samples if validator not found.
         void GetCartListFromDMS();
         void GetColumnListFromDMS();
         void GetDatasetTypeListFromDMS();

@@ -15,7 +15,7 @@ namespace LcmsNetDataClasses.Experiment
         private DirectoryCatalog mmef_directorycatalog;
         private static classSampleValidatorManager m_instance;
 
-        public classSampleValidatorManager()
+        private classSampleValidatorManager()
         {
             var catalog = new AggregateCatalog(new AssemblyCatalog(typeof(classSampleValidatorManager).Assembly));
             string validatorPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -27,7 +27,7 @@ namespace LcmsNetDataClasses.Experiment
             System.Diagnostics.Debug.WriteLine(string.Format("Loaded : {0} sample validators", Validators.Count()));
         }
 
-        public classSampleValidatorManager Instance
+        public static classSampleValidatorManager Instance
         {
             get
             {
@@ -38,7 +38,7 @@ namespace LcmsNetDataClasses.Experiment
                 return m_instance;
             }
         }
-
+        
         [ImportMany]
         public IEnumerable<Lazy<ISampleValidator, ISampleValidatorMetaData>> Validators
         {

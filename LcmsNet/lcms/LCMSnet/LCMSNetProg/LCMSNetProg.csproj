@@ -381,7 +381,6 @@
     <Compile Include="Reporting\Forms\formCreateErrorReport.Designer.cs">
       <DependentUpon>formCreateErrorReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="SampleQueue\classCoreSampleValidator.cs" />
     <Compile Include="SampleQueue\classDataExportException.cs" />
     <Compile Include="SampleQueue\classDataImportException.cs" />
     <Compile Include="SampleQueue\classListViewItemComparer.cs" />
@@ -389,15 +388,8 @@
     <Compile Include="SampleQueue\classSampleNotRunningException.cs" />
     <Compile Include="SampleQueue\classSampleQueue.cs" />
     <Compile Include="SampleQueue\classSampleQueueArgs.cs" />
-    <Compile Include="SampleQueue\classDMSSampleValidator.cs" />
     <Compile Include="SampleQueue\classSequenceComparer.cs" />
     <Compile Include="SampleQueue\codeFileTrayVialAssignmentDelegates.cs" />
-    <Compile Include="SampleQueue\Forms\controlDMSValidator.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlDMSValidator.Designer.cs">
-      <DependentUpon>controlDMSValidator.cs</DependentUpon>
-    </Compile>
     <Compile Include="SampleQueue\Forms\controlNotSelectedSamples.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -722,10 +714,6 @@
       <DependentUpon>formCreateErrorReport.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlDMSValidator.resx">
-      <DependentUpon>controlDMSValidator.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\controlNotSelectedSamples.resx">
       <DependentUpon>controlNotSelectedSamples.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -829,6 +817,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\AllIsGood.png" />
     <None Include="Simulator\SimulatorClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
@@ -910,7 +899,6 @@
     <None Include="lib\start2.png" />
     <None Include="Resources\BuildUpdate1.png" />
     <None Include="lib\stopit.gif" />
-    <None Include="Resources\AllIsGood.png" />
     <None Include="Resources\Pumps.png" />
     <None Include="Resources\Export.png" />
     <None Include="Resources\Filldown1.png" />

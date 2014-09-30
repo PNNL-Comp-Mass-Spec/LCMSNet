@@ -44,9 +44,12 @@ Name: "{app}\cy-GB"
 ; Exe
 Source: "LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe";                                     DestDir: "{app}";          Flags: ignoreversion
 ; Demo Plugins
-Source: "Demo\bin\x86\PNNLRelease\*";                                                     DestDir: "{app}\Plugins";  Flags: ignoreversion
+Source: "Demo\bin\x86\PNNLRelease\*";                                                      DestDir: "{app}\Plugins";  Flags: ignoreversion
 ;SDK
-Source: "{#MyLib}\*";                                                                                  DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\*";                                                                      DestDir: "{app}";          Flags: ignoreversion
+
+;Core sample validator    
+Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";                         DestDir: "{userappdata}\SampleValidators\"; Flags:ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"

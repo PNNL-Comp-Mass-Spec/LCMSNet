@@ -70,6 +70,14 @@ namespace LcmsNetDmsTools
         #endregion
 
         #region "Properties"
+         public bool ForceValidation
+         {
+             get
+             {
+                 return true;
+             }
+         }
+
         public  string ErrMsg
         {
             get

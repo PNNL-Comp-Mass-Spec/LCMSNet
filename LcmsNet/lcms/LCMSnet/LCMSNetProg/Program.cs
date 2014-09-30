@@ -413,7 +413,7 @@ namespace LcmsNet
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;
 
-                    LcmsNetDataClasses.Experiment.classSampleValidatorManager valManager = new LcmsNetDataClasses.Experiment.classSampleValidatorManager();
+                    //LcmsNetDataClasses.Experiment.classSampleValidatorManager valManager = LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance;
                     try
                     {
                         Application.Run(main);

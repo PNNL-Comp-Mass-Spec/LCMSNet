@@ -1,4 +1,4 @@
-#Note: More .gitignore files exist within the directory structure. Notably within the \InternalLibs, \pluginDLLs, and LcmsNet\lib subdirectories
+#Note: More .gitignore files exist within the directory structure. Notably within the \pluginDLLs, and LcmsNet\lib subdirectories
 *\obj
 *\bin
 *\packages

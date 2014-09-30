@@ -3,16 +3,19 @@
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2014, Battelle Memorial Institute
 // Created 09/11/2014
+// Last Modified On: 9/25/2014 By Christopher Walters
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.Composition;
+using System.ComponentModel;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Data;
 
 namespace LcmsNetSDK
 {
@@ -24,6 +27,10 @@ namespace LcmsNetSDK
         private CompositionContainer mmef_compositionContainer;
         private IDmsTools midmstools_selectedTools;
         private static classDMSToolsManager m_instance;
+        /// <summary>
+        /// reference to metadata of our selectedTools.
+        /// </summary>
+        private IDmsMetaData mdms_metadata;
 
         /// <summary>
         /// Directory
@@ -109,11 +116,13 @@ namespace LcmsNetSDK
                     string[] toolTokens = lastSelectedTool.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                     if (lastSelectedTool != string.Empty)
                     {
-                            midmstools_selectedTools = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Value;                        
+                            midmstools_selectedTools = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Value;
+                            mdms_metadata = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Metadata;
                     }
                     else
                     {
                         midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
+                        mdms_metadata = DmsTools.First().Metadata;
                         classLCMSSettings.SetParameter("DMSTool", DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
                     }
                 }
@@ -126,10 +135,38 @@ namespace LcmsNetSDK
         }
 
         /// <summary>
+        /// Find the first validator available that will work for the selected DMS tool and its version.
+        /// </summary>
+        public IDMSValidator Validator
+        {
+            get
+            {
+                try
+                {
+                    return Validators.Single(x => x.Metadata.RelatedToolName == mdms_metadata.Name && Convert.ToDouble(mdms_metadata.Version) >= Convert.ToDouble(x.Metadata.RequiredDMSToolVersion)).Value;
+                }
+                catch(InvalidCastException ex)
+                {                  
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Contains the MEF references to DmsTools
         /// </summary>
         [ImportMany]
         private IEnumerable<Lazy<IDmsTools, IDmsMetaData>> DmsTools
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Contains the MEF references to the validators
+        /// </summary>
+        [ImportMany]
+        private IEnumerable<Lazy<IDMSValidator, IDMSValidatorMetaData>> Validators
         {
             get;
             set;

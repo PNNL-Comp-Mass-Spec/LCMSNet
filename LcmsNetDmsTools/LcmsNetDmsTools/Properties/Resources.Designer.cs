@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LcmsNetSDK.Properties {
+namespace LcmsNetDmsTools.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace LcmsNetSDK.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LcmsNetSDK.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LcmsNetDmsTools.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,9 +63,9 @@ namespace LcmsNetSDK.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap next_32 {
+        internal static System.Drawing.Bitmap AllIsGood {
             get {
-                object obj = ResourceManager.GetObject("next_32", resourceCulture);
+                object obj = ResourceManager.GetObject("AllIsGood", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,19 +73,9 @@ namespace LcmsNetSDK.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap next_32_2 {
+        internal static System.Drawing.Bitmap ButtonDeleteRed {
             get {
-                object obj = ResourceManager.GetObject("next_32_2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap test_tube_32 {
-            get {
-                object obj = ResourceManager.GetObject("test_tube_32", resourceCulture);
+                object obj = ResourceManager.GetObject("ButtonDeleteRed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

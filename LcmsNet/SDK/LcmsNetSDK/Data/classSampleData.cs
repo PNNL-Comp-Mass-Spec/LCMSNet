@@ -55,6 +55,7 @@ using System.Runtime.Serialization;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Data;
 using System.IO;
 
 

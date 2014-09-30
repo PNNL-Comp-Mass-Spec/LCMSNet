@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Experiment;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetDmsTools
 {
     /// <summary>
     /// Validates a sample.
     /// </summary>
-    public class classDMSSampleValidator
+    [Export(typeof(IDMSValidator))]
+    [ExportMetadata("RelatedToolName", "PrismDMSTools")]
+    [ExportMetadata("Version", "1.0")]
+    [ExportMetadata("RequiredDMSToolVersion", "1.0")]
+    public class classDMSSampleValidator:IDMSValidator
     {
         /// <summary>
         /// Indicates not request number is tied to a EMSL user proposal in DMS.
@@ -131,6 +137,14 @@ namespace LcmsNet.SampleQueue
                 }
             }   
             return true;            
-        }     
+        }
+     
+        public Type DMSValidatorControl
+        {
+            get
+            {
+                return typeof(controlDMSValidator);
+            }
+        }    
     }
 }
