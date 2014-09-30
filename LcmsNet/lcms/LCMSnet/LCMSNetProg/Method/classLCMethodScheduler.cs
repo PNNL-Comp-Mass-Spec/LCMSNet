@@ -734,7 +734,7 @@ namespace LcmsNet.Method
                                               columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,                                    
                                               sampleEndTime[columnID].ToString(),
                                               samples[columnID].DmsData.DatasetName);
-                    Print(mm, CONST_VERBOSE_LEAST);
+                    Print(mm, CONST_VERBOSE_LEAST, null, samples[columnID]);
                     sampleEndTime[columnID] = DateTime.MinValue;
                     currentEvent[columnID]  = CONST_IDLE_FLAG;
                     if (SampleProgress != null)

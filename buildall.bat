@@ -76,6 +76,10 @@ ECHO Building LcmsNet in release mode...
 MSBUILD %CONFIG% %BOPTS% %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNet.sln
 if errorlevel 1 goto :ERROR
 ECHO Done.
+
+ECHO Building LogViewer...
+MSBUILD %CONFIG% %BOPTS% %ROOTPATH%\ExternalApplications\LogViewer\LogViewer.sln
+ECHO Done.
 goto :COMPLETE)
 
 :ERROR

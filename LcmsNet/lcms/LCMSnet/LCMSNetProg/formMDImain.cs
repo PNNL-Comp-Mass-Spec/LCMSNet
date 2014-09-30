@@ -728,7 +728,7 @@ namespace LcmsNet
             //is going to be removed/majorly simplified(the more likely option) this is here. --Chris
             if (!message.Equals(string.Empty))
             {
-                classApplicationLogger.LogMessage(0, message);
+                classApplicationLogger.LogMessage(0, message, sample);
             }
 
 

@@ -141,6 +141,7 @@ namespace LcmsNetDataClasses.Logging
                 args.Exception = ex;
             }
             ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseErrorEvent), new ThreadPoolStateObject(errorLevel, args));
+            //RaiseErrorEvent(new ThreadPoolStateObject(errorLevel, args));
         }  
         #endregion
 
@@ -164,6 +165,7 @@ namespace LcmsNetDataClasses.Logging
                 args = new classMessageLoggerArgs(message);
             }         
             ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseMessageEvent), new ThreadPoolStateObject(messageLevel, args));
+            //RaiseMessageEvent(new ThreadPoolStateObject(messageLevel, args));
         }
 
         /// <summary>

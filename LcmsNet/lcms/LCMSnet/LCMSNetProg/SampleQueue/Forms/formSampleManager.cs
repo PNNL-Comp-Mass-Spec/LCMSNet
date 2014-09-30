@@ -466,7 +466,6 @@ namespace LcmsNet.SampleQueue.Forms
                 List<classSampleData> badBlocks = validator.ValidateBlocks(samples);
                 if (badBlocks.Count > 0)
                 {
-                    return;
                     //TODO: Add a notification.
                     formSampleBadBlockDisplay display = new formSampleBadBlockDisplay(badBlocks);
                     DialogResult result = display.ShowDialog();

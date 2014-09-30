@@ -99,8 +99,15 @@ namespace LcmsNetDataClasses.Logging
 				if (args.Sample != null)
 				{
 					sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
-					sqlCmdBlder.Append("'" + " " + ",");	// Add column here
-					sqlCmdBlder.Append("'" + " " + ",");	// Add device here
+					sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID.ToString() + "',");	// Add column here
+                    if (args.Sample.LCMethod.CurrentEventNumber >= 0)
+                    {
+                        sqlCmdBlder.Append("'" + args.Sample.LCMethod.Events[args.Sample.LCMethod.CurrentEventNumber].Device.Name + "',");
+                    }
+                    else
+                    {
+                        sqlCmdBlder.Append("'" + "No Device " + "',");	// Add device here
+                    }
 				}
 				else
 				{ sqlCmdBlder.Append("'','','',"); }

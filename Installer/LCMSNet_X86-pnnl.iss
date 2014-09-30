@@ -63,6 +63,9 @@ Source: "..\..\..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";                   
 ;PAL Validator
 Source: "..\..\..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";                              DestDir: "{userappdata}\SampleValidators\"; Flags: ignoreversion
 
+;Log Viewer
+Source: "..\..\..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";                                DestDir: "{app}";          Flags: ignoreversion
+
 ; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 
 ; config.default! If you want to make changes to the deployed defaults, change the 
@@ -76,6 +79,7 @@ Source: "..\..\..\Installer\LcmsNet.exe.config.default";                        
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; Tasks: desktopicon
+;Name: "{commondesktop}\{#MyAppName}-LogViewer"; Filename: "{app}\LogViewer.exe"; WorkingDir:"{userappdata}\LCMSNet\Log"; Tasks: desktopicon
 
 [Run]
 ;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#MyAppName}}"; Flags: nowait postinstall skipifsilent
