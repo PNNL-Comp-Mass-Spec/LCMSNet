@@ -151,10 +151,14 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         void mobj_pump_MethodUpdated(object sender, classPumpMethodEventArgs e)
         {
-            if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<object, classPumpMethodEventArgs>(mobj_pump_MethodUpdated), new object[]{sender, e});
+            }
+            else if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
             {
                 mcomboBox_methods.Items.Add(e.MethodName);
-            }
+            }          
         }
         /// <summary>
         /// Handles when a pump method is added.
@@ -163,7 +167,11 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         void mobj_pump_MethodAdded(object sender, classPumpMethodEventArgs e)
         {
-            if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<object, classPumpMethodEventArgs>(mobj_pump_MethodAdded), new object[]{sender, e});
+            }
+            else if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
             {
                 mcomboBox_methods.Items.Add(e.MethodName);
 
@@ -171,7 +179,7 @@ namespace Agilent.Devices.Pumps
                 /// Make sure one method is selected.
                 /// 
                 if (mcomboBox_methods.Items.Count == 1)
-                    mcomboBox_methods.SelectedIndex = 0;
+                    mcomboBox_methods.SelectedIndex = 0;            
             }
         }
         /// <summary>

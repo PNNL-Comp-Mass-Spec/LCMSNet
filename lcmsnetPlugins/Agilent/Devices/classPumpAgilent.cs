@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.IO;
 
 using Agilent.Licop;
 using LcmsNetDataClasses;
@@ -79,6 +80,10 @@ namespace Agilent.Devices.Pumps
         /// The flow rate (used for save/load)
         /// </summary>
         private double mdouble_flowrate = -1.0;
+        /// <summary>
+        /// Filesystem watcher for real-time updating of pump methods.
+        /// </summary>
+        private static FileSystemWatcher mwatcher_methods;
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
         /// </summary>
@@ -195,6 +200,20 @@ namespace Agilent.Devices.Pumps
             {
                 mdict_methods = new Dictionary<string, string>();
             }
+            if(mwatcher_methods == null)
+            {
+                string path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+                path = Path.Combine(Path.GetDirectoryName(path), "..\\pumpmethods");
+                path = path.Substring(path.IndexOf(":") + 2); // gets rid of the file:/ tag.
+                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
+                if (path != null)
+                {
+                    mwatcher_methods = new FileSystemWatcher(path, "*.txt");
+                    mwatcher_methods.Created += mwatcher_methods_Created;
+                    mwatcher_methods.Changed += mwatcher_methods_Changed;
+                    mwatcher_methods.EnableRaisingEvents = true;
+                }
+            }
             mstring_name    = "pump";  
 
             mlist_flowrates = new List<double>();
@@ -218,6 +237,30 @@ namespace Agilent.Devices.Pumps
             MobilePhases.Add(new MobilePhase("A",   "This is a test"));
             MobilePhases.Add(new MobilePhase("B",   "This is a test"));
             MobilePhases.Add(new MobilePhase("Aux", "This is a test"));
+        }
+
+        void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
+        {
+            bool methodLoaded = false;
+            do
+            {
+                try
+                {
+                    AddMethod(Path.GetFileNameWithoutExtension(e.FullPath), File.ReadAllText(e.FullPath));
+                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " changed.");
+                    methodLoaded = true;
+                }
+                catch (IOException)
+                {
+                    //probably caught the file being opened for writing.
+                }
+            } while (!methodLoaded);
+        }
+
+        void mwatcher_methods_Created(object sender, FileSystemEventArgs e)
+        {
+            //AddMethod(Path.GetFileNameWithoutExtension(e.FullPath), File.ReadAllText(e.FullPath));
+            //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " created.");
         }
 
         #endregion
@@ -469,7 +512,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_pumps_ErrorOccurred(object sender, ErrorEventArgs e)
+        void mobj_pumps_ErrorOccurred(object sender, Agilent.Licop.ErrorEventArgs e)
         {            
             string name =  e.Message;
             if (e.Message == null)
@@ -557,7 +600,7 @@ namespace Agilent.Devices.Pumps
             }
             
             mobj_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);                         
-            mobj_pumps.ErrorOccurred += new EventHandler<ErrorEventArgs>(mobj_pumps_ErrorOccurred);                 
+            mobj_pumps.ErrorOccurred += new EventHandler<Agilent.Licop.ErrorEventArgs>(mobj_pumps_ErrorOccurred);                 
 
             /// 
             /// Try initial connection
@@ -738,7 +781,7 @@ namespace Agilent.Devices.Pumps
                     HandleError("Pump " + Name + " status: " + data, CONST_PUMP_ERROR);
                 }
             }
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(2, Name + " Agilent Pump Message " + data);
+            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(2, Name + " Agilent Pump Message " + data);
         }
         /// <summary>
         /// Handles m5onitoring data from the pumps.

@@ -826,12 +826,12 @@ namespace LcmsNet.Devices.Pal
             while (end.Subtract(start).TotalSeconds < timeout)
             {
                 int statusCheckError = mobj_PALDrvr.GetStatus(ref status);
-                if (this.StatusUpdate != null)
+                /*if (this.StatusUpdate != null)
                 {
                     this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
                         "PAL: " + status + " " + statusCheckError.ToString(),
                         this));                         
-                }
+                }*/
                 if (status.Contains("ERROR"))
                 {
                     HandleError(status);

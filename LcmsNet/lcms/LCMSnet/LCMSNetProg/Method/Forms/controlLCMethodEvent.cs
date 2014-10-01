@@ -533,42 +533,56 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void UpdateSelectedDevice()
         {
-            /// 
-            /// Update the user interface.
-            /// 
-            IDevice device = mcomboBox_devices.Items[mcomboBox_devices.SelectedIndex] as IDevice;
-            if (device != mobj_device)
+            if (this.InvokeRequired)
             {
-                mobj_device = device;
-                if (mobj_device != null)
+                this.Invoke(new Action(UpdateSelectedDevice));
+            }
+            else
+            {
+                /// 
+                /// Update the user interface.
+                /// 
+                IDevice device = mcomboBox_devices.Items[mcomboBox_devices.SelectedIndex] as IDevice;
+                if (device != mobj_device)
                 {
-                    if (mdict_deviceMappings.ContainsKey(mobj_device) == false)
+                    mobj_device = device;
+                    if (mobj_device != null)
                     {
-                        ReflectDevice(mobj_device);
+                        if (mdict_deviceMappings.ContainsKey(mobj_device) == false)
+                        {
+                            ReflectDevice(mobj_device);
+                        }
+                        LoadMethodInformation(mobj_device);
                     }
-                    LoadMethodInformation(mobj_device);
                 }
             }
         }
         private void UpdateSelectedMethod()
         {
-            /// 
-            /// Update the user interface.
-            /// 
-            classLCMethodData method = mcomboBox_method.Items[mcomboBox_method.SelectedIndex] as classLCMethodData;
-            if (method != mobj_methodData)
+            if (this.InvokeRequired)
             {
-                if(mobj_methodData != null)
-                { 
-                    mobj_methodData.BreakPointEvent -= BreakPointEvent_Handler;
-                    mobj_methodData.Simulated -= Simulated_Handler;
-                }                
-                mobj_methodData = method;
-                mobj_methodData.BreakPointEvent += BreakPointEvent_Handler;
-                mobj_methodData.Simulated += Simulated_Handler;
-                if (mobj_device != null)
+                this.Invoke(new Action(UpdateSelectedMethod));
+            }
+            else
+            {
+                /// 
+                /// Update the user interface.
+                /// 
+                classLCMethodData method = mcomboBox_method.Items[mcomboBox_method.SelectedIndex] as classLCMethodData;
+                if (method != mobj_methodData)
                 {
-                    LoadMethodParameters(mobj_methodData);
+                    if (mobj_methodData != null)
+                    {
+                        mobj_methodData.BreakPointEvent -= BreakPointEvent_Handler;
+                        mobj_methodData.Simulated -= Simulated_Handler;
+                    }
+                    mobj_methodData = method;
+                    mobj_methodData.BreakPointEvent += BreakPointEvent_Handler;
+                    mobj_methodData.Simulated += Simulated_Handler;
+                    if (mobj_device != null)
+                    {
+                        LoadMethodParameters(mobj_methodData);
+                    }
                 }
             }
         }

@@ -124,33 +124,40 @@ namespace LcmsNet.Method
         /// <param name="data"></param>
         public void FillData(object sender, List<object> data)
         {
-            object value = ParameterValue;
-
-            Items.Clear();
-            if (data == null || data.Count < 1)
-                return;
-
-            if (data.Count > 0)
-            {              
-                object [] tempData = new object[data.Count];
-                data.CopyTo(tempData, 0);                
-                Items.AddRange(tempData);
-                
-                int index = -1;
-                
-                if (value != null)
-                    index = Items.IndexOf(value);
-
-                if (index >= 0)
-                {
-                    ParameterValue = Items[index];                    
-                }
-                else
-                {
-                    ParameterValue = Items[0];
-                }
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<object, List<object>>(FillData), new object[] { sender, data });
             }
-            this.Sorted = true;            
+            else
+            {
+                object value = ParameterValue;
+
+                Items.Clear();
+                if (data == null || data.Count < 1)
+                    return;
+
+                if (data.Count > 0)
+                {
+                    object[] tempData = new object[data.Count];
+                    data.CopyTo(tempData, 0);
+                    Items.AddRange(tempData);
+
+                    int index = -1;
+
+                    if (value != null)
+                        index = Items.IndexOf(value);
+
+                    if (index >= 0)
+                    {
+                        ParameterValue = Items[index];
+                    }
+                    else
+                    {
+                        ParameterValue = Items[0];
+                    }
+                }
+                this.Sorted = true;
+            }
         }
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
