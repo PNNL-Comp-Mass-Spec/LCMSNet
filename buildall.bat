@@ -55,6 +55,7 @@ ECHO Done.
 
 ECHO Copying Plugins to %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug\plugins
 xcopy /y /q %ROOTPATH%pluginDLLs\*.dll %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug\plugins\
+xcopy /y /q %ROOTPATH%LcmsNet\lib\FluidicsPack.dll %ROOTPATH%LcmsNet\lcms\LCMSNet\LCMSNetProg\bin\x86\debug\plugins
 if errorlevel 1 goto :ERROR
 ECHO Done.
 

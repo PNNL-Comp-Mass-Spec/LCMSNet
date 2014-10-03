@@ -46,7 +46,8 @@ Source: "LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe";                          
 ; Demo Plugins
 Source: "Demo\bin\x86\PNNLRelease\*";                                                      DestDir: "{app}\Plugins";  Flags: ignoreversion
 ;SDK
-Source: "{#MyLib}\*";                                                                      DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\*";   Excludes: "FluidicsPack.dll";                                      DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\FluidicsPack.dll";                                                       DestDir: "{app}\Plugins";  Flags: ignoreversion
 
 ;Core sample validator    
 Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";                         DestDir: "{userappdata}\SampleValidators\"; Flags:ignoreversion
