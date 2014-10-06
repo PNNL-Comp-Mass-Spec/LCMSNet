@@ -357,7 +357,7 @@ namespace LcmsNet.Method
                 return true;
 
            bool done = AlignMethods(methods);
-           PrintAlignedMethods(methods);
+           //PrintAlignedMethods(methods);
            return done;
         }
 		/// <summary>
