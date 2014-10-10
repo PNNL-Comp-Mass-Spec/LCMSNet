@@ -609,7 +609,7 @@ namespace LcmsNet.Devices.Pal
             if (methods != null)
             {
                 string[] methodNames = methods.Split(new string [] {";"}, StringSplitOptions.RemoveEmptyEntries);
-                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL METHODS LENGTH: " + methodNames.Length);
+                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL METHODS LENGTH: " + methodNames.Length);
                 List<string> data    = new List<string>();
 
                 if (methodNames.Length > 0)
@@ -647,7 +647,7 @@ namespace LcmsNet.Devices.Pal
             if (mbool_emulation == false)
             {
                 int error = int.MaxValue;
-                while (error != 0 && string.IsNullOrEmpty(trays) && tries < MAX_TRIES)
+                while (error == 0 && string.IsNullOrEmpty(trays) && tries < MAX_TRIES)
                 {
                     error = mobj_PALDrvr.GetTrayNames(ref trays);
                     System.Threading.Thread.Sleep(250);
@@ -670,7 +670,7 @@ namespace LcmsNet.Devices.Pal
             if (!string.IsNullOrEmpty(trays))
             {
                 string[] names = trays.Split(new string []{";"}, StringSplitOptions.RemoveEmptyEntries);
-                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL TRAYS LIST: " + names.Length);
+                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL TRAYS LIST: " + names.Length);
                 trayList.AddRange(names);
 
                 if (TrayNames != null)

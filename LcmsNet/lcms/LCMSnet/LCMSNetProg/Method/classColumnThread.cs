@@ -210,7 +210,7 @@ namespace LcmsNet.Method
                             ex = exThrown;
                             success = false;
                             finished = LcmsNetSDK.TimeKeeper.Instance.Now;
-                            Print(string.Format("\t{0} COLUMN-{1} {5}.{4} EVENT:TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
+                            Print(string.Format("\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
                                                 finished.ToString(),
                                                 mint_columnId,                       // 1  COL ID
                                                 exThrown.Message,                    // 2  Message

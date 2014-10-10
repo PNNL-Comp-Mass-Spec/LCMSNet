@@ -38,6 +38,9 @@ namespace LcmsNet
         /// Level of errors to show.  Errors greater than are ignored.
         /// </summary>
         private int mint_errorLevel;
+
+        private object mobj_lockMessages;
+        private object mobj_lockErrors;
         #endregion
 
         /// <summary>
@@ -48,6 +51,8 @@ namespace LcmsNet
             InitializeComponent();
             mint_messageLevel   = classApplicationLogger.CONST_STATUS_LEVEL_USER;
             mint_errorLevel     = classApplicationLogger.CONST_STATUS_LEVEL_USER;
+            mobj_lockMessages = new object();
+            mobj_lockErrors = new object();
             SelectErrorTab();
         }
 
@@ -120,17 +125,20 @@ namespace LcmsNet
 			  if (mlistBox_messages.InvokeRequired)
 			  {
 				  delegateInsertMessage d = new delegateInsertMessage(InsertMessage);
-				  mlistBox_messages.Invoke(d, new object[] { message });
+                  mlistBox_messages.Invoke(d, new object[] { message });                  
 			  }
 			  else
 			  {
-				  mlistBox_messages.Items.Insert(0, message);
-				  mlistBox_messages.SelectedIndex = 0;
+                  lock (mobj_lockMessages)
+                  {
+                      mlistBox_messages.Items.Insert(0, message);
+                      mlistBox_messages.SelectedIndex = 0;
+                  }
 			  }
 		  }
         public delegate void DelegateShowErrors(int level, classErrorLoggerArgs args);
         private void ShowErrorsDelegated(int level, classErrorLoggerArgs args)
-        {            
+        {
             if (level <= mint_errorLevel && args != null)
             {
 
@@ -139,19 +147,25 @@ namespace LcmsNet
                     ErrorPresent(this, new EventArgs());
                 }
                 string exceptions = "";
-                if (args.Exception != null)
+                lock (mobj_lockErrors)
                 {
-                    m_errorMessages.Text = FormatMessage(args.Exception.StackTrace) + "\n" + m_errorMessages.Text;
+                    if (args.Exception != null)
+                    {
 
-                    Exception ex = args.Exception;
-                    while (ex != null)
-                    {                        
-                        exceptions  += ex.Message + "\n";
-                        ex          = ex.InnerException;
+                        m_errorMessages.Text = FormatMessage(args.Exception.StackTrace) + "\n" + m_errorMessages.Text;
+
+                        Exception ex = args.Exception;
+                        while (ex != null)
+                        {
+                            exceptions += ex.Message + "\n";
+                            ex = ex.InnerException;
+                        }
+
+                        m_errorMessages.Text = FormatMessage(exceptions) + "\n" + m_errorMessages.Text;
                     }
-                    m_errorMessages.Text = FormatMessage(exceptions) + "\n" + m_errorMessages.Text;
+
+                    m_errorMessages.Text = FormatMessage(args.Message) + "\n" + m_errorMessages.Text;
                 }
-                m_errorMessages.Text = FormatMessage(args.Message)              + "\n" + m_errorMessages.Text;                
             }
         }
         /// <summary>
@@ -182,7 +196,10 @@ namespace LcmsNet
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mlistBox_messages.Items.Clear();
+            lock (mobj_lockMessages)
+            {
+                mlistBox_messages.Items.Clear();
+            }
         }
 
         private void mlabel_errors_Click(object sender, EventArgs e)

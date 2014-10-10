@@ -50,7 +50,7 @@ Source: "{#MyLib}\*";   Excludes: "FluidicsPack.dll";                           
 Source: "{#MyLib}\FluidicsPack.dll";                                                       DestDir: "{app}\Plugins";  Flags: ignoreversion
 
 ;Core sample validator    
-Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";                         DestDir: "{userappdata}\SampleValidators\"; Flags:ignoreversion
+Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";                         DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"

@@ -174,7 +174,7 @@ namespace LcmsNet.Devices.Pal
         /// <param name="rawMethodList">The string which the PAL class returns after GetMethodList()</param>
         public void ProcessMethods(List<string> rawMethodList)
         {
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PAL ADVANCED CONTROL PROCESS METHODS:" + rawMethodList.Count);
+            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PAL ADVANCED CONTROL PROCESS METHODS:" + rawMethodList.Count);
             if (rawMethodList != null)
             {
                 mcomboBox_MethodList.BeginUpdate();
@@ -205,9 +205,9 @@ namespace LcmsNet.Devices.Pal
         /// <param name="rawMethodList">The string which the PAL class returns after GetTrayList()</param>
         public void ProcessTrays(List<string> trayList) 
         {
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(
+            /*LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(
                                                                LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
-                                                               "ADVANCED CONTROL PROCESS TRAYS:" + trayList.Count);
+                                                               "ADVANCED CONTROL PROCESS TRAYS:" + trayList.Count);*/
             if (trayList != null)
             {
                 //Clear out the previous list

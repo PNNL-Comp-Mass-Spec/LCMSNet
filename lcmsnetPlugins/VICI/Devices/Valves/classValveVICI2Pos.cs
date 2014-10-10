@@ -186,7 +186,7 @@ namespace LcmsNet.Devices.Valves
             set
 			{
 				if (value != menum_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
+                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "StatusChange", this));
 				menum_status = value;
             }
         }
@@ -928,10 +928,10 @@ namespace LcmsNet.Devices.Valves
         /// Gets or sets the abort event for scheduling.
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
-		  public List<string> GetStatusNotificationList()
+		public List<string> GetStatusNotificationList()
         {
-            return new List<string>();
-		  }
+            return new List<string>() {"StatusChange"};
+		}
 
 		  public List<string> GetErrorNotificationList()
           {

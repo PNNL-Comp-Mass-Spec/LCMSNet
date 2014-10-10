@@ -437,13 +437,13 @@ namespace LcmsNet.Method
                 /// 
                 /// Can we start this guy? make sure he starts after some time.
                 ///            
-                TimeSpan startSpan = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(data.LCMethod.Start);               
+                //TimeSpan startSpan = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(data.LCMethod.Start);               
                 /// 
-                /// If we have a positive time , then that means the lcmethod's start time is good enough 
-                /// basically, we want to ensure that a method doesn't start after it's expected start time
+                /// If we have a positive integer, then that means the lcmethod's start time is good enough 
+                /// basically, we want to ensure that a method doesn't start before it's expected start time
                 /// has occurred.
-                /// 
-                if (startSpan.Milliseconds >= 0)
+                ///           
+                if (LcmsNetSDK.TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0) //(startSpan.Milliseconds >= 0)
                 {
                     data = mobj_sampleQueue.NextSampleStart();
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
@@ -563,14 +563,14 @@ namespace LcmsNet.Method
                                             ///  
                                             mlist_columnThreads[columnID].Abort();          
                                             mlist_columnWorkers[columnID].CancelAsync();
-                                            classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID]];
+                                            classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID] + 1];
                                             string message = string.Format(
                                                                     "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1} Stopping all samples",
                                                                     columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                                                     sampleEndTime[columnID].ToString(),
                                                                     lcEvent.Device.Name,        
                                                                     lcEvent.Name);
-                                            Print(message, CONST_VERBOSE_LEAST, null, samples[columnID]);
+                                            //Print(message, CONST_VERBOSE_LEAST, null, samples[columnID]);
                                             HandleError(samples[columnID], message);
                                             sampleEndTime[columnID] = DateTime.MinValue;
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;
@@ -703,18 +703,24 @@ namespace LcmsNet.Method
                 }
             }
             else if(e.Error != null)
-            {
+            {                
                 classColumnException ex = e.Error as classColumnException;
                 int columnID = ex.ColumnID;
                 lock (mlist_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
+                    int EVENT_ADJUST = 1;
+                    int currentEventNumber = currentEvent[columnID] + EVENT_ADJUST < samples[columnID].LCMethod.Events.Count ? currentEvent[columnID] + EVENT_ADJUST : currentEvent[columnID];
+                    // we use currentEvent[columnID] + EVENT_ADJUST here as the scheduler still thinks we're on the old event.
+                    string stackTrace =  UnwrapException(ex);
                     HandleError(samples[columnID],
-                                string.Format("Column {4}: Method {1} of sample {0} had an error running event {3} on device {2}",
-                                              samples[columnID].DmsData.DatasetName,
+                                string.Format("Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
+                                              columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                               samples[columnID].LCMethod.Name,
-                                              samples[columnID].LCMethod.Events[currentEvent[columnID]].Device.Name,
-                                              samples[columnID].LCMethod.Events[currentEvent[columnID]].Name,
-                                              columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT));
+                                              samples[columnID].DmsData.DatasetName,
+                                              samples[columnID].LCMethod.Events[currentEventNumber].Name,
+                                              samples[columnID].LCMethod.Events[currentEventNumber].Device.Name,
+                                              stackTrace));
+                    
                     mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
                     samples[columnID] = null;
                     sampleEndTime[columnID] = DateTime.MinValue;
@@ -754,6 +760,16 @@ namespace LcmsNet.Method
                     samples[columnID] = null;                                 
                 }       
             }
+        }
+
+        private string UnwrapException(Exception ex)
+        {
+            string returnVal = ex.Message + " " + ex.StackTrace;
+            if(ex.InnerException != null)
+            {
+                returnVal += UnwrapException(ex.InnerException);
+            }
+            return returnVal;
         }
         #endregion
     }

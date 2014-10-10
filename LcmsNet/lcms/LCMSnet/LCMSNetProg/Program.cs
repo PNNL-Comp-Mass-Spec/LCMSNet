@@ -197,8 +197,6 @@ namespace LcmsNet
 		{
             try
             {
-                CreatePath(formMDImain.CONST_LC_LOG_FOLDER);
-
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
@@ -209,9 +207,10 @@ namespace LcmsNet
                 /// 
                 classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classFileLogging.LogError);
                 classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classFileLogging.LogMessage);
-
-                /*
-                Duplicate logging entries...disabling for now due to time spent for each log. */
+                
+                ///
+                /// Now lets initialize logging to SQLite database.
+                ///
                 classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classDbLogger.LogError);
                 classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classDbLogger.LogMessage);
                 
@@ -259,7 +258,7 @@ namespace LcmsNet
                     /// through this static call.  That way we know the log folder has been
                     /// created.                
                     /// 
-                    classApplicationLogger.LogMessage(-1, "Creating pertinent folders");
+                    //classApplicationLogger.LogMessage(-1, "Creating pertinent folders");
                     Application.DoEvents();
 
                     /// 
@@ -285,13 +284,13 @@ namespace LcmsNet
                     Application.DoEvents();
                     LoadSettings();
 
-                    classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
+                    //classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
                     InitializeSystemConfigurations();
 
                     /// 
                     /// Create a device manager.
                     /// 
-                    classApplicationLogger.LogMessage(-1, "Creating the Device Manager");
+                    //classApplicationLogger.LogMessage(-1, "Creating the Device Manager");
                     Application.DoEvents();
                     classDeviceManager deviceManager = classDeviceManager.Manager;
                     deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled"));
@@ -348,7 +347,7 @@ namespace LcmsNet
                     /// 
                     /// Create the method manager
                     /// 
-                    classApplicationLogger.LogMessage(-1, "Creating the Method Manager");
+                    //classApplicationLogger.LogMessage(-1, "Creating the Method Manager");
                     Application.DoEvents();
 
 
@@ -419,39 +418,38 @@ namespace LcmsNet
                     }
                     catch (Exception ex)
                     {
-                        classFileLogging.LogError(0, new classErrorLoggerArgs("Program Failed!", ex));
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Program Failed!", ex);
+                        throw ex;
                     }
-                    finally
-                    {
-                        /// 
-                        /// Just to make sure...let's kill the PAL at the end of the program as well.
-                        /// 
-                        KillExistingPalProcesses();
-
-                        // Save the user settings
-                        Properties.Settings.Default.ColumnName0 = classLCMSSettings.GetParameter("ColumnName0");
-                        Properties.Settings.Default.ColumnName1 = classLCMSSettings.GetParameter("ColumnName1");
-                        Properties.Settings.Default.ColumnName2 = classLCMSSettings.GetParameter("ColumnName2");
-                        Properties.Settings.Default.ColumnName3 = classLCMSSettings.GetParameter("ColumnName3");
-                        Properties.Settings.Default.ValidateSamplesForDMS = bool.Parse(classLCMSSettings.GetParameter("ValidateSamplesForDMS"));
-                        Properties.Settings.Default.InstName = classLCMSSettings.GetParameter("InstName");
-                        Properties.Settings.Default.Operator = classLCMSSettings.GetParameter("Operator");
-                        Properties.Settings.Default.CacheFileName = classLCMSSettings.GetParameter("CacheFileName");
-                        Properties.Settings.Default.MinimumVolume = classLCMSSettings.GetParameter("MinimumVolume");
-                        Properties.Settings.Default.SeparationType = classLCMSSettings.GetParameter("SeparationType");
-                        Properties.Settings.Default.TimeZone = classLCMSSettings.GetParameter("TimeZone");
-                        Properties.Settings.Default.DMSTool = classLCMSSettings.GetParameter("DMSTool");
-                        Properties.Settings.Default.Save();
-
-                        classFileLogging.LogMessage(0, new classMessageLoggerArgs("---------------------------------------"));
-                    }
-
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
+                //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Shutting down due to unhandled error.");
+            }
+            finally
+            {
+                /// 
+                /// Just to make sure...let's kill the PAL at the end of the program as well.
+                /// 
+                KillExistingPalProcesses();                
+                // Save the user settings
+                Properties.Settings.Default.ColumnName0           = classLCMSSettings.GetParameter("ColumnName0");
+                Properties.Settings.Default.ColumnName1           = classLCMSSettings.GetParameter("ColumnName1");
+                Properties.Settings.Default.ColumnName2           = classLCMSSettings.GetParameter("ColumnName2");
+                Properties.Settings.Default.ColumnName3           = classLCMSSettings.GetParameter("ColumnName3");
+                Properties.Settings.Default.ValidateSamplesForDMS = bool.Parse(classLCMSSettings.GetParameter("ValidateSamplesForDMS"));
+                Properties.Settings.Default.InstName              = classLCMSSettings.GetParameter("InstName");
+                Properties.Settings.Default.Operator              = classLCMSSettings.GetParameter("Operator");
+                Properties.Settings.Default.CacheFileName         = classLCMSSettings.GetParameter("CacheFileName");
+                Properties.Settings.Default.MinimumVolume         = classLCMSSettings.GetParameter("MinimumVolume");
+                Properties.Settings.Default.SeparationType        = classLCMSSettings.GetParameter("SeparationType");
+                Properties.Settings.Default.TimeZone              = classLCMSSettings.GetParameter("TimeZone");
+                Properties.Settings.Default.DMSTool               = classLCMSSettings.GetParameter("DMSTool");
+                Properties.Settings.Default.Save();
+
+                classFileLogging.LogMessage(0, new classMessageLoggerArgs("-----------------shutdown complete----------------------"));
             }
         }
         #endregion

@@ -111,12 +111,12 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
         /// <param name="message">Error message to report.</param>
         /// <param name="ex">An associated exception</param>
-        public static void LogError(int errorLevel, string message, Exception ex)
+        /*public static void LogError(int errorLevel, string message, Exception ex)
         {
             if (errorLevel <= mint_errorLevel)
                 if (Error != null)
                     Error(errorLevel, new classErrorLoggerArgs(message, ex));
-        }
+        }*/
         /// <summary>
         /// Logs an error to the listening error output streams.
         /// </summary>
@@ -169,7 +169,7 @@ namespace LcmsNetDataClasses.Logging
         }
 
         /// <summary>
-        /// Raises the error event using a Threadpool thread to avoid interrupting other functions with I/O.
+        /// Raises the error event in a Threadpool thread to avoid interrupting other functions with I/O.
         /// </summary>
         /// <param name="errorInfo"></param>
         public static void RaiseErrorEvent(object errorInfo)
@@ -184,7 +184,7 @@ namespace LcmsNetDataClasses.Logging
         }
 
         /// <summary>
-        /// Raises the message event using a Threadpool thread to avoid interrupting other functions with I/O.
+        /// Raises the message event in a Threadpool thread to avoid interrupting other functions with I/O.
         /// </summary>
         /// <param name="errorInfo"></param>
         private static void RaiseMessageEvent(object messageInfo)

@@ -988,7 +988,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             set
             {
-                classApplicationLogger.LogMessage(0, "SAMPLE VIEW PROCESSING AUTOSAMPLER TRAYS!");
+                //classApplicationLogger.LogMessage(0, "SAMPLE VIEW PROCESSING AUTOSAMPLER TRAYS!");
                 mlist_autosamplerTrays = value;             
                 if (mlist_autosamplerTrays == null)
                     mlist_autosamplerTrays = new List<string>();
