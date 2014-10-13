@@ -324,7 +324,7 @@ namespace LcmsNetDataClasses
 						  TempDict.Add("DMS." + de.Key.ToString(), de.Value.ToString());
 					  }
 						break;
-					case "LcmsNetDataClasses.classPalData":
+					case "LcmsNetDataClasses.Data.classPalData":
 					  // Special case - get the PAL data for this object and add properties to string dictionary
 					  StringDictionary palDict = this.PAL.GetPropertyValues();
 					  foreach (DictionaryEntry de in palDict)
