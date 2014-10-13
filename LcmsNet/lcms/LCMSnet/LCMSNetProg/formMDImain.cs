@@ -259,8 +259,15 @@ namespace LcmsNet
             ///           
             /// Tell the sample queue to load samples from cache after everything is loaded.
             /// 
-            mobj_sampleQueue.RetrieveQueueFromCache();
-            mobj_sampleQueue.IsDirty = false;
+            try
+            {
+                mobj_sampleQueue.RetrieveQueueFromCache();
+                mobj_sampleQueue.IsDirty = false;
+            }
+            catch(Exception ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message, ex);
+            }
 
             if (failedDeviceFlag == true)
             {

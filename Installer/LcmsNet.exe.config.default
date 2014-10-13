@@ -62,12 +62,6 @@
             <setting name="LoggingMsgLevel" serializeAs="String">
                 <value>2</value>
             </setting>
-            <setting name="DMSVersion" serializeAs="String">
-                <value>DMS5</value>
-            </setting>
-            <setting name="DMSPwd" serializeAs="String">
-                <value>Mprptq3v</value>
-            </setting>
             <setting name="CartName" serializeAs="String">
                 <value>(none)</value>
             </setting>
@@ -155,6 +149,12 @@
             </setting>
             <setting name="PdfPath" serializeAs="String">
                 <value>\\proto-5\BionetXfer\PDF_Methods</value>
+            </setting>
+            <setting name="TimeZone" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="DMSTool" serializeAs="String">
+                <value />
             </setting>
         </LcmsNet.Properties.Settings>
     </userSettings>

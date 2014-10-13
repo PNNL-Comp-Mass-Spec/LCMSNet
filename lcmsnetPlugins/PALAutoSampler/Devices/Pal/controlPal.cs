@@ -219,7 +219,7 @@ namespace LcmsNet.Devices.Pal
                 {
                     mcomboBox_tray.Items.Add(s);
                 }
-                mcomboBox_tray.EndUpdate();
+                mcomboBox_tray.EndUpdate();                
             }          
         }
 
