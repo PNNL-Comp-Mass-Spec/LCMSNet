@@ -646,8 +646,8 @@ namespace LcmsNet.Devices.Pal
             int MAX_TRIES = 50;
             if (mbool_emulation == false)
             {
-                int error = int.MaxValue;
-                while (error == 0 && string.IsNullOrEmpty(trays) && tries < MAX_TRIES)
+                int error = 0; //assume success
+                while (string.IsNullOrEmpty(trays) && tries <= MAX_TRIES)
                 {
                     error = mobj_PALDrvr.GetTrayNames(ref trays);
                     System.Threading.Thread.Sleep(250);

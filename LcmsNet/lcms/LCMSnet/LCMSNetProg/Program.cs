@@ -188,6 +188,12 @@ namespace LcmsNet
             classApplicationLogger.LogMessage(0, systemInformation);
         }
 
+        private static void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
+        {
+            Properties.Settings.Default[e.SettingName] = e.SettingValue;
+            Properties.Settings.Default.Save();
+        }
+
 	    #region Application entry point
 		/// <summary>
 		/// The main entry point for the application.
@@ -199,7 +205,6 @@ namespace LcmsNet
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
                 string mutexName = "Global\\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
                 /// 
@@ -283,10 +288,11 @@ namespace LcmsNet
                     classApplicationLogger.LogMessage(-1, "Loading settings");
                     Application.DoEvents();
                     LoadSettings();
-
+                    // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
+                    classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
                     //classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
                     InitializeSystemConfigurations();
-
+                    
                     /// 
                     /// Create a device manager.
                     /// 
@@ -434,11 +440,12 @@ namespace LcmsNet
                 /// Just to make sure...let's kill the PAL at the end of the program as well.
                 /// 
                 KillExistingPalProcesses();                
-                // Save the user settings
+                /*// Save the user settings
                 Properties.Settings.Default.ColumnName0           = classLCMSSettings.GetParameter("ColumnName0");
                 Properties.Settings.Default.ColumnName1           = classLCMSSettings.GetParameter("ColumnName1");
                 Properties.Settings.Default.ColumnName2           = classLCMSSettings.GetParameter("ColumnName2");
                 Properties.Settings.Default.ColumnName3           = classLCMSSettings.GetParameter("ColumnName3");
+                Properties.Settings.Default.FirstTime             = classLCMSSettings.GetParameter("FirstTime");
                 Properties.Settings.Default.ValidateSamplesForDMS = bool.Parse(classLCMSSettings.GetParameter("ValidateSamplesForDMS"));
                 Properties.Settings.Default.InstName              = classLCMSSettings.GetParameter("InstName");
                 Properties.Settings.Default.Operator              = classLCMSSettings.GetParameter("Operator");
@@ -447,7 +454,7 @@ namespace LcmsNet
                 Properties.Settings.Default.SeparationType        = classLCMSSettings.GetParameter("SeparationType");
                 Properties.Settings.Default.TimeZone              = classLCMSSettings.GetParameter("TimeZone");
                 Properties.Settings.Default.DMSTool               = classLCMSSettings.GetParameter("DMSTool");
-                Properties.Settings.Default.Save();
+                Properties.Settings.Default.Save();*/
 
                 classFileLogging.LogMessage(0, new classMessageLoggerArgs("-----------------shutdown complete----------------------"));
             }
