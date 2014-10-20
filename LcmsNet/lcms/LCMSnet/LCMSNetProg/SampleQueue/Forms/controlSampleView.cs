@@ -564,7 +564,7 @@ namespace LcmsNet.SampleQueue.Forms
                 { 
                     validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     // no dms tools validator
                     validator = null;

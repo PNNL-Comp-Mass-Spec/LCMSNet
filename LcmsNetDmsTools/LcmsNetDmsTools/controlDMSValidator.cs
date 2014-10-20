@@ -22,7 +22,7 @@ namespace LcmsNetDmsTools
         private bool mbool_isOK;
         #endregion
 
-        public event EventHandler<DMSValidatorEventArgs> EnterPressed;
+        public new event EventHandler<DMSValidatorEventArgs> EnterPressed;
 
         /// <summary>
         /// Constructor
@@ -74,10 +74,12 @@ namespace LcmsNetDmsTools
             Keys modifier       = e.Modifiers;
             ComboBox box        = null;
             NumericUpDown updown = null;
-
+            System.Diagnostics.Debug.WriteLine(e.KeyCode.ToString());
             switch(e.KeyCode)
             {
                 case Keys.Enter:
+                    Console.WriteLine("Enter Pressed!");
+                    LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
                     isEnterType = true;
                     break;
                 case Keys.Up:
@@ -128,10 +130,9 @@ namespace LcmsNetDmsTools
 
             if (isEnterType && c != null)
             {
-                if (this.EnterPressed != null)
-                {
-                    EnterPressed(this, new DMSValidatorEventArgs(c.Name, modifier));
-                }
+                Console.WriteLine(isEnterType.ToString() + " " + c.Name);
+                Console.WriteLine(EnterPressed != null);
+                OnEnterPressed(this, new DMSValidatorEventArgs(c.Name, modifier));              
             }
         }
 

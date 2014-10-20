@@ -288,7 +288,6 @@ namespace LcmsNet
 
         public void UpdateImage()
         {
-            //System.Diagnostics.Trace.WriteLine("Updating Image");
             if ((this.ParentForm.MdiParent == null || this.ParentForm.MdiParent.ActiveMdiChild == this.ParentForm) && this.Visible)
             {
                 System.Diagnostics.Debug.WriteLine("Updating Image");
@@ -432,7 +431,6 @@ namespace LcmsNet
 
         private void controlFluidicsControl_Paint(object sender, PaintEventArgs e)
         {
-            UpdateImage();
         }
     }
 }

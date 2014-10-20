@@ -215,7 +215,7 @@ public partial class formDMSView : Form
                         dbInUse = " (Using Production Database)";
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {                   
                 }
 				this.Text = "LcmsNet V" + Application.ProductVersion + dbInUse;

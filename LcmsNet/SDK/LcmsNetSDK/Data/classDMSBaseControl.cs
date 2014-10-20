@@ -40,6 +40,15 @@ namespace LcmsNetDataClasses.Data
 
         public event EventHandler<DMSValidatorEventArgs> EnterPressed;
 
+        public virtual void OnEnterPressed(object sender, DMSValidatorEventArgs e)
+        {
+            EventHandler<DMSValidatorEventArgs> handler = EnterPressed;
+            if (handler != null)
+            {
+                handler(sender, e);
+            }
+        }
+
         public classDMSBaseControl()
         {
             InitializeComponent();

@@ -52,7 +52,15 @@ namespace LcmsNet.Devices.Fluidics
             m_fluidics_mod.ScaleWorldView(1);
             m_fluidics_mod.ModelChanged += new classFluidicsModerator.ModelChange(FluidicsModelChanged);
             FormClosing += new FormClosingEventHandler(FluidicsDesign_FormClosing);
+            Activated += FluidicsDesign_Activated;
         }
+
+        void FluidicsDesign_Activated(object sender, EventArgs e)
+        {
+            Control[] fd0 = tabControl1.Controls.Find("controlFluidicsControlDesigner", true);
+            controlFluidicsControl fd = (controlFluidicsControl)fd0[0];
+            fd.UpdateImage();            
+        }    
 
         void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {

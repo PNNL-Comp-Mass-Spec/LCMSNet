@@ -41,12 +41,12 @@ namespace FluidicsSDK.Managers
             /// <param name="device">an IDevice object</param>
             public void Add(IDevice device)
             {
-                // Make sure some A-Hole doesnt add this device twice....
+                // Make sure someone doesnt add this device twice....
                 foreach (FluidicsDevice fdevice in m_devices)
                 {
                     if (fdevice.IDevice == device)
                     {
-                        throw new FluidicsDeviceExistsException("The specified device already exists in the code.");                        
+                        throw new FluidicsDeviceExistsException("The specified device already exists in the model.");                        
                     }      
                 }
                 
