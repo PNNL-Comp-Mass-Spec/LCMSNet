@@ -338,7 +338,6 @@ namespace LcmsNet
         /// <param name="e"></param>
         private void panelFluidicsDesign_Paint(object sender, PaintEventArgs e)
         {
-            //System.Diagnostics.Trace.WriteLine("Panel Paint");
             panelFluidicsDesign.AutoScrollMinSize = m_bitmap.Size;
             e.Graphics.TranslateTransform(panelFluidicsDesign.AutoScrollPosition.X, panelFluidicsDesign.AutoScrollPosition.Y);
             e.Graphics.DrawImageUnscaled(m_bitmap, 0, 0);
@@ -416,17 +415,14 @@ namespace LcmsNet
 
         private void trackBarConnectionTransparency_Scroll(object sender, EventArgs e)
         {
-
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
         {
-
         }
 
         private void controlFluidicsControl_ParentChanged(object sender, EventArgs e)
         {
-
         }
 
         private void controlFluidicsControl_Paint(object sender, PaintEventArgs e)

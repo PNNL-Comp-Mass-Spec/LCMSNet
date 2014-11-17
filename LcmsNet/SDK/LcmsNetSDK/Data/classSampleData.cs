@@ -463,6 +463,7 @@ namespace LcmsNetDataClasses
 				return newSample;
         }
         #endregion
+
         public static string BuildCartColumnName(classSampleData sample)
         {
             string cartName   = classLCMSSettings.GetParameter("CartName");

@@ -834,7 +834,14 @@ namespace LcmsNet.Devices.Pal
                 }*/
                 if (status.Contains("ERROR"))
                 {
-                    HandleError(status);
+                    if (status.ToLower().Contains("aspirating"))
+                    {
+                        HandleError("AspirationError");
+                    }
+                    else
+                    {
+                        HandleError(status);
+                    }
                     return false;                    
                 }
                 else if (status.Contains("READY"))
@@ -1011,7 +1018,7 @@ namespace LcmsNet.Devices.Pal
 
 	  public List<string> GetErrorNotificationList()
 	  {
-          return new List<string>();
+          return new List<string>() {"AspirationError"};
 	  }
         #endregion
         

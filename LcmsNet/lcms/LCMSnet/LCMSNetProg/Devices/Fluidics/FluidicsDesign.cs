@@ -144,7 +144,6 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         public void SaveConfiguration(string path)
         {
-            // classDeviceManager.Manager.SaveConfiguration(path);  
             classDeviceConfiguration configuration = new classDeviceConfiguration();
             configuration.CartName = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
 
@@ -154,7 +153,6 @@ namespace LcmsNet.Devices.Fluidics
             //For each device, extract the X,Y position for persistence.
             foreach (FluidicsDevice device in m_fluidics_mod.GetDevices())
             {
-                //IDeviceGlyph glyph = mdict_deviceControlMap[device].DashboardGlyph;
                 configuration.AddSetting(device.IDevice.Name, "dashboard-x", device.Loc.X);
                 configuration.AddSetting(device.IDevice.Name, "dashboard-y", device.Loc.Y);
                 configuration.AddSetting(device.IDevice.Name, "State", (int)device.CurrentState);
@@ -226,7 +224,6 @@ namespace LcmsNet.Devices.Fluidics
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Could not load the position or state of the device.", ex);
                 }
             }
-            //TODO: Load Connections
             Dictionary<string, string> connections = configuration.GetConnections();
             foreach (string connection in connections.Keys)
             {

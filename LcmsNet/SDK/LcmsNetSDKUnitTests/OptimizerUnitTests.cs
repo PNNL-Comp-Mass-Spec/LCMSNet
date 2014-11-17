@@ -121,7 +121,7 @@ namespace LcmsnetUnitTest
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods when they are on the same column with overlap disallowed, and both 
         /// methods are using the same device.
-        /// This test should make the second method run after the first completes(with an additional 500ms wait time)        
+        /// This test should make the second method run after the first completes(with an additional SAME_REQUIRED_LC_METHOD_OFFSET wait time)        
         /// </summary>
         [Test]
         public void TwoMethodsOnSameColumnWithOutOverlapSameDevice()

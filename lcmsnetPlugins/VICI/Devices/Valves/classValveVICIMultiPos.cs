@@ -576,6 +576,7 @@ namespace LcmsNet.Devices.Valves
                 return enumValveErrors.BadArgument;
             }           
         }
+       
         /// <summary>
         /// Gets the current position of the valve.
         /// </summary>

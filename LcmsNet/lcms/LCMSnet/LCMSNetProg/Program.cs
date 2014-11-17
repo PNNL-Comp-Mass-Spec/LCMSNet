@@ -440,22 +440,6 @@ namespace LcmsNet
                 /// Just to make sure...let's kill the PAL at the end of the program as well.
                 /// 
                 KillExistingPalProcesses();                
-                /*// Save the user settings
-                Properties.Settings.Default.ColumnName0           = classLCMSSettings.GetParameter("ColumnName0");
-                Properties.Settings.Default.ColumnName1           = classLCMSSettings.GetParameter("ColumnName1");
-                Properties.Settings.Default.ColumnName2           = classLCMSSettings.GetParameter("ColumnName2");
-                Properties.Settings.Default.ColumnName3           = classLCMSSettings.GetParameter("ColumnName3");
-                Properties.Settings.Default.FirstTime             = classLCMSSettings.GetParameter("FirstTime");
-                Properties.Settings.Default.ValidateSamplesForDMS = bool.Parse(classLCMSSettings.GetParameter("ValidateSamplesForDMS"));
-                Properties.Settings.Default.InstName              = classLCMSSettings.GetParameter("InstName");
-                Properties.Settings.Default.Operator              = classLCMSSettings.GetParameter("Operator");
-                Properties.Settings.Default.CacheFileName         = classLCMSSettings.GetParameter("CacheFileName");
-                Properties.Settings.Default.MinimumVolume         = classLCMSSettings.GetParameter("MinimumVolume");
-                Properties.Settings.Default.SeparationType        = classLCMSSettings.GetParameter("SeparationType");
-                Properties.Settings.Default.TimeZone              = classLCMSSettings.GetParameter("TimeZone");
-                Properties.Settings.Default.DMSTool               = classLCMSSettings.GetParameter("DMSTool");
-                Properties.Settings.Default.Save();*/
-
                 classFileLogging.LogMessage(0, new classMessageLoggerArgs("-----------------shutdown complete----------------------"));
             }
         }

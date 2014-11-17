@@ -32,7 +32,7 @@ namespace FluidicsSimulator
         /// Constructor that takes a timespan as parameter, this is so we can sort this list in a SortedSet
         /// all events in the list should happen "concurrently".
         /// </summary>
-        /// <param name="time">A timespan representing when the events following those in this list should start</param>
+        /// <param name="time">A datetime representing when the events following those in this list should start</param>
         public SimEventList(DateTime time)
         {
             this.Time = time;
