@@ -58,18 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\ContactClosure\classContactClosureU12.cs" />
-    <Compile Include="Devices\ContactClosure\classContactClosureU3.cs" />
     <Compile Include="Devices\ContactClosure\controlContactClosureU12.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Devices\ContactClosure\controlContactClosureU12.designer.cs">
       <DependentUpon>controlContactClosureU12.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\ContactClosure\controlContactClosureU3.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\ContactClosure\controlContactClosureU3.designer.cs">
-      <DependentUpon>controlContactClosureU3.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\NetworkStart\controlNetStart.cs">
       <SubType>UserControl</SubType>
@@ -96,9 +89,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Devices\ContactClosure\controlContactClosureU12.resx">
       <DependentUpon>controlContactClosureU12.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\ContactClosure\controlContactClosureU3.resx">
-      <DependentUpon>controlContactClosureU3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\NetworkStart\controlNetStart.resx">
       <DependentUpon>controlNetStart.cs</DependentUpon>

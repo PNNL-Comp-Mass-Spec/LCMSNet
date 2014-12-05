@@ -146,11 +146,13 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="e"></param>
         private void mbutton_SendPulse_Click(object sender, EventArgs e)
         {
-			if (Convert.ToDouble(mnum_voltage.Value) >= CONST_MINIMUMVOLTAGE && Convert.ToDouble(mnum_voltage.Value) <= CONST_MAXIMUMVOLTAGE && Convert.ToInt32(mnum_pulseLength.Value) > CONST_MINIMUMPULSELENGTH)
+            double pulse = Convert.ToInt32(mnum_pulseLength.Value);
+            double voltage = Convert.ToDouble(mnum_voltage.Value);
+			if ( CONST_MINIMUMVOLTAGE <= voltage  && voltage <= CONST_MAXIMUMVOLTAGE &&  CONST_MINIMUMPULSELENGTH <=  pulse)
 			{
 				try
 				{
-					mobj_contactClosure.Trigger(Convert.ToInt32(mnum_pulseLength.Value), Convert.ToDouble(mnum_voltage.Value));
+					mobj_contactClosure.Trigger(pulse, (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text), voltage);
                     
 				}
 				catch (Exception ex)

@@ -1,0 +1,2 @@
+LcmsNet runs as Administrator. It will request such access at startup.
+LcmsNet is susceptible to clock changes, as such window Time Synchronization should be turned off. LcmsNet will synchronize the clock every time a queue is started.

@@ -43,11 +43,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// Flag indicating if the device is in emulation mode.
         /// </summary>
         private bool mbool_emulation;
-        private const char CONST_ANALOGPREFIX = 'A';
-        private const int CONST_ANALOGHIGH = 5;
-        private const int CONST_DIGITALHIGH = 1;
-        private const int CONST_ANALOGLOW = 0;
-        private const int CONST_DIGITALLOW = 0;        
+        private const double CONST_ANALOGHIGH = 5.0;
+        private const double CONST_DIGITALHIGH = 1.0;
+        private const double CONST_LOW = 0;       
         #endregion
 
         #region Events
@@ -272,98 +270,8 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 DeviceSaveRequired(this, null);
             }
-        }
+        }     
 
-        /// <summary>
-        /// Triggers a 5V pulse of the specified length.
-        /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
-        [classLCMethodAttribute("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
-        public int Trigger(double timeout, double pulseLengthSeconds)
-        {
-            return Trigger(timeout, mobj_port, pulseLengthSeconds);            
-        }
-        /// <summary>
-        /// Triggers a 5V pulse of the specified length.
-        /// </summary>
-        /// <param name="timeout"></param>
-        /// <param name="port"></param>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
-        [classLCMethodAttribute("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
-        public int Trigger(double timeout, enumLabjackU3OutputPorts port, double pulseLengthSeconds)
-        {
-            if (mbool_emulation == true)
-            {
-                return 0;
-            }
-
-            string tempPortName = Enum.GetName(typeof(enumLabjackU3OutputPorts), mobj_port).ToString();
-
-            int error = 0;
-
-            try
-            {
-                if (tempPortName[0] == CONST_ANALOGPREFIX)
-                {
-                    mobj_labjack.Write(port, CONST_ANALOGHIGH);
-                }
-                else
-                {
-                    mobj_labjack.Write(port, CONST_DIGITALHIGH);
-                }
-            }
-            catch (classLabjackU3Exception ex)
-            {
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs("Could not start the trigger.",
-                                                         ex,
-                                                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                         this));
-                }
-                throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
-            }
-
-            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
-            if (AbortEvent != null)
-            {
-                timer.AbortEvent = AbortEvent;
-            }
-            timer.WaitSeconds(pulseLengthSeconds);
-
-            try
-            {
-                mobj_labjack.Write(port, CONST_ANALOGLOW);
-            }
-            catch (classLabjackU3Exception ex)
-            {
-                if (Error != null)
-                {
-                    Error(this, 
-                                        new classDeviceErrorEventArgs("Could not stop the trigger.",
-                                                                 ex,
-                                                                 enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                 this));
-
-                }
-                error = 1;
-                throw ex;
-            }
-            return error;
-        }
-
-        /// <summary>
-        /// Triggers a pulse of the specified voltage, lasting the specified duration.
-        /// This is intended for use on the analog output ports--if it is a digital 
-        /// port the specified voltage will be disregarded.
-        /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
-        /// <param name="voltage">The voltage to set</param>        
-        [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
-        public int Trigger(int pulseLengthSeconds, double voltage)
-        {
-            return Trigger(pulseLengthSeconds, mobj_port, voltage);
-        }
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
         /// This is intended for use on the analog output ports--if it is a digital 
@@ -372,18 +280,17 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
         /// <param name="voltage">The voltage to set</param>        
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
-        public int Trigger(int pulseLengthSeconds, enumLabjackU3OutputPorts port, double voltage)
+        public int Trigger(double pulseLengthSeconds, enumLabjackU3OutputPorts port, double voltage)
         {
             if (mbool_emulation == true)
             {
                 return 0;
             }
-
-            string tempPortName = Enum.GetName(typeof(enumLabjackU3OutputPorts), mobj_port).ToString();
+           
             int error = 0;
             try
             {
-                if (tempPortName.EndsWith("Analog"))
+                if (port.ToString().EndsWith("Analog"))
                 {
                     mobj_labjack.Write(port, voltage);
                 }
@@ -392,9 +299,9 @@ namespace LcmsNet.Devices.ContactClosure
                     mobj_labjack.Write(port, CONST_DIGITALHIGH);
                 }
             }
-            catch (classLabjackU3Exception ex)
+            catch (classLabjackU3Exception)
             {                
-                throw ex;
+                throw;
             }
 
             LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
@@ -402,11 +309,11 @@ namespace LcmsNet.Devices.ContactClosure
 
             try
             {
-                mobj_labjack.Write(port, CONST_ANALOGLOW);
+                mobj_labjack.Write(port, CONST_LOW);
             }
-            catch (classLabjackU3Exception ex)
+            catch (classLabjackU3Exception)
             {
-                throw ex;
+                throw;
             }
 
             return error;
@@ -472,35 +379,6 @@ namespace LcmsNet.Devices.ContactClosure
             return new List<string>();
         }
 
-        #endregion
-
-        /*/// <summary>
-        /// Returns a set of health information.
-        /// </summary>
-        /// <returns></returns>
-        public FinchComponentData GetData()
-        {
-            FinchComponentData component = new FinchComponentData();
-            component.Status    = Status.ToString();            
-            component.Name      = Name;
-            component.Type = "Contact Closure";
-            component.LastUpdate = DateTime.Now;
-
-            FinchScalarSignal measurement = new FinchScalarSignal();            
-            measurement.Name        = "ID"; 
-            measurement.Type        = FinchDataType.String;
-            measurement.Units       = "";
-            measurement.Value       = LabJackID.ToString();
-            component.Signals.Add(measurement);
-
-            FinchScalarSignal port = new FinchScalarSignal();            
-            port.Name           = "Port";
-            port.Type           = FinchDataType.String;
-            port.Units          = "";
-            port.Value          = this.Port.ToString();
-            component.Signals.Add(port);
-            
-            return component;
-        }*/                
+        #endregion                    
     }
 }

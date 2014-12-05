@@ -563,7 +563,7 @@ namespace LcmsNet.Method
                                             ///  
                                             mlist_columnThreads[columnID].Abort();          
                                             mlist_columnWorkers[columnID].CancelAsync();
-                                            classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID] + 1];
+                                            classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID]];
                                             string message = string.Format(
                                                                     "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1} Stopping all samples",
                                                                     columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
@@ -671,9 +671,8 @@ namespace LcmsNet.Method
                                                         samples[columnID],
                                                         enumSampleProgress.RunningNextEvent));
                         }
-                        //currentEvent[columnID]++;
+                        currentEvent[columnID] = columnCurrentEvent;
                     }
-
                  }
             }
         }

@@ -117,10 +117,19 @@ namespace LcmsNet.Method
         {
             bool flag = true;
             lcEvent.Device.AbortEvent = mobj_abortEvent;
-            object returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
-            if (returnValue != null && returnValue.GetType() == typeof(bool))
-                flag = (bool)returnValue;       
-            return flag;
+            try
+            {
+                object returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
+                if (returnValue != null && returnValue.GetType() == typeof(bool))
+                    flag = (bool)returnValue;
+                return flag;
+            }
+            catch(Exception ex)
+            {
+                classApplicationLogger.LogError(0, "THISISSTUPIDEVENT " + ex.Message, ex);
+                throw;
+            }
+            
         }              
 
         public void ExecuteSample(object sender, DoWorkEventArgs e)
@@ -217,7 +226,15 @@ namespace LcmsNet.Method
                                                 exThrown.StackTrace,                // 3  Stack Trace
                                                 lcEvent.Name,
                                                 lcEvent.Device.Name),
-                                                CONST_VERBOSE_EVENTS);                            
+                                                CONST_VERBOSE_EVENTS);      
+                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, string.Format("\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
+                                                finished.ToString(),
+                                                mint_columnId,                       // 1  COL ID
+                                                exThrown.Message,                    // 2  Message
+                                                exThrown.StackTrace,                // 3  Stack Trace
+                                                lcEvent.Name,
+                                                lcEvent.Device.Name),
+                                                ex);
                         }
                         actualEvent.Start = start;
                         actualEvent.Duration = finished.Subtract(start);
@@ -231,7 +248,15 @@ namespace LcmsNet.Method
                             /// 
                             classTimerDevice timer = new classTimerDevice();
                             TimeSpan span = next.Subtract(LcmsNetSDK.TimeKeeper.Instance.Now);
-                            int totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
+                            int totalMilliseconds = 0;
+                            try
+                            {
+                                totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
+                            }
+                            catch(OverflowException ex2)
+                            {
+                                classApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
+                            }
                             if (totalMilliseconds > 2)
                             {
                                 Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",

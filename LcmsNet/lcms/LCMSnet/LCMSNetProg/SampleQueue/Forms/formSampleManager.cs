@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using LcmsNet.Configuration;
 //using LcmsNet.Devices.NetworkStart;
@@ -33,6 +34,7 @@ using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetSQLiteTools;
 using LcmsNetSDK;
+
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -70,6 +72,9 @@ namespace LcmsNet.SampleQueue.Forms
 		/// Dialog for export of MRM files
 		/// </summary>
         private FolderBrowserDialog mdialog_exportMRMFiles;
+
+        private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
+
 		#endregion
 
 		#region "Constructors"
@@ -410,7 +415,6 @@ namespace LcmsNet.SampleQueue.Forms
 				classApplicationLogger.LogMessage(0, "Samples are already running.");
 				return;
 			}
-
             List<classSampleData> samples = mobj_sampleQueue.GetRunningQueue();
 
             /// 
@@ -503,10 +507,40 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 mobj_sampleQueue.UpdateSamples(samples);
             }
-            
+            SynchronizeSystemClock();
 			mobj_sampleQueue.StartSamples();
 			ToggleRunButton(false, true);
 		}
+
+        /// <summary>
+        /// Run windows time synchronization.
+        /// </summary>
+        private void SynchronizeSystemClock()
+        {
+            ProcessStartInfo synchStart = new ProcessStartInfo();
+            synchStart.FileName = @"w32tm.exe";
+            synchStart.Arguments = @"/resync";
+            synchStart.UseShellExecute = false;
+            synchStart.CreateNoWindow = true;
+            synchStart.RedirectStandardOutput = true;
+            synchStart.RedirectStandardError = true;
+            Process synch = Process.Start(synchStart);
+            synch.WaitForExit(TIME_SYNCH_WAIT_TIME_MILLISECONDS);
+            string output = string.Empty;
+            string error = string.Empty;
+            try
+            {
+                output = synch.StandardOutput.ReadToEnd();
+                error = synch.StandardError.ReadToEnd();
+            }
+            catch(Exception ex)
+            {
+
+            }
+            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Synched System Clock " + synch.ExitCode + " " + output + " " + error);
+            //MessageBox.Show("Exit code: " + synch.ExitCode + " " + output + " " + error);
+        }
+
         private void btnMRMExport_Click(object sender, EventArgs e)
         {
             ExportMRMFiles();

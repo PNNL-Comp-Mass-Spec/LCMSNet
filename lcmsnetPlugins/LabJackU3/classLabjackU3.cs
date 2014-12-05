@@ -119,17 +119,14 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="value">The value to write (0/1 for digital)</param>
         public void Write(enumLabjackU3OutputPorts channel, double value)
         {
-            string tempPortName = Enum.GetName(typeof(enumLabjackU3OutputPorts), channel);
-
             //Determine which type of port we are writing to            
-
             int port = (int)channel;       
-            if (tempPortName.EndsWith("Analog"))
+            if (channel.ToString().EndsWith("Analog"))
             {
                 port -= 20; // DAC ports are channel 0 and 1 for the function purposes, but we have 20-21 in enums representing DACs. so correct port number via substracting 20.
                 WriteAnalog(port, value);
             }
-            else if (tempPortName.EndsWith("Digital"))
+            else if (channel.ToString().EndsWith("Digital"))
             {                
                 WriteDigital(port, Convert.ToInt32(value));
             }         
