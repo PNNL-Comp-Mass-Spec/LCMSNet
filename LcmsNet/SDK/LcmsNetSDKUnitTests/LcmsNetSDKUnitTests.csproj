@@ -46,9 +46,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestPluginLibrary">
-      <HintPath>..\..\lcms\LCMSnet\Demo\bin\x86\Debug\TestPluginLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OptimizerUnitTests.cs" />
@@ -57,6 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Demo\DemoPluginLibrary.csproj">
+      <Project>{36381f3a-1ca7-4c8b-b99c-035b3c4e84f4}</Project>
+      <Name>DemoPluginLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

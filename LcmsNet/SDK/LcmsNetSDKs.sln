@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsPack", "FluidicsPac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreSampleValidator", "CoreSampleValidator\CoreSampleValidator.csproj", "{6B4EA740-F750-43A6-A0EA-522A06B22331}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoPluginLibrary", "Demo\DemoPluginLibrary.csproj", "{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,21 @@ Global
 		{6B4EA740-F750-43A6-A0EA-522A06B22331}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6B4EA740-F750-43A6-A0EA-522A06B22331}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6B4EA740-F750-43A6-A0EA-522A06B22331}.Release|x86.ActiveCfg = Release|Any CPU
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|x86.ActiveCfg = Debug|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Debug|x86.Build.0 = Debug|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.PNNLRelease|Any CPU.ActiveCfg = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.PNNLRelease|Mixed Platforms.ActiveCfg = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.PNNLRelease|Mixed Platforms.Build.0 = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.PNNLRelease|x86.ActiveCfg = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.PNNLRelease|x86.Build.0 = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Release|Any CPU.ActiveCfg = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Release|Mixed Platforms.ActiveCfg = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Release|Mixed Platforms.Build.0 = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Release|x86.ActiveCfg = PNNLRelease|x86
+		{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}.Release|x86.Build.0 = PNNLRelease|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

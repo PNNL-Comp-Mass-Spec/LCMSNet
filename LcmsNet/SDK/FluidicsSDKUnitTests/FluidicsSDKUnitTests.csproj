@@ -50,9 +50,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestPluginLibrary">
-      <HintPath>..\..\lcms\LCMSnet\Demo\bin\x86\Debug\TestPluginLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FluidicSDKUnitTests.cs" />
@@ -60,6 +57,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Demo\DemoPluginLibrary.csproj">
+      <Project>{36381f3a-1ca7-4c8b-b99c-035b3c4e84f4}</Project>
+      <Name>DemoPluginLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">
       <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
       <Name>FluidicsSDK</Name>
