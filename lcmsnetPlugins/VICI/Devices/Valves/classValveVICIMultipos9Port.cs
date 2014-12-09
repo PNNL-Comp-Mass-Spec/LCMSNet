@@ -26,6 +26,7 @@ namespace LcmsNet.Devices.Valves
     public class classValveVICIMultipos9Port:classValveVICIMultiPos, INinePortValve
     {
         private const int numPositions = 8;
+
         public classValveVICIMultipos9Port()
             : base(numPositions)
         {
@@ -36,7 +37,7 @@ namespace LcmsNet.Devices.Valves
         {
         }
 
-        [classLCMethodAttribute("Set Position", 4, true, "", -1, false)]
+        [classLCMethodAttribute("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
         public void SetPosition(EightPositionState position)
         {
            enumValveErrors err = base.SetPosition((int)position);

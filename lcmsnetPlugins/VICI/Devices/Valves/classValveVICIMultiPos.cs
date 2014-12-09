@@ -69,10 +69,16 @@ namespace LcmsNet.Devices.Valves
 
         private int mint_numberOfPositions;
 
+        /// <summary>
+        /// How long to tell LCMSNet the SetPosition method can take. it is 6  seconds instead of 4 because we verify that
+        /// the the position has change, and that 1.5 seconds+ so 4 + 1.5 rounded up = 6.
+        /// </summary>
+        public readonly static int LC_EVENT_SET_POSITION_TIME_SECONDS = 6;
+
         //Model EMTCA-CE can take up to 3150(1161+(999*2)ms to rotate if only 4 positions are set
         //More positions reduces time it takes to rotate, but we can't know how many positions there are        
         //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the 
-        //method isn't killed over 150ms + concurrency delays.
+        //method isn't killed over 150ms + concurrency delays.        
         private static int mint_rotationDelayTimems = 4000;
         private static int mint_IDChangeDelayTimems = 325;
         private const int CONST_DEAFULT_TIMEOUT = 1500;
