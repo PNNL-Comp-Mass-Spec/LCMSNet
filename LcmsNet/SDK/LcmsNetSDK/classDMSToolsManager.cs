@@ -32,16 +32,25 @@ namespace LcmsNetSDK
         /// </summary>
         private IDmsMetaData mdms_metadata;
 
-        /// <summary>
-        /// Directory
-        /// </summary>
-        private const string mstring_catalogDirectory = "\\LCMSNet\\dmsExtensions";
-
         private classDMSToolsManager()
         {
             var catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new AssemblyCatalog(typeof(classDMSToolsManager).Assembly));
-            string catalogPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + mstring_catalogDirectory;
+            
+            string catalogPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            catalogPath = Path.Combine(catalogPath, "LCMSNet", "dmsExtensions");
+
+            try
+            {
+                var catalogFolder = new DirectoryInfo(catalogPath);
+                if (!catalogFolder.Exists)
+                    catalogFolder.Create();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error creating folder " + catalogPath, ex);
+            }
+
             catalog.Catalogs.Add(new DirectoryCatalog(catalogPath));
             mmef_compositionContainer = new CompositionContainer(catalog);
             mmef_compositionContainer.ComposeParts(this);

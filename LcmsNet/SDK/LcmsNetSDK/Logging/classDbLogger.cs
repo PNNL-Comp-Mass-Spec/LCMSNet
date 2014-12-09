@@ -197,15 +197,31 @@ namespace LcmsNetDataClasses.Logging
 			/// </summary>
 			private static void CreateDbFile()
 			{
-				//FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
                 string path = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-				string logDir = Path.Combine(path, "LCMSNet\\Log");
-                //mstring_DbFileName = Path.Combine(logDir, "DbLog_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".db3");
+				string logDir = Path.Combine(path, "LCMSNet", "Log");
                 mstring_DbFileName = Path.Combine(logDir, "LcmsNetDbLog.db3");
+			    var logFile = new FileInfo(mstring_DbFileName);
+
 				// Create the file if it doesn't already exist
-				if (!File.Exists(mstring_DbFileName))
+				if (!logFile.Exists)
 				{
-					try
+				    try
+				    {
+                        if (logFile.Directory == null)
+                            throw new Exception("Db log file has a null directory object; unable to continue");
+
+				        // Create the log folder if it does not yet exist
+				        if (!logFile.Directory.Exists)
+				            logFile.Directory.Create();
+				    }
+				    catch (Exception ex)
+				    {
+				        mstring_ConnStr = "";
+				        mbool_LogDbFileCreated = false;
+				        throw new classDbLoggerException("Exception creating db log folder", ex);
+				    }
+
+				    try
 					{
 						SQLiteConnection.CreateFile(mstring_DbFileName);
 					}
