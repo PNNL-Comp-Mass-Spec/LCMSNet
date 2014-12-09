@@ -126,7 +126,7 @@ namespace LcmsNet.Method
             }
             catch(Exception ex)
             {
-                classApplicationLogger.LogError(0, "THISISSTUPIDEVENT " + ex.Message, ex);
+                classApplicationLogger.LogError(0, "EVENT ERROR: " + ex.Message, ex);
                 throw;
             }
             

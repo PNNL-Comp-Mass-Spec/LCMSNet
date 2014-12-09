@@ -22,6 +22,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DemoPluginLibrary">
+      <HintPath>..\..\..\lib\DemoPluginLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\FluidicsSDK.dll</HintPath>
@@ -50,10 +53,6 @@
     <Compile Include="TimeKeeperTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Demo\DemoPluginLibrary.csproj">
-      <Project>{36381f3a-1ca7-4c8b-b99c-035b3c4e84f4}</Project>
-      <Name>DemoPluginLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LCMSNetProg\LCMSNetProg.csproj">
       <Project>{51f59458-d3d7-41d6-8e09-19a12ad54b7a}</Project>
       <Name>LCMSNetProg</Name>
