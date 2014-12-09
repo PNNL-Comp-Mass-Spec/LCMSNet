@@ -51,7 +51,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TestPluginLibrary">
-      <HintPath>..\..\lcms\LCMSnet\Demo\bin\x86\PNNLRelease\TestPluginLibrary.dll</HintPath>
+      <HintPath>..\..\lcms\LCMSnet\Demo\bin\x86\Debug\TestPluginLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
