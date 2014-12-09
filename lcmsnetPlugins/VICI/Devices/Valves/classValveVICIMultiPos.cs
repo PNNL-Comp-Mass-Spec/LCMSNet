@@ -73,7 +73,7 @@ namespace LcmsNet.Devices.Valves
         /// How long to tell LCMSNet the SetPosition method can take. it is 6  seconds instead of 4 because we verify that
         /// the the position has change, and that 1.5 seconds+ so 4 + 1.5 rounded up = 6.
         /// </summary>
-        public readonly static int LC_EVENT_SET_POSITION_TIME_SECONDS = 6;
+        public const int LC_EVENT_SET_POSITION_TIME_SECONDS = 6;
 
         //Model EMTCA-CE can take up to 3150(1161+(999*2)ms to rotate if only 4 positions are set
         //More positions reduces time it takes to rotate, but we can't know how many positions there are        
@@ -524,12 +524,12 @@ namespace LcmsNet.Devices.Valves
 
                 catch (TimeoutException)
                 {
-                    classApplicationLogger.LogError(0, "Could not set position.  Write timeout.");
+                    //classApplicationLogger.LogError(0, "Could not set position.  Write timeout.");
                     return enumValveErrors.TimeoutDuringWrite;
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    classApplicationLogger.LogError(0, "Could not set position.  Could not access serial port.");
+                    //classApplicationLogger.LogError(0, "Could not set position.  Could not access serial port.");
                     return enumValveErrors.UnauthorizedAccess;
                 }
 
@@ -556,24 +556,24 @@ namespace LcmsNet.Devices.Valves
                 }
                 catch (ValveExceptionWriteTimeout)
                 {
-                    classApplicationLogger.LogError(0, "Could not set position.  The write operation timed out to device.");
+                    //classApplicationLogger.LogError(0, "Could not set position.  The write operation timed out to device.");
                     return enumValveErrors.TimeoutDuringWrite;
                 }
                 catch (ValveExceptionUnauthorizedAccess)
                 {
-                    classApplicationLogger.LogError(0, "Could not set position. Could not access port.");
+                    //classApplicationLogger.LogError(0, "Could not set position. Could not access port.");
                     return enumValveErrors.UnauthorizedAccess;
                 }
 
                 if (mobj_lastMeasuredPosition != mobj_lastSentPosition)
                 {
-                    classApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position."); 
+                    //classApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position."); 
                     return enumValveErrors.ValvePositionMismatch;
                 }
                 else
                 {
                     OnPosChanged(mobj_lastMeasuredPosition);
-                    classApplicationLogger.LogMessage(0, "Changed position of multi-position valve."); 
+                    //classApplicationLogger.LogMessage(0, Name + " changed position to: " + mobj_lastMeasuredPosition); 
                     return enumValveErrors.Success;
                 }
             }
