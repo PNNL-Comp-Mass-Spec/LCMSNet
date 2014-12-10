@@ -507,7 +507,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 mobj_sampleQueue.UpdateSamples(samples);
             }
-            SynchronizeSystemClock();
+            //SynchronizeSystemClock();
 			mobj_sampleQueue.StartSamples();
 			ToggleRunButton(false, true);
 		}

@@ -372,7 +372,7 @@ namespace LcmsNet
                         classApplicationLogger.MessageLevel = int.Parse(classLCMSSettings.GetParameter("LoggingMsgLevel"));
                     }
                     else classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
-
+                    CreateSQLCache();
                     classApplicationLogger.LogMessage(-1, "Loading DMS data");
                     Application.DoEvents();
                     try
@@ -442,6 +442,22 @@ namespace LcmsNet
                 KillExistingPalProcesses();                
                 classFileLogging.LogMessage(0, new classMessageLoggerArgs("-----------------shutdown complete----------------------"));
             }
+        }
+
+        /// <summary>
+        /// Create the SQL cache file, if necessary (SQLiteTools does all the heavy lifting.)
+        /// </summary>
+        private static void CreateSQLCache()
+        {
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() { "default" }, enumTableTypes.CartList);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() { "default" }, enumTableTypes.SeparationTypeList);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() { "default" }, enumTableTypes.DatasetTypeList);
+            classSQLiteTools.SaveInstListToCache(new List<classInstrumentInfo>());
+            classSQLiteTools.SaveUserListToCache(new List<classUserInfo>());
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() { "0", "1", "2", "3", "4"}, enumTableTypes.ColumnList);
+            classSQLiteTools.SaveExperimentListToCache(new List<classExperimentData>() { new classExperimentData() });
+            classSQLiteTools.SaveProposalUsers(new List<LcmsNetDataClasses.Data.classProposalUser>(), new List<LcmsNetDataClasses.Data.classUserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<LcmsNetDataClasses.Data.classUserIDPIDCrossReferenceEntry>>());
+            
         }
         #endregion
 	}	
