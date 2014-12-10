@@ -35,7 +35,7 @@ namespace LcmsNet
 		#endregion
 
 		#region "Class variables"
-		/// <summary>
+		    /// <summary>
 			/// Reference to splash screen window.
 			/// </summary>
 			private static formSplashScreen mform_splashScreen;
@@ -98,9 +98,9 @@ namespace LcmsNet
 		static void CreatePath(string localPath)
 		{
 			string path = Path.Combine(Application.StartupPath, localPath);
-			/// 
-			/// See if the logging directory exists
-			/// 
+            // 
+            // See if the logging directory exists
+            // 
 			if (Directory.Exists(path) == false)
 			{
 				try
@@ -109,9 +109,9 @@ namespace LcmsNet
 				}
 				catch(UnauthorizedAccessException ex)
 				{
-					/// 
-					/// Not much we can do here...
-					/// 
+                    // 
+                    // Not much we can do here...
+                    // 
 					string errorMessage = string.Format("LCMS could not create missing folder {0} required for operation.  Please run application with higher priveleges.  {1}",
 																  localPath, ex.Message);
 					MessageBox.Show(errorMessage);
@@ -138,9 +138,9 @@ namespace LcmsNet
         /// </summary>
         static void InitializeSystemConfigurations()
         {
-            /// 
-            /// Create system data with columns.
-            /// 
+            // 
+            // Create system data with columns.
+            // 
             classColumnData columnOne   = new classColumnData();
             classColumnData columnTwo   = new classColumnData();
             classColumnData columnThree = new classColumnData();
@@ -207,28 +207,28 @@ namespace LcmsNet
                 Application.SetCompatibleTextRenderingDefault(false);
                 string mutexName = "Global\\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
-                /// 
-                /// Before we do anything, let's initialize the file logging capability.
-                /// 
+                // 
+                // Before we do anything, let's initialize the file logging capability.
+                // 
                 classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classFileLogging.LogError);
                 classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classFileLogging.LogMessage);
-                
-                ///
-                /// Now lets initialize logging to SQLite database.
-                ///
+
+                //
+                // Now lets initialize logging to SQLite database.
+                //
                 classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classDbLogger.LogError);
                 classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classDbLogger.LogMessage);
-                
 
-                /// Note that we used icons from here for the gears on the main form window.
-                ///     http://labs.chemist2dio.com/free-vector-gears.php/
-                /// 
-                /// 
-                /// Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
-                ///		no instance of the application is running. Otherwise, we exit.
-                /// Code adapated from K. Scott Allen's OdeToCode.com at
-                ///		http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
-                ///		
+
+                // Note that we used icons from here for the gears on the main form window.
+                //     http://labs.chemist2dio.com/free-vector-gears.php/
+                // 
+                // 
+                // Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
+                //		no instance of the application is running. Otherwise, we exit.
+                // Code adapated from K. Scott Allen's OdeToCode.com at
+                //		http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
+                //		
                 using (Mutex mutex = new Mutex(false, mutexName))
                 {
                     if (!mutex.WaitOne(0, false))
@@ -241,15 +241,15 @@ namespace LcmsNet
                     KillExistingPalProcesses();
                     GC.KeepAlive(mutex);
 
-                    /// 
-                    /// Synch to the logger so we can display any messages coming back from the 
-                    /// rest of the program and interface.
-                    /// 
+                    // 
+                    // Synch to the logger so we can display any messages coming back from the 
+                    // rest of the program and interface.
+                    // 
                     classApplicationLogger.Message += new classApplicationLogger.DelegateMessageHandler(classApplicationLogger_Message);
 
-                    /// 
-                    /// Show the splash screen
-                    /// 
+                    // 
+                    // Show the splash screen
+                    // 
                     mform_splashScreen = new formSplashScreen();
                     mform_splashScreen.Show();
 
@@ -257,18 +257,18 @@ namespace LcmsNet
                     LogMachineInformation();
                     classApplicationLogger.LogMessage(0, string.Format("[Log]"));
 
-                    /// 
-                    /// Display the splash screen mesasge first! make the log folder, 
-                    /// after that we will route messages through the logger instead of 
-                    /// through this static call.  That way we know the log folder has been
-                    /// created.                
-                    /// 
+                    // 
+                    // Display the splash screen mesasge first! make the log folder, 
+                    // after that we will route messages through the logger instead of 
+                    // through this static call.  That way we know the log folder has been
+                    // created.                
+                    // 
                     //classApplicationLogger.LogMessage(-1, "Creating pertinent folders");
                     Application.DoEvents();
 
-                    /// 
-                    /// Make sure we can log/error report locally before we do anything!
-                    /// 
+                    // 
+                    // Make sure we can log/error report locally before we do anything!
+                    // 
                     try
                     {
 
@@ -282,9 +282,9 @@ namespace LcmsNet
                         MessageBox.Show("The application does not have the required privileges to run.  Please run as administrator.");
                         return;
                     }
-                    /// 
-                    /// Load settings 
-                    /// 
+                    // 
+                    // Load settings 
+                    // 
                     classApplicationLogger.LogMessage(-1, "Loading settings");
                     Application.DoEvents();
                     LoadSettings();
@@ -292,10 +292,10 @@ namespace LcmsNet
                     classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
                     //classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
                     InitializeSystemConfigurations();
-                    
-                    /// 
-                    /// Create a device manager.
-                    /// 
+
+                    // 
+                    // Create a device manager.
+                    // 
                     //classApplicationLogger.LogMessage(-1, "Creating the Device Manager");
                     Application.DoEvents();
                     classDeviceManager deviceManager = classDeviceManager.Manager;
@@ -306,9 +306,9 @@ namespace LcmsNet
                     deviceManager.AddDevice(new LcmsNet.Devices.classApplicationDevice());
 
 
-                    /// 
-                    /// Load the device plug-ins.
-                    /// 
+                    // 
+                    // Load the device plug-ins.
+                    // 
                     classApplicationLogger.LogMessage(-1, "Loading necessary device plug-ins.");
                     bool areDevicesLoaded = true;
                     try
@@ -343,23 +343,23 @@ namespace LcmsNet
                     Application.DoEvents();
 
 #if DEBUG
-                    /// 
-                    /// Create a device we can use for testing errors with.
-                    /// 
+                    // 
+                    // Create a device we can use for testing errors with.
+                    // 
                     LcmsNetDataClasses.Devices.IDevice dev = new LcmsNet.Devices.classErrorDevice();
                     deviceManager.AddDevice(dev);
 #endif
 
-                    /// 
-                    /// Create the method manager
-                    /// 
+                    // 
+                    // Create the method manager
+                    // 
                     //classApplicationLogger.LogMessage(-1, "Creating the Method Manager");
                     Application.DoEvents();
 
 
-                    ///
-                    /// Set the logging levels
-                    ///
+                    //
+                    // Set the logging levels
+                    //
                     if (classLCMSSettings.GetParameter("LoggingErrorLevel") != null)
                     {
                         classApplicationLogger.ErrorLevel = int.Parse(classLCMSSettings.GetParameter("LoggingErrorLevel"));
@@ -384,9 +384,9 @@ namespace LcmsNet
                         classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to load cache from DMS: " + ex.Message);
                     }
 
-                    ///
-                    /// Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
-                    /// 
+                    //
+                    // Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
+                    // 
                     if (bool.Parse(classLCMSSettings.GetParameter("CopyTriggerFiles")))
                     {
                         if (LcmsNetDataClasses.Data.classTriggerFileTools.CheckLocalTriggerFiles())
@@ -396,9 +396,9 @@ namespace LcmsNet
                         }
                     }
 
-                    ///
-                    /// Check to see if any method folders need to be copied to the transfer server, and copy if necessary
-                    /// 
+                    //
+                    // Check to see if any method folders need to be copied to the transfer server, and copy if necessary
+                    // 
                     if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
                     {
                         if (SampleQueue.IO.classMethodFileTools.CheckLocalMethodFolders())
@@ -408,9 +408,9 @@ namespace LcmsNet
                         }
                     }
 
-                    /// 
-                    /// Load the main application and run
-                    /// 
+                    // 
+                    // Load the main application and run
+                    // 
                     classApplicationLogger.LogMessage(-1, "Loading main form");
                     Application.DoEvents();
                     formMDImain main = new formMDImain();
@@ -429,16 +429,18 @@ namespace LcmsNet
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Shutting down due to unhandled error.");
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
+                // Wait 3 seconds to give the user a chance to see the errors
+                System.Threading.Thread.Sleep(3000);
             }
             finally
             {
-                /// 
-                /// Just to make sure...let's kill the PAL at the end of the program as well.
-                /// 
+                // 
+                // Just to make sure...let's kill the PAL at the end of the program as well.
+                // 
                 KillExistingPalProcesses();                
                 classFileLogging.LogMessage(0, new classMessageLoggerArgs("-----------------shutdown complete----------------------"));
             }
