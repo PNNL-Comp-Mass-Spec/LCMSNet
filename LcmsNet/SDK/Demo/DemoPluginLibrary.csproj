@@ -27,14 +27,6 @@
     <OutputPath>bin\x86\PNNLRelease\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluidicsSDK.dll</HintPath>
-    </Reference>
-    <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -98,6 +90,16 @@
     <EmbeddedResource Include="DemoValveAdvancedControl.resx">
       <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">
+      <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
+      <Name>FluidicsSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

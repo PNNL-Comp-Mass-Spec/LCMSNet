@@ -31,7 +31,19 @@ namespace LcmsNetDataClasses.Logging
 																+ "'Column','Device','Message','Exception') VALUES(";
 		#endregion
 
-		#region "Class variables"
+        #region "Properies"
+
+	    public static string LogFolderPath {
+	        get 
+            {
+                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LCMSNet", "Log");
+                return logDir;
+            }
+	    }
+
+	    #endregion
+
+            #region "Class variables"
             private static object mobj_lock = "AstringToLockOn";
             private static object mobj_writeLock = "AnotherStringToLockOn";
 			private static bool mbool_LogDbFileCreated = false;
@@ -197,9 +209,8 @@ namespace LcmsNetDataClasses.Logging
 			/// </summary>
 			private static void CreateDbFile()
 			{
-                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-				string logDir = Path.Combine(path, "LCMSNet", "Log");
-                mstring_DbFileName = Path.Combine(logDir, "LcmsNetDbLog.db3");
+
+                mstring_DbFileName = Path.Combine(LogFolderPath, "LcmsNetDbLog.db3");
 			    var logFile = new FileInfo(mstring_DbFileName);
 
 				// Create the file if it doesn't already exist
