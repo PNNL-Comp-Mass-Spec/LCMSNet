@@ -12,6 +12,8 @@ To build a fully functional and up-to-date LcmsNet use:
 3.      Build the plugin solution in \lcmsnetPlugins
 
 4.      Build the DMS solution in \LcmsNetDmsTools
+	        Copy LcmsNetDmsTools.dll (plus the other DLLs) to C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
+	        Also place PrismDMS.config in C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
 
 5.      Build LcmsNet main solution in \LcmsNet\lcms\LCMSnet
 

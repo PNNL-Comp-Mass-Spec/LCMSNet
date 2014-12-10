@@ -305,7 +305,6 @@ namespace LcmsNet
                     deviceManager.AddDevice(new LcmsNet.Devices.classLogDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classApplicationDevice());
 
-
                     // 
                     // Load the device plug-ins.
                     // 
@@ -375,13 +374,17 @@ namespace LcmsNet
                     CreateSQLCache();
                     classApplicationLogger.LogMessage(-1, "Loading DMS data");
                     Application.DoEvents();
+
                     try
                     {
+                        // This step loads DMS tools from folder C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
+                        // The folder will typically have file LcmsNetDmsTools.dll
                         classDMSToolsManager.Instance.SelectedTool.LoadCacheFromDMS(false);
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to load cache from DMS: " + ex.Message);
+                        string extensionsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LCMSNet", "dmsExtensions");
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, @"Unable to load cache from DMS.  If inside PNNL, assure folder " + extensionsFolder + " exists and has the required DLLs (including LcmsNetDmsTools.dll): " + ex.Message);
                     }
 
                     //
@@ -433,8 +436,10 @@ namespace LcmsNet
             {
                 //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
-                // Wait 3 seconds to give the user a chance to see the errors
-                System.Threading.Thread.Sleep(3000);
+
+                MessageBox.Show("Shutting down due to unhandled error: " + ex.Message +
+                                                     " \nFor additional information, see the log files at " +
+                                                     classDbLogger.LogFolderPath + "\\");
             }
             finally
             {
