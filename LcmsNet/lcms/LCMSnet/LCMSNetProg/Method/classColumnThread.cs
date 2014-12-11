@@ -149,7 +149,10 @@ namespace LcmsNet.Method
             {
                 // Main operation
                 for (int eventNumber = 0; eventNumber < methodEvents.Count; eventNumber++)
-                {                   
+                {
+                    classLCEvent actualEvent;
+                    DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    DateTime finished = LcmsNetSDK.TimeKeeper.Instance.Now;
                     // before every event, check to see if we need to cancel operations
                     if (mthread_worker.CancellationPending)
                     {
@@ -178,12 +181,10 @@ namespace LcmsNet.Method
                         mthread_worker.ReportProgress(percentComplete, state);
                         method.CurrentEventNumber = eventNumber;
                         // Used for statistics
-                        classLCEvent actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
-                        actualEvent.Start = DateTime.MinValue;
+                        actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
+                        actualEvent.Start = start;
                         actualEvent.Duration = new TimeSpan(0, 0, 0);
-                        method.ActualEvents.Add(actualEvent);
-                        DateTime finished = LcmsNetSDK.TimeKeeper.Instance.Now;
-                        DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        method.ActualEvents.Add(actualEvent);                    
                         classLCEvent lcEvent = methodEvents[eventNumber];
 
                         // This determines when the next event should start.  Since the events are layed out in time
@@ -205,10 +206,7 @@ namespace LcmsNet.Method
                             if (lcEvent.Duration.TotalMilliseconds > 1)
                                 success = ExecuteEvent(lcEvent);
                             else
-                                success = true;
-
-                            // Calculate the statistics of how long it took to run.
-                            finished = LcmsNetSDK.TimeKeeper.Instance.Now;
+                                success = true;                            
                             lcEvent.Device.Status = tempStatus;
                         }
                         catch (Exception exThrown)
@@ -235,9 +233,7 @@ namespace LcmsNet.Method
                                                 lcEvent.Name,
                                                 lcEvent.Device.Name),
                                                 ex);
-                        }
-                        actualEvent.Start = start;
-                        actualEvent.Duration = finished.Subtract(start);
+                        }                                          
 
                         if (success)
                         {
@@ -269,7 +265,9 @@ namespace LcmsNet.Method
                                 timer.WaitMilliseconds(totalMilliseconds, mobj_abortEvent);
                                 long timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
-                            }                      
+                                // Calculate the statistics of how long it took to run.                             
+                            }
+                            finished = LcmsNetSDK.TimeKeeper.Instance.Now;
                         }
                         else if (!success)
                         {
@@ -286,10 +284,13 @@ namespace LcmsNet.Method
                                                    lcEvent.Device.Name,
                                                    lcEvent.Name));
                             }
+                            // Calculate the statistics of how long it took to run.
+                            finished = LcmsNetSDK.TimeKeeper.Instance.Now;
                             throw ex;
                         }
                         //method.ActualEvents.Add(actualEvent);
                     }
+                    actualEvent.Duration = finished.Subtract(start);
                 }
             }
             catch(Exception columnEx)

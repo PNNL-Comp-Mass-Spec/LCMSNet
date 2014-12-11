@@ -52,7 +52,7 @@ namespace LcmsNet.Method
         /// <summary>     
         /// Total milliseconds an event is allowed to go over before terminating the associated method. 
         /// </summary>
-        private const double CONST_OVER_EVENT_TIME_LIMIT_SECONDS = 1.0;
+        private const int CONST_OVER_EVENT_TIME_LIMIT_SECONDS = 1;
         /// <summary>
         /// Prints all events to the trace.
         /// </summary>
@@ -509,7 +509,7 @@ namespace LcmsNet.Method
                 /// Temporary variables for setting up a new sample on a column thread.
                 ///                                 
                 int columnID            = 0;                
-                double timeElapsed      = 0.0;      // variable to see if a sample's event has gone past due.
+                double timeElapsedOverdue      = 0.0;      // variable to see if a sample's event has gone past due.
                 
                 switch (eventNumber)
                 {                                         
@@ -552,8 +552,9 @@ namespace LcmsNet.Method
                                     /// 
                                     if (sampleEndTime[columnID] != DateTime.MinValue)
                                     {
-                                        timeElapsed = now.Subtract(sampleEndTime[columnID]).TotalSeconds;
-                                        if (timeElapsed > CONST_OVER_EVENT_TIME_LIMIT_SECONDS)
+                                        TimeSpan overdueSpan = now.Subtract(sampleEndTime[columnID]);
+                                        timeElapsedOverdue = overdueSpan.TotalSeconds;
+                                        if (Convert.ToInt32(Math.Floor(timeElapsedOverdue)) >= CONST_OVER_EVENT_TIME_LIMIT_SECONDS)
                                         {
                                             /// 
                                             /// Here we shut down the method killing any execution of it.
@@ -573,10 +574,12 @@ namespace LcmsNet.Method
                                             //Print(message, CONST_VERBOSE_LEAST, null, samples[columnID]);
                                             HandleError(samples[columnID], message);
                                             sampleEndTime[columnID] = DateTime.MinValue;
+                                            classLCEvent evt = mlist_columnThreads[columnID].Sample.LCMethod.ActualEvents[currentEvent[columnID]];
+                                            evt.Duration = evt.Start.Add(lcEvent.Duration).Add(overdueSpan).Subtract(evt.Start);
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;
                                             mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
                                             samples[columnID] = null;                                            
-                                            StopAllOnOverdue();
+                                            StopAllOnOverdue();                                            
                                             ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, mlist_columnThreads[columnID].Sample);
                                         }
                                     }
@@ -725,6 +728,7 @@ namespace LcmsNet.Method
                     sampleEndTime[columnID] = DateTime.MinValue;
                     currentEvent[columnID] = CONST_IDLE_FLAG;                    
                     //Print("ERROR", CONST_VERBOSE_LEAST);
+                    ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, mlist_columnThreads[columnID].Sample);
                 }
                 Stop();              
             }           

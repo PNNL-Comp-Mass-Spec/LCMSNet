@@ -65,8 +65,7 @@ namespace LcmsNet.SampleQueue.IO
 
             // ----------------------------------------------------------------------------------------------------
             // Write the LC Method file
-            // ----------------------------------------------------------------------------------------------------
-            classLCMethodWriter methodWriter = new classLCMethodWriter();
+            // ---------------------------------------------------------------------------------------------------- 
             string methodFileName = classSampleData.GetTriggerFileName(sample, ".incompleteLcmethod");            
             string lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
             classLCMethodWriter lcWriter = new classLCMethodWriter();
@@ -82,7 +81,7 @@ namespace LcmsNet.SampleQueue.IO
             }
             finally
             {
-                methodWriter = null;
+                lcWriter = null;
             }
         }
 
