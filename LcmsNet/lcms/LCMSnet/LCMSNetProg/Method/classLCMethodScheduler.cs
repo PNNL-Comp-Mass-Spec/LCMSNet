@@ -50,7 +50,7 @@ namespace LcmsNet.Method
         /// </summary>
         private const int CONST_EVENT_NUM_STOP_SAMPLES = 1;
         /// <summary>     
-        /// Total milliseconds an event is allowed to go over before terminating the associated method. 
+        /// Total seconds an event is allowed to go over before terminating the associated method. 
         /// </summary>
         private const int CONST_OVER_EVENT_TIME_LIMIT_SECONDS = 1;
         /// <summary>
