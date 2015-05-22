@@ -119,8 +119,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == PNNLRelease goto :release
-else goto :end
+    <PostBuildEvent>if $(ConfigurationName) == PNNLRelease goto :release else goto :end
 
 :release
 xcopy /y  "$(TargetDir)*.dll" "$(SolutionDir)..\lib\"
