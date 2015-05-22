@@ -5,7 +5,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-// Last modified 09/17/2014
 //						- 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
 //						- 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
 //						- 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<classSampleData>
@@ -26,6 +25,7 @@
 //						- 05/22/2014 (MEM) - Replace Select * with selection of specific columns
 //                      - 09/11/2014 (CJW) - Modified to be an MEF Extension for lcmsnet
 //                      - 09/17/2014 (CJW) - Modified to use a stand-alone configuration file instead of the LcmsNet app configuration file.
+//						- 05/22/2015 (MEM) - Auto-create PrismDMS.config if missing
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Schema;
 
 using LcmsNetDataClasses;
@@ -44,13 +43,14 @@ using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Data;
 using LcmsNetSQLiteTools;
 using System.ComponentModel.Composition;
+using System.IO;
 
 namespace LcmsNetDmsTools
 {
     [Export(typeof(IDmsTools))]
     [ExportMetadata("Name", "PrismDMSTools")]
     [ExportMetadata("Version", "1.0")]
-    public class classDBTools : LcmsNetDataClasses.IDmsTools
+    public class classDBTools : IDmsTools
     {
         //*********************************************************************************************************
         // Class for interacting with DMS database
@@ -67,6 +67,9 @@ namespace LcmsNetDmsTools
          /// key to access the encoded DMS password string in the configuration dictionary.
          /// </summary>
          private const string CONST_DMS_PASSWORD_KEY = "DMSPwd";
+
+        private const string CONFIG_FILE = "PrismDMS.config";
+
         #endregion
 
         #region "Properties"
@@ -98,7 +101,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private StringDictionary configuration;
+        private readonly StringDictionary configuration;
      
         #endregion
 
@@ -120,19 +123,32 @@ namespace LcmsNetDmsTools
         /// </summary>
         private void LoadConfiguration()
         {
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.ValidationType = ValidationType.Schema;
-            readerSettings.ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema;
+            XmlReaderSettings readerSettings = new XmlReaderSettings
+            {
+                ValidationType = ValidationType.Schema,
+                ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
+            };
             readerSettings.ValidationEventHandler += settings_ValidationEventHandler;
 
-            string configurationPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\PrismDMS.config";
+            var folderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                throw new DirectoryNotFoundException("Directory for the executing assembly is empty; unable to load the configuration in classDBTools");
+            }
+
+            string configurationPath = Path.Combine(folderPath, CONFIG_FILE);
+            if (!File.Exists(configurationPath))
+            {
+                CreateDefaultConfigFile(configurationPath);
+            }
+
             XmlReader reader = XmlReader.Create(configurationPath, readerSettings);
             while(reader.Read())
             {
                 switch(reader.NodeType)
                 {
                     case XmlNodeType.Element:                         
-                        if(reader.GetAttribute("dmssetting") == "true")
+                        if(string.Equals(reader.GetAttribute("dmssetting"), "true", StringComparison.CurrentCultureIgnoreCase))
                         {
                             string settingName = reader.Name.Remove(0,2);
                             configuration[settingName] = reader.ReadString();
@@ -161,6 +177,7 @@ namespace LcmsNetDmsTools
         {
             LoadCacheFromDMS(true);
         }
+
         public void LoadCacheFromDMS(bool shouldLoadExperiment)
         {
             GetCartListFromDMS();
@@ -184,7 +201,7 @@ namespace LcmsNetDmsTools
         {
 
 
-            List<string> tmpCartList = null;	// Temp list for holding return values
+            List<string> tmpCartList;	// Temp list for holding return values
             string connStr = GetConnectionString();
 
 
@@ -220,7 +237,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetColumnListFromDMS()
         {
-            List<string> tmpColList = null;	// Temp list for holding return values
+            List<string> tmpColList;	// Temp list for holding return values
             string connStr = GetConnectionString();
 
             // Get a List containing all the columns
@@ -266,13 +283,13 @@ namespace LcmsNetDmsTools
                 return;
             }
 
-            // Get list of column names in the table
-            var columnNames = new List<string>(lcColumnTable.Columns.Count);
-            foreach (DataColumn column in lcColumnTable.Columns)
-            {
-                string s = column.ColumnName;
-                columnNames.Add(s);
-            }
+            //// Get list of column names in the table
+            //var columnNames = new List<string>(lcColumnTable.Columns.Count);
+            //foreach (DataColumn column in lcColumnTable.Columns)
+            //{
+            //    string s = column.ColumnName;
+            //    columnNames.Add(s);
+            //}
 
             int rowCount = lcColumnTable.Rows.Count;
             var lcColumnList = new List<classLCColumn>(rowCount);
@@ -330,7 +347,6 @@ namespace LcmsNetDmsTools
             {
                 const string errMsg = "Exception storing separation type list in cache";
                 classApplicationLogger.LogError(0, errMsg, Ex);
-                return;
             }
         }
 
@@ -412,7 +428,6 @@ namespace LcmsNetDmsTools
             {
                 const string errMsg = "Exception storing user list in cache";
                 classApplicationLogger.LogError(0, errMsg, Ex);
-                return;
             }
         }
 
@@ -767,7 +782,10 @@ namespace LcmsNetDmsTools
             }
             else
             {
-                throw new classDatabaseConnectionStringException("DMS version string not found in configuration file");
+                throw new classDatabaseConnectionStringException(
+                    "DMS version string not found in configuration file (this parameter is the " +
+                    "name of the database to connect to).  Delete the " + CONFIG_FILE + " file and " +
+                    "it will be automatically re-created with the default values.");
             }
 
             // Get password and append to return string
@@ -778,7 +796,10 @@ namespace LcmsNetDmsTools
             }
             else
             {
-                throw new classDatabaseConnectionStringException("DMS password string not found in configuration file");
+                throw new classDatabaseConnectionStringException(
+                    "DMS password string not found in configuration file (this is the password " +
+                    "for the LCMSOperator username.  Delete the " + CONFIG_FILE + " file and " +
+                    "it will be automatically re-created with the default values.");
             }
 
             return retStr;
@@ -794,7 +815,6 @@ namespace LcmsNetDmsTools
         public bool UpdateDMSCartAssignment(string requestList, string cartName, bool updateMode)
         {
             string connStr = GetConnectionString();
-            string returnMsg = "";
             string mode;
             int resultCode;
 
@@ -816,9 +836,11 @@ namespace LcmsNetDmsTools
             }
 
             // Set up parameters for stored procedure call
-            var spCmd = new SqlCommand();
-            spCmd.CommandType = CommandType.StoredProcedure;
-            spCmd.CommandText = "AddRemoveRequestCartAssignment";
+            var spCmd = new SqlCommand
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandText = "AddRemoveRequestCartAssignment"
+            };
             spCmd.Parameters.Add(new SqlParameter("@Return", SqlDbType.Int));
             spCmd.Parameters["@Return"].Direction = ParameterDirection.ReturnValue;
             spCmd.Parameters.Add(new SqlParameter("@RequestIDList", SqlDbType.VarChar, 8000));
@@ -848,7 +870,7 @@ namespace LcmsNetDmsTools
 
             if (resultCode != 0)	// Error occurred
             {
-                returnMsg = spCmd.Parameters["@message"].ToString();
+                var returnMsg = spCmd.Parameters["@message"].ToString();
                 throw new classDatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
             }
 
@@ -1019,6 +1041,44 @@ namespace LcmsNetDmsTools
 
             // Now assemble the whole number and return
             return (tmpRowMult * 12) + colNum;
+        }
+
+
+        private void CreateDefaultConfigFile(string configurationPath)
+        {
+            // Create a new file with default config data
+            using (var writer = new StreamWriter(new FileStream(configurationPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
+            {
+                writer.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                writer.WriteLine("<catalog>");
+                writer.WriteLine("  <!--DMS Configuration Schema definition-->");
+                writer.WriteLine("  <xs:schema elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"PrismDMS\"> ");
+                writer.WriteLine("    <xs:element name=\"PrismDMSConfig\">");
+                writer.WriteLine("      <xs:complexType><xs:sequence>");
+                writer.WriteLine("          <xs:element name=\"DMSVersion\">");
+                writer.WriteLine("             <xs:complexType><xs:simpleContent><xs:extension base=\"xs:string\">");
+                writer.WriteLine("                  <xs:attribute name=\"dmssetting\" use=\"required\" type=\"xs:string\"/>                 ");
+                writer.WriteLine("             </xs:extension></xs:simpleContent></xs:complexType>");
+                writer.WriteLine("          </xs:element>");
+                writer.WriteLine("          <xs:element name=\"DMSPwd\">");
+                writer.WriteLine("             <xs:complexType><xs:simpleContent><xs:extension base=\"xs:string\">");
+                writer.WriteLine("                  <xs:attribute name=\"dmssetting\" use=\"required\" type=\"xs:string\"/>");
+                writer.WriteLine("             </xs:extension></xs:simpleContent></xs:complexType>");
+                writer.WriteLine("          </xs:element>                 ");
+                writer.WriteLine("      </xs:sequence></xs:complexType>");
+                writer.WriteLine("    </xs:element>");
+                writer.WriteLine("  </xs:schema>");
+                writer.WriteLine(" ");
+                writer.WriteLine("  <!--DMS configuration-->");
+                writer.WriteLine("  <p:PrismDMSConfig xmlns:p=\"PrismDMS\">");
+                writer.WriteLine("    <!--DMSVersion is needed for creation of the connection string-->");
+                writer.WriteLine("    <p:DMSVersion dmssetting=\"true\">DMS5</p:DMSVersion>");
+                writer.WriteLine("    <!--DMSPwd is the encoded DMS password-->");
+                writer.WriteLine("    <p:DMSPwd dmssetting=\"true\">Mprptq3v</p:DMSPwd>");
+                writer.WriteLine("  </p:PrismDMSConfig>");
+                writer.WriteLine("</catalog>");
+            }
+
         }
 
         /// <summary>

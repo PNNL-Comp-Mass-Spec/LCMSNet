@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Devices.Pumps;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices.Pumps;
 using System.Drawing;
@@ -19,9 +16,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <summary>
         /// Dictionary to 
         /// </summary>
-        Dictionary<IPump, controlPumpDisplay> mdict_controlList;
-        private Dictionary<IPump, GroupBox> mdict_mobilePhases;
-        private List<IPump> m_pumps;
+        readonly Dictionary<IPump, controlPumpDisplay> mdict_controlList;
+        private readonly Dictionary<IPump, GroupBox> mdict_mobilePhases;
+        private readonly List<IPump> m_pumps;
 
         public event EventHandler Tack;
         public event EventHandler UnTack;
@@ -62,10 +59,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// </summary>
         void OnResize()
         {
-            /// 
-            /// dw = difference width             
-            /// N  = number of controls.
-            /// 
+            // 
+            // dw = difference width             
+            // N  = number of controls.
+            // 
             int N = mpanel_pumps.Controls.Count;
             if (mpanel_pumps.Controls.Count == 0)
                 return;
@@ -168,7 +165,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 return;
 
             // Make sure we have a reference to the pump
-            if (mdict_controlList.ContainsKey(pump) == true)
+            if (mdict_controlList.ContainsKey(pump))
                 return;
              
             // Hook into the pumps display calls            
@@ -234,10 +231,6 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <summary>
         /// Updates the appropriate control
         /// </summary>
-        /// <param name="time"></param>
-        /// <param name="pressure"></param>
-        /// <param name="flowrate"></param>
-        /// <param name="percentB"></param>
         void DisplayPumpData(object sender, PumpDataEventArgs e)
         {
             if (WindowState == FormWindowState.Minimized)
@@ -245,7 +238,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (Visible == false)
                 return;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new EventHandler<PumpDataEventArgs> (mdict_controlList[e.Pump].DisplayMonitoringData), new object[]
                                                                             {

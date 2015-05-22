@@ -13,6 +13,10 @@ namespace LcmsNetDataClasses.Logging
             MessageLevel = messageLevel;
             EventArgs = args;
         }
+
+        /// <summary>
+        /// Message importance level (0 is most important, 5 is least important)
+        /// </summary>
         public int MessageLevel { get; set; }
         public object EventArgs { get; set; }
     }
@@ -59,7 +63,14 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         public static event DelegateErrorHandler Error;
 
+        /// <summary>
+        /// Error message importance level (0 is most important, 5 is least important)
+        /// </summary>
         private static int mint_errorLevel = 0;
+
+        /// <summary>
+        /// Status message importance level (0 is most important, 5 is least important)
+        /// </summary>
         private static int mint_messageLevel = 0;
 
         /// <summary>

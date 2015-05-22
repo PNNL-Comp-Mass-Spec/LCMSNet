@@ -14,7 +14,6 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <summary>
         /// Name of the device.
         /// </summary>
-        /// <param name="name"></param>
         string Name { get; set; }
         /// <summary>
         /// Event fired when new pump data is available.

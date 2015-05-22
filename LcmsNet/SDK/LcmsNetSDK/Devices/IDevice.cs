@@ -52,8 +52,8 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>        
         /// Write the performance data and other required information associated with this device after a run.
         /// </summary>
-        /// <param name="filepath">Path to write data to.</param>
-        /// <param name="name">Name of method to gather performance data about.</param>
+        /// <param name="directoryPath">Path to write data to.</param>
+        /// <param name="methodName">Name of method to gather performance data about.</param>
         /// <param name="parameters">Parameter data to use when writing output.</param>
         void WritePerformanceData(string directoryPath, string methodName, object[] parameters);
         

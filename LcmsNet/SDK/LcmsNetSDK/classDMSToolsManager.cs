@@ -154,8 +154,8 @@ namespace LcmsNetSDK
                 {
                     return Validators.Single(x => x.Metadata.RelatedToolName == mdms_metadata.Name && Convert.ToDouble(mdms_metadata.Version) >= Convert.ToDouble(x.Metadata.RequiredDMSToolVersion)).Value;
                 }
-                catch(InvalidCastException ex)
-                {                  
+                catch(InvalidCastException)
+                {
                     return null;
                 }
             }
