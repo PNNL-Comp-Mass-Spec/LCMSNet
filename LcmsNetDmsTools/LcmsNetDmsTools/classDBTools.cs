@@ -580,7 +580,10 @@ namespace LcmsNetDmsTools
             DataTable instTable;
 
             // Get a table containing the instrumnet data
-            const string sqlCmd = "SELECT ex, val FROM V_Instrument_Picklist ORDER BY ex";
+            const string sqlCmd = "SELECT Instrument, NameAndUsage, CaptureMethod, " +
+                                  "Status, HostName, SharePath " +
+                                  "FROM V_Instrument_Info_LCMSNet " +
+                                  "ORDER BY Instrument";
             try
             {
                 instTable = GetDataTable(sqlCmd, connStr);
@@ -598,8 +601,12 @@ namespace LcmsNetDmsTools
             {
                 var tempInst = new classInstrumentInfo
                 {
-                    DMSName = (string)currRow[instTable.Columns["ex"]],
-                    CommonName = (string)currRow[instTable.Columns["val"]]
+                    DMSName = (string)currRow[instTable.Columns["Instrument"]],
+                    CommonName = (string)currRow[instTable.Columns["NameAndUsage"]],
+                    MethodName = (string)currRow[instTable.Columns["CaptureMethod"]],
+                    Status = (string)currRow[instTable.Columns["Status"]],
+                    HostName = (string)currRow[instTable.Columns["HostName"]],
+                    SharePath = (string)currRow[instTable.Columns["SharePath"]]
                 };
                 tmpRetVal.Add(tempInst);
             }

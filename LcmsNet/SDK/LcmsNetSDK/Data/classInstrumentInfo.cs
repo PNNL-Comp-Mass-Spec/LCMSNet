@@ -36,19 +36,52 @@ namespace LcmsNetDataClasses
 			{
 				get;
 				set;
-			}	// End property
+			}
+
 			/// <summary>
 			/// User-friendly name used for pick lists
 			/// </summary>
+			/// <remarks>Instrument name, then a space, then the instrument description</remarks>
 			public string CommonName
 			{
 				get;
 				set;
-			}	// End property
+			}
+
             /// <summary>
-            /// Gets or sets the name of the method to run on the instrument.
+            /// Gets or sets the name of the method used to capture data from this instrument
             /// </summary>
             public string MethodName
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            /// Gets or sets the instrument status
+            /// </summary>
+            /// <remarks>Status will be active, inactive, or offline</remarks>
+            public string Status
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            /// Gets or sets the name of the computer that holds the data for the instrument
+            /// </summary>
+            /// <remarks>May contain a domain suffix, for example VPro02.bionet</remarks>
+            public string HostName
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            /// Gets or sets the name of the shared folder for retrieving the instrument data
+            /// </summary>
+            /// <remarks>Typically a single folder name, like ProteomicsData\ but might contain subfolders, e.g. UserData\Nikola\AMOLF\</remarks>
+            public string SharePath
             {
                 get;
                 set;

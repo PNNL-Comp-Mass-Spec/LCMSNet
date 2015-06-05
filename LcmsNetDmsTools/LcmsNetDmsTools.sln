@@ -49,6 +49,7 @@ Global
 		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.PNNLRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.PNNLRelease|Mixed Platforms.Build.0 = Release|Any CPU
 		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.PNNLRelease|x86.ActiveCfg = PNNLRelease|x86
+		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.PNNLRelease|x86.Build.0 = PNNLRelease|x86
 		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BEBD0826-4489-4E26-8456-240AF4C30E8A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU

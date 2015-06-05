@@ -55,6 +55,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|x86'">
     <OutputPath>bin\x86\PNNLRelease\</OutputPath>
     <PlatformTarget>x86</PlatformTarget>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk">
@@ -62,6 +64,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.51.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\LcmsNet\lib\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,7 +86,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"
+xcopy /y "$(ProjectDir)..\..\LcmsNet\lib\SQLite.Interop.dll" "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

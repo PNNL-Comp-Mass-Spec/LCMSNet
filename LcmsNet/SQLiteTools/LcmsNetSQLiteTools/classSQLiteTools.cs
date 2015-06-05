@@ -33,235 +33,276 @@ using LcmsNetDataClasses.Data;
 
 namespace LcmsNetSQLiteTools
 {
-	public class classSQLiteTools
-	{
-		#region Class Variables
-		private static string mstring_connectionString = "";
+    public class classSQLiteTools
+    {
+        #region Class Variables
+
+        private static string mstring_connectionString = "";
         //private static string mstring_errroString = "";
 
-		private static List<string>			m_cartNames;
-		private static List<string>			m_columnNames;
-		private static List<string>			m_separationNames;
-		private static List<string>			m_datasetNames;
+        private static List<string> m_cartNames;
+        private static List<string> m_columnNames;
+        private static List<string> m_separationNames;
+        private static List<string> m_datasetNames;
 
-		private static List<classUserInfo>			m_userInfo;
-		private static List<classInstrumentInfo>	m_instrumentInfo;
-		private static List<classExperimentData>	m_experimentsData;
-		private static List<classLCColumn>			m_lcColumns;
+        private static List<classUserInfo> m_userInfo;
+        private static List<classInstrumentInfo> m_instrumentInfo;
+        private static List<classExperimentData> m_experimentsData;
+        private static List<classLCColumn> m_lcColumns;
 
-		private static List<classProposalUser>										m_proposalUsers;
-		private static Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>	m_pidIndexedReferenceList;
-		#endregion
+        private static List<classProposalUser> m_proposalUsers;
+        private static Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> m_pidIndexedReferenceList;
 
-		#region Initialize
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		static classSQLiteTools()
-		{
-            AppDataFolderName   = "LCMSNet";
-		    CacheName           = "LCMSCache.que";
+        #endregion
 
-			BuildConnectionString(false);
-		}
-        
-	    public static string CacheName { get; set; }
+        #region Initialize
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        static classSQLiteTools()
+        {
+            AppDataFolderName = "LCMSNet";
+            CacheName = "LCMSCache.que";
+
+            BuildConnectionString(false);
+        }
+
+        public static string CacheName { get; set; }
         public static string AppDataFolderName { get; set; }
 
-		public static void BuildConnectionString(bool newCache)
-		{
-			try
-			{
-				string name = classLCMSSettings.GetParameter("CacheFileName");
-				bool exists = File.Exists(name);
-				if (!exists && !newCache)
-				{
-                    
-                    string appPath      = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    name                = Path.Combine(appPath, AppDataFolderName);
-                                        
+        public static void BuildConnectionString(bool newCache)
+        {
+            try
+            {
+                string name = classLCMSSettings.GetParameter("CacheFileName");
+                bool exists = File.Exists(name);
+                if (!exists && !newCache)
+                {
+
+                    string appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    name = Path.Combine(appPath, AppDataFolderName);
+
                     if (!Directory.Exists(name))
                     {
                         Directory.CreateDirectory(name);
                     }
                     name = Path.Combine(name, CacheName);
-					classLCMSSettings.SetParameter("CacheFileName", name);
-				}
+                    classLCMSSettings.SetParameter("CacheFileName", name);
+                }
                 //workaround for SQLite library version 1.0.93 for network addresses
-                if(name.Substring(0,1) == "\\")
+                if (name.Substring(0, 1) == "\\")
                 {
                     name = "\\" + name;
                 }
-				mstring_connectionString = "data source=" + name;
-			}
-			catch (Exception ex)
-			{
-				classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Could not load the sample queue cache.", ex);
-			}
-		}
-		#endregion
+                mstring_connectionString = "data source=" + name;
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                                                "Could not load the sample queue cache.", ex);
+            }
+        }
 
-		#region Properties
+        #endregion
 
-		public static string ConnString
-		{
-			get { return mstring_connectionString; }
-			set { mstring_connectionString = value; }
-		}	// End property
-		#endregion
+        #region Properties
 
-		#region Methods
-		/// <summary>
-		/// Sets the cache location to the path provided.  
-		/// </summary>
-		/// <param name="location">New path to location of queue.</param>
-		public static void SetCacheLocation(string location)
-		{
-		    classLCMSSettings.SetParameter("CacheFileName", location);
-            
+        public static string ConnString
+        {
+            get { return mstring_connectionString; }
+            set { mstring_connectionString = value; }
+        } // End property
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Sets the cache location to the path provided.  
+        /// </summary>
+        /// <param name="location">New path to location of queue.</param>
+        public static void SetCacheLocation(string location)
+        {
+            classLCMSSettings.SetParameter("CacheFileName", location);
+
             BuildConnectionString(!File.Exists(location));
-		    //mstring_connectionString = "data source=" + location;
-		}
-		
-		/// <summary>
-		/// Retrieves a sample queue from cache database
-		/// Connection string and database name are defined by defaults
-		/// </summary>
-		/// <param name="TableType">TableType enum specifying type of queue to retrieve</param>
-        /// <returns>List containing queue data</returns>
-		public static List<classSampleData> GetQueueFromCache(enumTableTypes TableType)
-		{
-			return GetQueueFromCache(TableType, mstring_connectionString);
-		}	
-		
-		/// <summary>
-		/// Retrieves a sample queue from a SQLite database
-		/// Overload requires connection string to be specified
-		/// </summary>
-        /// <param name="tableType">TableType enum specifying type of queue to retrieve</param>
-        /// <param name="connectionString">Cache connection string</param>
-		/// <returns>List containing queue data</returns>
-		public static List<classSampleData> GetQueueFromCache(enumTableTypes tableType, string connectionString)
-		{
-			var returnData = new List<classSampleData>();
-		
-			// Convert type of queue into a data table name
-			string tableName = GetTableName(tableType);
-		
-			// Get a list of string dictionaries containing properties for each sample
-			IEnumerable<StringDictionary> allSampleProps = GetPropertiesFromCache(tableName, connectionString);
-		
-			// For each row (representing one sample), create a sample data object 
-			//		and load the property values
-			foreach (StringDictionary sampleProps in allSampleProps)
-			{
-				// Create a classSampleData object
-				var sampleData = new classSampleData();
-		
-				// Load the sample data object from the string dictionary
-				sampleData.LoadPropertyValues(sampleProps);
-		
-				// Add the sample data object to the return list
-				returnData.Add(sampleData);
-			}
-		
-			// All finished, so return
-			return returnData;
-		}	
-		
-		/// <summary>
-		/// Gets a list of string dictionary objects containing properties for each item in the cache
-		/// </summary>
-		/// <param name="tableName">Name of table containing the properties</param>
-		/// <param name="ConnStr">Connection string</param>
-		/// <returns>List with properties for each item in cache</returns>
-		private static IEnumerable<StringDictionary> GetPropertiesFromCache(string tableName, string ConnStr)
-		{
-			var returnData = new List<StringDictionary>();
-		
-			// Verify table exists in database
-			if (!VerifyTableExists(tableName, ConnStr))
-			{
-				// No table, so return an empty list
-				return returnData;
-			}
-		
-			// Get table containing cached data
-			string sqlStr = "SELECT * FROM " + tableName;
-			DataTable cacheData = GetSQLiteDataTable(sqlStr,ConnStr);
-			if (cacheData.Rows.Count < 1)
-			{
-				// No cahced data found, so return an empty list
-				return returnData;
-			}
-		
-			// For each row (representing properties and values for one sample), create a string dictionary
-			//			with the object's properties from the table columns, and add it to the return list
-			foreach (DataRow currentRow in cacheData.Rows)
-			{
-				// Create a string dictionary containing the properties and values for this sample
-				StringDictionary sampleProps = GetPropertyDictionaryForSample(currentRow, cacheData.Columns);
-				// Add the string dictionary to the return list
-				returnData.Add(sampleProps);
-			}
-		
-			// Return the list
-			return returnData;
-		}	
-		
-		/// <summary>
-		/// Gets a string dictionary containing property names and values contained in
-		///	a row of the cache data table
-		/// </summary>
-		/// <param name="RowOfValues">DataRow containing property values from table</param>
-		/// <param name="TableColumns">Collection of data columns in table</param>
-		/// <returns>StringDictionary in property name, property value format</returns>
-		private static StringDictionary GetPropertyDictionaryForSample(DataRow RowOfValues, DataColumnCollection TableColumns)
-		{
-			var returnDict = new StringDictionary();
+            //mstring_connectionString = "data source=" + location;
+        }
 
-		    // Build the string dictionary
-			foreach (DataColumn column in TableColumns)
-			{
-				string colName = column.ColumnName;
-				var colData = (string)RowOfValues[TableColumns[colName]];
-				returnDict.Add(colName, colData);
-			}
-			
-			// Return the dictionary
-			return returnDict;
-		}	
-		
-		/// <summary>
+        /// <summary>
+        /// Retrieves a sample queue from cache database
+        /// Connection string and database name are defined by defaults
+        /// </summary>
+        /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
+        /// <returns>List containing queue data</returns>
+        public static List<classSampleData> GetQueueFromCache(enumTableTypes tableType)
+        {
+            return GetQueueFromCache(tableType, mstring_connectionString);
+        }
+
+        /// <summary>
+        /// Retrieves a sample queue from a SQLite database
+        /// Overload requires connection string to be specified
+        /// </summary>
+        /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
+        /// <param name="connectionString">Cache connection string</param>
+        /// <returns>List containing queue data</returns>
+        public static List<classSampleData> GetQueueFromCache(enumTableTypes tableType, string connectionString)
+        {
+            var returnData = new List<classSampleData>();
+
+            // Convert type of queue into a data table name
+            var tableName = GetTableName(tableType);
+
+            // Get a list of string dictionaries containing properties for each sample
+            IEnumerable<StringDictionary> allSampleProps = GetPropertiesFromCache(tableName, connectionString);
+
+            // For each row (representing one sample), create a sample data object 
+            //		and load the property values
+            foreach (StringDictionary sampleProps in allSampleProps)
+            {
+                // Create a classSampleData object
+                var sampleData = new classSampleData();
+
+                // Load the sample data object from the string dictionary
+                sampleData.LoadPropertyValues(sampleProps);
+
+                // Add the sample data object to the return list
+                returnData.Add(sampleData);
+            }
+
+            // All finished, so return
+            return returnData;
+        }
+
+        /// <summary>
+        /// Gets a list of string dictionary objects containing properties for each item in the cache
+        /// </summary>
+        /// <param name="tableName">Name of table containing the properties</param>
+        /// <param name="connStr">Connection string</param>
+        /// <returns>List with properties for each item in cache</returns>
+        private static IEnumerable<StringDictionary> GetPropertiesFromCache(string tableName, string connStr)
+        {
+            var returnData = new List<StringDictionary>();
+
+            // Verify table exists in database
+            if (!VerifyTableExists(tableName, connStr))
+            {
+                // No table, so return an empty list
+                return returnData;
+            }
+
+            // Get table containing cached data
+            string sqlStr = "SELECT * FROM " + tableName;
+            DataTable cacheData = GetSQLiteDataTable(sqlStr, connStr);
+            if (cacheData.Rows.Count < 1)
+            {
+                // No cahced data found, so return an empty list
+                return returnData;
+            }
+
+            // For each row (representing properties and values for one sample), create a string dictionary
+            //			with the object's properties from the table columns, and add it to the return list
+            foreach (DataRow currentRow in cacheData.Rows)
+            {
+                // Create a string dictionary containing the properties and values for this sample
+                StringDictionary sampleProps = GetPropertyDictionaryForSample(currentRow, cacheData.Columns);
+                // Add the string dictionary to the return list
+                returnData.Add(sampleProps);
+            }
+
+            // Return the list
+            return returnData;
+        }
+
+        /// <summary>
+        /// Gets a string dictionary containing property names and values contained in
+        ///	a row of the cache data table
+        /// </summary>
+        /// <param name="RowOfValues">DataRow containing property values from table</param>
+        /// <param name="TableColumns">Collection of data columns in table</param>
+        /// <returns>StringDictionary in property name, property value format</returns>
+        private static StringDictionary GetPropertyDictionaryForSample(DataRow RowOfValues,
+                                                                       DataColumnCollection TableColumns)
+        {
+            var returnDict = new StringDictionary();
+
+            // Build the string dictionary
+            foreach (DataColumn column in TableColumns)
+            {
+                string colName = column.ColumnName;
+                var colData = (string)RowOfValues[TableColumns[colName]];
+                returnDict.Add(colName, colData);
+            }
+
+            // Return the dictionary
+            return returnDict;
+        }
+
+        /// <summary>
+        /// Determines if a particular table exists in the SQLite database
+        /// </summary>
+        /// <param name="tableName">Name of the table to search for</param>
+        /// <param name="connStr">Connection string for database</param>
+        /// <returns>TRUE if table found; FALSE if not found or error</returns>
+        private static bool VerifyTableExists(string tableName, string connStr)
+        {
+            int columnCount;
+            return VerifyTableExists(tableName, connStr, out columnCount);
+        }
+
+        /// <summary>
 		/// Determines if a particular table exists in the SQLite database
 		/// </summary>
-		/// <param name="TableName">Name of the table to search for</param>
-		/// <param name="ConnStr">Connection string for database</param>
+		/// <param name="tableName">Name of the table to search for</param>
+		/// <param name="connStr">Connection string for database</param>
+        /// <param name="columnCount">Number of columns in the table</param>
 		/// <returns>TRUE if table found; FALSE if not found or error</returns>
-		private static bool VerifyTableExists(string TableName, string ConnStr)
+        private static bool VerifyTableExists(string tableName, string connStr, out int columnCount)
 		{
-			string sqlString = "SELECT * FROM sqlite_master WHERE name ='" + TableName + "'";
-			DataTable tableList;
+		    columnCount = 0;
+
+			var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
+            DataTable resultSet1;
 			try
 			{
 				// Get a list of database tables matching the specified table name
-				tableList = GetSQLiteDataTable(sqlString, ConnStr);
+                resultSet1 = GetSQLiteDataTable(sqlString, connStr);
 			}
-			catch (Exception Ex)
+			catch (Exception ex)
 			{
-				string ErrMsg = "SQLite exception verifying table " + TableName + " exists";
-				// throw new classDatabaseDataException(ErrMsg, Ex);
-				classApplicationLogger.LogError(0, ErrMsg, Ex);
+				var errMsg = "SQLite exception verifying table " + tableName + " exists";
+                // throw new classDatabaseDataException(errMsg, ex);
+				classApplicationLogger.LogError(0, errMsg, ex);			
 				return false;
 			}
 		
-			// If exactly 1 row returned, then table exists
-			if (tableList.Rows.Count == 1)
-			{
-				return true;
-			}
-		    
-            return false;
+		    if (resultSet1.Rows.Count != 1)
+		    {
+		        return false;
+		    }
+
+            // Exactly 1 row returned; examine the number of columns
+		    // Count the number of columns
+		    var colCountSql = "pragma table_info(" + tableName + ")";
+
+		    try
+		    {
+		        // Use the pragma statement to get a table with one row per column
+		        var resultSet2 = GetSQLiteDataTable(colCountSql, connStr);
+
+		        columnCount = resultSet2.Rows.Count;
+
+		    }
+		    catch (Exception ex)
+		    {
+		        var errMsg = "SQLite exception counting columns in table " + tableName;                   
+		        classApplicationLogger.LogError(0, errMsg, ex);
+		        columnCount = 0;                   
+		    }
+
+		    return true;
 		}	
 		
 		/// <summary>
@@ -269,9 +310,9 @@ namespace LcmsNetSQLiteTools
 		/// </summary>
         /// <param name="dataToCache">List of ICacheInterface objects to save properites for</param>
 		/// <param name="tableName">Name of the table to save data in</param>
-		/// <param name="ConnStr">Connection string</param>
-		private static void SavePropertiesToCache(List<ICacheInterface> dataToCache, string tableName, 
-																		string ConnStr)
+		/// <param name="connStr">Connection string</param>
+		private static void SavePropertiesToCache(IList<ICacheInterface> dataToCache, string tableName, 
+																		string connStr)
 		{
 			bool dataExists = (dataToCache.Count > 0);
 
@@ -287,18 +328,18 @@ namespace LcmsNetSQLiteTools
 			StringDictionary FieldNames = firstItem.GetPropertyValues();
 		
 			// Verify table exists; if not, create it; Otherwise, clear it
-			if (!VerifyTableExists(tableName, ConnStr))
+			if (!VerifyTableExists(tableName, connStr))
 			{
 			    // Table doesn't exist, so create it
 			    string sqlCmd = BuildCreatePropTableCmd(FieldNames, tableName);
 			    try
 				{
-					ExecuteSQLiteCommand(sqlCmd, ConnStr);
+					ExecuteSQLiteCommand(sqlCmd, connStr);
 				}
 				catch (Exception Ex)
 				{
-					string ErrMsg = "SQLite exception creating table " + tableName;
-					classApplicationLogger.LogError(0, ErrMsg, Ex);
+					string errMsg = "SQLite exception creating table " + tableName;
+					classApplicationLogger.LogError(0, errMsg, Ex);
 					return;
 				}
 			}
@@ -315,13 +356,13 @@ namespace LcmsNetSQLiteTools
 			// Execute the list of commands
 			try
 			{
-				ExecuteSQLiteCmdsWithTransaction(cmdList, ConnStr);
+				ExecuteSQLiteCmdsWithTransaction(cmdList, connStr);
 			}
 			catch (Exception Ex)
 			{
-				string ErrMsg = "Exception inserting values into table " + tableName;
-				// throw new classDatabaseDataException(ErrMsg, Ex);
-				classApplicationLogger.LogError(0, ErrMsg, Ex);
+				string errMsg = "Exception inserting values into table " + tableName;
+				// throw new classDatabaseDataException(errMsg, Ex);
+				classApplicationLogger.LogError(0, errMsg, Ex);
 			}
 		}	
 		
@@ -330,10 +371,10 @@ namespace LcmsNetSQLiteTools
 		/// Connection string and database name are defined by defaults 
 		/// </summary>
         /// <param name="QueueData">List of classSampleData containing the sample data to save</param>
-		/// <param name="TableType">TableTypes enum specifying which queue is being saved</param>
-		public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes TableType)
+		/// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
+		public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType)
 		{
-			SaveQueueToCache(QueueData, TableType, mstring_connectionString);
+			SaveQueueToCache(QueueData, tableType, mstring_connectionString);
 		}	
 		
 		/// <summary>
@@ -341,16 +382,16 @@ namespace LcmsNetSQLiteTools
 		/// Overload requires database connection string be specified
 		/// </summary>
 		/// <param name="QueueData">List&lt;classSampleData&gt; containing the sample data to save</param>
-		/// <param name="TableType">TableTypes enum specifying which queue is being saved</param>
-		/// <param name="ConnStr">Connection string for database file</param>
-		public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes TableType,
-															string ConnStr)
+		/// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
+		/// <param name="connStr">Connection string for database file</param>
+		public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType,
+															string connStr)
 		{
 			bool DataInList = (QueueData.Count > 0);
-			string tableName = GetTableName(TableType);
+			string tableName = GetTableName(tableType);
 		
 			// Clear the cache table
-			ClearCacheTable(tableName, ConnStr);
+			ClearCacheTable(tableName, connStr);
 		
 			//If no data in list, just exit
 			if (!DataInList)
@@ -364,7 +405,7 @@ namespace LcmsNetSQLiteTools
 			{
 				dataList.Add(currentSample);
 			}
-			SavePropertiesToCache(dataList,tableName, ConnStr);
+			SavePropertiesToCache(dataList,tableName, connStr);
 		}	
 		
 		/// <summary>
@@ -535,7 +576,7 @@ namespace LcmsNetSQLiteTools
 			string tableName = GetTableName(enumTableTypes.InstrumentList);
 		
 			// Clear the cache table
-			ClearCacheTable(tableName, mstring_connectionString);
+			ClearCacheTable(tableName, mstring_connectionString, 6);
 		
 			m_instrumentInfo = new List<classInstrumentInfo>(InstList);
 			//If no data in list, just exit
@@ -557,10 +598,10 @@ namespace LcmsNetSQLiteTools
 		/// Executes specified SQLite command
 		/// </summary>
 		/// <param name="CmdStr">SQL statement to execute</param>
-		/// <param name="ConnStr">Connection string for SQL database file</param>
-		private static void ExecuteSQLiteCommand(string CmdStr, string ConnStr)
+		/// <param name="connStr">Connection string for SQL database file</param>
+		private static void ExecuteSQLiteCommand(string CmdStr, string connStr)
 		{
-			using (var Cn = new SQLiteConnection(ConnStr))
+			using (var Cn = new SQLiteConnection(connStr))
 			{
 				using (var myCmd = new SQLiteCommand(Cn))
 				{
@@ -573,9 +614,9 @@ namespace LcmsNetSQLiteTools
 					}
 					catch (Exception Ex)
 					{
-						string ErrMsg = "SQLite exception executing command " + CmdStr;
-						classApplicationLogger.LogError(0, ErrMsg, Ex);
-						throw new classDatabaseDataException(ErrMsg, Ex);
+						string errMsg = "SQLite exception executing command " + CmdStr;
+						classApplicationLogger.LogError(0, errMsg, Ex);
+						throw new classDatabaseDataException(errMsg, Ex);
 					}
 					finally
 					{
@@ -589,11 +630,11 @@ namespace LcmsNetSQLiteTools
 		/// Executes a collection of SQL commands wrapped in a transaction to improve performance
 		/// </summary>
 		/// <param name="CmdList">List containing the commands to execute</param>
-		/// <param name="ConnStr">Connection string</param>
-		private static void ExecuteSQLiteCmdsWithTransaction(IEnumerable<string> CmdList, string ConnStr)
+		/// <param name="connStr">Connection string</param>
+		private static void ExecuteSQLiteCmdsWithTransaction(IEnumerable<string> CmdList, string connStr)
 		{
 			
-			using (var connection = new SQLiteConnection(ConnStr))
+			using (var connection = new SQLiteConnection(connStr))
 			{
                 
 				using (var command = new SQLiteCommand(connection))
@@ -623,9 +664,9 @@ namespace LcmsNetSQLiteTools
 					}
 					catch (Exception Ex)
 					{
-						const string ErrMsg = "SQLite exception adding data";
-						classApplicationLogger.LogError(0, ErrMsg, Ex);
-						throw new classDatabaseDataException(ErrMsg, Ex);
+						const string errMsg = "SQLite exception adding data";
+						classApplicationLogger.LogError(0, errMsg, Ex);
+						throw new classDatabaseDataException(errMsg, Ex);
 					}
 					finally
 					{
@@ -639,12 +680,12 @@ namespace LcmsNetSQLiteTools
 		/// Retrieves a data table from a SQLite database
 		/// </summary>
 		/// <param name="CmdStr">SQL command to execute</param>
-		/// <param name="ConnStr">Connection string for SQLite database file</param>
+		/// <param name="connStr">Connection string for SQLite database file</param>
 		/// <returns>A DataTable containing data specfied by CmdStr</returns>
-		private static DataTable GetSQLiteDataTable(string CmdStr, string ConnStr)
+		private static DataTable GetSQLiteDataTable(string CmdStr, string connStr)
 		{
 			var returnTable = new DataTable();
-			using (var Cn = new SQLiteConnection(ConnStr))
+			using (var Cn = new SQLiteConnection(connStr))
 			{
 				using (var Da = new SQLiteDataAdapter())
 				{
@@ -660,9 +701,9 @@ namespace LcmsNetSQLiteTools
 						}
 						catch (Exception Ex)
 						{
-							string ErrMsg = "SQLite exception getting data table via query " + CmdStr + " : " + ConnStr;
-							classApplicationLogger.LogError(0, ErrMsg, Ex);
-							throw new classDatabaseDataException(ErrMsg, Ex);
+							string errMsg = "SQLite exception getting data table via query " + CmdStr + " : " + connStr;
+							classApplicationLogger.LogError(0, errMsg, Ex);
+							throw new classDatabaseDataException(errMsg, Ex);
 						}
 					}
 				}
@@ -691,18 +732,18 @@ namespace LcmsNetSQLiteTools
 		/// <summary>
 		/// Builds a INSERT command from the input string dictionary
 		/// </summary>
-		/// <param name="InpData">String dictionary containing property names and values</param>
-		/// <param name="TableName">Name of table to insert values into</param>
+		/// <param name="inpData">String dictionary containing property names and values</param>
+		/// <param name="tableName">Name of table to insert values into</param>
 		/// <returns>String consisting of a complete INSERT SQL statement</returns>
-		private static string BuildInsertPropValueCmd(StringDictionary InpData, string TableName)
+		private static string BuildInsertPropValueCmd(StringDictionary inpData, string tableName)
 		{
 			var sb = new StringBuilder();
 			sb.Append("INSERT INTO ");
-			sb.Append(TableName + " VALUES(");
+			sb.Append(tableName + " VALUES(");
 			// Add the property values to the string
-			foreach (string colName in InpData.Keys)
+			foreach (string colName in inpData.Keys)
 			{
-				sb.Append("'" + ScrubField(InpData[colName]) + "', ");
+				sb.Append("'" + ScrubField(inpData[colName]) + "', ");
 			}
 			// Remove the last "', "
 			sb.Remove(sb.Length - 2, 2);
@@ -714,16 +755,16 @@ namespace LcmsNetSQLiteTools
 		/// <summary>
 		/// Builds a CREATE TABLE command from the input string dictionary
 		/// </summary>
-		/// <param name="InpData">String dictionary containing property names and values</param>
-		/// <param name="TableName">Name of table to create</param>
+		/// <param name="inpData">String dictionary containing property names and values</param>
+		/// <param name="tableName">Name of table to create</param>
 		/// <returns>String consisting of a complete CREATE TABLE SQL statement</returns>
-		private static string BuildCreatePropTableCmd(StringDictionary InpData, string TableName)
+		private static string BuildCreatePropTableCmd(StringDictionary inpData, string tableName)
 		{
 			var sb = new StringBuilder();
 			sb.Append("CREATE TABLE ");
-			sb.Append(TableName + "(");
+			sb.Append(tableName + "(");
 			// Create column names for each key, which is same as property name in queue being saved
-			foreach (string colName in InpData.Keys)
+			foreach (string colName in inpData.Keys)
 			{
 				sb.Append("'" + colName + "', ");
 			}
@@ -737,11 +778,11 @@ namespace LcmsNetSQLiteTools
 		/// <summary>
 		/// Converts a type of table to the corresponding cache db table name
 		/// </summary>
-        /// <param name="TableType">enumTableTypes specifying table to get name for</param>
+        /// <param name="tableType">enumTableTypes specifying table to get name for</param>
 		/// <returns>Name of db table</returns>
-		private static string GetTableName(enumTableTypes TableType)
+		private static string GetTableName(enumTableTypes tableType)
 		{
-			return "T_" + Enum.GetName(typeof(enumTableTypes), TableType);
+			return "T_" + Enum.GetName(typeof(enumTableTypes), tableType);
 		}
 
 		/// <summary>
@@ -948,10 +989,10 @@ namespace LcmsNetSQLiteTools
 			{
 				var returnData = new List<classLCColumn>();
 		
-				string tablename = GetTableName(enumTableTypes.LCColumnList);
+				string tableName = GetTableName(enumTableTypes.LCColumnList);
 		
 				IEnumerable<StringDictionary> allLCColumnProperties =
-					GetPropertiesFromCache(tablename, mstring_connectionString);
+					GetPropertiesFromCache(tableName, mstring_connectionString);
 		
 				foreach (StringDictionary props in allLCColumnProperties)
 				{
@@ -1005,7 +1046,7 @@ namespace LcmsNetSQLiteTools
 		        
 		        if (!isFirstTime)
 		        {
-		            //ErrMsg = "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
+		            //errMsg = "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
 		            const string errorMessage = "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
 		            classApplicationLogger.LogError(0, errorMessage, ex);
 		        }
@@ -1027,12 +1068,12 @@ namespace LcmsNetSQLiteTools
 	    /// <summary>
 	    /// Generic method for saving a single column list to the cache db
 	    /// </summary>
-	    /// <param name="TableType">enumTableNames specifying table name suffix</param>
+	    /// <param name="tableType">enumTableNames specifying table name suffix</param>
 	    /// <param name="ListData">List&lt;string&gt; of data for storing in table</param>
-	    public static void SaveSingleColumnListToCache(List<string> ListData, enumTableTypes TableType)
+	    public static void SaveSingleColumnListToCache(List<string> ListData, enumTableTypes tableType)
 		{
 			// Set up table name
-			string tableName = GetTableName(TableType);
+			string tableName = GetTableName(tableType);
 
 			// SQL statement for table clear command
 			string sqlClearCmd = "DELETE FROM " + tableName;
@@ -1051,9 +1092,9 @@ namespace LcmsNetSQLiteTools
 				}
 				catch (Exception Ex)
 				{
-					string ErrMsg = "SQLite exception clearing table via command " + sqlClearCmd;
-					// throw new classDatabaseDataException(ErrMsg, Ex);
-					classApplicationLogger.LogError(0, ErrMsg, Ex);
+					string errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
+					// throw new classDatabaseDataException(errMsg, Ex);
+					classApplicationLogger.LogError(0, errMsg, Ex);
 					return;
 				}
 			}
@@ -1066,9 +1107,9 @@ namespace LcmsNetSQLiteTools
 				}
 				catch (Exception Ex)
 				{
-					string ErrMsg = "SQLite exception creating table " + tableName;
-					// throw new classDatabaseDataException(ErrMsg, Ex);
-					classApplicationLogger.LogError(0, ErrMsg, Ex);
+					string errMsg = "SQLite exception creating table " + tableName;
+					// throw new classDatabaseDataException(errMsg, Ex);
+					classApplicationLogger.LogError(0, errMsg, Ex);
 					return;
 				}
 			}
@@ -1088,29 +1129,29 @@ namespace LcmsNetSQLiteTools
 			}
 			catch (Exception Ex)
 			{
-				const string ErrMsg = "SQLite exception filling single-column table";
-				// throw new classDatabaseDataException(ErrMsg, Ex);
-				classApplicationLogger.LogError(0, ErrMsg, Ex);				
+				const string errMsg = "SQLite exception filling single-column table";
+				// throw new classDatabaseDataException(errMsg, Ex);
+				classApplicationLogger.LogError(0, errMsg, Ex);				
 			}
 		}	
 
 		/// <summary>
 		/// Generic method for retrieving data from a single column table
 		/// </summary>
-		/// <param name="TableType">enumTableTypes specifying type of table to retrieve</param>
+		/// <param name="tableType">enumTableTypes specifying type of table to retrieve</param>
 		/// <returns>List&lt;string&gt; containing cached data</returns>
-		private static List<string> GetSingleColumnListFromCache(enumTableTypes TableType)
+		private static List<string> GetSingleColumnListFromCache(enumTableTypes tableType)
 		{
 			var returnList = new List<string>();
 		
 			// Set up table name
-			string tableName = GetTableName(TableType);
+			string tableName = GetTableName(tableType);
 		
 			// Verify specified table exists
 			if (!VerifyTableExists(tableName, mstring_connectionString))
 			{
-				string ErrMsg = "Data table " + tableName + " not found in cache";
-				throw new classDatabaseDataException(ErrMsg, new Exception());
+				string errMsg = "Data table " + tableName + " not found in cache";
+				throw new classDatabaseDataException(errMsg, new Exception());
 			}
 		
 			// SQL statement for query commanda
@@ -1124,8 +1165,8 @@ namespace LcmsNetSQLiteTools
 			}
 			catch (Exception Ex)
 			{
-				string ErrMsg = "SQLite exception getting data table via query " + sqlQueryCmd;
-				throw new classDatabaseDataException(ErrMsg, Ex);
+				string errMsg = "SQLite exception getting data table via query " + sqlQueryCmd;
+				throw new classDatabaseDataException(errMsg, Ex);
 			}
 		
 			// Return empty list if no data in table
@@ -1147,14 +1188,14 @@ namespace LcmsNetSQLiteTools
 		/// <summary>
 		/// Generic method to build a CREATE TABLE command
 		/// </summary>
-		/// <param name="TableName">Name of table to create</param>
+		/// <param name="tableName">Name of table to create</param>
 		/// <param name="ColNames">String array containing column names</param>
 		/// <returns>Complete CREATE TABLE command</returns>
-		private static string BuildGenericCreateTableCmd(string TableName, IEnumerable<string> ColNames)
+		private static string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> ColNames)
 		{
 			var sb = new StringBuilder();
 			sb.Append("CREATE TABLE ");
-			sb.Append(TableName + "(");
+			sb.Append(tableName + "(");
 			// Create column names for each key, which is same as property name in queue being saved
 			foreach (string colName in ColNames)
 			{
@@ -1170,24 +1211,37 @@ namespace LcmsNetSQLiteTools
 		/// <summary>
 		/// Clears a cache table
 		/// </summary>
-		/// <param name="TableName">Name of table to clear</param>
-		/// <param name="ConnStr">Connection string</param>
-		private static void ClearCacheTable(string TableName, string ConnStr)
+		/// <param name="tableName">Name of table to clear</param>
+		/// <param name="connStr">Connection string</param>
+        /// <param name="columnCountExpected">Expected number of columns; 0 to not validate column count</param>
+        /// <remarks>If the actual column count is less than columnCountExpected, then the table is deleted (dropped)</remarks>
+		private static void ClearCacheTable(string tableName, string connStr, int columnCountExpected = 0)
 		{
 			// Clear the table, if it exists
-			if (VerifyTableExists(TableName, ConnStr))
+		    int columnCount;
+			if (VerifyTableExists(tableName, connStr, out columnCount))
 			{
-				// Clear the table
-				string sqlStr = "DELETE FROM " + TableName;
-				try
+			    string sqlStr;
+			    if (columnCountExpected > 0 && columnCount < columnCountExpected)
+			    {
+			        // Drop the table; it will get re-created later
+                    sqlStr = "DROP TABLE " + tableName;
+			    }
+			    else
+			    {
+			        // Clear the table
+			        sqlStr = "DELETE FROM " + tableName;
+			    }
+
+			    try
 				{
-					ExecuteSQLiteCommand(sqlStr, ConnStr);
+					ExecuteSQLiteCommand(sqlStr, connStr);
 				}
 				catch (Exception Ex)
 				{
-					string errorMessage = "Exception clearing table " + TableName;
+					string errorMessage = "Exception clearing table " + tableName;
 					classApplicationLogger.LogError(0, errorMessage, Ex);
-					throw new classDatabaseDataException("Exception clearing table " + TableName, Ex);
+					throw new classDatabaseDataException("Exception clearing table " + tableName, Ex);
 				}
 			}
 		}	
