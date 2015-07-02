@@ -271,6 +271,7 @@ namespace LcmsNetDmsTools
             string connStr = GetConnectionString();
             DataTable lcColumnTable;
 
+            // This view will return all columns, even retired ones
             const string sqlCmd = "SELECT [State], [Column Number] FROM V_LC_Column_List_Report";
             try
             {
