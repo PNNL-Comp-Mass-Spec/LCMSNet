@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -26,6 +25,7 @@
 //                      - 09/11/2014 (CJW) - Modified to be an MEF Extension for lcmsnet
 //                      - 09/17/2014 (CJW) - Modified to use a stand-alone configuration file instead of the LcmsNet app configuration file.
 //						- 05/22/2015 (MEM) - Auto-create PrismDMS.config if missing
+//						- 07/30/2015 (MEM) - Add option to load dataset names
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -57,31 +57,31 @@ namespace LcmsNetDmsTools
         //**********************************************************************************************************
 
         #region "Class variables"
-         string mstring_ErrMsg = "";
+        string mstring_ErrMsg = "";
 
-         /// <summary>
-         /// key to access the DMS version string in the configuration dictionary.
-         /// </summary>
-         private const string CONST_DMS_VERSION_KEY = "DMSVersion";
-         /// <summary>
-         /// key to access the encoded DMS password string in the configuration dictionary.
-         /// </summary>
-         private const string CONST_DMS_PASSWORD_KEY = "DMSPwd";
+        /// <summary>
+        /// key to access the DMS version string in the configuration dictionary.
+        /// </summary>
+        private const string CONST_DMS_VERSION_KEY = "DMSVersion";
+        /// <summary>
+        /// key to access the encoded DMS password string in the configuration dictionary.
+        /// </summary>
+        private const string CONST_DMS_PASSWORD_KEY = "DMSPwd";
 
         private const string CONFIG_FILE = "PrismDMS.config";
 
         #endregion
 
         #region "Properties"
-         public bool ForceValidation
-         {
-             get
-             {
-                 return true;
-             }
-         }
+        public bool ForceValidation
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-        public  string ErrMsg
+        public string ErrMsg
         {
             get
             {
@@ -91,7 +91,7 @@ namespace LcmsNetDmsTools
             {
                 mstring_ErrMsg = value;
             }
-        }	// End property
+        }
 
         public string DMSVersion
         {
@@ -101,17 +101,54 @@ namespace LcmsNetDmsTools
             }
         }
 
+        /// <summary>
+        /// Controls whether datasets are loaded when LoadCacheFromDMS() is called
+        /// </summary>
+        public bool LoadDatasets { get; set; }
+
+        /// <summary>
+        /// Controls whether experiments are loaded when LoadCacheFromDMS() is called
+        /// </summary>
+        public bool LoadExperiments { get; set; }
+
+        /// <summary>
+        /// Number of months back to search when reading dataset names
+        /// </summary>
+        /// <remarks>Use 0 to load all data</remarks>
+        public int RecentDatasetsMonthsToLoad { get; set; }
+
+        /// <summary>
+        /// Number of months back to search when reading experiment information
+        /// </summary>
+        /// <remarks>Use 0 to load all data</remarks>
+        public int RecentExperimentsMonthsToLoad { get; set; }
+
         private readonly StringDictionary configuration;
-     
+
+        #endregion
+
+        #region "Events"
+
+        public event ProgressEventHandler ProgressEvent;
+
+        public void OnProgressUpdate(ProgressEventArgs e)
+		{
+			if (ProgressEvent != null)
+				ProgressEvent(this, e);
+		}
+
         #endregion
 
         #region "Constructors"
+
         /// <summary>
         /// Constructor
         /// </summary>
         public classDBTools()
         {
             configuration = new StringDictionary();
+            RecentDatasetsMonthsToLoad = 12;
+            RecentExperimentsMonthsToLoad = 0;
             LoadConfiguration();
         }
         #endregion
@@ -123,7 +160,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         private void LoadConfiguration()
         {
-            XmlReaderSettings readerSettings = new XmlReaderSettings
+            var readerSettings = new XmlReaderSettings
             {
                 ValidationType = ValidationType.Schema,
                 ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
@@ -136,31 +173,31 @@ namespace LcmsNetDmsTools
                 throw new DirectoryNotFoundException("Directory for the executing assembly is empty; unable to load the configuration in classDBTools");
             }
 
-            string configurationPath = Path.Combine(folderPath, CONFIG_FILE);
+            var configurationPath = Path.Combine(folderPath, CONFIG_FILE);
             if (!File.Exists(configurationPath))
             {
                 CreateDefaultConfigFile(configurationPath);
             }
 
-            XmlReader reader = XmlReader.Create(configurationPath, readerSettings);
-            while(reader.Read())
+            var reader = XmlReader.Create(configurationPath, readerSettings);
+            while (reader.Read())
             {
-                switch(reader.NodeType)
+                switch (reader.NodeType)
                 {
-                    case XmlNodeType.Element:                         
-                        if(string.Equals(reader.GetAttribute("dmssetting"), "true", StringComparison.CurrentCultureIgnoreCase))
+                    case XmlNodeType.Element:
+                        if (string.Equals(reader.GetAttribute("dmssetting"), "true", StringComparison.CurrentCultureIgnoreCase))
                         {
-                            string settingName = reader.Name.Remove(0,2);
+                            var settingName = reader.Name.Remove(0, 2);
                             configuration[settingName] = reader.ReadString();
-                        }                 
+                        }
                         break;
                 }
             }
         }
 
         void settings_ValidationEventHandler(object sender, ValidationEventArgs e)
-        {            
-            if(e.Severity == XmlSeverityType.Error)
+        {
+            if (e.Severity == XmlSeverityType.Error)
             {
                 throw new InvalidOperationException(e.Message, e.Exception);
             }
@@ -175,25 +212,87 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void LoadCacheFromDMS()
         {
-            LoadCacheFromDMS(true);
+            LoadCacheFromDMS(LoadExperiments, LoadDatasets);
         }
 
-        public void LoadCacheFromDMS(bool shouldLoadExperiment)
+        public void LoadCacheFromDMS(bool loadExperiments)
         {
+            LoadCacheFromDMS(loadExperiments, LoadDatasets);
+        }
+
+        public void LoadCacheFromDMS(bool loadExperiments, bool loadDatasets)
+        {
+            const int STEP_COUNT_BASE = 10;
+            const int EXPERIMENT_STEPS = 20;
+            const int DATASET_STEPS = 50;
+
+            var stepCountTotal = STEP_COUNT_BASE;
+
+            if (loadExperiments)
+                stepCountTotal += EXPERIMENT_STEPS;
+
+            if (loadDatasets)
+                stepCountTotal += DATASET_STEPS;
+
+            ReportProgress("Loading cart names", 1, stepCountTotal);
             GetCartListFromDMS();
+
+            ReportProgress("Loading separation types", 2, stepCountTotal);
             GetSepTypeListFromDMS();
+
+            ReportProgress("Loading dataset types", 3, stepCountTotal);
             GetDatasetTypeListFromDMS();
+
+            ReportProgress("Loading instruments", 4, stepCountTotal);
             GetInstrumentListFromDMS();
+
+            ReportProgress("Loading users", 5, stepCountTotal);
             GetUserListFromDMS();
+
+            ReportProgress("Loading LC columns", 6, stepCountTotal);
             GetColumnListFromDMS();
-            if (shouldLoadExperiment)
-            {
-                GetExperimentListFromDMS();
-            }
+
+            ReportProgress("Loading proposal users", 7, stepCountTotal);
             GetProposalUsers();
+
+            var stepCountCompleted = STEP_COUNT_BASE;
+            if (loadExperiments)
+            {
+                var currentTask = "Loading experiments";
+                if (RecentExperimentsMonthsToLoad > 0)
+                    currentTask += " from the last " + RecentExperimentsMonthsToLoad + " months";
+
+                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
+
+                GetExperimentListFromDMS();
+                stepCountCompleted = stepCountCompleted + EXPERIMENT_STEPS;
+            }
+
+            if (loadDatasets)
+            {
+                var currentTask = "Loading datasets";
+                if (RecentDatasetsMonthsToLoad > 0)
+                    currentTask += " from the last " + RecentDatasetsMonthsToLoad + " months";
+
+                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
+
+                GetDatasetListFromDMS(stepCountCompleted, stepCountCompleted + DATASET_STEPS, stepCountTotal);
+                stepCountCompleted = stepCountCompleted + DATASET_STEPS;
+            }
+
+            ReportProgress("Loading complete", stepCountTotal, stepCountTotal);
+
             //GetEntireColumnListListFromDMS();
         }
 
+        private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)
+        {
+            var percentComplete = currentStep / (double)stepCountTotal * 100;
+            Console.WriteLine(currentTask + @": " + percentComplete);
+
+            OnProgressUpdate(new ProgressEventArgs(currentTask, percentComplete));
+        }
+   
         /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache
         /// </summary>
@@ -202,21 +301,21 @@ namespace LcmsNetDmsTools
 
 
             List<string> tmpCartList;	// Temp list for holding return values
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
 
             // Get a List containing all the carts
-            const string sqlCmd = "SELECT [Cart Name] FROM V_LC_Cart_List_Report " +
+            const string sqlCmd = "SELECT DISTINCT [Cart Name] FROM V_LC_Cart_List_Report " +
                                   "WHERE State LIKE '%service%' " +
                                   "ORDER BY [Cart Name]";
             try
             {
                 tmpCartList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting cart list";
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -225,11 +324,47 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveSingleColumnListToCache(tmpCartList, enumTableTypes.CartList);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing LC cart list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
+        }
+
+        public void GetDatasetListFromDMS(int stepCountAtStart, int stepCountAtEnd, int stepCountOverall)
+        {
+            var connStr = GetConnectionString();
+          
+            var sqlCmd = "SELECT DISTINCT Dataset FROM V_Dataset_Export";
+
+            if (RecentDatasetsMonthsToLoad > 0)
+            {
+                var dateThreshold = DateTime.Now.AddMonths(-RecentDatasetsMonthsToLoad).ToString("yyyy-MM-dd");
+                sqlCmd += " WHERE Created >= '" + dateThreshold + "'";
+            }
+
+            try
+            {
+                var datasetList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+
+                // Store the data in the cache db
+                try
+                {
+                    // int stepCountAtStart, int stepCountAtEnd, int stepCountOverall
+                    classSQLiteTools.SaveSingleColumnListToCache(datasetList, enumTableTypes.DatasetList);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing dataset list in cache";
+                    classApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting dataset list";
+                classApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+
         }
 
         /// <summary>
@@ -238,19 +373,19 @@ namespace LcmsNetDmsTools
         public void GetColumnListFromDMS()
         {
             List<string> tmpColList;	// Temp list for holding return values
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
             // Get a List containing all the columns
-            const string sqlCmd = "SELECT val FROM V_LC_Column_Picklist ORDER BY val";
+            const string sqlCmd = "SELECT Distinct val FROM V_LC_Column_Picklist ORDER BY val";
             try
             {
                 tmpColList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting column list";
-                //				throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //				throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -259,16 +394,16 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveSingleColumnListToCache(tmpColList, enumTableTypes.ColumnList);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing column list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
         public void GetEntireColumnListListFromDMS()
         {
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
             DataTable lcColumnTable;
 
             // This view will return all columns, even retired ones
@@ -292,7 +427,7 @@ namespace LcmsNetDmsTools
             //    columnNames.Add(s);
             //}
 
-            int rowCount = lcColumnTable.Rows.Count;
+            var rowCount = lcColumnTable.Rows.Count;
             var lcColumnList = new List<classLCColumn>(rowCount);
 
             foreach (DataRow currentRow in lcColumnTable.Rows)
@@ -310,10 +445,10 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveEntireLCColumnListToCache(lcColumnList);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing LC Column data list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -323,19 +458,19 @@ namespace LcmsNetDmsTools
         public void GetSepTypeListFromDMS()
         {
             List<string> tmpRetVal;	// Temp list for holding separation types
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
-            const string sqlCmd = "SELECT SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
+            const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
 
             try
             {
                 tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting separation type list";
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -344,10 +479,10 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveSingleColumnListToCache(tmpRetVal, enumTableTypes.SeparationTypeList);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing separation type list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -357,19 +492,19 @@ namespace LcmsNetDmsTools
         public void GetDatasetTypeListFromDMS()
         {
             List<string> tmpRetVal;	// Temp list for holding dataset types
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
             // Get a list of the dataset types
-            const string sqlCmd = "SELECT DST_Name FROM t_DatasetTypeName ORDER BY DST_Name";
+            const string sqlCmd = "SELECT Distinct DST_Name FROM t_DatasetTypeName ORDER BY DST_Name";
             try
             {
                 tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting dataset type list";
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -378,10 +513,10 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveSingleColumnListToCache(tmpRetVal, enumTableTypes.DatasetTypeList);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing dataset type list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -391,7 +526,7 @@ namespace LcmsNetDmsTools
         public void GetUserListFromDMS()
         {
             var tmpRetVal = new List<classUserInfo>();	// Temp list for holding user data
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
             DataTable userTable;
 
@@ -401,11 +536,11 @@ namespace LcmsNetDmsTools
             {
                 userTable = GetDataTable(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting user list";
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -425,19 +560,26 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveUserListToCache(tmpRetVal);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing user list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
         public void GetExperimentListFromDMS()
         {
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
             DataTable expTable;
 
-            const string sqlCmd = "SELECT ID, Experiment, Created, Organism, Reason, Request, Researcher FROM V_Experiment_List_Report_2";
+            var sqlCmd = "SELECT ID, Experiment, Created, Organism, Reason, Request, Researcher FROM V_Experiment_List_Report_2";
+
+            if (RecentExperimentsMonthsToLoad > 0)
+            {
+                var dateThreshold = DateTime.Now.AddMonths(-RecentExperimentsMonthsToLoad).ToString("yyyy-MM-dd");
+                sqlCmd += " WHERE Created >= '" + dateThreshold + "'";
+            }
+
             try
             {
                 expTable = GetDataTable(sqlCmd, connStr);
@@ -457,7 +599,7 @@ namespace LcmsNetDmsTools
             //    columnNames.Add(s);
             //}
 
-            int rowCount = expTable.Rows.Count;
+            var rowCount = expTable.Rows.Count;
             var expermentData = new List<classExperimentData>(rowCount);
 
             foreach (DataRow currentRow in expTable.Rows)
@@ -480,16 +622,16 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveExperimentListToCache(expermentData);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing experment list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
         public void GetProposalUsers()
         {
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
             DataTable expTable;
 
             const string sqlCmd = "SELECT [User ID], [User Name], [#Proposal] FROM V_EUS_Proposal_Users";
@@ -562,11 +704,11 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveProposalUsers(users, referenceList, referenceDictionary);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing Proposal Users list in cache";
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -576,7 +718,7 @@ namespace LcmsNetDmsTools
         public void GetInstrumentListFromDMS()
         {
             var tmpRetVal = new List<classInstrumentInfo>();	// Temp list for holding instrument data
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
             DataTable instTable;
 
@@ -589,11 +731,11 @@ namespace LcmsNetDmsTools
             {
                 instTable = GetDataTable(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting instrument list";
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -617,34 +759,34 @@ namespace LcmsNetDmsTools
             {
                 classSQLiteTools.SaveInstListToCache(tmpRetVal);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 const string errMsg = "Exception storing instrument list in cache";
-                classApplicationLogger.LogError(0, errMsg, Ex);
+                classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
         /// <summary>
-        /// Gets a list of run requests from DMS
+        /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         public List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData)
         {
             var tmpReturnVal = new List<classSampleData>();	// Temp list for holding samples
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
             DataTable schedRunList;
             // Get a data table containing run requests
-            string sqlCmd = queryData.BuildSqlString();
+            var sqlCmd = queryData.BuildSqlString();
 
             try
             {
                 schedRunList = GetDataTable(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting run request list";
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return tmpReturnVal;
             }
 
@@ -663,10 +805,10 @@ namespace LcmsNetDmsTools
                         UserList = currRow[schedRunList.Columns["EUS Users"]] as string
                     }
                 };
-                
+
                 var tmpStr = currRow[schedRunList.Columns["Well Number"]] as string;
                 if ((tmpStr == null) || tmpStr == "na")
-                    tmpStr = "0";                     
+                    tmpStr = "0";
 
                 try
                 {
@@ -677,8 +819,8 @@ namespace LcmsNetDmsTools
                     tmpDMSData.PAL.Well = 0;
                 }
                 tmpDMSData.PAL.WellPlate = currRow[schedRunList.Columns["Wellplate Number"]] as string;
-                
-                if ((tmpDMSData.PAL.WellPlate == null) || (tmpDMSData.PAL.WellPlate == "na")) 
+
+                if ((tmpDMSData.PAL.WellPlate == null) || (tmpDMSData.PAL.WellPlate == "na"))
                     tmpDMSData.PAL.WellPlate = "";
 
                 tmpDMSData.DmsData.CartName = currRow[schedRunList.Columns["Cart"]] as string;
@@ -704,8 +846,8 @@ namespace LcmsNetDmsTools
         public void GetMRMFilesFromDMS(string FileIndxList, ref List<classMRMFileData> fileData)
         {
             DataTable dt;
-            string sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + FileIndxList + ")";
-            string connStr = GetConnectionString();
+            var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + FileIndxList + ")";
+            var connStr = GetConnectionString();
 
             // Get the data from DMS
             try
@@ -713,11 +855,11 @@ namespace LcmsNetDmsTools
                 dt = GetDataTable(sqlCmd, connStr);
 
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 mstring_ErrMsg = "Exception getting MRM file data from DMS";
-                classApplicationLogger.LogError(0, mstring_ErrMsg, Ex);
-                throw new classDatabaseDataException(mstring_ErrMsg, Ex);
+                classApplicationLogger.LogError(0, mstring_ErrMsg, ex);
+                throw new classDatabaseDataException(mstring_ErrMsg, ex);
             }
 
             if (dt != null)
@@ -745,20 +887,20 @@ namespace LcmsNetDmsTools
             var retList = new Dictionary<int, int>();
 
             DataTable dt;
-            string sqlCmd = "SELECT ID, RDS_MRM_Attachment FROM T_Requested_Run WHERE (not RDS_MRM_Attachment is null) " +
+            var sqlCmd = "SELECT ID, RDS_MRM_Attachment FROM T_Requested_Run WHERE (not RDS_MRM_Attachment is null) " +
                                     "AND (ID BETWEEN " + MinID + " AND " + MaxID + ")";
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
 
             // Get the data from DMS
             try
             {
                 dt = GetDataTable(sqlCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 mstring_ErrMsg = "Exception getting MRM file list from DMS";
-                classApplicationLogger.LogError(0, mstring_ErrMsg, Ex);
-                throw new classDatabaseDataException(mstring_ErrMsg, Ex);
+                classApplicationLogger.LogError(0, mstring_ErrMsg, ex);
+                throw new classDatabaseDataException(mstring_ErrMsg, ex);
             }
 
             // Pull the data from the table
@@ -780,10 +922,10 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         private string GetConnectionString()
         {
-            string retStr = "Data Source=gigasax;Initial Catalog="; //Base connection string
+            var retStr = "Data Source=gigasax;Initial Catalog="; //Base connection string
 
             // Get DMS version and append to base string
-            string dmsVersion = configuration[CONST_DMS_VERSION_KEY];
+            var dmsVersion = configuration[CONST_DMS_VERSION_KEY];
             if (dmsVersion != null)
             {
                 retStr += dmsVersion + ";User ID=LCMSNetUser;Password=";
@@ -797,7 +939,7 @@ namespace LcmsNetDmsTools
             }
 
             // Get password and append to return string
-            string dmsPassword = configuration[CONST_DMS_PASSWORD_KEY];
+            var dmsPassword = configuration[CONST_DMS_PASSWORD_KEY];
             if (dmsPassword != null)
             {
                 retStr += DecodePassword(dmsPassword);
@@ -822,7 +964,7 @@ namespace LcmsNetDmsTools
         /// <returns>TRUE for success; FALSE for error</returns>
         public bool UpdateDMSCartAssignment(string requestList, string cartName, bool updateMode)
         {
-            string connStr = GetConnectionString();
+            var connStr = GetConnectionString();
             string mode;
             int resultCode;
 
@@ -867,12 +1009,12 @@ namespace LcmsNetDmsTools
             // Execute the SP
             try
             {
-                resultCode = ExecuteSP(spCmd, connStr);                
+                resultCode = ExecuteSP(spCmd, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                //					throw new classDatabaseDataException("Exception updating DMS cart list", Ex);
-                classApplicationLogger.LogError(0, "Exception updating DMS cart list", Ex);
+                //					throw new classDatabaseDataException("Exception updating DMS cart list", ex);
+                classApplicationLogger.LogError(0, "Exception updating DMS cart list", ex);
                 return false;
             }
 
@@ -903,11 +1045,11 @@ namespace LcmsNetDmsTools
             {
                 dbTable = GetDataTable(CmdStr, ConnStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception getting single column table via command: " + CmdStr;
-                //					throw new classDatabaseDataException(ErrMsg, Ex);
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                //					throw new classDatabaseDataException(ErrMsg, ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
                 return retList;
 
             }
@@ -943,11 +1085,11 @@ namespace LcmsNetDmsTools
                         {
                             da.Fill(returnTable);
                         }
-                        catch (Exception Ex)
+                        catch (Exception ex)
                         {
-                            string errMsg = "SQL exception getting data table via query " + CmdStr;
-                            classApplicationLogger.LogError(0, errMsg, Ex);
-                            throw new classDatabaseDataException(errMsg, Ex);
+                            var errMsg = "SQL exception getting data table via query " + CmdStr;
+                            classApplicationLogger.LogError(0, errMsg, ex);
+                            throw new classDatabaseDataException(errMsg, ex);
                         }
                     }
                 }
@@ -964,7 +1106,7 @@ namespace LcmsNetDmsTools
         /// <returns>SP result code</returns>
         private int ExecuteSP(SqlCommand SpCmd, string ConnStr)
         {
-            int resultCode = -9999;
+            var resultCode = -9999;
             try
             {
                 using (var cn = new SqlConnection(ConnStr))
@@ -977,15 +1119,15 @@ namespace LcmsNetDmsTools
                             da.SelectCommand = SpCmd;
                             da.Fill(ds);
                             resultCode = (int)da.SelectCommand.Parameters["@Return"].Value;
-                        }	// End using ds
-                    }	// End using da
-                }	// End using cn
+                        }	
+                    }
+                }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 ErrMsg = "Exception executing stored procedure " + SpCmd.CommandText;
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
-                throw new classDatabaseStoredProcException(SpCmd.CommandText, resultCode, Ex.Message);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
+                throw new classDatabaseStoredProcException(SpCmd.CommandText, resultCode, ex.Message);
             }
             return resultCode;
         }
@@ -1002,7 +1144,7 @@ namespace LcmsNetDmsTools
 
             // First, we'll see if it's a simple number
             var re = new Regex(regexNum);
-            MatchCollection mc = re.Matches(inpStr);
+            var mc = re.Matches(inpStr);
             if (mc.Count == 1) return int.Parse(mc[0].ToString());
 
             // Didn't find a nubmer, so try an alpha
@@ -1011,14 +1153,14 @@ namespace LcmsNetDmsTools
             if (mc.Count != 1) return 0;	// Input string isn't a proper vial number
 
             // It's an alpha. Pull off the first character
-            string tmpStr = mc[0].ToString();
-            string firstChar = tmpStr.Substring(0, 1);
+            var tmpStr = mc[0].ToString();
+            var firstChar = tmpStr.Substring(0, 1);
 
             // Strip first char off of tmpStr and convert rest to int
-            int colNum = int.Parse(tmpStr.Replace(firstChar, ""));
+            var colNum = int.Parse(tmpStr.Replace(firstChar, ""));
 
             // Convert first char to row multiplier (ugly brute force here, but it works)
-            int tmpRowMult = 0;
+            var tmpRowMult = 0;
             switch (firstChar.ToLower())
             {
                 case "a":
@@ -1100,18 +1242,18 @@ namespace LcmsNetDmsTools
             // Password was created by alternately subtracting or adding 1 to the ASCII value of each character
 
             // Convert the password string to a character array
-            char[] pwdChars = enPwd.ToCharArray();
+            var pwdChars = enPwd.ToCharArray();
             var pwdBytes = new byte[pwdChars.Length];
             var pwdCharsAdj = new char[pwdChars.Length];
 
-            for (int i = 0; i < pwdChars.Length; i++)
+            for (var i = 0; i < pwdChars.Length; i++)
             {
                 pwdBytes[i] = (byte)pwdChars[i];
             }
 
             // Modify the byte array by shifting alternating bytes up or down and convert back to char, and add to output string
-            string retStr = "";
-            for (int byteCntr = 0; byteCntr < pwdBytes.Length; byteCntr++)
+            var retStr = "";
+            for (var byteCntr = 0; byteCntr < pwdBytes.Length; byteCntr++)
             {
                 if ((byteCntr % 2) == 0)
                 {
@@ -1133,7 +1275,7 @@ namespace LcmsNetDmsTools
         /// <param name="InpObj">Object to convert</param>
         /// <returns>0 if null, otherwise integer version of InpObj</returns>
         private int DbCint(object InpObj)
-        {            
+        {
             if (InpObj is DBNull)
             {
                 return 0;
@@ -1144,4 +1286,4 @@ namespace LcmsNetDmsTools
 
         #endregion
     }
-}	// End namespace
+}

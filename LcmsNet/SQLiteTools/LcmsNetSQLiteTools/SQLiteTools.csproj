@@ -41,10 +41,11 @@
     <OutputPath>bin\x86\PNNLRelease\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
@@ -122,8 +123,8 @@
     <PostBuildEvent>if $(ConfigurationName) == PNNLRelease goto :release else goto :end
 
 :release
-xcopy /y  "$(TargetDir)*.dll" "$(SolutionDir)..\lib\"
-xcopy /y "$(TargetDir)\x86\*.dll" "$(SolutionDir)\..\lib"
+xcopy /y  /f "$(TargetDir)*.dll" "$(SolutionDir)..\lib\"
+xcopy /y /f "$(TargetDir)\x86\*.dll" "$(SolutionDir)\..\lib"
 
 :end</PostBuildEvent>
   </PropertyGroup>

@@ -1,36 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using LcmsNetSQLiteTools;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
-using System.IO;
+using LcmsNetSQLiteTools;
+using NUnit.Framework;
 
 namespace LcmsNetSQLiteToolsUnitTests
 {
     [TestFixture]
     public class LcmsNetSQLiteToolsUnitTests
     {
-        const string CONST_TEST_FOLDER = "LCMSNet\\";
+        const string CONST_TEST_FOLDER = "LCMSNetUnitTests";
         const string CONST_TEST_CACHE = "classSQLiteToolsUnitTests.que";
+
+        private const bool DELETE_CACHE_DB = true;
 
         public LcmsNetSQLiteToolsUnitTests()
         {
-            //For some reason, in order to get a cache that is not LCMSCache.que you have to perform the following two 
-            //operations in this specific order...There appears to be a logic error in the interaction between the SQLiteTools constructor and BuildConnectionString
-            //that is causing this. TODO: FIX IT! If time is found
-            classSQLiteTools.CacheName = CONST_TEST_CACHE; // causes the classSQLiteTools construtor to run, which would otherwise overwrite our following SetParameter
-            classLCMSSettings.SetParameter("CacheFileName", CONST_TEST_CACHE);
-            string appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string file = Path.Combine(appPath, CONST_TEST_FOLDER);
-            file = Path.Combine(file, CONST_TEST_CACHE);
-            if(File.Exists(file))
+
+            classSQLiteTools.Initialize(CONST_TEST_FOLDER);
+
+            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var file = Path.Combine(appPath, CONST_TEST_FOLDER, CONST_TEST_CACHE);
+            if (File.Exists(file) && DELETE_CACHE_DB)
             {
                 File.Delete(file);
             }
-            classSQLiteTools.BuildConnectionString(false); 
+
+            // Note that this will call BuildConnectionString
+            classSQLiteTools.SetCacheLocation(file);
+
         }
 
 
@@ -41,25 +42,30 @@ namespace LcmsNetSQLiteToolsUnitTests
         /// <summary>
         /// tests that the connection string being used by SQLiteTools is correct.
         /// </summary>
-       [Test]
+        [Test]
         public void TestA()
-       {
-           //actual buildconnectionstring call is in constructor
-           Assert.AreEqual("data source="+ Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + CONST_TEST_FOLDER + CONST_TEST_CACHE, classSQLiteTools.ConnString);
-       }
+        {
+            //actual buildconnectionstring call is in constructor
+            var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                                          CONST_TEST_FOLDER, CONST_TEST_CACHE);
+            Assert.AreEqual("data source=" + folderPath, classSQLiteTools.ConnString);
+        }
 
         /// <summary>
-        /// Tests that SaveSingleColumnListToCache works(or at least thinks it did)
+        /// Tests that SaveSingleColumnListToCache works
         /// </summary>
         [Test]
         public void TestB()
         {
-            List<string> testSeperationTypes = new List<string>();
-            testSeperationTypes.Add("Separation 1");
-            testSeperationTypes.Add("Separation 2");
-            testSeperationTypes.Add("Separation 3");
+            var testSeparationTypes = new List<string>
+            {
+                "Separation 1",
+                "Separation 2",
+                "Separation 3"
+            };
+
             // if the following line doesn't throw an exception, it "worked".
-            classSQLiteTools.SaveSingleColumnListToCache(testSeperationTypes, enumTableTypes.SeparationTypeList);
+            classSQLiteTools.SaveSingleColumnListToCache(testSeparationTypes, enumTableTypes.SeparationTypeList);
         }
 
         /// <summary>
@@ -68,11 +74,13 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestC()
         {
-            List<string> testList = new List<string>();
-            testList.Add("Separation 1");
-            testList.Add("Separation 2");
-            testList.Add("Separation 3");
-            List<string> retrieved = classSQLiteTools.GetSepTypeList(false);
+            var testList = new List<string>
+            {
+                "Separation 1",
+                "Separation 2",
+                "Separation 3"
+            };
+            var retrieved = classSQLiteTools.GetSepTypeList(false);
             Assert.IsTrue(retrieved.SequenceEqual(testList)); // If this is equal, both TestB and C worked, and we read the information back from the cache
         }
 
@@ -82,10 +90,12 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestD()
         {
-            List<classUserInfo> usersExampleData = new List<classUserInfo>();
-            classUserInfo example = new classUserInfo();
-            example.PayrollNum = "1";
-            example.UserName = "Test User";
+            var usersExampleData = new List<classUserInfo>();
+            var example = new classUserInfo
+            {
+                PayrollNum = "1",
+                UserName = "Test User"
+            };
             usersExampleData.Add(example);
             classSQLiteTools.SaveUserListToCache(usersExampleData);
         }
@@ -96,8 +106,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         /// </summary>
         [Test]
         public void TestE()
-        {          
-            List<classUserInfo> users = classSQLiteTools.GetUserList(false);
+        {
+            var users = classSQLiteTools.GetUserList(false);
             Assert.AreEqual(1, users.Count);
             Assert.IsTrue(users.Exists(x => x.UserName == "Test User" && x.PayrollNum == "1"));
         }
@@ -108,7 +118,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestF()
         {
-            classSQLiteTools.SaveSelectedSeparationType("Separation3");            
+            classSQLiteTools.SaveSelectedSeparationType("Separation3");
         }
 
         /// <summary>
@@ -117,20 +127,27 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestG()
         {
-            string result = classSQLiteTools.GetDefaultSeparationType();
+            var result = classSQLiteTools.GetDefaultSeparationType();
             Assert.AreEqual("Separation3", result);
         }
 
         /// <summary>
-        /// Tests that savequeuetocache works by saving the "waiting queue"
+        /// Tests that SaveQueueToCache works by saving the "waiting queue"
         /// </summary>
         [Test]
         public void TestH()
         {
-            List<classSampleData> samples = new List<classSampleData>();
-            samples.Add(new classSampleData());
+            var samples = new List<classSampleData>
+            {
+                new classSampleData()
+            };
             samples[0].UniqueID = 1;
-            classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.WaitingQueue);            
+            samples[0].DmsData.DatasetName = "Test";
+
+            samples.Add(new classSampleData());
+            samples[1].UniqueID = 2;
+
+            classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.WaitingQueue);
         }
 
         /// <summary>
@@ -139,7 +156,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestI()
         {
-            List<classSampleData> samples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);
+            var samples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);
             Assert.AreEqual(1, samples[0].UniqueID);
         }
 
@@ -149,8 +166,10 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestJ()
         {
-            List<classSampleData> samples = new List<classSampleData>();
-            samples.Add(new classSampleData());
+            var samples = new List<classSampleData>
+            {
+                new classSampleData()
+            };
             samples[0].UniqueID = 2;
             classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.RunningQueue);
         }
@@ -161,7 +180,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestK()
         {
-            List<classSampleData> samples = classSQLiteTools.GetQueueFromCache(enumTableTypes.RunningQueue);
+            var samples = classSQLiteTools.GetQueueFromCache(enumTableTypes.RunningQueue);
             Assert.AreEqual(2, samples[0].UniqueID);
         }
 
@@ -172,9 +191,15 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestL()
         {
-            List<classExperimentData> experiments = new List<classExperimentData>();
-            classExperimentData experiment = new classExperimentData();
-            experiment.ID = 1;
+            var experiments = new List<classExperimentData>();
+            var experiment = new classExperimentData
+            {
+                ID = 1,
+                Experiment = "Test",
+                Created = DateTime.Now,
+                Researcher = "Staff",
+                Reason = "Software testing"
+            };
             experiments.Add(experiment);
             classSQLiteTools.SaveExperimentListToCache(experiments);
         }
@@ -186,8 +211,9 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestM()
         {
-            List<classExperimentData> experiments = classSQLiteTools.GetExperimentList();
+            var experiments = classSQLiteTools.GetExperimentList();
             Assert.AreEqual(1, experiments[0].ID);
+            Assert.AreEqual("Test", experiments[0].Experiment);
         }
 
         /// <summary>
@@ -196,44 +222,48 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestN()
         {
-            List<classInstrumentInfo> instInfo = new List<classInstrumentInfo>();
-            classInstrumentInfo inst = new classInstrumentInfo();
-            inst.CommonName = "Test instrument";
+            var instInfo = new List<classInstrumentInfo>();
+            var inst = new classInstrumentInfo
+            {
+                CommonName = "Test instrument"
+            };
             instInfo.Add(inst);
             classSQLiteTools.SaveInstListToCache(instInfo);
         }
-        
+
         /// <summary>
         /// Tests that instruments are read from cache
         /// </summary>
         [Test]
         public void TestO()
         {
-            List<classInstrumentInfo> insts = classSQLiteTools.GetInstrumentList(false);
+            var insts = classSQLiteTools.GetInstrumentList(false);
             Assert.AreEqual("Test instrument", insts[0].CommonName);
         }
 
         /// <summary>
-        /// Test that instruments are saved to cache correctly
+        /// Test that proposal users are saved to cache correctly
         /// </summary>
         [Test]
         public void TestP()
         {
-            List<classProposalUser> users = new List<classProposalUser>();
-            classProposalUser user = new classProposalUser();
-            user.UserID = 1;
+            var users = new List<classProposalUser>();
+            var user = new classProposalUser
+            {
+                UserID = 1
+            };
             users.Add(user);
             classSQLiteTools.SaveProposalUsers(users, new List<classUserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>());
         }
 
         /// <summary>
-        /// Tests that instruments are read from cache
+        /// Tests that proposal users are read from cache
         /// </summary>
         [Test]
         public void TestQ()
         {
-            List<classProposalUser> users = new List<classProposalUser>();
-            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> dict = new Dictionary<string,List<classUserIDPIDCrossReferenceEntry>>();
+            List<classProposalUser> users;
+            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> dict;
             classSQLiteTools.GetProposalUsers(out users, out dict);
             Assert.AreEqual(1, users[0].UserID);
         }
@@ -241,23 +271,25 @@ namespace LcmsNetSQLiteToolsUnitTests
         /// <summary>
         /// Tests that LCColumns are saved to cache
         /// </summary>
-       [Test]
-       public void TestR()
-       {
-           List<classLCColumn> cols = new List<classLCColumn>();
-           classLCColumn col = new classLCColumn();
-           col.LCColumn = "ColTest1";
-           cols.Add(col);
-           classSQLiteTools.SaveEntireLCColumnListToCache(cols);
-       }
-      
+        [Test]
+        public void TestR()
+        {
+            var cols = new List<classLCColumn>();
+            var col = new classLCColumn
+            {
+                LCColumn = "ColTest1"
+            };
+            cols.Add(col);
+            classSQLiteTools.SaveEntireLCColumnListToCache(cols);
+        }
+
         /// <summary>
         /// Tests that LCColumns are read from cache
         /// </summary>
         [Test]
-       public void TestS()
+        public void TestS()
         {
-            List<classLCColumn> cols = classSQLiteTools.GetEntireLCColumnList();
+            var cols = classSQLiteTools.GetEntireLCColumnList();
             Assert.AreEqual(1, cols.Count);
             Assert.IsTrue(cols[0].LCColumn == "ColTest1");
         }

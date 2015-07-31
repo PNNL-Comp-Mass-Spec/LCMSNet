@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LcmsNetDmsTools;
+﻿using LcmsNetDmsTools;
 
 namespace TestTool
 {
@@ -10,7 +6,14 @@ namespace TestTool
     {
         static void Main(string[] args)
         {
-            classDBTools dbt = new classDBTools();
+            var dbt = new classDBTools
+            {
+                LoadExperiments = true,
+                LoadDatasets = true,
+                RecentExperimentsMonthsToLoad = 0,
+                RecentDatasetsMonthsToLoad = 12
+            };
+
             dbt.LoadCacheFromDMS();
         }
     }

@@ -52,13 +52,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LcmsNetSQLiteTools\SQLiteTools.csproj">
-      <Project>{f3eb0b04-7562-4b7d-871c-579c2c8a2045}</Project>
-      <Name>SQLiteTools</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\LcmsNetSQLiteTools\SQLiteTools.csproj">
+      <Project>{b164f88d-3799-46b9-8926-20b40707b2e4}</Project>
+      <Name>SQLiteTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

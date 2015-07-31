@@ -28,9 +28,10 @@ namespace LcmsNetSQLiteTools
 		DatasetTypeList,
 		InstrumentList,
 		ColumnList,
-		LCColumnList,	// Superset of ColumnList that spans active and inactive LC Columns and includes their state
+		LCColumnList,	    // Superset of ColumnList that spans active and inactive LC Columns and includes their state
 		ExperimentList,
 		PUserList,			// A User that's in a Proposal
 		PReferenceList,		// A cross reference of the PUser and a Proposal
+        DatasetList
 	}	
 }	

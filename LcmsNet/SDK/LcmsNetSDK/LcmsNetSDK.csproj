@@ -260,7 +260,7 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy  /y "$(TargetPath)" "$(SolutionDir)..\lib\"
+    <PostBuildEvent>xcopy  /y /F "$(TargetPath)" "$(SolutionDir)..\lib\"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
