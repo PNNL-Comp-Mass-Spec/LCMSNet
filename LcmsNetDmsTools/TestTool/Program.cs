@@ -10,7 +10,7 @@ namespace TestTool
             {
                 LoadExperiments = true,
                 LoadDatasets = true,
-                RecentExperimentsMonthsToLoad = 0,
+                RecentExperimentsMonthsToLoad = 18,
                 RecentDatasetsMonthsToLoad = 12
             };
 

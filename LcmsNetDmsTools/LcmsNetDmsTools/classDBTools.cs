@@ -114,13 +114,13 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Number of months back to search when reading dataset names
         /// </summary>
-        /// <remarks>Use 0 to load all data</remarks>
+        /// <remarks>Default is 12 months; use 0 to load all data</remarks>
         public int RecentDatasetsMonthsToLoad { get; set; }
 
         /// <summary>
         /// Number of months back to search when reading experiment information
         /// </summary>
-        /// <remarks>Use 0 to load all data</remarks>
+        /// <remarks>Default is 18 months; use 0 to load all data</remarks>
         public int RecentExperimentsMonthsToLoad { get; set; }
 
         private readonly StringDictionary configuration;
@@ -148,7 +148,7 @@ namespace LcmsNetDmsTools
         {
             configuration = new StringDictionary();
             RecentDatasetsMonthsToLoad = 12;
-            RecentExperimentsMonthsToLoad = 0;
+            RecentExperimentsMonthsToLoad = 18;
             LoadConfiguration();
         }
         #endregion
@@ -260,8 +260,8 @@ namespace LcmsNetDmsTools
             {
                 var currentTask = "Loading experiments";
                 if (RecentExperimentsMonthsToLoad > 0)
-                    currentTask += " from the last " + RecentExperimentsMonthsToLoad + " months";
-
+                    currentTask += " created/used in the last " + RecentExperimentsMonthsToLoad + " months";
+                    
                 ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
 
                 GetExperimentListFromDMS();
@@ -282,7 +282,6 @@ namespace LcmsNetDmsTools
 
             ReportProgress("Loading complete", stepCountTotal, stepCountTotal);
 
-            //GetEntireColumnListListFromDMS();
         }
 
         private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)
@@ -334,8 +333,8 @@ namespace LcmsNetDmsTools
         public void GetDatasetListFromDMS(int stepCountAtStart, int stepCountAtEnd, int stepCountOverall)
         {
             var connStr = GetConnectionString();
-          
-            var sqlCmd = "SELECT DISTINCT Dataset FROM V_Dataset_Export";
+
+            var sqlCmd = "SELECT Dataset FROM V_LCMSNet_Dataset_Export";
 
             if (RecentDatasetsMonthsToLoad > 0)
             {
@@ -368,15 +367,15 @@ namespace LcmsNetDmsTools
         }
 
         /// <summary>
-        /// Gets a list of LC columns from DMS and stores in the cache
+        /// Gets a list of active LC columns from DMS and stores in the cache
         /// </summary>
         public void GetColumnListFromDMS()
         {
             List<string> tmpColList;	// Temp list for holding return values
             var connStr = GetConnectionString();
 
-            // Get a List containing all the columns
-            const string sqlCmd = "SELECT Distinct val FROM V_LC_Column_Picklist ORDER BY val";
+            // Get a list of active columns
+            const string sqlCmd = "SELECT ColumnNumber FROM V_LCMSNet_Column_Export WHERE State <> 'Retired' ORDER BY ColumnNumber";
             try
             {
                 tmpColList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
@@ -407,7 +406,7 @@ namespace LcmsNetDmsTools
             DataTable lcColumnTable;
 
             // This view will return all columns, even retired ones
-            const string sqlCmd = "SELECT [State], [Column Number] FROM V_LC_Column_List_Report";
+            const string sqlCmd = "SELECT [State], [ColumnNumber] FROM V_LCMSNet_Column_Export";
             try
             {
                 lcColumnTable = GetDataTable(sqlCmd, connStr);
@@ -572,12 +571,12 @@ namespace LcmsNetDmsTools
             var connStr = GetConnectionString();
             DataTable expTable;
 
-            var sqlCmd = "SELECT ID, Experiment, Created, Organism, Reason, Request, Researcher FROM V_Experiment_List_Report_2";
+            var sqlCmd = "SELECT ID, Experiment, Created, Organism, Reason, Request, Researcher FROM V_LCMSNet_Experiment_Export";
 
             if (RecentExperimentsMonthsToLoad > 0)
             {
                 var dateThreshold = DateTime.Now.AddMonths(-RecentExperimentsMonthsToLoad).ToString("yyyy-MM-dd");
-                sqlCmd += " WHERE Created >= '" + dateThreshold + "'";
+                sqlCmd += " WHERE Last_Used >= '" + dateThreshold + "'";
             }
 
             try
@@ -591,16 +590,8 @@ namespace LcmsNetDmsTools
                 return;
             }
 
-            //// Little piece of code that gets me all the column names of the table.
-            //List<string> columnNames = new List<string>(expTable.Columns.Count);
-            //foreach (DataColumn column in expTable.Columns)
-            //{
-            //    string s = column.ColumnName;
-            //    columnNames.Add(s);
-            //}
-
             var rowCount = expTable.Rows.Count;
-            var expermentData = new List<classExperimentData>(rowCount);
+            var experimentData = new List<classExperimentData>(rowCount);
 
             foreach (DataRow currentRow in expTable.Rows)
             {
@@ -615,16 +606,16 @@ namespace LcmsNetDmsTools
                     Researcher = currentRow["Researcher"] as string
                 };
 
-                expermentData.Add(tempObject);
+                experimentData.Add(tempObject);
             }
 
             try
             {
-                classSQLiteTools.SaveExperimentListToCache(expermentData);
+                classSQLiteTools.SaveExperimentListToCache(experimentData);
             }
             catch (Exception ex)
             {
-                const string errMsg = "Exception storing experment list in cache";
+                const string errMsg = "Exception storing experiment list in cache";
                 classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
@@ -646,15 +637,6 @@ namespace LcmsNetDmsTools
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
-
-
-            //// Little piece of code that gets me all the column names of the table.
-            //List<string> columnNames = new List<string>(expTable.Columns.Count);
-            //foreach (DataColumn column in expTable.Columns)
-            //{
-            //    string s = column.ColumnName;
-            //    columnNames.Add(s);
-            //}
 
 
             // Split the View back into the two tables it was built from.
@@ -693,11 +675,13 @@ namespace LcmsNetDmsTools
                 if (!referenceDictionary.ContainsKey(crossReference.PID))
                     referenceDictionary.Add(crossReference.PID, new List<classUserIDPIDCrossReferenceEntry>());
 
-                if (!(referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID)))
+                if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
                 {
-                    referenceDictionary[crossReference.PID].Add(crossReference);
-                    referenceList.Add(crossReference);
+                    continue;
                 }
+
+                referenceDictionary[crossReference.PID].Add(crossReference);
+                referenceList.Add(crossReference);
             }
 
             try
@@ -722,7 +706,7 @@ namespace LcmsNetDmsTools
 
             DataTable instTable;
 
-            // Get a table containing the instrumnet data
+            // Get a table containing the instrument data
             const string sqlCmd = "SELECT Instrument, NameAndUsage, CaptureMethod, " +
                                   "Status, HostName, SharePath " +
                                   "FROM V_Instrument_Info_LCMSNet " +

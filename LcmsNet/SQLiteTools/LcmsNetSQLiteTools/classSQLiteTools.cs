@@ -516,7 +516,6 @@ namespace LcmsNetSQLiteTools
                                                                                     datum.Request,
                                                                                     datum.Experiment,
                                                                                     datum.Created ?? DateTime.MinValue);
-                                //dataList.Add(datum);
                                 command.CommandText = commandText;
                                 command.ExecuteNonQuery();
 
@@ -1302,7 +1301,7 @@ namespace LcmsNetSQLiteTools
                 }
                 else
                 {
-                    // Clear the table
+                    // Clear the table (note that SQLite does not have command "Truncate Table")
                     sqlStr = "DELETE FROM " + tableName;
                 }
 

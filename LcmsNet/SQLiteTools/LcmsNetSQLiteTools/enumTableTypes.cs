@@ -27,7 +27,7 @@ namespace LcmsNetSQLiteTools
 		SeparationTypeSelected,
 		DatasetTypeList,
 		InstrumentList,
-		ColumnList,
+		ColumnList,         // Active LC Columns
 		LCColumnList,	    // Superset of ColumnList that spans active and inactive LC Columns and includes their state
 		ExperimentList,
 		PUserList,			// A User that's in a Proposal
