@@ -59,8 +59,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\LcmsNet\lib\LcmsNetSdk.dll</HintPath>
+    <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -84,10 +85,13 @@
       <Name>LcmsNetDmsTools</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"
-xcopy /y "$(ProjectDir)..\..\LcmsNet\lib\SQLite.Interop.dll" "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y /d "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"
+xcopy /y /d "$(ProjectDir)..\..\LcmsNet\lib\SQLite.Interop.dll" "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
