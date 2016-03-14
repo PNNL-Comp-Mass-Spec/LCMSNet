@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
@@ -15,7 +14,8 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Sample data to interrogate for validity.
         /// </summary>
-        private classSampleData mobj_sample;
+        private readonly classSampleData mobj_sample;
+
         /// <summary>
         /// Flag indicating that this Sample is ok.
         /// </summary>
@@ -34,10 +34,10 @@ namespace LcmsNetDmsTools
 
             mnum_requestNumber.Maximum = int.MaxValue;
             
-            /// 
-            /// Make sure the sample is valid so we dont get an exception later
-            /// when we try to edit it.
-            /// 
+            // 
+            // Make sure the sample is valid so we dont get an exception later
+            // when we try to edit it.
+            // 
             if (sample == null)
                 throw new Exception("The sample was null and cannot be displayed.");
 
@@ -51,16 +51,16 @@ namespace LcmsNetDmsTools
             mtextbox_user.Text           = mobj_sample.DmsData.UserList;
             mnum_requestNumber.Value     = Convert.ToDecimal(mobj_sample.DmsData.RequestID);
 
-            this.mcomboBox_usageType.TextChanged        += new System.EventHandler(this.mtextbox_usageType_TextChanged);            
-            this.mcomboBox_usageType.KeyUp              += new KeyEventHandler(KeyUpHandler);
-            this.mtextbox_proposalID.TextChanged        += new System.EventHandler(this.mtextbox_proposalID_TextChanged);
-            this.mtextbox_proposalID.KeyUp              += new KeyEventHandler(KeyUpHandler);
-            this.mtextbox_user.TextChanged              += new System.EventHandler(this.mtextbox_user_TextChanged);
-            this.mtextbox_user.KeyUp                    += new KeyEventHandler(KeyUpHandler);            
-            this.mnum_requestNumber.ValueChanged        += new System.EventHandler(this.mnum_requestNumber_ValueChanged);
-            this.mnum_requestNumber.KeyUp               += new KeyEventHandler(KeyUpHandler);
-            this.mtextBox_experimentName.TextChanged    += new System.EventHandler(this.mtextBox_experimentName_TextChanged);
-            this.mtextBox_experimentName.KeyUp          += new KeyEventHandler(KeyUpHandler);
+            this.mcomboBox_usageType.TextChanged        += this.mtextbox_usageType_TextChanged;
+            this.mcomboBox_usageType.KeyUp              += this.KeyUpHandler;
+            this.mtextbox_proposalID.TextChanged        += this.mtextbox_proposalID_TextChanged;
+            this.mtextbox_proposalID.KeyUp              += this.KeyUpHandler;
+            this.mtextbox_user.TextChanged              += this.mtextbox_user_TextChanged;
+            this.mtextbox_user.KeyUp                    += this.KeyUpHandler;            
+            this.mnum_requestNumber.ValueChanged        += this.mnum_requestNumber_ValueChanged;
+            this.mnum_requestNumber.KeyUp               += this.KeyUpHandler;
+            this.mtextBox_experimentName.TextChanged    += this.mtextBox_experimentName_TextChanged;
+            this.mtextBox_experimentName.KeyUp          += this.KeyUpHandler;
 
             UpdateUserInterface();
 
@@ -69,16 +69,17 @@ namespace LcmsNetDmsTools
         
         void KeyUpHandler(object sender, KeyEventArgs e)
         {
-            Control c           = sender as Control;
-            bool    isEnterType = false;
-            Keys modifier       = e.Modifiers;
-            ComboBox box        = null;
+            var c                = sender as Control;
+            var isEnterType      = false;
+            var modifier         = e.Modifiers;
+            ComboBox box         = null;
             NumericUpDown updown = null;
-            System.Diagnostics.Debug.WriteLine(e.KeyCode.ToString());
+            Console.WriteLine(e.KeyCode.ToString());
+
             switch(e.KeyCode)
             {
                 case Keys.Enter:
-                    Console.WriteLine("Enter Pressed!");
+                    Console.WriteLine(@"Enter Pressed!");
                     LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
                     isEnterType = true;
                     break;
@@ -121,16 +122,18 @@ namespace LcmsNetDmsTools
                     }
                     break;
                 case Keys.Right:
-                    SelectNextControl(c, true, true, false,false);
+                    if (c != null)
+                        SelectNextControl(c, true, true, false, false);
                     break;
                 case Keys.Left:
-                    SelectNextControl(c, false, true, false, false);
+                    if (c != null)
+                        SelectNextControl(c, false, true, false, false);
                     break;
             }
 
             if (isEnterType && c != null)
             {
-                Console.WriteLine(isEnterType.ToString() + " " + c.Name);
+                Console.WriteLine(@"isEnterType: " + c.Name);
                 Console.WriteLine(EnterPressed != null);
                 OnEnterPressed(this, new DMSValidatorEventArgs(c.Name, modifier));              
             }

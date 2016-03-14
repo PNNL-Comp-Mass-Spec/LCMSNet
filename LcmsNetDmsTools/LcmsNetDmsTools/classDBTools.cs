@@ -59,13 +59,23 @@ namespace LcmsNetDmsTools
         #region "Class variables"
         string mstring_ErrMsg = "";
 
+        private bool mConnectionStringLogged;
+
         /// <summary>
-        /// key to access the DMS version string in the configuration dictionary.
+        /// Key to access the DMS version string in the configuration dictionary.
         /// </summary>
+        private const string CONST_DMS_SERVER_KEY = "DMSServer";
+
+        /// <summary>
+        /// Key to access the DMS version string in the configuration dictionary.
+        /// </summary>
+        /// <remarks>This is the name of the database to connect to</remarks>
         private const string CONST_DMS_VERSION_KEY = "DMSVersion";
+
         /// <summary>
-        /// key to access the encoded DMS password string in the configuration dictionary.
+        /// Key to access the encoded DMS password string in the configuration dictionary.
         /// </summary>
+        /// <remarks>This is the password of SQL Server user LCMSNetUser</remarks>
         private const string CONST_DMS_PASSWORD_KEY = "DMSPwd";
 
         private const string CONFIG_FILE = "PrismDMS.config";
@@ -233,6 +243,14 @@ namespace LcmsNetDmsTools
 
             if (loadDatasets)
                 stepCountTotal += DATASET_STEPS;
+
+            var connectionString = classSQLiteTools.ConnString;
+            var equalsIndex = connectionString.IndexOf('=');
+
+            if (equalsIndex > 0 && equalsIndex < connectionString.Length - 1)
+                Console.WriteLine(@"SQLite cache file path: " + connectionString.Substring(equalsIndex + 1));
+            else
+                Console.WriteLine(@"SQLite cache file path: " + connectionString);
 
             ReportProgress("Loading cart names", 1, stepCountTotal);
             GetCartListFromDMS();
@@ -901,18 +919,33 @@ namespace LcmsNetDmsTools
         }
 
         /// <summary>
-        /// Gets DMS connection sstring from config file
+        /// Gets DMS connection string from config file
         /// </summary>
         /// <returns></returns>
         private string GetConnectionString()
         {
-            var retStr = "Data Source=gigasax;Initial Catalog="; //Base connection string
+
+            // Construct the connection string, for example:
+            // Data Source=Gigasax;Initial Catalog=DMS5;User ID=LCMSNetUser;Password=ThePassword"
+
+            var retStr = "Data Source=";
+
+            // Get DMS version and append to base string
+            var dmsServer = configuration[CONST_DMS_SERVER_KEY];
+            if (dmsServer != null)
+            {
+                retStr += dmsServer;
+            }
+            else
+            {
+                retStr += "Gigasax";
+            }
 
             // Get DMS version and append to base string
             var dmsVersion = configuration[CONST_DMS_VERSION_KEY];
             if (dmsVersion != null)
             {
-                retStr += dmsVersion + ";User ID=LCMSNetUser;Password=";
+                retStr += ";Initial Catalog=" + dmsVersion + ";User ID=LCMSNetUser";
             }
             else
             {
@@ -922,11 +955,18 @@ namespace LcmsNetDmsTools
                     "it will be automatically re-created with the default values.");
             }
 
+            if (!mConnectionStringLogged)
+            {
+                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                                                  "Database connection string: " + retStr + ";Password=....");
+                mConnectionStringLogged = true;
+            }
+
             // Get password and append to return string
             var dmsPassword = configuration[CONST_DMS_PASSWORD_KEY];
             if (dmsPassword != null)
             {
-                retStr += DecodePassword(dmsPassword);
+                retStr += ";Password=" + DecodePassword(dmsPassword);
             }
             else
             {
