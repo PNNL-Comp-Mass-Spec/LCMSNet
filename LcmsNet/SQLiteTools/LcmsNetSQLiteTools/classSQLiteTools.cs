@@ -450,6 +450,7 @@ namespace LcmsNetSQLiteTools
             ClearCacheTable(tableName, mstring_connectionString);
 
             m_userInfo = new List<classUserInfo>(UserList);
+
             //If no data in list, exit
             if (!dataInList)
             {

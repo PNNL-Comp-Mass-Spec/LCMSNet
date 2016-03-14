@@ -48,6 +48,7 @@ namespace LcmsNetSQLiteToolsUnitTests
             //actual buildconnectionstring call is in constructor
             var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                           CONST_TEST_FOLDER, CONST_TEST_CACHE);
+            Console.WriteLine("ConnectionString: " + classSQLiteTools.ConnString);
             Assert.AreEqual("data source=" + folderPath, classSQLiteTools.ConnString);
         }
 
