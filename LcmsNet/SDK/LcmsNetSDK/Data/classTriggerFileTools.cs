@@ -13,7 +13,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
 
 namespace LcmsNetDataClasses.Data
@@ -58,11 +57,11 @@ namespace LcmsNetDataClasses.Data
 			{
 				// Create and initialize the document
                 mobject_TriggerFileContents = new XmlDocument();
-				XmlDeclaration docDeclaration = mobject_TriggerFileContents.CreateXmlDeclaration("1.0", null, null);
+				var docDeclaration = mobject_TriggerFileContents.CreateXmlDeclaration("1.0", null, null);
 				mobject_TriggerFileContents.AppendChild(docDeclaration);
 
 				// Add dataset (Root) element
-				XmlElement rootElement = mobject_TriggerFileContents.CreateElement("Dataset");
+				var rootElement = mobject_TriggerFileContents.CreateElement("Dataset");
 				mobject_TriggerFileContents.AppendChild(rootElement);
 
 				// Add the parameters
@@ -80,13 +79,13 @@ namespace LcmsNetDataClasses.Data
 				AddParam(rootElement, "Comment", "");
 				AddParam(rootElement, "Interest Rating", "Unreviewed");
 
-                /// 
-                /// BLL: Added to appease the trigger file gods, so that we dont write 
-                /// confuse DMS with EMSL related data when the requests are already fulfilled.
-                /// 
-                string usage    = "";
-                string userList = "";
-                string proposal = "";
+                // 
+                // BLL: Added to appease the trigger file gods, so that we don't
+                // confuse DMS with EMSL related data when the requests are already fulfilled.
+                // 
+                var usage    = "";
+                var userList = "";
+                var proposal = "";
                 if (sample.DmsData.RequestID <= 0)
                 {
                     usage    = sample.DmsData.UsageType;
@@ -115,7 +114,7 @@ namespace LcmsNetDataClasses.Data
 				//DateTime localTime = DateTime.Parse(localTime);
 
 				// Convert the local time to UTC time
-				DateTime utcTime = localTime.ToUniversalTime();
+				var utcTime = localTime.ToUniversalTime();
 
 				return utcTime.ToString("MM/dd/yyyy HH:mm:ss");
 			}
@@ -130,11 +129,11 @@ namespace LcmsNetDataClasses.Data
 			{
 				try
 				{
-					XmlElement newElement = mobject_TriggerFileContents.CreateElement("Parameter");
-					XmlAttribute nameAttr = mobject_TriggerFileContents.CreateAttribute("Name");
+					var newElement = mobject_TriggerFileContents.CreateElement("Parameter");
+					var nameAttr = mobject_TriggerFileContents.CreateAttribute("Name");
 					nameAttr.Value = paramName;
 					newElement.Attributes.Append(nameAttr);
-					XmlAttribute valueAttr = mobject_TriggerFileContents.CreateAttribute("Value");
+					var valueAttr = mobject_TriggerFileContents.CreateAttribute("Value");
 					valueAttr.Value = paramValue;
 					newElement.Attributes.Append(valueAttr);
 					Parent.AppendChild(newElement);
@@ -152,14 +151,14 @@ namespace LcmsNetDataClasses.Data
 			/// <param name="sample">Name of the sample this trigger file is for</param>
 			private static void SaveFile(XmlDocument doc, classSampleData sample, string datasetName)
             {
-                string sampleName   = sample.DmsData.DatasetName;
-                string outFileName  = classSampleData.GetTriggerFileName(sample, ".xml");
+                var sampleName   = sample.DmsData.DatasetName;
+                var outFileName  = classSampleData.GetTriggerFileName(sample, ".xml");
                 
 				// Write trigger file to local folder
-                string appPath           = classLCMSSettings.GetParameter("ApplicationPath");
-				string outFilePath       = Path.Combine(appPath, "TriggerFiles");
-                string outFileNamePath   = Path.Combine(outFilePath, outFileName);
-                bool wasLocalFileCreated = false;
+                var appPath           = classLCMSSettings.GetParameter("ApplicationPath");
+				var outFilePath       = Path.Combine(appPath, "TriggerFiles");
+                var outFileNamePath   = Path.Combine(outFilePath, outFileName);
+                var wasLocalFileCreated = false;
 
 				// If local folder doen't exist, then create it
 				if (!Directory.Exists(outFilePath))
@@ -180,7 +179,7 @@ namespace LcmsNetDataClasses.Data
                 // Copy the file path
 				try
 				{
-					FileStream outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
+					var outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
 					doc.Save(outputFile);
 					outputFile.Close();
 					classApplicationLogger.LogMessage(0, "Local trigger file created for sample " + sampleName);
@@ -189,7 +188,7 @@ namespace LcmsNetDataClasses.Data
 				catch (Exception ex)
 				{                    
 					// If local write failed, log it
-					string msg = "Error creating local trigger file for sample " + sampleName;
+					var msg = "Error creating local trigger file for sample " + sampleName;
 					classApplicationLogger.LogError(0, msg, ex);
 				}
 
@@ -209,7 +208,7 @@ namespace LcmsNetDataClasses.Data
                             outFilePath     = classLCMSSettings.GetParameter("TriggerFileFolder");
 
                             // Attempt to write the trigger file to a remote server
-                            FileStream outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
+                            var outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
                             doc.Save(outputFile);
                             outputFile.Close();
                             classApplicationLogger.LogMessage(0, "Remote trigger file created for sample " + sample.DmsData.DatasetName);
@@ -219,14 +218,14 @@ namespace LcmsNetDataClasses.Data
                     }
                     else
                     {
-                        string msg = "Generate Trigger File: Sample " + datasetName + ", Trigger file copy disabled";
+                        var msg = "Generate Trigger File: Sample " + datasetName + ", Trigger file copy disabled";
                         classApplicationLogger.LogMessage(0, msg);
                     }
                 }
                 catch (Exception ex)
                 {
                     // If remote write failed or disabled, log and try to write locally
-                    string msg = "Remote trigger file copy failed or disabled, sample " + sample.DmsData.DatasetName + ". Creating file locally.";
+                    var msg = "Remote trigger file copy failed or disabled, sample " + sample.DmsData.DatasetName + ". Creating file locally.";
                     classApplicationLogger.LogError(0, msg, ex);
                 }
 
@@ -239,12 +238,12 @@ namespace LcmsNetDataClasses.Data
 			public static bool CheckLocalTriggerFiles()
 			{
 				// Check for presence of local trigger file directory
-				string localFolderPath = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), "TriggerFiles");
+				var localFolderPath = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), "TriggerFiles");
 
 				// If local folder doen't exist, then there are no local trigger files
 				if (!Directory.Exists(localFolderPath)) return false;
 
-				string[] triggerFiles = Directory.GetFiles(localFolderPath);
+				var triggerFiles = Directory.GetFiles(localFolderPath);
 				if (triggerFiles.Length < 1)
 				{
 					// No files found
@@ -262,7 +261,7 @@ namespace LcmsNetDataClasses.Data
 			/// </summary>
 			public static void MoveLocalTriggerFiles()
 			{
-				string localFolderPath = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), "TriggerFiles");
+				var localFolderPath = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), "TriggerFiles");
 
 				// Verify local trigger file directory exists
 				if (!Directory.Exists(localFolderPath))
@@ -272,7 +271,7 @@ namespace LcmsNetDataClasses.Data
 				}
 
 				// Get a list of local trigger files
-				string[] triggerFiles = Directory.GetFiles(localFolderPath);
+				var triggerFiles = Directory.GetFiles(localFolderPath);
 				if (triggerFiles.Length < 1)
 				{
 					// No files found
@@ -281,22 +280,22 @@ namespace LcmsNetDataClasses.Data
 				}
 
 				// Move the local files to the remote server
-				string remoteFolderPath = classLCMSSettings.GetParameter("TriggerFileFolder");
+				var remoteFolderPath = classLCMSSettings.GetParameter("TriggerFileFolder");
 
 				// Verfiy remote folder connection exists
 				if (!Directory.Exists(remoteFolderPath))
 				{
-					string msg = "MoveLocalTriggerFiles: Unable to connect to remote folder " + remoteFolderPath;
+					var msg = "MoveLocalTriggerFiles: Unable to connect to remote folder " + remoteFolderPath;
 					classApplicationLogger.LogError(0, msg);
 					return;
 				}
 
-				foreach (string localFile in triggerFiles)
+				foreach (var localFile in triggerFiles)
 				{
 					var fi = new FileInfo(localFile);
-					string targetFilePath = Path.Combine(remoteFolderPath, fi.Name);
+					var targetFilePath = Path.Combine(remoteFolderPath, fi.Name);
 
-                    bool success = MoveLocalFile(fi.FullName, targetFilePath);
+                    var success = MoveLocalFile(fi.FullName, targetFilePath);
 				    fi.Refresh();
 
                     if (success && fi.Exists)
