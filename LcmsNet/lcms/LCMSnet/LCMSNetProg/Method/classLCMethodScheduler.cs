@@ -95,27 +95,27 @@ namespace LcmsNet.Method
         /// </summary>
         private ManualResetEvent mobj_stoppedSamples;
 
-        /// 
-        /// Here we hold a copy of the samples that are running, so we can do things like 
-        /// report status and interrogate when things should be done, without having
-        /// to use locks or critical sections that will chew up time 
-        /// spent by the column thread actually running the methods.
-        /// 
-        /// In a sense we hide latency of running the experiment here, in the scheduler.
-        /// We do all the administrative tasks, and let the column thread just set
-        /// threaded events.
-        /// 
-        /// A note: The above is no longer strictly true. The code for handling the administrative tasks does indeed
-        /// reside here in the scheduler, but it is in the form of callbacks to events that are run on the column
-        /// threads themselves. This is a more reliable way to synchronize the scheduler with the columns, since
-        /// state updates to the scheduler occur as they happen on the columns, instead of waiting for the
-        /// scheduler thread to get around to dealing with the report.
-        /// 
+        // 
+        // Here we hold a copy of the samples that are running, so we can do things like 
+        // report status and interrogate when things should be done, without having
+        // to use locks or critical sections that will chew up time 
+        // spent by the column thread actually running the methods.
+        // 
+        // In a sense we hide latency of running the experiment here, in the scheduler.
+        // We do all the administrative tasks, and let the column thread just set
+        // threaded events.
+        // 
+        // A note: The above is no longer strictly true. The code for handling the administrative tasks does indeed
+        // reside here in the scheduler, but it is in the form of callbacks to events that are run on the column
+        // threads themselves. This is a more reliable way to synchronize the scheduler with the columns, since
+        // state updates to the scheduler occur as they happen on the columns, instead of waiting for the
+        // scheduler thread to get around to dealing with the report.
+        // 
         classSampleData[] samples;
-        /// 
-        /// These two arrays tell us when the sample should finish
-        /// and what event of the LC method the current column thread is on.
-        /// 
+        // 
+        // These two arrays tell us when the sample should finish
+        // and what event of the LC method the current column thread is on.
+        // 
         DateTime[] sampleEndTime;
         int[] currentEvent;
         /// <summary>
@@ -153,10 +153,10 @@ namespace LcmsNet.Method
             {
                 try
                 {
-                    /// 
-                    /// Turn off the flag so the worker thread knows
-                    /// to stop doing what its doing when the flag is set to false
-                    /// 
+                    // 
+                    // Turn off the flag so the worker thread knows
+                    // to stop doing what its doing when the flag is set to false
+                    // 
                     mbool_isRunning = false;
                     mobj_thread.Abort();
                 }
@@ -196,15 +196,15 @@ namespace LcmsNet.Method
         {
             mbool_stopping = true;
 
-            /// Tell the scheduler thread to stop
+            // Tell the scheduler thread to stop
             mobj_stopSamples.Set();
             
-            /// Wait for it to tell us its done
+            // Wait for it to tell us its done
             mobj_stoppedSamples.WaitOne();
 
             mobj_sampleQueue.StopRunningQueue();
             
-            /// Then reset the event so it can tell us again later it's done.
+            // Then reset the event so it can tell us again later it's done.
             mobj_stoppedSamples.Reset();
 
             mbool_stopping = false;
@@ -230,9 +230,9 @@ namespace LcmsNet.Method
                     Monitor.Enter(mlist_threadLocks[i]); // since we are shutting down, we want to block here.                
                     if (samples[i] != null)
                     {
-                        /// 
-                        /// Tell the column thread to die..
-                        /// 
+                        // 
+                        // Tell the column thread to die..
+                        // 
 
                         Print("Killing column: " + i.ToString(), CONST_VERBOSE_EVENTS);
                         if (mlist_columnWorkers[i].IsBusy)
@@ -243,14 +243,14 @@ namespace LcmsNet.Method
                             mlist_columnWorkers[i].CancelAsync();
                         }
 
-                        /// 
-                        /// Tell the sample queue to stop doing what it is doing 
-                        /// 
+                        // 
+                        // Tell the sample queue to stop doing what it is doing 
+                        // 
                         mobj_sampleQueue.CancelRunningSample(samples[i], false);
 
-                        /// 
-                        /// Don't hold a reference to the sample if we dont need it.
-                        /// 
+                        // 
+                        // Don't hold a reference to the sample if we dont need it.
+                        // 
                         samples[i] = null;
                     }
                 }
@@ -354,26 +354,26 @@ namespace LcmsNet.Method
             }                      
             Name = "Scheduler";           
 
-            /// 
-            /// worker thread.
-            /// 
+            // 
+            // worker thread.
+            // 
             mobj_thread = null;
             mbool_stopping = false;
 
             m_notifyOnKill = false;
 
-            /// 
-            /// Reference to the sample queue so that we can grab samples
-            /// when we need them.
-            /// 
+            // 
+            // Reference to the sample queue so that we can grab samples
+            // when we need them.
+            // 
             mobj_sampleQueue = sampleQueue;
 
             // Register yourself with the notification system.
             Notification.NotificationBroadcaster.Manager.AddNotifier(this);
 
-            /// 
-            /// This is the event to tell the scheduler to shut everything down!
-            /// 
+            // 
+            // This is the event to tell the scheduler to shut everything down!
+            // 
             mobj_abortWaiting = new ManualResetEvent(false);
             mobj_stoppedSamples = new ManualResetEvent(false);
             mobj_stopSamples = new ManualResetEvent(false);
@@ -416,10 +416,10 @@ namespace LcmsNet.Method
 
             data = mobj_sampleQueue.NextSampleQuery();
 
-            /// 
-            /// See if the sample is legit, then if we have an idle column.
-            /// We also need to check if the column is not disabled.
-            /// 
+            // 
+            // See if the sample is legit, then if we have an idle column.
+            // We also need to check if the column is not disabled.
+            // 
             if (data == null)
             {
                 return;
@@ -434,15 +434,16 @@ namespace LcmsNet.Method
             }       
             if (!mlist_columnWorkers[sampleColumnID].IsBusy)
             {
-                /// 
-                /// Can we start this guy? make sure he starts after some time.
-                ///            
+                // 
+                // Can we start this guy? make sure he starts after some time.
+                //            
                 //TimeSpan startSpan = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(data.LCMethod.Start);               
-                /// 
-                /// If we have a positive integer, then that means the lcmethod's start time is good enough 
-                /// basically, we want to ensure that a method doesn't start before it's expected start time
-                /// has occurred.
-                ///           
+
+                // 
+                // If we have a positive integer, then that means the lcmethod's start time is good enough 
+                // basically, we want to ensure that a method doesn't start before it's expected start time
+                // has occurred.
+                //           
                 if (LcmsNetSDK.TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0) //(startSpan.Milliseconds >= 0)
                 {
                     data = mobj_sampleQueue.NextSampleStart();
@@ -450,10 +451,15 @@ namespace LcmsNet.Method
                             data.DmsData.DatasetName,
                             data.ColumnData.ID + 1, data.LCMethod.Start),
                             CONST_VERBOSE_LEAST, null, data);
-                    /// 
-                    /// Hold on to a copy of the sample 
-                    ///                                 
-                    sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
+                    // 
+                    // Hold on to a copy of the sample 
+                    //
+
+                    if (data.LCMethod.Events.Count > 0)
+                        sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
+                    else
+                        sampleEndTime[sampleColumnID] = LcmsNetSDK.TimeKeeper.Instance.Now;
+
                     currentEvent[sampleColumnID] = 0;
                     data.LCMethod.CurrentEventNumber = 0;
                     data.LCMethod.ActualEnd = DateTime.MaxValue;
@@ -472,13 +478,13 @@ namespace LcmsNet.Method
         private void RunThreaded()
         {
             Thread.CurrentThread.Name = "Scheduler Thread";
-            /// 
-            /// A list of events to listen for 
+            // 
+            // A list of events to listen for 
             WaitHandle[] events = new WaitHandle[CONST_NUMBER_OF_SCHEDULER_EVENTS];        
 
-            /// 
-            /// Setup the event table 
-            /// 
+            // 
+            // Setup the event table 
+            // 
             int j = 0;
             events[j++] = mobj_abortWaiting;
             events[j++] = mobj_stopSamples;
@@ -491,31 +497,31 @@ namespace LcmsNet.Method
                 mlist_columnThreads[i].Initialize();
             }
            
-            /// 
-            /// This is the meat of it, here is where we manage the column threads and send them
-            /// samples to run.  Here is also where we do things like monitor the thread to make
-            /// sure its not going to timeout or run over its allocated time.
-            /// 
+            // 
+            // This is the meat of it, here is where we manage the column threads and send them
+            // samples to run.  Here is also where we do things like monitor the thread to make
+            // sure its not going to timeout or run over its allocated time.
+            // 
             while (mbool_isRunning == true)
             {
-                /// 
-                /// Wait to be told to stop, if not told to stop within 100ms,
-                /// then check to see if a method is overdue or a column is ready for another sample.
-                /// 
+                // 
+                // Wait to be told to stop, if not told to stop within 100ms,
+                // then check to see if a method is overdue or a column is ready for another sample.
+                // 
                 int eventNumber = WaitHandle.WaitAny(events, CONST_THREAD_WAITTIMEOUT_MS);
                               
 
-                /// 
-                /// Temporary variables for setting up a new sample on a column thread.
-                ///                                 
+                // 
+                // Temporary variables for setting up a new sample on a column thread.
+                //                                 
                 int columnID            = 0;                
                 double timeElapsedOverdue      = 0.0;      // variable to see if a sample's event has gone past due.
                 
                 switch (eventNumber)
                 {                                         
-                    /// 
-                    /// Stops samples from being run.
-                    /// 
+                    // 
+                    // Stops samples from being run.
+                    // 
                     case CONST_EVENT_NUM_STOP_SAMPLES:
                         mobj_stopSamples.Reset();
                         Print("Killing all samples on all columns.", CONST_VERBOSE_EVENTS);
@@ -533,11 +539,11 @@ namespace LcmsNet.Method
                         mobj_stoppedSamples.Set();
                         break;                                                                   
                     default:                        
-                        /// 
-                        /// Figure out if it's worth looking at the next sample.  This is better 
-                        /// than acquiring locks and being turned down later because the state of a 
-                        /// column is running or disabled.
-                        ///     
+                        // 
+                        // Figure out if it's worth looking at the next sample.  This is better 
+                        // than acquiring locks and being turned down later because the state of a 
+                        // column is running or disabled.
+                        //     
                         DateTime now = LcmsNetSDK.TimeKeeper.Instance.Now; 
                         for (columnID = 0; columnID < currentEvent.Length; columnID++)
                         {
@@ -547,35 +553,57 @@ namespace LcmsNet.Method
                             {
                                 try
                                 {
-                                    /// 
-                                    /// Test to see if the sample has gone past due
-                                    /// 
+                                    // 
+                                    // Test to see if the sample has gone past due
+                                    // 
                                     if (sampleEndTime[columnID] != DateTime.MinValue)
                                     {
                                         TimeSpan overdueSpan = now.Subtract(sampleEndTime[columnID]);
                                         timeElapsedOverdue = overdueSpan.TotalSeconds;
                                         if (Convert.ToInt32(Math.Floor(timeElapsedOverdue)) >= CONST_OVER_EVENT_TIME_LIMIT_SECONDS)
                                         {
-                                            /// 
-                                            /// Here we shut down the method killing any execution of it.
-                                            /// We do our state-cleanup here because the BackgroundWorker
-                                            /// doesn't allow us to return the necessary information to
-                                            /// do so to the ColumnWorkerComplete_Handler event handler.
-                                            ///  
+                                            // 
+                                            // Here we shut down the method killing any execution of it.
+                                            // We do our state-cleanup here because the BackgroundWorker
+                                            // doesn't allow us to return the necessary information to
+                                            // do so to the ColumnWorkerComplete_Handler event handler.
+                                            //  
                                             mlist_columnThreads[columnID].Abort();          
                                             mlist_columnWorkers[columnID].CancelAsync();
-                                            classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID]];
+
+                                            String deviceName;
+                                            String eventName;
+                                            TimeSpan eventDuration;
+                                            if (currentEvent[columnID] < samples[columnID].LCMethod.Events.Count)
+                                            {
+                                                classLCEvent lcEvent = samples[columnID].LCMethod.Events[currentEvent[columnID]];
+                                                deviceName = lcEvent.Device.Name;
+                                                eventName = lcEvent.Name;
+                                                eventDuration = lcEvent.Duration;
+                                            }
+                                            else
+                                            {
+                                                deviceName = "Unknown Device";
+                                                eventName = "Unknown Event";
+                                                eventDuration = new TimeSpan(0, 0, 0);
+
+                                            }
                                             string message = string.Format(
                                                                     "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1} Stopping all samples",
                                                                     columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
-                                                                    sampleEndTime[columnID].ToString(),
-                                                                    lcEvent.Device.Name,        
-                                                                    lcEvent.Name);
+                                                                    sampleEndTime[columnID],
+                                                                    deviceName,
+                                                                    eventName);
                                             //Print(message, CONST_VERBOSE_LEAST, null, samples[columnID]);
                                             HandleError(samples[columnID], message);
                                             sampleEndTime[columnID] = DateTime.MinValue;
-                                            classLCEvent evt = mlist_columnThreads[columnID].Sample.LCMethod.ActualEvents[currentEvent[columnID]];
-                                            evt.Duration = evt.Start.Add(lcEvent.Duration).Add(overdueSpan).Subtract(evt.Start);
+
+                                            if (currentEvent[columnID] < mlist_columnThreads[columnID].Sample.LCMethod.ActualEvents.Count)
+                                            {
+                                                classLCEvent evt = mlist_columnThreads[columnID].Sample.LCMethod.ActualEvents[currentEvent[columnID]];
+                                                evt.Duration = evt.Start.Add(eventDuration).Add(overdueSpan).Subtract(evt.Start);
+                                            }
+                                            
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;
                                             mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
                                             samples[columnID] = null;                                            
@@ -583,10 +611,10 @@ namespace LcmsNet.Method
                                             ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, mlist_columnThreads[columnID].Sample);
                                         }
                                     }
-                                    /// 
-                                    /// We dont only look for == IDLE so that we pull off the 
-                                    /// dead samples if the column is disabled.
-                                    /// 
+                                    // 
+                                    // We dont only look for == IDLE so that we pull off the 
+                                    // dead samples if the column is disabled.
+                                    // 
                                     else if (currentEvent[columnID] == CONST_IDLE_FLAG && !mbool_stopping)
                                     {
 
@@ -655,14 +683,14 @@ namespace LcmsNet.Method
                 if (samples[columnID] != null && columnCurrentEvent >= 0)
                 {
                             
-                    /// 
-                    /// Make sure we have another event to process.
-                    /// 
+                    // 
+                    // Make sure we have another event to process.
+                    // 
                     if (samples[columnID].LCMethod.Events.Count  > columnCurrentEvent)
                     {
-                        /// 
-                        /// Now update the expected end time for the current event.
-                        /// 
+                        // 
+                        // Now update the expected end time for the current event.
+                        // 
                         sampleEndTime[columnID] = columnEndOfCurrentEvent;
                         samples[columnID].LCMethod.CurrentEventNumber = columnCurrentEvent;
 
@@ -738,11 +766,18 @@ namespace LcmsNet.Method
                 //Separation completed.
                 lock (mlist_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-                    DateTime noww = LcmsNetSDK.TimeKeeper.Instance.Now; 
+                    DateTime noww = LcmsNetSDK.TimeKeeper.Instance.Now;
+
+                    String datasetName;
+                    if ( samples[columnID] != null && samples[columnID].DmsData != null)
+                        datasetName = samples[columnID].DmsData.DatasetName;
+                    else
+                        datasetName = "Unknown_Dataset since samples[columnID] is null for columnID = " + columnID;
+
                     string mm = string.Format("END SAMPLE {2} on COLUMN-{0} COMPLETED at {1} ",
                                               columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,                                    
-                                              sampleEndTime[columnID].ToString(),
-                                              samples[columnID].DmsData.DatasetName);
+                                              sampleEndTime[columnID],
+                                              datasetName);
                     Print(mm, CONST_VERBOSE_LEAST, null, samples[columnID]);
                     sampleEndTime[columnID] = DateTime.MinValue;
                     currentEvent[columnID]  = CONST_IDLE_FLAG;
@@ -755,10 +790,10 @@ namespace LcmsNet.Method
                                            enumSampleProgress.Complete));
                     }
                     mobj_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
-                    /// 
-                    /// Write the trigger file and other data in a separate thread. I/O is expensive and we don't
-                    /// want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
-                    /// 
+                    // 
+                    // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
+                    // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
+                    // 
                     ThreadPool.QueueUserWorkItem(new WaitCallback(WriteCompletedSampleInformation), mlist_columnThreads[columnID].Sample);
                     samples[columnID] = null;                                 
                 }       

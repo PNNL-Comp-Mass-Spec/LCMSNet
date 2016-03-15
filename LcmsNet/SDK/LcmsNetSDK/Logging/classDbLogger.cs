@@ -115,7 +115,10 @@ namespace LcmsNetDataClasses.Logging
 					sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID.ToString() + "',");	// Add column here
                     if (args.Sample.LCMethod.CurrentEventNumber >= 0)
                     {
-                        sqlCmdBlder.Append("'" + args.Sample.LCMethod.Events[args.Sample.LCMethod.CurrentEventNumber].Device.Name + "',");
+                        if (args.Sample.LCMethod.Events.Count > 0)
+                            sqlCmdBlder.Append("'" + args.Sample.LCMethod.Events[args.Sample.LCMethod.CurrentEventNumber].Device.Name + "',");
+                        else
+                            sqlCmdBlder.Append("'No events',");
                     }
                     else
                     {

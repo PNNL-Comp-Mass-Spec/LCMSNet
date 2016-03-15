@@ -208,17 +208,17 @@ namespace LcmsNetDataClasses.Method
         /// <param name="directoryPath">Path of directory to write data to.</param>
         public void WritePerformanceData(string directoryPath)
         {            
-            /// 
-            /// For each event, we tell the device to write the required used data.
-            /// 
+            // 
+            // For each event, we tell the device to write the required used data.
+            // 
             foreach (classLCEvent lcEvent in mlist_events)
             {       
-                /// 
-                /// Only write this if we have performance data for this method....
-                /// meaning that it has something we need to know or save for later
-                /// to reproduce performance information to understand when the 
-                /// cart misbehaves.
-                /// 
+                // 
+                // Only write this if we have performance data for this method....
+                // meaning that it has something we need to know or save for later
+                // to reproduce performance information to understand when the 
+                // cart misbehaves.
+                // 
                 if (lcEvent.MethodAttribute.HasPerformanceData == true)
                 {
                     lcEvent.Device.WritePerformanceData(directoryPath, lcEvent.MethodAttribute.Name, lcEvent.Parameters);  
@@ -230,18 +230,18 @@ namespace LcmsNetDataClasses.Method
         /// </summary>
         /// <param name="start">Time to start the method.</param>
         public void SetStartTime(DateTime start)
-        {       
-            /// 
-            /// Update the start time and cascade the calculation so that 
-            /// the event times are all updated allowing us to calculate 
-            /// the duration and end time of the entire method.
-            /// 
+        {
+            // 
+            // Update the start time and cascade the calculation so that 
+            // the event times are all updated allowing us to calculate 
+            // the duration and end time of the entire method.
+            // 
             mtime_start = start;
             UpdateEventTimes();
 
-            /// 
-            /// Calculate the duration of the method.
-            /// 
+            // 
+            // Calculate the duration of the method.
+            // 
             if (Events.Count <= 0)
             {
                 mspan_duration = new TimeSpan(0, 0, 0, 0, 0);
@@ -258,10 +258,10 @@ namespace LcmsNetDataClasses.Method
         private void UpdateEventTimes()
         {            
             DateTime adjustedStart   = mtime_start;
-            /// 
-            /// Iterate through each event (ultimately) and 
-            /// adjust the start times of the event based on the time span provided.
-            /// 
+            // 
+            // Iterate through each event (ultimately) and 
+            // adjust the start times of the event based on the time span provided.
+            // 
             foreach(classLCEvent controlEvent in Events)
             {                                
                 controlEvent.Start  = adjustedStart;

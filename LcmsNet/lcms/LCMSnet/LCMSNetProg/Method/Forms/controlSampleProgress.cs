@@ -179,10 +179,15 @@ namespace LcmsNet.Method.Forms
 		/// <summary>
 		/// Renders the method provided.
 		/// </summary>
-		/// <param name="method"></param>
+        /// <param name="sample"></param>
 		public void UpdateSample(classSampleData sample)
 		{
-            int columnID = sample.ColumnData.ID;
+		    if (sample == null)
+		    {
+		        return;
+		    }
+
+		    int columnID = sample.ColumnData.ID;
             if (sample.LCMethod.IsSpecialMethod == true)
             {
                 columnID = CONST_TOTAL_COLUMNS;

@@ -34,7 +34,7 @@ namespace LcmsNet
         #endregion
 
         #region Members
-          private FluidicsDesign mform_fluidicsDesign;
+        private FluidicsDesign mform_fluidicsDesign;
         /// <summary>
         /// Method Scheduler and execution engine.
         /// </summary>
@@ -174,9 +174,9 @@ namespace LcmsNet
             mobj_scheduler.SampleProgress               += new DelegateSampleProgress(Scheduler_SampleProgress);
             mobj_scheduler.Initialize();
                         
-            /// 
-            /// Logging and messaging
-            /// 
+            // 
+            // Logging and messaging
+            // 
             mform_messages      = new formMessageWindow();
             mform_messages.ErrorCleared     += new EventHandler(mform_messages_ErrorCleared);
             mform_messages.ErrorPresent     += new EventHandler(mform_messages_ErrorPresent);
@@ -256,9 +256,9 @@ namespace LcmsNet
 
             classApplicationLogger.LogMessage(0, "Loading Sample Queue...");
             Application.DoEvents();
-            ///           
-            /// Tell the sample queue to load samples from cache after everything is loaded.
-            /// 
+            //           
+            // Tell the sample queue to load samples from cache after everything is loaded.
+            // 
             try
             {
                 mobj_sampleQueue.RetrieveQueueFromCache();
@@ -645,9 +645,9 @@ namespace LcmsNet
         /// <param name="e"></param>
         void mform_sampleManager_Stop(object sender, EventArgs e)
         {
-            /// 
-            /// Tell the scheduler to stop running!
-            /// 
+            // 
+            // Tell the scheduler to stop running!
+            // 
             mobj_scheduler.Stop();
         }
 
@@ -662,10 +662,10 @@ namespace LcmsNet
             LcmsNetDataClasses.Method.classLCEvent  lcEvent  = null;
             LcmsNetDataClasses.Method.classLCMethod lcMethod = null;
 			bool isError = false;
-            
-            /// 
-            /// Construct the message to display 
-            /// 
+
+            // 
+            // Construct the message to display 
+            // 
             switch (args.ProgressType)
             {
                 case enumSampleProgress.RunningNextEvent:
@@ -707,10 +707,21 @@ namespace LcmsNet
                     catch
                     {
                         // default to this path..
-                        docPath = "C:\\pdftest\\";
+                        docPath = @"C:\pdftest\";
                     }
                     try
                     {
+                        var pdfFolder = new DirectoryInfo(docPath);
+                        if (!pdfFolder.Exists)
+                        {
+                            if (!pdfFolder.Root.Exists)
+                            {
+                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Invalid PDF document folder defined in LcmsNet.exe.config (drive not found): " + docPath);
+                                break;
+                            }
+                            pdfFolder.Create();                            
+                        }
+
                         message = string.Empty; 
                         if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
                         {
@@ -722,25 +733,22 @@ namespace LcmsNet
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "PDF Generation Error on" + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PDF Generation Error for " + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
                     }
                     break;
                 case enumSampleProgress.Started:
 					message = string.Empty; 
                     break;
             }
-            //This is a workaround until this can be addressed properly.
-            //The Mainform was creating misleading entries in the log file, and in removing
-            //them, created empty messages, so until it can be determined if this whole section
-            //is going to be removed/majorly simplified(the more likely option) this is here. --Chris
-            if (!message.Equals(string.Empty))
+
+            if (!string.IsNullOrWhiteSpace(message))
             {
                 classApplicationLogger.LogMessage(0, message, sample);
             }
 
 
 			// Update visual progress. -- Errors are already updated above.			 
-			if (!isError)
+            if (!isError && sample != null)
 			{
 				mform_sampleProgress.UpdateSample(sample);
 			}
@@ -749,8 +757,7 @@ namespace LcmsNet
         /// Handles updating the status window when the next event starts.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="sample"></param>
-        /// <param name="eventNumber"></param>
+        /// <param name="args"></param>
         void Scheduler_SampleProgress(object sender, classSampleProgressEventArgs args)
         {
             if (InvokeRequired == true)
@@ -766,6 +773,7 @@ namespace LcmsNet
         /// Handles displaying the error message on the status bar.  
         /// </summary>
         /// <param name="sender"></param>
+        /// <param name="sample"></param>
         /// <param name="errorMessage"></param>
         void Scheduler_Error(object sender, classSampleData sample, string errorMessage)
         {            
@@ -817,7 +825,7 @@ namespace LcmsNet
             }
             catch
             {
-
+                // Ignore errors here
             }
 
             //TODO: Check to see if things shutdown.            
