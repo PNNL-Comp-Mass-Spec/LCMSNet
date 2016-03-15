@@ -14,7 +14,7 @@
  *		    3/17/2009: BLL
  *		        Generates unique ID's and sample ID's
  *		    5/18/2010: DAC
- *				  AModified for queue export to SQLite file and CSV file
+ *				  Modified for queue export to SQLite file and CSV file
  */
 //*********************************************************************************************************
 using System;
@@ -269,23 +269,23 @@ namespace LcmsNet.SampleQueue
         {
             get
             {
-                /// 
-                /// Make sure that we have enough columns to add data on.
-                /// 
+                // 
+                // Make sure that we have enough columns to add data on.
+                // 
                 if (mlist_columnOrders.Count < 1)
                     return null;
 
 
                 int index = -1;
 
-                /// 
-                /// Get the index of the last sample that is queued...
-                /// 
+                // 
+                // Get the index of the last sample that is queued...
+                // 
 
-                /// 
-                /// if the waiting queue is empty. that means no samples are queued
-                /// TODO:  Add to see what the last sample in the running or complete queue is                
-                /// 
+                // 
+                // if the waiting queue is empty. that means no samples are queued
+                // TODO:  Add to see what the last sample in the running or complete queue is                
+                // 
                 if (mlist_waitingQueue.Count > 0)
                 {
 
@@ -303,9 +303,9 @@ namespace LcmsNet.SampleQueue
                         index = mlist_columnOrders.IndexOf(mlist_completeQueue[mlist_completeQueue.Count - 1].ColumnData);
                     }
                 }
-                /// 
-                /// Then return the column data available at the end of queue                
-                /// 
+                // 
+                // Then return the column data available at the end of queue                
+                // 
                 return mlist_columnOrders[(index + 1) % mlist_columnOrders.Count];
             }
         }
@@ -391,9 +391,9 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         public bool HasUnusedSamples()
         {
-            /// 
-            /// Find the first sample that has an unused name
-            /// 
+            // 
+            // Find the first sample that has an unused name
+            // 
             foreach (classSampleData sample in mlist_waitingQueue)
             {
                 if (sample.DmsData.DatasetName == mstring_integrateName)
@@ -411,9 +411,9 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if the column has unused samples, false if not.</returns>
         public bool HasUnusedSamples(classColumnData column)
         {
-            /// 
-            /// Find the first sample that has an unused name
-            /// 
+            // 
+            // Find the first sample that has an unused name
+            // 
             foreach (classSampleData sample in mlist_waitingQueue)
             {
                 if (sample.DmsData.DatasetName == mstring_integrateName && column.ID == sample.ColumnData.ID)
@@ -432,9 +432,10 @@ namespace LcmsNet.SampleQueue
         public List<classSampleData> FindSample(string sampleName)
         {
             List<classSampleData> samples = new List<classSampleData>();
-            /// 
-            /// Search all of the queues and add any instance of a copy
-            /// 
+
+            // 
+            // Search all of the queues and add any instance of a copy
+            // 
             foreach (classSampleData data in mlist_waitingQueue)
                 if (data.DmsData.DatasetName == sampleName)
                     samples.Add(data);
@@ -525,15 +526,15 @@ namespace LcmsNet.SampleQueue
 
             if (mlist_waitingQueue.Count > 0)
             {
-                /// 
-                /// Remove from the run queue
-                /// 
+                // 
+                // Remove from the run queue
+                // 
                 data = mlist_waitingQueue[0];
                 mlist_waitingQueue.RemoveAt(0);
 
-                /// 
-                /// Put the data on the queue.
-                /// 
+                // 
+                // Put the data on the queue.
+                // 
                 mlist_runningQueue.Add(data);
             }
             return data;
@@ -550,10 +551,10 @@ namespace LcmsNet.SampleQueue
         {
             enumSampleValidResult result = enumSampleValidResult.Valid;
 
-            /// 
-            /// Determine if the sample has a duplicate request name.
-            /// If it has one match, then it should be itself.
-            /// 
+            // 
+            // Determine if the sample has a duplicate request name.
+            // If it has one match, then it should be itself.
+            // 
             List<classSampleData> data = FindSample(sample.DmsData.DatasetName);
             if (data.Count > 1)
             {
@@ -573,17 +574,17 @@ namespace LcmsNet.SampleQueue
         /// <returns>Histogram.  Empty if no samples exist.</returns>
         private Dictionary<classColumnData, List<classSampleData>> BuildSampleHistogram(List<classSampleData> queue)
         {
-            /// 
-            /// Create a queue histogram.
-            ///
+            // 
+            // Create a queue histogram.
+            //
             Dictionary<classColumnData, List<classSampleData>> sampleHistogram = new Dictionary<classColumnData, List<classSampleData>>();
             foreach (classColumnData col in mlist_columnOrders)
             {
                 sampleHistogram.Add(col, new List<classSampleData>());
             }
-            /// 
-            /// Calculate the Histogram
-            /// 
+            // 
+            // Calculate the Histogram
+            // 
             for (int i = 0; i < queue.Count; i++)
             {
                 classSampleData data = queue[i];
@@ -604,21 +605,21 @@ namespace LcmsNet.SampleQueue
         private void DistributeSamplesAcrossColumns(Dictionary<classColumnData, List<classSampleData>> histogram,
                                                     List<classSampleData> queue)
         {
-            /// 
-            /// Figure out how many items we have on this column.
-            /// 
+            // 
+            // Figure out how many items we have on this column.
+            // 
             int maxCount = -1;
             foreach (List<classSampleData> data in histogram.Values)
             {
                 maxCount = Math.Max(data.Count, maxCount);
             }
 
-            /// 
-            /// Now we have a histogram of columns whose entries are a List of samples
-            /// For every column whose List Count is less than the maximum, add unused samples to it
-            /// At this point the waiting list does not mean anything.  We will re-construct
-            /// the waiting queue after this point.
-            /// 
+            // 
+            // Now we have a histogram of columns whose entries are a List of samples
+            // For every column whose List Count is less than the maximum, add unused samples to it
+            // At this point the waiting list does not mean anything.  We will re-construct
+            // the waiting queue after this point.
+            // 
             foreach (classColumnData col in histogram.Keys)
             {
                 List<classSampleData> data = histogram[col];
@@ -632,12 +633,12 @@ namespace LcmsNet.SampleQueue
                         {
                             if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                             {
-                                /// 
-                                /// Because sample clones are deep copies, we cannot trust that
-                                /// every object in the sample is serializable...so...we are stuck
-                                /// making sure we re-hash the method using the name which 
-                                /// is copied during the serialization.
-                                /// 
+                                // 
+                                // Because sample clones are deep copies, we cannot trust that
+                                // every object in the sample is serializable...so...we are stuck
+                                // making sure we re-hash the method using the name which 
+                                // is copied during the serialization.
+                                // 
                                 sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
                             }
                         }
@@ -647,9 +648,9 @@ namespace LcmsNet.SampleQueue
                         sample = new classSampleData();
                     }
 
-                    /// 
-                    /// We make the request an "Unused sample"
-                    /// 
+                    // 
+                    // We make the request an "Unused sample"
+                    // 
                     sample.DmsData.RequestName  = mstring_integrateName;
                     sample.DmsData.DatasetName  = mstring_integrateName;
                     sample.DmsData.Block        = 0;    // It's an unused sample. so dont copy this information.
@@ -660,19 +661,19 @@ namespace LcmsNet.SampleQueue
                 }
             }
             queue.Clear();
-            /// 
-            /// Here we reconstruct the waiting queue.  We use the column orders list (tells us 
-            /// what column is the first one to use) to add samples in order.  
-            /// 
+            // 
+            // Here we reconstruct the waiting queue.  We use the column orders list (tells us 
+            // what column is the first one to use) to add samples in order.  
+            // 
             List<classSampleData> firstList = histogram[mlist_columnOrders[0]];
             for (int i = 0; i < firstList.Count; i++)
             {
                 classSampleData firstSample = firstList[i];
                 queue.Add(firstSample);
 
-                /// 
-                /// Now add each sample found on another column
-                /// 
+                // 
+                // Now add each sample found on another column
+                // 
                 for (int j = 1; j < mlist_columnOrders.Count; j++)
                 {
                     classColumnData col = mlist_columnOrders[j];
@@ -687,9 +688,9 @@ namespace LcmsNet.SampleQueue
         /// <param name="queue">Queue to remove excess samples from.</param>
         private void RemoveExcessSamples(List<classSampleData> queue)
         {
-            /// 
-            /// Remove excess items from the end of the list.
-            /// 
+            // 
+            // Remove excess items from the end of the list.
+            // 
             while (queue.Count > 0 && queue[queue.Count - 1].DmsData.DatasetName == mstring_integrateName)
                 queue.RemoveAt(queue.Count - 1);
         }
@@ -751,10 +752,10 @@ namespace LcmsNet.SampleQueue
                                 List<classSampleData> queue, 
                                 bool clearForward)
         {
-            /// 
-            /// If the user wants us to clear the forward stack then we will,
-            /// otherwise we ignore it.
-            /// 
+            // 
+            // If the user wants us to clear the forward stack then we will,
+            // otherwise we ignore it.
+            // 
             if (clearForward == true && forwardStack != null)            
                 forwardStack.Clear();
             
@@ -767,12 +768,12 @@ namespace LcmsNet.SampleQueue
                 {
                     if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                     {
-                        /// 
-                        /// Because sample clones are deep copies, we cannot trust that
-                        /// every object in the sample is serializable...so...we are stuck
-                        /// making sure we re-hash the method using the name which 
-                        /// is copied during the serialization.
-                        /// 
+                        // 
+                        // Because sample clones are deep copies, we cannot trust that
+                        // every object in the sample is serializable...so...we are stuck
+                        // making sure we re-hash the method using the name which 
+                        // is copied during the serialization.
+                        // 
                         sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
                     }
                 }
@@ -812,20 +813,20 @@ namespace LcmsNet.SampleQueue
         public void Undo()
         {
             
-            /// 
-            /// Pop the 
-            /// 
+            // 
+            // Pop the next item
+            // 
             List<classSampleData> queue = PopQueue(mstack_undoBackWaitingQueue);
 
-            /// Then if popping
+            // Then if popping
             if (queue != null && queue.Count > 0)
             {
-                /// 
-                /// Save the current waiting queue onto the forward stack, thus saving it for a redo
-                /// 
+                // 
+                // Save the current waiting queue onto the forward stack, thus saving it for a redo
+                // 
                 PushQueue(mstack_undoForwardWaitingQueue, null, mlist_waitingQueue);            
 
-                /// Transfer the new queue to our waiting queue.
+                // Transfer the new queue to our waiting queue.
                 mlist_waitingQueue.Clear();
                 mlist_waitingQueue = queue;
                 //ResetColumnData();
@@ -841,16 +842,16 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Redo()
         {
-            /// 
-            /// Pull the queue off the forward stack if one exists            
-            /// 
+            // 
+            // Pull the queue off the forward stack if one exists            
+            // 
             List<classSampleData> queue = PopQueue(mstack_undoForwardWaitingQueue); 
             
             if (queue != null && queue.Count > 0)
             {
-                /// 
-                /// Push the current queue onto the back stack, thus saving our waiting queue.
-                /// 
+                // 
+                // Push the current queue onto the back stack, thus saving our waiting queue.
+                // 
                 PushQueue(mstack_undoBackWaitingQueue, null, mlist_waitingQueue);
 
                 mlist_waitingQueue.Clear();
@@ -874,12 +875,12 @@ namespace LcmsNet.SampleQueue
         {
 
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue,  mlist_waitingQueue);
-            /// 
-            /// Overwrite all of the samples that are unused first. 
-            /// 
-            /// Then add to the queue if the number of unused samples are less
-            /// than the number of provided ones.
-            /// 
+            // 
+            // Overwrite all of the samples that are unused first. 
+            // 
+            // Then add to the queue if the number of unused samples are less
+            // than the number of provided ones.
+            // 
             int i = 0;
             while(i < mlist_waitingQueue.Count && samples.Count > 0)
             {
@@ -894,22 +895,22 @@ namespace LcmsNet.SampleQueue
                 i++;
             }
 
-            /// 
-            /// ask if there are any leftovers
-            /// 
+            // 
+            // ask if there are any leftovers
+            // 
             if (samples.Count > 0)
             {
-                /// 
-                /// Dont need to re-sequence or notify
-                /// because queue samples does it for us.
-                /// 
+                // 
+                // Dont need to re-sequence or notify
+                // because queue samples does it for us.
+                // 
                 QueueSamples(samples, handling);
             }
             else
             {
-                /// 
-                /// Always re-sequence, and notify
-                /// 
+                // 
+                // Always re-sequence, and notify
+                // 
                 ResequenceQueuedSamples(mlist_waitingQueue);
 
                 if (handling == enumColumnDataHandling.Resort)
@@ -931,12 +932,12 @@ namespace LcmsNet.SampleQueue
         {
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
 
-            /// 
-            /// Overwrite all of the samples that are unused first. 
-            /// 
-            /// Then add to the queue if the number of unused samples are less
-            /// than the number of provided ones.
-            /// 
+            // 
+            // Overwrite all of the samples that are unused first. 
+            // 
+            // Then add to the queue if the number of unused samples are less
+            // than the number of provided ones.
+            // 
             int i = 0;
             while (i < mlist_waitingQueue.Count && samples.Count > 0)
             {
@@ -951,22 +952,22 @@ namespace LcmsNet.SampleQueue
                 i++;
             }
 
-            /// 
-            /// ask if there are any leftovers
-            /// 
+            // 
+            // ask if there are any leftovers
+            // 
             if (samples.Count > 0)
             {
-                /// 
-                /// Dont need to re-sequence or notify
-                /// because queue samples does it for us.
-                /// 
+                // 
+                // Don't need to re-sequence or notify
+                // because queue samples does it for us.
+                // 
                 QueueSamples(samples, handling);
             }
             else
             {
-                /// 
-                /// Always re-sequence, and notify
-                /// 
+                // 
+                // Always re-sequence, and notify
+                // 
                 ResequenceQueuedSamples(mlist_waitingQueue);
                 if (SamplesAdded != null)
                 {
@@ -997,30 +998,30 @@ namespace LcmsNet.SampleQueue
 
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
 
-            /// 
-            /// Here we add to the waiting queue.
-            ///     1. Distribute the samples across the waiting queue using a histogram
-            ///         to figure out the distribution of samples.  This version will
-            ///         add unused samples that never get run but help balance the 
-            ///         queue building.
-            ///     2. Add the samples directly back to the waiting queue - append.
-            ///         This just puts samples on the queue.
-            /// 
+            // 
+            // Here we add to the waiting queue.
+            //     1. Distribute the samples across the waiting queue using a histogram
+            //         to figure out the distribution of samples.  This version will
+            //         add unused samples that never get run but help balance the 
+            //         queue building.
+            //     2. Add the samples directly back to the waiting queue - append.
+            //         This just puts samples on the queue.
+            // 
                 
             if (distributeSamplesEvenlyAcrossColumns == enumColumnDataHandling.CreateUnused)
             {
                 List<classSampleData> tempQueue                                    = new List<classSampleData>();
                 Dictionary<classColumnData, List<classSampleData>> sampleHistogram = BuildSampleHistogram(mlist_waitingQueue);
-                /// 
-                /// Add samples to their respective columns.
-                /// 
+                // 
+                // Add samples to their respective columns.
+                // 
                 foreach (classSampleData sample in sampleList)
                 {
-                    /// 
-                    /// Check for object references.
-                    /// We allow for the same request name to be had in the 
-                    /// sample list.
-                    /// 
+                    // 
+                    // Check for object references.
+                    // We allow for the same request name to be had in the 
+                    // sample list.
+                    // 
                     if (mlist_waitingQueue.Contains(sample) == false)
                     {
                         added           = true;
@@ -1042,15 +1043,15 @@ namespace LcmsNet.SampleQueue
                 }             
             }
             
-            /// 
-            /// Now make sure we alert everyone that we added a sample
-            /// 
+            // 
+            // Now make sure we alert everyone that we added a sample
+            // 
             if (added == true)
             {
-                /// 
-                /// Only re-sequence and remove if we changed the queue to not waste time
-                /// doing something if we dont have to.
-                /// 
+                // 
+                // Only re-sequence and remove if we changed the queue to not waste time
+                // doing something if we dont have to.
+                // 
                 RemoveExcessSamples(mlist_waitingQueue);
                 ResequenceQueuedSamples(mlist_waitingQueue);
 
@@ -1138,9 +1139,9 @@ namespace LcmsNet.SampleQueue
         private bool RemoveSample(List<classSampleData> queue, List<long> uniqueIDs)
         {
             bool removed = false;
-            /// 
-            /// Find each sample if it exists,
-            /// 
+            // 
+            // Find each sample if it exists,
+            // 
             foreach (long id in uniqueIDs)
             {
                 classSampleData sample = FindSample(queue, id);
@@ -1160,31 +1161,31 @@ namespace LcmsNet.SampleQueue
         public bool RemoveSample(List<long> uniqueIDs, enumColumnDataHandling resortColumns)
         {
             bool removed = false;
-            /// 
-            /// Remove the sample from the complete queue.
-            /// 
+            // 
+            // Remove the sample from the complete queue.
+            // 
             removed = RemoveSample(mlist_completeQueue, uniqueIDs);
 
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
 
-            /// 
-            /// First we figure out what samples we need to remove based on their
-            /// Unique ID's.  Then we remove them.
-            /// 
+            // 
+            // First we figure out what samples we need to remove based on their
+            // Unique ID's.  Then we remove them.
+            // 
             List<classSampleData> removedSamples = new List<classSampleData>();
             foreach (long i in uniqueIDs)
             {
                 classSampleData data = FindSample(i);
                 if (data != null)
                 {
-                    /// 
-                    /// Check for duplicate object references
-                    /// Also, if we are to distribute across columns that means we remove it 
-                    /// from the queue.  Then we allow the program to reseat the samples on new
-                    /// columns.  
-                    /// 
-                    /// Otherwise, we just make the sample name unused.
-                    /// 
+                    // 
+                    // Check for duplicate object references
+                    // Also, if we are to distribute across columns that means we remove it 
+                    // from the queue.  Then we allow the program to reseat the samples on new
+                    // columns.  
+                    // 
+                    // Otherwise, we just make the sample name unused.
+                    // 
                     if (mlist_waitingQueue.Contains(data) == true)
                     {
                         
@@ -1196,13 +1197,13 @@ namespace LcmsNet.SampleQueue
             }
 
 
-            /// 
-            /// If we removed then we want to tell someone what samples were removed.
-            /// Later we re-sequence them.
-            /// 
-            /// Also, make sure we reseat samples on new columns.  We do this because
-            /// removed can only be true if we removed some samples instead of renaming.
-            /// 
+            // 
+            // If we removed then we want to tell someone what samples were removed.
+            // Later we re-sequence them.
+            // 
+            // Also, make sure we reseat samples on new columns.  We do this because
+            // removed can only be true if we removed some samples instead of renaming.
+            // 
             if (removed)
             {
 
@@ -1214,12 +1215,12 @@ namespace LcmsNet.SampleQueue
                     case enumColumnDataHandling.LeaveAlone:
                         break;
                     case enumColumnDataHandling.CreateUnused:                                    
-                        /// 
-                        /// Then, if some were removed we build up the distribution list and fill back into the queue
-                        /// allowing for the correct spacing on other columns, but inserting unused samples at the end of this column list
-                        /// so we dont disturb other column Data.  We do this using the same mechanism that adding samples uses 
-                        /// but here we are not adding new samples to the queue.
-                        ///            
+                        // 
+                        // Then, if some were removed we build up the distribution list and fill back into the queue
+                        // allowing for the correct spacing on other columns, but inserting unused samples at the end of this column list
+                        // so we dont disturb other column Data.  We do this using the same mechanism that adding samples uses 
+                        // but here we are not adding new samples to the queue.
+                        //            
                         Dictionary<classColumnData, List<classSampleData>> histogram = BuildSampleHistogram(mlist_waitingQueue);
                         DistributeSamplesAcrossColumns(histogram, mlist_waitingQueue);
                         RemoveExcessSamples(mlist_waitingQueue);
@@ -1247,9 +1248,9 @@ namespace LcmsNet.SampleQueue
         {
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
 
-            /// 
-            /// Find the unique id's of all the samples that are unused.
-            /// 
+            // 
+            // Find the unique id's of all the samples that are unused.
+            // 
             List<long> uniqueList = new List<long>();
             foreach (classSampleData sample in mlist_waitingQueue)
             {
@@ -1259,11 +1260,11 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
-            /// 
-            /// Removes the samples from this list, AND! resorts the columns.
-            /// This is important for this method because it means that 
-            /// we dont care about preserving column information.
-            /// 
+            // 
+            // Removes the samples from this list, AND! resorts the columns.
+            // This is important for this method because it means that 
+            // we dont care about preserving column information.
+            // 
             if (uniqueList.Count > 0)
             {
                 return RemoveSample(uniqueList, resortColumns);
@@ -1279,9 +1280,9 @@ namespace LcmsNet.SampleQueue
         {
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
 
-            /// 
-            /// Find the unique id's of all the samples that are unused.
-            /// 
+            // 
+            // Find the unique id's of all the samples that are unused.
+            // 
             List<long> uniqueList = new List<long>();
             foreach (classSampleData sample in mlist_waitingQueue)
             {
@@ -1291,11 +1292,11 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
-            /// 
-            /// Removes the samples from this list, AND DOES NOT! Resort the columns.
-            /// This is important for this method because it means that 
-            /// we DO care about preserving column information.
-            /// 
+            // 
+            // Removes the samples from this list, AND DOES NOT! Resort the columns.
+            // This is important for this method because it means that 
+            // we DO care about preserving column information.
+            // 
             if (uniqueList.Count > 0)
             {
                 return RemoveSample(uniqueList, resortColumns);
@@ -1390,29 +1391,29 @@ namespace LcmsNet.SampleQueue
             long firstSequenceNumber = mlist_waitingQueue[0].SequenceID;
             bool swapped = false;
 
-            /// 
-            /// If the offset is positive then move the samples down in the list - towards end of queue
-            /// 
+            // 
+            // If the offset is positive then move the samples down in the list - towards end of queue
+            // 
             if (offset > 0)
             {
                 int lastIndex = queue.Count - 1;
                 for (int i = samples.Count - 1; i >= 0; i--)
                 {
-                    /// 
-                    /// If the first guy could not be swapped, then we dont want the other items
-                    /// to be swapped either.  So continue if done so.
-                    /// 
+                    // 
+                    // If the first guy could not be swapped, then we dont want the other items
+                    // to be swapped either.  So continue if done so.
+                    // 
                     if (i < samples.Count - 1 && swapped == false)
                         continue;
 
-                    /// find the location of the sample to swap in the waiting queue.                   
+                    // find the location of the sample to swap in the waiting queue.                   
                     int index = queue.IndexOf(samples[i]);
 
-                    /// 
-                    /// Calculate its new location to swap if the offset is one, 
-                    /// otherwise we dont want to swap by the last index because this would
-                    /// move items to another column.
-                    /// 
+                    // 
+                    // Calculate its new location to swap if the offset is one, 
+                    // otherwise we dont want to swap by the last index because this would
+                    // move items to another column.
+                    // 
                     int newIndex = Math.Min(index + offset, lastIndex);
                     if (Math.Abs(offset) > 1 && index + offset > lastIndex)                    
                         newIndex = index;
@@ -1431,28 +1432,28 @@ namespace LcmsNet.SampleQueue
                     }
                 }
             }
-            /// Otherwise move the samples up in the queue order.
+            // Otherwise move the samples up in the queue order.
             else if (offset < 0)
             {
                 int lastIndex = baseOffset;
                 for (int i = 0; i < samples.Count; i++)
                 {
 
-                    /// 
-                    /// If the first guy could not be swapped, then we dont want the other items
-                    /// to be swapped either.  So continue if done so.
-                    /// 
+                    // 
+                    // If the first guy could not be swapped, then we dont want the other items
+                    // to be swapped either.  So continue if done so.
+                    // 
                     if (i > 0 && swapped == false)
                         continue;
 
-                    /// find the location of the sample to swap in the waiting queue.                   
+                    // find the location of the sample to swap in the waiting queue.                   
                     int index = queue.IndexOf(samples[i]);
 
-                    /// 
-                    /// Calculate its new location to swap if the offset is one, 
-                    /// otherwise we dont want to swap by the last index because this would
-                    /// move items to another column.
-                    /// 
+                    // 
+                    // Calculate its new location to swap if the offset is one, 
+                    // otherwise we dont want to swap by the last index because this would
+                    // move items to another column.
+                    // 
                     int newIndex = Math.Max(index + offset, lastIndex); 
                     if (Math.Abs(offset) > 1 && index + offset < lastIndex)                    
                         newIndex = index;
@@ -1460,7 +1461,7 @@ namespace LcmsNet.SampleQueue
 
                     if (newIndex != index)
                     {
-                        /// Swap
+                        // Swap
                         classSampleData tempSample = queue[newIndex];
                         queue[newIndex] = queue[index];
                         queue[index] = tempSample;
@@ -1473,22 +1474,22 @@ namespace LcmsNet.SampleQueue
                     }
                 }
             }
-            /// 
-            /// Update the sequence numbers
-            /// 
+            // 
+            // Update the sequence numbers
+            // 
             ResequenceQueuedSamples(queue, firstSequenceNumber);
 
-            /// 
-            /// Update the column data            
-            /// 
+            // 
+            // Update the column data            
+            // 
             //if (handling == enumColumnDataHandling.Resort)
             //{
             //    ResetColumnData();
             //}
 
-            /// 
-            /// Tell listeners that we have re-sequenced the queue.
-            /// 
+            // 
+            // Tell listeners that we have re-sequenced the queue.
+            // 
             if (SamplesReordered != null)
             {
                 SamplesReordered(this, new classSampleQueueArgs(GetAllSamples()));
@@ -1502,20 +1503,20 @@ namespace LcmsNet.SampleQueue
         {
             PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
 
-            /// 
-            /// Find the sample 
-            /// 
+            // 
+            // Find the sample 
+            // 
             int index = mlist_waitingQueue.IndexOf(data);
             if (index >= 0)
             {
-                /// 
-                /// Update...although the reference should be updated.
-                /// 
+                // 
+                // Update...although the reference should be updated.
+                // 
                 mlist_waitingQueue[index] = data;
 
-                /// 
-                /// Alert listening objects.
-                /// 
+                // 
+                // Alert listening objects.
+                // 
                 if (SamplesUpdated != null)
                 {
                     SamplesUpdated(this, new classSampleQueueArgs(mlist_waitingQueue));
@@ -1548,9 +1549,9 @@ namespace LcmsNet.SampleQueue
                     }
                 }
             }
-            /// 
-            /// Alert listening objects.
-            /// 
+            // 
+            // Alert listening objects.
+            // 
             if (updated == true && SamplesUpdated != null)
             {
                 SamplesUpdated(this, new classSampleQueueArgs(mlist_waitingQueue));
@@ -1697,9 +1698,9 @@ namespace LcmsNet.SampleQueue
                 classSampleData realSample = FindSample(sample.UniqueID);
                 if (realSample == null)
                 {
-                    /// 
-                    /// this sample does not exist on the sample queue! 
-                    /// 
+                    // 
+                    // this sample does not exist on the sample queue! 
+                    // 
                     throw new NullReferenceException("This sample does not exist in the waiting queue! " + sample.DmsData.DatasetName);
                 }                
                 mlist_waitingQueue.Remove(realSample);
@@ -1756,18 +1757,18 @@ namespace LcmsNet.SampleQueue
 		/// <param name="samples">Samples to put back on the waiting queue.</param>
 		public void DequeueSampleFromRunningQueue(List<classSampleData> samples)
 		{
-			/// 
-			/// For each sample to run, set the status and delay the run for 10 seconds
-			///          
+			// 
+			// For each sample to run, set the status and delay the run for 10 seconds
+			//          
 			List<classSampleData> validSamples = new List<classSampleData>();			
 			foreach (classSampleData sample in samples)
 			{
 				classSampleData realSample = FindSample(sample.UniqueID);
 				if (realSample == null)
 				{
-					/// 
-					/// this sample does not exist on the sample queue! 
-					/// 
+					// 
+					// this sample does not exist on the sample queue! 
+					// 
 					throw new NullReferenceException("This sample does not exist in the waiting queue! " + sample.DmsData.DatasetName);
 				}
 				mlist_runningQueue.Remove(realSample);
@@ -1797,9 +1798,9 @@ namespace LcmsNet.SampleQueue
             if (sampleData == null)
                 throw new NullReferenceException("The sample provided to cancel was null.");
 
-            /// 
-            /// Find the sample provided to cancel.
-            ///             
+            // 
+            // Find the sample provided to cancel.
+            //             
             classSampleData sample = FindSample(mlist_runningQueue, sampleData.UniqueID);
             if (sample == null)
             {
@@ -1809,9 +1810,9 @@ namespace LcmsNet.SampleQueue
                 return;
             }
 
-            /// 
-            /// Remove the sample from the running queue
-            ///             
+            // 
+            // Remove the sample from the running queue
+            //             
             mlist_runningQueue.Remove(sample);
             //enumSampleRunningStatus status = enumSampleRunningStatus.Stopped;
             //if (error)
@@ -1821,9 +1822,9 @@ namespace LcmsNet.SampleQueue
             sample.RunningStatus     = enumSampleRunningStatus.Stopped;  
             mint_nextAvailableSample = Math.Max(mint_nextAvailableSample - 1, 0);
 
-            /// 
-            /// Requeue the sample putting it back on the queue it came from.
-            ///             
+            // 
+            // Requeue the sample putting it back on the queue it came from.
+            //             
             mlist_completeQueue.Add(sample);
 
             classSampleData [] samples = new classSampleData[]   {  sample };
@@ -1880,16 +1881,16 @@ namespace LcmsNet.SampleQueue
         /// <param name="sample"></param>
         public void FinishSampleRun(classSampleData sampleData)
         {
-            /// uhhh this sample was null
+            // uhhh this sample was null
             if (sampleData == null)
             {
                 //TODO: Add error display.
                 //throw new NullReferenceException("The sample that is said done was not an actual sample");
                 return;
             }
-            /// 
-            /// Find the sample provided to complete.
-            ///          
+            // 
+            // Find the sample provided to complete.
+            //          
             classSampleData sample = FindSample(mlist_runningQueue, sampleData.UniqueID);
             if (sample == null)
             {
@@ -1902,9 +1903,9 @@ namespace LcmsNet.SampleQueue
             mlist_runningQueue.Remove(sample);
             mlist_completeQueue.Add(sample);
 
-            /// 
-            /// Moves the sample pointer backward to the front of the running queue.
-            /// 
+            // 
+            // Moves the sample pointer backward to the front of the running queue.
+            // 
             mint_nextAvailableSample = Math.Max(mint_nextAvailableSample - 1, 0);
             sample.RunningStatus     = enumSampleRunningStatus.Complete;
 
@@ -1938,9 +1939,9 @@ namespace LcmsNet.SampleQueue
         {
             classSampleData sample = null;
 
-            /// 
-            /// Dequeue the sample, and start it.
-            /// 
+            // 
+            // Dequeue the sample, and start it.
+            // 
             if (mint_nextAvailableSample < mlist_runningQueue.Count && mbool_startedSamples)
             {
                 sample               = mlist_runningQueue[mint_nextAvailableSample++];                                
@@ -2054,17 +2055,17 @@ namespace LcmsNet.SampleQueue
                   mint_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
           }
           
-          /// 
-          /// Loads the samples and creates unique sequence ID's and unique id's
-          /// 
+          // 
+          // Loads the samples and creates unique sequence ID's and unique id's
+          // 
           List<classSampleData> waitingSamples;
           waitingSamples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);                     
 
-          /// 
-          /// Update the Waiting Sample queue with the right LC-Methods.  This makes sure
-          /// that we always have valid LC-methods.  Otherwise when we go to run the 
-          /// scheduler and thus program will crash hard.
-          /// 
+          // 
+          // Update the Waiting Sample queue with the right LC-Methods.  This makes sure
+          // that we always have valid LC-methods.  Otherwise when we go to run the 
+          // scheduler and thus program will crash hard.
+          // 
           foreach (classSampleData sample in waitingSamples) // mlist_waitingQueue)
           {
               if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
@@ -2091,14 +2092,14 @@ namespace LcmsNet.SampleQueue
           
           //ResetColumnData(true);
 
-          /// 
-          /// Put them on the waiting queue - we do it this way so that 
-          /// we push stuff on the undo/redo stack.  That logic is already in place
-          /// in the queue samples method.  We also see if no samples were added (updated == false)
-          /// and completeQueue.length > 0 that we force an update.  Otherwise if no samples
-          /// were left in the cache on the waiting queue but were on the complete queue, then
-          /// we wouldnt see the completed samples...big bug.
-          /// 
+          // 
+          // Put them on the waiting queue - we do it this way so that 
+          // we push stuff on the undo/redo stack.  That logic is already in place
+          // in the queue samples method.  We also see if no samples were added (updated == false)
+          // and completeQueue.length > 0 that we force an update.  Otherwise if no samples
+          // were left in the cache on the waiting queue but were on the complete queue, then
+          // we wouldnt see the completed samples...big bug.
+          // 
           bool updated = QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
           if (updated == false && mlist_completeQueue.Count > 0)
           {
@@ -2143,10 +2144,10 @@ namespace LcmsNet.SampleQueue
             List<classSampleData> waitingSamples;
             waitingSamples = reader.ReadSamples(path);
 
-            /// 
-            /// We need to assign the column data information to the samples
-            /// since columns have not been assigned.         
-            /// 
+            // 
+            // We need to assign the column data information to the samples
+            // since columns have not been assigned.         
+            // 
             int index = 0;
             if (mlist_waitingQueue.Count > 0)
             {
@@ -2157,9 +2158,9 @@ namespace LcmsNet.SampleQueue
                 index = mlist_columnOrders.IndexOf(mlist_columnOrders[0]);
             }
 
-            /// 
-            /// For all the entries in the new list of samples...add some column information back into it.
-            /// 
+            // 
+            // For all the entries in the new list of samples...add some column information back into it.
+            // 
             //foreach (classSampleData data in waitingSamples)
             //{
             //    classColumnData columnData = mlist_columnOrders[index % mlist_columnOrders.Count];
@@ -2167,9 +2168,9 @@ namespace LcmsNet.SampleQueue
             //    index++;
             //}
 
-            /// 
-            /// Make sure the method references are created 
-            /// 
+            // 
+            // Make sure the method references are created 
+            // 
             foreach (classSampleData sample in waitingSamples)
             {
                 if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
@@ -2200,10 +2201,10 @@ namespace LcmsNet.SampleQueue
             List<classSampleData> waitingSamples;
             waitingSamples = reader.ReadSamples(path);
 
-            /// 
-            /// Here we need to assign the column data information to the samples
-            /// if one has not already been assigned.
-            /// 
+            // 
+            // Here we need to assign the column data information to the samples
+            // if one has not already been assigned.
+            // 
             foreach (classSampleData data in waitingSamples)
             {
                 data.DmsData.CartName = classLCMSSettings.GetParameter("CartName");

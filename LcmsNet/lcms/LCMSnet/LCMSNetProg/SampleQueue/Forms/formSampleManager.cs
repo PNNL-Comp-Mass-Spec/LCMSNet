@@ -388,18 +388,18 @@ namespace LcmsNet.SampleQueue.Forms
 		/// <param name="e"></param>
 		private void mbutton_stop_Click(object sender, EventArgs e)
 		{
-			/// 
-			/// This tells anyone else using the samples to STOP!
-			/// For the scheduler this would tell him to stop first 
-			/// so that he can move the samples appropiately.
-			/// 
+			// 
+			// This tells anyone else using the samples to STOP!
+			// For the scheduler this would tell him to stop first 
+			// so that he can move the samples appropiately.
+			// 
 			if (Stop != null)
 				Stop(this, e);
 
-			/// 
-			/// Moves the samples from the running queue back onto the
-			/// waiting queue.
-			/// 
+			// 
+			// Moves the samples from the running queue back onto the
+			// waiting queue.
+			// 
 			mobj_sampleQueue.StopRunningQueue();
 			ToggleRunButton(true, false);
 		}
@@ -417,9 +417,9 @@ namespace LcmsNet.SampleQueue.Forms
 			}
             List<classSampleData> samples = mobj_sampleQueue.GetRunningQueue();
 
-            /// 
-            /// Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            /// 
+            // 
+            // Remove any samples that have already been run, waiting to run, or had an error (== has run).
+            // 
             samples.RemoveAll(delegate(classSampleData data)
             {
                 return data.RunningStatus != enumSampleRunningStatus.WaitingToRun;
@@ -428,34 +428,34 @@ namespace LcmsNet.SampleQueue.Forms
             if (samples.Count < 1)
                 return;
 
-            /// 
-            /// Make sure the samples pass the minimum QA/QC checks before running!
-            /// 
-            /// These checks include seeing if the sample has a valid method.  
-            /// Seeing if the sample's method has all of the devices present in the method.
-            /// 
-            /// Later we will add to make sure none of the devices have an error that has 
-            /// been thrown on them.
-            /// 
-            Dictionary<classSampleData, List<classSampleValidationError>> errors = new Dictionary<classSampleData,List<classSampleValidationError>>();
+            // 
+            // Make sure the samples pass the minimum QA/QC checks before running!
+            // 
+            // These checks include seeing if the sample has a valid method.  
+            // Seeing if the sample's method has all of the devices present in the method.
+            // 
+            // Later we will add to make sure none of the devices have an error that has 
+            // been thrown on them.
+            // 
+            var errors = new Dictionary<classSampleData,List<classSampleValidationError>>();
 
-            foreach (Lazy<ISampleValidator, ISampleValidatorMetaData> reference in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+            foreach (var reference in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
             {
-                ISampleValidator validator = reference.Value;
-                foreach (classSampleData sample in samples)
+                var validator = reference.Value;
+                foreach (var sample in samples)
                 {
-                    List<classSampleValidationError> error = validator.ValidateSamples(sample);
+                    var error = validator.ValidateSamples(sample);
                     if (error.Count > 0)
                     {
                         errors.Add(sample, error);
                     }
                 }
 
-                /// 
-                /// Of course if we have an error, we just want to display and alert the user.  
-                /// But we dont let them continue, they must edit their queue and make it appropiate
-                /// before running.
-                /// 
+                // 
+                // Of course if we have an error, we just want to display and alert the user.  
+                // But we dont let them continue, they must edit their queue and make it appropiate
+                // before running.
+                // 
                 if (errors.Count > 0)
                 {
                     formSampleValidatorErrorDisplay display = new formSampleValidatorErrorDisplay(errors);
@@ -463,9 +463,9 @@ namespace LcmsNet.SampleQueue.Forms
                     return;
                 }
 
-                /// 
-                /// Then we also want to check for running blocks on the wrong column.
-                /// 
+                // 
+                // Then we also want to check for running blocks on the wrong column.
+                // 
 
                 List<classSampleData> badBlocks = validator.ValidateBlocks(samples);
                 if (badBlocks.Count > 0)
@@ -480,11 +480,11 @@ namespace LcmsNet.SampleQueue.Forms
                 }
             }
 
-            /// 
-            /// Then for trigger file checks, we want the sample data for DMS to be complete.
-            /// So here we validate all of the samples and show the user all samples before running.
-            /// This way they can validate if they need to all of this information.
-            ///  
+            // 
+            // Then for trigger file checks, we want the sample data for DMS to be complete.
+            // So here we validate all of the samples and show the user all samples before running.
+            // This way they can validate if they need to all of this information.
+            //  
 
             bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && classLCMSSettings.GetParameter("DMSTool") != string.Empty;   
             if (validateSamples == true)
