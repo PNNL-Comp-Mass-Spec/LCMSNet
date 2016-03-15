@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LcmsNetDataClasses.Logging
 {
@@ -18,6 +15,7 @@ namespace LcmsNetDataClasses.Logging
         /// Message importance level (0 is most important, 5 is least important)
         /// </summary>
         public int MessageLevel { get; set; }
+
         public object EventArgs { get; set; }
     }
 
@@ -30,10 +28,12 @@ namespace LcmsNetDataClasses.Logging
         /// Critical and should always be logged.
         /// </summary>
         public const int CONST_STATUS_LEVEL_CRITICAL = 0;
+
         /// <summary>
         /// More detailed error levels.
         /// </summary>
         public const int CONST_STATUS_LEVEL_DETAILED = 1;
+
         /// <summary>
         /// Less likely to need to be logged.
         /// </summary>
@@ -104,36 +104,36 @@ namespace LcmsNetDataClasses.Logging
         }
 
         #region Error Methods
+
         /// <summary>
         /// Logs an error to the listening error output streams.
         /// </summary>
-        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
-        /// <param name="message">Error message to report.</param>
-        /// <param name="ex">An associated exception</param>
-        /*public static void LogError(int errorLevel, string message, Exception ex, classSampleData sample)
+        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered (0 is most important, 5 is least important)</param>
+        /// <param name="message">Error message</param>
+        public static void LogError(int errorLevel, string message)
         {
-            if (errorLevel <= mint_errorLevel)
-                if (Error != null)
-                    Error(errorLevel, new classErrorLoggerArgs(message, ex, sample));
-        }*/
+            LogError(errorLevel, message, null, null);
+        }
+
         /// <summary>
         /// Logs an error to the listening error output streams.
         /// </summary>
-        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
-        /// <param name="message">Error message to report.</param>
-        /// <param name="ex">An associated exception</param>
-        /*public static void LogError(int errorLevel, string message, Exception ex)
+        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered (0 is most important, 5 is least important)</param>
+        /// <param name="message">Error message</param>
+        /// <param name="ex">Exception</param>
+        public static void LogError(int errorLevel, string message, Exception ex)
         {
-            if (errorLevel <= mint_errorLevel)
-                if (Error != null)
-                    Error(errorLevel, new classErrorLoggerArgs(message, ex));
-        }*/
+            LogError(errorLevel, message, ex, null);
+        }
+
         /// <summary>
-        /// Logs an error to the listening error output streams.
+        /// Logs an error to the listening error output streams
         /// </summary>
-        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered.</param>
-        /// <param name="message">Error message to report.</param>
-        public static void LogError(int errorLevel, string message, Exception ex = null, classSampleData sample = null)
+        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered (0 is most important, 5 is least important)</param>
+        /// <param name="message">Error message</param>
+        /// <param name="ex">Exception</param>
+        /// <param name="sample">Data for a sample</param>
+        public static void LogError(int errorLevel, string message, Exception ex, classSampleData sample)
         {
             /*if (errorLevel <= mint_errorLevel)
                 if (Error != null)
@@ -151,8 +151,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 args.Exception = ex;
             }
-            ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseErrorEvent), new ThreadPoolStateObject(errorLevel, args));
-            //RaiseErrorEvent(new ThreadPoolStateObject(errorLevel, args));
+            ThreadPool.QueueUserWorkItem(RaiseErrorEvent, new ThreadPoolStateObject(errorLevel, args));            
         }  
         #endregion
 
@@ -161,10 +160,20 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Logs a message to the listening message output streams.
         /// </summary>
-        /// <param name="messageLevel"></param>
-        /// <param name="message"></param>
-        /// <param name="sample"></param>
-        public static void LogMessage(int messageLevel, string message, classSampleData sample = null)
+        /// <param name="messageLevel">Level of the message so more verbose messages can be filtered (0 is most important, 5 is least important)</param>
+        /// <param name="message">Message to log</param>
+        public static void LogMessage(int messageLevel, string message)
+        {
+            LogMessage(messageLevel, message, null);
+        }
+
+        /// <summary>
+        /// Logs a message to the listening message output streams.
+        /// </summary>
+        /// <param name="messageLevel">Level of the message so more verbose messages can be filtered (0 is most important, 5 is least important)</param>
+        /// <param name="message">Message to log</param>
+        /// <param name="sample">Sample data</param>
+        public static void LogMessage(int messageLevel, string message, classSampleData sample)
         {            
             classMessageLoggerArgs args;
             if(sample != null)
@@ -175,8 +184,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 args = new classMessageLoggerArgs(message);
             }         
-            ThreadPool.QueueUserWorkItem(new WaitCallback(RaiseMessageEvent), new ThreadPoolStateObject(messageLevel, args));
-            //RaiseMessageEvent(new ThreadPoolStateObject(messageLevel, args));
+            ThreadPool.QueueUserWorkItem(RaiseMessageEvent, new ThreadPoolStateObject(messageLevel, args));
         }
 
         /// <summary>
@@ -185,9 +193,9 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="errorInfo"></param>
         public static void RaiseErrorEvent(object errorInfo)
         {
-            ThreadPoolStateObject info = errorInfo as ThreadPoolStateObject;
+            var info = errorInfo as ThreadPoolStateObject;
 
-            if(info.MessageLevel <= mint_errorLevel && Error != null)
+            if(info != null && (info.MessageLevel <= mint_errorLevel && Error != null))
             {
                 Error(info.MessageLevel, info.EventArgs as classErrorLoggerArgs);
             }
@@ -197,12 +205,12 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Raises the message event in a Threadpool thread to avoid interrupting other functions with I/O.
         /// </summary>
-        /// <param name="errorInfo"></param>
+        /// <param name="messageInfo"></param>
         private static void RaiseMessageEvent(object messageInfo)
         {
-            ThreadPoolStateObject info = messageInfo as ThreadPoolStateObject;
+            var info = messageInfo as ThreadPoolStateObject;
 
-            if (info.MessageLevel <= mint_messageLevel && Message!= null)
+            if (info != null && (info.MessageLevel <= mint_messageLevel && Message != null))
             {
                 Message(info.MessageLevel, info.EventArgs as classMessageLoggerArgs);
             }
@@ -213,32 +221,32 @@ namespace LcmsNetDataClasses.Logging
 
         void ILogger.LogError(int errorLevel, string message, Exception ex, classSampleData sample)
         {
-            classApplicationLogger.LogError(errorLevel, message, ex, sample);
+            LogError(errorLevel, message, ex, sample);
         }
 
         void ILogger.LogError(int errorLevel, string message, Exception ex)
         {
-            classApplicationLogger.LogError(errorLevel, message, ex);
+            LogError(errorLevel, message, ex);
         }
 
         void ILogger.LogError(int errorLevel, string message, classSampleData sample)
         {
-            classApplicationLogger.LogError(errorLevel, message, null, sample);
+            LogError(errorLevel, message, null, sample);
         }
 
         void ILogger.LogError(int errorLevel, string message)
         {
-            classApplicationLogger.LogError(errorLevel, message);
+            LogError(errorLevel, message);
         }
 
         void ILogger.LogMessage(int messageLevel, string message)
         {
-            classApplicationLogger.LogMessage(messageLevel, message);
+            LogMessage(messageLevel, message);
         }
 
         void ILogger.LogMessage(int messageLevel, string message, classSampleData sample)
         {
-            classApplicationLogger.LogMessage(messageLevel, message, sample);
+            LogMessage(messageLevel, message, sample);
         }
 
         #endregion
