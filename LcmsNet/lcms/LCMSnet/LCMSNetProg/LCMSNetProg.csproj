@@ -34,6 +34,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>8d3b9d4a</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,10 +67,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\FluidicsSimulator.dll</HintPath>
     </Reference>
-    <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
-    </Reference>
     <Reference Include="LcmsNetSQLiteTools">
       <HintPath>..\..\..\lib\LcmsNetSQLiteTools.dll</HintPath>
     </Reference>
@@ -83,8 +80,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\..\lib\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net40\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
@@ -817,6 +815,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -960,6 +959,12 @@
   <ItemGroup>
     <Folder Include="Devices\Plugins\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SDK\LcmsNetSDK\LcmsNetSDK.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -969,9 +974,16 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(SolutionDir)..\..\lib\*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>rem xcopy /y "$(SolutionDir)..\..\lib\*" "$(TargetDir)"</PostBuildEvent>
     <PreBuildEvent>IF EXIST Plugins  GOTO DONE
 mkdir Plugins
 :DONE</PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets'))" />
+  </Target>
 </Project>

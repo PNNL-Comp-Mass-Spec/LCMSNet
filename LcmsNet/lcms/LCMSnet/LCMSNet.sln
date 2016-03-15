@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{07984DDF-DE3A-4AAB-8E48-A6F4ACC2C598}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsnetUnitTest", "LcmsnetUnitTest\LcmsnetUnitTest.csproj", "{08F2C18B-27E7-4DD4-A47F-760E52C2D552}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoFiles", "DemoFiles", "{E21C9EE4-EDD6-46EE-9463-216933A81959}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDK", "..\..\SDK\LcmsNetSDK\LcmsNetSDK.csproj", "{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,21 @@ Global
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|Mixed Platforms.ActiveCfg = Debug|x86
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|Mixed Platforms.Build.0 = Debug|x86
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|x86.ActiveCfg = Debug|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Debug|x86.ActiveCfg = Debug|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Debug|x86.Build.0 = Debug|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.PNNLRelease|Any CPU.ActiveCfg = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.PNNLRelease|Mixed Platforms.ActiveCfg = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.PNNLRelease|Mixed Platforms.Build.0 = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.PNNLRelease|x86.ActiveCfg = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.PNNLRelease|x86.Build.0 = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|Any CPU.ActiveCfg = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|Mixed Platforms.ActiveCfg = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|Mixed Platforms.Build.0 = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|x86.ActiveCfg = PNNLRelease|x86
+		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|x86.Build.0 = PNNLRelease|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
