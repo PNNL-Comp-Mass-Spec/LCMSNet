@@ -2603,9 +2603,9 @@ namespace LcmsNet.SampleQueue.Forms
         }
         protected virtual void SamplesAddedFromQueue(IEnumerable<classSampleData> samples)
         {
-            /// 
-            /// The sample queue gives all of the samples
-            /// 
+            // 
+            // The sample queue gives all of the samples
+            // 
             int scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
             mdataGrid_samples.Rows.Clear();
             AddSamplesToList(samples);

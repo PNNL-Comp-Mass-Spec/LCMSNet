@@ -118,9 +118,9 @@ namespace LcmsNet.SampleQueue.Forms
 					mobj_sampleQueue.SamplesWaitingToRun += new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SamplesWaitingToRun);					
 				}
 
-				/// 
-				/// Load up the data to the appropiate sub-controls.
-				/// 
+				// 
+				// Load up the data to the appropiate sub-controls.
+				// 
 				mcontrol_sequenceView.DMSView = mform_dmsView;
 				mcontrol_sequenceView.SampleQueue = mobj_sampleQueue;				
 				mcontrol_column1.DMSView = mform_dmsView;
