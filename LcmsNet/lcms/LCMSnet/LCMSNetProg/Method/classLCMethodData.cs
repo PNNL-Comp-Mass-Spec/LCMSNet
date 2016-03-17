@@ -56,12 +56,12 @@ namespace LcmsNet.Method
             for(int i = 0; i < Parameters.Controls.Count; i++)
             {
                 Control control = Parameters.Controls[i];
-                
+
                 if (control != null)
                 {
-                    /// 
+                    ///
                     /// Grab the controls value to be used later on
-                    /// 
+                    ///
                     ILCEventParameter parameterControl = control as ILCEventParameter;
                     if (parameterControl != null)
                     {

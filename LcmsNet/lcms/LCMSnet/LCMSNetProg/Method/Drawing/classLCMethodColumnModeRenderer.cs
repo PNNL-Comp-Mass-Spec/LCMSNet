@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
-
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
@@ -10,18 +9,20 @@ using LcmsNetDataClasses.Devices;
 namespace LcmsNet.Method.Drawing
 {
     /// <summary>
-    /// Class that renders LC-methods like the column sample renderer but without column data.    
+    /// Class that renders LC-methods like the column sample renderer but without column data.
     /// </summary>
-    public class classLCMethodColumnModeRenderer: classLCMethodRenderer
+    public class classLCMethodColumnModeRenderer : classLCMethodRenderer
     {
         /// <summary>
         /// Constant defining the number of columns to use.
         /// </summary>
-        private const int CONST_NUMBER_OF_COLUMNS                   = 4;
+        private const int CONST_NUMBER_OF_COLUMNS = 4;
+
         /// <summary>
         /// Number of pixels to pad the column background streak.
         /// </summary>
-        private const int CONST_COLUMN_BACKGROUND_HEIGHT_PADDING    = 15;
+        private const int CONST_COLUMN_BACKGROUND_HEIGHT_PADDING = 15;
+
         /// <summary>
         /// Spacing between column plots.
         /// </summary>
@@ -33,15 +34,11 @@ namespace LcmsNet.Method.Drawing
         public classLCMethodColumnModeRenderer()
         {
             PixelPadding = 5.0F;
-            ColumnNames  = new List<string>();
-            
+            ColumnNames = new List<string>();
         }
 
-        public List<string> ColumnNames
-        {
-            get;
-            set;
-        }
+        public List<string> ColumnNames { get; set; }
+
         /// <summary>
         /// Renders the column name on the background.
         /// </summary>
@@ -50,10 +47,10 @@ namespace LcmsNet.Method.Drawing
         /// <param name="x"></param>
         /// <param name="y"></param>
         public void RenderColumnName(Graphics graphics,
-                                      string columnName,
-                                      float x,
-                                      float y)
-        {            
+            string columnName,
+            float x,
+            float y)
+        {
             using (Font font = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Italic))
             {
                 SizeF fontSize = graphics.MeasureString(columnName, font);
@@ -63,7 +60,7 @@ namespace LcmsNet.Method.Drawing
                 }
             }
         }
- 
+
         /// <summary>
         /// Renders the samples provided in a column ordered way.
         /// </summary>
@@ -74,33 +71,34 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod( 
-                                            Graphics graphics,
-                                            RectangleF bounds, 
-                                            List<classLCMethod> methods,
-                                            DateTime startTime,
-                                            TimeSpan duration,
-                                            Dictionary<IDevice, Color> colorMap,
-                                            DateTime progress)
+        public override void RenderLCMethod(
+            Graphics graphics,
+            RectangleF bounds,
+            List<classLCMethod> methods,
+            DateTime startTime,
+            TimeSpan duration,
+            Dictionary<IDevice, Color> colorMap,
+            DateTime progress)
         {
-            /// //////////////////////////////////////////////////////////////////////////////////////////              
-            /// Calculate formatting paddings.
-            /// //////////////////////////////////////////////////////////////////////////////////////////  
-            /// 
-            /// This tells us how far down from the top of the rendering area we are before we draw anything!
-            /// 
+            // //////////////////////////////////////////////////////////////////////////////////////////
+            // Calculate formatting paddings.
+            // //////////////////////////////////////////////////////////////////////////////////////////
+            //
+            // This tells us how far down from the top of the rendering area we are before we draw anything!
+            //
             float offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
-            /// 
-            /// This tells us how much room we get per method or column spacing.
-            /// 
-            float heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
+            //
+            // This tells us how much room we get per method or column spacing.
+            //
+            float heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) /
+                              Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
             heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, CONST_MAX_HEIGHT));
 
 
-            /// ////////////////////////////////////////////////////////////////////////////////////////// 
-            /// Draw the data for the columns
-            /// ////////////////////////////////////////////////////////////////////////////////////////// 
+            // //////////////////////////////////////////////////////////////////////////////////////////
+            // Draw the data for the columns
+            // //////////////////////////////////////////////////////////////////////////////////////////
             for (int i = 0; i < ColumnNames.Count; i++)
             {
                 float width, height, x, top;
@@ -112,35 +110,33 @@ namespace LcmsNet.Method.Drawing
                 RectangleF area = new RectangleF(x, top, width, height);
                 int color = 245;
                 graphics.FillRectangle(new LinearGradientBrush(area,
-                                                                    Color.FromArgb(255,color, color, color),
-                                                                    Color.White,
-                                                                    LinearGradientMode.Vertical),
-                                            x,
-                                            top,
-                                            width,
-                                            height);
+                    Color.FromArgb(255, color, color, color),
+                    Color.White,
+                    LinearGradientMode.Vertical),
+                    x,
+                    top,
+                    width,
+                    height);
 
                 graphics.DrawRectangle(new Pen(new SolidBrush(Color.LightGray), 2.0F),
-                                            x,
-                                            top,
-                                            width,
-                                            height);
+                    x,
+                    top,
+                    width,
+                    height);
 
-                RenderColumnName(graphics, 
-                                 string.Format("Column {0}: {1}", i + 1, ColumnNames[i]),
-                                 x,
-                                 top);
+                RenderColumnName(graphics,
+                    string.Format("Column {0}: {1}", i + 1, ColumnNames[i]),
+                    x,
+                    top);
             }
 
 
             List<classLCEvent> alignedEvents = new List<classLCEvent>();
             if (methods != null && methods.Count > 0)
             {
-
-
-                /// //////////////////////////////////////////////////////////////////////////////////////////  
-                /// Find the start and end times of the samples so we can scale everything accordingly.
-                /// //////////////////////////////////////////////////////////////////////////////////////////  
+                // //////////////////////////////////////////////////////////////////////////////////////////
+                // Find the start and end times of the samples so we can scale everything accordingly.
+                // //////////////////////////////////////////////////////////////////////////////////////////
                 DateTime methodStart;
                 TimeSpan methodDuration;
                 FindTimeExtremas(methods, out methodStart, out methodDuration);
@@ -159,15 +155,15 @@ namespace LcmsNet.Method.Drawing
                     }
                 }
 
-                RenderAcquisitionTimes(graphics, 
-                                        bounds, 
-                                        startTime, 
-                                        duration, 
-                                        alignedEvents);
+                RenderAcquisitionTimes(graphics,
+                    bounds,
+                    startTime,
+                    duration,
+                    alignedEvents);
 
-                /// ////////////////////////////////////////////////////////////////////////////////////////// 
-                /// Draw each method
-                /// //////////////////////////////////////////////////////////////////////////////////////////  
+                // //////////////////////////////////////////////////////////////////////////////////////////
+                // Draw each method
+                // //////////////////////////////////////////////////////////////////////////////////////////
                 int columnID = 0;
                 foreach (classLCMethod method in methods)
                 {
@@ -178,34 +174,33 @@ namespace LcmsNet.Method.Drawing
 
                     if (columnID < 0)
                     {
-                        columnID = CONST_NUMBER_OF_COLUMNS;                        
+                        columnID = CONST_NUMBER_OF_COLUMNS;
                     }
-                   
-                    /// 
-                    /// Calculate the number of pixels the method should start from based on its time value.
-                    ///                                 
+
+                    //
+                    // Calculate the number of pixels the method should start from based on its time value.
+                    //
                     float top = offset + ((heightPer + CONST_COLUMN_SPACING) * columnID);
 
                     RectangleF methodBounds = new RectangleF(bounds.X, top, bounds.Width, heightPer);
-                    
-                    RenderLCMethod(graphics,
-                                   methodBounds,
-                                   method,
-                                   startTime,
-                                   duration,
-                                   colorMap,
-                                   progress);
 
+                    RenderLCMethod(graphics,
+                        methodBounds,
+                        method,
+                        startTime,
+                        duration,
+                        colorMap,
+                        progress);
                 }
             }
 
             RenderOptimizationsOnTimeline(graphics, bounds, startTime, duration, methods);
 
-            /// Draw a timeline            
+            // Draw a timeline
             RenderTimeline(graphics,
-                           bounds,
-                           startTime,
-                           duration);
+                bounds,
+                startTime,
+                duration);
         }
-    }    
+    }
 }

@@ -24,12 +24,12 @@ namespace LcmsNet.Notification
         public override NotificationConditionNode GetConditions()
         {
             NotificationConditionNode node = new NotificationConditionNode();
-            node.Name = "Always";            
+            node.Name = "Always";
             return node;
         }
+
         public override void SetConditions(NotificationConditionNode node)
         {
-            
         }
     }
 }

@@ -43,9 +43,9 @@
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_ok.Location = new System.Drawing.Point(674, 3);
@@ -55,9 +55,9 @@
             this.mbutton_ok.Text = "OK";
             this.mbutton_ok.UseVisualStyleBackColor = true;
             this.mbutton_ok.Click += new System.EventHandler(this.mbutton_ok_Click);
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -65,9 +65,9 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(845, 623);
             this.panel1.TabIndex = 1;
-            // 
+            //
             // panel3
-            // 
+            //
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.label3);
@@ -79,54 +79,54 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(845, 25);
             this.panel3.TabIndex = 2;
-            // 
+            //
             // label5
-            // 
+            //
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(612, 9);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(90, 13);
             this.label5.TabIndex = 22;
             this.label5.Text = "Experiment Name";
-            // 
+            //
             // label4
-            // 
+            //
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(515, 9);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(72, 13);
             this.label4.TabIndex = 21;
             this.label4.Text = "EMSL User(s)";
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(396, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 13);
             this.label3.TabIndex = 20;
             this.label3.Text = " Proposal ID";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(314, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 13);
             this.label2.TabIndex = 19;
             this.label2.Text = "Usage Type";
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(157, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(139, 13);
             this.label1.TabIndex = 18;
             this.label1.Text = "EMSL Request Number (ID)";
-            // 
+            //
             // mlabel_sampleName
-            // 
+            //
             this.mlabel_sampleName.AutoSize = true;
             this.mlabel_sampleName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mlabel_sampleName.Location = new System.Drawing.Point(51, 9);
@@ -135,9 +135,9 @@
             this.mlabel_sampleName.TabIndex = 13;
             this.mlabel_sampleName.Text = "Dataset Name";
             this.mlabel_sampleName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.Controls.Add(this.mbutton_cancel);
             this.panel2.Controls.Add(this.mbutton_ok);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -145,9 +145,9 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(845, 46);
             this.panel2.TabIndex = 1;
-            // 
+            //
             // mbutton_cancel
-            // 
+            //
             this.mbutton_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.mbutton_cancel.Location = new System.Drawing.Point(761, 3);
@@ -157,9 +157,9 @@
             this.mbutton_cancel.Text = "Cancel";
             this.mbutton_cancel.UseVisualStyleBackColor = true;
             this.mbutton_cancel.Click += new System.EventHandler(this.mbutton_cancel_Click);
-            // 
+            //
             // formSampleDMSValidatorDisplay
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

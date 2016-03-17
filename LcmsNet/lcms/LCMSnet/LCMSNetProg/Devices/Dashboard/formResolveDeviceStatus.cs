@@ -18,26 +18,23 @@ namespace LcmsNet.Devices.Dashboard
         {
             InitializeComponent();
             mbool_set = false;
-            
         }
 
-        public enumDeviceStatus Status
-        {
-            get;
-            set;
-        }
+        public enumDeviceStatus Status { get; set; }
 
         private void mbutton_leaveError_Click(object sender, EventArgs e)
         {
-            Status = enumDeviceStatus.Error;            
+            Status = enumDeviceStatus.Error;
         }
+
         private void mbutton_clearErrors_Click(object sender, EventArgs e)
         {
-            Status = enumDeviceStatus.Initialized;            
+            Status = enumDeviceStatus.Initialized;
         }
+
         private void mbutton_notInitialized_Click(object sender, EventArgs e)
         {
-            Status = enumDeviceStatus.NotInitialized;         
+            Status = enumDeviceStatus.NotInitialized;
         }
     }
 }

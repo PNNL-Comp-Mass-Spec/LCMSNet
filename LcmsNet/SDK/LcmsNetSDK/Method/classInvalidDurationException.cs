@@ -11,7 +11,7 @@ namespace LcmsNetDataClasses.Method
         /// Constructor for a new invalid time span exception
         /// </summary>
         /// <param name="message"></param>
-        public classInvalidTimeSpanException(string message): base(message)
+        public classInvalidTimeSpanException(string message) : base(message)
         {
         }
     }

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-
 using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Notification
-{ 
+{
     /// <summary>
-    /// Notifies listeners 
+    /// Notifies listeners
     /// </summary>
     public class classNotifier
     {
@@ -23,7 +22,7 @@ namespace LcmsNet.Notification
             WriteSystemHealth();
         }
         /// <summary>
-        /// Writes the system health to 
+        /// Writes the system health to
         /// </summary>
         public void WriteSystemHealth()
         {
@@ -44,24 +43,21 @@ namespace LcmsNet.Notification
             if (exists)
             {
                 string name     = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
-                string newPath = System.IO.Path.Combine(Path, name + "-systemHealth.xml"); 
+                string newPath = System.IO.Path.Combine(Path, name + "-systemHealth.xml");
                 LcmsNet.Devices.classDeviceManager.Manager.WriteSystemHealth(newPath);
             }
         }
         /// <summary>
-        /// Writes the system health to 
+        /// Writes the system health to
         /// </summary>
         public void WriteSystemHealth(string note)
         {
 
         }*/
+
         /// <summary>
         /// Gets or sets the path to write system health to.
         /// </summary>
-        public string Path
-        {
-            get;
-            set;
-        }
+        public string Path { get; set; }
     }
 }

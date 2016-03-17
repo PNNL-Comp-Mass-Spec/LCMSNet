@@ -13,7 +13,7 @@ namespace LcmsNet.Devices.Fluidics
     {
         public controlBufferedPanel()
             : base()
-        {            
+        {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint| ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
         }

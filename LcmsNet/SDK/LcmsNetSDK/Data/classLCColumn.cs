@@ -6,56 +6,62 @@ using System.Text;
 
 namespace LcmsNetDataClasses
 {
-	[Serializable]
-	public class classLCColumn
-		: classDataClassBase, INotifyPropertyChanged
-	{
-		#region Events
-		public event PropertyChangedEventHandler PropertyChanged;
-		#endregion
+    [Serializable]
+    public class classLCColumn
+        : classDataClassBase, INotifyPropertyChanged
+    {
+        #region Events
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		#region Initializtion
-		#endregion
+        #endregion
 
+        #region Methods
 
-		#region Properties
-		public string LCColumn
-		{
-			get { return m_lcColumn; }
-			set
-			{
-				if (m_lcColumn != value)
-				{
-					m_lcColumn = value;
-					OnPropertyChanged("LCColumn");
-				}
-			}
-		}
-		private string m_lcColumn;
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-		public string State
-		{
-			get { return m_state; }
-			set
-			{
-				if (m_state != value)
-				{
-					m_state = value;
-					OnPropertyChanged("State");
-				}
-			}
-		}
-		private string m_state;
-		#endregion
+        #endregion
 
+        #region Initializtion
 
-		#region Methods
-		private void OnPropertyChanged(string propertyName)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-		#endregion
-	}
+        #endregion
+
+        #region Properties
+
+        public string LCColumn
+        {
+            get { return m_lcColumn; }
+            set
+            {
+                if (m_lcColumn != value)
+                {
+                    m_lcColumn = value;
+                    OnPropertyChanged("LCColumn");
+                }
+            }
+        }
+
+        private string m_lcColumn;
+
+        public string State
+        {
+            get { return m_state; }
+            set
+            {
+                if (m_state != value)
+                {
+                    m_state = value;
+                    OnPropertyChanged("State");
+                }
+            }
+        }
+
+        private string m_state;
+
+        #endregion
+    }
 }

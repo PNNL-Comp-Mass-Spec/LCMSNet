@@ -20,22 +20,13 @@ namespace LcmsNetDataClasses.Method
         {
             Minimum = minimum;
             Maximum = maximum;
-            Name    = parameterName;
+            Name = parameterName;
         }
-        public double Minimum
-        {
-            get;
-            private set;
-        }
-        public double Maximum
-        {
-            get;
-            private set;
-        }
-        public string Name
-        {
-            get;
-            private set;
-        }
+
+        public double Minimum { get; private set; }
+
+        public double Maximum { get; private set; }
+
+        public string Name { get; private set; }
     }
 }

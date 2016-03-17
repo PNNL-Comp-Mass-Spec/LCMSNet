@@ -2,12 +2,12 @@
 {
     partial class controlSampleValidatorErrorDisplay
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -32,9 +32,9 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
-            // 
+            //
             // mlabel_sampleName
-            // 
+            //
             this.mlabel_sampleName.AutoSize = true;
             this.mlabel_sampleName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mlabel_sampleName.Location = new System.Drawing.Point(3, 0);
@@ -42,9 +42,9 @@
             this.mlabel_sampleName.Size = new System.Drawing.Size(69, 20);
             this.mlabel_sampleName.TabIndex = 0;
             this.mlabel_sampleName.Text = "Sample";
-            // 
+            //
             // listView1
-            // 
+            //
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -57,14 +57,14 @@
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // columnHeader1
-            // 
+            //
             this.columnHeader1.Text = "Error";
             this.columnHeader1.Width = 342;
-            // 
+            //
             // controlSampleValidatorErrorDisplay
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

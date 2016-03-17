@@ -8,13 +8,13 @@ namespace LcmsNet.Notification
     /// <summary>
     /// Configuration of the notifications for each device.
     /// </summary>
-    public class NotificationConfiguration: IEnumerable<INotifier>
+    public class NotificationConfiguration : IEnumerable<INotifier>
     {
         /// <summary>
         /// Maps devices to their settings.
         /// </summary>
         private Dictionary<INotifier, List<NotificationSetting>> mdict_settings;
-       
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -25,6 +25,29 @@ namespace LcmsNet.Notification
         }
 
         /// <summary>
+        /// Gets or sets whether to ignore all notifications.
+        /// </summary>
+        public bool IgnoreNotifications { get; set; }
+
+        #region IEnumerable<IDevice> Members
+
+        public IEnumerator<INotifier> GetEnumerator()
+        {
+            return this.mdict_settings.Keys.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.mdict_settings.Keys.GetEnumerator();
+        }
+
+        #endregion
+
+        /// <summary>
         /// Adds a setting for the given device.
         /// </summary>
         /// <param name="device">Device to persist.  If not added before will be saved</param>
@@ -33,11 +56,12 @@ namespace LcmsNet.Notification
         public void AddSetting(INotifier device, NotificationSetting setting)
         {
             if (!mdict_settings.ContainsKey(device))
-            {                    
+            {
                 mdict_settings.Add(device, new List<NotificationSetting>());
             }
             mdict_settings[device].Add(setting);
         }
+
         /// <summary>
         /// Retrieves the device settings for the specified device.
         /// </summary>
@@ -57,28 +81,5 @@ namespace LcmsNet.Notification
             }
             return devices;
         }
-
-        /// <summary>
-        /// Gets or sets whether to ignore all notifications.
-        /// </summary>
-        public bool IgnoreNotifications
-        {
-            get;
-            set;
-        }
-    
-        #region IEnumerable<IDevice> Members
-        public IEnumerator<INotifier> GetEnumerator()
-        {
-            return this.mdict_settings.Keys.GetEnumerator();            
-        }
-        #endregion
-
-        #region IEnumerable Members
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return this.mdict_settings.Keys.GetEnumerator();  
-        }
-        #endregion
     }
 }

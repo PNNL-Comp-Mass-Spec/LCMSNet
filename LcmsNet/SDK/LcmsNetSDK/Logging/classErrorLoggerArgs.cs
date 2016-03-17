@@ -19,6 +19,7 @@ namespace LcmsNetDataClasses.Logging
         {
             Exception = null;
         }
+
         /// <summary>
         /// Constructor that takes the error message.
         /// </summary>
@@ -28,34 +29,32 @@ namespace LcmsNetDataClasses.Logging
         {
             Exception = null;
         }
+
         /// <summary>
         /// Constructor that takes an error message and an exception.
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
-        public classErrorLoggerArgs(string message, Exception ex):
+        public classErrorLoggerArgs(string message, Exception ex) :
             base(message)
         {
             Exception = ex;
         }
+
         /// <summary>
         /// Constructor that takes an error message and an exception.
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
-        public classErrorLoggerArgs(string message, Exception ex, classSampleData sample):
+        public classErrorLoggerArgs(string message, Exception ex, classSampleData sample) :
             base(message, sample)
         {
             Exception = ex;
         }
+
         /// <summary>
         /// Gets or sets the exception associated with the error message if any. 
         /// </summary>
-        public Exception Exception
-        {
-            get;
-            set;
-        }
+        public Exception Exception { get; set; }
     }
-    
 }

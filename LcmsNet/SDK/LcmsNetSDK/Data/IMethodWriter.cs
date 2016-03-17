@@ -11,15 +11,18 @@ namespace LcmsNetDataClasses.Data
     public interface IMethodWriter
     {
         void WriteMethodFiles(classSampleData sample);
+
         /// <summary>
         /// Test for presence of completed sample method folders that need to be moved to DMS
         /// </summary>
         /// <returns>TRUE if files found; FALSE otherwise</returns>
         bool CheckLocalMethodFolders();
+
         /// <summary>
         /// Moves local sample method files to the DMS transfer folder
         /// </summary>
         void MoveLocalMethodFiles();
+
         /// <summary>
         /// Creates the remote system path.
         /// </summary>

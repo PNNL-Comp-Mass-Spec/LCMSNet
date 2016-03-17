@@ -10,7 +10,6 @@ namespace LcmsNetDataClasses
     {
         public ModelStatusChangeEventArgs()
         {
-
         }
 
         public ModelStatusChangeEventArgs(List<ModelStatus> status)
@@ -18,10 +17,6 @@ namespace LcmsNetDataClasses
             StatusList = status;
         }
 
-        public List<ModelStatus> StatusList
-        {
-            get;
-            set;
-        }
+        public List<ModelStatus> StatusList { get; set; }
     }
 }

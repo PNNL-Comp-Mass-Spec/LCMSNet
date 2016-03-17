@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace LcmsNet
 {
-    public class TackEventArgs:EventArgs
+    public class TackEventArgs : EventArgs
     {
         private bool m_tacked;
 
@@ -17,10 +17,7 @@ namespace LcmsNet
 
         public bool Tacked
         {
-            get
-            {
-                return m_tacked;
-            }
-        }        
+            get { return m_tacked; }
+        }
     }
 }

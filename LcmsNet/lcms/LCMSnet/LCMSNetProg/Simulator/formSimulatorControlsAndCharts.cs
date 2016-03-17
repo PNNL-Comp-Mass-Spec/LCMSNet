@@ -14,9 +14,8 @@ namespace LcmsNet.Simulator
 {
     public partial class formSimulatorControlsAndCharts : Form
     {
-        private FluidicsSimulator.FluidicsSimulator m_simulator;
-
         private SimControlsAndChartsControl m_controls;
+        private FluidicsSimulator.FluidicsSimulator m_simulator;
 
         public formSimulatorControlsAndCharts()
         {
@@ -25,7 +24,7 @@ namespace LcmsNet.Simulator
             m_controls = SimControlsAndChartsControl.GetInstance;
             m_controls.Dock = DockStyle.Fill;
             //m_controls.Tack += new EventHandler<TackEventArgs>(m_controls_Tack);
-        } 
+        }
 
 
         void m_controls_Tack(object sender, TackEventArgs e)
@@ -44,9 +43,8 @@ namespace LcmsNet.Simulator
         {
             this.Controls.Add(m_controls);
             if (!m_controls.Tacked)
-            {                
+            {
                 this.MdiParent = null;
-
             }
             base.Show();
         }

@@ -17,89 +17,96 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using LcmsNetDataClasses.Devices;
-using System.Xml;	// DAC added for save/retrieve settings
+using System.Xml; // DAC added for save/retrieve settings
 
 namespace LcmsNetDataClasses.Devices
 {
-	public partial class controlBaseDeviceControl : UserControl
-	{
-		#region Delegates
-			private delegate void delegateStatusUpdate(string newStatus);
-		#endregion
+    public partial class controlBaseDeviceControl : UserControl
+    {
+        #region Members
 
-		#region Members
-			/// <summary>
-			/// The associated device.
-			/// </summary>
-			protected IDevice mobj_device;
-		#endregion
-                
-		#region Events
-			//Name change
-			public event DelegateNameChanged NameChanged;
+        /// <summary>
+        /// The associated device.
+        /// </summary>
+        protected IDevice mobj_device;
 
-			public virtual void OnNameChanged(string newname)
-			{
-				if (NameChanged != null)
-				{
-					NameChanged(this, newname);
-				}
-			}
+        #endregion
 
-			//Save required
-			public event DelegateSaveRequired SaveRequired;
+        #region Constructors
 
-			public virtual void OnSaveRequired()
-			{
-				if (SaveRequired != null)
-				{
-					SaveRequired(this);
-				}
-			}
-		#endregion
+        public controlBaseDeviceControl()
+        {
+            InitializeComponent();
+        }
 
-		#region Constructors
-			public controlBaseDeviceControl()
-			{
-				InitializeComponent();
-			}
-		#endregion
-          
-		#region Properties
-			/// <summary>
-			/// Indicates whether the device is currently running or not.
-			/// </summary>
-			public virtual bool Running { get; set; }
+        #endregion
 
-			/// <summary>
-			/// Gets or sets the name of the control
-			/// </summary>
-			public new string Name
-			{
-				get
-				{
-					return mobj_device.Name;
-				}
-				set
-				{
-					}
-				}
-		    #endregion
+        #region Methods
 
-            #region Methods
-            /// <summary>
-			/// Sets the base device and updates the name text field.
-			/// </summary>
-			/// <param name="device"></param>
-			protected void SetBaseDevice(IDevice device)
-			{
-			mobj_device = device;				
-				}            
-		#endregion                
- 
+        // <summary>
+        /// Sets the base device and updates the name text field.
+        /// </summary>
+        /// <param name="device"></param>
+        protected void SetBaseDevice(IDevice device)
+        {
+            mobj_device = device;
+        }
+
+        #endregion
+
         protected virtual void UpdateStatusDisplay(string message)
-			{
+        {
             //TODO: Add back
-			}
-	}	
-}	
+        }
+
+        #region Delegates
+
+        private delegate void delegateStatusUpdate(string newStatus);
+
+        #endregion
+
+        #region Events
+
+        //Name change
+        public event DelegateNameChanged NameChanged;
+
+        public virtual void OnNameChanged(string newname)
+        {
+            if (NameChanged != null)
+            {
+                NameChanged(this, newname);
+            }
+        }
+
+        //Save required
+        public event DelegateSaveRequired SaveRequired;
+
+        public virtual void OnSaveRequired()
+        {
+            if (SaveRequired != null)
+            {
+                SaveRequired(this);
+            }
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Indicates whether the device is currently running or not.
+        /// </summary>
+        public virtual bool Running { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the control
+        /// </summary>
+        public new string Name
+        {
+            get { return mobj_device.Name; }
+            set { }
+        }
+
+        #endregion
+    }
+}

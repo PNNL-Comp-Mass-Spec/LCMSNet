@@ -16,10 +16,76 @@ using LcmsNet.Devices.Dashboard;
 
 namespace LcmsNet.Devices.Fluidics
 {
-
     public partial class FluidicsDesign : Form
     {
+        #region Properties
+
+        public bool DevicesLocked
+        {
+            get { return mbool_locked; }
+            set
+            {
+                mbool_locked = value;
+                if (mbool_locked)
+                {
+                    // Locked, we want the unlock button to be pressable to unlock.
+                    mbutton_lock.Enabled = false;
+                    mbutton_unlock.Enabled = true;
+                    mbutton_addDevice.Enabled = false;
+                    mbutton_removeDevice.Enabled = false;
+                    mbutton_save.Enabled = false;
+                    mbutton_loadHardware.Enabled = false;
+                    mbutton_saveAs.Enabled = false;
+                    mbutton_initialize.Enabled = false;
+                    btnConnect.Enabled = false;
+                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                        "The designer has been locked.");
+                }
+                else
+                {
+                    // Unlocked, we want the lock button to be lockable.
+                    mbutton_lock.Enabled = true;
+                    mbutton_unlock.Enabled = false;
+                    mbutton_addDevice.Enabled = true;
+                    mbutton_removeDevice.Enabled = true;
+                    mbutton_save.Enabled = true;
+                    mbutton_loadHardware.Enabled = true;
+                    mbutton_saveAs.Enabled = true;
+                    mbutton_initialize.Enabled = true;
+                    btnConnect.Enabled = true;
+                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                        "The designer has been un-locked.");
+                }
+            }
+        }
+
+        #endregion
+
+        private void mbutton_loadHardware_Click(object sender, EventArgs e)
+        {
+            LoadHardware();
+        }
+
+        private void mbutton_save_Click(object sender, EventArgs e)
+        {
+            SaveConfiguration();
+        }
+
+        private void mbutton_saveAs_Click(object sender, EventArgs e)
+        {
+            SaveHardwareAs();
+        }
+
+        private void controlDesign_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void FluidicsDesign_Paint(object sender, PaintEventArgs e)
+        {
+        }
+
         #region Members
+
         // fluidics moderator, controls access to fluidics managers and provides interface for working with them
         private classFluidicsModerator m_fluidics_mod;
 
@@ -27,12 +93,15 @@ namespace LcmsNet.Devices.Fluidics
         /// Filter for file dialogs.
         /// </summary>
         private const string CONST_HARDWARE_CONFIG_FILTER = "Config files (*.ini)|*.ini|All files (*.*)|*.*";
+
         /// <summary>
         /// Default configuration for hardware.
         /// </summary>
         private const string CONST_DEFAULT_CONFIG_FILEPATH = "HardwareConfig.ini";
+
         private bool mbool_locked;
         private ModelCheckReportViewer m_reporter;
+
         #endregion
 
         #region Methods
@@ -40,9 +109,11 @@ namespace LcmsNet.Devices.Fluidics
         public FluidicsDesign()
         {
             InitializeComponent();
-    
-            classDeviceManager.Manager.DeviceAdded += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
-            classDeviceManager.Manager.DeviceRemoved += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+
+            classDeviceManager.Manager.DeviceAdded +=
+                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+            classDeviceManager.Manager.DeviceRemoved +=
+                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
             classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
             m_fluidics_mod = classFluidicsModerator.Moderator;
             m_reporter = new ModelCheckReportViewer(m_fluidics_mod);
@@ -58,15 +129,15 @@ namespace LcmsNet.Devices.Fluidics
         void FluidicsDesign_Activated(object sender, EventArgs e)
         {
             Control[] fd0 = tabControl1.Controls.Find("controlFluidicsControlDesigner", true);
-            controlFluidicsControl fd = (controlFluidicsControl)fd0[0];
-            fd.UpdateImage();            
-        }    
+            controlFluidicsControl fd = (controlFluidicsControl) fd0[0];
+            fd.UpdateImage();
+        }
 
         void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
             TabControl page = sender as TabControl;
             Control[] fd = page.Controls.Find("controlFluidicsControlDesigner", true);
-            if ( fd != null && e.TabPage == fd[0].Parent)
+            if (fd != null && e.TabPage == fd[0].Parent)
             {
                 fd[0].Visible = true;
             }
@@ -74,7 +145,6 @@ namespace LcmsNet.Devices.Fluidics
             {
                 fd[0].Visible = false;
             }
-
         }
 
         private void Manager_DeviceRenamed(object sender, IDevice device)
@@ -155,7 +225,7 @@ namespace LcmsNet.Devices.Fluidics
             {
                 configuration.AddSetting(device.IDevice.Name, "dashboard-x", device.Loc.X);
                 configuration.AddSetting(device.IDevice.Name, "dashboard-y", device.Loc.Y);
-                configuration.AddSetting(device.IDevice.Name, "State", (int)device.CurrentState);
+                configuration.AddSetting(device.IDevice.Name, "State", (int) device.CurrentState);
 
                 //for every port in a device, add any connection that is not internal to the device to the list of connections
                 foreach (Port port in device.Ports)
@@ -165,7 +235,8 @@ namespace LcmsNet.Devices.Fluidics
                         if (!connectionIds.Contains(conn.ID) && conn.InternalConnectionOf == null)
                         {
                             connectionIds.Add(conn.ID);
-                            configuration.AddConnection(conn.ID.ToString(), conn.P1.ID + ", " + conn.P2.ID + "," + conn.ConnectionStyle);
+                            configuration.AddConnection(conn.ID.ToString(),
+                                conn.P1.ID + ", " + conn.P2.ID + "," + conn.ConnectionStyle);
                         }
                     }
                 }
@@ -175,8 +246,8 @@ namespace LcmsNet.Devices.Fluidics
             writer.WriteConfiguration(path, configuration);
 
             classApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.",
-                                                                path,
-                                                                CONST_DEFAULT_CONFIG_FILEPATH));
+                path,
+                CONST_DEFAULT_CONFIG_FILEPATH));
         }
 
         /// <summary>
@@ -221,29 +292,32 @@ namespace LcmsNet.Devices.Fluidics
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Could not load the position or state of the device.", ex);
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                        "Could not load the position or state of the device.", ex);
                 }
             }
             Dictionary<string, string> connections = configuration.GetConnections();
             foreach (string connection in connections.Keys)
             {
-                string[] delimiter = new string[] { ",", "\n" };
+                string[] delimiter = new string[] {",", "\n"};
                 string[] properties = connections[connection].Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (properties.Length == 3)
                 {
                     try
                     {
                         m_fluidics_mod.CreateConnection(properties[0].Trim(), properties[1].Trim(), properties[2].Trim());
-
                     }
                     catch (Exception)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Unable to create connection between " + properties[0] + " " + properties[1]);
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                            "Unable to create connection between " + properties[0] + " " + properties[1]);
                     }
                 }
                 else
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Unable to create connection, specified ports invalid or missing connection style." + " port1: " + properties[0] + " port2: " + properties[1] + " style: " + properties[2]);
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                        "Unable to create connection, specified ports invalid or missing connection style." + " port1: " +
+                        properties[0] + " port2: " + properties[1] + " style: " + properties[2]);
                 }
             }
             System.Diagnostics.Trace.WriteLine("Configuration Loaded");
@@ -288,7 +362,8 @@ namespace LcmsNet.Devices.Fluidics
             int deviceCount = classDeviceManager.Manager.DeviceCount;
             if (deviceCount > 0)
             {
-                DialogResult result = MessageBox.Show("Do you want to clear the existing device configuration?", "Clear Configuration", MessageBoxButtons.YesNo);
+                DialogResult result = MessageBox.Show("Do you want to clear the existing device configuration?",
+                    "Clear Configuration", MessageBoxButtons.YesNo);
                 if (result == DialogResult.No)
                 {
                     return;
@@ -301,7 +376,7 @@ namespace LcmsNet.Devices.Fluidics
                 openFileDialog.FilterIndex = 0;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // The device manager sends us an event when it removes the devices.  
+                    // The device manager sends us an event when it removes the devices.
                     // Since this is an event driven architecture, we dont have to worry about explicitly
                     // clearing our glyphs.
                     m_fluidics_mod.BeginModelSuspension();
@@ -330,10 +405,10 @@ namespace LcmsNet.Devices.Fluidics
                 }
             }
         }
+
         #endregion
 
         #region Events
-
 
         void FluidicsDesign_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -374,7 +449,9 @@ namespace LcmsNet.Devices.Fluidics
             bool reinitialize = false;
             if (initializedCount > 0)
             {
-                DialogResult result = MessageBox.Show("Some devices are initialized already.  Do you want to re-initialize those?", "Initialization", MessageBoxButtons.YesNoCancel);
+                DialogResult result =
+                    MessageBox.Show("Some devices are initialized already.  Do you want to re-initialize those?",
+                        "Initialization", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
                 {
                     return;
@@ -406,10 +483,9 @@ namespace LcmsNet.Devices.Fluidics
             {
                 m_fluidics_mod.AddDevice(device);
             }
-            //this should never, ever, happen
+                //this should never, ever, happen
             catch (Exception ex)
             {
-
                 ShowError(ex);
             }
         }
@@ -425,7 +501,7 @@ namespace LcmsNet.Devices.Fluidics
             {
                 m_fluidics_mod.RemoveDevice(device);
             }
-            //shouldn't ever happen.
+                //shouldn't ever happen.
             catch (Exception ex)
             {
                 ShowError(ex);
@@ -436,7 +512,7 @@ namespace LcmsNet.Devices.Fluidics
         /// event handler for when a fluidics model changes.
         /// </summary>
         private void FluidicsModelChanged()
-        {            
+        {
             if (InvokeRequired)
             {
                 this.BeginInvoke(new EventHandler(changeHandler));
@@ -454,7 +530,7 @@ namespace LcmsNet.Devices.Fluidics
         /// <param name="e"></param>
         private void changeHandler(object sender, EventArgs e)
         {
-            //System.Diagnostics.Trace.WriteLine("changeHandler sender: " + sender.ToString());            
+            //System.Diagnostics.Trace.WriteLine("changeHandler sender: " + sender.ToString());
             controlFluidicsControlDesigner.UpdateImage();
             tabPageDesign.Refresh();
         }
@@ -479,7 +555,7 @@ namespace LcmsNet.Devices.Fluidics
             {
                 ShowError(ex);
             }
-            // shouldn't ever get to here
+                // shouldn't ever get to here
             catch (Exception ex)
             {
                 ShowError(ex);
@@ -496,14 +572,15 @@ namespace LcmsNet.Devices.Fluidics
         {
             try
             {
-                DialogResult areYouSure = MessageBox.Show("Are you sure you want to delete this device or connection?", "Delete Device", MessageBoxButtons.YesNo);
+                DialogResult areYouSure = MessageBox.Show("Are you sure you want to delete this device or connection?",
+                    "Delete Device", MessageBoxButtons.YesNo);
 
                 if (areYouSure == DialogResult.Yes)
                 {
                     RemoveSelected();
                 }
             }
-            //shouldn't ever get this
+                //shouldn't ever get this
             catch (Exception ex)
             {
                 ShowError(ex);
@@ -519,75 +596,7 @@ namespace LcmsNet.Devices.Fluidics
         {
             AddDeviceToDeviceManager();
         }
+
         #endregion
-
-        #region Properties
-        public bool DevicesLocked
-        {
-            get
-            {
-                return mbool_locked;
-            }
-            set
-            {
-                mbool_locked = value;
-                if (mbool_locked)
-                {
-                    // Locked, we want the unlock button to be pressable to unlock.
-                    mbutton_lock.Enabled = false;
-                    mbutton_unlock.Enabled = true;
-                    mbutton_addDevice.Enabled = false;
-                    mbutton_removeDevice.Enabled = false;
-                    mbutton_save.Enabled = false;
-                    mbutton_loadHardware.Enabled = false;
-                    mbutton_saveAs.Enabled = false;
-                    mbutton_initialize.Enabled = false;
-                    btnConnect.Enabled = false;
-                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been locked.");
-
-
-                }
-                else
-                {
-                    // Unlocked, we want the lock button to be lockable.
-                    mbutton_lock.Enabled = true;
-                    mbutton_unlock.Enabled = false;
-                    mbutton_addDevice.Enabled = true;
-                    mbutton_removeDevice.Enabled = true;
-                    mbutton_save.Enabled = true;
-                    mbutton_loadHardware.Enabled = true;
-                    mbutton_saveAs.Enabled = true;
-                    mbutton_initialize.Enabled = true;
-                    btnConnect.Enabled = true;
-                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been un-locked.");
-                }
-            }
-        }
-        #endregion
-
-        private void mbutton_loadHardware_Click(object sender, EventArgs e)
-        {
-            LoadHardware();
-        }
-
-        private void mbutton_save_Click(object sender, EventArgs e)
-        {
-            SaveConfiguration();
-        }
-
-        private void mbutton_saveAs_Click(object sender, EventArgs e)
-        {
-            SaveHardwareAs();
-        }
-
-        private void controlDesign_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FluidicsDesign_Paint(object sender, PaintEventArgs e)
-        {
-            
-        }
     }
 }

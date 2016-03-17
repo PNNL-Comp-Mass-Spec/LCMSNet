@@ -37,9 +37,9 @@
             this.mpanel_errors.SuspendLayout();
             this.mpanel_buttons.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mpanel_errors
-            // 
+            //
             this.mpanel_errors.AutoScroll = true;
             this.mpanel_errors.BackColor = System.Drawing.Color.White;
             this.mpanel_errors.Controls.Add(this.mlistview_errors);
@@ -48,18 +48,18 @@
             this.mpanel_errors.Name = "mpanel_errors";
             this.mpanel_errors.Size = new System.Drawing.Size(510, 423);
             this.mpanel_errors.TabIndex = 1;
-            // 
+            //
             // mpanel_buttons
-            // 
+            //
             this.mpanel_buttons.Controls.Add(this.mbutton_ok);
             this.mpanel_buttons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.mpanel_buttons.Location = new System.Drawing.Point(0, 423);
             this.mpanel_buttons.Name = "mpanel_buttons";
             this.mpanel_buttons.Size = new System.Drawing.Size(510, 37);
             this.mpanel_buttons.TabIndex = 2;
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_ok.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -69,9 +69,9 @@
             this.mbutton_ok.TabIndex = 0;
             this.mbutton_ok.Text = "OK";
             this.mbutton_ok.UseVisualStyleBackColor = true;
-            // 
+            //
             // mlistview_errors
-            // 
+            //
             this.mlistview_errors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -86,19 +86,19 @@
             this.mlistview_errors.TabIndex = 0;
             this.mlistview_errors.UseCompatibleStateImageBehavior = false;
             this.mlistview_errors.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // columnHeader1
-            // 
+            //
             this.columnHeader1.Text = "Sample";
             this.columnHeader1.Width = 130;
-            // 
+            //
             // columnHeader2
-            // 
+            //
             this.columnHeader2.Text = "Error ";
             this.columnHeader2.Width = 372;
-            // 
+            //
             // formSampleValidatorErrorDisplay
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

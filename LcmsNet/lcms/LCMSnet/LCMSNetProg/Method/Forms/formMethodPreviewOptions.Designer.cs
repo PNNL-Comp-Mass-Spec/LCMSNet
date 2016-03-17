@@ -42,9 +42,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.mnum_frameCount)).BeginInit();
             this.mgroupBox_update.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mcheckBox_animate
-            // 
+            //
             this.mcheckBox_animate.AutoSize = true;
             this.mcheckBox_animate.Location = new System.Drawing.Point(12, 23);
             this.mcheckBox_animate.Name = "mcheckBox_animate";
@@ -53,9 +53,9 @@
             this.mcheckBox_animate.Text = "Animate";
             this.mcheckBox_animate.UseVisualStyleBackColor = true;
             this.mcheckBox_animate.CheckedChanged += new System.EventHandler(this.mcheckBox_animate_CheckedChanged);
-            // 
+            //
             // mnum_delay
-            // 
+            //
             this.mnum_delay.Location = new System.Drawing.Point(133, 44);
             this.mnum_delay.Maximum = new decimal(new int[] {
             30000,
@@ -75,27 +75,27 @@
             0,
             0,
             0});
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(30, 46);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(97, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Delay animation for";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(229, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "milliseconds";
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_ok.Location = new System.Drawing.Point(159, 152);
@@ -105,9 +105,9 @@
             this.mbutton_ok.Text = "OK";
             this.mbutton_ok.UseVisualStyleBackColor = true;
             this.mbutton_ok.Click += new System.EventHandler(this.mbutton_ok_Click);
-            // 
+            //
             // mbutton_cancel
-            // 
+            //
             this.mbutton_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.mbutton_cancel.Location = new System.Drawing.Point(232, 152);
@@ -117,18 +117,18 @@
             this.mbutton_cancel.Text = "Cancel";
             this.mbutton_cancel.UseVisualStyleBackColor = true;
             this.mbutton_cancel.Click += new System.EventHandler(this.mbutton_cancel_Click);
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(18, 25);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Update every";
-            // 
+            //
             // mnum_frameCount
-            // 
+            //
             this.mnum_frameCount.Location = new System.Drawing.Point(121, 23);
             this.mnum_frameCount.Maximum = new decimal(new int[] {
             1000,
@@ -143,11 +143,11 @@
             0,
             0,
             0});
-            // 
+            //
             // mgroupBox_update
-            // 
-            this.mgroupBox_update.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mgroupBox_update.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_update.Controls.Add(this.mlabel_frames);
             this.mgroupBox_update.Controls.Add(this.mnum_frameCount);
@@ -158,18 +158,18 @@
             this.mgroupBox_update.TabIndex = 8;
             this.mgroupBox_update.TabStop = false;
             this.mgroupBox_update.Text = "Update Data";
-            // 
+            //
             // mlabel_frames
-            // 
+            //
             this.mlabel_frames.AutoSize = true;
             this.mlabel_frames.Location = new System.Drawing.Point(217, 25);
             this.mlabel_frames.Name = "mlabel_frames";
             this.mlabel_frames.Size = new System.Drawing.Size(38, 13);
             this.mlabel_frames.TabIndex = 8;
             this.mlabel_frames.Text = "frames";
-            // 
+            //
             // formMethodPreviewOptions
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(301, 186);

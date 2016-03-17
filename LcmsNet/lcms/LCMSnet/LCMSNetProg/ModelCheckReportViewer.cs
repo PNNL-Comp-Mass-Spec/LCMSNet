@@ -30,7 +30,8 @@ namespace LcmsNet
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new EventHandler<ModelStatusChangeEventArgs>(StatusChangeHandler), new object[2] { sender, e});
+                this.BeginInvoke(new EventHandler<ModelStatusChangeEventArgs>(StatusChangeHandler),
+                    new object[2] {sender, e});
             }
             else
             {
@@ -46,8 +47,8 @@ namespace LcmsNet
         private void btnClear_Click(object sender, EventArgs e)
         {
             panelMessages.Controls.Clear();
-            ((Control)sender).Refresh(); // this causes the control to redraw, which removes the autoscroll bars, if present.
+            ((Control) sender).Refresh();
+                // this causes the control to redraw, which removes the autoscroll bars, if present.
         }
-        
     }
 }

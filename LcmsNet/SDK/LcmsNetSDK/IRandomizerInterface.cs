@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -9,18 +8,21 @@
 //						- 03/04/2009 (DAC) - Moved to LcmsNetDataClasses namespace
 //
 //*********************************************************************************************************
+
 using System.Collections.Generic;
 
 namespace LcmsNetDataClasses
 {
-	public interface IRandomizerInterface
-	{
-		//*********************************************************************************************************
-		// Inteface for sample run order randomizer
-		//**********************************************************************************************************
+    public interface IRandomizerInterface
+    {
+        //*********************************************************************************************************
+        // Inteface for sample run order randomizer
+        //**********************************************************************************************************
 
-		#region "Methods"
-			List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList);
-		#endregion
-	}	// End interface
-}	// End namespace
+        #region "Methods"
+
+        List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList);
+
+        #endregion
+    } // End interface
+} // End namespace

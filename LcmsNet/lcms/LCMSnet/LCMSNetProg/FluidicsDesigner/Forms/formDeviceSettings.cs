@@ -10,16 +10,16 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.FluidicsDesigner.Forms
 {
-	public partial class formDeviceSettings : Form
-	{
-		private const int WidthAdder = 5;
-		private const int HeightAdder = 40;
+    public partial class formDeviceSettings : Form
+    {
+        private const int WidthAdder = 5;
+        private const int HeightAdder = 40;
 
 
-		public formDeviceSettings()
-		{
-			InitializeComponent();
-		}
+        public formDeviceSettings()
+        {
+            InitializeComponent();
+        }
 
 
         public IDeviceControl DeviceControl
@@ -33,5 +33,5 @@ namespace LcmsNet.FluidicsDesigner.Forms
                 this.Controls.Add((Control)value);
             }
         }
-	}
+    }
 }

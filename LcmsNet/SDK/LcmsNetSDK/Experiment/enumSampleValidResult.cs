@@ -10,6 +10,6 @@ namespace LcmsNetDataClasses.Experiment
         Valid,
         DuplicateRequestName,
         InvalidRequestNumber,
-        InvalidDatasetType       
+        InvalidDatasetType
     }
 }

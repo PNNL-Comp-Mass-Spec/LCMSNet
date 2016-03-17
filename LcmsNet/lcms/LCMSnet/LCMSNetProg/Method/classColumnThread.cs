@@ -2,9 +2,10 @@
  * Written by Dave Clark?, Brian LaMarche for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009 Battle Memorial Institute
- * 
- * Last Modified 9/16/2014 By Christopher Walters 
+ *
+ * Last Modified 9/16/2014 By Christopher Walters
  *********************************************************************************************************/
+
 using System;
 using System.Threading;
 using System.Collections.Generic;
@@ -20,65 +21,63 @@ namespace LcmsNet.Method
     /// Class that handles execution of an LC method.
     /// </summary>
     public class classColumnThread
-    { 
-        #region Members and Constants  
+    {
+        #region Members and Constants
+
         /// <summary>
         /// The ID of the column this thread is working on.
         /// </summary>
         private int mint_columnId;
+
         /// <summary>
         /// Object that contains method to run with parameters.
         /// </summary>
         private classSampleData mobj_sampleData;
+
         /// <summary>
         /// synchronization event used for classDeviceTimer
         /// </summary>
         private ManualResetEvent mobj_abortEvent;
+
         /// <summary>
-        /// reference to the background worker this column thread is run on. Needed so we can check for 
-        /// Cancellations and other such issues. 
+        /// reference to the background worker this column thread is run on. Needed so we can check for
+        /// Cancellations and other such issues.
         /// </summary>
         private BackgroundWorker mthread_worker;
 
-        private const int CONST_VERBOSE_LEAST  = 0;
+        private const int CONST_VERBOSE_LEAST = 0;
         private const int CONST_VERBOSE_EVENTS = 1;
+
         #endregion
 
-        #region Properties     
-        public string Name
-        {
-            get;
-            set;
-        }
+        #region Properties
+
+        public string Name { get; set; }
 
         public classSampleData Sample
         {
-            get
-            {
-                return mobj_sampleData;
-            }
+            get { return mobj_sampleData; }
         }
 
-        public bool IsErrored
-        {
-            get;
-            private set;
-        }
+        public bool IsErrored { get; private set; }
+
         /// <summary>
         /// Gets or sets how verbose to make the debug output.
         /// </summary>
-        public int VerboseLevel { get; set; }   
+        public int VerboseLevel { get; set; }
+
         #endregion
 
-        #region Class Methods       
+        #region Class Methods
+
         public classColumnThread(int id, BackgroundWorker worker)
         {
-            mint_columnId   = id;
+            mint_columnId = id;
             mobj_abortEvent = new ManualResetEvent(false);
-            mthread_worker  = worker;
-            VerboseLevel    = CONST_VERBOSE_EVENTS;
+            mthread_worker = worker;
+            VerboseLevel = CONST_VERBOSE_EVENTS;
         }
-  
+
         public void Initialize()
         {
             IsErrored = false;
@@ -97,9 +96,10 @@ namespace LcmsNet.Method
                 System.Diagnostics.Trace.Flush();
             }
         }
+
         #endregion
 
-        #region Method/Event Execution  
+        #region Method/Event Execution
 
         /// <summary>
         /// aborts current wait timer.
@@ -120,23 +120,22 @@ namespace LcmsNet.Method
             try
             {
                 object returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
-                if (returnValue != null && returnValue.GetType() == typeof(bool))
-                    flag = (bool)returnValue;
+                if (returnValue != null && returnValue.GetType() == typeof (bool))
+                    flag = (bool) returnValue;
                 return flag;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 classApplicationLogger.LogError(0, "EVENT ERROR: " + ex.Message, ex);
                 throw;
             }
-            
-        }              
+        }
 
         public void ExecuteSample(object sender, DoWorkEventArgs e)
         {
             //Initialization
             mobj_abortEvent.Reset();
-            classColumnArgs args = e.Argument as classColumnArgs;                
+            classColumnArgs args = e.Argument as classColumnArgs;
             mobj_sampleData = args.Sample;
             classLCMethod method = mobj_sampleData.LCMethod;
             List<classLCEvent> methodEvents = mobj_sampleData.LCMethod.Events;
@@ -164,9 +163,11 @@ namespace LcmsNet.Method
                         //here we report progress, by notifying at the start of every new event.
                         decimal totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
                         long elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
-                        int percentComplete = (int)Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
-                        ///We send percentage(of time) complete and state of the column, currently consisting 
-                        ///of columnID, event number, and end time of the next event to the event handler
+                        int percentComplete =
+                            (int)
+                                Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
+                        //We send percentage(of time) complete and state of the column, currently consisting
+                        //of columnID, event number, and end time of the next event to the event handler
                         List<Object> state = new List<object>();
                         state.Add(mint_columnId);
                         state.Add(eventNumber);
@@ -184,11 +185,11 @@ namespace LcmsNet.Method
                         actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
                         actualEvent.Start = start;
                         actualEvent.Duration = new TimeSpan(0, 0, 0);
-                        method.ActualEvents.Add(actualEvent);                    
+                        method.ActualEvents.Add(actualEvent);
                         classLCEvent lcEvent = methodEvents[eventNumber];
 
                         // This determines when the next event should start.  Since the events are layed out in time
-                        // we know it should start by the lcEvent.End date time value.  This helps correct for any 
+                        // we know it should start by the lcEvent.End date time value.  This helps correct for any
                         // straying events that may be a ms or two off.
                         DateTime next = lcEvent.End;
                         bool success = true;
@@ -200,13 +201,13 @@ namespace LcmsNet.Method
                             if (lcEvent.MethodAttribute.RequiresSampleInput == true)
                                 lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = mobj_sampleData;
 
-                            // Try to execute the event, if it doesnt work, then we capture 
+                            // Try to execute the event, if it doesnt work, then we capture
                             // all relevant information and propogate it back out...At this time
-                            // if an error occurs we are done executing on this column.                  
+                            // if an error occurs we are done executing on this column.
                             if (lcEvent.Duration.TotalMilliseconds > 1)
                                 success = ExecuteEvent(lcEvent);
                             else
-                                success = true;                            
+                                success = true;
                             lcEvent.Device.Status = tempStatus;
                         }
                         catch (Exception exThrown)
@@ -217,31 +218,35 @@ namespace LcmsNet.Method
                             ex = exThrown;
                             success = false;
                             finished = LcmsNetSDK.TimeKeeper.Instance.Now;
-                            Print(string.Format("\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
-                                                finished.ToString(),
-                                                mint_columnId,                       // 1  COL ID
-                                                exThrown.Message,                    // 2  Message
-                                                exThrown.StackTrace,                // 3  Stack Trace
-                                                lcEvent.Name,
-                                                lcEvent.Device.Name),
-                                                CONST_VERBOSE_EVENTS);      
-                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, string.Format("\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
-                                                finished.ToString(),
-                                                mint_columnId,                       // 1  COL ID
-                                                exThrown.Message,                    // 2  Message
-                                                exThrown.StackTrace,                // 3  Stack Trace
-                                                lcEvent.Name,
-                                                lcEvent.Device.Name),
-                                                ex);
-                        }                                          
+                            Print(
+                                string.Format(
+                                    "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
+                                    finished.ToString(),
+                                    mint_columnId, // 1  COL ID
+                                    exThrown.Message, // 2  Message
+                                    exThrown.StackTrace, // 3  Stack Trace
+                                    lcEvent.Name,
+                                    lcEvent.Device.Name),
+                                CONST_VERBOSE_EVENTS);
+                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                                string.Format(
+                                    "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
+                                    finished.ToString(),
+                                    mint_columnId, // 1  COL ID
+                                    exThrown.Message, // 2  Message
+                                    exThrown.StackTrace, // 3  Stack Trace
+                                    lcEvent.Name,
+                                    lcEvent.Device.Name),
+                                ex);
+                        }
 
                         if (success)
                         {
                             actualEvent.HadError = false;
-                            /// 
-                            /// Here we'll wait enough time so that 
-                            /// we dont run the next event before its scheduled start.  This is flow control.                    
-                            /// 
+                            //
+                            // Here we'll wait enough time so that
+                            // we dont run the next event before its scheduled start.  This is flow control.
+                            //
                             classTimerDevice timer = new classTimerDevice();
                             TimeSpan span = next.Subtract(LcmsNetSDK.TimeKeeper.Instance.Now);
                             int totalMilliseconds = 0;
@@ -249,40 +254,40 @@ namespace LcmsNet.Method
                             {
                                 totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
                             }
-                            catch(OverflowException ex2)
+                            catch (OverflowException ex2)
                             {
                                 classApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
                             }
                             if (totalMilliseconds > 2)
                             {
                                 Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
-                                                    finished.ToString(),
-                                                    mint_columnId,                            // 1  COL ID
-                                                    span.TotalMilliseconds),
-                                                    CONST_VERBOSE_EVENTS);
+                                    finished.ToString(),
+                                    mint_columnId, // 1  COL ID
+                                    span.TotalMilliseconds),
+                                    CONST_VERBOSE_EVENTS);
                                 DateTime timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
                                 timer.WaitMilliseconds(totalMilliseconds, mobj_abortEvent);
                                 long timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
-                                // Calculate the statistics of how long it took to run.                             
+                                // Calculate the statistics of how long it took to run.
                             }
                             finished = LcmsNetSDK.TimeKeeper.Instance.Now;
                         }
                         else if (!success)
                         {
-                            /// 
-                            /// Well, we had an error (exception or expected) and we dont care why, we just want to
-                            /// gracefully notify people in charge, and exit.
-                            ///                           
+                            //
+                            // Well, we had an error (exception or expected) and we dont care why, we just want to
+                            // gracefully notify people in charge, and exit.
+                            //
 
                             lcEvent.Device.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.Error;
                             mobj_sampleData = null;
-                            if(ex == null)
+                            if (ex == null)
                             {
                                 ex = new Exception(string.Format("{0}.{1} failed.",
-                                                   lcEvent.Device.Name,
-                                                   lcEvent.Name));
+                                    lcEvent.Device.Name,
+                                    lcEvent.Name));
                             }
                             // Calculate the statistics of how long it took to run.
                             finished = LcmsNetSDK.TimeKeeper.Instance.Now;
@@ -293,17 +298,17 @@ namespace LcmsNet.Method
                     actualEvent.Duration = finished.Subtract(start);
                 }
             }
-            catch(Exception columnEx)
+            catch (Exception columnEx)
             {
                 throw new classColumnException(mint_columnId, columnEx);
             }
             //We may have finished the method, but if we were told to cancel between the time
-            //we started the last event and now, we still have to die. Otherwise, we could cause 
-            //null reference exceptions in the scheduler due to how we have to handle the cancellation 
+            //we started the last event and now, we still have to die. Otherwise, we could cause
+            //null reference exceptions in the scheduler due to how we have to handle the cancellation
             //process.
-            if(mthread_worker.CancellationPending)
+            if (mthread_worker.CancellationPending)
             {
-                e.Cancel = true;                
+                e.Cancel = true;
             }
         }
 
@@ -311,6 +316,7 @@ namespace LcmsNet.Method
         {
             classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message as string);
         }
+
         #endregion
     }
 }

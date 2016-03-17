@@ -2,12 +2,12 @@
 {
     partial class controlLCMethodEvent
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -39,18 +39,18 @@
             this.controlBreakpoint1 = new LcmsNet.Method.Forms.controlBreakpoint();
             this.mpanel_extras.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mcomboBox_method
-            // 
+            //
             this.mcomboBox_method.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mcomboBox_method.FormattingEnabled = true;
             this.mcomboBox_method.Location = new System.Drawing.Point(243, 5);
             this.mcomboBox_method.Name = "mcomboBox_method";
             this.mcomboBox_method.Size = new System.Drawing.Size(147, 21);
             this.mcomboBox_method.TabIndex = 2;
-            // 
+            //
             // mcomboBox_devices
-            // 
+            //
             this.mcomboBox_devices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mcomboBox_devices.FormattingEnabled = true;
             this.mcomboBox_devices.Location = new System.Drawing.Point(90, 5);
@@ -59,10 +59,10 @@
             this.mcomboBox_devices.Sorted = true;
             this.mcomboBox_devices.TabIndex = 1;
             this.mcomboBox_devices.SelectedIndexChanged += new System.EventHandler(this.mcomboBox_devices_SelectedIndexChanged);
-            // 
+            //
             // mcheckBox_selected
-            // 
-            this.mcheckBox_selected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //
+            this.mcheckBox_selected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mcheckBox_selected.BackColor = System.Drawing.Color.Silver;
             this.mcheckBox_selected.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -71,11 +71,11 @@
             this.mcheckBox_selected.Size = new System.Drawing.Size(20, 32);
             this.mcheckBox_selected.TabIndex = 0;
             this.mcheckBox_selected.UseVisualStyleBackColor = false;
-            // 
+            //
             // mpanel_parameters
-            // 
-            this.mpanel_parameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mpanel_parameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mpanel_parameters.BackColor = System.Drawing.Color.White;
             this.mpanel_parameters.ColumnCount = 1;
@@ -88,18 +88,18 @@
             this.mpanel_parameters.Size = new System.Drawing.Size(542, 33);
             this.mpanel_parameters.TabIndex = 3;
             this.mpanel_parameters.Paint += new System.Windows.Forms.PaintEventHandler(this.mpanel_parameters_Paint);
-            // 
+            //
             // mpanel_extras
-            // 
+            //
             this.mpanel_extras.Controls.Add(this.mcheckBox_optimizeFor);
             this.mpanel_extras.Dock = System.Windows.Forms.DockStyle.Right;
             this.mpanel_extras.Location = new System.Drawing.Point(941, 0);
             this.mpanel_extras.Name = "mpanel_extras";
             this.mpanel_extras.Size = new System.Drawing.Size(34, 31);
             this.mpanel_extras.TabIndex = 10;
-            // 
+            //
             // mcheckBox_optimizeFor
-            // 
+            //
             this.mcheckBox_optimizeFor.AutoSize = true;
             this.mcheckBox_optimizeFor.Image = global::LcmsNet.Properties.Resources.highlighter;
             this.mcheckBox_optimizeFor.Location = new System.Drawing.Point(3, 8);
@@ -109,17 +109,17 @@
             this.mcheckBox_optimizeFor.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mcheckBox_optimizeFor.UseVisualStyleBackColor = true;
             this.mcheckBox_optimizeFor.CheckedChanged += new System.EventHandler(this.mcheckBox_optimizeFor_CheckedChanged);
-            // 
+            //
             // labelEventNumber
-            // 
+            //
             this.labelEventNumber.Location = new System.Drawing.Point(4, 10);
             this.labelEventNumber.Name = "labelEventNumber";
             this.labelEventNumber.Size = new System.Drawing.Size(32, 16);
             this.labelEventNumber.TabIndex = 12;
             this.labelEventNumber.Text = "100";
-            // 
+            //
             // controlBreakpoint1
-            // 
+            //
             this.controlBreakpoint1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("controlBreakpoint1.BackgroundImage")));
             this.controlBreakpoint1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.controlBreakpoint1.IsSet = false;
@@ -127,9 +127,9 @@
             this.controlBreakpoint1.Name = "controlBreakpoint1";
             this.controlBreakpoint1.Size = new System.Drawing.Size(16, 16);
             this.controlBreakpoint1.TabIndex = 11;
-            // 
+            //
             // controlLCMethodEvent
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

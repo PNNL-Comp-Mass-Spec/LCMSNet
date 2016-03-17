@@ -12,17 +12,8 @@ namespace LcmsNet.Notification
             Conditions = new Dictionary<string, object>();
         }
 
-        public string Name
-        {
-            get;
-            set;
-        }
+        public string Name { get; set; }
 
-        public Dictionary<string, object> Conditions
-        {
-            get;
-            set;
-        }
-
+        public Dictionary<string, object> Conditions { get; set; }
     }
 }

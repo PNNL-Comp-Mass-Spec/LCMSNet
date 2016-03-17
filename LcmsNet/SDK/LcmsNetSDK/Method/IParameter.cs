@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
 using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Method
@@ -12,15 +11,17 @@ namespace LcmsNet.Method
     /// from the user interface for setting a parameter value in the method editor.
     /// </summary>
     public interface ILCEventParameter
-    {        
+    {
         /// <summary>
         /// Gets the value set by the user.
         /// </summary>
         object ParameterValue { get; set; }
+
         /// <summary>
         /// Fired when a parameter changes.
         /// </summary>
         event EventHandler EventChanged;
+
         //bool IsTime { get; set; }
     }
 
@@ -29,10 +30,12 @@ namespace LcmsNet.Method
     /// </summary>
     public class controlParameterTextBox : TextBox, ILCEventParameter
     {
-        public controlParameterTextBox(): base()
+        public controlParameterTextBox() : base()
         {
         }
+
         #region IParameterBase Members
+
         /// <summary>
         /// Gets the text of the control.
         /// </summary>
@@ -52,9 +55,11 @@ namespace LcmsNet.Method
                 OnEventChanged();
             }
         }
+
         #endregion
 
         public event EventHandler EventChanged;
+
         /// <summary>
         /// Fires the event changed event.
         /// </summary>
@@ -70,14 +75,14 @@ namespace LcmsNet.Method
         {
             base.OnTextChanged(e);
             OnEventChanged();
-        }        
+        }
     }
+
     /// <summary>
     /// Combo box control for enumerated user input when defining a method.
     /// </summary>
     public class controlParameterComboBox : ComboBox, ILCEventParameter
     {
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -88,6 +93,7 @@ namespace LcmsNet.Method
 
 
         public event EventHandler EventChanged;
+
         /// <summary>
         /// Fires the event changed event.
         /// </summary>
@@ -100,6 +106,7 @@ namespace LcmsNet.Method
         }
 
         #region IParameterBase Members
+
         /// <summary>
         /// Gets the text of the control.
         /// </summary>
@@ -109,14 +116,15 @@ namespace LcmsNet.Method
             set
             {
                 if (value == null)
-                    return; 
+                    return;
 
-                if (Items.Contains(value) == false)                
-                    Items.Add(value);                    
-                
+                if (Items.Contains(value) == false)
+                    Items.Add(value);
+
                 SelectedItem = value;
             }
         }
+
         /// <summary>
         /// Event method to storing objects in the list view.
         /// </summary>
@@ -126,7 +134,7 @@ namespace LcmsNet.Method
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new Action<object, List<object>>(FillData), new object[] { sender, data });
+                this.Invoke(new Action<object, List<object>>(FillData), new object[] {sender, data});
             }
             else
             {
@@ -159,11 +167,13 @@ namespace LcmsNet.Method
                 this.Sorted = true;
             }
         }
+
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
             this.OnEventChanged();
         }
+
         #endregion
     }
 }

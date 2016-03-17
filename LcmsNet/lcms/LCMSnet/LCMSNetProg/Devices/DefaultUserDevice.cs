@@ -19,24 +19,14 @@ namespace LcmsNet.Devices
 
         #region IDeviceControl Members
 
-        public IDevice Device
-        {
-            get;
-            set;
-        }
+        public IDevice Device { get; set; }
 
         public event DelegateNameChanged NameChanged;
 
         public bool Running
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public event DelegateSaveRequired SaveRequired;

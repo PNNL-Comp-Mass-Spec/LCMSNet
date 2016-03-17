@@ -10,10 +10,9 @@ namespace LcmsNetDataClasses.Devices
     /// </summary>
     public enum enumDeviceStatus
     {
-        
-		NotInitialized,
-		Initialized,
+        NotInitialized,
+        Initialized,
         Error,
-		InUseByMethod,        
+        InUseByMethod,
     }
 }

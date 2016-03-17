@@ -6,6 +6,7 @@
 //
 // Last modified 04/18/2014
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,11 @@ using System.Text;
 
 namespace LcmsNetDataClasses
 {
-
     public enum ModelStatusCategory
     {
-        Error, Warning, Information
+        Error,
+        Warning,
+        Information
     }
 
     /// <summary>
@@ -35,10 +37,13 @@ namespace LcmsNetDataClasses
             Description = "Generic ModelStatus";
             EventDevice = null;
             Event = string.Empty;
-            Time = LcmsNetSDK.TimeKeeper.Instance.Now.ToString(); // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString();
+            Time = LcmsNetSDK.TimeKeeper.Instance.Now.ToString();
+                // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString();
         }
 
-        public ModelStatus(string name = "", string description = "", ModelStatusCategory category = ModelStatusCategory.Information,  string eventName = "", string time = "", LcmsNetDataClasses.Devices.IDevice device = null, LcmsNetDataClasses.Devices.IDevice problemDevice = null)
+        public ModelStatus(string name = "", string description = "",
+            ModelStatusCategory category = ModelStatusCategory.Information, string eventName = "", string time = "",
+            LcmsNetDataClasses.Devices.IDevice device = null, LcmsNetDataClasses.Devices.IDevice problemDevice = null)
         {
             UID = m_availableID++;
             Name = name;
@@ -53,76 +58,43 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Unique ID representing this status change.
         /// </summary>
-        public long UID
-        {
-            get;
-            set;
-        }
+        public long UID { get; set; }
 
         /// <summary>
         /// The name/topic of the status change
         /// </summary>
-        public string Name
-        {
-            get;
-            set;
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// A description of the status change
         /// </summary>
-        public string Description
-        {
-            get;
-            set;
-        }
+        public string Description { get; set; }
 
         /// <summary>
         ///  The status category of Error, Information, or Warning.
         /// </summary>
-        public ModelStatusCategory Category
-        {
-            get;
-            set;
-        }
-        
+        public ModelStatusCategory Category { get; set; }
+
         /// <summary>
         /// returns The IDevice that triggered this status change, if known.
         /// </summary>
-        public LcmsNetDataClasses.Devices.IDevice EventDevice
-        {
-            get;
-            set;
-        }
+        public LcmsNetDataClasses.Devices.IDevice EventDevice { get; set; }
 
 
-        public LcmsNetDataClasses.Devices.IDevice ProblemDevice
-        {
-            get;
-            set;
-        }
+        public LcmsNetDataClasses.Devices.IDevice ProblemDevice { get; set; }
+
         /// <summary>
         /// returns the event that triggered the status change, if set.
         /// </summary>
-        public string Event
-        {
-            get;
-            set;
-        }
+        public string Event { get; set; }
 
         /// <summary>
         /// returns the time that the status change was recorded.
         /// </summary>
         public string Time
         {
-            get
-            {
-                return m_timeOfOccurance;
-            }
-            set
-            {
-                m_timeOfOccurance = value;
-            }
+            get { return m_timeOfOccurance; }
+            set { m_timeOfOccurance = value; }
         }
 
         /// <summary>
@@ -138,12 +110,12 @@ namespace LcmsNetDataClasses
                 temp.Append(" On Event:");
                 temp.Append(Event);
             }
-            if(Time != null)
+            if (Time != null)
             {
                 temp.Append(" at ");
                 temp.Append(Time);
             }
-            if(EventDevice != null)
+            if (EventDevice != null)
             {
                 temp.Append(" using Device:");
                 temp.Append(EventDevice.Name);

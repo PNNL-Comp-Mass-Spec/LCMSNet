@@ -14,13 +14,13 @@ namespace LcmsNet.IO
         public static string UniqifyFileName(string path, string extension)
         {
             int count = 1;
-            StringBuilder uniqueName = new StringBuilder();            
+            StringBuilder uniqueName = new StringBuilder();
             uniqueName.Append(path);
             uniqueName.Append(extension);
             while (CheckDuplicateNames(uniqueName.ToString()))
-            {                
+            {
                 uniqueName.Clear();
-                uniqueName.Append(path);                
+                uniqueName.Append(path);
                 uniqueName.Append("_" + count++);
                 uniqueName.Append(extension);
             }

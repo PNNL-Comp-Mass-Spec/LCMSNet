@@ -1,309 +1,319 @@
-﻿
-//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+﻿//*********************************************************************************************************
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2010, Battelle Memorial Institute
 // Created 08/18/2010
 //
 // Last modified 08/18/2010
-//						09/01/2010 (DAC) - Modified for autocomplete when selecting column name. Fixed bug
-//													that wasn't allowing changes to be passed to column object
+//                      09/01/2010 (DAC) - Modified for autocomplete when selecting column name. Fixed bug
+//                                                  that wasn't allowing changes to be passed to column object
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
 using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNet.Configuration
 {
-	public partial class controlColumn : UserControl
-	{
-		//*********************************************************************************************************
-		// Control for displaying information about the column.
-		//**********************************************************************************************************
+    public partial class controlColumn : UserControl
+    {
+        #region "Constructors"
 
-		#region "Class variables"
-			/// <summary>
-			/// Column configuration object.
-			/// </summary>
-			private classColumnData mobj_columnData;
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public controlColumn()
+        {
+            InitializeComponent();
+            mobj_columnData = new classColumnData();
+            mdialog_color = new ColorDialog();
 
-			/// <summary>
-			/// Dialog box for selecting the color of the column.
-			/// </summary>
-			private ColorDialog mdialog_color;
+            mcomboBox_names.SelectedIndexChanged += new EventHandler(mcomboBox_names_SelectedIndexChanged);
+            this.ColumnObjectChanged += new delegateColumnObjectChanged(SelectColumnNameFromData);
+            this.ColumnNamesChanged += new delegateColumnNamesChanged(SelectColumnNameFromData);
+        }
 
-			/// <summary>
-			/// Displays the ID - index of the column.
-			/// </summary>
-			private int mint_columnID;
+        #endregion
 
-			/// <summary>
-			/// Flag telling combo box index changed event that event was caused by a mouse click
-			/// </summary>
-			private bool mbool_ComboHasFocus = false;
-		#endregion
+        //*********************************************************************************************************
+        // Control for displaying information about the column.
+        //**********************************************************************************************************
 
-		#region "Delegates"
-			public delegate void delegateColumnNamesChanged();
-			private delegate void delegateColumnObjectChanged();
-		#endregion
+        #region "Class variables"
 
-		#region "Events"
-			public event delegateColumnNamesChanged ColumnNamesChanged;
-			private event delegateColumnObjectChanged ColumnObjectChanged;
-		#endregion
+        /// <summary>
+        /// Column configuration object.
+        /// </summary>
+        private classColumnData mobj_columnData;
 
-		#region Properties
-			/// <summary>
-			/// Gets or sets the data associated with the column.
-			/// </summary>
-			public classColumnData ColumnData
-			{
-				get
-				{
-					return mobj_columnData;
-				}
-				set
-				{
-					/// 
-					/// Reset the enabled
-					///
+        /// <summary>
+        /// Dialog box for selecting the color of the column.
+        /// </summary>
+        private ColorDialog mdialog_color;
 
-					mobj_columnData = value;
-					if (value != null)
-					{
-						UpdateUserInterface();
-						value.ColorChanged += new classColumnData.DelegateColorChanged(ColumnData_ColorChanged);
-						value.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
-					}
-					// Signal the combo box to update selected name
-					if (ColumnObjectChanged != null) ColumnObjectChanged();
-				}
-			}
+        /// <summary>
+        /// Displays the ID - index of the column.
+        /// </summary>
+        private int mint_columnID;
 
-			/// <summary>
-			/// Gets or sets the column index ID for display.
-			/// </summary>
-			public int ColumnID
-			{
-				get
-				{
-					return mint_columnID;
-				}
-				set
-				{
-					mint_columnID = value;
-					mbutton_color.Text = mint_columnID.ToString();
-					PerformLayout();
-				}
-			}
+        /// <summary>
+        /// Flag telling combo box index changed event that event was caused by a mouse click
+        /// </summary>
+        private bool mbool_ComboHasFocus = false;
 
-			/// <summary>
-			/// Sets the list of column names.
-			/// </summary>
-			public List<string> ColumnNames
-			{
-				set
-				{
-					mcomboBox_names.Items.Clear();
-					string[] names = new string[value.Count ];
-					value.CopyTo(names);
-                    mcomboBox_names.BeginUpdate();
-                    mcomboBox_names.Items.Add("NOTSET");
-					mcomboBox_names.Items.AddRange(names);                    
-					mcomboBox_names.AutoCompleteSource = AutoCompleteSource.ListItems;
-					mcomboBox_names.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    mcomboBox_names.EndUpdate();
-					// Update the selected name in the combo box
-					if (ColumnNamesChanged != null) ColumnNamesChanged();
-				}
-			}
-		#endregion
+        #endregion
 
-		#region "Constructors"
-			/// <summary>
-			/// Default constructor.
-			/// </summary>
-			public controlColumn()
-			{
-				InitializeComponent();
-				mobj_columnData = new classColumnData();
-				mdialog_color = new ColorDialog();
+        #region "Delegates"
 
-				mcomboBox_names.SelectedIndexChanged += new EventHandler(mcomboBox_names_SelectedIndexChanged);
-				this.ColumnObjectChanged += new delegateColumnObjectChanged(SelectColumnNameFromData);
-				this.ColumnNamesChanged += new delegateColumnNamesChanged(SelectColumnNameFromData);
-			}	
-		#endregion
+        public delegate void delegateColumnNamesChanged();
 
-		#region Column Data Event Handlers
-			/// <summary>
-			/// Handles when the status for a column changes.
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="previousStatus"></param>
-			/// <param name="newStatus"></param>
-			void ColumnData_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
-			{
-				if (InvokeRequired == true)
-				{
-					BeginInvoke(new DelegateUpdateStatus(SetStatusMessage), new object[] { sender, previousStatus, newStatus });
-				}
-				else
-				{
-					SetStatusMessage(sender, previousStatus, newStatus);
-				}
-			}	
+        private delegate void delegateColumnObjectChanged();
 
-			/// <summary>
-			/// Handles when the color of a column changes.
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="previousColor"></param>
-			/// <param name="newColor"></param>
-			void ColumnData_ColorChanged(object sender, Color previousColor, Color newColor)
-			{
-				SetColor(newColor);
-			}	
-		#endregion
+        #endregion
 
-		#region "Methods"
-			/// <summary>
-			/// Displays the appropiate status message.
-			/// </summary>
-			private void SetStatusMessage(object sender, enumColumnStatus previousStatus, enumColumnStatus status)
-			{
-				mlabel_status.Text = string.Format("Status: {0}", status); 
+        #region "Events"
 
-				string statusMessage = string.Format("Status: {0}", status);
-				//TODO: change this magic number into a constant.
-				LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(1, statusMessage);
-			}	
+        public event delegateColumnNamesChanged ColumnNamesChanged;
+        private event delegateColumnObjectChanged ColumnObjectChanged;
 
-			/// <summary>
-			/// Sets the color of the column.
-			/// </summary>
-			/// <param name="color"></param>
-			private void SetColor(Color color)
-			{
-				mbutton_color.BackColor = color;
-				mdialog_color.Color     = color;
-			}	
+        #endregion
 
-			/// <summary>
-			/// Updates the display with accurate data.
-			/// </summary>
-			private void UpdateUserInterface()
-			{
-				if (mobj_columnData == null)
-				return;
+        #region Properties
 
-				SetColor(mobj_columnData.Color);
-				SetStatusMessage(this, mobj_columnData.Status, mobj_columnData.Status);
+        /// <summary>
+        /// Gets or sets the data associated with the column.
+        /// </summary>
+        public classColumnData ColumnData
+        {
+            get { return mobj_columnData; }
+            set
+            {
+                //
+                // Reset the enabled
+                //
 
-				if (mobj_columnData.Status != enumColumnStatus.Disabled)
-					mcheckBox_enabled.Checked = true;
-				else
-					mcheckBox_enabled.Checked = false;
-			}	
+                mobj_columnData = value;
+                if (value != null)
+                {
+                    UpdateUserInterface();
+                    value.ColorChanged += new classColumnData.DelegateColorChanged(ColumnData_ColorChanged);
+                    value.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
+                }
+                // Signal the combo box to update selected name
+                if (ColumnObjectChanged != null) ColumnObjectChanged();
+            }
+        }
 
-			/// <summary>
-			/// Sets the column name combo box to match the value contained in the column data class
-			/// </summary>
-			private void SelectColumnNameFromData()
-			{
-				if (mcomboBox_names.Items.Count < 1) return; // Do nothing because the names haven't been loaded yet
+        /// <summary>
+        /// Gets or sets the column index ID for display.
+        /// </summary>
+        public int ColumnID
+        {
+            get { return mint_columnID; }
+            set
+            {
+                mint_columnID = value;
+                mbutton_color.Text = mint_columnID.ToString();
+                PerformLayout();
+            }
+        }
 
-				if ((mobj_columnData == null) || (mobj_columnData.Name == null) || (mobj_columnData.Name == ""))
-					return;	// No column name specified
+        /// <summary>
+        /// Sets the list of column names.
+        /// </summary>
+        public List<string> ColumnNames
+        {
+            set
+            {
+                mcomboBox_names.Items.Clear();
+                string[] names = new string[value.Count];
+                value.CopyTo(names);
+                mcomboBox_names.BeginUpdate();
+                mcomboBox_names.Items.Add("NOTSET");
+                mcomboBox_names.Items.AddRange(names);
+                mcomboBox_names.AutoCompleteSource = AutoCompleteSource.ListItems;
+                mcomboBox_names.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                mcomboBox_names.EndUpdate();
+                // Update the selected name in the combo box
+                if (ColumnNamesChanged != null) ColumnNamesChanged();
+            }
+        }
 
-				int nameIndx = mcomboBox_names.FindStringExact(mobj_columnData.Name);
+        #endregion
 
-				if (nameIndx == -1)
-				{
-					// Name match not found, set name to first available and exit
-					mcomboBox_names.SelectedIndex = 0;
-					return;
-				}
+        #region Column Data Event Handlers
 
-				mcomboBox_names.SelectedIndex = nameIndx;
-			}	
-		#endregion
+        /// <summary>
+        /// Handles when the status for a column changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="previousStatus"></param>
+        /// <param name="newStatus"></param>
+        void ColumnData_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
+        {
+            if (InvokeRequired == true)
+            {
+                BeginInvoke(new DelegateUpdateStatus(SetStatusMessage), new object[] {sender, previousStatus, newStatus});
+            }
+            else
+            {
+                SetStatusMessage(sender, previousStatus, newStatus);
+            }
+        }
 
-		#region Form Event Handlers
-			/// <summary>
-			/// Handles when the user clicks to change the color of the column.
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="e"></param>
-			private void mbutton_color_Click(object sender, EventArgs e)
-			{
-				if (mdialog_color.ShowDialog() == DialogResult.OK)
-				{
-					mobj_columnData.Color = mdialog_color.Color;
-				}
-			}	
+        /// <summary>
+        /// Handles when the color of a column changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="previousColor"></param>
+        /// <param name="newColor"></param>
+        void ColumnData_ColorChanged(object sender, Color previousColor, Color newColor)
+        {
+            SetColor(newColor);
+        }
 
-			/// <summary>
-			/// Handles when the user toggles the check box to enable or disable the column.
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="e"></param>
-			private void mcheckBox_enabled_CheckedChanged(object sender, EventArgs e)
-			{
-				if (mobj_columnData != null)
-				{
-				if (mcheckBox_enabled.Checked == false)
-					mobj_columnData.Status = enumColumnStatus.Disabled;
-					if (mcheckBox_enabled.Checked == true)
-						mobj_columnData.Status = enumColumnStatus.Idle;
-				}
-			}	
+        #endregion
 
-			/// <summary>
-			/// Handles change of selected item in combo box
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="e"></param>
-			void mcomboBox_names_SelectedIndexChanged(object sender, EventArgs e)
-			{
-				if (mobj_columnData != null)
-				{
-					// If selected index changed due to user action, then update the column data
-					//	Otherwise, index may have changed because of initializing the combo box and should be ignored
-                    if (mbool_ComboHasFocus)
+        #region "Methods"
+
+        /// <summary>
+        /// Displays the appropiate status message.
+        /// </summary>
+        private void SetStatusMessage(object sender, enumColumnStatus previousStatus, enumColumnStatus status)
+        {
+            mlabel_status.Text = string.Format("Status: {0}", status);
+
+            string statusMessage = string.Format("Status: {0}", status);
+            //TODO: change this magic number into a constant.
+            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(1, statusMessage);
+        }
+
+        /// <summary>
+        /// Sets the color of the column.
+        /// </summary>
+        /// <param name="color"></param>
+        private void SetColor(Color color)
+        {
+            mbutton_color.BackColor = color;
+            mdialog_color.Color = color;
+        }
+
+        /// <summary>
+        /// Updates the display with accurate data.
+        /// </summary>
+        private void UpdateUserInterface()
+        {
+            if (mobj_columnData == null)
+                return;
+
+            SetColor(mobj_columnData.Color);
+            SetStatusMessage(this, mobj_columnData.Status, mobj_columnData.Status);
+
+            if (mobj_columnData.Status != enumColumnStatus.Disabled)
+                mcheckBox_enabled.Checked = true;
+            else
+                mcheckBox_enabled.Checked = false;
+        }
+
+        /// <summary>
+        /// Sets the column name combo box to match the value contained in the column data class
+        /// </summary>
+        private void SelectColumnNameFromData()
+        {
+            if (mcomboBox_names.Items.Count < 1) return; // Do nothing because the names haven't been loaded yet
+
+            if ((mobj_columnData == null) || (mobj_columnData.Name == null) || (mobj_columnData.Name == ""))
+                return; // No column name specified
+
+            int nameIndx = mcomboBox_names.FindStringExact(mobj_columnData.Name);
+
+            if (nameIndx == -1)
+            {
+                // Name match not found, set name to first available and exit
+                mcomboBox_names.SelectedIndex = 0;
+                return;
+            }
+
+            mcomboBox_names.SelectedIndex = nameIndx;
+        }
+
+        #endregion
+
+        #region Form Event Handlers
+
+        /// <summary>
+        /// Handles when the user clicks to change the color of the column.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mbutton_color_Click(object sender, EventArgs e)
+        {
+            if (mdialog_color.ShowDialog() == DialogResult.OK)
+            {
+                mobj_columnData.Color = mdialog_color.Color;
+            }
+        }
+
+        /// <summary>
+        /// Handles when the user toggles the check box to enable or disable the column.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mcheckBox_enabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mobj_columnData != null)
+            {
+                if (mcheckBox_enabled.Checked == false)
+                    mobj_columnData.Status = enumColumnStatus.Disabled;
+                if (mcheckBox_enabled.Checked == true)
+                    mobj_columnData.Status = enumColumnStatus.Idle;
+            }
+        }
+
+        /// <summary>
+        /// Handles change of selected item in combo box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void mcomboBox_names_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mobj_columnData != null)
+            {
+                // If selected index changed due to user action, then update the column data
+                //  Otherwise, index may have changed because of initializing the combo box and should be ignored
+                if (mbool_ComboHasFocus)
+                {
+                    mobj_columnData.Name = mcomboBox_names.SelectedItem.ToString();
+                    if (ColumnNamesChanged != null)
                     {
-                        mobj_columnData.Name = mcomboBox_names.SelectedItem.ToString();
-                        if (ColumnNamesChanged != null)
-                        {
-                            ColumnNamesChanged();
-                        }
+                        ColumnNamesChanged();
                     }
-				}
-			}	
+                }
+            }
+        }
 
-			/// <summary>
-			/// Sets flag to indicate combo box has focus (Used in SelectedIndexChanged method)
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="e"></param>
-			private void mcomboBox_names_Enter(object sender, EventArgs e)
-			{
-				mbool_ComboHasFocus = true;
-			}	
+        /// <summary>
+        /// Sets flag to indicate combo box has focus (Used in SelectedIndexChanged method)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mcomboBox_names_Enter(object sender, EventArgs e)
+        {
+            mbool_ComboHasFocus = true;
+        }
 
-			/// <summary>
-			/// Clears flag indicating combo box focus (Used in SelectedIndexChanged method
-			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="e"></param>
-			private void mcomboBox_names_Leave(object sender, EventArgs e)
-			{
-				mbool_ComboHasFocus = false;
-			}	
-		#endregion
-	}	
-}	// End namespace
+        /// <summary>
+        /// Clears flag indicating combo box focus (Used in SelectedIndexChanged method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mcomboBox_names_Leave(object sender, EventArgs e)
+        {
+            mbool_ComboHasFocus = false;
+        }
+
+        #endregion
+    }
+} // End namespace

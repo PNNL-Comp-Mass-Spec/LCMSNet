@@ -17,17 +17,14 @@ using LcmsNetSDK;
 namespace LcmsNet.Simulator
 {
     public partial class SimControlsAndChartsControl : UserControl
-    {    
-        private DateTime mdatetime_startTime;
+    {
         private static SimControlsAndChartsControl m_instance;
 
         private bool m_tacked;
-        private FluidicsSimulator.FluidicsSimulator simInstance; 
+        private DateTime mdatetime_startTime;
+        private FluidicsSimulator.FluidicsSimulator simInstance;
 
-        public event EventHandler<TackEventArgs> Tack;
-        public event EventHandler EventChanged;
-
-        private  SimControlsAndChartsControl()
+        private SimControlsAndChartsControl()
         {
             InitializeComponent();
             m_tacked = true;
@@ -38,17 +35,54 @@ namespace LcmsNet.Simulator
             ModelCheckReportViewer reporter = new ModelCheckReportViewer(FluidicsSDK.classFluidicsModerator.Moderator);
             reporter.Name = "errorReporter";
             reporter.Dock = DockStyle.Fill;
-            tabControlCharts.TabPages["tabPageErrors"].Controls.Add(reporter);         
-            mcontrol_selectedMethods.MethodAdded += new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodAdded);
-            mcontrol_selectedMethods.MethodDeleted += new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodDeleted);
-            mcontrol_selectedMethods.MethodUpdated += new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodUpdated);
+            tabControlCharts.TabPages["tabPageErrors"].Controls.Add(reporter);
+            mcontrol_selectedMethods.MethodAdded +=
+                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodAdded);
+            mcontrol_selectedMethods.MethodDeleted +=
+                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodDeleted);
+            mcontrol_selectedMethods.MethodUpdated +=
+                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodUpdated);
             TabPage settings = tabControlSimulator.TabPages["tabSimulatorSettings"];
 
 
-            ModelCheckListControl checkList = new ModelCheckListControl(FluidicsSDK.classFluidicsModerator.Moderator, FluidicsSDK.classFluidicsModerator.Moderator.GetModelCheckers());
+            ModelCheckListControl checkList = new ModelCheckListControl(FluidicsSDK.classFluidicsModerator.Moderator,
+                FluidicsSDK.classFluidicsModerator.Moderator.GetModelCheckers());
             checkList.Location = new Point(10, 75);
             settings.Controls["mgroupBox_update"].Controls.Add(checkList);
         }
+
+        public static SimControlsAndChartsControl GetInstance
+        {
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new SimControlsAndChartsControl();
+                }
+                return m_instance;
+            }
+        }
+
+        public bool Tacked
+        {
+            get { return m_tacked; }
+            private set
+            {
+                m_tacked = value;
+                if (Tack != null)
+                {
+                    Tack(this, new TackEventArgs(m_tacked));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the method animation preview options.
+        /// </summary>
+        public classMethodPreviewOptions MethodPreviewOptions { get; set; }
+
+        public event EventHandler<TackEventArgs> Tack;
+        public event EventHandler EventChanged;
 
         private void simInstance_EventExecuting(object sender, SimulatedEventArgs e)
         {
@@ -58,9 +92,9 @@ namespace LcmsNet.Simulator
             classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
             optimizer.AlignMethods(methods);
             SortedSet<SimEventList> queue = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start);
-            foreach(SimEventList lst in queue)
+            foreach (SimEventList lst in queue)
             {
-                if(lst.Exists(evnt => evnt.Name == e.Event.Name && evnt.Start == e.Event.Start))
+                if (lst.Exists(evnt => evnt.Name == e.Event.Name && evnt.Start == e.Event.Start))
                 {
                     index = count;
                 }
@@ -85,20 +119,8 @@ namespace LcmsNet.Simulator
                     statusMessages += status.Description + Environment.NewLine;
                 }
                 MessageBox.Show(statusMessages);
-            }            
-            this.Refresh();
-        }
-
-        public static SimControlsAndChartsControl GetInstance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new SimControlsAndChartsControl();
-                }
-                return m_instance;
             }
+            this.Refresh();
         }
 
         /// <summary>
@@ -110,7 +132,6 @@ namespace LcmsNet.Simulator
             {
                 EventChanged(this, null);
             }
-
         }
 
         public void TackOnRequest()
@@ -122,23 +143,7 @@ namespace LcmsNet.Simulator
 
         private void btnTack_Click(object sender, EventArgs e)
         {
-            Tacked = !Tacked;            
-        }
-
-        public bool Tacked
-        {
-            get
-            {
-                return m_tacked;
-            }
-            private set
-            {
-                m_tacked = value;
-                if (Tack != null)
-                {
-                    Tack(this, new TackEventArgs(m_tacked));
-                }
-            }
+            Tacked = !Tacked;
         }
 
         /// <summary>
@@ -164,9 +169,9 @@ namespace LcmsNet.Simulator
         /// </summary>
         private void RenderAlignMethods()
         {
-            /// 
-            /// Align methods - blindly!
-            ///             
+            //
+            // Align methods - blindly!
+            //
             try
             {
                 classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
@@ -178,7 +183,8 @@ namespace LcmsNet.Simulator
                 {
                     if (mdatetime_startTime == null)
                     {
-                        mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                        mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+                            // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                     }
                     else
                     {
@@ -195,33 +201,33 @@ namespace LcmsNet.Simulator
                 MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// On an update, the optimizer will tell us the status of the methods here.
         /// </summary>
         void optimizer_UpdateRequired(classLCMethodOptimizer sender)
         {
-            /// 
-            /// Render the updates if we animating and past the rendering threshold. 
-            ///             
+            //
+            // Render the updates if we animating and past the rendering threshold.
+            //
             //if (MethodPreviewOptions.Animate == true && //mint_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
             //{
             //    RenderThroughput(sender.Methods);
             //    Refresh();
             //    Application.DoEvents();
 
-            //    /// 
+            //    ///
             //    /// reset the number of update calls we have seen.
-            //    /// 
+            //    ///
             //    //mint_renderUpdateCount = 0;
 
             //    System.Threading.Thread.Sleep(MethodPreviewOptions.AnimateDelay);
             //}
         }
-        
+
 
         private void PrepSim()
         {
-
             LcmsNet.Method.classLCMethodOptimizer optimizer = new LcmsNet.Method.classLCMethodOptimizer();
             List<classLCMethod> methodsToRun = mcontrol_selectedMethods.SelectedMethods;
             optimizer.AlignMethods(methodsToRun);
@@ -241,7 +247,8 @@ namespace LcmsNet.Simulator
                 else
                 {
                     PrepSim();
-                    mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                    mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                     simInstance.Step();
                 }
             }
@@ -264,7 +271,8 @@ namespace LcmsNet.Simulator
                 else
                 {
                     PrepSim();
-                    mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                    mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                     simInstance.Simulate();
                 }
             }
@@ -276,13 +284,13 @@ namespace LcmsNet.Simulator
             frmEmulationDialog dialog = new frmEmulationDialog();
             DialogResult result = dialog.ShowDialog();
 
-            switch(result)
+            switch (result)
             {
                 case DialogResult.Yes:
                     classLCMSSettings.SetParameter("EmulationEnabled", "True");
                     return runSimulation;
-            
-                case DialogResult.No:           
+
+                case DialogResult.No:
                     return runSimulation;
 
                 case DialogResult.Cancel:
@@ -294,20 +302,11 @@ namespace LcmsNet.Simulator
 
         private bool ConfirmEmulation()
         {
-            if(!Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled")))
+            if (!Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled")))
             {
                 return ConfirmNoEmulation();
             }
             return true;
-        }
-
-        /// <summary>
-        /// Gets or sets the method animation preview options.
-        /// </summary>
-        public classMethodPreviewOptions MethodPreviewOptions
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -335,20 +334,20 @@ namespace LcmsNet.Simulator
         void mcontrol_selectedMethods_MethodUpdated(object sender)
         {
             RenderAlignMethods();
-        }      
- 
+        }
+
         /// <summary>
         /// Finds the associated method from the list.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         private classLCMethod FindMethods(string name)
-        {      
-            classLCMethod method = null;            
+        {
+            classLCMethod method = null;
             if (classLCMethodManager.Manager.Methods.ContainsKey(name))
             {
                 method = classLCMethodManager.Manager.Methods[name];
-            }            
+            }
             return method;
         }
 
@@ -358,26 +357,27 @@ namespace LcmsNet.Simulator
         /// <param name="method"></param>
         public bool SaveMethod(classLCMethod method)
         {
-            /// 
-            /// Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
-            /// 
+            //
+            // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
+            //
             if (method == null)
                 return false;
 
-            /// 
-            /// Create a new writer.
-            /// 
-            classLCMethodWriter writer = new classLCMethodWriter();  
-          
-            ///
-            /// Construct the path
-            ///
-            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path        = System.IO.Path.Combine(path, method.Name +  classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            //
+            // Create a new writer.
+            //
+            classLCMethodWriter writer = new classLCMethodWriter();
 
-            /// 
-            /// Write the method out!
-            /// 
+            //
+            // Construct the path
+            //
+            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+                classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+            path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+
+            //
+            // Write the method out!
+            //
             return writer.WriteMethod(path, method);
         }
 
@@ -404,7 +404,7 @@ namespace LcmsNet.Simulator
             if (tabControlCharts.TabCount > 0)
             {
                 //grab the first chart from the list
-                UserControl untackThisControl= tabControlCharts.SelectedTab.Controls.OfType<UserControl>().First();
+                UserControl untackThisControl = tabControlCharts.SelectedTab.Controls.OfType<UserControl>().First();
                 formChartPopoutWindow popout = new formChartPopoutWindow(untackThisControl, tabControlCharts);
                 popout.Text = tabControlCharts.SelectedTab.Text;
                 tabControlCharts.SelectedTab.Controls.Remove(untackThisControl);

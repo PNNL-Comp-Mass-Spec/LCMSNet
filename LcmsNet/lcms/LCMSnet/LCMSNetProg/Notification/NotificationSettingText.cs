@@ -19,11 +19,7 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Text to compare to.
         /// </summary>
-        public string Text
-        {
-            get;
-            set;
-        }
+        public string Text { get; set; }
 
         public override NotificationConditionNode GetConditions()
         {
@@ -32,13 +28,14 @@ namespace LcmsNet.Notification
             node.Conditions.Add("equals", Text);
             return node;
         }
+
         public override void SetConditions(NotificationConditionNode node)
         {
-            Text = node.Conditions["equals"].ToString();            
+            Text = node.Conditions["equals"].ToString();
         }
 
         /// <summary>
-        /// Determines if the action is required based on the value of the notification. 
+        /// Determines if the action is required based on the value of the notification.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

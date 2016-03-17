@@ -8,6 +8,6 @@ namespace LcmsNetDataClasses.Logging
     /// </summary>
     public interface IDeviceHealthWriter
     {
-        void WriteDevices(List<IDevice> devices, string path);        
+        void WriteDevices(List<IDevice> devices, string path);
     }
 }

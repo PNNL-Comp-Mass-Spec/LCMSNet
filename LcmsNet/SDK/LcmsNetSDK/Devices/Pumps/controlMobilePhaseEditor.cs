@@ -18,12 +18,13 @@ namespace LcmsNetSDK.Devices.Pumps
         {
             InitializeComponent();
         }
-        public controlMobilePhaseEditor(MobilePhase phase): this()
+
+        public controlMobilePhaseEditor(MobilePhase phase) : this()
         {
             m_phase = phase;
 
-            mtext_comment.Text  = phase.Comment;
-            mtext_name.Text     = phase.Name;
+            mtext_comment.Text = phase.Comment;
+            mtext_name.Text = phase.Name;
         }
 
         private void mtext_name_TextChanged(object sender, EventArgs e)

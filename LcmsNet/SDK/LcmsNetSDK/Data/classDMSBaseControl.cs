@@ -11,13 +11,14 @@ namespace LcmsNetDataClasses.Data
 {
     public abstract partial class classDMSBaseControl : UserControl
     {
-        public int ID
+        public classDMSBaseControl()
         {
-            get;
-            set;
+            InitializeComponent();
         }
 
-        public abstract bool IsSampleValid {get;}
+        public int ID { get; set; }
+
+        public abstract bool IsSampleValid { get; }
 
         public void SetFocusOn(DMSValidatorEventArgs args)
         {
@@ -36,7 +37,7 @@ namespace LcmsNetDataClasses.Data
                     return;
                 }
             }
-        } 
+        }
 
         public event EventHandler<DMSValidatorEventArgs> EnterPressed;
 
@@ -47,11 +48,6 @@ namespace LcmsNetDataClasses.Data
             {
                 handler(sender, e);
             }
-        }
-
-        public classDMSBaseControl()
-        {
-            InitializeComponent();
         }
     }
 }

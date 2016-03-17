@@ -1,12 +1,12 @@
-﻿
-//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+﻿//*********************************************************************************************************
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2010, Battelle Memorial Institute
 // Created 10/18/2010
 //
 // Last modified 10/18/2010
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,90 +21,100 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet
 {
-	public partial class formInstrumentSetup : Form
-	{
-		//*********************************************************************************************************
-		// Form for specifying instrument that is connected to cart
-		//**********************************************************************************************************
+    public partial class formInstrumentSetup : Form
+    {
+        #region "Constructors"
 
-		#region "Constants"
-		#endregion
-		
-		#region "Delegates"
-		#endregion
+        public formInstrumentSetup()
+        {
+            InitializeComponent();
 
-		#region "Events"
-		#endregion
+            InitForm();
+        }
 
-		#region "Properties"
-		#endregion
+        #endregion
 
-		#region "Constructors"
-			public formInstrumentSetup()
-			{
-				InitializeComponent();
+        #region "Methods"
 
-				InitForm();
-			}
-		#endregion
+        private void InitForm()
+        {
+            // Load combo box
+            List<classInstrumentInfo> instList = classSQLiteTools.GetInstrumentList(false);
 
-		#region "Methods"
-			private void InitForm()
-			{
-				// Load combo box
-				List<classInstrumentInfo> instList = classSQLiteTools.GetInstrumentList(false);
+            if (instList == null)
+            {
+                classApplicationLogger.LogError(0, "formInstrumentSetup: Instrument list retrieval returned null");
+                return;
+            }
 
-				if (instList == null)
-				{
-					classApplicationLogger.LogError(0, "formInstrumentSetup: Instrument list retrieval returned null");					
-					return;
-				}
+            if (instList.Count < 1)
+            {
+                classApplicationLogger.LogError(0, "formInstrumentSetup: No instruments found");
+                return;
+            }
 
-				if (instList.Count < 1)
-				{
-					classApplicationLogger.LogError(0, "formInstrumentSetup: No instruments found");					
-					return;
-				}
+            comboBoxAvailInstruments.Items.Clear();
+            foreach (classInstrumentInfo instData in instList)
+            {
+                comboBoxAvailInstruments.Items.Add(instData.DMSName);
+            }
 
-				comboBoxAvailInstruments.Items.Clear();
-				foreach (classInstrumentInfo instData in instList)
-				{
-					comboBoxAvailInstruments.Items.Add(instData.DMSName);
-				}
+            // Determine if presently specified instrument name is in list. If it is, display it.
+            string currentName = classLCMSSettings.GetParameter("InstName");
+            int indx = 0;
+            bool found = false;
+            foreach (string itemName in comboBoxAvailInstruments.Items)
+            {
+                if (itemName == currentName)
+                {
+                    found = true;
+                    break;
+                }
+                indx++;
+            }
 
-				// Determine if presently specified instrument name is in list. If it is, display it.
-				string currentName = classLCMSSettings.GetParameter("InstName");
-				int indx = 0;
-				bool found = false;
-				foreach (string itemName in comboBoxAvailInstruments.Items)
-				{
-					if (itemName == currentName)
-					{
-						found = true;
-						break;
-					}
-					indx++;
-				}
+            if (found)
+            {
+                comboBoxAvailInstruments.SelectedIndex = indx;
+            }
+            else comboBoxAvailInstruments.SelectedIndex = 0;
+        }
 
-				if (found)
-				{
-					comboBoxAvailInstruments.SelectedIndex = indx;
-				}
-				else comboBoxAvailInstruments.SelectedIndex = 0;
-			}	
-		#endregion
+        #endregion
 
-		#region "Event handlers
-			private void buttonCancel_Click(object sender, EventArgs e)
-			{
-				this.Close();
-			}
+        //*********************************************************************************************************
+        // Form for specifying instrument that is connected to cart
+        //**********************************************************************************************************
 
-			private void buttonAccept_Click(object sender, EventArgs e)
-			{
-				classLCMSSettings.SetParameter("InstName", comboBoxAvailInstruments.SelectedItem.ToString());
-				this.Close();
-			}	
-		#endregion
-	}	
-}	// End namespace
+        #region "Constants"
+
+        #endregion
+
+        #region "Delegates"
+
+        #endregion
+
+        #region "Events"
+
+        #endregion
+
+        #region "Properties"
+
+        #endregion
+
+        #region "Event handlers
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void buttonAccept_Click(object sender, EventArgs e)
+        {
+            classLCMSSettings.SetParameter("InstName", comboBoxAvailInstruments.SelectedItem.ToString());
+            this.Close();
+        }
+
+        #endregion
+    }
+} // End namespace

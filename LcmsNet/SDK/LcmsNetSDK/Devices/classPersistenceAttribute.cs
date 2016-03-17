@@ -6,7 +6,7 @@ namespace LcmsNetDataClasses.Devices
     /// <summary>
     /// Attribute used to save a device's settings
     /// </summary>
-    public class classPersistenceAttribute: Attribute
+    public class classPersistenceAttribute : Attribute
     {
         /// <summary>
         /// Constructor.
@@ -16,6 +16,7 @@ namespace LcmsNetDataClasses.Devices
         {
             SettingName = settingName;
         }
+
         /// <summary>
         /// Gets the name of the setting.
         /// </summary>

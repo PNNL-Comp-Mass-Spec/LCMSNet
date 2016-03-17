@@ -5,6 +5,7 @@
 // Created 09/11/2014
 // Last Modified On: 9/25/2014 By Christopher Walters
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ using System.ComponentModel.Composition;
 using System.ComponentModel;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
-
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
 
@@ -24,19 +24,21 @@ namespace LcmsNetSDK
     /// </summary>
     public class classDMSToolsManager
     {
-        private CompositionContainer mmef_compositionContainer;
-        private IDmsTools midmstools_selectedTools;
         private static classDMSToolsManager m_instance;
+
         /// <summary>
         /// reference to metadata of our selectedTools.
         /// </summary>
         private IDmsMetaData mdms_metadata;
 
+        private IDmsTools midmstools_selectedTools;
+        private CompositionContainer mmef_compositionContainer;
+
         private classDMSToolsManager()
         {
             var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof(classDMSToolsManager).Assembly));
-            
+            catalog.Catalogs.Add(new AssemblyCatalog(typeof (classDMSToolsManager).Assembly));
+
             string catalogPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             catalogPath = Path.Combine(catalogPath, "LCMSNet", "dmsExtensions");
 
@@ -59,6 +61,102 @@ namespace LcmsNetSDK
                 classLCMSSettings.SetParameter("DMSTool", string.Empty);
             }
         }
+
+        /// <summary>
+        /// Get the selected Dms Tool, if none has been selected, returns the first available tool. If no tool is available, throws
+        /// </summary>
+        public IDmsTools SelectedTool
+        {
+            get
+            {
+                // Check that we have a tool available, if not, report via exception otherwise, return the selected, or first available tool.
+                if (midmstools_selectedTools == null && DmsTools.Count() != 0)
+                {
+                    string lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
+                    string[] toolTokens = lastSelectedTool.Split(new char[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
+                    if (lastSelectedTool != string.Empty)
+                    {
+                        midmstools_selectedTools =
+                            DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1])
+                                .Value;
+                        mdms_metadata =
+                            DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1])
+                                .Metadata;
+                    }
+                    else
+                    {
+                        midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
+                        mdms_metadata = DmsTools.First().Metadata;
+                        classLCMSSettings.SetParameter("DMSTool",
+                            DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
+                    }
+                }
+                else if (DmsTools.Count() == 0)
+                {
+                    throw new InvalidOperationException("No dms tools available");
+                }
+                return midmstools_selectedTools;
+            }
+        }
+
+        /// <summary>
+        /// Find the first validator available that will work for the selected DMS tool and its version.
+        /// </summary>
+        public IDMSValidator Validator
+        {
+            get
+            {
+                try
+                {
+                    return
+                        Validators.Single(
+                            x =>
+                                x.Metadata.RelatedToolName == mdms_metadata.Name &&
+                                Convert.ToDouble(mdms_metadata.Version) >=
+                                Convert.ToDouble(x.Metadata.RequiredDMSToolVersion)).Value;
+                }
+                catch (InvalidCastException)
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Contains the MEF references to DmsTools
+        /// </summary>
+        [ImportMany]
+        private IEnumerable<Lazy<IDmsTools, IDmsMetaData>> DmsTools { get; set; }
+
+        /// <summary>
+        /// Contains the MEF references to the validators
+        /// </summary>
+        [ImportMany]
+        private IEnumerable<Lazy<IDMSValidator, IDMSValidatorMetaData>> Validators { get; set; }
+
+        /// <summary>
+        /// Number of Dms Tools loaded.
+        /// </summary>
+        public int ToolCount
+        {
+            get { return DmsTools.Count(); }
+        }
+
+        /// <summary>
+        /// Get a reference to the classDMSTools instance.
+        /// </summary>
+        public static classDMSToolsManager Instance
+        {
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new classDMSToolsManager();
+                }
+                return m_instance;
+            }
+        }
+
         /// <summary>
         /// Select the Dms tool for future use
         /// </summary>
@@ -89,8 +187,9 @@ namespace LcmsNetSDK
             else if (!toolSelected)
             {
                 // Tool was not found with specified version.
-                throw new ArgumentException("Tool version " + toolVersion + " unavailable for selection, version not found.", "toolVersion");
-            }                        
+                throw new ArgumentException(
+                    "Tool version " + toolVersion + " unavailable for selection, version not found.", "toolVersion");
+            }
         }
 
         /// <summary>
@@ -109,102 +208,6 @@ namespace LcmsNetSDK
                 tools.Add(sb.ToString());
             }
             return tools;
-        }
-
-        /// <summary>
-        /// Get the selected Dms Tool, if none has been selected, returns the first available tool. If no tool is available, throws
-        /// </summary>
-        public IDmsTools SelectedTool
-        {
-            get
-            {
-                // Check that we have a tool available, if not, report via exception otherwise, return the selected, or first available tool.
-                if (midmstools_selectedTools == null && DmsTools.Count() != 0)
-                {
-                    string lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
-                    string[] toolTokens = lastSelectedTool.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lastSelectedTool != string.Empty)
-                    {
-                            midmstools_selectedTools = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Value;
-                            mdms_metadata = DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1]).Metadata;
-                    }
-                    else
-                    {
-                        midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
-                        mdms_metadata = DmsTools.First().Metadata;
-                        classLCMSSettings.SetParameter("DMSTool", DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
-                    }
-                }
-                else if (DmsTools.Count() == 0)
-                {
-                    throw new InvalidOperationException("No dms tools available");
-                }
-                return midmstools_selectedTools;
-            }
-        }
-
-        /// <summary>
-        /// Find the first validator available that will work for the selected DMS tool and its version.
-        /// </summary>
-        public IDMSValidator Validator
-        {
-            get
-            {
-                try
-                {
-                    return Validators.Single(x => x.Metadata.RelatedToolName == mdms_metadata.Name && Convert.ToDouble(mdms_metadata.Version) >= Convert.ToDouble(x.Metadata.RequiredDMSToolVersion)).Value;
-                }
-                catch(InvalidCastException)
-                {
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Contains the MEF references to DmsTools
-        /// </summary>
-        [ImportMany]
-        private IEnumerable<Lazy<IDmsTools, IDmsMetaData>> DmsTools
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Contains the MEF references to the validators
-        /// </summary>
-        [ImportMany]
-        private IEnumerable<Lazy<IDMSValidator, IDMSValidatorMetaData>> Validators
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Number of Dms Tools loaded.
-        /// </summary>
-        public int ToolCount
-        {
-            get
-            {
-                return DmsTools.Count();
-            }
-        }
-
-        /// <summary>
-        /// Get a reference to the classDMSTools instance.
-        /// </summary>
-        public static classDMSToolsManager Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new classDMSToolsManager();
-                }
-                return m_instance;
-            }
         }
     }
 }

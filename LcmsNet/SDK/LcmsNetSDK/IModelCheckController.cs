@@ -6,26 +6,22 @@ using LcmsNetSDK;
 
 namespace LcmsNetDataClasses
 {
-    public class ModelCheckControllerEventArgs:EventArgs
+    public class ModelCheckControllerEventArgs : EventArgs
     {
-        public IFluidicsModelChecker ModelChecker
-        {
-            get;
-            set;
-        }
-
         public ModelCheckControllerEventArgs()
         {
             ModelChecker = null;
-        }   
+        }
 
         public ModelCheckControllerEventArgs(IFluidicsModelChecker c)
         {
             ModelChecker = c;
         }
+
+        public IFluidicsModelChecker ModelChecker { get; set; }
     }
 
-    
+
     public interface IModelCheckController
     {
         List<IFluidicsModelChecker> GetModelCheckers();

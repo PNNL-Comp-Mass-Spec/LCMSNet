@@ -36,8 +36,8 @@ namespace LcmsNetDataClasses.Devices
             mlistview_failedDevices.Items.Clear();
             foreach (classDeviceErrorEventArgs error in deviceErrors)
             {
-                ListViewItem item   = new ListViewItem();
-                item.Text           = error.Device.Name;
+                ListViewItem item = new ListViewItem();
+                item.Text = error.Device.Name;
                 string exceptionMessage = "";
                 if (error.Exception != null)
                 {

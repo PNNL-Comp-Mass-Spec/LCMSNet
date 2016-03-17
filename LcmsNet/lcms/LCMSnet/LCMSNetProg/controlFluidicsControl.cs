@@ -16,13 +16,6 @@ namespace LcmsNet
         //consts for determining if multiple selection is allowed.
         private const bool MULTISELECT_YES = true;
         private const bool MULTISELECT_NO = false;
-        private bool selectionMade;
-        private classFluidicsModerator m_fluidics_mod;
-        private bool dragndrop;
-        // member variables used to track mouse movement, used for movement of fluidics glyphs.
-        private Point m_OldMouseLocation;
-        private Point m_NewMouseLocation;
-        private bool m_moving;
         //scale factor minimum and maximum in percent(since the trackbar provides int values, using a percent is convenient)
         private const int SCALE_MIN = 10;
         private const int SCALE_MAX = 200;
@@ -30,21 +23,36 @@ namespace LcmsNet
         private const float SCALE_CONVERSION = 100.0F;
 
         private static bool m_locked;
+        private bool dragndrop;
         private Image m_bitmap;
+        private classFluidicsModerator m_fluidics_mod;
+        private bool m_moving;
+        private Point m_NewMouseLocation;
+        // member variables used to track mouse movement, used for movement of fluidics glyphs.
+        private Point m_OldMouseLocation;
+        private bool selectionMade;
 
 
         public controlFluidicsControl()
         {
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(
+                ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
             InitializeComponent();
-            m_fluidics_mod = classFluidicsModerator.Moderator;            
+            m_fluidics_mod = classFluidicsModerator.Moderator;
             panelFluidicsDesign.MouseDown += panelFluidicsDesign_MouseDown;
             panelFluidicsDesign.MouseUp += panelFluidicsDesign_MouseUp;
             panelFluidicsDesign.MouseMove += panelFluidicsDesign_MouseMove;
             panelFluidicsDesign.DoubleClick += panelFluidicsDesign_DoubleClick;
             panelFluidicsDesign.Paint += panelFluidicsDesign_Paint;
-            this.VisibleChanged += new EventHandler((sender, e) => { if ((sender as Control).Visible) { this.UpdateImage(); this.Refresh(); } }); // ensures that the control has the most up-to-date image when a user switches to it.
+            this.VisibleChanged += new EventHandler((sender, e) =>
+            {
+                if ((sender as Control).Visible)
+                {
+                    this.UpdateImage();
+                    this.Refresh();
+                }
+            }); // ensures that the control has the most up-to-date image when a user switches to it.
             trackBarScale.Value = 100;
             trackBarPortTransparency.Value = 255;
             trackBarDeviceTransparency.Value = 255;
@@ -55,7 +63,12 @@ namespace LcmsNet
             panelFluidicsDesign.AutoScrollMinSize = panelFluidicsDesign.ClientRectangle.Size;
             m_bitmap = new Bitmap(panelFluidicsDesign.Size.Width, panelFluidicsDesign.Size.Height);
             //panelFluidicsDesign.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-                 
+        }
+
+        public bool DevicesLocked
+        {
+            get { return m_locked; }
+            set { m_locked = value; }
         }
 
         /// <summary>
@@ -67,7 +80,7 @@ namespace LcmsNet
         {
             try
             {
-                TrackBar bar = (TrackBar)sender;
+                TrackBar bar = (TrackBar) sender;
                 if (bar.Name == "trackBarScale")
                 {
                     //if the textbox value is different from the trackbar value, update the textbox
@@ -93,7 +106,7 @@ namespace LcmsNet
             {
                 ShowError(ex);
             }
-            //shouldn't ever get here
+                //shouldn't ever get here
             catch (Exception ex)
             {
                 ShowError(ex);
@@ -110,7 +123,7 @@ namespace LcmsNet
         {
             try
             {
-                TextBox self = (TextBox)sender;
+                TextBox self = (TextBox) sender;
                 int val = int.Parse(self.Text);
                 // if the trackbar value is not the same as the text value, it was entered by a user (or some method other than the trackbar)
                 // so change the trackbar to match
@@ -131,7 +144,7 @@ namespace LcmsNet
             {
                 ShowError(ex);
             }
-            // shouldn't ever get this
+                // shouldn't ever get this
             catch (Exception ex)
             {
                 ShowError(ex);
@@ -147,7 +160,7 @@ namespace LcmsNet
         {
             // if enter is pressed...just tab to the trackBar_zoom
             int enterKeyASCII = 13;
-            if (e.KeyChar == (char)enterKeyASCII)
+            if (e.KeyChar == (char) enterKeyASCII)
             {
                 try
                 {
@@ -159,9 +172,9 @@ namespace LcmsNet
                 }
                 catch (ArgumentException ex)
                 {
-                     ShowError(ex);
+                    ShowError(ex);
                 }
-                // shouldn't ever get this
+                    // shouldn't ever get this
                 catch (Exception ex)
                 {
                     ShowError(ex);
@@ -191,7 +204,7 @@ namespace LcmsNet
         /// <param name="e"></param>
         private void textBoxZoom_Enter(object sender, EventArgs e)
         {
-            TextBox zoomBox = (TextBox)sender;
+            TextBox zoomBox = (TextBox) sender;
             zoomBox.SelectAll();
         }
 
@@ -214,19 +227,19 @@ namespace LcmsNet
                         {
                             m_OldMouseLocation = e.Location;
                             dragndrop = true;
-                            //toggle dragndrop mode                           
-                            //select the connection/port/device at the location of the mouse.                      
-                            Point trueLocation = new Point(e.Location.X - panelFluidicsDesign.AutoScrollPosition.X, e.Location.Y - panelFluidicsDesign.AutoScrollPosition.Y);                                        
+                            //toggle dragndrop mode
+                            //select the connection/port/device at the location of the mouse.
+                            Point trueLocation = new Point(e.Location.X - panelFluidicsDesign.AutoScrollPosition.X,
+                                e.Location.Y - panelFluidicsDesign.AutoScrollPosition.Y);
                             if (Form.ModifierKeys != Keys.Control)
                             {
-
                                 selectionMade = m_fluidics_mod.Select(trueLocation, MULTISELECT_NO);
                             }
                             else
                             {
-                                selectionMade = m_fluidics_mod.Select(trueLocation, MULTISELECT_YES);                               
-                            }                           
-                        }                       
+                                selectionMade = m_fluidics_mod.Select(trueLocation, MULTISELECT_YES);
+                            }
+                        }
                     }
                     //only deselect if you did *not* just select something or taken an action
                     if ((!selectionMade))
@@ -241,7 +254,7 @@ namespace LcmsNet
                         }
                     }
                 }
-                // really shouldn't be possible
+                    // really shouldn't be possible
                 catch (Exception ex)
                 {
                     ShowError(ex);
@@ -266,12 +279,12 @@ namespace LcmsNet
                     m_moving = false;
                     if (selectionMade && m_fluidics_mod.GetSelectedPortCount() == 2)
                     {
-                        DialogResult result = MessageBox.Show("Do you want to connect the selected ports?", "Connect", MessageBoxButtons.YesNo);
+                        DialogResult result = MessageBox.Show("Do you want to connect the selected ports?", "Connect",
+                            MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
                         {
                             m_fluidics_mod.CreateConnection();
                             m_fluidics_mod.DeselectPorts();
-
                         }
                     }
                     selectionMade = false;
@@ -288,7 +301,8 @@ namespace LcmsNet
 
         public void UpdateImage()
         {
-            if ((this.ParentForm.MdiParent == null || this.ParentForm.MdiParent.ActiveMdiChild == this.ParentForm) && this.Visible)
+            if ((this.ParentForm.MdiParent == null || this.ParentForm.MdiParent.ActiveMdiChild == this.ParentForm) &&
+                this.Visible)
             {
                 System.Diagnostics.Debug.WriteLine("Updating Image");
                 try
@@ -300,10 +314,11 @@ namespace LcmsNet
                     Size imageSize = m_fluidics_mod.GetBoundingBox().Size;
                     if (scale > 1)
                     {
-                        imageSize.Width = (int)(imageSize.Width * scale);
-                        imageSize.Height = (int)(imageSize.Height * scale);
+                        imageSize.Width = (int) (imageSize.Width * scale);
+                        imageSize.Height = (int) (imageSize.Height * scale);
                     }
-                    if (imageSize.Height <= panelFluidicsDesign.ClientRectangle.Height && imageSize.Width <= panelFluidicsDesign.ClientRectangle.Width)
+                    if (imageSize.Height <= panelFluidicsDesign.ClientRectangle.Height &&
+                        imageSize.Width <= panelFluidicsDesign.ClientRectangle.Width)
                     {
                         imageSize = panelFluidicsDesign.ClientRectangle.Size;
                     }
@@ -317,13 +332,13 @@ namespace LcmsNet
                     using (Graphics g = Graphics.FromImage(m_bitmap))
                     {
                         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                        //each layer is rendered at the transparency value specified by the UI transparency trackbar for that layer, possible values 0-255.                        
+                        //each layer is rendered at the transparency value specified by the UI transparency trackbar for that layer, possible values 0-255.
                         m_fluidics_mod.Render(g, trackBarDeviceTransparency.Value, scale, Layer.Devices);
                         m_fluidics_mod.Render(g, trackBarConnectionTransparency.Value, scale, Layer.Connections);
                         m_fluidics_mod.Render(g, trackBarPortTransparency.Value, scale, Layer.Ports);
                     }
                 }
-                //should never happen
+                    //should never happen
                 catch (Exception ex)
                 {
                     ShowError(ex);
@@ -339,18 +354,19 @@ namespace LcmsNet
         private void panelFluidicsDesign_Paint(object sender, PaintEventArgs e)
         {
             panelFluidicsDesign.AutoScrollMinSize = m_bitmap.Size;
-            e.Graphics.TranslateTransform(panelFluidicsDesign.AutoScrollPosition.X, panelFluidicsDesign.AutoScrollPosition.Y);
+            e.Graphics.TranslateTransform(panelFluidicsDesign.AutoScrollPosition.X,
+                panelFluidicsDesign.AutoScrollPosition.Y);
             e.Graphics.DrawImageUnscaled(m_bitmap, 0, 0);
-            e.Graphics.ResetTransform();                
+            e.Graphics.ResetTransform();
         }
-  
+
         /// <summary>
         /// show error to user
         /// </summary>
         /// <param name="message">message to show user</param>
         private void ShowError(Exception ex)
         {
-            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);            
+            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
         }
 
 
@@ -370,7 +386,8 @@ namespace LcmsNet
                     m_NewMouseLocation = e.Location;
                     //amount the mouse moved.
 
-                    Point amountMoved = new Point(m_NewMouseLocation.X - m_OldMouseLocation.X, m_NewMouseLocation.Y - m_OldMouseLocation.Y);
+                    Point amountMoved = new Point(m_NewMouseLocation.X - m_OldMouseLocation.X,
+                        m_NewMouseLocation.Y - m_OldMouseLocation.Y);
                     if (amountMoved.X + amountMoved.Y != 0)
                     {
                         m_fluidics_mod.MoveSelectedDevices(amountMoved);
@@ -380,7 +397,7 @@ namespace LcmsNet
                     m_OldMouseLocation = m_NewMouseLocation;
                 }
             }
-            //shouldn't happen
+                //shouldn't happen
             catch (Exception ex)
             {
                 ShowError(ex);
@@ -392,20 +409,9 @@ namespace LcmsNet
             MouseEventArgs me = e as MouseEventArgs;
             Point p = Control.MousePosition;
             Point p2 = me.Location;
-            Point trueLocation = new Point(p2.X - panelFluidicsDesign.AutoScrollPosition.X, p2.Y - panelFluidicsDesign.AutoScrollPosition.Y);
+            Point trueLocation = new Point(p2.X - panelFluidicsDesign.AutoScrollPosition.X,
+                p2.Y - panelFluidicsDesign.AutoScrollPosition.Y);
             m_fluidics_mod.DoubleClickActions(trueLocation);
-        }
-
-        public bool DevicesLocked
-        {
-            get
-            {
-                return m_locked;
-            }
-            set
-            {
-                m_locked = value;
-            }
         }
 
         private void controlFluidicsControl_SizeChanged(object sender, EventArgs e)

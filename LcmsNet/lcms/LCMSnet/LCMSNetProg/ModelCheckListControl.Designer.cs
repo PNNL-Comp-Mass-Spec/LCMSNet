@@ -2,12 +2,12 @@
 {
     partial class ModelCheckListControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -35,9 +35,9 @@
             this.groupBoxModelChecks.SuspendLayout();
             this.panelEnableAll.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // groupBoxModelChecks
-            // 
+            //
             this.groupBoxModelChecks.AutoSize = true;
             this.groupBoxModelChecks.Controls.Add(this.panelCheckBoxes);
             this.groupBoxModelChecks.Controls.Add(this.panelEnableAll);
@@ -48,9 +48,9 @@
             this.groupBoxModelChecks.TabIndex = 0;
             this.groupBoxModelChecks.TabStop = false;
             this.groupBoxModelChecks.Text = "Model Checks";
-            // 
+            //
             // enableAllModelChecks
-            // 
+            //
             this.enableAllModelChecks.AutoSize = true;
             this.enableAllModelChecks.Dock = System.Windows.Forms.DockStyle.Left;
             this.enableAllModelChecks.Location = new System.Drawing.Point(0, 0);
@@ -60,26 +60,26 @@
             this.enableAllModelChecks.Text = "Enable All";
             this.enableAllModelChecks.UseVisualStyleBackColor = true;
             this.enableAllModelChecks.CheckedChanged += new System.EventHandler(this.EnableAllCheckHandler);
-            // 
+            //
             // panelEnableAll
-            // 
+            //
             this.panelEnableAll.Controls.Add(this.enableAllModelChecks);
             this.panelEnableAll.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelEnableAll.Location = new System.Drawing.Point(3, 16);
             this.panelEnableAll.Name = "panelEnableAll";
             this.panelEnableAll.Size = new System.Drawing.Size(454, 32);
             this.panelEnableAll.TabIndex = 1;
-            // 
+            //
             // panelCheckBoxes
-            // 
+            //
             this.panelCheckBoxes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCheckBoxes.Location = new System.Drawing.Point(3, 48);
             this.panelCheckBoxes.Name = "panelCheckBoxes";
             this.panelCheckBoxes.Size = new System.Drawing.Size(454, 194);
             this.panelCheckBoxes.TabIndex = 2;
-            // 
+            //
             // ModelCheckListControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;

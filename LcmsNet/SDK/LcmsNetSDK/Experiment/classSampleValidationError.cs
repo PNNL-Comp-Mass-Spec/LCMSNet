@@ -12,7 +12,8 @@ namespace LcmsNetDataClasses.Experiment
             Error = error;
             ValidationErrorType = validationError;
         }
+
         public string Error { get; set; }
-        public enumSampleValidationError ValidationErrorType{get;set;}
+        public enumSampleValidationError ValidationErrorType { get; set; }
     }
 }

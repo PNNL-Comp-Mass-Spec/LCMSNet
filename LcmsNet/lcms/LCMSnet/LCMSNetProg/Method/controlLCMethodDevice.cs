@@ -9,7 +9,7 @@ using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method
 {
-    
+
     public partial class controlLCMethodDevice : UserControl
     {
         internal class MethSelection
@@ -17,7 +17,7 @@ namespace LcmsNet.Method
             public MethSelection(MethodInfo info, object val)
             {
                 Method = info;
-                Value  = val; 
+                Value  = val;
             }
 
             public MethodInfo Method { get; set; }
@@ -39,12 +39,12 @@ namespace LcmsNet.Method
 
         public classLCAction GetAction()
         {
-            
+
             string key = mcomboBox_method.SelectedItem as string;
             if (mdict_params.ContainsKey(key) == false)
                 return null;
 
-            
+
             MethSelection sel = mdict_params[key];
             if (sel.Method == null || sel.Value == null)
                 return null;
@@ -54,7 +54,7 @@ namespace LcmsNet.Method
             action.Start         = DateTime.Now.AddDays(1.0);
             action.Method        = sel.Method;
             object o = mcomboBox_parameters.SelectedItem;
-            
+
             action.Method.Invoke(mobj_device, new object[] {o});
 
             return action;
@@ -88,9 +88,9 @@ namespace LcmsNet.Method
                             {
                                 if (paramInfo.ParameterType.IsEnum == true)
                                 {
-                                    /// 
+                                    ///
                                     /// Old reflection?
-                                    /// 
+                                    ///
                                     System.Array aenums = Enum.GetValues(paramInfo.ParameterType);
                                     object [] enums = new object[aenums.Length];
                                     aenums.CopyTo(enums, 0);
@@ -104,11 +104,11 @@ namespace LcmsNet.Method
 
                                 }
                             }
-                            
+
                         }
                         else
                             mdict_params.Add(attr.Name, new MethSelection(null, null));
-                    }                                        
+                    }
                 }
             }
         }

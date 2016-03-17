@@ -14,17 +14,24 @@ namespace LcmsNet
     public partial class ModelCheckControl : UserControl
     {
         IFluidicsModelChecker modelChecker;
-        public event EventHandler CheckChanged;
 
         public ModelCheckControl(IFluidicsModelChecker check)
-        {            
+        {
             InitializeComponent();
             modelChecker = check;
             chkboxModel.Text = modelChecker.Name;
             chkboxModel.Checked = check.IsEnabled;
             chkboxModel.CheckedChanged += CheckBoxCheckChanged;
-            comboCategories.DataSource = Enum.GetValues(typeof(ModelStatusCategory));
+            comboCategories.DataSource = Enum.GetValues(typeof (ModelStatusCategory));
         }
+
+
+        public bool Checked
+        {
+            get { return chkboxModel.Checked; }
+        }
+
+        public event EventHandler CheckChanged;
 
         public void Check(bool checkValue)
         {
@@ -33,29 +40,20 @@ namespace LcmsNet
 
         private void chkboxModel_CheckedChanged(object sender, EventArgs e)
         {
-            modelChecker.IsEnabled = ((CheckBox)sender).Checked;
+            modelChecker.IsEnabled = ((CheckBox) sender).Checked;
         }
 
         private void comboCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox s = (ComboBox)sender;
-            modelChecker.Category = (ModelStatusCategory)s.SelectedItem;
+            ComboBox s = (ComboBox) sender;
+            modelChecker.Category = (ModelStatusCategory) s.SelectedItem;
         }
 
         private void CheckBoxCheckChanged(object sender, EventArgs e)
         {
-            if(CheckChanged != null)
+            if (CheckChanged != null)
             {
                 CheckChanged(this, new EventArgs());
-            }
-        }
-
-
-        public bool Checked
-        {
-            get
-            {
-                return chkboxModel.Checked;
             }
         }
     }

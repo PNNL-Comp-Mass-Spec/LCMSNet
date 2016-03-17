@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -12,6 +11,7 @@
 //                      - 03/17/2009 (BLL) - Added Serializable attribute to allow for deep copy
 //
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 
@@ -21,71 +21,49 @@ namespace LcmsNetDataClasses
     /// Class to hold data about the instrument connected to the LC cart
     /// </summary>
     /// 
-   [Serializable]
-	public class classInstrumentInfo : classDataClassBase
-	{
-		//*********************************************************************************************************
-		// Class to hold data about the instrument connected to the LC cart
-		//**********************************************************************************************************
+    [Serializable]
+    public class classInstrumentInfo : classDataClassBase
+    {
+        //*********************************************************************************************************
+        // Class to hold data about the instrument connected to the LC cart
+        //**********************************************************************************************************
 
-		#region "Properties"
-			/// <summary>
-			/// Instrument name as used in DMS
-			/// </summary>
-			public string DMSName
-			{
-				get;
-				set;
-			}
+        #region "Properties"
 
-			/// <summary>
-			/// User-friendly name used for pick lists
-			/// </summary>
-			/// <remarks>Instrument name, then a space, then the instrument description</remarks>
-			public string CommonName
-			{
-				get;
-				set;
-			}
+        /// <summary>
+        /// Instrument name as used in DMS
+        /// </summary>
+        public string DMSName { get; set; }
 
-            /// <summary>
-            /// Gets or sets the name of the method used to capture data from this instrument
-            /// </summary>
-            public string MethodName
-            {
-                get;
-                set;
-            }
+        /// <summary>
+        /// User-friendly name used for pick lists
+        /// </summary>
+        /// <remarks>Instrument name, then a space, then the instrument description</remarks>
+        public string CommonName { get; set; }
 
-            /// <summary>
-            /// Gets or sets the instrument status
-            /// </summary>
-            /// <remarks>Status will be active, inactive, or offline</remarks>
-            public string Status
-            {
-                get;
-                set;
-            }
+        // <summary>
+        // Gets or sets the name of the method used to capture data from this instrument
+        // </summary>
+        public string MethodName { get; set; }
 
-            /// <summary>
-            /// Gets or sets the name of the computer that holds the data for the instrument
-            /// </summary>
-            /// <remarks>May contain a domain suffix, for example VPro02.bionet</remarks>
-            public string HostName
-            {
-                get;
-                set;
-            }
+        // <summary>
+        // Gets or sets the instrument status
+        // </summary>
+        // <remarks>Status will be active, inactive, or offline</remarks>
+        public string Status { get; set; }
 
-            /// <summary>
-            /// Gets or sets the name of the shared folder for retrieving the instrument data
-            /// </summary>
-            /// <remarks>Typically a single folder name, like ProteomicsData\ but might contain subfolders, e.g. UserData\Nikola\AMOLF\</remarks>
-            public string SharePath
-            {
-                get;
-                set;
-            }
-		#endregion
-	}	
-}	// End namespace
+        // <summary>
+        // Gets or sets the name of the computer that holds the data for the instrument
+        // </summary>
+        // <remarks>May contain a domain suffix, for example VPro02.bionet</remarks>
+        public string HostName { get; set; }
+
+        // <summary>
+        // Gets or sets the name of the shared folder for retrieving the instrument data
+        // </summary>
+        // <remarks>Typically a single folder name, like ProteomicsData\ but might contain subfolders, e.g. UserData\Nikola\AMOLF\</remarks>
+        public string SharePath { get; set; }
+
+        #endregion
+    }
+} // End namespace

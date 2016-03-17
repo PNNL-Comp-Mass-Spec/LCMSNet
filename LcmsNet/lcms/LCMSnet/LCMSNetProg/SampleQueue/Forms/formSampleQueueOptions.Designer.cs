@@ -36,9 +36,9 @@
             this.mbutton_ok = new System.Windows.Forms.Button();
             this.mgroupBox_triggerFileOptions.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mcheckbox_displayFullName
-            // 
+            //
             this.mcheckbox_displayFullName.AutoSize = true;
             this.mcheckbox_displayFullName.Location = new System.Drawing.Point(27, 12);
             this.mcheckbox_displayFullName.Name = "mcheckbox_displayFullName";
@@ -46,9 +46,9 @@
             this.mcheckbox_displayFullName.TabIndex = 0;
             this.mcheckbox_displayFullName.Text = "Display Full Name (Column, Date, Cart)";
             this.mcheckbox_displayFullName.UseVisualStyleBackColor = true;
-            // 
+            //
             // mgroupBox_triggerFileOptions
-            // 
+            //
             this.mgroupBox_triggerFileOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -61,9 +61,9 @@
             this.mgroupBox_triggerFileOptions.TabIndex = 1;
             this.mgroupBox_triggerFileOptions.TabStop = false;
             this.mgroupBox_triggerFileOptions.Text = "Trigger File Options";
-            // 
+            //
             // checkBox1
-            // 
+            //
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(15, 31);
             this.checkBox1.Name = "checkBox1";
@@ -71,9 +71,9 @@
             this.checkBox1.TabIndex = 1;
             this.checkBox1.Text = "Use Full Name (Column, Date, Cart) in trigger file output";
             this.checkBox1.UseVisualStyleBackColor = true;
-            // 
+            //
             // checkBox2
-            // 
+            //
             this.checkBox2.AutoSize = true;
             this.checkBox2.Location = new System.Drawing.Point(15, 66);
             this.checkBox2.Name = "checkBox2";
@@ -81,9 +81,9 @@
             this.checkBox2.TabIndex = 2;
             this.checkBox2.Text = "Copy Trigger Files to DMS";
             this.checkBox2.UseVisualStyleBackColor = true;
-            // 
+            //
             // checkBox3
-            // 
+            //
             this.checkBox3.AutoSize = true;
             this.checkBox3.Location = new System.Drawing.Point(15, 105);
             this.checkBox3.Name = "checkBox3";
@@ -92,9 +92,9 @@
             this.checkBox3.Text = "Create Trigger Files";
             this.checkBox3.ThreeState = true;
             this.checkBox3.UseVisualStyleBackColor = true;
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.mbutton_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_ok.Location = new System.Drawing.Point(170, 195);
@@ -103,9 +103,9 @@
             this.mbutton_ok.TabIndex = 2;
             this.mbutton_ok.Text = "OK";
             this.mbutton_ok.UseVisualStyleBackColor = true;
-            // 
+            //
             // formSampleQueueOptions
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(412, 242);

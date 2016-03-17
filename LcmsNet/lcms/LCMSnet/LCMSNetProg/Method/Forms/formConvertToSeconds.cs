@@ -15,6 +15,7 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
         }
+
         public formConvertToSeconds(int seconds, int precision)
         {
             InitializeComponent();
@@ -31,6 +32,18 @@ namespace LcmsNet.Method.Forms
             }
         }
 
+        public ConversionType ConversionType
+        {
+            get
+            {
+                if (radioButton1.Checked)
+                {
+                    return Forms.ConversionType.Time;
+                }
+                return Forms.ConversionType.Precision;
+            }
+        }
+
         public int GetTimeInSeconds()
         {
             int minutes = Convert.ToInt32(mnum_minutes.Value);
@@ -43,19 +56,6 @@ namespace LcmsNet.Method.Forms
         {
             return Convert.ToInt32(mnum_decimalPlaces.Value);
         }
-
-        public ConversionType ConversionType
-        {
-            get
-            {
-                if (radioButton1.Checked)
-                {
-                    return Forms.ConversionType.Time;
-                }
-                return Forms.ConversionType.Precision;
-            }            
-        }
-
     }
 
     public enum ConversionType

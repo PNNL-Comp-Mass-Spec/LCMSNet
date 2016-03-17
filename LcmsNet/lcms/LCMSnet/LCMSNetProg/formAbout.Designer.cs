@@ -36,9 +36,9 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.label2.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(0, 274);
@@ -47,9 +47,9 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Copyright Battelle Memorial Institute, 2011";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.label1.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(0, 324);
@@ -59,9 +59,9 @@
             this.label1.Text = "Brian LaMarche, Christopher Walters, David Clark, Danny Orton, John Ryan, Ron Moo" +
     "re, Derek Hopkins, Gordon Anderson";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
@@ -72,9 +72,9 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(710, 479);
             this.panel1.TabIndex = 5;
-            // 
+            //
             // mlabel_version
-            // 
+            //
             this.mlabel_version.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.mlabel_version.Font = new System.Drawing.Font("Calibri", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mlabel_version.Location = new System.Drawing.Point(0, 409);
@@ -83,9 +83,9 @@
             this.mlabel_version.TabIndex = 3;
             this.mlabel_version.Text = "Version: ";
             this.mlabel_version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox1.Image = global::LcmsNet.Properties.Resources.LcmsNet;
             this.pictureBox1.Location = new System.Drawing.Point(20, 88);
@@ -94,9 +94,9 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
+            //
             // formAbout
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(710, 479);

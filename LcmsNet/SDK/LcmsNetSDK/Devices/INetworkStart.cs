@@ -13,10 +13,10 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Fired when new method names are available.
         /// </summary>
-       event EventHandler<classNetworkStartEventArgs> MethodNames;
+        event EventHandler<classNetworkStartEventArgs> MethodNames;
     }
 
-    public class classNetworkStartEventArgs: EventArgs
+    public class classNetworkStartEventArgs : EventArgs
     {
         private readonly List<string> m_methodList;
 
@@ -24,12 +24,10 @@ namespace LcmsNetDataClasses.Devices
         {
             m_methodList = methodList;
         }
+
         public List<string> MethodList
         {
-            get
-            {
-                return m_methodList;
-            }            
+            get { return m_methodList; }
         }
     }
 }

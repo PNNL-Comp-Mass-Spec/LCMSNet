@@ -10,7 +10,7 @@ namespace LcmsNet
     {
         public classStatusEventArgs(string message)
         {
-            Message = message;  
+            Message = message;
         }
         /// <summary>
         /// Gets or sets the message.

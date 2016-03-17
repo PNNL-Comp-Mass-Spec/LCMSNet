@@ -2,12 +2,12 @@
 {
     partial class AdvancedDeviceGroupControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -43,9 +43,9 @@
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // m_selectedDevicePanel
-            // 
+            //
             this.m_selectedDevicePanel.AutoScroll = true;
             this.m_selectedDevicePanel.BackColor = System.Drawing.Color.White;
             this.m_selectedDevicePanel.Controls.Add(this.splitter1);
@@ -54,18 +54,18 @@
             this.m_selectedDevicePanel.Name = "m_selectedDevicePanel";
             this.m_selectedDevicePanel.Size = new System.Drawing.Size(503, 522);
             this.m_selectedDevicePanel.TabIndex = 0;
-            // 
+            //
             // splitter1
-            // 
+            //
             this.splitter1.BackColor = System.Drawing.Color.Silver;
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(3, 522);
             this.splitter1.TabIndex = 0;
             this.splitter1.TabStop = false;
-            // 
+            //
             // m_deviceButtonPanel
-            // 
+            //
             this.m_deviceButtonPanel.AutoScroll = true;
             this.m_deviceButtonPanel.BackColor = System.Drawing.Color.White;
             this.m_deviceButtonPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -74,9 +74,9 @@
             this.m_deviceButtonPanel.Name = "m_deviceButtonPanel";
             this.m_deviceButtonPanel.Size = new System.Drawing.Size(156, 670);
             this.m_deviceButtonPanel.TabIndex = 1;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.clearError);
             this.panel1.Controls.Add(this.mlabel_status);
@@ -87,9 +87,9 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(503, 148);
             this.panel1.TabIndex = 1;
-            // 
+            //
             // clearError
-            // 
+            //
             this.clearError.Image = global::LcmsNet.Properties.Resources.ButtonDeleteRed;
             this.clearError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.clearError.Location = new System.Drawing.Point(98, 110);
@@ -100,18 +100,18 @@
             this.clearError.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.clearError.UseVisualStyleBackColor = true;
             this.clearError.Click += new System.EventHandler(this.clearError_Click);
-            // 
+            //
             // mlabel_status
-            // 
+            //
             this.mlabel_status.Dock = System.Windows.Forms.DockStyle.Top;
             this.mlabel_status.Location = new System.Drawing.Point(0, 0);
             this.mlabel_status.Name = "mlabel_status";
             this.mlabel_status.Size = new System.Drawing.Size(503, 30);
             this.mlabel_status.TabIndex = 5;
-            // 
+            //
             // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.mbutton_RenameDevice);
@@ -122,18 +122,18 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Device";
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(16, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Name";
-            // 
+            //
             // mbutton_RenameDevice
-            // 
+            //
             this.mbutton_RenameDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_RenameDevice.Location = new System.Drawing.Point(407, 32);
             this.mbutton_RenameDevice.Name = "mbutton_RenameDevice";
@@ -142,18 +142,18 @@
             this.mbutton_RenameDevice.Text = "Rename";
             this.mbutton_RenameDevice.UseVisualStyleBackColor = true;
             this.mbutton_RenameDevice.Click += new System.EventHandler(this.mbutton_RenameDevice_Click);
-            // 
+            //
             // mtextBox_NewDeviceName
-            // 
-            this.mtextBox_NewDeviceName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mtextBox_NewDeviceName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextBox_NewDeviceName.Location = new System.Drawing.Point(19, 38);
             this.mtextBox_NewDeviceName.Name = "mtextBox_NewDeviceName";
             this.mtextBox_NewDeviceName.Size = new System.Drawing.Size(374, 20);
             this.mtextBox_NewDeviceName.TabIndex = 2;
-            // 
+            //
             // mbutton_initialize
-            // 
+            //
             this.mbutton_initialize.Image = global::LcmsNet.Properties.Resources.Cycle_16_Yellow;
             this.mbutton_initialize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_initialize.Location = new System.Drawing.Point(6, 110);
@@ -164,9 +164,9 @@
             this.mbutton_initialize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_initialize.UseVisualStyleBackColor = true;
             this.mbutton_initialize.Click += new System.EventHandler(this.mbutton_initialize_Click);
-            // 
+            //
             // AdvancedDeviceGroupControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;

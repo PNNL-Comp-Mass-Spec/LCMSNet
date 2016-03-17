@@ -2,12 +2,12 @@
 {
     partial class controlLCMethodEditor
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -53,9 +53,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.mnum_delay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mnum_frameCount)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // msplitter_one
-            // 
+            //
             this.msplitter_one.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.msplitter_one.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.msplitter_one.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -64,9 +64,9 @@
             this.msplitter_one.Size = new System.Drawing.Size(816, 5);
             this.msplitter_one.TabIndex = 4;
             this.msplitter_one.TabStop = false;
-            // 
+            //
             // mpanel_controlPanel
-            // 
+            //
             this.mpanel_controlPanel.BackColor = System.Drawing.Color.White;
             this.mpanel_controlPanel.Controls.Add(this.mcontrol_acquisitionStage);
             this.mpanel_controlPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -74,9 +74,9 @@
             this.mpanel_controlPanel.Name = "mpanel_controlPanel";
             this.mpanel_controlPanel.Size = new System.Drawing.Size(816, 365);
             this.mpanel_controlPanel.TabIndex = 10;
-            // 
+            //
             // mtabPages_methods
-            // 
+            //
             this.mtabPages_methods.Controls.Add(this.tabPage1);
             this.mtabPages_methods.Controls.Add(this.tabPage2);
             this.mtabPages_methods.Dock = System.Windows.Forms.DockStyle.Right;
@@ -86,9 +86,9 @@
             this.mtabPages_methods.SelectedIndex = 0;
             this.mtabPages_methods.Size = new System.Drawing.Size(248, 340);
             this.mtabPages_methods.TabIndex = 9;
-            // 
+            //
             // tabPage1
-            // 
+            //
             this.tabPage1.Controls.Add(this.mlabel_previewMode);
             this.tabPage1.Controls.Add(this.mcomboBox_previewMode);
             this.tabPage1.Controls.Add(this.mcontrol_selectedMethods);
@@ -100,9 +100,9 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Method Preview";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
+            //
             // mlabel_previewMode
-            // 
+            //
             this.mlabel_previewMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mlabel_previewMode.AutoSize = true;
             this.mlabel_previewMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -111,10 +111,10 @@
             this.mlabel_previewMode.Size = new System.Drawing.Size(75, 13);
             this.mlabel_previewMode.TabIndex = 13;
             this.mlabel_previewMode.Text = "Preview Mode";
-            // 
+            //
             // mcomboBox_previewMode
-            // 
-            this.mcomboBox_previewMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mcomboBox_previewMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mcomboBox_previewMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mcomboBox_previewMode.FormattingEnabled = true;
@@ -122,9 +122,9 @@
             this.mcomboBox_previewMode.Name = "mcomboBox_previewMode";
             this.mcomboBox_previewMode.Size = new System.Drawing.Size(141, 21);
             this.mcomboBox_previewMode.TabIndex = 11;
-            // 
+            //
             // tabPage2
-            // 
+            //
             this.tabPage2.Controls.Add(this.mgroupBox_update);
             this.tabPage2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -134,11 +134,11 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Preview Options";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
+            //
             // mgroupBox_update
-            // 
-            this.mgroupBox_update.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mgroupBox_update.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_update.Controls.Add(this.label3);
             this.mgroupBox_update.Controls.Add(this.mnum_delay);
@@ -152,9 +152,9 @@
             this.mgroupBox_update.TabIndex = 13;
             this.mgroupBox_update.TabStop = false;
             this.mgroupBox_update.Text = "Preview Options";
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(14, 69);
@@ -162,9 +162,9 @@
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Frame Update";
-            // 
+            //
             // mnum_delay
-            // 
+            //
             this.mnum_delay.Location = new System.Drawing.Point(92, 37);
             this.mnum_delay.Maximum = new decimal(new int[] {
             30000,
@@ -185,9 +185,9 @@
             0,
             0});
             this.mnum_delay.ValueChanged += new System.EventHandler(this.mnum_delay_ValueChanged);
-            // 
+            //
             // label4
-            // 
+            //
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(14, 39);
@@ -195,9 +195,9 @@
             this.label4.Size = new System.Drawing.Size(56, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "Delay (ms)";
-            // 
+            //
             // mnum_frameCount
-            // 
+            //
             this.mnum_frameCount.Location = new System.Drawing.Point(92, 67);
             this.mnum_frameCount.Maximum = new decimal(new int[] {
             1000,
@@ -208,9 +208,9 @@
             this.mnum_frameCount.Size = new System.Drawing.Size(61, 20);
             this.mnum_frameCount.TabIndex = 14;
             this.mnum_frameCount.ValueChanged += new System.EventHandler(this.mnum_frameCount_ValueChanged);
-            // 
+            //
             // mcheckBox_animate
-            // 
+            //
             this.mcheckBox_animate.AutoSize = true;
             this.mcheckBox_animate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mcheckBox_animate.Location = new System.Drawing.Point(17, 19);
@@ -220,9 +220,9 @@
             this.mcheckBox_animate.Text = "Animate";
             this.mcheckBox_animate.UseVisualStyleBackColor = true;
             this.mcheckBox_animate.CheckedChanged += new System.EventHandler(this.mcheckBox_animate_CheckedChanged);
-            // 
+            //
             // splitter1
-            // 
+            //
             this.splitter1.BackColor = System.Drawing.Color.Gray;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter1.Location = new System.Drawing.Point(568, 5);
@@ -230,9 +230,9 @@
             this.splitter1.Size = new System.Drawing.Size(5, 340);
             this.splitter1.TabIndex = 16;
             this.splitter1.TabStop = false;
-            // 
+            //
             // mcontrol_methodTimelineThroughput
-            // 
+            //
             this.mcontrol_methodTimelineThroughput.AutoScroll = true;
             this.mcontrol_methodTimelineThroughput.BackColor = System.Drawing.Color.White;
             this.mcontrol_methodTimelineThroughput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -242,11 +242,11 @@
             this.mcontrol_methodTimelineThroughput.RenderMode = LcmsNet.Method.enumLCMethodRenderMode.Column;
             this.mcontrol_methodTimelineThroughput.Size = new System.Drawing.Size(568, 340);
             this.mcontrol_methodTimelineThroughput.TabIndex = 5;
-            // 
+            //
             // mcontrol_selectedMethods
-            // 
-            this.mcontrol_selectedMethods.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mcontrol_selectedMethods.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mcontrol_selectedMethods.AutoScroll = true;
             this.mcontrol_selectedMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -254,13 +254,13 @@
             this.mcontrol_selectedMethods.Name = "mcontrol_selectedMethods";
             this.mcontrol_selectedMethods.Size = new System.Drawing.Size(228, 278);
             this.mcontrol_selectedMethods.TabIndex = 10;
-            // 
+            //
             // mcontrol_acquisitionStage
-            // 
+            //
             this.mcontrol_acquisitionStage.AllowPostOverlap = false;
             this.mcontrol_acquisitionStage.AllowPreOverlap = false;
-            this.mcontrol_acquisitionStage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mcontrol_acquisitionStage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mcontrol_acquisitionStage.BackColor = System.Drawing.Color.White;
             this.mcontrol_acquisitionStage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -270,9 +270,9 @@
             this.mcontrol_acquisitionStage.Name = "mcontrol_acquisitionStage";
             this.mcontrol_acquisitionStage.Size = new System.Drawing.Size(816, 366);
             this.mcontrol_acquisitionStage.TabIndex = 5;
-            // 
+            //
             // controlLCMethodEditor
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -300,7 +300,7 @@
 
         #endregion
 
-		private System.Windows.Forms.Splitter msplitter_one;
+        private System.Windows.Forms.Splitter msplitter_one;
         private controlLCMethodStage mcontrol_acquisitionStage;
         private controlLCMethodTimeline mcontrol_methodTimelineThroughput;
         private System.Windows.Forms.Panel mpanel_controlPanel;

@@ -12,8 +12,8 @@ namespace LcmsNet.Devices
     /// <summary>
     /// Concrete class that writes the notifcation system to XML.
     /// </summary>
-    public class classXMLDeviceNotifierConfigurationReader 
-    {      
+    public class classXMLDeviceNotifierConfigurationReader
+    {
         /// <summary>
         /// Writes the configuration to file.
         /// </summary>
@@ -27,11 +27,11 @@ namespace LcmsNet.Devices
             }
 
             NotificationConfiguration configuration = new NotificationConfiguration();
-            XmlDocument document    = new XmlDocument();
+            XmlDocument document = new XmlDocument();
             document.Load(path);
-            XmlNode rootElement     = document.SelectSingleNode("Devices");
-            
-            foreach(XmlNode node in rootElement.ChildNodes)
+            XmlNode rootElement = document.SelectSingleNode("Devices");
+
+            foreach (XmlNode node in rootElement.ChildNodes)
             {
                 if (node.Name == "Device")
                 {
@@ -41,19 +41,19 @@ namespace LcmsNet.Devices
                 {
                     ReadNotificationSetting(configuration, node);
                 }
-
             }
             return configuration;
         }
 
         private static void ReadNotificationSetting(NotificationConfiguration configuration, XmlNode node)
-        {            
+        {
             XmlNode nameNode = node.Attributes.GetNamedItem("Ignore");
             if (nameNode != null)
             {
                 configuration.IgnoreNotifications = Convert.ToBoolean(nameNode.Value);
             }
         }
+
         private static void ReadDevice(NotificationConfiguration configuration, XmlNode node)
         {
             string deviceName = node.Attributes.GetNamedItem("name").Value;
@@ -90,11 +90,12 @@ namespace LcmsNet.Devices
 
                     // Determine the action
                     enumDeviceNotificationAction actionEnum = enumDeviceNotificationAction.Ignore;
-                    string[] names = Enum.GetNames(typeof(enumDeviceNotificationAction));
+                    string[] names = Enum.GetNames(typeof (enumDeviceNotificationAction));
 
                     try
                     {
-                        actionEnum = (enumDeviceNotificationAction)Enum.Parse(typeof(enumDeviceNotificationAction), action);
+                        actionEnum =
+                            (enumDeviceNotificationAction) Enum.Parse(typeof (enumDeviceNotificationAction), action);
                     }
                     catch
                     {

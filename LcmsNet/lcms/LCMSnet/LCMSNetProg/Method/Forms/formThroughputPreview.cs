@@ -2,11 +2,8 @@
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
-
-
 using LcmsNet.Method;
 using LcmsNet.Method.Drawing;
-
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 
@@ -16,38 +13,38 @@ namespace LcmsNet.Method.Forms
     /// Form that displays the throughput for the given samples.
     /// </summary>
     public partial class formThroughputPreview : Form
-    {        
+    {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="samples"></param>
         public formThroughputPreview()
         {
-            InitializeComponent();                        
+            InitializeComponent();
         }
-        
+
         /// <summary>
         /// Displays the alignment for the samples.
         /// </summary>
         /// <param name="samples"></param>
         public void ShowAlignmentForSamples(List<classSampleData> samples)
         {
-            /// 
-            /// Show the samples 
-            /// 
+            //
+            // Show the samples
+            //
             UpdateSampleMethods(samples);
             Application.DoEvents();
 
-            /// 
-            /// Align the samples 
-            /// 
+            //
+            // Align the samples
+            //
             classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
             optimizer.UpdateRequired += new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
             optimizer.AlignSamples(samples);
 
-            /// 
-            /// Display end product
-            /// 
+            //
+            // Display end product
+            //
             if (optimizer.Methods != null)
                 UpdateSampleMethods(samples);
         }
@@ -57,7 +54,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         /// <param name="sender"></param>
         void optimizer_UpdateRequired(classLCMethodOptimizer sender)
-        {            
+        {
             RenderMethods(sender.Methods);
         }
 
@@ -71,17 +68,17 @@ namespace LcmsNet.Method.Forms
             {
                 if (sample != null && sample.LCMethod != null)
                 {
-                    /// 
-                    /// Clone this, so we dont have multiple copies competing for the same times,
-                    /// methods, etc.
-                    ///  
+                    //
+                    // Clone this, so we dont have multiple copies competing for the same times,
+                    // methods, etc.
+                    //
                     sample.LCMethod = sample.LCMethod.Clone() as classLCMethod;
                     methods.Add(sample.LCMethod);
                 }
             }
 
-            if (methods.Count > 0)            
-                RenderMethods(methods);            
+            if (methods.Count > 0)
+                RenderMethods(methods);
         }
 
         /// <summary>
@@ -89,7 +86,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         /// <param name="methods"></param>
         private void RenderMethods(List<classLCMethod> methods)
-        {                        
+        {
             mcontrol_throughputTimeline.RenderLCMethod(methods);
             Application.DoEvents();
         }

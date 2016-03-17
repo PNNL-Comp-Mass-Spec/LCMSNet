@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
 
@@ -22,43 +21,55 @@ namespace LcmsNet.SampleQueue.Forms
         {
             InitializeComponent();
 
-            /// 
-            /// Always scroll if we have too many items to display.
-            /// 
+            //
+            // Always scroll if we have too many items to display.
+            //
             AutoScroll = true;
 
             mlist_validatorControls = new List<classDMSBaseControl>();
 
-            /// 
-            /// Create a sample validator control for each sample.
-            /// 
+            //
+            // Create a sample validator control for each sample.
+            //
             int i = 0;
             foreach (classSampleData sample in samples)
             {
                 try
                 {
-                    classDMSBaseControl sampleControl = Activator.CreateInstance(LcmsNetSDK.classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as classDMSBaseControl;//new controlDMSValidator(sample);
-                    if(sampleControl == null)
+                    classDMSBaseControl sampleControl =
+                        Activator.CreateInstance(
+                            LcmsNetSDK.classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as
+                            classDMSBaseControl; //new controlDMSValidator(sample);
+                    if (sampleControl == null)
                     {
                         throw new InvalidOperationException("Sample control instantiation failed!");
                     }
-                    sampleControl.Dock                  = DockStyle.Top;
-                    sampleControl.ID                    = i++;
-                    sampleControl.EnterPressed          += new EventHandler<DMSValidatorEventArgs>(sampleControl_EnterPressed);
+                    sampleControl.Dock = DockStyle.Top;
+                    sampleControl.ID = i++;
+                    sampleControl.EnterPressed += new EventHandler<DMSValidatorEventArgs>(sampleControl_EnterPressed);
                     mlist_validatorControls.Add(sampleControl);
                     panel1.Controls.Add(sampleControl);
-                    
-                    sampleControl.BringToFront(); 
-                }               
-                catch(Exception ex)
+
+                    sampleControl.BringToFront();
+                }
+                catch (Exception ex)
                 {
                     // We get this if the sample is null.  Just pass up the chain for now.
                     throw ex;
-                }                
+                }
             }
 
             FormClosing += new FormClosingEventHandler(formSampleDMSValidatorDisplay_FormClosing);
         }
+
+        /// <summary>
+        /// Gets the flag if the samples are valid or not.
+        /// </summary>
+        public bool AreSamplesValid
+        {
+            get { return CheckSamples(); }
+        }
+
         /// <summary>
         /// Moves the focus to the next control.
         /// </summary>
@@ -92,7 +103,22 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        #region Form Event Handlers 
+        /// <summary>
+        /// Checks the sample controls to see if they are valid or not.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckSamples()
+        {
+            foreach (classDMSBaseControl validator in mlist_validatorControls)
+            {
+                if (validator.IsSampleValid == false)
+                    return false;
+            }
+            return true;
+        }
+
+        #region Form Event Handlers
+
         /// <summary>
         /// Prevents the dispose method from being called if we are going to use results from
         /// the sample list objects to see if they are valid at a later time.
@@ -107,6 +133,7 @@ namespace LcmsNet.SampleQueue.Forms
                 Hide();
             }
         }
+
         /// <summary>
         /// Hide the form so we don't dispose of it yet.
         /// </summary>
@@ -116,6 +143,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             DialogResult = DialogResult.OK;
         }
+
         /// <summary>
         /// Hide the form so we don't dispose of it yet.
         /// </summary>
@@ -125,30 +153,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             DialogResult = DialogResult.Cancel;
         }
-        #endregion
 
-        /// <summary>
-        /// Checks the sample controls to see if they are valid or not.
-        /// </summary>
-        /// <returns></returns>
-        private bool CheckSamples()
-        {            
-            foreach (classDMSBaseControl validator in mlist_validatorControls)
-            {
-                if (validator.IsSampleValid == false)
-                    return false;
-            }
-            return true;
-        }
-        /// <summary>
-        /// Gets the flag if the samples are valid or not.
-        /// </summary>
-        public bool AreSamplesValid
-        {
-            get
-            {
-                return CheckSamples();
-            }
-        }
+        #endregion
     }
 }

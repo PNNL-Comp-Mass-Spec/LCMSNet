@@ -8,11 +8,11 @@ using LcmsNetDataClasses.Devices;
 namespace LcmsNet.Method
 {
     /// <summary>
-    /// Abstract Control class that allows the user to define how the value is grabbed 
+    /// Abstract Control class that allows the user to define how the value is grabbed
     /// from the user interface for setting a parameter value in the method editor.
     /// </summary>
     public interface ILCEventParameter
-    {        
+    {
         /// <summary>
         /// Gets the value set by the user.
         /// </summary>
@@ -70,7 +70,7 @@ namespace LcmsNet.Method
         {
             base.OnTextChanged(e);
             OnEventChanged();
-        }        
+        }
     }
     /// <summary>
     /// Combo box control for enumerated user input when defining a method.
@@ -109,11 +109,11 @@ namespace LcmsNet.Method
             set
             {
                 if (value == null)
-                    return; 
+                    return;
 
-                if (Items.Contains(value) == false)                
-                    Items.Add(value);                    
-                
+                if (Items.Contains(value) == false)
+                    Items.Add(value);
+
                 SelectedItem = value;
             }
         }
@@ -131,26 +131,26 @@ namespace LcmsNet.Method
                 return;
 
             if (data.Count > 0)
-            {              
+            {
                 object [] tempData = new object[data.Count];
-                data.CopyTo(tempData, 0);                
+                data.CopyTo(tempData, 0);
                 Items.AddRange(tempData);
-                
+
                 int index = -1;
-                
+
                 if (value != null)
                     index = Items.IndexOf(value);
 
                 if (index >= 0)
                 {
-                    ParameterValue = Items[index];                    
+                    ParameterValue = Items[index];
                 }
                 else
                 {
                     ParameterValue = Items[0];
                 }
             }
-            this.Sorted = true;            
+            this.Sorted = true;
         }
         protected override void OnSelectedIndexChanged(EventArgs e)
         {

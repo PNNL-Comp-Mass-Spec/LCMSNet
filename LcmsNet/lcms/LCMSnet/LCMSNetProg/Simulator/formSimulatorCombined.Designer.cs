@@ -32,16 +32,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitFluidicsAndControls)).BeginInit();
             this.splitFluidicsAndControls.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // splitFluidicsAndControls
-            // 
+            //
             this.splitFluidicsAndControls.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitFluidicsAndControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitFluidicsAndControls.Location = new System.Drawing.Point(0, 0);
             this.splitFluidicsAndControls.Name = "splitFluidicsAndControls";
-            // 
+            //
             // splitFluidicsAndControls.Panel1
-            // 
+            //
             this.splitFluidicsAndControls.Panel1.BackColor = System.Drawing.SystemColors.Control;
             this.splitFluidicsAndControls.Panel1MinSize = 0;
             this.splitFluidicsAndControls.Panel2MinSize = 0;
@@ -49,9 +49,9 @@
             this.splitFluidicsAndControls.SplitterDistance = 288;
             this.splitFluidicsAndControls.SplitterWidth = 5;
             this.splitFluidicsAndControls.TabIndex = 0;
-            // 
+            //
             // formSimulatorCombined
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(957, 517);

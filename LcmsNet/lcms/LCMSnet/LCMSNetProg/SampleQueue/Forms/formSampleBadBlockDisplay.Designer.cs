@@ -38,9 +38,9 @@
             this.mbutton_ok = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
@@ -49,9 +49,9 @@
             this.label1.Text = "These samples were blocked but selected to run on different columns or use differ" +
                 "ent LC-Methods";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
+            //
             // mlistview_samples
-            // 
+            //
             this.mlistview_samples.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -69,31 +69,31 @@
             this.mlistview_samples.TabIndex = 1;
             this.mlistview_samples.UseCompatibleStateImageBehavior = false;
             this.mlistview_samples.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // columnHeader1
-            // 
+            //
             this.columnHeader1.Text = "Batch";
-            // 
+            //
             // columnHeader2
-            // 
+            //
             this.columnHeader2.Text = "Block";
-            // 
+            //
             // columnHeader5
-            // 
+            //
             this.columnHeader5.Text = "Column #";
-            // 
+            //
             // columnHeader3
-            // 
+            //
             this.columnHeader3.Text = "Dataset Name";
             this.columnHeader3.Width = 203;
-            // 
+            //
             // columnHeader4
-            // 
+            //
             this.columnHeader4.Text = "LC-Method";
             this.columnHeader4.Width = 225;
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.mbutton_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_ok.Location = new System.Drawing.Point(117, 366);
@@ -103,9 +103,9 @@
             this.mbutton_ok.Text = "OK, I want to run in this order";
             this.mbutton_ok.UseVisualStyleBackColor = true;
             this.mbutton_ok.Click += new System.EventHandler(this.mbutton_ok_Click);
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Location = new System.Drawing.Point(331, 366);
@@ -114,9 +114,9 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Cancel, do not run!";
             this.button1.UseVisualStyleBackColor = true;
-            // 
+            //
             // formSampleBadBlockDisplay
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

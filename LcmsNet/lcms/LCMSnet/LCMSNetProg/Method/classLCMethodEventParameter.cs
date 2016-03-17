@@ -25,7 +25,7 @@ namespace LcmsNet.Method
         /// </summary>
         public List<string> Names { get; private set; }
         /// <summary>
-        /// Gets the values to use with the method. 
+        /// Gets the values to use with the method.
         /// </summary>
         public List<object> Values { get; private set; }
         /// <summary>
@@ -36,7 +36,7 @@ namespace LcmsNet.Method
         /// List of data provider names.
         /// </summary>
         public List<string> DataProviderNames { get; set; }
-        
+
         /// <summary>
         /// Adds a parameter value to the list of parameters and it's associated editing control.
         /// </summary>
@@ -45,10 +45,10 @@ namespace LcmsNet.Method
         /// <param name="dataProviderName">Name of the data provider to use.</param>
         public void AddParameter(object parameter, Control editControl, string name, string dataProviderName)
         {
-            /// 
-            /// We use the private set.  
-            /// Private so that the lists are only gauranteed to be synchronized.                
-            /// 
+            ///
+            /// We use the private set.
+            /// Private so that the lists are only gauranteed to be synchronized.
+            ///
             Values.Add(parameter);
             Controls.Add(editControl);
             Names.Add(name);

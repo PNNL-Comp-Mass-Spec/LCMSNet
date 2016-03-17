@@ -22,8 +22,22 @@ namespace LcmsNetDataClasses.Logging
     /// <summary>
     /// Class that marshalls messages from different components to different logging and streaming capabilities.
     /// </summary>
-    public class classApplicationLogger: ILogger
+    public class classApplicationLogger : ILogger
     {
+        /// <summary>
+        /// Delegate method handler defining how an error event will be called.
+        /// </summary>
+        /// <param name="errorLevel"></param>
+        /// <param name="args"></param>
+        public delegate void DelegateErrorHandler(int errorLevel, classErrorLoggerArgs args);
+
+        /// <summary>
+        /// Delegate method handler defining how a message event will be called.
+        /// </summary>
+        /// <param name="messageLevel"></param>
+        /// <param name="args"></param>
+        public delegate void DelegateMessageHandler(int messageLevel, classMessageLoggerArgs args);
+
         /// <summary>
         /// Critical and should always be logged.
         /// </summary>
@@ -40,30 +54,6 @@ namespace LcmsNetDataClasses.Logging
         public const int CONST_STATUS_LEVEL_USER = 2;
 
         /// <summary>
-        /// Delegate method handler defining how a message event will be called.
-        /// </summary>
-        /// <param name="messageLevel"></param>
-        /// <param name="args"></param>
-        public delegate void DelegateMessageHandler(int messageLevel, classMessageLoggerArgs args);
-        
-        /// <summary>
-        /// Delegate method handler defining how an error event will be called.
-        /// </summary>
-        /// <param name="errorLevel"></param>
-        /// <param name="args"></param>
-        public delegate void DelegateErrorHandler(int errorLevel, classErrorLoggerArgs args);
-        
-        /// <summary>
-        /// Found when the application finds a message.
-        /// </summary>
-        public static event DelegateMessageHandler Message;
-        
-        /// <summary>
-        /// Fired when the application has an error.
-        /// </summary>
-        public static event DelegateErrorHandler Error;
-
-        /// <summary>
         /// Error message importance level (0 is most important, 5 is least important)
         /// </summary>
         private static int mint_errorLevel = 0;
@@ -78,30 +68,28 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         public static int ErrorLevel
         {
-            get
-            {
-                return mint_errorLevel;
-            }
-            set
-            {
-                mint_errorLevel = value;
-            }
+            get { return mint_errorLevel; }
+            set { mint_errorLevel = value; }
         }
-        
+
         /// <summary>
         /// Gets or sets the message level to log.  
         /// </summary>
         public static int MessageLevel
         {
-            get
-            {
-                return mint_messageLevel;
-            }
-            set
-            {
-                mint_messageLevel = value;
-            }
+            get { return mint_messageLevel; }
+            set { mint_messageLevel = value; }
         }
+
+        /// <summary>
+        /// Found when the application finds a message.
+        /// </summary>
+        public static event DelegateMessageHandler Message;
+
+        /// <summary>
+        /// Fired when the application has an error.
+        /// </summary>
+        public static event DelegateErrorHandler Error;
 
         #region Error Methods
 
@@ -147,12 +135,13 @@ namespace LcmsNetDataClasses.Logging
             {
                 args = new classErrorLoggerArgs(message);
             }
-            if(ex != null)
+            if (ex != null)
             {
                 args.Exception = ex;
             }
-            ThreadPool.QueueUserWorkItem(RaiseErrorEvent, new ThreadPoolStateObject(errorLevel, args));            
-        }  
+            ThreadPool.QueueUserWorkItem(RaiseErrorEvent, new ThreadPoolStateObject(errorLevel, args));
+        }
+
         #endregion
 
         #region Messages 
@@ -174,16 +163,16 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="message">Message to log</param>
         /// <param name="sample">Sample data</param>
         public static void LogMessage(int messageLevel, string message, classSampleData sample)
-        {            
+        {
             classMessageLoggerArgs args;
-            if(sample != null)
+            if (sample != null)
             {
                 args = new classMessageLoggerArgs(message, sample);
             }
             else
             {
                 args = new classMessageLoggerArgs(message);
-            }         
+            }
             ThreadPool.QueueUserWorkItem(RaiseMessageEvent, new ThreadPoolStateObject(messageLevel, args));
         }
 
@@ -195,11 +184,10 @@ namespace LcmsNetDataClasses.Logging
         {
             var info = errorInfo as ThreadPoolStateObject;
 
-            if(info != null && (info.MessageLevel <= mint_errorLevel && Error != null))
+            if (info != null && (info.MessageLevel <= mint_errorLevel && Error != null))
             {
                 Error(info.MessageLevel, info.EventArgs as classErrorLoggerArgs);
             }
-
         }
 
         /// <summary>
@@ -215,6 +203,7 @@ namespace LcmsNetDataClasses.Logging
                 Message(info.MessageLevel, info.EventArgs as classMessageLoggerArgs);
             }
         }
+
         #endregion
 
         #region ILogger Members
@@ -250,5 +239,5 @@ namespace LcmsNetDataClasses.Logging
         }
 
         #endregion
-    }   
+    }
 }

@@ -6,6 +6,7 @@
  * 
  * Last Modified 7/25/2014 By Christopher Walters 
  ********************************************************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,11 +18,14 @@ namespace LcmsNetSDK
     public class TimeKeeper
     {
         #region Members
+
         private TimeZoneInfo m_current_timezone;
         private static TimeKeeper m_instance;
 
         #endregion
+
         #region Methods
+
         private TimeKeeper()
         {
             if (LcmsNetDataClasses.classLCMSSettings.GetParameter("TimeZone") == null)
@@ -31,7 +35,8 @@ namespace LcmsNetSDK
             }
             else
             {
-                m_current_timezone = TimeZoneInfo.FindSystemTimeZoneById(LcmsNetDataClasses.classLCMSSettings.GetParameter("TimeZone"));
+                m_current_timezone =
+                    TimeZoneInfo.FindSystemTimeZoneById(LcmsNetDataClasses.classLCMSSettings.GetParameter("TimeZone"));
             }
             LcmsNetDataClasses.classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
         }
@@ -53,7 +58,6 @@ namespace LcmsNetSDK
             //Persist the timezone setting
             LcmsNetDataClasses.classLCMSSettings.SettingChanged -= classLCMSSettings_SettingChanged;
             LcmsNetDataClasses.classLCMSSettings.SetParameter("TimeZone", m_current_timezone.Id.ToString());
-            
         }
 
         /// <summary>
@@ -93,12 +97,13 @@ namespace LcmsNetSDK
                 return true;
             }
             else
-            { 
+            {
                 return false;
             }
         }
 
-        private void FindDSTTransitions(int year, out TimeZoneInfo.TransitionTime startTransTime, out TimeZoneInfo.TransitionTime endTransTime)
+        private void FindDSTTransitions(int year, out TimeZoneInfo.TransitionTime startTransTime,
+            out TimeZoneInfo.TransitionTime endTransTime)
         {
             startTransTime = new TimeZoneInfo.TransitionTime();
             endTransTime = new TimeZoneInfo.TransitionTime();
@@ -131,12 +136,14 @@ namespace LcmsNetSDK
             DateTime dstTransitionSpring = ConvertToDateTime(springTransition, year);
             DateTime dstTransitionFall = ConvertToDateTime(fallTransition, year);
             // If the method starts after the spring dst transition and occurs on the DAY of that transition...
-            if(method.Start.Subtract(dstTransitionSpring).Milliseconds >= 0 && method.Start.Date == dstTransitionSpring.Date)
+            if (method.Start.Subtract(dstTransitionSpring).Milliseconds >= 0 &&
+                method.Start.Date == dstTransitionSpring.Date)
             {
                 return true;
             }
             // If the method starts after the fall dst transition and occurs on the DAY of that transition...
-            else if (method.Start.Subtract(dstTransitionFall).Milliseconds >= 0 && method.Start.Date == dstTransitionFall.Date)
+            else if (method.Start.Subtract(dstTransitionFall).Milliseconds >= 0 &&
+                     method.Start.Date == dstTransitionFall.Date)
             {
                 return true;
             }
@@ -156,19 +163,20 @@ namespace LcmsNetSDK
         private DateTime ConvertToDateTime(TimeZoneInfo.TransitionTime transition, int year)
         {
             //This is a modified version of MSDN's example code from the TimeZoneInfo.TransitionTime property page.
-            Calendar localCalendar = CultureInfo.CurrentCulture.Calendar;      
+            Calendar localCalendar = CultureInfo.CurrentCulture.Calendar;
             if (transition.IsFixedDateRule)
             {
-                return new DateTime(year, transition.Month, (int)transition.DayOfWeek, transition.TimeOfDay.Hour, transition.TimeOfDay.Minute, transition.TimeOfDay.Second, localCalendar);
+                return new DateTime(year, transition.Month, (int) transition.DayOfWeek, transition.TimeOfDay.Hour,
+                    transition.TimeOfDay.Minute, transition.TimeOfDay.Second, localCalendar);
             }
             else
-            {                
+            {
                 int startOfWeek = transition.Week * 7 - 6;
                 // What day of the week does the month start on? 
-                int firstDayOfWeek = (int)localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
+                int firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
                 // Determine how much start date has to be adjusted 
                 int transitionDay;
-                int changeDayOfWeek = (int)transition.DayOfWeek;
+                int changeDayOfWeek = (int) transition.DayOfWeek;
 
                 if (firstDayOfWeek <= changeDayOfWeek)
                     transitionDay = startOfWeek + (changeDayOfWeek - firstDayOfWeek);
@@ -179,30 +187,27 @@ namespace LcmsNetSDK
                 if (transitionDay > localCalendar.GetDaysInMonth(year, transition.Month))
                     transitionDay -= 7;
 
-                return new DateTime(year, transition.Month, transitionDay, transition.TimeOfDay.Hour, transition.TimeOfDay.Minute, transition.TimeOfDay.Second);
+                return new DateTime(year, transition.Month, transitionDay, transition.TimeOfDay.Hour,
+                    transition.TimeOfDay.Minute, transition.TimeOfDay.Second);
             }
         }
 
         #endregion
+
         #region Properties
+
         /// <summary>
         /// get current time as defined by the currently selected timezone
         /// </summary>
         public DateTime Now
         {
-            get
-            {
-                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, m_current_timezone);
-            }
-            private set {}
+            get { return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, m_current_timezone); }
+            private set { }
         }
 
         public TimeZoneInfo TimeZone
         {
-            get
-            {
-                return m_current_timezone;
-            }
+            get { return m_current_timezone; }
             set
             {
                 m_current_timezone = value;
@@ -220,8 +225,9 @@ namespace LcmsNetSDK
                 }
                 return m_instance;
             }
-            private set {}
+            private set { }
         }
+
         #endregion
     }
 }

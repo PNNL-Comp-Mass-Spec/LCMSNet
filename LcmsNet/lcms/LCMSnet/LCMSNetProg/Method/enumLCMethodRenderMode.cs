@@ -1,5 +1,4 @@
-﻿
-namespace LcmsNet.Method
+﻿namespace LcmsNet.Method
 {
     /// <summary>
     /// Mode used to preview the method throughput.

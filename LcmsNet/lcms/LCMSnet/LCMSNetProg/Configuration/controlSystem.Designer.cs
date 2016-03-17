@@ -2,12 +2,12 @@
 {
     partial class controlSystem
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -31,9 +31,9 @@
             this.mlabel_system = new System.Windows.Forms.Label();
             this.mbutton_color = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // mlabel_system
-            // 
+            //
             this.mlabel_system.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.mlabel_system.AutoSize = true;
@@ -43,9 +43,9 @@
             this.mlabel_system.Size = new System.Drawing.Size(86, 24);
             this.mlabel_system.TabIndex = 21;
             this.mlabel_system.Text = "System 1";
-            // 
+            //
             // mbutton_color
-            // 
+            //
             this.mbutton_color.BackColor = System.Drawing.Color.Red;
             this.mbutton_color.Location = new System.Drawing.Point(95, 0);
             this.mbutton_color.Name = "mbutton_color";
@@ -53,9 +53,9 @@
             this.mbutton_color.TabIndex = 20;
             this.mbutton_color.UseVisualStyleBackColor = false;
             this.mbutton_color.Click += new System.EventHandler(this.mbutton_color_Click);
-            // 
+            //
             // controlSystem
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mlabel_system);

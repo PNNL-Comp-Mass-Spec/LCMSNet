@@ -5,31 +5,35 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices
 {
-    public class classINIDeviceConfigurationReader: IDeviceConfigurationReader
+    public class classINIDeviceConfigurationReader : IDeviceConfigurationReader
     {
         /// <summary>
         /// Tag used above every device.
         /// </summary>
         private const string CONST_DEVICE_HEADER_TAG = "[Device]";
+
         /// <summary>
         /// tag used above the connections section
         /// </summary>
         private const string CONST_CONNECTIONS_HEADER_TAG = "[Connections]";
+
         /// <summary>
         /// Delimeter of file.
         /// </summary>
         private const string CONST_DELIMETER = " = ";
 
         #region IDeviceConfigurationReader Members
-        public classDeviceConfiguration  ReadConfiguration(string path)
+
+        public classDeviceConfiguration ReadConfiguration(string path)
         {
-            string[] configLines    = File.ReadAllLines(path);
+            string[] configLines = File.ReadAllLines(path);
 
             // Find the device headers.
             List<int> deviceHeaders = new List<int>();
             int i = 0;
-            int connectionsIndex = configLines.Length; // if connection section doesn't exist, we should just go on, so set this to length of the array.
-            foreach(string line in configLines)
+            int connectionsIndex = configLines.Length;
+                // if connection section doesn't exist, we should just go on, so set this to length of the array.
+            foreach (string line in configLines)
             {
                 string xline = line.Replace("\n", "");
                 xline = xline.Replace("\r", "");
@@ -47,11 +51,11 @@ namespace LcmsNet.Devices
             }
 
             classDeviceConfiguration configuration = new classDeviceConfiguration();
-            for(i = 0; i < deviceHeaders.Count; i++)
+            for (i = 0; i < deviceHeaders.Count; i++)
             {
-                int k           = i + 1;
-                int startIndex  = deviceHeaders[i];
-                int lastIndex   = startIndex;
+                int k = i + 1;
+                int startIndex = deviceHeaders[i];
+                int lastIndex = startIndex;
                 if (k == deviceHeaders.Count)
                 {
                     lastIndex = configLines.Length;
@@ -60,18 +64,18 @@ namespace LcmsNet.Devices
                 {
                     lastIndex = deviceHeaders[k];
                 }
-                
-                string deviceName   = "";
+
+                string deviceName = "";
                 Dictionary<string, object> data = new Dictionary<string, object>();
-                string[] delimeter  = new string[] { CONST_DELIMETER }; 
+                string[] delimeter = new string[] {CONST_DELIMETER};
                 for (int j = startIndex + 1; j < lastIndex; j++)
                 {
-                     string line        = configLines[j];
-                     string [] lineData = line.Split(delimeter, StringSplitOptions.RemoveEmptyEntries);
-                     if (lineData.Length == 2)
-                     {
-                         data.Add(lineData[0], lineData[1]);
-                     }
+                    string line = configLines[j];
+                    string[] lineData = line.Split(delimeter, StringSplitOptions.RemoveEmptyEntries);
+                    if (lineData.Length == 2)
+                    {
+                        data.Add(lineData[0], lineData[1]);
+                    }
                 }
 
                 deviceName = Convert.ToString(data["DeviceName"]);
@@ -79,7 +83,7 @@ namespace LcmsNet.Devices
                 {
                     configuration.AddSetting(deviceName, key, data[key]);
                 }
-            }            
+            }
             for (int j = connectionsIndex; j < configLines.Length; j++)
             {
                 string line = configLines[j];
@@ -87,12 +91,13 @@ namespace LcmsNet.Devices
                 string[] lineData = line.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (lineData.Length == 3)
                 {
-                    configuration.AddConnection("conn" + (j - connectionsIndex).ToString(), lineData[0] + "," + lineData[1] + "," + lineData[2]);   
+                    configuration.AddConnection("conn" + (j - connectionsIndex).ToString(),
+                        lineData[0] + "," + lineData[1] + "," + lineData[2]);
                 }
             }
             return configuration;
         }
 
         #endregion
-}
+    }
 }

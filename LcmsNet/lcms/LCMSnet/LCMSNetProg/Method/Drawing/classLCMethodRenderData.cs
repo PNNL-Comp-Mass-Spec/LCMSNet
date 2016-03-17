@@ -17,7 +17,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="lineColor">Color of the line to display.</param>
         /// <param name="method">Method to render</param>
         /// <param name="useGradientBrush">Flag indicating to use a solid or gradient brush for the background.</param>
-        public classLCMethodRenderData( Color background, 
+        public classLCMethodRenderData( Color background,
                                         Color lineColor,
                                         float lineWidth,
                                         classLCMethod method,

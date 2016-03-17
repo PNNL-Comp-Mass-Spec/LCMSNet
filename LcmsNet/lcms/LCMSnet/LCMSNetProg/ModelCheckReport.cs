@@ -25,76 +25,40 @@ namespace LcmsNet
 
         public string Time
         {
-            get
-            {
-                return lblTime.Text;
-            }
-            set
-            {
-                lblTime.Text = value;
-            }
+            get { return lblTime.Text; }
+            set { lblTime.Text = value; }
         }
 
 
         public string MessageType
         {
-            get
-            {
-                return lblMsgTypeConst.Text;
-            }
-            set
-            {
-                lblMsgType.Text = value;
-            }
+            get { return lblMsgTypeConst.Text; }
+            set { lblMsgType.Text = value; }
         }
+
         public string Type
         {
-            get
-            {
-                return lblType.Text;
-            }
-            set
-            {
-                lblType.Text = value;
-            }
+            get { return lblType.Text; }
+            set { lblType.Text = value; }
         }
 
         public string Event
         {
-            get
-            {
-                return lblEvent.Text;
-            }
-            set
-            {
-                lblEvent.Text = value;
-            }
+            get { return lblEvent.Text; }
+            set { lblEvent.Text = value; }
         }
 
 
         public string ProblemDevice
         {
-            get
-            {
-                return lblProblemDevice.Text;
-            }
-            set
-            {
-                lblProblemDevice.Text = value;
-            }
+            get { return lblProblemDevice.Text; }
+            set { lblProblemDevice.Text = value; }
         }
 
         public string Device
         {
-            get
-            {
-                return lblDevice.Text;
-
-            }
-            set
-            {
-                lblDevice.Text = value;
-            }
+            get { return lblDevice.Text; }
+            set { lblDevice.Text = value; }
         }
     }
 }

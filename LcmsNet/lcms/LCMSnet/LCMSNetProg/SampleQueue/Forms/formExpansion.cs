@@ -16,18 +16,19 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         Dictionary<Button, bool> mdict_registeredButton;
 
-        public formExpansion()            
+        public formExpansion()
         {
-            InitializeComponent();  
+            InitializeComponent();
         }
-        
+
         public void UpdateButtons(List<Button> buttons)
         {
             Initialize(buttons);
         }
+
         private void Initialize(List<Button> buttons)
         {
-            mdict_registeredButton = new Dictionary<Button, bool>();          
+            mdict_registeredButton = new Dictionary<Button, bool>();
             KeyDown += new KeyEventHandler(formExpansion_KeyDown);
             LostFocus += new EventHandler(formExpansion_LostFocus);
             MouseLeave += new EventHandler(formExpansion_MouseLeave);
@@ -35,14 +36,14 @@ namespace LcmsNet.SampleQueue.Forms
 
             Controls.Clear();
 
-            int left    = 0;
-            int width   = 0;
+            int left = 0;
+            int width = 0;
             if (buttons.Count > 0)
             {
-                width       = 60;
+                width = 60;
                 int padding = 2;
-                left        = 32;
-                this.Width  = ((width + padding) * buttons.Count) + left;
+                left = 32;
+                this.Width = ((width + padding) * buttons.Count) + left;
                 foreach (Button button in buttons)
                 {
                     if (!mdict_registeredButton.ContainsKey(button))
@@ -51,10 +52,10 @@ namespace LcmsNet.SampleQueue.Forms
                         button.MouseLeave += new EventHandler(button_MouseLeave);
                         button.Click += new EventHandler(button_Click);
                     }
-                    button.Left   = left;
+                    button.Left = left;
                     button.Width = width;
                     left += (width + padding);
-                    button.Height = Height - button.Top - padding; 
+                    button.Height = Height - button.Top - padding;
                     Controls.Add(button);
                 }
             }
@@ -89,8 +90,12 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
+        private void formExpansion_Load(object sender, EventArgs e)
+        {
+        }
 
-        #region Exit 
+        #region Exit
+
         private void CheckIfMouseGone()
         {
             Point cursorPoint = Cursor.Position;
@@ -105,6 +110,7 @@ namespace LcmsNet.SampleQueue.Forms
                 DialogResult = DialogResult.Cancel;
             }
         }
+
         void formExpansion_MouseLeave(object sender, EventArgs e)
         {
             CheckIfMouseGone();
@@ -114,18 +120,15 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (e.KeyCode == Keys.Escape)
             {
-                DialogResult = DialogResult.Cancel;                
+                DialogResult = DialogResult.Cancel;
             }
         }
+
         void formExpansion_LostFocus(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;            
+            DialogResult = DialogResult.Cancel;
         }
-        #endregion
-        
-        private void formExpansion_Load(object sender, EventArgs e)
-        {
 
-        }
+        #endregion
     }
 }

@@ -72,18 +72,18 @@
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mlabel_cartName
-            // 
+            //
             this.mlabel_cartName.AutoSize = true;
             this.mlabel_cartName.Location = new System.Drawing.Point(14, 26);
             this.mlabel_cartName.Name = "mlabel_cartName";
             this.mlabel_cartName.Size = new System.Drawing.Size(89, 20);
             this.mlabel_cartName.TabIndex = 26;
             this.mlabel_cartName.Text = "Cart Name:";
-            // 
+            //
             // mlabel_Cart
-            // 
+            //
             this.mlabel_Cart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.mlabel_Cart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mlabel_Cart.Location = new System.Drawing.Point(207, 22);
@@ -91,27 +91,27 @@
             this.mlabel_Cart.Size = new System.Drawing.Size(302, 21);
             this.mlabel_Cart.TabIndex = 29;
             this.mlabel_Cart.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(129, 20);
             this.label1.TabIndex = 30;
             this.label1.Text = "Separation Type:";
-            // 
+            //
             // mcombo_SepType
-            // 
+            //
             this.mcombo_SepType.FormattingEnabled = true;
             this.mcombo_SepType.Location = new System.Drawing.Point(207, 53);
             this.mcombo_SepType.Name = "mcombo_SepType";
             this.mcombo_SepType.Size = new System.Drawing.Size(302, 28);
             this.mcombo_SepType.TabIndex = 31;
             this.mcombo_SepType.SelectedIndexChanged += new System.EventHandler(this.mcombo_SepType_SelectedIndexChanged);
-            // 
+            //
             // mbutton_Reload
-            // 
+            //
             this.mbutton_Reload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_Reload.Location = new System.Drawing.Point(6, 283);
             this.mbutton_Reload.Name = "mbutton_Reload";
@@ -120,9 +120,9 @@
             this.mbutton_Reload.Text = "Reload Column Names";
             this.mbutton_Reload.UseVisualStyleBackColor = true;
             this.mbutton_Reload.Click += new System.EventHandler(this.mbutton_Reload_Click);
-            // 
+            //
             // mbutton_accept
-            // 
+            //
             this.mbutton_accept.Location = new System.Drawing.Point(347, 50);
             this.mbutton_accept.Name = "mbutton_accept";
             this.mbutton_accept.Size = new System.Drawing.Size(95, 28);
@@ -130,18 +130,18 @@
             this.mbutton_accept.Text = "Set";
             this.mbutton_accept.UseVisualStyleBackColor = true;
             this.mbutton_accept.Click += new System.EventHandler(this.buttonAccept_Click);
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 25);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(161, 20);
             this.label2.TabIndex = 34;
             this.label2.Text = "Available Instruments";
-            // 
+            //
             // comboBoxAvailInstruments
-            // 
+            //
             this.comboBoxAvailInstruments.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAvailInstruments.FormattingEnabled = true;
             this.comboBoxAvailInstruments.Location = new System.Drawing.Point(17, 50);
@@ -149,10 +149,10 @@
             this.comboBoxAvailInstruments.Size = new System.Drawing.Size(311, 28);
             this.comboBoxAvailInstruments.TabIndex = 33;
             this.comboBoxAvailInstruments.SelectedIndexChanged += new System.EventHandler(this.comboBoxAvailInstruments_SelectedIndexChanged);
-            // 
+            //
             // mgroupBox_instrument
-            // 
-            this.mgroupBox_instrument.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mgroupBox_instrument.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_instrument.Controls.Add(this.comboBoxAvailInstruments);
             this.mgroupBox_instrument.Controls.Add(this.mbutton_accept);
@@ -163,10 +163,10 @@
             this.mgroupBox_instrument.TabIndex = 36;
             this.mgroupBox_instrument.TabStop = false;
             this.mgroupBox_instrument.Text = "Mass Spectrometer Instrument";
-            // 
+            //
             // mgroupBox_cart
-            // 
-            this.mgroupBox_cart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mgroupBox_cart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_cart.Controls.Add(this.mcontrol_columnTwo);
             this.mgroupBox_cart.Controls.Add(this.mcontrol_columnOne);
@@ -183,9 +183,9 @@
             this.mgroupBox_cart.TabIndex = 37;
             this.mgroupBox_cart.TabStop = false;
             this.mgroupBox_cart.Text = "LC-Cart";
-            // 
+            //
             // mcontrol_columnTwo
-            // 
+            //
             this.mcontrol_columnTwo.ColumnData = null;
             this.mcontrol_columnTwo.ColumnID = 2;
             this.mcontrol_columnTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -193,9 +193,9 @@
             this.mcontrol_columnTwo.Name = "mcontrol_columnTwo";
             this.mcontrol_columnTwo.Size = new System.Drawing.Size(314, 81);
             this.mcontrol_columnTwo.TabIndex = 12;
-            // 
+            //
             // mcontrol_columnOne
-            // 
+            //
             this.mcontrol_columnOne.ColumnData = null;
             this.mcontrol_columnOne.ColumnID = 1;
             this.mcontrol_columnOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -203,9 +203,9 @@
             this.mcontrol_columnOne.Name = "mcontrol_columnOne";
             this.mcontrol_columnOne.Size = new System.Drawing.Size(354, 81);
             this.mcontrol_columnOne.TabIndex = 0;
-            // 
+            //
             // mcontrol_columnFour
-            // 
+            //
             this.mcontrol_columnFour.ColumnData = null;
             this.mcontrol_columnFour.ColumnID = 4;
             this.mcontrol_columnFour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -213,9 +213,9 @@
             this.mcontrol_columnFour.Name = "mcontrol_columnFour";
             this.mcontrol_columnFour.Size = new System.Drawing.Size(323, 63);
             this.mcontrol_columnFour.TabIndex = 16;
-            // 
+            //
             // mcontrol_columnThree
-            // 
+            //
             this.mcontrol_columnThree.ColumnData = null;
             this.mcontrol_columnThree.ColumnID = 3;
             this.mcontrol_columnThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -223,10 +223,10 @@
             this.mcontrol_columnThree.Name = "mcontrol_columnThree";
             this.mcontrol_columnThree.Size = new System.Drawing.Size(354, 69);
             this.mcontrol_columnThree.TabIndex = 14;
-            // 
+            //
             // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.mbutton_acceptOperator);
             this.groupBox1.Controls.Add(this.mcombo_Operator);
@@ -236,9 +236,9 @@
             this.groupBox1.TabIndex = 38;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operator";
-            // 
+            //
             // mbutton_acceptOperator
-            // 
+            //
             this.mbutton_acceptOperator.Location = new System.Drawing.Point(250, 17);
             this.mbutton_acceptOperator.Name = "mbutton_acceptOperator";
             this.mbutton_acceptOperator.Size = new System.Drawing.Size(79, 32);
@@ -246,9 +246,9 @@
             this.mbutton_acceptOperator.Text = "Set";
             this.mbutton_acceptOperator.UseVisualStyleBackColor = true;
             this.mbutton_acceptOperator.Click += new System.EventHandler(this.mbutton_acceptOperator_Click);
-            // 
+            //
             // mcombo_Operator
-            // 
+            //
             this.mcombo_Operator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mcombo_Operator.FormattingEnabled = true;
             this.mcombo_Operator.Location = new System.Drawing.Point(17, 19);
@@ -256,10 +256,10 @@
             this.mcombo_Operator.Size = new System.Drawing.Size(227, 28);
             this.mcombo_Operator.TabIndex = 33;
             this.mcombo_Operator.SelectedIndexChanged += new System.EventHandler(this.mcombo_Operator_SelectedIndexChanged);
-            // 
+            //
             // mgroupBox_autoUploads
-            // 
-            this.mgroupBox_autoUploads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mgroupBox_autoUploads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_autoUploads.Controls.Add(this.label3);
             this.mgroupBox_autoUploads.Controls.Add(this.mtextbox_triggerLocation);
@@ -269,30 +269,30 @@
             this.mgroupBox_autoUploads.TabIndex = 39;
             this.mgroupBox_autoUploads.TabStop = false;
             this.mgroupBox_autoUploads.Text = "Data Auto-Upload DMS";
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(213, 20);
             this.label3.TabIndex = 7;
             this.label3.Text = "Remote Trigger File Location";
-            // 
+            //
             // mtextbox_triggerLocation
-            // 
-            this.mtextbox_triggerLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mtextbox_triggerLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextbox_triggerLocation.Enabled = false;
             this.mtextbox_triggerLocation.Location = new System.Drawing.Point(16, 70);
             this.mtextbox_triggerLocation.Name = "mtextbox_triggerLocation";
             this.mtextbox_triggerLocation.Size = new System.Drawing.Size(761, 26);
             this.mtextbox_triggerLocation.TabIndex = 6;
-            // 
+            //
             // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -304,9 +304,9 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(852, 578);
             this.tabControl1.TabIndex = 40;
-            // 
+            //
             // tabPage4
-            // 
+            //
             this.tabPage4.Controls.Add(this.groupBox1);
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
@@ -314,9 +314,9 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Operator";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
+            //
             // tabPage1
-            // 
+            //
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.comboTimeZone);
             this.tabPage1.Controls.Add(this.txtPdfPath);
@@ -331,53 +331,53 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "LC Cart";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
+            //
             // label6
-            // 
+            //
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(386, 351);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(88, 20);
             this.label6.TabIndex = 45;
             this.label6.Text = "Time Zone:";
-            // 
+            //
             // comboTimeZone
-            // 
+            //
             this.comboTimeZone.FormattingEnabled = true;
             this.comboTimeZone.Location = new System.Drawing.Point(480, 347);
             this.comboTimeZone.Name = "comboTimeZone";
             this.comboTimeZone.Size = new System.Drawing.Size(242, 28);
             this.comboTimeZone.TabIndex = 44;
             this.comboTimeZone.SelectedValueChanged += new System.EventHandler(this.comboTimeZone_SelectedValueChanged);
-            // 
+            //
             // txtPdfPath
-            // 
+            //
             this.txtPdfPath.Enabled = false;
             this.txtPdfPath.Location = new System.Drawing.Point(130, 395);
             this.txtPdfPath.Name = "txtPdfPath";
             this.txtPdfPath.Size = new System.Drawing.Size(428, 26);
             this.txtPdfPath.TabIndex = 43;
-            // 
+            //
             // label5
-            // 
+            //
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(20, 398);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(104, 20);
             this.label5.TabIndex = 40;
             this.label5.Text = "Write PDF to:";
-            // 
+            //
             // label4
-            // 
+            //
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(20, 347);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(220, 20);
             this.label4.TabIndex = 39;
             this.label4.Text = "Minimum Sample Volume (uL)";
-            // 
+            //
             // numericUpDown1
-            // 
+            //
             this.numericUpDown1.Location = new System.Drawing.Point(257, 345);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000,
@@ -388,9 +388,9 @@
             this.numericUpDown1.Size = new System.Drawing.Size(109, 26);
             this.numericUpDown1.TabIndex = 38;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
+            //
             // tabPage2
-            // 
+            //
             this.tabPage2.Controls.Add(this.mgroupBox_instrument);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
@@ -399,9 +399,9 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Mass Spectrometer";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
+            //
             // tabPage3
-            // 
+            //
             this.tabPage3.Controls.Add(this.label7);
             this.tabPage3.Controls.Add(this.comboDmsTools);
             this.tabPage3.Controls.Add(this.mgroupBox_autoUploads);
@@ -411,27 +411,27 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "DMS";
             this.tabPage3.UseVisualStyleBackColor = true;
-            // 
+            //
             // comboDmsTools
-            // 
+            //
             this.comboDmsTools.FormattingEnabled = true;
             this.comboDmsTools.Location = new System.Drawing.Point(104, 163);
             this.comboDmsTools.Name = "comboDmsTools";
             this.comboDmsTools.Size = new System.Drawing.Size(265, 28);
             this.comboDmsTools.TabIndex = 40;
             this.comboDmsTools.SelectedIndexChanged += new System.EventHandler(this.comboDmsTools_SelectedIndexChanged);
-            // 
+            //
             // label7
-            // 
+            //
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(15, 166);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(83, 20);
             this.label7.TabIndex = 41;
             this.label7.Text = "DMS Tool:";
-            // 
+            //
             // formSystemConfiguration
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
@@ -468,10 +468,10 @@
         private controlColumn mcontrol_columnThree;
         private controlColumn mcontrol_columnFour;
         private System.Windows.Forms.Label mlabel_cartName;
-		  private System.Windows.Forms.Label mlabel_Cart;
-		  private System.Windows.Forms.Label label1;
-		  private System.Windows.Forms.ComboBox mcombo_SepType;
-		  private System.Windows.Forms.Button mbutton_Reload;
+          private System.Windows.Forms.Label mlabel_Cart;
+          private System.Windows.Forms.Label label1;
+          private System.Windows.Forms.ComboBox mcombo_SepType;
+          private System.Windows.Forms.Button mbutton_Reload;
           private System.Windows.Forms.Button mbutton_accept;
           private System.Windows.Forms.Label label2;
           private System.Windows.Forms.ComboBox comboBoxAvailInstruments;

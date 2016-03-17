@@ -18,6 +18,7 @@ namespace LcmsNet.Method.Forms
             InitializeComponent();
             UpdateList(errors);
         }
+
         /// <summary>
         /// Updates the listview with the error device messages.
         /// </summary>
@@ -29,19 +30,20 @@ namespace LcmsNet.Method.Forms
             foreach (string  path in errors.Keys)
             {
                 TreeNode parentNode = new TreeNode();
-                parentNode.Text     = System.IO.Path.GetFileNameWithoutExtension(path);
-                List<Exception> exceptions  = errors[path];
+                parentNode.Text = System.IO.Path.GetFileNameWithoutExtension(path);
+                List<Exception> exceptions = errors[path];
                 foreach (Exception ex in exceptions)
                 {
-                    TreeNode childNode  = new TreeNode();
-                    childNode.Text      = ex.Message;
-                    parentNode.Nodes.Add(childNode);            
+                    TreeNode childNode = new TreeNode();
+                    childNode.Text = ex.Message;
+                    parentNode.Nodes.Add(childNode);
                 }
                 m_tree.Nodes.Add(parentNode);
             }
             m_tree.ExpandAll();
             m_tree.EndUpdate();
         }
+
         private void mbutton_ok_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;

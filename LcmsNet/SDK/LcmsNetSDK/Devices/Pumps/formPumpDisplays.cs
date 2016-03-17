@@ -13,15 +13,17 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// Pixel padding for the height at the bottom of the control.
         /// </summary>
         private const int CONST_HEIGHT_PADDING = 15;
+
+        private readonly List<IPump> m_pumps;
+
         /// <summary>
         /// Dictionary to 
         /// </summary>
         readonly Dictionary<IPump, controlPumpDisplay> mdict_controlList;
-        private readonly Dictionary<IPump, GroupBox> mdict_mobilePhases;
-        private readonly List<IPump> m_pumps;
 
-        public event EventHandler Tack;
-        public event EventHandler UnTack;
+        private readonly Dictionary<IPump, GroupBox> mdict_mobilePhases;
+
+        private int m_pointer;
 
 
         public formPumpDisplays()
@@ -29,13 +31,21 @@ namespace LcmsNetDataClasses.Devices.Pumps
             InitializeComponent();
             mdict_mobilePhases = new Dictionary<IPump, GroupBox>();
             m_pumps = new List<IPump>();
-            mdict_controlList  = new Dictionary<IPump, controlPumpDisplay>();            
-            DeviceManagerBridge.DeviceAdded     += new DelegateDeviceUpdated(Manager_DeviceAdded);
-            DeviceManagerBridge.DeviceRemoved   += new DelegateDeviceUpdated(Manager_DeviceRemoved);
-            FormClosing                         += new FormClosingEventHandler(formPumpDisplays_FormClosing);
-            Resize                              += new EventHandler(formPumpDisplays_Resize);
+            mdict_controlList = new Dictionary<IPump, controlPumpDisplay>();
+            DeviceManagerBridge.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
+            DeviceManagerBridge.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
+            FormClosing += new FormClosingEventHandler(formPumpDisplays_FormClosing);
+            Resize += new EventHandler(formPumpDisplays_Resize);
             m_pointer = 0;
         }
+
+        /// <summary>
+        /// Gets or sets whether the window is tacked.
+        /// </summary>
+        public bool IsTacked { get; set; }
+
+        public event EventHandler Tack;
+        public event EventHandler UnTack;
 
         /// <summary>
         /// Handles resizing.
@@ -46,14 +56,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         {
             OnResize();
         }
-        /// <summary>
-        /// Gets or sets whether the window is tacked.
-        /// </summary>
-        public bool IsTacked
-        {
-            get;
-            set;
-        }
+
         /// <summary>
         /// Resizes all pump displays equally.
         /// </summary>
@@ -67,26 +70,27 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (mpanel_pumps.Controls.Count == 0)
                 return;
 
-            int dw   = Width / N;            
+            int dw = Width / N;
             int left = 0;
             foreach (Control c in mpanel_pumps.Controls)
             {
-                c.Top    = 0;
+                c.Top = 0;
                 int trueWidth = dw;
                 controlPumpDisplay display = c as controlPumpDisplay;
                 if (display != null)
                 {
                     if (display.Tacked)
                     {
-                        trueWidth = display.TackWidth;                        
+                        trueWidth = display.TackWidth;
                     }
                 }
-                c.Width  = trueWidth;
-                c.Left   = left;
-                left    += trueWidth;
-                c.Height = mpanel_pumps.Height - CONST_HEIGHT_PADDING;                
+                c.Width = trueWidth;
+                c.Left = left;
+                left += trueWidth;
+                c.Height = mpanel_pumps.Height - CONST_HEIGHT_PADDING;
             }
         }
+
         /// <summary>
         /// Prevents the form from being disposed and instead hides the form.
         /// </summary>
@@ -101,7 +105,69 @@ namespace LcmsNetDataClasses.Devices.Pumps
             }
         }
 
+        private void mbutton_expand_Click(object sender, EventArgs e)
+        {
+            IsTacked = (IsTacked == false);
+            if (IsTacked)
+            {
+                if (Tack != null)
+                {
+                    Tack(this, e);
+                }
+            }
+            else
+            {
+                if (UnTack != null)
+                {
+                    UnTack(this, e);
+                }
+            }
+        }
+
+        private void mbutton_left_Click(object sender, EventArgs e)
+        {
+            MoveRight();
+        }
+
+
+        private void mbutton_right_Click(object sender, EventArgs e)
+        {
+            MoveLeft();
+        }
+
+        private void MoveLeft()
+        {
+            m_pointer = Math.Max(0, --m_pointer);
+
+            if (m_pumps.Count < 1)
+            {
+                mlabel_pump.Text = "";
+                return;
+            }
+
+            UpdateLabel();
+        }
+
+        private void MoveRight()
+        {
+            m_pointer = Math.Min(m_pumps.Count - 1, ++m_pointer);
+            UpdateLabel();
+        }
+
+        private void UpdateLabel()
+        {
+            IPump pump = m_pumps[m_pointer];
+
+            GroupBox box = mdict_mobilePhases[pump];
+            box.Focus();
+            box.Select();
+
+
+            mlabel_pump.Text = pump.Name;
+        }
+
         #region Device Manager Event Handlers 
+
         /// <summary>
         /// Handles when the device manager removes a device.
         /// </summary>
@@ -134,9 +200,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (m_pumps.Contains(pump))
                 m_pumps.Remove(pump);
 
-            MoveLeft();            
+            MoveLeft();
             OnResize();
         }
+
         /// <summary>
         /// Checks to update the name of the device.
         /// </summary>
@@ -152,6 +219,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
             mdict_controlList[pump].SetPumpName(pump.Name);
         }
+
         /// <summary>
         /// Handles when the device manager adds a device.
         /// </summary>
@@ -167,15 +235,15 @@ namespace LcmsNetDataClasses.Devices.Pumps
             // Make sure we have a reference to the pump
             if (mdict_controlList.ContainsKey(pump))
                 return;
-             
+
             // Hook into the pumps display calls            
             controlPumpDisplay display = new controlPumpDisplay();
             display.SetPumpName(pump.Name);
 
             pump.MonitoringDataReceived += new EventHandler<PumpDataEventArgs>(DisplayPumpData);
-            pump.DeviceSaveRequired     += new EventHandler(pump_DeviceSaveRequired);
-            display.Tack                += new EventHandler(display_Tack);
-            display.UnTack              += new EventHandler(display_UnTack);
+            pump.DeviceSaveRequired += new EventHandler(pump_DeviceSaveRequired);
+            display.Tack += new EventHandler(display_Tack);
+            display.UnTack += new EventHandler(display_UnTack);
 
             // Make sure we reference this pump 
             mdict_controlList.Add(pump, display);
@@ -186,19 +254,19 @@ namespace LcmsNetDataClasses.Devices.Pumps
             {
                 // Create a groupbox that we can associate with this pump
                 GroupBox box = new GroupBox();
-                box.Text     = pump.Name;
-                box.Margin   = new Padding(5);
+                box.Text = pump.Name;
+                box.Margin = new Padding(5);
 
-                int height   = 0;
+                int height = 0;
                 foreach (MobilePhase phase in pump.MobilePhases)
                 {
                     controlMobilePhaseEditor editor = new controlMobilePhaseEditor(phase);
-                    editor.Margin                   = new Padding(5);
-                    editor.Dock                     = DockStyle.Top;                    
-                    height                          += editor.Height + 15;
+                    editor.Margin = new Padding(5);
+                    editor.Dock = DockStyle.Top;
+                    height += editor.Height + 15;
                     box.Controls.Add(editor);
                     box.ForeColor = Color.DarkRed;
-                    editor.Size   = new System.Drawing.Size(editor.Width - 5, editor.Height);
+                    editor.Size = new System.Drawing.Size(editor.Width - 5, editor.Height);
                 }
                 box.Size = new System.Drawing.Size(box.Width, height);
                 box.Dock = DockStyle.Top;
@@ -213,7 +281,6 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
                 box.Select();
                 box.Focus();
-                
             }
 
             OnResize();
@@ -228,6 +295,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         {
             OnResize();
         }
+
         /// <summary>
         /// Updates the appropriate control
         /// </summary>
@@ -240,79 +308,19 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<PumpDataEventArgs> (mdict_controlList[e.Pump].DisplayMonitoringData), new object[]
-                                                                            {
-                                                                                sender, e
-                                                                            }
-                            );                            
+                BeginInvoke(new EventHandler<PumpDataEventArgs>(mdict_controlList[e.Pump].DisplayMonitoringData),
+                    new object[]
+                    {
+                        sender, e
+                    }
+                    );
             }
             else
             {
                 mdict_controlList[e.Pump].DisplayMonitoringData(sender, e);
             }
         }
+
         #endregion
-
-        private void mbutton_expand_Click(object sender, EventArgs e)
-        {
-            IsTacked = (IsTacked == false);
-            if (IsTacked)
-            {
-                if (Tack != null)
-                {
-                    Tack(this, e);
-                }
-            }
-            else
-            {
-                if (UnTack != null)
-                {
-                    UnTack(this, e);
-                }
-            }
-        }
-
-        private int m_pointer;
-
-        private void mbutton_left_Click(object sender, EventArgs e)
-        {
-            MoveRight();
-        }
-
-
-        private void mbutton_right_Click(object sender, EventArgs e)
-        {
-            MoveLeft();
-        }
-
-        private void MoveLeft()
-        {
-            m_pointer = Math.Max(0, --m_pointer);
-
-            if (m_pumps.Count < 1)
-            {
-                mlabel_pump.Text = "";
-                return;
-            }
-            
-            UpdateLabel();
-        }
-        private void MoveRight()
-        {
-            m_pointer = Math.Min(m_pumps.Count - 1, ++m_pointer);
-            UpdateLabel();
-        }
-
-        private void UpdateLabel()
-        {
-            IPump pump = m_pumps[m_pointer];
-
-            GroupBox box = mdict_mobilePhases[pump];
-            box.Focus();
-            box.Select();
-
-
-            mlabel_pump.Text = pump.Name;
-        }
     }
 }

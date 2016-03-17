@@ -8,16 +8,13 @@ namespace LcmsNet.Simulator
 {
     public partial class SimConfigControl : UserControl
     {
+        const int TRANSPARENCY_OF_FLUIDICS = 255;
+        const float SCALE_OF_FLUIDICS = 1;
         private static SimConfigControl m_instance;
 
         private classFluidicsModerator m_mod;
 
         private bool m_tacked;
-
-        const int TRANSPARENCY_OF_FLUIDICS = 255;
-        const float SCALE_OF_FLUIDICS = 1;
-
-        public event EventHandler<TackEventArgs> Tack;
 
         private SimConfigControl()
         {
@@ -28,7 +25,7 @@ namespace LcmsNet.Simulator
             m_tacked = true;
             FluidicsSimulator.FluidicsSimulator.GetInstance.EventSimulated += EventSimulated_Handler;
 
-            var sinkCheck =  new FluidicsSDK.ModelCheckers.NoSinksModelCheck();
+            var sinkCheck = new FluidicsSDK.ModelCheckers.NoSinksModelCheck();
             sinkCheck.IsEnabled = false;
 
             var sourceCheck = new FluidicsSDK.ModelCheckers.MultipleSourcesModelCheck();
@@ -45,7 +42,34 @@ namespace LcmsNet.Simulator
             FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(cycleCheck as IFluidicsModelChecker);
             FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(testCheck as IFluidicsModelChecker);
             //controlConfig.UpdateImage();
-        }        
+        }
+
+        public static SimConfigControl GetInstance
+        {
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new SimConfigControl();
+                }
+                return m_instance;
+            }
+        }
+
+        public bool Tacked
+        {
+            get { return m_tacked; }
+            private set
+            {
+                m_tacked = value;
+                if (Tack != null)
+                {
+                    Tack(this, new TackEventArgs(m_tacked));
+                }
+            }
+        }
+
+        public event EventHandler<TackEventArgs> Tack;
 
         private void EventSimulated_Handler(object sender, SimulatedEventArgs e)
         {
@@ -61,7 +85,7 @@ namespace LcmsNet.Simulator
         /// event handler for when a fluidics model changes.
         /// </summary>
         private void ModelChangedHandler()
-        {            
+        {
             if (InvokeRequired)
             {
                 this.BeginInvoke(new EventHandler(changeHandler));
@@ -73,22 +97,9 @@ namespace LcmsNet.Simulator
         }
 
         void changeHandler(object sender, EventArgs e)
-        {         
-            
+        {
             controlConfig.UpdateImage();
             this.Refresh();
-        }
-
-        public static SimConfigControl GetInstance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new SimConfigControl();
-                }
-                return m_instance;
-            }
         }
 
         public void TackOnRequest()
@@ -99,22 +110,6 @@ namespace LcmsNet.Simulator
         private void btnTack_Click(object sender, EventArgs e)
         {
             Tacked = !Tacked;
-        }
-
-        public bool Tacked
-        {
-            get
-            {
-                return m_tacked;
-            }
-            private set
-            {
-                m_tacked = value;
-                if (Tack != null)
-                {
-                    Tack(this, new TackEventArgs(m_tacked));
-                }
-            }
         }
     }
 }

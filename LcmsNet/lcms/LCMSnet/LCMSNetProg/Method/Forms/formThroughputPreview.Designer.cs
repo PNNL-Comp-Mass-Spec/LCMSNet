@@ -31,9 +31,9 @@
             this.mcontrol_throughputTimeline = new LcmsNet.Method.Forms.controlLCMethodTimeline();
             this.mbutton_ok = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // mcontrol_throughputTimeline
-            // 
+            //
             this.mcontrol_throughputTimeline.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -44,9 +44,9 @@
             this.mcontrol_throughputTimeline.Name = "mcontrol_throughputTimeline";
             this.mcontrol_throughputTimeline.Size = new System.Drawing.Size(567, 248);
             this.mcontrol_throughputTimeline.TabIndex = 0;
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_ok.Location = new System.Drawing.Point(508, 269);
             this.mbutton_ok.Name = "mbutton_ok";
@@ -55,9 +55,9 @@
             this.mbutton_ok.Text = "Ok";
             this.mbutton_ok.UseVisualStyleBackColor = true;
             this.mbutton_ok.Click += new System.EventHandler(this.mbutton_ok_Click);
-            // 
+            //
             // formThroughputPreview
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

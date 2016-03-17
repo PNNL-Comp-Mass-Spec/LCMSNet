@@ -34,9 +34,9 @@
             this.mbutton_notInitialized = new System.Windows.Forms.Button();
             this.mbutton_doNothing = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // mbutton_leaveError
-            // 
+            //
             this.mbutton_leaveError.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_leaveError.Image = global::LcmsNet.Properties.Resources.ButtonDeleteRed;
             this.mbutton_leaveError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -47,9 +47,9 @@
             this.mbutton_leaveError.Text = "Leave Error Indicator";
             this.mbutton_leaveError.UseVisualStyleBackColor = true;
             this.mbutton_leaveError.Click += new System.EventHandler(this.mbutton_leaveError_Click);
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -59,9 +59,9 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "How do you want to resolve this device status?";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
+            //
             // mbutton_clearErrors
-            // 
+            //
             this.mbutton_clearErrors.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_clearErrors.Image = global::LcmsNet.Properties.Resources.AllIsGood;
             this.mbutton_clearErrors.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -72,9 +72,9 @@
             this.mbutton_clearErrors.Text = "Clear Error Indicator as Initialized";
             this.mbutton_clearErrors.UseVisualStyleBackColor = true;
             this.mbutton_clearErrors.Click += new System.EventHandler(this.mbutton_clearErrors_Click);
-            // 
+            //
             // mbutton_notInitialized
-            // 
+            //
             this.mbutton_notInitialized.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_notInitialized.Image = global::LcmsNet.Properties.Resources.breakpointDisabled;
             this.mbutton_notInitialized.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -86,9 +86,9 @@
             this.mbutton_notInitialized.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_notInitialized.UseVisualStyleBackColor = true;
             this.mbutton_notInitialized.Click += new System.EventHandler(this.mbutton_notInitialized_Click);
-            // 
+            //
             // mbutton_doNothing
-            // 
+            //
             this.mbutton_doNothing.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.mbutton_doNothing.Location = new System.Drawing.Point(348, 46);
             this.mbutton_doNothing.Name = "mbutton_doNothing";
@@ -96,9 +96,9 @@
             this.mbutton_doNothing.TabIndex = 4;
             this.mbutton_doNothing.Text = "Cancel";
             this.mbutton_doNothing.UseVisualStyleBackColor = true;
-            // 
+            //
             // formResolveDeviceStatus
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(467, 116);

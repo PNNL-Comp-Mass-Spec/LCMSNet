@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace LcmsNetDataClasses.Configuration
 {
@@ -7,9 +6,9 @@ namespace LcmsNetDataClasses.Configuration
     /// Enumeration describing the status of a column.
     /// </summary>
     public enum enumColumnStatus
-    {        
+    {
         Disabled,
         Idle,
-        Running     
+        Running
     }
 }

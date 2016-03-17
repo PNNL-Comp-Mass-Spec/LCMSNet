@@ -26,67 +26,91 @@ namespace LcmsNet
 {
     public partial class formMDImain : Form
     {
-        #region Constants 
-	      /// <summary>
-	      /// Log File folder name.
-	      /// </summary>
-	      public const string CONST_LC_LOG_FOLDER = "Log";
+        #region Constants
+
+        /// <summary>
+        /// Log File folder name.
+        /// </summary>
+        public const string CONST_LC_LOG_FOLDER = "Log";
+
         #endregion
 
-        #region Members
-        private FluidicsDesign mform_fluidicsDesign;
         /// <summary>
-        /// Method Scheduler and execution engine.
+        /// Default constructor.
         /// </summary>
-        private classLCMethodScheduler mobj_scheduler;
+        public formMDImain()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        #region "Column event handlers"
+
+        void column_NameChanged(object sender, string name, string oldName)
+        {
+            classColumnData column = sender as classColumnData;
+            if (column != null)
+            {
+                classLCMSSettings.SetParameter("ColumnName" + column.ID, column.Name);
+            }
+        }
+
+        #endregion
+
+        #region Cleanup Methods
+
         /// <summary>
-        /// Form that manages views of the sample queue class for handling sample
-        /// ordering and running.
+        /// Calls all objects to shutdown and finish doing what they are doing before disposal.
         /// </summary>
-        private formSampleManager mform_sampleManager;
+        private void Shutdown()
+        {
+            // Save fluidics designer config, if desired
+            mform_fluidicsDesign.SaveConfiguration();
+
+            // Cache the selected separation type
+            classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter("SeparationType"));
+
+            // Shut off the scheduler...
+            try
+            {
+                mobj_scheduler.Shutdown();
+
+                // Save queue to the cache
+                mobj_sampleQueue.StopRunningQueue();
+
+                if (mobj_sampleQueue.IsDirty)
+                {
+                    DialogResult result =
+                        MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
+                            classLCMSSettings.GetParameter("CacheFileName")
+                            ), "Confirm Queue Save", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        mobj_sampleQueue.CacheQueue(true);
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore errors here
+            }
+
+            //TODO: Check to see if things shutdown.
+        }
+
+        #endregion
+
+        #region Fluidics Form Event Handlers
+
         /// <summary>
-        /// Object that manages operation of the samples.
+        /// Updates status message on main status window.
         /// </summary>
-        private classSampleQueue mobj_sampleQueue;
-        /// <summary>
-        /// Form that displays the configuration of the columns.
-        /// </summary>
-        private formSystemConfiguration mform_systemConfiguration;        
-        /// <summary>
-        /// Form that displays the messages from the different parts of the program.
-        /// </summary>
-        private formMessageWindow mform_messages;
-        /// <summary>
-        /// Method editor form to construct new LC separations.
-        /// </summary>
-        private formMethodEditor mform_methodEditor;
-        /// <summary>
-        /// Displays progress of samples along each column.
-        /// </summary>
-        private formColumnSampleProgress mform_sampleProgress;		
-		/// <summary>
-        /// Notifications form.
-        /// </summary>
-        private formNotificationSystem mform_notifications;
-        /// <summary>
-        /// About box.
-        /// </summary>
-        private formAbout mform_about;
-        /// <summary>
-        /// Display form for the pumps.
-        /// </summary>
-        private LcmsNetDataClasses.Devices.Pumps.formPumpDisplays mform_displays;
-        /// <summary>
-        /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
-        /// </summary>
-        private classApplicationLogger mobj_logger;
-        /// <summary>
-        /// default PDF generator, used to generate a pdf of information after a sample run.
-        /// </summary>
-        private IPDF m_pdfGen = new PDFGen();
-        private formSimulatorCombined mform_simCombined;
-        private formSimConfiguration mform_simConfig;
-        private formSimulatorControlsAndCharts mform_simControlsAndCharts;
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void mform_fluidicsDesign_Status(object sender, classDeviceStatusEventArgs e)
+        {
+            classApplicationLogger.LogMessage(0, e.Message);
+        }
 
         #endregion
 
@@ -95,25 +119,88 @@ namespace LcmsNet
         /// </summary>
         /// <param name="message">Message to display.</param>
         private delegate void DelegateUpdateMessage(int level, string message);
-        
+
+        #region Members
+
+        private FluidicsDesign mform_fluidicsDesign;
+
         /// <summary>
-        /// Default constructor.
-        /// </summary>        
-        public formMDImain()
-        {
-            InitializeComponent();
-            Initialize();
-        }
+        /// Method Scheduler and execution engine.
+        /// </summary>
+        private classLCMethodScheduler mobj_scheduler;
+
+        /// <summary>
+        /// Form that manages views of the sample queue class for handling sample
+        /// ordering and running.
+        /// </summary>
+        private formSampleManager mform_sampleManager;
+
+        /// <summary>
+        /// Object that manages operation of the samples.
+        /// </summary>
+        private classSampleQueue mobj_sampleQueue;
+
+        /// <summary>
+        /// Form that displays the configuration of the columns.
+        /// </summary>
+        private formSystemConfiguration mform_systemConfiguration;
+
+        /// <summary>
+        /// Form that displays the messages from the different parts of the program.
+        /// </summary>
+        private formMessageWindow mform_messages;
+
+        /// <summary>
+        /// Method editor form to construct new LC separations.
+        /// </summary>
+        private formMethodEditor mform_methodEditor;
+
+        /// <summary>
+        /// Displays progress of samples along each column.
+        /// </summary>
+        private formColumnSampleProgress mform_sampleProgress;
+
+        /// <summary>
+        /// Notifications form.
+        /// </summary>
+        private formNotificationSystem mform_notifications;
+
+        /// <summary>
+        /// About box.
+        /// </summary>
+        private formAbout mform_about;
+
+        /// <summary>
+        /// Display form for the pumps.
+        /// </summary>
+        private LcmsNetDataClasses.Devices.Pumps.formPumpDisplays mform_displays;
+
+        /// <summary>
+        /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
+        /// </summary>
+        private classApplicationLogger mobj_logger;
+
+        /// <summary>
+        /// default PDF generator, used to generate a pdf of information after a sample run.
+        /// </summary>
+        private IPDF m_pdfGen = new PDFGen();
+
+        private formSimulatorCombined mform_simCombined;
+        private formSimConfiguration mform_simConfig;
+        private formSimulatorControlsAndCharts mform_simControlsAndCharts;
+
+        #endregion
 
         #region Initialization
-		/// <summary>
+
+        /// <summary>
         /// Initializes all the forms and objects.and I ass
         // </summary>
         private void Initialize()
-        {            
+        {
             System.Threading.Thread.CurrentThread.Name = "Main Thread";
             mobj_logger = new classApplicationLogger();
-			this.Text  = "LcmsNet Version: " + Application.ProductVersion;
+            this.Text = "LcmsNet Version: " + Application.ProductVersion;
             this.Text += " Cart - " + classLCMSSettings.GetParameter("CartName");
             string emulation = classLCMSSettings.GetParameter("EmulationEnabled");
             if (emulation != null)
@@ -122,7 +209,7 @@ namespace LcmsNet
                 if (isEmulated)
                 {
                     this.Text += " [EMULATED] ";
-                }                
+                }
             }
 
             foreach (classColumnData column in classCartConfiguration.Columns)
@@ -130,13 +217,13 @@ namespace LcmsNet
                 column.NameChanged += new classColumnData.DelegateNameChanged(column_NameChanged);
             }
 
-				
-			mform_systemConfiguration               = new formSystemConfiguration();      
-            mform_systemConfiguration.ColumnNames   = classSQLiteTools.GetColumnList(false);
-			mform_systemConfiguration.Users         = classSQLiteTools.GetUserList(false);    
-            mform_systemConfiguration.ColumnNameChanged += new EventHandler(mform_systemConfiguration_ColumnNameChanged);            
+
+            mform_systemConfiguration = new formSystemConfiguration();
+            mform_systemConfiguration.ColumnNames = classSQLiteTools.GetColumnList(false);
+            mform_systemConfiguration.Users = classSQLiteTools.GetUserList(false);
+            mform_systemConfiguration.ColumnNameChanged += new EventHandler(mform_systemConfiguration_ColumnNameChanged);
             classSQLiteTools.GetSepTypeList(false);
-            
+
             // Fludics Design display
             mform_fluidicsDesign = new FluidicsDesign();
             mform_fluidicsDesign.Icon = this.Icon;
@@ -144,74 +231,78 @@ namespace LcmsNet
 
             // Notification System
             mform_notifications = new formNotificationSystem(classDeviceManager.Manager);
-            mform_notifications.ActionRequired += new EventHandler<NotificationSetting>(mform_notifications_ActionRequired);
+            mform_notifications.ActionRequired +=
+                new EventHandler<NotificationSetting>(mform_notifications_ActionRequired);
 
-            
-            // Construct the sample queue object that holds and manages sample data ordering            
-            mobj_sampleQueue                         = new classSampleQueue();
-            mform_sampleManager                      = new formSampleManager(mobj_sampleQueue);
 
-            classDeviceManager.Manager.DeviceAdded   += new DelegateDeviceUpdated(Manager_DeviceAdded);
+            // Construct the sample queue object that holds and manages sample data ordering
+            mobj_sampleQueue = new classSampleQueue();
+            mform_sampleManager = new formSampleManager(mobj_sampleQueue);
+
+            classDeviceManager.Manager.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
             classDeviceManager.Manager.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
             classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
             classDeviceManager.Manager.DevicesInitialized += new EventHandler(Manager_DevicesInitialized);
 
             // Displays the pump data.
-            mform_displays           = new LcmsNetDataClasses.Devices.Pumps.formPumpDisplays();
-            mform_displays.Tack     += new EventHandler(mform_displays_Tack);
-            mform_displays.UnTack   += new EventHandler(mform_displays_UnTack);
-            mform_displays.Icon      = Icon;
-            mform_displays.IsTacked  = true;
+            mform_displays = new LcmsNetDataClasses.Devices.Pumps.formPumpDisplays();
+            mform_displays.Tack += new EventHandler(mform_displays_Tack);
+            mform_displays.UnTack += new EventHandler(mform_displays_UnTack);
+            mform_displays.Icon = Icon;
+            mform_displays.IsTacked = true;
 
             classApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
             mform_fluidicsDesign.LoadConfiguration();
 
-            
-            // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
-            mobj_scheduler                              = new classLCMethodScheduler(mobj_sampleQueue);
-            mobj_scheduler.Logger                       = mobj_logger;
-            mobj_scheduler.SchedulerError               += new DelegateError(Scheduler_Error);
-            mobj_scheduler.SampleProgress               += new DelegateSampleProgress(Scheduler_SampleProgress);
-            mobj_scheduler.Initialize();
-                        
-            // 
-            // Logging and messaging
-            // 
-            mform_messages      = new formMessageWindow();
-            mform_messages.ErrorCleared     += new EventHandler(mform_messages_ErrorCleared);
-            mform_messages.ErrorPresent     += new EventHandler(mform_messages_ErrorPresent);
-            classApplicationLogger.Error    += new classApplicationLogger.DelegateErrorHandler(mform_messages.ShowErrors);
-            classApplicationLogger.Error    += new classApplicationLogger.DelegateErrorHandler(classApplicationLogger_Error);
-            classApplicationLogger.Message  += new classApplicationLogger.DelegateMessageHandler(mform_messages.ShowMessage);
-            classApplicationLogger.Message  += new classApplicationLogger.DelegateMessageHandler(classApplicationLogger_Message);
 
-			// Method Editor
-            mform_methodEditor           = new formMethodEditor();            
-            mform_sampleProgress         = new formColumnSampleProgress();            
-            mform_sampleManager.Stop    += new EventHandler(mform_sampleManager_Stop);
+            // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
+            mobj_scheduler = new classLCMethodScheduler(mobj_sampleQueue);
+            mobj_scheduler.Logger = mobj_logger;
+            mobj_scheduler.SchedulerError += new DelegateError(Scheduler_Error);
+            mobj_scheduler.SampleProgress += new DelegateSampleProgress(Scheduler_SampleProgress);
+            mobj_scheduler.Initialize();
+
+            //
+            // Logging and messaging
+            //
+            mform_messages = new formMessageWindow();
+            mform_messages.ErrorCleared += new EventHandler(mform_messages_ErrorCleared);
+            mform_messages.ErrorPresent += new EventHandler(mform_messages_ErrorPresent);
+            classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(mform_messages.ShowErrors);
+            classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classApplicationLogger_Error);
+            classApplicationLogger.Message +=
+                new classApplicationLogger.DelegateMessageHandler(mform_messages.ShowMessage);
+            classApplicationLogger.Message +=
+                new classApplicationLogger.DelegateMessageHandler(classApplicationLogger_Message);
+
+            // Method Editor
+            mform_methodEditor = new formMethodEditor();
+            mform_sampleProgress = new formColumnSampleProgress();
+            mform_sampleManager.Stop += new EventHandler(mform_sampleManager_Stop);
 
 
             // Get the most recently used separation type
-			classLCMSSettings.SetParameter("SeparationType", classSQLiteTools.GetDefaultSeparationType());
+            classLCMSSettings.SetParameter("SeparationType", classSQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
-            bool failedDeviceFlag   = false;
-            int  failedCount        = 0;
-            classDeviceManager.Manager.InitialzingDevice += new EventHandler<classDeviceManagerStatusArgs>(Manager_InitialzingDevice);
-            formFailedDevicesDisplay display              = null;    
+            bool failedDeviceFlag = false;
+            int failedCount = 0;
+            classDeviceManager.Manager.InitialzingDevice +=
+                new EventHandler<classDeviceManagerStatusArgs>(Manager_InitialzingDevice);
+            formFailedDevicesDisplay display = null;
             if (Convert.ToBoolean(classLCMSSettings.GetParameter("InitializeHardwareOnStartup")) == true)
             {
                 classApplicationLogger.LogMessage(0, "Initializing hardware.");
                 List<classDeviceErrorEventArgs> failedDevices = classDeviceManager.Manager.InitializeDevices();
                 if (failedDevices != null && failedDevices.Count > 0)
                 {
-                    failedDeviceFlag        = true;
-                    failedCount             = failedDevices.Count;
-                    display                 = new formFailedDevicesDisplay(failedDevices);
-                    display.StartPosition   = FormStartPosition.CenterParent;
-                    display.Icon            = this.Icon;
+                    failedDeviceFlag = true;
+                    failedCount = failedDevices.Count;
+                    display = new formFailedDevicesDisplay(failedDevices);
+                    display.StartPosition = FormStartPosition.CenterParent;
+                    display.Icon = this.Icon;
                 }
-            }         
+            }
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
             if (Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled")) == true)
@@ -233,20 +324,23 @@ namespace LcmsNet
 
             // Load the methods from the LC-Methods folder.
             classApplicationLogger.LogMessage(0, "Reading User Methods.");
-            Dictionary<string, List<Exception>> userMethodErrors = classLCMethodManager.Manager.LoadMethods(System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),                                                  classLCMethodFactory.CONST_LC_METHOD_FOLDER));
+            Dictionary<string, List<Exception>> userMethodErrors =
+                classLCMethodManager.Manager.LoadMethods(
+                    System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+                        classLCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             if (userMethodErrors.Count > 0)
             {
-                formFailedMethodLoadDisplay failedMethods   = new formFailedMethodLoadDisplay(userMethodErrors);
-                failedMethods.Icon                          = Icon;
-                failedMethods.StartPosition                 = FormStartPosition.CenterScreen;
+                formFailedMethodLoadDisplay failedMethods = new formFailedMethodLoadDisplay(userMethodErrors);
+                failedMethods.Icon = Icon;
+                failedMethods.StartPosition = FormStartPosition.CenterScreen;
                 failedMethods.ShowDialog();
-            }            
+            }
 
             AddForm(mform_fluidicsDesign);
             mform_about = new formAbout();
             AddForm(mform_displays);
-            AddForm(mform_about);            
+            AddForm(mform_about);
             AddForm(mform_messages);
             AddForm(mform_notifications);
             AddForm(mform_methodEditor);
@@ -256,22 +350,23 @@ namespace LcmsNet
 
             classApplicationLogger.LogMessage(0, "Loading Sample Queue...");
             Application.DoEvents();
-            //           
+            //
             // Tell the sample queue to load samples from cache after everything is loaded.
-            // 
+            //
             try
             {
                 mobj_sampleQueue.RetrieveQueueFromCache();
                 mobj_sampleQueue.IsDirty = false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message, ex);
             }
 
             if (failedDeviceFlag == true)
             {
-                classApplicationLogger.LogMessage(0, string.Format("System Unsure.  {0} devices failed to initialize.", failedCount));
+                classApplicationLogger.LogMessage(0,
+                    string.Format("System Unsure.  {0} devices failed to initialize.", failedCount));
             }
             else if (userMethodErrors.Count > 0)
             {
@@ -286,8 +381,9 @@ namespace LcmsNet
             {
                 display.ShowDialog();
             }
-            mform_sampleProgress.PreviewAvailable += new EventHandler<SampleProgressPreviewArgs>(mform_sampleManager.PreviewAvailable);            
-            mform_notifications.LoadNotificationFile();            
+            mform_sampleProgress.PreviewAvailable +=
+                new EventHandler<SampleProgressPreviewArgs>(mform_sampleManager.PreviewAvailable);
+            mform_notifications.LoadNotificationFile();
         }
 
         void mform_systemConfiguration_ColumnNameChanged(object sender, EventArgs e)
@@ -296,6 +392,7 @@ namespace LcmsNet
         }
 
         #region Notification System.
+
         /// <summary>
         /// Handles events from the notification system.
         /// </summary>
@@ -305,7 +402,7 @@ namespace LcmsNet
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<NotificationSetting>(NotifyHandler), new object[] { sender, e });
+                BeginInvoke(new EventHandler<NotificationSetting>(NotifyHandler), new object[] {sender, e});
             }
             else
             {
@@ -333,54 +430,54 @@ namespace LcmsNet
                     // Runs the method if it is not null.
                     if (e.Method != null)
                     {
-
-                        classApplicationLogger.LogError(0, 
+                        classApplicationLogger.LogError(0,
                             string.Format(
-                                "The notification system is stopping all current runs and running the special method {1} because of the setting {0}", e.Name, e.Method.Name));
+                                "The notification system is stopping all current runs and running the special method {1} because of the setting {0}",
+                                e.Name, e.Method.Name));
                         int columnID = e.Method.Column;
-                        
+
                         //mobj_sampleQueue.StopRunningQueue();
                         mobj_scheduler.Stop();
-                        classSampleData stupidSample    = new classSampleData();
+                        classSampleData stupidSample = new classSampleData();
                         stupidSample.DmsData.DatasetName = string.Format("NotificationAction--{0}", e.Method.Name);
                         if (columnID >= 0)
                         {
-                            stupidSample.ColumnData     = classCartConfiguration.Columns[columnID];
+                            stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
                         }
-                        stupidSample.LCMethod           = e.Method;
-                        mobj_sampleQueue.RunNext(stupidSample);                        
-                        
+                        stupidSample.LCMethod = e.Method;
+                        mobj_sampleQueue.RunNext(stupidSample);
 
-                        classApplicationLogger.LogError(0, 
+
+                        classApplicationLogger.LogError(0,
                             string.Format(
-                                "Queue restarted with special method {1} because of the setting {0}", e.Name, e.Method.Name));
+                                "Queue restarted with special method {1} because of the setting {0}", e.Name,
+                                e.Method.Name));
                     }
                     break;
                 case enumDeviceNotificationAction.RunMethodNext:
                     if (e.Method != null)
                     {
+                        int columnID = e.Method.Column;
 
-                        int columnID                 = e.Method.Column;
-
-                        classApplicationLogger.LogError(0, 
+                        classApplicationLogger.LogError(0,
                             string.Format(
-                                "The notification system is queuing the special method {1} because of the setting {0}.", 
-                                    e.Name, e.Method.Name));                                        
+                                "The notification system is queuing the special method {1} because of the setting {0}.",
+                                e.Name, e.Method.Name));
 
                         classSampleData stupidSample = new classSampleData();
                         if (columnID >= 0)
                         {
-                            stupidSample.ColumnData  = classCartConfiguration.Columns[columnID];
+                            stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
                         }
-                        stupidSample.LCMethod        = e.Method;
+                        stupidSample.LCMethod = e.Method;
                         mobj_sampleQueue.RunNext(stupidSample);
 
-                        classApplicationLogger.LogError(0, 
+                        classApplicationLogger.LogError(0,
                             string.Format(
                                 "The special method {2} was queued to run next on the column {0} because of the notification system event {1} ",
-                                        columnID,
-                                        e.Name,
-                                        e.Method.Name));
+                                columnID,
+                                e.Name,
+                                e.Method.Name));
 
                         if (!mobj_sampleQueue.IsRunning)
                         {
@@ -388,10 +485,10 @@ namespace LcmsNet
                         }
                     }
                     break;
-                        
             }
         }
-        #endregion 
+
+        #endregion
 
         void mform_messages_ErrorPresent(object sender, EventArgs e)
         {
@@ -400,7 +497,6 @@ namespace LcmsNet
 
         void mform_messages_ErrorCleared(object sender, EventArgs e)
         {
-
             mtoolButton_showMessages.Image = global::LcmsNet.Properties.Resources.StatusMessages;
         }
 
@@ -442,7 +538,6 @@ namespace LcmsNet
                     mform_simControlsAndCharts.Show();
                     mform_simConfig.BringToFront();
                 }
-
             }
             else if (sender == SimConfigControl.GetInstance)
             {
@@ -473,64 +568,54 @@ namespace LcmsNet
                     mform_simControlsAndCharts.Show();
                     mform_simConfig.Show();
                     mform_simControlsAndCharts.BringToFront();
-
                 }
-
             }
-
         }
 
         #endregion
 
-		#region "Column event handlers"
-        void column_NameChanged(object sender, string name, string oldName)
-        {
-            classColumnData column = sender as classColumnData;
-            if (column != null)
-            {
-                classLCMSSettings.SetParameter("ColumnName" + column.ID, column.Name);
-            }
-        }	 
-		#endregion
-
         #region Device Manager Events
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="device"></param>
         void RegisterDeviceEventHandlers(IDevice device)
-        {            
+        {
             IAutoSampler sampler = device as IAutoSampler;
             if (sampler != null)
-            {                
-                sampler.TrayNames += new EventHandler<classAutoSampleEventArgs>(mform_sampleManager.AutoSamplerTrayList);                
+            {
+                sampler.TrayNames += new EventHandler<classAutoSampleEventArgs>(mform_sampleManager.AutoSamplerTrayList);
             }
 
             INetworkStart network = device as INetworkStart;
             if (network != null)
             {
-                network.MethodNames += new EventHandler<classNetworkStartEventArgs>(mform_sampleManager.InstrumentMethodList);
-            }            
+                network.MethodNames +=
+                    new EventHandler<classNetworkStartEventArgs>(mform_sampleManager.InstrumentMethodList);
+            }
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="device"></param>
         void DeRegisterDeviceEventHandlers(IDevice device)
         {
             Type type = device.GetType();
-            if (type.IsAssignableFrom(typeof(IAutoSampler)))
+            if (type.IsAssignableFrom(typeof (IAutoSampler)))
             {
                 IAutoSampler sampler = device as IAutoSampler;
                 sampler.TrayNames -= mform_sampleManager.AutoSamplerTrayList;
             }
 
-            if (type.IsAssignableFrom(typeof(INetworkStart)))
+            if (type.IsAssignableFrom(typeof (INetworkStart)))
             {
                 INetworkStart network = device as INetworkStart;
                 network.MethodNames -= mform_sampleManager.InstrumentMethodList;
-            } 
+            }
         }
+
         /// <summary>
         /// Handles when a device is renamed.
         /// </summary>
@@ -540,6 +625,7 @@ namespace LcmsNet
         {
             classApplicationLogger.LogMessage(0, "Renamed a device to " + device.Name);
         }
+
         /// <summary>
         /// Handles when a device is removed.
         /// </summary>
@@ -550,6 +636,7 @@ namespace LcmsNet
             DeRegisterDeviceEventHandlers(device);
             classApplicationLogger.LogMessage(0, "Removed device " + device.Name);
         }
+
         /// <summary>
         /// Handles when a device is added.
         /// </summary>
@@ -559,7 +646,8 @@ namespace LcmsNet
         {
             RegisterDeviceEventHandlers(device);
             classApplicationLogger.LogMessage(0, "Added device " + device.Name);
-        }      
+        }
+
         /// <summary>
         /// Updates status window when device is being initialized.
         /// </summary>
@@ -571,6 +659,7 @@ namespace LcmsNet
         }
 
         #region Methods
+
         /// <summary>
         /// Sets up the given form to be added as a mdi-child
         /// </summary>
@@ -578,24 +667,27 @@ namespace LcmsNet
         void AddForm(Form form)
         {
             form.BringToFront();
-            form.Icon           = Icon;
-            form.MdiParent      = this;
-            form.ControlBox     = false;
-            form.WindowState    = FormWindowState.Maximized;
+            form.Icon = Icon;
+            form.MdiParent = this;
+            form.ControlBox = false;
+            form.WindowState = FormWindowState.Maximized;
             form.Show();
         }
+
         public void SetStatusMessage(int level, string message)
         {
-            toolStripStatusLabel.Text = message;            
+            toolStripStatusLabel.Text = message;
         }
+
         /// <summary>
         /// Displays the suggested string on the status bar.
         /// </summary>
         /// <param name="message">Message to display to the user.</param>
         public void SetStatusMessage(string message)
         {
-            toolStripStatusLabel.Text = message;            
+            toolStripStatusLabel.Text = message;
         }
+
         #endregion
 
         public delegate void statusDelegate(int messageLevel, string message);
@@ -607,10 +699,11 @@ namespace LcmsNet
         /// <param name="args">Data associated with messages.</param>
         void classApplicationLogger_Message(int messageLevel, classMessageLoggerArgs args)
         {
-            if (args != null && messageLevel <= classApplicationLogger.CONST_STATUS_LEVEL_USER)              
+            if (args != null && messageLevel <= classApplicationLogger.CONST_STATUS_LEVEL_USER)
             {
-                if(this.InvokeRequired)
-                {                   ;
+                if (this.InvokeRequired)
+                {
+                    ;
                     this.Invoke(new statusDelegate(SetStatusMessage), messageLevel, args.Message);
                 }
                 else
@@ -619,6 +712,7 @@ namespace LcmsNet
                 }
             }
         }
+
         /// <summary>
         /// Handles displaying an error mesasge when notified LCMS.
         /// </summary>
@@ -627,7 +721,7 @@ namespace LcmsNet
         void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
         {
             if (this.InvokeRequired)
-            {                
+            {
                 this.Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
             }
             else
@@ -635,9 +729,11 @@ namespace LcmsNet
                 SetStatusMessage(args.Message);
             }
         }
+
         #endregion
 
         #region Scheduler and Related Events
+
         /// <summary>
         /// Handles the stop event to stop any sample runs.
         /// </summary>
@@ -645,9 +741,9 @@ namespace LcmsNet
         /// <param name="e"></param>
         void mform_sampleManager_Stop(object sender, EventArgs e)
         {
-            // 
+            //
             // Tell the scheduler to stop running!
-            // 
+            //
             mobj_scheduler.Stop();
         }
 
@@ -656,38 +752,39 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sample"></param>
         void UpdateSampleProgress(object sender, classSampleProgressEventArgs args)
-        {           
-            string message          = "";
-            classSampleData sample  = args.Sample;
-            LcmsNetDataClasses.Method.classLCEvent  lcEvent  = null;
+        {
+            string message = "";
+            classSampleData sample = args.Sample;
+            LcmsNetDataClasses.Method.classLCEvent lcEvent = null;
             LcmsNetDataClasses.Method.classLCMethod lcMethod = null;
-			bool isError = false;
+            bool isError = false;
 
-            // 
-            // Construct the message to display 
-            // 
+            //
+            // Construct the message to display
+            //
             switch (args.ProgressType)
             {
                 case enumSampleProgress.RunningNextEvent:
                     lcMethod = sample.LCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
-											sample.ColumnData.ID + 1,
-											sample.ColumnData.Name,
-											lcEvent.Device.Name,
-											lcEvent.Name,
-											sample.DmsData.DatasetName);
+                        sample.ColumnData.ID + 1,
+                        sample.ColumnData.Name,
+                        lcEvent.Device.Name,
+                        lcEvent.Name,
+                        sample.DmsData.DatasetName);
                     break;
                 case enumSampleProgress.Error:
                     message = "";
                     lcMethod = sample.LCMethod;
-                    int eventNumber     = lcMethod.CurrentEventNumber;                
+                    int eventNumber = lcMethod.CurrentEventNumber;
                     if (eventNumber < lcMethod.Events.Count && eventNumber > -1)
                     {
-                        lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];                                
-                    }                         
+                        lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
+                    }
                     mform_sampleProgress.UpdateError(sample, lcEvent);
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message, null, args.Sample);
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message,
+                        null, args.Sample);
                     isError = true;
                     break;
                 case enumSampleProgress.Stopped:
@@ -702,7 +799,7 @@ namespace LcmsNet
                     string docPath = string.Empty;
                     try
                     {
-                        docPath =  classLCMSSettings.GetParameter("PdfPath"); 
+                        docPath = classLCMSSettings.GetParameter("PdfPath");
                     }
                     catch
                     {
@@ -716,28 +813,33 @@ namespace LcmsNet
                         {
                             if (!pdfFolder.Root.Exists)
                             {
-                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Invalid PDF document folder defined in LcmsNet.exe.config (drive not found): " + docPath);
+                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                                    "Invalid PDF document folder defined in LcmsNet.exe.config (drive not found): " +
+                                    docPath);
                                 break;
                             }
-                            pdfFolder.Create();                            
+                            pdfFolder.Create();
                         }
 
-                        message = string.Empty; 
+                        message = string.Empty;
                         if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
                         {
                             SampleQueue.IO.classMethodFileTools.MoveLocalMethodFiles();
                         }
-                        string filePath = FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
-                        m_pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample, classCartConfiguration.NumberOfEnabledColumns.ToString(), classCartConfiguration.Columns,
+                        string filePath =
+                            FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
+                        m_pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
+                            classCartConfiguration.NumberOfEnabledColumns.ToString(), classCartConfiguration.Columns,
                             classDeviceManager.Manager.Devices, configImage);
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PDF Generation Error for " + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                            "PDF Generation Error for " + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
                     }
                     break;
                 case enumSampleProgress.Started:
-					message = string.Empty; 
+                    message = string.Empty;
                     break;
             }
 
@@ -747,12 +849,13 @@ namespace LcmsNet
             }
 
 
-			// Update visual progress. -- Errors are already updated above.			 
+            // Update visual progress. -- Errors are already updated above.
             if (!isError && sample != null)
-			{
-				mform_sampleProgress.UpdateSample(sample);
-			}
+            {
+                mform_sampleProgress.UpdateSample(sample);
+            }
         }
+
         /// <summary>
         /// Handles updating the status window when the next event starts.
         /// </summary>
@@ -762,77 +865,39 @@ namespace LcmsNet
         {
             if (InvokeRequired == true)
             {
-                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] { null, args });
+                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] {null, args});
             }
             else
             {
                 UpdateSampleProgress(null, args);
-            }            
+            }
         }
+
         /// <summary>
-        /// Handles displaying the error message on the status bar.  
+        /// Handles displaying the error message on the status bar.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="sample"></param>
         /// <param name="errorMessage"></param>
         void Scheduler_Error(object sender, classSampleData sample, string errorMessage)
-        {            
-			classSampleProgressEventArgs args = new classSampleProgressEventArgs(errorMessage,
-			 																	 sample,
-																				 enumSampleProgress.Error);
+        {
+            classSampleProgressEventArgs args = new classSampleProgressEventArgs(errorMessage,
+                sample,
+                enumSampleProgress.Error);
             if (InvokeRequired == true)
-            {                
-                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object [] {null, args});
+            {
+                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] {null, args});
             }
             else
             {
-				UpdateSampleProgress(sender, args);
+                UpdateSampleProgress(sender, args);
             }
-        }   
-        #endregion
-
-        #region Cleanup Methods
-        /// <summary>
-        /// Calls all objects to shutdown and finish doing what they are doing before disposal.        
-        /// </summary>
-        private void Shutdown()
-        {
-		    // Save fluidics designer config, if desired
-		    mform_fluidicsDesign.SaveConfiguration();
-    		              
-			// Cache the selected separation type
-			classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter("SeparationType"));
-
-			// Shut off the scheduler...            
-            try
-            {
-                mobj_scheduler.Shutdown();
-
-                // Save queue to the cache                 
-                mobj_sampleQueue.StopRunningQueue();
-
-                if (mobj_sampleQueue.IsDirty)
-                {
-
-                    DialogResult result = MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
-                                                   classLCMSSettings.GetParameter("CacheFileName")
-                                                   ), "Confirm Queue Save", MessageBoxButtons.YesNo);
-                    if (result == DialogResult.Yes)
-                    {
-                        mobj_sampleQueue.CacheQueue(true);
-                    }
-                }
-            }
-            catch
-            {
-                // Ignore errors here
-            }
-
-            //TODO: Check to see if things shutdown.            
         }
+
         #endregion
 
         #region Show Methods
+
         /// <summary>
         /// Displays the cart configuration.
         /// </summary>
@@ -842,14 +907,15 @@ namespace LcmsNet
             mform_systemConfiguration.SeparationTypes = separationTypes;
             if (classLCMSSettings.GetParameter("SeparationType") == "")
             {
-	            mform_systemConfiguration.SetSeparationType("none");
+                mform_systemConfiguration.SetSeparationType("none");
             }
             else
             {
-	            mform_systemConfiguration.SetSeparationType(classLCMSSettings.GetParameter("SeparationType"));
+                mform_systemConfiguration.SetSeparationType(classLCMSSettings.GetParameter("SeparationType"));
             }
-            mform_systemConfiguration.BringToFront();    
+            mform_systemConfiguration.BringToFront();
         }
+
         /// <summary>
         /// Displays the messages window.
         /// </summary>
@@ -858,6 +924,7 @@ namespace LcmsNet
             mform_messages.Show();
             mform_messages.BringToFront();
         }
+
         /// <summary>
         /// Displays the sample queue window.
         /// </summary>
@@ -866,14 +933,16 @@ namespace LcmsNet
             mform_sampleManager.Show();
             mform_sampleManager.BringToFront();
         }
+
         /// <summary>
-        /// Displays the method editor 
+        /// Displays the method editor
         /// </summary>
         private void ShowMethodEditor()
         {
-          mform_methodEditor.Show();
-          mform_methodEditor.BringToFront();
+            mform_methodEditor.Show();
+            mform_methodEditor.BringToFront();
         }
+
         /// <summary>
         /// Displays the sample progress window.
         /// </summary>
@@ -889,13 +958,11 @@ namespace LcmsNet
             {
                 mform_simControlsAndCharts.BringToFront();
                 mform_simControlsAndCharts.Show();
-
             }
             else if (!SimControlsAndChartsControl.GetInstance.Tacked && SimConfigControl.GetInstance.Tacked)
             {
                 mform_simConfig.BringToFront();
                 mform_simConfig.Show();
-
             }
             else
             {
@@ -903,21 +970,11 @@ namespace LcmsNet
                 mform_simCombined.BringToFront();
             }
         }
-        #endregion
 
-        #region Fluidics Form Event Handlers
-        /// <summary>
-        /// Updates status message on main status window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void mform_fluidicsDesign_Status(object sender, classDeviceStatusEventArgs e)
-        {
-            classApplicationLogger.LogMessage(0, e.Message);            
-        }
         #endregion
 
         #region Form Event Handlers
+
         /// <summary>
         /// Handles closing the program when the Exit button is clicked.
         /// </summary>
@@ -926,7 +983,8 @@ namespace LcmsNet
         private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
-        }  
+        }
+
         /// <summary>
         /// Displays the messages and error window.
         /// </summary>
@@ -936,6 +994,7 @@ namespace LcmsNet
         {
             ShowMessagesWindow();
         }
+
         /// <summary>
         /// Displays the method editor.
         /// </summary>
@@ -944,7 +1003,8 @@ namespace LcmsNet
         private void mbutton_MethodEditor_Click(object sender, EventArgs e)
         {
             ShowMethodEditor();
-        }   
+        }
+
         /// <summary>
         /// Displays the sample queue window.
         /// </summary>
@@ -954,78 +1014,87 @@ namespace LcmsNet
         {
             ShowSampleQueue();
         }
+
         private void mbutton_sampleProgress_Click(object sender, EventArgs e)
         {
             ShowSampleProgress();
-        }			
+        }
+
         private void formMDImain_FormClosing(object sender, FormClosingEventArgs e)
         {
-          //string msg = "Hey, man. Some dude said to close this here durned program. " + Environment.NewLine + 
-          //             "Y'all should check ta be shore no samples is runnin' afore closin' things up." + Environment.NewLine + 
-          //             Environment.NewLine + "Is you'uns sure ya wants ta do this?";
-          string msg = "Application shutdown requested. If samples are running, data may be lost" + Environment.NewLine +
-						        Environment.NewLine + "Are you sure you want to shut down?";
-          DialogResult result = MessageBox.Show(msg, "Closing Application", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-          if (result != DialogResult.OK)
-          {
-	          e.Cancel = true;
-	          return;
-          }
-        } 
-    
+            //string msg = "Hey, man. Some dude said to close this here durned program. " + Environment.NewLine +
+            //             "Y'all should check ta be shore no samples is runnin' afore closin' things up." + Environment.NewLine +
+            //             Environment.NewLine + "Is you'uns sure ya wants ta do this?";
+            string msg = "Application shutdown requested. If samples are running, data may be lost" +
+                         Environment.NewLine +
+                         Environment.NewLine + "Are you sure you want to shut down?";
+            DialogResult result = MessageBox.Show(msg, "Closing Application", MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Question);
+            if (result != DialogResult.OK)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
         private void mbutton_cartButton_Click(object sender, EventArgs e)
         {
             ShowCartConfiguration();
         }
+
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             mform_about.BringToFront();
             mform_about.Show();
         }
+
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             mform_displays.BringToFront();
             mform_displays.Show();
         }
+
         void mform_displays_UnTack(object sender, EventArgs e)
         {
-
             mform_displays.MdiParent = null;
             mform_displays.WindowState = FormWindowState.Normal;
-
         }
+
         void mform_displays_Tack(object sender, EventArgs e)
         {
             mform_displays.MdiParent = this;
             mform_displays.WindowState = FormWindowState.Maximized;
         }
+
         private void toolButton_notificationSystem_Click(object sender, EventArgs e)
         {
-
             mform_notifications.BringToFront();
             mform_notifications.Show();
         }
+
         private void mbutton_reportError_Click(object sender, EventArgs e)
         {
             classLCMethodManager manager = classLCMethodManager.Manager;
-            string logPath               = classFileLogging.LogPath;
-            List<Form> forms             = new List<Form>();
+            string logPath = classFileLogging.LogPath;
+            List<Form> forms = new List<Form>();
 
-            forms.AddRange(new Form[] { mform_about, 
-                                        mform_displays, 
-                                        mform_messages,
-                                        mform_methodEditor,
-                                        mform_notifications,
-                                        mform_sampleProgress,
-                                        mform_sampleManager});
-                                        
+            forms.AddRange(new Form[]
+            {
+                mform_about,
+                mform_displays,
+                mform_messages,
+                mform_methodEditor,
+                mform_notifications,
+                mform_sampleProgress,
+                mform_sampleManager
+            });
 
-            using (Reporting.Forms.formCreateErrorReport report 
-                            = new LcmsNet.Reporting.Forms.formCreateErrorReport(manager,
-                                logPath, 
-                                forms
-                                                                                
-                                                                                ))
+
+            using (Reporting.Forms.formCreateErrorReport report
+                = new LcmsNet.Reporting.Forms.formCreateErrorReport(manager,
+                    logPath,
+                    forms
+                    ))
             {
                 report.ShowDialog();
             }
@@ -1050,5 +1119,5 @@ namespace LcmsNet
         }
 
         #endregion
-	 }	
-}	
+    }
+}

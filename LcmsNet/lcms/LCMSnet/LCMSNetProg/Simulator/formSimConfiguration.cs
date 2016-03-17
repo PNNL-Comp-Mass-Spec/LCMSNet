@@ -23,17 +23,17 @@ namespace LcmsNet.Simulator
         }
 
         private void m_config_Tack(object sender, TackEventArgs e)
-        {                 
+        {
             if (e.Tacked)
             {
                 //this.Hide();
             }
-            else            {
-                
+            else
+            {
                 this.Show();
             }
         }
-        
+
         public new void Show()
         {
             this.Controls.Add(m_config);
@@ -51,7 +51,5 @@ namespace LcmsNet.Simulator
                 e.Cancel = true;
             }
         }
-
-
     }
 }

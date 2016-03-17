@@ -15,9 +15,9 @@ namespace LcmsNet.Reporting.Forms
 {
     public partial class formCreateErrorReport : Form
     {
+        private List<Form> m_forms;
+        private string m_logPath;
         private classLCMethodManager m_manager;
-        private string               m_logPath;
-        private List<Form>           m_forms;
 
         public formCreateErrorReport()
         {
@@ -30,11 +30,11 @@ namespace LcmsNet.Reporting.Forms
             InitializeComponent();
 
             m_manager = manager;
-            m_manager.MethodAdded   += new DelegateMethodUpdated(m_manager_MethodAdded);
+            m_manager.MethodAdded += new DelegateMethodUpdated(m_manager_MethodAdded);
             m_manager.MethodRemoved += new DelegateMethodUpdated(m_manager_MethodRemoved);
 
-            m_logPath   = logPath;
-            m_forms     = forms;
+            m_logPath = logPath;
+            m_forms = forms;
 
             foreach (classLCMethod method in m_manager.Methods.Values)
             {
@@ -43,10 +43,42 @@ namespace LcmsNet.Reporting.Forms
                     mlistbox_methods.Items.Add(method);
                     mlistbox_methods.SelectedItems.Add(method);
                 }
-            }            
+            }
         }
 
+        #region Button Handler Events
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mbutton_create_Click(object sender, EventArgs e)
+        {
+            List<classLCMethod> methods = new List<classLCMethod>();
+            foreach (object o in mlistbox_methods.SelectedItems)
+            {
+                classLCMethod method = o as classLCMethod;
+                if (method != null)
+                {
+                    methods.Add(method);
+                }
+            }
+
+
+            classErrorReportBuilder builder = new classErrorReportBuilder();
+            string path = builder.CreateReport(m_forms, methods, m_logPath, "hardwareconfig.ini");
+
+            string cartName = classLCMSSettings.GetParameter("CartName");
+            string errorReportPath = classLCMSSettings.GetParameter("ErrorPath");
+
+            classErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
+        }
+
+        #endregion
+
         #region Method Manager Updates
+
         /// <summary>
         /// Removes the LC Method from the listbox.
         /// </summary>
@@ -61,6 +93,7 @@ namespace LcmsNet.Reporting.Forms
             mlistbox_methods.Items.Remove(method);
             return true;
         }
+
         /// <summary>
         /// Adds a new LC Method to the list box.
         /// </summary>
@@ -75,35 +108,7 @@ namespace LcmsNet.Reporting.Forms
             mlistbox_methods.Items.Add(method);
             return true;
         }
-        #endregion
 
-        #region Button Handler Events
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mbutton_create_Click(object sender, EventArgs e)
-        {
-            List<classLCMethod> methods     = new List<classLCMethod>();
-            foreach(object o in mlistbox_methods.SelectedItems)
-            {
-                classLCMethod method = o as classLCMethod;
-                if (method != null)
-                {
-                    methods.Add(method);
-                }
-            }
-
-
-            classErrorReportBuilder builder = new classErrorReportBuilder();
-            string path = builder.CreateReport(m_forms, methods, m_logPath, "hardwareconfig.ini");
-
-            string cartName         = classLCMSSettings.GetParameter("CartName");
-            string errorReportPath  = classLCMSSettings.GetParameter("ErrorPath");
-
-            classErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
-        }
         #endregion
     }
 }

@@ -36,9 +36,9 @@
             this.mbutton_cancel = new System.Windows.Forms.Button();
             this.mcheckbox_fillIn = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
-            // 
+            //
             // mbutton_column1
-            // 
+            //
             this.mbutton_column1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_column1.Location = new System.Drawing.Point(21, 31);
             this.mbutton_column1.Name = "mbutton_column1";
@@ -47,9 +47,9 @@
             this.mbutton_column1.Text = "1";
             this.mbutton_column1.UseVisualStyleBackColor = true;
             this.mbutton_column1.Click += new System.EventHandler(this.mbutton_column1_Click);
-            // 
+            //
             // mbutton_column2
-            // 
+            //
             this.mbutton_column2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_column2.Location = new System.Drawing.Point(136, 31);
             this.mbutton_column2.Name = "mbutton_column2";
@@ -58,9 +58,9 @@
             this.mbutton_column2.Text = "2";
             this.mbutton_column2.UseVisualStyleBackColor = true;
             this.mbutton_column2.Click += new System.EventHandler(this.mbutton_column2_Click);
-            // 
+            //
             // mbutton_column3
-            // 
+            //
             this.mbutton_column3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_column3.Location = new System.Drawing.Point(251, 31);
             this.mbutton_column3.Name = "mbutton_column3";
@@ -69,9 +69,9 @@
             this.mbutton_column3.Text = "3";
             this.mbutton_column3.UseVisualStyleBackColor = true;
             this.mbutton_column3.Click += new System.EventHandler(this.mbutton_column3_Click);
-            // 
+            //
             // mbutton_column4
-            // 
+            //
             this.mbutton_column4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_column4.Location = new System.Drawing.Point(366, 31);
             this.mbutton_column4.Name = "mbutton_column4";
@@ -80,18 +80,18 @@
             this.mbutton_column4.Text = "4";
             this.mbutton_column4.UseVisualStyleBackColor = true;
             this.mbutton_column4.Click += new System.EventHandler(this.mbutton_column4_Click);
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Location = new System.Drawing.Point(133, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(227, 19);
             this.label1.TabIndex = 4;
             this.label1.Text = "Move Samples To Column?";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mbutton_cancel
-            // 
+            //
             this.mbutton_cancel.Location = new System.Drawing.Point(136, 167);
             this.mbutton_cancel.Name = "mbutton_cancel";
             this.mbutton_cancel.Size = new System.Drawing.Size(224, 27);
@@ -99,9 +99,9 @@
             this.mbutton_cancel.Text = "Cancel";
             this.mbutton_cancel.UseVisualStyleBackColor = true;
             this.mbutton_cancel.Click += new System.EventHandler(this.mbutton_cancel_Click);
-            // 
+            //
             // mcheckbox_fillIn
-            // 
+            //
             this.mcheckbox_fillIn.AutoSize = true;
             this.mcheckbox_fillIn.Checked = true;
             this.mcheckbox_fillIn.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -111,9 +111,9 @@
             this.mcheckbox_fillIn.TabIndex = 6;
             this.mcheckbox_fillIn.Text = "Fill in any un-used";
             this.mcheckbox_fillIn.UseVisualStyleBackColor = true;
-            // 
+            //
             // formMoveToColumnSelector
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(488, 206);

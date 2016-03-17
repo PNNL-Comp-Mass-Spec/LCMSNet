@@ -2,9 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
 using LcmsNetDataClasses.Logging;
-
 using LcmsNetDataClasses;
 using LcmsNet.Configuration;
 
@@ -19,7 +17,9 @@ namespace LcmsNet.Method.Forms
         /// Dialog for opening a LC-Method
         /// </summary>
         private OpenFileDialog mdialog_openMethod;
+
         private string mstring_editingMethod;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -27,25 +27,27 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
 
-            mdialog_openMethod                  = new OpenFileDialog();
-            mdialog_openMethod.Title            = "Open LC-Method";
+            mdialog_openMethod = new OpenFileDialog();
+            mdialog_openMethod.Title = "Open LC-Method";
             string path = classLCMSSettings.GetParameter("ApplicationPath");
             if (path != null)
             {
-                mdialog_openMethod.InitialDirectory =  Path.Combine(path,
-                                                                    classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+                mdialog_openMethod.InitialDirectory = Path.Combine(path,
+                    classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             }
-            mstring_editingMethod   = "";            
+            mstring_editingMethod = "";
 
-           // mcontrol_methodEditor.EventChanged += new EventHandler(mcontrol_methodEditor_EventChanged);
-            mcontrol_methodEditor.UpdatingMethod += new EventHandler<classMethodEditingEventArgs>(mcontrol_methodEditor_UpdatingMethod);
+            // mcontrol_methodEditor.EventChanged += new EventHandler(mcontrol_methodEditor_EventChanged);
+            mcontrol_methodEditor.UpdatingMethod +=
+                new EventHandler<classMethodEditingEventArgs>(mcontrol_methodEditor_UpdatingMethod);
         }
 
         void mcontrol_methodEditor_UpdatingMethod(object sender, classMethodEditingEventArgs e)
         {
             mstring_editingMethod = e.Name;
-            UpdateName();  
+            UpdateName();
         }
+
         private void UpdateName()
         {
         }
@@ -80,8 +82,8 @@ namespace LcmsNet.Method.Forms
         ///// <param name="e"></param>
         //private void openToolStripMenuItem_Click(object sender, EventArgs e)
         //{
-        //    if (mdialog_openMethod.ShowDialog() == DialogResult.OK)            
-        //        mcontrol_methodEditor.OpenMethod(mdialog_openMethod.FileName);            
+        //    if (mdialog_openMethod.ShowDialog() == DialogResult.OK)
+        //        mcontrol_methodEditor.OpenMethod(mdialog_openMethod.FileName);
         //}
         ///// <summary>
         ///// Tells the control to load the methods from a directory.
@@ -114,15 +116,15 @@ namespace LcmsNet.Method.Forms
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            formMethodPreviewOptions options    = new formMethodPreviewOptions();            
-            options.Animate                     = mcontrol_methodEditor.MethodPreviewOptions.Animate;
-            options.AnimationDelay              = mcontrol_methodEditor.MethodPreviewOptions.AnimateDelay;
-            options.FrameDelay                  = mcontrol_methodEditor.MethodPreviewOptions.FrameDelay;
+            formMethodPreviewOptions options = new formMethodPreviewOptions();
+            options.Animate = mcontrol_methodEditor.MethodPreviewOptions.Animate;
+            options.AnimationDelay = mcontrol_methodEditor.MethodPreviewOptions.AnimateDelay;
+            options.FrameDelay = mcontrol_methodEditor.MethodPreviewOptions.FrameDelay;
             if (options.ShowDialog() == DialogResult.OK)
             {
-                mcontrol_methodEditor.MethodPreviewOptions.Animate      = options.Animate;
+                mcontrol_methodEditor.MethodPreviewOptions.Animate = options.Animate;
                 mcontrol_methodEditor.MethodPreviewOptions.AnimateDelay = options.AnimationDelay;
-                mcontrol_methodEditor.MethodPreviewOptions.FrameDelay   = options.FrameDelay;                
+                mcontrol_methodEditor.MethodPreviewOptions.FrameDelay = options.FrameDelay;
             }
             options.Dispose();
         }

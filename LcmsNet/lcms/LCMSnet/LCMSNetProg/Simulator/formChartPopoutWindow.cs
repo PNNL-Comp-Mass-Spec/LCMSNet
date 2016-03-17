@@ -36,7 +36,7 @@ namespace LcmsNet.Simulator
         }
 
         public void OnClose()
-        {            
+        {
             control = null;
             parentControl = null;
         }

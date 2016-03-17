@@ -117,9 +117,9 @@ namespace LcmsNet.Devices.Pumps
                 //TODO: Do I need these?
             //mobj_pumps.ConfigurationChanged += new EventHandler<ConfigurationEventArgs>(ConfigurationChanged);
             //mobj_pumps.ErrorOccurred += new EventHandler<ErrorEventArgs>(ErrorOccurred);
-                
+
             mstr_address = mobj_port.PortName;
-            
+
             //Try initial connection
             if (mobj_pumps.TryConnect(mstr_address, 5000) == false)
             {
@@ -180,7 +180,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 //Couldn't send instruction
                 return false;
-            }            
+            }
             if (mobj_inChannel.TryRead(out reply, 10000) == false)
             {
                 //Couldn't read reply

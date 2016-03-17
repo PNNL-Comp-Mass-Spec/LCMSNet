@@ -10,15 +10,14 @@ namespace LcmsNetDataClasses.Experiment
 {
     public class classSampleValidatorManager
     {
-
         private const string CONST_VALIDATOR_PATH = @"LCMSNet\SampleValidators";
+        private static classSampleValidatorManager m_instance;
         private readonly CompositionContainer mmef_container;
         private readonly DirectoryCatalog mmef_directorycatalog;
-        private static classSampleValidatorManager m_instance;
 
         private classSampleValidatorManager()
         {
-            var catalog = new AggregateCatalog(new AssemblyCatalog(typeof(classSampleValidatorManager).Assembly));
+            var catalog = new AggregateCatalog(new AssemblyCatalog(typeof (classSampleValidatorManager).Assembly));
 
             var validatorPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var validatorFolder = new DirectoryInfo(Path.Combine(validatorPath, CONST_VALIDATOR_PATH));
@@ -37,19 +36,15 @@ namespace LcmsNetDataClasses.Experiment
         {
             get
             {
-                if(m_instance == null)
+                if (m_instance == null)
                 {
                     m_instance = new classSampleValidatorManager();
                 }
                 return m_instance;
             }
         }
-        
+
         [ImportMany]
-        public IEnumerable<Lazy<ISampleValidator, ISampleValidatorMetaData>> Validators
-        {
-            get;
-            set;
-        }
+        public IEnumerable<Lazy<ISampleValidator, ISampleValidatorMetaData>> Validators { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-/*********************************************************************************************************
+﻿/*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -11,6 +10,7 @@
  *      BLL - 9-14-09
  *          Added XML settings file save and load methods.
 /*********************************************************************************************************/
+
 using System;
 using System.Xml;
 using System.Drawing;
@@ -22,26 +22,31 @@ namespace LcmsNetDataClasses.Devices
     /// Describes the interface for user control's that interface a given hardware device or object.
     /// </summary>
     public interface IDeviceControl
-	 {		
-		#region "Events"
-		event DelegateNameChanged NameChanged;
-		event DelegateSaveRequired SaveRequired;
-		#endregion
+    {
+        #region "Events"
 
-		#region "Properties"
-		/// <summary>
-		/// Indicates control state
-		/// </summary>
-		bool Running { get; set; }
-		/// <summary>
-		/// Gets the device to be controlled that's associated with this interface
-		/// </summary>
+        event DelegateNameChanged NameChanged;
+        event DelegateSaveRequired SaveRequired;
+
+        #endregion
+
+        #region "Properties"
+
+        /// <summary>
+        /// Indicates control state
+        /// </summary>
+        bool Running { get; set; }
+
+        /// <summary>
+        /// Gets the device to be controlled that's associated with this interface
+        /// </summary>
         IDevice Device { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the device control.
         /// </summary>
         string Name { get; set; }
-		#endregion
 
-    }	
-}	
+        #endregion
+    }
+}

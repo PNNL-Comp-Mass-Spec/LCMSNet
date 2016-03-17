@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -18,6 +17,7 @@
 //						04/17/2013 (FCT) - Added Proposal Users list with a a cross reference list of their UID to the PIDs of proposals they've worked.
 //
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -26,7 +26,6 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
-
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Data;
@@ -36,6 +35,16 @@ namespace LcmsNetSQLiteTools
 {
     public static class classSQLiteTools
     {
+        #region Properties
+
+        public static string ConnString
+        {
+            get { return mstring_connectionString; }
+            set { mstring_connectionString = value; }
+        }
+
+        #endregion
+
         #region Class Variables
 
         private static string mstring_connectionString = "";
@@ -87,14 +96,8 @@ namespace LcmsNetSQLiteTools
         /// <remarks>Starts off as a filename, but is changed to a path by BuildConnectionString</remarks>
         public static string CacheName
         {
-            get
-            {
-                return classLCMSSettings.GetParameter("CacheFileName");
-            }
-            private set
-            {
-                classLCMSSettings.SetParameter("CacheFileName", value);
-            }
+            get { return classLCMSSettings.GetParameter("CacheFileName"); }
+            private set { classLCMSSettings.SetParameter("CacheFileName", value); }
         }
 
         public static string AppDataFolderName { get; set; }
@@ -107,7 +110,6 @@ namespace LcmsNetSQLiteTools
                 var exists = File.Exists(name);
                 if (!exists && !newCache)
                 {
-
                     var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                     name = Path.Combine(appPath, AppDataFolderName);
 
@@ -129,18 +131,8 @@ namespace LcmsNetSQLiteTools
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                                                "Could not load the sample queue cache.", ex);
+                    "Could not load the sample queue cache.", ex);
             }
-        }
-
-        #endregion
-
-        #region Properties
-
-        public static string ConnString
-        {
-            get { return mstring_connectionString; }
-            set { mstring_connectionString = value; }
         }
 
         #endregion
@@ -262,7 +254,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="TableColumns">Collection of data columns in table</param>
         /// <returns>Dictionary in property name, property value format</returns>
         private static Dictionary<string, string> GetPropertyDictionaryForSample(DataRow RowOfValues,
-                                                                       DataColumnCollection TableColumns)
+            DataColumnCollection TableColumns)
         {
             var returnDict = new Dictionary<string, string>();
 
@@ -270,7 +262,7 @@ namespace LcmsNetSQLiteTools
             foreach (DataColumn column in TableColumns)
             {
                 var colName = column.ColumnName;
-                var colData = (string)RowOfValues[TableColumns[colName]];
+                var colData = (string) RowOfValues[TableColumns[colName]];
                 returnDict.Add(colName, colData);
             }
 
@@ -331,7 +323,6 @@ namespace LcmsNetSQLiteTools
                 var resultSet2 = GetSQLiteDataTable(colCountSql, connStr);
 
                 columnCount = resultSet2.Rows.Count;
-
             }
             catch (Exception ex)
             {
@@ -350,7 +341,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableName">Name of the table to save data in</param>
         /// <param name="connStr">Connection string</param>
         private static void SavePropertiesToCache(IList<ICacheInterface> dataToCache, string tableName,
-                                                                        string connStr)
+            string connStr)
         {
             var dataExists = (dataToCache.Count > 0);
 
@@ -392,7 +383,6 @@ namespace LcmsNetSQLiteTools
             }
 
             StoreCmdListData(connStr, tableName, cmdList);
-
         }
 
         /// <summary>
@@ -414,7 +404,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
         public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType,
-                                                            string connStr)
+            string connStr)
         {
             var DataInList = (QueueData.Count > 0);
             var tableName = GetTableName(tableType);
@@ -488,7 +478,6 @@ namespace LcmsNetSQLiteTools
             {
                 using (var connection = new SQLiteConnection(mstring_connectionString))
                 {
-
                     connection.Open();
 
                     if (!VerifyTableExists(tableName, mstring_connectionString))
@@ -505,21 +494,21 @@ namespace LcmsNetSQLiteTools
                     {
                         using (var command = connection.CreateCommand())
                         {
-
                             foreach (var datum in expList)
                             {
-                                var commandText = string.Format("INSERT INTO T_ExperimentList ('ID', 'Organism', 'Researcher', 'Reason', 'Request', 'Experiment', 'Created') " +
-                                                                "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')",
-                                                                                    datum.ID,
-                                                                                    datum.Organism,
-                                                                                    datum.Researcher,
-                                                                                    datum.Reason == null ? "" : datum.Reason.Replace("'", ""),
-                                                                                    datum.Request,
-                                                                                    datum.Experiment,
-                                                                                    datum.Created ?? DateTime.MinValue);
+                                var commandText =
+                                    string.Format(
+                                        "INSERT INTO T_ExperimentList ('ID', 'Organism', 'Researcher', 'Reason', 'Request', 'Experiment', 'Created') " +
+                                        "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')",
+                                        datum.ID,
+                                        datum.Organism,
+                                        datum.Researcher,
+                                        datum.Reason == null ? "" : datum.Reason.Replace("'", ""),
+                                        datum.Request,
+                                        datum.Experiment,
+                                        datum.Created ?? DateTime.MinValue);
                                 command.CommandText = commandText;
                                 command.ExecuteNonQuery();
-
                             }
                         }
                         transaction.Commit();
@@ -528,9 +517,10 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, string.Format("Could not insert all of the experiment data into the experiment table. {0}", ex.Message));
+                classApplicationLogger.LogError(0,
+                    string.Format("Could not insert all of the experiment data into the experiment table. {0}",
+                        ex.Message));
             }
-
         }
 
         /// <summary>
@@ -654,13 +644,10 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr">Connection string</param>
         private static void ExecuteSQLiteCmdsWithTransaction(IEnumerable<string> cmdList, string connStr)
         {
-
             using (var connection = new SQLiteConnection(connStr))
             {
-
                 using (var command = new SQLiteCommand(connection))
                 {
-
                     command.CommandType = CommandType.Text;
                     try
                     {
@@ -818,7 +805,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>Name of db table</returns>
         private static string GetTableName(enumTableTypes tableType)
         {
-            return "T_" + Enum.GetName(typeof(enumTableTypes), tableType);
+            return "T_" + Enum.GetName(typeof (enumTableTypes), tableType);
         }
 
         /// <summary>
@@ -885,6 +872,7 @@ namespace LcmsNetSQLiteTools
             }
             return m_datasetTypeNames;
         }
+
         /// <summary>
         /// Gets user list from cache
         /// </summary>
@@ -919,6 +907,7 @@ namespace LcmsNetSQLiteTools
             // All finished, so return
             return m_userInfo;
         }
+
         /// <summary>
         /// Gets a list of instruments from the cache
         /// </summary>
@@ -984,7 +973,8 @@ namespace LcmsNetSQLiteTools
             out List<classProposalUser> users,
             out Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
         {
-            if (m_proposalUsers != null && m_proposalUsers.Count > 0 && m_pidIndexedReferenceList != null && m_pidIndexedReferenceList.Count > 0)
+            if (m_proposalUsers != null && m_proposalUsers.Count > 0 && m_pidIndexedReferenceList != null &&
+                m_pidIndexedReferenceList.Count > 0)
             {
                 users = m_proposalUsers;
                 pidIndexedReferenceList = m_pidIndexedReferenceList;
@@ -1064,9 +1054,9 @@ namespace LcmsNetSQLiteTools
         {
             // Create a list for the Save call to use
             var sepTypes = new List<string>
-			{
-			    separationType
-			};
+            {
+                separationType
+            };
 
             SaveSingleColumnListToCache(sepTypes, enumTableTypes.SeparationTypeSelected);
         }
@@ -1080,7 +1070,6 @@ namespace LcmsNetSQLiteTools
             List<string> sepType;
             try
             {
-
                 sepType = GetSingleColumnListFromCache(enumTableTypes.SeparationTypeSelected);
             }
             catch (Exception ex)
@@ -1096,7 +1085,8 @@ namespace LcmsNetSQLiteTools
                 if (!isFirstTime)
                 {
                     //errMsg = "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
-                    const string errorMessage = "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
+                    const string errorMessage =
+                        "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
                     classApplicationLogger.LogError(0, errorMessage, ex);
                 }
                 else
@@ -1131,7 +1121,7 @@ namespace LcmsNetSQLiteTools
             var sqlClearCmd = "DELETE FROM " + tableName;
 
             // Build SQL statement for creating table
-            string[] colNames = { GENERIC_COLUMN_NAME };
+            string[] colNames = {GENERIC_COLUMN_NAME};
             var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, GENERIC_COLUMN_NAME);
 
             // If table exists, clear it. Otherwise create one
@@ -1246,7 +1236,7 @@ namespace LcmsNetSQLiteTools
             // Fill the return list
             foreach (DataRow currentRow in resultTable.Rows)
             {
-                returnList.Add((string)currentRow[resultTable.Columns[0]]);
+                returnList.Add((string) currentRow[resultTable.Columns[0]]);
             }
 
             // All finished, so return
@@ -1260,7 +1250,8 @@ namespace LcmsNetSQLiteTools
         /// <param name="ColNames">String array containing column names</param>
         /// <param name="primaryKeyColumn">Optional: name of the column to create as the primary key</param>
         /// <returns>Complete CREATE TABLE command</returns>
-        private static string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> ColNames, string primaryKeyColumn)
+        private static string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> ColNames,
+            string primaryKeyColumn)
         {
             var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");
@@ -1318,6 +1309,7 @@ namespace LcmsNetSQLiteTools
                 }
             }
         }
+
         #endregion
     }
 }

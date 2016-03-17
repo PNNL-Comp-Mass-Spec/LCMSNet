@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-
 using System.Windows.Forms;
 
 namespace LcmsNet.SampleQueue.Forms
@@ -16,22 +15,24 @@ namespace LcmsNet.SampleQueue.Forms
     /// </summary>
     public partial class classDataGrid : DataGridView
     {
+        public classDataGrid()
+        {
+            InitializeComponent();
+        }
+
         public event DelegateOnPaint SpecialPaint;
 
-        public classDataGrid()
-        {			
-            InitializeComponent();            
-        }
         protected override void SetSelectedRowCore(int rowIndex, bool selected)
-        {            
+        {
             base.SetSelectedRowCore(rowIndex, selected);
         }
+
         protected override void OnPaint(PaintEventArgs e)
-        {            
+        {
             base.OnPaint(e);
 
-            if (this.SpecialPaint != null)            
-                SpecialPaint(this, e);                         
+            if (this.SpecialPaint != null)
+                SpecialPaint(this, e);
         }
     }
 }

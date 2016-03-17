@@ -16,47 +16,57 @@ namespace LcmsNetDataClasses.Devices.Pumps
             InitializePlots();
         }
 
+        public bool Tacked { get; set; }
+
+        /// <summary>
+        /// Gets the width for the tack icon.
+        /// </summary>
+        public int TackWidth
+        {
+            get { return 36; }
+        }
+
         /// <summary>
         /// Initialize the plotting capabilities
         /// </summary>
         private void InitializePlots()
         {
-            /// 
-            /// Time and setup 
-            /// 
+            // 
+            // Time and setup 
+            // 
             GraphPane pane = mplot_monitoringDataPressure.GraphPane;
             pane.Title.Text = "Pressure (bar)";
             pane.XAxis.Title.Text = "Time";
             pane.XAxis.Type = AxisType.Date;
             pane.XAxis.MajorGrid.IsVisible = true;
 
-            /// 
-            /// Pressure
-            /// 
+            // 
+            // Pressure
+            // 
             pane.YAxis.Color = Color.Red;
             pane.YAxis.Title.Text = "Pressure (bar)";
 
-            /// 
-            /// Flow rate 
-            /// 
-            GraphPane paneFlow          = mplot_monitoringDataFlow.GraphPane;
-            paneFlow.Title.Text         = "Flow Rate";
-            paneFlow.XAxis.Title.Text   = "Time";
-            paneFlow.XAxis.Type         = AxisType.Date;
+            // 
+            // Flow rate 
+            // 
+            GraphPane paneFlow = mplot_monitoringDataFlow.GraphPane;
+            paneFlow.Title.Text = "Flow Rate";
+            paneFlow.XAxis.Title.Text = "Time";
+            paneFlow.XAxis.Type = AxisType.Date;
             paneFlow.XAxis.MajorGrid.IsVisible = true;
-            paneFlow.YAxis.Title.Text         = "Flow Rate";            
-            paneFlow.YAxis.Color        = Color.DarkGreen;
+            paneFlow.YAxis.Title.Text = "Flow Rate";
+            paneFlow.YAxis.Color = Color.DarkGreen;
 
-            /// 
-            /// Percent B 
-            /// 
+            // 
+            // Percent B 
+            // 
             GraphPane paneComp = mplot_monitoringDataB.GraphPane;
             paneComp.Title.Text = "Composition";
             paneComp.XAxis.Title.Text = "Time";
             paneComp.XAxis.Type = AxisType.Date;
             paneComp.XAxis.MajorGrid.IsVisible = true;
             paneComp.YAxis.Title.Text = "Composition (%B)";
-            paneComp.YAxis.Color = Color.Blue;            
+            paneComp.YAxis.Color = Color.Blue;
         }
 
 
@@ -67,13 +77,14 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <param name="pressure"></param>
         /// <param name="flowrate"></param>
         /// <param name="percentB"></param>
-        public void DisplayMonitoringData(object sender, PumpDataEventArgs args) //List<DateTime> time, List<double> pressure, List<double> flowrate, List<double> percentB)
+        public void DisplayMonitoringData(object sender, PumpDataEventArgs args)
+            //List<DateTime> time, List<double> pressure, List<double> flowrate, List<double> percentB)
         {
             try
             {
-                GraphPane panePressure  = mplot_monitoringDataPressure.GraphPane;
-                GraphPane paneFlow      = mplot_monitoringDataFlow.GraphPane;
-                GraphPane paneB         = mplot_monitoringDataB.GraphPane;
+                GraphPane panePressure = mplot_monitoringDataPressure.GraphPane;
+                GraphPane paneFlow = mplot_monitoringDataFlow.GraphPane;
+                GraphPane paneB = mplot_monitoringDataB.GraphPane;
 
                 double[] x = new double[args.Time.Count];
                 int i = 0;
@@ -94,9 +105,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 paneB.CurveList.Clear();
 
 
-                LineItem pressureItems  = panePressure.AddCurve("Pressure (psi)", x, pressurePoints, Color.Red, SymbolType.Circle);
-                LineItem flowItems      = paneFlow.AddCurve("Flow Rate", x, flowrates, Color.DarkGreen, SymbolType.Triangle);
-                LineItem percentItems   = paneB.AddCurve("% B", x, percentBs, Color.Blue, SymbolType.Square);
+                LineItem pressureItems = panePressure.AddCurve("Pressure (psi)", x, pressurePoints, Color.Red,
+                    SymbolType.Circle);
+                LineItem flowItems = paneFlow.AddCurve("Flow Rate", x, flowrates, Color.DarkGreen, SymbolType.Triangle);
+                LineItem percentItems = paneB.AddCurve("% B", x, percentBs, Color.Blue, SymbolType.Square);
 
                 paneB.AxisChange();
                 paneFlow.AxisChange();
@@ -118,24 +130,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
         public event EventHandler Tack;
         public event EventHandler UnTack;
-        public bool Tacked
-        {
-            get;
-            set;
-        }
-        /// <summary>
-        /// Gets the width for the tack icon.
-        /// </summary>
-        public int TackWidth
-        {
-            get
-            {
-                return 36;
-            }
-        }
+
         private void mbutton_expand_Click(object sender, EventArgs e)
         {
-
             Tacked = (Tacked == false);
             if (Tacked)
             {

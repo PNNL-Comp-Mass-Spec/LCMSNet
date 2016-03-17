@@ -10,6 +10,7 @@
 //         Changed file log name to include hhmmss using a flag to indicate whether the file exists.
 //     
 //*********************************************************************************************************
+
 using System;
 using System.IO;
 using System.Text;
@@ -21,12 +22,20 @@ namespace LcmsNetDataClasses.Logging
     /// </summary>
     public static class classFileLogging
     {
-
         /// <summary>
         /// Flag indicating whether a log file has been created for this program start.
         /// </summary>
         private static bool m_logFileCreated = false;
+
         private static string m_LogFilePath;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        static classFileLogging()
+        {
+            AppFolder = "LCMSNet";
+        }
 
         #region Properties
 
@@ -37,7 +46,7 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         /// <param name="args"></param>
         public delegate void DelegateLogPathReporter(classMessageLoggerArgs args);
-        
+
         /// <summary>
         /// Fired when the log file path is defined
         /// </summary>
@@ -50,32 +59,18 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         public static string LogPath
         {
-            get
-            {
-                return m_LogFilePath;
-            }
+            get { return m_LogFilePath; }
         }
 
         /// <summary>
         /// Gets the file log path.
         /// </summary>
-        public static string AppFolder
-        {
-            get;
-            set;
-        }
+        public static string AppFolder { get; set; }
 
         #endregion
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        static classFileLogging()
-        {
-            AppFolder = "LCMSNet";
-        }
-
         #region "Methods"
+
         public static void LogError(int errorLevel, classErrorLoggerArgs args)
         {
             try
@@ -110,7 +105,7 @@ namespace LcmsNetDataClasses.Logging
                 // Write the message to the log file
                 WriteToLogFile(msgStr.ToString());
             }
-            // ReSharper disable once EmptyGeneralCatchClause
+                // ReSharper disable once EmptyGeneralCatchClause
             catch
             {
                 // if something dies...oh well..
@@ -204,7 +199,10 @@ namespace LcmsNetDataClasses.Logging
 
                     if (logFile.Directory.Exists)
                     {
-                        using (var logWriter = new StreamWriter(new FileStream(logFile.FullName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite)))
+                        using (
+                            var logWriter =
+                                new StreamWriter(new FileStream(logFile.FullName, FileMode.Append, FileAccess.Write,
+                                    FileShare.ReadWrite)))
                         {
                             logWriter.WriteLine(msgStr);
                         }
@@ -233,7 +231,7 @@ namespace LcmsNetDataClasses.Logging
             var path = Path.Combine(appPath, AppFolder);
             return Path.Combine(Path.Combine(path, "Log"), logFileName);
         }
-        #endregion
 
+        #endregion
     }
 }

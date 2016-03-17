@@ -10,17 +10,30 @@ namespace LcmsNet
 {
     public partial class ModelCheckListControl : UserControl
     {
+        IModelCheckController controller;
         Dictionary<string, ModelCheckControl> m_checks;
-        IModelCheckController controller;   
 
         public ModelCheckListControl()
         {
             InitializeComponent();
         }
 
+        public ModelCheckListControl(IModelCheckController cntrlr, IEnumerable<IFluidicsModelChecker> checks)
+        {
+            InitializeComponent();
+            controller = cntrlr;
+            controller.ModelCheckAdded += CheckAddedHandler;
+            controller.ModelCheckRemoved += CheckRemovedHandler;
+            m_checks = new Dictionary<string, ModelCheckControl>();
+            foreach (var check in checks)
+            {
+                AddCheckerControl(check);
+            }
+        }
+
         private void EnableAllCheckHandler(object sender, EventArgs e)
         {
-            var checkValue = ((CheckBox)sender).Checked;
+            var checkValue = ((CheckBox) sender).Checked;
             if (checkValue)
             {
                 foreach (var key in m_checks.Keys)
@@ -28,19 +41,6 @@ namespace LcmsNet
                     m_checks[key].Check(checkValue);
                 }
                 this.Refresh();
-            }
-        }
-
-        public ModelCheckListControl(IModelCheckController cntrlr, IEnumerable<IFluidicsModelChecker> checks)
-        {
-            InitializeComponent();
-            controller = cntrlr;
-            controller.ModelCheckAdded   += CheckAddedHandler;
-            controller.ModelCheckRemoved += CheckRemovedHandler;
-            m_checks = new Dictionary<string, ModelCheckControl>();
-            foreach(var check in checks)
-            {
-                AddCheckerControl(check);
             }
         }
 
@@ -57,7 +57,7 @@ namespace LcmsNet
                 checkerControl.BringToFront(); // keeps Z-order correct.
             }
         }
- 
+
         ~ModelCheckListControl()
         {
             controller.ModelCheckAdded -= CheckAddedHandler;
@@ -66,10 +66,11 @@ namespace LcmsNet
 
         private void ModelCheckChanged(object sender, EventArgs e)
         {
-            var s = (ModelCheckControl)sender;
+            var s = (ModelCheckControl) sender;
             if (!s.Checked)
             {
-                ((CheckBox)(groupBoxModelChecks.Controls["panelEnableAll"].Controls["enableAllModelChecks"])).Checked = false;
+                ((CheckBox) (groupBoxModelChecks.Controls["panelEnableAll"].Controls["enableAllModelChecks"])).Checked =
+                    false;
             }
         }
 
@@ -78,12 +79,12 @@ namespace LcmsNet
             var check = e.ModelChecker;
             AddCheckerControl(check);
             this.Refresh();
-        }      
+        }
 
         private void CheckRemovedHandler(object sender, ModelCheckControllerEventArgs e)
         {
             var check = e.ModelChecker;
-            if(m_checks[check.Name] == check)
+            if (m_checks[check.Name] == check)
             {
                 groupBoxModelChecks.Controls.Remove(m_checks[check.Name]);
                 m_checks.Remove(check.Name);

@@ -10,7 +10,7 @@ namespace LcmsNet.Devices
     /// Used for persisting a device list to storage.
     /// </summary>
     interface IDeviceConfigurationWriter
-    {        
-        void WriteConfiguration(string path, classDeviceConfiguration configuration);        
+    {
+        void WriteConfiguration(string path, classDeviceConfiguration configuration);
     }
 }

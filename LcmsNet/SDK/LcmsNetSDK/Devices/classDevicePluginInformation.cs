@@ -15,20 +15,9 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="name"></param>
         public classDevicePluginInformation(Type deviceType, classDeviceControlAttribute attribute)
         {
-            DeviceType      = deviceType;
+            DeviceType = deviceType;
             DeviceAttribute = attribute;
         }
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the device type.
-        /// </summary>
-        public Type DeviceType { get; set; }
-        /// <summary>
-        /// Gets or sets the attribute of the device.
-        /// </summary>
-        public classDeviceControlAttribute DeviceAttribute {get; set; }
-        #endregion
 
         /// <summary>
         /// Returns the name of the device.
@@ -43,5 +32,19 @@ namespace LcmsNetDataClasses.Devices
             }
             return name;
         }
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the device type.
+        /// </summary>
+        public Type DeviceType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the attribute of the device.
+        /// </summary>
+        public classDeviceControlAttribute DeviceAttribute { get; set; }
+
+        #endregion
     }
 }

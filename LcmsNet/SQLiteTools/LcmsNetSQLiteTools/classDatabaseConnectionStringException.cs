@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -9,18 +8,19 @@
 //						02/19/2009 (DAC) - Renamed for use with both DMS and SQLite databases
 //
 //*********************************************************************************************************
+
 using System;
 
 namespace LcmsNetSQLiteTools
 {
-	public class classDatabaseConnectionStringException : Exception
-	{
-		//*********************************************************************************************************
-		// Custom exception for reporting invalid database connection string
-		//**********************************************************************************************************
-		public classDatabaseConnectionStringException(string message) : 
-			base(message)
-		{
-		}
-	}	//End class
-}	// End namespace
+    public class classDatabaseConnectionStringException : Exception
+    {
+        //*********************************************************************************************************
+        // Custom exception for reporting invalid database connection string
+        //**********************************************************************************************************
+        public classDatabaseConnectionStringException(string message) :
+            base(message)
+        {
+        }
+    } //End class
+} // End namespace

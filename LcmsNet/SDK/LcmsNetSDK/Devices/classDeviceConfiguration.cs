@@ -14,6 +14,7 @@
  *      Created plug-ins, and loading of a new configuration pattern.
  * 
 /*********************************************************************************************************/
+
 using System;
 using System.Reflection;
 using System.Collections.Generic;
@@ -21,8 +22,6 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNetDataClasses.Devices
 {
-
-
     /// <summary>
     /// Holds the configuration of a collection of devices for persistence.
     /// </summary>
@@ -33,15 +32,17 @@ namespace LcmsNetDataClasses.Devices
         /// Maps devices to their settings.
         /// </summary>
         private Dictionary<string, Dictionary<string, object>> mdict_settings;
-        /// <summary>
-        /// Holds a list of devices that can be enumerated through.
-        /// </summary>
-        private List<string> mlist_devices;
+
         /// <summary>
         /// holds a list of connections and the ports that they connection
         /// unique ID of connection is the key, the ports are a comma separated string that make up the value
         /// </summary>
         private Dictionary<string, string> mlist_connections;
+
+        /// <summary>
+        /// Holds a list of devices that can be enumerated through.
+        /// </summary>
+        private List<string> mlist_devices;
 
         /// <summary>
         /// Default constructor.
@@ -54,10 +55,24 @@ namespace LcmsNetDataClasses.Devices
         }
 
 
-        public string CartName
+        public string CartName { get; set; }
+
+        /// <summary>
+        /// Gets the number of devices stored here.
+        /// </summary>
+        public int DeviceCount
         {
-            get;
-            set;
+            get { return mlist_devices.Count; }
+        }
+
+        /// <summary>
+        /// Gets the item at the specified index.
+        /// </summary>
+        /// <param name="index">Index of IDevice.</param>
+        /// <returns>Device in collection at index.</returns>
+        public string this[int index]
+        {
+            get { return mlist_devices[index]; }
         }
 
         /// <summary>
@@ -75,6 +90,7 @@ namespace LcmsNetDataClasses.Devices
             }
             mdict_settings[deviceName].Add(settingsName, value);
         }
+
         /// <summary>
         /// Retrieves the device settings for the specified device.
         /// </summary>
@@ -84,33 +100,11 @@ namespace LcmsNetDataClasses.Devices
         {
             return mdict_settings[deviceName];
         }
-        /// <summary>
-        /// Gets the number of devices stored here.
-        /// </summary>
-        public int DeviceCount
-        {
-            get
-            {
-                return mlist_devices.Count;
-            }
-        }
-        /// <summary>
-        /// Gets the item at the specified index.
-        /// </summary>
-        /// <param name="index">Index of IDevice.</param>
-        /// <returns>Device in collection at index.</returns>
-        public string this[int index]
-        {
-            get
-            {
-                return mlist_devices[index];
-            }
-        }
 
         public void AddConnection(string connId, string ports)
         {
             mlist_connections[connId] = ports;
-        }            
+        }
 
         public Dictionary<string, string> GetConnections()
         {

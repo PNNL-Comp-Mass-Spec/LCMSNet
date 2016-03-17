@@ -2,9 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+
 [assembly: AssemblyTitle("LcmsNetProg")]
 [assembly: AssemblyDescription("Liquid Chromatography control software for Mass Spectrometry.")]
 [assembly: AssemblyConfiguration("")]
@@ -16,4 +17,3 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("128f8638-d4c3-4d46-a4fc-a17373718f81")]
 [assembly: AssemblyVersion("4.2.*")]
-

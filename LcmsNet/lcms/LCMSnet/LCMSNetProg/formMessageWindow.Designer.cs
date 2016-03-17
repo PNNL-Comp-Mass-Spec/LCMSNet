@@ -49,9 +49,9 @@
             this.mtab_errors.SuspendLayout();
             this.mpanel_errors.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mlabel_errors
-            // 
+            //
             this.mlabel_errors.BackColor = System.Drawing.Color.White;
             this.mlabel_errors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mlabel_errors.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -66,9 +66,9 @@
             this.mlabel_errors.MouseLeave += new System.EventHandler(this.mlabel_errors_MouseLeave);
             this.mlabel_errors.Click += new System.EventHandler(this.mlabel_errors_Click);
             this.mlabel_errors.MouseEnter += new System.EventHandler(this.mlabel_errors_MouseEnter);
-            // 
+            //
             // mlabel_messages
-            // 
+            //
             this.mlabel_messages.BackColor = System.Drawing.Color.White;
             this.mlabel_messages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mlabel_messages.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -83,9 +83,9 @@
             this.mlabel_messages.MouseLeave += new System.EventHandler(this.mlabel_messages_MouseLeave);
             this.mlabel_messages.Click += new System.EventHandler(this.mlabel_messages_Click);
             this.mlabel_messages.MouseEnter += new System.EventHandler(this.mlabel_messages_MouseEnter);
-            // 
+            //
             // panel3
-            // 
+            //
             this.panel3.Controls.Add(this.mpanel_messageIndicator);
             this.panel3.Controls.Add(this.mpanel_errorIndicator);
             this.panel3.Controls.Add(this.mlabel_errors);
@@ -96,23 +96,23 @@
             this.panel3.Padding = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.panel3.Size = new System.Drawing.Size(168, 783);
             this.panel3.TabIndex = 11;
-            // 
+            //
             // mpanel_messageIndicator
-            // 
+            //
             this.mpanel_messageIndicator.Location = new System.Drawing.Point(0, 0);
             this.mpanel_messageIndicator.Name = "mpanel_messageIndicator";
             this.mpanel_messageIndicator.Size = new System.Drawing.Size(4, 42);
             this.mpanel_messageIndicator.TabIndex = 13;
-            // 
+            //
             // mpanel_errorIndicator
-            // 
+            //
             this.mpanel_errorIndicator.Location = new System.Drawing.Point(0, 45);
             this.mpanel_errorIndicator.Name = "mpanel_errorIndicator";
             this.mpanel_errorIndicator.Size = new System.Drawing.Size(4, 42);
             this.mpanel_errorIndicator.TabIndex = 12;
-            // 
+            //
             // customTabControl1
-            // 
+            //
             this.customTabControl1.Controls.Add(this.mtab_messages);
             this.customTabControl1.Controls.Add(this.mtab_errors);
             this.customTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -121,9 +121,9 @@
             this.customTabControl1.SelectedIndex = 0;
             this.customTabControl1.Size = new System.Drawing.Size(1411, 783);
             this.customTabControl1.TabIndex = 1;
-            // 
+            //
             // mtab_messages
-            // 
+            //
             this.mtab_messages.Controls.Add(this.mpanel_messages);
             this.mtab_messages.Location = new System.Drawing.Point(4, 22);
             this.mtab_messages.Name = "mtab_messages";
@@ -132,9 +132,9 @@
             this.mtab_messages.TabIndex = 0;
             this.mtab_messages.Text = "tabPage3";
             this.mtab_messages.UseVisualStyleBackColor = true;
-            // 
+            //
             // mpanel_messages
-            // 
+            //
             this.mpanel_messages.BackColor = System.Drawing.Color.White;
             this.mpanel_messages.Controls.Add(this.mlistBox_messages);
             this.mpanel_messages.Controls.Add(this.button1);
@@ -144,9 +144,9 @@
             this.mpanel_messages.Padding = new System.Windows.Forms.Padding(5);
             this.mpanel_messages.Size = new System.Drawing.Size(1397, 751);
             this.mpanel_messages.TabIndex = 10;
-            // 
+            //
             // mlistBox_messages
-            // 
+            //
             this.mlistBox_messages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mlistBox_messages.FormattingEnabled = true;
             this.mlistBox_messages.HorizontalScrollbar = true;
@@ -155,9 +155,9 @@
             this.mlistBox_messages.ScrollAlwaysVisible = true;
             this.mlistBox_messages.Size = new System.Drawing.Size(1387, 706);
             this.mlistBox_messages.TabIndex = 10;
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.button1.Location = new System.Drawing.Point(5, 714);
             this.button1.Name = "button1";
@@ -167,9 +167,9 @@
             this.button1.Text = "Clear Messages";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
+            //
             // mtab_errors
-            // 
+            //
             this.mtab_errors.Controls.Add(this.mpanel_errors);
             this.mtab_errors.Location = new System.Drawing.Point(4, 22);
             this.mtab_errors.Name = "mtab_errors";
@@ -178,9 +178,9 @@
             this.mtab_errors.TabIndex = 1;
             this.mtab_errors.Text = "tabPage4";
             this.mtab_errors.UseVisualStyleBackColor = true;
-            // 
+            //
             // mpanel_errors
-            // 
+            //
             this.mpanel_errors.BackColor = System.Drawing.Color.White;
             this.mpanel_errors.Controls.Add(this.m_errorMessages);
             this.mpanel_errors.Controls.Add(this.mbutton_acknowledgeErrors);
@@ -190,9 +190,9 @@
             this.mpanel_errors.Padding = new System.Windows.Forms.Padding(5);
             this.mpanel_errors.Size = new System.Drawing.Size(1397, 751);
             this.mpanel_errors.TabIndex = 8;
-            // 
+            //
             // m_errorMessages
-            // 
+            //
             this.m_errorMessages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_errorMessages.Location = new System.Drawing.Point(5, 5);
             this.m_errorMessages.Name = "m_errorMessages";
@@ -201,9 +201,9 @@
             this.m_errorMessages.TabIndex = 6;
             this.m_errorMessages.Text = "";
             this.m_errorMessages.WordWrap = false;
-            // 
+            //
             // mbutton_acknowledgeErrors
-            // 
+            //
             this.mbutton_acknowledgeErrors.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.mbutton_acknowledgeErrors.Location = new System.Drawing.Point(5, 714);
             this.mbutton_acknowledgeErrors.Name = "mbutton_acknowledgeErrors";
@@ -213,9 +213,9 @@
             this.mbutton_acknowledgeErrors.Text = "Clear Error Notification";
             this.mbutton_acknowledgeErrors.UseVisualStyleBackColor = true;
             this.mbutton_acknowledgeErrors.Click += new System.EventHandler(this.mbutton_acknowledgeErrors_Click);
-            // 
+            //
             // formMessageWindow
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

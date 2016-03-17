@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using LcmsNet.Method;
 using LcmsNetSQLiteTools;
 using LcmsNetDmsTools;
@@ -19,9 +18,9 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public void  WriteSamples(string path, List<classSampleData> data)
+        public void WriteSamples(string path, List<classSampleData> data)
         {
- 	        string connStr = "data source=" + path;
+            string connStr = "data source=" + path;
 
             try
             {
@@ -30,8 +29,8 @@ namespace LcmsNet.SampleQueue.IO
             catch (Exception ex)
             {
                 string errMsg = "Exception exporting queue to " + path;
-                classApplicationLogger.LogError(0, errMsg, ex);                
-            }            
+                classApplicationLogger.LogError(0, errMsg, ex);
+            }
         }
     }
 }

@@ -52,9 +52,9 @@
             this.tabPageDesign.SuspendLayout();
             this.tabPageConfiguration.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mbutton_removeDevice
-            // 
+            //
             this.mbutton_removeDevice.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
             this.mbutton_removeDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_removeDevice.Location = new System.Drawing.Point(3, 314);
@@ -65,9 +65,9 @@
             this.mbutton_removeDevice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_removeDevice.UseVisualStyleBackColor = true;
             this.mbutton_removeDevice.Click += new System.EventHandler(this.btnRemove_Click);
-            // 
+            //
             // mbutton_loadHardware
-            // 
+            //
             this.mbutton_loadHardware.Image = global::LcmsNet.Properties.Resources.Open;
             this.mbutton_loadHardware.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_loadHardware.Location = new System.Drawing.Point(789, 6);
@@ -78,9 +78,9 @@
             this.mbutton_loadHardware.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_loadHardware.UseVisualStyleBackColor = true;
             this.mbutton_loadHardware.Click += new System.EventHandler(this.mbutton_loadHardware_Click);
-            // 
+            //
             // mbutton_save
-            // 
+            //
             this.mbutton_save.Image = global::LcmsNet.Properties.Resources.Save;
             this.mbutton_save.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_save.Location = new System.Drawing.Point(853, 6);
@@ -91,9 +91,9 @@
             this.mbutton_save.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_save.UseVisualStyleBackColor = true;
             this.mbutton_save.Click += new System.EventHandler(this.mbutton_save_Click);
-            // 
+            //
             // mbutton_saveAs
-            // 
+            //
             this.mbutton_saveAs.Image = global::LcmsNet.Properties.Resources.Save;
             this.mbutton_saveAs.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_saveAs.Location = new System.Drawing.Point(917, 6);
@@ -104,9 +104,9 @@
             this.mbutton_saveAs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_saveAs.UseVisualStyleBackColor = true;
             this.mbutton_saveAs.Click += new System.EventHandler(this.mbutton_saveAs_Click);
-            // 
+            //
             // mbutton_lock
-            // 
+            //
             this.mbutton_lock.Image = global::LcmsNet.Properties.Resources._lock;
             this.mbutton_lock.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_lock.Location = new System.Drawing.Point(3, 6);
@@ -117,9 +117,9 @@
             this.mbutton_lock.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_lock.UseVisualStyleBackColor = true;
             this.mbutton_lock.Click += new System.EventHandler(this.mbutton_lock_Click);
-            // 
+            //
             // mbutton_unlock
-            // 
+            //
             this.mbutton_unlock.Enabled = false;
             this.mbutton_unlock.Image = global::LcmsNet.Properties.Resources.unlock;
             this.mbutton_unlock.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -131,9 +131,9 @@
             this.mbutton_unlock.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_unlock.UseVisualStyleBackColor = true;
             this.mbutton_unlock.Click += new System.EventHandler(this.mbutton_unlock_Click);
-            // 
+            //
             // mbutton_initialize
-            // 
+            //
             this.mbutton_initialize.Image = global::LcmsNet.Properties.Resources.Cycle_16_Yellow;
             this.mbutton_initialize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_initialize.Location = new System.Drawing.Point(3, 160);
@@ -144,9 +144,9 @@
             this.mbutton_initialize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_initialize.UseVisualStyleBackColor = true;
             this.mbutton_initialize.Click += new System.EventHandler(this.mbutton_initialize_Click);
-            // 
+            //
             // mbutton_addDevice
-            // 
+            //
             this.mbutton_addDevice.Image = global::LcmsNet.Properties.Resources.add;
             this.mbutton_addDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_addDevice.Location = new System.Drawing.Point(3, 237);
@@ -157,9 +157,9 @@
             this.mbutton_addDevice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_addDevice.UseVisualStyleBackColor = true;
             this.mbutton_addDevice.Click += new System.EventHandler(this.btnAddDevice_Click);
-            // 
+            //
             // panelDevices
-            // 
+            //
             this.panelDevices.Controls.Add(this.mbutton_loadHardware);
             this.panelDevices.Controls.Add(this.mbutton_saveAs);
             this.panelDevices.Controls.Add(this.mbutton_save);
@@ -168,9 +168,9 @@
             this.panelDevices.Name = "panelDevices";
             this.panelDevices.Size = new System.Drawing.Size(920, 40);
             this.panelDevices.TabIndex = 1;
-            // 
+            //
             // panelDeviceQuickboard
-            // 
+            //
             this.panelDeviceQuickboard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelDeviceQuickboard.Controls.Add(this.btnConnect);
             this.panelDeviceQuickboard.Controls.Add(this.mbutton_lock);
@@ -183,9 +183,9 @@
             this.panelDeviceQuickboard.Name = "panelDeviceQuickboard";
             this.panelDeviceQuickboard.Size = new System.Drawing.Size(86, 591);
             this.panelDeviceQuickboard.TabIndex = 27;
-            // 
+            //
             // btnConnect
-            // 
+            //
             this.btnConnect.Location = new System.Drawing.Point(5, 391);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 71);
@@ -193,11 +193,11 @@
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
+            //
             // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageDesign);
             this.tabControl1.Controls.Add(this.tabPageConfiguration);
@@ -208,9 +208,9 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(914, 539);
             this.tabControl1.TabIndex = 28;
-            // 
+            //
             // tabPageDesign
-            // 
+            //
             this.tabPageDesign.Controls.Add(this.controlFluidicsControlDesigner);
             this.tabPageDesign.Location = new System.Drawing.Point(4, 29);
             this.tabPageDesign.Name = "tabPageDesign";
@@ -219,9 +219,9 @@
             this.tabPageDesign.TabIndex = 0;
             this.tabPageDesign.Text = "Design";
             this.tabPageDesign.UseVisualStyleBackColor = true;
-            // 
+            //
             // controlFluidicsControlDesigner
-            // 
+            //
             this.controlFluidicsControlDesigner.DevicesLocked = false;
             this.controlFluidicsControlDesigner.Dock = System.Windows.Forms.DockStyle.Fill;
             this.controlFluidicsControlDesigner.Location = new System.Drawing.Point(3, 3);
@@ -229,9 +229,9 @@
             this.controlFluidicsControlDesigner.Name = "controlFluidicsControlDesigner";
             this.controlFluidicsControlDesigner.Size = new System.Drawing.Size(900, 500);
             this.controlFluidicsControlDesigner.TabIndex = 0;
-            // 
+            //
             // tabPageConfiguration
-            // 
+            //
             this.tabPageConfiguration.Controls.Add(this.advancedDeviceControlPanel2);
             this.tabPageConfiguration.Location = new System.Drawing.Point(4, 29);
             this.tabPageConfiguration.Name = "tabPageConfiguration";
@@ -240,9 +240,9 @@
             this.tabPageConfiguration.TabIndex = 1;
             this.tabPageConfiguration.Text = "Configuration";
             this.tabPageConfiguration.UseVisualStyleBackColor = true;
-            // 
+            //
             // advancedDeviceControlPanel2
-            // 
+            //
             this.advancedDeviceControlPanel2.AutoScroll = true;
             this.advancedDeviceControlPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.advancedDeviceControlPanel2.Location = new System.Drawing.Point(3, 3);
@@ -250,9 +250,9 @@
             this.advancedDeviceControlPanel2.Name = "advancedDeviceControlPanel2";
             this.advancedDeviceControlPanel2.Size = new System.Drawing.Size(900, 500);
             this.advancedDeviceControlPanel2.TabIndex = 0;
-            // 
+            //
             // tabPageModelStatus
-            // 
+            //
             this.tabPageModelStatus.Location = new System.Drawing.Point(4, 29);
             this.tabPageModelStatus.Name = "tabPageModelStatus";
             this.tabPageModelStatus.Padding = new System.Windows.Forms.Padding(3);
@@ -260,9 +260,9 @@
             this.tabPageModelStatus.TabIndex = 2;
             this.tabPageModelStatus.Text = "Model Status";
             this.tabPageModelStatus.UseVisualStyleBackColor = true;
-            // 
+            //
             // tabPageModel
-            // 
+            //
             this.tabPageModel.Location = new System.Drawing.Point(4, 29);
             this.tabPageModel.Name = "tabPageModel";
             this.tabPageModel.Padding = new System.Windows.Forms.Padding(3);
@@ -270,9 +270,9 @@
             this.tabPageModel.TabIndex = 2;
             this.tabPageModel.Text = "Model Status";
             this.tabPageModel.UseVisualStyleBackColor = true;
-            // 
+            //
             // FluidicsDesign
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

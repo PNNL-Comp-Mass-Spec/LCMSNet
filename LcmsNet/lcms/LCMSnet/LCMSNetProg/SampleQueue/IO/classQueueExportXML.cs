@@ -1,15 +1,16 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/11/2009
 //
 // Last modified 03/11/2009
-//						- 04/08/2009 (DAC) - Added output to logging function when export complete
-//						- 04/09/2009 (DAC) - Added output to log file on exception
-//						- 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
+//                      - 04/08/2009 (DAC) - Added output to logging function when export complete
+//                      - 04/09/2009 (DAC) - Added output to log file on exception
+//                      - 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
 //
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,174 +21,178 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {
-	class classQueueExportXML : ISampleQueueWriter
-	{
-		//*********************************************************************************************************
-		// Class for generating XML export files
-		//**********************************************************************************************************
+    class classQueueExportXML : ISampleQueueWriter
+    {
+        //*********************************************************************************************************
+        // Class for generating XML export files
+        //**********************************************************************************************************
 
-		#region "Class variables"
-			XmlDocument mobj_ExportDoc;
-		#endregion
+        #region "Class variables"
 
-		#region "Methods"
-			public classQueueExportXML()
-			{				
-			}
+        XmlDocument mobj_ExportDoc;
 
-			/// <summary>
-			/// Exports a queue as an XML file for use by LCMS-old
-			/// </summary>
-			/// <param name="InpSamples">List<classSampleData> to be exported</param>
-			/// <param name="ExportFileNamePath">Full name and path of file to export</param>
-			public void WriteSamples(string ExportFileNamePath, List<classSampleData> InpSamples)
-			{
-				// Verify there are samples to export
-				if (InpSamples.Count() < 1)
-				{
-					// No data to export found in list
-					throw new classDataExportException("No data to export", new Exception());
-				}
+        #endregion
 
-				// Create and initialize the document object
-				mobj_ExportDoc = new XmlDocument();
-				XmlDeclaration docDeclaration = mobj_ExportDoc.CreateXmlDeclaration("1.0", null, null);
-				mobj_ExportDoc.AppendChild(docDeclaration);
+        #region "Methods"
 
-				// Add MetaData (root) element
-				XmlElement rootElement = mobj_ExportDoc.CreateElement("MetaData");
-				mobj_ExportDoc.AppendChild(rootElement);
+        public classQueueExportXML()
+        {
+        }
 
-				// Add QueueSettings node
-				XmlElement queueSettingsElement = AddElementNoAttributes("QueueSettings", rootElement);
+        /// <summary>
+        /// Exports a queue as an XML file for use by LCMS-old
+        /// </summary>
+        /// <param name="InpSamples">List<classSampleData> to be exported</param>
+        /// <param name="ExportFileNamePath">Full name and path of file to export</param>
+        public void WriteSamples(string ExportFileNamePath, List<classSampleData> InpSamples)
+        {
+            // Verify there are samples to export
+            if (InpSamples.Count() < 1)
+            {
+                // No data to export found in list
+                throw new classDataExportException("No data to export", new Exception());
+            }
 
-				// Add ItemCount node
-				XmlElement itemCount = AddElementWithTypeAttribute("ItemCount", queueSettingsElement, "Integer",
-																						InpSamples.Count().ToString());
+            // Create and initialize the document object
+            mobj_ExportDoc = new XmlDocument();
+            XmlDeclaration docDeclaration = mobj_ExportDoc.CreateXmlDeclaration("1.0", null, null);
+            mobj_ExportDoc.AppendChild(docDeclaration);
 
-				// Loop through the queue and add nodes for each queued sample
-				int itemCntr = 1;
-				foreach (classSampleData currentSample in InpSamples)
-				{
-					string itemNum = "Item" + itemCntr.ToString("0000");
-					XmlElement currentElement = AddElementNoAttributes(itemNum, queueSettingsElement);
-					AddOneSample(currentSample, currentElement);
-					itemCntr++;
-				}
+            // Add MetaData (root) element
+            XmlElement rootElement = mobj_ExportDoc.CreateElement("MetaData");
+            mobj_ExportDoc.AppendChild(rootElement);
 
-				// Add Auto Refill checkbox node. Return value not needed because node has no children
-				AddElementWithTypeAttribute("chkAutoRefill", queueSettingsElement, "Integer", "1");
+            // Add QueueSettings node
+            XmlElement queueSettingsElement = AddElementNoAttributes("QueueSettings", rootElement);
 
-				// Add Auto Increment node. Return value not needed because node has no children
-				AddElementWithTypeAttribute("mnuAutoIncrement", queueSettingsElement, "Boolean", "True");
+            // Add ItemCount node
+            XmlElement itemCount = AddElementWithTypeAttribute("ItemCount", queueSettingsElement, "Integer",
+                InpSamples.Count().ToString());
 
-				// Add Well Plate Graphic node. Return value not needed because node has no children
-				AddElementWithTypeAttribute("mnuWellPlateGraphic", queueSettingsElement, "Boolean", "False");
+            // Loop through the queue and add nodes for each queued sample
+            int itemCntr = 1;
+            foreach (classSampleData currentSample in InpSamples)
+            {
+                string itemNum = "Item" + itemCntr.ToString("0000");
+                XmlElement currentElement = AddElementNoAttributes(itemNum, queueSettingsElement);
+                AddOneSample(currentSample, currentElement);
+                itemCntr++;
+            }
 
-				// Write the XML object to the output file and exit
-				SaveQueue(mobj_ExportDoc, ExportFileNamePath);
+            // Add Auto Refill checkbox node. Return value not needed because node has no children
+            AddElementWithTypeAttribute("chkAutoRefill", queueSettingsElement, "Integer", "1");
 
-				// Notify user
-				LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Export complete");
-			}	
+            // Add Auto Increment node. Return value not needed because node has no children
+            AddElementWithTypeAttribute("mnuAutoIncrement", queueSettingsElement, "Boolean", "True");
 
-			/// <summary>
-			/// Converts a single classSampleData object to XML
-			/// </summary>
-			/// <param name="InpSample">classSampleData object to convert</param>
-			/// <param name="ParentElement">XML element that will be the parent of this element</param>
-			void AddOneSample(classSampleData InpSample, XmlElement ParentElement)
-			{
-				// Description element
-				XmlElement descElement = AddElementWithTypeAttribute("Description", ParentElement, "String",
-																						InpSample.DmsData.DatasetName);
+            // Add Well Plate Graphic node. Return value not needed because node has no children
+            AddElementWithTypeAttribute("mnuWellPlateGraphic", queueSettingsElement, "Boolean", "False");
 
-				// Selection element (PAL data)
-				XmlElement selectionElement = AddElementNoAttributes("Selection", ParentElement);
-				// No return type needed, since these elements don't have any children
-				AddElementWithTypeAttribute("Method", selectionElement, "String", InpSample.PAL.Method);
-				AddElementWithTypeAttribute("Tray", selectionElement, "String", InpSample.PAL.PALTray);
-				AddElementWithTypeAttribute("Vial", selectionElement, "Integer", InpSample.PAL.Well.ToString());
-				AddElementWithTypeAttribute("Volume", selectionElement, "Integer", InpSample.Volume.ToString());
+            // Write the XML object to the output file and exit
+            SaveQueue(mobj_ExportDoc, ExportFileNamePath);
 
-				// Separation element. These will be blank or zero for now
-				XmlElement separationElement = AddElementNoAttributes("Separation", ParentElement);
-				// No return type needed, since these elements don't have any children
-                string name = "";
-                if (InpSample.LCMethod != null)
-                {
-                    name = InpSample.LCMethod.Name;
-                }
-				AddElementWithTypeAttribute("Method", separationElement, "String", name);
+            // Notify user
+            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Export complete");
+        }
 
-				// Acquisition element. These will be blank or zero for now
-				XmlElement acquisitionElement = AddElementNoAttributes("Acquisition", ParentElement);
-				// No return type needed, since these elements don't have any children
-				AddElementWithTypeAttribute("Method", acquisitionElement, "String", InpSample.InstrumentData.MethodName);
+        /// <summary>
+        /// Converts a single classSampleData object to XML
+        /// </summary>
+        /// <param name="InpSample">classSampleData object to convert</param>
+        /// <param name="ParentElement">XML element that will be the parent of this element</param>
+        void AddOneSample(classSampleData InpSample, XmlElement ParentElement)
+        {
+            // Description element
+            XmlElement descElement = AddElementWithTypeAttribute("Description", ParentElement, "String",
+                InpSample.DmsData.DatasetName);
 
-				// DMS element
-				XmlElement dmsElement = AddElementNoAttributes("DMS", ParentElement);
-				// No return type needed, since these elements don't have any children
-				AddElementWithTypeAttribute("RequestNumber", dmsElement, "String", InpSample.DmsData.RequestID.ToString());
-				AddElementWithTypeAttribute("Comment", dmsElement, "String", InpSample.DmsData.Comment);
-				AddElementWithTypeAttribute("DatasetType", dmsElement, "String", InpSample.DmsData.DatasetType);
-				AddElementWithTypeAttribute("Experiment", dmsElement, "String", InpSample.DmsData.Experiment);
-				AddElementWithTypeAttribute("EMSLProposalID", dmsElement, "String", InpSample.DmsData.ProposalID);
-				AddElementWithTypeAttribute("EMSLUsageType", dmsElement, "String", InpSample.DmsData.UsageType);
-				AddElementWithTypeAttribute("EMSLUser", dmsElement, "String", InpSample.DmsData.UserList);
-			}	
+            // Selection element (PAL data)
+            XmlElement selectionElement = AddElementNoAttributes("Selection", ParentElement);
+            // No return type needed, since these elements don't have any children
+            AddElementWithTypeAttribute("Method", selectionElement, "String", InpSample.PAL.Method);
+            AddElementWithTypeAttribute("Tray", selectionElement, "String", InpSample.PAL.PALTray);
+            AddElementWithTypeAttribute("Vial", selectionElement, "Integer", InpSample.PAL.Well.ToString());
+            AddElementWithTypeAttribute("Volume", selectionElement, "Integer", InpSample.Volume.ToString());
 
-			/// <summary>
-			/// Saves the XML document to the specified file
-			/// </summary>
-			/// <param name="InpDoc">XML document to save</param>
-			/// <param name="FileNamePath">Full name and path where document will be saved</param>
-			void SaveQueue(XmlDocument InpDoc, string FileNamePath)
-			{
-				try
-				{
-					FileStream outputFile = new FileStream(FileNamePath, FileMode.Create, FileAccess.Write);
-					InpDoc.Save(outputFile);
-					outputFile.Close();
-				}
-				catch (Exception Ex)
-				{
-					string ErrMsg = "Exception saving file " + FileNamePath + ": " + Ex.Message;
-					classApplicationLogger.LogError(0, ErrMsg, Ex);
-					throw new classDataExportException(ErrMsg, Ex);
-				}
-			}	
+            // Separation element. These will be blank or zero for now
+            XmlElement separationElement = AddElementNoAttributes("Separation", ParentElement);
+            // No return type needed, since these elements don't have any children
+            string name = "";
+            if (InpSample.LCMethod != null)
+            {
+                name = InpSample.LCMethod.Name;
+            }
+            AddElementWithTypeAttribute("Method", separationElement, "String", name);
 
-			/// <summary>
-			/// Adds an XML element with no attributes to an XML document
-			/// </summary>
-			/// <param name="ElementName">Name of the element to add</param>
-			/// <param name="Parent">XML element that will be the parent of this element</param>
-			/// <returns>XMLElement that was added to document</returns>
-			XmlElement AddElementNoAttributes(string ElementName, XmlElement Parent)
-			{
-				XmlElement newElement = mobj_ExportDoc.CreateElement(ElementName);
-				Parent.AppendChild(newElement);
-				return newElement;
-			}	
+            // Acquisition element. These will be blank or zero for now
+            XmlElement acquisitionElement = AddElementNoAttributes("Acquisition", ParentElement);
+            // No return type needed, since these elements don't have any children
+            AddElementWithTypeAttribute("Method", acquisitionElement, "String", InpSample.InstrumentData.MethodName);
 
-			/// <summary>
-			/// Adds an XML element with an element type and value to an XML document
-			/// </summary>
-			/// <param name="ElementName">Name of element to add</param>
-			/// <param name="Parent">XML element that will be the parent of this element</param>
-			/// <param name="TypeName">Data type of element</param>
-			/// <param name="ElemValue">String representing value of element</param>
-			/// <returns>XML element that was added to document</returns>
-			XmlElement AddElementWithTypeAttribute(string ElementName, XmlElement Parent, string TypeName, string ElemValue)
-			{
-				XmlElement newElement = AddElementNoAttributes(ElementName, Parent);
-				XmlAttribute newAttribute = mobj_ExportDoc.CreateAttribute("type");
-				newAttribute.Value = TypeName;
-				newElement.Attributes.Append(newAttribute);
-				newElement.InnerText = ElemValue;
-				return newElement;
-			}	
-		#endregion
-	}	
-}	// End namespace
+            // DMS element
+            XmlElement dmsElement = AddElementNoAttributes("DMS", ParentElement);
+            // No return type needed, since these elements don't have any children
+            AddElementWithTypeAttribute("RequestNumber", dmsElement, "String", InpSample.DmsData.RequestID.ToString());
+            AddElementWithTypeAttribute("Comment", dmsElement, "String", InpSample.DmsData.Comment);
+            AddElementWithTypeAttribute("DatasetType", dmsElement, "String", InpSample.DmsData.DatasetType);
+            AddElementWithTypeAttribute("Experiment", dmsElement, "String", InpSample.DmsData.Experiment);
+            AddElementWithTypeAttribute("EMSLProposalID", dmsElement, "String", InpSample.DmsData.ProposalID);
+            AddElementWithTypeAttribute("EMSLUsageType", dmsElement, "String", InpSample.DmsData.UsageType);
+            AddElementWithTypeAttribute("EMSLUser", dmsElement, "String", InpSample.DmsData.UserList);
+        }
+
+        /// <summary>
+        /// Saves the XML document to the specified file
+        /// </summary>
+        /// <param name="InpDoc">XML document to save</param>
+        /// <param name="FileNamePath">Full name and path where document will be saved</param>
+        void SaveQueue(XmlDocument InpDoc, string FileNamePath)
+        {
+            try
+            {
+                FileStream outputFile = new FileStream(FileNamePath, FileMode.Create, FileAccess.Write);
+                InpDoc.Save(outputFile);
+                outputFile.Close();
+            }
+            catch (Exception Ex)
+            {
+                string ErrMsg = "Exception saving file " + FileNamePath + ": " + Ex.Message;
+                classApplicationLogger.LogError(0, ErrMsg, Ex);
+                throw new classDataExportException(ErrMsg, Ex);
+            }
+        }
+
+        /// <summary>
+        /// Adds an XML element with no attributes to an XML document
+        /// </summary>
+        /// <param name="ElementName">Name of the element to add</param>
+        /// <param name="Parent">XML element that will be the parent of this element</param>
+        /// <returns>XMLElement that was added to document</returns>
+        XmlElement AddElementNoAttributes(string ElementName, XmlElement Parent)
+        {
+            XmlElement newElement = mobj_ExportDoc.CreateElement(ElementName);
+            Parent.AppendChild(newElement);
+            return newElement;
+        }
+
+        /// <summary>
+        /// Adds an XML element with an element type and value to an XML document
+        /// </summary>
+        /// <param name="ElementName">Name of element to add</param>
+        /// <param name="Parent">XML element that will be the parent of this element</param>
+        /// <param name="TypeName">Data type of element</param>
+        /// <param name="ElemValue">String representing value of element</param>
+        /// <returns>XML element that was added to document</returns>
+        XmlElement AddElementWithTypeAttribute(string ElementName, XmlElement Parent, string TypeName, string ElemValue)
+        {
+            XmlElement newElement = AddElementNoAttributes(ElementName, Parent);
+            XmlAttribute newAttribute = mobj_ExportDoc.CreateAttribute("type");
+            newAttribute.Value = TypeName;
+            newElement.Attributes.Append(newAttribute);
+            newElement.InnerText = ElemValue;
+            return newElement;
+        }
+
+        #endregion
+    }
+} // End namespace

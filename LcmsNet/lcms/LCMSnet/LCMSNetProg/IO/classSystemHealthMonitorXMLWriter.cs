@@ -40,7 +40,7 @@
 //        #endregion
 
 //        /// <summary>
-//        /// writes a full 
+//        /// writes a full
 //        /// </summary>
 //        /// <param name="document"></param>
 //        /// <param name="root"></param>
@@ -49,11 +49,11 @@
 //            XmlElement propertiesElement = document.CreateElement("assembly");
 //            propertiesElement.SetAttribute("name", classLCMSSettings.GetParameter("cartName"));
 //            propertiesElement.SetAttribute("class", "LC-Cart");
-            
+
 //            XmlElement statusProperties = document.CreateElement("property");
 //            statusProperties.SetAttribute("lastUpdate", DateTime.UtcNow.Subtract(new TimeSpan(8, 0 , 0)).ToString("MM-dd-yyyy hh:mm:ss"));
-//            propertiesElement.AppendChild(statusProperties);   
-         
+//            propertiesElement.AppendChild(statusProperties);
+
 //            root.AppendChild(propertiesElement);
 //        }
 //        /// <summary>
@@ -64,7 +64,7 @@
 //        /// <param name="device"></param>
 //        private void WriteDeviceProperties(XmlDocument document, XmlElement root, IDevice device)
 //        {
-            
+
 //            classMonitoringComponent deviceAsComponent = device.GetData();
 
 //            if (deviceAsComponent == null)
@@ -80,7 +80,7 @@
 //            message.InnerText               = deviceAsComponent.Message;
 //            XmlElement error                = document.CreateElement("hasError");
 //            error.InnerText                 = "";
-//            XmlElement diagnostics          = document.CreateElement("diagnosticData");            
+//            XmlElement diagnostics          = document.CreateElement("diagnosticData");
 //            XmlElement measurements         = document.CreateElement("measurements");
 //            XmlElement plots                = document.CreateElement("plots");
 
@@ -123,7 +123,7 @@
 //            root.AppendChild(component);
 //        }
 //        /// <summary>
-//        /// Writes the devices health status to the file path provided. 
+//        /// Writes the devices health status to the file path provided.
 //        /// </summary>
 //        /// <param name="devices"></param>
 //        /// <param name="path"></param>
@@ -152,9 +152,10 @@
 //                    }
 //                    root.AppendChild(propertiesElement);
 //                    document.AppendChild(root);
-//                    document.Save(writer);                    
+//                    document.Save(writer);
 //                }
 //            }
 //        }
 //    }
 //}
+

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
 using LcmsNetDataClasses;
 
 namespace LcmsNet.SampleQueue.Forms
@@ -23,13 +22,14 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void DisplaySample(classSampleData sample)
         {
-            ListViewItem item   = new ListViewItem();
-            item.Text           = sample.DmsData.Batch.ToString();
+            ListViewItem item = new ListViewItem();
+            item.Text = sample.DmsData.Batch.ToString();
 
-            ListViewItem.ListViewSubItem block   = new ListViewItem.ListViewSubItem(item, sample.DmsData.Block.ToString());
+            ListViewItem.ListViewSubItem block = new ListViewItem.ListViewSubItem(item, sample.DmsData.Block.ToString());
             ListViewItem.ListViewSubItem dataset = new ListViewItem.ListViewSubItem(item, sample.DmsData.DatasetName);
-            ListViewItem.ListViewSubItem column  = new ListViewItem.ListViewSubItem(item, (sample.ColumnData.ID + 1).ToString());
-            ListViewItem.ListViewSubItem method  = new ListViewItem.ListViewSubItem(item, sample.LCMethod.Name);
+            ListViewItem.ListViewSubItem column = new ListViewItem.ListViewSubItem(item,
+                (sample.ColumnData.ID + 1).ToString());
+            ListViewItem.ListViewSubItem method = new ListViewItem.ListViewSubItem(item, sample.LCMethod.Name);
 
             item.SubItems.Add(block);
             item.SubItems.Add(column);

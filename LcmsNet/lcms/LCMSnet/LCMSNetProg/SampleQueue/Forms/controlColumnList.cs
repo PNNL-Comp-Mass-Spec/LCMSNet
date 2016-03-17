@@ -50,10 +50,10 @@ namespace LcmsNetSampleQueue.Forms
             }
             set
             {
-                mobj_sampleQueue = value;                
+                mobj_sampleQueue = value;
             }
         }
-        #endregion      
+        #endregion
 
         /// <summary>
         /// Adds a sample to the listview.
@@ -70,16 +70,16 @@ namespace LcmsNetSampleQueue.Forms
             }
             else
             {
-                /// 
+                ///
                 /// Serialize the sample into a list view item
-                /// 
+                ///
                 ListViewItem item = new ListViewItem();
                 //item.Text = sample.Name;
-					 item.SubItems.Add(sample.DmsData.RequestName);	// Name column
-					 item.SubItems.Add("");	// PAL Method column
-					 item.SubItems.Add("");	// Experiment column
-					 item.SubItems.Add(sample.DmsData.RequestID.ToString());	// Request ID column
-					
+                     item.SubItems.Add(sample.DmsData.RequestName); // Name column
+                     item.SubItems.Add(""); // PAL Method column
+                     item.SubItems.Add(""); // Experiment column
+                     item.SubItems.Add(sample.DmsData.RequestID.ToString());    // Request ID column
+
                 mlistview_samples.Items.Add(item);
             }
 
@@ -100,13 +100,13 @@ namespace LcmsNetSampleQueue.Forms
             {
                 DialogResult result = mform_dmsView.ShowDialog();
 
-                /// 
-                /// If the user clicks ok , then add the samples from the 
-                /// form into the sample queue.  Don't add them directly to the 
+                ///
+                /// If the user clicks ok , then add the samples from the
+                /// form into the sample queue.  Don't add them directly to the
                 /// form so that the event model will update both this view
                 /// and any other views that we may have.  For the sequence
-                /// we dont care how we add them to the form.                  
-                /// 
+                /// we dont care how we add them to the form.
+                ///
                 if (result == DialogResult.OK)
                 {
                     List<classSampleData> samples = mform_dmsView.GetNewSamplesDMSView();
@@ -120,7 +120,7 @@ namespace LcmsNetSampleQueue.Forms
                     mform_dmsView.ClearForm();
                 }
             }
-        }        
+        }
 
 
     }

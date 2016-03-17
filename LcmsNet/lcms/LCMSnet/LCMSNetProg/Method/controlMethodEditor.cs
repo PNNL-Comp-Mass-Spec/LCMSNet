@@ -8,7 +8,7 @@ namespace LcmsNetMethodSimulator.Method
 {
     public partial class controlMethodEditor : UserControl
     {
-        
+
         public controlMethodEditor()
         {
             InitializeComponent();
@@ -19,8 +19,8 @@ namespace LcmsNetMethodSimulator.Method
         /// </summary>
         /// <param name="device"></param>
         public void ReflectDevice(IDevice device)
-        {            
-         
+        {
+
         }
     }
 }

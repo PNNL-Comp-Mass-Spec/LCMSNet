@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses;
 
 namespace LcmsNet.Devices
 {
-    class classINIDeviceConfigurationWriter: IDeviceConfigurationWriter
+    class classINIDeviceConfigurationWriter : IDeviceConfigurationWriter
     {
         /// <summary>
         /// Tag used above every device.
@@ -15,6 +14,7 @@ namespace LcmsNet.Devices
         private const string CONST_DEVICE_HEADER_TAG = "[Device]";
 
         private const string CONST_CONNECTION_HEADER_TAG = "[Connections]";
+
         /// <summary>
         /// Delimeter of file.
         /// </summary>
@@ -35,13 +35,13 @@ namespace LcmsNet.Devices
                 for (int i = 0; i < configuration.DeviceCount; i++)
                 {
                     writer.WriteLine(CONST_DEVICE_HEADER_TAG);
-                    string  deviceName                  = configuration[i];                    
-                    Dictionary<string, object> settings = configuration.GetDeviceSettings(deviceName);                    
+                    string deviceName = configuration[i];
+                    Dictionary<string, object> settings = configuration.GetDeviceSettings(deviceName);
                     foreach (string setting in settings.Keys)
                     {
-                        object value = settings[setting];                        
+                        object value = settings[setting];
                         writer.WriteLine("{0}{1}{2}", setting, CONST_DELIMETER, value);
-                     }
+                    }
                 }
                 writer.WriteLine(CONST_CONNECTION_HEADER_TAG);
                 Dictionary<string, string> connections = configuration.GetConnections();

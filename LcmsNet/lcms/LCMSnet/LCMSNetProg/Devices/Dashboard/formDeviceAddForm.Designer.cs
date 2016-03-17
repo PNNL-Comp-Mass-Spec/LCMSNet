@@ -36,9 +36,9 @@
             this.mtree_availableDevices = new System.Windows.Forms.TreeView();
             this.mcheckBox_initializeOnAdd = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
-            // 
+            //
             // mbutton_ok
-            // 
+            //
             this.mbutton_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_ok.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mbutton_ok.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -49,9 +49,9 @@
             this.mbutton_ok.Text = "OK";
             this.mbutton_ok.UseVisualStyleBackColor = true;
             this.mbutton_ok.Click += new System.EventHandler(this.mbutton_ok_Click);
-            // 
+            //
             // mbutton_cancel
-            // 
+            //
             this.mbutton_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.mbutton_cancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -62,9 +62,9 @@
             this.mbutton_cancel.Text = "Cancel";
             this.mbutton_cancel.UseVisualStyleBackColor = true;
             this.mbutton_cancel.Click += new System.EventHandler(this.mbutton_cancel_Click);
-            // 
+            //
             // mlistbox_devices
-            // 
+            //
             this.mlistbox_devices.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mlistbox_devices.FormattingEnabled = true;
             this.mlistbox_devices.ItemHeight = 20;
@@ -74,9 +74,9 @@
             this.mlistbox_devices.Size = new System.Drawing.Size(260, 424);
             this.mlistbox_devices.Sorted = true;
             this.mlistbox_devices.TabIndex = 4;
-            // 
+            //
             // mbutton_add
-            // 
+            //
             this.mbutton_add.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_add.Location = new System.Drawing.Point(275, 114);
             this.mbutton_add.Name = "mbutton_add";
@@ -85,9 +85,9 @@
             this.mbutton_add.Text = ">>";
             this.mbutton_add.UseVisualStyleBackColor = true;
             this.mbutton_add.Click += new System.EventHandler(this.mbutton_add_Click);
-            // 
+            //
             // mbutton_remove
-            // 
+            //
             this.mbutton_remove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.mbutton_remove.Location = new System.Drawing.Point(275, 153);
             this.mbutton_remove.Name = "mbutton_remove";
@@ -96,17 +96,17 @@
             this.mbutton_remove.Text = "<<";
             this.mbutton_remove.UseVisualStyleBackColor = true;
             this.mbutton_remove.Click += new System.EventHandler(this.mbutton_remove_Click);
-            // 
+            //
             // mtree_availableDevices
-            // 
+            //
             this.mtree_availableDevices.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mtree_availableDevices.Location = new System.Drawing.Point(12, 10);
             this.mtree_availableDevices.Name = "mtree_availableDevices";
             this.mtree_availableDevices.Size = new System.Drawing.Size(257, 454);
             this.mtree_availableDevices.TabIndex = 8;
-            // 
+            //
             // mcheckBox_initializeOnAdd
-            // 
+            //
             this.mcheckBox_initializeOnAdd.AutoSize = true;
             this.mcheckBox_initializeOnAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcheckBox_initializeOnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -116,9 +116,9 @@
             this.mcheckBox_initializeOnAdd.TabIndex = 9;
             this.mcheckBox_initializeOnAdd.Text = "Initialize On Add";
             this.mcheckBox_initializeOnAdd.UseVisualStyleBackColor = true;
-            // 
+            //
             // formDeviceAddForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

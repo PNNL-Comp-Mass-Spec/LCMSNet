@@ -8,15 +8,17 @@ namespace LcmsNet.Devices
 {
     public partial class AdvancedDeviceControlPanel : UserControl
     {
+        private Dictionary<AdvancedDeviceGroupControl, TabPage> m_controlToPageMap;
+
         /// <summary>
         /// Maps a device to which advanced control panel it belongs to.
         /// </summary>
         private Dictionary<IDevice, AdvancedDeviceGroupControl> m_deviceToControlMap;
+
         /// <summary>
         /// Maps a device group name to the advanced control panel.
         /// </summary>
         private Dictionary<string, AdvancedDeviceGroupControl> m_nameToControlMap;
-        private Dictionary<AdvancedDeviceGroupControl, TabPage> m_controlToPageMap;
 
 
         public AdvancedDeviceControlPanel()
@@ -27,12 +29,13 @@ namespace LcmsNet.Devices
             m_nameToControlMap = new Dictionary<string, AdvancedDeviceGroupControl>();
             m_deviceToControlMap = new Dictionary<IDevice, AdvancedDeviceGroupControl>();
 
-            classDeviceManager.Manager.DeviceAdded += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
-            classDeviceManager.Manager.DeviceRemoved += new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
-
+            classDeviceManager.Manager.DeviceAdded +=
+                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+            classDeviceManager.Manager.DeviceRemoved +=
+                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
         }
 
-        
+
         void AdvancedDeviceControl_FormClosing(object sender, FormClosingEventArgs e)
         {
             //if (e.CloseReason == CloseReason.UserClosing)
@@ -67,10 +70,11 @@ namespace LcmsNet.Devices
                     {
                         m_nameToControlMap.Remove(control.Name);
                     }
-                    m_controlToPageMap.Remove(control);                    
+                    m_controlToPageMap.Remove(control);
                 }
             }
         }
+
         /// <summary>
         /// Handles a new device being added to the system.
         /// </summary>
@@ -78,25 +82,24 @@ namespace LcmsNet.Devices
         /// <param name="device"></param>
         void Manager_DeviceAdded(object sender, IDevice device)
         {
-            
             Type type = device.GetType();
 
-            object[] attributes = type.GetCustomAttributes(typeof(classDeviceControlAttribute), false);
+            object[] attributes = type.GetCustomAttributes(typeof (classDeviceControlAttribute), false);
             foreach (object o in attributes)
             {
                 classDeviceControlAttribute monitorAttribute = o as classDeviceControlAttribute;
                 if (monitorAttribute != null)
-                {                    
-                    IDeviceControl control  = null;
+                {
+                    IDeviceControl control = null;
                     if (monitorAttribute.ControlType != null)
                     {
                         control = Activator.CreateInstance(monitorAttribute.ControlType) as IDeviceControl;
                     }
-                    
-                    AddDeviceControl(monitorAttribute.Category, device, control);                    
+
+                    AddDeviceControl(monitorAttribute.Category, device, control);
                     break;
                 }
-            }	
+            }
         }
 
         /// <summary>
@@ -111,22 +114,22 @@ namespace LcmsNet.Devices
             AdvancedDeviceGroupControl control = null;
             if (!m_nameToControlMap.ContainsKey(groupName))
             {
-                control         = new AdvancedDeviceGroupControl();
-                control.Name    = groupName;
-                control.Dock    = DockStyle.Fill;
+                control = new AdvancedDeviceGroupControl();
+                control.Name = groupName;
+                control.Dock = DockStyle.Fill;
                 m_nameToControlMap.Add(groupName, control);
-                
+
                 // Create the tab page
-                TabPage page    = new TabPage();
-                page.Text       = groupName;
-                page.BackColor  = Color.White;
+                TabPage page = new TabPage();
+                page.Text = groupName;
+                page.BackColor = Color.White;
                 page.AutoScroll = true;
                 page.Controls.Add(control);
                 control.AutoScroll = true;
                 m_controlToPageMap.Add(control, page);
                 m_advancedTabControl.TabPages.Add(page);
             }
-            control         = m_nameToControlMap[groupName];
+            control = m_nameToControlMap[groupName];
             m_deviceToControlMap.Add(device, control);
 
             if (deviceControl == null)
@@ -136,7 +139,7 @@ namespace LcmsNet.Devices
             deviceControl.Device = device;
 
             // Adds the device control to the group control
-            control.AddDevice(device, deviceControl);   
+            control.AddDevice(device, deviceControl);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LcmsNet
             // Hide the tab headers at run-time
             if (m.Msg == TCM_ADJUSTRECT && !DesignMode)
             {
-                m.Result = (IntPtr)1;
+                m.Result = (IntPtr) 1;
                 return;
             }
 

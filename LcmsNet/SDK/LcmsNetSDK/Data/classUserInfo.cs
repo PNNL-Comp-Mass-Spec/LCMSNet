@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -12,31 +11,24 @@
 
 namespace LcmsNetDataClasses
 {
-	public class classUserInfo : classDataClassBase
-	{
-		//*********************************************************************************************************
-		// Class to hold data about LcmsNet users
-		//**********************************************************************************************************
+    public class classUserInfo : classDataClassBase
+    {
+        //*********************************************************************************************************
+        // Class to hold data about LcmsNet users
+        //**********************************************************************************************************
 
-		#region "Properties"
-			/// <summary>
-			/// Name of user
-			/// </summary>
-			public string UserName
-			{
-				get;
-				set;
-			}	// End property
+        #region "Properties"
 
-			/// <summary>
-			/// Payroll number (network login) of user
-			/// </summary>
-			public string PayrollNum
-			{
-				get;
-				set;
-			}	// End property
-		#endregion
+        /// <summary>
+        /// Name of user
+        /// </summary>
+        public string UserName { get; set; } // End property
 
-	}	
-}	  // End namespace
+        /// <summary>
+        /// Payroll number (network login) of user
+        /// </summary>
+        public string PayrollNum { get; set; } // End property
+
+        #endregion
+    }
+} // End namespace

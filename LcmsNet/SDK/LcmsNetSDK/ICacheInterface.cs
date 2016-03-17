@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy 
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -9,6 +8,7 @@
 //						 - 02/23/2009 (DAC) - Corrected bug in interface syntax
 //
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +17,18 @@ using System.Collections.Specialized;
 
 namespace LcmsNetDataClasses
 {
-	public interface ICacheInterface
-	{
-		//*********************************************************************************************************
-		// Interface for data classes that use the cache database
-		//**********************************************************************************************************
+    public interface ICacheInterface
+    {
+        //*********************************************************************************************************
+        // Interface for data classes that use the cache database
+        //**********************************************************************************************************
 
-		#region "Methods"
-		StringDictionary GetPropertyValues();
+        #region "Methods"
 
-		void LoadPropertyValues(StringDictionary PropValues);
-		#endregion
-	} // End interface
-}	// End namespace
+        StringDictionary GetPropertyValues();
+
+        void LoadPropertyValues(StringDictionary PropValues);
+
+        #endregion
+    } // End interface
+} // End namespace

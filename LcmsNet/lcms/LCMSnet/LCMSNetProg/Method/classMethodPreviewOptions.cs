@@ -14,10 +14,12 @@ namespace LcmsNet.Method
         /// Gets or sets whether to animate the method alignment.
         /// </summary>
         public bool Animate { get; set; }
+
         /// <summary>
         /// Gets or sets the animation delay.
         /// </summary>
         public int AnimateDelay { get; set; }
+
         /// <summary>
         /// Gets or sets the frame delay count.
         /// </summary>

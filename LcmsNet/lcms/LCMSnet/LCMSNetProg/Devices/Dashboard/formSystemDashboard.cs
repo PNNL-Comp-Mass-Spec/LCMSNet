@@ -11,7 +11,7 @@ namespace LcmsNet.Devices
     /// <summary>
     /// Displays the status of each device.
     /// </summary>
-	public partial class formSystemDashboard : Form
+    public partial class formSystemDashboard : Form
     {
         #region Constants
         /// <summary>
@@ -49,14 +49,14 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Amount of the devices panel to display.
         /// </summary>
-        private readonly int mint_devicesDisplayedHeight;        
+        private readonly int mint_devicesDisplayedHeight;
         #endregion
 
         #region Members
-		/// <summary>
-		/// Maps the device to its displaying control.  
-		/// </summary>
-		Dictionary<IDevice, classDeviceControlData> mdict_deviceControlMap;
+        /// <summary>
+        /// Maps the device to its displaying control.
+        /// </summary>
+        Dictionary<IDevice, classDeviceControlData> mdict_deviceControlMap;
         /// <summary>
         /// Flag indicating whether the user is draggin a control around.
         /// </summary>
@@ -92,21 +92,21 @@ namespace LcmsNet.Devices
         #endregion
 
         /// <summary>
-		/// Constructor.
-		/// </summary>
-		public formSystemDashboard()
-		{
+        /// Constructor.
+        /// </summary>
+        public formSystemDashboard()
+        {
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-			InitializeComponent();
+            InitializeComponent();
 
             this.Text += " - " + CONST_DEFAULT_CONFIG_FILEPATH;
 
-			mdict_deviceControlMap       = new Dictionary<IDevice, classDeviceControlData>();
+            mdict_deviceControlMap       = new Dictionary<IDevice, classDeviceControlData>();
             mdict_userControlToDeviceMap = new Dictionary<UserControl, IDevice>();
-            
-			classDeviceManager.Manager.DeviceAdded          += new DelegateDeviceUpdated(Manager_DeviceAdded);
-			classDeviceManager.Manager.DeviceRemoved        += new DelegateDeviceUpdated(Manager_DeviceRemoved);
+
+            classDeviceManager.Manager.DeviceAdded          += new DelegateDeviceUpdated(Manager_DeviceAdded);
+            classDeviceManager.Manager.DeviceRemoved        += new DelegateDeviceUpdated(Manager_DeviceRemoved);
             classDeviceManager.Manager.PluginsLoaded        += new EventHandler(Manager_PluginsLoaded);
             mcontrol_dashboardPanel.MouseMove               += new MouseEventHandler(formSystemDashboard_MouseMove);
             mcontrol_dashboardPanel.MouseLeave              += new EventHandler(formSystemDashboard_MouseLeave);
@@ -116,10 +116,10 @@ namespace LcmsNet.Devices
             TurnOffDrag();
             DeselectGlyph();
 
-            // This size is determined by the button height and placement for aesthics. 
+            // This size is determined by the button height and placement for aesthics.
             //          *2 is to provide padding on top and bottom of button when we display it.
             mint_displayedHeight        = mbutton_loadHardware.Height + CONST_HEIGHT_PANEL_PADDING*2;
-            //          Using the hardware button is just a way to add padding to the display height so we can see the bottom of the button 
+            //          Using the hardware button is just a way to add padding to the display height so we can see the bottom of the button
             //          when it's displayed.
             mint_devicesDisplayedHeight = mbutton_addDevice.Top + mbutton_addDevice.Height + CONST_HEIGHT_PANEL_PADDING;
 
@@ -131,7 +131,7 @@ namespace LcmsNet.Devices
             classDeviceManager.Manager.ShutdownDevices();
         }
 
-        
+
 
         #region Helper Methods
         /// <summary>
@@ -155,7 +155,7 @@ namespace LcmsNet.Devices
         {
             IDeviceGlyph glyph = null;
 
-            // First we need to retrieve the device because 
+            // First we need to retrieve the device because
             // we need it to map back to the glyph we want.
             IDevice device = GetDeviceFromDashboardControl(control);
             if (device != null)
@@ -191,7 +191,7 @@ namespace LcmsNet.Devices
         private IDeviceControl GetDeviceControlFromDashboardControl(UserControl control)
         {
             IDeviceControl deviceControl = null;
-            // First we need to retrieve the device because 
+            // First we need to retrieve the device because
             // we need it to map back to the glyph we want.
             IDevice device = GetDeviceFromDashboardControl(control);
             if (device != null)
@@ -204,7 +204,7 @@ namespace LcmsNet.Devices
                 }
             }
             return deviceControl;
-        }        
+        }
         /// <summary>
         /// Adds the device controls and places them onto the form.
         /// </summary>
@@ -235,9 +235,9 @@ namespace LcmsNet.Devices
             glyph.RegisterDevice(device);
 
             glyph.UserControl.Location     = new Point(x, y);
-            
+
             // Setup the drag panel.
-            controlDeviceStatusDisplay dragPanel = new controlDeviceStatusDisplay();            
+            controlDeviceStatusDisplay dragPanel = new controlDeviceStatusDisplay();
             dragPanel.Height                     = CONST_DEVICE_DRAG_PANEL_HEIGHT;
             dragPanel.Dock                       = DockStyle.Top;
             dragPanel.KeyUp                     += new KeyEventHandler(formSystemDashboard_KeyUp);
@@ -246,7 +246,7 @@ namespace LcmsNet.Devices
             dragPanel.ShowDetailsWindow         += new EventHandler(dragPanel_ShowDetailsWindow);
             dragPanel.MouseMove                 += new MouseEventHandler(UserControl_MouseMove);
             dragPanel.ErrorIndicatorClicked     += new EventHandler(dragPanel_ErrorIndicatorClicked);
-            dragPanel.Device                     = device; 
+            dragPanel.Device                     = device;
             device.Error                        += new EventHandler<classDeviceErrorEventArgs>(dragPanel.DeviceError);
             device.StatusUpdate                 += new EventHandler<classDeviceStatusEventArgs>(dragPanel.DeviceStatusUpdate);
 
@@ -258,14 +258,14 @@ namespace LcmsNet.Devices
             dragPanel.SendToBack();
             glyph.UserControl.MouseEnter        += new EventHandler(UserControl_MouseEnter);
             glyph.UserControl.KeyUp             += new KeyEventHandler(formSystemDashboard_KeyUp);
-                        
+
 
             // This maps the control we render on the dashboard to the device
             mdict_userControlToDeviceMap.Add(glyph.UserControl, device);
             // This maps the device to the glyph (summary data) and device control (for the advanced window)
             mdict_deviceControlMap.Add(device, new classDeviceControlData(control, glyph, attribute));
-            
-            mcontrol_dashboardPanel.Controls.Add(glyph.UserControl);            
+
+            mcontrol_dashboardPanel.Controls.Add(glyph.UserControl);
         }
 
         void dragPanel_ErrorIndicatorClicked(object sender, EventArgs e)
@@ -327,7 +327,7 @@ namespace LcmsNet.Devices
             addForm.Icon                                        = Icon;
             classDeviceManager manager                          = classDeviceManager.Manager;
             List<classDevicePluginInformation> availablePlugins = new List<classDevicePluginInformation>();
-            foreach (classDevicePluginInformation plugin in manager.AvailablePlugins) 
+            foreach (classDevicePluginInformation plugin in manager.AvailablePlugins)
             {
                 availablePlugins.Add(plugin);
             }
@@ -344,7 +344,7 @@ namespace LcmsNet.Devices
                 foreach (classDevicePluginInformation plugin in plugins)
                 {
                     if (plugin != null)
-                    {                        
+                    {
                         try
                         {
                             bool wasAdded = classDeviceManager.Manager.AddDevice(plugin, initializeOnAdd);
@@ -375,7 +375,7 @@ namespace LcmsNet.Devices
                     display.Icon = ParentForm.Icon;
                     display.ShowDialog();
                 }
-            }            
+            }
         }
         /// <summary>
         /// Sets current glyph as parameter.
@@ -416,12 +416,12 @@ namespace LcmsNet.Devices
         /// </summary>
         public void SaveConfiguration(string path)
         {
-            // classDeviceManager.Manager.SaveConfiguration(path);  
+            // classDeviceManager.Manager.SaveConfiguration(path);
             classDeviceConfiguration configuration = new classDeviceConfiguration();
             configuration.CartName      = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
-            
+
             classDeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);
-            
+
             foreach (IDevice device in mdict_deviceControlMap.Keys)
             {
                 IDeviceGlyph glyph = mdict_deviceControlMap[device].DashboardGlyph;
@@ -432,7 +432,7 @@ namespace LcmsNet.Devices
             writer.WriteConfiguration(path, configuration);
 
             classApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.",
-                                                                path, 
+                                                                path,
                                                                 CONST_DEFAULT_CONFIG_FILEPATH));
         }
         /// <summary>
@@ -456,18 +456,18 @@ namespace LcmsNet.Devices
                 openFileDialog.FilterIndex = 0;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // The device manager sends us an event when it removes the devices.  
+                    // The device manager sends us an event when it removes the devices.
                     // Since this is an event driven architecture, we dont have to worry about explicitly
                     // clearing our glyphs.
                     classDeviceManager.Manager.ShutdownDevices(true);
-                    
+
                     // Then we actually load the next data
                     LoadConfiguration(openFileDialog.FileName);
 
                     classApplicationLogger.LogMessage(0, "Device configuration loaded from " + openFileDialog.FileName);
                 }
             }
-        }        
+        }
         /// <summary>
         /// Saves the hardware configuration to a new path.
         /// </summary>
@@ -495,11 +495,11 @@ namespace LcmsNet.Devices
         /// </summary>
         /// <param name="path"></param>
         public void LoadConfiguration(string path)
-        {            
+        {
             classINIDeviceConfigurationReader reader = new classINIDeviceConfigurationReader();
             classDeviceConfiguration configuration   = reader.ReadConfiguration(path);
             classDeviceManager.Manager.LoadPersistentConfiguration(configuration);
-            
+
             foreach (IDevice device in mdict_deviceControlMap.Keys)
             {
                 try
@@ -542,7 +542,7 @@ namespace LcmsNet.Devices
         void formSystemDashboard_MouseLeave(object sender, EventArgs e)
         {
             TurnOffDrag();
-        }            
+        }
         /// <summary>
         /// Handles moving the device glyph.
         /// </summary>
@@ -574,12 +574,12 @@ namespace LcmsNet.Devices
         /// <param name="e"></param>
         void UserControl_MouseUp(object sender, MouseEventArgs e)
         {
-            if (mbool_draggingGlyph && !DevicesLocked) 
+            if (mbool_draggingGlyph && !DevicesLocked)
             {
                 MoveGlyph(mobj_movingGlyph, e.Location, mobj_dragStartPoint);
             }
             TurnOffDrag();
-        }        
+        }
         /// <summary>
         /// Signals the movement of a glyph on.
         /// </summary>
@@ -592,7 +592,7 @@ namespace LcmsNet.Devices
                 return;
             }
             Control childControl = sender as Control;
-            
+
             if (childControl == null)
                 return;
             UserControl control = childControl.Parent as UserControl;
@@ -616,8 +616,8 @@ namespace LcmsNet.Devices
                         {
                             DeselectGlyph();    // Deselect the old glyph
                             SelectGlyph(glyph); // Select the new one.
-                            Cursor              = Cursors.Hand;                            
-                            mobj_movingGlyph    = glyph;                            
+                            Cursor              = Cursors.Hand;
+                            mobj_movingGlyph    = glyph;
                         }
                     }
                 }
@@ -638,17 +638,17 @@ namespace LcmsNet.Devices
             UserControl control = sender as UserControl;
             if (control != null)
             {
-                control.BorderStyle  = BorderStyle.FixedSingle;                 
+                control.BorderStyle  = BorderStyle.FixedSingle;
             }
-        } 
-		#endregion
+        }
+        #endregion
 
         #region Rendering and Layout
         /// <summary>
         /// Disables dragging of the glyph.
         /// </summary>
         private void TurnOffDrag()
-        {            
+        {
             mbool_draggingGlyph     = false;
             mobj_movingGlyph        = null;
             Cursor                  = Cursors.Arrow;
@@ -667,10 +667,10 @@ namespace LcmsNet.Devices
                 target.X            = devicePoint.X + target.X - offset.X;
                 target.Y            = devicePoint.Y + target.Y - offset.Y;
 
-                // Enforce the boundary before drawing.  
+                // Enforce the boundary before drawing.
                 target.X = Math.Max(Math.Min(target.X, Width - CONST_GLYPH_PADDING), CONST_GLYPH_PADDING);
                 target.Y = Math.Max(Math.Min(target.Y, Height - CONST_GLYPH_PADDING), CONST_GLYPH_PADDING);
-                
+
                 Invalidate(new Rectangle(glyph.UserControl.Location.X - CONST_HIGHLIGHT_PADDING,
                                          glyph.UserControl.Location.Y - CONST_HIGHLIGHT_PADDING,
                                          glyph.UserControl.Width  + 2*CONST_HIGHLIGHT_PADDING,
@@ -680,7 +680,7 @@ namespace LcmsNet.Devices
                                          glyph.UserControl.Location.Y - CONST_HIGHLIGHT_PADDING,
                                          glyph.UserControl.Width  + 2*CONST_HIGHLIGHT_PADDING,
                                          glyph.UserControl.Height + 2*CONST_HIGHLIGHT_PADDING));
-                Update();                            
+                Update();
             }
         }
         #endregion
@@ -693,23 +693,23 @@ namespace LcmsNet.Devices
         /// <param name="e"></param>
         void Manager_PluginsLoaded(object sender, EventArgs e)
         {
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Loaded plugins.");            
+            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Loaded plugins.");
         }
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="device"></param>
-		void Manager_DeviceRemoved(object sender, IDevice device)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="device"></param>
+        void Manager_DeviceRemoved(object sender, IDevice device)
         {
             classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Removed " + device.Name);
-			if (mdict_deviceControlMap.ContainsKey(device))
-			{
-                // 1. Retrieve the dashboard user control data 
+            if (mdict_deviceControlMap.ContainsKey(device))
+            {
+                // 1. Retrieve the dashboard user control data
                 // 2. Remove the device key
                 // 3. Then remove the dashboard user control information as well.
                 classDeviceControlData deviceData = mdict_deviceControlMap[device];
-				mdict_deviceControlMap.Remove(device);
+                mdict_deviceControlMap.Remove(device);
 
                 if (deviceData == null || deviceData.DashboardGlyph == null || deviceData.DashboardGlyph.UserControl == null)
                 {
@@ -722,24 +722,24 @@ namespace LcmsNet.Devices
                     mcontrol_dashboardPanel.Controls.Remove(deviceData.DashboardGlyph.UserControl);
                     deviceData.DashboardGlyph.DeRegisterDevice();
                 }
-			}
-		}
-		/// <summary>
-		/// Updates tracking references with device monitoring objects.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="device"></param>
-		void Manager_DeviceAdded(object sender, IDevice device)
-		{
+            }
+        }
+        /// <summary>
+        /// Updates tracking references with device monitoring objects.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="device"></param>
+        void Manager_DeviceAdded(object sender, IDevice device)
+        {
             classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Added " + device.Name);
-			Type type					= device.GetType();
-    
-			object [] attributes = type.GetCustomAttributes(typeof(classDeviceControlAttribute), false);
-			foreach (object o in attributes)
-			{
+            Type type                   = device.GetType();
+
+            object [] attributes = type.GetCustomAttributes(typeof(classDeviceControlAttribute), false);
+            foreach (object o in attributes)
+            {
                 classDeviceControlAttribute monitorAttribute = o as classDeviceControlAttribute;
-				if (monitorAttribute != null)
-				{
+                if (monitorAttribute != null)
+                {
                    IDeviceGlyph     glyph   = null;
                    IDeviceControl   control = null;
                    if (monitorAttribute.ControlType != null)
@@ -750,13 +750,13 @@ namespace LcmsNet.Devices
                    {
                         glyph = Activator.CreateInstance(monitorAttribute.GlyphType) as IDeviceGlyph;
                    }
-                   
+
                    AddDeviceControls(device, control, glyph, monitorAttribute);
                    break;
-				}
-			}				            
-		}
-		#endregion      
+                }
+            }
+        }
+        #endregion
 
         #region User Control Event Handlers
         /// <summary>
@@ -796,7 +796,7 @@ namespace LcmsNet.Devices
                     }
                     break;
             }
-        }        
+        }
         /// <summary>
         /// Removes a selected device from the dashboard.
         /// </summary>
@@ -820,7 +820,7 @@ namespace LcmsNet.Devices
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "No device selected to remove.");
                 return;
             }
-            
+
             IDevice device = GetDeviceFromDashboardControl(mobj_selectedGlyph.UserControl);
             if (device != null)
             {
@@ -838,7 +838,7 @@ namespace LcmsNet.Devices
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void formSystemDashboard_MouseUp(object sender, MouseEventArgs e)
-        {                        
+        {
             DeselectGlyph();
 
             if (e.Button == MouseButtons.Right)
@@ -855,7 +855,7 @@ namespace LcmsNet.Devices
         {
             int initializedCount = classDeviceManager.Manager.InitializedDeviceCount;
 
-            bool reinitialize = false;            
+            bool reinitialize = false;
             if (initializedCount > 0)
             {
                 DialogResult result = MessageBox.Show("Some devices are initialized already.  Do you want to re-initialize those?", "Initialization", MessageBoxButtons.YesNoCancel);
@@ -879,13 +879,13 @@ namespace LcmsNet.Devices
             }
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void menuItemSaveAsDefault_Click(object sender, EventArgs e)
-        {            
-            SaveConfiguration(CONST_DEFAULT_CONFIG_FILEPATH);            
+        {
+            SaveConfiguration(CONST_DEFAULT_CONFIG_FILEPATH);
         }
         private void mbutton_unlock_Click(object sender, EventArgs e)
         {
@@ -907,7 +907,7 @@ namespace LcmsNet.Devices
         {
             SaveHardwareAs();
         }
-        #endregion        
+        #endregion
 
         #region Properties
         public bool DevicesLocked
@@ -934,7 +934,7 @@ namespace LcmsNet.Devices
 
                     foreach(classDeviceControlData data in mdict_deviceControlMap.Values)
                     {
-                        data.DashboardGlyph.UserControl.Enabled = false; 
+                        data.DashboardGlyph.UserControl.Enabled = false;
                     }
 
                 }
@@ -946,7 +946,7 @@ namespace LcmsNet.Devices
                     mbutton_addDevice.Enabled    = true;
                     mbutton_removeDevice.Enabled = true;
                     mbutton_save.Enabled         = true;
-                    mbutton_loadHardware.Enabled = true; 
+                    mbutton_loadHardware.Enabled = true;
                     mbutton_saveAs.Enabled       = true;
                     mbutton_initialize.Enabled   = true;
                     classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, "The dashboard has been un-locked.");
@@ -959,7 +959,7 @@ namespace LcmsNet.Devices
                 }
             }
         }
-        #endregion      
+        #endregion
 
         #region Window Arranging
         /// <summary>
@@ -968,7 +968,7 @@ namespace LcmsNet.Devices
         private void TileArrange()
         {
             List<UserControl> controls = new List<UserControl>();
-            controls.AddRange(mdict_userControlToDeviceMap.Keys);            
+            controls.AddRange(mdict_userControlToDeviceMap.Keys);
             TileArrange(controls);
         }
         private void TileArrange(List<UserControl> controls)
@@ -981,7 +981,7 @@ namespace LcmsNet.Devices
 
             foreach (UserControl x in controls)
             {
-                // Increase the row if needed 
+                // Increase the row if needed
                 int farWidth = left + x.Width + paddingX + mpanel_deviceQuickBoard.Width;
                 if (farWidth > Width )
                 {
@@ -993,7 +993,7 @@ namespace LcmsNet.Devices
                 maxRowHeight = Math.Max(x.Height, maxRowHeight);
                 x.Location = new Point(left, top);
 
-                // Move the next guy over a smidge including its padding 
+                // Move the next guy over a smidge including its padding
                 left += x.Width + paddingX;
             }
 
@@ -1041,7 +1041,7 @@ namespace LcmsNet.Devices
         private void SortByDeviceType()
         {
             SortByDelegate(delegate(IDevice x, IDevice y)
-            {                
+            {
                 classDeviceControlAttribute xc = mdict_deviceControlMap[x].DeviceAttribute;
                 classDeviceControlAttribute yc = mdict_deviceControlMap[y].DeviceAttribute;
 

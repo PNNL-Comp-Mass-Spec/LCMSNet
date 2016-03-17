@@ -13,7 +13,7 @@ namespace LcmsNetSDK.Data
 
         public MobilePhase(string name, string comment)
         {
-            Name    = name;
+            Name = name;
             Comment = comment;
         }
 

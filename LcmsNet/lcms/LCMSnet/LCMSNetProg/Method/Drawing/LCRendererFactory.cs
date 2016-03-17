@@ -13,11 +13,10 @@ namespace LcmsNet.Method.Drawing
             if (mode == enumLCMethodRenderMode.Column)
             {
                 renderer = new classLCMethodColumnModeRenderer();
-            
             }
             else if (mode == enumLCMethodRenderMode.Conversation)
             {
-                renderer = new classLCMethodConversationRenderer();        
+                renderer = new classLCMethodConversationRenderer();
             }
             return renderer;
         }

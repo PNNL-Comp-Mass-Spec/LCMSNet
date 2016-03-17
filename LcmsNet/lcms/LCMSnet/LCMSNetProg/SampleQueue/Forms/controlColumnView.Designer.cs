@@ -2,12 +2,12 @@
 {
     partial class controlColumnView
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -46,13 +46,13 @@
             this.mlabel_columnNameHeader = new System.Windows.Forms.Label();
             this.mpanel_control.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // m_selector
-            // 
+            //
             this.m_selector.Location = new System.Drawing.Point(150, 150);
-            // 
+            //
             // mpanel_control
-            // 
+            //
             this.mpanel_control.Controls.Add(this.mbutton_dmsEdit);
             this.mpanel_control.Controls.Add(this.mbutton_cartColumnDate);
             this.mpanel_control.Controls.Add(this.mbutton_moveColumns);
@@ -73,9 +73,9 @@
             this.mpanel_control.Padding = new System.Windows.Forms.Padding(1);
             this.mpanel_control.Size = new System.Drawing.Size(860, 104);
             this.mpanel_control.TabIndex = 20;
-            // 
+            //
             // mbutton_dmsEdit
-            // 
+            //
             this.mbutton_dmsEdit.BackColor = System.Drawing.Color.White;
             this.mbutton_dmsEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_dmsEdit.Image = global::LcmsNet.Properties.Resources.DMSEdit;
@@ -88,9 +88,9 @@
             this.mbutton_dmsEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_dmsEdit.UseVisualStyleBackColor = false;
             this.mbutton_dmsEdit.Click += new System.EventHandler(this.mbutton_dmsEdit_Click);
-            // 
+            //
             // mbutton_cartColumnDate
-            // 
+            //
             this.mbutton_cartColumnDate.BackColor = System.Drawing.Color.White;
             this.mbutton_cartColumnDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_cartColumnDate.Image = global::LcmsNet.Properties.Resources.CartColumnName;
@@ -103,9 +103,9 @@
             this.mbutton_cartColumnDate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_cartColumnDate.UseVisualStyleBackColor = false;
             this.mbutton_cartColumnDate.Click += new System.EventHandler(this.mbutton_cartColumnDate_Click);
-            // 
+            //
             // mbutton_moveColumns
-            // 
+            //
             this.mbutton_moveColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_moveColumns.BackColor = System.Drawing.Color.White;
@@ -122,9 +122,9 @@
             this.mbutton_moveColumns.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_moveColumns.UseVisualStyleBackColor = false;
             this.mbutton_moveColumns.Click += new System.EventHandler(this.mbutton_moveColumns_Click);
-            // 
+            //
             // mbutton_randomize
-            // 
+            //
             this.mbutton_randomize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_randomize.BackColor = System.Drawing.Color.White;
@@ -141,9 +141,9 @@
             this.mbutton_randomize.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_randomize.UseVisualStyleBackColor = false;
             this.mbutton_randomize.Click += new System.EventHandler(this.mbutton_randomize_Click);
-            // 
+            //
             // mbutton_trayVial
-            // 
+            //
             this.mbutton_trayVial.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_trayVial.BackColor = System.Drawing.Color.White;
@@ -160,9 +160,9 @@
             this.mbutton_trayVial.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_trayVial.UseVisualStyleBackColor = false;
             this.mbutton_trayVial.Click += new System.EventHandler(this.mbutton_trayVial_Click);
-            // 
+            //
             // mbutton_fillDown
-            // 
+            //
             this.mbutton_fillDown.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_fillDown.BackColor = System.Drawing.Color.White;
@@ -179,9 +179,9 @@
             this.mbutton_fillDown.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_fillDown.UseVisualStyleBackColor = false;
             this.mbutton_fillDown.Click += new System.EventHandler(this.mbutton_fillDown_Click);
-            // 
+            //
             // mbutton_addDMS
-            // 
+            //
             this.mbutton_addDMS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_addDMS.BackColor = System.Drawing.Color.White;
@@ -196,9 +196,9 @@
             this.mbutton_addDMS.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_addDMS.UseVisualStyleBackColor = false;
             this.mbutton_addDMS.Click += new System.EventHandler(this.mbutton_addDMS_Click);
-            // 
+            //
             // mbutton_addBlankAppend
-            // 
+            //
             this.mbutton_addBlankAppend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_addBlankAppend.BackColor = System.Drawing.Color.White;
@@ -214,9 +214,9 @@
             this.mbutton_addBlankAppend.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_addBlankAppend.UseVisualStyleBackColor = false;
             this.mbutton_addBlankAppend.Click += new System.EventHandler(this.mbutton_addBlankAppend_Click);
-            // 
+            //
             // mbutton_addBlank
-            // 
+            //
             this.mbutton_addBlank.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_addBlank.BackColor = System.Drawing.Color.White;
@@ -232,9 +232,9 @@
             this.mbutton_addBlank.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_addBlank.UseVisualStyleBackColor = false;
             this.mbutton_addBlank.Click += new System.EventHandler(this.mbutton_addBlank_Click);
-            // 
+            //
             // mbutton_removeSelected
-            // 
+            //
             this.mbutton_removeSelected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_removeSelected.BackColor = System.Drawing.Color.White;
@@ -250,9 +250,9 @@
             this.mbutton_removeSelected.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_removeSelected.UseVisualStyleBackColor = false;
             this.mbutton_removeSelected.Click += new System.EventHandler(this.mbutton_removeSelected_Click);
-            // 
+            //
             // mbutton_deleteUnused
-            // 
+            //
             this.mbutton_deleteUnused.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_deleteUnused.BackColor = System.Drawing.Color.White;
@@ -268,9 +268,9 @@
             this.mbutton_deleteUnused.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_deleteUnused.UseVisualStyleBackColor = false;
             this.mbutton_deleteUnused.Click += new System.EventHandler(this.mbutton_removeUnused_Click);
-            // 
+            //
             // mbutton_down
-            // 
+            //
             this.mbutton_down.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_down.BackColor = System.Drawing.Color.White;
@@ -283,9 +283,9 @@
             this.mbutton_down.TabIndex = 50;
             this.mbutton_down.UseVisualStyleBackColor = false;
             this.mbutton_down.Click += new System.EventHandler(this.mbutton_down_Click);
-            // 
+            //
             // mbutton_up
-            // 
+            //
             this.mbutton_up.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mbutton_up.BackColor = System.Drawing.Color.White;
@@ -298,9 +298,9 @@
             this.mbutton_up.TabIndex = 49;
             this.mbutton_up.UseVisualStyleBackColor = false;
             this.mbutton_up.Click += new System.EventHandler(this.mbutton_up_Click);
-            // 
+            //
             // mbutton_expand
-            // 
+            //
             this.mbutton_expand.BackColor = System.Drawing.Color.Transparent;
             this.mbutton_expand.Dock = System.Windows.Forms.DockStyle.Right;
             this.mbutton_expand.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -314,9 +314,9 @@
             this.mbutton_expand.UseVisualStyleBackColor = false;
             this.mbutton_expand.Click += new System.EventHandler(this.mbutton_expand_Click);
             this.mbutton_expand.MouseHover += new System.EventHandler(this.mbutton_expand_MouseHover);
-            // 
+            //
             // mlabel_columnNameHeader
-            // 
+            //
             this.mlabel_columnNameHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.mlabel_columnNameHeader.Location = new System.Drawing.Point(3, 3);
             this.mlabel_columnNameHeader.Name = "mlabel_columnNameHeader";
@@ -324,9 +324,9 @@
             this.mlabel_columnNameHeader.TabIndex = 41;
             this.mlabel_columnNameHeader.Text = "Column:";
             this.mlabel_columnNameHeader.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
+            //
             // controlColumnView
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mpanel_control);

@@ -33,9 +33,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // mlabel_insertDescription
-            // 
+            //
             this.mlabel_insertDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.mlabel_insertDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -45,9 +45,9 @@
             this.mlabel_insertDescription.TabIndex = 2;
             this.mlabel_insertDescription.Text = "We noticed there are some unused samples.  What do you want to do?";
             this.mlabel_insertDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // button2
-            // 
+            //
             this.button2.DialogResult = System.Windows.Forms.DialogResult.No;
             this.button2.Image = global::LcmsNet.Properties.Resources.Append;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -58,9 +58,9 @@
             this.button2.Text = "Append the samples";
             this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button2.UseVisualStyleBackColor = true;
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -71,9 +71,9 @@
             this.button1.Text = "Insert onto Unused";
             this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button1.UseVisualStyleBackColor = true;
-            // 
+            //
             // formInsertOntoUnusedDialog
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(377, 158);

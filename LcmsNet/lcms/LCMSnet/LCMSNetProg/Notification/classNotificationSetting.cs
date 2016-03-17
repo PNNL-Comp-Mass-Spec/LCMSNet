@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace LcmsNet.Notification
-{ 
+{
     /// <summary>
     /// Holds settings for actions to take on given notifications.
     /// </summary>
@@ -15,7 +15,7 @@ namespace LcmsNet.Notification
         /// </summary>
         public classNotificationSetting()
         {
-            Action           = enumDeviceNotificationAction.Ignore;            
+            Action           = enumDeviceNotificationAction.Ignore;
         }
 
         #region Properties
@@ -37,11 +37,11 @@ namespace LcmsNet.Notification
         }
         #endregion
         /// <summary>
-        /// Determines if the action is required based on the value of the notification. 
+        /// Determines if the action is required based on the value of the notification.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public abstract bool ActionRequired(string value);        
+        public abstract bool ActionRequired(string value);
     }
     /// <summary>
     /// Compares text.
@@ -63,12 +63,12 @@ namespace LcmsNet.Notification
         }
 
         /// <summary>
-        /// Determines if the action is required based on the value of the notification. 
+        /// Determines if the action is required based on the value of the notification.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public override bool ActionRequired(string value)
-        {           
+        {
             return value == Text;
         }
     }
@@ -95,12 +95,12 @@ namespace LcmsNet.Notification
             set;
         }
         /// <summary>
-        /// Determines if the action is required based on the value of the notification. 
+        /// Determines if the action is required based on the value of the notification.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public override bool ActionRequired(string value)
-        {            
+        {
             bool isNumeric = IsNumeric(value.GetType());
             if (isNumeric)
             {
@@ -110,7 +110,7 @@ namespace LcmsNet.Notification
                     return result < Maximum && result < Minimum;
                 }
             }
-            return false;            
+            return false;
         }
 
         //TODO: Find a better place for this.
@@ -152,6 +152,6 @@ namespace LcmsNet.Notification
         public override bool ActionRequired(string value)
         {
             return true;
-        } 
+        }
     }
 }

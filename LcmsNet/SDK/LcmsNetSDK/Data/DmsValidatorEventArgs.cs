@@ -8,14 +8,8 @@ public class DMSValidatorEventArgs : EventArgs
         Name = name;
         Modifiers = modifier;
     }
-    public string Name
-    {
-        get;
-        private set;
-    }
-    public Keys Modifiers
-    {
-        get;
-        private set;
-    }
+
+    public string Name { get; private set; }
+
+    public Keys Modifiers { get; private set; }
 }

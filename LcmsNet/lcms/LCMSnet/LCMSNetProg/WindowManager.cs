@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace LcmsNet
 {
-	public partial class WindowManager : Form
-	{
-		public WindowManager()
-		{
-			InitializeComponent();
-			this.Dock = DockStyle.Top;
-			this.TopMost = true;
-			this.SendToBack();
-		}
-	}
+    public partial class WindowManager : Form
+    {
+        public WindowManager()
+        {
+            InitializeComponent();
+            this.Dock = DockStyle.Top;
+            this.TopMost = true;
+            this.SendToBack();
+        }
+    }
 }

@@ -32,9 +32,9 @@
             LcmsNet.Method.classMethodPreviewOptions classMethodPreviewOptions1 = new LcmsNet.Method.classMethodPreviewOptions();
             this.mcontrol_methodEditor = new LcmsNet.Method.Forms.controlLCMethodEditor();
             this.SuspendLayout();
-            // 
+            //
             // mcontrol_methodEditor
-            // 
+            //
             this.mcontrol_methodEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mcontrol_methodEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcontrol_methodEditor.Location = new System.Drawing.Point(0, 0);
@@ -48,9 +48,9 @@
             this.mcontrol_methodEditor.Padding = new System.Windows.Forms.Padding(5);
             this.mcontrol_methodEditor.Size = new System.Drawing.Size(818, 840);
             this.mcontrol_methodEditor.TabIndex = 0;
-            // 
+            //
             // formMethodEditor
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(818, 840);
