@@ -37,12 +37,6 @@ namespace LcmsNet.SampleQueue.Forms
     {
         protected formMoveToColumnSelector m_selector;
 
-        protected virtual void ShrinkLeftPanel()
-        {
-            mpanel_queueHandling.Visible = false;
-            mpanel_queueHandling.Size = new Size(0, 0);
-        }
-
         /// <summary>
         /// Edits the selected samples in the sample view.
         /// </summary>
@@ -254,31 +248,6 @@ namespace LcmsNet.SampleQueue.Forms
         protected formTrayVialAssignment mform_trayVial;
 
         /// <summary>
-        /// Flag indicating if the mouse button is pressed or depressed.
-        /// </summary>
-        private bool mbool_mouseDown = false;
-
-        /// <summary>
-        /// Start Y position in pixels of mouse related to a sample for queueing.
-        /// </summary>
-        private int mint_startY = 0;
-
-        /// <summary>
-        /// Last Y position in pixels of mouse related to a sample for queueing.
-        /// </summary>
-        private int mint_endY = 0;
-
-        /// <summary>
-        /// Height of a row in the data grid.
-        /// </summary>
-        private int mint_sampleItemSize = 0;
-
-        /// <summary>
-        /// Size of the headers of the datagrid.
-        /// </summary>
-        private int mint_columnSize = 0;
-
-        /// <summary>
         /// Last position of the sample that is queued used to track how the user is queuing and dequeuing samples.
         /// </summary>
         private int mint_lastQueuedSamplePosition = 0;
@@ -361,8 +330,6 @@ namespace LcmsNet.SampleQueue.Forms
 
             DMSView = dmsView;
             SampleQueue = sampleQueue;
-            mint_startY = mint_columnSize;
-            mint_endY = mint_columnSize;
 
             //
             // Background colors
@@ -426,8 +393,6 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Events to make sure the editing is done correctly.
             //
-            mdataGrid_samples.Scroll += new ScrollEventHandler(mdataGrid_samples_Scroll);
-            mdataGrid_samples.Resize += new EventHandler(mdataGrid_samples_Resize);
             mdataGrid_samples.CellBeginEdit += new DataGridViewCellCancelEventHandler(mdataGrid_samples_CellBeginEdit);
             mdataGrid_samples.CellEndEdit += new DataGridViewCellEventHandler(mdataGrid_samples_CellEndEdit);
             mdataGrid_samples.DataError += new DataGridViewDataErrorEventHandler(mdataGrid_samples_DataError);
@@ -453,36 +418,20 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
-        /// Enables whether the queue handler on the left hand side of the queue will be enabled or not.
+        /// Enables whether the queue handler will be enabled or not.
         /// </summary>
         /// <param name="state"></param>
         protected void EnableQueueing(bool state)
         {
             if (state == true)
             {
-                //mdataGrid_samples.CurrentCellDirtyStateChanged += DataGridViewCurrentCellDirtyStateChanged;
-                mdataGrid_samples.CellContentClick += DataGridViewCellContentClicked;
-                //mdataGrid_samples.CellContentDoubleClick += DataGridViewCellContentClicked;
                 //
                 // Handles for queuing data!
                 //
-                mpanel_queueHandling.Paint += new PaintEventHandler(mpanel_queueHandling_Paint);
-                mpanel_queueHandling.MouseDown += new MouseEventHandler(mpanel_queueHandling_MouseDown);
-                mpanel_queueHandling.MouseUp += new MouseEventHandler(mpanel_queueHandling_MouseUp);
-                mpanel_queueHandling.MouseLeave += new EventHandler(mpanel_queueHandling_MouseLeave);
-                mpanel_queueHandling.MouseMove += new MouseEventHandler(mpanel_queueHandling_MouseMove);
-
-                mint_columnSize = mdataGrid_samples.ColumnHeadersHeight + 10;
-
-                mint_startY = mint_columnSize;
-                mint_endY = mint_columnSize;
-                mint_sampleItemSize = mdataGrid_samples.RowTemplate.Height;
+                mdataGrid_samples.CellContentClick += DataGridViewCellContentClicked;
             }
             else
             {
-                mpanel_queueHandling.Dock = DockStyle.None;
-                mpanel_queueHandling.Visible = false;
-                mpanel_queueHandling.BringToFront();
                 mdataGrid_samples.Dock = DockStyle.Fill;
                 mdataGrid_samples.SendToBack();
             }
@@ -490,342 +439,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         #endregion
 
-        #region Pulldown queue handling and painting
-
-        void mdataGrid_samples_Resize(object sender, EventArgs e)
-        {
-            int subtractAmount = mdataGrid_samples.FirstDisplayedScrollingRowIndex - mint_firstQueuedSamplePosition;
-            if (subtractAmount <= 0)
-            {
-                subtractAmount = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
-
-                mint_startY = Math.Max(mint_columnSize,
-                    (mint_firstQueuedSamplePosition - subtractAmount) * mint_sampleItemSize + mint_columnSize);
-                mint_endY = Math.Max(mint_columnSize,
-                    (mint_lastQueuedSamplePosition - subtractAmount) * mint_sampleItemSize + mint_columnSize);
-            }
-            else
-            {
-                mint_startY = mint_columnSize;
-                subtractAmount = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
-                mint_endY = Math.Max(mint_columnSize,
-                    (mint_lastQueuedSamplePosition - subtractAmount) * mint_sampleItemSize + mint_columnSize);
-            }
-
-            mpanel_queueHandling.Refresh();
-        }
-
-        private void UpdateQueueBarPixelPositions()
-        {
-            int subtractAmount = mdataGrid_samples.FirstDisplayedScrollingRowIndex - mint_firstQueuedSamplePosition;
-            if (subtractAmount <= 0)
-            {
-                subtractAmount = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
-                mint_startY = Math.Max(mint_columnSize,
-                    (mint_firstQueuedSamplePosition - subtractAmount) * mint_sampleItemSize + mint_columnSize);
-                mint_endY = Math.Max(mint_columnSize,
-                    (mint_lastQueuedSamplePosition - subtractAmount) * mint_sampleItemSize + mint_columnSize);
-            }
-            else
-            {
-                mint_startY = mint_columnSize;
-                subtractAmount = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
-                mint_endY = Math.Max(mint_columnSize,
-                    (mint_lastQueuedSamplePosition - subtractAmount) * mint_sampleItemSize + mint_columnSize);
-            }
-        }
-
-        /// <summary>
-        /// Synchronizes the sample queue pulldown bar with the samples in the queue.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void mdataGrid_samples_Scroll(object sender, ScrollEventArgs e)
-        {
-            if (e.ScrollOrientation == ScrollOrientation.VerticalScroll)
-            {
-                UpdateQueueBarPixelPositions();
-                mpanel_queueHandling.Refresh();
-            }
-        }
-
-        /// <summary>
-        /// Draws the pull down bar at the left of the sample queue.
-        /// </summary>
-        /// <param name="graphics"></param>
-        /// <param name="barY"></param>
-        /// <param name="color"></param>
-        void DrawBar(Graphics graphics, int barY, Color color)
-        {
-            graphics.FillRectangle(new SolidBrush(color), 0, barY, mpanel_queueHandling.Width, CONST_BAR_SIZE);
-            graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black), 2.0F), 0, barY, mpanel_queueHandling.Width,
-                CONST_BAR_SIZE);
-        }
-
-        /// <summary>
-        /// Draws the sample queue area!
-        /// </summary>
-        /// <param name="graphics"></param>
-        void DrawQueueArea(Graphics graphics)
-        {
-            int y0 = Math.Min(mint_startY, mint_endY);
-            int y1 = Math.Max(mint_startY, mint_endY);
-
-            // Figure out how many items to queue
-            int startSample =
-                Convert.ToInt32(
-                    Math.Round(Convert.ToDouble(y0 - mint_columnSize) / Convert.ToDouble(mint_sampleItemSize)));
-            int endSample =
-                Convert.ToInt32(
-                    Math.Round(Convert.ToDouble(y1 - mint_columnSize) / Convert.ToDouble(mint_sampleItemSize)));
-            int startPixel = (startSample * mint_sampleItemSize) + mint_columnSize;
-            int endPixel = (endSample * mint_sampleItemSize) + mint_columnSize;
-
-            if (mbool_mouseDown == true)
-            {
-                startPixel = y0;
-                endPixel = y1;
-            }
-            startPixel = Math.Min(mpanel_queueHandling.Height - CONST_BAR_SIZE, startPixel);
-            endPixel = Math.Min(mpanel_queueHandling.Height - CONST_BAR_SIZE, endPixel);
-
-            // Draw the bars and the background.
-            graphics.FillRectangle(new SolidBrush(Color.DarkGray), 0, startPixel, mpanel_queueHandling.Width,
-                endPixel - startPixel);
-
-            if (mint_firstQueuedSamplePosition >= mdataGrid_samples.FirstDisplayedScrollingRowIndex)
-            {
-                DrawBar(graphics, startPixel, Color.Green);
-            }
-            if (mint_lastQueuedSamplePosition >= mdataGrid_samples.FirstDisplayedScrollingRowIndex)
-            {
-                DrawBar(graphics, endPixel, Color.Yellow);
-            }
-            else
-            {
-                DrawArrowBar(graphics);
-            }
-        }
-
-        /// <summary>
-        /// Draws an arrow bar indicating that the user should scroll up to queue more samples.
-        /// </summary>
-        private void DrawArrowBar(Graphics graphics)
-        {
-            int top = mint_columnSize;
-            int height = mint_columnSize * 4;
-            int x = mpanel_queueHandling.Width / 2;
-            using (Brush brush = new SolidBrush(Color.LightGray))
-            {
-                using (Pen pen = new Pen(brush, 8.0F))
-                {
-                    pen.StartCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-                    graphics.DrawLine(pen, x, top, x, top + height);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Invokes painting of the queue handler.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void mpanel_queueHandling_Paint(object sender, PaintEventArgs e)
-        {
-            DrawQueueArea(e.Graphics);
-        }
-
-        /// <summary>
-        /// Triggers refresh of the queue handler display.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void mpanel_queueHandling_MouseLeave(object sender, EventArgs e)
-        {
-            Cursor = Cursors.Arrow;
-            mbool_mouseDown = false;
-            mpanel_queueHandling.Refresh();
-        }
-
-        /// <summary>
-        /// Determines if a queue can be pulled down or not.
-        /// </summary>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        bool CanPullDownQueueBar(int y)
-        {
-            // Make sure we aren't at the end of the queue.
-            int N = mdataGrid_samples.Rows.Count;
-            if (y < N * mint_sampleItemSize)
-            {
-                int currentSample =
-                    Convert.ToInt32(Math.Round(Convert.ToDouble(y) / Convert.ToDouble(mint_sampleItemSize))) +
-                    mdataGrid_samples.FirstDisplayedScrollingRowIndex;
-
-                if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
-                    return false;
-                this.Validate();
-                //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
-                classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
-
-                // Dont let us re-run something that has been run, errored, or is currently running.
-                if (sample.RunningStatus != enumSampleRunningStatus.Queued
-                    && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
-                {
-                    return false;
-                }
-
-                // Validate sample.
-                IDMSValidator validator;
-                try
-                {
-                    validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
-                }
-                catch (Exception)
-                {
-                    // no dms tools validator
-                    validator = null;
-                }
-                bool isSampleValid;
-                if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
-                {
-                    isSampleValid = validator.IsSampleValid(sample);
-                    if (!isSampleValid && false)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "DMS validator not found and DMS validation enabled. Item not queued.");
-                    return false;
-                }
-
-                // Validate other parts of the sample.
-                List<classSampleValidationError> errors = new List<classSampleValidationError>();
-                foreach (
-                    Lazy<ISampleValidator, ISampleValidatorMetaData> reference in
-                        LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
-                {
-#if DEBUG
-                    System.Diagnostics.Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
-#endif
-                    ISampleValidator sampleValidator = reference.Value;
-                    errors.AddRange(sampleValidator.ValidateSamples(sample));
-                }
-                if (errors.Count > 0)
-                {
-                    //TODO: Add notifications to what was wrong with the samples.
-                    return false;
-                }
-
-                return true;
-            }
-            // We were at the end of the rope.
-            return false;
-        }
-
-        /// <summary>
-        /// Handles validation of samples and queue operations.
-        /// </summary>
-        /// <param name="y">The vertical position of the slider</param>
-        private void HandleSampleValidationAndQueuing(int y)
-        {
-            var currentTask = "Initializing";
-
-            try
-            {
-                currentTask = "Call to CanPullDownQueueBar";
-                bool canPullDown = CanPullDownQueueBar(y - mint_columnSize);
-
-                currentTask = "Determine number of selected items";
-                int offset = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
-
-                // Find the number of items that are selected.
-                int totalSamples =
-                    Convert.ToInt32(
-                        Math.Round(Convert.ToDouble(y - mint_columnSize) / Convert.ToDouble(mint_sampleItemSize))) +
-                    offset;
-                //int totalSamples = Convert.ToInt32(Math.Round(Convert.ToDouble(y - mint_columnSize) / Convert.ToDouble(mint_sampleItemSize)));
-
-                if (Math.Abs(mint_lastQueuedSamplePosition - totalSamples) > 1)
-                {
-                    return;
-                }
-
-                currentTask = "Examine samples";
-                if (totalSamples <= mint_firstQueuedSamplePosition)
-                {
-                    if (totalSamples < mint_lastQueuedSamplePosition && totalSamples >= mint_firstQueuedSamplePosition)
-                    {
-                        classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
-                        mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
-                    }
-                    mint_lastQueuedSamplePosition = Math.Max(0, totalSamples);
-                    mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                    mint_endY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                    mpanel_queueHandling.Refresh();
-                    return;
-                }
-
-                if (!canPullDown)
-                {
-                    return;
-                }
-
-                currentTask =
-                    "Handle queueing the samples by first tracking the current sample index, then seeingif it changed from last to current";
-
-                // Handle queueing the samples by first tracking the current sample index, then
-                // seeing if it changed from last to current.
-                if (mint_lastQueuedSamplePosition < totalSamples)
-                {
-                    classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples - 1]);
-                    mobj_sampleQueue.MoveSamplesToRunningQueue(sample);
-                }
-                else if (mint_lastQueuedSamplePosition > totalSamples)
-                {
-                    classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
-                    mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
-                }
-
-
-                int track = mint_lastQueuedSamplePosition;
-                mint_lastQueuedSamplePosition = totalSamples;
-
-                currentTask = "Convert the sample location to pixels";
-                // Convert the sample location to pixels
-                mint_endY = ((totalSamples - offset) * mint_sampleItemSize) + mint_columnSize;
-
-                // Make sure it's in the bounds.
-                int N = mdataGrid_samples.Rows.Count;
-                mint_endY = Math.Min(N * mint_sampleItemSize + mint_columnSize, mint_endY);
-
-                //
-                // Dont let the cursor run off the end of the screen
-                //
-                mint_endY = Math.Min(mint_endY, mpanel_queueHandling.Height);
-
-                //
-                // Dont let the cursor go above the column headers
-                //
-                mint_endY = Math.Max(mint_endY, mint_columnSize);
-                mint_endY = Math.Max(mint_endY, mint_startY);
-
-                mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                mint_startY = Math.Max(mint_columnSize, mint_startY);
-
-                mpanel_queueHandling.Refresh();
-            }
-            catch (Exception ex)
-            {
-                classApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueueing, task " + currentTask, ex);
-                MessageBox.Show(
-                    @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
+        #region Queue handling
 
         /// <summary>
         /// Determines if a queue can be pulled down or not.
@@ -976,9 +590,7 @@ namespace LcmsNet.SampleQueue.Forms
                     if (!isRecursive)
                     {
                         mint_lastQueuedSamplePosition = Math.Max(0, rowNum);
-                        mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                        mint_endY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                        mpanel_queueHandling.Refresh();
+                        m_sampleContainer.Refresh();
                     }
                     return;
                 }
@@ -989,31 +601,8 @@ namespace LcmsNet.SampleQueue.Forms
 
                     if (!isRecursive)
                     {
-                        int track = mint_lastQueuedSamplePosition;
                         mint_lastQueuedSamplePosition = rowNum;
-
-                        currentTask = "Convert the sample location to pixels";
-                        // Convert the sample location to pixels
-                        mint_endY = ((rowNum - offset) * mint_sampleItemSize) + mint_columnSize;
-
-                        // Make sure it's in the bounds.
-                        mint_endY = Math.Min(N * mint_sampleItemSize + mint_columnSize, mint_endY);
-
-                        //
-                        // Dont let the cursor run off the end of the screen
-                        //
-                        mint_endY = Math.Min(mint_endY, mpanel_queueHandling.Height);
-
-                        //
-                        // Dont let the cursor go above the column headers
-                        //
-                        mint_endY = Math.Max(mint_endY, mint_columnSize);
-                        mint_endY = Math.Max(mint_endY, mint_startY);
-
-                        mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                        mint_startY = Math.Max(mint_columnSize, mint_startY);
-
-                        mpanel_queueHandling.Refresh();
+                        m_sampleContainer.Refresh();
                     }
                     //m_sampleContainer.Refresh();
                     return;
@@ -1111,31 +700,8 @@ namespace LcmsNet.SampleQueue.Forms
 
                 if (!isRecursive)
                 {
-                    int track = mint_lastQueuedSamplePosition;
                     mint_lastQueuedSamplePosition = rowNum;
-
-                    currentTask = "Convert the sample location to pixels";
-                    // Convert the sample location to pixels
-                    mint_endY = ((rowNum - offset) * mint_sampleItemSize) + mint_columnSize;
-
-                    // Make sure it's in the bounds.
-                    mint_endY = Math.Min(N * mint_sampleItemSize + mint_columnSize, mint_endY);
-
-                    //
-                    // Dont let the cursor run off the end of the screen
-                    //
-                    mint_endY = Math.Min(mint_endY, mpanel_queueHandling.Height);
-
-                    //
-                    // Dont let the cursor go above the column headers
-                    //
-                    mint_endY = Math.Max(mint_endY, mint_columnSize);
-                    mint_endY = Math.Max(mint_endY, mint_startY);
-
-                    mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-                    mint_startY = Math.Max(mint_columnSize, mint_startY);
-
-                    mpanel_queueHandling.Refresh();
+                    m_sampleContainer.Refresh();
                 }
             }
             catch (Exception ex)
@@ -1177,62 +743,6 @@ namespace LcmsNet.SampleQueue.Forms
                     }
                     // Other conditions: no change (disabled cannot be unset, and no change for state to same state
                 }
-            }
-        }
-
-        /// <summary>
-        /// Handles moving the queue bar down if samples are valid.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mpanel_queueHandling_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (mbool_mouseDown == true)
-            {
-                if (e.Y > mint_startY)
-                {
-                    HandleSampleValidationAndQueuing(e.Y);
-                }
-            }
-
-            if (Math.Abs(e.Y - mint_endY) < 10 &&
-                mint_lastQueuedSamplePosition >= mdataGrid_samples.FirstDisplayedScrollingRowIndex)
-            {
-                Cursor = Cursors.Hand;
-            }
-            else
-            {
-                Cursor = Cursors.Arrow;
-            }
-        }
-
-        /// <summary>
-        /// Handles when the user releases the queue bar.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void mpanel_queueHandling_MouseUp(object sender, MouseEventArgs e)
-        {
-            Cursor = Cursors.Arrow;
-            mbool_mouseDown = false;
-        }
-
-        /// <summary>
-        /// Handles when the user clicks on the area of the queue bar.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void mpanel_queueHandling_MouseDown(object sender, MouseEventArgs e)
-        {
-            //
-            // Here we want to make sure the user meant to move the queue.
-            //
-            if (Math.Abs(e.Y - mint_endY) < 10)
-            {
-                mbool_mouseDown = true;
-                int N = mdataGrid_samples.Rows.Count;
-
-                mpanel_queueHandling.Refresh();
             }
         }
 
@@ -2887,9 +2397,9 @@ namespace LcmsNet.SampleQueue.Forms
         protected virtual void SamplesStopped(object sender, classSampleQueueArgs data)
         {
             mint_lastQueuedSamplePosition = data.CompleteQueueTotal;
-            UpdatePulldownBar();
+            UpdateDataView();
             SamplesUpdated(sender, data);
-            mpanel_queueHandling.Refresh();
+            m_sampleContainer.Refresh();
         }
 
         /// <summary>
@@ -2995,7 +2505,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Finds the first index of the latest queable sample.
         /// </summary>
-        private void UpdatePulldownBar()
+        private void UpdateDataView()
         {
             // Find the latest run, error, or running sample in the list.
             int maxComplete = -1;
@@ -3021,13 +2531,7 @@ namespace LcmsNet.SampleQueue.Forms
             mint_firstQueuedSamplePosition = Math.Max(0, maxComplete);
             mint_lastQueuedSamplePosition = Math.Max(0, maxWaitingToRun);
 
-            int offset = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
-
-            //
-            mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
-            mint_endY = mint_columnSize + (mint_lastQueuedSamplePosition - offset) * mint_sampleItemSize;
-
-            mpanel_queueHandling.Refresh();
+            m_sampleContainer.Refresh();
         }
 
         /// <summary>
@@ -3043,12 +2547,12 @@ namespace LcmsNet.SampleQueue.Forms
             if (InvokeRequired == true)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
-                BeginInvoke(new MethodInvoker(UpdatePulldownBar));
+                BeginInvoke(new MethodInvoker(UpdateDataView));
             }
             else
             {
                 UpdateRows(data.Samples);
-                UpdatePulldownBar();
+                UpdateDataView();
             }
         }
 
@@ -3067,7 +2571,7 @@ namespace LcmsNet.SampleQueue.Forms
             mdataGrid_samples.Rows.Clear();
             AddSamplesToList(data.Samples);
 
-            UpdatePulldownBar();
+            UpdateDataView();
 
             int count = mdataGrid_samples.Rows.Count;
             if (count > 0)
@@ -3101,12 +2605,12 @@ namespace LcmsNet.SampleQueue.Forms
             if (InvokeRequired == true)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
-                BeginInvoke(new MethodInvoker(UpdatePulldownBar));
+                BeginInvoke(new MethodInvoker(UpdateDataView));
             }
             else
             {
                 UpdateRows(data.Samples);
-                UpdatePulldownBar();
+                UpdateDataView();
             }
         }
 
@@ -3123,12 +2627,12 @@ namespace LcmsNet.SampleQueue.Forms
             if (InvokeRequired == true)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
-                BeginInvoke(new MethodInvoker(UpdatePulldownBar));
+                BeginInvoke(new MethodInvoker(UpdateDataView));
             }
             else
             {
                 UpdateRows(data.Samples);
-                UpdatePulldownBar();
+                UpdateDataView();
             }
         }
 
@@ -3162,7 +2666,7 @@ namespace LcmsNet.SampleQueue.Forms
             AddSamplesToList(samples);
 
 
-            UpdatePulldownBar();
+            UpdateDataView();
 
             int count = mdataGrid_samples.Rows.Count;
             if (count > 0)
@@ -3181,7 +2685,7 @@ namespace LcmsNet.SampleQueue.Forms
             int scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
             mdataGrid_samples.Rows.Clear();
             AddSamplesToList(data.Samples);
-            UpdatePulldownBar();
+            UpdateDataView();
             int count = mdataGrid_samples.Rows.Count;
             if (count > 0)
             {

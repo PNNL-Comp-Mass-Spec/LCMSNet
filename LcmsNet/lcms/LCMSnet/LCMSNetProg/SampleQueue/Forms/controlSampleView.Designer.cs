@@ -75,7 +75,6 @@
             this.dataGridViewComboBoxColumn3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewComboBoxColumn4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewComboBoxColumn5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.mpanel_queueHandling = new System.Windows.Forms.Panel();
             this.m_sampleContainer = new System.Windows.Forms.Panel();
             this.mdataGrid_samples = new LcmsNet.SampleQueue.Forms.classDataGrid();
             this.mcolumn_checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -353,19 +352,10 @@
             this.dataGridViewComboBoxColumn5.Sorted = true;
             this.dataGridViewComboBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // mpanel_queueHandling
-            // 
-            this.mpanel_queueHandling.Dock = System.Windows.Forms.DockStyle.Left;
-            this.mpanel_queueHandling.Location = new System.Drawing.Point(0, 0);
-            this.mpanel_queueHandling.Name = "mpanel_queueHandling";
-            this.mpanel_queueHandling.Size = new System.Drawing.Size(41, 655);
-            this.mpanel_queueHandling.TabIndex = 8;
-            // 
             // m_sampleContainer
             // 
             this.m_sampleContainer.AutoSize = true;
             this.m_sampleContainer.Controls.Add(this.mdataGrid_samples);
-            this.m_sampleContainer.Controls.Add(this.mpanel_queueHandling);
             this.m_sampleContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_sampleContainer.Location = new System.Drawing.Point(3, 3);
             this.m_sampleContainer.Name = "m_sampleContainer";
@@ -404,25 +394,26 @@
             this.mcolumn_batchID});
             this.mdataGrid_samples.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mdataGrid_samples.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.mdataGrid_samples.Location = new System.Drawing.Point(41, 0);
+            this.mdataGrid_samples.Location = new System.Drawing.Point(0, 0);
             this.mdataGrid_samples.Name = "mdataGrid_samples";
             this.mdataGrid_samples.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mdataGrid_samples.Size = new System.Drawing.Size(885, 655);
+            this.mdataGrid_samples.Size = new System.Drawing.Size(926, 655);
             this.mdataGrid_samples.TabIndex = 7;
             // 
             // mcolumn_checkbox
             // 
-            this.mcolumn_checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.NullValue = false;
             this.mcolumn_checkbox.DefaultCellStyle = dataGridViewCellStyle3;
             this.mcolumn_checkbox.FalseValue = "enumCheckboxStatus.Unchecked";
-            this.mcolumn_checkbox.HeaderText = "Action";
+            this.mcolumn_checkbox.HeaderText = "";
+            this.mcolumn_checkbox.MinimumWidth = 20;
             this.mcolumn_checkbox.Name = "mcolumn_checkbox";
             this.mcolumn_checkbox.ReadOnly = true;
             this.mcolumn_checkbox.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.mcolumn_checkbox.TrueValue = "enumCheckboxStatus.Checked";
-            this.mcolumn_checkbox.Width = 43;
+            this.mcolumn_checkbox.Width = 20;
             // 
             // Status
             // 
@@ -637,7 +628,6 @@
         private System.Windows.Forms.ToolStripMenuItem batchIDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem previewThroughputToolStripMenuItem;
         public classDataGrid mdataGrid_samples;
-        private System.Windows.Forms.Panel mpanel_queueHandling;
         private System.Windows.Forms.ToolStripMenuItem blockToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;

@@ -286,7 +286,6 @@ namespace LcmsNet.SampleQueue.Forms
             DisplayColumn(CONST_COLUMN_VOLUME, false);
             mdataGrid_samples.SpecialPaint += new DelegateOnPaint(mdataGrid_samples_SpecialPaint);
             InitializeButtons();
-            ShrinkLeftPanel();
             mlabel_columnNameHeader.SendToBack();
             mpanel_control.SendToBack();
             PerformLayout();
@@ -319,7 +318,6 @@ namespace LcmsNet.SampleQueue.Forms
                 DisplayColumn(CONST_COLUMN_VOLUME, false);
                 mdataGrid_samples.SpecialPaint += new DelegateOnPaint(mdataGrid_samples_SpecialPaint);
                 InitializeButtons();
-                ShrinkLeftPanel();
                 mlabel_columnNameHeader.SendToBack();
                 mpanel_control.SendToBack();
                 PerformLayout();
