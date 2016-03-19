@@ -93,75 +93,80 @@ namespace LcmsNet.SampleQueue.Forms
         protected const int CONST_COLUMN_INDEX_OFFSET = 1;
 
         /// <summary>
+        /// Index of check box indicating sample selection
+        /// </summary>
+        protected const int CONST_COLUMN_CHECKED = 0;
+
+        /// <summary>
         /// Index Offset for going from a zero based array for configuration data to the user
         /// readable column display.
         /// </summary>
-        protected const int CONST_COLUMN_STATUS = 0;
+        protected const int CONST_COLUMN_STATUS = 1;
 
         /// <summary>
         /// Index of sequence number id column.
         /// </summary>
-        protected const int CONST_COLUMN_SEQUENCE_ID = 1;
+        protected const int CONST_COLUMN_SEQUENCE_ID = 2;
 
         /// <summary>
         /// Index of Column ID column, not a typo
         /// </summary>
-        protected const int CONST_COLUMN_COLUMN_ID = 2;
+        protected const int CONST_COLUMN_COLUMN_ID = 3;
 
         /// <summary>
         /// Index of Unique ID column.
         /// </summary>
-        protected const int CONST_COLUMN_UNIQUE_ID = 3;
+        protected const int CONST_COLUMN_UNIQUE_ID = 4;
 
         /// <summary>
         /// Index of the block data (from DMS) column.
         /// </summary>
-        protected const int CONST_COLUMN_BLOCK = 4;
+        protected const int CONST_COLUMN_BLOCK = 5;
 
         /// <summary>
         /// Index of DMS Run order column.
         /// </summary>
-        protected const int CONST_COLUMN_RUN_ORDER = 5;
+        protected const int CONST_COLUMN_RUN_ORDER = 6;
 
         /// <summary>
         /// Index of Request Name column
         /// </summary>
-        protected const int CONST_COLUMN_REQUEST_NAME = 6;
+        protected const int CONST_COLUMN_REQUEST_NAME = 7;
 
         /// <summary>
         /// Index of pal tray column
         /// </summary>
-        protected const int CONST_COLUMN_PAL_TRAY = 7;
+        protected const int CONST_COLUMN_PAL_TRAY = 8;
 
         /// <summary>
         /// Index of pal vial column
         /// </summary>
-        protected const int CONST_COLUMN_PAL_VIAL = 8;
+        protected const int CONST_COLUMN_PAL_VIAL = 9;
 
         /// <summary>
         /// Index of volume column.
         /// </summary>
-        protected const int CONST_COLUMN_VOLUME = 9;
+        protected const int CONST_COLUMN_VOLUME = 10;
 
         /// <summary>
         /// Index of experiment method column.
         /// </summary>
-        protected const int CONST_COLUMN_EXPERIMENT_METHOD = 10;
+        protected const int CONST_COLUMN_EXPERIMENT_METHOD = 11;
 
         /// <summary>
         /// Index of instrument method column.
         /// </summary>
-        protected const int CONST_COLUMN_INSTRUMENT_METHOD = 11;
+        protected const int CONST_COLUMN_INSTRUMENT_METHOD = 12;
 
         /// <summary>
         /// Index of dataset type column.
         /// </summary>
-        protected const int CONST_COLUMN_DATASET_TYPE = 12;
+        protected const int CONST_COLUMN_DATASET_TYPE = 13;
 
         /// <summary>
         /// Index of batch ID column.
         /// </summary>
-        protected const int CONST_COLUMN_BATCH_ID = 13;
+        protected const int CONST_COLUMN_BATCH_ID = 14;
 
         /// <summary>
         /// String that should be displayed when new data is added but is not initialized.
@@ -455,6 +460,9 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (state == true)
             {
+                //mdataGrid_samples.CurrentCellDirtyStateChanged += DataGridViewCurrentCellDirtyStateChanged;
+                mdataGrid_samples.CellContentClick += DataGridViewCellContentClicked;
+                //mdataGrid_samples.CellContentDoubleClick += DataGridViewCellContentClicked;
                 //
                 // Handles for queuing data!
                 //
@@ -721,7 +729,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Handles validation of samples and queue operations.
         /// </summary>
-        /// <param name="y"></param>
+        /// <param name="y">The vertical position of the slider</param>
         private void HandleSampleValidationAndQueuing(int y)
         {
             var currentTask = "Initializing";
@@ -816,6 +824,359 @@ namespace LcmsNet.SampleQueue.Forms
                 MessageBox.Show(
                     @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        /// <summary>
+        /// Determines if a queue can be pulled down or not.
+        /// </summary>
+        /// <param name="rowNum">The row number</param>
+        /// <returns></returns>
+        bool SelectionChangeValid(int rowNum, classSampleData sample, bool doNotValidate = false)
+        {
+            // Make sure we aren't at the end of the queue.
+            int N = mdataGrid_samples.Rows.Count;
+            if (rowNum <= N/* * mint_sampleItemSize*/)
+            {
+                int currentSample =
+                    /*Convert.ToInt32(Math.Round(Convert.ToDouble(y) / Convert.ToDouble(mint_sampleItemSize))) +
+                    mdataGrid_samples.FirstDisplayedScrollingRowIndex*/ rowNum;
+
+                if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
+                    return false;
+                if (!doNotValidate)
+                {
+                    this.Validate(); ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                }
+                //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
+                //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
+
+                // Dont let us re-run something that has been run, errored, or is currently running.
+                if (sample.RunningStatus != enumSampleRunningStatus.Queued
+                    && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
+                {
+                    return false;
+                }
+
+                // Validate sample.
+                IDMSValidator validator;
+                try
+                {
+                    validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                }
+                catch (Exception)
+                {
+                    // no dms tools validator
+                    validator = null;
+                }
+                bool isSampleValid;
+                if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
+                {
+                    isSampleValid = validator.IsSampleValid(sample);
+                    if (!isSampleValid && false)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        "DMS validator not found and DMS validation enabled. Item not queued.");
+                    return false;
+                }
+
+                // Validate other parts of the sample.
+                List<classSampleValidationError> errors = new List<classSampleValidationError>();
+                foreach (
+                    Lazy<ISampleValidator, ISampleValidatorMetaData> reference in
+                        LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+                {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
+#endif
+                    ISampleValidator sampleValidator = reference.Value;
+                    errors.AddRange(sampleValidator.ValidateSamples(sample));
+                }
+                if (errors.Count > 0)
+                {
+                    //TODO: Add notifications to what was wrong with the samples.
+                    return false;
+                }
+
+                return true;
+            }
+            // We were at the end of the rope.
+            return false;
+        }
+
+        /// <summary>
+        /// Handles validation of samples and queue operations.
+        /// </summary>
+        /// <param name="rowNum"></param>
+        /// <param name="isRecursive"></param>
+        private void HandleSampleValidationAndQueuing(int rowNum, bool isRecursive)
+        {
+            //var y = mdataGrid_samples.Rows.IndexOf(row) + 1;
+            var currentTask = "Initializing";
+            
+            // Make sure we aren't at the end of the queue.
+            int N = mdataGrid_samples.Rows.Count;
+
+            try
+            {
+                currentTask = "Determine number of selected items";
+                int offset = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
+
+                // Find the number of items that are selected.
+                if (rowNum <= N)
+                {
+                    if (rowNum < 0 || rowNum > mdataGrid_samples.Rows.Count)
+                        return;
+                    if (!isRecursive && !(rowNum <= mint_firstQueuedSamplePosition || mint_lastQueuedSamplePosition > rowNum))
+                    {
+                        this.Validate();
+                            ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                    }
+                }
+
+                if (Math.Abs(mint_lastQueuedSamplePosition - rowNum) > 1)
+                {
+                    // process: if more than 1 selected, ask user for confirmation; if confirmed, recursively call this function?
+                    bool isDequeue = mint_lastQueuedSamplePosition - rowNum > 0;
+                    if (isDequeue) // dequeuing samples
+                    {
+                        HandleSampleValidationAndQueuing(rowNum + 1, true);
+                    }
+                    else // queuing samples
+                    {
+                        HandleSampleValidationAndQueuing(rowNum - 1, true);
+                    }
+                    //return;
+                }
+
+                currentTask = "Examine samples";
+                int neededRowId = 0;
+                if (rowNum <= mint_firstQueuedSamplePosition || mint_lastQueuedSamplePosition > rowNum)
+                {
+                    neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum].Cells[CONST_COLUMN_UNIQUE_ID].Value);
+                }
+                else
+                {
+                    neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
+                }
+                classSampleData sample = mobj_sampleQueue.FindSample(neededRowId);
+
+                if (rowNum <= mint_firstQueuedSamplePosition)
+                {
+                    if (rowNum < mint_lastQueuedSamplePosition && rowNum >= mint_firstQueuedSamplePosition)
+                    {
+                        //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
+                        mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
+                    }
+                    if (!isRecursive)
+                    {
+                        mint_lastQueuedSamplePosition = Math.Max(0, rowNum);
+                        mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
+                        mint_endY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
+                        mpanel_queueHandling.Refresh();
+                    }
+                    return;
+                }
+                if (mint_lastQueuedSamplePosition > rowNum)
+                {
+                    //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
+                    mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
+
+                    if (!isRecursive)
+                    {
+                        int track = mint_lastQueuedSamplePosition;
+                        mint_lastQueuedSamplePosition = rowNum;
+
+                        currentTask = "Convert the sample location to pixels";
+                        // Convert the sample location to pixels
+                        mint_endY = ((rowNum - offset) * mint_sampleItemSize) + mint_columnSize;
+
+                        // Make sure it's in the bounds.
+                        mint_endY = Math.Min(N * mint_sampleItemSize + mint_columnSize, mint_endY);
+
+                        //
+                        // Dont let the cursor run off the end of the screen
+                        //
+                        mint_endY = Math.Min(mint_endY, mpanel_queueHandling.Height);
+
+                        //
+                        // Dont let the cursor go above the column headers
+                        //
+                        mint_endY = Math.Max(mint_endY, mint_columnSize);
+                        mint_endY = Math.Max(mint_endY, mint_startY);
+
+                        mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
+                        mint_startY = Math.Max(mint_columnSize, mint_startY);
+
+                        mpanel_queueHandling.Refresh();
+                    }
+                    //m_sampleContainer.Refresh();
+                    return;
+                }
+
+                currentTask = "Call to CanPullDownQueueBar";
+                //bool canPullDown = SelectionChangeValid(y/* - mint_columnSize*/, tsample, isRecursive);
+                //
+                //if (!canPullDown)
+                //{
+                //    return;
+                //}
+                if (rowNum <= N)
+                {
+                    int currentSample = rowNum;
+
+                    if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
+                        return;
+                    //if (!isRecursive)
+                    //{
+                    //    this.Validate(); ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                    //}
+                    //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
+                    //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
+
+                    // Dont let us re-run something that has been run, errored, or is currently running.
+                    if (sample.RunningStatus != enumSampleRunningStatus.Queued
+                        && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
+                    {
+                        return;
+                    }
+
+                    // Validate sample.
+                    IDMSValidator validator;
+                    try
+                    {
+                        validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                    }
+                    catch (Exception)
+                    {
+                        // no dms tools validator
+                        validator = null;
+                    }
+                    bool isSampleValid;
+                    if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
+                    {
+                        isSampleValid = validator.IsSampleValid(sample);
+                        if (!isSampleValid && false)
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                            "DMS validator not found and DMS validation enabled. Item not queued.");
+                        return;
+                    }
+
+                    // Validate other parts of the sample.
+                    List<classSampleValidationError> errors = new List<classSampleValidationError>();
+                    foreach (
+                        Lazy<ISampleValidator, ISampleValidatorMetaData> reference in
+                            LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+                    {
+#if DEBUG
+                        System.Diagnostics.Debug.WriteLine("Validating sample with validator: " +
+                                                           reference.Metadata.Name);
+#endif
+                        ISampleValidator sampleValidator = reference.Value;
+                        errors.AddRange(sampleValidator.ValidateSamples(sample));
+                    }
+                    if (errors.Count > 0)
+                    {
+                        //TODO: Add notifications to what was wrong with the samples.
+                        return;
+                    }
+                }
+                else
+                {
+                    // We were at the end of the rope.
+                    return;
+                }
+
+                currentTask =
+                    "Handle queueing the samples by first tracking the current sample index, then seeing if it changed from last to current";
+
+                // Handle queueing the samples by first tracking the current sample index, then
+                // seeing if it changed from last to current.
+                if (mint_lastQueuedSamplePosition < rowNum)
+                {
+                    //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples - 1]);
+                    mobj_sampleQueue.MoveSamplesToRunningQueue(sample);
+                }
+
+                if (!isRecursive)
+                {
+                    int track = mint_lastQueuedSamplePosition;
+                    mint_lastQueuedSamplePosition = rowNum;
+
+                    currentTask = "Convert the sample location to pixels";
+                    // Convert the sample location to pixels
+                    mint_endY = ((rowNum - offset) * mint_sampleItemSize) + mint_columnSize;
+
+                    // Make sure it's in the bounds.
+                    mint_endY = Math.Min(N * mint_sampleItemSize + mint_columnSize, mint_endY);
+
+                    //
+                    // Dont let the cursor run off the end of the screen
+                    //
+                    mint_endY = Math.Min(mint_endY, mpanel_queueHandling.Height);
+
+                    //
+                    // Dont let the cursor go above the column headers
+                    //
+                    mint_endY = Math.Max(mint_endY, mint_columnSize);
+                    mint_endY = Math.Max(mint_endY, mint_startY);
+
+                    mint_startY = mint_columnSize + (mint_firstQueuedSamplePosition - offset) * mint_sampleItemSize;
+                    mint_startY = Math.Max(mint_columnSize, mint_startY);
+
+                    mpanel_queueHandling.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueueing, task " + currentTask, ex);
+                MessageBox.Show(
+                    @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        void DataGridViewCellContentClicked(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == CONST_COLUMN_CHECKED)
+            {
+                var row = mdataGrid_samples.CurrentRow;
+                if (row == null)
+                {
+                    return;
+                }
+                DataGridViewCheckBoxCell checkbox = row.Cells[CONST_COLUMN_CHECKED] as DataGridViewCheckBoxCell;
+                if (checkbox == null)
+                {
+                    return;
+                }
+                //enumCheckboxStatus gridEditState =
+                //    GetCheckboxStatusFromCheckbox(checkbox, checkbox.EditedFormattedValue); // use checkbox.EditedFormattedValue
+                enumCheckboxStatus gridSavedState =
+                    GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value); // use checkbox.EditedFormattedValue
+                if (gridSavedState != enumCheckboxStatus.Disabled)
+                {
+                    if (gridSavedState == enumCheckboxStatus.Unchecked /*&& gridState == enumCheckboxStatus.Checked*/)
+                    {
+                        HandleSampleValidationAndQueuing(mdataGrid_samples.Rows.IndexOf(row) + 1, false);
+                    }
+                    else if (gridSavedState == enumCheckboxStatus.Checked /*&& gridState == enumCheckboxStatus.Unchecked*/)
+                    {
+                        HandleSampleValidationAndQueuing(mdataGrid_samples.Rows.IndexOf(row), false);
+                    }
+                    // Other conditions: no change (disabled cannot be unset, and no change for state to same state
+                }
             }
         }
 
@@ -1794,7 +2155,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>New object reference of a sample with only required data copied.</returns>
         protected virtual classSampleData CopyRequiredSampleData(classSampleData sampleToCopy)
         {
-            classSampleData newSample = new classSampleData();
+            classSampleData newSample = new classSampleData(false);
             newSample.DmsData.RequestName = string.Format("{0}_{1:0000}",
                 mobj_sampleQueue.DefaultSampleName,
                 mobj_sampleQueue.RunningSampleIndex++);
@@ -1963,7 +2324,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Otherwise, add a new sample.
                 //
-                newData = new classSampleData();
+                newData = new classSampleData(false);
                 newData.DmsData.RequestName = string.Format("{0}_{1:0000}",
                     mobj_sampleQueue.DefaultSampleName,
                     mobj_sampleQueue.RunningSampleIndex++);
@@ -2387,6 +2748,8 @@ namespace LcmsNet.SampleQueue.Forms
                 style.SelectionBackColor = style.BackColor;
                 style.SelectionForeColor = style.ForeColor;
             }
+
+            GetCheckboxStatusAndSetCheckbox(data, row.Cells[CONST_COLUMN_CHECKED] as DataGridViewCheckBoxCell);
 
             //
             // If the name of the sample is the un-used, it means that the Sample Queue has backfilled the
@@ -3071,6 +3434,95 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region Row to Sample Conversion
 
+        public enum enumCheckboxStatus
+        {
+            Unchecked = 0,
+            Checked,
+            Disabled,
+        }
+
+        /// <summary>
+        /// Returns the status message pertaining to a given samples running status.
+        /// </summary>
+        /// <param name="sample">Sample to extract status message from.</param>
+        /// <returns>String representing the status of the running state.</returns>
+        protected enumCheckboxStatus GetCheckboxStatusFromSampleStatus(classSampleData sample)
+        {
+            enumCheckboxStatus status = enumCheckboxStatus.Disabled;
+            switch (sample.RunningStatus)
+            {
+                case enumSampleRunningStatus.Complete:
+                    status = enumCheckboxStatus.Disabled;
+                    break;
+                case enumSampleRunningStatus.Error:
+                    status = enumCheckboxStatus.Unchecked;
+                    break;
+                case enumSampleRunningStatus.Stopped:
+                    status = enumCheckboxStatus.Unchecked;
+                    break;
+                case enumSampleRunningStatus.Queued:
+                    status = enumCheckboxStatus.Unchecked;
+                    break;
+                case enumSampleRunningStatus.Running:
+                    status = enumCheckboxStatus.Disabled;
+                    break;
+                case enumSampleRunningStatus.WaitingToRun:
+                    status = enumCheckboxStatus.Checked;
+                    break;
+                default:
+                    //
+                    // Should never get here
+                    //
+                    break;
+            }
+
+            return status;
+        }
+
+        protected enumCheckboxStatus GetCheckboxStatusAndSetCheckbox(classSampleData sample,
+            DataGridViewCheckBoxCell checkbox)
+        {
+            enumCheckboxStatus status = GetCheckboxStatusFromSampleStatus(sample);
+            if (checkbox != null)
+            {
+                if (status == enumCheckboxStatus.Disabled)
+                {
+                    checkbox.Value = enumCheckboxStatus.Checked;
+                    checkbox.Tag = "Disabled";
+                }
+                else
+                {
+                    checkbox.Value = status;
+                }
+            }
+            return status;
+        }
+
+        protected enumCheckboxStatus GetCheckboxStatusFromCheckbox(DataGridViewCheckBoxCell checkbox)
+        {
+            return GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value);
+        }
+
+        protected enumCheckboxStatus GetCheckboxStatusFromCheckbox(DataGridViewCheckBoxCell checkbox, object chkboxValue)
+        {
+            enumCheckboxStatus status = enumCheckboxStatus.Unchecked;
+            if (checkbox != null)
+            {
+                if (checkbox.Tag != null && checkbox.Tag.ToString() == "Disabled")
+                {
+                    status = enumCheckboxStatus.Disabled;
+                }
+                else
+                {
+                    if (chkboxValue is enumCheckboxStatus)
+                    {
+                        status = (enumCheckboxStatus)chkboxValue;
+                    }
+                }
+            }
+            return status;
+        }
+
         /// <summary>
         /// Returns the status message pertaining to a given samples running status.
         /// </summary>
@@ -3191,6 +3643,10 @@ namespace LcmsNet.SampleQueue.Forms
                 return null;
 
             DataGridViewRow row = new DataGridViewRow();
+            DataGridViewCheckBoxCell checkCell = new DataGridViewCheckBoxCell();
+            checkCell.TrueValue = enumCheckboxStatus.Checked;
+            checkCell.FalseValue = enumCheckboxStatus.Unchecked;
+            GetCheckboxStatusAndSetCheckbox(sample, checkCell);
             DataGridViewTextBoxCell statusCell = new DataGridViewTextBoxCell();
             statusCell.Value = GetStatusMessageFromSampleStatus(sample);
             statusCell.ToolTipText = GetToolTipMessageFromSampleStatus(sample);
@@ -3371,6 +3827,7 @@ namespace LcmsNet.SampleQueue.Forms
             runOrder.Value = sample.DmsData.RunOrder;
 
 
+            row.Cells.Add(checkCell);
             row.Cells.Add(statusCell);
             row.Cells.Add(sequenceCell);
             row.Cells.Add(columnIDCell);
@@ -3401,7 +3858,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Don't find the real sample so we dont change anything in the reference if this is a temporary operation.
             //
-            classSampleData sample = new classSampleData();
+            classSampleData sample = new classSampleData(true); // Mark it as a dummy sample
             sample.SequenceID = Convert.ToInt32(row.Cells[CONST_COLUMN_SEQUENCE_ID].Value);
             int id = 0;
             string value = row.Cells[CONST_COLUMN_COLUMN_ID].Value.ToString();

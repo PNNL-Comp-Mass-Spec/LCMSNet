@@ -1759,7 +1759,11 @@ namespace LcmsNet.SampleQueue
             {
                 //DateTime next = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).Add(new TimeSpan(0, 0, 10));
                 DateTime next = LcmsNetSDK.TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
-                classSampleData realSample = FindSample(sample.UniqueID);
+                classSampleData realSample = sample;
+                if (sample.IsDummySample)
+                {
+                    realSample = FindSample(sample.UniqueID);
+                }
                 if (realSample == null)
                 {
                     //
@@ -1830,7 +1834,11 @@ namespace LcmsNet.SampleQueue
             List<classSampleData> validSamples = new List<classSampleData>();
             foreach (classSampleData sample in samples)
             {
-                classSampleData realSample = FindSample(sample.UniqueID);
+                classSampleData realSample = sample;
+                if (sample.IsDummySample)
+                {
+                    realSample = FindSample(sample.UniqueID);
+                }
                 if (realSample == null)
                 {
                     //

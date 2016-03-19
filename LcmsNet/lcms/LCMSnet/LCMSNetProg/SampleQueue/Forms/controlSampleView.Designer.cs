@@ -42,6 +42,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mcontextMenu_options = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +78,7 @@
             this.mpanel_queueHandling = new System.Windows.Forms.Panel();
             this.m_sampleContainer = new System.Windows.Forms.Panel();
             this.mdataGrid_samples = new LcmsNet.SampleQueue.Forms.classDataGrid();
+            this.mcolumn_checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mcolumn_sequenceNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mcolumn_columnNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,9 +97,9 @@
             this.m_sampleContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mdataGrid_samples)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // mcontextMenu_options
-            //
+            // 
             this.mcontextMenu_options.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.undoToolStripMenuItem,
             this.redoToolStripMenuItem,
@@ -118,95 +120,95 @@
             this.randomizeToolStripMenuItem});
             this.mcontextMenu_options.Name = "mcontextMenu_options";
             this.mcontextMenu_options.Size = new System.Drawing.Size(250, 298);
-            //
+            // 
             // undoToolStripMenuItem
-            //
+            // 
             this.undoToolStripMenuItem.Image = global::LcmsNet.Properties.Resources.undo_16;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.undoToolStripMenuItem.Text = "Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
-            //
+            // 
             // redoToolStripMenuItem
-            //
+            // 
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.redoToolStripMenuItem.Text = "Redo";
             this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
-            //
+            // 
             // toolStripSeparator2
-            //
+            // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(246, 6);
-            //
+            // 
             // addBlankToolStripMenuItem
-            //
+            // 
             this.addBlankToolStripMenuItem.Image = global::LcmsNet.Properties.Resources.add;
             this.addBlankToolStripMenuItem.Name = "addBlankToolStripMenuItem";
             this.addBlankToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.addBlankToolStripMenuItem.Text = "Add Blank";
             this.addBlankToolStripMenuItem.Click += new System.EventHandler(this.addBlankToolStripMenuItem_Click);
-            //
+            // 
             // insertBlankIntoUnusedToolStripMenuItem
-            //
+            // 
             this.insertBlankIntoUnusedToolStripMenuItem.Name = "insertBlankIntoUnusedToolStripMenuItem";
             this.insertBlankIntoUnusedToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.insertBlankIntoUnusedToolStripMenuItem.Text = "Insert Blank Into Unused";
             this.insertBlankIntoUnusedToolStripMenuItem.Click += new System.EventHandler(this.insertBlankIntoUnusedToolStripMenuItem_Click);
-            //
+            // 
             // importFromDMSToolStripMenuItem
-            //
+            // 
             this.importFromDMSToolStripMenuItem.Name = "importFromDMSToolStripMenuItem";
             this.importFromDMSToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.importFromDMSToolStripMenuItem.Text = "Import from DMS";
             this.importFromDMSToolStripMenuItem.Click += new System.EventHandler(this.importFromDMSToolStripMenuItem_Click);
-            //
+            // 
             // toolStripSeparator3
-            //
+            // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(246, 6);
-            //
+            // 
             // addDateCartNameColumnIDToolStripMenuItem
-            //
+            // 
             this.addDateCartNameColumnIDToolStripMenuItem.Name = "addDateCartNameColumnIDToolStripMenuItem";
             this.addDateCartNameColumnIDToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.addDateCartNameColumnIDToolStripMenuItem.Text = "Add Date, Cart Name, Column ID";
             this.addDateCartNameColumnIDToolStripMenuItem.Click += new System.EventHandler(this.addDateCartNameColumnIDToolStripMenuItem_Click);
-            //
+            // 
             // toolStripSeparator5
-            //
+            // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(246, 6);
-            //
+            // 
             // deleteSelectedToolStripMenuItem
-            //
+            // 
             this.deleteSelectedToolStripMenuItem.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
             this.deleteSelectedToolStripMenuItem.Name = "deleteSelectedToolStripMenuItem";
             this.deleteSelectedToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.deleteSelectedToolStripMenuItem.Text = "Delete Selected";
             this.deleteSelectedToolStripMenuItem.Click += new System.EventHandler(this.deleteSelectedToolStripMenuItem_Click);
-            //
+            // 
             // deleteUnusedToolStripMenuItem
-            //
+            // 
             this.deleteUnusedToolStripMenuItem.Name = "deleteUnusedToolStripMenuItem";
             this.deleteUnusedToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.deleteUnusedToolStripMenuItem.Text = "Delete Unused";
             this.deleteUnusedToolStripMenuItem.Click += new System.EventHandler(this.deleteUnusedToolStripMenuItem_Click);
-            //
+            // 
             // clearToolStripMenuItem
-            //
+            // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
-            //
+            // 
             // toolStripSeparator1
-            //
+            // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(246, 6);
-            //
+            // 
             // showToolStripMenuItem
-            //
+            // 
             this.showToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pALTrayToolStripMenuItem,
             this.pALVialToolStripMenuItem,
@@ -220,123 +222,123 @@
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
             this.showToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.showToolStripMenuItem.Text = "Show";
-            //
+            // 
             // pALTrayToolStripMenuItem
-            //
+            // 
             this.pALTrayToolStripMenuItem.Name = "pALTrayToolStripMenuItem";
             this.pALTrayToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.pALTrayToolStripMenuItem.Text = "PAL Tray";
             this.pALTrayToolStripMenuItem.Click += new System.EventHandler(this.pALTrayToolStripMenuItem_Click);
-            //
+            // 
             // pALVialToolStripMenuItem
-            //
+            // 
             this.pALVialToolStripMenuItem.Name = "pALVialToolStripMenuItem";
             this.pALVialToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.pALVialToolStripMenuItem.Text = "PAL Vial";
             this.pALVialToolStripMenuItem.Click += new System.EventHandler(this.pALVialToolStripMenuItem_Click);
-            //
+            // 
             // volumeToolStripMenuItem
-            //
+            // 
             this.volumeToolStripMenuItem.Name = "volumeToolStripMenuItem";
             this.volumeToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.volumeToolStripMenuItem.Text = "Volume";
             this.volumeToolStripMenuItem.Click += new System.EventHandler(this.volumeToolStripMenuItem_Click);
-            //
+            // 
             // lCMethodToolStripMenuItem
-            //
+            // 
             this.lCMethodToolStripMenuItem.Name = "lCMethodToolStripMenuItem";
             this.lCMethodToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.lCMethodToolStripMenuItem.Text = "LC Method";
             this.lCMethodToolStripMenuItem.Click += new System.EventHandler(this.lCMethodToolStripMenuItem_Click);
-            //
+            // 
             // instrumentMethodToolStripMenuItem
-            //
+            // 
             this.instrumentMethodToolStripMenuItem.Name = "instrumentMethodToolStripMenuItem";
             this.instrumentMethodToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.instrumentMethodToolStripMenuItem.Text = "Instrument Method";
             this.instrumentMethodToolStripMenuItem.Click += new System.EventHandler(this.instrumentMethodToolStripMenuItem_Click);
-            //
+            // 
             // datasetTypeToolStripMenuItem
-            //
+            // 
             this.datasetTypeToolStripMenuItem.Name = "datasetTypeToolStripMenuItem";
             this.datasetTypeToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.datasetTypeToolStripMenuItem.Text = "Dataset Type";
             this.datasetTypeToolStripMenuItem.Click += new System.EventHandler(this.datasetTypeToolStripMenuItem_Click);
-            //
+            // 
             // batchIDToolStripMenuItem
-            //
+            // 
             this.batchIDToolStripMenuItem.Name = "batchIDToolStripMenuItem";
             this.batchIDToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.batchIDToolStripMenuItem.Text = "Batch ID";
             this.batchIDToolStripMenuItem.Click += new System.EventHandler(this.batchIDToolStripMenuItem_Click);
-            //
+            // 
             // blockToolStripMenuItem
-            //
+            // 
             this.blockToolStripMenuItem.Name = "blockToolStripMenuItem";
             this.blockToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.blockToolStripMenuItem.Text = "Block";
             this.blockToolStripMenuItem.Click += new System.EventHandler(this.blockToolStripMenuItem_Click);
-            //
+            // 
             // runOrderToolStripMenuItem
-            //
+            // 
             this.runOrderToolStripMenuItem.Name = "runOrderToolStripMenuItem";
             this.runOrderToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.runOrderToolStripMenuItem.Text = "Run Order";
             this.runOrderToolStripMenuItem.Click += new System.EventHandler(this.runOrderToolStripMenuItem_Click);
-            //
+            // 
             // previewThroughputToolStripMenuItem
-            //
+            // 
             this.previewThroughputToolStripMenuItem.Name = "previewThroughputToolStripMenuItem";
             this.previewThroughputToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.previewThroughputToolStripMenuItem.Text = "Preview Throughput";
             this.previewThroughputToolStripMenuItem.Click += new System.EventHandler(this.previewThroughputToolStripMenuItem_Click);
-            //
+            // 
             // toolStripSeparator4
-            //
+            // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(246, 6);
-            //
+            // 
             // randomizeToolStripMenuItem
-            //
+            // 
             this.randomizeToolStripMenuItem.Name = "randomizeToolStripMenuItem";
             this.randomizeToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.randomizeToolStripMenuItem.Text = "Randomize";
             this.randomizeToolStripMenuItem.Click += new System.EventHandler(this.randomizeToolStripMenuItem_Click);
-            //
+            // 
             // dataGridViewComboBoxColumn1
-            //
+            // 
             this.dataGridViewComboBoxColumn1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn1.HeaderText = "PAL Method";
             this.dataGridViewComboBoxColumn1.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
             this.dataGridViewComboBoxColumn1.Width = 73;
-            //
+            // 
             // dataGridViewComboBoxColumn2
-            //
+            // 
             this.dataGridViewComboBoxColumn2.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn2.HeaderText = "PAL Tray";
             this.dataGridViewComboBoxColumn2.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
             this.dataGridViewComboBoxColumn2.Width = 72;
-            //
+            // 
             // dataGridViewComboBoxColumn3
-            //
+            // 
             this.dataGridViewComboBoxColumn3.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn3.HeaderText = "LC Method";
             this.dataGridViewComboBoxColumn3.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn3.Name = "dataGridViewComboBoxColumn3";
             this.dataGridViewComboBoxColumn3.Width = 72;
-            //
+            // 
             // dataGridViewComboBoxColumn4
-            //
+            // 
             this.dataGridViewComboBoxColumn4.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn4.HeaderText = "Instrument Method";
             this.dataGridViewComboBoxColumn4.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn4.Name = "dataGridViewComboBoxColumn4";
             this.dataGridViewComboBoxColumn4.Width = 73;
-            //
+            // 
             // dataGridViewComboBoxColumn5
-            //
+            // 
             this.dataGridViewComboBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
@@ -350,17 +352,17 @@
             this.dataGridViewComboBoxColumn5.Name = "dataGridViewComboBoxColumn5";
             this.dataGridViewComboBoxColumn5.Sorted = true;
             this.dataGridViewComboBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            //
+            // 
             // mpanel_queueHandling
-            //
+            // 
             this.mpanel_queueHandling.Dock = System.Windows.Forms.DockStyle.Left;
             this.mpanel_queueHandling.Location = new System.Drawing.Point(0, 0);
             this.mpanel_queueHandling.Name = "mpanel_queueHandling";
             this.mpanel_queueHandling.Size = new System.Drawing.Size(41, 655);
             this.mpanel_queueHandling.TabIndex = 8;
-            //
+            // 
             // m_sampleContainer
-            //
+            // 
             this.m_sampleContainer.AutoSize = true;
             this.m_sampleContainer.Controls.Add(this.mdataGrid_samples);
             this.m_sampleContainer.Controls.Add(this.mpanel_queueHandling);
@@ -369,9 +371,9 @@
             this.m_sampleContainer.Name = "m_sampleContainer";
             this.m_sampleContainer.Size = new System.Drawing.Size(926, 655);
             this.m_sampleContainer.TabIndex = 19;
-            //
+            // 
             // mdataGrid_samples
-            //
+            // 
             this.mdataGrid_samples.AllowDrop = true;
             this.mdataGrid_samples.AllowUserToAddRows = false;
             this.mdataGrid_samples.AllowUserToDeleteRows = false;
@@ -385,6 +387,7 @@
             this.mdataGrid_samples.BackgroundColor = System.Drawing.Color.White;
             this.mdataGrid_samples.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.mdataGrid_samples.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.mcolumn_checkbox,
             this.Status,
             this.mcolumn_sequenceNumber,
             this.mcolumn_columnNumber,
@@ -406,92 +409,106 @@
             this.mdataGrid_samples.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.mdataGrid_samples.Size = new System.Drawing.Size(885, 655);
             this.mdataGrid_samples.TabIndex = 7;
-            //
-            // Status
-            //
-            this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            // 
+            // mcolumn_checkbox
+            // 
+            this.mcolumn_checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Blue;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
-            this.Status.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle3.NullValue = false;
+            this.mcolumn_checkbox.DefaultCellStyle = dataGridViewCellStyle3;
+            this.mcolumn_checkbox.FalseValue = "enumCheckboxStatus.Unchecked";
+            this.mcolumn_checkbox.HeaderText = "Action";
+            this.mcolumn_checkbox.Name = "mcolumn_checkbox";
+            this.mcolumn_checkbox.ReadOnly = true;
+            this.mcolumn_checkbox.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.mcolumn_checkbox.TrueValue = "enumCheckboxStatus.Checked";
+            this.mcolumn_checkbox.Width = 43;
+            // 
+            // Status
+            // 
+            this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Blue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+            this.Status.DefaultCellStyle = dataGridViewCellStyle4;
             this.Status.HeaderText = "Status";
             this.Status.Name = "Status";
             this.Status.ReadOnly = true;
             this.Status.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Status.Width = 43;
-            //
+            // 
             // mcolumn_sequenceNumber
-            //
+            // 
             this.mcolumn_sequenceNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.Format = "0000";
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_sequenceNumber.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.Format = "0000";
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_sequenceNumber.DefaultCellStyle = dataGridViewCellStyle5;
             this.mcolumn_sequenceNumber.HeaderText = "Seq #";
             this.mcolumn_sequenceNumber.MinimumWidth = 10;
             this.mcolumn_sequenceNumber.Name = "mcolumn_sequenceNumber";
             this.mcolumn_sequenceNumber.ReadOnly = true;
             this.mcolumn_sequenceNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.mcolumn_sequenceNumber.Width = 32;
-            //
+            this.mcolumn_sequenceNumber.Width = 42;
+            // 
             // mcolumn_columnNumber
-            //
+            // 
             this.mcolumn_columnNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_columnNumber.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_columnNumber.DefaultCellStyle = dataGridViewCellStyle6;
             this.mcolumn_columnNumber.HeaderText = "Col #";
             this.mcolumn_columnNumber.Name = "mcolumn_columnNumber";
             this.mcolumn_columnNumber.ReadOnly = true;
             this.mcolumn_columnNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.mcolumn_columnNumber.Width = 28;
-            //
+            this.mcolumn_columnNumber.Width = 38;
+            // 
             // mcolumn_uniqueID
-            //
+            // 
             this.mcolumn_uniqueID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_uniqueID.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_uniqueID.DefaultCellStyle = dataGridViewCellStyle7;
             this.mcolumn_uniqueID.HeaderText = "UID";
             this.mcolumn_uniqueID.Name = "mcolumn_uniqueID";
             this.mcolumn_uniqueID.ReadOnly = true;
             this.mcolumn_uniqueID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.mcolumn_uniqueID.Width = 32;
-            //
+            // 
             // mcolumn_blockNumber
-            //
+            // 
             this.mcolumn_blockNumber.HeaderText = "Block";
             this.mcolumn_blockNumber.Name = "mcolumn_blockNumber";
             this.mcolumn_blockNumber.ReadOnly = true;
             this.mcolumn_blockNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.mcolumn_blockNumber.Width = 60;
-            //
+            // 
             // mcolumn_runOrder
-            //
+            // 
             this.mcolumn_runOrder.HeaderText = "Run Order";
             this.mcolumn_runOrder.Name = "mcolumn_runOrder";
             this.mcolumn_runOrder.ReadOnly = true;
             this.mcolumn_runOrder.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.mcolumn_runOrder.Width = 30;
-            //
+            // 
             // mcolumn_requestName
-            //
+            // 
             this.mcolumn_requestName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_requestName.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_requestName.DefaultCellStyle = dataGridViewCellStyle8;
             this.mcolumn_requestName.HeaderText = "Dataset Name";
             this.mcolumn_requestName.MinimumWidth = 10;
             this.mcolumn_requestName.Name = "mcolumn_requestName";
             this.mcolumn_requestName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            //
+            // 
             // mcolumn_PalTray
-            //
+            // 
             this.mcolumn_PalTray.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_PalTray.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_PalTray.DefaultCellStyle = dataGridViewCellStyle9;
             this.mcolumn_PalTray.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_PalTray.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_PalTray.HeaderText = "PAL Tray";
@@ -499,33 +516,33 @@
             this.mcolumn_PalTray.Name = "mcolumn_PalTray";
             this.mcolumn_PalTray.Sorted = true;
             this.mcolumn_PalTray.Width = 51;
-            //
+            // 
             // mcolumn_palVial
-            //
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_palVial.DefaultCellStyle = dataGridViewCellStyle9;
+            // 
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_palVial.DefaultCellStyle = dataGridViewCellStyle10;
             this.mcolumn_palVial.HeaderText = "PAL Vial";
             this.mcolumn_palVial.Name = "mcolumn_palVial";
             this.mcolumn_palVial.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.mcolumn_palVial.Width = 50;
-            //
+            // 
             // mcolumn_PALVolume
-            //
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_PALVolume.DefaultCellStyle = dataGridViewCellStyle10;
+            // 
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_PALVolume.DefaultCellStyle = dataGridViewCellStyle11;
             this.mcolumn_PALVolume.HeaderText = "Volume";
             this.mcolumn_PALVolume.Name = "mcolumn_PALVolume";
             this.mcolumn_PALVolume.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.mcolumn_PALVolume.Width = 50;
-            //
+            // 
             // mcolumn_LCMethod
-            //
+            // 
             this.mcolumn_LCMethod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_LCMethod.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_LCMethod.DefaultCellStyle = dataGridViewCellStyle12;
             this.mcolumn_LCMethod.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_LCMethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_LCMethod.HeaderText = "LC Method";
@@ -533,13 +550,13 @@
             this.mcolumn_LCMethod.Name = "mcolumn_LCMethod";
             this.mcolumn_LCMethod.Sorted = true;
             this.mcolumn_LCMethod.Width = 59;
-            //
+            // 
             // mcolumn_instrumentMethod
-            //
+            // 
             this.mcolumn_instrumentMethod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_instrumentMethod.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_instrumentMethod.DefaultCellStyle = dataGridViewCellStyle13;
             this.mcolumn_instrumentMethod.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_instrumentMethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_instrumentMethod.HeaderText = "Instrument Method";
@@ -547,13 +564,13 @@
             this.mcolumn_instrumentMethod.Name = "mcolumn_instrumentMethod";
             this.mcolumn_instrumentMethod.Sorted = true;
             this.mcolumn_instrumentMethod.Width = 91;
-            //
+            // 
             // mcolumn_datasetType
-            //
+            // 
             this.mcolumn_datasetType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.White;
-            this.mcolumn_datasetType.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.White;
+            this.mcolumn_datasetType.DefaultCellStyle = dataGridViewCellStyle14;
             this.mcolumn_datasetType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_datasetType.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_datasetType.HeaderText = "Dataset Type";
@@ -563,17 +580,17 @@
             this.mcolumn_datasetType.Name = "mcolumn_datasetType";
             this.mcolumn_datasetType.Sorted = true;
             this.mcolumn_datasetType.Width = 69;
-            //
+            // 
             // mcolumn_batchID
-            //
+            // 
             this.mcolumn_batchID.HeaderText = "Batch ID";
             this.mcolumn_batchID.Name = "mcolumn_batchID";
             this.mcolumn_batchID.ReadOnly = true;
             this.mcolumn_batchID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.mcolumn_batchID.Width = 68;
-            //
+            // 
             // controlSampleView
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -625,6 +642,8 @@
         private System.Windows.Forms.ToolStripMenuItem runOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem addDateCartNameColumnIDToolStripMenuItem;
+        private System.Windows.Forms.Panel m_sampleContainer;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn mcolumn_checkbox;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_sequenceNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_columnNumber;
@@ -639,6 +658,5 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_instrumentMethod;
         private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_datasetType;
         private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_batchID;
-        private System.Windows.Forms.Panel m_sampleContainer;
     }
 }

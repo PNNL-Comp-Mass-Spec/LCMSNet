@@ -276,6 +276,7 @@ namespace LcmsNet.SampleQueue.Forms
             mobj_columnData.ID = -1;
 
             DisplayColumn(CONST_COLUMN_STATUS, false);
+            DisplayColumn(CONST_COLUMN_CHECKED, false);
             DisplayColumn(CONST_COLUMN_COLUMN_ID, false);
             DisplayColumn(CONST_COLUMN_DATASET_TYPE, false);
             DisplayColumn(CONST_COLUMN_EXPERIMENT_METHOD, false);
@@ -308,6 +309,7 @@ namespace LcmsNet.SampleQueue.Forms
 
 
                 DisplayColumn(CONST_COLUMN_STATUS, false);
+                DisplayColumn(CONST_COLUMN_CHECKED, false);
                 DisplayColumn(CONST_COLUMN_COLUMN_ID, false);
                 DisplayColumn(CONST_COLUMN_DATASET_TYPE, false);
                 DisplayColumn(CONST_COLUMN_EXPERIMENT_METHOD, true);

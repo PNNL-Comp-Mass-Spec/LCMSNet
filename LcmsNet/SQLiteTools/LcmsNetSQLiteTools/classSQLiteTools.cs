@@ -192,7 +192,7 @@ namespace LcmsNetSQLiteTools
             foreach (var sampleProps in allSampleProps)
             {
                 // Create a classSampleData object
-                var sampleData = new classSampleData();
+                var sampleData = new classSampleData(false);
 
                 // Load the sample data object from the string dictionary
                 sampleData.LoadPropertyValues(DictionaryToStringDict(sampleProps));

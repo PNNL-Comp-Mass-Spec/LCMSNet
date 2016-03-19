@@ -104,7 +104,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>classSampleData object containing data from the XML node</returns>
         private classSampleData ConvertXMLNodeToSample(XmlNode ItemNode)
         {
-            classSampleData retData = new classSampleData();
+            classSampleData retData = new classSampleData(false);
             string tempStr;
 
             // Description (DMS.Name)

@@ -1,48 +1,48 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
 /* Last modified 01/16/2009
- * 
+ *
  *      1/16/2009: Brian LaMarche
  *         - Added Name for the sample
  *         - Added some comments for the get or set accesors for private member
  *              variables.
- *         - Made the class implement the ICloneable interface for shallow 
+ *         - Made the class implement the ICloneable interface for shallow
  *              copies of references.
  *         - Added the constant value region for default sample names.
- *         
+ *
  *      1/19/2009: Brian LaMarche
  *          - Added Column ID, and Sequence ID
  *          - Added a property to the PAL data.
- *          
- *		  2/10/2009: Dave Clark
- *				- Added method for retrieving current values of all properties at once
- *				
- *			2/17/2009: Dave Clark
- *				- Changed to inherit from classDataClassBase and override data prep method
- *				
- *			2/20/2009: Dave Clark
- *				- Changed clone method to deep copy
- *				
- *			2/27/2009: Dave Clark
- *				- Changed event attributes to non-serialized to fix deep clone bug
- *				
- *			3-16-2009:  Brian LaMarche
- *			    - Added the Instrument and Experiment Method Name properties.			
  *
- *			3/19/2009: Dave Clark
- *				 - Modified cache property storage/retrieval methods to reflect new properties added 3/16
- *				 
- *			4/3/2009: Dave Clark
- *				 - Corrected bug in restoration of experiment data from cache
- *				 
- *		    10/8/2009: Brian LaMarche
- *				 - Added the LC Method data...not sure if the experiment data should be removed.
- *		    7/16/2010: Brian LaMarche
- *				 - Added a fullname option to display date and cart name appended to the DMS request name.
+ *      2/10/2009: Dave Clark
+ *          - Added method for retrieving current values of all properties at once
+ *
+ *      2/17/2009: Dave Clark
+ *          - Changed to inherit from classDataClassBase and override data prep method
+ *
+ *      2/20/2009: Dave Clark
+ *          - Changed clone method to deep copy
+ *
+ *      2/27/2009: Dave Clark
+ *          - Changed event attributes to non-serialized to fix deep clone bug
+ *
+ *      3-16-2009:  Brian LaMarche
+ *          - Added the Instrument and Experiment Method Name properties.
+ *
+ *      3/19/2009: Dave Clark
+ *          - Modified cache property storage/retrieval methods to reflect new properties added 3/16
+ *
+ *      4/3/2009: Dave Clark
+ *          - Corrected bug in restoration of experiment data from cache
+ *
+ *      10/8/2009: Brian LaMarche
+ *          - Added the LC Method data...not sure if the experiment data should be removed.
+ *      7/16/2010: Brian LaMarche
+ *          - Added a fullname option to display date and cart name appended to the DMS request name.
  * */
 //*********************************************************************************************************
 
@@ -91,13 +91,13 @@ namespace LcmsNetDataClasses
         Complete,
 
         /// <summary>
-        /// Error occurred during the run. 
+        /// Error occurred during the run.
         /// </summary>
         Error
     }
 
     /// <summary>
-    /// Class to hold data for one sample (instrument run)    
+    /// Class to hold data for one sample (instrument run)
     /// </summary>
     [Serializable]
     public class classSampleData : classDataClassBase, ICloneable
@@ -123,14 +123,16 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Default constructor
         /// </summary>
-        public classSampleData()
+        /// <param name="isDummySample">If this is possibly a dummy or unchecked sample, and the real sample needs to be found in the queue/list</param>
+        public classSampleData(bool isDummySample = true)
         {
+            IsDummySample = isDummySample;
             mobj_DmsData = new classDMSData();
 
-            // 
-            // Set the default column to the first column, 
+            //
+            // Set the default column to the first column,
             // and sequence number to non-existent.
-            // 
+            //
             mlong_sequenceNumber = -1;
 
             mobj_palData = new classPalData();
@@ -138,9 +140,9 @@ namespace LcmsNetDataClasses
             mobj_instrumentData = new classInstrumentInfo();
             mobj_method = null;
             Volume = CONST_MIN_SAMPLE_VOLUME;
-            // 
+            //
             // Default state is always to be queued but not waiting to run.
-            // 
+            //
             RunningStatus = enumSampleRunningStatus.Queued;
         }
 
@@ -184,7 +186,7 @@ namespace LcmsNetDataClasses
         }
 
         /// <summary>
-        /// Sets the dataset name 
+        /// Sets the dataset name
         /// </summary>
         /// <param name="sample"></param>
         public static void AddDateCartColumnToDatasetName(classSampleData sample)
@@ -298,7 +300,13 @@ namespace LcmsNetDataClasses
 
         #endregion
 
-        #region "Properties"  
+        #region "Properties"
+
+        /// <summary>
+        /// Whether this is possibly a dummy sample, and a real sample needs to be looked up before we perform any operations
+        /// Default value is true; exists to prevent excessive lookups of the real sample.
+        /// </summary>
+        public bool IsDummySample { get; private set; }
 
         /// <summary>
         /// Gets or sets the status of the sample running on a column thread or waiting in a queue.
@@ -526,7 +534,7 @@ namespace LcmsNetDataClasses
                 if (keyName.Length < 4)
                 {
                     // Property name is too short to be one of the properties that holds a class, so add
-                    //		it to the main class dictionary
+                    //      it to the main class dictionary
                     baseProps.Add(keyName, testEntry.Value.ToString());
                 }
                 // Stuff string dictionaries for each property holding a class, and main class

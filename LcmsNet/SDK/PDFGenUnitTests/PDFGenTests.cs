@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 10/25/2013
- * 
- * Last Modified 11/8/2013 By Christopher Walters 
+ *
+ * Last Modified 11/8/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -44,13 +44,13 @@ namespace PDFGeneratorTests
             sample.LCMethod = new LcmsNetDataClasses.Method.classLCMethod();
             sample.LCMethod.Name = "LCMethod9";
             sample.LCMethod.Column = 1;
-            sample.LCMethod.SetStartTime(DateTime.Now.AddSeconds(10));                        
+            sample.LCMethod.SetStartTime(DateTime.Now.AddSeconds(10));
             sample.LCMethod.Events.Add(new LcmsNetDataClasses.Method.classLCEvent());
             sample.LCMethod.Events.Add(new LcmsNetDataClasses.Method.classLCEvent());
-            TestPump testPump = new TestPump();            
+            TestPump testPump = new TestPump();
             testPump.Emulation = true;
             testPump.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized;
-            testPump.ErrorType = LcmsNetDataClasses.Devices.enumDeviceErrorStatus.NoError;           
+            testPump.ErrorType = LcmsNetDataClasses.Devices.enumDeviceErrorStatus.NoError;
             string err = "Derpy error";
             testPump.Initialize(ref err);
             LcmsNetDataClasses.Devices.IDevice testValve = new TestValve();
@@ -69,10 +69,10 @@ namespace PDFGeneratorTests
             sample.LCMethod.Events[0].Parameters[0] = 10000;
             sample.LCMethod.Events[0].Parameters[1] = 1.0;
             sample.LCMethod.Events[0].Parameters[2] = "TestMethod";
-            sample.LCMethod.Events[0].Duration = new TimeSpan(0, 0, 10);                              
+            sample.LCMethod.Events[0].Duration = new TimeSpan(0, 0, 10);
             sample.LCMethod.Events[0].MethodAttribute = new classLCMethodAttribute("Start Method", 10000.00, string.Empty, -1, false);
             sample.LCMethod.Events[0].Method = testPump.GetType().GetMethod("StartMethod");
-            
+
             sample.LCMethod.Events[1].Device = testValve;
             sample.LCMethod.Events[1].HadError = false;
             sample.LCMethod.Events[1].Name = "SetPosition";
@@ -80,18 +80,18 @@ namespace PDFGeneratorTests
             sample.LCMethod.Events[1].ParameterNames = new string[1];
             sample.LCMethod.Events[1].ParameterNames[0] = "newPosition";
             sample.LCMethod.Events[1].Parameters = new object[1];
-            sample.LCMethod.Events[1].Parameters[0] = FluidicsSDK.Base.TwoPositionState.PositionB;           
+            sample.LCMethod.Events[1].Parameters[0] = FluidicsSDK.Base.TwoPositionState.PositionB;
             sample.LCMethod.Events[1].MethodAttribute = new classLCMethodAttribute("SetPostion", 10000.00, string.Empty, -1, false);
             sample.LCMethod.Events[1].Method = testValve.GetType().GetMethod("SetPosition");
             sample.Operator = "TestOp";
             sample.Volume = 5;
-            
+
             sample.ColumnData = new LcmsNetDataClasses.Configuration.classColumnData();
             sample.ColumnData.ID = 1;
             sample.ColumnData.Name = "Column1";
             sample.ColumnData.Status = LcmsNetDataClasses.Configuration.enumColumnStatus.Idle;
             sample.ColumnData.Color = Color.Red;
-            
+
             sample.DmsData = new classDMSData();
             sample.DmsData.RequestName = "TestReq";
             sample.DmsData.RequestID = 9001;
@@ -103,10 +103,10 @@ namespace PDFGeneratorTests
             sample.DmsData.DatasetType = "HMS";
             sample.DmsData.DatasetName = "test dataset";
             sample.RunningStatus = enumSampleRunningStatus.WaitingToRun;
-            
+
             sample.PAL.PALTray = "Tray1";
             classLCMSSettings.SetParameter("InstName", "Mass Spec Test.1");
-            
+
             devices = new List<IDevice>();
             devices.Add(testPump);
             devices.Add(testValve);
@@ -150,8 +150,8 @@ namespace PDFGeneratorTests
             f.Add(sample.ColumnData);
             classCartConfiguration.Columns = f;
             classSampleQueue queue = new classSampleQueue();
-            List<classSampleData> d = new List<classSampleData>();           
-            d.Add(sample);     
+            List<classSampleData> d = new List<classSampleData>();
+            d.Add(sample);
             classLCMethodManager.Manager.Methods.Add(sample.LCMethod.Name, sample.LCMethod);
             classLCMethodScheduler sched = new classLCMethodScheduler(queue);
             sched.SampleProgress += WritePDFOnMethodComplete;
