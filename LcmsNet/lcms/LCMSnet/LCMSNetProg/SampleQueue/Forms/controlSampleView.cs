@@ -257,6 +257,11 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private int mint_firstQueuedSamplePosition = 0;
 
+        /// <summary>
+        /// If autoscroll during sequence run is enabled
+        /// </summary>
+        protected bool m_autoscroll = true;
+
         #endregion
 
         #region Constructors and Initialization
@@ -363,7 +368,6 @@ namespace LcmsNet.SampleQueue.Forms
                 classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(Manager_MethodRemoved);
                 classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(Manager_MethodUpdated);
             }
-
 
             //
             // Update Method Combo Boxes
@@ -1815,7 +1819,6 @@ namespace LcmsNet.SampleQueue.Forms
         {
             classSampleData newData = null;
 
-
             //
             // If we have a sample, get the previous sample data.
             //
@@ -1912,8 +1915,7 @@ namespace LcmsNet.SampleQueue.Forms
             List<long> removes = new List<long>();
             foreach (DataGridViewRow row in mdataGrid_samples.Rows)
             {
-                classSampleData data = RowToSample(row);
-                removes.Add(data.UniqueID);
+                removes.Add((long)row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
             }
 
             //
@@ -2365,28 +2367,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void SamplesUpdated(object sender, classSampleQueueArgs data)
         {
-            var dtStart = DateTime.UtcNow;
-            var samplesUpdated = 0;
-            var totalSamples = data.Samples.Count();
-            var waitTimeSeconds = 5;
-
-            mdataGrid_samples.SuspendLayout();
-
-            foreach (var datum in data.Samples)
-            {
-                var index = FindRowIndexFromUID(datum.UniqueID);
-                if (index >= 0)
-                {
-                    UpdateRow(datum, index);
-                }
-
-                if (QueryUserAbortSlowUpdates(ref dtStart, ref waitTimeSeconds, samplesUpdated, totalSamples))
-                    break;
-
-                samplesUpdated++;
-            }
-
-            mdataGrid_samples.ResumeLayout();
+            UpdateRows(data.Samples);
         }
 
         /// <summary>
@@ -2455,17 +2436,21 @@ namespace LcmsNet.SampleQueue.Forms
             var dtStart = DateTime.UtcNow;
             var samplesUpdated = 0;
             var totalSamples = samples.Count();
-
+            var lastCompletedRow = 0;
             var waitTimeSeconds = 5;
 
             mdataGrid_samples.SuspendLayout();
 
             foreach (var sample in samples)
             {
-                var uid = FindRowIndexFromUID(sample.UniqueID);
-                if (uid >= 0)
+                var rowid = FindRowIndexFromUID(sample.UniqueID);
+                if (rowid >= 0)
                 {
-                    UpdateRow(sample, uid);
+                    UpdateRow(sample, rowid);
+                    if (GetCheckboxStatusFromSampleStatus(sample) == enumCheckboxStatus.Disabled)
+                    {
+                        lastCompletedRow = Math.Max(lastCompletedRow, rowid);
+                    }
                 }
 
                 if (QueryUserAbortSlowUpdates(ref dtStart, ref waitTimeSeconds, samplesUpdated, totalSamples))
@@ -2474,6 +2459,10 @@ namespace LcmsNet.SampleQueue.Forms
                 samplesUpdated++;
             }
 
+            if (m_autoscroll && lastCompletedRow > 3)
+            {
+                mdataGrid_samples.FirstDisplayedScrollingRowIndex = lastCompletedRow - 3;
+            }
             mdataGrid_samples.ResumeLayout();
         }
 
