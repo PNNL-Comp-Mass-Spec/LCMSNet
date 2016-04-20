@@ -501,6 +501,7 @@
     <Compile Include="SampleQueue\Forms\formTrayVialAssignment.Designer.cs">
       <DependentUpon>formTrayVialAssignment.cs</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Forms\SampleToRowTranslator.cs" />
     <Compile Include="SampleQueue\IO\ISampleQueueReader.cs" />
     <Compile Include="SampleQueue\IO\ISampleQueueWriter.cs" />
     <Compile Include="SampleQueue\IO\classConvertVialPosition.cs" />
@@ -813,6 +814,7 @@
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\LcmsNet.SampleQueue.Forms.SampleToRowTranslator.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

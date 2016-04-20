@@ -401,6 +401,8 @@ namespace LcmsNet.SampleQueue.Forms
             mdataGrid_samples.CellEndEdit += new DataGridViewCellEventHandler(mdataGrid_samples_CellEndEdit);
             mdataGrid_samples.DataError += new DataGridViewDataErrorEventHandler(mdataGrid_samples_DataError);
             mdataGrid_samples.KeyUp += new KeyEventHandler(mdataGrid_samples_KeyUp);
+            // Make sure to set the styles/data for a row before it is displayed
+            mdataGrid_samples.RowPrePaint += RowPrePaint;
 
             DisplayColumn(CONST_COLUMN_COLUMN_ID, true);
             DisplayColumn(CONST_COLUMN_DATASET_TYPE, true);
@@ -748,6 +750,11 @@ namespace LcmsNet.SampleQueue.Forms
                     // Other conditions: no change (disabled cannot be unset, and no change for state to same state
                 }
             }
+        }
+
+        void RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            UpdateRow(e.RowIndex);
         }
 
         #endregion
@@ -1342,7 +1349,7 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
-        /// Updates the PAL Tray Column Combo Box.
+        /// Updates the Instrument Method Column Combo Box.
         /// </summary>
         protected virtual void ShowInstrumentMethods()
         {
@@ -1864,26 +1871,23 @@ namespace LcmsNet.SampleQueue.Forms
             }
             else
             {
-                DataGridViewRow row = SampleToRow(sample);
-                if (row != null)
+                bool found = false;
+                for (int i = 0; i < mdataGrid_samples.Rows.Count; i++)
                 {
-                    bool found = false;
-                    for (int i = 0; i < mdataGrid_samples.Rows.Count; i++)
+                    classSampleData sampleNext = RowToSample(mdataGrid_samples.Rows[i]);
+                    if (sample.SequenceID < sampleNext.SequenceID &&
+                        sampleNext.RunningStatus == enumSampleRunningStatus.Queued)
                     {
-                        classSampleData sampleNext = RowToSample(mdataGrid_samples.Rows[i]);
-                        if (sample.SequenceID < sampleNext.SequenceID &&
-                            sampleNext.RunningStatus == enumSampleRunningStatus.Queued)
-                        {
-                            found = true;
-                            mdataGrid_samples.Rows.Insert(i, row);
-                            row.Selected = false;
-                            break;
-                        }
+                        found = true;
+                        sampleToRowTranslatorBindingSource.List.Insert(i, new SampleToRowTranslator(sample));
+                        UpdateRow(i);
+                        break;
                     }
-                    if (!found)
-                    {
-                        mdataGrid_samples.Rows.Add(row);
-                    }
+                }
+                if (!found)
+                {
+                    sampleToRowTranslatorBindingSource.List.Add(new SampleToRowTranslator(sample));
+                    UpdateRow(mdataGrid_samples.RowCount - 1);
                 }
             }
             return added;
@@ -2155,7 +2159,7 @@ namespace LcmsNet.SampleQueue.Forms
         protected virtual DataGridViewCellStyle GetRowStyleFromSample(classSampleData data,
             DataGridViewCellStyle defaultStyle)
         {
-            DataGridViewCellStyle rowStyle = new DataGridViewCellStyle(defaultStyle);
+            DataGridViewCellStyle rowStyle = defaultStyle;
             switch (data.RunningStatus)
             {
                 case enumSampleRunningStatus.Running:
@@ -2205,6 +2209,7 @@ namespace LcmsNet.SampleQueue.Forms
                     rowStyle.SelectionBackColor = Color.Navy;
                     break;
                 case enumSampleRunningStatus.Queued:
+                    goto default;
                 default:
                     rowStyle.BackColor = Color.White;
                     rowStyle.ForeColor = Color.Black;
@@ -2228,8 +2233,80 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Updates the row at index with the data provided.
         /// </summary>
+        /// <param name="index">Index to update.</param>
+        /// 
+        protected virtual void UpdateRow(int index)
+        {
+            DataGridViewRow row = mdataGrid_samples.Rows[index];
+            if (!row.Displayed)
+            {
+                return;
+            }
+            SampleToRowTranslator data = (SampleToRowTranslator)row.DataBoundItem;
+
+
+            DataGridViewCellStyle style = row.Cells[CONST_COLUMN_COLUMN_ID].Style;
+            if (data.Sample.ColumnData == null)
+            {
+                throw new Exception("The column data cannot be null.");
+            }
+            else if (data.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
+            {
+                data.SpecialColumnNumber = "S";
+            }
+            else
+            {
+                style.BackColor = data.Sample.ColumnData.Color;
+            }
+
+            // Make sure selected rows column colors don't change for running and waiting to run
+            // but only for queued, or completed (including error) sample status.
+            if (data.Sample.RunningStatus == enumSampleRunningStatus.Running ||
+                data.Sample.RunningStatus == enumSampleRunningStatus.WaitingToRun)
+            {
+                style.SelectionBackColor = style.BackColor;
+                style.SelectionForeColor = style.ForeColor;
+            }
+
+            row.Cells[CONST_COLUMN_CHECKED].Tag = data.CheckboxTag;
+
+            //
+            // If the name of the sample is the un-used, it means that the Sample Queue has backfilled the
+            // samples to help the user normalize samples on columns.
+            //
+            string name = data.Sample.DmsData.DatasetName;
+            if (name.Contains(mobj_sampleQueue.UnusedSampleName))
+            {
+                DataGridViewCellStyle rowStyle = row.DefaultCellStyle;
+                rowStyle.BackColor = Color.LightGray;
+                rowStyle.ForeColor = Color.DarkGray;
+            }
+            else
+            {
+                //
+                // We need to color the sample based on its status.
+                //
+                DataGridViewCellStyle rowStyle = GetRowStyleFromSample(data.Sample, row.DefaultCellStyle);
+            }
+            row.Cells[CONST_COLUMN_STATUS].ToolTipText = data.StatusToolTipText;
+
+            //
+            // Setup the style for the column color
+            //
+            row.Cells[CONST_COLUMN_COLUMN_ID].Style = style;
+
+            //
+            // Make sure we color the valid row.
+            //
+            UpdateValidCell(row, data.Sample);
+        }
+
+        /// <summary>
+        /// Updates the row at index with the data provided.
+        /// </summary>
         /// <param name="data">Data to update the row with.</param>
         /// <param name="index">Index to update.</param>
+        [Obsolete("Version used before databinding", true)]
         protected virtual void UpdateRow(classSampleData data, int index)
         {
             DataGridViewRow row = mdataGrid_samples.Rows[index];
@@ -2446,7 +2523,7 @@ namespace LcmsNet.SampleQueue.Forms
                 var rowid = FindRowIndexFromUID(sample.UniqueID);
                 if (rowid >= 0)
                 {
-                    UpdateRow(sample, rowid);
+                    UpdateRow(rowid);
                     if (GetCheckboxStatusFromSampleStatus(sample) == enumCheckboxStatus.Disabled)
                     {
                         lastCompletedRow = Math.Max(lastCompletedRow, rowid);

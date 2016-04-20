@@ -77,6 +77,7 @@
             this.dataGridViewComboBoxColumn5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.m_sampleContainer = new System.Windows.Forms.Panel();
             this.mdataGrid_samples = new LcmsNet.SampleQueue.Forms.classDataGrid();
+            this.sampleToRowTranslatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mcolumn_checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mcolumn_sequenceNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,6 +96,7 @@
             this.mcontextMenu_options.SuspendLayout();
             this.m_sampleContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mdataGrid_samples)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sampleToRowTranslatorBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // mcontextMenu_options
@@ -306,7 +308,6 @@
             // 
             // dataGridViewComboBoxColumn1
             // 
-            this.dataGridViewComboBoxColumn1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn1.HeaderText = "PAL Method";
             this.dataGridViewComboBoxColumn1.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
@@ -314,7 +315,6 @@
             // 
             // dataGridViewComboBoxColumn2
             // 
-            this.dataGridViewComboBoxColumn2.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn2.HeaderText = "PAL Tray";
             this.dataGridViewComboBoxColumn2.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
@@ -322,7 +322,6 @@
             // 
             // dataGridViewComboBoxColumn3
             // 
-            this.dataGridViewComboBoxColumn3.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn3.HeaderText = "LC Method";
             this.dataGridViewComboBoxColumn3.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn3.Name = "dataGridViewComboBoxColumn3";
@@ -330,7 +329,6 @@
             // 
             // dataGridViewComboBoxColumn4
             // 
-            this.dataGridViewComboBoxColumn4.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn4.HeaderText = "Instrument Method";
             this.dataGridViewComboBoxColumn4.MaxDropDownItems = 100;
             this.dataGridViewComboBoxColumn4.Name = "dataGridViewComboBoxColumn4";
@@ -342,7 +340,6 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
             this.dataGridViewComboBoxColumn5.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewComboBoxColumn5.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.dataGridViewComboBoxColumn5.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.dataGridViewComboBoxColumn5.HeaderText = "Dataset Type";
             this.dataGridViewComboBoxColumn5.Items.AddRange(new object[] {
@@ -373,6 +370,7 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.mdataGrid_samples.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.mdataGrid_samples.AutoGenerateColumns = false;
             this.mdataGrid_samples.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.mdataGrid_samples.BackgroundColor = System.Drawing.Color.White;
             this.mdataGrid_samples.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -392,6 +390,7 @@
             this.mcolumn_instrumentMethod,
             this.mcolumn_datasetType,
             this.mcolumn_batchID});
+            this.mdataGrid_samples.DataSource = this.sampleToRowTranslatorBindingSource;
             this.mdataGrid_samples.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mdataGrid_samples.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.mdataGrid_samples.Location = new System.Drawing.Point(0, 0);
@@ -400,9 +399,14 @@
             this.mdataGrid_samples.Size = new System.Drawing.Size(926, 655);
             this.mdataGrid_samples.TabIndex = 7;
             // 
+            // sampleToRowTranslatorBindingSource
+            // 
+            this.sampleToRowTranslatorBindingSource.DataSource = typeof(LcmsNet.SampleQueue.Forms.SampleToRowTranslator);
+            // 
             // mcolumn_checkbox
             // 
             this.mcolumn_checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.mcolumn_checkbox.DataPropertyName = "Checkbox";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.NullValue = false;
             this.mcolumn_checkbox.DefaultCellStyle = dataGridViewCellStyle3;
@@ -418,6 +422,7 @@
             // Status
             // 
             this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Status.DataPropertyName = "Status";
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
@@ -431,6 +436,7 @@
             // mcolumn_sequenceNumber
             // 
             this.mcolumn_sequenceNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_sequenceNumber.DataPropertyName = "SequenceNumber";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.Format = "0000";
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.MediumBlue;
@@ -446,6 +452,7 @@
             // mcolumn_columnNumber
             // 
             this.mcolumn_columnNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_columnNumber.DataPropertyName = "ColumnNumber";
             dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_columnNumber.DefaultCellStyle = dataGridViewCellStyle6;
@@ -458,6 +465,7 @@
             // mcolumn_uniqueID
             // 
             this.mcolumn_uniqueID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_uniqueID.DataPropertyName = "UniqueID";
             dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_uniqueID.DefaultCellStyle = dataGridViewCellStyle7;
@@ -469,6 +477,7 @@
             // 
             // mcolumn_blockNumber
             // 
+            this.mcolumn_blockNumber.DataPropertyName = "BlockNumber";
             this.mcolumn_blockNumber.HeaderText = "Block";
             this.mcolumn_blockNumber.Name = "mcolumn_blockNumber";
             this.mcolumn_blockNumber.ReadOnly = true;
@@ -477,6 +486,7 @@
             // 
             // mcolumn_runOrder
             // 
+            this.mcolumn_runOrder.DataPropertyName = "RunOrder";
             this.mcolumn_runOrder.HeaderText = "Run Order";
             this.mcolumn_runOrder.Name = "mcolumn_runOrder";
             this.mcolumn_runOrder.ReadOnly = true;
@@ -486,6 +496,7 @@
             // mcolumn_requestName
             // 
             this.mcolumn_requestName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.mcolumn_requestName.DataPropertyName = "RequestName";
             dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_requestName.DefaultCellStyle = dataGridViewCellStyle8;
@@ -497,10 +508,10 @@
             // mcolumn_PalTray
             // 
             this.mcolumn_PalTray.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_PalTray.DataPropertyName = "PALTray";
             dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_PalTray.DefaultCellStyle = dataGridViewCellStyle9;
-            this.mcolumn_PalTray.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_PalTray.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_PalTray.HeaderText = "PAL Tray";
             this.mcolumn_PalTray.MaxDropDownItems = 100;
@@ -510,6 +521,7 @@
             // 
             // mcolumn_palVial
             // 
+            this.mcolumn_palVial.DataPropertyName = "PALVial";
             dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_palVial.DefaultCellStyle = dataGridViewCellStyle10;
@@ -520,6 +532,7 @@
             // 
             // mcolumn_PALVolume
             // 
+            this.mcolumn_PALVolume.DataPropertyName = "PALVolume";
             dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_PALVolume.DefaultCellStyle = dataGridViewCellStyle11;
@@ -531,10 +544,10 @@
             // mcolumn_LCMethod
             // 
             this.mcolumn_LCMethod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_LCMethod.DataPropertyName = "LCMethod";
             dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_LCMethod.DefaultCellStyle = dataGridViewCellStyle12;
-            this.mcolumn_LCMethod.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_LCMethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_LCMethod.HeaderText = "LC Method";
             this.mcolumn_LCMethod.MaxDropDownItems = 100;
@@ -545,10 +558,10 @@
             // mcolumn_instrumentMethod
             // 
             this.mcolumn_instrumentMethod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_instrumentMethod.DataPropertyName = "InstrumentMethod";
             dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_instrumentMethod.DefaultCellStyle = dataGridViewCellStyle13;
-            this.mcolumn_instrumentMethod.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_instrumentMethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_instrumentMethod.HeaderText = "Instrument Method";
             this.mcolumn_instrumentMethod.MaxDropDownItems = 100;
@@ -559,10 +572,10 @@
             // mcolumn_datasetType
             // 
             this.mcolumn_datasetType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.mcolumn_datasetType.DataPropertyName = "DatasetType";
             dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_datasetType.DefaultCellStyle = dataGridViewCellStyle14;
-            this.mcolumn_datasetType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
             this.mcolumn_datasetType.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mcolumn_datasetType.HeaderText = "Dataset Type";
             this.mcolumn_datasetType.Items.AddRange(new object[] {
@@ -574,6 +587,7 @@
             // 
             // mcolumn_batchID
             // 
+            this.mcolumn_batchID.DataPropertyName = "BatchID";
             this.mcolumn_batchID.HeaderText = "Batch ID";
             this.mcolumn_batchID.Name = "mcolumn_batchID";
             this.mcolumn_batchID.ReadOnly = true;
@@ -592,6 +606,7 @@
             this.mcontextMenu_options.ResumeLayout(false);
             this.m_sampleContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mdataGrid_samples)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sampleToRowTranslatorBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -648,5 +663,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_instrumentMethod;
         private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_datasetType;
         private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_batchID;
+        private System.Windows.Forms.BindingSource sampleToRowTranslatorBindingSource;
     }
 }
