@@ -339,7 +339,7 @@
             // dataGridViewComboBoxColumn5
             // 
             this.dataGridViewComboBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
             this.dataGridViewComboBoxColumn5.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewComboBoxColumn5.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
@@ -369,7 +369,7 @@
             this.mdataGrid_samples.AllowUserToDeleteRows = false;
             this.mdataGrid_samples.AllowUserToOrderColumns = true;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.mdataGrid_samples.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
@@ -419,7 +419,7 @@
             // 
             this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Blue;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
             this.Status.DefaultCellStyle = dataGridViewCellStyle4;
             this.Status.HeaderText = "Status";
@@ -433,7 +433,7 @@
             this.mcolumn_sequenceNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.Format = "0000";
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_sequenceNumber.DefaultCellStyle = dataGridViewCellStyle5;
             this.mcolumn_sequenceNumber.HeaderText = "Seq #";
@@ -446,7 +446,7 @@
             // mcolumn_columnNumber
             // 
             this.mcolumn_columnNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_columnNumber.DefaultCellStyle = dataGridViewCellStyle6;
             this.mcolumn_columnNumber.HeaderText = "Col #";
@@ -458,7 +458,7 @@
             // mcolumn_uniqueID
             // 
             this.mcolumn_uniqueID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_uniqueID.DefaultCellStyle = dataGridViewCellStyle7;
             this.mcolumn_uniqueID.HeaderText = "UID";
@@ -486,7 +486,7 @@
             // mcolumn_requestName
             // 
             this.mcolumn_requestName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_requestName.DefaultCellStyle = dataGridViewCellStyle8;
             this.mcolumn_requestName.HeaderText = "Dataset Name";
@@ -497,7 +497,7 @@
             // mcolumn_PalTray
             // 
             this.mcolumn_PalTray.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_PalTray.DefaultCellStyle = dataGridViewCellStyle9;
             this.mcolumn_PalTray.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
@@ -510,7 +510,7 @@
             // 
             // mcolumn_palVial
             // 
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_palVial.DefaultCellStyle = dataGridViewCellStyle10;
             this.mcolumn_palVial.HeaderText = "PAL Vial";
@@ -520,7 +520,7 @@
             // 
             // mcolumn_PALVolume
             // 
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_PALVolume.DefaultCellStyle = dataGridViewCellStyle11;
             this.mcolumn_PALVolume.HeaderText = "Volume";
@@ -531,7 +531,7 @@
             // mcolumn_LCMethod
             // 
             this.mcolumn_LCMethod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_LCMethod.DefaultCellStyle = dataGridViewCellStyle12;
             this.mcolumn_LCMethod.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
@@ -545,7 +545,7 @@
             // mcolumn_instrumentMethod
             // 
             this.mcolumn_instrumentMethod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_instrumentMethod.DefaultCellStyle = dataGridViewCellStyle13;
             this.mcolumn_instrumentMethod.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
@@ -559,7 +559,7 @@
             // mcolumn_datasetType
             // 
             this.mcolumn_datasetType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.MediumBlue;
             dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.White;
             this.mcolumn_datasetType.DefaultCellStyle = dataGridViewCellStyle14;
             this.mcolumn_datasetType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
