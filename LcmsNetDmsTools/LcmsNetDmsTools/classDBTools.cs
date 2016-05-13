@@ -294,7 +294,7 @@ namespace LcmsNetDmsTools
 
                 ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
 
-                GetDatasetListFromDMS(stepCountCompleted, stepCountCompleted + DATASET_STEPS, stepCountTotal);
+                GetDatasetListFromDMS();
                 stepCountCompleted = stepCountCompleted + DATASET_STEPS;
             }
 
@@ -348,7 +348,13 @@ namespace LcmsNetDmsTools
             }
         }
 
+        [Obsolete("This version of the function is obsolete since the stepCount variables are not used")]
         public void GetDatasetListFromDMS(int stepCountAtStart, int stepCountAtEnd, int stepCountOverall)
+        {
+            GetDatasetListFromDMS();
+        }
+
+        public void GetDatasetListFromDMS()
         {
             var connStr = GetConnectionString();
 
@@ -367,7 +373,6 @@ namespace LcmsNetDmsTools
                 // Store the data in the cache db
                 try
                 {
-                    // int stepCountAtStart, int stepCountAtEnd, int stepCountOverall
                     classSQLiteTools.SaveSingleColumnListToCache(datasetList, enumTableTypes.DatasetList);
                 }
                 catch (Exception ex)
