@@ -2523,6 +2523,7 @@ namespace LcmsNet.SampleQueue.Forms
                 var rowid = FindRowIndexFromUID(sample.UniqueID);
                 if (rowid >= 0)
                 {
+                    ((SampleToRowTranslator)mdataGrid_samples.Rows[rowid].DataBoundItem).Sample = sample;
                     UpdateRow(rowid);
                     if (GetCheckboxStatusFromSampleStatus(sample) == enumCheckboxStatus.Disabled)
                     {
