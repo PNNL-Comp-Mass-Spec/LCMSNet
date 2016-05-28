@@ -286,7 +286,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             finally
             {
-                mdataGrid_samples.RowHeadersVisible = true;
+                mdataGrid_samples.RowHeadersVisible = false;
             }
         }
 
@@ -314,7 +314,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             finally
             {
-                mdataGrid_samples.RowHeadersVisible = true;
+                mdataGrid_samples.RowHeadersVisible = false;
             }
         }
 
