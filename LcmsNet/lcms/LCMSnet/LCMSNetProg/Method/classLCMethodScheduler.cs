@@ -488,7 +488,11 @@ namespace LcmsNet.Method
                     if (data.LCMethod.Events.Count > 0)
                         sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
                     else
+#if DEBUG
+                        sampleEndTime[sampleColumnID] = LcmsNetSDK.TimeKeeper.Instance.Now.AddSeconds(5);
+#else
                         sampleEndTime[sampleColumnID] = LcmsNetSDK.TimeKeeper.Instance.Now;
+#endif
 
                     currentEvent[sampleColumnID] = 0;
                     data.LCMethod.CurrentEventNumber = 0;
@@ -623,11 +627,12 @@ namespace LcmsNet.Method
                                                 eventDuration = new TimeSpan(0, 0, 0);
                                             }
                                             string message = string.Format(
-                                                "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1} Stopping all samples",
+                                                "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1}, Late by {4:F2} seconds; Stopping all samples",
                                                 columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                                 sampleEndTime[columnID],
                                                 deviceName,
-                                                eventName);
+                                                eventName,
+                                                timeElapsedOverdue);
                                             //Print(message, CONST_VERBOSE_LEAST, null, samples[columnID]);
                                             HandleError(samples[columnID], message);
                                             sampleEndTime[columnID] = DateTime.MinValue;

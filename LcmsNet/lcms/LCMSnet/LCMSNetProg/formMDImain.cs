@@ -703,7 +703,6 @@ namespace LcmsNet
             {
                 if (this.InvokeRequired)
                 {
-                    ;
                     this.Invoke(new statusDelegate(SetStatusMessage), messageLevel, args.Message);
                 }
                 else
@@ -722,7 +721,10 @@ namespace LcmsNet
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
+                if (!this.IsDisposed)
+                {
+                    this.Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
+                }
             }
             else
             {
@@ -797,6 +799,10 @@ namespace LcmsNet
                 case enumSampleProgress.Complete:
                     Bitmap configImage = mform_fluidicsDesign.GetImage();
                     string docPath = string.Empty;
+                    if (sample == null)
+                    {
+                        break;
+                    }
                     try
                     {
                         docPath = classLCMSSettings.GetParameter("PdfPath");

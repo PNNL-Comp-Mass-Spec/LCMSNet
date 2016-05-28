@@ -78,7 +78,7 @@ namespace LcmsNetDataClasses.Logging
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID.ToString() + "',");
                 int eventIndx = args.Sample.LCMethod.CurrentEventNumber;
-                if (eventIndx < 0)
+                if (eventIndx < 0 || eventIndx > args.Sample.LCMethod.Events.Count)
                 {
                     sqlCmdBlder.Append("'',");
                 }
