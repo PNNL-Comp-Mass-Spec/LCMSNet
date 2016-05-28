@@ -471,7 +471,7 @@
             this.mbutton_fillLCMethod.Text = "Apply";
             this.mbutton_fillLCMethod.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_fillLCMethod.UseVisualStyleBackColor = true;
-            this.mbutton_fillLCMethod.Click += new System.EventHandler(this.button1_Click);
+            this.mbutton_fillLCMethod.Click += new System.EventHandler(this.mbutton_fillLCMethod_Click);
             //
             // button5
             //

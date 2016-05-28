@@ -37,7 +37,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void mbutton_fillLCMethod_Click(object sender, EventArgs e)
         {
             EnsureItemsAreSelected();
             List<classLCMethod> methods = new List<classLCMethod>();
@@ -246,9 +246,9 @@ namespace LcmsNet.SampleQueue.Forms
         private void button5_Click(object sender, EventArgs e)
         {
             // This is lazy programming....
-            EnsureItemsAreSelected();
-            button1_Click(null, null);
             mbutton_fillInstrument_Click(null, null);
+            EnsureItemsAreSelected();
+            mbutton_fillLCMethod_Click(null, null);
             mbutton_fillVolume_Click(null, null);
             mbutton_fillDatasetType_Click(null, null);
         }
