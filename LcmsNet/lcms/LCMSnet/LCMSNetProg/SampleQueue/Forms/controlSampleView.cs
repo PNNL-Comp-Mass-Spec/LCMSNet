@@ -2240,6 +2240,7 @@ namespace LcmsNet.SampleQueue.Forms
             DataGridViewRow row = mdataGrid_samples.Rows[index];
             if (!row.Displayed)
             {
+                mdataGrid_samples.Invalidate();
                 return;
             }
             SampleToRowTranslator data = (SampleToRowTranslator)row.DataBoundItem;
