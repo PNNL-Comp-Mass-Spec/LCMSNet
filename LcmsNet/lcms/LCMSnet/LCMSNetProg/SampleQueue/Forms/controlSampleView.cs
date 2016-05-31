@@ -434,7 +434,9 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Handles for queuing data!
                 //
-                mdataGrid_samples.CellContentClick += DataGridViewCellContentClicked;
+                // Use the CellClick event so we can make the ComboBoxes drop down properly.
+                //mdataGrid_samples.CellContentClick += DataGridViewCellContentClicked;
+                mdataGrid_samples.CellClick += DataGridViewCellContentClicked;
             }
             else
             {
@@ -749,6 +751,27 @@ namespace LcmsNet.SampleQueue.Forms
                     }
                     // Other conditions: no change (disabled cannot be unset, and no change for state to same state
                 }
+            }
+            else if (e.ColumnIndex == CONST_COLUMN_PAL_TRAY || e.ColumnIndex == CONST_COLUMN_INSTRUMENT_METHOD || e.ColumnIndex == CONST_COLUMN_DATASET_TYPE)
+            {
+                //if (mdataGrid_samples.IsCurrentCellInEditMode)
+                //{
+                //    mdataGrid_samples.EndEdit();
+                //    return;
+                //}
+                var row = mdataGrid_samples.CurrentRow;
+                if (row == null)
+                {
+                    return;
+                }
+                DataGridViewComboBoxCell comboBox = row.Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
+                if (comboBox == null)
+                {
+                    return;
+                }
+                comboBox.Selected = true;
+                mdataGrid_samples.BeginEdit(true);
+                ((DataGridViewComboBoxEditingControl) mdataGrid_samples.EditingControl).DroppedDown = true;
             }
         }
 

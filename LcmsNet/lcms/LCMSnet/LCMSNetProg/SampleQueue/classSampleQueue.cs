@@ -484,15 +484,24 @@ namespace LcmsNet.SampleQueue
             //
             // Search all of the queues and add any instance of a copy
             //
-            foreach (classSampleData data in mlist_waitingQueue)
-                if (data.DmsData.DatasetName == sampleName)
-                    samples.Add(data);
-            foreach (classSampleData data in mlist_runningQueue)
-                if (data.DmsData.DatasetName == sampleName)
-                    samples.Add(data);
-            foreach (classSampleData data in mlist_completeQueue)
-                if (data.DmsData.DatasetName == sampleName)
-                    samples.Add(data);
+            lock (mlist_waitingQueue)
+            {
+                foreach (classSampleData data in mlist_waitingQueue)
+                    if (data.DmsData.DatasetName == sampleName)
+                        samples.Add(data);
+            }
+            lock (mlist_runningQueue)
+            {
+                foreach (classSampleData data in mlist_runningQueue)
+                    if (data.DmsData.DatasetName == sampleName)
+                        samples.Add(data);
+            }
+            lock (mlist_completeQueue)
+            {
+                foreach (classSampleData data in mlist_completeQueue)
+                    if (data.DmsData.DatasetName == sampleName)
+                        samples.Add(data);
+            }
 
             return samples;
         }
