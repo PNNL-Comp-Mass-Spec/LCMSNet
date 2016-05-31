@@ -737,8 +737,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 //enumCheckboxStatus gridEditState =
                 //    GetCheckboxStatusFromCheckbox(checkbox, checkbox.EditedFormattedValue); // use checkbox.EditedFormattedValue
-                enumCheckboxStatus gridSavedState =
-                    GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value); // use checkbox.EditedFormattedValue
+                enumCheckboxStatus gridSavedState = GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value);
                 if (gridSavedState != enumCheckboxStatus.Disabled)
                 {
                     if (gridSavedState == enumCheckboxStatus.Unchecked /*&& gridState == enumCheckboxStatus.Checked*/)
@@ -752,13 +751,10 @@ namespace LcmsNet.SampleQueue.Forms
                     // Other conditions: no change (disabled cannot be unset, and no change for state to same state
                 }
             }
-            else if (e.ColumnIndex == CONST_COLUMN_PAL_TRAY || e.ColumnIndex == CONST_COLUMN_INSTRUMENT_METHOD || e.ColumnIndex == CONST_COLUMN_DATASET_TYPE)
+            //else if (e.ColumnIndex == CONST_COLUMN_PAL_TRAY || e.ColumnIndex == CONST_COLUMN_INSTRUMENT_METHOD ||
+            //         e.ColumnIndex == CONST_COLUMN_INSTRUMENT_METHOD || e.ColumnIndex == CONST_COLUMN_DATASET_TYPE)
+            else if (mdataGrid_samples.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
             {
-                //if (mdataGrid_samples.IsCurrentCellInEditMode)
-                //{
-                //    mdataGrid_samples.EndEdit();
-                //    return;
-                //}
                 var row = mdataGrid_samples.CurrentRow;
                 if (row == null)
                 {
@@ -769,9 +765,16 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     return;
                 }
-                comboBox.Selected = true;
-                mdataGrid_samples.BeginEdit(true);
-                ((DataGridViewComboBoxEditingControl) mdataGrid_samples.EditingControl).DroppedDown = true;
+                try
+                {
+                    comboBox.Selected = true;
+                    mdataGrid_samples.BeginEdit(true);
+                    ((DataGridViewComboBoxEditingControl) mdataGrid_samples.EditingControl).DroppedDown = true;
+                }
+                catch (Exception)
+                {
+                    mdataGrid_samples.CancelEdit();
+                }
             }
         }
 
@@ -2280,6 +2283,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             else
             {
+                data.Sample.ColumnData = classCartConfiguration.Columns[data.Sample.ColumnData.ID];
                 style.BackColor = data.Sample.ColumnData.Color;
             }
 

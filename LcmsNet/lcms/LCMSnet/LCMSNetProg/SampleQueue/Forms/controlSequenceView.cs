@@ -138,6 +138,8 @@ namespace LcmsNet.SampleQueue.Forms
         {
             this.mlabel_name = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonRefresh = new System.Windows.Forms.Button();
+            this.mcheckbox_autoscroll = new System.Windows.Forms.CheckBox();
             this.mbutton_dmsEdit = new System.Windows.Forms.Button();
             this.mbutton_cartColumnDate = new System.Windows.Forms.Button();
             this.mbutton_down = new System.Windows.Forms.Button();
@@ -149,7 +151,6 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_fillDown = new System.Windows.Forms.Button();
             this.mbutton_trayVial = new System.Windows.Forms.Button();
             this.mcheckbox_cycleColumns = new System.Windows.Forms.CheckBox();
-            this.mcheckbox_autoscroll = new System.Windows.Forms.CheckBox();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -169,6 +170,7 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.buttonRefresh);
             this.panel2.Controls.Add(this.mcheckbox_autoscroll);
             this.panel2.Controls.Add(this.mbutton_dmsEdit);
             this.panel2.Controls.Add(this.mbutton_cartColumnDate);
@@ -186,6 +188,34 @@ namespace LcmsNet.SampleQueue.Forms
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(860, 104);
             this.panel2.TabIndex = 20;
+            // 
+            // buttonRefresh
+            // 
+            this.buttonRefresh.BackColor = System.Drawing.Color.Transparent;
+            this.buttonRefresh.CausesValidation = false;
+            this.buttonRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRefresh.ForeColor = System.Drawing.Color.Black;
+            this.buttonRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonRefresh.Location = new System.Drawing.Point(569, 6);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(60, 66);
+            this.buttonRefresh.TabIndex = 43;
+            this.buttonRefresh.Text = "Refresh\r\nList";
+            this.buttonRefresh.UseVisualStyleBackColor = false;
+            this.buttonRefresh.Click += new System.EventHandler(this.mbutton_refresh_Click);
+            // 
+            // mcheckbox_autoscroll
+            // 
+            this.mcheckbox_autoscroll.AutoSize = true;
+            this.mcheckbox_autoscroll.Checked = true;
+            this.mcheckbox_autoscroll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mcheckbox_autoscroll.Location = new System.Drawing.Point(569, 78);
+            this.mcheckbox_autoscroll.Name = "mcheckbox_autoscroll";
+            this.mcheckbox_autoscroll.Size = new System.Drawing.Size(75, 17);
+            this.mcheckbox_autoscroll.TabIndex = 42;
+            this.mcheckbox_autoscroll.Text = "Auto-scroll";
+            this.mcheckbox_autoscroll.UseVisualStyleBackColor = true;
+            this.mcheckbox_autoscroll.CheckedChanged += new System.EventHandler(this.mcheckbox_autoscroll_CheckedChanged);
             // 
             // mbutton_dmsEdit
             // 
@@ -338,19 +368,6 @@ namespace LcmsNet.SampleQueue.Forms
             this.mcheckbox_cycleColumns.UseVisualStyleBackColor = true;
             this.mcheckbox_cycleColumns.CheckedChanged += new System.EventHandler(this.mcheckbox_cycleColumns_CheckedChanged);
             // 
-            // mcheckbox_autoscroll
-            // 
-            this.mcheckbox_autoscroll.AutoSize = true;
-            this.mcheckbox_autoscroll.Checked = true;
-            this.mcheckbox_autoscroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.mcheckbox_autoscroll.Location = new System.Drawing.Point(569, 44);
-            this.mcheckbox_autoscroll.Name = "mcheckbox_autoscroll";
-            this.mcheckbox_autoscroll.Size = new System.Drawing.Size(75, 17);
-            this.mcheckbox_autoscroll.TabIndex = 42;
-            this.mcheckbox_autoscroll.Text = "Auto-scroll";
-            this.mcheckbox_autoscroll.UseVisualStyleBackColor = true;
-            this.mcheckbox_autoscroll.CheckedChanged += new System.EventHandler(mcheckbox_autoscroll_CheckedChanged);
-            // 
             // controlSequenceView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,6 +452,11 @@ namespace LcmsNet.SampleQueue.Forms
         private void mbutton_cartColumnDate_Click(object sender, EventArgs e)
         {
             AddDateCartnameColumnIDToDatasetName();
+        }
+
+        private void mbutton_refresh_Click(object sender, EventArgs e)
+        {
+            InvalidateGridView();
         }
 
         private void mbutton_dmsEdit_Click(object sender, EventArgs e)
@@ -564,6 +586,7 @@ namespace LcmsNet.SampleQueue.Forms
         private Button mbutton_cartColumnDate;
         private Button mbutton_dmsEdit;
         private CheckBox mcheckbox_autoscroll;
+        private Button buttonRefresh;
         private bool mbool_movingQueueUp;
 
         private bool CanDeQueueSample(int rowID)
