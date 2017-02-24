@@ -437,6 +437,7 @@ namespace LcmsNet.SampleQueue.Forms
                 // Use the CellClick event so we can make the ComboBoxes drop down properly.
                 //mdataGrid_samples.CellContentClick += DataGridViewCellContentClicked;
                 mdataGrid_samples.CellClick += DataGridViewCellContentClicked;
+                mdataGrid_samples.CellEndEdit += InvalidateGridView;
             }
             else
             {
@@ -719,6 +720,17 @@ namespace LcmsNet.SampleQueue.Forms
                     @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        void InvalidateGridView(object sender, DataGridViewCellEventArgs e)
+        {
+            InvalidateGridView();
+        }
+
+        protected void InvalidateGridView()
+        {
+            mdataGrid_samples.ResetBindings();
+            mdataGrid_samples.Invalidate();
         }
 
         void DataGridViewCellContentClicked(object sender, DataGridViewCellEventArgs e)
