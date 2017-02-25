@@ -39,7 +39,7 @@ namespace LcmsNetSDK
             var catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new AssemblyCatalog(typeof (classDMSToolsManager).Assembly));
 
-            string catalogPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var catalogPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             catalogPath = Path.Combine(catalogPath, "LCMSNet", "dmsExtensions");
 
             try
@@ -72,8 +72,8 @@ namespace LcmsNetSDK
                 // Check that we have a tool available, if not, report via exception otherwise, return the selected, or first available tool.
                 if (midmstools_selectedTools == null && DmsTools.Count() != 0)
                 {
-                    string lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
-                    string[] toolTokens = lastSelectedTool.Split(new char[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
+                    var lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
+                    var toolTokens = lastSelectedTool.Split(new char[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
                     if (lastSelectedTool != string.Empty)
                     {
                         midmstools_selectedTools =
@@ -164,9 +164,9 @@ namespace LcmsNetSDK
         /// <param name="toolVersion">The version of the Dms tool to use</param>
         public void SelectTool(string toolName, string toolVersion)
         {
-            bool toolSelected = false;
-            bool toolFound = false;
-            foreach (Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
+            var toolSelected = false;
+            var toolFound = false;
+            foreach (var tool in DmsTools)
             {
                 if (tool.Metadata.Name == toolName)
                 {
@@ -198,10 +198,10 @@ namespace LcmsNetSDK
         /// <returns>a list of strings containing name and version for each detected IDmsTools extension.</returns>
         public List<string> ListTools()
         {
-            List<string> tools = new List<string>();
-            foreach (Lazy<IDmsTools, IDmsMetaData> tool in DmsTools)
+            var tools = new List<string>();
+            foreach (var tool in DmsTools)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.Append(tool.Metadata.Name);
                 sb.Append("-");
                 sb.Append(tool.Metadata.Version);

@@ -60,9 +60,9 @@ namespace LcmsNet.Method
 
         public override string ToString()
         {
-            string data = "";
+            var data = "";
 
-            foreach (object value in Values)
+            foreach (var value in Values)
             {
                 if (value != null)
                 {

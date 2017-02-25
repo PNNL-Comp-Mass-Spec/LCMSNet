@@ -39,7 +39,7 @@ namespace LcmsNetDataClasses.Logging
         {
             get
             {
-                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                var logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "LCMSNet", "Log");
                 return logDir;
             }
@@ -66,7 +66,7 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="args">Message arguments</param>
         public static void LogError(int errorLevel, classErrorLoggerArgs args)
         {
-            StringBuilder sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
+            var sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'ERROR',");
@@ -77,7 +77,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID.ToString() + "',");
-                int eventIndx = args.Sample.LCMethod.CurrentEventNumber;
+                var eventIndx = args.Sample.LCMethod.CurrentEventNumber;
                 if (eventIndx < 0 || eventIndx > args.Sample.LCMethod.Events.Count)
                 {
                     sqlCmdBlder.Append("'',");
@@ -95,7 +95,7 @@ namespace LcmsNetDataClasses.Logging
             sqlCmdBlder.Append("'" + ReplaceQuotes(args.Message) + "',");
 
             // Unwrap any exception messages and add them
-            string exMsg = "";
+            var exMsg = "";
             if (args.Exception != null)
             {
                 UnwrapExceptionMsgs(args.Exception, out exMsg);
@@ -114,7 +114,7 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="args">Message arguments</param>
         public static void LogMessage(int msgLevel, classMessageLoggerArgs args)
         {
-            StringBuilder sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
+            var sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'MSG',");
@@ -166,7 +166,7 @@ namespace LcmsNetDataClasses.Logging
                 // Verify logging db is ready
                 while (!mbool_LogDbFileCreated)
                 {
-                    bool check = false;
+                    var check = false;
                     try
                     {
                         check = Monitor.TryEnter(mobj_lock);
@@ -192,7 +192,7 @@ namespace LcmsNetDataClasses.Logging
             }
             catch (Exception ex)
             {
-                string msg = "Exception logging error message: ";
+                var msg = "Exception logging error message: ";
                 UnwrapExceptionMsgs(ex, out msg);
                 System.Windows.Forms.MessageBox.Show(msg, "LOG ERROR", System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
@@ -217,7 +217,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 mbool_LogDbFileCreated = false;
                 mstring_ConnStr = "";
-                string msg = "Exception initializing log database: ";
+                var msg = "Exception initializing log database: ";
                 UnwrapExceptionMsgs(ex, out msg);
                 System.Windows.Forms.MessageBox.Show(msg, "LOG ERROR", System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
@@ -273,7 +273,7 @@ namespace LcmsNetDataClasses.Logging
         private static void CreateLogTable(string connStr)
         {
             // Create the command string
-            string sqlStr =
+            var sqlStr =
                 "CREATE TABLE IF NOT EXISTS T_LogData('Date','Type','Level','Sample','Column','Device','Message','Exception')";
             try
             {
@@ -281,7 +281,7 @@ namespace LcmsNetDataClasses.Logging
             }
             catch (Exception ex)
             {
-                string msg = "Exception creating table in log database";
+                var msg = "Exception creating table in log database";
                 throw new classDbLoggerException(msg, ex);
             }
         }
@@ -294,9 +294,9 @@ namespace LcmsNetDataClasses.Logging
         private static void ExecuteSQLiteCommand(string CmdStr, string connStr)
         {
             int AffectedRows;
-            using (SQLiteConnection Cn = new SQLiteConnection(connStr))
+            using (var Cn = new SQLiteConnection(connStr))
             {
-                using (SQLiteCommand myCmd = new SQLiteCommand(Cn))
+                using (var myCmd = new SQLiteCommand(Cn))
                 {
                     myCmd.CommandType = System.Data.CommandType.Text;
                     myCmd.CommandText = CmdStr;
@@ -308,7 +308,7 @@ namespace LcmsNetDataClasses.Logging
                     }
                     catch (Exception Ex)
                     {
-                        string ErrMsg = "SQLite exception executing command " + CmdStr;
+                        var ErrMsg = "SQLite exception executing command " + CmdStr;
                         throw new classDbLoggerException(ErrMsg, Ex);
                     }
                     finally
@@ -327,8 +327,8 @@ namespace LcmsNetDataClasses.Logging
         /// <returns>TRUE if table found; FALSE if not found or error</returns>
         private static bool VerifyTableExists(string TableName, string connStr)
         {
-            string sqlString = "SELECT * FROM sqlite_master WHERE name ='" + TableName + "'";
-            DataTable tableList = new DataTable();
+            var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + TableName + "'";
+            var tableList = new DataTable();
             try
             {
                 // Get a list of database tables matching the specified table name
@@ -336,7 +336,7 @@ namespace LcmsNetDataClasses.Logging
             }
             catch (Exception Ex)
             {
-                string ErrMsg = "SQLite exception verifying table " + TableName + " exists";
+                var ErrMsg = "SQLite exception verifying table " + TableName + " exists";
                 throw new classDbLoggerException(ErrMsg, Ex);
             }
 
@@ -359,13 +359,13 @@ namespace LcmsNetDataClasses.Logging
         /// <returns>A DataTable containing data specfied by CmdStr</returns>
         private static DataTable GetSQLiteDataTable(string CmdStr, string connStr)
         {
-            DataTable returnTable = new DataTable();
-            int FilledRows = 0;
-            using (SQLiteConnection Cn = new SQLiteConnection(connStr))
+            var returnTable = new DataTable();
+            var FilledRows = 0;
+            using (var Cn = new SQLiteConnection(connStr))
             {
-                using (SQLiteDataAdapter Da = new SQLiteDataAdapter())
+                using (var Da = new SQLiteDataAdapter())
                 {
-                    using (SQLiteCommand Cmd = new SQLiteCommand(CmdStr, Cn))
+                    using (var Cmd = new SQLiteCommand(CmdStr, Cn))
                     {
                         Cmd.CommandType = CommandType.Text;
                         Da.SelectCommand = Cmd;
@@ -375,7 +375,7 @@ namespace LcmsNetDataClasses.Logging
                         }
                         catch (Exception Ex)
                         {
-                            string ErrMsg = "SQLite exception getting data table via query " + CmdStr;
+                            var ErrMsg = "SQLite exception getting data table via query " + CmdStr;
                             throw new classDbLoggerException(ErrMsg, Ex);
                         }
                     }

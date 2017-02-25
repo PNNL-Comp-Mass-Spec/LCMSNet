@@ -18,12 +18,12 @@ namespace LcmsNetDataClasses.Configuration
         {
             get
             {
-                int n = 0;
+                var n = 0;
 
                 // 
                 // Figure out what columns are enabled or disabled.
                 //             
-                foreach (classColumnData col in Columns)
+                foreach (var col in Columns)
                 {
                     if (col.Status != enumColumnStatus.Disabled)
                     {
@@ -47,8 +47,8 @@ namespace LcmsNetDataClasses.Configuration
         /// <returns>List of columns stored in cart configuration.</returns>
         public static List<classColumnData> BuildColumnList(bool orderByFirst)
         {
-            List<classColumnData> orderList = new List<classColumnData>();
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            var orderList = new List<classColumnData>();
+            foreach (var column in classCartConfiguration.Columns)
             {
                 orderList.Add(column);
             }
@@ -60,11 +60,11 @@ namespace LcmsNetDataClasses.Configuration
             // For every column add it to the build list,
             // if it is not disabled to run
             // 
-            List<classColumnData> tempList1 = new List<classColumnData>();
-            List<classColumnData> tempList2 = new List<classColumnData>();
-            List<classColumnData> ptrList = tempList1;
-            bool copyNew = false;
-            foreach (classColumnData data in orderList)
+            var tempList1 = new List<classColumnData>();
+            var tempList2 = new List<classColumnData>();
+            var ptrList = tempList1;
+            var copyNew = false;
+            foreach (var data in orderList)
             {
                 if (data.Status != enumColumnStatus.Disabled)
                 {
@@ -95,13 +95,22 @@ namespace LcmsNetDataClasses.Configuration
             set { classLCMSSettings.SetParameter("CartName", value); }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the cart.
+        /// </summary>
+        public static string CartConfigName
+        {
+            get { return classLCMSSettings.GetParameter("CartConfigName"); }
+            set { classLCMSSettings.SetParameter("CartConfigName", value); }
+        }
+
         public static double MinimumVolume
         {
             get
             {
-                string volumeSetting = classLCMSSettings.GetParameter("MinimumVolume");
-                double volume = classSampleData.CONST_MIN_SAMPLE_VOLUME;
-                bool worked = double.TryParse(volumeSetting, out volume);
+                var volumeSetting = classLCMSSettings.GetParameter("MinimumVolume");
+                var volume = classSampleData.CONST_MIN_SAMPLE_VOLUME;
+                var worked = double.TryParse(volumeSetting, out volume);
                 return volume;
             }
             set { classLCMSSettings.SetParameter("MinimumVolume", value.ToString()); }

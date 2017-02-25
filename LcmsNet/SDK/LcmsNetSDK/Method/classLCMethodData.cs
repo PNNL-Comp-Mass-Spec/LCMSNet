@@ -47,16 +47,16 @@ namespace LcmsNet.Method
         /// </summary>
         public void BuildMethod()
         {
-            for (int i = 0; i < Parameters.Controls.Count; i++)
+            for (var i = 0; i < Parameters.Controls.Count; i++)
             {
-                Control control = Parameters.Controls[i];
+                var control = Parameters.Controls[i];
 
                 if (control != null)
                 {
                     // 
                     // Grab the controls value to be used later on
                     // 
-                    ILCEventParameter parameterControl = control as ILCEventParameter;
+                    var parameterControl = control as ILCEventParameter;
                     if (parameterControl != null)
                     {
                         Parameters.Values[i] = parameterControl.ParameterValue;

@@ -107,7 +107,7 @@ namespace LcmsNetDataClasses
 
         public string BuildSqlString()
         {
-            StringBuilder queryBldr = new StringBuilder(CMD_BASE);
+            var queryBldr = new StringBuilder(CMD_BASE);
 
             // Add min/max request numbers
             queryBldr.Append("Request >= '" + mlist_QueryParams["minrequestnum"] + "'");

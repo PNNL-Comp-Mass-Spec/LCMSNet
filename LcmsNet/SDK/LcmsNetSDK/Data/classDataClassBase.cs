@@ -53,15 +53,15 @@ namespace LcmsNetDataClasses
         /// <returns>String dictionary containing current values of all properties</returns>
         public virtual StringDictionary GetPropertyValues()
         {
-            StringDictionary TempDict = new StringDictionary();
+            var TempDict = new StringDictionary();
             // Use reflection to get the name and value for each property and store in a string dictionary
-            Type classType = this.GetType();
-            PropertyInfo[] properties = classType.GetProperties();
-            foreach (PropertyInfo tempProp in properties)
+            var classType = this.GetType();
+            var properties = classType.GetProperties();
+            foreach (var tempProp in properties)
             {
                 if (tempProp.PropertyType != typeof (Color))
                 {
-                    object tempObject = tempProp.GetValue(this, null);
+                    var tempObject = tempProp.GetValue(this, null);
                     if (tempObject == null)
                     {
                         TempDict.Add(tempProp.Name, "");
@@ -73,7 +73,7 @@ namespace LcmsNetDataClasses
                 }
                 else
                 {
-                    Color c = (Color) tempProp.GetValue(this, null);
+                    var c = (Color) tempProp.GetValue(this, null);
                     TempDict.Add(tempProp.Name, TypeDescriptor.GetConverter(c).ConvertToString(c));
                 }
             }
@@ -87,13 +87,13 @@ namespace LcmsNetDataClasses
         /// <param name="PropValues">String dictionary containing property names and values</param>
         public virtual void LoadPropertyValues(StringDictionary PropValues)
         {
-            Type classType = this.GetType();
-            PropertyInfo[] properties = classType.GetProperties();
+            var classType = this.GetType();
+            var properties = classType.GetProperties();
             foreach (DictionaryEntry currentEntry in PropValues)
             {
-                string currentKey = currentEntry.Key.ToString();
-                string currentValue = currentEntry.Value.ToString();
-                foreach (PropertyInfo tempProp in properties)
+                var currentKey = currentEntry.Key.ToString();
+                var currentValue = currentEntry.Value.ToString();
+                foreach (var tempProp in properties)
                 {
                     if (tempProp.Name.ToLower() == currentKey.ToLower())
                     {
@@ -115,24 +115,24 @@ namespace LcmsNetDataClasses
                                 tempProp.SetValue(this, double.Parse(currentValue), null);
                                 break;
                             case "System.Drawing.Color":
-                                Color c =
+                                var c =
                                     (Color) TypeDescriptor.GetConverter(typeof (Color)).ConvertFromString(currentValue);
                                 tempProp.SetValue(this, c, null);
                                 break;
                             case "LcmsNetDataClasses.Configuration.enumColumnStatus":
-                                enumColumnStatus tempEnum =
+                                var tempEnum =
                                     (enumColumnStatus) Enum.Parse(typeof (enumColumnStatus), currentValue);
                                 tempProp.SetValue(this, tempEnum, null);
                                 break;
                             case "LcmsNetDataClasses.enumSampleRunningStatus":
-                                enumSampleRunningStatus tempStatus =
+                                var tempStatus =
                                     (enumSampleRunningStatus) Enum.Parse(typeof (enumSampleRunningStatus), currentValue);
                                 tempProp.SetValue(this, tempStatus, null);
                                 break;
                             case "System.DateTime":
                                 break;
                             default:
-                                string tpName = tempProp.PropertyType.ToString();
+                                var tpName = tempProp.PropertyType.ToString();
                                 if (tpName.StartsWith("System.Nullable"))
                                 {
                                     if (tpName.Contains("System.Int32"))
@@ -141,14 +141,14 @@ namespace LcmsNetDataClasses
                                         // value for those is null, so we shouldn't have to set the
                                         // value to null if parsing doesn't work.
                                         int value;
-                                        bool worked = int.TryParse(currentValue, out value);
+                                        var worked = int.TryParse(currentValue, out value);
                                         if (worked)
                                             tempProp.SetValue(this, value, null);
                                     }
                                     else if (tpName.Contains("System.DateTime"))
                                     {
                                         DateTime value;
-                                        bool worked = DateTime.TryParse(currentValue, out value);
+                                        var worked = DateTime.TryParse(currentValue, out value);
                                         if (worked)
                                             tempProp.SetValue(this, value, null);
                                     }

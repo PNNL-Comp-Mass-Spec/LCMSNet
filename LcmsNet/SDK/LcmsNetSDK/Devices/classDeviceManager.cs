@@ -198,7 +198,7 @@ namespace LcmsNetDataClasses.Devices
             mlist_devices = new List<IDevice>();
             //Manager              = this;
 
-            DeviceManagerBridge bridge = new DeviceManagerBridge(this);
+            var bridge = new DeviceManagerBridge(this);
 
             mbool_loadingPlugins = false;
             mbool_emulateDevices = true;
@@ -213,10 +213,10 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            string[] data = args.Name.Split(',');
-            string basicName = data[0];
-            string assemblyName = basicName + ".dll";
-            string testPath = System.IO.Path.Combine(CONST_DEVICE_PLUGIN_PATH, assemblyName);
+            var data = args.Name.Split(',');
+            var basicName = data[0];
+            var assemblyName = basicName + ".dll";
+            var testPath = System.IO.Path.Combine(CONST_DEVICE_PLUGIN_PATH, assemblyName);
             testPath = System.IO.Path.GetFullPath(testPath);
 
             if (System.IO.File.Exists(testPath))
@@ -272,8 +272,8 @@ namespace LcmsNetDataClasses.Devices
             get
             {
                 // Find out how many are initialized.
-                int total = 0;
-                foreach (IDevice device in mlist_devices)
+                var total = 0;
+                foreach (var device in mlist_devices)
                 {
                     if (device.Status == enumDeviceStatus.Initialized || device.Status == enumDeviceStatus.InUseByMethod)
                     {
@@ -295,12 +295,12 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="filePath">Path to load configuration from.</param>
         public void LoadPersistentConfiguration(classDeviceConfiguration configuration)
         {
-            List<Exception> exceptionsToThrow = new List<Exception>();
+            var exceptionsToThrow = new List<Exception>();
 
-            for (int i = 0; i < configuration.DeviceCount; i++)
+            for (var i = 0; i < configuration.DeviceCount; i++)
             {
-                string deviceName = configuration[i];
-                Dictionary<string, object> settings = configuration.GetDeviceSettings(deviceName);
+                var deviceName = configuration[i];
+                var settings = configuration.GetDeviceSettings(deviceName);
 
                 // We may have to load the type from another assembly, so look it up.
                 string path = null;
@@ -314,8 +314,8 @@ namespace LcmsNetDataClasses.Devices
                 {
                     // This wasn't working...
                     //type = Assembly.LoadFrom(path).GetType(settings[CONST_DEVICE_TYPE_TAG] as string);                    
-                    string typeName = settings[CONST_DEVICE_TYPE_TAG] as string;
-                    foreach (Type t in Assembly.LoadFrom(path).GetTypes())
+                    var typeName = settings[CONST_DEVICE_TYPE_TAG] as string;
+                    foreach (var t in Assembly.LoadFrom(path).GetTypes())
                     {
                         if (t.FullName == typeName) //TODO: BLL if(t.AssemblyQualifiedName == typeName)
                         {
@@ -326,10 +326,10 @@ namespace LcmsNetDataClasses.Devices
                 }
                 else
                 {
-                    string testType = settings[CONST_DEVICE_TYPE_TAG] as string;
+                    var testType = settings[CONST_DEVICE_TYPE_TAG] as string;
                     type = Type.GetType(testType);
                 }
-                string name = settings[CONST_DEVICE_NAME_TAG] as string;
+                var name = settings[CONST_DEVICE_NAME_TAG] as string;
                 if (!typeof (IDevice).IsAssignableFrom(type))
                 {
                     exceptionsToThrow.Add(new InvalidCastException("The specified device type is invalid."));
@@ -356,16 +356,16 @@ namespace LcmsNetDataClasses.Devices
                 // for emulation mode at startup/initialization.
                 device.Emulation = mbool_emulateDevices;
                 // Get all writeable properties.
-                PropertyInfo[] properties = type.GetProperties();
+                var properties = type.GetProperties();
 
                 // Then map them so we dont have to do a N^2 search to set a value.
-                Dictionary<string, PropertyInfo> propertyMap = new Dictionary<string, PropertyInfo>();
-                foreach (PropertyInfo property in properties)
+                var propertyMap = new Dictionary<string, PropertyInfo>();
+                foreach (var property in properties)
                 {
-                    object[] attributes = property.GetCustomAttributes(typeof (classPersistenceAttribute), true);
-                    foreach (object o in attributes)
+                    var attributes = property.GetCustomAttributes(typeof (classPersistenceAttribute), true);
+                    foreach (var o in attributes)
                     {
-                        classPersistenceAttribute setting = o as classPersistenceAttribute;
+                        var setting = o as classPersistenceAttribute;
                         if (setting != null)
                         {
                             propertyMap.Add(setting.SettingName, property);
@@ -374,13 +374,13 @@ namespace LcmsNetDataClasses.Devices
                 }
 
                 // Then finally load the values into the property.
-                foreach (string key in settings.Keys)
+                foreach (var key in settings.Keys)
                 {
                     if (propertyMap.ContainsKey(key) && propertyMap[key].CanWrite)
                     {
-                        object data = settings[key];
+                        var data = settings[key];
                         // Enumerations are a special breed.  
-                        Type propertyType = propertyMap[key].PropertyType;
+                        var propertyType = propertyMap[key].PropertyType;
                         if (propertyType.IsEnum)
                         {
                             data = Enum.Parse(propertyType, data.ToString());
@@ -401,17 +401,17 @@ namespace LcmsNetDataClasses.Devices
                 }
 
                 // Reconstruct any mobile phase data...
-                IPump pump = device as IPump;
+                var pump = device as IPump;
                 if (pump != null)
                 {
-                    Dictionary<int, MobilePhase> phases = new Dictionary<int, MobilePhase>();
+                    var phases = new Dictionary<int, MobilePhase>();
                     pump.MobilePhases.Clear();
 
-                    foreach (string key in settings.Keys)
+                    foreach (var key in settings.Keys)
                     {
-                        bool isComment = key.Contains(CONST_MOBILE_PHASE_COMMENT);
-                        bool isName = key.Contains(CONST_MOBILE_PHASE_NAME);
-                        int phaseId = 0;
+                        var isComment = key.Contains(CONST_MOBILE_PHASE_COMMENT);
+                        var isName = key.Contains(CONST_MOBILE_PHASE_NAME);
+                        var phaseId = 0;
 
                         if (isComment && int.TryParse(key.Replace(CONST_MOBILE_PHASE_COMMENT, ""), out phaseId))
                         {
@@ -419,8 +419,8 @@ namespace LcmsNetDataClasses.Devices
                             {
                                 phases.Add(phaseId, new MobilePhase());
                             }
-                            MobilePhase phase = phases[phaseId];
-                            object value = settings[key];
+                            var phase = phases[phaseId];
+                            var value = settings[key];
                             phase.Comment = value.ToString();
                         }
                         else if (isName && int.TryParse(key.Replace(CONST_MOBILE_PHASE_NAME, ""), out phaseId))
@@ -429,13 +429,13 @@ namespace LcmsNetDataClasses.Devices
                             {
                                 phases.Add(phaseId, new MobilePhase());
                             }
-                            MobilePhase phase = phases[phaseId];
-                            object value = settings[key];
+                            var phase = phases[phaseId];
+                            var value = settings[key];
                             phase.Name = value.ToString();
                         }
                     }
 
-                    foreach (MobilePhase phase in phases.Values)
+                    foreach (var phase in phases.Values)
                     {
                         pump.MobilePhases.Add(phase);
                     }
@@ -452,14 +452,14 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="filePath"></param>
         public void ExtractToPersistConfiguration(ref classDeviceConfiguration configuration)
         {
-            foreach (IDevice device in Devices)
+            foreach (var device in Devices)
             {
                 if ((device.DeviceType != enumDeviceType.Component) && (device.DeviceType != enumDeviceType.Fluidics))
                 {
                     continue;
                 }
-                Type deviceType = device.GetType();
-                PropertyInfo[] properties = deviceType.GetProperties();
+                var deviceType = device.GetType();
+                var properties = deviceType.GetProperties();
 
                 configuration.AddSetting(device.Name, CONST_DEVICE_TYPE_TAG, deviceType.FullName);
                     //TODO: BLL - .AssemblyQualifiedName);
@@ -467,26 +467,26 @@ namespace LcmsNetDataClasses.Devices
                     // This should be made a relative path since we have a plugin directory. All plugins should be in that directory. Using a relative path means that if the program is installed to a different directory, the plugin will still be found properly while avoiding problems with multiple installs(Such as multiple branches on the same dev machine and swapping hardware configs. 
                 configuration.AddSetting(device.Name, CONST_DEVICE_NAME_TAG, device.Name);
 
-                foreach (PropertyInfo property in properties)
+                foreach (var property in properties)
                 {
                     if (!property.CanWrite)
                         continue;
 
-                    object[] attributes = property.GetCustomAttributes(
+                    var attributes = property.GetCustomAttributes(
                         typeof (classPersistenceAttribute),
                         true);
                     // Make sure the propety is tagged to be persisted.
                     if (attributes.Length < 1)
                         continue;
 
-                    foreach (object attributeObject in attributes)
+                    foreach (var attributeObject in attributes)
                     {
-                        classPersistenceAttribute settingAttribute =
+                        var settingAttribute =
                             attributeObject as classPersistenceAttribute;
 
                         if (settingAttribute != null)
                         {
-                            object data = property.GetValue(device, BindingFlags.GetProperty,
+                            var data = property.GetValue(device, BindingFlags.GetProperty,
                                 null,
                                 null,
                                 null);
@@ -511,7 +511,7 @@ namespace LcmsNetDataClasses.Devices
             if (deviceName == null)
                 return false;
 
-            foreach (IDevice dev in mlist_devices)
+            foreach (var dev in mlist_devices)
             {
                 if (dev.Name == deviceName)
                     return true;
@@ -535,10 +535,10 @@ namespace LcmsNetDataClasses.Devices
             // 
             // Then see if the device type matches as well...
             // 
-            foreach (IDevice dev in mlist_devices)
+            foreach (var dev in mlist_devices)
             {
-                string name = dev.Name;
-                Type devType = dev.GetType();
+                var name = dev.Name;
+                var devType = dev.GetType();
                 if (dev.Name == deviceName && devType.Equals(deviceType))
                 {
                     device = dev;
@@ -564,7 +564,7 @@ namespace LcmsNetDataClasses.Devices
             // 
             // Then see if the device type matches as well...
             // 
-            foreach (IDevice dev in mlist_devices)
+            foreach (var dev in mlist_devices)
             {
                 if (dev.Name == deviceName)
                 {
@@ -582,8 +582,8 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         public string CreateUniqueDeviceName(string baseName)
         {
-            string newName = baseName;
-            int deviceCount = 0;
+            var newName = baseName;
+            var deviceCount = 0;
 
             // We expect that there are not an infinite number of device names
             while (DeviceNameExists(newName) == true)
@@ -602,7 +602,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="basename">Name to use for the device.</param>
         public void RenameDevice(IDevice device, string basename)
         {
-            string oldName = device.Name;
+            var oldName = device.Name;
 
             // 
             // If this happens, then they are trying to name the device
@@ -611,7 +611,7 @@ namespace LcmsNetDataClasses.Devices
             if (basename == oldName)
                 return;
 
-            string newName = CreateUniqueDeviceName(basename);
+            var newName = CreateUniqueDeviceName(basename);
             device.Name = newName;
 
             if (DeviceRenamed != null)
@@ -660,9 +660,9 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>True if successful, False if it fails.</returns>
         public bool AddDevice(classDevicePluginInformation plugin, bool initialize)
         {
-            IDevice device = Activator.CreateInstance(plugin.DeviceType) as IDevice;
+            var device = Activator.CreateInstance(plugin.DeviceType) as IDevice;
             device.Name = CreateUniqueDeviceName(device.Name);
-            bool added = AddDevice(device);
+            var added = AddDevice(device);
 
             if (added && initialize)
             {
@@ -699,7 +699,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         private void SetEmulationFlags()
         {
-            foreach (IDevice device in mlist_devices)
+            foreach (var device in mlist_devices)
             {
                 device.Emulation = mbool_emulateDevices;
             }
@@ -724,17 +724,17 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>True if shutdown successful.  False if shutdown failed.</returns>
         public bool ShutdownDevices(bool clearDevices)
         {
-            bool worked = true;
-            foreach (IDevice device in mlist_devices)
+            var worked = true;
+            foreach (var device in mlist_devices)
             {
                 worked = (worked && device.Shutdown());
             }
 
             if (clearDevices)
             {
-                List<IDevice> tempDevices = new List<IDevice>();
+                var tempDevices = new List<IDevice>();
                 tempDevices.AddRange(mlist_devices);
-                foreach (IDevice device in tempDevices)
+                foreach (var device in tempDevices)
                 {
                     try
                     {
@@ -759,10 +759,10 @@ namespace LcmsNetDataClasses.Devices
         {
             if (InitialzingDevice != null)
                 InitialzingDevice(this, new classDeviceManagerStatusArgs("Initializing " + device.Name));
-            bool initialized = false;
+            var initialized = false;
             try
             {
-                string errorMessage = "";
+                var errorMessage = "";
                 initialized = device.Initialize(ref errorMessage);
                 if (initialized == false)
                 {
@@ -770,7 +770,7 @@ namespace LcmsNetDataClasses.Devices
                     // We wrap error details in the event args class so that it can also be used via a delegate
                     // And then shove it into an exception class.  this way we force the 
                     // caller to handle any exception, but allow them to propogate to any observers.
-                    classDeviceErrorEventArgs args = new classDeviceErrorEventArgs(
+                    var args = new classDeviceErrorEventArgs(
                         errorMessage,
                         null,
                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
@@ -790,7 +790,7 @@ namespace LcmsNetDataClasses.Devices
             catch (Exception ex)
             {
                 device.Status = enumDeviceStatus.Error;
-                classDeviceErrorEventArgs args = new classDeviceErrorEventArgs("Error intializing device.",
+                var args = new classDeviceErrorEventArgs("Error intializing device.",
                     ex,
                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
                     device);
@@ -806,12 +806,12 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         public List<classDeviceErrorEventArgs> InitializeDevices(bool reinitializeAlreadyInitialized)
         {
-            List<classDeviceErrorEventArgs> devices = new List<classDeviceErrorEventArgs>();
-            foreach (IDevice device in mlist_devices)
+            var devices = new List<classDeviceErrorEventArgs>();
+            foreach (var device in mlist_devices)
             {
                 try
                 {
-                    bool alreadyInitialized = (device.Status == enumDeviceStatus.Initialized ||
+                    var alreadyInitialized = (device.Status == enumDeviceStatus.Initialized ||
                                                device.Status == enumDeviceStatus.Initialized);
                     if (!reinitializeAlreadyInitialized && !alreadyInitialized)
                     {
@@ -860,13 +860,13 @@ namespace LcmsNetDataClasses.Devices
         {
             try
             {
-                string[] files = System.IO.Directory.GetFiles(path, "*.dll");
-                foreach (string file in files)
+                var files = System.IO.Directory.GetFiles(path, "*.dll");
+                foreach (var file in files)
                 {
                     try
                     {
-                        string fullPath = System.IO.Path.GetFullPath(file);
-                        Assembly ass = Assembly.LoadFile(fullPath);
+                        var fullPath = System.IO.Path.GetFullPath(file);
+                        var ass = Assembly.LoadFile(fullPath);
                     }
                     catch (BadImageFormatException)
                     {
@@ -892,7 +892,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="forceReload">Flag indicating whether to force a re-load the assemblies if they have already been loaded.</param>
         public void LoadPlugins(Assembly assembly, bool forceReload)
         {
-            string assemblyPath = assembly.Location;
+            var assemblyPath = assembly.Location;
             if (mdict_plugins.ContainsKey(assemblyPath))
             {
                 if (!forceReload)
@@ -902,7 +902,7 @@ namespace LcmsNetDataClasses.Devices
                 else
                 {
                     // Remove the old plug-ins from the list.
-                    foreach (classDevicePluginInformation plugin in mdict_plugins[assemblyPath])
+                    foreach (var plugin in mdict_plugins[assemblyPath])
                     {
                         AvailablePlugins.Remove(plugin);
                     }
@@ -912,7 +912,7 @@ namespace LcmsNetDataClasses.Devices
             }
 
             // Map the assembly path to a list of available plug-ins and also update the list of available plug-ins
-            List<classDevicePluginInformation> supportedPlugins = RetrieveSupportedDevicePluginTypes(assembly);
+            var supportedPlugins = RetrieveSupportedDevicePluginTypes(assembly);
             AvailablePlugins.AddRange(supportedPlugins);
             mdict_plugins.Add(assemblyPath, supportedPlugins);
         }
@@ -934,7 +934,7 @@ namespace LcmsNetDataClasses.Devices
                 else
                 {
                     // Remove the old plug-ins from the list.
-                    foreach (classDevicePluginInformation plugin in mdict_plugins[assemblyPath])
+                    foreach (var plugin in mdict_plugins[assemblyPath])
                     {
                         AvailablePlugins.Remove(plugin);
                     }
@@ -944,7 +944,7 @@ namespace LcmsNetDataClasses.Devices
             }
 
             // Map the assembly path to a list of available plug-ins and also update the list of available plug-ins
-            List<classDevicePluginInformation> supportedPlugins =
+            var supportedPlugins =
                 RetrieveSupportedDevicePluginTypes(System.IO.Path.GetFullPath(assemblyPath));
             AvailablePlugins.AddRange(supportedPlugins);
             mdict_plugins.Add(assemblyPath, supportedPlugins);
@@ -966,8 +966,8 @@ namespace LcmsNetDataClasses.Devices
             // Signal others we are the ones doing the loading and alerting.
             mbool_loadingPlugins = true;
 
-            string[] files = System.IO.Directory.GetFiles(directoryPath, filter);
-            foreach (string assemblyPath in files)
+            var files = System.IO.Directory.GetFiles(directoryPath, filter);
+            foreach (var assemblyPath in files)
             {
                 LoadPlugins(assemblyPath, forceReload);
             }
@@ -986,25 +986,25 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>All types that support IDevice and have been attributed with a glyph and device control attribute.</returns>
         private List<classDevicePluginInformation> RetrieveSupportedDevicePluginTypes(Assembly assembly)
         {
-            List<classDevicePluginInformation> supportedTypes = new List<classDevicePluginInformation>();
+            var supportedTypes = new List<classDevicePluginInformation>();
 
-            Type[] types = assembly.GetExportedTypes();
-            foreach (Type objectType in types)
+            var types = assembly.GetExportedTypes();
+            foreach (var objectType in types)
             {
                 // Map the controls
                 if (typeof (IDevice).IsAssignableFrom(objectType))
                 {
-                    object[] attributes = objectType.GetCustomAttributes(typeof (classDeviceControlAttribute), true);
-                    foreach (object attribute in attributes)
+                    var attributes = objectType.GetCustomAttributes(typeof (classDeviceControlAttribute), true);
+                    foreach (var attribute in attributes)
                     {
-                        classDeviceControlAttribute control = attribute as classDeviceControlAttribute;
+                        var control = attribute as classDeviceControlAttribute;
                         if (control != null)
                         {
                             //TODO: Brian changed this...kind of chris made him do it...but we are going to revisit all of the bad things that could happen
                             // if we left this thing uncommented...basically trying to transition from this crap anyway...
                             //if (control.GlyphType != null && control.ControlType != null)
                             {
-                                classDevicePluginInformation pluginInfo = new classDevicePluginInformation(objectType,
+                                var pluginInfo = new classDevicePluginInformation(objectType,
                                     control);
                                 supportedTypes.Add(pluginInfo);
                             }
@@ -1023,11 +1023,11 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>All types that support IDevice and have been attributed with a glyph and device control attribute.</returns>
         private List<classDevicePluginInformation> RetrieveSupportedDevicePluginTypes(string assemblyPath)
         {
-            List<classDevicePluginInformation> supportedTypes = new List<classDevicePluginInformation>();
+            var supportedTypes = new List<classDevicePluginInformation>();
             try
             {
-                Assembly fileAssembly = Assembly.LoadFile(assemblyPath);
-                List<classDevicePluginInformation> subTypes = RetrieveSupportedDevicePluginTypes(fileAssembly);
+                var fileAssembly = Assembly.LoadFile(assemblyPath);
+                var subTypes = RetrieveSupportedDevicePluginTypes(fileAssembly);
                 supportedTypes.AddRange(subTypes);
             }
             catch (Exception ex)

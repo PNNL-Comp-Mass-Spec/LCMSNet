@@ -36,8 +36,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public string DMSConnStr
         {
-            get { return mstring_DMSConnStr; }
-            set { mstring_DMSConnStr = value; }
+            get { return m_DMSConnStr; }
+            set { m_DMSConnStr = value; }
         } // End property
 
         #endregion
@@ -49,14 +49,14 @@ namespace LcmsNet.SampleQueue
         #region "Class variables"
 
         List<classSampleData> mobj_DmsRequestList;
-        string mstring_MatchString;
-        string mstring_DMSConnStr;
-        string mstring_CartName;
+        string m_MatchString;
+        string m_DMSConnStr;
+        string m_CartName;
         // These two string dictionaries hold selected column and sort orders for the listview
         // Using string dictionaries allows me to make the event handler for the column click event common
         //   to both listviews
-        StringDictionary mstringdict_ListViewColumns = new StringDictionary();
-        StringDictionary mstringdict_ListViewSortOrder = new StringDictionary();
+        readonly StringDictionary mstringdict_ListViewColumns = new StringDictionary();
+        readonly StringDictionary mstringdict_ListViewSortOrder = new StringDictionary();
 
         #endregion
 
@@ -115,8 +115,9 @@ namespace LcmsNet.SampleQueue
         /// <param name="e"></param>
         private void comboBoxSelectCart_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mstring_CartName = comboBoxSelectCart.Text;
-            labelLCCart.Text = "LC Cart: " + mstring_CartName;
+            m_CartName = comboBoxSelectCart.Text;
+            labelLCCart.Text = "LC Cart: " + m_CartName;
+        }
         }
 
         /// <summary>
@@ -204,7 +205,7 @@ namespace LcmsNet.SampleQueue
             FormClosing += new FormClosingEventHandler(formDMSView_FormClosing);
 
             // Form caption
-            string dbInUse = string.Empty;
+            var dbInUse = string.Empty;
             try
             {
                 if (classDMSToolsManager.Instance.SelectedTool.DMSVersion.Contains("_T3"))
@@ -242,15 +243,14 @@ namespace LcmsNet.SampleQueue
             UpdateCartList();
 
             // Cart name
-            mstring_CartName = classLCMSSettings.GetParameter("CartName");
-            if (mstring_CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
+            m_CartName = classLCMSSettings.GetParameter("CartName");
+            if (m_CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
-                // No cart name is assigned, so allow user to select one
-                comboBoxSelectCart.Visible = true;
+                // No cart name is assigned, user will need to select one
             }
             else
             {
-                labelLCCart.Text = "LC Cart: " + mstring_CartName;
+                labelLCCart.Text = "LC Cart: " + m_CartName;
             }
         }
 
@@ -259,7 +259,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void UpdateCartList()
         {
-            List<string> cartList = null;
+            List<string> cartList;
 
             comboBoxCarts.Items.Clear();
             comboBoxSelectCart.Items.Clear();
@@ -268,29 +268,27 @@ namespace LcmsNet.SampleQueue
             try
             {
                 cartList = classSQLiteTools.GetCartNameList(false);
-            } //End try
+            }
             catch (classDatabaseConnectionStringException Ex)
             {
                 // The SQLite connection string wasn't found
-                string ErrMsg = Ex.Message + " while getting LC cart listing/r/n";
-                ErrMsg = ErrMsg + "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
+                var errMsg = Ex.Message + " while getting LC cart listing.\r\n" + 
+                    "Please close LcmsNet program and correct the configuration file";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
-            } // End catch1
             catch (classDatabaseDataException Ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                string ErrMsg = "Exception getting LC cart list from DMS: " + Ex.InnerException.Message + "\r\n";
-                ErrMsg = ErrMsg + "As a workaround, you may manually type the cart name when needed.\r\n";
-                ErrMsg = ErrMsg + "You may retry retrieving the cart list later, if desired.";
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
-                buttonUpdateCartList.Visible = true;
+                var errMsg = "Exception getting LC cart list from DMS: " + Ex.InnerException.Message + "\r\n" + 
+                    "As a workaround, you may manually type the cart name when needed.\r\n" + 
+                    "You may retry retrieving the cart list later, if desired.";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
-            } // End catch2
+            }
 
             if (cartList.Count() > 0)
             {
-                foreach (string cart in cartList)
+                foreach (var cart in cartList)
                 {
                     comboBoxCarts.Items.Add(cart);
                     comboBoxSelectCart.Items.Add(cart);
@@ -305,10 +303,10 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void FindDmsRequests()
         {
-            List<classSampleData> tempRequestList = null;
+            List<classSampleData> tempRequestList;
 
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
-            classSampleQueryData queryData = new classSampleQueryData();
+            var queryData = new classSampleQueryData();
 
             queryData.RequestName = textRequestName.Text;
 
@@ -363,15 +361,15 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseConnectionStringException Ex)
             {
                 // The DMS connection string wasn't found
-                string ErrMsg = Ex.Message + " while getting request listing/r/n";
-                ErrMsg = ErrMsg + "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
+                var errMsg = Ex.Message + " while getting request listing\r\n";
+                errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             } // End catch1
             catch (classDatabaseDataException Ex)
             {
-                string ErrMsg = Ex.Message + ": " + Ex.InnerException.Message;
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
+                var errMsg = Ex.Message + ": " + Ex.InnerException.Message;
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             } // End catch2
             finally
@@ -399,13 +397,13 @@ namespace LcmsNet.SampleQueue
                 mobj_DmsRequestList = new List<classSampleData>();
             }
 
-            ArrayList availReqList = new ArrayList();
+            var availReqList = new ArrayList();
 
-            foreach (classSampleData request in tempRequestList)
+            foreach (var request in tempRequestList)
             {
                 // Determine if already in list of requests
-                mstring_MatchString = request.DmsData.RequestName;
-                int foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                m_MatchString = request.DmsData.RequestName;
+                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx == -1)
                 {
                     // Request not found, so add to list of all requests
@@ -426,7 +424,7 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
-            ListViewItem[] itemsToAdd = (ListViewItem[]) availReqList.ToArray(typeof (ListViewItem));
+            var itemsToAdd = (ListViewItem[]) availReqList.ToArray(typeof (ListViewItem));
             listviewAvailableRequests.Items.AddRange(itemsToAdd);
 
             // Hide the wait message and display the listview again
@@ -437,7 +435,7 @@ namespace LcmsNet.SampleQueue
             // Check to see if any items have blocking enabled
             if (IsBlockingEnabled(tempRequestList))
             {
-                string msg =
+                var msg =
                     "You have downloaded samples that have blocking enabled. Please be sure you have downloaded the " +
                     "entire block of samples needed";
                 MessageBox.Show(msg, "Blocked Samples Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -451,7 +449,7 @@ namespace LcmsNet.SampleQueue
         /// <returns>TRUE if any samples have blcoking enabled; otherwise FALSE</returns>
         private bool IsBlockingEnabled(List<classSampleData> InpData)
         {
-            foreach (classSampleData testSample in InpData)
+            foreach (var testSample in InpData)
             {
                 if (testSample.DmsData.Block > 0)
                 {
@@ -475,23 +473,23 @@ namespace LcmsNet.SampleQueue
             foreach (ListViewItem tempItem in listviewAvailableRequests.SelectedItems)
             {
                 // Move the selected items
-                ListViewItem tempItemToMove = new ListViewItem(tempItem.Text);
-                int numSubItems = tempItem.SubItems.Count;
-                for (int cnt = 1; cnt < numSubItems; cnt++)
+                var tempItemToMove = new ListViewItem(tempItem.Text);
+                var numSubItems = tempItem.SubItems.Count;
+                for (var cnt = 1; cnt < numSubItems; cnt++)
                 {
                     tempItemToMove.SubItems.Add(tempItem.SubItems[cnt].Text);
                 }
                 listViewRequestsToRun.Items.Add(tempItemToMove);
                 // Update main list of DMS items
-                mstring_MatchString = tempItem.Text;
-                int foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                m_MatchString = tempItem.Text;
+                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx != -1)
                 {
                     mobj_DmsRequestList[foundIndx].DmsData.SelectedToRun = true;
                 }
                 else
                 {
-                    string tempStr = "Request " + tempItem.SubItems[2].Text + " not found in requested run collection";
+                    var tempStr = "Request " + tempItem.SubItems[2].Text + " not found in requested run collection";
                     MessageBox.Show(tempStr);
                     return;
                 }
@@ -512,15 +510,15 @@ namespace LcmsNet.SampleQueue
             foreach (ListViewItem tempItem in listViewRequestsToRun.SelectedItems)
             {
                 // Update main list of DMS items
-                mstring_MatchString = tempItem.Text;
-                int foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                m_MatchString = tempItem.Text;
+                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx != -1)
                 {
                     mobj_DmsRequestList.RemoveAt(foundIndx);
                 }
                 else
                 {
-                    string tempStr = "Request " + tempItem.SubItems[2].Text + " not found in requested run collection";
+                    var tempStr = "Request " + tempItem.SubItems[2].Text + " not found in requested run collection";
                     MessageBox.Show(tempStr);
                     return;
                 }
@@ -537,7 +535,7 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if match is made; otherwise False</returns>
         private bool PredContainsRequestName(classSampleData request)
         {
-            if (request.DmsData.RequestName.ToLower() == mstring_MatchString.ToLower())
+            if (request.DmsData.RequestName.ToLower() == m_MatchString.ToLower())
             {
                 return true;
             }
@@ -564,23 +562,23 @@ namespace LcmsNet.SampleQueue
         /// <returns>List of classSampleData objects</returns>
         public List<classSampleData> GetNewSamplesDMSView()
         {
-            List<classSampleData> retList = new List<classSampleData>();
+            var retList = new List<classSampleData>();
 
             foreach (ListViewItem tempItem in listViewRequestsToRun.Items)
             {
                 // Find index of item in master request list
-                mstring_MatchString = tempItem.Text;
-                int foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                m_MatchString = tempItem.Text;
+                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx == -1)
                 {
                     // Request has disappeared from master list (shouldn't ever happen, but.....)
-                    string tempStr = "Request " + tempItem.Text + " not found in requested run collection";
+                    var tempStr = "Request " + tempItem.Text + " not found in requested run collection";
                     MessageBox.Show(tempStr);
                     retList.Clear();
                     return retList;
                 }
-                classSampleData tempSampleData = (classSampleData) mobj_DmsRequestList[foundIndx].Clone();
-                tempSampleData.DmsData.CartName = mstring_CartName;
+                var tempSampleData = (classSampleData) mobj_DmsRequestList[foundIndx].Clone();
+                tempSampleData.DmsData.CartName = m_CartName;
 //                  classSampleData tempSampleData = CopyDMSDataObj(tempDMSData);
                 retList.Add(tempSampleData);
             }
@@ -595,16 +593,17 @@ namespace LcmsNet.SampleQueue
         bool UpdateDMSCartAssignment()
         {
             // Verify a cart is specified
-            if (mstring_CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
+            if (m_CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 MessageBox.Show("Cart name must be specified", "CART NAME NOT SPECIFIED");
                 return false;
             }
 
             // Update the cart assignments in DMS
-            string reqIDs = "";
+            var reqIDs = "";
+
             // Build a string of request IDs for stored procedure call
-            foreach (classSampleData tempDMSData in mobj_DmsRequestList)
+            foreach (var tempDMSData in mobj_DmsRequestList)
             {
                 if (tempDMSData.DmsData.SelectedToRun)
                 {
@@ -619,32 +618,28 @@ namespace LcmsNet.SampleQueue
                 }
             }
             // Call the DMS stored procedure to update the cart assignments
-            bool success = false;
+            var success = false;
             try
             {
-                success = classDMSToolsManager.Instance.SelectedTool.UpdateDMSCartAssignment(reqIDs, mstring_CartName,
-                    true);
+                success = classDMSToolsManager.Instance.SelectedTool.UpdateDMSCartAssignment(reqIDs, m_CartName, m_CartConfigName, true);
             } // End try
             catch (classDatabaseConnectionStringException Ex)
             {
                 // The DMS connection string wasn't found
-                string ErrMsg = Ex.Message + " while getting LC cart listing\r\n";
-                ErrMsg = ErrMsg + "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
+                var errMsg = Ex.Message + " while getting LC cart listing\r\n";
+                errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return false;
             } // End catch1
             catch (classDatabaseDataException Ex)
             {
-                string ErrMsg = Ex.Message + ": " + Ex.InnerException.Message + "\r\n\r\n";
-                ErrMsg = ErrMsg + " Requests in DMS may not show correct cart assignments";
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
+                var errMsg = Ex.Message + ": " + Ex.InnerException.Message + "\r\n\r\n";
+                errMsg = errMsg + " Requests in DMS may not show correct cart assignments";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
             } // End catch2
             catch (classDatabaseStoredProcException Ex)
             {
-                string ErrMsg = "Error " + Ex.ReturnCode.ToString() + " while executing stored procedure ";
-                ErrMsg = ErrMsg + Ex.ProcName + ": " + Ex.ErrMessage;
-                ErrMsg = ErrMsg + "\r\n\r\nRequests in DMS may not show correct cart assignments";
                 MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
             } // End catch3
@@ -666,7 +661,7 @@ namespace LcmsNet.SampleQueue
         private void AddNewItemToRunListView(classSampleData requestData)
         {
             // Add to listview
-            ListViewItem newItem = new ListViewItem(requestData.DmsData.RequestName);
+            var newItem = new ListViewItem(requestData.DmsData.RequestName);
             newItem.SubItems.Add(requestData.DmsData.RequestID.ToString());
             newItem.SubItems.Add(requestData.DmsData.CartName);
             newItem.SubItems.Add(requestData.DmsData.UserList);
@@ -689,7 +684,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="lvItemList">ArrayList containing listview items to add</param>
         private void AddNewItemToRunListView(classSampleData requestData, ref ArrayList lvItemList)
         {
-            ListViewItem newItem = new ListViewItem(requestData.DmsData.RequestName);
+            var newItem = new ListViewItem(requestData.DmsData.RequestName);
             newItem.SubItems.Add(requestData.DmsData.RequestID.ToString());
             newItem.SubItems.Add(requestData.DmsData.CartName);
             newItem.SubItems.Add(requestData.DmsData.UserList);
@@ -712,8 +707,8 @@ namespace LcmsNet.SampleQueue
         /// <param name="e">Arguments for listview column click event</param>
         private void SortListview(ListView selectedView, ColumnClickEventArgs e)
         {
-            int selectedColumn = int.Parse(mstringdict_ListViewColumns[selectedView.Name]);
-            bool sortOrderAscending = bool.Parse(mstringdict_ListViewSortOrder[selectedView.Name]);
+            var selectedColumn = int.Parse(mstringdict_ListViewColumns[selectedView.Name]);
+            var sortOrderAscending = bool.Parse(mstringdict_ListViewSortOrder[selectedView.Name]);
 
             // selected column is same as previously selected column, then reverse sort order.
             // Otherwise, sort newly selected column in ascending order
@@ -747,5 +742,6 @@ namespace LcmsNet.SampleQueue
         }
 
         #endregion
+        
     }
 } // End namespace

@@ -97,7 +97,7 @@ namespace LcmsNetDataClasses.Devices
             }
             else
             {
-                using (ManualResetEvent ev = new ManualResetEvent(false))
+                using (var ev = new ManualResetEvent(false))
                 {
                     WaitMilliseconds(Convert.ToInt32(seconds) * 1000, ev);
                 }
@@ -110,7 +110,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="seconds">Total number of milliseconds to wait.</param>
         public void WaitMilliseconds(int milliSeconds, ManualResetEvent resetEvent)
         {
-            bool wait = resetEvent.WaitOne(milliSeconds);
+            var wait = resetEvent.WaitOne(milliSeconds);
         }
 
         #endregion

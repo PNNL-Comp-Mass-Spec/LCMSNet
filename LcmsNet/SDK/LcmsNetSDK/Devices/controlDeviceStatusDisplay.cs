@@ -256,7 +256,7 @@ namespace LcmsNetDataClasses.Devices
         protected void DrawIndicator(Graphics g, int left, int top, int width, int height, Color onColor, Color offColor,
             bool isOn)
         {
-            Color indicatorColor = onColor;
+            var indicatorColor = onColor;
             if (!isOn)
             {
                 indicatorColor = offColor;
@@ -269,7 +269,7 @@ namespace LcmsNetDataClasses.Devices
 
                 using (Brush outline = new SolidBrush(Color.Black))
                 {
-                    using (Pen pen = new Pen(outline, 1.0F))
+                    using (var pen = new Pen(outline, 1.0F))
                     {
                         g.DrawEllipse(pen, left, top, width, height);
                     }
@@ -286,12 +286,12 @@ namespace LcmsNetDataClasses.Devices
             base.OnPaintBackground(e);
 
             using (
-                LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, Width, Height), Color.White,
+                var brush = new LinearGradientBrush(new Rectangle(0, 0, Width, Height), Color.White,
                     Color.LightGray, LinearGradientMode.Vertical))
             {
                 using (Brush outline = new SolidBrush(Color.Black))
                 {
-                    using (Pen pen = new Pen(outline, 1.0F))
+                    using (var pen = new Pen(outline, 1.0F))
                     {
                         e.Graphics.DrawRectangle(pen, 0, 0, Width, Height);
                     }
@@ -299,15 +299,15 @@ namespace LcmsNetDataClasses.Devices
                 e.Graphics.FillRectangle(brush, 0, 0, Width, Height);
             }
 
-            int offset = 0;
+            var offset = 0;
 
             if (BorderStyle != BorderStyle.None)
                 offset += CONST_INDICATOR_TOP_PADDING;
 
-            int height = Height - CONST_INDICATOR_PADDING;
-            int width = height;
-            int left = Width - height + offset - CONST_INDICATOR_PADDING;
-            int top = CONST_INDICATOR_TOP_PADDING;
+            var height = Height - CONST_INDICATOR_PADDING;
+            var width = height;
+            var left = Width - height + offset - CONST_INDICATOR_PADDING;
+            var top = CONST_INDICATOR_TOP_PADDING;
             // Draw the initialized indicator.       
             DrawIndicator(e.Graphics, left, top, width, height, Color.Lime, Color.DarkOliveGreen, mbool_isInitialized);
             // Draw the in use indicator.

@@ -40,7 +40,7 @@ namespace LcmsNetDataClasses.Data
         /// <returns>A new object reference as a copy of this.</returns>
         public object Clone()
         {
-            classPalData newData = new classPalData();
+            var newData = new classPalData();
             newData.PALTray = mstring_PalTray;
             newData.Method = mstring_palMethod;
             newData.Well = mint_Well;

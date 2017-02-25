@@ -66,17 +66,17 @@ namespace LcmsNetDataClasses.Devices.Pumps
             // dw = difference width             
             // N  = number of controls.
             // 
-            int N = mpanel_pumps.Controls.Count;
+            var N = mpanel_pumps.Controls.Count;
             if (mpanel_pumps.Controls.Count == 0)
                 return;
 
-            int dw = Width / N;
-            int left = 0;
+            var dw = Width / N;
+            var left = 0;
             foreach (Control c in mpanel_pumps.Controls)
             {
                 c.Top = 0;
-                int trueWidth = dw;
-                controlPumpDisplay display = c as controlPumpDisplay;
+                var trueWidth = dw;
+                var display = c as controlPumpDisplay;
                 if (display != null)
                 {
                     if (display.Tacked)
@@ -156,9 +156,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
         private void UpdateLabel()
         {
-            IPump pump = m_pumps[m_pointer];
+            var pump = m_pumps[m_pointer];
 
-            GroupBox box = mdict_mobilePhases[pump];
+            var box = mdict_mobilePhases[pump];
             box.Focus();
             box.Select();
 
@@ -176,7 +176,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         void Manager_DeviceRemoved(object sender, LcmsNetDataClasses.Devices.IDevice device)
         {
             // Is this a pump?
-            IPump pump = device as IPump;
+            var pump = device as IPump;
             if (pump == null)
                 return;
 
@@ -191,7 +191,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
             if (mdict_mobilePhases.ContainsKey(pump))
             {
-                GroupBox box = mdict_mobilePhases[pump];
+                var box = mdict_mobilePhases[pump];
                 mpanel_mobilePhase.Controls.Remove(box);
 
                 mdict_mobilePhases.Remove(pump);
@@ -210,7 +210,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <param name="sender"></param>
         void pump_DeviceSaveRequired(object sender, EventArgs e)
         {
-            IPump pump = sender as IPump;
+            var pump = sender as IPump;
             if (pump == null)
                 return;
 
@@ -228,7 +228,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         void Manager_DeviceAdded(object sender, LcmsNetDataClasses.Devices.IDevice device)
         {
             // Make sure the device is a pump.
-            IPump pump = device as IPump;
+            var pump = device as IPump;
             if (pump == null)
                 return;
 
@@ -237,7 +237,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 return;
 
             // Hook into the pumps display calls            
-            controlPumpDisplay display = new controlPumpDisplay();
+            var display = new controlPumpDisplay();
             display.SetPumpName(pump.Name);
 
             pump.MonitoringDataReceived += new EventHandler<PumpDataEventArgs>(DisplayPumpData);
@@ -253,14 +253,14 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (pump.MobilePhases != null)
             {
                 // Create a groupbox that we can associate with this pump
-                GroupBox box = new GroupBox();
+                var box = new GroupBox();
                 box.Text = pump.Name;
                 box.Margin = new Padding(5);
 
-                int height = 0;
-                foreach (MobilePhase phase in pump.MobilePhases)
+                var height = 0;
+                foreach (var phase in pump.MobilePhases)
                 {
-                    controlMobilePhaseEditor editor = new controlMobilePhaseEditor(phase);
+                    var editor = new controlMobilePhaseEditor(phase);
                     editor.Margin = new Padding(5);
                     editor.Dock = DockStyle.Top;
                     height += editor.Height + 15;

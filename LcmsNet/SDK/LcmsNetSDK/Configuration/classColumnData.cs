@@ -142,7 +142,7 @@ namespace LcmsNetDataClasses.Configuration
                 // 
                 if (value != menum_status)
                 {
-                    enumColumnStatus previousStatus = menum_status;
+                    var previousStatus = menum_status;
                     menum_status = value;
                     if (StatusChanged != null)
                         StatusChanged(this, previousStatus, menum_status);
@@ -179,7 +179,7 @@ namespace LcmsNetDataClasses.Configuration
             {
                 if (value != mstring_name)
                 {
-                    string oldName = mstring_name;
+                    var oldName = mstring_name;
 
                     mstring_name = value;
                     if (NameChanged != null)

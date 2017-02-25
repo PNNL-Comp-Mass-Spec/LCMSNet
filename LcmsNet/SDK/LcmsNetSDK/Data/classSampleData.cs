@@ -158,12 +158,12 @@ namespace LcmsNetDataClasses
         {
             //Create a formatter and a memory stream
             IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            var ms = new System.IO.MemoryStream();
             //Serialize the input object
             formatter.Serialize(ms, this);
             //Reset the stream to its beginning and de-serialize into the return object
             ms.Seek(0, System.IO.SeekOrigin.Begin);
-            classSampleData newSample = formatter.Deserialize(ms) as classSampleData;
+            var newSample = formatter.Deserialize(ms) as classSampleData;
             return newSample;
         }
 
@@ -171,13 +171,10 @@ namespace LcmsNetDataClasses
 
         public static string BuildCartColumnName(classSampleData sample)
         {
-            string cartName = classLCMSSettings.GetParameter("CartName");
-            string columnName = "";
-            //if (sample.DmsData.CartName != null && !string.IsNullOrEmpty(sample.DmsData.CartName))
-            //{
-            //    cartName = sample.DmsData.CartName;
-            //}
-            if (sample.ColumnData != null && !string.IsNullOrEmpty(sample.ColumnData.Name))
+            var cartName = classLCMSSettings.GetParameter("CartName");
+            var columnName = "";
+            
+            if (!string.IsNullOrEmpty(sample.ColumnData?.Name))
             {
                 columnName = sample.ColumnData.Name;
             }
@@ -191,8 +188,8 @@ namespace LcmsNetDataClasses
         /// <param name="sample"></param>
         public static void AddDateCartColumnToDatasetName(classSampleData sample)
         {
-            string oldName = sample.DmsData.DatasetName;
-            DateTime now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)); ;
+            var oldName = sample.DmsData.DatasetName;
+            var now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)); ;
             var months = new[]
             {
                 "Jan",
@@ -208,11 +205,11 @@ namespace LcmsNetDataClasses
                 "Nov",
                 "Dec"
             };
-            string dateName = string.Format("{0}{1}{2}", now.Day, months[now.Month - 1], now.Year - 2000);
-            string cartColumn = BuildCartColumnName(sample);
-            string name = string.Format("_{0}_{1}", dateName, cartColumn);
+            var dateName = string.Format("{0}{1}{2}", now.Day, months[now.Month - 1], now.Year - 2000);
+            var cartColumn = BuildCartColumnName(sample);
+            var name = string.Format("_{0}_{1}", dateName, cartColumn);
 
-            bool containsInfoAlready = oldName.Contains(cartColumn);
+            var containsInfoAlready = oldName.Contains(cartColumn);
             if (!containsInfoAlready)
             {
                 sample.DmsData.DatasetName = oldName + name;
@@ -230,8 +227,8 @@ namespace LcmsNetDataClasses
 
         public static string GetTriggerFileName(classSampleData sample, string extension)
         {
-            string datasetName = sample.DmsData.DatasetName;
-            string outFileName =
+            var datasetName = sample.DmsData.DatasetName;
+            var outFileName =
                 string.Format("{0}_{1}_{2}{3}",
                     classLCMSSettings.GetParameter("CartName"),
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
@@ -243,7 +240,7 @@ namespace LcmsNetDataClasses
 
         public override string ToString()
         {
-            string name = base.ToString();
+            var name = base.ToString();
             if (DmsData != null)
             {
                 name = DmsData.DatasetName;
@@ -380,7 +377,7 @@ namespace LcmsNetDataClasses
                     mobj_columnData.NameChanged -= mobj_columnData_NameChanged;
                 }
 
-                bool sameData = (mobj_columnData == value);
+                var sameData = (mobj_columnData == value);
 
                 mobj_columnData = value;
 
@@ -396,22 +393,22 @@ namespace LcmsNetDataClasses
             if (oldName == "")
                 return;
 
-            string cartName = "";
-            if (DmsData != null && DmsData.CartName != null)
+            var cartName = "";
+            if (DmsData?.CartName != null)
             {
                 cartName = DmsData.CartName;
             }
-            string cartColumn = DmsData.CartName + "_" + oldName;
+            var cartColumn = DmsData.CartName + "_" + oldName;
 
             // Make sure we actually have a cart and column name.
-            int length = DmsData.CartName.Length + oldName.Length;
+            var length = DmsData.CartName.Length + oldName.Length;
             if (length < 1)
                 return;
 
-            bool contains = this.DmsData.DatasetName.Contains(cartColumn);
+            var contains = this.DmsData.DatasetName.Contains(cartColumn);
             if (contains)
             {
-                string cartColumnNew = BuildCartColumnName(this);
+                var cartColumnNew = BuildCartColumnName(this);
                 DmsData.DatasetName = DmsData.DatasetName.Replace(cartColumn, cartColumnNew);
             }
         }
@@ -442,18 +439,18 @@ namespace LcmsNetDataClasses
         public override StringDictionary GetPropertyValues()
         {
             //NOTE: This method must be modified if new property representing an object is added
-            StringDictionary TempDict = new StringDictionary();
+            var TempDict = new StringDictionary();
 
             // Use reflection to get the name and value for each property and store in a string dictionary
-            Type classType = this.GetType();
-            PropertyInfo[] properties = classType.GetProperties();
-            foreach (PropertyInfo tempProp in properties)
+            var classType = this.GetType();
+            var properties = classType.GetProperties();
+            foreach (var tempProp in properties)
             {
                 switch (tempProp.PropertyType.ToString())
                 {
                     case "LcmsNetDataClasses.classDMSData":
                         // Special case - get the DMS data for this object and add properties to string dictionary
-                        StringDictionary dmsDict = this.DmsData.GetPropertyValues();
+                        var dmsDict = this.DmsData.GetPropertyValues();
                         foreach (DictionaryEntry de in dmsDict)
                         {
                             TempDict.Add("DMS." + de.Key.ToString(), de.Value.ToString());
@@ -461,7 +458,7 @@ namespace LcmsNetDataClasses
                         break;
                     case "LcmsNetDataClasses.Data.classPalData":
                         // Special case - get the PAL data for this object and add properties to string dictionary
-                        StringDictionary palDict = this.PAL.GetPropertyValues();
+                        var palDict = this.PAL.GetPropertyValues();
                         foreach (DictionaryEntry de in palDict)
                         {
                             TempDict.Add("PAL." + de.Key.ToString(), de.Value.ToString());
@@ -471,7 +468,7 @@ namespace LcmsNetDataClasses
                         if (ColumnData != null)
                         {
                             // Special case - get the column data for this object and add properties to string dictionary
-                            StringDictionary colDict = this.ColumnData.GetPropertyValues();
+                            var colDict = this.ColumnData.GetPropertyValues();
                             foreach (DictionaryEntry de in colDict)
                             {
                                 TempDict.Add("Col." + de.Key.ToString(), de.Value.ToString());
@@ -482,7 +479,7 @@ namespace LcmsNetDataClasses
                         if (LCMethod != null)
                         {
                             // Special case - get the experiment data for this object and add properties to string dictionary
-                            StringDictionary expDict = this.LCMethod.GetPropertyValues();
+                            var expDict = this.LCMethod.GetPropertyValues();
                             foreach (DictionaryEntry de in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
@@ -491,8 +488,8 @@ namespace LcmsNetDataClasses
                         }
                         else
                         {
-                            classLCMethod method = new classLCMethod();
-                            StringDictionary expDict = method.GetPropertyValues();
+                            var method = new classLCMethod();
+                            var expDict = method.GetPropertyValues();
                             foreach (DictionaryEntry de in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
@@ -502,7 +499,7 @@ namespace LcmsNetDataClasses
                         break;
                     case "LcmsNetDataClasses.classInstrumentInfo":
                         // Special case - get the experiment data for this object and add properties to string dictionary
-                        StringDictionary instDict = this.InstrumentData.GetPropertyValues();
+                        var instDict = this.InstrumentData.GetPropertyValues();
                         foreach (DictionaryEntry de in instDict)
                         {
                             TempDict.Add("Ins." + de.Key.ToString(), de.Value.ToString());
@@ -520,17 +517,17 @@ namespace LcmsNetDataClasses
         public override void LoadPropertyValues(StringDictionary PropValues)
         {
             //NOTE: This method must be modified if new property representing an object is added
-            StringDictionary baseProps = new StringDictionary();
-            StringDictionary dmsProps = new StringDictionary();
-            StringDictionary palProps = new StringDictionary();
-            StringDictionary colProps = new StringDictionary();
-            StringDictionary expProps = new StringDictionary();
-            StringDictionary instProps = new StringDictionary();
+            var baseProps = new StringDictionary();
+            var dmsProps = new StringDictionary();
+            var palProps = new StringDictionary();
+            var colProps = new StringDictionary();
+            var expProps = new StringDictionary();
+            var instProps = new StringDictionary();
 
             // Separate the properties into class dictionaries
             foreach (DictionaryEntry testEntry in PropValues)
             {
-                string keyName = testEntry.Key.ToString();
+                var keyName = testEntry.Key.ToString();
                 if (keyName.Length < 4)
                 {
                     // Property name is too short to be one of the properties that holds a class, so add

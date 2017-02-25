@@ -110,7 +110,7 @@ namespace LcmsNetDataClasses.Devices
 
         public void SetY(List<double> values)
         {
-            foreach (double value in values)
+            foreach (var value in values)
             {
                 YValues.Add(value.ToString(".000"));
             }
@@ -118,7 +118,7 @@ namespace LcmsNetDataClasses.Devices
 
         public void SetY(List<DateTime> values)
         {
-            foreach (DateTime value in values)
+            foreach (var value in values)
             {
                 YValues.Add(value.ToString());
             }
@@ -126,7 +126,7 @@ namespace LcmsNetDataClasses.Devices
 
         public void SetX(List<double> values)
         {
-            foreach (double value in values)
+            foreach (var value in values)
             {
                 XValues.Add(value.ToString(".000"));
             }
@@ -134,7 +134,7 @@ namespace LcmsNetDataClasses.Devices
 
         public void SetX(List<DateTime> values)
         {
-            foreach (DateTime value in values)
+            foreach (var value in values)
             {
                 XValues.Add(value.ToString());
             }

@@ -65,7 +65,7 @@ namespace LcmsNetDataClasses.Method
         /// <returns>classLCEvent with same parameters as used with this method.</returns>
         public object Clone()
         {
-            classLCEvent newEvent = new classLCEvent();
+            var newEvent = new classLCEvent();
             newEvent.Device = Device;
             newEvent.Duration = Duration;
             newEvent.HasDiscreteStates = HasDiscreteStates;

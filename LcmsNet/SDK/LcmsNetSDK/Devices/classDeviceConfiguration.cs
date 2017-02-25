@@ -31,18 +31,18 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Maps devices to their settings.
         /// </summary>
-        private Dictionary<string, Dictionary<string, object>> mdict_settings;
+        private readonly Dictionary<string, Dictionary<string, object>> mdict_settings;
 
         /// <summary>
         /// holds a list of connections and the ports that they connection
         /// unique ID of connection is the key, the ports are a comma separated string that make up the value
         /// </summary>
-        private Dictionary<string, string> mlist_connections;
+        private readonly Dictionary<string, string> mlist_connections;
 
         /// <summary>
         /// Holds a list of devices that can be enumerated through.
         /// </summary>
-        private List<string> mlist_devices;
+        private readonly List<string> mlist_devices;
 
         /// <summary>
         /// Default constructor.
@@ -78,8 +78,8 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Adds a setting for the given device.
         /// </summary>
-        /// <param name="device">Device to persist.  If not added before will be saved</param>
-        /// <param name="name">Name of setting.</param>
+        /// <param name="deviceName">Device to persist.  If not added before will be saved</param>
+        /// <param name="settingsName">Name of setting.</param>
         /// <param name="value">Value to assign.</param>
         public void AddSetting(string deviceName, string settingsName, object value)
         {
@@ -94,7 +94,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Retrieves the device settings for the specified device.
         /// </summary>
-        /// <param name="device"></param>
+        /// <param name="deviceName"></param>
         /// <returns></returns>
         public Dictionary<string, object> GetDeviceSettings(string deviceName)
         {

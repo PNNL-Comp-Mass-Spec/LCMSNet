@@ -34,7 +34,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             // 
             // Time and setup 
             // 
-            GraphPane pane = mplot_monitoringDataPressure.GraphPane;
+            var pane = mplot_monitoringDataPressure.GraphPane;
             pane.Title.Text = "Pressure (bar)";
             pane.XAxis.Title.Text = "Time";
             pane.XAxis.Type = AxisType.Date;
@@ -49,7 +49,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             // 
             // Flow rate 
             // 
-            GraphPane paneFlow = mplot_monitoringDataFlow.GraphPane;
+            var paneFlow = mplot_monitoringDataFlow.GraphPane;
             paneFlow.Title.Text = "Flow Rate";
             paneFlow.XAxis.Title.Text = "Time";
             paneFlow.XAxis.Type = AxisType.Date;
@@ -60,7 +60,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             // 
             // Percent B 
             // 
-            GraphPane paneComp = mplot_monitoringDataB.GraphPane;
+            var paneComp = mplot_monitoringDataB.GraphPane;
             paneComp.Title.Text = "Composition";
             paneComp.XAxis.Title.Text = "Time";
             paneComp.XAxis.Type = AxisType.Date;
@@ -82,22 +82,22 @@ namespace LcmsNetDataClasses.Devices.Pumps
         {
             try
             {
-                GraphPane panePressure = mplot_monitoringDataPressure.GraphPane;
-                GraphPane paneFlow = mplot_monitoringDataFlow.GraphPane;
-                GraphPane paneB = mplot_monitoringDataB.GraphPane;
+                var panePressure = mplot_monitoringDataPressure.GraphPane;
+                var paneFlow = mplot_monitoringDataFlow.GraphPane;
+                var paneB = mplot_monitoringDataB.GraphPane;
 
-                double[] x = new double[args.Time.Count];
-                int i = 0;
-                foreach (DateTime tick in args.Time)
+                var x = new double[args.Time.Count];
+                var i = 0;
+                foreach (var tick in args.Time)
                     x[i++] = tick.ToOADate();
 
-                double[] pressurePoints = new double[args.Pressure.Count];
+                var pressurePoints = new double[args.Pressure.Count];
                 args.Pressure.CopyTo(pressurePoints, 0);
 
-                double[] flowrates = new double[args.Flowrate.Count];
+                var flowrates = new double[args.Flowrate.Count];
                 args.Flowrate.CopyTo(flowrates, 0);
 
-                double[] percentBs = new double[args.PercentB.Count];
+                var percentBs = new double[args.PercentB.Count];
                 args.PercentB.CopyTo(percentBs, 0);
 
                 panePressure.CurveList.Clear();
@@ -105,10 +105,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 paneB.CurveList.Clear();
 
 
-                LineItem pressureItems = panePressure.AddCurve("Pressure (psi)", x, pressurePoints, Color.Red,
+                var pressureItems = panePressure.AddCurve("Pressure (psi)", x, pressurePoints, Color.Red,
                     SymbolType.Circle);
-                LineItem flowItems = paneFlow.AddCurve("Flow Rate", x, flowrates, Color.DarkGreen, SymbolType.Triangle);
-                LineItem percentItems = paneB.AddCurve("% B", x, percentBs, Color.Blue, SymbolType.Square);
+                var flowItems = paneFlow.AddCurve("Flow Rate", x, flowrates, Color.DarkGreen, SymbolType.Triangle);
+                var percentItems = paneB.AddCurve("% B", x, percentBs, Color.Blue, SymbolType.Square);
 
                 paneB.AxisChange();
                 paneFlow.AxisChange();

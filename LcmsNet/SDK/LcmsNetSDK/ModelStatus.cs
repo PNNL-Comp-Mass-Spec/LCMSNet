@@ -103,7 +103,7 @@ namespace LcmsNetDataClasses
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder temp = new StringBuilder();
+            var temp = new StringBuilder();
             temp.Append(Description);
             if (Event != null)
             {

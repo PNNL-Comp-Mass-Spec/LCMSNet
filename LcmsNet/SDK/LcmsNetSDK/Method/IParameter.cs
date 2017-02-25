@@ -138,7 +138,7 @@ namespace LcmsNet.Method
             }
             else
             {
-                object value = ParameterValue;
+                var value = ParameterValue;
 
                 Items.Clear();
                 if (data == null || data.Count < 1)
@@ -146,11 +146,11 @@ namespace LcmsNet.Method
 
                 if (data.Count > 0)
                 {
-                    object[] tempData = new object[data.Count];
+                    var tempData = new object[data.Count];
                     data.CopyTo(tempData, 0);
                     Items.AddRange(tempData);
 
-                    int index = -1;
+                    var index = -1;
 
                     if (value != null)
                         index = Items.IndexOf(value);

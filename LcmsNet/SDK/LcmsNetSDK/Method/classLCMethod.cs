@@ -188,7 +188,7 @@ namespace LcmsNetDataClasses.Method
             // 
             // For each event, we tell the device to write the required used data.
             // 
-            foreach (classLCEvent lcEvent in mlist_events)
+            foreach (var lcEvent in mlist_events)
             {
                 // 
                 // Only write this if we have performance data for this method....
@@ -236,12 +236,12 @@ namespace LcmsNetDataClasses.Method
         /// </summary>
         private void UpdateEventTimes()
         {
-            DateTime adjustedStart = mtime_start;
+            var adjustedStart = mtime_start;
             // 
             // Iterate through each event (ultimately) and 
             // adjust the start times of the event based on the time span provided.
             // 
-            foreach (classLCEvent controlEvent in Events)
+            foreach (var controlEvent in Events)
             {
                 controlEvent.Start = adjustedStart;
                 adjustedStart = adjustedStart.Add(controlEvent.Duration);
@@ -263,13 +263,13 @@ namespace LcmsNetDataClasses.Method
         /// <returns></returns>
         public object Clone()
         {
-            classLCMethod newMethod = new classLCMethod();
+            var newMethod = new classLCMethod();
             newMethod.Name = Name;
             if (mlist_events != null)
             {
-                foreach (classLCEvent lcEvent in Events)
+                foreach (var lcEvent in Events)
                 {
-                    classLCEvent clonedEvent = lcEvent.Clone() as classLCEvent;
+                    var clonedEvent = lcEvent.Clone() as classLCEvent;
                     if (clonedEvent != null)
                     {
                         newMethod.Events.Add(clonedEvent);
@@ -297,7 +297,7 @@ namespace LcmsNetDataClasses.Method
         /// <returns>StringDictionary containing the name of the LC Method</returns>
         public override StringDictionary GetPropertyValues()
         {
-            StringDictionary dictionary = new StringDictionary();
+            var dictionary = new StringDictionary();
             dictionary.Add(CONST_NAME_METHOD_KEY, Name);
 
             return dictionary;

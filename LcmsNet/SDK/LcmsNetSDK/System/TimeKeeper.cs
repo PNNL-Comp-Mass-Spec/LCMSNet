@@ -47,7 +47,7 @@ namespace LcmsNetSDK
             {
                 if (!string.IsNullOrEmpty(e.SettingValue))
                 {
-                    TimeZoneInfo newTimeZone = TimeZoneInfo.FindSystemTimeZoneById(e.SettingValue);
+                    var newTimeZone = TimeZoneInfo.FindSystemTimeZoneById(e.SettingValue);
                     m_current_timezone = newTimeZone;
                 }
             }
@@ -80,8 +80,8 @@ namespace LcmsNetSDK
         public bool DoDateTimesSpanDaylightSavingsTransition(DateTime start, DateTime end)
         {
             //Construct DateTimes representing DST transition
-            DateTime springTransition = DateTime.MinValue;
-            DateTime fallTransition = DateTime.MinValue;
+            var springTransition = DateTime.MinValue;
+            var fallTransition = DateTime.MinValue;
             TimeZoneInfo.TransitionTime startTransTime;
             TimeZoneInfo.TransitionTime endTransTime;
             FindDSTTransitions(start.Year, out startTransTime, out endTransTime);
@@ -108,9 +108,9 @@ namespace LcmsNetSDK
             startTransTime = new TimeZoneInfo.TransitionTime();
             endTransTime = new TimeZoneInfo.TransitionTime();
 
-            TimeZoneInfo.AdjustmentRule[] adjustments = m_current_timezone.GetAdjustmentRules();
+            var adjustments = m_current_timezone.GetAdjustmentRules();
             // Iterate adjustment rules for time zone 
-            foreach (TimeZoneInfo.AdjustmentRule adjustment in adjustments)
+            foreach (var adjustment in adjustments)
             {
                 // Determine if this adjustment rule covers year desired 
                 if (adjustment.DateStart.Year <= year && adjustment.DateEnd.Year >= year)
@@ -129,12 +129,12 @@ namespace LcmsNetSDK
         /// <returns></returns>
         public bool AfterDSTTransition(LcmsNetDataClasses.Method.classLCMethod method)
         {
-            int year = method.Start.Year;
+            var year = method.Start.Year;
             TimeZoneInfo.TransitionTime springTransition;
             TimeZoneInfo.TransitionTime fallTransition;
             FindDSTTransitions(year, out springTransition, out fallTransition);
-            DateTime dstTransitionSpring = ConvertToDateTime(springTransition, year);
-            DateTime dstTransitionFall = ConvertToDateTime(fallTransition, year);
+            var dstTransitionSpring = ConvertToDateTime(springTransition, year);
+            var dstTransitionFall = ConvertToDateTime(fallTransition, year);
             // If the method starts after the spring dst transition and occurs on the DAY of that transition...
             if (method.Start.Subtract(dstTransitionSpring).Milliseconds >= 0 &&
                 method.Start.Date == dstTransitionSpring.Date)
@@ -163,7 +163,7 @@ namespace LcmsNetSDK
         private DateTime ConvertToDateTime(TimeZoneInfo.TransitionTime transition, int year)
         {
             //This is a modified version of MSDN's example code from the TimeZoneInfo.TransitionTime property page.
-            Calendar localCalendar = CultureInfo.CurrentCulture.Calendar;
+            var localCalendar = CultureInfo.CurrentCulture.Calendar;
             if (transition.IsFixedDateRule)
             {
                 return new DateTime(year, transition.Month, (int) transition.DayOfWeek, transition.TimeOfDay.Hour,
@@ -171,12 +171,12 @@ namespace LcmsNetSDK
             }
             else
             {
-                int startOfWeek = transition.Week * 7 - 6;
+                var startOfWeek = transition.Week * 7 - 6;
                 // What day of the week does the month start on? 
-                int firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
+                var firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
                 // Determine how much start date has to be adjusted 
                 int transitionDay;
-                int changeDayOfWeek = (int) transition.DayOfWeek;
+                var changeDayOfWeek = (int) transition.DayOfWeek;
 
                 if (firstDayOfWeek <= changeDayOfWeek)
                     transitionDay = startOfWeek + (changeDayOfWeek - firstDayOfWeek);

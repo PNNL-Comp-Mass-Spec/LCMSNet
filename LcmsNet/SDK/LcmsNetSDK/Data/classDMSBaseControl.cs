@@ -43,7 +43,7 @@ namespace LcmsNetDataClasses.Data
 
         public virtual void OnEnterPressed(object sender, DMSValidatorEventArgs e)
         {
-            EventHandler<DMSValidatorEventArgs> handler = EnterPressed;
+            var handler = EnterPressed;
             if (handler != null)
             {
                 handler(sender, e);
