@@ -535,8 +535,9 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
-        /// Run windows time synchronization.
+        /// Run windows time synchronization using w32tm.exe
         /// </summary>
+        /// <remarks>This method is unused</remarks>
         private void SynchronizeSystemClock()
         {
             ProcessStartInfo synchStart = new ProcessStartInfo();
@@ -555,8 +556,9 @@ namespace LcmsNet.SampleQueue.Forms
                 output = synch.StandardOutput.ReadToEnd();
                 error = synch.StandardError.ReadToEnd();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                // Ignore errors here
             }
             classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                 "Synched System Clock " + synch.ExitCode + " " + output + " " + error);

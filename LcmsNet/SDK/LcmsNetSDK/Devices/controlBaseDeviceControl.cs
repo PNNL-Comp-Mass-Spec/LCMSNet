@@ -67,7 +67,9 @@ namespace LcmsNetDataClasses.Devices
 
         #region Events
 
-        //Name change
+        /// <summary>
+        /// An event that indicates the name has changed.
+        /// </summary>
         public event DelegateNameChanged NameChanged;
 
         public virtual void OnNameChanged(string newname)
@@ -78,7 +80,9 @@ namespace LcmsNetDataClasses.Devices
             }
         }
 
-        //Save required
+        /// <summary>
+        /// An event that indicates the control needs to be saved
+        /// </summary>
         public event DelegateSaveRequired SaveRequired;
 
         public virtual void OnSaveRequired()

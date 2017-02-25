@@ -459,6 +459,7 @@ namespace LcmsNet.SampleQueue.Forms
             InvalidateGridView();
         }
 
+
         private void mbutton_dmsEdit_Click(object sender, EventArgs e)
         {
             EditDMSData();

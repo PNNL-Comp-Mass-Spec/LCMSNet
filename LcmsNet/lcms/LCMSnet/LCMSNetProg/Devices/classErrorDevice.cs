@@ -167,11 +167,8 @@ namespace LcmsNet.Devices
         [classLCMethodAttribute("Event Error", 1, false, "", -1, false)]
         public void EventError()
         {
-            if (Error != null)
-            {
-                Error(this,
-                    new classDeviceErrorEventArgs("Error!", null, enumDeviceErrorStatus.ErrorSampleOnly, this, "Error!"));
-            }
+            Error?.Invoke(this,
+                          new classDeviceErrorEventArgs("Error!", null, enumDeviceErrorStatus.ErrorSampleOnly, this, "Error!"));
         }
 
         /// <summary>

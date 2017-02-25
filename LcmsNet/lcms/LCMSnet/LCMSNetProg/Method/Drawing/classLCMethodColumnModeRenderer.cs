@@ -37,7 +37,10 @@ namespace LcmsNet.Method.Drawing
             ColumnNames = new List<string>();
         }
 
-        public List<string> ColumnNames { get; set; }
+        /// <summary>
+        /// Note that this overrides the base class ColumnNames
+        /// </summary>
+        public new List<string> ColumnNames { get; set; }
 
         /// <summary>
         /// Renders the column name on the background.
