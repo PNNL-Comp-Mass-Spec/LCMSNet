@@ -2289,7 +2289,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 throw new Exception("The column data cannot be null.");
             }
-            else if (data.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
+            else if (data.Sample != null && data.Sample.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
             {
                 data.SpecialColumnNumber = "S";
             }

@@ -250,7 +250,11 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 return "";
             }
-            set { Sample.LCMethod.Name = value; }
+            set
+            {
+                if (Sample.LCMethod != null)
+                    Sample.LCMethod.Name = value;
+            }
         }
         //this.mcolumn_instrumentMethod,
         public string InstrumentMethod
