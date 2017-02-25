@@ -253,8 +253,14 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy  /y /F "$(TargetPath)" "$(SolutionDir)..\lib\"
-</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(ProjectDir)..\..\lib\"
+xcopy /y /F /D "$(TargetPath)" "$(ProjectDir)..\..\lcms\lib\"
+xcopy /y /F /D "$(TargetPath)" "$(ProjectDir)..\..\..\pluginDLLs\"
+
+
+if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
+if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
+xcopy /y /F /D "$(TargetPath)" %25appdata%25\LCMSNet\dmsExtensions</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

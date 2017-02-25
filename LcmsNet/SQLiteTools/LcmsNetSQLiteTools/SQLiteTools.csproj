@@ -116,17 +116,18 @@
     <PostBuildEvent>if $(ConfigurationName) == PNNLRelease goto :release else goto :end
 
 :release
-xcopy /y  /f "$(TargetDir)*.dll" "$(SolutionDir)..\lib\"
-xcopy /y /f "$(TargetDir)\x86\*.dll" "$(SolutionDir)\..\lib"
+xcopy /Y /F /D "$(TargetDir)*.dll" "$(ProjectDir)..\..\lib\"
+xcopy /Y /F /D "$(TargetDir)*.dll" "$(ProjectDir)..\..\lcms\lib\"
+xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(ProjectDir)..\..\lib"
 
 :end
 
-if not exist "$(SolutionDir)SQLite" mkdir "$(SolutionDir)SQLite"
-if not exist "$(SolutionDir)SQLite\x86" mkdir "$(SolutionDir)SQLite\x86"
-if not exist "$(SolutionDir)SQLite\x64" mkdir "$(SolutionDir)SQLite\x64"
-xcopy /y /d "$(TargetDir)System.Data.SQLite.*"  "$(SolutionDir)SQLite\"
-xcopy /y /d "$(TargetDir)x86\*"  "$(SolutionDir)SQLite\x86\"
-xcopy /y /d "$(TargetDir)x64\*"  "$(SolutionDir)SQLite\x64\"
+if not exist "$(ProjectDir)..\SQLite" mkdir "$(ProjectDir)..\SQLite"
+if not exist "$(ProjectDir)..\SQLite\x86" mkdir "$(ProjectDir)..\SQLite\x86"
+if not exist "$(ProjectDir)..\SQLite\x64" mkdir "$(ProjectDir)..\SQLite\x64"
+xcopy /Y /F /D "$(TargetDir)System.Data.SQLite.*"  "$(ProjectDir)..\SQLite\"
+xcopy /Y /F /D "$(TargetDir)x86\*"  "$(ProjectDir)..\SQLite\x86\"
+xcopy /Y /F /D "$(TargetDir)x64\*"  "$(ProjectDir)..\SQLite\x64\"
 </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets')" />

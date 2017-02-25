@@ -72,9 +72,9 @@
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(TargetDir)x86" mkdir "$(TargetDir)x86"
 if not exist "$(TargetDir)x64" mkdir "$(TargetDir)x64"
-xcopy /y /d "$(SolutionDir)SQLite\System.Data.SQLite.*" "$(TargetDir)"
-xcopy /y /d "$(SolutionDir)SQLite\x86\*" "$(TargetDir)x86\"
-xcopy /y /d "$(SolutionDir)SQLite\x64\*" "$(TargetDir)x64\"
+xcopy /y /d /f "$(ProjectDir)..\SQLite\System.Data.SQLite.*" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)..\SQLite\x86\*" "$(TargetDir)x86\"
+xcopy /y /d /f "$(ProjectDir)..\SQLite\x64\*" "$(TargetDir)x64\"
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

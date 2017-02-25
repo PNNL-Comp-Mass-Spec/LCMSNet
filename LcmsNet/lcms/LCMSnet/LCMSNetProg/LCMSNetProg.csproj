@@ -977,10 +977,16 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>rem xcopy /y "$(SolutionDir)..\..\lib\*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>rem xcopy /Y /F /D "$(ProjectDir)..\..\..\lib\*" "$(TargetDir)"
+
+if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
+if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
+
+xcopy /Y /F /D "$(ProjectDir)..\..\..\lib\LcmsNetDmsTools.dll" "%25appdata%25\LCMSNet\dmsExtensions"</PostBuildEvent>
     <PreBuildEvent>IF EXIST Plugins  GOTO DONE
 mkdir Plugins
-:DONE</PreBuildEvent>
+:DONE
+</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net40\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
