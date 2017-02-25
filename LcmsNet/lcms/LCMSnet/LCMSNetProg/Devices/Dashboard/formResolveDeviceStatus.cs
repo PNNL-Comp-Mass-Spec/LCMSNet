@@ -12,12 +12,9 @@ namespace LcmsNet.Devices.Dashboard
 {
     public partial class formResolveDeviceStatus : Form
     {
-        private bool mbool_set;
-
         public formResolveDeviceStatus()
         {
             InitializeComponent();
-            mbool_set = false;
         }
 
         public enumDeviceStatus Status { get; set; }
