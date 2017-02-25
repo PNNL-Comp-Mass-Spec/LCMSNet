@@ -625,7 +625,14 @@ namespace FluidicsSimulator
 
         #region Events
 
-        public event EventHandler<SimulatedEventArgs> EventExecuting;
+#pragma warning disable 67
+        public event EventHandler<SimulatedEventArgs> EventExecuting
+        {
+            add { }
+            remove { }
+        }
+#pragma warning restore 67
+
         public event EventHandler<SimulatedEventArgs> EventSimulated;
         public event EventHandler<ModelStatusChangeEventArgs> SimulationComplete;
         public event EventHandler<ModelStatusChangeEventArgs> ModelStatusChangeEvent;

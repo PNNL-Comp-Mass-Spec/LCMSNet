@@ -122,6 +122,10 @@ namespace FluidicsSDK.ModelCheckers
 
         public event EventHandler<LcmsNetDataClasses.Devices.classDeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error;
+        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
     }
 }

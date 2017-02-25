@@ -751,8 +751,20 @@ namespace FluidicsSDK
 
         public event EventHandler<LcmsNetDataClasses.ModelCheckControllerEventArgs> ModelCheckAdded;
 
-        public event EventHandler<LcmsNetDataClasses.ModelCheckControllerEventArgs> ModelCheckRemoved;
-        public event EventHandler<ModelStatusChangeEventArgs> ModelStatusChanged;
+        public event EventHandler<LcmsNetDataClasses.ModelCheckControllerEventArgs> ModelCheckRemoved
+        {
+            add { }
+            remove { }
+        }
+
+#pragma warning disable 67
+        public event EventHandler<ModelStatusChangeEventArgs> ModelStatusChanged
+        {
+            add { }
+            remove { }
+        }
+#pragma warning restore 67
+
         public event EventHandler<LcmsNetDataClasses.ModelStatusChangeEventArgs> ModelStatusChangeEvent;
     }
 }

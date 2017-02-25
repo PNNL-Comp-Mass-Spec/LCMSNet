@@ -21,107 +21,127 @@ namespace DemoPluginLibrary
                                  typeof(FluidicsSprayNeedle),
                                  "Demo Spray Needle",
                                  "Demo")]
-    public class DemoSprayNeedle:IDevice
+    public class DemoSprayNeedle : IDevice
     {
-           public DemoSprayNeedle()
-           {
-               Name = "Demo Spray Needle";
-               Version = "infinity.";
-               Position = 1;
-               AbortEvent = new System.Threading.ManualResetEvent(false);
-           }
+        public DemoSprayNeedle()
+        {
+            Name = "Demo Spray Needle";
+            Version = "infinity.";
+            Position = 1;
+            AbortEvent = new System.Threading.ManualResetEvent(false);
+        }
 
-           public bool Initialize(ref string errorMessage)
-            {
-                Status = enumDeviceStatus.Initialized;
-                ErrorType = enumDeviceErrorStatus.NoError;
-                return true;
-            }
+        public bool Initialize(ref string errorMessage)
+        {
+            Status = enumDeviceStatus.Initialized;
+            ErrorType = enumDeviceErrorStatus.NoError;
+            return true;
+        }
 
-            public bool Shutdown()
-            {
-                return true;
-            }
+        public bool Shutdown()
+        {
+            return true;
+        }
 
-            public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-            {
+        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
+        {
 
-            }
+        }
 
-            public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-            {
+        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
+        {
 
-            }
+        }
 
-            public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-            {
+        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
+        {
 
-            }
+        }
 
-            public List<string> GetStatusNotificationList()
-            {
-                return new List<string>();
-            }
+        public List<string> GetStatusNotificationList()
+        {
+            return new List<string>();
+        }
 
-            public List<string> GetErrorNotificationList()
-            {
-                return new List<string>();
-            }
+        public List<string> GetErrorNotificationList()
+        {
+            return new List<string>();
+        }
 
-            #region Events
-            public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        #region Events
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        {
+            add { }
+            remove { }
+        }
 
-            public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
-            public event EventHandler DeviceSaveRequired;
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
-            public event EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
-            #endregion
+#pragma warning disable 67
+        public event EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged
+        {
+            add { }
+            remove { }
+        }
+#pragma warning restore 67
 
-            #region Properties
-            public enumDeviceType DeviceType
-            {
-                get { return enumDeviceType.Component; }
-            }
 
-            public enumDeviceErrorStatus ErrorType
-            {
-                get;
-                set;
-            }
+        #endregion
 
-            public string Name
-            {
-                get;
-                set;
-            }
+        #region Properties
+        public enumDeviceType DeviceType
+        {
+            get { return enumDeviceType.Component; }
+        }
 
-            public string Version
-            {
-                get;
-                set;
-            }
+        public enumDeviceErrorStatus ErrorType
+        {
+            get;
+            set;
+        }
 
-            public enumDeviceStatus Status
-            {
-                get;
-                set;
-            }
+        public string Name
+        {
+            get;
+            set;
+        }
 
-            public System.Threading.ManualResetEvent AbortEvent
-            {
-                get;
-                set;
-            }
+        public string Version
+        {
+            get;
+            set;
+        }
 
-            public bool Emulation
-            {
-                get;
-                set;
-            }
+        public enumDeviceStatus Status
+        {
+            get;
+            set;
+        }
 
-            public int Position { get; set; }
+        public System.Threading.ManualResetEvent AbortEvent
+        {
+            get;
+            set;
+        }
 
-            #endregion        
+        public bool Emulation
+        {
+            get;
+            set;
+        }
+
+        public int Position { get; set; }
+
+        #endregion
     }
 }

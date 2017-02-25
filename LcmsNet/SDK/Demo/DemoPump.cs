@@ -123,11 +123,23 @@ namespace DemoPluginLibrary
         #endregion
 
         #region Events
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        {
+            add { }
+            remove { }
+        }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
-        public event EventHandler DeviceSaveRequired;
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         public event EventHandler<PumpEventArgs<double>> FlowChanged;
 
@@ -138,7 +150,12 @@ namespace DemoPluginLibrary
         /// <summary>
         /// Event fired when new pump data is available.
         /// </summary>
-        public event EventHandler<PumpDataEventArgs> MonitoringDataReceived;
+        public event EventHandler<PumpDataEventArgs> MonitoringDataReceived
+        {
+            add { }
+            remove { }
+        }
+
         #endregion
 
         #region Properties

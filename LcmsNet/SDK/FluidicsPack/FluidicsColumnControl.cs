@@ -36,8 +36,17 @@ namespace FluidicsPack
         }
 
         #region IDeviceControl Members
-        public event DelegateNameChanged NameChanged;
-        public event DelegateSaveRequired SaveRequired;
+        public event DelegateNameChanged NameChanged
+        {
+            add { }
+            remove { }
+        }
+
+        public event DelegateSaveRequired SaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         public bool Running
         {

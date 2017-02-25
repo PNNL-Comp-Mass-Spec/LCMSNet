@@ -14,7 +14,12 @@ namespace FluidicsPack
 
     public class FluidicsColumnGlyph : FluidicsDevice , IFluidicsDevice
     {        
-        public event EventHandler DeviceSaveRequired;
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
+
         private IDevice m_device;
         private Port m_inputPort;
         private Port m_exitPort;

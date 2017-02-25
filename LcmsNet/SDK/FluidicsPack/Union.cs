@@ -67,11 +67,23 @@ namespace FluidicsPack
         #endregion
 
         #region Events
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        {
+            add { }
+            remove { }
+        }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
-        public event EventHandler DeviceSaveRequired;
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         #endregion
 

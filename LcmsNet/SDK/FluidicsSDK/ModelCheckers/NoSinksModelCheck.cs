@@ -25,7 +25,12 @@ namespace FluidicsSDK.ModelCheckers
         private const string NO_PATH_FOUND = "No Sink Found";
 
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
 
         public NoSinksModelCheck()

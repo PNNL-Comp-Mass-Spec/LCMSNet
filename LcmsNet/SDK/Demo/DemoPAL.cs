@@ -21,7 +21,14 @@ namespace DemoPluginLibrary
         /// <summary>
         /// Fired when new method names are available.
         /// </summary>
-        public event EventHandler<classAutoSampleEventArgs> MethodNames;
+#pragma warning disable 67
+        public event EventHandler<classAutoSampleEventArgs> MethodNames
+        {
+            add { }
+            remove { }
+        }
+#pragma warning restore 67
+
         /// <summary>
         /// Fired to the method editor handler with a List of method names 
         /// </summary>
@@ -100,11 +107,23 @@ namespace DemoPluginLibrary
         {
             return new List<string>();
         }
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        {
+            add { }
+            remove { }
+        }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
-        public event EventHandler DeviceSaveRequired;
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         public enumDeviceType DeviceType
         {
