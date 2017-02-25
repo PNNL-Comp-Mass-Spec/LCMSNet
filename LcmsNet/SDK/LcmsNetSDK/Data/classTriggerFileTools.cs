@@ -38,12 +38,12 @@ namespace LcmsNetDataClasses.Data
         public static void GenerateTriggerFile(classSampleData sample)
         {
             /*// Exit if trigger file creation disabled
-				if (!bool.Parse(classLCMSSettings.GetParameter("CreateTriggerFiles")))
-				{
-					string msg = "Generate Trigger File: Sample " + sample.DmsData.DatasetName + ", Trigger file creation disabled";
-					classApplicationLogger.LogMessage(0, msg);
-					return;
-				}*/
+                if (!bool.Parse(classLCMSSettings.GetParameter("CreateTriggerFiles")))
+                {
+                    string msg = "Generate Trigger File: Sample " + sample.DmsData.DatasetName + ", Trigger file creation disabled";
+                    classApplicationLogger.LogMessage(0, msg);
+                    return;
+                }*/
 
             // Create an XML document containing the trigger file's contents
             GenerateXmlDoc(sample);
@@ -73,6 +73,7 @@ namespace LcmsNetDataClasses.Data
             AddParam(rootElement, "Instrument Name", classLCMSSettings.GetParameter("InstName"));
             AddParam(rootElement, "Separation Type", classLCMSSettings.GetParameter("SeparationType"));
             AddParam(rootElement, "LC Cart Name", classLCMSSettings.GetParameter("CartName"));
+            AddParam(rootElement, "LC Cart Config", classLCMSSettings.GetParameter("CartConfigName"));
             AddParam(rootElement, "LC Column", sample.ColumnData.Name);
             AddParam(rootElement, "Wellplate Number", sample.PAL.WellPlate);
             AddParam(rootElement, "Well Number", sample.PAL.Well.ToString());

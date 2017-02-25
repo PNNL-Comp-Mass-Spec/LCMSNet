@@ -28,6 +28,6 @@ namespace LcmsNetDataClasses
         void GetUserListFromDMS();
         void LoadCacheFromDMS();
         void LoadCacheFromDMS(bool shouldLoadExperiment);
-        bool UpdateDMSCartAssignment(string requestList, string cartName, bool updateMode);
+        bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode);
     }
 }

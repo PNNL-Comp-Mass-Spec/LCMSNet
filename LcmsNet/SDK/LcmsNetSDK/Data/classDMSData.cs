@@ -35,6 +35,7 @@ namespace LcmsNetDataClasses
             this.Batch = -1;
             this.Block = -1;
             this.CartName = "";
+            this.CartConfigName = "";
             this.Comment = "";
             this.DatasetName = "";
             this.DatasetType = "";
@@ -110,6 +111,12 @@ namespace LcmsNetDataClasses
         /// Name of cart used for sample run
         /// </summary>
         public string CartName { get; set; }
+
+        /// <summary>
+        /// Name of cart configuration used for sample run
+        /// </summary>
+        public string CartConfigName { get; set; }
+
 
         /// <summary>
         /// Comment field

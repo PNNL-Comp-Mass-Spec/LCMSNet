@@ -52,6 +52,8 @@ namespace LcmsNet.SampleQueue
         string m_MatchString;
         string m_DMSConnStr;
         string m_CartName;
+        string m_CartConfigName;
+
         // These two string dictionaries hold selected column and sort orders for the listview
         // Using string dictionaries allows me to make the event handler for the column click event common
         //   to both listviews
@@ -118,6 +120,15 @@ namespace LcmsNet.SampleQueue
             m_CartName = comboBoxSelectCart.Text;
             labelLCCart.Text = "LC Cart: " + m_CartName;
         }
+
+        /// <summary>
+        /// Event handler for selection of cart config name
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxSelectCartConfig_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_CartConfigName = comboBoxSelectCartConfig.Text;
         }
 
         /// <summary>
@@ -165,6 +176,7 @@ namespace LcmsNet.SampleQueue
         private void buttonUpdateCartList_Click(object sender, EventArgs e)
         {
             UpdateCartList();
+            UpdateCartConfigList();
         }
 
         /// <summary>
@@ -241,9 +253,12 @@ namespace LcmsNet.SampleQueue
 
             // Load the LC cart lists
             UpdateCartList();
+            UpdateCartConfigList();
 
             // Cart name
             m_CartName = classLCMSSettings.GetParameter("CartName");
+            m_CartConfigName = classLCMSSettings.GetParameter("CartConfigName");
+
             if (m_CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 // No cart name is assigned, user will need to select one
@@ -276,6 +291,7 @@ namespace LcmsNet.SampleQueue
                     "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
+            }
             catch (classDatabaseDataException Ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
@@ -286,18 +302,56 @@ namespace LcmsNet.SampleQueue
                 return;
             }
 
-            if (cartList.Count() > 0)
+            if (cartList.Any())
             {
                 foreach (var cart in cartList)
                 {
                     comboBoxCarts.Items.Add(cart);
                     comboBoxSelectCart.Items.Add(cart);
                 }
-                // Lists updated OK, so we don't need "Update" button
-                buttonUpdateCartList.Visible = false;
             }
         }
 
+        /// <summary>
+        /// Loads the LC cart config dropdown with data from cache
+        /// </summary>
+        private void UpdateCartConfigList()
+        {
+            List<string> cartConfigList;
+
+            comboBoxSelectCartConfig.Items.Clear();
+
+            // Get the list of cart configuration names from DMS
+            try
+            {
+                cartConfigList = classSQLiteTools.GetCartConfigNameList(false);
+            }
+            catch (classDatabaseConnectionStringException Ex)
+            {
+                // The SQLite connection string wasn't found
+                var errMsg = Ex.Message + " while getting LC cart config name listing.\r\n" + 
+                    "Please close LcmsNet program and correct the configuration file";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
+                return;
+            }
+            catch (classDatabaseDataException Ex)
+            {
+                // There was a problem getting the list of LC carts from the cache db
+                var errMsg = "Exception getting LC cart config name list from DMS: " + Ex.InnerException.Message + "\r\n" + 
+                    "As a workaround, you may manually type the cart config name when needed.\r\n" + 
+                    "You may retry retrieving the cart list later, if desired.";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
+                return;
+            }
+
+            if (cartConfigList.Any())
+            {
+                foreach (var cartConfig in cartConfigList)
+                {
+                    comboBoxSelectCartConfig.Items.Add(cartConfig);
+                }
+            }
+        }
         /// <summary>
         /// Loads listViewAvailableRequests with all requests in DMS matching specified criteria
         /// </summary>
@@ -379,15 +433,15 @@ namespace LcmsNet.SampleQueue
 
             // Check to see if any items were found
             labelPleaseWait.Visible = false;
-            if (tempRequestList.Count() < 1)
+            if (!tempRequestList.Any())
             {
                 MessageBox.Show("No requests found in DMS");
-                labelRequestCount.Text = tempRequestList.Count().ToString() + "0 requests found";
+                labelRequestCount.Text = tempRequestList.Count() + "0 requests found";
                 return;
             }
             else
             {
-                labelRequestCount.Text = tempRequestList.Count().ToString() + " requests found";
+                labelRequestCount.Text = tempRequestList.Count() + " requests found";
             }
 
             // Add the requests to the listview
@@ -640,7 +694,10 @@ namespace LcmsNet.SampleQueue
             } // End catch2
             catch (classDatabaseStoredProcException Ex)
             {
-                MessageBox.Show(ErrMsg, "LcmsNet", MessageBoxButtons.OK);
+                var errMsg = "Error " + Ex.ReturnCode.ToString() + " while executing stored procedure ";
+                errMsg = errMsg + Ex.ProcName + ": " + Ex.ErrMessage;
+                errMsg = errMsg + "\r\n\r\nRequests in DMS may not show correct cart assignments";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
             } // End catch3
 

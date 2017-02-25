@@ -823,6 +823,19 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Wrapper around generic retrieval method specifically for cart config name lists
+        /// </summary>
+        /// <returns>List&lt;string&gt; containing cart names</returns>
+        public static List<string> GetCartConfigNameList(bool force)
+        {
+            if (m_cartConfigNames == null)
+            {
+                m_cartConfigNames = GetSingleColumnListFromCache(enumTableTypes.CartConfigNameList);
+            }
+            return m_cartConfigNames;
+        }
+
+        /// <summary>
         /// Wrapper around generic retrieval method specifically for LC column lists
         /// </summary>
         /// <returns>List&lt;string&gt; containing cart names</returns>

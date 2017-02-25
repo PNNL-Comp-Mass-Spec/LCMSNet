@@ -142,10 +142,10 @@ namespace LcmsNetDmsTools
         public event ProgressEventHandler ProgressEvent;
 
         public void OnProgressUpdate(ProgressEventArgs e)
-		{
-			if (ProgressEvent != null)
-				ProgressEvent(this, e);
-		}
+        {
+            if (ProgressEvent != null)
+                ProgressEvent(this, e);
+        }
 
         #endregion
 
@@ -255,22 +255,25 @@ namespace LcmsNetDmsTools
             ReportProgress("Loading cart names", 1, stepCountTotal);
             GetCartListFromDMS();
 
-            ReportProgress("Loading separation types", 2, stepCountTotal);
+            ReportProgress("Loading cart config names", 2, stepCountTotal);
+            GetCartConfigNamesFromDMS();
+
+            ReportProgress("Loading separation types", 3, stepCountTotal);
             GetSepTypeListFromDMS();
 
-            ReportProgress("Loading dataset types", 3, stepCountTotal);
+            ReportProgress("Loading dataset types", 4, stepCountTotal);
             GetDatasetTypeListFromDMS();
 
-            ReportProgress("Loading instruments", 4, stepCountTotal);
+            ReportProgress("Loading instruments", 5, stepCountTotal);
             GetInstrumentListFromDMS();
 
-            ReportProgress("Loading users", 5, stepCountTotal);
+            ReportProgress("Loading users", 6, stepCountTotal);
             GetUserListFromDMS();
 
-            ReportProgress("Loading LC columns", 6, stepCountTotal);
+            ReportProgress("Loading LC columns", 7, stepCountTotal);
             GetColumnListFromDMS();
 
-            ReportProgress("Loading proposal users", 7, stepCountTotal);
+            ReportProgress("Loading proposal users", 8, stepCountTotal);
             GetProposalUsers();
 
             var stepCountCompleted = STEP_COUNT_BASE;
@@ -309,7 +312,47 @@ namespace LcmsNetDmsTools
 
             OnProgressUpdate(new ProgressEventArgs(currentTask, percentComplete));
         }
-   
+
+        /// <summary>
+        /// Gets a list of Cart Config Names from DMS and stores it in cache
+        /// </summary>
+        public void GetCartConfigNamesFromDMS()
+        {
+
+            List<string> tmpCartConfigNames;
+            var connStr = GetConnectionString();
+
+
+            // Get a list containing all active cart configuration names
+            const string sqlCmd = 
+                "SELECT [Config Name] " + 
+                "FROM V_LC_Cart_Configuration_List_Report " + 
+                "WHERE State = 'Active' " + 
+                "ORDER BY [Config Name]";
+
+            try
+            {
+                tmpCartConfigNames = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting cart config names";
+                classApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            // Store the list of cart config names in the cache db
+            try
+            {
+                classSQLiteTools.SaveSingleColumnListToCache(tmpCartConfigNames, enumTableTypes.CartConfigNameList);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing LC cart config names in cache";
+                classApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
         /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache
         /// </summary>
@@ -989,9 +1032,10 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="requestList">Comma-delimited string of request ID's (must be less than 8000 chars long)</param>
         /// <param name="cartName">Name of cart to assign (ignored for removing aasignment)</param>
+        /// <param name="cartConfigName">Name of cart config name to assign</param>
         /// <param name="updateMode">TRUE for updating assignment; FALSE to clear assignment</param>
         /// <returns>TRUE for success; FALSE for error</returns>
-        public bool UpdateDMSCartAssignment(string requestList, string cartName, bool updateMode)
+        public bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode)
         {
             var connStr = GetConnectionString();
             string mode;

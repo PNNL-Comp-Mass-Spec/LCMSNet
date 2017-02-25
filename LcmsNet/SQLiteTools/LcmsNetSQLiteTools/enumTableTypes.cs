@@ -31,6 +31,7 @@ namespace LcmsNetSQLiteTools
         ExperimentList,
         PUserList, // A User that's in a Proposal
         PReferenceList, // A cross reference of the PUser and a Proposal
-        DatasetList
+        DatasetList,
+        CartConfigNameList
     }
 }
