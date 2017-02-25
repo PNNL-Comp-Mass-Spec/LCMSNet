@@ -21,7 +21,15 @@ namespace LcmsNet.Devices
 
         public IDevice Device { get; set; }
 
-        public event DelegateNameChanged NameChanged;
+        /// <summary>
+        /// An event that indicates the name of the column has changed.
+        /// </summary>
+        /// <remarks>This event is required by IDeviceControl but this class does not use it</remarks>
+        public event DelegateNameChanged NameChanged
+        {
+            add { }
+            remove { }
+        }
 
         public bool Running
         {
@@ -29,7 +37,15 @@ namespace LcmsNet.Devices
             set { throw new NotImplementedException(); }
         }
 
-        public event DelegateSaveRequired SaveRequired;
+        /// <summary>
+        /// An event that indicates the control needs to be saved
+        /// </summary>
+        /// <remarks>This event is required by IDeviceControl but this class does not use it</remarks>
+        public event DelegateSaveRequired SaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         #endregion
     }

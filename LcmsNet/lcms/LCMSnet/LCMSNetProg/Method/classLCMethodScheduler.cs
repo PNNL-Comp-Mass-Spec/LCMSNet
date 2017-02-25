@@ -704,7 +704,16 @@ namespace LcmsNet.Method
         public string Name { get; set; }
 
         public event EventHandler<LcmsNetDataClasses.Devices.classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error;
+
+        /// <summary>
+        /// Fired when an error occurs in the device.
+        /// </summary>
+        /// <remarks>This event is required by IDevice but this class does not use it</remarks>
+        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
         #endregion
 

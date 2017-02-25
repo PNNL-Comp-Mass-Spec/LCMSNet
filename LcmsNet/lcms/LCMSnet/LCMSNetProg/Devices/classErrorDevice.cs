@@ -37,7 +37,12 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
-        public event EventHandler DeviceSaveRequired;
+        /// <remarks>This event is required by IDevice but this class does not use it</remarks>
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {

@@ -32,12 +32,22 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        /// <remarks>This event is required by IDevice but this class does not use it</remarks>
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
-        public event EventHandler DeviceSaveRequired;
+        /// <remarks>This event is required by IDevice but this class does not use it</remarks>
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         #region LC-Method Registered Methods
 

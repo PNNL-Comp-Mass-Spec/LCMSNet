@@ -60,12 +60,20 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<classDeviceErrorEventArgs> Error
+        {
+            add { }
+            remove { }
+        }
 
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
-        public event EventHandler DeviceSaveRequired;
+        public event EventHandler DeviceSaveRequired
+        {
+            add { }
+            remove { }
+        }
 
         #endregion
 
@@ -145,9 +153,6 @@ namespace LcmsNet.Devices
         /// <returns></returns>
         public bool Initialize(ref string errorMessage)
         {
-            if (Error != null)
-            {
-            }
             return true;
         }
 
