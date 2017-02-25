@@ -1064,17 +1064,13 @@ namespace LcmsNetDmsTools
                 CommandType = CommandType.StoredProcedure,
                 CommandText = "AddRemoveRequestCartAssignment"
             };
-            spCmd.Parameters.Add(new SqlParameter("@Return", SqlDbType.Int));
-            spCmd.Parameters["@Return"].Direction = ParameterDirection.ReturnValue;
-            spCmd.Parameters.Add(new SqlParameter("@RequestIDList", SqlDbType.VarChar, 8000));
-            spCmd.Parameters["@RequestIDList"].Direction = ParameterDirection.Input;
-            spCmd.Parameters["@RequestIDList"].Value = requestList;
-            spCmd.Parameters.Add(new SqlParameter("@CartName", SqlDbType.VarChar, 128));
-            spCmd.Parameters["@CartName"].Direction = ParameterDirection.Input;
-            spCmd.Parameters["@CartName"].Value = cartName;
-            spCmd.Parameters.Add(new SqlParameter("@Mode", SqlDbType.VarChar, 32));
-            spCmd.Parameters["@Mode"].Direction = ParameterDirection.Input;
-            spCmd.Parameters["@Mode"].Value = mode;
+            spCmd.Parameters.Add(new SqlParameter("@Return", SqlDbType.Int)).Direction = ParameterDirection.ReturnValue;
+
+            spCmd.Parameters.Add(new SqlParameter("@RequestIDList", SqlDbType.VarChar, 8000)).Value = requestList;
+            spCmd.Parameters.Add(new SqlParameter("@CartName", SqlDbType.VarChar, 128)).Value = cartName;
+            spCmd.Parameters.Add(new SqlParameter("@CartConfigName", SqlDbType.VarChar, 128)).Value = cartConfigName;
+            spCmd.Parameters.Add(new SqlParameter("@Mode", SqlDbType.VarChar, 32)).Value = mode;
+
             spCmd.Parameters.Add(new SqlParameter("@message", SqlDbType.VarChar, 512));
             spCmd.Parameters["@message"].Direction = ParameterDirection.InputOutput;
             spCmd.Parameters["@message"].Value = "";
@@ -1086,8 +1082,7 @@ namespace LcmsNetDmsTools
             }
             catch (Exception ex)
             {
-                //					throw new classDatabaseDataException("Exception updating DMS cart list", ex);
-                classApplicationLogger.LogError(0, "Exception updating DMS cart list", ex);
+                classApplicationLogger.LogError(0, "Exception updating DMS cart information", ex);
                 return false;
             }
 
