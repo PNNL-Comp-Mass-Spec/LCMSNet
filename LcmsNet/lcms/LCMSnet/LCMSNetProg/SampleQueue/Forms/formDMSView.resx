@@ -112,32 +112,98 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="splitContainer1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="splitContainer1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="splitContainer1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="splitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
     <value>Horizontal</value>
+  </data>
+  <data name="comboBoxSelectCartConfig.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1059, 96</value>
+  </data>
+  <data name="comboBoxSelectCartConfig.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="comboBoxSelectCartConfig.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="comboBoxSelectCartConfig.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSelectCartConfig.Name" xml:space="preserve">
+    <value>comboBoxSelectCartConfig</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSelectCartConfig.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSelectCartConfig.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;comboBoxSelectCartConfig.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="labelLCCartConfig.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="labelLCCartConfig.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="labelLCCartConfig.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1059, 69</value>
+  </data>
+  <data name="labelLCCartConfig.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="labelLCCartConfig.Size" type="System.Drawing.Size, System.Drawing">
+    <value>239, 28</value>
+  </data>
+  <data name="labelLCCartConfig.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="labelLCCartConfig.Text" xml:space="preserve">
+    <value>LC Cart Config:</value>
+  </data>
+  <data name="labelLCCartConfig.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;labelLCCartConfig.Name" xml:space="preserve">
+    <value>labelLCCartConfig</value>
+  </data>
+  <data name="&gt;&gt;labelLCCartConfig.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelLCCartConfig.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;labelLCCartConfig.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="labelRequestCount.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
   </data>
   <data name="labelRequestCount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>360, 383</value>
+    <value>480, 471</value>
+  </data>
+  <data name="labelRequestCount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelRequestCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 13</value>
+    <value>160, 16</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="labelRequestCount.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
   </data>
@@ -148,43 +214,43 @@
     <value>labelRequestCount</value>
   </data>
   <data name="&gt;&gt;labelRequestCount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelRequestCount.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;labelRequestCount.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="buttonUpdateCartList.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="buttonUpdateCartList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>868, 67</value>
+    <value>1156, 132</value>
+  </data>
+  <data name="buttonUpdateCartList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="buttonUpdateCartList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 28</value>
+    <value>139, 34</value>
   </data>
   <data name="buttonUpdateCartList.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
   </data>
   <data name="buttonUpdateCartList.Text" xml:space="preserve">
-    <value>Update Cart List</value>
-  </data>
-  <data name="buttonUpdateCartList.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
+    <value>Update Cart Info</value>
   </data>
   <data name="&gt;&gt;buttonUpdateCartList.Name" xml:space="preserve">
     <value>buttonUpdateCartList</value>
   </data>
   <data name="&gt;&gt;buttonUpdateCartList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonUpdateCartList.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;buttonUpdateCartList.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="labelPleaseWait.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 15.75pt, style=Bold, Italic</value>
@@ -193,10 +259,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelPleaseWait.Location" type="System.Drawing.Point, System.Drawing">
-    <value>358, 231</value>
+    <value>477, 284</value>
+  </data>
+  <data name="labelPleaseWait.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelPleaseWait.Size" type="System.Drawing.Size, System.Drawing">
-    <value>257, 58</value>
+    <value>343, 71</value>
   </data>
   <data name="labelPleaseWait.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -214,37 +283,37 @@
     <value>labelPleaseWait</value>
   </data>
   <data name="&gt;&gt;labelPleaseWait.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelPleaseWait.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;labelPleaseWait.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="comboBoxSelectCart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>797, 36</value>
+    <value>1059, 39</value>
+  </data>
+  <data name="comboBoxSelectCart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="comboBoxSelectCart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 21</value>
+    <value>232, 24</value>
   </data>
   <data name="comboBoxSelectCart.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
-  </data>
-  <data name="comboBoxSelectCart.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="&gt;&gt;comboBoxSelectCart.Name" xml:space="preserve">
     <value>comboBoxSelectCart</value>
   </data>
   <data name="&gt;&gt;comboBoxSelectCart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;comboBoxSelectCart.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;comboBoxSelectCart.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="listviewAvailableRequests.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -298,10 +367,16 @@
     <value>71</value>
   </data>
   <data name="listviewAvailableRequests.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 151</value>
+    <value>17, 186</value>
+  </data>
+  <data name="listviewAvailableRequests.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="listviewAvailableRequests.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1015, 122</value>
   </data>
   <data name="listviewAvailableRequests.Size" type="System.Drawing.Size, System.Drawing">
-    <value>960, 212</value>
+    <value>1280, 260</value>
   </data>
   <data name="listviewAvailableRequests.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -310,19 +385,22 @@
     <value>listviewAvailableRequests</value>
   </data>
   <data name="&gt;&gt;listviewAvailableRequests.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;listviewAvailableRequests.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;listviewAvailableRequests.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="textWellplate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>452, 25</value>
+    <value>603, 31</value>
+  </data>
+  <data name="textWellplate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="textWellplate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 20</value>
+    <value>152, 22</value>
   </data>
   <data name="textWellplate.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -331,7 +409,7 @@
     <value>textWellplate</value>
   </data>
   <data name="&gt;&gt;textWellplate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textWellplate.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -346,10 +424,13 @@
     <value>NoControl</value>
   </data>
   <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>397, 28</value>
+    <value>529, 34</value>
+  </data>
+  <data name="label5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 13</value>
+    <value>66, 17</value>
   </data>
   <data name="label5.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -361,7 +442,7 @@
     <value>label5</value>
   </data>
   <data name="&gt;&gt;label5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label5.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -370,10 +451,13 @@
     <value>1</value>
   </data>
   <data name="textBlock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>452, 79</value>
+    <value>603, 97</value>
+  </data>
+  <data name="textBlock.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="textBlock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 20</value>
+    <value>152, 22</value>
   </data>
   <data name="textBlock.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -382,7 +466,7 @@
     <value>textBlock</value>
   </data>
   <data name="&gt;&gt;textBlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBlock.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -397,10 +481,13 @@
     <value>NoControl</value>
   </data>
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>397, 83</value>
+    <value>529, 102</value>
+  </data>
+  <data name="label4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 13</value>
+    <value>42, 17</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -412,7 +499,7 @@
     <value>label4</value>
   </data>
   <data name="&gt;&gt;label4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label4.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -421,10 +508,13 @@
     <value>3</value>
   </data>
   <data name="textBatchID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>452, 52</value>
+    <value>603, 64</value>
+  </data>
+  <data name="textBatchID.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="textBatchID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 20</value>
+    <value>152, 22</value>
   </data>
   <data name="textBatchID.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -433,7 +523,7 @@
     <value>textBatchID</value>
   </data>
   <data name="&gt;&gt;textBatchID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textBatchID.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -448,10 +538,13 @@
     <value>NoControl</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>397, 55</value>
+    <value>529, 68</value>
+  </data>
+  <data name="label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 13</value>
+    <value>61, 17</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -463,7 +556,7 @@
     <value>label3</value>
   </data>
   <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -475,10 +568,13 @@
     <value>NoControl</value>
   </data>
   <data name="checkBoxUnAssignedOnly.Location" type="System.Drawing.Point, System.Drawing">
-    <value>618, 19</value>
+    <value>824, 23</value>
+  </data>
+  <data name="checkBoxUnAssignedOnly.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="checkBoxUnAssignedOnly.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 33</value>
+    <value>205, 41</value>
   </data>
   <data name="checkBoxUnAssignedOnly.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -490,7 +586,7 @@
     <value>checkBoxUnAssignedOnly</value>
   </data>
   <data name="&gt;&gt;checkBoxUnAssignedOnly.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;checkBoxUnAssignedOnly.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -505,10 +601,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonFind.Location" type="System.Drawing.Point, System.Drawing">
-    <value>681, 58</value>
+    <value>908, 71</value>
+  </data>
+  <data name="buttonFind.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="buttonFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 41</value>
+    <value>120, 50</value>
   </data>
   <data name="buttonFind.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -523,7 +622,7 @@
     <value>buttonFind</value>
   </data>
   <data name="&gt;&gt;buttonFind.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonFind.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -532,10 +631,13 @@
     <value>7</value>
   </data>
   <data name="comboBoxCarts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 78</value>
+    <value>135, 96</value>
+  </data>
+  <data name="comboBoxCarts.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="comboBoxCarts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 21</value>
+    <value>351, 24</value>
   </data>
   <data name="comboBoxCarts.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -544,7 +646,7 @@
     <value>comboBoxCarts</value>
   </data>
   <data name="&gt;&gt;comboBoxCarts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;comboBoxCarts.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -553,10 +655,13 @@
     <value>8</value>
   </data>
   <data name="textRequestNumMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 52</value>
+    <value>336, 64</value>
+  </data>
+  <data name="textRequestNumMax.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="textRequestNumMax.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 20</value>
+    <value>149, 22</value>
   </data>
   <data name="textRequestNumMax.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -565,7 +670,7 @@
     <value>textRequestNumMax</value>
   </data>
   <data name="&gt;&gt;textRequestNumMax.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textRequestNumMax.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -574,10 +679,13 @@
     <value>9</value>
   </data>
   <data name="textRequestNumMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 51</value>
+    <value>135, 63</value>
+  </data>
+  <data name="textRequestNumMin.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="textRequestNumMin.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 20</value>
+    <value>141, 22</value>
   </data>
   <data name="textRequestNumMin.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -586,7 +694,7 @@
     <value>textRequestNumMin</value>
   </data>
   <data name="&gt;&gt;textRequestNumMin.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textRequestNumMin.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -595,10 +703,13 @@
     <value>10</value>
   </data>
   <data name="textRequestName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 24</value>
+    <value>135, 30</value>
+  </data>
+  <data name="textRequestName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="textRequestName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>266, 20</value>
+    <value>353, 22</value>
   </data>
   <data name="textRequestName.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -607,7 +718,7 @@
     <value>textRequestName</value>
   </data>
   <data name="&gt;&gt;textRequestName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;textRequestName.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -622,10 +733,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelCarts.Location" type="System.Drawing.Point, System.Drawing">
-    <value>21, 82</value>
+    <value>28, 101</value>
+  </data>
+  <data name="labelCarts.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelCarts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>31, 13</value>
+    <value>41, 17</value>
   </data>
   <data name="labelCarts.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -637,7 +751,7 @@
     <value>labelCarts</value>
   </data>
   <data name="&gt;&gt;labelCarts.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelCarts.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -652,10 +766,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelRequestsTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>226, 54</value>
+    <value>301, 66</value>
+  </data>
+  <data name="labelRequestsTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelRequestsTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 13</value>
+    <value>25, 17</value>
   </data>
   <data name="labelRequestsTo.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -667,7 +784,7 @@
     <value>labelRequestsTo</value>
   </data>
   <data name="&gt;&gt;labelRequestsTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelRequestsTo.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -682,10 +799,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelRequestsFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 54</value>
+    <value>27, 66</value>
+  </data>
+  <data name="labelRequestsFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelRequestsFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 13</value>
+    <value>78, 17</value>
   </data>
   <data name="labelRequestsFrom.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -697,7 +817,7 @@
     <value>labelRequestsFrom</value>
   </data>
   <data name="&gt;&gt;labelRequestsFrom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelRequestsFrom.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -712,10 +832,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelRequestName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 27</value>
+    <value>27, 33</value>
+  </data>
+  <data name="labelRequestName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelRequestName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 13</value>
+    <value>102, 17</value>
   </data>
   <data name="labelRequestName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -727,7 +850,7 @@
     <value>labelRequestName</value>
   </data>
   <data name="&gt;&gt;labelRequestName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelRequestName.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -736,10 +859,16 @@
     <value>15</value>
   </data>
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 10</value>
+    <value>13, 12</value>
+  </data>
+  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 115</value>
+    <value>1037, 142</value>
   </data>
   <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -751,13 +880,13 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -766,10 +895,13 @@
     <value>NoControl</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 135</value>
+    <value>13, 166</value>
+  </data>
+  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 13</value>
+    <value>129, 17</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -781,13 +913,13 @@
     <value>label1</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="buttonMoveDown.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -799,10 +931,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonMoveDown.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 369</value>
+    <value>17, 454</value>
+  </data>
+  <data name="buttonMoveDown.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="buttonMoveDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 40</value>
+    <value>200, 49</value>
   </data>
   <data name="buttonMoveDown.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -817,13 +952,13 @@
     <value>buttonMoveDown</value>
   </data>
   <data name="&gt;&gt;buttonMoveDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonMoveDown.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;buttonMoveDown.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="buttonMoveUp.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -835,10 +970,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonMoveUp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>169, 369</value>
+    <value>225, 454</value>
+  </data>
+  <data name="buttonMoveUp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="buttonMoveUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 40</value>
+    <value>200, 49</value>
   </data>
   <data name="buttonMoveUp.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -853,13 +991,13 @@
     <value>buttonMoveUp</value>
   </data>
   <data name="&gt;&gt;buttonMoveUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonMoveUp.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;buttonMoveUp.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="labelLCCart.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
@@ -868,10 +1006,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelLCCart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>794, 10</value>
+    <value>1059, 12</value>
+  </data>
+  <data name="labelLCCart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="labelLCCart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>179, 23</value>
+    <value>239, 28</value>
   </data>
   <data name="labelLCCart.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -886,13 +1027,13 @@
     <value>labelLCCart</value>
   </data>
   <data name="&gt;&gt;labelLCCart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelLCCart.Parent" xml:space="preserve">
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;labelLCCart.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="panel2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -900,8 +1041,11 @@
   <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="panel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>983, 412</value>
+    <value>1312, 507</value>
   </data>
   <data name="panel2.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -910,7 +1054,7 @@
     <value>panel2</value>
   </data>
   <data name="&gt;&gt;panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -922,7 +1066,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel1.Parent" xml:space="preserve">
     <value>splitContainer1</value>
@@ -982,10 +1126,16 @@
     <value>71</value>
   </data>
   <data name="listViewRequestsToRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 25</value>
+    <value>13, 31</value>
+  </data>
+  <data name="listViewRequestsToRun.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="listViewRequestsToRun.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1015, 122</value>
   </data>
   <data name="listViewRequestsToRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>970, 188</value>
+    <value>1293, 232</value>
   </data>
   <data name="listViewRequestsToRun.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -994,7 +1144,7 @@
     <value>listViewRequestsToRun</value>
   </data>
   <data name="&gt;&gt;listViewRequestsToRun.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;listViewRequestsToRun.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -1009,10 +1159,13 @@
     <value>NoControl</value>
   </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 9</value>
+    <value>9, 11</value>
+  </data>
+  <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 13</value>
+    <value>119, 17</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1024,7 +1177,7 @@
     <value>label2</value>
   </data>
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label2.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -1042,10 +1195,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>823, 219</value>
+    <value>1097, 272</value>
+  </data>
+  <data name="buttonCancel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 46</value>
+    <value>200, 57</value>
   </data>
   <data name="buttonCancel.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -1060,7 +1216,7 @@
     <value>buttonCancel</value>
   </data>
   <data name="&gt;&gt;buttonCancel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonCancel.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -1078,10 +1234,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonOK.Location" type="System.Drawing.Point, System.Drawing">
-    <value>667, 220</value>
+    <value>889, 273</value>
+  </data>
+  <data name="buttonOK.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="buttonOK.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 46</value>
+    <value>200, 57</value>
   </data>
   <data name="buttonOK.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -1096,7 +1255,7 @@
     <value>buttonOK</value>
   </data>
   <data name="&gt;&gt;buttonOK.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;buttonOK.Parent" xml:space="preserve">
     <value>panel1</value>
@@ -1110,8 +1269,11 @@
   <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>983, 274</value>
+    <value>1312, 339</value>
   </data>
   <data name="panel1.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -1120,7 +1282,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -1132,7 +1294,7 @@
     <value>splitContainer1.Panel2</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel2.Parent" xml:space="preserve">
     <value>splitContainer1</value>
@@ -1141,10 +1303,13 @@
     <value>1</value>
   </data>
   <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>987, 698</value>
+    <value>1316, 859</value>
   </data>
   <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
-    <value>416</value>
+    <value>511</value>
+  </data>
+  <data name="splitContainer1.SplitterWidth" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
   <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -1153,7 +1318,7 @@
     <value>splitContainer1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1161,14 +1326,17 @@
   <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>8, 16</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>987, 698</value>
+    <value>1316, 859</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>LCMS V (DMS View)</value>
@@ -1177,102 +1345,102 @@
     <value>columnHeaderAvailRequestsReqName</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsReqName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsReqNum.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsReqNum</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsReqNum.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsCart.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsCart</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsCart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsUser.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsUser</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsUser.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsUsageType.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsUsageType</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsUsageType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsBatch.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsBatch</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsBatch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsBlock.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsBlock</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsBlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsRunOrder.Name" xml:space="preserve">
     <value>columnHeaderAvailRequestsRunOrder</value>
   </data>
   <data name="&gt;&gt;columnHeaderAvailRequestsRunOrder.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunReqName.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunReqName</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunReqName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunReqNum.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunReqNum</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunReqNum.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunCart.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunCart</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunCart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunUser.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunUser</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunUser.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunUsageType.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunUsageType</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunUsageType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunBatch.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunBatch</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunBatch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunBlock.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunBlock</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunBlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunRunOrder.Name" xml:space="preserve">
     <value>columnHeaderRequestsToRunRunOrder</value>
   </data>
   <data name="&gt;&gt;columnHeaderRequestsToRunRunOrder.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>formDMSView</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
