@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
@@ -116,7 +117,6 @@ namespace LcmsNet.Configuration
 
         #region "Class variables"
 
-        private const int CONST_TOTAL_COLUMNS = 4;
         /// <summary>
         /// List of cart configuration names
         /// </summary>
@@ -125,12 +125,12 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// List of available separation types
         /// </summary>
-        private List<string> mobj_SeparationTypes;
+        private List<string> m_SeparationTypes;
 
         /// <summary>
         /// List of users
         /// </summary>
-        private Dictionary<string, classUserInfo> mobj_Users;
+        private Dictionary<string, classUserInfo> m_Users;
 
         #endregion
 
@@ -172,9 +172,9 @@ namespace LcmsNet.Configuration
         {
             set
             {
-                mobj_SeparationTypes = value;
+                m_SeparationTypes = value;
                 mcombo_SepType.Items.Clear();
-                foreach (string sepType in mobj_SeparationTypes)
+                foreach (var sepType in m_SeparationTypes)
                 {
                     mcombo_SepType.Items.Add(sepType);
                 }
@@ -348,18 +348,18 @@ namespace LcmsNet.Configuration
         private void LoadUserCombo(List<classUserInfo> userList)
         {
             // Make a dictionary based on the input list, with the first entry = "(None)"
-            if (mobj_Users == null)
+            if (m_Users == null)
             {
-                mobj_Users = new Dictionary<string, classUserInfo>();
+                m_Users = new Dictionary<string, classUserInfo>();
             }
-            else mobj_Users.Clear();
+            else m_Users.Clear();
 
             // Create dummy user. User is not recognized by DMS, so that trigger files will fail and let
             //      operator know that user name was not provided
             classUserInfo tmpUser = new classUserInfo();
             tmpUser.PayrollNum = "None";
             tmpUser.UserName = "(None)";
-            mobj_Users.Add(tmpUser.PayrollNum, tmpUser);
+            m_Users.Add(tmpUser.PayrollNum, tmpUser);
 
             // Add users to dictionary from user list
             foreach (classUserInfo currUser in userList)
@@ -367,12 +367,12 @@ namespace LcmsNet.Configuration
                 var data = string.Format("{0} - ({1})", currUser.UserName,
                     currUser.PayrollNum);
 
-                mobj_Users.Add(data, currUser);
+                m_Users.Add(data, currUser);
             }
 
             // Now add user list to combo box
             mcombo_Operator.Items.Clear();
-            foreach (KeyValuePair<string, classUserInfo> currKey in mobj_Users)
+            foreach (KeyValuePair<string, classUserInfo> currKey in m_Users)
             {
                 mcombo_Operator.Items.Add(string.Format("{0} - ({1})",
                     currKey.Value.UserName,
@@ -432,11 +432,10 @@ namespace LcmsNet.Configuration
         /// <param name="separationType">New separation type</param>
         public void SetSeparationType(string separationType)
         {
-            int indx = mcombo_SepType.FindString(separationType, -1);
-            if (indx == -1)
+            var indx = mcombo_SepType.FindString(separationType, -1);
+            if (indx == -1 && mcombo_SepType.Items.Count > 0)
             {
-                if (mcombo_SepType.Items.Count > 0)
-                    mcombo_SepType.SelectedIndex = 0;
+                mcombo_SepType.SelectedIndex = 0;
             }
             else
             {
@@ -484,7 +483,8 @@ namespace LcmsNet.Configuration
 
         private void mbutton_Reload_Click(object sender, EventArgs e)
         {
-            // Get a fresh list of columns from DMS and store it in the cache db
+
+            // Instruct the selected tool to get a fresh list of columns from DMS and store it in the cache db
             try
             {
                 classDMSToolsManager.Instance.SelectedTool.GetColumnListFromDMS();
@@ -493,6 +493,57 @@ namespace LcmsNet.Configuration
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
+
+            UpdateCartConfigNames();
+
+            UpdateColumnNameLists();
+        }
+
+        private void UpdateCartConfigNames()
+        {
+            List<string> cartConfigNameList = null;
+            try
+            {
+                // Get the new cart config names from the cache db
+                cartConfigNameList = classSQLiteTools.GetCartConfigNameList(true);
+            }
+            catch (classDatabaseDataException ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
+            }
+
+            // If a valid list was received, update the display
+            if (cartConfigNameList == null)
+            {
+                // No new cart config names were obtained
+                classApplicationLogger.LogError(0, "Cart config name list null when refreshing list");
+                MessageBox.Show("List not updated. Cart config name list from DMS is null");
+                return;
+            }
+
+            if (cartConfigNameList.Count < 1)
+            {
+                // No names found in list
+                classApplicationLogger.LogError(0, "No cart config names found when refreshing list");
+                MessageBox.Show("List not updated. No cart config names were found.");
+                return;
+            }
+
+            mcombo_CartConfigName.Items.Clear();
+            if (cartConfigNameList.Any())
+            {
+                foreach (var cartConfig in cartConfigNameList)
+                {
+                    mcombo_CartConfigName.Items.Add(cartConfig);
+                }
+            }
+
+            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                "Cart config name lists updated");
+        }
+
+        private void UpdateColumnNameLists()
+        {
 
             List<string> columnList = null;
             try
@@ -504,7 +555,8 @@ namespace LcmsNet.Configuration
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
-            // If a valid list was received, then update the display
+
+            // If a valid list was received, update the display
             if (columnList == null)
             {
                 // No new column list obtained
@@ -547,7 +599,7 @@ namespace LcmsNet.Configuration
             if (!m_isLoading)
             {
                 var operatorName = mcombo_Operator.SelectedItem.ToString();
-                if (mobj_Users.ContainsKey(operatorName))
+                if (m_Users.ContainsKey(operatorName))
                 {
                     var instrumentOperator = m_Users[operatorName];
                     classLCMSSettings.SetParameter(classLCMSSettings.PARAM_OPERATOR, instrumentOperator.UserName);
