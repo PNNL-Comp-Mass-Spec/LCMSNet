@@ -60,20 +60,14 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Gets the number of devices stored here.
         /// </summary>
-        public int DeviceCount
-        {
-            get { return m_devices.Count; }
-        }
+        public int DeviceCount => m_devices.Count;
 
         /// <summary>
         /// Gets the item at the specified index.
         /// </summary>
         /// <param name="index">Index of IDevice.</param>
         /// <returns>Device in collection at index.</returns>
-        public string this[int index]
-        {
-            get { return m_devices[index]; }
-        }
+        public string this[int index] => m_devices[index];
 
         /// <summary>
         /// Adds a setting for the given device.

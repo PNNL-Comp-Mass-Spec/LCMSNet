@@ -54,10 +54,7 @@ namespace LcmsNet.Method
 
         public string Name { get; set; }
 
-        public classSampleData Sample
-        {
-            get { return m_sampleData; }
-        }
+        public classSampleData Sample => m_sampleData;
 
         public bool IsErrored { get; private set; }
 

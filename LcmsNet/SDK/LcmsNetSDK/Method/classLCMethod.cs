@@ -81,10 +81,7 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Gets or sets the duration for this action.
         /// </summary>
-        public TimeSpan Duration
-        {
-            get { return mspan_duration; }
-        }
+        public TimeSpan Duration => mspan_duration;
 
         /// <summary>
         /// Gets the end time of the action. 
@@ -124,10 +121,7 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Gets the start time of this action.
         /// </summary>
-        public DateTime Start
-        {
-            get { return mtime_start; }
-        }
+        public DateTime Start => mtime_start;
 
         /// <summary>
         /// Gets the actual start of the sample.
@@ -142,10 +136,7 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Gets the actual duration of the experiment that was run.
         /// </summary>
-        public TimeSpan ActualDuration
-        {
-            get { return ActualEnd.Subtract(ActualStart); }
-        }
+        public TimeSpan ActualDuration => ActualEnd.Subtract(ActualStart);
 
         /// <summary>
         /// Gets or sets the event number being executed.  -1 = not run, 0-N is the current event, where N is the total events defined in LCEvents.

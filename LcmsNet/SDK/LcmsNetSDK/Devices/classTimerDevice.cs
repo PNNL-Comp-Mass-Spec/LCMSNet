@@ -199,10 +199,7 @@ namespace LcmsNetDataClasses.Devices
 
         public enumDeviceErrorStatus ErrorType { get; set; }
 
-        public enumDeviceType DeviceType
-        {
-            get { return enumDeviceType.Virtual; }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Virtual;
 
         #endregion
 

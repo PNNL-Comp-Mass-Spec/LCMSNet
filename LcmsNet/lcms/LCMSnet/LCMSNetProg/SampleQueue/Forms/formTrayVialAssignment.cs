@@ -30,10 +30,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Properties"
 
-        public List<classSampleData> SampleList
-        {
-            get { return m_SampleList; }
-        }
+        public List<classSampleData> SampleList => m_SampleList;
 
         #endregion
 

@@ -75,10 +75,7 @@ namespace LcmsNet.SampleQueue.Forms
             set { m_TrayNumber = value; }
         }
 
-        public int SampleCount
-        {
-            get { return dataGridView1.Rows.Count; }
-        }
+        public int SampleCount => dataGridView1.Rows.Count;
 
         public bool MasterView
         {

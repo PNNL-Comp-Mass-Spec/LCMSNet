@@ -232,10 +232,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Gets the list of registered devices.
         /// </summary>
-        public List<IDevice> Devices
-        {
-            get { return m_devices; }
-        }
+        public List<IDevice> Devices => m_devices;
 
         /// <summary>
         /// Gets the list of available plug-ins.
@@ -258,10 +255,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Gets the device count.
         /// </summary>
-        public int DeviceCount
-        {
-            get { return m_devices.Count; }
-        }
+        public int DeviceCount => m_devices.Count;
 
         /// <summary>
         /// Gets the number of initialized devices.

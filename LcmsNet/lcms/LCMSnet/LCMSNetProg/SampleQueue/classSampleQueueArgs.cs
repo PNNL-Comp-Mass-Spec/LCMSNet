@@ -49,10 +49,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets the samples that had an action performed on them.
         /// </summary>
-        public IEnumerable<classSampleData> Samples
-        {
-            get { return marray_data; }
-        }
+        public IEnumerable<classSampleData> Samples => marray_data;
 
         /// <summary>
         ///

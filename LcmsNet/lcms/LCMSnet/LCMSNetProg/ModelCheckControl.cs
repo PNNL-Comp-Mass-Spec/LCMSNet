@@ -20,10 +20,7 @@ namespace LcmsNet
         }
 
 
-        public bool Checked
-        {
-            get { return chkboxModel.Checked; }
-        }
+        public bool Checked => chkboxModel.Checked;
 
         public event EventHandler CheckChanged;
 

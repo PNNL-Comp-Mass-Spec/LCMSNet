@@ -43,10 +43,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Determines if there are any devices in this group.
         /// </summary>
-        public bool IsDeviceGroupEmpty
-        {
-            get { return m_deviceToButtonMap.Keys.Count < 1; }
-        }
+        public bool IsDeviceGroupEmpty => m_deviceToButtonMap.Keys.Count < 1;
 
         public Color SelectedColor { get; set; }
 

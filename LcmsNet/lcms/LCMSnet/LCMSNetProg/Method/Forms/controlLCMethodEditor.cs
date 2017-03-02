@@ -88,26 +88,17 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Gets or sets whether to animate the method optimization not.
         /// </summary>
-        public bool Animate
-        {
-            get { return mcheckBox_animate.Checked; }
-        }
+        public bool Animate => mcheckBox_animate.Checked;
 
         /// <summary>
         /// Gets or sets the animation delay time in ms.
         /// </summary>
-        public int AnimationDelay
-        {
-            get { return Convert.ToInt32(mnum_delay.Value); }
-        }
+        public int AnimationDelay => Convert.ToInt32(mnum_delay.Value);
 
         /// <summary>
         /// Gets or sets the frame delay count.
         /// </summary>
-        public int FrameDelay
-        {
-            get { return Convert.ToInt32(mnum_frameCount.Value); }
-        }
+        public int FrameDelay => Convert.ToInt32(mnum_frameCount.Value);
 
         /// <summary>
         /// Fired when editing a method.

@@ -164,10 +164,7 @@ namespace LcmsNet.Devices
 
         public enumDeviceErrorStatus ErrorType { get; set; }
 
-        public enumDeviceType DeviceType
-        {
-            get { return enumDeviceType.BuiltIn; }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.BuiltIn;
 
         #endregion
 

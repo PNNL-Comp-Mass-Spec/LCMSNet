@@ -405,18 +405,12 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Gets flag indicating whether this event editor is a placeholder for a locking event.
         /// </summary>
-        public bool IsLockingEvent
-        {
-            get { return m_isLockingEvent; }
-        }
+        public bool IsLockingEvent => m_isLockingEvent;
 
         /// <summary>
         /// Returns the device selected
         /// </summary>
-        public IDevice Device
-        {
-            get { return m_device; }
-        }
+        public IDevice Device => m_device;
 
         private bool IsCurrent { get; set; }
 

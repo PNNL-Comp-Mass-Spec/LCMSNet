@@ -18,10 +18,7 @@ namespace LcmsNet.SampleQueue.Forms
         public classSampleData Sample { get; set; }
 
         //this.mcolumn_sequenceNumber,
-        public long SequenceNumber
-        {
-            get { return Sample.SequenceID; }
-        }
+        public long SequenceNumber => Sample.SequenceID;
 
         //this.mcolumn_columnNumber,
         public string ColumnNumber
@@ -39,10 +36,7 @@ namespace LcmsNet.SampleQueue.Forms
         public string SpecialColumnNumber { get; set; }
         
         //this.mcolumn_uniqueID,
-        public long UniqueID
-        {
-            get { return Sample.UniqueID; }
-        }
+        public long UniqueID => Sample.UniqueID;
 
         //this.mcolumn_checkbox,
         public controlSampleView.enumCheckboxStatus Checkbox
@@ -206,15 +200,9 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
         //this.mcolumn_blockNumber,
-        public int BlockNumber
-        {
-            get { return Sample.DmsData.Block; }
-        }
+        public int BlockNumber => Sample.DmsData.Block;
         //this.mcolumn_runOrder,
-        public int RunOrder
-        {
-            get { return Sample.DmsData.RunOrder; }
-        }
+        public int RunOrder => Sample.DmsData.RunOrder;
         //this.mcolumn_requestName,
         public string RequestName
         {
@@ -269,9 +257,6 @@ namespace LcmsNet.SampleQueue.Forms
             set { Sample.DmsData.DatasetType = value; }
         }
         //this.mcolumn_batchID;
-        public int BatchID
-        {
-            get { return Sample.DmsData.Batch; }
-        }
+        public int BatchID => Sample.DmsData.Batch;
     }
 }

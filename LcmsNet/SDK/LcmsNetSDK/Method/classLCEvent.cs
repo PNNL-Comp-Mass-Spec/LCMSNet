@@ -63,23 +63,26 @@ namespace LcmsNetDataClasses.Method
         /// <returns>classLCEvent with same parameters as used with this method.</returns>
         public object Clone()
         {
-            var newEvent = new classLCEvent();
-            newEvent.Device = Device;
-            newEvent.Duration = Duration;
-            newEvent.HasDiscreteStates = HasDiscreteStates;
-            newEvent.HoldTime = HoldTime;
-            newEvent.Method = Method;
-            newEvent.Name = Name;
-            newEvent.OptimizeWith = OptimizeWith;
-            newEvent.Parameters = new object[Parameters.Length];
-            newEvent.ParameterNames = new string[ParameterNames.Length];
-            newEvent.MethodAttribute = MethodAttribute;
+            var newEvent = new classLCEvent
+            {
+                Device = Device,
+                Duration = Duration,
+                HasDiscreteStates = HasDiscreteStates,
+                HoldTime = HoldTime,
+                Method = Method,
+                Name = Name,
+                OptimizeWith = OptimizeWith,
+                Parameters = new object[Parameters.Length],
+                ParameterNames = new string[ParameterNames.Length],
+                MethodAttribute = MethodAttribute,
+                IsIndeterminant = IsIndeterminant,
+                BreakPoint = BreakPoint,
+                Start = Start,
+                MethodData = MethodData
+            };
+
             ParameterNames.CopyTo(newEvent.ParameterNames, 0);
             Parameters.CopyTo(newEvent.Parameters, 0);
-            newEvent.IsIndeterminant = IsIndeterminant;
-            newEvent.BreakPoint = BreakPoint;
-            newEvent.Start = Start;
-            newEvent.MethodData = MethodData;
 
             return newEvent;
         }
@@ -149,10 +152,7 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Gets the end time for the event.
         /// </summary>
-        public DateTime End
-        {
-            get { return Start.Add(Duration.Add(HoldTime)); }
-        }
+        public DateTime End => Start.Add(Duration.Add(HoldTime));
 
         /// <summary>
         /// Gets or sets if this event has discrete states that can be compared.

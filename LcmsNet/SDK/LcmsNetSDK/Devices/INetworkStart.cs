@@ -23,9 +23,6 @@ namespace LcmsNetDataClasses.Devices
             m_methodList = methodList;
         }
 
-        public List<string> MethodList
-        {
-            get { return m_methodList; }
-        }
+        public List<string> MethodList => m_methodList;
     }
 }

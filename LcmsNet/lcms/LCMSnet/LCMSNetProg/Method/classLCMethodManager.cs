@@ -100,10 +100,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets the list of LC methods available to run.
         /// </summary>
-        public Dictionary<string, classLCMethod> Methods
-        {
-            get { return m_methods; }
-        }
+        public Dictionary<string, classLCMethod> Methods => m_methods;
 
         /// <summary>
         /// Removes the method from the list of available methods.

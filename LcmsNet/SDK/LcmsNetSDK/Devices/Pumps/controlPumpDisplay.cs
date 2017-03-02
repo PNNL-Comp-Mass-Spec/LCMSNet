@@ -18,10 +18,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <summary>
         /// Gets the width for the tack icon.
         /// </summary>
-        public int TackWidth
-        {
-            get { return 36; }
-        }
+        public int TackWidth => 36;
 
         /// <summary>
         /// Initialize the plotting capabilities

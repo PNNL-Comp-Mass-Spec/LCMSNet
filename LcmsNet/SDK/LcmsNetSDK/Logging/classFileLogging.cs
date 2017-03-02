@@ -57,10 +57,7 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Gets the file log path.
         /// </summary>
-        public static string LogPath
-        {
-            get { return m_LogFilePath; }
-        }
+        public static string LogPath => m_LogFilePath;
 
         /// <summary>
         /// Gets the file log path.

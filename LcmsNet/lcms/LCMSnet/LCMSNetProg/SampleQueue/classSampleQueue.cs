@@ -376,18 +376,12 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets the name of the un-used sample.
         /// </summary>
-        public string UnusedSampleName
-        {
-            get { return m_integrateName; }
-        }
+        public string UnusedSampleName => m_integrateName;
 
         /// <summary>
         /// Gets or sets the column data.
         /// </summary>
-        public List<classColumnData> ColumnOrder
-        {
-            get { return m_columnOrders; }
-        }
+        public List<classColumnData> ColumnOrder => m_columnOrders;
 
         /// <summary>
         /// Gets or sets whether to reset the column data.
@@ -420,10 +414,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets the threading event when a sample is queued.
         /// </summary>
-        public AutoResetEvent SampleQueuedEvent
-        {
-            get { return m_sampleWaitingEvent; }
-        }
+        public AutoResetEvent SampleQueuedEvent => m_sampleWaitingEvent;
 
         #endregion
 
@@ -1655,18 +1646,12 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets a value indicating if samples are read to be run.
         /// </summary>
-        public bool AreSamplesAvailableToRun
-        {
-            get { return m_runningQueue.Count > 0; }
-        }
+        public bool AreSamplesAvailableToRun => m_runningQueue.Count > 0;
 
         /// <summary>
         /// Gets whether there are samples currently set with running status.
         /// </summary>
-        public bool IsRunning
-        {
-            get { return m_nextAvailableSample > 0; }
-        }
+        public bool IsRunning => m_nextAvailableSample > 0;
 
         /// <summary>
         /// Starts the samples

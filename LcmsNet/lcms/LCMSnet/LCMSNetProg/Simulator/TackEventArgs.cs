@@ -11,9 +11,6 @@ namespace LcmsNet
             m_tacked = tack;
         }
 
-        public bool Tacked
-        {
-            get { return m_tacked; }
-        }
+        public bool Tacked => m_tacked;
     }
 }

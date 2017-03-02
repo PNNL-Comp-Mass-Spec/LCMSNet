@@ -65,10 +65,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Gets the flag if the samples are valid or not.
         /// </summary>
-        public bool AreSamplesValid
-        {
-            get { return CheckSamples(); }
-        }
+        public bool AreSamplesValid => CheckSamples();
 
         /// <summary>
         /// Moves the focus to the next control.

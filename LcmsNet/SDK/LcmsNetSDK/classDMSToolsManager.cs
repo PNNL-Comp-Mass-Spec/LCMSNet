@@ -136,10 +136,7 @@ namespace LcmsNetSDK
         /// <summary>
         /// Number of Dms Tools loaded.
         /// </summary>
-        public int ToolCount
-        {
-            get { return DmsTools.Count(); }
-        }
+        public int ToolCount => DmsTools.Count();
 
         /// <summary>
         /// Get a reference to the classDMSTools instance.
