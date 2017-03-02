@@ -589,7 +589,7 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if match is made; otherwise False</returns>
         private bool PredContainsRequestName(classSampleData request)
         {
-            if (request.DmsData.RequestName.ToLower() == m_MatchString.ToLower())
+            if (string.Equals(request.DmsData.RequestName, m_MatchString, StringComparison.CurrentCultureIgnoreCase))
             {
                 return true;
             }
@@ -663,7 +663,7 @@ namespace LcmsNet.SampleQueue
                 {
                     if (reqIDs.Length != 0)
                     {
-                        reqIDs = reqIDs + "," + tempDMSData.DmsData.RequestID.ToString();
+                        reqIDs = reqIDs + "," + tempDMSData.DmsData.RequestID;
                     }
                     else
                     {

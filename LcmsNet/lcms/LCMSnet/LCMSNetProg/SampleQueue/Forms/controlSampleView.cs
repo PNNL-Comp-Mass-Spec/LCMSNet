@@ -329,8 +329,8 @@ namespace LcmsNet.SampleQueue.Forms
 
             foreach (classColumnData column in classCartConfiguration.Columns)
             {
-                column.NameChanged += new classColumnData.DelegateNameChanged(column_NameChanged);
-                column.ColorChanged += new classColumnData.DelegateColorChanged(column_ColorChanged);
+                column.NameChanged += column_NameChanged;
+                column.ColorChanged += column_ColorChanged;
             }
 
             DMSView = dmsView;
@@ -364,9 +364,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             if (classLCMethodManager.Manager != null)
             {
-                classLCMethodManager.Manager.MethodAdded += new DelegateMethodUpdated(Manager_MethodAdded);
-                classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(Manager_MethodRemoved);
-                classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(Manager_MethodUpdated);
+                classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+                classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+                classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
             }
 
             //
@@ -397,10 +397,11 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Events to make sure the editing is done correctly.
             //
-            mdataGrid_samples.CellBeginEdit += new DataGridViewCellCancelEventHandler(mdataGrid_samples_CellBeginEdit);
-            mdataGrid_samples.CellEndEdit += new DataGridViewCellEventHandler(mdataGrid_samples_CellEndEdit);
-            mdataGrid_samples.DataError += new DataGridViewDataErrorEventHandler(mdataGrid_samples_DataError);
-            mdataGrid_samples.KeyUp += new KeyEventHandler(mdataGrid_samples_KeyUp);
+            mdataGrid_samples.CellBeginEdit += mdataGrid_samples_CellBeginEdit;
+            mdataGrid_samples.CellEndEdit += mdataGrid_samples_CellEndEdit;
+            mdataGrid_samples.DataError += mdataGrid_samples_DataError;
+            mdataGrid_samples.KeyUp += mdataGrid_samples_KeyUp;
+            
             // Make sure to set the styles/data for a row before it is displayed
             mdataGrid_samples.RowPrePaint += RowPrePaint;
 
@@ -416,8 +417,7 @@ namespace LcmsNet.SampleQueue.Forms
             DisplayColumn(CONST_COLUMN_BATCH_ID, false);
             DisplayColumn(CONST_COLUMN_UNIQUE_ID, false);
 
-            mdataGrid_samples.CellFormatting +=
-                new DataGridViewCellFormattingEventHandler(mdataGrid_samples_CellFormatting);
+            mdataGrid_samples.CellFormatting += mdataGrid_samples_CellFormatting;
             mdataGrid_samples.BringToFront();
             m_sampleContainer.BringToFront();
             PerformLayout();
@@ -960,6 +960,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// Adds a sequence of samples to the manager.
         /// </summary>
         /// <param name="samples">List of samples to add to the manager.</param>
+        /// <param name="insertIntoUnused"></param>
         protected virtual void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
             if (insertIntoUnused == false)
@@ -996,24 +997,15 @@ namespace LcmsNet.SampleQueue.Forms
                 mobj_sampleQueue = value;
                 if (value != null)
                 {
-                    mobj_sampleQueue.SamplesAdded +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SampleAdded);
-                    mobj_sampleQueue.SamplesCancelled +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SampleCancelled);
-                    mobj_sampleQueue.SamplesFinished +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SampleFinished);
-                    mobj_sampleQueue.SamplesRemoved +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SampleRemoved);
-                    mobj_sampleQueue.SamplesStarted +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SampleStarted);
-                    mobj_sampleQueue.SamplesReordered +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SamplesReordered);
-                    mobj_sampleQueue.SamplesUpdated +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SamplesUpdated);
-                    mobj_sampleQueue.SamplesWaitingToRun +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SamplesWaitingToRun);
-                    mobj_sampleQueue.SamplesStopped +=
-                        new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SamplesStopped);
+                    mobj_sampleQueue.SamplesAdded += mobj_sampleQueue_SampleAdded;
+                    mobj_sampleQueue.SamplesCancelled += mobj_sampleQueue_SampleCancelled;
+                    mobj_sampleQueue.SamplesFinished += mobj_sampleQueue_SampleFinished;
+                    mobj_sampleQueue.SamplesRemoved += mobj_sampleQueue_SampleRemoved;
+                    mobj_sampleQueue.SamplesStarted += mobj_sampleQueue_SampleStarted;
+                    mobj_sampleQueue.SamplesReordered += mobj_sampleQueue_SamplesReordered;
+                    mobj_sampleQueue.SamplesUpdated += mobj_sampleQueue_SamplesUpdated;
+                    mobj_sampleQueue.SamplesWaitingToRun += mobj_sampleQueue_SamplesWaitingToRun;
+                    mobj_sampleQueue.SamplesStopped += mobj_sampleQueue_SamplesStopped;
                 }
 
                 Enabled = (value != null);
@@ -1714,19 +1706,25 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>New object reference of a sample with only required data copied.</returns>
         protected virtual classSampleData CopyRequiredSampleData(classSampleData sampleToCopy)
         {
-            classSampleData newSample = new classSampleData(false);
-            newSample.DmsData.RequestName = string.Format("{0}_{1:0000}",
-                mobj_sampleQueue.DefaultSampleName,
-                mobj_sampleQueue.RunningSampleIndex++);
-            newSample.DmsData.CartName = sampleToCopy.DmsData.CartName;
-
-            //
-            // Copy the data
-            //
-            newSample.PAL.Method = sampleToCopy.PAL.Method;
-            newSample.PAL.Well = classPalData.CONST_DEFAULT_VIAL_NUMBER;
-            newSample.PAL.PALTray = CONST_NOT_SELECTED;
-            newSample.PAL.WellPlate = sampleToCopy.PAL.WellPlate;
+            classSampleData newSample = new classSampleData(false)
+            {
+                DmsData =
+                {
+                    RequestName = string.Format("{0}_{1:0000}",
+                                                mobj_sampleQueue.DefaultSampleName,
+                                                mobj_sampleQueue.RunningSampleIndex++),
+                    CartName = sampleToCopy.DmsData.CartName,
+                    CartConfigName = sampleToCopy.DmsData.CartConfigName,
+                    DatasetType = sampleToCopy.DmsData.DatasetType
+                },
+                PAL =
+                {
+                    Method = sampleToCopy.PAL.Method,
+                    Well = classPalData.CONST_DEFAULT_VIAL_NUMBER,
+                    PALTray = CONST_NOT_SELECTED,
+                    WellPlate = sampleToCopy.PAL.WellPlate
+                }
+            };
 
             // Make sure we copy the column data.  If it's null, then it's probably a special method.
             if (sampleToCopy.ColumnData != null)
@@ -1783,8 +1781,7 @@ namespace LcmsNet.SampleQueue.Forms
             newSample.DmsData.RequestID = 0;
             newSample.DmsData.RunOrder = 0;
             newSample.DmsData.UsageType = "";
-            newSample.DmsData.DatasetType = sampleToCopy.DmsData.DatasetType;
-            newSample.DmsData.CartName = sampleToCopy.DmsData.CartName;
+            
             return newSample;
         }
 
@@ -1882,11 +1879,17 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Otherwise, add a new sample.
                 //
-                newData = new classSampleData(false);
-                newData.DmsData.RequestName = string.Format("{0}_{1:0000}",
-                    mobj_sampleQueue.DefaultSampleName,
-                    mobj_sampleQueue.RunningSampleIndex++);
-                newData.DmsData.CartName = classCartConfiguration.CartName;
+                newData = new classSampleData(false)
+                {
+                    DmsData =
+                    {
+                        RequestName = string.Format("{0}_{1:0000}",
+                                                    mobj_sampleQueue.DefaultSampleName,
+                                                    mobj_sampleQueue.RunningSampleIndex++),
+                        CartName = classCartConfiguration.CartName,
+                        CartConfigName = classCartConfiguration.CartConfigName
+                    }
+                };
             }
 
             if (newData != null)
@@ -3502,21 +3505,24 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Copy the required DMS data.
             //
-            sample.DmsData = new classDMSData();
-            sample.DmsData.Batch = realSample.DmsData.Batch;
-            sample.DmsData.Block = realSample.DmsData.Block;
-            sample.DmsData.CartName = realSample.DmsData.CartName;
-            sample.DmsData.Comment = realSample.DmsData.Comment;
-            sample.DmsData.DatasetName = realSample.DmsData.DatasetName;
-            sample.DmsData.DatasetType = realSample.DmsData.DatasetType;
-            sample.DmsData.Experiment = realSample.DmsData.Experiment;
-            sample.DmsData.MRMFileID = realSample.DmsData.MRMFileID;
-            sample.DmsData.ProposalID = realSample.DmsData.ProposalID;
-            sample.DmsData.RequestID = realSample.DmsData.RequestID;
-            sample.DmsData.RequestName = realSample.DmsData.RequestName;
-            sample.DmsData.RunOrder = realSample.DmsData.RunOrder;
-            sample.DmsData.UsageType = realSample.DmsData.UsageType;
-            sample.DmsData.UserList = realSample.DmsData.UserList;
+            sample.DmsData = new classDMSData
+            {
+                Batch = realSample.DmsData.Batch,
+                Block = realSample.DmsData.Block,
+                CartName = realSample.DmsData.CartName,
+                CartConfigName = realSample.DmsData.CartConfigName,
+                Comment = realSample.DmsData.Comment,
+                DatasetName = realSample.DmsData.DatasetName,
+                DatasetType = realSample.DmsData.DatasetType,
+                Experiment = realSample.DmsData.Experiment,
+                MRMFileID = realSample.DmsData.MRMFileID,
+                ProposalID = realSample.DmsData.ProposalID,
+                RequestID = realSample.DmsData.RequestID,
+                RequestName = realSample.DmsData.RequestName,
+                RunOrder = realSample.DmsData.RunOrder,
+                UsageType = realSample.DmsData.UsageType,
+                UserList = realSample.DmsData.UserList
+            };
 
             sample.DmsData.DatasetName = Convert.ToString(row.Cells[CONST_COLUMN_REQUEST_NAME].Value);
             sample.DmsData.DatasetType = Convert.ToString(row.Cells[CONST_COLUMN_DATASET_TYPE].Value);
