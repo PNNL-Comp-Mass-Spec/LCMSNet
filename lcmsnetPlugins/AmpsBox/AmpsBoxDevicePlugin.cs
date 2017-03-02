@@ -64,7 +64,7 @@ namespace AmpsBox
         [classPersistenceAttribute("PortName")]
         public string PortName
         {
-            get 
+            get
             {
                 return m_device.Port.PortName;
             }
@@ -128,7 +128,7 @@ namespace AmpsBox
             {
                 if (Error != null)
                 {
-                    this.Error(this, new classDeviceErrorEventArgs("The device could not be initialized.", 
+                    this.Error(this, new classDeviceErrorEventArgs("The device could not be initialized.",
                                                                     ex,
                                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
                                                                     this));
@@ -149,7 +149,7 @@ namespace AmpsBox
                 }
                 catch
                 {
-                    // Ignore any exceptions thrown by somethign not required to 
+                    // Ignore any exceptions thrown by somethign not required to
                     // initialize the device for now.
                 }
             }
@@ -238,13 +238,13 @@ namespace AmpsBox
             component.Type                  = "AMPS";
             component.LastUpdate            = DateTime.Now;
              
-            FinchScalarSignal port          = new FinchScalarSignal();            
+            FinchScalarSignal port          = new FinchScalarSignal();
             port.Name                       = "Port";
             port.Type                       = FinchDataType.String;
             port.Units                      = "";
             port.Value                      = this.PortName.ToString();
 
-            FinchScalarSignal baud          = new FinchScalarSignal();            
+            FinchScalarSignal baud          = new FinchScalarSignal();
             baud.Name                       = "BaudRate";
             baud.Type                       = FinchDataType.String;
             baud.Units                      = "";
@@ -290,15 +290,15 @@ namespace AmpsBox
         }
         public int GetOutputVoltage(int channel)
         {
-            return m_device.GetOutputVoltage(channel);            
+            return m_device.GetOutputVoltage(channel);
         }
         public int GetDriveLevel(int channel)
         {
-            return m_device.GetDriveLevel(channel);                        
+            return m_device.GetDriveLevel(channel);
         }
         public int GetRfFrequency(int channel)
         {
-            return m_device.GetRfFrequency(channel);            
+            return m_device.GetRfFrequency(channel);
         }
         public void SetRfDriveLevel(int channel, int voltage)
         {

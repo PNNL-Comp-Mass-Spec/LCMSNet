@@ -41,7 +41,7 @@ namespace ExternalFileWatcher.Watchers
 
         public ExternalFileWatcher()
         {
-            m_status            = enumDeviceStatus.NotInitialized;            
+            m_status            = enumDeviceStatus.NotInitialized;
             AbortEvent          = new ManualResetEvent(false);
             Name                = "Data file watcher";
             DirectoryExtension  = ".d";
@@ -118,8 +118,8 @@ namespace ExternalFileWatcher.Watchers
 
                     if (FileComplete != null)
                     {
-                        FileComplete(this, new FileWriteArgs(path, 
-                            info.LastWriteTime, 
+                        FileComplete(this, new FileWriteArgs(path,
+                            info.LastWriteTime,
                             info.LastWriteTime.AddSeconds(SecondsToWait)));
                         shouldWatch = false;
                     }
@@ -192,7 +192,7 @@ namespace ExternalFileWatcher.Watchers
             path        = Path.Combine(WatchPath, path + FileExtension);
 
             DateTime startTime  = DateTime.Now;
-            bool found          = false; 
+            bool found          = false;
             while (shouldWatch)
             {
                 int dwEvent = WaitHandle.WaitAny(handles, 100);
@@ -257,7 +257,7 @@ namespace ExternalFileWatcher.Watchers
             bool found          = false;
             int flag            = FIND_DIRECTORY_MODE;
 
-            string filePath     = "";  
+            string filePath     = "";
             while (shouldWatch)
             {
                 int dwEvent = WaitHandle.WaitAny(handles, 100);
@@ -289,7 +289,7 @@ namespace ExternalFileWatcher.Watchers
                             break;
                         case FIND_FILE_MODE:
                             /// Here we look for the latest file to be written and assume that's the guy we want.
-                            string [] files = Directory.GetFiles(searchPath, "*" + FileExtension, SearchOption.TopDirectoryOnly);                            
+                            string [] files = Directory.GetFiles(searchPath, "*" + FileExtension, SearchOption.TopDirectoryOnly);
                             FileInfo info   = null;
                             foreach (string file in files)
                             {
@@ -411,7 +411,7 @@ namespace ExternalFileWatcher.Watchers
         }
         public classMonitoringComponent GetHealthData()
         {
-            return null;    
+            return null;
         }
 
         public List<string> GetStatusNotificationList()

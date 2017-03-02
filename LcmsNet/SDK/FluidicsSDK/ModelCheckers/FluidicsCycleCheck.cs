@@ -2,8 +2,8 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
-using System.Drawing; 
+using System.Drawing;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -88,7 +88,7 @@ namespace FluidicsSDK.ModelCheckers
             // check where every connection from the starting source goes
             foreach(Connection conn in startingSource.Connections)
             {                
-                Port otherEnd = conn.FindOppositeEndOfConnection(startingSource);                
+                Port otherEnd = conn.FindOppositeEndOfConnection(startingSource);
                 if (PrevConnection == null || conn.ID != PrevConnection.ID) // if conn.ID is the same as PrevConnection.ID, ignore it, since that's the connection we just traveled, and we don't want to go backwards as this would be detected as a cycle, when in reality it is not.
                 {
                     pathTaken.Add(conn);
@@ -106,7 +106,7 @@ namespace FluidicsSDK.ModelCheckers
                     if (cycleFound) { return cycleFound; }
                 }                
             }        
-            return cycleFound;            
+            return cycleFound;
         }
 
 

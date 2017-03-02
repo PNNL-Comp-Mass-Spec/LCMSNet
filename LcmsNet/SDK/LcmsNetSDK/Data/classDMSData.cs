@@ -1,16 +1,16 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark for the US Department of Energy 
+// Written by Dave Clark for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
 // Last modified 01/07/2009
-//						02/04/2009 (DAC) - Removed well plate and well, which were xferred to PAL data class
-//						02/10/2009 (DAC) - Added method for obtaining current values of all properties
-//						02/17/2009 (DAC) - Changed to inherited class; moved cache ops to base class
-//						03/09/2009 (DAC) - Added comment property
-//						04/02/2009 (DAC) - Added field for MRM file index
-//						08/11/2009 (DAC) - Added field for run request batch number
+//                      02/04/2009 (DAC) - Removed well plate and well, which were xferred to PAL data class
+//                      02/10/2009 (DAC) - Added method for obtaining current values of all properties
+//                      02/17/2009 (DAC) - Changed to inherited class; moved cache ops to base class
+//                      03/09/2009 (DAC) - Added comment property
+//                      04/02/2009 (DAC) - Added field for MRM file index
+//                      08/11/2009 (DAC) - Added field for run request batch number
 //
 //*********************************************************************************************************
 

@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 12/31/2013
- * 
- * Last Modified 12/31/2013 By Christopher Walters 
+ *
+ * Last Modified 12/31/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ namespace FluidicsSDK.Devices
             //add left control
             base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));      
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));
             // add loop
             base.AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
             base.AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Color.Black, Brushes.White, fill:true, atScale:1));

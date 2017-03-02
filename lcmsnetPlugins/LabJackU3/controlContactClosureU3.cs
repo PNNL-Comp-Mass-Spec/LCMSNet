@@ -64,9 +64,9 @@ namespace LcmsNet.Devices.ContactClosure
                 mcomboBox_Ports.SelectedItem = mobj_contactClosure.Port;
             }
             mcomboBox_Ports.SelectedValueChanged   += new EventHandler(mcomboBox_Ports_SelectedValueChanged);
-            mobj_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);            
-            SetBaseDevice(mobj_contactClosure);            
-            mbool_loading = false;            
+            mobj_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);
+            SetBaseDevice(mobj_contactClosure);
+            mbool_loading = false;
         }
         #endregion
 
@@ -78,7 +78,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mobj_contactClosure.Port;                
+                return mobj_contactClosure.Port;
             }
             set
             {
@@ -137,7 +137,7 @@ namespace LcmsNet.Devices.ContactClosure
         private void mcomboBox_Ports_SelectedValueChanged(object sender, EventArgs e)
         {
             if (mbool_loading == false)
-                mobj_contactClosure.Port = (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text);            
+                mobj_contactClosure.Port = (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text);
         }
         /// <summary>
         /// Handles sending a pulse to the Contact Closure when the user presses the button to do so.
@@ -148,18 +148,18 @@ namespace LcmsNet.Devices.ContactClosure
         {
             double pulse = Convert.ToInt32(mnum_pulseLength.Value);
             double voltage = Convert.ToDouble(mnum_voltage.Value);
-			if ( CONST_MINIMUMVOLTAGE <= voltage  && voltage <= CONST_MAXIMUMVOLTAGE &&  CONST_MINIMUMPULSELENGTH <=  pulse)
-			{
-				try
-				{
-					mobj_contactClosure.Trigger(pulse, (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text), voltage);
+            if ( CONST_MINIMUMVOLTAGE <= voltage  && voltage <= CONST_MAXIMUMVOLTAGE &&  CONST_MINIMUMPULSELENGTH <=  pulse)
+            {
+                try
+                {
+                    mobj_contactClosure.Trigger(pulse, (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text), voltage);
                     
-				}
-				catch (Exception ex)
-				{
-					classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
-				}
-			}
+                }
+                catch (Exception ex)
+                {
+                    classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
+                }
+            }
         }
 
         public void Initialize()
@@ -176,6 +176,6 @@ namespace LcmsNet.Devices.ContactClosure
         {
             Initialize();
         }
-        #endregion       
+        #endregion
     }   
 }

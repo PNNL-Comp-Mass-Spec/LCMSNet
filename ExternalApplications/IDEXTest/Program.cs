@@ -52,7 +52,7 @@ namespace IDEXTest
                         string returnedMessage = port.ReadExisting();
                         Console.WriteLine("Read status: {0}", returnedMessage);
 
-                        // Do a readback                        
+                        // Do a readback
                     }
                 }
             }

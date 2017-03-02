@@ -19,6 +19,6 @@ namespace FluidicsPack
         {
             Name = "Tee";
         }
-        #endregion       
+        #endregion
     }
 }

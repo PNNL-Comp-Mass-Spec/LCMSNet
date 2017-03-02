@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 10/7/2013
- * 
- * Last Modified 10/7/2013 By Christopher Walters 
+ *
+ * Last Modified 10/7/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -239,7 +239,7 @@ namespace DemoPluginLibrary
 
         public double GetActualFlow()
         {
-            return 0;        
+            return 0;
         }
 
         public double GetMixerVolume()
@@ -269,7 +269,7 @@ namespace DemoPluginLibrary
         /// <summary>
         /// Property representing the PercentB for the pump.
         /// </summary>
-        public double PercentB 
+        public double PercentB
         { 
             get
             {
@@ -287,10 +287,10 @@ namespace DemoPluginLibrary
         /// <summary>
         /// Gets or sets the list of mobile phases associated with the pump.
         /// </summary>
-        public List<MobilePhase> MobilePhases 
+        public List<MobilePhase> MobilePhases
         { 
-            get; 
-            set; 
+            get;
+            set;
         }
         #endregion
     }

@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/19/2013
- * 
- * Last Modified 8/19/2013 By Christopher Walters 
+ *
+ * Last Modified 8/19/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace FluidicsSDK.Graphic
         public FluidicsGraphicsError(string message, Exception inner) : base(message, inner) { }
        
         // A constructor is needed for serialization when an
-        // exception propagates from a remoting server to the client. 
+        // exception propagates from a remoting server to the client.
         protected FluidicsGraphicsError(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) { }
     }

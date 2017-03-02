@@ -41,7 +41,7 @@ namespace Newport.ESP300
         private const StopBits CONST_STOPBITS = StopBits.One;
         private const Parity CONST_PARITY = Parity.None;
         private const Handshake CONST_HANDSHAKE = Handshake.RequestToSend;
-        #endregion 
+        #endregion
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace Newport.ESP300
         /// <param name="numAxes">an integer representing the number of axes of movement available to this stage</param>
         public classNewportStage(SerialPort port, string currentPos, int numAxes)
         {
-            m_disposed = false;        
+            m_disposed = false;
             if (port == null)
             {
                 Port = new SerialPort("COM1", CONST_BAUDRATE, CONST_PARITY, CONST_DATABITS, CONST_STOPBITS);
@@ -74,7 +74,7 @@ namespace Newport.ESP300
             }            
             NumAxes = numAxes;
             m_SpeedNormal = new double[NumAxes];
-            m_positions = new Dictionary<string, classStagePosition>();     
+            m_positions = new Dictionary<string, classStagePosition>();
             Name = "Stage";
             m_position = currentPos;
             m_reportedErrors = new List<string>();
@@ -659,7 +659,7 @@ namespace Newport.ESP300
 
 
         /// <summary>
-        /// Lists the position names 
+        /// Lists the position names
         /// </summary>
         private void ListPositions()
         {

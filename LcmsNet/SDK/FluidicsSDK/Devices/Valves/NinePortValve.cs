@@ -26,7 +26,7 @@ namespace FluidicsSDK.Devices
             //add left control
             base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));  
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));
         }
 
 
@@ -121,7 +121,7 @@ namespace FluidicsSDK.Devices
             //if startingPortIndex == -1, return empty list representing a "no connections" state
             if (startingPortIndex == -1) { return stateConnection; } 
             stateConnection.Add(new Tuple<int, int>(startingPortIndex, endingPortIndex));
-            return stateConnection; 
+            return stateConnection;
         }
 
  

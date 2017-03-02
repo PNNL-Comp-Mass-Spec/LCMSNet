@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -66,7 +66,7 @@ namespace LcmsNet.Devices.ContactClosure
         #region Properties
 
         /// <summary>
-        /// Gets or sets the labjack's local ID, which is probably 0. 
+        /// Gets or sets the labjack's local ID, which is probably 0.
         /// This doesn't change the hardware ID of the labjack itself, just the ID the software uses to communicate.
         /// </summary>
         public int LocalID

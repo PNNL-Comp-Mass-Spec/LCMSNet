@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -69,9 +69,9 @@ namespace LcmsNet.Devices.ContactClosure
                 mcomboBox_Ports.SelectedItem = mobj_contactClosure.Port;
             }
             mcomboBox_Ports.SelectedValueChanged   += new EventHandler(mcomboBox_Ports_SelectedValueChanged);
-            mobj_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);            
-            SetBaseDevice(mobj_contactClosure);            
-            mbool_loading = false;            
+            mobj_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);
+            SetBaseDevice(mobj_contactClosure);
+            mbool_loading = false;
         }
         #endregion
 
@@ -83,7 +83,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mobj_contactClosure.Port;                
+                return mobj_contactClosure.Port;
             }
             set
             {
@@ -142,7 +142,7 @@ namespace LcmsNet.Devices.ContactClosure
         private void mcomboBox_Ports_SelectedValueChanged(object sender, EventArgs e)
         {
             if (mbool_loading == false)
-                mobj_contactClosure.Port = (enumLabjackU12OutputPorts)Enum.Parse(typeof(enumLabjackU12OutputPorts), this.mcomboBox_Ports.Text);            
+                mobj_contactClosure.Port = (enumLabjackU12OutputPorts)Enum.Parse(typeof(enumLabjackU12OutputPorts), this.mcomboBox_Ports.Text);
         }
         /// <summary>
         /// Handles sending a pulse to the Contact Closure when the user presses the button to do so.
@@ -151,18 +151,18 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="e"></param>
         private void mbutton_SendPulse_Click(object sender, EventArgs e)
         {
-			if (Convert.ToDouble(mnum_voltage.Value) >= CONST_MINIMUMVOLTAGE && Convert.ToDouble(mnum_voltage.Value) <= CONST_MAXIMUMVOLTAGE && Convert.ToInt32(mnum_pulseLength.Value) > CONST_MINIMUMPULSELENGTH)
-			{
-				try
-				{
-					mobj_contactClosure.Trigger(Convert.ToInt32(mnum_pulseLength.Value), Convert.ToDouble(mnum_voltage.Value));
+            if (Convert.ToDouble(mnum_voltage.Value) >= CONST_MINIMUMVOLTAGE && Convert.ToDouble(mnum_voltage.Value) <= CONST_MAXIMUMVOLTAGE && Convert.ToInt32(mnum_pulseLength.Value) > CONST_MINIMUMPULSELENGTH)
+            {
+                try
+                {
+                    mobj_contactClosure.Trigger(Convert.ToInt32(mnum_pulseLength.Value), Convert.ToDouble(mnum_voltage.Value));
                     
-				}
-				catch (Exception ex)
-				{
-					classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
-				}
-			}
+                }
+                catch (Exception ex)
+                {
+                    classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
+                }
+            }
         }
         /// <summary>
         /// Initializes the device.
@@ -173,6 +173,6 @@ namespace LcmsNet.Devices.ContactClosure
         {
             Initialize();
         }
-        #endregion       
+        #endregion
     }   
 }

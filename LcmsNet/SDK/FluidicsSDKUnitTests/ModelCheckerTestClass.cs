@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
  * Created 6/2/2014
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace FluidicsSDKUnitTests
         [SetUp]
         public void SetUp()
         {            
-            if(cm == null)            
+            if(cm == null)
             {
                 cm = ConnectionManager.GetConnectionManager;
                 dm = FluidicsDeviceManager.DeviceManager;
@@ -81,7 +81,7 @@ namespace FluidicsSDKUnitTests
         /// <summary>
         /// Tests that the multiple sources on path check finds multiple sources that have intersecting paths
         /// </summary>
-        [Test] 
+        [Test]
         public void TestC()
         {
             MultipleSourcesModelCheck multipleSourceCheck = new MultipleSourcesModelCheck();

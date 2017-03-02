@@ -2,8 +2,8 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace LabJackU3TestApp
             myU3.Initialize();
                
             string cmdStr = string.Empty;
-            PrintMenu();    
+            PrintMenu();
             while (true)
             {
                 try

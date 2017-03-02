@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 11/21/2013
- * 
- * Last Modified 12/3/2013 By Christopher Walters 
+ *
+ * Last Modified 12/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace FluidicsSDK.Devices
     {
         #region Members
         // radius of the valve's circle primitive in pixels, arbitrarily chosen
-        protected const int m_radius = 75;    
+        protected const int m_radius = 75;
         // number of ports the valve has
         protected int m_numberOfPorts;
         protected Dictionary<int, List<Tuple<int, int>>> m_states;
@@ -46,7 +46,7 @@ namespace FluidicsSDK.Devices
             base.AddCircle(new Point(0, 0), m_radius, Color.Black, Brushes.White, fill: true);
             m_info_controls_box = new Rectangle(base.Loc.X, base.Loc.Y + (int)base.Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             m_numberOfPorts = numberOfPorts;
-            Point[] portLocs = GeneratePortLocs();                     
+            Point[] portLocs = GeneratePortLocs();
             foreach (Point p in portLocs)
             {
                 base.AddPort(p);

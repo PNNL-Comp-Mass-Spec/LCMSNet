@@ -421,7 +421,7 @@ namespace ASIpump
         }
 
         /// <summary>
-        /// Gets the current loaded method in the pump module. 
+        /// Gets the current loaded method in the pump module.
         /// </summary>
         /// <returns>Method string kept on the pump.</returns>
         public string RetrieveMethod()
@@ -478,7 +478,7 @@ namespace ASIpump
         #region IDevice Data Provider Methods
 
         /// <summary>
-        /// Lists the methods 
+        /// Lists the methods
         /// </summary>
         private void ListMethods()
         {

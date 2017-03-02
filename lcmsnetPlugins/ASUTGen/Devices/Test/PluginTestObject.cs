@@ -29,7 +29,7 @@ namespace PluginTestObjectLibrary
         #region Methods
 
         /// <summary>
-        /// Opens the test object 
+        /// Opens the test object
         /// </summary>
         public virtual void Open()
         {
@@ -57,7 +57,7 @@ namespace PluginTestObjectLibrary
             try
             {
                 // Create slight time delay to simulate closing
-                Thread.Sleep(1000);              
+                Thread.Sleep(1000);
             }
             finally
             {
@@ -96,7 +96,7 @@ namespace PluginTestObjectLibrary
         /// <summary>
         /// Test method for the plugin test object:
         /// Function used to validate proper plugin data processing, by returning to
-        /// the calling LCMSNet method the sum of the current value of the IntTestProperty and 
+        /// the calling LCMSNet method the sum of the current value of the IntTestProperty and
         /// the argument that was passed to the method.
         /// </summary>
         public int FunctionTest(int argument)

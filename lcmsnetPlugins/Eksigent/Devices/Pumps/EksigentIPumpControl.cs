@@ -87,7 +87,7 @@ namespace Eksigent.Devices.Pumps
 
             if (value > totalChannels)
             {
-                mnum_channels.Value = totalChannels; 
+                mnum_channels.Value = totalChannels;
             }
 
             mnum_channels.Minimum = Math.Min(1, totalChannels);
@@ -141,7 +141,7 @@ namespace Eksigent.Devices.Pumps
         {
             base.UpdateStatusDisplay(e.Error);
         }
-        #endregion 
+        #endregion
 
         #region Button Event Handlers
         private void mbutton_updateMethods_Click(object sender, EventArgs e)

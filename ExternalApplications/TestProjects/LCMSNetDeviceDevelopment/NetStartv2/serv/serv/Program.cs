@@ -144,7 +144,7 @@ namespace serv
                         default:
                             descriptor = "ERROR";
                             send = false;
-                            break;                        
+                            break;
                     }
                     if(send)
                         SendMessage(streamWriter, enumNetStartMessageTypes.Post, 0, descriptor, arguments);
@@ -191,7 +191,7 @@ namespace serv
                     SendMessage(streamWriter, enumNetStartMessageTypes.Post, 0, "STARTED", arguments);
                     //streamWriter.WriteLine("STARTED");
                     //Console.WriteLine("STARTED");
-                    //streamWriter.Flush();           
+                    //streamWriter.Flush();
 
                 */
                     streamReader.Close();

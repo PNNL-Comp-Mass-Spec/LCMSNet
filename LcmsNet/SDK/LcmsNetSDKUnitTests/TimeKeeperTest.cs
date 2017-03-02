@@ -18,7 +18,7 @@ namespace LcmsnetUnitTest
             TimeKeeper.Instance.TimeZone = pst;
             DateTime timeKeeperTime = TimeKeeper.Instance.Now;
             DateTime nowPst = TimeZoneInfo.ConvertTimeFromUtc(now, pst);
-            NUnit.Framework.Assert.IsTrue(nowPst.ToString() == timeKeeperTime.ToString());            
+            NUnit.Framework.Assert.IsTrue(nowPst.ToString() == timeKeeperTime.ToString());
         }
 
         [Test]
@@ -27,14 +27,14 @@ namespace LcmsnetUnitTest
             TimeZoneInfo pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             TimeZoneInfo aet = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
             TimeKeeper.Instance.TimeZone = pst;
-            DateTime now = DateTime.UtcNow;            
-            DateTime timeKeeperTime = TimeKeeper.Instance.Now; 
+            DateTime now = DateTime.UtcNow;
+            DateTime timeKeeperTime = TimeKeeper.Instance.Now;
             DateTime nowAet = TimeZoneInfo.ConvertTimeFromUtc(now, aet);
-            // timekeeper time should be waaay different from aet time as it's set to pst. 
+            // timekeeper time should be waaay different from aet time as it's set to pst.
             // but mathematically, they would be the same(or close to the same) so we check the strings
             // to see if they actually are different
             NUnit.Framework.Assert.IsFalse(nowAet.ToString() == timeKeeperTime.ToString());
-            TimeKeeper.Instance.TimeZone = aet;            
+            TimeKeeper.Instance.TimeZone = aet;
             NUnit.Framework.Assert.IsTrue(nowAet.ToString() == TimeKeeper.Instance.ConvertToTimeZone(timeKeeperTime, "AUS Eastern Standard Time").ToString());
         }
 

@@ -1,12 +1,12 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 0219/2009
 //
 // Last modified 02/19/2009
-//						- 02/24/2008 (DAC) - Added additional enums for DMS data types
-//						- 12/08/2009 (DAC) - Added enum for caching selected separation type
+//                      - 02/24/2008 (DAC) - Added additional enums for DMS data types
+//                      - 12/08/2009 (DAC) - Added enum for caching selected separation type
 //
 //*********************************************************************************************************
 

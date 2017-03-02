@@ -138,7 +138,7 @@ namespace LcmsNetDataClasses.Devices
             get { return string.Empty; }
             set
             {
-                // Pass    
+                // Pass
             }
         }
 

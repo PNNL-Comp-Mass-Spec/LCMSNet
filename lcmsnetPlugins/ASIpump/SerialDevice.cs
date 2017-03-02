@@ -10,7 +10,7 @@ using LcmsNetDataClasses.Devices;
 
 namespace ASIpump
 {
-    public class SerialDevice 
+    public class SerialDevice
     {
         public delegate void MessageReplyDelegate(string sentStr, string replyStr);
 
@@ -66,7 +66,7 @@ namespace ASIpump
         public string PortName
         {
             get { return mPort.PortName; }
-            set 
+            set
             {
                 if (value != null)
                 {
@@ -130,7 +130,7 @@ namespace ASIpump
             set
             {
                 if (value == 0) value = 9600;
-                mPort.BaudRate = value; 
+                mPort.BaudRate = value;
             }
         }
 
@@ -144,7 +144,7 @@ namespace ASIpump
             set
             {
                 if (value == 0) value = 8;
-                mPort.DataBits = value; 
+                mPort.DataBits = value;
             }
         }
 
@@ -155,10 +155,10 @@ namespace ASIpump
         public StopBits StopBits
         {
             get { return mPort.StopBits; }
-            set 
+            set
             {
                 if (value == System.IO.Ports.StopBits.None) value = System.IO.Ports.StopBits.One;
-                mPort.StopBits = value; 
+                mPort.StopBits = value;
             }
         }
 

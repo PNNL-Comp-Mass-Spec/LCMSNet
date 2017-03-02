@@ -11,7 +11,7 @@
         DatasetNameError,
 
         /// <summary>
-        /// The device does not exist in configuration.  
+        /// The device does not exist in configuration.
         /// </summary>
         DeviceDoesNotExist,
 

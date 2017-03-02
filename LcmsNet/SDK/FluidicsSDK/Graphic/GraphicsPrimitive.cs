@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/16/2013
- * 
- * Last Modified 10/21/2013 By Christopher Walters 
+ *
+ * Last Modified 10/21/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Windows.Forms;
@@ -20,10 +20,10 @@ namespace FluidicsSDK.Graphic
     /// abstract Graphics Primitive for Fluidics Designer. base class for holding graphics data for fluidics
     /// devices/ports/connections.
     /// </summary>
-    public abstract class GraphicsPrimitive 
+    public abstract class GraphicsPrimitive
     {
 
-        #region Members  
+        #region Members
         /// <summary>
         ///   Should the object drawn be filled with the FillColor or not.
         /// </summary>
@@ -31,11 +31,11 @@ namespace FluidicsSDK.Graphic
         /// <summary>
         ///  Color of the object to be drawn
         /// </summary>
-        private Color m_color;        
+        private Color m_color;
         /// <summary>
-        ///  Brush to use to draw object, solid, hatched, crosshatched are the options.  
+        ///  Brush to use to draw object, solid, hatched, crosshatched are the options.
         /// </summary>        
-        private Brush m_fillBrush;          
+        private Brush m_fillBrush;
         /// <summary>
         ///  the current pen to draw with.
         /// </summary>
@@ -95,7 +95,7 @@ namespace FluidicsSDK.Graphic
 
         public GraphicsPrimitive(Brush fillbrush , Nullable<Color> myColor = null, bool fill = true, float atScale = 1)
         {                 
-            m_fill  = fill;            
+            m_fill  = fill;
             m_color = myColor != null ? (Color)myColor : DEFAULT_COLOR;
             m_fillBrush = fillbrush;
             m_drawingPen = new Pen(new SolidBrush(m_color));
@@ -129,7 +129,7 @@ namespace FluidicsSDK.Graphic
         // a primitive should be able to tell if a point is within itself.
         public abstract bool Contains(Point point, int max_variance);
 
-        public abstract void MoveBy(Point relativeValues);    
+        public abstract void MoveBy(Point relativeValues);
 
         #endregion
 
@@ -146,7 +146,7 @@ namespace FluidicsSDK.Graphic
                 }
                 set
                 {                 
-                    this.m_fill = value;                                    
+                    this.m_fill = value;
                 }
             }
 
@@ -248,7 +248,7 @@ namespace FluidicsSDK.Graphic
                 {
                     return m_fillBrush;
                 }
-                set 
+                set
                 {
                     m_fillBrush = value;
                 }
@@ -262,7 +262,7 @@ namespace FluidicsSDK.Graphic
             /// <summary>
             /// property to repsenting the location of the primitive on screen
             /// </summary>
-            public virtual Point Loc 
+            public virtual Point Loc
             {
                 get
                 {

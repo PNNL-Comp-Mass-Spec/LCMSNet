@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 9/5/2013
- * 
- * Last Modified 1/3/2013 By Christopher Walters 
+ *
+ * Last Modified 1/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -119,13 +119,13 @@ namespace FluidicsSDK.Managers
         /// <exception cref="ArgumentException">tried to connect a port to itself</exception>"
         public void Connect(Port port1, Port port2, FluidicsDevice device = null, ConnectionStyles? style = null)
         {
-            //if the connection doesn't already exist, try to create it, or if it's an internal device connection associated with a state, create regardless of if connection exist between them otherwise          
+            //if the connection doesn't already exist, try to create it, or if it's an internal device connection associated with a state, create regardless of if connection exist between them otherwise
             if (FindConnection(port1, port2) == null || (port1.ParentDevice == device && port2.ParentDevice == device && device != null) )
             {
                 //but if port1 IS port 2, throw an error, as you cannot connect a port to itself.
                 if (port1 != port2)
                 {
-                    Connection newConnection = new Connection(port1, port2, device, style);                                                      
+                    Connection newConnection = new Connection(port1, port2, device, style);
                     m_connections.Add(newConnection);
                     if (ConnectionChanged != null)
                     {

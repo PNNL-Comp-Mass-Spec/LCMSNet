@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 9/5/2013
- * 
- * Last Modified 1/3/2013 By Christopher Walters 
+ *
+ * Last Modified 1/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -29,22 +29,22 @@ namespace FluidicsSDK.Base
         protected long m_id;
         //we want each connection to have a unique id, this tracks the next available id..first connection made will get ID 0, next connection 1, next connection 2, etc.
         //no need for it to be a GUUID or such, since it's incredibly unlikely that any program would need 2^64 -1 ports.
-        protected static long availableId = 0;        
+        protected static long availableId = 0;
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// empty constructor..does not create a useful connection, must still have 
+        /// empty constructor..does not create a useful connection, must still have
         /// </summary>
         public Connection()
         {
             //assign the availableId to this, and then increment it so the next class gets availableId+1 as its id.
-            m_id = availableId++;            
+            m_id = availableId++;
             m_prims = new List<GraphicsPrimitive>();
             ConnectionStyle = ConnectionStyles.Standard;
             //TODO: Improve line start and end points so they touch the edge of the port circle at the proper points for the direction
-            //that the line will go.         
+            //that the line will go.
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace FluidicsSDK.Base
             from.AddConnection(m_id, this);
             to.AddConnection(m_id, this);
             ConnectionStyle = style == null ? ConnectionStyles.Standard : (ConnectionStyles)style;
-            m_prims = SetupLines(from, to);          
+            m_prims = SetupLines(from, to);
             P1 = from;
             P2 = to;
             InternalConnectionOf = device;
@@ -85,7 +85,7 @@ namespace FluidicsSDK.Base
                 }
                 else if (diffX > diffY)
                 {
-                    midPoint = new Point(to.Center.X, from.Center.Y);                  
+                    midPoint = new Point(to.Center.X, from.Center.Y);
                 }
                 FluidicsLine line = new FluidicsLine(from.Center, midPoint);
                 lines.Add(line);
@@ -95,7 +95,7 @@ namespace FluidicsSDK.Base
             }
             else
             {
-                FluidicsLine line = new FluidicsLine(new Point(from.Center.X, from.Center.Y), new Point(to.Center.X, to.Center.Y));                
+                FluidicsLine line = new FluidicsLine(new Point(from.Center.X, from.Center.Y), new Point(to.Center.X, to.Center.Y));
                 lines.Add(line);
             }
             return lines;
@@ -154,7 +154,7 @@ namespace FluidicsSDK.Base
                 line.Term = P2.Center;
             }
          
-            //if (port.ID == P1.ID)                 
+            //if (port.ID == P1.ID)
             //{
             //    List<GraphicsPrimitive> prims = SetupLines(port, P2);
             //    for (int i = 0; i < prims.Count; i++)
@@ -370,7 +370,7 @@ namespace FluidicsSDK.Base
         }
         
         public ConnectionStyles ConnectionStyle { get; set; }
-        #endregion     
+        #endregion
     
         
     }

@@ -68,7 +68,7 @@ namespace ContactClosureAutomation
 
             m_contactControl.Port = enumLabjackU12OutputPorts.D0;
 
-            UpdateCycleTime();            
+            UpdateCycleTime();
             LoadSettings();
         }
 
@@ -80,7 +80,7 @@ namespace ContactClosureAutomation
         /// <param name="message"></param>
         private void UpdateStatus(string message)
         {
-            m_statusLabel.Text = message;  
+            m_statusLabel.Text = message;
  
             try
             {
@@ -119,7 +119,7 @@ namespace ContactClosureAutomation
         private void LoadSettings()
         {
             m_delayTime.Value       = Properties.Settings.Default.DelayTime;
-            m_holdOpenTime.Value    = Properties.Settings.Default.TriggerTime; 
+            m_holdOpenTime.Value    = Properties.Settings.Default.TriggerTime;
             m_totalTriggers.Value   = Properties.Settings.Default.NumTriggers;
             try
             {
@@ -160,14 +160,14 @@ namespace ContactClosureAutomation
                 return;
             }
 
-            StartTrigger();            
+            StartTrigger();
         }
         /// <summary>
         /// Starts a trigger thread.
         /// </summary>
         private void StartTrigger()
         {
-            string triggers  = string.Format(" - {0}/{1} triggers", (m_totalTriggersMade), 
+            string triggers  = string.Format(" - {0}/{1} triggers", (m_totalTriggersMade),
                                                                  Convert.ToInt32(m_totalTriggers.Value));
 
             UpdateStatus("Triggering " + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString() + triggers);
@@ -276,7 +276,7 @@ namespace ContactClosureAutomation
         private void UpdateCycleTime()
         {            
             int totalTime    = Convert.ToInt32(m_delayTime.Value) + Convert.ToInt32(m_holdOpenTime.Value);
-            m_cycleTime.Text = totalTime.ToString() + " seconds"; 
+            m_cycleTime.Text = totalTime.ToString() + " seconds";
         }
         /// <summary>
         /// 

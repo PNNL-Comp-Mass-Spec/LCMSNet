@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/16/2013
- * 
- * Last Modified 1/7/2013 By Christopher Walters 
+ *
+ * Last Modified 1/7/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace FluidicsSDK.Base
         // top-left corner's location
         private Point m_loc;
         // the IDevice this fluidicsdeivce controls
-        private IDevice m_lcmsDevice;        
+        private IDevice m_lcmsDevice;
         // dictionary of actions that can be taken by this device, keyed by the primitves that
         // activate them
         private Dictionary<GraphicsPrimitive, Action> m_actions;
@@ -149,7 +149,7 @@ namespace FluidicsSDK.Base
         /// Activates the state number "state" in the devices list of states
         /// </summary>
         /// <param name="state">an integer determining which state to switch to.</param>
-        public abstract void ActivateState(int state);     
+        public abstract void ActivateState(int state);
 
         /// <summary>
         /// Take a list of tuples and use it to create the internal connections
@@ -200,7 +200,7 @@ namespace FluidicsSDK.Base
                     primitive.Render(g, alpha, scale, false, IDevice.Status == enumDeviceStatus.Error);
                 }
             }
-            DrawControls(g, alpha, scale); 
+            DrawControls(g, alpha, scale);
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace FluidicsSDK.Base
                     string name = DeviceName;
                     SizeF nameSize = g.MeasureString(name, stringFont);
                    
-                    m_info_controls_box = UpdateControlBoxLocation();                    
+                    m_info_controls_box = UpdateControlBoxLocation();
                     //place the name at the top middle of the box
                     Point nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Width, scale);
                     g.DrawString(name, stringFont, br, nameLocation);
@@ -278,7 +278,7 @@ namespace FluidicsSDK.Base
         }
 
         /// <summary>
-        /// selects the device 
+        /// selects the device
         /// </summary>
         public virtual void Select(Point mouse_location)
         {
@@ -343,10 +343,10 @@ namespace FluidicsSDK.Base
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
         protected virtual void AddCircle(Point loc, int radius, Color color, Brush fillBrush, bool fill=true, Action action = null)
         {
-            FluidicsCircle circle   = new FluidicsCircle( loc, Color.Black, fillBrush, radius);            
+            FluidicsCircle circle   = new FluidicsCircle( loc, Color.Black, fillBrush, radius);
             circle.Color            = color;
             circle.Fill             = fill;
-            this.AddPrimitive(circle, action);            
+            this.AddPrimitive(circle, action);
         }
 
         /// <summary>
@@ -361,10 +361,10 @@ namespace FluidicsSDK.Base
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
         protected virtual void AddRectangle(Point loc, Size size, Color color,  Brush fillBrush, bool fill=true, Action action = null)
         {
-            FluidicsRectangle rect = new FluidicsRectangle(loc, size, Color.Black, fillBrush);            
+            FluidicsRectangle rect = new FluidicsRectangle(loc, size, Color.Black, fillBrush);
             rect.Color      = color;
             rect.Fill       = fill;
-            this.AddPrimitive(rect, action);            
+            this.AddPrimitive(rect, action);
         }
 
         /// <summary>
@@ -399,13 +399,13 @@ namespace FluidicsSDK.Base
               
             /*  translation*/
             Point oldLoc = m_primitives[PRIMARY_PRIMITIVE].Loc;
-            Point moveTo = new Point(oldLoc.X + translateRelativeValues.X, oldLoc.Y + translateRelativeValues.Y);          
+            Point moveTo = new Point(oldLoc.X + translateRelativeValues.X, oldLoc.Y + translateRelativeValues.Y);
             this.Loc = moveTo;
-            m_primitives[PRIMARY_PRIMITIVE].MoveBy(translateRelativeValues);            
-            // move ports with device            
+            m_primitives[PRIMARY_PRIMITIVE].MoveBy(translateRelativeValues);
+            // move ports with device
             for (int i = 0; i < m_portList.Count; i++)
             {
-                Port p = m_portList[i];                
+                Port p = m_portList[i];
                 p.MoveBy(translateRelativeValues);
             }
             //don't change the primitive at index PRIMARY_PRIMITIVE since it was already moved.
@@ -424,13 +424,13 @@ namespace FluidicsSDK.Base
         ///  all fluidics devices should be able to determine if they contain a specified point within their bounds
         /// </summary>
         /// <param name="location">a System.Drawing.Point specifying the location to be checkeda against</param>
-        /// <param name="max_variance">an int representing the variation in pixels that is tolerable for determining if a location 
+        /// <param name="max_variance">an int representing the variation in pixels that is tolerable for determining if a location
         /// is contained by the device</param>
         /// <returns>a bool determing if the device contains that location</returns>
         public virtual bool Contains(Point location)
         {
             bool inDevice = false;
-            foreach (GraphicsPrimitive prim in m_primitives)    
+            foreach (GraphicsPrimitive prim in m_primitives)
             {                
                 if (prim.Contains(location, MaxVariance))
                 {
@@ -445,7 +445,7 @@ namespace FluidicsSDK.Base
         /// return the string representing the state of the device
         /// </summary>
         /// <returns></returns>
-        public abstract string StateString();        
+        public abstract string StateString();
         #endregion
 
         #region Properties
@@ -536,7 +536,7 @@ namespace FluidicsSDK.Base
             {
                 return m_lcmsDevice;
             }
-            protected set 
+            protected set
             {
                 m_lcmsDevice = value;
             }

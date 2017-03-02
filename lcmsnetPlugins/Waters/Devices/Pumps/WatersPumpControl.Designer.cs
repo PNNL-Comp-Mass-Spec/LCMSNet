@@ -23,7 +23,7 @@
         #region Component Designer generated code
 
         /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -50,7 +50,7 @@
             this.mbutton_scanInstruments = new System.Windows.Forms.Button();
             this.mtext_computerName = new System.Windows.Forms.TextBox();
             this.mbutton_setComputerName = new System.Windows.Forms.Button();
-            this.mlist_instruments = new System.Windows.Forms.ListBox();            
+            this.mlist_instruments = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -61,7 +61,7 @@
             // 
             // m_buttonLaunchConsole
             // 
-            this.m_buttonLaunchConsole.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_buttonLaunchConsole.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_buttonLaunchConsole.Location = new System.Drawing.Point(13, 19);
             this.m_buttonLaunchConsole.Name = "m_buttonLaunchConsole";
@@ -96,7 +96,7 @@
             // 
             // m_statusLabel
             // 
-            this.m_statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_statusLabel.Location = new System.Drawing.Point(3, 10);
@@ -106,8 +106,8 @@
             // 
             // mcontrol_pumpDisplay
             // 
-            this.mcontrol_pumpDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mcontrol_pumpDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mcontrol_pumpDisplay.Location = new System.Drawing.Point(0, 40);
             this.mcontrol_pumpDisplay.Name = "mcontrol_pumpDisplay";
@@ -129,8 +129,8 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.mbutton_stopMethod);
             this.groupBox1.Controls.Add(this.mbutton_getListOfMethods);
@@ -179,7 +179,7 @@
             // 
             // mcomboBox_methods
             // 
-            this.mcomboBox_methods.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mcomboBox_methods.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mcomboBox_methods.FormattingEnabled = true;
             this.mcomboBox_methods.Location = new System.Drawing.Point(6, 19);
@@ -200,7 +200,7 @@
             // 
             // mnum_methodLength
             // 
-            this.mnum_methodLength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mnum_methodLength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mnum_methodLength.Location = new System.Drawing.Point(6, 56);
             this.mnum_methodLength.Maximum = new decimal(new int[] {
@@ -329,7 +329,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "WatersPumpControl";
             this.Size = new System.Drawing.Size(336, 359);
-            this.Controls.SetChildIndex(this.tabControl1, 0);            
+            this.Controls.SetChildIndex(this.tabControl1, 0);
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

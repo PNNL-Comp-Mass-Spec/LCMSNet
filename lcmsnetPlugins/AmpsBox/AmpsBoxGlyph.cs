@@ -25,7 +25,7 @@ namespace AmpsBox
         public void RegisterDevice(IDevice device)
         {
             m_box               = device as AmpsBoxDevicePlugin;
-            mlabel_name.Text    = device.Name; 
+            mlabel_name.Text    = device.Name;
 
             device.DeviceSaveRequired += new EventHandler(device_DeviceSaveRequired);
         }

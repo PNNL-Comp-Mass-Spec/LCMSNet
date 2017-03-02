@@ -26,7 +26,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         private void InitializePlots()
         {
             // 
-            // Time and setup 
+            // Time and setup
             // 
             var pane = mplot_monitoringDataPressure.GraphPane;
             pane.Title.Text = "Pressure (bar)";
@@ -41,7 +41,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             pane.YAxis.Title.Text = "Pressure (bar)";
 
             // 
-            // Flow rate 
+            // Flow rate
             // 
             var paneFlow = mplot_monitoringDataFlow.GraphPane;
             paneFlow.Title.Text = "Flow Rate";
@@ -52,7 +52,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             paneFlow.YAxis.Color = Color.DarkGreen;
 
             // 
-            // Percent B 
+            // Percent B
             // 
             var paneComp = mplot_monitoringDataB.GraphPane;
             paneComp.Title.Text = "Composition";

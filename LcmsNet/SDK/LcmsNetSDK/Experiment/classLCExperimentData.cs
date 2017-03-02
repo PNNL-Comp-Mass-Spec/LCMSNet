@@ -1,11 +1,11 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/16/2009
 //
 // Last modified 03/16/2009
-//						- 03/16/2009: (BLL) - Created file.  
+//                      - 03/16/2009: (BLL) - Created file.
 //
 //*********************************************************************************************************
 
@@ -14,7 +14,7 @@ using System;
 namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
-    /// Experiment data 
+    /// Experiment data
     /// </summary>
     [Serializable]
     public class classLCExperimentData : classDataClassBase

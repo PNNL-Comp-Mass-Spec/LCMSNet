@@ -66,7 +66,7 @@ namespace DemoPluginLibrary
             return Position;
         }
 
-        [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]      
+        [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]
         public void SetPosition(TwoPositionState position)
         {            
             if ((int)position < 0 || (int)position > 1)
@@ -148,6 +148,6 @@ namespace DemoPluginLibrary
 
         public int Position { get; set; }
 
-        #endregion        
+        #endregion
     }
 }

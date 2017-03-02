@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -26,8 +26,8 @@ namespace LcmsNet.Devices.Valves
     /// <summary>
     /// Class used for interacting with the VICI 2-position valve
     /// </summary>
-	[Serializable]
-    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]	
+    [Serializable]
+    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [classDeviceControlAttribute(typeof(controlValveVICI2Pos),
                                  typeof(controlValveVICI2PosGlyph),
                                  "Valve Two-Position",
@@ -44,7 +44,7 @@ namespace LcmsNet.Devices.Valves
         ///     Parity      None
         ///     Stop Bits   One
         ///     Data Bits   8
-        ///     Handshake   None        
+        ///     Handshake   None
         private System.IO.Ports.SerialPort mobj_serialPort;
         /// <summary>
         /// The last measured position of the valve.
@@ -69,7 +69,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Holds the status of the device.
         /// </summary>
-        private enumDeviceStatus menum_status;        
+        private enumDeviceStatus menum_status;
         /// <summary>
         /// Decides if valve is in emulation mode.
         /// </summary>
@@ -96,8 +96,8 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;  
-        #endregion        
+        public event EventHandler<classDeviceErrorEventArgs> Error;
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -110,7 +110,7 @@ namespace LcmsNet.Devices.Valves
             ///     Parity      None
             ///     Stop Bits   One
             ///     Data Bits   8
-            ///     Handshake   None       
+            ///     Handshake   None
             mobj_serialPort             = new System.IO.Ports.SerialPort();
             mobj_serialPort.PortName    = "COM1";
             mobj_serialPort.BaudRate    = 9600;
@@ -129,7 +129,7 @@ namespace LcmsNet.Devices.Valves
             mobj_valveID                = ' ';
             mobj_versionInfo            = "";
 
-            mstring_name = "valve"; 
+            mstring_name = "valve";
         }
         /// <summary>
         /// Constructor from a supplied serial port object.
@@ -178,10 +178,10 @@ namespace LcmsNet.Devices.Valves
                 return menum_status;
             }
             set
-			{
-				if (value != menum_status && StatusUpdate != null)
+            {
+                if (value != menum_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
-				menum_status = value;
+                menum_status = value;
             }
         }
         /// <summary>
@@ -196,7 +196,7 @@ namespace LcmsNet.Devices.Valves
             set
             {
                  mstring_name = value;
-                 OnDeviceSaveRequired();               
+                 OnDeviceSaveRequired();
             }
         }
         /// <summary>
@@ -346,10 +346,10 @@ namespace LcmsNet.Devices.Valves
             }
             catch (UnauthorizedAccessException)
             {
-				if (Error != null)
-				{
-					
-				}
+                if (Error != null)
+                {
+                    
+                }
                 throw new ValveExceptionUnauthorizedAccess();
             }
             return true;
@@ -398,12 +398,12 @@ namespace LcmsNet.Devices.Valves
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
-            {				
+            {               
                 errorMessage = "Reading the hardware ID timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
-            {				
+            {               
                 errorMessage = "Sending a command to get the hardware ID timed out. " + ex.Message;
                 return false;
             }
@@ -418,13 +418,13 @@ namespace LcmsNet.Devices.Valves
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
-			{
+            {
                 errorMessage = "Reading the valve position timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
-			{
-				errorMessage = "Sending a command to get the valve position timed out. " + ex.Message;                
+            {
+                errorMessage = "Sending a command to get the valve position timed out. " + ex.Message;
                 return false;
             }
 
@@ -433,18 +433,18 @@ namespace LcmsNet.Devices.Valves
                 GetVersion();
             }
             catch (ValveExceptionUnauthorizedAccess ex)
-			{
-				errorMessage = "Could not get the valve version. " + ex.Message;
+            {
+                errorMessage = "Could not get the valve version. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
-			{
-				errorMessage = "Reading the valve version timed out. " + ex.Message;
+            {
+                errorMessage = "Reading the valve version timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
-			{
-				errorMessage = "Sending a command to get the valve version timed out. " + ex.Message;
+            {
+                errorMessage = "Sending a command to get the valve version timed out. " + ex.Message;
                 return false;
             }
             return true;
@@ -487,7 +487,7 @@ namespace LcmsNet.Devices.Valves
             }
 
             //Read in whatever is waiting in the buffer
-            //This should look like 
+            //This should look like
             //  Position is "B"
             string tempBuffer = "";
             try
@@ -504,7 +504,7 @@ namespace LcmsNet.Devices.Valves
             }
 
 
-            //Make a string containing the position           
+            //Make a string containing the position
             string tempPosition = "Unknown";        //Default to unknown
 
             //Grab the actual position from the above string
@@ -812,7 +812,7 @@ namespace LcmsNet.Devices.Valves
                 }
 
                 //Wait 145ms for valve to actually switch before proceeding
-                //NOTE: This can be shortened if there are more than 4 ports but still 
+                //NOTE: This can be shortened if there are more than 4 ports but still
                 //      2 positions; see manual page 1 for switching times
 
                 System.Threading.Thread.Sleep(mint_rotationDelayTimems);
@@ -859,7 +859,7 @@ namespace LcmsNet.Devices.Valves
                 }
 
                 //Wait 145ms for valve to actually switch before proceeding
-                //NOTE: This can be shortened if there are more than 4 ports but still 
+                //NOTE: This can be shortened if there are more than 4 ports but still
                 //      2 positions; see manual page 1 for switching times
 
                 System.Threading.Thread.Sleep(mint_rotationDelayTimems);
@@ -901,15 +901,15 @@ namespace LcmsNet.Devices.Valves
         /// Gets or sets the abort event for scheduling.
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
-		  public List<string> GetStatusNotificationList()
+          public List<string> GetStatusNotificationList()
         {
             return new List<string>();
-		  }
+          }
 
-		  public List<string> GetErrorNotificationList()
+          public List<string> GetErrorNotificationList()
           {
               return new List<string>();
-		  }
+          }
 
         #endregion
 

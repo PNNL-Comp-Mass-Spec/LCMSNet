@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -32,7 +32,7 @@ namespace LcmsNet.Devices.Valves
         #region Component Designer generated code
 
         /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -73,8 +73,8 @@ namespace LcmsNet.Devices.Valves
             // 
             // mpropertyGrid_Serial
             // 
-            this.mpropertyGrid_Serial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mpropertyGrid_Serial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mpropertyGrid_Serial.Location = new System.Drawing.Point(-2, 0);
             this.mpropertyGrid_Serial.Name = "mpropertyGrid_Serial";
@@ -84,7 +84,7 @@ namespace LcmsNet.Devices.Valves
             // 
             // mbutton_SetPosA
             // 
-            this.mbutton_SetPosA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mbutton_SetPosA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_SetPosA.Location = new System.Drawing.Point(6, 19);
             this.mbutton_SetPosA.Name = "mbutton_SetPosA";
@@ -96,7 +96,7 @@ namespace LcmsNet.Devices.Valves
             // 
             // mbutton_setPosB
             // 
-            this.mbutton_setPosB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mbutton_setPosB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_setPosB.Location = new System.Drawing.Point(6, 85);
             this.mbutton_setPosB.Name = "mbutton_setPosB";
@@ -166,7 +166,7 @@ namespace LcmsNet.Devices.Valves
             // 
             // mgroupBox_setPos
             // 
-            this.mgroupBox_setPos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mgroupBox_setPos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_setPos.Controls.Add(this.mbutton_SetPosA);
             this.mgroupBox_setPos.Controls.Add(this.mbutton_setPosB);
@@ -179,8 +179,8 @@ namespace LcmsNet.Devices.Valves
             // 
             // mgroupbox_Version
             // 
-            this.mgroupbox_Version.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mgroupbox_Version.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupbox_Version.Controls.Add(this.mtextbox_VersionInfo);
             this.mgroupbox_Version.Controls.Add(this.mbutton_refreshVersion);
@@ -193,7 +193,7 @@ namespace LcmsNet.Devices.Valves
             // 
             // mtextbox_VersionInfo
             // 
-            this.mtextbox_VersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mtextbox_VersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextbox_VersionInfo.Location = new System.Drawing.Point(6, 19);
             this.mtextbox_VersionInfo.Name = "mtextbox_VersionInfo";

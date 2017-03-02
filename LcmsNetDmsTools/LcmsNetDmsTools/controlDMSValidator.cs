@@ -43,7 +43,7 @@ namespace LcmsNetDmsTools
 
             mobj_sample = sample;
 
-            mlabel_sampleName.Text = sample.DmsData.DatasetName;    
+            mlabel_sampleName.Text = sample.DmsData.DatasetName;
 
             mtextBox_experimentName.Text = mobj_sample.DmsData.Experiment;
             mtextbox_proposalID.Text     = mobj_sample.DmsData.ProposalID;
@@ -56,7 +56,7 @@ namespace LcmsNetDmsTools
             this.mtextbox_proposalID.TextChanged        += this.mtextbox_proposalID_TextChanged;
             this.mtextbox_proposalID.KeyUp              += this.KeyUpHandler;
             this.mtextbox_user.TextChanged              += this.mtextbox_user_TextChanged;
-            this.mtextbox_user.KeyUp                    += this.KeyUpHandler;            
+            this.mtextbox_user.KeyUp                    += this.KeyUpHandler;
             this.mnum_requestNumber.ValueChanged        += this.mnum_requestNumber_ValueChanged;
             this.mnum_requestNumber.KeyUp               += this.KeyUpHandler;
             this.mtextBox_experimentName.TextChanged    += this.mtextBox_experimentName_TextChanged;
@@ -112,7 +112,7 @@ namespace LcmsNetDmsTools
                     {
                         isEnterType = false;
                     }
-                    else 
+                    else
                     {
                         updown = c as NumericUpDown;
                         if (updown != null)
@@ -135,7 +135,7 @@ namespace LcmsNetDmsTools
             {
                 Console.WriteLine(@"isEnterType: " + c.Name);
                 Console.WriteLine(EnterPressed != null);
-                OnEnterPressed(this, new DMSValidatorEventArgs(c.Name, modifier));              
+                OnEnterPressed(this, new DMSValidatorEventArgs(c.Name, modifier));
             }
         }
 
@@ -153,7 +153,7 @@ namespace LcmsNetDmsTools
             Dictionary<bool, Color> drawingForegroundColors = new Dictionary<bool, Color>();
 
             drawingBackgroundColors.Add(false, Color.Red);
-            drawingBackgroundColors.Add(true, Color.White);            
+            drawingBackgroundColors.Add(true, Color.White);
             drawingForegroundColors.Add(false, Color.White);
             drawingForegroundColors.Add(true, Color.Black);
 
@@ -203,7 +203,7 @@ namespace LcmsNetDmsTools
 
                 /// 
                 /// Make it look nice for the user so they can tell what is going on
-                /// Here we just pick an image to display next to the sample to draw their 
+                /// Here we just pick an image to display next to the sample to draw their
                 /// attention to it.
                 /// 
                 if (mbool_isOK == false)
@@ -217,7 +217,7 @@ namespace LcmsNetDmsTools
             }
 
         }
-        #endregion 
+        #endregion
 
         #region Properties
         /// <summary>
@@ -230,9 +230,9 @@ namespace LcmsNetDmsTools
                 return mbool_isOK;
             }
         }
-        #endregion 
+        #endregion
 
-        #region Form Event Handlers 
+        #region Form Event Handlers
         private void mnum_requestNumber_ValueChanged(object sender, EventArgs e)
         {
             mobj_sample.DmsData.RequestID = Convert.ToInt32(mnum_requestNumber.Value);

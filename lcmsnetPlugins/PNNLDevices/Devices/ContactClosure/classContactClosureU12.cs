@@ -1,5 +1,5 @@
 ﻿/*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -7,8 +7,8 @@
 // Last modified 08/17/2009
  *      BLL - 9-8-2009
  *          Added method editing attributes for the method editor to use for an event.
- *              - Method:  Trigger(int timeout)          
- * 
+ *              - Method:  Trigger(int timeout)
+ *
 //********************************************************************************************************/
 
 using System;
@@ -26,7 +26,7 @@ using FluidicsSDK.Devices;
 
 namespace LcmsNet.Devices.ContactClosure
 {
-	[Serializable]
+    [Serializable]
     [classDeviceControlAttribute(typeof(controlContactClosureU12),
                                  "Contact Closure U12",
                                  "Contact Closures")
@@ -47,7 +47,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         private string mstring_name;
         /// <summary>
-        /// The version. 
+        /// The version.
         /// </summary>
         private string mstring_version;
         /// <summary>
@@ -62,7 +62,7 @@ namespace LcmsNet.Devices.ContactClosure
         private const int CONST_ANALOGHIGH = 5;
         private const int CONST_DIGITALHIGH = 1;
         private const int CONST_ANALOGLOW = 0;
-        private const int CONST_DIGITALLOW = 0;        
+        private const int CONST_DIGITALLOW = 0;
         #endregion
 
         #region Events
@@ -70,7 +70,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// Fired when the status changes.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-		public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
@@ -159,12 +159,12 @@ namespace LcmsNet.Devices.ContactClosure
                 return menum_status;
             }
             set
-			{
+            {
                 if (value != menum_status && StatusUpdate != null)
                 {
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
                 }
-				menum_status = value;
+                menum_status = value;
             }
         }
 
@@ -278,7 +278,7 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
-            return Trigger(timeout, mobj_port, pulseLengthSeconds);            
+            return Trigger(timeout, mobj_port, pulseLengthSeconds);
         }
         /// <summary>
         /// Triggers a 5V pulse of the specified length.
@@ -336,7 +336,7 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 if (Error != null)
                 {
-                    Error(this, 
+                    Error(this,
                                         new classDeviceErrorEventArgs("Could not stop the trigger.",
                                                                  ex,
                                                                  enumDeviceErrorStatus.ErrorAffectsAllColumns,
@@ -351,7 +351,7 @@ namespace LcmsNet.Devices.ContactClosure
 
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
-        /// This is intended for use on the analog output ports--if it is a digital 
+        /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
@@ -363,7 +363,7 @@ namespace LcmsNet.Devices.ContactClosure
         }
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
-        /// This is intended for use on the analog output ports--if it is a digital 
+        /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
@@ -424,28 +424,28 @@ namespace LcmsNet.Devices.ContactClosure
         }
         #endregion
 
-		/// <summary>
-		/// Writes any performance data cached to directory path provided.
-		/// </summary>
-		/// <param name="directoryPath"></param>
-		/// <param name="name"></param>
-		/// <param name="parameters"></param>
+        /// <summary>
+        /// Writes any performance data cached to directory path provided.
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
 
         }
 
         #region IDevice Members
-		/// <summary>
-		/// Gets or sets the error type of last error.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets the error type of last error.
+        /// </summary>
         public enumDeviceErrorStatus ErrorType
         {
             get;
             set;
         }
-		/// <summary>
-		/// Gets or sets the device type.
+        /// <summary>
+        /// Gets or sets the device type.
         /// </summary>
         public enumDeviceType DeviceType
         {
@@ -478,19 +478,19 @@ namespace LcmsNet.Devices.ContactClosure
         public FinchComponentData GetData()
         {
             FinchComponentData component = new FinchComponentData();
-            component.Status    = Status.ToString();            
+            component.Status    = Status.ToString();
             component.Name      = Name;
             component.Type = "Contact Closure";
             component.LastUpdate = DateTime.Now;
 
-            FinchScalarSignal measurement = new FinchScalarSignal();            
-            measurement.Name        = "ID"; 
+            FinchScalarSignal measurement = new FinchScalarSignal();
+            measurement.Name        = "ID";
             measurement.Type        = FinchDataType.String;
             measurement.Units       = "";
             measurement.Value       = LabJackID.ToString();
             component.Signals.Add(measurement);
 
-            FinchScalarSignal port = new FinchScalarSignal();            
+            FinchScalarSignal port = new FinchScalarSignal();
             port.Name           = "Port";
             port.Type           = FinchDataType.String;
             port.Units          = "";

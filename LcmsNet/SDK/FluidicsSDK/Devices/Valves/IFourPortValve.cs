@@ -11,7 +11,7 @@ namespace FluidicsSDK.Devices
     /// </summary>
     public interface IFourPortValve : IFluidicsDevice
     {        
-        event           EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;        
+        event           EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
         int             GetPosition();
         void SetPosition(TwoPositionState s);
     }

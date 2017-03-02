@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/22/2013
- * 
- * Last Modified 10/17/2013 By Christopher Walters 
+ *
+ * Last Modified 10/17/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -54,12 +54,12 @@ namespace FluidicsSDK
         /// <summary>
         /// base class constructor
         /// </summary>
-        public FluidicsPump()                
+        public FluidicsPump()
         {
             base.AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
             Point portLoc = GeneratePortLoc();
             base.AddPort(portLoc);
-            m_states = SetupStates();                        
+            m_states = SetupStates();
             MaxVariance = MAX_PIXEL_VARIANCE;
             Source = true;
             Sink = false;
@@ -68,7 +68,7 @@ namespace FluidicsSDK
         }
 
         /// <summary>
-        /// class constructor 
+        /// class constructor
         /// </summary>
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public FluidicsPump(Point loc)
@@ -85,7 +85,7 @@ namespace FluidicsSDK
         protected Point GeneratePortLoc()
         {           
             //create port1 to left side of pump
-            return new Point(Loc.X + (int)(Size.Width/2), Loc.Y - MIN_DIST_FROM_EDGE);          
+            return new Point(Loc.X + (int)(Size.Width/2), Loc.Y - MIN_DIST_FROM_EDGE);
         }
 
         /// <summary>
@@ -94,14 +94,14 @@ namespace FluidicsSDK
         /// <returns></returns>
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
-            Dictionary<TwoPositionState, List<Tuple<int, int>>> states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();               
+            Dictionary<TwoPositionState, List<Tuple<int, int>>> states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
             // pump only has no states, it is a source
             return states;
         }
  
         protected override void SetDevice(IDevice device)
         {
-            m_pump = device as IFluidicsPump;           
+            m_pump = device as IFluidicsPump;
             // m_pump.FlowChanged += new EventHandler<PumpEventArgs<double>>(pump_flow_change_event_handler);
         }
 
@@ -131,7 +131,7 @@ namespace FluidicsSDK
             stateString.Append("Flow Rate: ");
             stateString.Append(m_pump.GetFlowRate());
             stateString.Append(Environment.NewLine);
-            stateString.Append("Pressure: ");            
+            stateString.Append("Pressure: ");
             stateString.Append(m_pump.GetPressure());
             stateString.Append(Environment.NewLine);
             stateString.Append("%B: ");

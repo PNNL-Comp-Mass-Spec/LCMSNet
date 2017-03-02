@@ -77,7 +77,7 @@ namespace LcmsNet.Devices.Valves
         {
             get;set;
         }
-        #endregion        
+        #endregion
 
         private void mbutton_SetPosition_Click(object sender, EventArgs e)
         {

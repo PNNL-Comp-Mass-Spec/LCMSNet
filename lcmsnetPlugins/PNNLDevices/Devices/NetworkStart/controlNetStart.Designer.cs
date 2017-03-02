@@ -1,33 +1,33 @@
 ﻿namespace LcmsNet.Devices.NetworkStart
 {
-	partial class controlNetStart
-	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class controlNetStart
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
+        #region Component Designer generated code
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.mcomboBox_methods = new System.Windows.Forms.ComboBox();
             this.mlabel_methods = new System.Windows.Forms.Label();
             this.mbutton_getMethods = new System.Windows.Forms.Button();
@@ -240,9 +240,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.mnum_port)).EndInit();
             this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
         private System.Windows.Forms.ComboBox mcomboBox_methods;
         private System.Windows.Forms.Label mlabel_methods;
@@ -259,5 +259,5 @@
         private System.Windows.Forms.Label mlabel_status;
         private System.Windows.Forms.Label mlabel_sampleName;
         private System.Windows.Forms.TextBox mtextbox_sampleName;
-	}
+    }
 }

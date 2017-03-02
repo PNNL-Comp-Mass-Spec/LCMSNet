@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 10/22/2013
- * 
- * Last Modified 11/08/2013 By Christopher Walters 
+ *
+ * Last Modified 11/08/2013 By Christopher Walters
  ********************************************************************************************************/
 
 using System;
@@ -45,9 +45,9 @@ namespace PDFGenerator
             doc.FontSize = 11;
             doc.Font = "Courier New";
             doc.Title = title;
-            //enter document into model                      
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Dataset - " + sample.DmsData.DatasetName);       
-            doc.AddParagraph(CreateDatasetParagraph(sample));            
+            //enter document into model
+            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Dataset - " + sample.DmsData.DatasetName);
+            doc.AddParagraph(CreateDatasetParagraph(sample));
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Configuration");
             int[] FieldWidths = {-20, -20};
             string[] cartData = { "Cart-Name:", sample.DmsData.CartName };
@@ -72,7 +72,7 @@ namespace PDFGenerator
                 }
             }
             StringBuilder mobilePhases = new StringBuilder();
-            int[] fieldWidths = { -5, -15, -13, -15, -8, -15 }; 
+            int[] fieldWidths = { -5, -15, -13, -15, -8, -15 };
             foreach(LcmsNetDataClasses.Devices.Pumps.IPump pump in pumps)
             {                           
                 if (pump.MobilePhases.Count > 0)
@@ -95,7 +95,7 @@ namespace PDFGenerator
             //TODO: Get mass spectrometer name from lcmsnet
             doc.AddParagraph(string.Format("Mass Spectrometer: {0}", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME)));
             doc.AddPageBreak();
-            //fluidics design section          
+            //fluidics design section
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Method");
             doc.AddParagraph("Method Name: " + sample.LCMethod.Name);
             doc.AddParagraph(""); // adds an empty line
@@ -119,7 +119,7 @@ namespace PDFGenerator
             //doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Errors");
             //doc.AddParagraph("Error Info");
 
-            //write the document to file 
+            //write the document to file
             doc.WriteDocument(documentPath);
             rfluidicsImage.Dispose();
         }
@@ -150,7 +150,7 @@ namespace PDFGenerator
         /// <returns>a rescaled bitmap</returns>
         private static Bitmap ScaleImage(Bitmap fluidicsImage)
         {
-            // create bitmap image of fluidics design, rescale it, and add it to the document model                               
+            // create bitmap image of fluidics design, rescale it, and add it to the document model
             // image no wider than an 8" page with 0.5" margins---aka 7" and no taller than 5"
             // while maintaining aspect ratio
             float maxWidth = (7 * fluidicsImage.HorizontalResolution);
@@ -185,13 +185,13 @@ namespace PDFGenerator
                 string lcEventName = lcEvent.Name;
                 int eventNameLength = lcEvent.Name.Length;
 
-                // substrings are 20 characters long for columnation, each index is a column 
+                // substrings are 20 characters long for columnation, each index is a column
                 string[] LCEventRow = {deviceName.Substring(0, (deviceNameLength < 20 ? deviceNameLength: 20)),     // device name
                                        lcEventName.Substring(0, (eventNameLength < 20 ? eventNameLength : 20)),     // LC-event name
                                        lcEvent.Duration.ToString(),                                                 // duration
                                        lcEvent.HadError ? "Yes":"No"};                                              // Device error column
 
-                lcMethodString += FormatString(fieldWidths, LCEventRow);                
+                lcMethodString += FormatString(fieldWidths, LCEventRow);
                 // We also want to store the methods and their parameters.
                 if (lcEvent.Parameters != null && lcEvent.ParameterNames != null && lcEvent.ParameterNames.Length > 0)
                 {
@@ -302,12 +302,12 @@ namespace PDFGenerator
             foreach (int fieldWidth in fieldWidths)
             {
                 // create format string of {<count>, <fieldwidth>}, ex {0, 20} for the first element in data and a field width of 20 characters
-                stringFormatter.Append("{" + count.ToString() + "," + fieldWidth.ToString() + "}");                                          
+                stringFormatter.Append("{" + count.ToString() + "," + fieldWidth.ToString() + "}");
                 count++;
             }           
             stringFormatter.Append(Environment.NewLine);
             // use stringFormatter to place all elements of data into proper format
-            formattedString += string.Format(stringFormatter.ToString(), data);           
+            formattedString += string.Format(stringFormatter.ToString(), data);
             return formattedString;
         }
 

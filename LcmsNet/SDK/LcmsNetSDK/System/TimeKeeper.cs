@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
  * Created 7/1/2014
- * 
- * Last Modified 7/25/2014 By Christopher Walters 
+ *
+ * Last Modified 7/25/2014 By Christopher Walters
  ********************************************************************************************************/
 
 using System;
@@ -104,10 +104,10 @@ namespace LcmsNetSDK
             endTransTime = new TimeZoneInfo.TransitionTime();
 
             var adjustments = m_current_timezone.GetAdjustmentRules();
-            // Iterate adjustment rules for time zone 
+            // Iterate adjustment rules for time zone
             foreach (var adjustment in adjustments)
             {
-                // Determine if this adjustment rule covers year desired 
+                // Determine if this adjustment rule covers year desired
                 if (adjustment.DateStart.Year <= year && adjustment.DateEnd.Year >= year)
                 {
                     startTransTime = adjustment.DaylightTransitionStart;
@@ -117,7 +117,7 @@ namespace LcmsNetSDK
         }
 
         /// <summary>
-        /// Determine if a method starts after a DST transition(on the day of that DST transition). Used in 
+        /// Determine if a method starts after a DST transition(on the day of that DST transition). Used in
         /// optimization routine.
         /// </summary>
         /// <param name="method"></param>
@@ -169,7 +169,7 @@ namespace LcmsNetSDK
             // What day of the week does the month start on? 
             var firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
             
-            // Determine how much start date has to be adjusted 
+            // Determine how much start date has to be adjusted
             int transitionDay;
             var changeDayOfWeek = (int) transition.DayOfWeek;
 
@@ -178,7 +178,7 @@ namespace LcmsNetSDK
             else
                 transitionDay = startOfWeek + (7 - firstDayOfWeek + changeDayOfWeek);
 
-            // Adjust for months with no fifth week 
+            // Adjust for months with no fifth week
             if (transitionDay > localCalendar.GetDaysInMonth(year, transition.Month))
                 transitionDay -= 7;
 

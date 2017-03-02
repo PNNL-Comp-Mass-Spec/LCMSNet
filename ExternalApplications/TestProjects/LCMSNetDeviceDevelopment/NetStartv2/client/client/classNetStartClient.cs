@@ -43,7 +43,7 @@ namespace LCMSNet.Devices
 
 
         
-        #region Properties 
+        #region Properties
         /// <summary>
         /// Gets or sets the send timeout for the socket.
         /// </summary>
@@ -80,7 +80,7 @@ namespace LCMSNet.Devices
             }
         }
         /// <summary>
-        /// Disconnects from instrument if connected. 
+        /// Disconnects from instrument if connected.
         /// </summary>
         /// <returns>False if not connected previously or disconnect failed.</returns>
         public bool Disconnect()
@@ -132,7 +132,7 @@ namespace LCMSNet.Devices
         {
             //Console.WriteLine(descriptor);
 
-            string message = PackMessage(type, sequence, descriptor, arglist);    
+            string message = PackMessage(type, sequence, descriptor, arglist);
 
             streamWriter.WriteLine(message);
             Console.WriteLine("Send: " + message);
@@ -234,7 +234,7 @@ namespace LCMSNet.Devices
                             /// Tell the system to prepare for acquisition
                             /// 
                             SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
-                            outputString = streamReader.ReadLine();     // Read off auto-response 
+                            outputString = streamReader.ReadLine();     // Read off auto-response
                             
                             /// 
                             /// Then ask if it is prepared...this should be in some kind of loop

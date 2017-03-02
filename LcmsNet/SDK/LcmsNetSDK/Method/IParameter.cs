@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace LcmsNet.Method
 {
     /// <summary>
-    /// Abstract Control class that allows the user to define how the value is grabbed 
+    /// Abstract Control class that allows the user to define how the value is grabbed
     /// from the user interface for setting a parameter value in the method editor.
     /// </summary>
     public interface ILCEventParameter

@@ -1,12 +1,12 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
 // Last modified 08/8/2014 by Christopher Walters
-//						12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
-//						12/02/2009 (DAC) - Added retrieving tray list and firing event to pass list to other objects
+//                      12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
+//                      12/02/2009 (DAC) - Added retrieving tray list and firing event to pass list to other objects
 //*********************************************************************************************************
 
 using System;
@@ -28,7 +28,7 @@ namespace LcmsNet.Devices.Pal
     /// <summary>
     /// Interface to the LEAP PAL robotic sampler.
     /// </summary>
-	[Serializable]	
+    [Serializable]
     
     [classDeviceControlAttribute(typeof(controlPal),
                                  "PAL Autosampler",
@@ -111,7 +111,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Indicates that the device is not busy and can accept commands.
         /// </summary>
-        public event DelegateDeviceFree Free;    
+        public event DelegateDeviceFree Free;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
@@ -129,7 +129,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public event EventHandler<classAutoSampleEventArgs> MethodNames;
         /// <summary>
-        /// Fired to the method editor handler with a List of method names 
+        /// Fired to the method editor handler with a List of method names
         /// </summary>
         public event DelegateDeviceHasData Methods;
         #endregion
@@ -165,7 +165,7 @@ namespace LcmsNet.Devices.Pal
             }
             set
             {
-                mbool_emulation = value;              
+                mbool_emulation = value;
             }
         }
         /// <summary>
@@ -178,10 +178,10 @@ namespace LcmsNet.Devices.Pal
                 return menum_status;
             }
             set
-			{
-				if (StatusUpdate != null)
+            {
+                if (StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
-				menum_status = value;
+                menum_status = value;
             }
         }
         /// <summary>
@@ -227,18 +227,18 @@ namespace LcmsNet.Devices.Pal
             set
             {
                 mstring_methodsFolder = value;
-				if (mbool_emulation == false)
-				{
-					if (value == null)
-					{
-						throw new NullReferenceException("The methods folder for the PAL provided by the user was null.");
-					}
-					if (!System.IO.Directory.Exists(value))
-					{
-						throw new System.IO.DirectoryNotFoundException("The directory does not exist: " + value + "");
-					}
-					mobj_PALDrvr.SelectMethodFolder(value); 
-				}
+                if (mbool_emulation == false)
+                {
+                    if (value == null)
+                    {
+                        throw new NullReferenceException("The methods folder for the PAL provided by the user was null.");
+                    }
+                    if (!System.IO.Directory.Exists(value))
+                    {
+                        throw new System.IO.DirectoryNotFoundException("The directory does not exist: " + value + "");
+                    }
+                    mobj_PALDrvr.SelectMethodFolder(value);
+                }
             }
         }
         /// <summary>
@@ -389,7 +389,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         private void HandleError(string message)
         {
-            HandleError(message, null);            
+            HandleError(message, null);
         }
 
         /// <summary>
@@ -409,22 +409,22 @@ namespace LcmsNet.Devices.Pal
         {
             if (Error != null)
             {
-					Error(this, new classDeviceErrorEventArgs(message, ex, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, message));							
+                    Error(this, new classDeviceErrorEventArgs(message, ex, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, message));
             }            
         }
         /// <summary>
-        /// Initializes the PAL. 
-        /// This is done by starting paldriv.exe, resetting the PAL, 
+        /// Initializes the PAL.
+        /// This is done by starting paldriv.exe, resetting the PAL,
         /// and loading the PAL's configuration.
         /// </summary>
         public bool Initialize(ref string errorMessage)
         {
             if (mbool_emulation == true)
-			{
+            {
                 mbool_accessible = true;
                 ListMethods();
                 ListTrays();
-                return true;                
+                return true;
             }
 
             if (mbool_accessible == false)
@@ -457,8 +457,8 @@ namespace LcmsNet.Devices.Pal
                 }
 
                 if (error > 0)
-				{
-					string tempStatus = "";
+                {
+                    string tempStatus = "";
                     mobj_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
@@ -466,7 +466,7 @@ namespace LcmsNet.Devices.Pal
                     return false;
                 }
                 
-                int status = WaitUntilReady(CONST_WAITTIMEOUT);                                
+                int status = WaitUntilReady(CONST_WAITTIMEOUT);
                 if (System.IO.File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal"))
                 {
                     System.IO.File.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal");
@@ -475,9 +475,9 @@ namespace LcmsNet.Devices.Pal
                 writer.Close();
 
                 //Reset the pal
-                error = mobj_PALDrvr.ResetPAL();                
+                error = mobj_PALDrvr.ResetPAL();
                 if (error > 0)
-				{
+                {
                     string tempStatus = "";
                     mobj_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
@@ -492,7 +492,7 @@ namespace LcmsNet.Devices.Pal
                 error = mobj_PALDrvr.LoadConfiguration();
                                 
                 if (error > 0)
-				{
+                {
                     string tempStatus = "";
                     mobj_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
@@ -510,7 +510,7 @@ namespace LcmsNet.Devices.Pal
                 {
                     System.Threading.Thread.Sleep(StatusPollDelay);
                     System.Windows.Forms.Application.DoEvents();
-                    end = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));                    
+                    end = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                 }
 
                 string methodsFolder = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PALMETHODSFOLDER);
@@ -527,12 +527,12 @@ namespace LcmsNet.Devices.Pal
                 MethodsFolder = methodsFolder;
                 WaitUntilReady(CONST_WAITTIMEOUT);
                 //If we made it this far, success! We can now access the PAL.
-                mbool_accessible = true;                
+                mbool_accessible = true;
                 //list methods
                 ListMethods();
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
                 // list trays
-				ListTrays();		
+                ListTrays();
             }
             OnFree();
             return true;
@@ -635,7 +635,7 @@ namespace LcmsNet.Devices.Pal
         }
 
         /// <summary>
-        /// Lists the available trays known to the PAL. 
+        /// Lists the available trays known to the PAL.
         /// </summary>
         /// <returns>A string containing the methods</returns>
         public List<string> ListTrays()
@@ -660,7 +660,7 @@ namespace LcmsNet.Devices.Pal
             }
             else
             {
-                trays = "emuTray01;emuTray02;emuTray03;emuTray04;emuTray05;emuTray06";               
+                trays = "emuTray01;emuTray02;emuTray03;emuTray04;emuTray05;emuTray06";
             }
 
             /// 
@@ -703,7 +703,7 @@ namespace LcmsNet.Devices.Pal
             int error = mobj_PALDrvr.GetStatus(ref tempString);
             //TODO: Handle error.
             OnFree();
-            return tempString;  
+            return tempString;
         }
 
         /// <summary>
@@ -722,9 +722,9 @@ namespace LcmsNet.Devices.Pal
             OnFree();
         }               
         /// 
-        /// Loads the method 
+        /// Loads the method
         /// 
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]       
+        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool LoadMethod(double timeout, classSampleData sample, string methodName)
         {
             if(mbool_emulation == true)
@@ -733,9 +733,9 @@ namespace LcmsNet.Devices.Pal
             }
 
             /// 
-            /// We let start method run 
+            /// We let start method run
             /// 
-            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now; 
+            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
   
             /// 
             /// Load the method...
@@ -746,7 +746,7 @@ namespace LcmsNet.Devices.Pal
                         sample.PAL.Well,
                         string.Format("{0}",sample.Volume));
 
-            StartMethod(timeout);     
+            StartMethod(timeout);
 
             /// 
             /// We see if we ran over or not...if so then return failure, otherwise let it continue.
@@ -819,7 +819,7 @@ namespace LcmsNet.Devices.Pal
                 return false;
             }
 
-            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now; 
+            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
             DateTime end    = start;
 
             int delayTime = StatusPollDelay * 1000;
@@ -830,7 +830,7 @@ namespace LcmsNet.Devices.Pal
                 {
                     this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
                         "PAL: " + status + " " + statusCheckError.ToString(),
-                        this));                         
+                        this));
                 }*/
                 if (status.Contains("ERROR"))
                 {
@@ -842,7 +842,7 @@ namespace LcmsNet.Devices.Pal
                     {
                         HandleError(status);
                     }
-                    return false;                    
+                    return false;
                 }
                 else if (status.Contains("READY"))
                 {
@@ -853,7 +853,7 @@ namespace LcmsNet.Devices.Pal
                     break;
                 }
                 System.Threading.Thread.Sleep(delayTime);
-                end = LcmsNetSDK.TimeKeeper.Instance.Now; 
+                end = LcmsNetSDK.TimeKeeper.Instance.Now;
             }
 
             if (this.StatusUpdate != null)
@@ -867,12 +867,12 @@ namespace LcmsNet.Devices.Pal
         }
 
 
-        [classLCMethodAttribute("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]        
+        [classLCMethodAttribute("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
         public void ThrowError(int timeToThrowup)
         {
             if (Error != null)
             {
-					Error(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
+                    Error(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
             }
         }
         /// <summary>
@@ -944,7 +944,7 @@ namespace LcmsNet.Devices.Pal
             {
                 return;
             }
-            mobj_PALDrvr.StopMethod();            
+            mobj_PALDrvr.StopMethod();
         }
 
         /// <summary>
@@ -1014,12 +1014,12 @@ namespace LcmsNet.Devices.Pal
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Status", "Done Injecting start method", "continue method", "continue method end:" };
-	  }
+      }
 
-	  public List<string> GetErrorNotificationList()
-	  {
+      public List<string> GetErrorNotificationList()
+      {
           return new List<string>() {"AspirationError"};
-	  }
+      }
         #endregion
         
         #region IDevice Data Provider Methods
@@ -1072,40 +1072,40 @@ namespace LcmsNet.Devices.Pal
         /*public FinchComponentData GetData()
         {
             FinchComponentData component = new FinchComponentData();
-            component.Status        = Status.ToString();            
+            component.Status        = Status.ToString();
             component.Name          = Name;
             component.Type          = "Auto-sampler";
             component.LastUpdate = DateTime.Now;
 
-            FinchScalarSignal measurement = new FinchScalarSignal();            
+            FinchScalarSignal measurement = new FinchScalarSignal();
             measurement.Name        = "Last Vial";
             measurement.Type = FinchDataType.String;
             measurement.Units       = "";
             measurement.Value       = Vial.ToString();
             component.Signals.Add(measurement);
 
-            FinchScalarSignal measurementTray = new FinchScalarSignal();            
-            measurementTray.Name        = "Last Tray"; 
+            FinchScalarSignal measurementTray = new FinchScalarSignal();
+            measurementTray.Name        = "Last Tray";
             measurementTray.Type        = FinchDataType.String;
             measurementTray.Units       = "";
             measurementTray.Value       = Tray;
             component.Signals.Add(measurementTray);
 
-            FinchScalarSignal measurementVolume = new FinchScalarSignal();            
-            measurementVolume.Name        = "Last Volume"; 
+            FinchScalarSignal measurementVolume = new FinchScalarSignal();
+            measurementVolume.Name        = "Last Volume";
             measurementVolume.Type        = FinchDataType.Double;
             measurementVolume.Units       = "uL";
             measurementVolume.Value       = Volume.ToString();
             component.Signals.Add(measurementVolume);
 
-            FinchScalarSignal measurementMethod = new FinchScalarSignal();            
-            measurementMethod.Name        = "Last Method"; 
+            FinchScalarSignal measurementMethod = new FinchScalarSignal();
+            measurementMethod.Name        = "Last Method";
             measurementMethod.Type        = FinchDataType.String;
             measurementMethod.Units       = "";
             measurementMethod.Value       = Method;
             component.Signals.Add(measurementMethod);
 
-            FinchScalarSignal measurementPort = new FinchScalarSignal();            
+            FinchScalarSignal measurementPort = new FinchScalarSignal();
             measurementPort.Name        = "Port";
             measurementPort.Type        = FinchDataType.String;
             measurementPort.Units       = "";

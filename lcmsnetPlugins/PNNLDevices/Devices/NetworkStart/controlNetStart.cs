@@ -1,11 +1,11 @@
 ﻿
 //*********************************************************************************************************
-/*/ Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+/*/ Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/25/2009
 //
- *      12-11-2009 - BLL - Added device status and data provider methods for examining the status in a list view 
+ *      12-11-2009 - BLL - Added device status and data provider methods for examining the status in a list view
 // Last modified 12/11/2009
 /*///*********************************************************************************************************
 using System;
@@ -18,40 +18,40 @@ using LcmsNet.Devices.NetworkStart.Socket;
 
 namespace LcmsNet.Devices.NetworkStart
 {
-	public partial class controlNetStart :  controlBaseDeviceControl, IDeviceControl
-	{
-		//*********************************************************************************************************
-		// Control for detector triggered by network start signal (presently just a stub)
-		//**********************************************************************************************************
+    public partial class controlNetStart :  controlBaseDeviceControl, IDeviceControl
+    {
+        //*********************************************************************************************************
+        // Control for detector triggered by network start signal (presently just a stub)
+        //**********************************************************************************************************
 
-		#region Members
-		/// <summary>
-		/// A NesStart object to use
-		/// </summary>
-		private classNetStartSocket mobj_netStart;        
+        #region Members
+        /// <summary>
+        /// A NesStart object to use
+        /// </summary>
+        private classNetStartSocket mobj_netStart;
         private delegate void UpdateStatus(enumDeviceStatus status, string message);
         /// <summary>
         /// Fired when the instrument methods are updated.
         /// </summary>
         public event DelegateNameListReceived InstrumentMethodListReceived;
-		#endregion
+        #endregion
 
 
-		#region "Constructors"
-		public controlNetStart()
-		{
-			InitializeComponent();
+        #region "Constructors"
+        public controlNetStart()
+        {
+            InitializeComponent();
         }
         private void RegisterDevice(IDevice device)
         {
-			mobj_netStart              = device as classNetStartSocket; 
+            mobj_netStart              = device as classNetStartSocket;
             mobj_netStart.MethodNames += new DelegateDeviceHasData(mobj_netStart_MethodNames);
             mobj_netStart.Error       += new EventHandler<classDeviceErrorEventArgs>(mobj_netStart_Error);
             UpdateUserInterface();
             
             SetBaseDevice(mobj_netStart);
-		}
-		#endregion
+        }
+        #endregion
 
         #region "Properties"
         /// <summary>
@@ -63,7 +63,7 @@ namespace LcmsNet.Devices.NetworkStart
             {
                 return mobj_netStart;
             }
-            set 
+            set
             {
                 RegisterDevice(value);
             }
@@ -188,5 +188,5 @@ namespace LcmsNet.Devices.NetworkStart
             mobj_netStart.Port = Convert.ToInt32(mnum_port.Value);
             OnSaveRequired();
         }
-    }	
+    }   
 }

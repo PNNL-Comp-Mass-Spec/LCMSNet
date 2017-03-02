@@ -21,7 +21,7 @@ namespace LCMSNetPlugins
     /// <summary>
     /// Plugin template for the device being controlled.
     /// </summary>
-    // TODO: Change Control and Glyph types to the proper type, and set the proper 
+    // TODO: Change Control and Glyph types to the proper type, and set the proper
     // strings, for the device being controlled, in the following attribute code
     [classDeviceControlAttribute(typeof(PluginTestObjectControl),
                                  typeof(PluginTestObjectGlyph),
@@ -66,14 +66,14 @@ namespace LCMSNetPlugins
             Name = "Test Object";
             
             // Create and intialize object being controlled here
-            mTestObject = new PluginTestObject();         
+            mTestObject = new PluginTestObject();
 
         } // End constructor
 
 
         #region Events
 
-        // This is all boilerplate from Brain M., Don't really know anything about how 
+        // This is all boilerplate from Brain M., Don't really know anything about how
         // it works or how to use it
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace LCMSNetPlugins
         public event EventHandler<classDeviceErrorEventArgs> Error;
 
         /// <summary>
-        /// Used to notify others that properties have changed.  
+        /// Used to notify others that properties have changed.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
 
@@ -159,7 +159,7 @@ namespace LCMSNetPlugins
         }
 
         /// <summary>
-        /// Gets what type of device it is. 
+        /// Gets what type of device it is.
         /// </summary>
         public enumDeviceType DeviceType
         {
@@ -221,7 +221,7 @@ namespace LCMSNetPlugins
             try
             {
                 // TODO: Add any custom shutdown code that extends beyond
-                // the objects Close() method 
+                // the objects Close() method
                 if ( mTestObject.Opened )
                 {
                     if (mTestObject.Opened) mTestObject.Close(); // Don't close if it's not opened
@@ -283,7 +283,7 @@ namespace LCMSNetPlugins
         
         public List<string> GetStatusNotificationList()
         {
-            //TODO: ??? Add any custom code 
+            //TODO: ??? Add any custom code
             return new List<string>() { "Empty String1", "Empty String 2" };
         }
         
@@ -306,7 +306,7 @@ namespace LCMSNetPlugins
             {
                 return mTestObject.Opened;
             }
-        }// End IsOpen property      
+        }// End IsOpen property
 
         /// <summary>
         ///Integer property for testing the data processing of the plugin
@@ -409,7 +409,7 @@ namespace LCMSNetPlugins
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(0, PluginHelperFunctions.FormatExceptionText(mName, ex));
-                savedException = ex;               
+                savedException = ex;
 
             } // End catch block
 
@@ -418,7 +418,7 @@ namespace LCMSNetPlugins
         /// <summary>
         /// Test method for the plugin test object:
         /// Function used to validate proper plugin data processing, by returning to
-        /// the calling LCMSNet method the sum of the current value of the IntTestProperty and 
+        /// the calling LCMSNet method the sum of the current value of the IntTestProperty and
         /// the argument that was passed to the method.
         /// </summary>        
         [classLCMethodAttribute("FunctionTest", enumMethodOperationTime.Parameter, "", -1, false)]

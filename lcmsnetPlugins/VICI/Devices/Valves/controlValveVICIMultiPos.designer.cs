@@ -23,7 +23,7 @@
         #region Component Designer generated code
 
         /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -72,8 +72,8 @@
             // 
             // mpropertyGrid_Serial
             // 
-            this.mpropertyGrid_Serial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mpropertyGrid_Serial.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mpropertyGrid_Serial.Location = new System.Drawing.Point(-2, 0);
             this.mpropertyGrid_Serial.Name = "mpropertyGrid_Serial";
@@ -143,7 +143,7 @@
             // 
             // mgroupBox_setPos
             // 
-            this.mgroupBox_setPos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mgroupBox_setPos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_setPos.Controls.Add(this.mbutton_SetPosition);
             this.mgroupBox_setPos.Controls.Add(this.mcomboBox_Position);
@@ -167,7 +167,7 @@
             // 
             // mcomboBox_Position
             // 
-            this.mcomboBox_Position.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mcomboBox_Position.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mcomboBox_Position.FormattingEnabled = true;
             this.mcomboBox_Position.Location = new System.Drawing.Point(7, 19);
@@ -177,8 +177,8 @@
             // 
             // mgroupbox_Version
             // 
-            this.mgroupbox_Version.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mgroupbox_Version.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupbox_Version.Controls.Add(this.mtextbox_VersionInfo);
             this.mgroupbox_Version.Controls.Add(this.mbutton_refreshVersion);
@@ -191,7 +191,7 @@
             // 
             // mtextbox_VersionInfo
             // 
-            this.mtextbox_VersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mtextbox_VersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextbox_VersionInfo.Location = new System.Drawing.Point(6, 19);
             this.mtextbox_VersionInfo.Name = "mtextbox_VersionInfo";
@@ -271,7 +271,7 @@
             // 
             // mgroupBox_Positions
             // 
-            this.mgroupBox_Positions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mgroupBox_Positions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_Positions.Controls.Add(this.mbutton_GetNumPos);
             this.mgroupBox_Positions.Controls.Add(this.mbutton_SetNumPos);
@@ -321,7 +321,7 @@
             // 
             // mgroupBox_valveID
             // 
-            this.mgroupBox_valveID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mgroupBox_valveID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_valveID.Controls.Add(this.mlabel_SetID);
             this.mgroupBox_valveID.Controls.Add(this.mbutton_ClearID);

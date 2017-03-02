@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 12/31/2013
- * 
- * Last Modified 12/31/2013 By Christopher Walters 
+ *
+ * Last Modified 12/31/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -76,7 +76,7 @@ namespace DemoPluginLibrary
             return Position;
         }
 
-        [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]      
+        [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]
         public void SetPosition(TwoPositionState position)
         {            
             if ((int)position < 0 || (int)position > 2)
@@ -89,7 +89,7 @@ namespace DemoPluginLibrary
                 PositionChanged(this, new ValvePositionEventArgs<TwoPositionState>(position));
             }
         }
-        #endregion 
+        #endregion
 
         #region Events
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
@@ -157,6 +157,6 @@ namespace DemoPluginLibrary
 
         public int Position { get; set; }
 
-        #endregion        
+        #endregion
     }
 }

@@ -1,11 +1,11 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/21/2009
 //
 // Last modified 02/21/2009
-//						 - 02/23/2009 (DAC) - Corrected bug in interface syntax
+//                       - 02/23/2009 (DAC) - Corrected bug in interface syntax
 //
 //*********************************************************************************************************
 

@@ -87,7 +87,7 @@ namespace LCMSNetPlugins
                 HandleError(ex);
             }
 
-        } // End mMethod1Button_Click() method      
+        } // End mMethod1Button_Click() method
 
         #endregion UI Handlers
 

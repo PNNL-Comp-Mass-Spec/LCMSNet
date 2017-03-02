@@ -153,7 +153,7 @@ namespace Waters.Devices.Pumps
 
         private void mbutton_getListOfMethods_Click(object sender, System.EventArgs e)
         {
-            List<string> methods = mobj_pump.GetMethodList();           
+            List<string> methods = mobj_pump.GetMethodList();
         }
 
         private void mbutton_stopMethod_Click(object sender, EventArgs e)

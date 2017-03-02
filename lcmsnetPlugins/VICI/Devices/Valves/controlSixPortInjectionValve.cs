@@ -21,15 +21,15 @@ namespace LcmsNet.Devices.Valves
         private void btnSetInjectionVolume_Click(object sender, EventArgs e)
         {
             ISixPortInjectionValve injector = Device as ISixPortInjectionValve;
-            double volume = Convert.ToDouble(txtInjectionVolume.Text);          
-            injector.InjectionVolume = volume;           
+            double volume = Convert.ToDouble(txtInjectionVolume.Text);
+            injector.InjectionVolume = volume;
         }
 
         public override void RegisterDevice(IDevice device)
         {
             base.RegisterDevice(device);
 
-            ISixPortInjectionValve injector = Device as ISixPortInjectionValve;            
+            ISixPortInjectionValve injector = Device as ISixPortInjectionValve;
             txtInjectionVolume.Text = injector.InjectionVolume.ToString();
         }
     }

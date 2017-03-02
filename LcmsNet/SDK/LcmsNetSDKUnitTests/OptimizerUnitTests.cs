@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
  * Created 5/30/2014
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace LcmsnetUnitTest
         [SetUp]
         public void SetupOptmizerAndMethodsForOptimizerTests()
         {
-            optimizer = new classLCMethodOptimizer();   
+            optimizer = new classLCMethodOptimizer();
 
             methods = new List<classLCMethod>();
             methods.Add(new classLCMethod());
@@ -89,7 +89,7 @@ namespace LcmsnetUnitTest
         {                      
             optimizer.AlignMethods(methods);
             double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
-            CheckDifferenceInStartTimes(expectedDifference);           
+            CheckDifferenceInStartTimes(expectedDifference);
         }
 
         /// <summary>
@@ -119,9 +119,9 @@ namespace LcmsnetUnitTest
         }
 
         /// <summary>
-        /// Test the optimizer to ensure that it is properly aligning methods when they are on the same column with overlap disallowed, and both 
+        /// Test the optimizer to ensure that it is properly aligning methods when they are on the same column with overlap disallowed, and both
         /// methods are using the same device.
-        /// This test should make the second method run after the first completes(with an additional SAME_REQUIRED_LC_METHOD_OFFSET wait time)        
+        /// This test should make the second method run after the first completes(with an additional SAME_REQUIRED_LC_METHOD_OFFSET wait time)
         /// </summary>
         [Test]
         public void TwoMethodsOnSameColumnWithOutOverlapSameDevice()
@@ -143,7 +143,7 @@ namespace LcmsnetUnitTest
         {
             methods[0].AllowPreOverlap = false;
             methods[0].AllowPostOverlap = false;
-            //Changing method[1], Event[0] to use a different device.         
+            //Changing method[1], Event[0] to use a different device.
             DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
@@ -183,7 +183,7 @@ namespace LcmsnetUnitTest
         [Test]
         public void TwoMethodsOnDifferentColumnsWithOverlapDifferentDevice()
         {
-            //Changing method[1], Event[0] to use a different device.         
+            //Changing method[1], Event[0] to use a different device.
             DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
@@ -228,7 +228,7 @@ namespace LcmsnetUnitTest
             
             methods[0].AllowPostOverlap = false;
             methods[0].AllowPreOverlap = false;
-            //Changing method[1], Event[0] to use a different device.  
+            //Changing method[1], Event[0] to use a different device.
             DemoValve valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
@@ -282,7 +282,7 @@ namespace LcmsnetUnitTest
         /// <param name="expectedDifference"></param>
         private void CheckDifferenceInStartTimes(double expectedDifference)
         {
-            double difference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;            
+            double difference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;
             Assert.AreEqual(expectedDifference, difference);
         }
 

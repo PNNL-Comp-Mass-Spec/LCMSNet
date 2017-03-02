@@ -103,7 +103,7 @@ namespace DemoPluginLibrary
         public override void Select(Point mouse_location)
         {
             if (Contains(mouse_location))
-                Selected = true;            
+                Selected = true;
                 if (DeviceChanged != null)
                 {
                     DeviceChanged(this, new FluidicsDevChangeEventArgs());

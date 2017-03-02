@@ -1,11 +1,11 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/17/2009
 //
 // Last modified 02/17/2009
-//						- 02/20/2009 (DAC) - Added ICache interface
+//                      - 02/20/2009 (DAC) - Added ICache interface
 //*********************************************************************************************************
 
 using System;
@@ -22,7 +22,7 @@ namespace LcmsNetDataClasses
     {
         //*********************************************************************************************************
         // Base class for LCMS data storage classes. Contains methods and properties common
-        //		to all data storage classes
+        //      to all data storage classes
         //**********************************************************************************************************
 
         #region "Constants"

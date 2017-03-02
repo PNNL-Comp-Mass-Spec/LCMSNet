@@ -14,7 +14,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Pump to purge.
         /// </summary>
-        private classPumpAgilent mobj_pump; 
+        private classPumpAgilent mobj_pump;
 
         /// <summary>
         /// Constructor.

@@ -281,7 +281,7 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseConnectionStringException Ex)
             {
                 // The SQLite connection string wasn't found
-                var errMsg = Ex.Message + " while getting LC cart listing.\r\n" + 
+                var errMsg = Ex.Message + " while getting LC cart listing.\r\n" +
                     "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
@@ -289,8 +289,8 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseDataException Ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                var errMsg = "Exception getting LC cart list from DMS: " + Ex.InnerException.Message + "\r\n" + 
-                    "As a workaround, you may manually type the cart name when needed.\r\n" + 
+                var errMsg = "Exception getting LC cart list from DMS: " + Ex.InnerException.Message + "\r\n" +
+                    "As a workaround, you may manually type the cart name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
@@ -323,7 +323,7 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseConnectionStringException Ex)
             {
                 // The SQLite connection string wasn't found
-                var errMsg = Ex.Message + " while getting LC cart config name listing.\r\n" + 
+                var errMsg = Ex.Message + " while getting LC cart config name listing.\r\n" +
                     "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
@@ -331,8 +331,8 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseDataException Ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                var errMsg = "Exception getting LC cart config name list from DMS: " + Ex.InnerException.Message + "\r\n" + 
-                    "As a workaround, you may manually type the cart config name when needed.\r\n" + 
+                var errMsg = "Exception getting LC cart config name list from DMS: " + Ex.InnerException.Message + "\r\n" +
+                    "As a workaround, you may manually type the cart config name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;

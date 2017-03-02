@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -49,7 +49,7 @@ namespace LcmsNet.Devices.Pumps
         /// </summary>
         public static event EventHandler NewMethodAvailable;
         formAgilentPumpPurge mform_purges;
-		#endregion
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -94,15 +94,15 @@ namespace LcmsNet.Devices.Pumps
                 }
             }
 
-            // Reads the pump method directory.            
-			try
-			{
-				ReadMethodDirectory();
-			}
-			catch
-			{
-				//TODO: Update errors!
-			}
+            // Reads the pump method directory.
+            try
+            {
+                ReadMethodDirectory();
+            }
+            catch
+            {
+                //TODO: Update errors!
+            }
 
             InitializePlots();
         }
@@ -138,11 +138,11 @@ namespace LcmsNet.Devices.Pumps
         #region Pump Event Handlers and methods
         void controlPumpAgilent_NewMethodAvailable(object sender, EventArgs e)
         {
-			if (sender != null && sender != this)
-			{
-				//TODO: Error handling
-				ReadMethodDirectory();
-			}
+            if (sender != null && sender != this)
+            {
+                //TODO: Error handling
+                ReadMethodDirectory();
+            }
         }
         /// <summary>
         /// Handles when a pump method is updated.
@@ -180,21 +180,21 @@ namespace LcmsNet.Devices.Pumps
         void ReadMethodDirectory()
         {
             /// 
-            /// The reason we dont just add stuff straight into the user interface here, is to maintain the 
-            /// design pattern that things propogate events to us, since we are not in charge of managing the 
+            /// The reason we dont just add stuff straight into the user interface here, is to maintain the
+            /// design pattern that things propogate events to us, since we are not in charge of managing the
             /// data.  We will catch an event from adding a method that one was added...and thus update
             /// the user interface intrinsically.
             /// 
             string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ExecutablePath), CONST_PUMP_METHOD_PATH);
             if (!System.IO.Directory.Exists(path))
             {
-				throw new System.IO.DirectoryNotFoundException("The directory " + path + " does not exist.");				
+                throw new System.IO.DirectoryNotFoundException("The directory " + path + " does not exist.");
             }
 
             string[] filenames = System.IO.Directory.GetFiles(path, "*.txt");
             
             /// 
-            /// Clear any existing pump methods 
+            /// Clear any existing pump methods
             /// 
             if (filenames.Length > 0)
                 mobj_pump.ClearMethods();
@@ -218,7 +218,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 return mobj_pump;
             }
-            set 
+            set
             {
                 RegisterDevice(value);
             }
@@ -231,15 +231,15 @@ namespace LcmsNet.Devices.Pumps
         {
           get
           {
-	          return mobj_pump.Emulation;
+              return mobj_pump.Emulation;
           }
           set
           {
-	          mobj_pump.Emulation = value;
+              mobj_pump.Emulation = value;
           }
         }
 
-        #endregion       
+        #endregion
 
         #region Methods
         ///// <summary>
@@ -373,21 +373,21 @@ namespace LcmsNet.Devices.Pumps
         }
         private void mbutton_loadMethods_Click(object sender, EventArgs e)
         {
-			try
-			{
-				ReadMethodDirectory();
-			}
-			catch(System.IO.DirectoryNotFoundException ex)
-			{
-				classApplicationLogger.LogError(0, ex.Message, ex);				
-			}
+            try
+            {
+                ReadMethodDirectory();
+            }
+            catch(System.IO.DirectoryNotFoundException ex)
+            {
+                classApplicationLogger.LogError(0, ex.Message, ex);
+            }
         }
         #endregion
 
         Random r = new Random();
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //#if DEBUG 
+            //#if DEBUG
             if (Emulation == true)
             {
                 timer1.Interval = mobj_pump.TotalMonitoringSecondElapsed * 1000;

@@ -6,12 +6,12 @@ using LcmsNetDataClasses.Devices;
 
 namespace FluidicsPack
 {
-    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]	
+    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [classDeviceControlAttribute(typeof(FluidicsColumnControl),
                                  typeof(FluidicsColumnGlyph),
                                  "Column",
                                  "Fluidics Components")
-    ]   
+    ]
     public class FluidicsColumn : FluidicsComponentBase
     {
         public FluidicsColumn()

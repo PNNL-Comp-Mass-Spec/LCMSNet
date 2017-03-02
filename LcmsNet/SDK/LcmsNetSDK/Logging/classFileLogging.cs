@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/30/2009
@@ -161,9 +161,9 @@ namespace LcmsNetDataClasses.Logging
                     FileInfo logFile;
 
                     // 
-                    // We always create a new file every time we run the program. 
+                    // We always create a new file every time we run the program.
                     // Here we check to see that the file has been created before
-                    // because our file names will be Date_TimeOfDay which 
+                    // because our file names will be Date_TimeOfDay which
                     // will change.
                     // 
                     if (m_logFileCreated == false || string.IsNullOrWhiteSpace(LogPath))

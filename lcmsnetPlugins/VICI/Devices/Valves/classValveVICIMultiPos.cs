@@ -19,7 +19,7 @@ namespace LcmsNet.Devices.Valves
     /// Class used for interacting with the VICI multipositon valve
     /// </summary>
     //[Serializable]
-    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]	
+    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     //[classDeviceControlAttribute(typeof(controlValveVICIMultiPos),
     //                             typeof(controlValveVICIMultiPosGlyph),
     //                             "Valve Multi-Position",
@@ -36,7 +36,7 @@ namespace LcmsNet.Devices.Valves
         ///     Parity      None
         ///     Stop Bits   One
         ///     Data Bits   8
-        ///     Handshake   None        
+        ///     Handshake   None
         private SerialPort mobj_serialPort;
         /// <summary>
         /// The last measured position of the valve.
@@ -76,9 +76,9 @@ namespace LcmsNet.Devices.Valves
         public const int LC_EVENT_SET_POSITION_TIME_SECONDS = 6;
 
         //Model EMTCA-CE can take up to 3150(1161+(999*2)ms to rotate if only 4 positions are set
-        //More positions reduces time it takes to rotate, but we can't know how many positions there are        
-        //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the 
-        //method isn't killed over 150ms + concurrency delays.        
+        //More positions reduces time it takes to rotate, but we can't know how many positions there are
+        //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the
+        //method isn't killed over 150ms + concurrency delays.
         private static int mint_rotationDelayTimems = 4000;
         private static int mint_IDChangeDelayTimems = 325;
         private const int CONST_DEAFULT_TIMEOUT = 1500;
@@ -91,7 +91,7 @@ namespace LcmsNet.Devices.Valves
         /// Fired when the status changes.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-		public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
@@ -136,7 +136,7 @@ namespace LcmsNet.Devices.Valves
             ///     Parity      None
             ///     Stop Bits   One
             ///     Data Bits   8
-            ///     Handshake   None       
+            ///     Handshake   None
             mobj_serialPort           = new System.IO.Ports.SerialPort();
             mobj_serialPort.PortName  = "COM1";
             mobj_serialPort.BaudRate  = 9600;
@@ -158,7 +158,7 @@ namespace LcmsNet.Devices.Valves
             mint_numberOfPositions      = numPositions;
 
             SoftwareID                  = ' ';
-            mstring_name                = "MPValve"; 
+            mstring_name                = "MPValve";
         }
         /// <summary>
         /// Constructor from a supplied serial port object.
@@ -176,7 +176,7 @@ namespace LcmsNet.Devices.Valves
             mobj_versionInfo        = "";
             mint_numberOfPositions  = numPositions;
             mobj_serialPort         = port;
-            mstring_name            = "MPValve"; 
+            mstring_name            = "MPValve";
         }
         #endregion
 
@@ -213,10 +213,10 @@ namespace LcmsNet.Devices.Valves
                 }
             }
             set
-			{
-				if (value != menum_status && StatusUpdate != null)
+            {
+                if (value != menum_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status Changed", this));
-				menum_status = value;
+                menum_status = value;
             }
         }
         /// <summary>
@@ -231,7 +231,7 @@ namespace LcmsNet.Devices.Valves
             set
             {
                 mstring_name = value;
-                OnDeviceSaveRequired();                
+                OnDeviceSaveRequired();
             }
         }
         /// <summary>
@@ -384,8 +384,8 @@ namespace LcmsNet.Devices.Valves
         public bool Initialize(ref string errorMessage)
         {
             if (mbool_emulation == true)
-			{
-				//Fill in fake ID, version, position
+            {
+                //Fill in fake ID, version, position
                 mobj_valveID = ' ';
                 mobj_versionInfo = "Fake Version Information";
                 mobj_lastMeasuredPosition = 0;
@@ -400,8 +400,8 @@ namespace LcmsNet.Devices.Valves
                     mobj_serialPort.Open();
                 }
                 catch (UnauthorizedAccessException ex)
-				{
-					errorMessage = "Could not access the COM port specifieid. " + ex.Message;
+                {
+                    errorMessage = "Could not access the COM port specifieid. " + ex.Message;
                     return false;
                 }
             }
@@ -412,23 +412,23 @@ namespace LcmsNet.Devices.Valves
                 GetHardwareID();
             }
             catch (ValveExceptionUnauthorizedAccess ex)
-			{
-				errorMessage = "Could not get the hardware ID. " + ex.Message;                
+            {
+                errorMessage = "Could not get the hardware ID. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
             {
 
-				if (Error != null)
-				{
+                if (Error != null)
+                {
 
-				}
-				errorMessage = "Reading the hardware ID timed out. " + ex.Message;
+                }
+                errorMessage = "Reading the hardware ID timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
             {
-				errorMessage = "Sending a command to get the hardware ID timed out. " + ex.Message;
+                errorMessage = "Sending a command to get the hardware ID timed out. " + ex.Message;
                 return false;
             }
 
@@ -448,17 +448,17 @@ namespace LcmsNet.Devices.Valves
             catch (ValveExceptionUnauthorizedAccess ex)
             {
 
-				errorMessage = "Could not get the valve position. " + ex.Message;
+                errorMessage = "Could not get the valve position. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
-			{
-				errorMessage = "Reading the valve position timed out. " + ex.Message;
+            {
+                errorMessage = "Reading the valve position timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
-			{
-				errorMessage = "Sending a command to get the valve position timed out. " + ex.Message;
+            {
+                errorMessage = "Sending a command to get the valve position timed out. " + ex.Message;
                 return false;
             }
 
@@ -467,18 +467,18 @@ namespace LcmsNet.Devices.Valves
                 GetVersion();
             }
             catch (ValveExceptionUnauthorizedAccess ex)
-			{
-				errorMessage = "Could not get the valve version. " + ex.Message;
+            {
+                errorMessage = "Could not get the valve version. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
-			{
-				errorMessage = "Reading the valve version timed out. " + ex.Message;
+            {
+                errorMessage = "Reading the valve version timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
-			{
-				errorMessage = "Sending a command to get the valve version timed out. " + ex.Message;                
+            {
+                errorMessage = "Sending a command to get the valve version timed out. " + ex.Message;
                 return false;
             }
             return true;
@@ -533,7 +533,7 @@ namespace LcmsNet.Devices.Valves
                     return enumValveErrors.UnauthorizedAccess;
                 }
 
-                //Wait mint_rotationDelayTimems for valve to actually switch before proceeding           
+                //Wait mint_rotationDelayTimems for valve to actually switch before proceeding
                 //TODO: BLL test this instead using the abort event.
                 if (AbortEvent == null)
                     AbortEvent = new System.Threading.ManualResetEvent(false);
@@ -549,10 +549,10 @@ namespace LcmsNet.Devices.Valves
                 {
                     GetPosition();
 
-					if (StatusUpdate != null)
-					{
+                    if (StatusUpdate != null)
+                    {
 
-					}
+                    }
                 }
                 catch (ValveExceptionWriteTimeout)
                 {
@@ -567,13 +567,13 @@ namespace LcmsNet.Devices.Valves
 
                 if (mobj_lastMeasuredPosition != mobj_lastSentPosition)
                 {
-                    //classApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position."); 
+                    //classApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
                     return enumValveErrors.ValvePositionMismatch;
                 }
                 else
                 {
                     OnPosChanged(mobj_lastMeasuredPosition);
-                    //classApplicationLogger.LogMessage(0, Name + " changed position to: " + mobj_lastMeasuredPosition); 
+                    //classApplicationLogger.LogMessage(0, Name + " changed position to: " + mobj_lastMeasuredPosition);
                     return enumValveErrors.Success;
                 }
             }
@@ -623,7 +623,7 @@ namespace LcmsNet.Devices.Valves
             }
 
             //Read in whatever is waiting in the buffer
-            //This should look like 
+            //This should look like
             //  Position is "B"
             string tempBuffer = "";
             try
@@ -657,7 +657,7 @@ namespace LcmsNet.Devices.Valves
             /// 
             /// Grab the actual position from the above string
             /// 
-            if (tempBuffer.Length > 1)  
+            if (tempBuffer.Length > 1)
             {
                 string[] positions = tempBuffer.Split('=');
                 string   tempPosition = positions[positions.Length - 1];
@@ -1034,7 +1034,7 @@ namespace LcmsNet.Devices.Valves
         {
           return new List<string>() { "Valve Position" };
         }
-		#endregion
+        #endregion
         
         /// <summary>
         /// Returns the name of the device.
@@ -1051,12 +1051,12 @@ namespace LcmsNet.Devices.Valves
         /*public FinchComponentData GetData()
         {
             FinchComponentData component = new FinchComponentData();
-            component.Status    = Status.ToString();            
+            component.Status    = Status.ToString();
             component.Name      = Name;
             component.Type      = "Multi-Position Valve";
             component.LastUpdate = DateTime.Now;
             
-            FinchScalarSignal measurementSentPosition = new FinchScalarSignal();            
+            FinchScalarSignal measurementSentPosition = new FinchScalarSignal();
             measurementSentPosition.Name        = "Set Position";
             measurementSentPosition.Type        = FinchDataType.Integer;
             measurementSentPosition.Units       = "";
@@ -1070,14 +1070,14 @@ namespace LcmsNet.Devices.Valves
             measurementMeasuredPosition.Value       = this.mobj_lastMeasuredPosition.ToString();
             component.Signals.Add(measurementMeasuredPosition);
 
-            FinchScalarSignal port = new FinchScalarSignal();            
+            FinchScalarSignal port = new FinchScalarSignal();
             port.Name           = "Port";
             port.Type           =  FinchDataType.String;
             port.Units          = "";
             port.Value          = this.PortName.ToString();
             component.Signals.Add(port);
 
-            return component;        
+            return component;
         }*/
     }
 }

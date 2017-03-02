@@ -37,7 +37,7 @@ namespace Waters.Devices.Pumps
                 info.LedStatus      = ledState.InnerText;
                 info.Pressure       = Convert.ToDouble(pressure.InnerText);
             }
-            catch 
+            catch
             { 
             }
             return info;

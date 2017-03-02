@@ -1,11 +1,11 @@
 ﻿/*********************************************************************************************************
-// Written by Dave Clark, John Ryan, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, John Ryan, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 06/30/2009
 //
 // Last modified 06/30/2009
-//						11/03/2009: Removed objects that perform no function.
+//                      11/03/2009: Removed objects that perform no function.
  *                          Removed the multiport listener class.
 *********************************************************************************************************/
 
@@ -31,7 +31,7 @@ namespace LcmsNet.Devices.Valves
     {
         #region Members
         /// <summary>
-        /// Class that interfaces the hardware. 
+        /// Class that interfaces the hardware.
         /// </summary>
         private classValveVICIMultiPos          mobj_valve;
         /// <summary>
@@ -52,8 +52,8 @@ namespace LcmsNet.Devices.Valves
         private void RegisterDevice(IDevice device)
         {
             mobj_valve              = device as classValveVICIMultiPos;
-            mobj_valve.PosChanged += new EventHandler<ValvePositionEventArgs<int>>(OnPosChanged);            
-            SetBaseDevice(mobj_valve);                        
+            mobj_valve.PosChanged += new EventHandler<ValvePositionEventArgs<int>>(OnPosChanged);
+            SetBaseDevice(mobj_valve);
             
             mpropertyGrid_Serial.SelectedObject     = mobj_valve.Port;
             PopulateComboBox();
@@ -75,7 +75,7 @@ namespace LcmsNet.Devices.Valves
         #region Events
 
         //Position change
-        public virtual void OnPosChanged(object sender, ValvePositionEventArgs<int> newPosition)	
+        public virtual void OnPosChanged(object sender, ValvePositionEventArgs<int> newPosition)
         {
             if (InvokeRequired)
             {
@@ -125,7 +125,7 @@ namespace LcmsNet.Devices.Valves
 
                     /*
                     string errorMessage = "";
-                    mobj_valve = (classValveVICIMultiPos)value;                    
+                    mobj_valve = (classValveVICIMultiPos)value;
                     try
                     {
                         mobj_valve.Initialize(ref errorMessage);

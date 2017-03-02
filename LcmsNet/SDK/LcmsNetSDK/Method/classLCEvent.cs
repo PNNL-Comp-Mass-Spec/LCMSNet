@@ -6,7 +6,7 @@ using LcmsNet.Method;
 namespace LcmsNetDataClasses.Method
 {
     /// <summary>
-    /// Class that holds data for relative starting of LC-methods/events 
+    /// Class that holds data for relative starting of LC-methods/events
     /// </summary>
     [Serializable]
     public class classLCEventRelative
@@ -23,7 +23,7 @@ namespace LcmsNetDataClasses.Method
         public classLCMethod RelativeMethod { get; private set; }
 
         /// <summary>
-        /// Gets or sets the time to add to the relative method 
+        /// Gets or sets the time to add to the relative method
         /// to properly start the above method relative to ourself
         /// </summary>
         public TimeSpan RelativeStartTime { get; private set; }
@@ -46,7 +46,7 @@ namespace LcmsNetDataClasses.Method
         #endregion
 
         /// <summary>
-        /// Constructor.  
+        /// Constructor.
         /// </summary>
         public classLCEvent()
         {
@@ -87,7 +87,7 @@ namespace LcmsNetDataClasses.Method
             return newEvent;
         }
 
-        #region Properties      
+        #region Properties
 
         /// <summary>
         /// Gets or sets the method to be started when an event is indeterminant.
@@ -110,7 +110,7 @@ namespace LcmsNetDataClasses.Method
         public classLCMethodData MethodData { get; set; }
 
         /// <summary>
-        /// Gets or sets the duration for this action.  
+        /// Gets or sets the duration for this action.
         /// 
         /// Throws: 
         ///     classInvalidDurationException (value lt 0)
@@ -160,8 +160,8 @@ namespace LcmsNetDataClasses.Method
         public bool HasDiscreteStates { get; set; }
 
         /// <summary>
-        /// Gets or sets the time to hold past the duration of this event in case 
-        /// the device has a method that needs to be held in a certain state for 
+        /// Gets or sets the time to hold past the duration of this event in case
+        /// the device has a method that needs to be held in a certain state for
         /// longer than it takes to execute the method.
         /// </summary>
         public TimeSpan HoldTime { get; set; }

@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 12/31/2013
- * 
- * Last Modified 1/3/2013 By Christopher Walters 
+ *
+ * Last Modified 1/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -36,11 +36,11 @@ namespace DemoPluginLibrary
             Point rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
 
-            //main rectangle            
+            //main rectangle
             base.AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
-            //left most rectangle            
-            base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);  
+            //left most rectangle
+            base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
            
             // bottom left parallelogram + connecting line
             base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X, leftMostStartPoint.Y + MAIN_RECT_HEIGHT), new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
@@ -52,9 +52,9 @@ namespace DemoPluginLibrary
             
             //bottom middle trapezoid
             base.AddPrimitive(new FluidicsLine(new Point(mainStartPoint.X, mainStartPoint.Y + MAIN_RECT_HEIGHT), new Point(mainStartPoint.X + 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
-            base.AddPrimitive(new FluidicsLine(new Point(mainStartPoint.X + MAIN_RECT_WIDTH, mainStartPoint.Y + MAIN_RECT_HEIGHT), 
+            base.AddPrimitive(new FluidicsLine(new Point(mainStartPoint.X + MAIN_RECT_WIDTH, mainStartPoint.Y + MAIN_RECT_HEIGHT),
                 new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
-            base.AddPrimitive(new FluidicsLine(new Point(mainStartPoint.X + 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10), 
+            base.AddPrimitive(new FluidicsLine(new Point(mainStartPoint.X + 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10),
                 new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
 
             // bottom right parallelogram + connecting line
@@ -66,7 +66,7 @@ namespace DemoPluginLibrary
             base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
                                     
             
-            // rightmost rectangle            
+            // rightmost rectangle
             base.AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // upper left parallelogram + connecting line
@@ -85,11 +85,11 @@ namespace DemoPluginLibrary
             base.AddPrimitive(new FluidicsLine(rightMostStartPoint, new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y - 10)));
             base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3, rightMostStartPoint.Y),
                 new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y - 10)));
-            base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y - 10), 
+            base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y - 10),
                 new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y - 10)));
             base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 2, rightMostStartPoint.Y - 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y - 5)));
 
-            // needle     
+            // needle
             Point needleStartPoint = new Point(leftMostStartPoint.X - MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 3);
             base.AddRectangle(needleStartPoint, new Size(MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 2), Color.Black, Brushes.White);
             //needle tip

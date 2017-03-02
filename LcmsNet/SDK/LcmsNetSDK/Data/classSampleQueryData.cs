@@ -1,11 +1,11 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2010, Battelle Memorial Institute
 // Created 01/01/2010
 ///
 // Last modified 01/01/2010
-//						- 03/09/2010 (DAC) - Added field for wellplate name
+//                      - 03/09/2010 (DAC) - Added field for wellplate name
 //
 //****************/*****************************************************************************************
 
@@ -152,7 +152,7 @@ namespace LcmsNetDataClasses
         //      { return true; }
         //   }
         //   return false;
-        //}	
+        //} 
 
         #endregion
     }

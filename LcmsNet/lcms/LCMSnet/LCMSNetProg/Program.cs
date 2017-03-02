@@ -399,13 +399,13 @@ namespace LcmsNet
                     var logLevelErrors = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGERRORLEVEL);
                     if (!string.IsNullOrWhiteSpace(logLevelErrors))
                         classApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
-                    else 
+                    else
                         classApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
 
                     var logLevelMessages = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGMSGLEVEL);
                     if (!string.IsNullOrWhiteSpace(logLevelMessages))
                         classApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
-                    else 
+                    else
                         classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
                     
                     CreateSQLCache();

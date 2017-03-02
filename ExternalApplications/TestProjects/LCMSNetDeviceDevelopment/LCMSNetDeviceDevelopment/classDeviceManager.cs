@@ -1,14 +1,14 @@
 ﻿
 /*********************************************************************************************************
- * Written by Dave Clark, Brian LaMarche, John Ryan for the US Department of Energy 
+ * Written by Dave Clark, Brian LaMarche, John Ryan for the US Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009, Battelle Memorial Institute
  * Created 06/19/2009
- * 
+ *
  *  Last modified 06/19/2009
- *      Created class and added static methods with static device manager object that registers itself with 
+ *      Created class and added static methods with static device manager object that registers itself with
  *      the static method property.
- * 
+ *
 /*********************************************************************************************************/
 using System;
 using System.Collections.Generic;

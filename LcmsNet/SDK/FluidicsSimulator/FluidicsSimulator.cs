@@ -2,8 +2,8 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
- * 
- * Last Modified 6/9/2014 By Christopher Walters 
+ *
+ * Last Modified 6/9/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -83,10 +83,10 @@ namespace FluidicsSimulator
         /// <summary>
         /// The list that the simulator is currently exectuing(or stepping through)
         /// </summary>
-        private SimEventList m_runningEvents;       
+        private SimEventList m_runningEvents;
 
         private LcmsNetDataClasses.Method.classLCEvent m_breakEvent;
-        private bool m_inProgress;  
+        private bool m_inProgress;
         private DateTime m_FirstStartTime;
         private DateTime m_currentStartTime;
         private TimeSpan m_elapsedTime;
@@ -109,7 +109,7 @@ namespace FluidicsSimulator
         {
             m_completedEvents = new Stack<LcmsNetDataClasses.Method.classLCEvent>();
             m_simulationQueue = new SortedSet<SimEventList>();
-            m_runningEvents = null;            
+            m_runningEvents = null;
             SimulationSpeed = DEFAULT_TIMER_INTERVAL;
             m_modelCheckers = new List<IFluidicsModelChecker>();
             m_AllStatusChangesThisRun = new List<ModelStatus>();
@@ -118,7 +118,7 @@ namespace FluidicsSimulator
             AtBreakPoint = false;
             StopOnModelStatusChange = false;
             StopOnStatusLevel = WantedStatusChanges.All;
-            CategoriesRequested = WantedStatusChanges.All;            
+            CategoriesRequested = WantedStatusChanges.All;
         }
         /// <summary>
         /// simulate events until either a breakpoint is reached, an error has occured, or all events simulated.
@@ -155,7 +155,7 @@ namespace FluidicsSimulator
                 m_completedEvents.Peek().MethodData.IsDone();
             }
             m_completedEvents.Clear();
-            m_simulationQueue.Clear();            
+            m_simulationQueue.Clear();
             m_runningEvents = null;
             if(m_breakEvent != null)
             {
@@ -179,7 +179,7 @@ namespace FluidicsSimulator
         /// <param name="events"></param>
         public void PrepSimulation(List<LcmsNetDataClasses.Method.classLCMethod> Methods)
         {
-            ClearSimulator();            
+            ClearSimulator();
             try
             {
                 // break the list of events into several SimEventLists of events that happen "concurrently" then add
@@ -189,7 +189,7 @@ namespace FluidicsSimulator
                     IsReady = false;
                     return;
                 }
-                DateTime startTime = DateTime.Now;    
+                DateTime startTime = DateTime.Now;
                 
                 m_simulationQueue = BuildEventList(Methods, startTime);
                 m_FirstStartTime = m_simulationQueue.Min.Time;
@@ -299,7 +299,7 @@ namespace FluidicsSimulator
         private void CheckForBreakpointExecuteEventIfNot(LcmsNetDataClasses.Method.classLCEvent m_currentEvent)
         {
             //if the prepared event is a breakpoint, temporarily halt operations, if however, the current event is a breakpoint AND we've already stopped
-            // at this breakpoint, let it pass through and execute it. 
+            // at this breakpoint, let it pass through and execute it.
             if (m_currentEvent.BreakPoint && (m_breakEvent != m_currentEvent) && InProgress)
             {
                 m_simulationTimer.Stop();
@@ -327,8 +327,8 @@ namespace FluidicsSimulator
             {
                 m_breakEvent.PassBreakPoint();
                 m_currentEvent = m_breakEvent;
-                AtBreakPoint = false;               
-                return m_currentEvent;               
+                AtBreakPoint = false;
+                return m_currentEvent;
             }
             // If the current step doesnt have events, we need to pull from the simulation queue
             // and then make sure we remove it from the queue so we dont actually re-run the events again
@@ -347,7 +347,7 @@ namespace FluidicsSimulator
                     {
                         InProgress = !InProgress;
                     }                   
-                    m_completedEvents.Peek().MethodData.IsDone();                             
+                    m_completedEvents.Peek().MethodData.IsDone();
                 }
             }
 
@@ -361,8 +361,8 @@ namespace FluidicsSimulator
             {
                 m_completedEvents.Peek().MethodData.IsDone();
             }
-            m_currentEvent.MethodData.IsCurrent();     
-            m_runningEvents.Remove(m_currentEvent);                      
+            m_currentEvent.MethodData.IsCurrent();
+            m_runningEvents.Remove(m_currentEvent);
             
             // if we've pulled the last event from the list, set m_runningEvents to null so we grab the next list from
             // the queue on the next run through
@@ -639,6 +639,6 @@ namespace FluidicsSimulator
         public event EventHandler<ModelCheckControllerEventArgs> ModelCheckAdded;
         public event EventHandler<ModelCheckControllerEventArgs> ModelCheckRemoved;
 
-        #endregion  
+        #endregion
     }
 }

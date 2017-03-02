@@ -26,7 +26,7 @@ namespace LcmsNet.Devices.Valves
         ///     Parity      None
         ///     Stop Bits   One
         ///     Data Bits   8
-        ///     Handshake   None        
+        ///     Handshake   None
         private System.IO.Ports.SerialPort mobj_serialPort;
         /// <summary>
         /// The last measured position of the valve.
@@ -344,7 +344,7 @@ namespace LcmsNet.Devices.Valves
                 }
 
                 //Wait 145ms for valve to actually switch before proceeding
-                //NOTE: This can be shortened if there are more than 4 ports but still 
+                //NOTE: This can be shortened if there are more than 4 ports but still
                 //      2 positions; see manual page 1 for switching times
                 //TODO: Make the 145ms a property or static variable or something
                 //      instead of being hardcoded.
@@ -393,7 +393,7 @@ namespace LcmsNet.Devices.Valves
                 }
 
                 //Wait 145ms for valve to actually switch before proceeding
-                //NOTE: This can be shortened if there are more than 4 ports but still 
+                //NOTE: This can be shortened if there are more than 4 ports but still
                 //      2 positions; see manual page 1 for switching times
                 //TODO: Make the 145ms a property or static variable or something
                 //      instead of being hardcoded.
@@ -464,7 +464,7 @@ namespace LcmsNet.Devices.Valves
             }
 
             //Read in whatever is waiting in the buffer
-            //This should look like 
+            //This should look like
             //  Position is "B"
             string tempBuffer = "";
             try
@@ -481,7 +481,7 @@ namespace LcmsNet.Devices.Valves
             }
 
 
-            //Make a string containing the position           
+            //Make a string containing the position
             string tempPosition = "Unknown";        //Default to unknown
 
             //Grab the actual position from the above string
@@ -717,6 +717,6 @@ namespace LcmsNet.Devices.Valves
         #endregion
 
 
-		
-	}
+        
+    }
 }

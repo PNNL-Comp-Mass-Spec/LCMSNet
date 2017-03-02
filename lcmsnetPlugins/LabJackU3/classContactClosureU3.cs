@@ -32,7 +32,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         private string mstring_name;
         /// <summary>
-        /// The version. 
+        /// The version.
         /// </summary>
         private string mstring_version;
         /// <summary>
@@ -45,7 +45,7 @@ namespace LcmsNet.Devices.ContactClosure
         private bool mbool_emulation;
         private const double CONST_ANALOGHIGH = 5.0;
         private const double CONST_DIGITALHIGH = 1.0;
-        private const double CONST_LOW = 0;       
+        private const double CONST_LOW = 0;
         #endregion
 
         #region Events
@@ -53,7 +53,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// Fired when the status changes.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-		public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
@@ -142,12 +142,12 @@ namespace LcmsNet.Devices.ContactClosure
                 return menum_status;
             }
             set
-			{
+            {
                 if (value != menum_status && StatusUpdate != null)
                 {
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
                 }
-				menum_status = value;
+                menum_status = value;
             }
         }
 
@@ -246,7 +246,7 @@ namespace LcmsNet.Devices.ContactClosure
             }
             else
             {
-                Status = enumDeviceStatus.Error;                
+                Status = enumDeviceStatus.Error;
                 errorMessage = "Could not get the firmware version or driver version information.";
                 return false;
             }
@@ -274,7 +274,7 @@ namespace LcmsNet.Devices.ContactClosure
 
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
-        /// This is intended for use on the analog output ports--if it is a digital 
+        /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
@@ -334,28 +334,28 @@ namespace LcmsNet.Devices.ContactClosure
         }
         #endregion
 
-		/// <summary>
-		/// Writes any performance data cached to directory path provided.
-		/// </summary>
-		/// <param name="directoryPath"></param>
-		/// <param name="name"></param>
-		/// <param name="parameters"></param>
+        /// <summary>
+        /// Writes any performance data cached to directory path provided.
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
 
         }
 
         #region IDevice Members
-		/// <summary>
-		/// Gets or sets the error type of last error.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets the error type of last error.
+        /// </summary>
         public enumDeviceErrorStatus ErrorType
         {
             get;
             set;
         }
-		/// <summary>
-		/// Gets or sets the device type.
+        /// <summary>
+        /// Gets or sets the device type.
         /// </summary>
         public enumDeviceType DeviceType
         {
@@ -379,6 +379,6 @@ namespace LcmsNet.Devices.ContactClosure
             return new List<string>();
         }
 
-        #endregion                    
+        #endregion
     }
 }

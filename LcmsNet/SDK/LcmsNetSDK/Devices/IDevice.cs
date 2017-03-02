@@ -1,12 +1,12 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
 // Last modified 08/17/2009
 /*     BLL - 9-14-2009
- *          Added device save and load settings method to XML. 
+ *          Added device save and load settings method to XML.
  *     BLL - 1-18-2010
  *          Added the ManualResetEvent that the device can use to synchronize with scheduling objects.
  */
@@ -75,7 +75,7 @@ namespace LcmsNetDataClasses.Devices
         string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the status of the device. 
+        /// Gets or sets the status of the device.
         /// </summary>
         enumDeviceStatus Status { get; set; }
 

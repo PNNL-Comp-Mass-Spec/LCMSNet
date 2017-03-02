@@ -27,7 +27,7 @@ namespace WindowsFormsApplication2
             controlValveVICI2Pos ctl = new controlValveVICI2Pos();
             
             /// 
-            /// Created a valve that actually interfaces the 
+            /// Created a valve that actually interfaces the
             /// hardware.
             /// 
             classValveVICI2Pos valve = new classValveVICI2Pos();

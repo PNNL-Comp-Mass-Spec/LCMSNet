@@ -52,7 +52,7 @@ namespace LcmsNetDataClasses.Logging
         }
 
         /// <summary>
-        /// Gets or sets the exception associated with the error message if any. 
+        /// Gets or sets the exception associated with the error message if any.
         /// </summary>
         public Exception Exception { get; set; }
     }

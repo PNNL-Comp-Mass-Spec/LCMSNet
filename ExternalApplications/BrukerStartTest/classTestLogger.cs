@@ -1,6 +1,6 @@
 ﻿
 //*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2010, Battelle Memorial Institute
 // Created 07/09/2010
@@ -18,44 +18,44 @@ using log4net;
 
 namespace BrukerStartTest
 {
-	class classTestLogger
-	{
-		//*********************************************************************************************************
-		// Logging class for test program
-		//**********************************************************************************************************
+    class classTestLogger
+    {
+        //*********************************************************************************************************
+        // Logging class for test program
+        //**********************************************************************************************************
 
-		#region "Constants"
-		#endregion
+        #region "Constants"
+        #endregion
 
-		#region "Class variables"
-			private static readonly ILog m_FileLogger = LogManager.GetLogger("FileLogger");
-		#endregion
+        #region "Class variables"
+            private static readonly ILog m_FileLogger = LogManager.GetLogger("FileLogger");
+        #endregion
 
-		#region "Delegates"
-		#endregion
+        #region "Delegates"
+        #endregion
 
-		#region "Events"
-		#endregion
+        #region "Events"
+        #endregion
 
-		#region "Properties"
-		#endregion
+        #region "Properties"
+        #endregion
 
-		#region "Constructors"
-		#endregion
+        #region "Constructors"
+        #endregion
 
-		#region "Methods"
-			/// <summary>
-			/// Logs a debug message
-			/// </summary>
-			/// <param name="msg">Message to log</param>
-			public static void LogDebugMessage(string msg)
-			{
-				StringBuilder outStrBld = new StringBuilder();
-				outStrBld.Append(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff") + ", ");
-				outStrBld.Append(msg);
-				outStrBld.Append(Environment.NewLine);
-				m_FileLogger.Debug(outStrBld.ToString());
-			}	// End sub
-		#endregion
-	}	// End class
-}	// End namespace
+        #region "Methods"
+            /// <summary>
+            /// Logs a debug message
+            /// </summary>
+            /// <param name="msg">Message to log</param>
+            public static void LogDebugMessage(string msg)
+            {
+                StringBuilder outStrBld = new StringBuilder();
+                outStrBld.Append(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff") + ", ");
+                outStrBld.Append(msg);
+                outStrBld.Append(Environment.NewLine);
+                m_FileLogger.Debug(outStrBld.ToString());
+            }   // End sub
+        #endregion
+    }   // End class
+}   // End namespace

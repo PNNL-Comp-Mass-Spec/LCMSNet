@@ -13,7 +13,7 @@ namespace FluidicsSDK.Devices
 {
     public class FourPortFluidicsValve: TwoPositionValve
     {
-        private const int NUMBER_OF_PORTS = 4;        
+        private const int NUMBER_OF_PORTS = 4;
         IFourPortValve m_valve;
 
         public FourPortFluidicsValve():
@@ -21,7 +21,7 @@ namespace FluidicsSDK.Devices
         {
             m_states = SetupStates();
             m_currentState = TwoPositionState.PositionA;
-            base.ActivateState(m_states[m_currentState]);            
+            base.ActivateState(m_states[m_currentState]);
             Size StateControlSize = new Size(15, 15);
             Point StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 2), base.Center.Y - (StateControlSize.Height / 2));
             Point StateControl2Loc = new Point(base.Center.X + StateControlSize.Width, base.Center.Y - (StateControlSize.Height /2));
@@ -30,7 +30,7 @@ namespace FluidicsSDK.Devices
             //add left control
             base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));           
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));
         }
 
         private void SetValvePosition(TwoPositionState pos)
@@ -67,7 +67,7 @@ namespace FluidicsSDK.Devices
 
         void m_valve_PositionChanged(object sender, ValvePositionEventArgs<TwoPositionState> e)
         {            
-            ActivateState((int)e.Position);                      
+            ActivateState((int)e.Position);
         }
 
         protected override void ClearDevice(IDevice device)
@@ -99,7 +99,7 @@ namespace FluidicsSDK.Devices
             }
             else
             {
-                pos = (int)TwoPositionState.PositionA;               
+                pos = (int)TwoPositionState.PositionA;
             }
             m_valve.SetPosition((TwoPositionState)pos);
         }
@@ -109,13 +109,13 @@ namespace FluidicsSDK.Devices
         /// </summary>
         private void LeftButtonAction()
         {
-            ChangePosition(true);            
+            ChangePosition(true);
         }
 
         /// <summary>
         /// action to take when right state primitive is clicked
         /// </summary>
-        private void RightButtonAction()  
+        private void RightButtonAction()
         {
             ChangePosition(false);
         }

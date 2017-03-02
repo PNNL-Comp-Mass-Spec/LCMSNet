@@ -1,10 +1,10 @@
 ﻿/*********************************************************************************************************
- * Written by Christopher Walters for the US Department of Energy 
+ * Written by Christopher Walters for the US Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014, Battelle Memorial Institute
- * 
+ *
  *  Last modified 06/19/2014
- * 
+ *
 /*********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace LcmsNet.Devices.Pumps
         {
             base.AddRectangle(new Point(0, 0), new Size(CONST_WIDTH, CONST_HEIGHT), Color.Black, Brushes.White, true);
             base.AddPort(new Point((int)(CONST_WIDTH * 0.25), -10));
-            base.AddPort(new Point((int)(CONST_WIDTH * 0.5), -10)); 
+            base.AddPort(new Point((int)(CONST_WIDTH * 0.5), -10));
             base.AddPort(new Point((int)(CONST_WIDTH * 0.75), -10));
             foreach(Port port in Ports)
             {

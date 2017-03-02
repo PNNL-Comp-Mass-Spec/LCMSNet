@@ -2,8 +2,8 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
- * 
- * Last Modified 6/5/2014 By Christopher Walters 
+ *
+ * Last Modified 6/5/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using FluidicsSDK.Base;
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
-    //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]	
+    //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [classDeviceControlAttribute(typeof(controlValveVICIMultiPos),
                                  "Nine-Port",
                                  "Valves Multi-Position")

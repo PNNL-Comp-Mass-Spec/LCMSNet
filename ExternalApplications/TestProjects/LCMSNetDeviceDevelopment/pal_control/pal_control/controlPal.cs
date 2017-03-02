@@ -14,7 +14,7 @@ namespace pal_control
 {
     public partial class controlPal : controlBaseDeviceControl
     {
-        #region Constructors 
+        #region Constructors
 
         public controlPal()
         {

@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 1/3/2013
- * 
- * Last Modified 1/3/2013 By Christopher Walters 
+ *
+ * Last Modified 1/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -32,10 +32,10 @@ namespace FluidicsPack
             Point leftMostStartPoint = new Point(-(MAIN_RECT_WIDTH / 3) - 5, 0);
             Point rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
-            //main rectangle            
+            //main rectangle
             base.AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
-            //left most rectangle            
+            //left most rectangle
             base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // bottom left parallelogram + connecting line
@@ -80,7 +80,7 @@ namespace FluidicsPack
 
 
 
-            // rightmost rectangle            
+            // rightmost rectangle
             base.AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // upper left parallelogram + connecting line

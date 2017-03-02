@@ -1,31 +1,31 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark for the US Department of Energy 
+// Written by Dave Clark for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-//						- 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
-//						- 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
-//						- 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<classSampleData>
-//						- 02/19/2009 (DAC) - Incorporated renamed exceptions
-//						- 02/24/2009 (DAC) - Changed to cache downloaded data in SQLite database
-//						- 03/09/2009 (DAC) - Added download of DMS Comment field
-//						- 03/27/2009 (DAC) - Converted LINQ queries to ADO.Net due to terrible error handling by LINQ
-//						- 03/31/2009 (DAC) - Implemented file logging for exceptions
-//						- 04/02/2009 (DAC) - Implemented MRM file download tools
-//						- 04/09/2009 (DAC) - Added retrieval and caching of column lists
-//						- 05/12/2009 (DAC) - Added download of blocking and run order values
-//						- 08/11/2009 (DAC) - Added download of request batch number
-//						- 12/01/2009 (DAC) - Modified to accomodate changing vial from string to int
-//						- 02/18/2010 (DAC) - Modified to streamline generation of sample request query
-//						- 07/28/2010 (DAC) - Added conversion of alpha well/vial to integer
-//						- 12/08/2010 (DAC) - Modified DMS connection string to use name/password authentication
-//						- 04/30/2013 (FCT) - Modified get carts sql command string to include "No_Cart" in the results.
-//						- 05/22/2014 (MEM) - Replace Select * with selection of specific columns
+//                      - 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
+//                      - 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
+//                      - 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<classSampleData>
+//                      - 02/19/2009 (DAC) - Incorporated renamed exceptions
+//                      - 02/24/2009 (DAC) - Changed to cache downloaded data in SQLite database
+//                      - 03/09/2009 (DAC) - Added download of DMS Comment field
+//                      - 03/27/2009 (DAC) - Converted LINQ queries to ADO.Net due to terrible error handling by LINQ
+//                      - 03/31/2009 (DAC) - Implemented file logging for exceptions
+//                      - 04/02/2009 (DAC) - Implemented MRM file download tools
+//                      - 04/09/2009 (DAC) - Added retrieval and caching of column lists
+//                      - 05/12/2009 (DAC) - Added download of blocking and run order values
+//                      - 08/11/2009 (DAC) - Added download of request batch number
+//                      - 12/01/2009 (DAC) - Modified to accomodate changing vial from string to int
+//                      - 02/18/2010 (DAC) - Modified to streamline generation of sample request query
+//                      - 07/28/2010 (DAC) - Added conversion of alpha well/vial to integer
+//                      - 12/08/2010 (DAC) - Modified DMS connection string to use name/password authentication
+//                      - 04/30/2013 (FCT) - Modified get carts sql command string to include "No_Cart" in the results.
+//                      - 05/22/2014 (MEM) - Replace Select * with selection of specific columns
 //                      - 09/11/2014 (CJW) - Modified to be an MEF Extension for lcmsnet
 //                      - 09/17/2014 (CJW) - Modified to use a stand-alone configuration file instead of the LcmsNet app configuration file.
-//						- 05/22/2015 (MEM) - Auto-create PrismDMS.config if missing
-//						- 07/30/2015 (MEM) - Add option to load dataset names
+//                      - 05/22/2015 (MEM) - Auto-create PrismDMS.config if missing
+//                      - 07/30/2015 (MEM) - Add option to load dataset names
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
@@ -325,9 +325,9 @@ namespace LcmsNetDmsTools
 
             // Get a list containing all active cart configuration names
             const string sqlCmd = 
-                "SELECT [Config Name] " + 
-                "FROM V_LC_Cart_Configuration_List_Report " + 
-                "WHERE State = 'Active' " + 
+                "SELECT [Config Name] " +
+                "FROM V_LC_Cart_Configuration_List_Report " +
+                "WHERE State = 'Active' " +
                 "ORDER BY [Config Name]";
 
             try
@@ -360,7 +360,7 @@ namespace LcmsNetDmsTools
         {
 
 
-            List<string> tmpCartList;	// Temp list for holding return values
+            List<string> tmpCartList;   // Temp list for holding return values
             var connStr = GetConnectionString();
 
 
@@ -437,7 +437,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetColumnListFromDMS()
         {
-            List<string> tmpColList;	// Temp list for holding return values
+            List<string> tmpColList;    // Temp list for holding return values
             var connStr = GetConnectionString();
 
             // Get a list of active columns
@@ -449,7 +449,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting column list";
-                //				throw new classDatabaseDataException(ErrMsg, ex);
+                //              throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -522,7 +522,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetSepTypeListFromDMS()
         {
-            List<string> tmpRetVal;	// Temp list for holding separation types
+            List<string> tmpRetVal; // Temp list for holding separation types
             var connStr = GetConnectionString();
 
             const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
@@ -534,7 +534,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting separation type list";
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -556,7 +556,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetDatasetTypeListFromDMS()
         {
-            List<string> tmpRetVal;	// Temp list for holding dataset types
+            List<string> tmpRetVal; // Temp list for holding dataset types
             var connStr = GetConnectionString();
 
             // Get a list of the dataset types
@@ -568,7 +568,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting dataset type list";
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -590,7 +590,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetUserListFromDMS()
         {
-            var tmpRetVal = new List<classUserInfo>();	// Temp list for holding user data
+            var tmpRetVal = new List<classUserInfo>();  // Temp list for holding user data
             var connStr = GetConnectionString();
 
             DataTable userTable;
@@ -604,7 +604,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting user list";
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -706,7 +706,7 @@ namespace LcmsNetDmsTools
 
 
             // Split the View back into the two tables it was built from.
-            // Note: It would be faster if we had the component tables the View was created from.												
+            // Note: It would be faster if we had the component tables the View was created from.
 
             var users = new List<classProposalUser>();
             var referenceList = new List<classUserIDPIDCrossReferenceEntry>();
@@ -757,7 +757,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing Proposal Users list in cache";
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, errMsg, ex);
             }
         }
@@ -767,7 +767,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetInstrumentListFromDMS()
         {
-            var tmpRetVal = new List<classInstrumentInfo>();	// Temp list for holding instrument data
+            var tmpRetVal = new List<classInstrumentInfo>();    // Temp list for holding instrument data
             var connStr = GetConnectionString();
 
             DataTable instTable;
@@ -784,7 +784,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting instrument list";
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -821,7 +821,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData)
         {
-            var tmpReturnVal = new List<classSampleData>();	// Temp list for holding samples
+            var tmpReturnVal = new List<classSampleData>(); // Temp list for holding samples
             var connStr = GetConnectionString();
 
             DataTable schedRunList;
@@ -835,7 +835,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting run request list";
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return tmpReturnVal;
             }
@@ -1086,7 +1086,7 @@ namespace LcmsNetDmsTools
                 return false;
             }
 
-            if (resultCode != 0)	// Error occurred
+            if (resultCode != 0)    // Error occurred
             {
                 var returnMsg = spCmd.Parameters["@message"].ToString();
                 throw new classDatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
@@ -1116,7 +1116,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting single column table via command: " + CmdStr;
-                //					throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return retList;
 
@@ -1187,7 +1187,7 @@ namespace LcmsNetDmsTools
                             da.SelectCommand = SpCmd;
                             da.Fill(ds);
                             resultCode = (int)da.SelectCommand.Parameters["@Return"].Value;
-                        }	
+                        }   
                     }
                 }
             }
@@ -1218,7 +1218,7 @@ namespace LcmsNetDmsTools
             // Didn't find a nubmer, so try an alpha
             re = new Regex(regexAlpha);
             mc = re.Matches(inpStr);
-            if (mc.Count != 1) return 0;	// Input string isn't a proper vial number
+            if (mc.Count != 1) return 0;    // Input string isn't a proper vial number
 
             // It's an alpha. Pull off the first character
             var tmpStr = mc[0].ToString();

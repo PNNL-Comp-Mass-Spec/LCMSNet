@@ -15,8 +15,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 {
     /// <summary> 
     /// Network Start using old command packing messaging for communication with mass spectrometer.
-	/// </summary>
-    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]	
+    /// </summary>
+    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [classDeviceControlAttribute(typeof(controlNetStart),
                                  
                                  "Network Start",
@@ -56,7 +56,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Network stream for establishing connections.
         /// </summary>
-        private NetworkStream   mobj_networkstream;        
+        private NetworkStream   mobj_networkstream;
         /// <summary>
         /// The name of the port (e.g. "COM1") used for communication with the Agilent pumps
         /// </summary>
@@ -72,7 +72,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// The device's verion.
         /// </summary>
-        private string mstring_version;                       
+        private string mstring_version;
         /// <summary>
         /// Status of the device.
         /// </summary>
@@ -84,7 +84,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// Fired when the status changes for the device.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-		public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs.
         /// </summary>
@@ -92,11 +92,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Fired when the Agilent Pump finds out what method names are available.
         /// </summary>
-		public event DelegateDeviceHasData MethodNames;
-		/// <summary>
-		/// Fired when a property changes in the device.
-		/// </summary>
-		public event EventHandler DeviceSaveRequired;
+        public event DelegateDeviceHasData MethodNames;
+        /// <summary>
+        /// Fired when a property changes in the device.
+        /// </summary>
+        public event EventHandler DeviceSaveRequired;
         #endregion
 
         #region Constructors
@@ -111,8 +111,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             mint_port       = CONST_SERVER_PORT;
             menum_status    = enumDeviceStatus.NotInitialized;
 
-			AbortEvent		= new System.Threading.ManualResetEvent(false);
-            Emulation		= true;
+            AbortEvent      = new System.Threading.ManualResetEvent(false);
+            Emulation       = true;
         }
         #endregion
 
@@ -192,7 +192,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             return connected;
         }
         /// <summary>
-        /// Disconnects from instrument if connected. 
+        /// Disconnects from instrument if connected.
         /// </summary>
         /// <returns>False if not connected previously or disconnect failed.</returns>
         public bool Disconnect()
@@ -223,7 +223,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <returns></returns>
         public List<string> GetMethods()
         {
-            List<string> methods = new List<string>();            
+            List<string> methods = new List<string>();
             if (Emulation == true)
             {
                 methods.Add("Dummy-Instrument-01");
@@ -282,7 +282,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             //Console.WriteLine(descriptor);
 
-            string message = PackMessage(type, sequence, descriptor, arglist);    
+            string message = PackMessage(type, sequence, descriptor, arglist);
 
             streamWriter.WriteLine(message);
             Console.WriteLine("Send: " + message);
@@ -366,91 +366,91 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             string methodName = sample.InstrumentData.MethodName;
             string sampleName = sample.DmsData.DatasetName;
 
-			try
-			{
-				string outputString;
-				int i = 0;
-				Connect(mstring_address, mint_port);
-				StreamReader streamReader = mobj_reader;
-				StreamWriter streamWriter = mobj_writer;
-				SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
+            try
+            {
+                string outputString;
+                int i = 0;
+                Connect(mstring_address, mint_port);
+                StreamReader streamReader = mobj_reader;
+                StreamWriter streamWriter = mobj_writer;
+                SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
 
-				outputString = streamReader.ReadLine();     //IDLE                
-				if (UnpackMessage(outputString).Descriptor == "ACQIDLE")
-				{
-					arguments.Add(new classNetStartArgument("Method", methodName));
-					arguments.Add(new classNetStartArgument("SampleName", sampleName));
-					SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPARAMS", arguments);
-					arguments.Clear();
+                outputString = streamReader.ReadLine();     //IDLE
+                if (UnpackMessage(outputString).Descriptor == "ACQIDLE")
+                {
+                    arguments.Add(new classNetStartArgument("Method", methodName));
+                    arguments.Add(new classNetStartArgument("SampleName", sampleName));
+                    SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPARAMS", arguments);
+                    arguments.Clear();
 
-					outputString = streamReader.ReadLine();     //RECEIVED
+                    outputString = streamReader.ReadLine();     //RECEIVED
 
-					/// 
-					/// Now see if the system is ready
-					/// 
-					SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQREADY", arguments);
-					outputString = streamReader.ReadLine();     //READY
+                    /// 
+                    /// Now see if the system is ready
+                    /// 
+                    SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQREADY", arguments);
+                    outputString = streamReader.ReadLine();     //READY
 
-					if (UnpackMessage(outputString).Descriptor == "ACQREADY")
-					{
+                    if (UnpackMessage(outputString).Descriptor == "ACQREADY")
+                    {
 
-						///
-						/// Tell the system to prepare for acquisition
-						/// 
-						SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
-						outputString = streamReader.ReadLine();     // Read off auto-response 
+                        ///
+                        /// Tell the system to prepare for acquisition
+                        /// 
+                        SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
+                        outputString = streamReader.ReadLine();     // Read off auto-response
 
-						/// 
-						/// Then ask if it is prepared...this should be in some kind of loop
-						/// 
-						{
-							SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
+                        /// 
+                        /// Then ask if it is prepared...this should be in some kind of loop
+                        /// 
+                        {
+                            SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
 
-							/// 
-							/// Check to see if it is prepared...
-							/// 
-							outputString = streamReader.ReadLine();     // Read off response for PREPARED
-							classNetStartMessage preparedMessage = UnpackMessage(outputString);
-							if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
-							{
-								SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQSTART", arguments);
-								string startResponse = mobj_reader.ReadLine();
+                            /// 
+                            /// Check to see if it is prepared...
+                            /// 
+                            outputString = streamReader.ReadLine();     // Read off response for PREPARED
+                            classNetStartMessage preparedMessage = UnpackMessage(outputString);
+                            if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
+                            {
+                                SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQSTART", arguments);
+                                string startResponse = mobj_reader.ReadLine();
 
-								SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQSTARTED", arguments);
-								outputString = streamReader.ReadLine();     //STARTED
+                                SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQSTARTED", arguments);
+                                outputString = streamReader.ReadLine();     //STARTED
 
-								classNetStartMessage startedMessage = UnpackMessage(outputString);
-								if (startedMessage.Descriptor.ToUpper() == "ACQSTARTED" && startedMessage.ArgumentList.Count > 0 && startedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
-									success = true;
-							}
-						}
-					}
-				}
-				Disconnect();
-			}
-			catch (Exception ex)
-			{
-				HandleError("Could not start the acquisition.", ex);
-				try
-				{
-					Disconnect();
-				}
-				catch (Exception exDisconnect)
-				{
-					HandleError("Could not disconnect from the server.", exDisconnect);
-				}
-			}
-			finally
-			{
-				//TODO: Clean-up code to use disposable's
-			}
+                                classNetStartMessage startedMessage = UnpackMessage(outputString);
+                                if (startedMessage.Descriptor.ToUpper() == "ACQSTARTED" && startedMessage.ArgumentList.Count > 0 && startedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
+                                    success = true;
+                            }
+                        }
+                    }
+                }
+                Disconnect();
+            }
+            catch (Exception ex)
+            {
+                HandleError("Could not start the acquisition.", ex);
+                try
+                {
+                    Disconnect();
+                }
+                catch (Exception exDisconnect)
+                {
+                    HandleError("Could not disconnect from the server.", exDisconnect);
+                }
+            }
+            finally
+            {
+                //TODO: Clean-up code to use disposable's
+            }
 
             return success;
         }
         /// <summary>
         /// Stops instrument acquisition.
         /// </summary>
-        [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)] 
+        [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopAcquisition(double delayTime)
         {
             DateTime startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -463,7 +463,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 return true;
             }
 
-			Connect(mstring_address, mint_port);
+            Connect(mstring_address, mint_port);
 
             StreamReader streamReader = mobj_reader;
             StreamWriter streamWriter = mobj_writer;
@@ -474,7 +474,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             try
             {
                 string outputString;
-					 SendMessage(streamWriter, enumNetStartMessageTypes.Post, 0, "ACQSTOP", arguments);
+                     SendMessage(streamWriter, enumNetStartMessageTypes.Post, 0, "ACQSTOP", arguments);
                 outputString = streamReader.ReadLine();
                 success = true;
 
@@ -482,7 +482,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             catch(Exception ex)
             {
                 HandleError("Could not stop the acquisition.", ex);
-				success = false;
+                success = false;
             }
             return success;
         }
@@ -533,13 +533,13 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             get
             {
-				return menum_status;
+                return menum_status;
             }
             set
-			{
-				if (value != menum_status && StatusUpdate != null)
+            {
+                if (value != menum_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
-				menum_status = value;
+                menum_status = value;
             }
         }
         /// <summary>
@@ -573,7 +573,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 if (connected == false)
                 {
                     errorMessage = "Could not disconnect from the remote instrument.";
-                    return false; 
+                    return false;
                 }
                 success = true;
             }
@@ -602,16 +602,16 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             //pass
         }
-		  public List<string> GetStatusNotificationList()
+          public List<string> GetStatusNotificationList()
         {
             return new List<string>();
-		  }
+          }
 
-		  public List<string> GetErrorNotificationList()
+          public List<string> GetErrorNotificationList()
           {
               return new List<string>();
-		  }
-		  #endregion
+          }
+          #endregion
 
         #region Settings and Saving Methods
         /// <summary>
@@ -678,10 +678,10 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             if (Error != null)
             {
                 Error(this, new classDeviceErrorEventArgs(message,
-												 ex,
-												 enumDeviceErrorStatus.ErrorAffectsAllColumns,
-												 this,
-												 "None"));
+                                                 ex,
+                                                 enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                                 this,
+                                                 "None"));
             }
         }
 
@@ -707,33 +707,33 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         public FinchComponentData GetData()
         {
             FinchComponentData component    = new FinchComponentData();
-            component.Status                = Status.ToString();            
+            component.Status                = Status.ToString();
             component.Name                  = Name;
             component.Type                  = "Network Start";
             component.LastUpdate = DateTime.Now;
 
-            FinchScalarSignal measurementSendTimeout  = new FinchScalarSignal();            
+            FinchScalarSignal measurementSendTimeout  = new FinchScalarSignal();
             measurementSendTimeout.Name             = "Send Timeout";
             measurementSendTimeout.Type             = FinchDataType.Integer;
             measurementSendTimeout.Units            = "";
             measurementSendTimeout.Value            = this.SendTimeout.ToString();
             component.Signals.Add(measurementSendTimeout);
 
-            FinchScalarSignal measurementReceiveTimeout   = new FinchScalarSignal();            
+            FinchScalarSignal measurementReceiveTimeout   = new FinchScalarSignal();
             measurementReceiveTimeout.Name              = "Receive Timeout";
             measurementReceiveTimeout.Type              = FinchDataType.Integer;
             measurementReceiveTimeout.Units             = "";
             measurementReceiveTimeout.Value             = this.ReceiveTimeout.ToString();
             component.Signals.Add(measurementReceiveTimeout);
 
-            FinchScalarSignal measurementAddress   = new FinchScalarSignal();            
+            FinchScalarSignal measurementAddress   = new FinchScalarSignal();
             measurementAddress.Name              = "Address";
             measurementAddress.Type              =  FinchDataType.String;
             measurementAddress.Units             = "";
             measurementAddress.Value             = this.Address.ToString();
             component.Signals.Add(measurementAddress);
 
-            FinchScalarSignal port = new FinchScalarSignal();            
+            FinchScalarSignal port = new FinchScalarSignal();
             port.Name           = "Port";
             port.Type           = FinchDataType.String;
             port.Units          = "";

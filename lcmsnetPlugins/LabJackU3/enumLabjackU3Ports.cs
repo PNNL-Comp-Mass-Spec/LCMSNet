@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by Christopher Walters for the US Department of Energy 
+// Written by Christopher Walters for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 1/7/2014
@@ -29,7 +29,7 @@ namespace LcmsNet.Devices.ContactClosure
         FIO4Digital = 4,
         FIO5Digital = 5,
         FIO6Digital = 6,
-        FIO7Digital = 7,   
+        FIO7Digital = 7,
         // EIO pins in the U3 DB-15 connector, digital mode
         EIO0Digital = 8,
         EIO1Digital = 9,
@@ -43,7 +43,7 @@ namespace LcmsNet.Devices.ContactClosure
         CIO0Digital = 16,
         CIO1Digital = 17,
         CIO2Digital = 18,
-        CIO3Digital = 19,       
+        CIO3Digital = 19,
         // FIO pins on the front of the U3, analog mode
         FIO0Analog = 20,
         FIO1Analog = 21,
@@ -80,7 +80,7 @@ namespace LcmsNet.Devices.ContactClosure
         FIO4Digital = 4,
         FIO5Digital = 5,
         FIO6Digital = 6,
-        FIO7Digital = 7, 
+        FIO7Digital = 7,
         // EIO pins in the U3 DB-15 connector, digital mode
         EIO0Digital = 8,
         EIO1Digital = 9,
@@ -112,7 +112,7 @@ namespace LcmsNet.Devices.ContactClosure
         EIO4Analog = 32,
         EIO5Analog = 33,
         EIO6Analog = 34,
-        EIO7Analog = 35, 
+        EIO7Analog = 35,
     }
 
     /// <summary>

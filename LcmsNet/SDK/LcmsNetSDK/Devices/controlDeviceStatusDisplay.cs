@@ -299,7 +299,7 @@ namespace LcmsNetDataClasses.Devices
             var width = height;
             var left = Width - height + offset - CONST_INDICATOR_PADDING;
             var top = CONST_INDICATOR_TOP_PADDING;
-            // Draw the initialized indicator.       
+            // Draw the initialized indicator.
             DrawIndicator(e.Graphics, left, top, width, height, Color.Lime, Color.DarkOliveGreen, m_isInitialized);
             // Draw the in use indicator.
             left -= (height + CONST_INDICATOR_PADDING);

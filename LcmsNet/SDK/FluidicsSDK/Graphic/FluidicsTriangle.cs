@@ -2,8 +2,8 @@
  * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
- * 
- * Last Modified 12/18/2013 By Christopher Walters 
+ *
+ * Last Modified 12/18/2013 By Christopher Walters
  ********************************************************************************************************/
 
 using System;
@@ -140,7 +140,7 @@ namespace FluidicsSDK.Graphic
             for (int i = 0; i < m_points.Length; i++)
             {
                 m_points[i].X += relativeValues.X;
-                m_points[i].Y += relativeValues.Y;              
+                m_points[i].Y += relativeValues.Y;
             
                 maxx = Math.Max(m_points[i].X, maxx);
                 maxy = Math.Max(m_points[i].Y, maxy);

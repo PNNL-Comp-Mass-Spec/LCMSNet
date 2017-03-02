@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/22/2013
- * 
- * Last Modified 10/17/2013 By Christopher Walters 
+ *
+ * Last Modified 10/17/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace FluidicsSDK.Graphic
         public FluidicsRectangle(Point loc, Size size, Color color, Brush fillBrush, bool fill = true, float atScale = 1):
             base(fillBrush, myColor:color, fill:fill, atScale:atScale)
         {
-            m_rect = new Rectangle(loc, size);             
+            m_rect = new Rectangle(loc, size);
         }
 
         /// <summary>

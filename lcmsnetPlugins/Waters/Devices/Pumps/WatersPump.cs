@@ -142,7 +142,7 @@ namespace Waters.Devices.Pumps
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
 
-            m_notificationStrings = new string[] 
+            m_notificationStrings = new string[]
             {
                 CONST_FLOW_CHANGE,
                 CONST_PRESSURE_VALUE
@@ -182,7 +182,7 @@ namespace Waters.Devices.Pumps
                         {                            
                             statusXML = m_instrumentSystem.StatusDetail;
                         }
-                        catch (Exception) 
+                        catch (Exception)
                         {
 
                         }
@@ -213,7 +213,7 @@ namespace Waters.Devices.Pumps
             if (m_flowRate != 0)
             {
                 double percentFlowChange = (m_flowRate - flowrate) / m_flowRate;
-                UpdateNotificationStatus(percentFlowChange.ToString(), CONST_FLOW_CHANGE);               
+                UpdateNotificationStatus(percentFlowChange.ToString(), CONST_FLOW_CHANGE);
             }
             m_flowRate = flowrate;
 
@@ -305,7 +305,7 @@ namespace Waters.Devices.Pumps
         /// </summary>
         private void StartMonitorThread()
         {
-            AbortMonitorThread();            
+            AbortMonitorThread();
             
             m_shouldMonitor     = true;
             ThreadStart start   = new ThreadStart(MonitorThread);
@@ -500,7 +500,7 @@ namespace Waters.Devices.Pumps
             }
             finally
             {
-                Dispose();  
+                Dispose();
             }
             return true;
         }
@@ -546,12 +546,12 @@ namespace Waters.Devices.Pumps
             List<string> notifications = new List<string>() { "Status"
                                                             };
 
-            notifications.AddRange(m_notificationStrings);            
+            notifications.AddRange(m_notificationStrings);
             return notifications;
         }
         public List<string> GetErrorNotificationList()
         {
-            return new List<string>(); 
+            return new List<string>();
         }        
         #endregion
         
@@ -606,7 +606,7 @@ namespace Waters.Devices.Pumps
         #endregion
 
         /// <summary>
-        /// Gets a list of instruments from the network.       
+        /// Gets a list of instruments from the network.
         /// </summary>
         /// <returns></returns>
         public List<string> ScanForInstruments()
@@ -622,7 +622,7 @@ namespace Waters.Devices.Pumps
             List<string> instrumentNames = new List<string>();
             foreach (XmlNode node in nodes)
             {
-                instrumentNames.Add(node.InnerText);                
+                instrumentNames.Add(node.InnerText);
             }
             return instrumentNames;
         }
@@ -646,12 +646,12 @@ namespace Waters.Devices.Pumps
             }
         }
         /// <summary>
-        /// Starts the method provided for the given runtime.  
+        /// Starts the method provided for the given runtime.
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="method"></param>
         /// <param name="runTime"></param>
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]        
+        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
         public void StartMethod(double timeout, string method)
         {
             try

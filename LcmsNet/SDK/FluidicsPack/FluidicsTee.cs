@@ -37,7 +37,7 @@ namespace FluidicsPack
             }
             List<Tuple<int, int>> Connections = new List<Tuple<int, int>>();
             Connections.Add(new Tuple<int,int>(0, 1));
-            Connections.Add(new Tuple<int,int>(2,1)); 
+            Connections.Add(new Tuple<int,int>(2,1));
             m_info_controls_box.Width = 70;
             m_info_controls_box.Height = 46;
             ActivateState(Connections);
@@ -90,7 +90,7 @@ namespace FluidicsPack
         public override void Select(Point mouse_location)
         {
             if (Contains(mouse_location))
-                Selected = true;            
+                Selected = true;
                 if (DeviceChanged != null)
                 {
                     DeviceChanged(this, new FluidicsDevChangeEventArgs());

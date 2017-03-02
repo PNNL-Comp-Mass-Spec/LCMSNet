@@ -88,7 +88,7 @@ namespace LcmsNetDataClasses.Experiment
         public List<classSampleData> ValidateBlocks(List<classSampleData> samples)
         {
             /// 
-            /// First we want to bin the samples based on block number, then we want to 
+            /// First we want to bin the samples based on block number, then we want to
             /// figure out for each block if we are scheduled to run on the same column.
             /// 
             Dictionary<string, List<classSampleData>> tempDictionary = new Dictionary<string,List<classSampleData>>();
@@ -96,7 +96,7 @@ namespace LcmsNetDataClasses.Experiment
             {
                 int block = sample.DmsData.Block;
                 int batch = sample.DmsData.Batch;
-				// If the items are blocked, then they need to run on one column.  For batched samples we dont care.
+                // If the items are blocked, then they need to run on one column.  For batched samples we dont care.
                 if (block < 1)
                 {
                     continue;
@@ -132,7 +132,7 @@ namespace LcmsNetDataClasses.Experiment
 
                 /// 
                 /// Find a mis match between any of the columns. By communicative property
-                /// we only need to use one of the column id values to do this and perform a 
+                /// we only need to use one of the column id values to do this and perform a
                 /// O(n) search.
                 /// 
                 for (int i = 1; i < tempSamples.Count; i++)
@@ -143,7 +143,7 @@ namespace LcmsNetDataClasses.Experiment
                     if (tempSamples[i].ColumnData.ID != columnID || method.Name != tempSamples[i].LCMethod.Name)
                     {                        
                         badSamples.AddRange(tempSamples);
-                        break;                                       
+                        break;
                     }
                 }                        
             }

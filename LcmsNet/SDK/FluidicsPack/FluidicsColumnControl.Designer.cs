@@ -23,7 +23,7 @@
         #region Component Designer generated code
 
         /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -83,7 +83,7 @@
             // 
             // mtextBox_packingMaterial
             // 
-            this.mtextBox_packingMaterial.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.mtextBox_packingMaterial.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextBox_packingMaterial.Location = new System.Drawing.Point(120, 88);
             this.mtextBox_packingMaterial.Multiline = true;

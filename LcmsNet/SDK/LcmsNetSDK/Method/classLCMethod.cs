@@ -69,7 +69,7 @@ namespace LcmsNetDataClasses.Method
         #region Properties
 
         /// <summary>
-        /// Gets or sets the method for a 
+        /// Gets or sets the method for a
         /// </summary>
         public classLCEventRelative RelativeMethod { get; set; }
 
@@ -84,7 +84,7 @@ namespace LcmsNetDataClasses.Method
         public TimeSpan Duration => mspan_duration;
 
         /// <summary>
-        /// Gets the end time of the action. 
+        /// Gets the end time of the action.
         /// </summary>
         public DateTime End
         {
@@ -145,11 +145,11 @@ namespace LcmsNetDataClasses.Method
 
         /// <summary>
         /// Gets or sets the index of the column that this method is associated with.
-        /// </summary>        		
+        /// </summary>              
         public int Column { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the method is special.  This means that the method 
+        /// Gets or sets whether the method is special.  This means that the method
         /// is not targeted to run on a column.
         /// </summary>
         public bool IsSpecialMethod { get; set; }
@@ -182,7 +182,7 @@ namespace LcmsNetDataClasses.Method
                 // 
                 // Only write this if we have performance data for this method....
                 // meaning that it has something we need to know or save for later
-                // to reproduce performance information to understand when the 
+                // to reproduce performance information to understand when the
                 // cart misbehaves.
                 // 
                 if (lcEvent.MethodAttribute.HasPerformanceData)
@@ -199,8 +199,8 @@ namespace LcmsNetDataClasses.Method
         public void SetStartTime(DateTime start)
         {
             // 
-            // Update the start time and cascade the calculation so that 
-            // the event times are all updated allowing us to calculate 
+            // Update the start time and cascade the calculation so that
+            // the event times are all updated allowing us to calculate
             // the duration and end time of the entire method.
             // 
             mtime_start = start;
@@ -227,7 +227,7 @@ namespace LcmsNetDataClasses.Method
         {
             var adjustedStart = mtime_start;
             // 
-            // Iterate through each event (ultimately) and 
+            // Iterate through each event (ultimately) and
             // adjust the start times of the event based on the time span provided.
             // 
             foreach (var controlEvent in Events)
@@ -247,7 +247,7 @@ namespace LcmsNetDataClasses.Method
         }
 
         /// <summary>
-        /// Clones the current method and returns a new method 
+        /// Clones the current method and returns a new method
         /// </summary>
         /// <returns></returns>
         public object Clone()

@@ -11,7 +11,7 @@ using LcmsNetDataClasses;
 namespace DemoPluginLibrary
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(DemoPALAdvancedControl),                                 
+    [classDeviceControlAttribute(typeof(DemoPALAdvancedControl),
                                  "DemoPAL",
                                  "Demo")
     ]
@@ -30,7 +30,7 @@ namespace DemoPluginLibrary
 #pragma warning restore 67
 
         /// <summary>
-        /// Fired to the method editor handler with a List of method names 
+        /// Fired to the method editor handler with a List of method names
         /// </summary>
         public event DelegateDeviceHasData Methods;
 

@@ -14,7 +14,7 @@ namespace LcmsNet.Devices.Pumps
 {
     public partial class controlPumpAgilentGlyph : UserControl, IDeviceGlyph
     {
-        private classPumpAgilent mobj_agilentPump;        
+        private classPumpAgilent mobj_agilentPump;
         formAgilentPumpPurge     mform_purges;
 
         public controlPumpAgilentGlyph()
@@ -59,7 +59,7 @@ namespace LcmsNet.Devices.Pumps
             get;
             set;
         }
-        #endregion        
+        #endregion
         
         #region Rendering
         private void DisplayMonitoringData(List<DateTime> time, List<double> pressure, List<double> flowrate, List<double> percentB)
@@ -85,7 +85,7 @@ namespace LcmsNet.Devices.Pumps
                 DisplayMonitoringData(time, pressure, flowrate, percentB);
             }            
         }
-        #endregion        
+        #endregion
 
         
         private void mbutton_purge_Click(object sender, EventArgs e)

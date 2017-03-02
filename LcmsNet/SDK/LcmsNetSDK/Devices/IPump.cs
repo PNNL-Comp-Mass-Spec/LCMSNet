@@ -5,7 +5,7 @@ using LcmsNetSDK.Data;
 namespace LcmsNetDataClasses.Devices.Pumps
 {
     /// <summary>
-    /// Interface for displaying pump data 
+    /// Interface for displaying pump data
     /// </summary>
     public interface IPump
     {

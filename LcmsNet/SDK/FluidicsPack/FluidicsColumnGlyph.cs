@@ -55,7 +55,7 @@ namespace FluidicsPack
             
         }
 
-        protected override void SetDevice(IDevice device) 
+        protected override void SetDevice(IDevice device)
         {
             m_device = device;
         }
@@ -98,7 +98,7 @@ namespace FluidicsPack
                 using (Font stringFont = new Font("Calibri", 11 + stringScale))
                 {
                     // draw name to screen
-                    string name = DeviceName;                    
+                    string name = DeviceName;
 
                     m_info_controls_box = UpdateControlBoxLocation();
 
@@ -106,8 +106,8 @@ namespace FluidicsPack
                     System.Drawing.StringFormat sf = new StringFormat(StringFormatFlags.DirectionVertical);
                     SizeF nameSize = g.MeasureString(name, stringFont);
 
-                    Point nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Height, scale);                    
-                    g.DrawString(name, stringFont, br, nameLocation, sf);                   
+                    Point nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Height, scale);
+                    g.DrawString(name, stringFont, br, nameLocation, sf);
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace FluidicsPack
         /// <returns></returns>
         protected override Point CreateStringLocation(int y, float stringHeight, float scale)
         {
-            // The height is actually our "width" here, since we are drawing the string vertically. 
+            // The height is actually our "width" here, since we are drawing the string vertically.
             return new Point((int)((m_info_controls_box.X * scale) - stringHeight/2),
                     (int)(y + 10));
         }

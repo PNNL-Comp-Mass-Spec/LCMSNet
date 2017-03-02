@@ -31,7 +31,7 @@ namespace AmpsBox
             Expandable = false;
         }
 
-        #region RF Commands        
+        #region RF Commands
         void m_rfControl_GetRfFrequency(object sender, AmpsBoxCommandEventArgs e)
         {
             try
@@ -99,7 +99,7 @@ namespace AmpsBox
 
         #region HV Control
         /// <summary>
-        /// Gets 
+        /// Gets
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -183,8 +183,8 @@ namespace AmpsBox
             m_device.CapabilitiesLearned += new EventHandler<AmpsInitializationArgs>(m_device_CapabilitiesLearned);
             m_device.Error += new EventHandler<classDeviceErrorEventArgs>(m_device_Error);
    
-            // Add a list of available serial port names to the combo box.            
-            mpropertyGrid_serialPort.SelectedObject = m_device.Port;                    
+            // Add a list of available serial port names to the combo box.
+            mpropertyGrid_serialPort.SelectedObject = m_device.Port;
         }
 
         void m_device_Error(object sender, classDeviceErrorEventArgs e)
@@ -278,7 +278,7 @@ namespace AmpsBox
                 m_device.Emulation = value;
             }
         }
-        #endregion        
+        #endregion
         
         private void mbutton_closePort_Click(object sender, EventArgs e)
         {

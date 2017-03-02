@@ -10,46 +10,46 @@ using ActiveMQTools;
 
 namespace ActiveMQModuleTest
 {
-	public partial class Form1 : Form
-	{
-		//private ActiveMQTools.classMsgControl msgControl = null;
+    public partial class Form1 : Form
+    {
+        //private ActiveMQTools.classMsgControl msgControl = null;
 
-		public Form1()
-		{
-			InitializeComponent();
+        public Form1()
+        {
+            InitializeComponent();
 
-			InitForm();
-		}
+            InitForm();
+        }
 
-		private void InitForm()
-		{
-			//msgControl = new classMsgControl("Elmer", txtBrokerURI.Text, txtQueueName.Text,
-			//                  txtStatusTopic.Text);
+        private void InitForm()
+        {
+            //msgControl = new classMsgControl("Elmer", txtBrokerURI.Text, txtQueueName.Text,
+            //                  txtStatusTopic.Text);
 
-			// Initialize ActuveMQ handling class
-			classMsgControl.BrokerURI = txtBrokerURI.Text;
-			classMsgControl.CommandQueueName = txtQueueName.Text;
-			classMsgControl.InstName = "Elmer";
-			classMsgControl.StatusTopicName = txtStatusTopic.Text;
-			classMsgControl.InitMsgControl();
-			classMsgControl.ControlCmdReceived += new DelegateControlCmdReceived(OnControlCmdReceived);
-		}
+            // Initialize ActuveMQ handling class
+            classMsgControl.BrokerURI = txtBrokerURI.Text;
+            classMsgControl.CommandQueueName = txtQueueName.Text;
+            classMsgControl.InstName = "Elmer";
+            classMsgControl.StatusTopicName = txtStatusTopic.Text;
+            classMsgControl.InitMsgControl();
+            classMsgControl.ControlCmdReceived += new DelegateControlCmdReceived(OnControlCmdReceived);
+        }
 
-		void OnControlCmdReceived(object sender, string cmdText)
-		{
-			txtCmdReceived.Text = cmdText;
-		}
+        void OnControlCmdReceived(object sender, string cmdText)
+        {
+            txtCmdReceived.Text = cmdText;
+        }
 
-		private void btnSendWithReply_Click(object sender, EventArgs e)
-		{
-			string response = classMsgControl.SendCommandWithReply(txtQueueMsg.Text);
-			//string response = msgControl.SendCommandWithReply(txtQueueMsg.Text);
-			txtQueueReply.Text = response;
-		}
+        private void btnSendWithReply_Click(object sender, EventArgs e)
+        {
+            string response = classMsgControl.SendCommandWithReply(txtQueueMsg.Text);
+            //string response = msgControl.SendCommandWithReply(txtQueueMsg.Text);
+            txtQueueReply.Text = response;
+        }
 
-		private void btnSendStatus_Click(object sender, EventArgs e)
-		{
-			classMsgControl.SendStatusMsg(txtStatus.Text);
-		}
-	}
+        private void btnSendStatus_Click(object sender, EventArgs e)
+        {
+            classMsgControl.SendStatusMsg(txtStatus.Text);
+        }
+    }
 }

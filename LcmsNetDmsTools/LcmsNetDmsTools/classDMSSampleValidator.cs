@@ -53,7 +53,7 @@ namespace LcmsNetDmsTools
                     return false;
                 }
             }
-            else if (string.IsNullOrEmpty(data.UsageType.ToUpper()))                
+            else if (string.IsNullOrEmpty(data.UsageType.ToUpper()))
             {
                 return false;
             }
@@ -74,7 +74,7 @@ namespace LcmsNetDmsTools
                 {
                     if (string.IsNullOrEmpty(data.ProposalID.Replace(" ","")))
                     {
-                     return false;   
+                     return false;
                     }                    
                 }
             }
@@ -112,7 +112,7 @@ namespace LcmsNetDmsTools
             
             if (data.RequestID == CONST_EMSL_REQUEST_CHECK)
             {                
-                if (string.IsNullOrEmpty(data.UsageType.ToUpper()))                
+                if (string.IsNullOrEmpty(data.UsageType.ToUpper()))
                 {
                     return false;
                 }
@@ -130,12 +130,12 @@ namespace LcmsNetDmsTools
             
             if (data.RequestID == CONST_EMSL_REQUEST_CHECK)
             {                
-                if (string.IsNullOrEmpty(data.Experiment.ToUpper()))                
+                if (string.IsNullOrEmpty(data.Experiment.ToUpper()))
                 {
                     return false;
                 }
             }   
-            return true;            
+            return true;
         }
      
         public Type DMSValidatorControl

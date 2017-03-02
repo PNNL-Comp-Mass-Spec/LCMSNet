@@ -49,7 +49,7 @@ namespace LcmsNet.Devices.BrukerStart
             get;
             set;
         }
-        #endregion        
+        #endregion
         
         /// <summary>
         /// Gets or sets the status display bar.

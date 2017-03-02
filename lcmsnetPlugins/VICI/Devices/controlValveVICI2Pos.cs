@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -58,11 +58,11 @@ namespace LcmsNet.Devices.Valves
             
             //TODO: Throw error!
             if (mobj_valve == null)
-                return;            
-	
+                return;
+    
             
             
-			mobj_valve.PositionChanged    += new DelegateDevicePositionChange(OnPosChanged);            
+            mobj_valve.PositionChanged    += new DelegateDevicePositionChange(OnPosChanged);
             mobj_valve.DeviceSaveRequired += new EventHandler(Valve_DeviceSaveRequired);
             
             SetBaseDevice(mobj_valve);
@@ -147,7 +147,7 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="newPosition">The new position</param>
-        public virtual void OnPosChanged(object sender, string newPosition)	// DAC changed
+        public virtual void OnPosChanged(object sender, string newPosition) // DAC changed
         {            
             if (InvokeRequired)
             {
@@ -185,31 +185,31 @@ namespace LcmsNet.Devices.Valves
         }   
         private void btnA_Click(object sender, EventArgs e)
         {
-			  try
-			  {
-				  mobj_valve.SetPosition(enumValvePosition2Pos.A);
-				  mtextbox_CurrentPos.Text = mobj_valve.LastMeasuredPosition.ToString();
-			  }
-			  catch (ValveExceptionReadTimeout ex)
-			  {
-				  ShowError("Timeout (read) when attempting to set valve position", ex);
-			  }
-			  catch (ValveExceptionWriteTimeout ex)
-			  {
-				  ShowError("Timeout (write) when attempting to set valve position", ex);
-			  }
-			  catch (ValveExceptionUnauthorizedAccess ex)
-			  {
-				  ShowError("Unauthorized access when attempting to set valve position", ex);
-			  }
-			  catch (ValveExceptionPositionMismatch ex)
-			  {
-				  ShowError("Valve position mismatch", ex);
-			  }
-			  catch (Exception Ex)
-			  {
-				  ShowError("Exception in valve control", Ex);
-			  }
+              try
+              {
+                  mobj_valve.SetPosition(enumValvePosition2Pos.A);
+                  mtextbox_CurrentPos.Text = mobj_valve.LastMeasuredPosition.ToString();
+              }
+              catch (ValveExceptionReadTimeout ex)
+              {
+                  ShowError("Timeout (read) when attempting to set valve position", ex);
+              }
+              catch (ValveExceptionWriteTimeout ex)
+              {
+                  ShowError("Timeout (write) when attempting to set valve position", ex);
+              }
+              catch (ValveExceptionUnauthorizedAccess ex)
+              {
+                  ShowError("Unauthorized access when attempting to set valve position", ex);
+              }
+              catch (ValveExceptionPositionMismatch ex)
+              {
+                  ShowError("Valve position mismatch", ex);
+              }
+              catch (Exception Ex)
+              {
+                  ShowError("Exception in valve control", Ex);
+              }
         }
 
         private void btnB_Click(object sender, EventArgs e)

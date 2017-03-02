@@ -1,7 +1,7 @@
 ﻿namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
-    /// Holds information regarding the type of error that 
+    /// Holds information regarding the type of error that
     /// </summary>
     public class classSampleValidationError
     {

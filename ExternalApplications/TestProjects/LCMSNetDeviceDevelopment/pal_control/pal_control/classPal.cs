@@ -161,8 +161,8 @@ namespace pal_control
         }
 
         /// <summary>
-        /// Initializes the PAL. 
-        /// This is done by starting paldriv.exe, resetting the PAL, 
+        /// Initializes the PAL.
+        /// This is done by starting paldriv.exe, resetting the PAL,
         /// and loading the PAL's configuration.
         /// </summary>
         public void Initialize()
@@ -242,7 +242,7 @@ namespace pal_control
                 {
                     System.Threading.Thread.Sleep(10);
                     System.Windows.Forms.Application.DoEvents();
-                    end = DateTime.Now;                    
+                    end = DateTime.Now;
                 }
 
                 //If we made it this far, success! We can now access the PAL.
@@ -291,7 +291,7 @@ namespace pal_control
         }
 
         /// <summary>
-        /// Lists the available trays known to the PAL. 
+        /// Lists the available trays known to the PAL.
         /// </summary>
         /// <returns>A string containing the methods</returns>
         public string ListTrays()
@@ -351,7 +351,7 @@ namespace pal_control
             DateTime start  = DateTime.Now;
             DateTime end    = start;
             string status   = "";
-            bool isError    = true; 
+            bool isError    = true;
             while (end.Subtract(start).TotalMilliseconds < timeout)
             {
                 int statusCheckError = mobj_PALDrvr.GetStatus(ref status);

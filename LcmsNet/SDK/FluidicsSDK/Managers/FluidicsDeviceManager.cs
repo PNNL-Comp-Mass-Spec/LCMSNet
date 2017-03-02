@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 9/5/2013
- * 
- * Last Modified 1/6/2013 By Christopher Walters 
+ *
+ * Last Modified 1/6/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace FluidicsSDK.Managers
             public event EventHandler<FluidicsDeviceChangeEventArgs> DeviceAdded;
             public event EventHandler<FluidicsDeviceChangeEventArgs> DeviceRemoved;
             public event EventHandler DeviceChanged;
-        #endregion         
+        #endregion
 
         #region Methods
             /// <summary>
@@ -46,7 +46,7 @@ namespace FluidicsSDK.Managers
                 {
                     if (fdevice.IDevice == device)
                     {
-                        throw new FluidicsDeviceExistsException("The specified device already exists in the model.");                        
+                        throw new FluidicsDeviceExistsException("The specified device already exists in the model.");
                     }      
                 }
                 
@@ -149,8 +149,8 @@ namespace FluidicsSDK.Managers
             /// <returns>a classFluidicsDevice object if one is found, or null</returns>
             public FluidicsDevice Select(Point location)
             {
-                // search devices from back of list to front..this provides inherent z ordering, since 
-                // devices that were created after others(or were moved in front of others), will appear at the 
+                // search devices from back of list to front..this provides inherent z ordering, since
+                // devices that were created after others(or were moved in front of others), will appear at the
                 // back of the list.
                 List<FluidicsDevice> tmpList = new List<FluidicsDevice>(m_devices);
                 tmpList.Reverse();
@@ -165,7 +165,7 @@ namespace FluidicsSDK.Managers
             }
 
             /// <summary>
-            /// Get bounding box around 
+            /// Get bounding box around
             /// </summary>
             /// <returns></returns>
             public Rectangle GetBoundingBox(bool addBuffer)
@@ -238,7 +238,7 @@ namespace FluidicsSDK.Managers
             {
                 listOfDevices.Add(new Tuple<string, string, string>(dev.IDevice.Name, dev.IDevice.Status.ToString(), dev.IDevice.ErrorType.ToString()));
             }
-            return listOfDevices;            
+            return listOfDevices;
         }
 
 

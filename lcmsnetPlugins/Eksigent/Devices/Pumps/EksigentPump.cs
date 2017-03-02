@@ -142,7 +142,7 @@ namespace Eksigent.Devices.Pumps
             TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
         }
 
-        #region Properties 
+        #region Properties
         
         [classPersistenceAttribute("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
@@ -159,7 +159,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Gets or sets the value to wait for the instrument to go into a valid state before starting a run.
         /// </summary>
-        [classPersistence("PrepareTimeout")]        
+        [classPersistence("PrepareTimeout")]
         public int PrepareTimeout
         {
             get;
@@ -215,7 +215,7 @@ namespace Eksigent.Devices.Pumps
         }
         private enumDeviceStatus menum_status;
         /// <summary>
-        /// Gets or sets Current Status of device 
+        /// Gets or sets Current Status of device
         /// </summary>
         public enumDeviceStatus Status
         {
@@ -290,7 +290,7 @@ namespace Eksigent.Devices.Pumps
             {
                 try
                 {    
-                    m_hardware = new EksigentInterfaceClass();                    
+                    m_hardware = new EksigentInterfaceClass();
                 }
                 catch (Exception ex)
                 {
@@ -300,7 +300,7 @@ namespace Eksigent.Devices.Pumps
                 bool initialized = m_hardware.Initialize();
                 if (!initialized)
                 {
-                    errorMessage = "Could not create an interface to the Eksigent SDK.";                    
+                    errorMessage = "Could not create an interface to the Eksigent SDK.";
                     return false;
                 }                
                 HandleStatus("Getting number of channels on Eksigent Pump.");
@@ -318,12 +318,12 @@ namespace Eksigent.Devices.Pumps
                     int counts = 0;
                     while (status != 1 && counts < CONST_STATUS_TRIES)
                     {
-                        status = m_hardware.GetStatus(Convert.ToByte(i));                        
+                        status = m_hardware.GetStatus(Convert.ToByte(i));
                         if (status != lastStatus)
                         {
                             ConvertAndLogStatus(status);
                         }
-                        lastStatus = status;                    
+                        lastStatus = status;
                         System.Threading.Thread.Sleep(100);
                         counts++;
                     }
@@ -339,14 +339,14 @@ namespace Eksigent.Devices.Pumps
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent COMDRIVER");
                 try
                 {
-                    m_comDriver = m_hardware.get_COMInterface();                  
+                    m_comDriver = m_hardware.get_COMInterface();
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS");
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "flowprofilecomplete");
                     m_comDriver.FlowProfileComplete += new __COM_Driver_FlowProfileCompleteEventHandler(driv_FlowProfileComplete);
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "devicemessage");
                     m_comDriver.DeviceMessage += new __COM_Driver_DeviceMessageEventHandler(driv_DeviceMessage);
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "davavail");
-                    m_comDriver.DataAvailable += new __COM_Driver_DataAvailableEventHandler(driv_DataAvailable);         
+                    m_comDriver.DataAvailable += new __COM_Driver_DataAvailableEventHandler(driv_DataAvailable);
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS COMPLETE");
                 }
                 catch(Exception)
@@ -434,7 +434,7 @@ namespace Eksigent.Devices.Pumps
         }
         public List<string> GetErrorNotificationList()
         {
-            return new List<string>() { "Error" };            
+            return new List<string>() { "Error" };
         }        
         #endregion
 
@@ -448,7 +448,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (Error != null)
             {
-                classDeviceErrorEventArgs args = new classDeviceErrorEventArgs(error, ex, ErrorType, this, "Error");                
+                classDeviceErrorEventArgs args = new classDeviceErrorEventArgs(error, ex, ErrorType, this, "Error");
                 Error(this, args);
             }
             else
@@ -464,7 +464,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {                
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, "Status", status, this);                
+                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, "Status", status, this);
 
                 StatusUpdate(this, args);
             }
@@ -482,7 +482,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, statusNotifyString, status, this);                
+                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, statusNotifyString, status, this);
 
                 StatusUpdate(this, args);
             }
@@ -638,7 +638,7 @@ namespace Eksigent.Devices.Pumps
         }
         #endregion
 
-        #region COM Driver Event Handlers 
+        #region COM Driver Event Handlers
         void driv_FlowProfileComplete(ref byte colnum, ref bool FinishNormal)
         {
             HandleStatus(string.Format("The Eksigent - {1} - flow profile has completed for channel: {0}",
@@ -712,7 +712,7 @@ namespace Eksigent.Devices.Pumps
             }
 
         }
-        #endregion 
+        #endregion
 
         #region Custom HW/Software Interface
         /// <summary>
@@ -754,13 +754,13 @@ namespace Eksigent.Devices.Pumps
             injVol                  = 0;
             runFlag                 = 0;
             startMode               = 0;
-            string vialName         = "A1";            
-            bool worked             = m_hardware.PrepareForRun(Convert.ToByte(intChannel), 
-                                                                method, 
-                                                                0, 
-                                                                ref startMode, 
-                                                                vialName, 
-                                                                ref injVol, 
+            string vialName         = "A1";
+            bool worked             = m_hardware.PrepareForRun(Convert.ToByte(intChannel),
+                                                                method,
+                                                                0,
+                                                                ref startMode,
+                                                                vialName,
+                                                                ref injVol,
                                                                 ref runFlag);
             int status              = m_hardware.GetStatus(Convert.ToByte(intChannel));
 
@@ -847,7 +847,7 @@ namespace Eksigent.Devices.Pumps
         {
 
             string path = GetPathFromMethod(methodName);
-            if (path == null) 
+            if (path == null)
             {
                 HandleError("The method you requested does not exist.", null);
                 return;
@@ -858,7 +858,7 @@ namespace Eksigent.Devices.Pumps
         }
         public void ShowDirectControl(int channelNumber, int owner)
         {
-            m_hardware.ShowDirectControlMenu(Convert.ToByte(channelNumber), 
+            m_hardware.ShowDirectControlMenu(Convert.ToByte(channelNumber),
                                             0,
                                             owner);
         }

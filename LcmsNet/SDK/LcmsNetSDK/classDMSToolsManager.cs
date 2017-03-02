@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by Christopher Walters for the US Department of Energy 
+// Written by Christopher Walters for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2014, Battelle Memorial Institute
 // Created 09/11/2014
@@ -189,7 +189,7 @@ namespace LcmsNetSDK
         }
 
         /// <summary>
-        /// List the name and version of all dms tools detected. 
+        /// List the name and version of all dms tools detected.
         /// </summary>
         /// <returns>a list of strings containing name and version for each detected IDmsTools extension.</returns>
         public List<string> ListTools()

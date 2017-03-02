@@ -51,7 +51,7 @@ namespace LcmsNet.Devices.ContactClosure
             get;
             set;
         }
-        #endregion        
+        #endregion
 
         
         /// <summary>

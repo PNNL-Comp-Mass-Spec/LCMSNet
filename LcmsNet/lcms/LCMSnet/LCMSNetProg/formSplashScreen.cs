@@ -56,7 +56,7 @@ namespace LcmsNet
         public formSplashScreen()
         {
             InitializeComponent();
-            mlabel_version.Text += Application.ProductVersion; 
+            mlabel_version.Text += Application.ProductVersion;
         }
 
         private void UpdateStatus(string newStatus)

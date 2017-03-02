@@ -16,7 +16,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         private readonly List<IPump> m_pumps;
 
         /// <summary>
-        /// Dictionary to 
+        /// Dictionary to
         /// </summary>
         readonly Dictionary<IPump, controlPumpDisplay> m_controlList;
 
@@ -62,7 +62,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         void OnResize()
         {
             // 
-            // dw = difference width             
+            // dw = difference width
             // N  = number of controls.
             // 
             var N = mpanel_pumps.Controls.Count;
@@ -159,7 +159,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             mlabel_pump.Text = pump.Name;
         }
 
-        #region Device Manager Event Handlers 
+        #region Device Manager Event Handlers
 
         /// <summary>
         /// Handles when the device manager removes a device.
@@ -173,12 +173,12 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (pump == null)
                 return;
 
-            // Make sure we have the pump            
+            // Make sure we have the pump
             if (m_controlList.ContainsKey(pump) == false)
                 return;
 
-            // If it's a pump and we have it we are safe to remove it from the list of controls 
-            // and the mapping dictionary.                    
+            // If it's a pump and we have it we are safe to remove it from the list of controls
+            // and the mapping dictionary.
             mpanel_pumps.Controls.Remove(m_controlList[pump]);
             m_controlList.Remove(pump);
 
@@ -229,7 +229,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (m_controlList.ContainsKey(pump))
                 return;
 
-            // Hook into the pumps display calls            
+            // Hook into the pumps display calls
             var display = new controlPumpDisplay();
             display.SetPumpName(pump.Name);
 
@@ -238,7 +238,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             display.Tack += display_Tack;
             display.UnTack += display_UnTack;
 
-            // Make sure we reference this pump 
+            // Make sure we reference this pump
             m_controlList.Add(pump, display);
             mpanel_pumps.Controls.Add(display);
 

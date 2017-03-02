@@ -36,12 +36,12 @@ namespace EMSL.DocumentGenerator.PDFSharp.Tests
             //File.Delete(path);
         }     
         
-        [Test]       
+        [Test]
         public void TestWriteText()
         {
-            path = basePath + "\\writetest.pdf";           
+            path = basePath + "\\writetest.pdf";
             doc.Title = "writetest";
-            doc.AddParagraph("This is a test file.");           
+            doc.AddParagraph("This is a test file.");
             doc.WriteDocument(path);
             Assert.AreEqual(true, File.Exists(path));
             //File.Delete(path);
@@ -51,7 +51,7 @@ namespace EMSL.DocumentGenerator.PDFSharp.Tests
         public void TestDrawImageWithoutCaption()
         {
             path = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\testbitmap.bmp";
-            doc.Title = "drawtestwithoutcaption";            
+            doc.Title = "drawtestwithoutcaption";
             Core.Model.ImageContent image = new Core.Model.ImageContent(path);
             doc.AddImage(image);
             path = basePath + "\\drawtest1.pdf";
@@ -107,7 +107,7 @@ namespace EMSL.DocumentGenerator.PDFSharp.Tests
             doc.Title = "wholedoctest";
             doc.Date = DateTime.Now;
             doc.DateFormatString = "MMMM dd, yyyy";
-            doc.AddHeader(Core.Model.HeaderLevel.H1, "Doc Header");            
+            doc.AddHeader(Core.Model.HeaderLevel.H1, "Doc Header");
             Core.Model.ImageContent image = new Core.Model.ImageContent(picPath);
             doc.AddParagraph("This is a test document. We'll be back after the break!");
             image.CaptionText = "Figure 1: Random Test Image.";

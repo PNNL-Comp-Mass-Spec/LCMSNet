@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/19/2013
- * 
- * Last Modified 9/20/2013 By Christopher Walters 
+ *
+ * Last Modified 9/20/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -20,8 +20,8 @@ namespace FluidicsSDK.Graphic
 
             Rectangle m_rect;
             // Used for default constructor
-            const int DEFAULT_RADIUS = 10;            
-            int m_myRadius;    
+            const int DEFAULT_RADIUS = 10;
+            int m_myRadius;
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace FluidicsSDK.Graphic
             }
 
             /// <summary>
-            /// class constructor 
+            /// class constructor
             /// </summary>
             /// <param name="loc">a System.Drawing.Point representing the cirlces location on screen</param>
             /// <param name="color">a System.Drawing.Color to represent the cirlce</param>
@@ -68,7 +68,7 @@ namespace FluidicsSDK.Graphic
             {
                 // alter the color of the circle to be proper alpha.
                 base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
-                base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);                
+                base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
                 //base.FillColor = Color.FromArgb(alpha, base.FillColor.R, base.FillColor.G, base.FillColor.B);
                     Rectangle scaledRect = new Rectangle();
                     scaledRect.Location = new Point((int)(m_rect.Location.X * scale), (int)(m_rect.Location.Y * scale));
@@ -91,11 +91,11 @@ namespace FluidicsSDK.Graphic
                     if (base.Fill)
                     {                       
                         g.FillEllipse(base.FillBrush, scaledRect);
-                        g.DrawEllipse(drawingPen, scaledRect);      
+                        g.DrawEllipse(drawingPen, scaledRect);
                     }
                     else
                     {
-                        g.DrawEllipse(drawingPen, scaledRect);                                    
+                        g.DrawEllipse(drawingPen, scaledRect);
                     }          
             }
 
@@ -133,7 +133,7 @@ namespace FluidicsSDK.Graphic
                 // need to make a new rectangle as well as change the base Loc value to match the new Point location.
                 set
                 {                  
-                    m_rect = new Rectangle(value.X, value.Y, m_myRadius * 2 , m_myRadius * 2);                    
+                    m_rect = new Rectangle(value.X, value.Y, m_myRadius * 2 , m_myRadius * 2);
                 }    
             }
 

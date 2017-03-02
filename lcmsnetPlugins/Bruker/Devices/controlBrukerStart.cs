@@ -1,6 +1,6 @@
 ﻿
 //*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2010, Battelle Memorial Institute
 // Created 02/19/2010
@@ -19,34 +19,34 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices.BrukerStart
 {
-	public partial class controlBrukerStart : controlBaseDeviceControl, IDeviceControl
-	{
-		//*********************************************************************************************************
-		// Control for detector triggered by Bruker start commands
-		//**********************************************************************************************************
+    public partial class controlBrukerStart : controlBaseDeviceControl, IDeviceControl
+    {
+        //*********************************************************************************************************
+        // Control for detector triggered by Bruker start commands
+        //**********************************************************************************************************
 
-		#region "Class variables"
-			/// <summary>
-			/// BrukerStart object to use
-			/// </summary>
-			private classBrukerStart mobj_BrukerStart;
-		#endregion
+        #region "Class variables"
+            /// <summary>
+            /// BrukerStart object to use
+            /// </summary>
+            private classBrukerStart mobj_BrukerStart;
+        #endregion
 
-		#region "Private delegates"
-			private delegate void UpdateStatus(enumDeviceStatus status, string message);
-		#endregion
+        #region "Private delegates"
+            private delegate void UpdateStatus(enumDeviceStatus status, string message);
+        #endregion
 
-		#region "Events"
-			/// <summary>
-			/// Fired when the instrument methods are updated.
-			/// </summary>
-			public event DelegateNameListReceived InstrumentMethodListReceived;
-		#endregion
+        #region "Events"
+            /// <summary>
+            /// Fired when the instrument methods are updated.
+            /// </summary>
+            public event DelegateNameListReceived InstrumentMethodListReceived;
+        #endregion
 
-		#region "Constructors"
-		public controlBrukerStart()
-		{
-			InitializeComponent();
+        #region "Constructors"
+        public controlBrukerStart()
+        {
+            InitializeComponent();
         }
         public void RegisterDevice(IDevice device)
         {
@@ -61,39 +61,39 @@ namespace LcmsNet.Devices.BrukerStart
         }
         #endregion
 
-		#region "Properties"
-			/// <summary>
-			/// Device associated with this control
-			/// </summary>
-			public IDevice Device
-			{
-				get
-				{
-					 return mobj_BrukerStart;
+        #region "Properties"
+            /// <summary>
+            /// Device associated with this control
+            /// </summary>
+            public IDevice Device
+            {
+                get
+                {
+                     return mobj_BrukerStart;
                 }
                 set
                 {
                     RegisterDevice(value);
                 }
-			}
+            }
 
-			/// <summary>
-			/// Gets or sets object emulation mode
-			/// </summary>
-			public bool Emulation
-			{
-				get
-				{
-					 return mobj_BrukerStart.Emulation;
-				}
-				set
-				{
-					 mobj_BrukerStart.Emulation = value;
-				}
-			}
-		#endregion
+            /// <summary>
+            /// Gets or sets object emulation mode
+            /// </summary>
+            public bool Emulation
+            {
+                get
+                {
+                     return mobj_BrukerStart.Emulation;
+                }
+                set
+                {
+                     mobj_BrukerStart.Emulation = value;
+                }
+            }
+        #endregion
 
-		#region "Methods"
+        #region "Methods"
         /// <summary>
         /// Updates the status of the device.
         /// </summary>
@@ -143,47 +143,47 @@ namespace LcmsNet.Devices.BrukerStart
             if (InstrumentMethodListReceived != null)
                 InstrumentMethodListReceived(methodNames);
         }
-		#endregion
+        #endregion
 
-		#region Form Event Handlers 
-			private void mbutton_startAcquisition_Click(object sender, EventArgs e)
-			{
-				string methodName = "";
-				if (mcomboBox_methods.SelectedIndex < 0)
-				{
-					SetStatus(mobj_BrukerStart.Status, "No method selected.");
-					return;
-				}
-				methodName = mcomboBox_methods.SelectedItem.ToString();
+        #region Form Event Handlers
+            private void mbutton_startAcquisition_Click(object sender, EventArgs e)
+            {
+                string methodName = "";
+                if (mcomboBox_methods.SelectedIndex < 0)
+                {
+                    SetStatus(mobj_BrukerStart.Status, "No method selected.");
+                    return;
+                }
+                methodName = mcomboBox_methods.SelectedItem.ToString();
 
-				classSampleData sample           = new classSampleData();
-				sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
-				sample.InstrumentData.MethodName = methodName;
+                classSampleData sample           = new classSampleData();
+                sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
+                sample.InstrumentData.MethodName = methodName;
 
-				mobj_BrukerStart.StartAcquisition(20, sample);
-			}	
+                mobj_BrukerStart.StartAcquisition(20, sample);
+            }   
 
-			private void mbutton_stopAcquisition_Click(object sender, EventArgs e)
-			{
-				mobj_BrukerStart.StopAcquisition(20);
-			}	
+            private void mbutton_stopAcquisition_Click(object sender, EventArgs e)
+            {
+                mobj_BrukerStart.StopAcquisition(20);
+            }   
 
-			private void mbutton_getMethods_Click(object sender, EventArgs e)
-			{
-				mobj_BrukerStart.GetMethods();
-			}	
+            private void mbutton_getMethods_Click(object sender, EventArgs e)
+            {
+                mobj_BrukerStart.GetMethods();
+            }   
 
-			private void mtextbox_ipAddress_TextChanged(object sender, EventArgs e)
-			{
-				OnSaveRequired();
-				mobj_BrukerStart.IPAddress = mtextbox_ipAddress.Text;
-			}	
+            private void mtextbox_ipAddress_TextChanged(object sender, EventArgs e)
+            {
+                OnSaveRequired();
+                mobj_BrukerStart.IPAddress = mtextbox_ipAddress.Text;
+            }   
 
-			private void mnum_port_ValueChanged(object sender, EventArgs e)
-			{
-				mobj_BrukerStart.Port = Convert.ToInt32(mnum_port.Value);
-				OnSaveRequired();
-			}	
-		#endregion
-    }	
-}	// End namespace
+            private void mnum_port_ValueChanged(object sender, EventArgs e)
+            {
+                mobj_BrukerStart.Port = Convert.ToInt32(mnum_port.Value);
+                OnSaveRequired();
+            }   
+        #endregion
+    }   
+}   // End namespace

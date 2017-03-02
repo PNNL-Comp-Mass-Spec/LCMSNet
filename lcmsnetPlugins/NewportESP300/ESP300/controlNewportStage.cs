@@ -17,7 +17,7 @@ namespace Newport.ESP300
         const string positionNotDefined = "NoPosition";
         public controlNewportStage()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
 
@@ -31,7 +31,7 @@ namespace Newport.ESP300
             UpdatePositionListBox();
             UpdatePositionLabel(m_obj.CurrentPos);
             UpdateMotorStatus();
-            m_serialPropertyGrid.SelectedObject = m_obj.Port;            
+            m_serialPropertyGrid.SelectedObject = m_obj.Port;
         }
 
         private void m_obj_StatusUpdate(object sender, classDeviceStatusEventArgs e)
@@ -49,7 +49,7 @@ namespace Newport.ESP300
                         break;
                     case "3":
                         lblAxis3MotorStatus.Text = tokens[1];
-                        break;                   
+                        break;
                     default:
                         // we don't care about other updates...for now.
                         break;
@@ -163,7 +163,7 @@ namespace Newport.ESP300
 
         private void btnAxis3Fwd_MouseDown(object sender, MouseEventArgs e)
         {
-            m_obj.MoveAxis(3, false);            
+            m_obj.MoveAxis(3, false);
         }
 
         private void btnAxis3Fwd_MouseUp(object sender, MouseEventArgs e)
@@ -222,7 +222,7 @@ namespace Newport.ESP300
 
         private void btnGetErrors_Click(object sender, EventArgs e)
         {      
-            MessageBox.Show(m_obj.GetErrors(), "ESP300 Errors", MessageBoxButtons.OK);            
+            MessageBox.Show(m_obj.GetErrors(), "ESP300 Errors", MessageBoxButtons.OK);
         }
 
         private void UpdatePositionListBox()

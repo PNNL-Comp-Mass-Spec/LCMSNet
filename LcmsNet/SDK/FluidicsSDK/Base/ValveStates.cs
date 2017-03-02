@@ -76,7 +76,7 @@ namespace FluidicsSDK.Base
                     break;
                 case FifteenPositionState.P10:
                     customString = "10";
-                    break;  
+                    break;
                 case FifteenPositionState.P11:
                     customString = "11";
                     break;
@@ -183,7 +183,7 @@ namespace FluidicsSDK.Base
                     break;
                 case TenPositionState.Unknown:
                     customString = "Unknown";
-                    break; 
+                    break;
                 default:
                     // this should be 100% impossible to get to...
                     throw new ArgumentException("Error converting state to string");
@@ -206,7 +206,7 @@ namespace FluidicsSDK.Base
                     break;
                 case TwoPositionState.PositionB:
                     customString = "B";
-                    break;    
+                    break;
                 case TwoPositionState.Unknown:
                     customString = "Unknown";
                     break;

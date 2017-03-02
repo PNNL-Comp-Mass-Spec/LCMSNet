@@ -9,11 +9,11 @@ namespace FluidicsSDK.Graphic
     public class StateControlPrimitive:GraphicsPrimitive
     {
         Rectangle m_rect;
-        Size m_size; 
+        Size m_size;
 
         public StateControlPrimitive(Point location, Size sz)
         {
-            m_size = sz;            
+            m_size = sz;
             m_rect = new Rectangle(location, m_size);
         }
 

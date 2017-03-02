@@ -90,7 +90,7 @@ namespace FluidicsSDK.Devices
                     // 
                     if (fluidicsDeviceType != null)
                     {
-                        device = Activator.CreateInstance(fluidicsDeviceType) as FluidicsDevice;  
+                        device = Activator.CreateInstance(fluidicsDeviceType) as FluidicsDevice;
                     }
                 }
             }

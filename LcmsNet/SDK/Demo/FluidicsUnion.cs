@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 1/3/2013
- * 
- * Last Modified 1/3/2013 By Christopher Walters 
+ *
+ * Last Modified 1/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -31,11 +31,11 @@ namespace DemoPluginLibrary
             Point leftMostStartPoint = new Point(-(MAIN_RECT_WIDTH / 3) - 5, 0);
             Point rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
-            //main rectangle            
+            //main rectangle
             base.AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black,  Brushes.White);
 
-            //left most rectangle            
-            base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black,  Brushes.White);        
+            //left most rectangle
+            base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black,  Brushes.White);
 
             // bottom left parallelogram + connecting line
             base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X, leftMostStartPoint.Y + MAIN_RECT_HEIGHT), new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
@@ -61,7 +61,7 @@ namespace DemoPluginLibrary
             base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
 
 
-            // rightmost rectangle            
+            // rightmost rectangle
             base.AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // upper left parallelogram + connecting line

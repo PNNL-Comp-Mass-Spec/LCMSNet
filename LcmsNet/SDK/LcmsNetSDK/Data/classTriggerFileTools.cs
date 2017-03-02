@@ -1,12 +1,12 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 12/03/2009
 //
 // Last modified 12/03/2009
-//						02/22/2011 (DAC) - Removed Run Finish UTC param to fix problem with data import in DMS
-//						02/23/2011 (DAC) - Changed Operator output field to use settings value instead of sample value
+//                      02/22/2011 (DAC) - Removed Run Finish UTC param to fix problem with data import in DMS
+//                      02/23/2011 (DAC) - Changed Operator output field to use settings value instead of sample value
 //*********************************************************************************************************
 
 using System;
@@ -104,7 +104,7 @@ namespace LcmsNetDataClasses.Data
             AddParam(rootElement, "Run Start", sample.LCMethod.ActualStart.ToString("MM/dd/yyyy HH:mm:ss"));
             AddParam(rootElement, "Run Finish", sample.LCMethod.ActualEnd.ToString("MM/dd/yyyy HH:mm:ss"));
             // Removed to fix date comparison problems during DMS data import
-            //AddParam(rootElement, "Run Finish UTC",   ConvertTimeLocalToUtc(sample.LCMethod.ActualEnd)); 
+            //AddParam(rootElement, "Run Finish UTC",   ConvertTimeLocalToUtc(sample.LCMethod.ActualEnd));
         }
 
         /// <summary>

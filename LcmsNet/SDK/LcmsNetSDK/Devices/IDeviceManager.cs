@@ -18,7 +18,7 @@
     }
 
     /// <summary>
-    /// Class for bridging the device manager to the user defined controls 
+    /// Class for bridging the device manager to the user defined controls
     /// </summary>
     public class DeviceManagerBridge
     {

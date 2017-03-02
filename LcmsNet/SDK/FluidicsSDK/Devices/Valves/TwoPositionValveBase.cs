@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/16/2013
- * 
- * Last Modified 12/3/2013 By Christopher Walters 
+ *
+ * Last Modified 12/3/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace FluidicsSDK.Devices
     {
         #region Members
         // radius of the valve's circle primitive in pixels, arbitrarily chosen
-        const int m_radius = 75;    
+        const int m_radius = 75;
         // number of ports the valve has
         const float M_DISTFROMCENTER = .75f;
         protected int m_numberOfPorts;
@@ -48,7 +48,7 @@ namespace FluidicsSDK.Devices
             base.AddCircle(new Point(0, 0), m_radius, Color.Black, Brushes.White, fill:true);
             m_info_controls_box = new Rectangle(base.Loc.X, base.Loc.Y + (int)base.Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             m_numberOfPorts = numberOfPorts;
-            Point[] portLocs = GeneratePortLocs();                     
+            Point[] portLocs = GeneratePortLocs();
             foreach (Point p in portLocs)
             {
                 base.AddPort(p);
@@ -74,10 +74,10 @@ namespace FluidicsSDK.Devices
             int shiftX = Center.X;
             for (int i = 0; i < m_numberOfPorts; i++)
             {
-                // Position the first port above the center point, shift all other ports to correct locations after. 
-                double currentAngle = (Math.PI/2) + (angle * i); 
+                // Position the first port above the center point, shift all other ports to correct locations after.
+                double currentAngle = (Math.PI/2) + (angle * i);
                 // place them on a circle at a radius of m_radius* 3/4 from the center
-                // of the valve.                
+                // of the valve.
                 int x = (int)((m_radius * M_DISTFROMCENTER) * Math.Cos(currentAngle) + shiftX);
                 int y = (int)((m_radius * M_DISTFROMCENTER) * Math.Sin(currentAngle) + Center.Y);
                            

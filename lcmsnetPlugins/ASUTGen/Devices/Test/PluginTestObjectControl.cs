@@ -118,7 +118,7 @@ namespace LCMSNetPlugins
         } // End mRenameButton_Click() mehod
 
         /// <summary>
-        ///Tests the test plugin's SimpleShowTest() method 
+        ///Tests the test plugin's SimpleShowTest() method
         /// </summary> 
         private void mSimpleShowTestButton_Click(object sender, EventArgs e)
         {
@@ -148,7 +148,7 @@ namespace LCMSNetPlugins
         } // End mFunctionTestButton_Click() mehod
 
         /// <summary>
-        ///Tests the test objects's ShowTest() method 
+        ///Tests the test objects's ShowTest() method
         /// </summary> 
         private void mShowTestButton_Click(object sender, EventArgs e)
         {
@@ -163,7 +163,7 @@ namespace LCMSNetPlugins
         } // End mShowTestButton_Click() mehod
 
         /// <summary>
-        ///Tests the test objects's WaitTest() method 
+        ///Tests the test objects's WaitTest() method
         /// </summary> 
         private void mWaitTestButton_Click(object sender, EventArgs e)
         {

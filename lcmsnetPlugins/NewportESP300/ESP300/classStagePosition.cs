@@ -51,7 +51,7 @@ namespace Newport.ESP300
             }
             set
             {
-                m_numAxes = value;            
+                m_numAxes = value;
             }
         }
     }

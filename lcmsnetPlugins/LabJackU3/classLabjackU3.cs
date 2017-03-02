@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by Christopher Walters for the US Department of Energy 
+// Written by Christopher Walters for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 1/7/2014
@@ -50,7 +50,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             mint_localID            = labjackID;
             mdouble_firmwareVersion = 0;
-            mdouble_driverVersion    = 0;        
+            mdouble_driverVersion    = 0;
         }
         
         #endregion
@@ -58,7 +58,7 @@ namespace LcmsNet.Devices.ContactClosure
         #region Properties
 
         /// <summary>
-        /// Gets or sets the labjack's local ID, which is probably 0. 
+        /// Gets or sets the labjack's local ID, which is probably 0.
         /// This doesn't change the hardware ID of the labjack itself, just the ID the software uses to communicate.
         /// </summary>
         public int LocalID
@@ -119,8 +119,8 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="value">The value to write (0/1 for digital)</param>
         public void Write(enumLabjackU3OutputPorts channel, double value)
         {
-            //Determine which type of port we are writing to            
-            int port = (int)channel;       
+            //Determine which type of port we are writing to
+            int port = (int)channel;
             if (channel.ToString().EndsWith("Analog"))
             {
                 port -= 20; // DAC ports are channel 0 and 1 for the function purposes, but we have 20-21 in enums representing DACs. so correct port number via substracting 20.
@@ -306,7 +306,7 @@ namespace LcmsNet.Devices.ContactClosure
         private void ThrowErrorMessage(string msg, LJUD.LJUDERROR errorCode)
         {
             string errorString = GetErrorString(errorCode);
-            throw new classLabjackU3Exception(msg + ":\r\n\r\n" + errorString);            
+            throw new classLabjackU3Exception(msg + ":\r\n\r\n" + errorString);
         }
 
         #endregion

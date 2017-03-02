@@ -21,7 +21,7 @@ namespace AmpsBox
         /// <summary>
         /// Data to send or receive.
         /// </summary>
-        private AmpsBoxChannelData m_data; 
+        private AmpsBoxChannelData m_data;
 
         /// <summary>
         /// Constructor.
@@ -34,7 +34,7 @@ namespace AmpsBox
         /// <summary>
         /// Gets or sets the name of the element control.
         /// </summary>
-        public string DisplayName 
+        public string DisplayName
         {
             get
             {
@@ -128,10 +128,10 @@ namespace AmpsBox
         /// <param name="data"></param>
         public AmpsBoxCommandEventArgs(AmpsBoxChannelData data)
         {
-            Data = data;            
+            Data = data;
         }
         /// <summary>
-        /// Gets or sets the data 
+        /// Gets or sets the data
         /// </summary>
         public AmpsBoxChannelData Data { get; set; }
     }

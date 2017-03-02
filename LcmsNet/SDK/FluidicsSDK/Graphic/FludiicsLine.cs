@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 9/5/2013
- * 
- * Last Modified 12/18/2013 By Christopher Walters 
+ *
+ * Last Modified 12/18/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -64,13 +64,13 @@ namespace FluidicsSDK.Graphic
             {
                 drawingPen = base.Pen;
             }
-            g.DrawLine(drawingPen, scaled_orig, scaled_term);                        
+            g.DrawLine(drawingPen, scaled_orig, scaled_term);
         }
 
         public override bool Contains(Point location, int max_variance)
         {
              //basic linear algebra, check that the crossproduct is between -MAX_PIXEL_VARIANCE and MAX_PIXEL_VARIANCE, this way users don't
-            //have to click 100% precisely on pixels, that the dot product is > 0, and that the dot product is less than the squared distance 
+            //have to click 100% precisely on pixels, that the dot product is > 0, and that the dot product is less than the squared distance
             //between point1 and point2. if the user click meets these critera, they've clicked on the connection. Also, modify the values by the scale
             //to ensure they can select while scaled.
             float crossProduct = ((location.Y - Origin.Y) * (Term.X - Origin.X)) - ((location.X - Origin.X) * (Term.Y - Origin.Y));

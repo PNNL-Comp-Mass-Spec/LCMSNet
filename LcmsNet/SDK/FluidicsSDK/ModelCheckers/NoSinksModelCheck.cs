@@ -2,8 +2,8 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace FluidicsSDK.ModelCheckers
     /// </summary>
     public class NoSinksModelCheck: IFluidicsModelChecker
     {
-        private readonly List<string> m_status; 
+        private readonly List<string> m_status;
         private const string NO_PATH_FOUND = "No Sink Found";
 
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
@@ -54,7 +54,7 @@ namespace FluidicsSDK.ModelCheckers
             unexplored.Enqueue(fromPort);
             while (unexplored.Count > 0)
             {
-                Port unexploredPort = unexplored.Dequeue();                                                           
+                Port unexploredPort = unexplored.Dequeue();
                 visitedPorts.Add(unexploredPort);
                 // trace each connection leaving fromPort.
                 foreach (var connection in unexploredPort.Connections)
@@ -102,7 +102,7 @@ namespace FluidicsSDK.ModelCheckers
             const string message = "No fluidics path found from source {0} to a sink";
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            var status = new List<ModelStatus>(); 
+            var status = new List<ModelStatus>();
             //for each port in the device, see if it leads to a sink, if and only if, that port has not been previously tested and that port is a source.
             var sources = Managers.PortManager.GetPortManager.Ports.FindAll(x => x.Source);
             foreach (var p in sources)

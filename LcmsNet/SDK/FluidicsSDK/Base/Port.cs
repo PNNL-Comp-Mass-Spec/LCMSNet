@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/16/2013
- * 
- * Last Modified 10/14/2013 By Christopher Walters 
+ *
+ * Last Modified 10/14/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -112,7 +112,7 @@ namespace FluidicsSDK.Base
             {                      
                 m_fluids.Clear();
                 m_connections.Clear();
-                m_primitive = null;            
+                m_primitive = null;
             }
         
             /// <summary>
@@ -158,7 +158,7 @@ namespace FluidicsSDK.Base
 
         #endregion
 
-        #region Properties             
+        #region Properties
         
             /// <summary>
             /// property for determining parent device of the port
@@ -263,6 +263,6 @@ namespace FluidicsSDK.Base
                 }
             }
                     
-        #endregion           
+        #endregion
     }
 }

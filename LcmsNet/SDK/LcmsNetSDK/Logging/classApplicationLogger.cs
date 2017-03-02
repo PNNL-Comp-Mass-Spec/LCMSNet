@@ -73,7 +73,7 @@ namespace LcmsNetDataClasses.Logging
         }
 
         /// <summary>
-        /// Gets or sets the message level to log.  
+        /// Gets or sets the message level to log.
         /// </summary>
         public static int MessageLevel
         {
@@ -144,7 +144,7 @@ namespace LcmsNetDataClasses.Logging
 
         #endregion
 
-        #region Messages 
+        #region Messages
 
         /// <summary>
         /// Logs a message to the listening message output streams.

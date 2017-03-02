@@ -4,7 +4,7 @@ using LcmsNetDataClasses;
 namespace LcmsNetSDK
 {
     /// <summary>
-    /// interface for checking validity of fluidics models 
+    /// interface for checking validity of fluidics models
     /// </summary>
     public interface IFluidicsModelChecker : Notifications.INotifier
     {

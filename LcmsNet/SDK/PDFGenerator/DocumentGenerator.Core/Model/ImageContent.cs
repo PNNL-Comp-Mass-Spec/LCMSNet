@@ -7,20 +7,20 @@ namespace EMSL.DocumentGenerator.Core.Model
 {
  
     public class ImageContent
-		: DocumentContent
-	{
+        : DocumentContent
+    {
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
 
         #region Constructors
         public ImageContent()
-		{
-			CaptionText			= null;
-			MaxWidth			= double.MaxValue;
-			MaxHeight			= double.MaxValue;
-			CaptionPlacement	= CaptionPlacement.Bottom;
-			SourceImage			= null;
-		}
+        {
+            CaptionText         = null;
+            MaxWidth            = double.MaxValue;
+            MaxHeight           = double.MaxValue;
+            CaptionPlacement    = CaptionPlacement.Bottom;
+            SourceImage         = null;
+        }
 
         public ImageContent(string path, string caption = null)
         {
@@ -44,13 +44,13 @@ namespace EMSL.DocumentGenerator.Core.Model
         #endregion
 
         #region Properties
-        public string			CaptionText			{ get; set; }
-		public double			MaxWidth			{ get; set; }
-		public double			MaxHeight			{ get; set; }
-		public CaptionPlacement CaptionPlacement	{ get; set; }
-		public BitmapSource		SourceImage			{ get; set; }
+        public string           CaptionText         { get; set; }
+        public double           MaxWidth            { get; set; }
+        public double           MaxHeight           { get; set; }
+        public CaptionPlacement CaptionPlacement    { get; set; }
+        public BitmapSource     SourceImage         { get; set; }
 
-		public override ItemType ItemType { get { return ItemType.ImageItem; } }
+        public override ItemType ItemType { get { return ItemType.ImageItem; } }
 
         #endregion
 

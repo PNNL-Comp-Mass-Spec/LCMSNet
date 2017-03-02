@@ -23,7 +23,7 @@
         #region Component Designer generated code
 
         /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -190,7 +190,7 @@
             // 
             // mlabel_version
             // 
-            this.mlabel_version.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.mlabel_version.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mlabel_version.Location = new System.Drawing.Point(6, 386);
             this.mlabel_version.Name = "mlabel_version";
@@ -199,8 +199,8 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.mbutton_closePort);
             this.groupBox1.Controls.Add(this.mpropertyGrid_serialPort);
@@ -225,8 +225,8 @@
             // 
             // mpropertyGrid_serialPort
             // 
-            this.mpropertyGrid_serialPort.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mpropertyGrid_serialPort.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mpropertyGrid_serialPort.Location = new System.Drawing.Point(6, 19);
             this.mpropertyGrid_serialPort.Name = "mpropertyGrid_serialPort";
@@ -246,7 +246,7 @@
             // 
             // mbutton_saveParameters
             // 
-            this.mbutton_saveParameters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.mbutton_saveParameters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_saveParameters.Location = new System.Drawing.Point(12, 309);
             this.mbutton_saveParameters.Name = "mbutton_saveParameters";
@@ -258,7 +258,7 @@
             // 
             // mbutton_getVersion
             // 
-            this.mbutton_getVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.mbutton_getVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mbutton_getVersion.Location = new System.Drawing.Point(12, 349);
             this.mbutton_getVersion.Name = "mbutton_getVersion";
@@ -270,7 +270,7 @@
             // 
             // mbuton_emulate
             // 
-            this.mbuton_emulate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.mbuton_emulate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mbuton_emulate.Location = new System.Drawing.Point(12, 418);
             this.mbuton_emulate.Name = "mbuton_emulate";

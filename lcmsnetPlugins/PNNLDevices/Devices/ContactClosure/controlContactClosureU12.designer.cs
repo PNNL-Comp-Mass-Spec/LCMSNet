@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
@@ -34,7 +34,7 @@ namespace LcmsNet.Devices.ContactClosure
         #region Component Designer generated code
 
         /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -183,7 +183,7 @@ namespace LcmsNet.Devices.ContactClosure
 
         private System.Windows.Forms.ComboBox mcomboBox_Ports;
         private System.Windows.Forms.Button mbutton_SendPulse;
-        private System.Windows.Forms.GroupBox mgroupBox_PulseControls;        
+        private System.Windows.Forms.GroupBox mgroupBox_PulseControls;
         private System.Windows.Forms.Label mlabel_PulseLength;
         private System.Windows.Forms.Label mlabel_Port;
         private System.Windows.Forms.Label mlabel_Voltage;

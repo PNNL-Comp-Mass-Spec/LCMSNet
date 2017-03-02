@@ -48,7 +48,7 @@ namespace LcmsNet.Devices.ContactClosure
         #region Properties
 
         /// <summary>
-        /// Gets or sets the labjack's local ID, which is probably 0. 
+        /// Gets or sets the labjack's local ID, which is probably 0.
         /// This doesn't change the hardware ID of the labjack itself, just the ID the software uses to communicate.
         /// </summary>
         public int localID

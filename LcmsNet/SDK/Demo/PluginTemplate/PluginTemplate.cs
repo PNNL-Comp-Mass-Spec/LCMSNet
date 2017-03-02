@@ -14,7 +14,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     // constructor
     public RenameThisTemplate()
     {
-        //setup code       
+        //setup code
     }
 
 
@@ -92,7 +92,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// </summary>
     string Version { get; set; }
     /// <summary>
-    /// Gets or sets the status of the device. 
+    /// Gets or sets the status of the device.
     /// </summary>
     enumDeviceStatus Status { get; set; }
     /// <summary>

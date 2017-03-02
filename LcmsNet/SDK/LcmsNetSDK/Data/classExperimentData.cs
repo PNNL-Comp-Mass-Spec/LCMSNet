@@ -11,30 +11,30 @@ namespace LcmsNetDataClasses
 
         public classExperimentData()
         {
-            //this.Campaign		= null;
-            //this.CellCulturies	= null;
-            //this.Comment		= null;
-            //this.Concentration	= null;
+            //this.Campaign     = null;
+            //this.CellCulturies    = null;
+            //this.Comment      = null;
+            //this.Concentration    = null;
 
-            //this.Container		= null;
+            //this.Container        = null;
             Created = null;
-            //this.Enzyme			= null;
+            //this.Enzyme           = null;
             Experiment = null;
 
             ID = null;
-            //this.Labeling		= null;
-            //this.Location		= null;
-            //this.Notebook		= null;
+            //this.Labeling     = null;
+            //this.Location     = null;
+            //this.Notebook     = null;
 
             Organism = null;
-            //this.Postdigest		= null;
-            //this.Predigest		= null;
+            //this.Postdigest       = null;
+            //this.Predigest        = null;
             Reason = null;
 
             Request = null;
             Researcher = null;
-            //this.Well			= null;
-            //this.Wellplate		= null;
+            //this.Well         = null;
+            //this.Wellplate        = null;
         }
 
         #endregion
@@ -55,22 +55,22 @@ namespace LcmsNetDataClasses
         private string m_organism;
         private DateTime? m_created;
         private int? m_request;
-        //private string		m_comment;
+        //private string        m_comment;
 
-        //private string		m_well;
-        //private string		m_concentration;
-        //private string		m_campaign;
-        //private string		m_cellCultures;
+        //private string        m_well;
+        //private string        m_concentration;
+        //private string        m_campaign;
+        //private string        m_cellCultures;
 
-        //private string		m_enzyme;
-        //private string		m_notebook;
-        //private string		m_labeling;
-        //private string		m_predigest;
+        //private string        m_enzyme;
+        //private string        m_notebook;
+        //private string        m_labeling;
+        //private string        m_predigest;
 
-        //private string		m_postdigest;
-        //private string		m_container;
-        //private string		m_location;
-        //private string		m_wellplate;
+        //private string        m_postdigest;
+        //private string        m_container;
+        //private string        m_location;
+        //private string        m_wellplate;
 
         #endregion
 

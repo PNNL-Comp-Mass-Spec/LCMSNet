@@ -31,19 +31,19 @@ namespace PALAutoSampler.Validator
             if (string.IsNullOrEmpty(sample.PAL.Method))
                 errors.Add(new classSampleValidationError("The PAL Method is not set.", enumSampleValidationError.PalMethodNotSpecified));
 
-			if (string.IsNullOrEmpty(sample.PAL.PALTray))
-			{
-				errors.Add(new classSampleValidationError("The PAL Tray is not set.", enumSampleValidationError.PalTrayNotSpecified));
-			}
-			else if (sample.PAL.PALTray == "(select)")
-			{
-				errors.Add(new classSampleValidationError("The PAL Tray is not set.", enumSampleValidationError.PalTrayNotSpecified));
-			}
+            if (string.IsNullOrEmpty(sample.PAL.PALTray))
+            {
+                errors.Add(new classSampleValidationError("The PAL Tray is not set.", enumSampleValidationError.PalTrayNotSpecified));
+            }
+            else if (sample.PAL.PALTray == "(select)")
+            {
+                errors.Add(new classSampleValidationError("The PAL Tray is not set.", enumSampleValidationError.PalTrayNotSpecified));
+            }
 
-			if (sample.DmsData.DatasetName.ToLower() == "(unused)")
-			{
-				errors.Add(new classSampleValidationError("The dataset name is not correct.", enumSampleValidationError.DatasetNameError));
-			}
+            if (sample.DmsData.DatasetName.ToLower() == "(unused)")
+            {
+                errors.Add(new classSampleValidationError("The dataset name is not correct.", enumSampleValidationError.DatasetNameError));
+            }
 
             /// 
             /// Make sure the volume is set.

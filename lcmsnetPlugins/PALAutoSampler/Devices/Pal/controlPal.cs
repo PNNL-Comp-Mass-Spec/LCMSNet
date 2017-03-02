@@ -1,11 +1,11 @@
 ﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
 // Last modified 08/17/2009
-//						- 12/01/09 (DAC) - Modified to accomodate change of vial from string to int
+//                      - 12/01/09 (DAC) - Modified to accomodate change of vial from string to int
 //*********************************************************************************************************
 
 using System;
@@ -42,14 +42,14 @@ namespace LcmsNet.Devices.Pal
 
         #endregion
 
-        #region Constructors 
+        #region Constructors
 
         /// <summary>
         /// The main constructor. Creates the PAL class and initializes the port.
         /// </summary>
         public controlPal()
         {
-            InitializeComponent(); 
+            InitializeComponent();
             string[] names = System.IO.Ports.SerialPort.GetPortNames();
             mcombo_portNames.Items.AddRange(names);
             mcombo_portNames.SelectedIndexChanged += new EventHandler(mcombo_portNames_SelectedIndexChanged);
@@ -65,12 +65,12 @@ namespace LcmsNet.Devices.Pal
         private void RegisterDevice(IDevice device)
         {
           
-            mobj_Pal = device as classPal;            
+            mobj_Pal = device as classPal;
            
             mobj_Pal.DeviceSaveRequired += new EventHandler(Pal_DeviceSaveRequired);
             mobj_Pal.Free               += new DelegateDeviceFree(OnFree);
             mobj_Pal.TrayNames          += new EventHandler<classAutoSampleEventArgs>(mobj_Pal_PalTrayListReceived);
-            mobj_Pal.MethodNames        += new EventHandler<classAutoSampleEventArgs>((object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); });     
+            mobj_Pal.MethodNames        += new EventHandler<classAutoSampleEventArgs>((object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); });
      
             mcomboBox_VialRange.DataSource      = System.Enum.GetNames(typeof(enumVialRanges));
             mcomboBox_VialRange.SelectedItem    = mobj_Pal.VialRange.ToString();
@@ -84,7 +84,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Indicates that the device is available to take commands
         /// </summary>
-        public event DelegateFree Free;        
+        public event DelegateFree Free;
         #endregion
 
         #region Properties
@@ -203,7 +203,7 @@ namespace LcmsNet.Devices.Pal
         /// Converts the raw tray list string into a list of trays.
         /// </summary>
         /// <param name="rawMethodList">The string which the PAL class returns after GetTrayList()</param>
-        public void ProcessTrays(List<string> trayList) 
+        public void ProcessTrays(List<string> trayList)
         {
             /*LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(
                                                                LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
@@ -212,21 +212,21 @@ namespace LcmsNet.Devices.Pal
             {
                 //Clear out the previous list
                 mcomboBox_tray.Items.Clear();
-                mcomboBox_tray.BeginUpdate();               
+                mcomboBox_tray.BeginUpdate();
 
                 //That was cool, so now fill up the combobox
                 foreach (string s in trayList)
                 {
                     mcomboBox_tray.Items.Add(s);
                 }
-                mcomboBox_tray.EndUpdate();                
+                mcomboBox_tray.EndUpdate();
             }          
         }
 
         private void mButton_RefreshMethods_Click(object sender, EventArgs e)
         {
              mobj_Pal.ListMethods();
-             mobj_Pal.ListTrays();                     
+             mobj_Pal.ListTrays();
         }
 
         private void mButton_RunMethod_Click(object sender, EventArgs e)
@@ -273,7 +273,7 @@ namespace LcmsNet.Devices.Pal
             mTextBox_Status.Text = mobj_Pal.GetStatus();
         }
 
-        #endregion        
+        #endregion
         private void mbutton_stopMethod_Click(object sender, EventArgs e)
         {
             mobj_Pal.StopMethod();

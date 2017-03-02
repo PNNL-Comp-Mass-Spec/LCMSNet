@@ -49,7 +49,7 @@ namespace LCMSNetUnitTests
         // [ClassCleanup()]
         // public static void MyClassCleanup() { }
         //
-        // Use TestInitialize to run code before running each test 
+        // Use TestInitialize to run code before running each test
         // [TestInitialize()]
         // public void MyTestInitialize() { }
         //
@@ -63,7 +63,7 @@ namespace LCMSNetUnitTests
         public void TestMethod1()
         {
             //
-            // TODO: Add test logic	here
+            // TODO: Add test logic here
             //
         }
 
@@ -173,7 +173,7 @@ namespace LCMSNetUnitTests
             tempTrayForm.ShowDialog();
             if (tempTrayForm.DialogResult == DialogResult.OK) mobj_sampleQueue.UpdateSamples(tempTrayForm.SampleList);
         }
-        #endregion    
+        #endregion
          * */
     }
 }

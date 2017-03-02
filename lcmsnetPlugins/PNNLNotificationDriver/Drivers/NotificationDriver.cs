@@ -160,7 +160,7 @@ namespace FailureInjector.Drivers
                     enumDeviceStatus.InUseByMethod,
                     "Number Change",
                     number.ToString(),
-                    this);                
+                    this);
 
                 this.StatusUpdate(this, args);
             }
@@ -221,7 +221,7 @@ namespace FailureInjector.Drivers
             {
                 classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(
                     enumDeviceStatus.InUseByMethod,
-                    "Inject Status", 
+                    "Inject Status",
                     this);
 
                 this.StatusUpdate(this, args);

@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 9/5/2013
- * 
- * Last Modified 6/30/2014 By Christopher Walters 
+ *
+ * Last Modified 6/30/2014 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -73,8 +73,8 @@ namespace FluidicsSDK
             m_last_scaled_at = 0F;
             m_worldView = new Rectangle();
             m_fluidicsCheckers = new List<IFluidicsModelChecker>();
-            var sinkCheck = new FluidicsSDK.ModelCheckers.NoSinksModelCheck();            
-            var cycleCheck = new FluidicsSDK.ModelCheckers.FluidicsCycleCheck();                        
+            var sinkCheck = new FluidicsSDK.ModelCheckers.NoSinksModelCheck();
+            var cycleCheck = new FluidicsSDK.ModelCheckers.FluidicsCycleCheck();
             var multipleCheck = new FluidicsSDK.ModelCheckers.MultipleSourcesModelCheck();
             // Disable the model checkers by default. They're too slow for normal use. They can
             // be turned on/off for use with the simulator this way.
@@ -124,7 +124,7 @@ namespace FluidicsSDK
 
         public List<IFluidicsModelChecker> GetModelCheckers()
         {
-            return m_fluidicsCheckers; 
+            return m_fluidicsCheckers;
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace FluidicsSDK
                 System.Diagnostics.Trace.WriteLine("Ignoring Model Change");
                 return;
             }
-            // This foreach loop resets the color of all connections after every change in the model. 
+            // This foreach loop resets the color of all connections after every change in the model.
             foreach(Connection conn in m_conManager.GetConnections())
             {
                 conn.Color = Color.Black;
@@ -215,7 +215,7 @@ namespace FluidicsSDK
         public bool TakeAction(Point location)
         {
             bool retVal = m_fluidicsDevManager.TakeAction(location);
-            return retVal;            
+            return retVal;
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace FluidicsSDK
             }
             Connection conUnderMouse = m_conManager.Select(rescaledLocation);
             Port portUnderMouse = m_portManager.Select(rescaledLocation);
-            FluidicsDevice devUnderMouse = m_fluidicsDevManager.Select(rescaledLocation);         
+            FluidicsDevice devUnderMouse = m_fluidicsDevManager.Select(rescaledLocation);
             if(m_selectedDevices.Count == 1 && m_selectedDevices.Contains(devUnderMouse) && !multiple_select)
             {
                 selected = true;
@@ -282,13 +282,13 @@ namespace FluidicsSDK
             {
                 if (!m_selectedDevices.Contains(devUnderMouse))
                 {
-                    // try to take an action( if user clicked on action primitive don't "select")                
+                    // try to take an action( if user clicked on action primitive don't "select")
                     if (!multiple_select)
                     {
                         ClearSelected();
                     }
                     m_selectedDevices.Add(devUnderMouse);
-                    m_fluidicsDevManager.ConfirmSelect(devUnderMouse, rescaledLocation);                    
+                    m_fluidicsDevManager.ConfirmSelect(devUnderMouse, rescaledLocation);
                     selected = true;
                 }
                     
@@ -306,7 +306,7 @@ namespace FluidicsSDK
             {
                 EndModelSuspension(false);
             }
-            return selected;            
+            return selected;
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace FluidicsSDK
         /// <param name="graphicsView">A rectangle representing the origin and size of the visible area</param>
         public void SetWorldView(Rectangle graphicsView)
         {
-            // set the worldview to the same place and size as the provide graphics view.                  
+            // set the worldview to the same place and size as the provide graphics view.
             m_worldView = new Rectangle(graphicsView.Location, graphicsView.Size);
         }
 
@@ -350,7 +350,7 @@ namespace FluidicsSDK
             {
                 m_last_scaled_at = scale;
                 int scaleWidthValue = (int)(m_worldView.Size.Width - (m_worldView.Size.Width * scale));
-                int scaleHeightValue = (int)(m_worldView.Size.Height - (m_worldView.Size.Height * scale));           
+                int scaleHeightValue = (int)(m_worldView.Size.Height - (m_worldView.Size.Height * scale));
                 Rectangle scaledView;
                 scaledView = new Rectangle(m_worldView.X, m_worldView.Y, m_worldView.Width - scaleWidthValue, m_worldView.Height - scaleHeightValue);
                 if (scaledView.Size.Width < m_worldView.Size.Width || scaledView.Size.Height < m_worldView.Size.Height)
@@ -390,7 +390,7 @@ namespace FluidicsSDK
             {
                 port.Deselect();
             }
-            m_selectedPorts.Clear();       
+            m_selectedPorts.Clear();
         }
 
         /// <summary>
@@ -402,14 +402,14 @@ namespace FluidicsSDK
         {
             Connection conUnderMouse = m_conManager.Select(location);
             Port portUnderMouse = m_portManager.Select(location);
-            FluidicsDevice devUnderMouse = m_fluidicsDevManager.Select(location);            
+            FluidicsDevice devUnderMouse = m_fluidicsDevManager.Select(location);
             //add the first one detected to the list of selected items.
             if (conUnderMouse != null)
             {
                 if (m_selectedConnections.Contains(conUnderMouse))
                 {
                     m_conManager.Deselect(conUnderMouse);
-                    m_selectedConnections.Remove(conUnderMouse);                    
+                    m_selectedConnections.Remove(conUnderMouse);
                 }
             }
             else if (portUnderMouse != null)
@@ -479,7 +479,7 @@ namespace FluidicsSDK
         /// <param name="device">an IDevice representing the device to remove</param>
         public void RemoveDevice(IDevice device)
         {
-            // find the ports associated with the device    
+            // find the ports associated with the device
             BeginModelSuspension();
             FluidicsDevice fdevice = FluidicsDeviceManager.DeviceManager.FindDevice(device);
             foreach (Port port in fdevice.Ports)
@@ -489,11 +489,11 @@ namespace FluidicsSDK
             }
             // remove the ports themselves
             m_portManager.RemovePorts(fdevice);
-            // finally, remove the device itself                           
+            // finally, remove the device itself
             m_selectedDevices.Remove(fdevice);
             m_fluidicsDevManager.Remove(device);
             // notify of the change in the model.
-            EndModelSuspension(true);                  
+            EndModelSuspension(true);
         }
 
         /// <summary>
@@ -507,8 +507,8 @@ namespace FluidicsSDK
             {
                 if (!m_methodRunning)
                 {
-                    removedDevices.Add(device.IDevice);                    
-                    //remove device from the selected devices list..if it exists there.                   
+                    removedDevices.Add(device.IDevice);
+                    //remove device from the selected devices list..if it exists there.
                 }
             }
             EndModelSuspension(true);
@@ -545,7 +545,7 @@ namespace FluidicsSDK
             BeginModelSuspension();
             List<Connection> tmp = new List<Connection>(m_selectedConnections);
             RemoveConnections(tmp);
-            EndModelSuspension(true);     
+            EndModelSuspension(true);
         }
 
         /// <summary>
@@ -585,7 +585,7 @@ namespace FluidicsSDK
             foreach (FluidicsDevice device in devices)
             {
                 device.MoveBy(normalizedAmountMoved);
-                devicesMoved.Add(device); 
+                devicesMoved.Add(device);
             }
             //reorder the list as necessary.
             m_fluidicsDevManager.BringToFront(new List<FluidicsDevice>(devices));
@@ -673,7 +673,7 @@ namespace FluidicsSDK
 
         /// <summary>
         /// the "world view" of the fluidics system. All fluidics devices exist/move around within this world view.
-        /// it controls the boundaries 
+        /// it controls the boundaries
         /// </summary>
         public Rectangle WorldView
         {
@@ -742,7 +742,7 @@ namespace FluidicsSDK
             //System.Diagnostics.Trace.WriteLine("PortChange sender: " + sender.ToString());
             OnModelChanged();
         }
-        #endregion        
+        #endregion
     
         public IEnumerable<Connection> GetConnections()
         {

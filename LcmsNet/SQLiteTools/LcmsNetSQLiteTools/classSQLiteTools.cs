@@ -1,20 +1,20 @@
 ﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy 
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/10/2009
 //
 // Last modified 02/10/2009
-//						02/12/2009 (DAC) - Added methods for retrieving cached queue
-//						02/19/2009 (DAC) - Incorporated renamed exceptions
-//						02/23/2009 (DAC) - Reworked queue saving to reduce future coding
-//						02/24/2009 (DAC) - Added storage and retrieval of DMS parameters
-//						03/03/2009 (DAC) - Modified constructor to fix form designer issue, added method overloads
-//													for queue ops to specify a database file other than the cache file
-//						03/10/2009 (DAC) - Added function to replace SQLite-incompatible characters
-//						04/01/2009 (DAC) - Added file logging for exceptions
-//						05/18/2010 (DAC) - Added error logging; Modified for queue import/export using SQLite
-//						04/17/2013 (FCT) - Added Proposal Users list with a a cross reference list of their UID to the PIDs of proposals they've worked.
+//                      02/12/2009 (DAC) - Added methods for retrieving cached queue
+//                      02/19/2009 (DAC) - Incorporated renamed exceptions
+//                      02/23/2009 (DAC) - Reworked queue saving to reduce future coding
+//                      02/24/2009 (DAC) - Added storage and retrieval of DMS parameters
+//                      03/03/2009 (DAC) - Modified constructor to fix form designer issue, added method overloads
+//                                                  for queue ops to specify a database file other than the cache file
+//                      03/10/2009 (DAC) - Added function to replace SQLite-incompatible characters
+//                      04/01/2009 (DAC) - Added file logging for exceptions
+//                      05/18/2010 (DAC) - Added error logging; Modified for queue import/export using SQLite
+//                      04/17/2013 (FCT) - Added Proposal Users list with a a cross reference list of their UID to the PIDs of proposals they've worked.
 //
 //*********************************************************************************************************
 
@@ -183,8 +183,8 @@ namespace LcmsNetSQLiteTools
             // Get a list of string dictionaries containing properties for each sample
             var allSampleProps = GetPropertiesFromCache(tableName, connectionString);
 
-            // For each row (representing one sample), create a sample data object 
-            //		and load the property values
+            // For each row (representing one sample), create a sample data object
+            //      and load the property values
             foreach (var sampleProps in allSampleProps)
             {
                 // Create a classSampleData object
@@ -228,7 +228,7 @@ namespace LcmsNetSQLiteTools
             }
 
             // For each row (representing properties and values for one sample), create a string dictionary
-            //			with the object's properties from the table columns, and add it to the return list
+            //          with the object's properties from the table columns, and add it to the return list
             foreach (DataRow currentRow in cacheData.Rows)
             {
                 // Create a string dictionary containing the properties and values for this sample
@@ -244,7 +244,7 @@ namespace LcmsNetSQLiteTools
 
         /// <summary>
         /// Gets a string dictionary containing property names and values contained in
-        ///	a row of the cache data table
+        /// a row of the cache data table
         /// </summary>
         /// <param name="RowOfValues">DataRow containing property values from table</param>
         /// <param name="TableColumns">Collection of data columns in table</param>
@@ -348,7 +348,7 @@ namespace LcmsNetSQLiteTools
             }
 
             // Create a string dictionary holding the property names and values for object,
-            //		using the first object in the input list
+            //      using the first object in the input list
             var firstItem = dataToCache[0];
             var FieldNames = StringDictToDictionary(firstItem.GetPropertyValues());
 
@@ -383,7 +383,7 @@ namespace LcmsNetSQLiteTools
 
         /// <summary>
         /// Saves the contents of specified sample queue to the SQLite cache file
-        /// Connection string and database name are defined by defaults 
+        /// Connection string and database name are defined by defaults
         /// </summary>
         /// <param name="QueueData">List of classSampleData containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
@@ -662,7 +662,7 @@ namespace LcmsNetSQLiteTools
                                 command.ExecuteNonQuery();
                             }
 
-                            // End transaction                                                        
+                            // End transaction
                             transaction.Commit();
                         }
                     }
@@ -716,7 +716,7 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Replaces characters in a string that are incompatible with SQLite 
+        /// Replaces characters in a string that are incompatible with SQLite
         /// </summary>
         /// <param name="InpString">String to clean</param>
         /// <returns>String compatible with SQLite</returns>
@@ -808,7 +808,7 @@ namespace LcmsNetSQLiteTools
         /// Wrapper around generic retrieval method specifically for cart lists
         /// </summary>
         /// <returns>List containing cart names</returns>
-        [Obsolete("Use GetCartNameList that does not have parameter force (since force is not used)")] 
+        [Obsolete("Use GetCartNameList that does not have parameter force (since force is not used)")]
         public static List<string> GetCartNameList(bool force)
         {
             return GetCartNameList();
@@ -908,8 +908,8 @@ namespace LcmsNetSQLiteTools
                 // Get a list of string dictionaries containing properties for each item
                 var allUserProps = GetPropertiesFromCache(tableName, ConnString);
 
-                // For each row (representing one user), create a user data object 
-                //		and load the property values
+                // For each row (representing one user), create a user data object
+                //      and load the property values
                 foreach (var userProps in allUserProps)
                 {
                     // Create a classUserInfo object
@@ -943,8 +943,8 @@ namespace LcmsNetSQLiteTools
                 // Get a list of string dictionaries containing properties for each instrument
                 var allInstProps = GetPropertiesFromCache(tableName, ConnString);
 
-                // For each row (representing one instrument), create an instrument data object 
-                //		and load the property values
+                // For each row (representing one instrument), create an instrument data object
+                //      and load the property values
                 foreach (var instProps in allInstProps)
                 {
                     // Create a classInstrumentInfo object

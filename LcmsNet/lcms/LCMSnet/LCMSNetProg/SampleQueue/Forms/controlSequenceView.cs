@@ -244,7 +244,7 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_down
             // 
-            mbutton_down.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom) 
+            mbutton_down.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom)
             | AnchorStyles.Right)));
             mbutton_down.Image = Properties.Resources.Button_Down_16;
             mbutton_down.Location = new Point(795, 4);
@@ -272,7 +272,7 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_up
             // 
-            mbutton_up.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom) 
+            mbutton_up.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom)
             | AnchorStyles.Right)));
             mbutton_up.Image = Properties.Resources.Button_Up_16;
             mbutton_up.Location = new Point(729, 3);

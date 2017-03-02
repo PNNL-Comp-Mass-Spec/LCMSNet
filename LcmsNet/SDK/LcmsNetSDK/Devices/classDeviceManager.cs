@@ -1,18 +1,18 @@
 ﻿/*********************************************************************************************************
- * Written by Brian LaMarche, Dave Clark, John Ryan for the US Department of Energy 
+ * Written by Brian LaMarche, Dave Clark, John Ryan for the US Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009, Battelle Memorial Institute
  * Created 06/19/2009
- * 
+ *
  *  Last modified 06/19/2009
- *      Created class and added static methods with static device manager object that registers itself with 
+ *      Created class and added static methods with static device manager object that registers itself with
  *      the static method property.
- *      
+ *
  *  12-12-2009: BLL
  *      Added a method, FindDevice, to search for a device given its name (key) and it's type (found via GetType()).
  *  12-10-2009: BLL
  *      Created plug-ins, and loading of a new configuration pattern.
- * 
+ *
 /*********************************************************************************************************/
 
 using System;
@@ -280,10 +280,10 @@ namespace LcmsNetDataClasses.Devices
 
         #endregion
 
-        #region Configuration Extraction and Loading 
+        #region Configuration Extraction and Loading
 
         /// <summary>
-        /// Loads a devcie 
+        /// Loads a devcie
         /// </summary>
         /// <param name="filePath">Path to load configuration from.</param>
         public void LoadPersistentConfiguration(classDeviceConfiguration configuration)
@@ -306,7 +306,7 @@ namespace LcmsNetDataClasses.Devices
                 if (Assembly.GetExecutingAssembly().Location != path && path != null && System.IO.File.Exists(path))
                 {
                     // This wasn't working...
-                    //type = Assembly.LoadFrom(path).GetType(settings[CONST_DEVICE_TYPE_TAG] as string);                    
+                    //type = Assembly.LoadFrom(path).GetType(settings[CONST_DEVICE_TYPE_TAG] as string);
                     var typeName = settings[CONST_DEVICE_TYPE_TAG] as string;
                     foreach (var t in Assembly.LoadFrom(path).GetTypes())
                     {
@@ -372,7 +372,7 @@ namespace LcmsNetDataClasses.Devices
                     if (propertyMap.ContainsKey(key) && propertyMap[key].CanWrite)
                     {
                         var data = settings[key];
-                        // Enumerations are a special breed.  
+                        // Enumerations are a special breed.
                         var propertyType = propertyMap[key].PropertyType;
                         if (propertyType.IsEnum)
                         {
@@ -440,7 +440,7 @@ namespace LcmsNetDataClasses.Devices
         }
 
         /// <summary>
-        /// Saves all devices to the configuration 
+        /// Saves all devices to the configuration
         /// </summary>
         /// <param name="filePath"></param>
         public void ExtractToPersistConfiguration(ref classDeviceConfiguration configuration)
@@ -457,7 +457,7 @@ namespace LcmsNetDataClasses.Devices
                 configuration.AddSetting(device.Name, CONST_DEVICE_TYPE_TAG, deviceType.FullName);
                     //TODO: BLL - .AssemblyQualifiedName);
                 configuration.AddSetting(device.Name, CONST_DEVICE_TYPE_PATH, deviceType.Assembly.Location);
-                    // This should be made a relative path since we have a plugin directory. All plugins should be in that directory. Using a relative path means that if the program is installed to a different directory, the plugin will still be found properly while avoiding problems with multiple installs(Such as multiple branches on the same dev machine and swapping hardware configs. 
+                    // This should be made a relative path since we have a plugin directory. All plugins should be in that directory. Using a relative path means that if the program is installed to a different directory, the plugin will still be found properly while avoiding problems with multiple installs(Such as multiple branches on the same dev machine and swapping hardware configs.
                 configuration.AddSetting(device.Name, CONST_DEVICE_NAME_TAG, device.Name);
 
                 foreach (var property in properties)
@@ -523,7 +523,7 @@ namespace LcmsNetDataClasses.Devices
             IDevice device = null;
 
             // 
-            // Find the device in the list, might be better if we used a 
+            // Find the device in the list, might be better if we used a
             // dictionary instead.
             // 
             // Then see if the device type matches as well...
@@ -552,7 +552,7 @@ namespace LcmsNetDataClasses.Devices
             IDevice device = null;
 
             // 
-            // Find the device in the list, might be better if we used a 
+            // Find the device in the list, might be better if we used a
             // dictionary instead.
             // 
             // Then see if the device type matches as well...
@@ -685,7 +685,7 @@ namespace LcmsNetDataClasses.Devices
         }
 
         /// <summary>
-        /// Updates devices with emulated flags 
+        /// Updates devices with emulated flags
         /// </summary>
         private void SetEmulationFlags()
         {
@@ -732,7 +732,7 @@ namespace LcmsNetDataClasses.Devices
                     }
                     catch
                     {
-                        //TODO: CRAP!  what happens if the device cannot be removed. 
+                        //TODO: CRAP!  what happens if the device cannot be removed.
                     }
                 }
             }
@@ -757,7 +757,7 @@ namespace LcmsNetDataClasses.Devices
                 {
                     device.Status = enumDeviceStatus.Error;
                     // We wrap error details in the event args class so that it can also be used via a delegate
-                    // And then shove it into an exception class.  this way we force the 
+                    // And then shove it into an exception class.  this way we force the
                     // caller to handle any exception, but allow them to propogate to any observers.
                     var args = new classDeviceErrorEventArgs(
                         errorMessage,

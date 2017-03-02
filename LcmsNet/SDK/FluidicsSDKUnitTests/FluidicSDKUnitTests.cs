@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
  * Created 6/2/2014
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -50,7 +50,7 @@ namespace FluidicsSDKUnitTests
             //remove
             PortManager.GetPortManager.RemovePorts(FluidicsDeviceManager.DeviceManager.FindDevice(p));
             FluidicsDeviceManager.DeviceManager.Remove(p); // cleanup
-            Assert.AreEqual(0, FluidicsDeviceManager.DeviceManager.GetDevices().Count);            
+            Assert.AreEqual(0, FluidicsDeviceManager.DeviceManager.GetDevices().Count);
             p = null;
         }
 
@@ -71,13 +71,13 @@ namespace FluidicsSDKUnitTests
             PortManager.GetPortManager.RemovePort(p1);
             PortManager.GetPortManager.RemovePort(p2);
             p1 = null;
-            p2 = null;            
+            p2 = null;
         }
         
         /// <summary>
         /// Test to ensure that a port cannot be connected to itself.
         /// </summary>
-        [Test]        
+        [Test]
         public void ConnectionmanagerDoNotConnectTheSamePortToItself()
         {            
             Assert.Throws<ArgumentException>(DoNotConnectHelper);
@@ -90,7 +90,7 @@ namespace FluidicsSDKUnitTests
         private void DoNotConnectHelper()
         {
             Port p1 = new Port(new Point(0, 0), null);
-            ConnectionManager.GetConnectionManager.Connect(p1, p1); 
+            ConnectionManager.GetConnectionManager.Connect(p1, p1);
         }
 
         /// <summary>

@@ -1,33 +1,33 @@
 ﻿namespace LcmsNet.Devices.Pumps
 {
-	partial class controlPumpIsco
-	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class controlPumpIsco
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
+        #region Component Designer generated code
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.mTabControl = new System.Windows.Forms.TabControl();
             this.mtabPage_PumpControl = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -696,60 +696,60 @@
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.TabControl mTabControl;
-		private System.Windows.Forms.TabPage mtabPage_PumpControl;
-		private System.Windows.Forms.TabPage mtabPage_Advanced;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox mtextBox_BaudRate;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.ComboBox mcomboBox_PumpCount;
-		private System.Windows.Forms.TextBox mtextBox_WriteTimeout;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.TextBox mtextBox_ReadTimeout;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.ComboBox mcomboBox_UnitAddress;
-		private System.Windows.Forms.ComboBox mcomboBox_Ports;
-		private System.Windows.Forms.GroupBox groupBox5;
-		private System.Windows.Forms.Label label18;
-		private System.Windows.Forms.Label label17;
-		private System.Windows.Forms.Label label16;
-		private controlPumpIscoDisplay mcontrol_PumpB;
-		private controlPumpIscoDisplay mcontrol_PumpC;
-		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private controlPumpIscoDisplay mcontrol_PumpA;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Button mbuttonSetAllPress;
-		private System.Windows.Forms.Button mbutton_Refresh;
-		private System.Windows.Forms.Button mbuttonStopAll;
-		private System.Windows.Forms.Button mbutton_RefillAll;
-		private System.Windows.Forms.Button mbutton_SetAllFlow;
-		private System.Windows.Forms.Button mbutton_StartAll;
-		private System.Windows.Forms.Button mbutton_SetPortProperties;
-		private System.Windows.Forms.TextBox mtextBox_RefillSpA;
-		private System.Windows.Forms.TextBox mtextBox_RefillSpC;
-		private System.Windows.Forms.TextBox mtextBox_RefillSpB;
-		private System.Windows.Forms.Button mbutton_SetRefillRate;
-		private System.Windows.Forms.TabPage mtabPage_Limits;
-		private System.Windows.Forms.ListView mlistView_Limits;
-		private System.Windows.Forms.ColumnHeader mColHdr_Params_Parameter;
-		private System.Windows.Forms.ColumnHeader mColHdr_Params_PumpA;
-		private System.Windows.Forms.ColumnHeader mColHdr_Params_PumpB;
-		private System.Windows.Forms.ColumnHeader mColHdr_Params_PumpC;
-		private controlPumpIscoGraphs mcontrol_IscoGraphs;
-		private System.Windows.Forms.GroupBox groupBox4;
-		private System.Windows.Forms.Button mbutton_SetControlMode;
-		private System.Windows.Forms.ComboBox mcomboBox_ControlMode;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.Button mbutton_SetOpMode;
-		private System.Windows.Forms.ComboBox mcomboBox_OperationMode;
-		private System.Windows.Forms.TextBox mtextBox_Notes;
-	}
+        private System.Windows.Forms.TabControl mTabControl;
+        private System.Windows.Forms.TabPage mtabPage_PumpControl;
+        private System.Windows.Forms.TabPage mtabPage_Advanced;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox mtextBox_BaudRate;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox mcomboBox_PumpCount;
+        private System.Windows.Forms.TextBox mtextBox_WriteTimeout;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox mtextBox_ReadTimeout;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox mcomboBox_UnitAddress;
+        private System.Windows.Forms.ComboBox mcomboBox_Ports;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private controlPumpIscoDisplay mcontrol_PumpB;
+        private controlPumpIscoDisplay mcontrol_PumpC;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private controlPumpIscoDisplay mcontrol_PumpA;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button mbuttonSetAllPress;
+        private System.Windows.Forms.Button mbutton_Refresh;
+        private System.Windows.Forms.Button mbuttonStopAll;
+        private System.Windows.Forms.Button mbutton_RefillAll;
+        private System.Windows.Forms.Button mbutton_SetAllFlow;
+        private System.Windows.Forms.Button mbutton_StartAll;
+        private System.Windows.Forms.Button mbutton_SetPortProperties;
+        private System.Windows.Forms.TextBox mtextBox_RefillSpA;
+        private System.Windows.Forms.TextBox mtextBox_RefillSpC;
+        private System.Windows.Forms.TextBox mtextBox_RefillSpB;
+        private System.Windows.Forms.Button mbutton_SetRefillRate;
+        private System.Windows.Forms.TabPage mtabPage_Limits;
+        private System.Windows.Forms.ListView mlistView_Limits;
+        private System.Windows.Forms.ColumnHeader mColHdr_Params_Parameter;
+        private System.Windows.Forms.ColumnHeader mColHdr_Params_PumpA;
+        private System.Windows.Forms.ColumnHeader mColHdr_Params_PumpB;
+        private System.Windows.Forms.ColumnHeader mColHdr_Params_PumpC;
+        private controlPumpIscoGraphs mcontrol_IscoGraphs;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button mbutton_SetControlMode;
+        private System.Windows.Forms.ComboBox mcomboBox_ControlMode;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button mbutton_SetOpMode;
+        private System.Windows.Forms.ComboBox mcomboBox_OperationMode;
+        private System.Windows.Forms.TextBox mtextBox_Notes;
+    }
 }

@@ -1,33 +1,33 @@
 ﻿namespace LcmsNet.Devices.Pumps
 {
-	partial class controlPumpIscoDisplay
-	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class controlPumpIscoDisplay
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
+        #region Component Designer generated code
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.mlabel_PumpName = new System.Windows.Forms.Label();
             this.mbutton_Refill = new System.Windows.Forms.Button();
             this.mbutton_StopPump = new System.Windows.Forms.Button();
@@ -199,23 +199,23 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Label mlabel_PumpName;
-		private System.Windows.Forms.Button mbutton_Refill;
-		private System.Windows.Forms.Button mbutton_StopPump;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.TextBox mtextBox_ActualPressure;
-		private System.Windows.Forms.Label mlabel_SetpontUnits;
-		private System.Windows.Forms.TextBox mtextBox_ActualFlow;
-		private System.Windows.Forms.Button mbutton_StartPump;
-		private System.Windows.Forms.Button mbutton_ChangeSetpoint;
-		private System.Windows.Forms.TextBox mtextBox_Setpoint;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox mtextBox_ActualVolume;
+        private System.Windows.Forms.Label mlabel_PumpName;
+        private System.Windows.Forms.Button mbutton_Refill;
+        private System.Windows.Forms.Button mbutton_StopPump;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox mtextBox_ActualPressure;
+        private System.Windows.Forms.Label mlabel_SetpontUnits;
+        private System.Windows.Forms.TextBox mtextBox_ActualFlow;
+        private System.Windows.Forms.Button mbutton_StartPump;
+        private System.Windows.Forms.Button mbutton_ChangeSetpoint;
+        private System.Windows.Forms.TextBox mtextBox_Setpoint;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox mtextBox_ActualVolume;
         private System.Windows.Forms.Label mlabel_ProbStatus;
-	}
+    }
 }

@@ -1,18 +1,18 @@
 ﻿/*********************************************************************************************************
- * Written by Brian LaMarche, Dave Clark, John Ryan for the US Department of Energy 
+ * Written by Brian LaMarche, Dave Clark, John Ryan for the US Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2009, Battelle Memorial Institute
  * Created 06/19/2009
- * 
+ *
  *  Last modified 06/19/2009
- *      Created class and added static methods with static device manager object that registers itself with 
+ *      Created class and added static methods with static device manager object that registers itself with
  *      the static method property.
- *      
+ *
  *  12-12-2009: BLL
  *      Added a method, FindDevice, to search for a device given its name (key) and it's type (found via GetType()).
  *  12-10-2009: BLL
  *      Created plug-ins, and loading of a new configuration pattern.
- * 
+ *
 /*********************************************************************************************************/
 
 using System;

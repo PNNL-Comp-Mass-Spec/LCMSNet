@@ -28,7 +28,7 @@ namespace AmpsBox
             m_driveLevelControl.GetDataCommand      += new EventHandler<AmpsBoxCommandEventArgs>(m_driveLevelControl_GetDataCommand);
         }
 
-        #region Command Event Handlers        
+        #region Command Event Handlers
         void m_driveLevelControl_GetDataCommand(object sender, AmpsBoxCommandEventArgs e)
         {
             e.Data.Channel = m_rfData.Channel;
@@ -37,12 +37,12 @@ namespace AmpsBox
         void m_outputVoltageControl_GetDataCommand(object sender, AmpsBoxCommandEventArgs e)
         {
             e.Data.Channel = m_rfData.Channel;
-            GetOutputVoltage(this, e); 
+            GetOutputVoltage(this, e);
         }
         void m_rfControl_GetDataCommand(object sender, AmpsBoxCommandEventArgs e)
         {
             e.Data.Channel = m_rfData.Channel;
-            GetRfFrequency(this, e);    
+            GetRfFrequency(this, e);
         }
         void m_driveLevelControl_SetDataCommand(object sender, AmpsBoxCommandEventArgs e)
         {
@@ -52,12 +52,12 @@ namespace AmpsBox
         void m_outputVoltageControl_SetDataCommand(object sender, AmpsBoxCommandEventArgs e)
         {
             e.Data.Channel = m_rfData.Channel;
-            SetOutputVoltage(this, e); 
+            SetOutputVoltage(this, e);
         }
         void m_rfControl_SetDataCommand(object sender, AmpsBoxCommandEventArgs e)
         {
             e.Data.Channel = m_rfData.Channel;
-            SetRfFrequency(this, e);            
+            SetRfFrequency(this, e);
         }
         #endregion
 
@@ -67,7 +67,7 @@ namespace AmpsBox
         /// <param name="rfData"></param>
         public void SetData(AmpsBoxRfData rfData)
         {
-            m_rfData                    = rfData;            
+            m_rfData                    = rfData;
             m_rfControl.Data            = rfData.RfFrequency;
             m_outputVoltageControl.Data = rfData.OutputVoltage;
             m_driveLevelControl.Data    = rfData.DriveLevel;

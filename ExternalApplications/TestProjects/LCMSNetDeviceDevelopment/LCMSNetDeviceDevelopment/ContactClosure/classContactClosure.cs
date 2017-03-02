@@ -139,7 +139,7 @@ namespace LcmsNet.Devices.ContactClosure
 
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
-        /// This is intended for use on the analog output ports--if it is a digital 
+        /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>

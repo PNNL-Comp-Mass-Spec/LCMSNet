@@ -65,7 +65,7 @@ namespace serv
 
                 streamWriter.WriteLine("STARTED");
                 Console.WriteLine("STARTED");
-                streamWriter.Flush();           
+                streamWriter.Flush();
  
 
                 streamReader.Close();

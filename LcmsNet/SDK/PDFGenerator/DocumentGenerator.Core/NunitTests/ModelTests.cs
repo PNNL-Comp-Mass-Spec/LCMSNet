@@ -23,7 +23,7 @@ namespace EMSL.DocumentGenerator.Core.Tests
         public void TestFromImage()
         {
             Bitmap test = new Bitmap(picturePath);
-            Core.Model.ImageContent testContent = new Core.Model.ImageContent(test);            
+            Core.Model.ImageContent testContent = new Core.Model.ImageContent(test);
         }
 
         [Test]

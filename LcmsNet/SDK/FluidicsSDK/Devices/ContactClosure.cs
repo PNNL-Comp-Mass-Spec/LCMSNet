@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 8/22/2013
- * 
- * Last Modified 10/17/2013 By Christopher Walters 
+ *
+ * Last Modified 10/17/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -62,12 +62,12 @@ namespace FluidicsSDK.Devices
         }
 
         /// <summary>
-        /// class constructor 
+        /// class constructor
         /// </summary>
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public ContactClosure(Point loc)
         {
-            base.AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);            
+            base.AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
         }
 
 

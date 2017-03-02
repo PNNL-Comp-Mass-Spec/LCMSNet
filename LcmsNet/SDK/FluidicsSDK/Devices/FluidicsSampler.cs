@@ -3,8 +3,8 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  * Created 11/27/2013
- * 
- * Last Modified 11/27/2013 By Christopher Walters 
+ *
+ * Last Modified 11/27/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace FluidicsSDK.Devices
 
         public FluidicsSampler(Point loc)
         {
-            DefineGraphcs(loc);               
+            DefineGraphcs(loc);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace FluidicsSDK.Devices
         }
 
         /// <summary>
-        /// IDevice required 
+        /// IDevice required
         /// </summary>
         /// <param name="device"></param>
         protected override void ClearDevice(LcmsNetDataClasses.Devices.IDevice device)

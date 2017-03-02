@@ -30,11 +30,11 @@ namespace FluidicsSDK.Devices
             //add left control
             base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));  
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));
             //add top "injection port"
             base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width/4, Loc.Y - 30), new Size((int)Size.Width/2, 10), Color.Black,  Brushes.White));
-            base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) -5), Loc.Y - 20), new Size(10, 20), Color.Black,  Brushes.White));  
-            // add injection loop           
+            base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) -5), Loc.Y - 20), new Size(10, 20), Color.Black,  Brushes.White));
+            // add injection loop
             base.AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
             base.AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50,30), Color.Black, Brushes.White, true, 1));
         }
@@ -46,7 +46,7 @@ namespace FluidicsSDK.Devices
             int stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
             using(Font f = new Font("Calibri", 11 + stringScale))
             {
-                g.DrawString(Volume.ToString() + " \u00b5" + "L", f, Brushes.Black, new PointF((Center.X * scale - 20), (Center.Y * scale - 10))); 
+                g.DrawString(Volume.ToString() + " \u00b5" + "L", f, Brushes.Black, new PointF((Center.X * scale - 20), (Center.Y * scale - 10)));
             }
         }
         

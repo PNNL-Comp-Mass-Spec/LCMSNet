@@ -2,8 +2,8 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
- * 
- * Last Modified 6/4/2014 By Christopher Walters 
+ *
+ * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -59,7 +59,7 @@ namespace FluidicsSDK.ModelCheckers
             {
                 List<Port> visitedPorts = new List<Port>();
                 List<Connection> pathTaken;
-                otherSourceFound = FindOtherSources(source, out pathTaken);            
+                otherSourceFound = FindOtherSources(source, out pathTaken);
                 if (otherSourceFound)
                 {
                     // Multiple sources found on a path, color path red.
@@ -97,9 +97,9 @@ namespace FluidicsSDK.ModelCheckers
             bool otherSourceFound = false;
             while(unexplored.Count > 0)
             {
-                Port unexploredPort = unexplored.Dequeue();          
+                Port unexploredPort = unexplored.Dequeue();
                 visitedPorts.Add(unexploredPort);
-                foreach(Connection connection in unexploredPort.Connections) 
+                foreach(Connection connection in unexploredPort.Connections)
                 {
                     Port otherEnd = connection.FindOppositeEndOfConnection(unexploredPort);
                     if (!visitedPorts.Contains(otherEnd)) // keeps us from getting stuck in a cycle in the graph, checking ports we've already checked.
@@ -113,7 +113,7 @@ namespace FluidicsSDK.ModelCheckers
                         {
                             pathTaken.Add(connection);
                             unexplored.Enqueue(otherEnd);
-                            //otherSourceFound = FindOtherSources(otherEnd, visitedPorts, pathTaken); 
+                            //otherSourceFound = FindOtherSources(otherEnd, visitedPorts, pathTaken);
                         }
                     }
                     if (otherSourceFound) { return otherSourceFound; } //short circuit out, we've found another source on the same path.
