@@ -34,7 +34,7 @@ namespace LcmsNetDataClasses.Devices
 
         #region Methods
 
-        // <summary>
+        /// <summary>
         /// Sets the base device and updates the name text field.
         /// </summary>
         /// <param name="device"></param>
