@@ -75,7 +75,7 @@ namespace LcmsNet
                 }
 
                 // Determine if presently specified instrument name is in list. If it is, display it.
-                string currentName = classLCMSSettings.GetParameter("InstName");
+                string currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME);
                 int indx = 0;
                 bool found = false;
                 foreach (string itemName in comboBoxAvailInstruments.Items)
@@ -104,7 +104,7 @@ namespace LcmsNet
 
             private void buttonAccept_Click(object sender, EventArgs e)
             {
-                classLCMSSettings.SetParameter("InstName", comboBoxAvailInstruments.SelectedItem.ToString());
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_INSTNAME, comboBoxAvailInstruments.SelectedItem.ToString());
                 this.Close();
             }
         #endregion

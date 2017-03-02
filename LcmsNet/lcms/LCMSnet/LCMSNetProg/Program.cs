@@ -52,14 +52,14 @@ namespace LcmsNet
 
             // Add path to executable as a saved setting
             FileInfo fi = new FileInfo(Application.ExecutablePath);
-            classLCMSSettings.SetParameter("ApplicationPath", fi.DirectoryName);
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
 
 
-            string emulation = classLCMSSettings.GetParameter("EmulationEnabled");
-            if (emulation != null)
+            string emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
+            if (!string.IsNullOrWhiteSpace(emulation))
             {
                 bool isEmulated = Convert.ToBoolean(emulation);
-                mform_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter("CartName"), isEmulated);
+                mform_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
             }
             return;
         }
@@ -168,38 +168,41 @@ namespace LcmsNet
             //
             // Create system data with columns.
             //
-            classColumnData columnOne = new classColumnData();
-            classColumnData columnTwo = new classColumnData();
-            classColumnData columnThree = new classColumnData();
-            classColumnData columnFour = new classColumnData();
+            var columnOne = new classColumnData
+            {
+                ID = 0,
+                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME0),
+                Status = enumColumnStatus.Idle,
+                Color = Color.Tomato,
+                First = true
+            };
 
+            var columnTwo = new classColumnData
+            {
+                ID = 1,
+                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME1),
+                Status = enumColumnStatus.Idle,
+                Color = Color.Lime
+            };
 
-            columnOne.ID = 0;
-            columnOne.Name = classLCMSSettings.GetParameter("ColumnName0");
-            columnOne.Status = enumColumnStatus.Idle;
-            columnOne.Color = Color.Tomato;
-            columnOne.First = true;
+            var columnThree = new classColumnData
+            {
+                ID = 2,
+                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME2),
+                Status = enumColumnStatus.Idle,
+                Color = Color.LightSteelBlue
+            };
 
-            columnTwo.ID = 1;
-            columnTwo.Name = classLCMSSettings.GetParameter("ColumnName1");
-            columnTwo.Status = enumColumnStatus.Idle;
-            columnTwo.Color = Color.Lime;
+            var columnFour = new classColumnData
+            {
+                ID = 3,
+                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME3),
+                Status = enumColumnStatus.Idle,
+                Color = Color.LightSalmon
+            };
 
-            columnThree.ID = 2;
-            columnThree.Name = classLCMSSettings.GetParameter("ColumnName2");
-            columnThree.Status = enumColumnStatus.Idle;
-            columnThree.Color = Color.LightSteelBlue;
-
-            columnFour.ID = 3;
-            columnFour.Name = classLCMSSettings.GetParameter("ColumnName3");
-            columnFour.Status = enumColumnStatus.Idle;
-            columnFour.Color = Color.LightSalmon;
-
-            classCartConfiguration.Columns = new List<classColumnData>();
-            classCartConfiguration.Columns.Add(columnOne);
-            classCartConfiguration.Columns.Add(columnTwo);
-            classCartConfiguration.Columns.Add(columnThree);
-            classCartConfiguration.Columns.Add(columnFour);
+            classCartConfiguration.Columns = new List<classColumnData> {
+                columnOne, columnTwo, columnThree, columnFour};
         }
 
         #endregion
@@ -303,8 +306,10 @@ namespace LcmsNet
                     classApplicationLogger.LogMessage(-1, "Loading settings");
                     Application.DoEvents();
                     LoadSettings();
+                    
                     // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
                     classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
+                    
                     //classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
                     InitializeSystemConfigurations();
 
@@ -314,7 +319,7 @@ namespace LcmsNet
                     //classApplicationLogger.LogMessage(-1, "Creating the Device Manager");
                     Application.DoEvents();
                     classDeviceManager deviceManager = classDeviceManager.Manager;
-                    deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled"));
+                    deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
                     deviceManager.AddDevice(new LcmsNetDataClasses.Devices.classTimerDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classBlockDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classLogDevice());
@@ -374,20 +379,18 @@ namespace LcmsNet
                     //
                     // Set the logging levels
                     //
-                    if (classLCMSSettings.GetParameter("LoggingErrorLevel") != null)
-                    {
-                        classApplicationLogger.ErrorLevel =
-                            int.Parse(classLCMSSettings.GetParameter("LoggingErrorLevel"));
-                    }
-                    else classApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
+                    var logLevelErrors = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGERRORLEVEL);
+                    if (!string.IsNullOrWhiteSpace(logLevelErrors))
+                        classApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
+                    else 
+                        classApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
 
-
-                    if (classLCMSSettings.GetParameter("LoggingMsgLevel") != null)
-                    {
-                        classApplicationLogger.MessageLevel =
-                            int.Parse(classLCMSSettings.GetParameter("LoggingMsgLevel"));
-                    }
-                    else classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
+                    var logLevelMessages = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGMSGLEVEL);
+                    if (!string.IsNullOrWhiteSpace(logLevelMessages))
+                        classApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
+                    else 
+                        classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
+                    
                     CreateSQLCache();
                     classApplicationLogger.LogMessage(-1, "Loading DMS data");
                     Application.DoEvents();
@@ -411,7 +414,7 @@ namespace LcmsNet
                     //
                     // Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
                     //
-                    if (bool.Parse(classLCMSSettings.GetParameter("CopyTriggerFiles")))
+                    if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
                     {
                         if (LcmsNetDataClasses.Data.classTriggerFileTools.CheckLocalTriggerFiles())
                         {
@@ -423,7 +426,7 @@ namespace LcmsNet
                     //
                     // Check to see if any method folders need to be copied to the transfer server, and copy if necessary
                     //
-                    if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
+                    if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
                     {
                         if (SampleQueue.IO.classMethodFileTools.CheckLocalMethodFolders())
                         {

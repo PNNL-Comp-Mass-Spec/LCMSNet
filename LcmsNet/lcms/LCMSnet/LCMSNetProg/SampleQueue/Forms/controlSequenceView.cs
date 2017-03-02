@@ -491,7 +491,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             panel2.SendToBack();
-            if (classLCMSSettings.GetParameter("DMSTool") == string.Empty)
+            if (string.IsNullOrWhiteSpace(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL)))
             {
                 mbutton_addDMS.Visible = false;
                 mbutton_dmsEdit.Visible = false;
@@ -522,7 +522,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             panel2.SendToBack();
-            if (classLCMSSettings.GetParameter("DMSTool") == string.Empty)
+            if (string.IsNullOrWhiteSpace(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL)))
             {
                 mbutton_addDMS.Visible = false;
                 mbutton_dmsEdit.Visible = false;

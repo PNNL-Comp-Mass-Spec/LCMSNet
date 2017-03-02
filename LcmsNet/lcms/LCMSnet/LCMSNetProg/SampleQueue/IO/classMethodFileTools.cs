@@ -50,7 +50,7 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Exit if method folder creation disabled
-            if (!bool.Parse(classLCMSSettings.GetParameter("CreateMethodFolders")))
+            if (!bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS)))
             {
                 string msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
                              ", Method folder creation disabled";
@@ -102,7 +102,7 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Exit if method folder creation disabled
-            if (!bool.Parse(classLCMSSettings.GetParameter("CreateMethodFolders")))
+            if (!bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS)))
             {
                 string msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
                              ", Method folder creation disabled";
@@ -159,7 +159,7 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Exit if method folder copy disabled
             // ----------------------------------------------------------------------------------------------------
-            bool shouldCopyFolder = bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders"));
+            bool shouldCopyFolder = bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS));
             if (!shouldCopyFolder)
             {
                 string msg = "The method data was not copied to the server for: " + sample.DmsData.DatasetName +
@@ -206,7 +206,7 @@ namespace LcmsNet.SampleQueue.IO
             string message;
 
             // Verify local method folder exists. Otherwise, create the folder.
-            string localFolder = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+            string localFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 LOCAL_METHOD_FOLDER_NAME);
             if (!Directory.Exists(localFolder))
             {
@@ -231,7 +231,7 @@ namespace LcmsNet.SampleQueue.IO
         public static bool CheckLocalMethodFolders()
         {
             // Check for presence of local method directory
-            string localMethodXferFolder = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+            string localMethodXferFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 LOCAL_METHOD_FOLDER_NAME);
             if (!Directory.Exists(localMethodXferFolder))
                 return false; // If no directory, there are no folders needing transfer
@@ -255,7 +255,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         public static void MoveLocalMethodFiles()
         {
-            string localFolder = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+            string localFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 LOCAL_METHOD_FOLDER_NAME);
 
             if (!Directory.Exists(localFolder))
@@ -307,7 +307,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns></returns>
         public static string CreateRemoteFolderPath()
         {
-            string path = Path.Combine(classLCMSSettings.GetParameter("TriggerFileFolder"), METHOD_FOLDER_NAME);
+            string path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER), METHOD_FOLDER_NAME);
             DateTime now = DateTime.Now;
             int month = now.Month;
             int year = now.Year;

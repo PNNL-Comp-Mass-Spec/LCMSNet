@@ -1033,7 +1033,7 @@ namespace LcmsNet.Method.Forms
             //
             // Construct the path
             //
-            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 

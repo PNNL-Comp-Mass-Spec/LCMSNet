@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using LcmsNet.Configuration;
-using LcmsNet.Devices;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
 using LcmsNet.Notification;
@@ -48,10 +47,10 @@ namespace LcmsNet
 
         void column_NameChanged(object sender, string name, string oldName)
         {
-            classColumnData column = sender as classColumnData;
+            var column = sender as classColumnData;
             if (column != null)
             {
-                classLCMSSettings.SetParameter("ColumnName" + column.ID, column.Name);
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_COLUMNNAME + column.ID, column.Name);
             }
         }
 
@@ -68,7 +67,7 @@ namespace LcmsNet
             mform_fluidicsDesign.SaveConfiguration();
 
             // Cache the selected separation type
-            classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter("SeparationType"));
+            classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE));
 
             // Shut off the scheduler...
             try
@@ -80,9 +79,9 @@ namespace LcmsNet
 
                 if (mobj_sampleQueue.IsDirty)
                 {
-                    DialogResult result =
+                    var result =
                         MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
-                            classLCMSSettings.GetParameter("CacheFileName")
+                            classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME)
                             ), "Confirm Queue Save", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
@@ -183,7 +182,7 @@ namespace LcmsNet
         /// <summary>
         /// default PDF generator, used to generate a pdf of information after a sample run.
         /// </summary>
-        private IPDF m_pdfGen = new PDFGen();
+        private readonly IPDF m_pdfGen = new PDFGen();
 
         private formSimulatorCombined mform_simCombined;
         private formSimConfiguration mform_simConfig;
@@ -194,15 +193,15 @@ namespace LcmsNet
         #region Initialization
 
         /// <summary>
-        /// Initializes all the forms and objects.and I ass
-        // </summary>
+        /// Initializes all the forms and objects
+        /// </summary>
         private void Initialize()
         {
             System.Threading.Thread.CurrentThread.Name = "Main Thread";
             mobj_logger = new classApplicationLogger();
             this.Text = "LcmsNet Version: " + Application.ProductVersion;
-            this.Text += " Cart - " + classLCMSSettings.GetParameter("CartName");
-            string emulation = classLCMSSettings.GetParameter("EmulationEnabled");
+            this.Text += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+            string emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
             if (emulation != null)
             {
                 bool isEmulated = Convert.ToBoolean(emulation);
@@ -282,7 +281,7 @@ namespace LcmsNet
 
 
             // Get the most recently used separation type
-            classLCMSSettings.SetParameter("SeparationType", classSQLiteTools.GetDefaultSeparationType());
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE, classSQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
             bool failedDeviceFlag = false;
@@ -290,7 +289,7 @@ namespace LcmsNet
             classDeviceManager.Manager.InitialzingDevice +=
                 new EventHandler<classDeviceManagerStatusArgs>(Manager_InitialzingDevice);
             formFailedDevicesDisplay display = null;
-            if (Convert.ToBoolean(classLCMSSettings.GetParameter("InitializeHardwareOnStartup")) == true)
+            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP)) == true)
             {
                 classApplicationLogger.LogMessage(0, "Initializing hardware.");
                 List<classDeviceErrorEventArgs> failedDevices = classDeviceManager.Manager.InitializeDevices();
@@ -305,7 +304,7 @@ namespace LcmsNet
             }
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
-            if (Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled")) == true)
+            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)) == true)
             {
                 //add simulator button to main form and add simulator forms.
                 mform_simCombined = new formSimulatorCombined();
@@ -326,7 +325,7 @@ namespace LcmsNet
             classApplicationLogger.LogMessage(0, "Reading User Methods.");
             Dictionary<string, List<Exception>> userMethodErrors =
                 classLCMethodManager.Manager.LoadMethods(
-                    System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+                    System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                         classLCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             if (userMethodErrors.Count > 0)
@@ -805,7 +804,7 @@ namespace LcmsNet
                     }
                     try
                     {
-                        docPath = classLCMSSettings.GetParameter("PdfPath");
+                        docPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PDFPATH);
                     }
                     catch
                     {
@@ -828,7 +827,7 @@ namespace LcmsNet
                         }
 
                         message = string.Empty;
-                        if (bool.Parse(classLCMSSettings.GetParameter("CopyMethodFolders")))
+                        if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
                         {
                             SampleQueue.IO.classMethodFileTools.MoveLocalMethodFiles();
                         }
@@ -909,15 +908,19 @@ namespace LcmsNet
         /// </summary>
         private void ShowCartConfiguration()
         {
-            List<string> separationTypes = classSQLiteTools.GetSepTypeList(false);
+
+            var separationTypes = classSQLiteTools.GetSepTypeList(false);
             mform_systemConfiguration.SeparationTypes = separationTypes;
-            if (classLCMSSettings.GetParameter("SeparationType") == "")
+
+
+            var separationType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE);
+            if (string.IsNullOrWhiteSpace(separationType))
             {
                 mform_systemConfiguration.SetSeparationType("none");
             }
             else
             {
-                mform_systemConfiguration.SetSeparationType(classLCMSSettings.GetParameter("SeparationType"));
+                mform_systemConfiguration.SetSeparationType(separationType);
             }
             mform_systemConfiguration.BringToFront();
         }

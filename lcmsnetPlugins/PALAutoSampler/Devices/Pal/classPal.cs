@@ -513,7 +513,7 @@ namespace LcmsNet.Devices.Pal
                     end = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));                    
                 }
 
-                string methodsFolder = classLCMSSettings.GetParameter("PalMethodsFolder");
+                string methodsFolder = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PALMETHODSFOLDER);
                 bool exists = System.IO.Directory.Exists(methodsFolder);
                 if (!exists)
                 {

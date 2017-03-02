@@ -2115,7 +2115,7 @@ namespace LcmsNet.SampleQueue
             // This means that we have to recompile the data ...
             if (buildconnectionString)
             {
-                List<string> cartNames = classSQLiteTools.GetCartNameList(false);
+                List<string> cartNames = classSQLiteTools.GetCartNameList();
                 List<string> columnNames = classSQLiteTools.GetColumnList(false);
                 List<string> datasetNames = classSQLiteTools.GetDatasetTypeList(false);
                 List<classInstrumentInfo> instrumentList = classSQLiteTools.GetInstrumentList(false);
@@ -2314,7 +2314,7 @@ namespace LcmsNet.SampleQueue
                         sample.ColumnData = classCartConfiguration.Columns[columnID];
                     }
                 }
-                sample.DmsData.CartName = classLCMSSettings.GetParameter("CartName");
+                sample.DmsData.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
                 if (sample.UniqueID >= mint_sampleIndex)
                 {
                     mint_sampleIndex = Convert.ToInt32(sample.UniqueID);
@@ -2340,7 +2340,7 @@ namespace LcmsNet.SampleQueue
             //
             foreach (classSampleData data in waitingSamples)
             {
-                data.DmsData.CartName = classLCMSSettings.GetParameter("CartName");
+                data.DmsData.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
                 data.ColumnData = column;
             }
 

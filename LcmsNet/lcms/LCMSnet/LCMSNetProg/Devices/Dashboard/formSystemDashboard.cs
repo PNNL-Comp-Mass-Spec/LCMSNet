@@ -418,7 +418,7 @@ namespace LcmsNet.Devices
         {
             // classDeviceManager.Manager.SaveConfiguration(path);
             classDeviceConfiguration configuration = new classDeviceConfiguration();
-            configuration.CartName      = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
+            configuration.CartName = LcmsNetDataClasses.classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
 
             classDeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);
 

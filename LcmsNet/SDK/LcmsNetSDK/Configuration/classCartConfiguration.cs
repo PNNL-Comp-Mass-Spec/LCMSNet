@@ -91,29 +91,31 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public static string CartName
         {
-            get { return classLCMSSettings.GetParameter("CartName"); }
-            set { classLCMSSettings.SetParameter("CartName", value); }
+            get { return classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME); }
+            set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CARTNAME, value); }
         }
 
         /// <summary>
-        /// Gets or sets the name of the cart.
+        /// Gets or sets the name of the cart configuration in use
         /// </summary>
         public static string CartConfigName
         {
-            get { return classLCMSSettings.GetParameter("CartConfigName"); }
-            set { classLCMSSettings.SetParameter("CartConfigName", value); }
+            get { return classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME); }
+            set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME, value); }
         }
 
         public static double MinimumVolume
         {
             get
             {
-                var volumeSetting = classLCMSSettings.GetParameter("MinimumVolume");
-                var volume = classSampleData.CONST_MIN_SAMPLE_VOLUME;
-                var worked = double.TryParse(volumeSetting, out volume);
-                return volume;
+                var volumeSetting = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME);
+                double volume;
+                if (double.TryParse(volumeSetting, out volume))
+                    return volume;
+
+                return classSampleData.CONST_MIN_SAMPLE_VOLUME;
             }
-            set { classLCMSSettings.SetParameter("MinimumVolume", value.ToString()); }
+            set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME, value.ToString()); }
         }
 
         #endregion

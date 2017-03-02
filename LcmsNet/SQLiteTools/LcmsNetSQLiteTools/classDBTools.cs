@@ -681,8 +681,8 @@ namespace LcmsNetDmsTools
             string retStr = "Data Source=gigasax;Initial Catalog="; //Base connection string
 
             // Get DMS version and append to base string
-            string dmsVersion = classLCMSSettings.GetParameter("DMSVersion");
-            if (dmsVersion != null)
+            string dmsVersion = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSVERSION);
+            if (!string.IsNullOrWhitespace(dmsVersion))
             {
                 retStr += dmsVersion + ";User ID=LCMSNetUser;Password=";
             }
@@ -692,8 +692,8 @@ namespace LcmsNetDmsTools
             }
 
             // Get password and append to return string
-            string dmsPassword = classLCMSSettings.GetParameter("DMSPwd");
-            if (dmsPassword != null)
+            string dmsPassword = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSPWD);
+            if (!string.IsNullOrWhitespace(dmsPassword))
             {
                 retStr += DecodePassword(dmsPassword);
             }

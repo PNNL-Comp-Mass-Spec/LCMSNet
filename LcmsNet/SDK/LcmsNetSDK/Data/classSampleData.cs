@@ -171,7 +171,7 @@ namespace LcmsNetDataClasses
 
         public static string BuildCartColumnName(classSampleData sample)
         {
-            var cartName = classLCMSSettings.GetParameter("CartName");
+            var cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
             var columnName = "";
             
             if (!string.IsNullOrEmpty(sample.ColumnData?.Name))
@@ -230,7 +230,7 @@ namespace LcmsNetDataClasses
             var datasetName = sample.DmsData.DatasetName;
             var outFileName =
                 string.Format("{0}_{1}_{2}{3}",
-                    classLCMSSettings.GetParameter("CartName"),
+                    classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME),
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
                     sample.LCMethod.Start.ToString("MM.dd.yyyy_hh.mm.ss"),
                     datasetName,

@@ -69,8 +69,8 @@ namespace LcmsNet.Reporting.Forms
             classErrorReportBuilder builder = new classErrorReportBuilder();
             string path = builder.CreateReport(m_forms, methods, m_logPath, "hardwareconfig.ini");
 
-            string cartName = classLCMSSettings.GetParameter("CartName");
-            string errorReportPath = classLCMSSettings.GetParameter("ErrorPath");
+            string cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+            string errorReportPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_ERRORPATH);
 
             classErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
         }

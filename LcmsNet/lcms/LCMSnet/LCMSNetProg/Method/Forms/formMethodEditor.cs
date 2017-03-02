@@ -29,8 +29,8 @@ namespace LcmsNet.Method.Forms
 
             mdialog_openMethod = new OpenFileDialog();
             mdialog_openMethod.Title = "Open LC-Method";
-            string path = classLCMSSettings.GetParameter("ApplicationPath");
-            if (path != null)
+            string path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
+            if (!string.IsNullOrWhiteSpace(path))
             {
                 mdialog_openMethod.InitialDirectory = Path.Combine(path,
                     classLCMethodFactory.CONST_LC_METHOD_FOLDER);

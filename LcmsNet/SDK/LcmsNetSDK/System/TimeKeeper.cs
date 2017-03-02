@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using LcmsNetDataClasses;
 
 namespace LcmsNetSDK
 {
@@ -28,20 +29,20 @@ namespace LcmsNetSDK
 
         private TimeKeeper()
         {
-            if (LcmsNetDataClasses.classLCMSSettings.GetParameter("TimeZone") == null)
+            var timeZone = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TIMEZONE);
+            if (string.IsNullOrWhiteSpace(timeZone))
             {
                 m_current_timezone = TimeZoneInfo.Local;
-                LcmsNetDataClasses.classLCMSSettings.SetParameter("TimeZone", m_current_timezone.Id);
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id);
             }
             else
             {
-                m_current_timezone =
-                    TimeZoneInfo.FindSystemTimeZoneById(LcmsNetDataClasses.classLCMSSettings.GetParameter("TimeZone"));
+                m_current_timezone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
             }
-            LcmsNetDataClasses.classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
+            classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
         }
 
-        private void classLCMSSettings_SettingChanged(object sender, LcmsNetDataClasses.SettingChangedEventArgs e)
+        private void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
             if (e.SettingName == "TimeZone")
             {
@@ -56,8 +57,8 @@ namespace LcmsNetSDK
         ~TimeKeeper()
         {
             //Persist the timezone setting
-            LcmsNetDataClasses.classLCMSSettings.SettingChanged -= classLCMSSettings_SettingChanged;
-            LcmsNetDataClasses.classLCMSSettings.SetParameter("TimeZone", m_current_timezone.Id.ToString());
+            classLCMSSettings.SettingChanged -= classLCMSSettings_SettingChanged;
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id.ToString());
         }
 
         /// <summary>
@@ -211,7 +212,7 @@ namespace LcmsNetSDK
             set
             {
                 m_current_timezone = value;
-                LcmsNetDataClasses.classLCMSSettings.SetParameter("TimeZone", value.Id);
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, value.Id);
             }
         }
 

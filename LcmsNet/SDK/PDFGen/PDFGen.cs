@@ -93,7 +93,7 @@ namespace PDFGenerator
 
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Mass Spectrometer Configuration");
             //TODO: Get mass spectrometer name from lcmsnet
-            doc.AddParagraph(string.Format("Mass Spectrometer: {0}", classLCMSSettings.GetParameter("InstName")));
+            doc.AddParagraph(string.Format("Mass Spectrometer: {0}", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME)));
             doc.AddPageBreak();
             //fluidics design section          
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Method");

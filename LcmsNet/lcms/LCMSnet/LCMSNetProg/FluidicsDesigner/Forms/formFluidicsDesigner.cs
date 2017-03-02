@@ -491,7 +491,7 @@ namespace LcmsNet.FluidicsDesigner
             public void LoadDefaultConfig()
             {
                 // If default config file doesn't exist, just return
-                string defaultConfigFile = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), DEFAULT_CONFIG_NAME);
+                string defaultConfigFile = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), DEFAULT_CONFIG_NAME);
                 if (!File.Exists(defaultConfigFile)) return;
 
                 // Load the settings from the default config file
@@ -848,7 +848,7 @@ namespace LcmsNet.FluidicsDesigner
                 if (result != DialogResult.OK) return;
 
                 // Save the configuration
-                string defaultConfigFile = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), DEFAULT_CONFIG_NAME);
+                string defaultConfigFile = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), DEFAULT_CONFIG_NAME);
                 SaveSymbolConfig(defaultConfigFile);
             }
 

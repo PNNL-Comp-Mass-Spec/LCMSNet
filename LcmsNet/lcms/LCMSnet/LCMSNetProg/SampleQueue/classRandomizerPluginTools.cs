@@ -29,7 +29,7 @@ namespace LcmsNet.SampleQueue
 
             // Get list of DLL's in plugin folder
             FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
-            string pluginFolder = Path.Combine(fi.DirectoryName, classLCMSSettings.GetParameter("PluginFolder"));
+            string pluginFolder = Path.Combine(fi.DirectoryName, classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PLUGINFOLDER));
             string[] dllFiles = Directory.GetFiles(pluginFolder, "*.dll");
             if (dllFiles.GetLength(0) == 0)
             {

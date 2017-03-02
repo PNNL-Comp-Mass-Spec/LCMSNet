@@ -58,7 +58,7 @@ namespace LcmsNetSDK
             mmef_compositionContainer.ComposeParts(this);
             if (ToolCount == 0)
             {
-                classLCMSSettings.SetParameter("DMSTool", string.Empty);
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, string.Empty);
             }
         }
 
@@ -72,9 +72,9 @@ namespace LcmsNetSDK
                 // Check that we have a tool available, if not, report via exception otherwise, return the selected, or first available tool.
                 if (midmstools_selectedTools == null && DmsTools.Count() != 0)
                 {
-                    var lastSelectedTool = classLCMSSettings.GetParameter("DMSTool");
-                    var toolTokens = lastSelectedTool.Split(new char[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
-                    if (lastSelectedTool != string.Empty)
+                    var lastSelectedTool = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL);
+                    var toolTokens = lastSelectedTool.Split(new[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
+                    if (!string.IsNullOrWhiteSpace(lastSelectedTool))
                     {
                         midmstools_selectedTools =
                             DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1])
@@ -87,7 +87,7 @@ namespace LcmsNetSDK
                     {
                         midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
                         mdms_metadata = DmsTools.First().Metadata;
-                        classLCMSSettings.SetParameter("DMSTool",
+                        classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL,
                             DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
                     }
                 }
@@ -175,7 +175,7 @@ namespace LcmsNetSDK
                     {
                         toolSelected = true;
                         midmstools_selectedTools = tool.Value;
-                        classLCMSSettings.SetParameter("DMSTool", toolName + "-" + toolVersion);
+                        classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, toolName + "-" + toolVersion);
                     }
                 }
             }

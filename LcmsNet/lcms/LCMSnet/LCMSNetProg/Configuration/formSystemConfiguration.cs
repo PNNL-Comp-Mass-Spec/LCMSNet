@@ -67,7 +67,7 @@ namespace LcmsNet.Configuration
             string path = txtPdfPath.Text;
             if (Directory.Exists(path))
             {
-                classLCMSSettings.SetParameter("PdfPath", path);
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_PDFPATH, path);
             }
             else
             {
@@ -94,7 +94,7 @@ namespace LcmsNet.Configuration
 
         private void comboTimeZone_SelectedValueChanged(object sender, EventArgs e)
         {
-            classLCMSSettings.SetParameter("TimeZone", comboTimeZone.SelectedItem.ToString());
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, comboTimeZone.SelectedItem.ToString());
         }
 
         private void comboDmsTools_SelectedIndexChanged(object sender, EventArgs e)
@@ -105,7 +105,7 @@ namespace LcmsNet.Configuration
             try
             {
                 classDMSToolsManager.Instance.SelectTool(toolInfo[0], toolInfo[1]);
-                classLCMSSettings.SetParameter("DMSTool", selectedTool);
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, selectedTool);
             }
             catch (Exception ex)
             {
@@ -184,8 +184,8 @@ namespace LcmsNet.Configuration
         /// </summary>
         private void Initialize()
         {
-            mtextbox_triggerLocation.Text = classLCMSSettings.GetParameter("TriggerFileFolder");
-            txtPdfPath.Text = classLCMSSettings.GetParameter("PdfPath");
+            mtextbox_triggerLocation.Text = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
+            txtPdfPath.Text = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PDFPATH);
             mcontrol_columnOne.ColumnData = classCartConfiguration.Columns[0];
             mcontrol_columnTwo.ColumnData = classCartConfiguration.Columns[1];
             mcontrol_columnThree.ColumnData = classCartConfiguration.Columns[2];
@@ -197,7 +197,7 @@ namespace LcmsNet.Configuration
             RegisterColumn(mcontrol_columnFour);
 
             // Cart name
-            mlabel_Cart.Text = classLCMSSettings.GetParameter("CartName");
+            mlabel_Cart.Text = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
 
             LoadInstrumentInformation();
             LoadApplicationSettings();
@@ -210,13 +210,13 @@ namespace LcmsNet.Configuration
                 comboTimeZone.Items.Add(tzi.Id);
             }
 
-            comboTimeZone.SelectedIndex = comboTimeZone.FindStringExact(classLCMSSettings.GetParameter("TimeZone"));
+            comboTimeZone.SelectedIndex = comboTimeZone.FindStringExact(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TIMEZONE));
 
             //load dms tools into combobox
             comboDmsTools.Items.AddRange(classDMSToolsManager.Instance.ListTools().ToArray());
             try
             {
-                comboDmsTools.SelectedIndex = comboDmsTools.Items.IndexOf(classLCMSSettings.GetParameter("DMSTool"));
+                comboDmsTools.SelectedIndex = comboDmsTools.Items.IndexOf(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL));
             }
             catch (Exception ex)
             {
@@ -265,7 +265,7 @@ namespace LcmsNet.Configuration
             }
 
             // Determine if presently specified instrument name is in list. If it is, display it.
-            string currentName = classLCMSSettings.GetParameter("InstName");
+            string currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME);
             int indx = 0;
             bool found = false;
             foreach (string itemName in comboBoxAvailInstruments.Items)
@@ -285,8 +285,8 @@ namespace LcmsNet.Configuration
             else comboBoxAvailInstruments.SelectedIndex = 0;
 
 
-            // Determine if presently specified instrument name is in list. If it is, display it.
-            currentName = classLCMSSettings.GetParameter("SeparationType");
+            // Determine if presently specified separation type is in list. If it is, display it.
+            currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE);
             indx = 0;
             found = false;
             foreach (string itemName in mcombo_SepType.Items)
@@ -316,10 +316,10 @@ namespace LcmsNet.Configuration
         /// </summary>
         private void LoadApplicationSettings()
         {
-            //mcheckBox_createTriggerFiles.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter("CreateTriggerFiles"));
-            //mcheckBox_copyTriggerFiles.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter("CopyTriggerFiles"));
-            //mcheckBox_createMethodFolders.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter("CreateMethodFolders"));
-            //mcheckBox_copyMethodFolders.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter("CopyMethodFolders"));
+            //mcheckBox_createTriggerFiles.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATETRIGGERFILES));
+            //mcheckBox_copyTriggerFiles.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES));
+            //mcheckBox_createMethodFolders.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS));
+            //mcheckBox_copyMethodFolders.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS));
         }
 
         /// <summary>
@@ -365,7 +365,7 @@ namespace LcmsNet.Configuration
 
 
             // Determine if presently specified operator name is in list. If it is, display it.
-            string currentName = classLCMSSettings.GetParameter("Operator");
+            string currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_OPERATOR);
             int indx = 0;
             bool found = false;
             foreach (string itemName in mcombo_Operator.Items)
@@ -434,10 +434,11 @@ namespace LcmsNet.Configuration
 
         #region Form Events
 
+
         private void mcombo_SepType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            classLCMSSettings.SetParameter("SeparationType", mcombo_SepType.Text);
-            classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter("SeparationType"));
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE, mcombo_SepType.Text);
+            classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE));
         }
 
         private void mbutton_Reload_Click(object sender, EventArgs e)
@@ -491,7 +492,7 @@ namespace LcmsNet.Configuration
         private void buttonAccept_Click(object sender, EventArgs e)
         {
             if (!m_isLoading)
-                classLCMSSettings.SetParameter("InstName", comboBoxAvailInstruments.SelectedItem.ToString());
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_INSTNAME, comboBoxAvailInstruments.SelectedItem.ToString());
             mbutton_accept.BackColor = System.Drawing.Color.FromName("ButtonHighlight");
         }
 
@@ -507,8 +508,8 @@ namespace LcmsNet.Configuration
                 var operatorName = mcombo_Operator.SelectedItem.ToString();
                 if (mobj_Users.ContainsKey(operatorName))
                 {
-                    var instrumentOperator = mobj_Users[operatorName];
-                    classLCMSSettings.SetParameter("Operator", instrumentOperator.UserName);
+                    var instrumentOperator = m_Users[operatorName];
+                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_OPERATOR, instrumentOperator.UserName);
                 }
                 else
                 {

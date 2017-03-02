@@ -13,6 +13,7 @@ using FluidicsSDK.Graphic;
 using FluidicsSDK.Base;
 using System.IO;
 using LcmsNet.Devices.Dashboard;
+using LcmsNetDataClasses;
 
 namespace LcmsNet.Devices.Fluidics
 {
@@ -215,7 +216,7 @@ namespace LcmsNet.Devices.Fluidics
         public void SaveConfiguration(string path)
         {
             classDeviceConfiguration configuration = new classDeviceConfiguration();
-            configuration.CartName = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
+            configuration.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
 
 
             classDeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);

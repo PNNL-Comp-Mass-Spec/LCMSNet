@@ -46,7 +46,7 @@ namespace LcmsNetDataClasses.Devices
             aggregate.Error              = null;
             aggregate.LastUpdate         = DateTime.Now;
             aggregate.Status             = "";
-            aggregate.Name               = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
+            aggregate.Name               = LcmsNetDataClasses.classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
 
             foreach (IDevice device in mlist_devices)
             {

@@ -86,9 +86,9 @@ namespace LcmsNet.FluidicsDesigner
             {
                 mobj_Diagram = TargetDiagram;
                 mobj_Device = new controlValveVICI2Pos();
-                mobj_Device.Emulation = bool.Parse(classLCMSSettings.GetParameter("EmulationEnabled"));
+                mobj_Device.Emulation = bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
                 mobj_Device.NameChanged += new DelegateNameChanged(OnNameChange);
-            mobj_Device.PosChanged += new DelegatePositionChanged(OnPositionChange);
+                mobj_Device.PosChanged += new DelegatePositionChanged(OnPositionChange);
                 mobj_Device.SaveRequired += new LcmsNetDataClasses.Devices.DelegateSaveRequired(OnSaveRequired);
                 CreateSymbolGroup();
             }   // End sub

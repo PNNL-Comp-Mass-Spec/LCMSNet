@@ -91,7 +91,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// Default constructor that takes cart configuration data.
         /// </summary>
         /// <param name="queue">Sample queue to provide interface to.</param>
-        /// <param name="cartConfig">Cart Configuration of hardware details.</param>
         public formSampleManager(classSampleQueue queue)
         {
             //
@@ -117,7 +116,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// Initialization code.
         /// </summary>
         /// <param name="queue"></param>
-        /// <param name="cartConfig"></param>
         private void Initialize(classSampleQueue queue)
         {
             mform_dmsView = new formDMSView();
@@ -174,7 +172,7 @@ namespace LcmsNet.SampleQueue.Forms
             mdialog_importQueue.Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml";
 
             mdialog_exportMRMFiles = new FolderBrowserDialog();
-            Text = "Sample Queue - " + classLCMSSettings.GetParameter("CacheFileName");
+            Text = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
         }
 
         public void PreviewAvailable(object sender, LcmsNet.Method.Forms.SampleProgressPreviewArgs e)
@@ -505,8 +503,8 @@ namespace LcmsNet.SampleQueue.Forms
             // This way they can validate if they need to all of this information.
             //
 
-            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) &&
-                                   classLCMSSettings.GetParameter("DMSTool") != string.Empty;
+            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) &&
+                                   classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL) != string.Empty;
             if (validateSamples == true)
             {
                 formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
@@ -587,12 +585,12 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 mobj_sampleQueue.CacheQueue(false);
                 classApplicationLogger.LogMessage(0,
-                    "Queue saved \"" + classLCMSSettings.GetParameter("CacheFileName") + "\".");
+                    "Queue saved \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "\".");
             }
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(0,
-                    "Could not save queue: " + classLCMSSettings.GetParameter("CacheFileName") + "  " + ex.Message, ex);
+                    "Could not save queue: " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "  " + ex.Message, ex);
             }
         }
 
@@ -613,7 +611,7 @@ namespace LcmsNet.SampleQueue.Forms
                 mobj_sampleQueue.CacheQueue(mdialog_exportQueue.FileName);
                 this.Text = "Sample Queue - " + mdialog_exportQueue.FileName;
                 classApplicationLogger.LogMessage(0,
-                    "Queue saved to \"" + classLCMSSettings.GetParameter("CacheFileName") +
+                    "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
                     "\" and is now the default queue.");
             }
         }

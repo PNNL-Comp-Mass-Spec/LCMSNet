@@ -256,8 +256,8 @@ namespace LcmsNet.SampleQueue
             UpdateCartConfigList();
 
             // Cart name
-            m_CartName = classLCMSSettings.GetParameter("CartName");
-            m_CartConfigName = classLCMSSettings.GetParameter("CartConfigName");
+            m_CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+            m_CartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
 
             if (m_CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
@@ -282,7 +282,7 @@ namespace LcmsNet.SampleQueue
             // Get the list of carts from DMS
             try
             {
-                cartList = classSQLiteTools.GetCartNameList(false);
+                cartList = classSQLiteTools.GetCartNameList();
             }
             catch (classDatabaseConnectionStringException Ex)
             {

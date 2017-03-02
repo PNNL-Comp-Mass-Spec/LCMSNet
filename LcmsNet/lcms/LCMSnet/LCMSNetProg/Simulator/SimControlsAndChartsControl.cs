@@ -287,7 +287,7 @@ namespace LcmsNet.Simulator
             switch (result)
             {
                 case DialogResult.Yes:
-                    classLCMSSettings.SetParameter("EmulationEnabled", "True");
+                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, "True");
                     return runSimulation;
 
                 case DialogResult.No:
@@ -302,7 +302,7 @@ namespace LcmsNet.Simulator
 
         private bool ConfirmEmulation()
         {
-            if (!Convert.ToBoolean(classLCMSSettings.GetParameter("EmulationEnabled")))
+            if (!Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)))
             {
                 return ConfirmNoEmulation();
             }
@@ -371,7 +371,7 @@ namespace LcmsNet.Simulator
             //
             // Construct the path
             //
-            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"),
+            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 

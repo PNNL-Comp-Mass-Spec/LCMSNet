@@ -38,12 +38,45 @@ namespace LcmsNetDataClasses
         }
     }
 
+    /// <summary>
+    /// Class to handle program settings data
+    /// </summary>
     public class classLCMSSettings
     {
         public const string CONST_UNASSIGNED_CART_NAME = "(none)";
-        //*********************************************************************************************************
-        // Class to handle program settings data
-        //**********************************************************************************************************
+
+        public const string PARAM_APPLICATIONPATH = "ApplicationPath";
+        public const string PARAM_CACHEFILENAME = "CacheFileName";
+        public const string PARAM_CARTCONFIGNAME = "CartConfigName";
+        public const string PARAM_CARTNAME = "CartName";
+        public const string PARAM_COLUMNNAME = "ColumnName";
+        public const string PARAM_COLUMNNAME0 = "ColumnName0";
+        public const string PARAM_COLUMNNAME1 = "ColumnName1";
+        public const string PARAM_COLUMNNAME2 = "ColumnName2";
+        public const string PARAM_COLUMNNAME3 = "ColumnName3";
+        public const string PARAM_COPYMETHODFOLDERS = "CopyMethodFolders";
+        public const string PARAM_COPYTRIGGERFILES = "CopyTriggerFiles";
+        public const string PARAM_CREATEMETHODFOLDERS = "CreateMethodFolders";
+        public const string PARAM_CREATETRIGGERFILES = "CreateTriggerFiles";
+        public const string PARAM_DMSPWD = "DMSPwd";
+        public const string PARAM_DMSTOOL = "DMSTool";
+        public const string PARAM_DMSVERSION = "DMSVersion";
+        public const string PARAM_EMULATIONENABLED = "EmulationEnabled";
+        public const string PARAM_ERRORPATH = "ErrorPath";
+        public const string PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE = "FirstTime";
+        public const string PARAM_INITIALIZEHARDWAREONSTARTUP = "InitializeHardwareOnStartup";
+        public const string PARAM_INSTNAME = "InstName";
+        public const string PARAM_LOGGINGERRORLEVEL = "LoggingErrorLevel";
+        public const string PARAM_LOGGINGMSGLEVEL = "LoggingMsgLevel";
+        public const string PARAM_MINIMUMVOLUME = "MinimumVolume";
+        public const string PARAM_OPERATOR = "Operator";
+        public const string PARAM_PALMETHODSFOLDER = "PalMethodsFolder";
+        public const string PARAM_PDFPATH = "PdfPath";
+        public const string PARAM_PLUGINFOLDER = "PluginFolder";
+        public const string PARAM_SEPARATIONTYPE = "SeparationType";
+        public const string PARAM_TIMEZONE = "TimeZone";
+        public const string PARAM_TRIGGERFILEFOLDER = "TriggerFileFolder";
+        public const string PARAM_VALIDATESAMPLESFORDMS = "ValidateSamplesForDMS";
 
         #region "Class variables"
 

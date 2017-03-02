@@ -97,8 +97,8 @@ namespace LcmsNetSQLiteTools
         /// <remarks>Starts off as a filename, but is changed to a path by BuildConnectionString</remarks>
         public static string CacheName
         {
-            get { return classLCMSSettings.GetParameter("CacheFileName"); }
-            private set { classLCMSSettings.SetParameter("CacheFileName", value); }
+            get { return classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME); }
+            private set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CACHEFILENAME, value); }
         }
 
         public static string AppDataFolderName { get; set; }
@@ -107,7 +107,7 @@ namespace LcmsNetSQLiteTools
         {
             try
             {
-                var name = classLCMSSettings.GetParameter("CacheFileName");
+                var name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
                 var exists = File.Exists(name);
                 if (!exists && !newCache)
                 {
@@ -119,7 +119,7 @@ namespace LcmsNetSQLiteTools
                         Directory.CreateDirectory(name);
                     }
                     name = Path.Combine(name, CacheName);
-                    classLCMSSettings.SetParameter("CacheFileName", name);
+                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CACHEFILENAME, name);
                 }
 
                 //workaround for SQLite library version 1.0.93 for network addresses
@@ -1088,24 +1088,23 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                var firstTime = classLCMSSettings.GetParameter("FirstTime");
+                var firstTimeLookupedSelectedSepType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
 
                 var isFirstTime = true;
-                if (firstTime != null)
+                if (!string.IsNullOrWhiteSpace(firstTimeLookupedSelectedSepType))
                 {
-                    isFirstTime = Convert.ToBoolean(firstTime);
+                    isFirstTime = Convert.ToBoolean(firstTimeLookupedSelectedSepType);
                 }
 
                 if (!isFirstTime)
                 {
-                    //errMsg = "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
                     const string errorMessage =
                         "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
                     classApplicationLogger.LogError(0, errorMessage, ex);
                 }
                 else
                 {
-                    classLCMSSettings.SetParameter("FirstTime", false.ToString());
+                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE, false.ToString());
                 }
                 return "";
             }

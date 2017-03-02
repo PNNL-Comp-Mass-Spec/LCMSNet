@@ -493,7 +493,7 @@ namespace LcmsNet.SampleQueue.Forms
                     validator = null;
                 }
                 bool isSampleValid;
-                if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
+                if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) && validator != null)
                 {
                     isSampleValid = validator.IsSampleValid(sample);
                     if (!isSampleValid && false)
@@ -656,7 +656,7 @@ namespace LcmsNet.SampleQueue.Forms
                         validator = null;
                     }
                     bool isSampleValid;
-                    if (Convert.ToBoolean(classLCMSSettings.GetParameter("ValidateSamplesForDMS")) && validator != null)
+                    if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) && validator != null)
                     {
                         isSampleValid = validator.IsSampleValid(sample);
                         if (!isSampleValid && false)

@@ -35,38 +35,41 @@ namespace LcmsnetUnitTest
                 //
                 // Create system data with columns.
                 //
-                classColumnData columnOne = new classColumnData();
-                classColumnData columnTwo = new classColumnData();
-                classColumnData columnThree = new classColumnData();
-                classColumnData columnFour = new classColumnData();
+                var columnOne = new classColumnData
+                {
+                    ID = 0,
+                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME0),
+                    Status = enumColumnStatus.Idle,
+                    Color = Color.Tomato,
+                    First = true
+                };
 
+                var columnTwo = new classColumnData
+                {
+                    ID = 1,
+                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME1),
+                    Status = enumColumnStatus.Idle,
+                    Color = Color.Lime
+                };
 
-                columnOne.ID = 0;
-                columnOne.Name = classLCMSSettings.GetParameter("ColumnName0");
-                columnOne.Status = enumColumnStatus.Idle;
-                columnOne.Color = Color.Tomato;
-                columnOne.First = true;
+                var columnThree = new classColumnData
+                {
+                    ID = 2,
+                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME2),
+                    Status = enumColumnStatus.Idle,
+                    Color = Color.LightSteelBlue
+                };
 
-                columnTwo.ID = 1;
-                columnTwo.Name = classLCMSSettings.GetParameter("ColumnName1");
-                columnTwo.Status = enumColumnStatus.Idle;
-                columnTwo.Color = Color.Lime;
+                var columnFour = new classColumnData
+                {
+                    ID = 3,
+                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME3),
+                    Status = enumColumnStatus.Idle,
+                    Color = Color.LightSalmon
+                };
 
-                columnThree.ID = 2;
-                columnThree.Name = classLCMSSettings.GetParameter("ColumnName2");
-                columnThree.Status = enumColumnStatus.Idle;
-                columnThree.Color = Color.LightSteelBlue;
-
-                columnFour.ID = 3;
-                columnFour.Name = classLCMSSettings.GetParameter("ColumnName3");
-                columnFour.Status = enumColumnStatus.Idle;
-                columnFour.Color = Color.LightSalmon;
-
-                classCartConfiguration.Columns = new List<classColumnData>();
-                classCartConfiguration.Columns.Add(columnOne);
-                classCartConfiguration.Columns.Add(columnTwo);
-                classCartConfiguration.Columns.Add(columnThree);
-                classCartConfiguration.Columns.Add(columnFour);
+                classCartConfiguration.Columns = new List<classColumnData> {
+                    columnOne, columnTwo, columnThree, columnFour};
 
                 optimizer = new classLCMethodOptimizer();
             }

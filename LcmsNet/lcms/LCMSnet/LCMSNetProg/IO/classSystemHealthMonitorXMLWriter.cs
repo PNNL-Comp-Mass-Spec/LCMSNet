@@ -47,7 +47,7 @@
 //        private void WriteProperties(XmlDocument document, XmlElement root)
 //        {
 //            XmlElement propertiesElement = document.CreateElement("assembly");
-//            propertiesElement.SetAttribute("name", classLCMSSettings.GetParameter("cartName"));
+//            propertiesElement.SetAttribute("name", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME));
 //            propertiesElement.SetAttribute("class", "LC-Cart");
 
 //            XmlElement statusProperties = document.CreateElement("property");

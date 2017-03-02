@@ -38,7 +38,7 @@ namespace LcmsNetDataClasses.Data
         public static void GenerateTriggerFile(classSampleData sample)
         {
             /*// Exit if trigger file creation disabled
-                if (!bool.Parse(classLCMSSettings.GetParameter("CreateTriggerFiles")))
+                if (!bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATETRIGGERFILES)))
                 {
                     string msg = "Generate Trigger File: Sample " + sample.DmsData.DatasetName + ", Trigger file creation disabled";
                     classApplicationLogger.LogMessage(0, msg);
@@ -70,16 +70,16 @@ namespace LcmsNetDataClasses.Data
             // Add the parameters
             AddParam(rootElement, "Dataset Name", sample.DmsData.DatasetName);
             AddParam(rootElement, "Experiment Name", sample.DmsData.Experiment);
-            AddParam(rootElement, "Instrument Name", classLCMSSettings.GetParameter("InstName"));
-            AddParam(rootElement, "Separation Type", classLCMSSettings.GetParameter("SeparationType"));
-            AddParam(rootElement, "LC Cart Name", classLCMSSettings.GetParameter("CartName"));
-            AddParam(rootElement, "LC Cart Config", classLCMSSettings.GetParameter("CartConfigName"));
+            AddParam(rootElement, "Instrument Name", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME));
+            AddParam(rootElement, "Separation Type", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE));
+            AddParam(rootElement, "LC Cart Name", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME));
+            AddParam(rootElement, "LC Cart Config", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME));
             AddParam(rootElement, "LC Column", sample.ColumnData.Name);
             AddParam(rootElement, "Wellplate Number", sample.PAL.WellPlate);
             AddParam(rootElement, "Well Number", sample.PAL.Well.ToString());
             AddParam(rootElement, "Dataset Type", sample.DmsData.DatasetType);
             // AddParam(rootElement, "Operator (PRN)", sample.Operator);
-            AddParam(rootElement, "Operator (PRN)", classLCMSSettings.GetParameter("Operator"));
+            AddParam(rootElement, "Operator (PRN)", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_OPERATOR));
             AddParam(rootElement, "Comment", "");
             AddParam(rootElement, "Interest Rating", "Unreviewed");
 
@@ -153,15 +153,15 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         /// <param name="doc">XML document to be written</param>
         /// <param name="sample">Name of the sample this trigger file is for</param>
+        /// <param name="datasetName">Dataset name</param>
         private static void SaveFile(XmlDocument doc, classSampleData sample, string datasetName)
         {
             var sampleName = sample.DmsData.DatasetName;
             var outFileName = classSampleData.GetTriggerFileName(sample, ".xml");
 
             // Write trigger file to local folder
-            var appPath = classLCMSSettings.GetParameter("ApplicationPath");
+            var appPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
             var outFilePath = Path.Combine(appPath, "TriggerFiles");
-            var outFileNamePath = Path.Combine(outFilePath, outFileName);
             var wasLocalFileCreated = false;
 
             // If local folder doen't exist, then create it
@@ -178,7 +178,7 @@ namespace LcmsNetDataClasses.Data
                 }
             }
 
-            outFileNamePath = Path.Combine(outFilePath, outFileName);
+            var outFileNamePath = Path.Combine(outFilePath, outFileName);
 
             // Copy the file path
             try
@@ -198,18 +198,18 @@ namespace LcmsNetDataClasses.Data
 
             try
             {
-                if (bool.Parse(classLCMSSettings.GetParameter("CopyTriggerFiles")))
+                if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
                 {
                     // If the file was created locally...copy it
                     if (wasLocalFileCreated)
                     {
-                        outFilePath = classLCMSSettings.GetParameter("TriggerFileFolder");
+                        outFilePath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
                         MoveLocalFile(outFileNamePath, Path.Combine(outFilePath, outFileName));
                     }
                     else
                     {
                         outFileNamePath = Path.Combine(outFilePath, outFileName);
-                        outFilePath = classLCMSSettings.GetParameter("TriggerFileFolder");
+                        outFilePath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
 
                         // Attempt to write the trigger file to a remote server
                         var outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
@@ -242,7 +242,7 @@ namespace LcmsNetDataClasses.Data
         public static bool CheckLocalTriggerFiles()
         {
             // Check for presence of local trigger file directory
-            var localFolderPath = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), "TriggerFiles");
+            var localFolderPath = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), "TriggerFiles");
 
             // If local folder doen't exist, then there are no local trigger files
             if (!Directory.Exists(localFolderPath)) return false;
@@ -265,7 +265,7 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public static void MoveLocalTriggerFiles()
         {
-            var localFolderPath = Path.Combine(classLCMSSettings.GetParameter("ApplicationPath"), "TriggerFiles");
+            var localFolderPath = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), "TriggerFiles");
 
             // Verify local trigger file directory exists
             if (!Directory.Exists(localFolderPath))
@@ -284,7 +284,7 @@ namespace LcmsNetDataClasses.Data
             }
 
             // Move the local files to the remote server
-            var remoteFolderPath = classLCMSSettings.GetParameter("TriggerFileFolder");
+            var remoteFolderPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
 
             // Verfiy remote folder connection exists
             if (!Directory.Exists(remoteFolderPath))

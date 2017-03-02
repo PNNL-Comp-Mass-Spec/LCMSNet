@@ -42,7 +42,7 @@ namespace LcmsNet.Notification
 
             if (exists)
             {
-                string name     = LcmsNetDataClasses.classLCMSSettings.GetParameter("CartName");
+                string name     = LcmsNetDataClasses.classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
                 string newPath = System.IO.Path.Combine(Path, name + "-systemHealth.xml");
                 LcmsNet.Devices.classDeviceManager.Manager.WriteSystemHealth(newPath);
             }
