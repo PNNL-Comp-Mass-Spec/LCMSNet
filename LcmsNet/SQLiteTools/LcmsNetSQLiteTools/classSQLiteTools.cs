@@ -1106,12 +1106,12 @@ namespace LcmsNetSQLiteTools
                 {
                     classLCMSSettings.SetParameter(classLCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE, false.ToString());
                 }
-                return "";
+                return string.Empty;
             }
 
             if (sepType.Count != 1)
             {
-                return "";
+                return string.Empty;
             }
 
             return sepType[0];

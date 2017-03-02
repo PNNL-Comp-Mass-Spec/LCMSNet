@@ -183,7 +183,7 @@ namespace LcmsNet.SampleQueue.IO
         {
             if (string.IsNullOrEmpty(InpVal))
             {
-                return "";
+                return string.Empty;
             }
             else
             {

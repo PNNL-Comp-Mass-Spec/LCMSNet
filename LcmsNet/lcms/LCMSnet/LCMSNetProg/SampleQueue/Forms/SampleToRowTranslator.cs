@@ -248,7 +248,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     return Sample.LCMethod.Name;
                 }
-                return "";
+                return string.Empty;
             }
             set
             {

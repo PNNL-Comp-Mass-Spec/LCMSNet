@@ -101,7 +101,7 @@ namespace LcmsNetDataClasses
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
 

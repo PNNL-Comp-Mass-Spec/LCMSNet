@@ -136,7 +136,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public string Version
         {
-            get { return ""; }
+            get { return string.Empty; }
             set
             {
                 // Pass    

@@ -299,7 +299,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>If non-zero, tray name; Otherwise empty string</returns>
         private string GetTrayNameFromNumber(int trayNumber)
         {
-            if (trayNumber == 0) return "";
+            if (trayNumber == 0) return string.Empty;
 
             return mobject_TrayNames[trayNumber - 1];
         }

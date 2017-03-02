@@ -218,7 +218,7 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     message = "Could not create the method folder " + localFolder;
                     classApplicationLogger.LogError(0, message, ex, sample);
-                    return "";
+                    return string.Empty;
                 }
             }
             return localFolder;
