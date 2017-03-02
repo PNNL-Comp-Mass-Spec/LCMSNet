@@ -585,7 +585,7 @@ namespace LcmsNet.SampleQueue
         /// Predicate function to find index of request matching specified request number
         /// Used for mobj_DmsRequestList FindIndex method
         /// </summary>
-        /// <param name="sample">classDMSData object passed in from List<T>.FindIndex method</param>
+        /// <param name="request">classDMSData object passed in from List<T>.FindIndex method</param>
         /// <returns>True if match is made; otherwise False</returns>
         private bool PredContainsRequestName(classSampleData request)
         {
@@ -676,7 +676,7 @@ namespace LcmsNet.SampleQueue
             try
             {
                 success = classDMSToolsManager.Instance.SelectedTool.UpdateDMSCartAssignment(reqIDs, m_CartName, m_CartConfigName, true);
-            } // End try
+            }
             catch (classDatabaseConnectionStringException Ex)
             {
                 // The DMS connection string wasn't found
@@ -684,14 +684,14 @@ namespace LcmsNet.SampleQueue
                 errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return false;
-            } // End catch1
+            }
             catch (classDatabaseDataException Ex)
             {
                 var errMsg = Ex.Message + ": " + Ex.InnerException.Message + "\r\n\r\n";
                 errMsg = errMsg + " Requests in DMS may not show correct cart assignments";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
-            } // End catch2
+            }
             catch (classDatabaseStoredProcException Ex)
             {
                 var errMsg = "Error " + Ex.ReturnCode.ToString() + " while executing stored procedure ";
@@ -699,7 +699,7 @@ namespace LcmsNet.SampleQueue
                 errMsg = errMsg + "\r\n\r\nRequests in DMS may not show correct cart assignments";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
-            } // End catch3
+            }
 
             if (!success)
             {

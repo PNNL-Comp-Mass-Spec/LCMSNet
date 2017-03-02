@@ -64,8 +64,9 @@ namespace LcmsNet.Devices
             {
                 LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0, "Could not write the LC Method file.");
             }
+
             sampleData.LCMethod.ActualEnd = LcmsNetSDK.TimeKeeper.Instance.Now;
-                // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            
             try
             {
                 classTriggerFileTools.GenerateTriggerFile(sampleData);
