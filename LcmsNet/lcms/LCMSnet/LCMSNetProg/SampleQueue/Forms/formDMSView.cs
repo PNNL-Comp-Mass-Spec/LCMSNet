@@ -633,7 +633,9 @@ namespace LcmsNet.SampleQueue
                 }
                 var tempSampleData = (classSampleData) mobj_DmsRequestList[foundIndx].Clone();
                 tempSampleData.DmsData.CartName = m_CartName;
-//                  classSampleData tempSampleData = CopyDMSDataObj(tempDMSData);
+                tempSampleData.DmsData.CartConfigName = m_CartConfigName;
+
+                //                  classSampleData tempSampleData = CopyDMSDataObj(tempDMSData);
                 retList.Add(tempSampleData);
             }
 //              classStatusTools.SendStatusMsg("Adding " + retList.Count.ToString() + " samples from DMS");
