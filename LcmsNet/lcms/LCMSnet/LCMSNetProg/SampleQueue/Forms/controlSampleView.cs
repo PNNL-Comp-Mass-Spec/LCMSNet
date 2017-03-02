@@ -175,7 +175,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Maximum wellplate number.
         /// </summary>
-        protected const int CONST_MAX_WELLPLATE = 96;
+        protected const int CONST_MAX_WELLPLATE = 1250;
 
         /// <summary>
         /// Minimum volume that can be injected.
