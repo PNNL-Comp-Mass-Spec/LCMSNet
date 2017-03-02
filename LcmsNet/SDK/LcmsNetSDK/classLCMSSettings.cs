@@ -13,29 +13,21 @@
 
 using System.Collections.Specialized;
 using System;
+using System.Collections.Generic;
 
 namespace LcmsNetDataClasses
 {
     public class SettingChangedEventArgs : EventArgs
     {
-        private string m_settingName;
-        private string m_settingValue;
-
         public SettingChangedEventArgs(string name, string value)
         {
-            m_settingName = name;
-            m_settingValue = value;
+            SettingName = name;
+            SettingValue = value;
         }
 
-        public string SettingName
-        {
-            get { return m_settingName; }
-        }
+        public string SettingName { get; }
 
-        public string SettingValue
-        {
-            get { return m_settingValue; }
-        }
+        public string SettingValue { get; }
     }
 
     /// <summary>
@@ -83,7 +75,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// String dictionary to hold settings data
         /// </summary>
-        static readonly StringDictionary mstringdict_SettingsDict;
+        static readonly Dictionary<string, string> m_Settings;
 
         #endregion
 
@@ -96,7 +88,7 @@ namespace LcmsNetDataClasses
         /// </summary>
         static classLCMSSettings()
         {
-            mstringdict_SettingsDict = new StringDictionary();
+            m_Settings = new Dictionary<string, string>();
         }
 
         /// <summary>
