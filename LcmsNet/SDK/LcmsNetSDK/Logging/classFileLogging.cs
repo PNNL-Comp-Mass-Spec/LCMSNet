@@ -147,8 +147,7 @@ namespace LcmsNetDataClasses.Logging
 
         private static void ReportLogFilePath(string logFilePath)
         {
-            if (LogFilePathDefined != null)
-                LogFilePathDefined(new classMessageLoggerArgs(logFilePath));
+            LogFilePathDefined?.Invoke(new classMessageLoggerArgs(logFilePath));
         }
 
         private static readonly object m_lockObject = new object();

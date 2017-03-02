@@ -82,8 +82,7 @@ namespace LcmsNet.Configuration
             {
                 if (m_columnColor != value && value != null)
                 {
-                    if (ColorChanged != null)
-                        ColorChanged(this, m_columnColor, value);
+                    ColorChanged?.Invoke(this, m_columnColor, value);
                 }
                 m_columnColor = value;
             }

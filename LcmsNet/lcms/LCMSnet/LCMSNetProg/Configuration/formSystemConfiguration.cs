@@ -256,8 +256,7 @@ namespace LcmsNet.Configuration
 
         void mcontrol_columnOne_ColumnNamesChanged()
         {
-            if (ColumnNameChanged != null)
-                ColumnNameChanged(this, null);
+            ColumnNameChanged?.Invoke(this, null);
         }
 
         private void LoadInstrumentInformation()

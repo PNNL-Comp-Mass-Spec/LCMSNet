@@ -127,8 +127,7 @@ namespace LcmsNet.Method.Forms
                 foreach (var removeMethod in removeMethods)
                     mlistBox_methods.Items.Remove(removeMethod);
 
-                if (MethodDeleted != null)
-                    MethodDeleted(this);
+                MethodDeleted?.Invoke(this);
             }
 
             //
@@ -191,8 +190,7 @@ namespace LcmsNet.Method.Forms
                     mlistBox_methods.Items[indexOf] = method.Name;
                 }
 
-                if (MethodUpdated != null)
-                    MethodUpdated(this);
+                MethodUpdated?.Invoke(this);
             }
 
 
@@ -226,8 +224,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         void mbutton_down_LostFocus(object sender, EventArgs e)
         {
-            if (MethodUpdated != null)
-                MethodUpdated(this);
+            MethodUpdated?.Invoke(this);
         }
 
         /// <summary>
@@ -237,8 +234,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         void mbutton_up_LostFocus(object sender, EventArgs e)
         {
-            if (MethodUpdated != null)
-                MethodUpdated(this);
+            MethodUpdated?.Invoke(this);
         }
 
         /// <summary>
@@ -291,8 +287,7 @@ namespace LcmsNet.Method.Forms
                 if (method != null)
                 {
                     mlistBox_methods.Items.Add(method);
-                    if (MethodAdded != null)
-                        MethodAdded(this);
+                    MethodAdded?.Invoke(this);
                 }
             }
         }
@@ -320,8 +315,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // Signal anyone who needs to know the objects were removed.
                 //
-                if (MethodDeleted != null)
-                    MethodDeleted(this);
+                MethodDeleted?.Invoke(this);
             }
         }
 

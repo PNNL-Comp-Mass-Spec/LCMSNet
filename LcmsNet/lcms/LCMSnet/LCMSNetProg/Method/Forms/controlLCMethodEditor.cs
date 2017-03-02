@@ -121,10 +121,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
         }
 
         /// <summary>
@@ -410,10 +407,7 @@ namespace LcmsNet.Method.Forms
 
         private void OnEditMethod()
         {
-            if (UpdatingMethod != null)
-            {
-                UpdatingMethod(this, new classMethodEditingEventArgs(mcontrol_acquisitionStage.TextBoxNameGetText()));
-            }
+            UpdatingMethod?.Invoke(this, new classMethodEditingEventArgs(mcontrol_acquisitionStage.TextBoxNameGetText()));
         }
 
         private bool IgnoreUpdates { get; set; }

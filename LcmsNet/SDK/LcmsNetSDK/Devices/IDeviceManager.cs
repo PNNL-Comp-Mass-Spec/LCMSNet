@@ -36,18 +36,12 @@
 
         void m_manager_DeviceRemoved(object sender, IDevice device)
         {
-            if (DeviceRemoved != null)
-            {
-                DeviceRemoved(this, device);
-            }
+            DeviceRemoved?.Invoke(this, device);
         }
 
         void m_manager_DeviceAdded(object sender, IDevice device)
         {
-            if (DeviceAdded != null)
-            {
-                DeviceAdded(this, device);
-            }
+            DeviceAdded?.Invoke(this, device);
         }
 
         /// <summary>

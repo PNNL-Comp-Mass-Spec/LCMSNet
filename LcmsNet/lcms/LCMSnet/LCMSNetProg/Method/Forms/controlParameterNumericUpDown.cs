@@ -64,10 +64,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
         }
 
         private void mbutton_conversion_Click(object sender, EventArgs e)

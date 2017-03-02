@@ -65,10 +65,7 @@ namespace LcmsNetDataClasses.Devices
 
         public virtual void OnNameChanged(string newname)
         {
-            if (NameChanged != null)
-            {
-                NameChanged(this, newname);
-            }
+            NameChanged?.Invoke(this, newname);
         }
 
         /// <summary>
@@ -78,10 +75,7 @@ namespace LcmsNetDataClasses.Devices
 
         public virtual void OnSaveRequired()
         {
-            if (SaveRequired != null)
-            {
-                SaveRequired(this);
-            }
+            SaveRequired?.Invoke(this);
         }
 
         #endregion

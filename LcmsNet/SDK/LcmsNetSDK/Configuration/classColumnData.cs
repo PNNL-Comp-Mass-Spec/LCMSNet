@@ -118,10 +118,7 @@ namespace LcmsNetDataClasses.Configuration
             set
             {
                 m_first = value;
-                if (FirstChanged != null)
-                {
-                    FirstChanged(this, value);
-                }
+                FirstChanged?.Invoke(this, value);
             }
         }
 
@@ -141,8 +138,7 @@ namespace LcmsNetDataClasses.Configuration
                 {
                     var previousStatus = menum_status;
                     menum_status = value;
-                    if (StatusChanged != null)
-                        StatusChanged(this, previousStatus, menum_status);
+                    StatusChanged?.Invoke(this, previousStatus, menum_status);
                 }
                 menum_status = value;
             }
@@ -179,10 +175,7 @@ namespace LcmsNetDataClasses.Configuration
                     var oldName = m_name;
 
                     m_name = value;
-                    if (NameChanged != null)
-                    {
-                        NameChanged(this, m_name, oldName);
-                    }
+                    NameChanged?.Invoke(this, m_name, oldName);
                 }
             }
         }
@@ -197,8 +190,7 @@ namespace LcmsNetDataClasses.Configuration
             {
                 if (m_columnColor != value && value != null)
                 {
-                    if (ColorChanged != null)
-                        ColorChanged(this, m_columnColor, value);
+                    ColorChanged?.Invoke(this, m_columnColor, value);
                 }
                 m_columnColor = value;
             }

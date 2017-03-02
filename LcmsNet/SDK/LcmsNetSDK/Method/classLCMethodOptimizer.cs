@@ -516,10 +516,7 @@ namespace LcmsNet.Method
                         }
                     }
                 }
-                if (UpdateRequired != null)
-                {
-                    UpdateRequired(this);
-                }
+                UpdateRequired?.Invoke(this);
             } while (aligned == false);
 
             // Adjust for DST transition, if necessary

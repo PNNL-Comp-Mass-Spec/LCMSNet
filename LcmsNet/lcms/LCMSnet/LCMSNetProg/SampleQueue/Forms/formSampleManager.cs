@@ -400,8 +400,7 @@ namespace LcmsNet.SampleQueue.Forms
             // For the scheduler this would tell him to stop first
             // so that he can move the samples appropiately.
             //
-            if (Stop != null)
-                Stop(this, e);
+            Stop?.Invoke(this, e);
 
             //
             // Moves the samples from the running queue back onto the

@@ -65,36 +65,24 @@ namespace LcmsNet.Method
 
         public void Break()
         {
-            if (BreakPointEvent != null)
-            {
-                BreakPointEvent(this, new BreakEventArgs(true));
-            }
+            BreakPointEvent?.Invoke(this, new BreakEventArgs(true));
         }
 
         public void PassBreakPoint()
         {
-            if (BreakPointEvent != null)
-            {
-                BreakPointEvent(this, new BreakEventArgs(false));
-            }
+            BreakPointEvent?.Invoke(this, new BreakEventArgs(false));
         }
 
         public void IsDone()
         {
             Executing = false;
-            if (Simulated != null)
-            {
-                Simulated(this, new EventArgs());
-            }
+            Simulated?.Invoke(this, new EventArgs());
         }
 
         public void IsCurrent()
         {
             Executing = true;
-            if (SimulatingEvent != null)
-            {
-                SimulatingEvent(this, new EventArgs());
-            }
+            SimulatingEvent?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

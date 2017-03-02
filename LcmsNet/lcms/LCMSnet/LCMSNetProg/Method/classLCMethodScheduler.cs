@@ -428,8 +428,7 @@ namespace LcmsNet.Method
         /// <param name="errorMessage">Error message to report.</param>
         private void HandleError(classSampleData sample, string errorMessage)
         {
-            if (SchedulerError != null)
-                SchedulerError(this, sample, errorMessage);
+            SchedulerError?.Invoke(this, sample, errorMessage);
         }
 
         /// <summary>
@@ -562,12 +561,9 @@ namespace LcmsNet.Method
                         {
                             m_sampleQueue.StopRunningQueue();
                             m_notifyOnKill = false;
-                            if (StatusUpdate != null)
-                            {
-                                StatusUpdate(this,
-                                    new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(
-                                        LcmsNetDataClasses.Devices.enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
-                            }
+                            StatusUpdate?.Invoke(this,
+    new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(
+        LcmsNetDataClasses.Devices.enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
                         }
                         Print("Done killing columns.  ", CONST_VERBOSE_EVENTS);
                         m_stoppedSamples.Set();
@@ -738,14 +734,11 @@ namespace LcmsNet.Method
                         sampleEndTime[columnID] = columnEndOfCurrentEvent;
                         samples[columnID].LCMethod.CurrentEventNumber = columnCurrentEvent;
 
-                        if (SampleProgress != null)
-                        {
-                            SampleProgress(this,
-                                new classSampleProgressEventArgs(
-                                    "LC-Event Started",
-                                    samples[columnID],
-                                    enumSampleProgress.RunningNextEvent));
-                        }
+                        SampleProgress?.Invoke(this,
+    new classSampleProgressEventArgs(
+        "LC-Event Started",
+        samples[columnID],
+        enumSampleProgress.RunningNextEvent));
                         currentEvent[columnID] = columnCurrentEvent;
                     }
                 }
@@ -828,14 +821,11 @@ namespace LcmsNet.Method
                     Print(mm, CONST_VERBOSE_LEAST, null, samples[columnID]);
                     sampleEndTime[columnID] = DateTime.MinValue;
                     currentEvent[columnID] = CONST_IDLE_FLAG;
-                    if (SampleProgress != null)
-                    {
-                        SampleProgress(this,
-                            new classSampleProgressEventArgs(
-                                "LC-Method Completed",
-                                samples[columnID],
-                                enumSampleProgress.Complete));
-                    }
+                    SampleProgress?.Invoke(this,
+    new classSampleProgressEventArgs(
+        "LC-Method Completed",
+        samples[columnID],
+        enumSampleProgress.Complete));
                     m_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
                     //
                     // Write the trigger file and other data in a separate thread. I/O is expensive and we don't

@@ -65,10 +65,7 @@ namespace LcmsNetDataClasses.Devices
 
         private void fixErrorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ErrorIndicatorClicked != null)
-            {
-                ErrorIndicatorClicked(this, e);
-            }
+            ErrorIndicatorClicked?.Invoke(this, e);
         }
 
         #region Members
@@ -324,10 +321,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="e"></param>
         private void mbutton_show_Click(object sender, EventArgs e)
         {
-            if (ShowDetailsWindow != null)
-            {
-                ShowDetailsWindow(this, new EventArgs());
-            }
+            ShowDetailsWindow?.Invoke(this, new EventArgs());
         }
 
         #endregion

@@ -57,12 +57,9 @@ namespace LcmsNet.Simulator
 
         void controlsTack(object sender, TackEventArgs e)
         {
-            if (Tack != null)
-            {
-                // this form is NOT triggering the tack, but rather the object this form is listening to is, so send THAT as the
-                // sender of this event...we're just passing it up the chain to formMDIMain
-                Tack(sender, e);
-            }
+            // this form is NOT triggering the tack, but rather the object this form is listening to is, so send THAT as the
+            // sender of this event...we're just passing it up the chain to formMDIMain
+            Tack?.Invoke(sender, e);
         }
     }
 }

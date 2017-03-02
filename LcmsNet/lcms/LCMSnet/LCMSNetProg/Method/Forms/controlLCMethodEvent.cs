@@ -650,10 +650,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
         }
 
         /// <summary>
@@ -940,8 +937,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         private void mcheckBox_optimizeFor_CheckedChanged(object sender, EventArgs e)
         {
-            if (UseForOptimization != null)
-                UseForOptimization(this, mcheckBox_optimizeFor.Checked);
+            UseForOptimization?.Invoke(this, mcheckBox_optimizeFor.Checked);
             m_methodData.OptimizeWith = mcheckBox_optimizeFor.Checked;
             OnEventChanged();
         }

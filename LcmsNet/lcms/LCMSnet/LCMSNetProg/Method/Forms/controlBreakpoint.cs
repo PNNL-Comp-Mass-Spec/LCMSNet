@@ -26,10 +26,7 @@ namespace LcmsNet.Method.Forms
                     return;
 
                 m_set = value;
-                if (Changed != null)
-                {
-                    Changed(this, new BreakpointArgs(m_set));
-                }
+                Changed?.Invoke(this, new BreakpointArgs(m_set));
                 if (m_set)
                 {
                     BackgroundImage = global::LcmsNet.Properties.Resources.breakpoint;

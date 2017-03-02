@@ -63,10 +63,7 @@ namespace LcmsNet.Method
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
         }
 
         protected override void OnTextChanged(EventArgs e)
@@ -97,10 +94,7 @@ namespace LcmsNet.Method
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
         }
 
         #region IParameterBase Members

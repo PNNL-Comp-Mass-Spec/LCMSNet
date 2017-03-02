@@ -143,10 +143,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         void RaiseEventRandomizeComplete()
         {
-            if (RandomizeComplete != null)
-            {
-                RandomizeComplete(this, new EventArgs());
-            }
+            RandomizeComplete?.Invoke(this, new EventArgs());
         }
 
         #endregion

@@ -34,16 +34,14 @@ namespace LcmsNet.Notification
 
         public void AddNotifier(INotifier notifier)
         {
-            if (Added != null)
-                Added(this, new NotifierChangedEventArgs(notifier));
+            Added?.Invoke(this, new NotifierChangedEventArgs(notifier));
 
             Notifiers.Add(notifier);
         }
 
         public void RemoveNotifier(INotifier notifier)
         {
-            if (Removed != null)
-                Removed(this, new NotifierChangedEventArgs(notifier));
+            Removed?.Invoke(this, new NotifierChangedEventArgs(notifier));
 
             if (Notifiers.Contains(notifier))
                 Notifiers.Remove(notifier);

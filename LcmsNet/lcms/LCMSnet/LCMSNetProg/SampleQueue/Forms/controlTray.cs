@@ -239,7 +239,7 @@ namespace LcmsNet.SampleQueue.Forms
 //              m_DataView.RowStateFilter = DataViewRowState.Added | DataViewRowState.Unchanged;
             SetDataView();
             dataGridView1.DataSource = m_DataView;
-            if (RowModified != null) RowModified(this, m_TrayNumber);
+            RowModified?.Invoke(this, m_TrayNumber);
         }
 
         // Debug code

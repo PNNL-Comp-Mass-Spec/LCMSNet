@@ -613,8 +613,7 @@ namespace LcmsNetDataClasses.Devices
             var newName = CreateUniqueDeviceName(basename);
             device.Name = newName;
 
-            if (DeviceRenamed != null)
-                DeviceRenamed(this, device);
+            DeviceRenamed?.Invoke(this, device);
         }
 
         /// <summary>
@@ -645,8 +644,7 @@ namespace LcmsNetDataClasses.Devices
 
             m_devices.Add(device);
 
-            if (DeviceAdded != null)
-                DeviceAdded(this, device);
+            DeviceAdded?.Invoke(this, device);
 
             return true;
         }
@@ -687,8 +685,7 @@ namespace LcmsNetDataClasses.Devices
 
             m_devices.Remove(device);
 
-            if (DeviceRemoved != null)
-                DeviceRemoved(this, device);
+            DeviceRemoved?.Invoke(this, device);
 
             return true;
         }
@@ -756,8 +753,7 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         public bool InitializeDevice(IDevice device)
         {
-            if (InitialzingDevice != null)
-                InitialzingDevice(this, new classDeviceManagerStatusArgs("Initializing " + device.Name));
+            InitialzingDevice?.Invoke(this, new classDeviceManagerStatusArgs("Initializing " + device.Name));
             var initialized = false;
             try
             {
@@ -831,10 +827,7 @@ namespace LcmsNetDataClasses.Devices
                 }
             }
 
-            if (DevicesInitialized != null)
-            {
-                DevicesInitialized(this, new EventArgs());
-            }
+            DevicesInitialized?.Invoke(this, new EventArgs());
             return devices;
         }
 
@@ -972,10 +965,7 @@ namespace LcmsNetDataClasses.Devices
             }
             m_loadingPlugins = false;
 
-            if (PluginsLoaded != null)
-            {
-                PluginsLoaded(this, null);
-            }
+            PluginsLoaded?.Invoke(this, null);
         }
 
         /// <summary>

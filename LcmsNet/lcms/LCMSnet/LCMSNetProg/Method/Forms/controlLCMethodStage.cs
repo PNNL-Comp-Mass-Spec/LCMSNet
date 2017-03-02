@@ -210,10 +210,7 @@ namespace LcmsNet.Method.Forms
 
         private void OnEditMethod()
         {
-            if (UpdatingMethod != null)
-            {
-                UpdatingMethod(this, new classMethodEditingEventArgs(mtextBox_methodName.Text));
-            }
+            UpdatingMethod?.Invoke(this, new classMethodEditingEventArgs(mtextBox_methodName.Text));
         }
 
         /// <summary>
@@ -616,10 +613,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
             UpdateUserInterface(MethodExists());
         }
 

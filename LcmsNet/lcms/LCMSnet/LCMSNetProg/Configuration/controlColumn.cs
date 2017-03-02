@@ -102,7 +102,7 @@ namespace LcmsNet.Configuration
                     value.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
                 }
                 // Signal the combo box to update selected name
-                if (ColumnObjectChanged != null) ColumnObjectChanged();
+                ColumnObjectChanged?.Invoke();
             }
         }
 
@@ -137,7 +137,7 @@ namespace LcmsNet.Configuration
                 mcomboBox_names.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 mcomboBox_names.EndUpdate();
                 // Update the selected name in the combo box
-                if (ColumnNamesChanged != null) ColumnNamesChanged();
+                ColumnNamesChanged?.Invoke();
             }
         }
 
@@ -286,10 +286,7 @@ namespace LcmsNet.Configuration
                 if (m_ComboHasFocus)
                 {
                     m_columnData.Name = mcomboBox_names.SelectedItem.ToString();
-                    if (ColumnNamesChanged != null)
-                    {
-                        ColumnNamesChanged();
-                    }
+                    ColumnNamesChanged?.Invoke();
                 }
             }
         }

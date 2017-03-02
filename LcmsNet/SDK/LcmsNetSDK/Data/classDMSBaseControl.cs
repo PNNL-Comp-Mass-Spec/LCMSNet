@@ -22,10 +22,7 @@ namespace LcmsNetDataClasses.Data
                 {
                     if (c.Enabled == false)
                     {
-                        if (EnterPressed != null)
-                        {
-                            EnterPressed(this, args);
-                        }
+                        EnterPressed?.Invoke(this, args);
                     }
                     c.Focus();
                     return;
@@ -37,11 +34,7 @@ namespace LcmsNetDataClasses.Data
 
         public virtual void OnEnterPressed(object sender, DMSValidatorEventArgs e)
         {
-            var handler = EnterPressed;
-            if (handler != null)
-            {
-                handler(sender, e);
-            }
+            EnterPressed?.Invoke(sender, e);
         }
     }
 }

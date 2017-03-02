@@ -65,10 +65,7 @@ namespace LcmsNet.Simulator
             private set
             {
                 m_tacked = value;
-                if (Tack != null)
-                {
-                    Tack(this, new TackEventArgs(m_tacked));
-                }
+                Tack?.Invoke(this, new TackEventArgs(m_tacked));
             }
         }
 
@@ -124,10 +121,7 @@ namespace LcmsNet.Simulator
         /// </summary>
         private void OnEventChanged()
         {
-            if (EventChanged != null)
-            {
-                EventChanged(this, null);
-            }
+            EventChanged?.Invoke(this, null);
         }
 
         public void TackOnRequest()

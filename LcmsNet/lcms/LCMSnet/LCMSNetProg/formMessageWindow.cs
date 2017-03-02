@@ -90,10 +90,7 @@ namespace LcmsNet
         {
             if (level <= m_errorLevel && args != null)
             {
-                if (ErrorPresent != null)
-                {
-                    ErrorPresent(this, new EventArgs());
-                }
+                ErrorPresent?.Invoke(this, new EventArgs());
                 var exceptions = "";
                 lock (m_lockErrors)
                 {
@@ -136,10 +133,7 @@ namespace LcmsNet
         private void mbutton_acknowledgeErrors_Click(object sender, EventArgs e)
         {
             m_errorMessages.Clear();
-            if (ErrorCleared != null)
-            {
-                ErrorCleared(this, new EventArgs());
-            }
+            ErrorCleared?.Invoke(this, new EventArgs());
         }
 
         private void button1_Click(object sender, EventArgs e)

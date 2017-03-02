@@ -884,10 +884,7 @@ namespace LcmsNet.SampleQueue
                 m_waitingQueue = queue;
                 //ResetColumnData();
 
-                if (SamplesAdded != null)
-                {
-                    SamplesAdded(this, new classSampleQueueArgs(GetAllSamples()));
-                }
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
             }
         }
 
@@ -912,10 +909,7 @@ namespace LcmsNet.SampleQueue
                 m_waitingQueue = queue;
                 //ResetColumnData();
 
-                if (SamplesAdded != null)
-                {
-                    SamplesAdded(this, new classSampleQueueArgs(GetAllSamples()));
-                }
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
             }
         }
 
@@ -973,10 +967,7 @@ namespace LcmsNet.SampleQueue
                     ResetColumnData();
                 }
 
-                if (SamplesAdded != null)
-                {
-                    SamplesAdded(this, new classSampleQueueArgs(GetAllSamples()));
-                }
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
             }
         }
 
@@ -1027,10 +1018,7 @@ namespace LcmsNet.SampleQueue
                 // Always re-sequence, and notify
                 //
                 ResequenceQueuedSamples(m_waitingQueue);
-                if (SamplesAdded != null)
-                {
-                    SamplesAdded(this, new classSampleQueueArgs(GetAllSamples()));
-                }
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
             }
         }
 
@@ -1298,13 +1286,9 @@ namespace LcmsNet.SampleQueue
 
                 ResequenceQueuedSamples(m_waitingQueue);
 
-                if (SamplesRemoved != null)
-                {
-                    SamplesRemoved(this, new classSampleQueueArgs(GetAllSamples()));
-                }
+                SamplesRemoved?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
 
-                if (SamplesUpdated != null)
-                    SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
+                SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
             return removed;
         }
@@ -1405,10 +1389,7 @@ namespace LcmsNet.SampleQueue
             }
 
             //TODO: Re-order by only sending the ones that changed.
-            if (SamplesReordered != null)
-            {
-                SamplesReordered(this, new classSampleQueueArgs(GetAllSamples()));
-            }
+            SamplesReordered?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
         }
 
         /// <summary>
@@ -1417,10 +1398,7 @@ namespace LcmsNet.SampleQueue
         public void ResetColumnData(bool updateUsers)
         {
             ResetColumnData();
-            if (SamplesUpdated != null)
-            {
-                SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
-            }
+            SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
         }
 
         /// <summary>
@@ -1563,10 +1541,7 @@ namespace LcmsNet.SampleQueue
             //
             // Tell listeners that we have re-sequenced the queue.
             //
-            if (SamplesReordered != null)
-            {
-                SamplesReordered(this, new classSampleQueueArgs(GetAllSamples()));
-            }
+            SamplesReordered?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
         }
 
         /// <summary>
@@ -1591,10 +1566,7 @@ namespace LcmsNet.SampleQueue
                 //
                 // Alert listening objects.
                 //
-                if (SamplesUpdated != null)
-                {
-                    SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
-                }
+                SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
         }
 
@@ -1818,15 +1790,12 @@ namespace LcmsNet.SampleQueue
                 m_runningQueue.Add(realSample);
             }
 
-            if (SamplesWaitingToRun != null)
-            {
-                SamplesWaitingToRun(this,
-                    new classSampleQueueArgs(validSamples,
-                        m_nextAvailableSample,
-                        m_runningQueue.Count,
-                        m_completeQueue.Count,
-                        m_waitingQueue.Count));
-            }
+            SamplesWaitingToRun?.Invoke(this,
+    new classSampleQueueArgs(validSamples,
+        m_nextAvailableSample,
+        m_runningQueue.Count,
+        m_completeQueue.Count,
+        m_waitingQueue.Count));
         }
 
         /// <summary>
@@ -1871,15 +1840,12 @@ namespace LcmsNet.SampleQueue
                 validSamples.Add(realSample);
             }
 
-            if (SamplesWaitingToRun != null)
-            {
-                SamplesWaitingToRun(this,
-                    new classSampleQueueArgs(validSamples,
-                        m_nextAvailableSample,
-                        m_runningQueue.Count,
-                        m_completeQueue.Count,
-                        m_waitingQueue.Count));
-            }
+            SamplesWaitingToRun?.Invoke(this,
+    new classSampleQueueArgs(validSamples,
+        m_nextAvailableSample,
+        m_runningQueue.Count,
+        m_completeQueue.Count,
+        m_waitingQueue.Count));
         }
 
         /// <summary>
@@ -1938,14 +1904,8 @@ namespace LcmsNet.SampleQueue
                 m_startedSamples = false;
             }
 
-            if (SamplesCancelled != null)
-            {
-                SamplesCancelled(this, args);
-            }
-            if (SamplesWaitingToRun != null)
-            {
-                SamplesWaitingToRun(this, args);
-            }
+            SamplesCancelled?.Invoke(this, args);
+            SamplesWaitingToRun?.Invoke(this, args);
         }
 
         /// <summary>
@@ -1976,10 +1936,7 @@ namespace LcmsNet.SampleQueue
             {
                 SamplesStopped(this, args);
             }
-            if (SamplesWaitingToRun != null)
-            {
-                SamplesWaitingToRun(this, args);
-            }
+            SamplesWaitingToRun?.Invoke(this, args);
         }
 
         /// <summary>
@@ -2035,14 +1992,8 @@ namespace LcmsNet.SampleQueue
                 m_startedSamples = false;
             }
 
-            if (SamplesFinished != null)
-            {
-                SamplesFinished(this, args);
-            }
-            if (SamplesWaitingToRun != null)
-            {
-                SamplesWaitingToRun(this, args);
-            }
+            SamplesFinished?.Invoke(this, args);
+            SamplesWaitingToRun?.Invoke(this, args);
         }
 
         /// <summary>
@@ -2063,10 +2014,7 @@ namespace LcmsNet.SampleQueue
                     sample = m_runningQueue[m_nextAvailableSample++];
                     sample.RunningStatus = enumSampleRunningStatus.Running;
 
-                    if (SamplesStarted != null)
-                    {
-                        SamplesStarted(this, new classSampleQueueArgs(new classSampleData[] {sample}));
-                    }
+                    SamplesStarted?.Invoke(this, new classSampleQueueArgs(new classSampleData[] { sample }));
                 }
             }
 
@@ -2076,10 +2024,7 @@ namespace LcmsNet.SampleQueue
                 m_runningQueue.Count,
                 m_completeQueue.Count,
                 m_waitingQueue.Count);
-            if (SamplesWaitingToRun != null)
-            {
-                SamplesWaitingToRun(this, args);
-            }
+            SamplesWaitingToRun?.Invoke(this, args);
             return sample;
         }
 

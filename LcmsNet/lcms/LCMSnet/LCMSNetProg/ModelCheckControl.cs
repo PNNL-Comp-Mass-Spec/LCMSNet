@@ -45,10 +45,7 @@ namespace LcmsNet
 
         private void CheckBoxCheckChanged(object sender, EventArgs e)
         {
-            if (CheckChanged != null)
-            {
-                CheckChanged(this, new EventArgs());
-            }
+            CheckChanged?.Invoke(this, new EventArgs());
         }
     }
 }

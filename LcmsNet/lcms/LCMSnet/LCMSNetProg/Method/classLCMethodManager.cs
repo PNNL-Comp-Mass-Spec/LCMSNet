@@ -83,8 +83,7 @@ namespace LcmsNet.Method
             if (m_methods.ContainsKey(method.Name) == false)
             {
                 m_methods.Add(method.Name, method);
-                if (MethodAdded != null)
-                    MethodAdded(this, method);
+                MethodAdded?.Invoke(this, method);
 
                 return true;
             }
@@ -92,8 +91,7 @@ namespace LcmsNet.Method
             {
                 m_methods[method.Name] = method;
 
-                if (MethodUpdated != null)
-                    MethodUpdated(this, method);
+                MethodUpdated?.Invoke(this, method);
 
                 return false;
             }

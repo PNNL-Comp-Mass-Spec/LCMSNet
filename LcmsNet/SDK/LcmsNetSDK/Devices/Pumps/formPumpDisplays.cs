@@ -109,17 +109,11 @@ namespace LcmsNetDataClasses.Devices.Pumps
             IsTacked = (IsTacked == false);
             if (IsTacked)
             {
-                if (Tack != null)
-                {
-                    Tack(this, e);
-                }
+                Tack?.Invoke(this, e);
             }
             else
             {
-                if (UnTack != null)
-                {
-                    UnTack(this, e);
-                }
+                UnTack?.Invoke(this, e);
             }
         }
 
