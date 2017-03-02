@@ -31,10 +31,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
             m_mobilePhases = new Dictionary<IPump, GroupBox>();
             m_pumps = new List<IPump>();
             m_controlList = new Dictionary<IPump, controlPumpDisplay>();
-            DeviceManagerBridge.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
-            DeviceManagerBridge.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
-            FormClosing += new FormClosingEventHandler(formPumpDisplays_FormClosing);
-            Resize += new EventHandler(formPumpDisplays_Resize);
+            DeviceManagerBridge.DeviceAdded += Manager_DeviceAdded;
+            DeviceManagerBridge.DeviceRemoved += Manager_DeviceRemoved;
+            FormClosing += formPumpDisplays_FormClosing;
+            Resize += formPumpDisplays_Resize;
             m_pointer = 0;
         }
 
@@ -233,10 +233,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
             var display = new controlPumpDisplay();
             display.SetPumpName(pump.Name);
 
-            pump.MonitoringDataReceived += new EventHandler<PumpDataEventArgs>(DisplayPumpData);
-            pump.DeviceSaveRequired += new EventHandler(pump_DeviceSaveRequired);
-            display.Tack += new EventHandler(display_Tack);
-            display.UnTack += new EventHandler(display_UnTack);
+            pump.MonitoringDataReceived += DisplayPumpData;
+            pump.DeviceSaveRequired += pump_DeviceSaveRequired;
+            display.Tack += display_Tack;
+            display.UnTack += display_UnTack;
 
             // Make sure we reference this pump 
             m_controlList.Add(pump, display);

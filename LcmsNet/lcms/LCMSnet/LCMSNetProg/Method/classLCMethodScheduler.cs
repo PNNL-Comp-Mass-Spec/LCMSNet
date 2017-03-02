@@ -831,7 +831,7 @@ namespace LcmsNet.Method
                     // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
                     // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
                     //
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(WriteCompletedSampleInformation),
+                    ThreadPool.QueueUserWorkItem(WriteCompletedSampleInformation,
                         m_columnThreads[columnID].Sample);
                     samples[columnID] = null;
                 }

@@ -22,7 +22,7 @@ namespace LcmsNetDataClasses.Devices
             m_isInitialized = false;
             EndUpdate();
 
-            MouseClick += new MouseEventHandler(controlDeviceStatusDisplay_MouseClick);
+            MouseClick += controlDeviceStatusDisplay_MouseClick;
 
             Refresh();
             PerformLayout();

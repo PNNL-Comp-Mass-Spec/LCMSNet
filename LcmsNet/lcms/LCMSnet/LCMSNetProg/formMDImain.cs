@@ -212,14 +212,14 @@ namespace LcmsNet
 
             foreach (var column in classCartConfiguration.Columns)
             {
-                column.NameChanged += new classColumnData.DelegateNameChanged(column_NameChanged);
+                column.NameChanged += column_NameChanged;
             }
 
 
             m_systemConfiguration = new formSystemConfiguration();
             m_systemConfiguration.ColumnNames = classSQLiteTools.GetColumnList(false);
             m_systemConfiguration.Users = classSQLiteTools.GetUserList(false);
-            m_systemConfiguration.ColumnNameChanged += new EventHandler(m_systemConfiguration_ColumnNameChanged);
+            m_systemConfiguration.ColumnNameChanged += m_systemConfiguration_ColumnNameChanged;
             classSQLiteTools.GetSepTypeList(false);
 
             // Fludics Design display
@@ -230,22 +230,22 @@ namespace LcmsNet
             // Notification System
             m_notifications = new formNotificationSystem(classDeviceManager.Manager);
             m_notifications.ActionRequired +=
-                new EventHandler<NotificationSetting>(m_notifications_ActionRequired);
+                m_notifications_ActionRequired;
 
 
             // Construct the sample queue object that holds and manages sample data ordering
             m_sampleQueue = new classSampleQueue();
             m_sampleManager = new formSampleManager(m_sampleQueue);
 
-            classDeviceManager.Manager.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
-            classDeviceManager.Manager.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
-            classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
-            classDeviceManager.Manager.DevicesInitialized += new EventHandler(Manager_DevicesInitialized);
+            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+            classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
+            classDeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
 
             // Displays the pump data.
             m_displays = new LcmsNetDataClasses.Devices.Pumps.formPumpDisplays();
-            m_displays.Tack += new EventHandler(m_displays_Tack);
-            m_displays.UnTack += new EventHandler(m_displays_UnTack);
+            m_displays.Tack += m_displays_Tack;
+            m_displays.UnTack += m_displays_UnTack;
             m_displays.Icon = Icon;
             m_displays.IsTacked = true;
 
@@ -256,27 +256,27 @@ namespace LcmsNet
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
             m_scheduler = new classLCMethodScheduler(m_sampleQueue);
             m_scheduler.Logger = m_logger;
-            m_scheduler.SchedulerError += new DelegateError(Scheduler_Error);
-            m_scheduler.SampleProgress += new DelegateSampleProgress(Scheduler_SampleProgress);
+            m_scheduler.SchedulerError += Scheduler_Error;
+            m_scheduler.SampleProgress += Scheduler_SampleProgress;
             m_scheduler.Initialize();
 
             //
             // Logging and messaging
             //
             m_messages = new formMessageWindow();
-            m_messages.ErrorCleared += new EventHandler(m_messages_ErrorCleared);
-            m_messages.ErrorPresent += new EventHandler(m_messages_ErrorPresent);
-            classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(m_messages.ShowErrors);
-            classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classApplicationLogger_Error);
+            m_messages.ErrorCleared += m_messages_ErrorCleared;
+            m_messages.ErrorPresent += m_messages_ErrorPresent;
+            classApplicationLogger.Error += m_messages.ShowErrors;
+            classApplicationLogger.Error += classApplicationLogger_Error;
             classApplicationLogger.Message +=
-                new classApplicationLogger.DelegateMessageHandler(m_messages.ShowMessage);
+                m_messages.ShowMessage;
             classApplicationLogger.Message +=
-                new classApplicationLogger.DelegateMessageHandler(classApplicationLogger_Message);
+                classApplicationLogger_Message;
 
             // Method Editor
             m_methodEditor = new formMethodEditor();
             m_sampleProgress = new formColumnSampleProgress();
-            m_sampleManager.Stop += new EventHandler(m_sampleManager_Stop);
+            m_sampleManager.Stop += m_sampleManager_Stop;
 
 
             // Get the most recently used separation type
@@ -286,7 +286,7 @@ namespace LcmsNet
             var failedDeviceFlag = false;
             var failedCount = 0;
             classDeviceManager.Manager.InitialzingDevice +=
-                new EventHandler<classDeviceManagerStatusArgs>(Manager_InitialzingDevice);
+                Manager_InitialzingDevice;
             formFailedDevicesDisplay display = null;
             if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP)))
             {
@@ -385,7 +385,7 @@ namespace LcmsNet
                 display.ShowDialog();
             }
             m_sampleProgress.PreviewAvailable +=
-                new EventHandler<SampleProgressPreviewArgs>(m_sampleManager.PreviewAvailable);
+                m_sampleManager.PreviewAvailable;
             m_notifications.LoadNotificationFile();
         }
 
@@ -588,14 +588,14 @@ namespace LcmsNet
             var sampler = device as IAutoSampler;
             if (sampler != null)
             {
-                sampler.TrayNames += new EventHandler<classAutoSampleEventArgs>(m_sampleManager.AutoSamplerTrayList);
+                sampler.TrayNames += m_sampleManager.AutoSamplerTrayList;
             }
 
             var network = device as INetworkStart;
             if (network != null)
             {
                 network.MethodNames +=
-                    new EventHandler<classNetworkStartEventArgs>(m_sampleManager.InstrumentMethodList);
+                    m_sampleManager.InstrumentMethodList;
             }
         }
 

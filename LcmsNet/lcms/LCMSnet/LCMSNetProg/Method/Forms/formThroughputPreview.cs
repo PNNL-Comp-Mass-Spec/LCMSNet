@@ -36,7 +36,7 @@ namespace LcmsNet.Method.Forms
             // Align the samples
             //
             var optimizer = new classLCMethodOptimizer();
-            optimizer.UpdateRequired += new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
+            optimizer.UpdateRequired += optimizer_UpdateRequired;
             optimizer.AlignSamples(samples);
 
             //

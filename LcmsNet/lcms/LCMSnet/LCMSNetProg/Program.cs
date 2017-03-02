@@ -234,16 +234,16 @@ namespace LcmsNet
                 // Before we do anything, let's initialize the file logging capability.
                 //
                 classApplicationLogger.Error +=
-                    new classApplicationLogger.DelegateErrorHandler(classFileLogging.LogError);
+                    classFileLogging.LogError;
                 classApplicationLogger.Message +=
-                    new classApplicationLogger.DelegateMessageHandler(classFileLogging.LogMessage);
+                    classFileLogging.LogMessage;
 
                 //
                 // Now lets initialize logging to SQLite database.
                 //
-                classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classDbLogger.LogError);
+                classApplicationLogger.Error += classDbLogger.LogError;
                 classApplicationLogger.Message +=
-                    new classApplicationLogger.DelegateMessageHandler(classDbLogger.LogMessage);
+                    classDbLogger.LogMessage;
 
 
                 // Note that we used icons from here for the gears on the main form window.
@@ -272,7 +272,7 @@ namespace LcmsNet
                     // rest of the program and interface.
                     //
                     classApplicationLogger.Message +=
-                        new classApplicationLogger.DelegateMessageHandler(classApplicationLogger_Message);
+                        classApplicationLogger_Message;
 
                     //
                     // Show the splash screen

@@ -43,9 +43,9 @@ namespace LcmsNet.Devices
                 }
                 mlistview_devices.EndUpdate();
 
-                classDeviceManager.Manager.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
-                classDeviceManager.Manager.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
-                classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
+                classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+                classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+                classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
             }
             mlistview_devices.Columns[2].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             mlistview_devices.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -58,7 +58,7 @@ namespace LcmsNet.Devices
         /// <param name="device">Device to show.</param>
         private void AddDevice(IDevice device)
         {
-            device.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(device_StatusUpdate);
+            device.StatusUpdate += device_StatusUpdate;
             var item = new ListViewItem();
             item.Text = device.Name;
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.Status.ToString()));

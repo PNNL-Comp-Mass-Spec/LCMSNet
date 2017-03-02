@@ -31,7 +31,7 @@ namespace LcmsNet.Devices
             m_buttonToDeviceMap = new Dictionary<Button, IDevice>();
             m_deviceToButtonMap = new Dictionary<IDevice, Button>();
             m_selectedDevicePanel.AutoScroll = true;
-            classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
+            classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
 
             m_selectedDevice = null;
 
@@ -229,7 +229,7 @@ namespace LcmsNet.Devices
             button.Margin = new Padding(5);
             button.Size = new Size(button.Width, CONST_BUTTON_HEIGHT);
             button.Font = new Font(button.Font.FontFamily, 12, FontStyle.Bold);
-            button.Click += new EventHandler(button_Click);
+            button.Click += button_Click;
 
             m_buttonToDeviceMap.Add(button, device);
             m_deviceToButtonMap.Add(device, button);

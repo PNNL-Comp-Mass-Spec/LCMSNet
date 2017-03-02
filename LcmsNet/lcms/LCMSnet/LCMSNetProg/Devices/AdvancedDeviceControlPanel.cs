@@ -30,9 +30,9 @@ namespace LcmsNet.Devices
             m_deviceToControlMap = new Dictionary<IDevice, AdvancedDeviceGroupControl>();
 
             classDeviceManager.Manager.DeviceAdded +=
-                new DelegateDeviceUpdated(Manager_DeviceAdded);
+                Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved +=
-                new DelegateDeviceUpdated(Manager_DeviceRemoved);
+                Manager_DeviceRemoved;
         }
 
 

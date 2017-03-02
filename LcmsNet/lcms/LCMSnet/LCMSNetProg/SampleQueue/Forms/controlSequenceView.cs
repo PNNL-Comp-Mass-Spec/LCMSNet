@@ -154,7 +154,7 @@ namespace LcmsNet.SampleQueue.Forms
             // m_selector
             // 
             m_selector.Location = new Point(150, 150);
-            m_selector.Load += new EventHandler(m_selector_Load);
+            m_selector.Load += m_selector_Load;
             // 
             // mlabel_name
             // 
@@ -199,7 +199,7 @@ namespace LcmsNet.SampleQueue.Forms
             buttonRefresh.TabIndex = 43;
             buttonRefresh.Text = "Refresh\r\nList";
             buttonRefresh.UseVisualStyleBackColor = false;
-            buttonRefresh.Click += new EventHandler(mbutton_refresh_Click);
+            buttonRefresh.Click += mbutton_refresh_Click;
             // 
             // mcheckbox_autoscroll
             // 
@@ -212,7 +212,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcheckbox_autoscroll.TabIndex = 42;
             mcheckbox_autoscroll.Text = "Auto-scroll";
             mcheckbox_autoscroll.UseVisualStyleBackColor = true;
-            mcheckbox_autoscroll.CheckedChanged += new EventHandler(mcheckbox_autoscroll_CheckedChanged);
+            mcheckbox_autoscroll.CheckedChanged += mcheckbox_autoscroll_CheckedChanged;
             // 
             // mbutton_dmsEdit
             // 
@@ -226,7 +226,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_dmsEdit.Text = "DMS Edit";
             mbutton_dmsEdit.TextAlign = ContentAlignment.BottomCenter;
             mbutton_dmsEdit.UseVisualStyleBackColor = true;
-            mbutton_dmsEdit.Click += new EventHandler(mbutton_dmsEdit_Click);
+            mbutton_dmsEdit.Click += mbutton_dmsEdit_Click;
             // 
             // mbutton_cartColumnDate
             // 
@@ -240,7 +240,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_cartColumnDate.Text = "Cart, Col, Date";
             mbutton_cartColumnDate.TextAlign = ContentAlignment.BottomCenter;
             mbutton_cartColumnDate.UseVisualStyleBackColor = true;
-            mbutton_cartColumnDate.Click += new EventHandler(mbutton_cartColumnDate_Click);
+            mbutton_cartColumnDate.Click += mbutton_cartColumnDate_Click;
             // 
             // mbutton_down
             // 
@@ -252,7 +252,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_down.Size = new Size(60, 96);
             mbutton_down.TabIndex = 31;
             mbutton_down.UseVisualStyleBackColor = true;
-            mbutton_down.Click += new EventHandler(mbutton_down_Click);
+            mbutton_down.Click += mbutton_down_Click;
             // 
             // mbutton_addBlank
             // 
@@ -268,7 +268,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_addBlank.Text = "Blank";
             mbutton_addBlank.TextAlign = ContentAlignment.BottomCenter;
             mbutton_addBlank.UseVisualStyleBackColor = false;
-            mbutton_addBlank.Click += new EventHandler(mbutton_addBlank_Click);
+            mbutton_addBlank.Click += mbutton_addBlank_Click;
             // 
             // mbutton_up
             // 
@@ -280,7 +280,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_up.Size = new Size(60, 96);
             mbutton_up.TabIndex = 30;
             mbutton_up.UseVisualStyleBackColor = true;
-            mbutton_up.Click += new EventHandler(mbutton_up_Click);
+            mbutton_up.Click += mbutton_up_Click;
             // 
             // mbutton_addDMS
             // 
@@ -293,7 +293,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_addDMS.Text = "DMS";
             mbutton_addDMS.TextAlign = ContentAlignment.BottomCenter;
             mbutton_addDMS.UseVisualStyleBackColor = true;
-            mbutton_addDMS.Click += new EventHandler(mbutton_addDMS_Click);
+            mbutton_addDMS.Click += mbutton_addDMS_Click;
             // 
             // mbutton_removeSelected
             // 
@@ -309,7 +309,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_removeSelected.Text = "Selected";
             mbutton_removeSelected.TextAlign = ContentAlignment.BottomCenter;
             mbutton_removeSelected.UseVisualStyleBackColor = false;
-            mbutton_removeSelected.Click += new EventHandler(mbutton_removeSelected_Click);
+            mbutton_removeSelected.Click += mbutton_removeSelected_Click;
             // 
             // mbutton_deleteUnused
             // 
@@ -325,7 +325,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_deleteUnused.Text = "Unused";
             mbutton_deleteUnused.TextAlign = ContentAlignment.BottomCenter;
             mbutton_deleteUnused.UseVisualStyleBackColor = false;
-            mbutton_deleteUnused.Click += new EventHandler(mbutton_deleteUnused_Click);
+            mbutton_deleteUnused.Click += mbutton_deleteUnused_Click;
             // 
             // mbutton_fillDown
             // 
@@ -339,7 +339,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_fillDown.Text = "Fill Down";
             mbutton_fillDown.TextAlign = ContentAlignment.BottomCenter;
             mbutton_fillDown.UseVisualStyleBackColor = true;
-            mbutton_fillDown.Click += new EventHandler(mbutton_fillDown_Click);
+            mbutton_fillDown.Click += mbutton_fillDown_Click;
             // 
             // mbutton_trayVial
             // 
@@ -353,7 +353,7 @@ namespace LcmsNet.SampleQueue.Forms
             mbutton_trayVial.Text = "Tray Vial";
             mbutton_trayVial.TextAlign = ContentAlignment.BottomCenter;
             mbutton_trayVial.UseVisualStyleBackColor = true;
-            mbutton_trayVial.Click += new EventHandler(mbutton_trayVial_Click);
+            mbutton_trayVial.Click += mbutton_trayVial_Click;
             // 
             // mcheckbox_cycleColumns
             // 
@@ -363,7 +363,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcheckbox_cycleColumns.TabIndex = 35;
             mcheckbox_cycleColumns.Text = "Cycle Columns";
             mcheckbox_cycleColumns.UseVisualStyleBackColor = true;
-            mcheckbox_cycleColumns.CheckedChanged += new EventHandler(mcheckbox_cycleColumns_CheckedChanged);
+            mcheckbox_cycleColumns.CheckedChanged += mcheckbox_cycleColumns_CheckedChanged;
             // 
             // controlSequenceView
             // 
@@ -484,7 +484,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             foreach (var column in classCartConfiguration.Columns)
             {
-                column.StatusChanged += new classColumnData.DelegateStatusChanged(column_StatusChanged);
+                column.StatusChanged += column_StatusChanged;
             }
 
             panel2.SendToBack();
@@ -514,7 +514,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 foreach (var column in classCartConfiguration.Columns)
                 {
-                    column.StatusChanged += new classColumnData.DelegateStatusChanged(column_StatusChanged);
+                    column.StatusChanged += column_StatusChanged;
                 }
             }
 

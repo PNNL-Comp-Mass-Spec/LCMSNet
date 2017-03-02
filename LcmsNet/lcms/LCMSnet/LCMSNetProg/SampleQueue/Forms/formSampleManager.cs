@@ -114,7 +114,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (m_sampleQueue != null)
             {
                 m_sampleQueue.SamplesWaitingToRun +=
-                    new classSampleQueue.DelegateSamplesModifiedHandler(m_sampleQueue_SamplesWaitingToRun);
+                    m_sampleQueue_SamplesWaitingToRun;
             }
 
             //

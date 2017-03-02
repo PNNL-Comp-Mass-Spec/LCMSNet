@@ -20,7 +20,7 @@ namespace LcmsNet.Simulator
         {
             InitializeComponent();
             m_mod = classFluidicsModerator.Moderator;
-            m_mod.ModelChanged += new classFluidicsModerator.ModelChange(ModelChangedHandler);
+            m_mod.ModelChanged += ModelChangedHandler;
 
             m_tacked = true;
             FluidicsSimulator.FluidicsSimulator.GetInstance.EventSimulated += EventSimulated_Handler;

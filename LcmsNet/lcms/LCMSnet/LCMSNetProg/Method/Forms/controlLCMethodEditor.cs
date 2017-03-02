@@ -64,17 +64,17 @@ namespace LcmsNet.Method.Forms
             UpdateConfiguration();
 
             mcontrol_selectedMethods.MethodAdded +=
-                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodAdded);
+                mcontrol_selectedMethods_MethodAdded;
             mcontrol_selectedMethods.MethodDeleted +=
-                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodDeleted);
+                mcontrol_selectedMethods_MethodDeleted;
             mcontrol_selectedMethods.MethodUpdated +=
-                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodUpdated);
+                mcontrol_selectedMethods_MethodUpdated;
 
 
             mcomboBox_previewMode.Items.Add(enumLCMethodRenderMode.Column);
             mcomboBox_previewMode.Items.Add(enumLCMethodRenderMode.Time);
             mcomboBox_previewMode.SelectedIndex = 0;
-            mcomboBox_previewMode.SelectedIndexChanged += new EventHandler(mcomboBox_previewMode_SelectedIndexChanged);
+            mcomboBox_previewMode.SelectedIndexChanged += mcomboBox_previewMode_SelectedIndexChanged;
 
             MethodPreviewOptions = new classMethodPreviewOptions();
             MethodPreviewOptions.FrameDelay = CONST_DEFAULT_RENDER_WAIT_COUNT;
@@ -82,7 +82,7 @@ namespace LcmsNet.Method.Forms
             MethodPreviewOptions.AnimateDelay = CONST_DEFAULT_ANIMATION_DELAY_TIME;
             m_renderUpdateCount = 0;
 
-            mcontrol_acquisitionStage.EventChanged += new EventHandler(mcontrol_acquisitionStage_EventChanged);
+            mcontrol_acquisitionStage.EventChanged += mcontrol_acquisitionStage_EventChanged;
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace LcmsNet.Method.Forms
             {
                 var optimizer = new classLCMethodOptimizer();
                 optimizer.UpdateRequired +=
-                    new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
+                    optimizer_UpdateRequired;
                 var methods = mcontrol_selectedMethods.SelectedMethods;
                 m_renderUpdateCount = 0;
 

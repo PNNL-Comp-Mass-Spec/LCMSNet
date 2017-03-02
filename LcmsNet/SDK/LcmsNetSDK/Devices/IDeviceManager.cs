@@ -27,8 +27,8 @@
         public DeviceManagerBridge(IDeviceManager manager)
         {
             m_manager = manager;
-            m_manager.DeviceAdded += new DelegateDeviceUpdated(m_manager_DeviceAdded);
-            m_manager.DeviceRemoved += new DelegateDeviceUpdated(m_manager_DeviceRemoved);
+            m_manager.DeviceAdded += m_manager_DeviceAdded;
+            m_manager.DeviceRemoved += m_manager_DeviceRemoved;
         }
 
         public static event DelegateDeviceUpdated DeviceAdded;

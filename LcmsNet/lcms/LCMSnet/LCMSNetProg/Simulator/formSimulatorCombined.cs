@@ -21,10 +21,10 @@ namespace LcmsNet.Simulator
             InitializeComponent();
             m_controls = SimControlsAndChartsControl.GetInstance;
             m_controls.Dock = DockStyle.Fill;
-            m_controls.Tack += new EventHandler<TackEventArgs>(controlsTack);
+            m_controls.Tack += controlsTack;
             m_config = SimConfigControl.GetInstance;
             m_config.Dock = DockStyle.Fill;
-            m_config.Tack += new EventHandler<TackEventArgs>(controlsTack);
+            m_config.Tack += controlsTack;
             splitFluidicsAndControls.Panel2.Controls.Add(m_controls);
             splitFluidicsAndControls.Panel1.Controls.Add(m_config);
             Activated += formSimulatorCombined_Activated;

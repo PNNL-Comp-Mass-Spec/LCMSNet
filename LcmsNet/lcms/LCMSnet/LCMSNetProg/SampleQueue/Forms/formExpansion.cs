@@ -24,10 +24,10 @@ namespace LcmsNet.SampleQueue.Forms
         private void Initialize(List<Button> buttons)
         {
             m_registeredButton = new Dictionary<Button, bool>();
-            KeyDown += new KeyEventHandler(formExpansion_KeyDown);
-            LostFocus += new EventHandler(formExpansion_LostFocus);
-            MouseLeave += new EventHandler(formExpansion_MouseLeave);
-            FormClosing += new FormClosingEventHandler(formExpansion_FormClosing);
+            KeyDown += formExpansion_KeyDown;
+            LostFocus += formExpansion_LostFocus;
+            MouseLeave += formExpansion_MouseLeave;
+            FormClosing += formExpansion_FormClosing;
 
             Controls.Clear();
 
@@ -44,8 +44,8 @@ namespace LcmsNet.SampleQueue.Forms
                     if (!m_registeredButton.ContainsKey(button))
                     {
                         m_registeredButton.Add(button, true);
-                        button.MouseLeave += new EventHandler(button_MouseLeave);
-                        button.Click += new EventHandler(button_Click);
+                        button.MouseLeave += button_MouseLeave;
+                        button.Click += button_Click;
                     }
                     button.Left = left;
                     button.Width = width;

@@ -12,7 +12,7 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
 
-            FormClosing += new FormClosingEventHandler(formMethodPreviewOptions_FormClosing);
+            FormClosing += formMethodPreviewOptions_FormClosing;
         }
 
         private void mcheckBox_animate_CheckedChanged(object sender, EventArgs e)

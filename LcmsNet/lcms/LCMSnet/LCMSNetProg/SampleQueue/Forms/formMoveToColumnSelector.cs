@@ -18,7 +18,7 @@ namespace LcmsNet.SampleQueue.Forms
             InitializeComponent();
 
             SelectedColumn = CONST_NO_COLUMN_SELECTED;
-            FormClosing += new FormClosingEventHandler(formMoveToColumnSelector_FormClosing);
+            FormClosing += formMoveToColumnSelector_FormClosing;
         }
 
         /// <summary>

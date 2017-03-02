@@ -64,9 +64,9 @@ namespace LcmsNet.SampleQueue.Forms
                 }
 
                 m_columnData = value;
-                m_columnData.ColorChanged += new classColumnData.DelegateColorChanged(ColumnData_ColorChanged);
-                m_columnData.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
-                m_columnData.NameChanged += new classColumnData.DelegateNameChanged(ColumnData_NameChanged);
+                m_columnData.ColorChanged += ColumnData_ColorChanged;
+                m_columnData.StatusChanged += ColumnData_StatusChanged;
+                m_columnData.NameChanged += ColumnData_NameChanged;
 
                 SetColumnStatus();
 
@@ -281,7 +281,7 @@ namespace LcmsNet.SampleQueue.Forms
             DisplayColumn(CONST_COLUMN_PAL_TRAY, false);
             DisplayColumn(CONST_COLUMN_PAL_VIAL, false);
             DisplayColumn(CONST_COLUMN_VOLUME, false);
-            mdataGrid_samples.SpecialPaint += new DelegateOnPaint(mdataGrid_samples_SpecialPaint);
+            mdataGrid_samples.SpecialPaint += mdataGrid_samples_SpecialPaint;
             InitializeButtons();
             mlabel_columnNameHeader.SendToBack();
             mpanel_control.SendToBack();
@@ -313,13 +313,13 @@ namespace LcmsNet.SampleQueue.Forms
                 DisplayColumn(CONST_COLUMN_PAL_TRAY, false);
                 DisplayColumn(CONST_COLUMN_PAL_VIAL, false);
                 DisplayColumn(CONST_COLUMN_VOLUME, false);
-                mdataGrid_samples.SpecialPaint += new DelegateOnPaint(mdataGrid_samples_SpecialPaint);
+                mdataGrid_samples.SpecialPaint += mdataGrid_samples_SpecialPaint;
                 InitializeButtons();
                 mlabel_columnNameHeader.SendToBack();
                 mpanel_control.SendToBack();
                 PerformLayout();
 
-                Resize += new EventHandler(controlColumnView_Resize);
+                Resize += controlColumnView_Resize;
             }
             catch
             {

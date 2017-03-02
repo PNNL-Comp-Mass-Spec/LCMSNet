@@ -42,9 +42,9 @@ namespace LcmsNet.Method.Forms
                 // Register device additions and deletions so that we remap color information for display.
                 //
                 classDeviceManager.Manager.DeviceAdded +=
-                    new DelegateDeviceUpdated(Manager_DeviceAdded);
+                    Manager_DeviceAdded;
                 classDeviceManager.Manager.DeviceRemoved +=
-                    new DelegateDeviceUpdated(Manager_DeviceRemoved);
+                    Manager_DeviceRemoved;
             }
             catch
             {
@@ -52,7 +52,7 @@ namespace LcmsNet.Method.Forms
             leftMouseDown = false;
             m_index = 0;
             unmoved = false;
-            Resize += new EventHandler(controlLCMethodTimeline_Resize);
+            Resize += controlLCMethodTimeline_Resize;
         }
 
         /// <summary>

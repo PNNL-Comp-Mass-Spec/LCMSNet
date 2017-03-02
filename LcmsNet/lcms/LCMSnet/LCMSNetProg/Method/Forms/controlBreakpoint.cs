@@ -11,7 +11,7 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
             m_set = false;
-            Click += new EventHandler(controlBreakpoint_Click);
+            Click += controlBreakpoint_Click;
         }
 
         /// <summary>

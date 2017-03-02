@@ -58,10 +58,10 @@ namespace LcmsNet.Method.Forms
             // Build the button to method dictionary.
             m_checkBoxToColumnDataMap = new Dictionary<string, classColumnData>();
             UpdateConfiguration();
-            mtextBox_methodName.LostFocus += new EventHandler(mtextBox_methodName_LostFocus);
-            classLCMethodManager.Manager.MethodAdded += new DelegateMethodUpdated(Manager_MethodAdded);
-            classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(Manager_MethodRemoved);
-            classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(Manager_MethodUpdated);
+            mtextBox_methodName.LostFocus += mtextBox_methodName_LostFocus;
+            classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+            classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+            classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
         }
 
         private bool IgnoreUpdates { get; set; }
@@ -630,8 +630,8 @@ namespace LcmsNet.Method.Forms
             //
             // Make a locking event.
             //
-            deviceEvent.Lock += new DelegateLCMethodEventLocked(deviceEvent_Lock);
-            deviceEvent.EventChanged += new EventHandler(deviceEvent_EventChanged);
+            deviceEvent.Lock += deviceEvent_Lock;
+            deviceEvent.EventChanged += deviceEvent_EventChanged;
 
             var eventData = "";
             if (deviceEvent.SelectedMethod != null)
@@ -681,7 +681,7 @@ namespace LcmsNet.Method.Forms
                         // stuff.
                         //
                         lcEvent.Device.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider,
-                            new DelegateDeviceHasData(combo.FillData));
+                            combo.FillData);
                         control = combo;
                     }
                     else

@@ -30,11 +30,11 @@ namespace LcmsNet.Devices
             m_deviceToControlMap = new Dictionary<IDevice, AdvancedDeviceGroupControl>();
 
             classDeviceManager.Manager.DeviceAdded +=
-                new DelegateDeviceUpdated(Manager_DeviceAdded);
+                Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved +=
-                new DelegateDeviceUpdated(Manager_DeviceRemoved);
+                Manager_DeviceRemoved;
 
-            FormClosing += new FormClosingEventHandler(AdvancedDeviceControl_FormClosing);
+            FormClosing += AdvancedDeviceControl_FormClosing;
         }
 
         void AdvancedDeviceControl_FormClosing(object sender, FormClosingEventArgs e)

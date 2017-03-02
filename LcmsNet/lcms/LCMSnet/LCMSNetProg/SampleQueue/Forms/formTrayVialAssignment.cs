@@ -115,7 +115,7 @@ namespace LcmsNet.SampleQueue.Forms
                 m_Trays[trayIndx].TrayNumber = trayIndx;
                 m_Trays[trayIndx].Top = TRAY_CONTROL_TOP;
                 m_Trays[trayIndx].Left = TRAY_CONTROL_LEFT;
-                m_Trays[trayIndx].RowModified += new DelegateRowModified(UpdateTabDisplays);
+                m_Trays[trayIndx].RowModified += UpdateTabDisplays;
                 tabControlPlates.TabPages[trayIndx].Controls.Add(m_Trays[trayIndx]);
                 m_Trays[trayIndx].Clear();
             }

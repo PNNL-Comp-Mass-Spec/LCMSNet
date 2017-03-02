@@ -24,8 +24,8 @@ namespace LcmsNet.Reporting.Forms
             InitializeComponent();
 
             m_manager = manager;
-            m_manager.MethodAdded += new DelegateMethodUpdated(m_manager_MethodAdded);
-            m_manager.MethodRemoved += new DelegateMethodUpdated(m_manager_MethodRemoved);
+            m_manager.MethodAdded += m_manager_MethodAdded;
+            m_manager.MethodRemoved += m_manager_MethodRemoved;
 
             m_logPath = logPath;
             m_forms = forms;

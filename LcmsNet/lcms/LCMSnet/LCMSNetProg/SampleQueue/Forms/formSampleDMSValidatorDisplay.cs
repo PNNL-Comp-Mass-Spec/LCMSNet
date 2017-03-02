@@ -46,7 +46,7 @@ namespace LcmsNet.SampleQueue.Forms
                     }
                     sampleControl.Dock = DockStyle.Top;
                     sampleControl.ID = i++;
-                    sampleControl.EnterPressed += new EventHandler<DMSValidatorEventArgs>(sampleControl_EnterPressed);
+                    sampleControl.EnterPressed += sampleControl_EnterPressed;
                     m_validatorControls.Add(sampleControl);
                     panel1.Controls.Add(sampleControl);
 
@@ -59,7 +59,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
             }
 
-            FormClosing += new FormClosingEventHandler(formSampleDMSValidatorDisplay_FormClosing);
+            FormClosing += formSampleDMSValidatorDisplay_FormClosing;
         }
 
         /// <summary>

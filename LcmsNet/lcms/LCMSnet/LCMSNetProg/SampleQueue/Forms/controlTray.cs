@@ -148,7 +148,7 @@ namespace LcmsNet.SampleQueue.Forms
             dataGridView1.Columns.Add(blockColumn);
             dataGridView1.Columns.Add(runOrderColumn);
 
-            dataGridView1.CellValueChanged += new DataGridViewCellEventHandler(dataGridView1_CellValueChanged);
+            dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
         }
 
         /// <summary>

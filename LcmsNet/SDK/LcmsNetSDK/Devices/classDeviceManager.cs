@@ -190,7 +190,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         private classDeviceManager()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
             m_plugins = new Dictionary<string, List<classDevicePluginInformation>>();
             AvailablePlugins = new List<classDevicePluginInformation>();

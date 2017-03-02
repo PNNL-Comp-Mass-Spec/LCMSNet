@@ -105,18 +105,18 @@ namespace LcmsNet.Devices.Fluidics
             InitializeComponent();
 
             classDeviceManager.Manager.DeviceAdded +=
-                new DelegateDeviceUpdated(Manager_DeviceAdded);
+                Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved +=
-                new DelegateDeviceUpdated(Manager_DeviceRemoved);
-            classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
+                Manager_DeviceRemoved;
+            classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
             m_fluidics_mod = classFluidicsModerator.Moderator;
             m_reporter = new ModelCheckReportViewer(m_fluidics_mod);
             m_reporter.Dock = DockStyle.Fill;
             tabControl1.TabPages["tabPageModelStatus"].Controls.Add(m_reporter);
             tabControl1.Selecting += tabControl1_Selecting;
             m_fluidics_mod.ScaleWorldView(1);
-            m_fluidics_mod.ModelChanged += new classFluidicsModerator.ModelChange(FluidicsModelChanged);
-            FormClosing += new FormClosingEventHandler(FluidicsDesign_FormClosing);
+            m_fluidics_mod.ModelChanged += FluidicsModelChanged;
+            FormClosing += FluidicsDesign_FormClosing;
             Activated += FluidicsDesign_Activated;
         }
 

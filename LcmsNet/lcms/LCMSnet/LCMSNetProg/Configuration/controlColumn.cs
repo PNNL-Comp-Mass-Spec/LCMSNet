@@ -30,9 +30,9 @@ namespace LcmsNet.Configuration
             m_columnData = new classColumnData();
             mdialog_color = new ColorDialog();
 
-            mcomboBox_names.SelectedIndexChanged += new EventHandler(mcomboBox_names_SelectedIndexChanged);
-            ColumnObjectChanged += new delegateColumnObjectChanged(SelectColumnNameFromData);
-            ColumnNamesChanged += new delegateColumnNamesChanged(SelectColumnNameFromData);
+            mcomboBox_names.SelectedIndexChanged += mcomboBox_names_SelectedIndexChanged;
+            ColumnObjectChanged += SelectColumnNameFromData;
+            ColumnNamesChanged += SelectColumnNameFromData;
         }
 
         #endregion
@@ -98,8 +98,8 @@ namespace LcmsNet.Configuration
                 if (value != null)
                 {
                     UpdateUserInterface();
-                    value.ColorChanged += new classColumnData.DelegateColorChanged(ColumnData_ColorChanged);
-                    value.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
+                    value.ColorChanged += ColumnData_ColorChanged;
+                    value.StatusChanged += ColumnData_StatusChanged;
                 }
                 // Signal the combo box to update selected name
                 ColumnObjectChanged?.Invoke();

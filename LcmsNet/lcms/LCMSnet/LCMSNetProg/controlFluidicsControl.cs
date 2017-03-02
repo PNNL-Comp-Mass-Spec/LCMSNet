@@ -40,14 +40,14 @@ namespace LcmsNet
             panelFluidicsDesign.MouseMove += panelFluidicsDesign_MouseMove;
             panelFluidicsDesign.DoubleClick += panelFluidicsDesign_DoubleClick;
             panelFluidicsDesign.Paint += panelFluidicsDesign_Paint;
-            VisibleChanged += new EventHandler((sender, e) =>
+            VisibleChanged += (sender, e) =>
             {
                 if ((sender as Control).Visible)
                 {
                     UpdateImage();
                     Refresh();
                 }
-            }); // ensures that the control has the most up-to-date image when a user switches to it.
+            }; // ensures that the control has the most up-to-date image when a user switches to it.
             trackBarScale.Value = 100;
             trackBarPortTransparency.Value = 255;
             trackBarDeviceTransparency.Value = 255;

@@ -11,7 +11,7 @@ namespace LcmsNet.Method.Forms
             InitializeComponent();
             mnum_value.Minimum = Convert.ToDecimal(0.0);
             mnum_value.Maximum = Convert.ToDecimal(10000000000.0);
-            mnum_value.ValueChanged += new EventHandler(mnum_value_ValueChanged);
+            mnum_value.ValueChanged += mnum_value_ValueChanged;
 
             Range = null;
         }

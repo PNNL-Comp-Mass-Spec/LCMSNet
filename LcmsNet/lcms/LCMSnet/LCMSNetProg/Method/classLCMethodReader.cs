@@ -29,7 +29,7 @@ namespace LcmsNet.Method
 
         public classLCMethodReader()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

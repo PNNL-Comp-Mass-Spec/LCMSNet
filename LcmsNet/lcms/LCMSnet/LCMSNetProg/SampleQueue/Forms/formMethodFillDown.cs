@@ -313,9 +313,9 @@ namespace LcmsNet.SampleQueue.Forms
             }
             // Set initial dropdown values
             SetInitialDropdownValue(tableLayoutPanel1.Controls);
-            manager.MethodAdded += new DelegateMethodUpdated(manager_MethodAdded);
-            manager.MethodRemoved += new DelegateMethodUpdated(manager_MethodRemoved);
-            manager.MethodUpdated += new DelegateMethodUpdated(manager_MethodUpdated);
+            manager.MethodAdded += manager_MethodAdded;
+            manager.MethodRemoved += manager_MethodRemoved;
+            manager.MethodUpdated += manager_MethodUpdated;
         }
 
         bool manager_MethodUpdated(object sender, classLCMethod method)

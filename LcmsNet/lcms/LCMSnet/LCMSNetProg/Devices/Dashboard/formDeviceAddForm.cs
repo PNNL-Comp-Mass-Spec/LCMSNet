@@ -16,10 +16,10 @@ namespace LcmsNet.Devices.Dashboard
         public formDeviceAddForm()
         {
             InitializeComponent();
-            mtree_availableDevices.KeyUp += new KeyEventHandler(mtree_availableDevices_KeyUp);
+            mtree_availableDevices.KeyUp += mtree_availableDevices_KeyUp;
             mtree_availableDevices.NodeMouseDoubleClick +=
-                new TreeNodeMouseClickEventHandler(mtree_availableDevices_NodeMouseDoubleClick);
-            mlistbox_devices.KeyUp += new KeyEventHandler(mlistbox_devices_KeyUp);
+                mtree_availableDevices_NodeMouseDoubleClick;
+            mlistbox_devices.KeyUp += mlistbox_devices_KeyUp;
         }
 
         /// <summary>

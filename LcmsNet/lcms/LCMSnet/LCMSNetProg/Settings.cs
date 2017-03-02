@@ -22,7 +22,7 @@ namespace LcmsNet.Properties
 
         public Settings()
         {
-            PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Settings_PropertyChanged);
+            PropertyChanged += Settings_PropertyChanged;
 
             var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
             if (applicationVersion != appVersion.ToString())

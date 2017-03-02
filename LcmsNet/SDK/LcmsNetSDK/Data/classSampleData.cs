@@ -380,7 +380,7 @@ namespace LcmsNetDataClasses
 
                 if (m_columnData != null && !sameData)
                 {
-                    m_columnData.NameChanged += new classColumnData.DelegateNameChanged(m_columnData_NameChanged);
+                    m_columnData.NameChanged += m_columnData_NameChanged;
                 }
             }
         }

@@ -50,9 +50,9 @@ namespace LcmsNet.Notification.Forms
             }
 
             // Synch the device manager.
-            manager.DeviceRenamed += new DelegateDeviceUpdated(manager_DeviceRenamed);
-            manager.DeviceRemoved += new DelegateDeviceUpdated(manager_DeviceRemoved);
-            manager.DeviceAdded += new DelegateDeviceUpdated(manager_DeviceAdded);
+            manager.DeviceRenamed += manager_DeviceRenamed;
+            manager.DeviceRemoved += manager_DeviceRemoved;
+            manager.DeviceAdded += manager_DeviceAdded;
 
             var model = FluidicsSDK.classFluidicsModerator.Moderator;
             model.ModelCheckAdded += Model_ModelCheckAdded;
@@ -66,9 +66,9 @@ namespace LcmsNet.Notification.Forms
                 AddNotifier(notifier);
             }
             NotificationBroadcaster.Manager.Added +=
-                new EventHandler<NotifierChangedEventArgs>(Manager_Added);
+                Manager_Added;
             NotificationBroadcaster.Manager.Removed +=
-                new EventHandler<NotifierChangedEventArgs>(Manager_Removed);
+                Manager_Removed;
 
             // Add any existing methods.
             var methods = classLCMethodManager.Manager.Methods;
@@ -82,9 +82,9 @@ namespace LcmsNet.Notification.Forms
 
 
             // Synch methods
-            classLCMethodManager.Manager.MethodAdded += new DelegateMethodUpdated(Manager_MethodAdded);
-            classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(Manager_MethodUpdated);
-            classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(Manager_MethodRemoved);
+            classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+            classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
+            classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
         }
 
         /// <summary>
@@ -303,8 +303,8 @@ namespace LcmsNet.Notification.Forms
 
         private void AddNotifier(INotifier device)
         {
-            device.Error += new EventHandler<classDeviceErrorEventArgs>(device_Error);
-            device.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(device_StatusUpdate);
+            device.Error += device_Error;
+            device.StatusUpdate += device_StatusUpdate;
 
             var linker = new classNotificationLinker(device.Name);
             var errors = device.GetErrorNotificationList();

@@ -304,7 +304,7 @@ namespace LcmsNet.SampleQueue
             UpdateColumnList();
             foreach (var column in classCartConfiguration.Columns)
             {
-                column.FirstChanged += new classColumnData.DelegateFirstChanged(column_FirstChanged);
+                column.FirstChanged += column_FirstChanged;
             }
         }
 

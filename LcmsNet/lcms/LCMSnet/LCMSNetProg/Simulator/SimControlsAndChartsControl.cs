@@ -33,11 +33,11 @@ namespace LcmsNet.Simulator
             reporter.Dock = DockStyle.Fill;
             tabControlCharts.TabPages["tabPageErrors"].Controls.Add(reporter);
             mcontrol_selectedMethods.MethodAdded +=
-                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodAdded);
+                mcontrol_selectedMethods_MethodAdded;
             mcontrol_selectedMethods.MethodDeleted +=
-                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodDeleted);
+                mcontrol_selectedMethods_MethodDeleted;
             mcontrol_selectedMethods.MethodUpdated +=
-                new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodUpdated);
+                mcontrol_selectedMethods_MethodUpdated;
             var settings = tabControlSimulator.TabPages["tabSimulatorSettings"];
 
 

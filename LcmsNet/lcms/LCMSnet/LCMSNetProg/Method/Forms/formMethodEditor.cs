@@ -36,7 +36,7 @@ namespace LcmsNet.Method.Forms
 
             // mcontrol_methodEditor.EventChanged += new EventHandler(mcontrol_methodEditor_EventChanged);
             mcontrol_methodEditor.UpdatingMethod +=
-                new EventHandler<classMethodEditingEventArgs>(mcontrol_methodEditor_UpdatingMethod);
+                mcontrol_methodEditor_UpdatingMethod;
         }
 
         void mcontrol_methodEditor_UpdatingMethod(object sender, classMethodEditingEventArgs e)

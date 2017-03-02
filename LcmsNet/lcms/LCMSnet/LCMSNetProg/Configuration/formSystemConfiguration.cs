@@ -251,7 +251,7 @@ namespace LcmsNet.Configuration
         void RegisterColumn(controlColumn column)
         {
             column.ColumnNamesChanged +=
-                new controlColumn.delegateColumnNamesChanged(mcontrol_columnOne_ColumnNamesChanged);
+                mcontrol_columnOne_ColumnNamesChanged;
         }
 
         void mcontrol_columnOne_ColumnNamesChanged()

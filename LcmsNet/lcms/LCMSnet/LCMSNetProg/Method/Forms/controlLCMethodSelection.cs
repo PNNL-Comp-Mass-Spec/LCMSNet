@@ -22,14 +22,14 @@ namespace LcmsNet.Method.Forms
             //
             if (classLCMethodManager.Manager != null)
             {
-                classLCMethodManager.Manager.MethodAdded += new DelegateMethodUpdated(Manager_MethodAdded);
-                classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(Manager_MethodRemoved);
-                classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(Manager_MethodAdded);
+                classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+                classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+                classLCMethodManager.Manager.MethodUpdated += Manager_MethodAdded;
             }
 
-            mbutton_up.LostFocus += new EventHandler(mbutton_up_LostFocus);
-            mbutton_down.LostFocus += new EventHandler(mbutton_down_LostFocus);
-            mcomboBox_methods.KeyUp += new KeyEventHandler(mcomboBox_methods_KeyUp);
+            mbutton_up.LostFocus += mbutton_up_LostFocus;
+            mbutton_down.LostFocus += mbutton_down_LostFocus;
+            mcomboBox_methods.KeyUp += mcomboBox_methods_KeyUp;
         }
 
         /// <summary>

@@ -139,18 +139,18 @@ namespace LcmsNet.Method.Forms
             //
             // Handle user interface events to display context of method editors
             //
-            mcomboBox_method.SelectedIndexChanged += new EventHandler(mcomboBox_method_SelectedIndexChanged);
-            mcomboBox_devices.SelectedIndexChanged += new EventHandler(mcomboBox_devices_SelectedIndexChanged);
+            mcomboBox_method.SelectedIndexChanged += mcomboBox_method_SelectedIndexChanged;
+            mcomboBox_devices.SelectedIndexChanged += mcomboBox_devices_SelectedIndexChanged;
             controlBreakpoint1.Changed += controlBreakpoint1_Changed;
             //
             // Register to listen for device additions or deletions.
             //
             classDeviceManager.Manager.DeviceAdded +=
-                new DelegateDeviceUpdated(Manager_DeviceAdded);
+                Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved +=
-                new DelegateDeviceUpdated(Manager_DeviceRemoved);
+                Manager_DeviceRemoved;
             classDeviceManager.Manager.DeviceRenamed +=
-                new DelegateDeviceUpdated(Manager_DeviceRenamed);
+                Manager_DeviceRenamed;
         }
 
         void controlBreakpoint1_Changed(object sender, BreakpointArgs e)
@@ -562,7 +562,7 @@ namespace LcmsNet.Method.Forms
 
                     var param = control as ILCEventParameter;
                     param.ParameterValue = parameters.Values[j];
-                    param.EventChanged += new EventHandler(param_EventChanged);
+                    param.EventChanged += param_EventChanged;
                 }
             }
             mpanel_parameters.ResumeLayout();
@@ -754,7 +754,7 @@ namespace LcmsNet.Method.Forms
                                     // stuff.
                                     //
                                     device.RegisterDataProvider(attr.DataProvider,
-                                        new DelegateDeviceHasData(combo.FillData));
+                                        combo.FillData);
                                     control = combo;
                                     //
                                     // Set the data if we have it, otherwise, cross your fingers batman!

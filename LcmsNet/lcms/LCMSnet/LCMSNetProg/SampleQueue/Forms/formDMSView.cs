@@ -208,7 +208,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void InitFormControls()
         {
-            FormClosing += new FormClosingEventHandler(formDMSView_FormClosing);
+            FormClosing += formDMSView_FormClosing;
 
             // Form caption
             var dbInUse = string.Empty;

@@ -53,7 +53,7 @@ namespace LcmsNet.Configuration
                     {
                         m_systemData.ColorChanged -= SystemData_ColorChanged;
                     }
-                    value.ColorChanged += new classSystemData.DelegateColorChanged(SystemData_ColorChanged);
+                    value.ColorChanged += SystemData_ColorChanged;
                 }
                 m_systemData = value;
             }
