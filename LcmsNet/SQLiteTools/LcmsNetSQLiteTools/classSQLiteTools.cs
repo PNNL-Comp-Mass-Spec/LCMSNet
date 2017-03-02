@@ -48,7 +48,7 @@ namespace LcmsNetSQLiteTools
         #region Class Variables
 
         private static string m_ConnectionString = "";
-        //private static string mstring_errroString = "";
+        //private static string m_errroString = "";
 
         private static List<string> m_cartNames;
         private static List<string> m_cartConfigNames;

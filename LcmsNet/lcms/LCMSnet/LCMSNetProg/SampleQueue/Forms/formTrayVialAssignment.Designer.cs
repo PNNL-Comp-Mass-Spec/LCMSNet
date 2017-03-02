@@ -17,9 +17,9 @@
             {
                 components.Dispose();
             }
-            if (mobject_Trays != null)
+            if (m_Trays != null)
             {
-                foreach (var currControl in mobject_Trays)
+                foreach (var currControl in m_Trays)
                 {
                     currControl.RowModified -= UpdateTabDisplays;
                     currControl.Dispose();

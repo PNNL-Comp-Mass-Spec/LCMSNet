@@ -14,7 +14,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Tracks whether the button's event handler has already been registered here before.
         /// </summary>
-        Dictionary<Button, bool> mdict_registeredButton;
+        Dictionary<Button, bool> m_registeredButton;
 
         public formExpansion()
         {
@@ -28,7 +28,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void Initialize(List<Button> buttons)
         {
-            mdict_registeredButton = new Dictionary<Button, bool>();
+            m_registeredButton = new Dictionary<Button, bool>();
             KeyDown += new KeyEventHandler(formExpansion_KeyDown);
             LostFocus += new EventHandler(formExpansion_LostFocus);
             MouseLeave += new EventHandler(formExpansion_MouseLeave);
@@ -46,9 +46,9 @@ namespace LcmsNet.SampleQueue.Forms
                 this.Width = ((width + padding) * buttons.Count) + left;
                 foreach (var button in buttons)
                 {
-                    if (!mdict_registeredButton.ContainsKey(button))
+                    if (!m_registeredButton.ContainsKey(button))
                     {
-                        mdict_registeredButton.Add(button, true);
+                        m_registeredButton.Add(button, true);
                         button.MouseLeave += new EventHandler(button_MouseLeave);
                         button.Click += new EventHandler(button_Click);
                     }

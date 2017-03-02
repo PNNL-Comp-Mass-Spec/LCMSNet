@@ -41,7 +41,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Render Update counts
         /// </summary>
-        private int mint_renderUpdateCount;
+        private int m_renderUpdateCount;
 
         /// <summary>
         /// Currently selected method.
@@ -85,7 +85,7 @@ namespace LcmsNet.Method.Forms
             MethodPreviewOptions.FrameDelay = CONST_DEFAULT_RENDER_WAIT_COUNT;
             MethodPreviewOptions.Animate = false;
             MethodPreviewOptions.AnimateDelay = CONST_DEFAULT_ANIMATION_DELAY_TIME;
-            mint_renderUpdateCount = 0;
+            m_renderUpdateCount = 0;
 
             mcontrol_acquisitionStage.EventChanged += new EventHandler(mcontrol_acquisitionStage_EventChanged);
         }
@@ -299,7 +299,7 @@ namespace LcmsNet.Method.Forms
                 optimizer.UpdateRequired +=
                     new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
                 var methods = mcontrol_selectedMethods.SelectedMethods;
-                mint_renderUpdateCount = 0;
+                m_renderUpdateCount = 0;
 
                 if (methods.Count > 0)
                     methods[0].SetStartTime(LcmsNetSDK.TimeKeeper.Instance.Now);
@@ -323,7 +323,7 @@ namespace LcmsNet.Method.Forms
             //
             // Render the updates if we animating and past the rendering threshold.
             //
-            if (MethodPreviewOptions.Animate == true && mint_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
+            if (MethodPreviewOptions.Animate == true && m_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
             {
                 RenderThroughput(sender.Methods);
                 Refresh();
@@ -332,7 +332,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // reset the number of update calls we have seen.
                 //
-                mint_renderUpdateCount = 0;
+                m_renderUpdateCount = 0;
 
                 System.Threading.Thread.Sleep(MethodPreviewOptions.AnimateDelay);
             }

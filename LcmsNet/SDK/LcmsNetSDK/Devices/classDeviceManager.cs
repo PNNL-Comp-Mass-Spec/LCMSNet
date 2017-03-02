@@ -48,7 +48,7 @@ namespace LcmsNetDataClasses.Devices
             aggregate.Status             = "";
             aggregate.Name               = LcmsNetDataClasses.classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
 
-            foreach (IDevice device in mlist_devices)
+            foreach (IDevice device in m_devices)
             {
                 FinchComponentData data = device.GetData();
                 if (data != null)
@@ -105,7 +105,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// A current list of devices the application is using.
         /// </summary>
-        private List<IDevice> mlist_devices;
+        private List<IDevice> m_devices;
 
         /// <summary>
         /// Static Device Manager Reference.
@@ -170,17 +170,17 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// A list of loaded plugin assemblies.
         /// </summary>
-        private Dictionary<string, List<classDevicePluginInformation>> mdict_plugins;
+        private Dictionary<string, List<classDevicePluginInformation>> m_plugins;
 
         /// <summary>
         /// Flag to indicate whether plug-ins are already being loaded via a directory operation.
         /// </summary>
-        private bool mbool_loadingPlugins;
+        private bool m_loadingPlugins;
 
         /// <summary>
         /// Flag tracking whether the devices are emulated or not.
         /// </summary>
-        private bool mbool_emulateDevices;
+        private bool m_emulateDevices;
 
         #endregion
 
@@ -193,15 +193,15 @@ namespace LcmsNetDataClasses.Devices
         {
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
-            mdict_plugins = new Dictionary<string, List<classDevicePluginInformation>>();
+            m_plugins = new Dictionary<string, List<classDevicePluginInformation>>();
             AvailablePlugins = new List<classDevicePluginInformation>();
-            mlist_devices = new List<IDevice>();
+            m_devices = new List<IDevice>();
             //Manager              = this;
 
             var bridge = new DeviceManagerBridge(this);
 
-            mbool_loadingPlugins = false;
-            mbool_emulateDevices = true;
+            m_loadingPlugins = false;
+            m_emulateDevices = true;
             classLCMSSettings.SettingChanged += OnSettingChanged;
         }
 
@@ -235,7 +235,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public List<IDevice> Devices
         {
-            get { return mlist_devices; }
+            get { return m_devices; }
         }
 
         /// <summary>
@@ -248,10 +248,10 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public bool Emulate
         {
-            get { return mbool_emulateDevices; }
+            get { return m_emulateDevices; }
             set
             {
-                mbool_emulateDevices = value;
+                m_emulateDevices = value;
                 SetEmulationFlags();
             }
         }
@@ -261,7 +261,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public int DeviceCount
         {
-            get { return mlist_devices.Count; }
+            get { return m_devices.Count; }
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace LcmsNetDataClasses.Devices
             {
                 // Find out how many are initialized.
                 var total = 0;
-                foreach (var device in mlist_devices)
+                foreach (var device in m_devices)
                 {
                     if (device.Status == enumDeviceStatus.Initialized || device.Status == enumDeviceStatus.InUseByMethod)
                     {
@@ -354,7 +354,7 @@ namespace LcmsNetDataClasses.Devices
                 }
                 // Emulation needs to be set on devices before any other properties, otherwise it may not be seen properly on a check
                 // for emulation mode at startup/initialization.
-                device.Emulation = mbool_emulateDevices;
+                device.Emulation = m_emulateDevices;
                 // Get all writeable properties.
                 var properties = type.GetProperties();
 
@@ -511,7 +511,7 @@ namespace LcmsNetDataClasses.Devices
             if (deviceName == null)
                 return false;
 
-            foreach (var dev in mlist_devices)
+            foreach (var dev in m_devices)
             {
                 if (dev.Name == deviceName)
                     return true;
@@ -535,7 +535,7 @@ namespace LcmsNetDataClasses.Devices
             // 
             // Then see if the device type matches as well...
             // 
-            foreach (var dev in mlist_devices)
+            foreach (var dev in m_devices)
             {
                 var name = dev.Name;
                 var devType = dev.GetType();
@@ -564,7 +564,7 @@ namespace LcmsNetDataClasses.Devices
             // 
             // Then see if the device type matches as well...
             // 
-            foreach (var dev in mlist_devices)
+            foreach (var dev in m_devices)
             {
                 if (dev.Name == deviceName)
                 {
@@ -633,7 +633,7 @@ namespace LcmsNetDataClasses.Devices
             // 
             // No duplicate references allowed.
             // 
-            if (mlist_devices.Contains(device) == true)
+            if (m_devices.Contains(device) == true)
                 return false;
 
             // 
@@ -642,9 +642,9 @@ namespace LcmsNetDataClasses.Devices
             if (DeviceNameExists(device.Name))
                 return false;
 
-            device.Emulation = mbool_emulateDevices;
+            device.Emulation = m_emulateDevices;
 
-            mlist_devices.Add(device);
+            m_devices.Add(device);
 
             if (DeviceAdded != null)
                 DeviceAdded(this, device);
@@ -681,12 +681,12 @@ namespace LcmsNetDataClasses.Devices
             // 
             // Make sure we have the reference
             // 
-            if (mlist_devices.Contains(device) == false)
+            if (m_devices.Contains(device) == false)
                 return false;
 
             device.Shutdown();
 
-            mlist_devices.Remove(device);
+            m_devices.Remove(device);
 
             if (DeviceRemoved != null)
                 DeviceRemoved(this, device);
@@ -699,9 +699,9 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         private void SetEmulationFlags()
         {
-            foreach (var device in mlist_devices)
+            foreach (var device in m_devices)
             {
-                device.Emulation = mbool_emulateDevices;
+                device.Emulation = m_emulateDevices;
             }
         }
 
@@ -725,7 +725,7 @@ namespace LcmsNetDataClasses.Devices
         public bool ShutdownDevices(bool clearDevices)
         {
             var worked = true;
-            foreach (var device in mlist_devices)
+            foreach (var device in m_devices)
             {
                 worked = (worked && device.Shutdown());
             }
@@ -733,7 +733,7 @@ namespace LcmsNetDataClasses.Devices
             if (clearDevices)
             {
                 var tempDevices = new List<IDevice>();
-                tempDevices.AddRange(mlist_devices);
+                tempDevices.AddRange(m_devices);
                 foreach (var device in tempDevices)
                 {
                     try
@@ -807,7 +807,7 @@ namespace LcmsNetDataClasses.Devices
         public List<classDeviceErrorEventArgs> InitializeDevices(bool reinitializeAlreadyInitialized)
         {
             var devices = new List<classDeviceErrorEventArgs>();
-            foreach (var device in mlist_devices)
+            foreach (var device in m_devices)
             {
                 try
                 {
@@ -893,7 +893,7 @@ namespace LcmsNetDataClasses.Devices
         public void LoadPlugins(Assembly assembly, bool forceReload)
         {
             var assemblyPath = assembly.Location;
-            if (mdict_plugins.ContainsKey(assemblyPath))
+            if (m_plugins.ContainsKey(assemblyPath))
             {
                 if (!forceReload)
                 {
@@ -902,19 +902,19 @@ namespace LcmsNetDataClasses.Devices
                 else
                 {
                     // Remove the old plug-ins from the list.
-                    foreach (var plugin in mdict_plugins[assemblyPath])
+                    foreach (var plugin in m_plugins[assemblyPath])
                     {
                         AvailablePlugins.Remove(plugin);
                     }
                     // Remove the old plug-in link in the plug-in dictionary.
-                    mdict_plugins.Remove(assemblyPath);
+                    m_plugins.Remove(assemblyPath);
                 }
             }
 
             // Map the assembly path to a list of available plug-ins and also update the list of available plug-ins
             var supportedPlugins = RetrieveSupportedDevicePluginTypes(assembly);
             AvailablePlugins.AddRange(supportedPlugins);
-            mdict_plugins.Add(assemblyPath, supportedPlugins);
+            m_plugins.Add(assemblyPath, supportedPlugins);
         }
 
         /// <summary>
@@ -924,7 +924,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="forceReload">Flag indicating whether to force a re-load the assemblies if they have already been loaded.</param>
         public void LoadPlugins(string assemblyPath, bool forceReload)
         {
-            if (mdict_plugins.ContainsKey(assemblyPath))
+            if (m_plugins.ContainsKey(assemblyPath))
 
             {
                 if (!forceReload)
@@ -934,12 +934,12 @@ namespace LcmsNetDataClasses.Devices
                 else
                 {
                     // Remove the old plug-ins from the list.
-                    foreach (var plugin in mdict_plugins[assemblyPath])
+                    foreach (var plugin in m_plugins[assemblyPath])
                     {
                         AvailablePlugins.Remove(plugin);
                     }
                     // Remove the old plug-in link in the plug-in dictionary.
-                    mdict_plugins.Remove(assemblyPath);
+                    m_plugins.Remove(assemblyPath);
                 }
             }
 
@@ -947,9 +947,9 @@ namespace LcmsNetDataClasses.Devices
             var supportedPlugins =
                 RetrieveSupportedDevicePluginTypes(System.IO.Path.GetFullPath(assemblyPath));
             AvailablePlugins.AddRange(supportedPlugins);
-            mdict_plugins.Add(assemblyPath, supportedPlugins);
+            m_plugins.Add(assemblyPath, supportedPlugins);
 
-            if (PluginsLoaded != null && !mbool_loadingPlugins)
+            if (PluginsLoaded != null && !m_loadingPlugins)
             {
                 PluginsLoaded(this, null);
             }
@@ -964,14 +964,14 @@ namespace LcmsNetDataClasses.Devices
         public void LoadPlugins(string directoryPath, string filter, bool forceReload)
         {
             // Signal others we are the ones doing the loading and alerting.
-            mbool_loadingPlugins = true;
+            m_loadingPlugins = true;
 
             var files = System.IO.Directory.GetFiles(directoryPath, filter);
             foreach (var assemblyPath in files)
             {
                 LoadPlugins(assemblyPath, forceReload);
             }
-            mbool_loadingPlugins = false;
+            m_loadingPlugins = false;
 
             if (PluginsLoaded != null)
             {

@@ -13,7 +13,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Number of columns aligning on.
         /// </summary>
-        // private int mint_numberOfColumns;
+        // private int m_numberOfColumns;
         /// <summary>
         /// Constructor.
         /// </summary>

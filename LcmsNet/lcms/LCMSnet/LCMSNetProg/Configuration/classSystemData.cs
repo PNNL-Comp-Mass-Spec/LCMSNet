@@ -23,8 +23,8 @@ namespace LcmsNet.Configuration
         /// </summary>
         public classSystemData()
         {
-            mint_systemIndex = 0;
-            mlist_column = new List<classColumnData>();
+            m_systemIndex = 0;
+            m_column = new List<classColumnData>();
         }
 
         #endregion
@@ -34,7 +34,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// System index of the column.
         /// </summary>
-        private int mint_systemIndex;
+        private int m_systemIndex;
 
         /// <summary>
         /// Fired when the color of the column changes.
@@ -49,7 +49,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// List of columns associated with the system.
         /// </summary>
-        private List<classColumnData> mlist_column;
+        private List<classColumnData> m_column;
 
         #endregion
 
@@ -60,8 +60,8 @@ namespace LcmsNet.Configuration
         /// </summary>
         public List<classColumnData> Columns
         {
-            get { return mlist_column; }
-            set { mlist_column = value; }
+            get { return m_column; }
+            set { m_column = value; }
         }
 
         /// <summary>
@@ -69,8 +69,8 @@ namespace LcmsNet.Configuration
         /// </summary>
         public int SystemIndex
         {
-            get { return mint_systemIndex; }
-            set { mint_systemIndex = value; }
+            get { return m_systemIndex; }
+            set { m_systemIndex = value; }
         }
 
         /// <summary>

@@ -56,20 +56,20 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Error message importance level (0 is most important, 5 is least important)
         /// </summary>
-        private static int mint_errorLevel = 0;
+        private static int m_errorLevel = 0;
 
         /// <summary>
         /// Status message importance level (0 is most important, 5 is least important)
         /// </summary>
-        private static int mint_messageLevel = 0;
+        private static int m_messageLevel = 0;
 
         /// <summary>
         /// Gets or sets the error level to log.
         /// </summary>
         public static int ErrorLevel
         {
-            get { return mint_errorLevel; }
-            set { mint_errorLevel = value; }
+            get { return m_errorLevel; }
+            set { m_errorLevel = value; }
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         public static int MessageLevel
         {
-            get { return mint_messageLevel; }
-            set { mint_messageLevel = value; }
+            get { return m_messageLevel; }
+            set { m_messageLevel = value; }
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="sample">Data for a sample</param>
         public static void LogError(int errorLevel, string message, Exception ex, classSampleData sample)
         {
-            /*if (errorLevel <= mint_errorLevel)
+            /*if (errorLevel <= m_errorLevel)
                 if (Error != null)
                     Error(errorLevel, new classErrorLoggerArgs(message, sample));*/
             classErrorLoggerArgs args;
@@ -184,7 +184,7 @@ namespace LcmsNetDataClasses.Logging
         {
             var info = errorInfo as ThreadPoolStateObject;
 
-            if (info != null && (info.MessageLevel <= mint_errorLevel && Error != null))
+            if (info != null && (info.MessageLevel <= m_errorLevel && Error != null))
             {
                 Error(info.MessageLevel, info.EventArgs as classErrorLoggerArgs);
             }
@@ -198,7 +198,7 @@ namespace LcmsNetDataClasses.Logging
         {
             var info = messageInfo as ThreadPoolStateObject;
 
-            if (info != null && (info.MessageLevel <= mint_messageLevel && Message != null))
+            if (info != null && (info.MessageLevel <= m_messageLevel && Message != null))
             {
                 Message(info.MessageLevel, info.EventArgs as classMessageLoggerArgs);
             }

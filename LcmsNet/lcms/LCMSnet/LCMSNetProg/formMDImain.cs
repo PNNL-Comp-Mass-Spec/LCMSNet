@@ -64,7 +64,7 @@ namespace LcmsNet
         private void Shutdown()
         {
             // Save fluidics designer config, if desired
-            mform_fluidicsDesign.SaveConfiguration();
+            m_fluidicsDesign.SaveConfiguration();
 
             // Cache the selected separation type
             classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE));
@@ -106,7 +106,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mform_fluidicsDesign_Status(object sender, classDeviceStatusEventArgs e)
+        void m_fluidicsDesign_Status(object sender, classDeviceStatusEventArgs e)
         {
             classApplicationLogger.LogMessage(0, e.Message);
         }
@@ -121,7 +121,7 @@ namespace LcmsNet
 
         #region Members
 
-        private FluidicsDesign mform_fluidicsDesign;
+        private FluidicsDesign m_fluidicsDesign;
 
         /// <summary>
         /// Method Scheduler and execution engine.
@@ -132,7 +132,7 @@ namespace LcmsNet
         /// Form that manages views of the sample queue class for handling sample
         /// ordering and running.
         /// </summary>
-        private formSampleManager mform_sampleManager;
+        private formSampleManager m_sampleManager;
 
         /// <summary>
         /// Object that manages operation of the samples.
@@ -142,37 +142,37 @@ namespace LcmsNet
         /// <summary>
         /// Form that displays the configuration of the columns.
         /// </summary>
-        private formSystemConfiguration mform_systemConfiguration;
+        private formSystemConfiguration m_systemConfiguration;
 
         /// <summary>
         /// Form that displays the messages from the different parts of the program.
         /// </summary>
-        private formMessageWindow mform_messages;
+        private formMessageWindow m_messages;
 
         /// <summary>
         /// Method editor form to construct new LC separations.
         /// </summary>
-        private formMethodEditor mform_methodEditor;
+        private formMethodEditor m_methodEditor;
 
         /// <summary>
         /// Displays progress of samples along each column.
         /// </summary>
-        private formColumnSampleProgress mform_sampleProgress;
+        private formColumnSampleProgress m_sampleProgress;
 
         /// <summary>
         /// Notifications form.
         /// </summary>
-        private formNotificationSystem mform_notifications;
+        private formNotificationSystem m_notifications;
 
         /// <summary>
         /// About box.
         /// </summary>
-        private formAbout mform_about;
+        private formAbout m_about;
 
         /// <summary>
         /// Display form for the pumps.
         /// </summary>
-        private LcmsNetDataClasses.Devices.Pumps.formPumpDisplays mform_displays;
+        private LcmsNetDataClasses.Devices.Pumps.formPumpDisplays m_displays;
 
         /// <summary>
         /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
@@ -184,9 +184,9 @@ namespace LcmsNet
         /// </summary>
         private readonly IPDF m_pdfGen = new PDFGen();
 
-        private formSimulatorCombined mform_simCombined;
-        private formSimConfiguration mform_simConfig;
-        private formSimulatorControlsAndCharts mform_simControlsAndCharts;
+        private formSimulatorCombined m_simCombined;
+        private formSimConfiguration m_simConfig;
+        private formSimulatorControlsAndCharts m_simControlsAndCharts;
 
         #endregion
 
@@ -217,26 +217,26 @@ namespace LcmsNet
             }
 
 
-            mform_systemConfiguration = new formSystemConfiguration();
-            mform_systemConfiguration.ColumnNames = classSQLiteTools.GetColumnList(false);
-            mform_systemConfiguration.Users = classSQLiteTools.GetUserList(false);
-            mform_systemConfiguration.ColumnNameChanged += new EventHandler(mform_systemConfiguration_ColumnNameChanged);
+            m_systemConfiguration = new formSystemConfiguration();
+            m_systemConfiguration.ColumnNames = classSQLiteTools.GetColumnList(false);
+            m_systemConfiguration.Users = classSQLiteTools.GetUserList(false);
+            m_systemConfiguration.ColumnNameChanged += new EventHandler(m_systemConfiguration_ColumnNameChanged);
             classSQLiteTools.GetSepTypeList(false);
 
             // Fludics Design display
-            mform_fluidicsDesign = new FluidicsDesign();
-            mform_fluidicsDesign.Icon = this.Icon;
-            mform_fluidicsDesign.Dock = DockStyle.Fill;
+            m_fluidicsDesign = new FluidicsDesign();
+            m_fluidicsDesign.Icon = this.Icon;
+            m_fluidicsDesign.Dock = DockStyle.Fill;
 
             // Notification System
-            mform_notifications = new formNotificationSystem(classDeviceManager.Manager);
-            mform_notifications.ActionRequired +=
-                new EventHandler<NotificationSetting>(mform_notifications_ActionRequired);
+            m_notifications = new formNotificationSystem(classDeviceManager.Manager);
+            m_notifications.ActionRequired +=
+                new EventHandler<NotificationSetting>(m_notifications_ActionRequired);
 
 
             // Construct the sample queue object that holds and manages sample data ordering
             mobj_sampleQueue = new classSampleQueue();
-            mform_sampleManager = new formSampleManager(mobj_sampleQueue);
+            m_sampleManager = new formSampleManager(mobj_sampleQueue);
 
             classDeviceManager.Manager.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
             classDeviceManager.Manager.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
@@ -244,14 +244,14 @@ namespace LcmsNet
             classDeviceManager.Manager.DevicesInitialized += new EventHandler(Manager_DevicesInitialized);
 
             // Displays the pump data.
-            mform_displays = new LcmsNetDataClasses.Devices.Pumps.formPumpDisplays();
-            mform_displays.Tack += new EventHandler(mform_displays_Tack);
-            mform_displays.UnTack += new EventHandler(mform_displays_UnTack);
-            mform_displays.Icon = Icon;
-            mform_displays.IsTacked = true;
+            m_displays = new LcmsNetDataClasses.Devices.Pumps.formPumpDisplays();
+            m_displays.Tack += new EventHandler(m_displays_Tack);
+            m_displays.UnTack += new EventHandler(m_displays_UnTack);
+            m_displays.Icon = Icon;
+            m_displays.IsTacked = true;
 
             classApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
-            mform_fluidicsDesign.LoadConfiguration();
+            m_fluidicsDesign.LoadConfiguration();
 
 
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
@@ -264,20 +264,20 @@ namespace LcmsNet
             //
             // Logging and messaging
             //
-            mform_messages = new formMessageWindow();
-            mform_messages.ErrorCleared += new EventHandler(mform_messages_ErrorCleared);
-            mform_messages.ErrorPresent += new EventHandler(mform_messages_ErrorPresent);
-            classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(mform_messages.ShowErrors);
+            m_messages = new formMessageWindow();
+            m_messages.ErrorCleared += new EventHandler(m_messages_ErrorCleared);
+            m_messages.ErrorPresent += new EventHandler(m_messages_ErrorPresent);
+            classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(m_messages.ShowErrors);
             classApplicationLogger.Error += new classApplicationLogger.DelegateErrorHandler(classApplicationLogger_Error);
             classApplicationLogger.Message +=
-                new classApplicationLogger.DelegateMessageHandler(mform_messages.ShowMessage);
+                new classApplicationLogger.DelegateMessageHandler(m_messages.ShowMessage);
             classApplicationLogger.Message +=
                 new classApplicationLogger.DelegateMessageHandler(classApplicationLogger_Message);
 
             // Method Editor
-            mform_methodEditor = new formMethodEditor();
-            mform_sampleProgress = new formColumnSampleProgress();
-            mform_sampleManager.Stop += new EventHandler(mform_sampleManager_Stop);
+            m_methodEditor = new formMethodEditor();
+            m_sampleProgress = new formColumnSampleProgress();
+            m_sampleManager.Stop += new EventHandler(m_sampleManager_Stop);
 
 
             // Get the most recently used separation type
@@ -307,13 +307,13 @@ namespace LcmsNet
             if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)) == true)
             {
                 //add simulator button to main form and add simulator forms.
-                mform_simCombined = new formSimulatorCombined();
-                mform_simCombined.Tack += mform_simCombined_Tack;
-                mform_simConfig = new formSimConfiguration();
-                mform_simControlsAndCharts = new formSimulatorControlsAndCharts();
-                AddForm(mform_simCombined);
-                AddForm(mform_simConfig);
-                AddForm(mform_simControlsAndCharts);
+                m_simCombined = new formSimulatorCombined();
+                m_simCombined.Tack += m_simCombined_Tack;
+                m_simConfig = new formSimConfiguration();
+                m_simControlsAndCharts = new formSimulatorControlsAndCharts();
+                AddForm(m_simCombined);
+                AddForm(m_simConfig);
+                AddForm(m_simControlsAndCharts);
             }
             else
             {
@@ -336,21 +336,21 @@ namespace LcmsNet
                 failedMethods.ShowDialog();
             }
 
-            AddForm(mform_fluidicsDesign);
-            mform_about = new formAbout
+            AddForm(m_fluidicsDesign);
+            m_about = new formAbout
             {
                 SoftwareCopyright = Program.SOFTWARE_COPYRIGHT,
                 SoftwareDevelopers = Program.SOFTWARE_DEVELOPERS
             };
 
-            AddForm(mform_displays);
-            AddForm(mform_about);
-            AddForm(mform_messages);
-            AddForm(mform_notifications);
-            AddForm(mform_methodEditor);
-            AddForm(mform_sampleProgress);
-            AddForm(mform_systemConfiguration);
-            AddForm(mform_sampleManager);
+            AddForm(m_displays);
+            AddForm(m_about);
+            AddForm(m_messages);
+            AddForm(m_notifications);
+            AddForm(m_methodEditor);
+            AddForm(m_sampleProgress);
+            AddForm(m_systemConfiguration);
+            AddForm(m_sampleManager);
 
             classApplicationLogger.LogMessage(0, "Loading Sample Queue...");
             Application.DoEvents();
@@ -385,12 +385,12 @@ namespace LcmsNet
             {
                 display.ShowDialog();
             }
-            mform_sampleProgress.PreviewAvailable +=
-                new EventHandler<SampleProgressPreviewArgs>(mform_sampleManager.PreviewAvailable);
-            mform_notifications.LoadNotificationFile();
+            m_sampleProgress.PreviewAvailable +=
+                new EventHandler<SampleProgressPreviewArgs>(m_sampleManager.PreviewAvailable);
+            m_notifications.LoadNotificationFile();
         }
 
-        void mform_systemConfiguration_ColumnNameChanged(object sender, EventArgs e)
+        void m_systemConfiguration_ColumnNameChanged(object sender, EventArgs e)
         {
             mobj_sampleQueue.UpdateAllSamples();
         }
@@ -402,7 +402,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mform_notifications_ActionRequired(object sender, NotificationSetting e)
+        void m_notifications_ActionRequired(object sender, NotificationSetting e)
         {
             if (InvokeRequired)
             {
@@ -494,12 +494,12 @@ namespace LcmsNet
 
         #endregion
 
-        void mform_messages_ErrorPresent(object sender, EventArgs e)
+        void m_messages_ErrorPresent(object sender, EventArgs e)
         {
             mtoolButton_showMessages.Image = global::LcmsNet.Properties.Resources.StatusMessagesError;
         }
 
-        void mform_messages_ErrorCleared(object sender, EventArgs e)
+        void m_messages_ErrorCleared(object sender, EventArgs e)
         {
             mtoolButton_showMessages.Image = global::LcmsNet.Properties.Resources.StatusMessages;
         }
@@ -509,7 +509,7 @@ namespace LcmsNet
             classApplicationLogger.LogMessage(0, "Device initialization complete.");
         }
 
-        void mform_simCombined_Tack(object sender, TackEventArgs e)
+        void m_simCombined_Tack(object sender, TackEventArgs e)
         {
             if (sender == SimControlsAndChartsControl.GetInstance)
             {
@@ -517,30 +517,30 @@ namespace LcmsNet
                 if (!e.Tacked && SimConfigControl.GetInstance.Tacked)
                 {
                     //show config in main window
-                    mform_simConfig.MdiParent = this;
-                    mform_simConfig.Hide();
-                    mform_simConfig.BringToFront();
-                    mform_simConfig.Show();
-                    mform_simControlsAndCharts.Show();
+                    m_simConfig.MdiParent = this;
+                    m_simConfig.Hide();
+                    m_simConfig.BringToFront();
+                    m_simConfig.Show();
+                    m_simControlsAndCharts.Show();
                 }
                 // charts and controls is tacked and config is already tacked.
                 else if (e.Tacked && SimConfigControl.GetInstance.Tacked)
                 {
-                    mform_simControlsAndCharts.MdiParent = this;
-                    mform_simCombined.Hide();
-                    mform_simCombined.Show();
-                    mform_simCombined.BringToFront();
+                    m_simControlsAndCharts.MdiParent = this;
+                    m_simCombined.Hide();
+                    m_simCombined.Show();
+                    m_simCombined.BringToFront();
                 }
                 //config was untacked, and untack of controls and charts requested
                 else if (!e.Tacked && !SimConfigControl.GetInstance.Tacked)
                 {
                     //tack config to main window
                     SimConfigControl.GetInstance.TackOnRequest();
-                    mform_simConfig.MdiParent = this;
-                    mform_simConfig.Hide();
-                    mform_simConfig.Show();
-                    mform_simControlsAndCharts.Show();
-                    mform_simConfig.BringToFront();
+                    m_simConfig.MdiParent = this;
+                    m_simConfig.Hide();
+                    m_simConfig.Show();
+                    m_simControlsAndCharts.Show();
+                    m_simConfig.BringToFront();
                 }
             }
             else if (sender == SimConfigControl.GetInstance)
@@ -549,29 +549,29 @@ namespace LcmsNet
                 if (!e.Tacked && SimControlsAndChartsControl.GetInstance.Tacked)
                 {
                     //show charts and controls in main window
-                    mform_simControlsAndCharts.MdiParent = this;
-                    mform_simControlsAndCharts.Hide();
-                    mform_simControlsAndCharts.BringToFront();
-                    mform_simControlsAndCharts.Show();
-                    mform_simConfig.Show();
+                    m_simControlsAndCharts.MdiParent = this;
+                    m_simControlsAndCharts.Hide();
+                    m_simControlsAndCharts.BringToFront();
+                    m_simControlsAndCharts.Show();
+                    m_simConfig.Show();
                 }
                 // config is tacked and charts and controls is already tacked
                 else if (e.Tacked && SimControlsAndChartsControl.GetInstance.Tacked)
                 {
-                    mform_simConfig.MdiParent = this;
-                    mform_simCombined.Show();
-                    mform_simCombined.BringToFront();
+                    m_simConfig.MdiParent = this;
+                    m_simCombined.Show();
+                    m_simCombined.BringToFront();
                 }
                 // config is untacked and charts and controls is already untacked
                 else if (!e.Tacked && !SimControlsAndChartsControl.GetInstance.Tacked)
                 {
                     // tack carts and controls to main window and show it
                     SimControlsAndChartsControl.GetInstance.TackOnRequest();
-                    mform_simControlsAndCharts.MdiParent = this;
-                    mform_simControlsAndCharts.Hide();
-                    mform_simControlsAndCharts.Show();
-                    mform_simConfig.Show();
-                    mform_simControlsAndCharts.BringToFront();
+                    m_simControlsAndCharts.MdiParent = this;
+                    m_simControlsAndCharts.Hide();
+                    m_simControlsAndCharts.Show();
+                    m_simConfig.Show();
+                    m_simControlsAndCharts.BringToFront();
                 }
             }
         }
@@ -589,14 +589,14 @@ namespace LcmsNet
             var sampler = device as IAutoSampler;
             if (sampler != null)
             {
-                sampler.TrayNames += new EventHandler<classAutoSampleEventArgs>(mform_sampleManager.AutoSamplerTrayList);
+                sampler.TrayNames += new EventHandler<classAutoSampleEventArgs>(m_sampleManager.AutoSamplerTrayList);
             }
 
             var network = device as INetworkStart;
             if (network != null)
             {
                 network.MethodNames +=
-                    new EventHandler<classNetworkStartEventArgs>(mform_sampleManager.InstrumentMethodList);
+                    new EventHandler<classNetworkStartEventArgs>(m_sampleManager.InstrumentMethodList);
             }
         }
 
@@ -610,13 +610,13 @@ namespace LcmsNet
             if (type.IsAssignableFrom(typeof (IAutoSampler)))
             {
                 var sampler = device as IAutoSampler;
-                sampler.TrayNames -= mform_sampleManager.AutoSamplerTrayList;
+                sampler.TrayNames -= m_sampleManager.AutoSamplerTrayList;
             }
 
             if (type.IsAssignableFrom(typeof (INetworkStart)))
             {
                 var network = device as INetworkStart;
-                network.MethodNames -= mform_sampleManager.InstrumentMethodList;
+                network.MethodNames -= m_sampleManager.InstrumentMethodList;
             }
         }
 
@@ -745,7 +745,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mform_sampleManager_Stop(object sender, EventArgs e)
+        void m_sampleManager_Stop(object sender, EventArgs e)
         {
             //
             // Tell the scheduler to stop running!
@@ -788,7 +788,7 @@ namespace LcmsNet
                     {
                         lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     }
-                    mform_sampleProgress.UpdateError(sample, lcEvent);
+                    m_sampleProgress.UpdateError(sample, lcEvent);
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message,
                         null, args.Sample);
                     isError = true;
@@ -797,11 +797,11 @@ namespace LcmsNet
                     lcMethod = sample.LCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Empty;
-                    mform_sampleProgress.UpdateError(sample, lcEvent);
+                    m_sampleProgress.UpdateError(sample, lcEvent);
                     isError = true;
                     break;
                 case enumSampleProgress.Complete:
-                    var configImage = mform_fluidicsDesign.GetImage();
+                    var configImage = m_fluidicsDesign.GetImage();
                     var docPath = string.Empty;
                     if (sample == null)
                     {
@@ -862,7 +862,7 @@ namespace LcmsNet
             // Update visual progress. -- Errors are already updated above.
             if (!isError && sample != null)
             {
-                mform_sampleProgress.UpdateSample(sample);
+                m_sampleProgress.UpdateSample(sample);
             }
         }
 
@@ -914,27 +914,27 @@ namespace LcmsNet
         private void ShowCartConfiguration()
         {
             var cartConfigNames = classSQLiteTools.GetCartConfigNameList(false);
-            mform_systemConfiguration.CartConfigNames = cartConfigNames;
+            m_systemConfiguration.CartConfigNames = cartConfigNames;
 
             var separationTypes = classSQLiteTools.GetSepTypeList(false);
-            mform_systemConfiguration.SeparationTypes = separationTypes;
+            m_systemConfiguration.SeparationTypes = separationTypes;
 
             var cartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
             if (!string.IsNullOrWhiteSpace(cartConfigName))
             {
-                mform_systemConfiguration.SetCartConfigName(cartConfigName);
+                m_systemConfiguration.SetCartConfigName(cartConfigName);
             }
 
             var separationType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE);
             if (string.IsNullOrWhiteSpace(separationType))
             {
-                mform_systemConfiguration.SetSeparationType("none");
+                m_systemConfiguration.SetSeparationType("none");
             }
             else
             {
-                mform_systemConfiguration.SetSeparationType(separationType);
+                m_systemConfiguration.SetSeparationType(separationType);
             }
-            mform_systemConfiguration.BringToFront();
+            m_systemConfiguration.BringToFront();
         }
 
         /// <summary>
@@ -942,8 +942,8 @@ namespace LcmsNet
         /// </summary>
         private void ShowMessagesWindow()
         {
-            mform_messages.Show();
-            mform_messages.BringToFront();
+            m_messages.Show();
+            m_messages.BringToFront();
         }
 
         /// <summary>
@@ -951,8 +951,8 @@ namespace LcmsNet
         /// </summary>
         private void ShowSampleQueue()
         {
-            mform_sampleManager.Show();
-            mform_sampleManager.BringToFront();
+            m_sampleManager.Show();
+            m_sampleManager.BringToFront();
         }
 
         /// <summary>
@@ -960,8 +960,8 @@ namespace LcmsNet
         /// </summary>
         private void ShowMethodEditor()
         {
-            mform_methodEditor.Show();
-            mform_methodEditor.BringToFront();
+            m_methodEditor.Show();
+            m_methodEditor.BringToFront();
         }
 
         /// <summary>
@@ -969,26 +969,26 @@ namespace LcmsNet
         /// </summary>
         private void ShowSampleProgress()
         {
-            mform_sampleProgress.Show();
-            mform_sampleProgress.BringToFront();
+            m_sampleProgress.Show();
+            m_sampleProgress.BringToFront();
         }
 
         private void ShowSimulator()
         {
             if (SimControlsAndChartsControl.GetInstance.Tacked && !SimConfigControl.GetInstance.Tacked)
             {
-                mform_simControlsAndCharts.BringToFront();
-                mform_simControlsAndCharts.Show();
+                m_simControlsAndCharts.BringToFront();
+                m_simControlsAndCharts.Show();
             }
             else if (!SimControlsAndChartsControl.GetInstance.Tacked && SimConfigControl.GetInstance.Tacked)
             {
-                mform_simConfig.BringToFront();
-                mform_simConfig.Show();
+                m_simConfig.BringToFront();
+                m_simConfig.Show();
             }
             else
             {
-                mform_simCombined.Show();
-                mform_simCombined.BringToFront();
+                m_simCombined.Show();
+                m_simCombined.BringToFront();
             }
         }
 
@@ -1065,32 +1065,32 @@ namespace LcmsNet
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            mform_about.BringToFront();
-            mform_about.Show();
+            m_about.BringToFront();
+            m_about.Show();
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            mform_displays.BringToFront();
-            mform_displays.Show();
+            m_displays.BringToFront();
+            m_displays.Show();
         }
 
-        void mform_displays_UnTack(object sender, EventArgs e)
+        void m_displays_UnTack(object sender, EventArgs e)
         {
-            mform_displays.MdiParent = null;
-            mform_displays.WindowState = FormWindowState.Normal;
+            m_displays.MdiParent = null;
+            m_displays.WindowState = FormWindowState.Normal;
         }
 
-        void mform_displays_Tack(object sender, EventArgs e)
+        void m_displays_Tack(object sender, EventArgs e)
         {
-            mform_displays.MdiParent = this;
-            mform_displays.WindowState = FormWindowState.Maximized;
+            m_displays.MdiParent = this;
+            m_displays.WindowState = FormWindowState.Maximized;
         }
 
         private void toolButton_notificationSystem_Click(object sender, EventArgs e)
         {
-            mform_notifications.BringToFront();
-            mform_notifications.Show();
+            m_notifications.BringToFront();
+            m_notifications.Show();
         }
 
         private void mbutton_reportError_Click(object sender, EventArgs e)
@@ -1101,13 +1101,13 @@ namespace LcmsNet
 
             forms.AddRange(new Form[]
             {
-                mform_about,
-                mform_displays,
-                mform_messages,
-                mform_methodEditor,
-                mform_notifications,
-                mform_sampleProgress,
-                mform_sampleManager
+                m_about,
+                m_displays,
+                m_messages,
+                m_methodEditor,
+                m_notifications,
+                m_sampleProgress,
+                m_sampleManager
             });
 
 
@@ -1123,15 +1123,15 @@ namespace LcmsNet
 
         private void toolStripButtonFludics_Click(object sender, EventArgs e)
         {
-            mform_fluidicsDesign.BringToFront();
-            mform_fluidicsDesign.Show();
+            m_fluidicsDesign.BringToFront();
+            m_fluidicsDesign.Show();
         }
 
 
         private void toolStripButtonAbout_Click(object sender, EventArgs e)
         {
-            mform_about.BringToFront();
-            mform_about.Show();
+            m_about.BringToFront();
+            m_about.Show();
         }
 
         private void toolStripButtonSimulate_Click(object sender, EventArgs e)

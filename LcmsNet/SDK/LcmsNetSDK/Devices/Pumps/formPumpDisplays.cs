@@ -19,9 +19,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <summary>
         /// Dictionary to 
         /// </summary>
-        readonly Dictionary<IPump, controlPumpDisplay> mdict_controlList;
+        readonly Dictionary<IPump, controlPumpDisplay> m_controlList;
 
-        private readonly Dictionary<IPump, GroupBox> mdict_mobilePhases;
+        private readonly Dictionary<IPump, GroupBox> m_mobilePhases;
 
         private int m_pointer;
 
@@ -29,9 +29,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
         public formPumpDisplays()
         {
             InitializeComponent();
-            mdict_mobilePhases = new Dictionary<IPump, GroupBox>();
+            m_mobilePhases = new Dictionary<IPump, GroupBox>();
             m_pumps = new List<IPump>();
-            mdict_controlList = new Dictionary<IPump, controlPumpDisplay>();
+            m_controlList = new Dictionary<IPump, controlPumpDisplay>();
             DeviceManagerBridge.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
             DeviceManagerBridge.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
             FormClosing += new FormClosingEventHandler(formPumpDisplays_FormClosing);
@@ -158,7 +158,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         {
             var pump = m_pumps[m_pointer];
 
-            var box = mdict_mobilePhases[pump];
+            var box = m_mobilePhases[pump];
             box.Focus();
             box.Select();
 
@@ -181,20 +181,20 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 return;
 
             // Make sure we have the pump            
-            if (mdict_controlList.ContainsKey(pump) == false)
+            if (m_controlList.ContainsKey(pump) == false)
                 return;
 
             // If it's a pump and we have it we are safe to remove it from the list of controls 
             // and the mapping dictionary.                    
-            mpanel_pumps.Controls.Remove(mdict_controlList[pump]);
-            mdict_controlList.Remove(pump);
+            mpanel_pumps.Controls.Remove(m_controlList[pump]);
+            m_controlList.Remove(pump);
 
-            if (mdict_mobilePhases.ContainsKey(pump))
+            if (m_mobilePhases.ContainsKey(pump))
             {
-                var box = mdict_mobilePhases[pump];
+                var box = m_mobilePhases[pump];
                 mpanel_mobilePhase.Controls.Remove(box);
 
-                mdict_mobilePhases.Remove(pump);
+                m_mobilePhases.Remove(pump);
             }
 
             if (m_pumps.Contains(pump))
@@ -214,10 +214,10 @@ namespace LcmsNetDataClasses.Devices.Pumps
             if (pump == null)
                 return;
 
-            if (mdict_controlList.ContainsKey(pump) == false)
+            if (m_controlList.ContainsKey(pump) == false)
                 return;
 
-            mdict_controlList[pump].SetPumpName(pump.Name);
+            m_controlList[pump].SetPumpName(pump.Name);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 return;
 
             // Make sure we have a reference to the pump
-            if (mdict_controlList.ContainsKey(pump))
+            if (m_controlList.ContainsKey(pump))
                 return;
 
             // Hook into the pumps display calls            
@@ -246,7 +246,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             display.UnTack += new EventHandler(display_UnTack);
 
             // Make sure we reference this pump 
-            mdict_controlList.Add(pump, display);
+            m_controlList.Add(pump, display);
             mpanel_pumps.Controls.Add(display);
 
 
@@ -271,7 +271,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 box.Size = new System.Drawing.Size(box.Width, height);
                 box.Dock = DockStyle.Top;
                 mpanel_mobilePhase.Controls.Add(box);
-                mdict_mobilePhases.Add(pump, box);
+                m_mobilePhases.Add(pump, box);
 
 
                 m_pumps.Add(pump);
@@ -308,7 +308,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<PumpDataEventArgs>(mdict_controlList[e.Pump].DisplayMonitoringData),
+                BeginInvoke(new EventHandler<PumpDataEventArgs>(m_controlList[e.Pump].DisplayMonitoringData),
                     new object[]
                     {
                         sender, e
@@ -317,7 +317,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
             }
             else
             {
-                mdict_controlList[e.Pump].DisplayMonitoringData(sender, e);
+                m_controlList[e.Pump].DisplayMonitoringData(sender, e);
             }
         }
 

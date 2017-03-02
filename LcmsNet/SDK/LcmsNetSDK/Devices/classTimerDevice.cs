@@ -17,7 +17,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public classTimerDevice()
         {
-            mstring_name = "Timer";
+            m_name = "Timer";
             menum_status = enumDeviceStatus.NotInitialized;
         }
 
@@ -64,7 +64,7 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         public override string ToString()
         {
-            return mstring_name;
+            return m_name;
         }
 
         #region Members
@@ -72,7 +72,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Name of the device.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
 
         /// <summary>
         /// Status of the device currently.
@@ -127,8 +127,8 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public string Name
         {
-            get { return mstring_name; }
-            set { mstring_name = value; }
+            get { return m_name; }
+            set { m_name = value; }
         }
 
         /// <summary>

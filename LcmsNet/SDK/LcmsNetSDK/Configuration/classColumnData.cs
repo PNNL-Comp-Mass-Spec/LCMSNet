@@ -20,11 +20,11 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public classColumnData()
         {
-            mstring_name = "";
-            mint_columnIndex = 0;
-            mint_systemIndex = 0;
+            m_name = "";
+            m_columnIndex = 0;
+            m_systemIndex = 0;
             menum_status = enumColumnStatus.Idle;
-            mbool_first = false;
+            m_first = false;
         }
 
         #endregion
@@ -57,17 +57,17 @@ namespace LcmsNetDataClasses.Configuration
         /// <summary>
         /// Index of the column.
         /// </summary>
-        private int mint_columnIndex;
+        private int m_columnIndex;
 
         /// <summary>
         /// Name of the column
         /// </summary>
-        private string mstring_name;
+        private string m_name;
 
         /// <summary>
         /// System index of the column.
         /// </summary>
-        private int mint_systemIndex;
+        private int m_systemIndex;
 
         /// <summary>
         /// Status of the column
@@ -106,7 +106,7 @@ namespace LcmsNetDataClasses.Configuration
         /// <summary>
         /// Flag indicating if this is the first column to run.
         /// </summary>
-        private bool mbool_first;
+        private bool m_first;
 
         #endregion
 
@@ -117,10 +117,10 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public bool First
         {
-            get { return mbool_first; }
+            get { return m_first; }
             set
             {
-                mbool_first = value;
+                m_first = value;
                 if (FirstChanged != null)
                 {
                     FirstChanged(this, value);
@@ -156,8 +156,8 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public int ID
         {
-            get { return mint_columnIndex; }
-            set { mint_columnIndex = value; }
+            get { return m_columnIndex; }
+            set { m_columnIndex = value; }
         }
 
         /// <summary>
@@ -165,8 +165,8 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public int SystemID
         {
-            get { return mint_systemIndex; }
-            set { mint_systemIndex = value; }
+            get { return m_systemIndex; }
+            set { m_systemIndex = value; }
         }
 
         /// <summary>
@@ -174,17 +174,17 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public string Name
         {
-            get { return mstring_name; }
+            get { return m_name; }
             set
             {
-                if (value != mstring_name)
+                if (value != m_name)
                 {
-                    var oldName = mstring_name;
+                    var oldName = m_name;
 
-                    mstring_name = value;
+                    m_name = value;
                     if (NameChanged != null)
                     {
-                        NameChanged(this, mstring_name, oldName);
+                        NameChanged(this, m_name, oldName);
                     }
                 }
             }

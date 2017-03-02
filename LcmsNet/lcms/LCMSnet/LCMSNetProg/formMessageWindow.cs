@@ -12,8 +12,8 @@ namespace LcmsNet
     {
         public delegate void DelegateShowErrors(int level, classErrorLoggerArgs args);
 
-        bool mbool_errorLabelSelected = false;
-        bool mbool_messageLabelSelected = false;
+        bool m_errorLabelSelected = false;
+        bool m_messageLabelSelected = false;
 
         /// <summary>
         /// Constructor.
@@ -21,8 +21,8 @@ namespace LcmsNet
         public formMessageWindow()
         {
             InitializeComponent();
-            mint_messageLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
-            mint_errorLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
+            m_messageLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
+            m_errorLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
             mobj_lockMessages = new object();
             mobj_lockErrors = new object();
             SelectErrorTab();
@@ -58,7 +58,7 @@ namespace LcmsNet
         /// <param name="message">Message to show user.</param>
         public void ShowMessage(int level, classMessageLoggerArgs message)
         {
-            if (level <= mint_messageLevel && message != null)
+            if (level <= m_messageLevel && message != null)
             {
                 InsertMessage(FormatMessage(message.Message));
                 //mlistBox_messages.Items.Insert(0, FormatMessage(message.Message));
@@ -89,7 +89,7 @@ namespace LcmsNet
 
         private void ShowErrorsDelegated(int level, classErrorLoggerArgs args)
         {
-            if (level <= mint_errorLevel && args != null)
+            if (level <= m_errorLevel && args != null)
             {
                 if (ErrorPresent != null)
                 {
@@ -171,8 +171,8 @@ namespace LcmsNet
             //mlabel_messages.BackColor           = System.Drawing.Color.LightGray;
             mlabel_messages.ForeColor = System.Drawing.Color.Gray;
             mpanel_messageIndicator.BackColor = System.Drawing.Color.White;
-            mbool_errorLabelSelected = true;
-            mbool_messageLabelSelected = false;
+            m_errorLabelSelected = true;
+            m_messageLabelSelected = false;
         }
 
         private void SelectMessageTab()
@@ -185,14 +185,14 @@ namespace LcmsNet
             //mlabel_messages.BackColor           = System.Drawing.Color.White;
             mlabel_messages.ForeColor = System.Drawing.Color.Black;
             mpanel_messageIndicator.BackColor = System.Drawing.Color.DarkGray;
-            mbool_messageLabelSelected = true;
-            mbool_errorLabelSelected = false;
+            m_messageLabelSelected = true;
+            m_errorLabelSelected = false;
         }
 
 
         private void mlabel_errors_MouseLeave(object sender, EventArgs e)
         {
-            if (!mbool_errorLabelSelected)
+            if (!m_errorLabelSelected)
             {
                 mlabel_errors.ForeColor = System.Drawing.Color.Gray;
                 mpanel_errorIndicator.BackColor = System.Drawing.Color.White;
@@ -201,7 +201,7 @@ namespace LcmsNet
 
         private void mlabel_errors_MouseEnter(object sender, EventArgs e)
         {
-            if (!mbool_errorLabelSelected)
+            if (!m_errorLabelSelected)
             {
                 mlabel_errors.ForeColor = System.Drawing.Color.LightGray;
                 mpanel_errorIndicator.BackColor = System.Drawing.Color.DarkGray;
@@ -210,7 +210,7 @@ namespace LcmsNet
 
         private void mlabel_messages_MouseLeave(object sender, EventArgs e)
         {
-            if (!mbool_messageLabelSelected)
+            if (!m_messageLabelSelected)
             {
                 mlabel_messages.ForeColor = System.Drawing.Color.Gray;
                 mpanel_messageIndicator.BackColor = System.Drawing.Color.White;
@@ -219,7 +219,7 @@ namespace LcmsNet
 
         private void mlabel_messages_MouseEnter(object sender, EventArgs e)
         {
-            if (!mbool_messageLabelSelected)
+            if (!m_messageLabelSelected)
             {
                 mlabel_messages.ForeColor = System.Drawing.Color.LightGray;
                 mpanel_messageIndicator.BackColor = System.Drawing.Color.DarkGray;
@@ -241,12 +241,12 @@ namespace LcmsNet
         /// <summary>
         /// Level of messages to show.  Messages greater than are ignored.
         /// </summary>
-        private int mint_messageLevel;
+        private int m_messageLevel;
 
         /// <summary>
         /// Level of errors to show.  Errors greater than are ignored.
         /// </summary>
-        private int mint_errorLevel;
+        private int m_errorLevel;
 
         private object mobj_lockMessages;
         private object mobj_lockErrors;
@@ -260,8 +260,8 @@ namespace LcmsNet
         /// </summary>
         public int MessageLevel
         {
-            get { return mint_messageLevel; }
-            set { mint_messageLevel = value; }
+            get { return m_messageLevel; }
+            set { m_messageLevel = value; }
         }
 
         /// <summary>
@@ -269,8 +269,8 @@ namespace LcmsNet
         /// </summary>
         public int ErrorLevel
         {
-            get { return mint_errorLevel; }
-            set { mint_errorLevel = value; }
+            get { return m_errorLevel; }
+            set { m_errorLevel = value; }
         }
 
         #endregion

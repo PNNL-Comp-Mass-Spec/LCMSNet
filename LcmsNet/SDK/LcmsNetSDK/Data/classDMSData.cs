@@ -28,7 +28,7 @@ namespace LcmsNetDataClasses
         // Class file for handling data used in communication with DMS
         //**********************************************************************************************************
 
-        private string mstring_requestName;
+        private string m_requestName;
 
         public classDMSData()
         {
@@ -63,10 +63,10 @@ namespace LcmsNetDataClasses
         /// </summary>
         public string RequestName
         {
-            get { return mstring_requestName; }
+            get { return m_requestName; }
             set
             {
-                mstring_requestName = value;
+                m_requestName = value;
                 if (string.IsNullOrEmpty(DatasetName))
                     DatasetName = value;
             }

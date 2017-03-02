@@ -293,7 +293,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Operator performing LC run
         /// </summary>
-        private string mstring_Operator = "";
+        private string m_Operator = "";
 
         #endregion
 
@@ -424,8 +424,8 @@ namespace LcmsNetDataClasses
 
         public string Operator
         {
-            get { return mstring_Operator; }
-            set { mstring_Operator = value; }
+            get { return m_Operator; }
+            set { m_Operator = value; }
         }
 
         #endregion

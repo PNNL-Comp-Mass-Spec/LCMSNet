@@ -68,11 +68,11 @@ namespace LcmsNet.SampleQueue
         private long GenerateUniqueID()
         {
             // Get the largest unique ID in the set.
-            var count = mlist_uniqueID.Count;
+            var count = m_uniqueID.Count;
             long uniqueID = 1;
             if (count > 0)
-                uniqueID = mlist_uniqueID[count - 1] + 1;
-            mlist_uniqueID.Add(uniqueID);
+                uniqueID = m_uniqueID[count - 1] + 1;
+            m_uniqueID.Add(uniqueID);
             return uniqueID;
         }
 
@@ -142,57 +142,57 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Running count of the sequence index to use when running samples.
         /// </summary>
-        private int mint_sequenceIndex;
+        private int m_sequenceIndex;
 
         /// <summary>
         /// Index of next available sample in the running queue.
         /// </summary>
-        private int mint_nextAvailableSample;
+        private int m_nextAvailableSample;
 
         /// <summary>
         /// Index count of samples
         /// </summary>
-        private int mint_sampleIndex;
+        private int m_sampleIndex;
 
         /// <summary>
         /// Name of samples that are added through distribution across columns.
         /// </summary>
-        private string mstring_integrateName;
+        private string m_integrateName;
 
         /// <summary>
         /// List of columns that are enabled or disabled.
         /// </summary>
-        //private List<classColumnData> mlist_columnOrders;
+        //private List<classColumnData> m_columnOrders;
         /// <summary>
         /// Queue of sample data to be run.  Index 0 should be the next sample to run.
         /// </summary>
-        private List<classSampleData> mlist_waitingQueue;
+        private List<classSampleData> m_waitingQueue;
 
         /// <summary>
         /// Queue of samples that have already ran.  Index 0 being the oldest run sample. Index N (size of queue
         /// being the most recently run sample).
         /// </summary>
-        private List<classSampleData> mlist_completeQueue;
+        private List<classSampleData> m_completeQueue;
 
         /// <summary>
         /// List of samples that are currently running.
         /// </summary>
-        private List<classSampleData> mlist_runningQueue;
+        private List<classSampleData> m_runningQueue;
 
         /// <summary>
         /// List of unique ID's used in the sample queue.
         /// </summary>
-        private List<long> mlist_uniqueID;
+        private List<long> m_uniqueID;
 
         /// <summary>
         /// Flag indicating whether to re-set the column data when a queue operation is performed.
         /// </summary>
-        private bool mbool_resetColumns;
+        private bool m_resetColumns;
 
         /// <summary>
         /// Default name of the sample to add when distributing across columns.
         /// </summary>
-        private string mstring_defaultSampleName;
+        private string m_defaultSampleName;
 
         /// <summary>
         /// Stack of waiting queues for undo operations.
@@ -207,14 +207,14 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         ///
         /// </summary>
-        private List<classColumnData> mlist_columnOrders;
+        private List<classColumnData> m_columnOrders;
 
         /// <summary>
         /// Flag indicating whether the samples were started explicitly by the caller.
         /// If false the queries for next samples will return null indicating no samples can be started.
         /// If true, and samples finish or are cancelled (i.e. errors) then the flag will reset to false.
         /// </summary>
-        private bool mbool_startedSamples;
+        private bool m_startedSamples;
 
         #endregion
 
@@ -279,17 +279,17 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public classSampleQueue()
         {
-            mlist_completeQueue = new List<classSampleData>();
-            mlist_waitingQueue = new List<classSampleData>();
-            mlist_runningQueue = new List<classSampleData>();
-            mlist_uniqueID = new List<long>();
+            m_completeQueue = new List<classSampleData>();
+            m_waitingQueue = new List<classSampleData>();
+            m_runningQueue = new List<classSampleData>();
+            m_uniqueID = new List<long>();
 
-            mstring_defaultSampleName = CONST_DEFAULT_SAMPLENAME;
-            mstring_integrateName = CONST_DEFAULT_INTEGRATE_SAMPLENAME;
-            mbool_resetColumns = true;
-            mint_sampleIndex = 1;
+            m_defaultSampleName = CONST_DEFAULT_SAMPLENAME;
+            m_integrateName = CONST_DEFAULT_INTEGRATE_SAMPLENAME;
+            m_resetColumns = true;
+            m_sampleIndex = 1;
             mobj_sampleWaitingEvent = new AutoResetEvent(false);
-            mlist_columnOrders = new List<classColumnData>();
+            m_columnOrders = new List<classColumnData>();
 
             // Undo - redo operations
             mstack_undoBackWaitingQueue = new Stack<List<classSampleData>>();
@@ -297,10 +297,10 @@ namespace LcmsNet.SampleQueue
 
 
             // Pointer to the next available sample that is queued for running.
-            mint_nextAvailableSample = 0;
+            m_nextAvailableSample = 0;
 
             // Tracks what is the current sequence number that has been run previously.
-            mint_sequenceIndex = 1;
+            m_sequenceIndex = 1;
 
 
             UpdateColumnList();
@@ -320,8 +320,8 @@ namespace LcmsNet.SampleQueue
 
         private void UpdateColumnList()
         {
-            mlist_columnOrders.Clear();
-            mlist_columnOrders = classCartConfiguration.BuildColumnList(true);
+            m_columnOrders.Clear();
+            m_columnOrders = classCartConfiguration.BuildColumnList(true);
         }
 
         #endregion
@@ -338,7 +338,7 @@ namespace LcmsNet.SampleQueue
                 //
                 // Make sure that we have enough columns to add data on.
                 //
-                if (mlist_columnOrders.Count < 1)
+                if (m_columnOrders.Count < 1)
                     return null;
 
 
@@ -352,26 +352,26 @@ namespace LcmsNet.SampleQueue
                 // if the waiting queue is empty. that means no samples are queued
                 // TODO:  Add to see what the last sample in the running or complete queue is
                 //
-                if (mlist_waitingQueue.Count > 0)
+                if (m_waitingQueue.Count > 0)
                 {
-                    var data = mlist_waitingQueue[mlist_waitingQueue.Count - 1];
-                    index = mlist_columnOrders.IndexOf(data.ColumnData);
+                    var data = m_waitingQueue[m_waitingQueue.Count - 1];
+                    index = m_columnOrders.IndexOf(data.ColumnData);
                 }
                 else
                 {
-                    if (mlist_runningQueue.Count > 0)
+                    if (m_runningQueue.Count > 0)
                     {
-                        index = mlist_columnOrders.IndexOf(mlist_runningQueue[mlist_runningQueue.Count - 1].ColumnData);
+                        index = m_columnOrders.IndexOf(m_runningQueue[m_runningQueue.Count - 1].ColumnData);
                     }
-                    else if (mlist_completeQueue.Count > 0)
+                    else if (m_completeQueue.Count > 0)
                     {
-                        index = mlist_columnOrders.IndexOf(mlist_completeQueue[mlist_completeQueue.Count - 1].ColumnData);
+                        index = m_columnOrders.IndexOf(m_completeQueue[m_completeQueue.Count - 1].ColumnData);
                     }
                 }
                 //
                 // Then return the column data available at the end of queue
                 //
-                return mlist_columnOrders[(index + 1) % mlist_columnOrders.Count];
+                return m_columnOrders[(index + 1) % m_columnOrders.Count];
             }
         }
 
@@ -380,7 +380,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public string UnusedSampleName
         {
-            get { return mstring_integrateName; }
+            get { return m_integrateName; }
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public List<classColumnData> ColumnOrder
         {
-            get { return mlist_columnOrders; }
+            get { return m_columnOrders; }
         }
 
         /// <summary>
@@ -396,8 +396,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public bool AutoColumnData
         {
-            get { return mbool_resetColumns; }
-            set { mbool_resetColumns = value; }
+            get { return m_resetColumns; }
+            set { m_resetColumns = value; }
         }
 
         /// <summary>
@@ -405,8 +405,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public string DefaultSampleName
         {
-            get { return mstring_defaultSampleName; }
-            set { mstring_defaultSampleName = value; }
+            get { return m_defaultSampleName; }
+            set { m_defaultSampleName = value; }
         }
 
         /// <summary>
@@ -415,8 +415,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public int RunningSampleIndex
         {
-            get { return mint_sampleIndex; }
-            set { mint_sampleIndex = value; }
+            get { return m_sampleIndex; }
+            set { m_sampleIndex = value; }
         }
 
         /// <summary>
@@ -440,9 +440,9 @@ namespace LcmsNet.SampleQueue
             //
             // Find the first sample that has an unused name
             //
-            foreach (var sample in mlist_waitingQueue)
+            foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == mstring_integrateName)
+                if (sample.DmsData.DatasetName == m_integrateName)
                 {
                     return true;
                 }
@@ -461,9 +461,9 @@ namespace LcmsNet.SampleQueue
             //
             // Find the first sample that has an unused name
             //
-            foreach (var sample in mlist_waitingQueue)
+            foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == mstring_integrateName && column.ID == sample.ColumnData.ID)
+                if (sample.DmsData.DatasetName == m_integrateName && column.ID == sample.ColumnData.ID)
                 {
                     return true;
                 }
@@ -484,21 +484,21 @@ namespace LcmsNet.SampleQueue
             //
             // Search all of the queues and add any instance of a copy
             //
-            lock (mlist_waitingQueue)
+            lock (m_waitingQueue)
             {
-                foreach (var data in mlist_waitingQueue)
+                foreach (var data in m_waitingQueue)
                     if (data.DmsData.DatasetName == sampleName)
                         samples.Add(data);
             }
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                foreach (var data in mlist_runningQueue)
+                foreach (var data in m_runningQueue)
                     if (data.DmsData.DatasetName == sampleName)
                         samples.Add(data);
             }
-            lock (mlist_completeQueue)
+            lock (m_completeQueue)
             {
-                foreach (var data in mlist_completeQueue)
+                foreach (var data in m_completeQueue)
                     if (data.DmsData.DatasetName == sampleName)
                         samples.Add(data);
             }
@@ -514,21 +514,21 @@ namespace LcmsNet.SampleQueue
         /// contains the unique ID provided.</returns>
         public classSampleData FindSample(long uniqueID)
         {
-            lock (mlist_completeQueue)
+            lock (m_completeQueue)
             {
-                foreach (var sample in mlist_completeQueue)
+                foreach (var sample in m_completeQueue)
                     if (sample.UniqueID == uniqueID)
                         return sample;
             }
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                foreach (var sample in mlist_runningQueue)
+                foreach (var sample in m_runningQueue)
                     if (sample.UniqueID == uniqueID)
                         return sample;
             }
-            lock (mlist_waitingQueue)
+            lock (m_waitingQueue)
             {
-                foreach (var sample in mlist_waitingQueue)
+                foreach (var sample in m_waitingQueue)
                     if (sample.UniqueID == uniqueID)
                         return sample;
             }
@@ -559,7 +559,7 @@ namespace LcmsNet.SampleQueue
             var unusedSamples = new List<classSampleData>();
             foreach (var sample in queue)
             {
-                if (sample.DmsData.DatasetName == mstring_integrateName)
+                if (sample.DmsData.DatasetName == m_integrateName)
                 {
                     unusedSamples.Add(sample);
                 }
@@ -578,7 +578,7 @@ namespace LcmsNet.SampleQueue
             var unusedSamples = new List<classSampleData>();
             foreach (var sample in queue)
             {
-                if (sample.DmsData.DatasetName == mstring_integrateName && sample.ColumnData == column)
+                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnData == column)
                 {
                     unusedSamples.Add(sample);
                 }
@@ -595,18 +595,18 @@ namespace LcmsNet.SampleQueue
         {
             classSampleData data = null;
 
-            if (mlist_waitingQueue.Count > 0)
+            if (m_waitingQueue.Count > 0)
             {
                 //
                 // Remove from the run queue
                 //
-                data = mlist_waitingQueue[0];
-                mlist_waitingQueue.RemoveAt(0);
+                data = m_waitingQueue[0];
+                m_waitingQueue.RemoveAt(0);
 
                 //
                 // Put the data on the queue.
                 //
-                mlist_runningQueue.Add(data);
+                m_runningQueue.Add(data);
             }
             return data;
         }
@@ -627,7 +627,7 @@ namespace LcmsNet.SampleQueue
             //
             var sampleHistogram =
                 new Dictionary<classColumnData, List<classSampleData>>();
-            foreach (var col in mlist_columnOrders)
+            foreach (var col in m_columnOrders)
             {
                 sampleHistogram.Add(col, new List<classSampleData>());
             }
@@ -701,8 +701,8 @@ namespace LcmsNet.SampleQueue
                     //
                     // We make the request an "Unused sample"
                     //
-                    sample.DmsData.RequestName = mstring_integrateName;
-                    sample.DmsData.DatasetName = mstring_integrateName;
+                    sample.DmsData.RequestName = m_integrateName;
+                    sample.DmsData.DatasetName = m_integrateName;
                     sample.DmsData.Block = 0; // It's an unused sample. so dont copy this information.
                     sample.DmsData.Batch = 0;
                     sample.ColumnData = col;
@@ -715,7 +715,7 @@ namespace LcmsNet.SampleQueue
             // Here we reconstruct the waiting queue.  We use the column orders list (tells us
             // what column is the first one to use) to add samples in order.
             //
-            var firstList = histogram[mlist_columnOrders[0]];
+            var firstList = histogram[m_columnOrders[0]];
             for (var i = 0; i < firstList.Count; i++)
             {
                 var firstSample = firstList[i];
@@ -724,9 +724,9 @@ namespace LcmsNet.SampleQueue
                 //
                 // Now add each sample found on another column
                 //
-                for (var j = 1; j < mlist_columnOrders.Count; j++)
+                for (var j = 1; j < m_columnOrders.Count; j++)
                 {
-                    var col = mlist_columnOrders[j];
+                    var col = m_columnOrders[j];
                     var sample = histogram[col][i];
                     queue.Add(sample);
                 }
@@ -742,7 +742,7 @@ namespace LcmsNet.SampleQueue
             //
             // Remove excess items from the end of the list.
             //
-            while (queue.Count > 0 && queue[queue.Count - 1].DmsData.DatasetName == mstring_integrateName)
+            while (queue.Count > 0 && queue[queue.Count - 1].DmsData.DatasetName == m_integrateName)
                 queue.RemoveAt(queue.Count - 1);
         }
 
@@ -754,17 +754,17 @@ namespace LcmsNet.SampleQueue
             if (queue.Count > 0)
             {
                 long sequence = 0;
-                foreach (var sample in mlist_completeQueue)
+                foreach (var sample in m_completeQueue)
                 {
                     sequence = Math.Max(sample.SequenceID, sequence);
                 }
-                foreach (var sample in mlist_runningQueue)
+                foreach (var sample in m_runningQueue)
                 {
                     sequence = Math.Max(sample.SequenceID, sequence);
                 }
                 sequence++;
 
-                mint_sequenceIndex = Convert.ToInt32(sequence);
+                m_sequenceIndex = Convert.ToInt32(sequence);
 
                 ResequenceQueuedSamples(queue, sequence);
             }
@@ -780,7 +780,7 @@ namespace LcmsNet.SampleQueue
             {
                 data.SequenceID = startSequence++;
             }
-            mint_sequenceIndex = Convert.ToInt32(startSequence);
+            m_sequenceIndex = Convert.ToInt32(startSequence);
         }
 
         #endregion
@@ -879,11 +879,11 @@ namespace LcmsNet.SampleQueue
                 //
                 // Save the current waiting queue onto the forward stack, thus saving it for a redo
                 //
-                PushQueue(mstack_undoForwardWaitingQueue, null, mlist_waitingQueue);
+                PushQueue(mstack_undoForwardWaitingQueue, null, m_waitingQueue);
 
                 // Transfer the new queue to our waiting queue.
-                mlist_waitingQueue.Clear();
-                mlist_waitingQueue = queue;
+                m_waitingQueue.Clear();
+                m_waitingQueue = queue;
                 //ResetColumnData();
 
                 if (SamplesAdded != null)
@@ -908,10 +908,10 @@ namespace LcmsNet.SampleQueue
                 //
                 // Push the current queue onto the back stack, thus saving our waiting queue.
                 //
-                PushQueue(mstack_undoBackWaitingQueue, null, mlist_waitingQueue);
+                PushQueue(mstack_undoBackWaitingQueue, null, m_waitingQueue);
 
-                mlist_waitingQueue.Clear();
-                mlist_waitingQueue = queue;
+                m_waitingQueue.Clear();
+                m_waitingQueue = queue;
                 //ResetColumnData();
 
                 if (SamplesAdded != null)
@@ -931,7 +931,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="samples"></param>
         public void InsertIntoUnusedSamples(List<classSampleData> samples, enumColumnDataHandling handling)
         {
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
             //
             // Overwrite all of the samples that are unused first.
             //
@@ -939,15 +939,15 @@ namespace LcmsNet.SampleQueue
             // than the number of provided ones.
             //
             var i = 0;
-            while (i < mlist_waitingQueue.Count && samples.Count > 0)
+            while (i < m_waitingQueue.Count && samples.Count > 0)
             {
-                var unusedSample = mlist_waitingQueue[i];
-                if (unusedSample.DmsData.DatasetName.Contains(mstring_integrateName))
+                var unusedSample = m_waitingQueue[i];
+                if (unusedSample.DmsData.DatasetName.Contains(m_integrateName))
                 {
                     var sample = samples[0];
                     samples.RemoveAt(0);
-                    mlist_waitingQueue[i] = sample;
-                    mlist_waitingQueue[i].UniqueID = GenerateUniqueID();
+                    m_waitingQueue[i] = sample;
+                    m_waitingQueue[i].UniqueID = GenerateUniqueID();
                 }
                 i++;
             }
@@ -968,7 +968,7 @@ namespace LcmsNet.SampleQueue
                 //
                 // Always re-sequence, and notify
                 //
-                ResequenceQueuedSamples(mlist_waitingQueue);
+                ResequenceQueuedSamples(m_waitingQueue);
 
                 if (handling == enumColumnDataHandling.Resort)
                 {
@@ -989,7 +989,7 @@ namespace LcmsNet.SampleQueue
         public void InsertIntoUnusedSamples(List<classSampleData> samples, classColumnData column,
             enumColumnDataHandling handling)
         {
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // Overwrite all of the samples that are unused first.
@@ -998,16 +998,16 @@ namespace LcmsNet.SampleQueue
             // than the number of provided ones.
             //
             var i = 0;
-            while (i < mlist_waitingQueue.Count && samples.Count > 0)
+            while (i < m_waitingQueue.Count && samples.Count > 0)
             {
-                var unusedSample = mlist_waitingQueue[i];
-                if (unusedSample.DmsData.DatasetName.Contains(mstring_integrateName) &&
+                var unusedSample = m_waitingQueue[i];
+                if (unusedSample.DmsData.DatasetName.Contains(m_integrateName) &&
                     unusedSample.ColumnData == column)
                 {
                     var sample = samples[0];
                     samples.RemoveAt(0);
-                    mlist_waitingQueue[i] = sample;
-                    mlist_waitingQueue[i].UniqueID = GenerateUniqueID();
+                    m_waitingQueue[i] = sample;
+                    m_waitingQueue[i].UniqueID = GenerateUniqueID();
                 }
                 i++;
             }
@@ -1028,7 +1028,7 @@ namespace LcmsNet.SampleQueue
                 //
                 // Always re-sequence, and notify
                 //
-                ResequenceQueuedSamples(mlist_waitingQueue);
+                ResequenceQueuedSamples(m_waitingQueue);
                 if (SamplesAdded != null)
                 {
                     SamplesAdded(this, new classSampleQueueArgs(GetAllSamples()));
@@ -1046,7 +1046,7 @@ namespace LcmsNet.SampleQueue
         public void MoveQueuedSamples(List<classSampleData> samples, int baseOffset, int offset,
             enumMoveSampleType moveType)
         {
-            SwapQueuedSamplesColumn(mlist_waitingQueue, samples, baseOffset, offset, enumColumnDataHandling.LeaveAlone);
+            SwapQueuedSamplesColumn(m_waitingQueue, samples, baseOffset, offset, enumColumnDataHandling.LeaveAlone);
         }
 
         /// <summary>
@@ -1060,7 +1060,7 @@ namespace LcmsNet.SampleQueue
         {
             var added = false;
 
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // Here we add to the waiting queue.
@@ -1076,7 +1076,7 @@ namespace LcmsNet.SampleQueue
             {
                 var tempQueue = new List<classSampleData>();
                 var sampleHistogram =
-                    BuildSampleHistogram(mlist_waitingQueue);
+                    BuildSampleHistogram(m_waitingQueue);
                 //
                 // Add samples to their respective columns.
                 //
@@ -1087,7 +1087,7 @@ namespace LcmsNet.SampleQueue
                     // We allow for the same request name to be had in the
                     // sample list.
                     //
-                    if (mlist_waitingQueue.Contains(sample) == false)
+                    if (m_waitingQueue.Contains(sample) == false)
                     {
                         added = true;
                         sample.UniqueID = GenerateUniqueID();
@@ -1095,14 +1095,14 @@ namespace LcmsNet.SampleQueue
                         tempQueue.Add(sample);
                     }
                 }
-                DistributeSamplesAcrossColumns(sampleHistogram, mlist_waitingQueue);
+                DistributeSamplesAcrossColumns(sampleHistogram, m_waitingQueue);
             }
             else
             {
                 foreach (var data in sampleList)
                 {
                     data.UniqueID = GenerateUniqueID();
-                    mlist_waitingQueue.Add(data);
+                    m_waitingQueue.Add(data);
                     added = true;
                 }
             }
@@ -1116,8 +1116,8 @@ namespace LcmsNet.SampleQueue
                 // Only re-sequence and remove if we changed the queue to not waste time
                 // doing something if we dont have to.
                 //
-                RemoveExcessSamples(mlist_waitingQueue);
-                ResequenceQueuedSamples(mlist_waitingQueue);
+                RemoveExcessSamples(m_waitingQueue);
+                ResequenceQueuedSamples(m_waitingQueue);
 
                 if (SamplesAdded != null)
                 {
@@ -1159,9 +1159,9 @@ namespace LcmsNet.SampleQueue
         private List<classSampleData> GetAllSamples()
         {
             var allSamples = new List<classSampleData>();
-            allSamples.AddRange(mlist_completeQueue);
-            allSamples.AddRange(mlist_runningQueue);
-            allSamples.AddRange(mlist_waitingQueue);
+            allSamples.AddRange(m_completeQueue);
+            allSamples.AddRange(m_runningQueue);
+            allSamples.AddRange(m_waitingQueue);
             return allSamples;
         }
 
@@ -1172,7 +1172,7 @@ namespace LcmsNet.SampleQueue
         public List<classSampleData> GetWaitingQueue()
         {
             var waitingQueue = new List<classSampleData>();
-            waitingQueue.AddRange(mlist_waitingQueue);
+            waitingQueue.AddRange(m_waitingQueue);
             return waitingQueue;
         }
 
@@ -1183,7 +1183,7 @@ namespace LcmsNet.SampleQueue
         public List<classSampleData> GetRunningQueue()
         {
             var runningQueue = new List<classSampleData>();
-            runningQueue.AddRange(mlist_runningQueue);
+            runningQueue.AddRange(m_runningQueue);
             return runningQueue;
         }
 
@@ -1195,9 +1195,9 @@ namespace LcmsNet.SampleQueue
         private bool RemoveSample(classSampleData sample)
         {
             var removed = false;
-            if (mlist_waitingQueue.Contains(sample) == true)
+            if (m_waitingQueue.Contains(sample) == true)
             {
-                mlist_waitingQueue.Remove(sample);
+                m_waitingQueue.Remove(sample);
                 removed = true;
             }
             return removed;
@@ -1236,9 +1236,9 @@ namespace LcmsNet.SampleQueue
             //
             // Remove the sample from the complete queue.
             //
-            removed = RemoveSample(mlist_completeQueue, uniqueIDs);
+            removed = RemoveSample(m_completeQueue, uniqueIDs);
 
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // First we figure out what samples we need to remove based on their
@@ -1258,9 +1258,9 @@ namespace LcmsNet.SampleQueue
                     //
                     // Otherwise, we just make the sample name unused.
                     //
-                    if (mlist_waitingQueue.Contains(data) == true)
+                    if (m_waitingQueue.Contains(data) == true)
                     {
-                        mlist_waitingQueue.Remove(data);
+                        m_waitingQueue.Remove(data);
                         removedSamples.Add(data);
                         removed = true;
                     }
@@ -1292,13 +1292,13 @@ namespace LcmsNet.SampleQueue
                         // but here we are not adding new samples to the queue.
                         //
                         var histogram =
-                            BuildSampleHistogram(mlist_waitingQueue);
-                        DistributeSamplesAcrossColumns(histogram, mlist_waitingQueue);
-                        RemoveExcessSamples(mlist_waitingQueue);
+                            BuildSampleHistogram(m_waitingQueue);
+                        DistributeSamplesAcrossColumns(histogram, m_waitingQueue);
+                        RemoveExcessSamples(m_waitingQueue);
                         break;
                 }
 
-                ResequenceQueuedSamples(mlist_waitingQueue);
+                ResequenceQueuedSamples(m_waitingQueue);
 
                 if (SamplesRemoved != null)
                 {
@@ -1306,7 +1306,7 @@ namespace LcmsNet.SampleQueue
                 }
 
                 if (SamplesUpdated != null)
-                    SamplesUpdated(this, new classSampleQueueArgs(mlist_waitingQueue));
+                    SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
             }
             return removed;
         }
@@ -1318,15 +1318,15 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if any samples were removed.  False if not.</returns>
         public bool RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // Find the unique id's of all the samples that are unused.
             //
             var uniqueList = new List<long>();
-            foreach (var sample in mlist_waitingQueue)
+            foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == mstring_integrateName)
+                if (sample.DmsData.DatasetName == m_integrateName)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
@@ -1351,15 +1351,15 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if any samples were removed.  False if not.</returns>
         public bool RemoveUnusedSamples(classColumnData column, enumColumnDataHandling resortColumns)
         {
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // Find the unique id's of all the samples that are unused.
             //
             var uniqueList = new List<long>();
-            foreach (var sample in mlist_waitingQueue)
+            foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == mstring_integrateName && sample.ColumnData == column)
+                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnData == column)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
@@ -1386,18 +1386,18 @@ namespace LcmsNet.SampleQueue
             if (newOrders.Count < 1)
                 return;
 
-            if (mlist_waitingQueue.Count < 1)
+            if (m_waitingQueue.Count < 1)
                 return;
 
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
-            var baseOffset = mlist_waitingQueue[0].SequenceID;
+            var baseOffset = m_waitingQueue[0].SequenceID;
             foreach (var sample in newOrders)
             {
                 var newIndex = sample.SequenceID - baseOffset;
-                if (mlist_waitingQueue.Count > newIndex)
+                if (m_waitingQueue.Count > newIndex)
                 {
-                    mlist_waitingQueue[Convert.ToInt32(newIndex)] = sample;
+                    m_waitingQueue[Convert.ToInt32(newIndex)] = sample;
                 }
             }
 
@@ -1421,7 +1421,7 @@ namespace LcmsNet.SampleQueue
             ResetColumnData();
             if (SamplesUpdated != null)
             {
-                SamplesUpdated(this, new classSampleQueueArgs(mlist_waitingQueue));
+                SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
             }
         }
 
@@ -1432,18 +1432,18 @@ namespace LcmsNet.SampleQueue
         {
             var index = 0;
 
-            if (mlist_runningQueue.Count > 0)
+            if (m_runningQueue.Count > 0)
             {
-                index = mlist_columnOrders.IndexOf(mlist_runningQueue[mlist_runningQueue.Count - 1].ColumnData) + 1;
+                index = m_columnOrders.IndexOf(m_runningQueue[m_runningQueue.Count - 1].ColumnData) + 1;
             }
-            else if (mlist_completeQueue.Count > 0)
+            else if (m_completeQueue.Count > 0)
             {
-                index = mlist_columnOrders.IndexOf(mlist_completeQueue[mlist_completeQueue.Count - 1].ColumnData) + 1;
+                index = m_columnOrders.IndexOf(m_completeQueue[m_completeQueue.Count - 1].ColumnData) + 1;
             }
 
-            foreach (var data in mlist_waitingQueue)
+            foreach (var data in m_waitingQueue)
             {
-                var columnData = mlist_columnOrders[index % mlist_columnOrders.Count];
+                var columnData = m_columnOrders[index % m_columnOrders.Count];
                 data.ColumnData = columnData;
                 index++;
             }
@@ -1464,7 +1464,7 @@ namespace LcmsNet.SampleQueue
             if (samples.Count < 1)
                 return;
 
-            var firstSequenceNumber = mlist_waitingQueue[0].SequenceID;
+            var firstSequenceNumber = m_waitingQueue[0].SequenceID;
             var swapped = false;
 
             //
@@ -1497,7 +1497,7 @@ namespace LcmsNet.SampleQueue
                     if (newIndex != index)
                     {
                         var tempSample = queue[newIndex];
-                        queue[newIndex] = mlist_waitingQueue[index];
+                        queue[newIndex] = m_waitingQueue[index];
                         queue[index] = tempSample;
                         lastIndex = newIndex - offset;
                         swapped = true;
@@ -1577,25 +1577,25 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         public void UpdateSample(classSampleData data)
         {
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // Find the sample
             //
-            var index = mlist_waitingQueue.IndexOf(data);
+            var index = m_waitingQueue.IndexOf(data);
             if (index >= 0)
             {
                 //
                 // Update...although the reference should be updated.
                 //
-                mlist_waitingQueue[index] = data;
+                m_waitingQueue[index] = data;
 
                 //
                 // Alert listening objects.
                 //
                 if (SamplesUpdated != null)
                 {
-                    SamplesUpdated(this, new classSampleQueueArgs(mlist_waitingQueue));
+                    SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
                 }
             }
         }
@@ -1606,15 +1606,15 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         public void UpdateSamples(List<classSampleData> samples)
         {
-            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, mlist_waitingQueue);
+            PushQueue(mstack_undoBackWaitingQueue, mstack_undoForwardWaitingQueue, m_waitingQueue);
 
             var updated = false;
             foreach (var sample in samples)
             {
-                var existingSample = FindSample(mlist_waitingQueue, sample.UniqueID);
+                var existingSample = FindSample(m_waitingQueue, sample.UniqueID);
                 if (existingSample != null)
                 {
-                    var index = mlist_waitingQueue.IndexOf(existingSample);
+                    var index = m_waitingQueue.IndexOf(existingSample);
                     if (index >= 0)
                     {
                         updated = true;
@@ -1622,7 +1622,7 @@ namespace LcmsNet.SampleQueue
                         //{
                         //    sample.ColumnData = existingSample.ColumnData;
                         //}
-                        mlist_waitingQueue[index] = sample;
+                        m_waitingQueue[index] = sample;
                     }
                 }
             }
@@ -1631,7 +1631,7 @@ namespace LcmsNet.SampleQueue
             //
             if (updated == true && SamplesUpdated != null)
             {
-                SamplesUpdated(this, new classSampleQueueArgs(mlist_waitingQueue));
+                SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
             }
         }
 
@@ -1654,19 +1654,19 @@ namespace LcmsNet.SampleQueue
         public void RunNext(classSampleData sample)
         {
             var i = 0;
-            while (i < mlist_runningQueue.Count &&
-                   mlist_runningQueue[i].RunningStatus == enumSampleRunningStatus.Running)
+            while (i < m_runningQueue.Count &&
+                   m_runningQueue[i].RunningStatus == enumSampleRunningStatus.Running)
             {
                 i++;
             }
 
-            if (mlist_runningQueue.Count == i)
+            if (m_runningQueue.Count == i)
             {
-                mlist_runningQueue.Insert(i, sample);
+                m_runningQueue.Insert(i, sample);
             }
             else
             {
-                mlist_runningQueue.Add(sample);
+                m_runningQueue.Add(sample);
             }
 
 
@@ -1687,7 +1687,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public bool AreSamplesAvailableToRun
         {
-            get { return mlist_runningQueue.Count > 0; }
+            get { return m_runningQueue.Count > 0; }
         }
 
         /// <summary>
@@ -1695,7 +1695,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public bool IsRunning
         {
-            get { return mint_nextAvailableSample > 0; }
+            get { return m_nextAvailableSample > 0; }
         }
 
         /// <summary>
@@ -1704,12 +1704,12 @@ namespace LcmsNet.SampleQueue
         public void StartSamples()
         {
             // Don't run if nothing is there to run.
-            if (mlist_runningQueue.Count == 0)
+            if (m_runningQueue.Count == 0)
             {
                 return;
             }
 
-            if (mint_nextAvailableSample > 0)
+            if (m_nextAvailableSample > 0)
             {
                 return;
             }
@@ -1717,7 +1717,7 @@ namespace LcmsNet.SampleQueue
             // Setup the queue to be optimized.
             var validSamples = new List<classSampleData>();
             DateTime next;
-            foreach (var sample in mlist_runningQueue)
+            foreach (var sample in m_runningQueue)
             {
                 //DateTime next       = DateTime.UtcNow.Subtract(new TimeSpan(8, 0 , 0)).Add(new TimeSpan(0, 0, 10));
                 next = LcmsNetSDK.TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
@@ -1745,12 +1745,12 @@ namespace LcmsNet.SampleQueue
             // We have not started to run so optimize this way.
             var optimizer = new classLCMethodOptimizer();
             System.Diagnostics.Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
-            optimizer.AlignSamples(mlist_runningQueue);
+            optimizer.AlignSamples(m_runningQueue);
 
             // Set the listening event so that time sensitive items will know that
             // a sample is waiting on the running queue.
             mobj_sampleWaitingEvent.Set();
-            mbool_startedSamples = true;
+            m_startedSamples = true;
         }
 
         /// <summary>
@@ -1790,7 +1790,7 @@ namespace LcmsNet.SampleQueue
                     throw new NullReferenceException("This sample does not exist in the waiting queue! " +
                                                      sample.DmsData.DatasetName);
                 }
-                mlist_waitingQueue.Remove(realSample);
+                m_waitingQueue.Remove(realSample);
 
                 var containsMethod = classLCMethodManager.Manager.Methods.ContainsKey(realSample.LCMethod.Name);
                 if (containsMethod)
@@ -1802,32 +1802,32 @@ namespace LcmsNet.SampleQueue
 
                 realSample.RunningStatus = enumSampleRunningStatus.WaitingToRun;
 
-                if (mlist_runningQueue.Count > 0 && mint_nextAvailableSample > 0)
+                if (m_runningQueue.Count > 0 && m_nextAvailableSample > 0)
                 {
                     System.Diagnostics.Debug.WriteLine("Optimizing sample against running queue.");
                     // We arent the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
                     realSample.LCMethod.SetStartTime(next);
-                    optimizer.AlignSamples(mlist_runningQueue, realSample);
+                    optimizer.AlignSamples(m_runningQueue, realSample);
                 }
-                else if (mlist_runningQueue.Count == 0)
+                else if (m_runningQueue.Count == 0)
                 {
                     System.Diagnostics.Debug.WriteLine("Setting sample start time as it is first in running queue.");
                     // Otherwise we are the first ones on the queue, but we dont need to do anything
                     // for alignment.
                     realSample.LCMethod.SetStartTime(next);
                 }
-                mlist_runningQueue.Add(realSample);
+                m_runningQueue.Add(realSample);
             }
 
             if (SamplesWaitingToRun != null)
             {
                 SamplesWaitingToRun(this,
                     new classSampleQueueArgs(validSamples,
-                        mint_nextAvailableSample,
-                        mlist_runningQueue.Count,
-                        mlist_completeQueue.Count,
-                        mlist_waitingQueue.Count));
+                        m_nextAvailableSample,
+                        m_runningQueue.Count,
+                        m_completeQueue.Count,
+                        m_waitingQueue.Count));
             }
         }
 
@@ -1865,8 +1865,8 @@ namespace LcmsNet.SampleQueue
                     throw new NullReferenceException("This sample does not exist in the waiting queue! " +
                                                      sample.DmsData.DatasetName);
                 }
-                mlist_runningQueue.Remove(realSample);
-                mlist_waitingQueue.Insert(0, realSample);
+                m_runningQueue.Remove(realSample);
+                m_waitingQueue.Insert(0, realSample);
 
                 realSample.LCMethod = realSample.LCMethod.Clone() as classLCMethod;
                 realSample.RunningStatus = enumSampleRunningStatus.Queued;
@@ -1877,10 +1877,10 @@ namespace LcmsNet.SampleQueue
             {
                 SamplesWaitingToRun(this,
                     new classSampleQueueArgs(validSamples,
-                        mint_nextAvailableSample,
-                        mlist_runningQueue.Count,
-                        mlist_completeQueue.Count,
-                        mlist_waitingQueue.Count));
+                        m_nextAvailableSample,
+                        m_runningQueue.Count,
+                        m_completeQueue.Count,
+                        m_waitingQueue.Count));
             }
         }
 
@@ -1896,7 +1896,7 @@ namespace LcmsNet.SampleQueue
             //
             // Find the sample provided to cancel.
             //
-            var sample = FindSample(mlist_runningQueue, sampleData.UniqueID);
+            var sample = FindSample(m_runningQueue, sampleData.UniqueID);
             if (sample == null)
             {
                 var errorMessage = string.Format("The sample {0} was not found on the running Queue.",
@@ -1908,9 +1908,9 @@ namespace LcmsNet.SampleQueue
             //
             // Remove the sample from the running queue
             //
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                mlist_runningQueue.Remove(sample);
+                m_runningQueue.Remove(sample);
             }
             //enumSampleRunningStatus status = enumSampleRunningStatus.Stopped;
             //if (error)
@@ -1918,26 +1918,26 @@ namespace LcmsNet.SampleQueue
             //    status = enumSampleRunningStatus.Error;
             //}
             sample.RunningStatus = enumSampleRunningStatus.Stopped;
-            mint_nextAvailableSample = Math.Max(mint_nextAvailableSample - 1, 0);
+            m_nextAvailableSample = Math.Max(m_nextAvailableSample - 1, 0);
 
             //
             // Requeue the sample putting it back on the queue it came from.
             //
-            lock (mlist_completeQueue)
+            lock (m_completeQueue)
             {
-                mlist_completeQueue.Add(sample);
+                m_completeQueue.Add(sample);
             }
 
             var samples = new classSampleData[] {sample};
             var args = new classSampleQueueArgs(samples,
-                mint_nextAvailableSample,
-                mlist_runningQueue.Count,
-                mlist_completeQueue.Count,
-                mlist_waitingQueue.Count);
+                m_nextAvailableSample,
+                m_runningQueue.Count,
+                m_completeQueue.Count,
+                m_waitingQueue.Count);
 
-            if ((mint_nextAvailableSample == 0) && (mlist_runningQueue.Count == 0))
+            if ((m_nextAvailableSample == 0) && (m_runningQueue.Count == 0))
             {
-                mbool_startedSamples = false;
+                m_startedSamples = false;
             }
 
             if (SamplesCancelled != null)
@@ -1955,25 +1955,25 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void StopRunningQueue()
         {
-            foreach (var sample in mlist_runningQueue)
+            foreach (var sample in m_runningQueue)
                 sample.RunningStatus = enumSampleRunningStatus.Queued;
 
-            lock (mlist_waitingQueue)
+            lock (m_waitingQueue)
             {
-                mlist_waitingQueue.InsertRange(0, mlist_runningQueue);
+                m_waitingQueue.InsertRange(0, m_runningQueue);
             }
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                mlist_runningQueue.Clear();
+                m_runningQueue.Clear();
             }
-            mint_nextAvailableSample = 0;
+            m_nextAvailableSample = 0;
 
-            var args = new classSampleQueueArgs(mlist_waitingQueue,
-                mint_nextAvailableSample,
-                mlist_runningQueue.Count,
-                mlist_completeQueue.Count,
-                mlist_waitingQueue.Count);
-            mbool_startedSamples = false;
+            var args = new classSampleQueueArgs(m_waitingQueue,
+                m_nextAvailableSample,
+                m_runningQueue.Count,
+                m_completeQueue.Count,
+                m_waitingQueue.Count);
+            m_startedSamples = false;
             if (SamplesUpdated != null)
             {
                 SamplesStopped(this, args);
@@ -2000,7 +2000,7 @@ namespace LcmsNet.SampleQueue
             //
             // Find the sample provided to complete.
             //
-            var sample = FindSample(mlist_runningQueue, sampleData.UniqueID);
+            var sample = FindSample(m_runningQueue, sampleData.UniqueID);
             if (sample == null)
             {
                 var errorMessage = string.Format("The sample {0} was not found on the running Queue.",
@@ -2009,32 +2009,32 @@ namespace LcmsNet.SampleQueue
                 return;
             }
 
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                mlist_runningQueue.Remove(sample);
+                m_runningQueue.Remove(sample);
             }
-            lock (mlist_completeQueue)
+            lock (m_completeQueue)
             {
-                mlist_completeQueue.Add(sample);
+                m_completeQueue.Add(sample);
             }
 
             //
             // Moves the sample pointer backward to the front of the running queue.
             //
-            mint_nextAvailableSample = Math.Max(mint_nextAvailableSample - 1, 0);
+            m_nextAvailableSample = Math.Max(m_nextAvailableSample - 1, 0);
             sample.RunningStatus = enumSampleRunningStatus.Complete;
 
 
             var args = new classSampleQueueArgs(
                 new classSampleData[] {sample},
-                mint_nextAvailableSample,
-                mlist_runningQueue.Count,
-                mlist_completeQueue.Count,
-                mlist_waitingQueue.Count);
+                m_nextAvailableSample,
+                m_runningQueue.Count,
+                m_completeQueue.Count,
+                m_waitingQueue.Count);
 
-            if ((mint_nextAvailableSample == 0) && (mlist_runningQueue.Count == 0))
+            if ((m_nextAvailableSample == 0) && (m_runningQueue.Count == 0))
             {
-                mbool_startedSamples = false;
+                m_startedSamples = false;
             }
 
             if (SamplesFinished != null)
@@ -2058,11 +2058,11 @@ namespace LcmsNet.SampleQueue
             //
             // Dequeue the sample, and start it.
             //
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                if (mint_nextAvailableSample < mlist_runningQueue.Count && mbool_startedSamples)
+                if (m_nextAvailableSample < m_runningQueue.Count && m_startedSamples)
                 {
-                    sample = mlist_runningQueue[mint_nextAvailableSample++];
+                    sample = m_runningQueue[m_nextAvailableSample++];
                     sample.RunningStatus = enumSampleRunningStatus.Running;
 
                     if (SamplesStarted != null)
@@ -2074,10 +2074,10 @@ namespace LcmsNet.SampleQueue
 
             var args = new classSampleQueueArgs(
                 new classSampleData[] {sample},
-                mint_nextAvailableSample,
-                mlist_runningQueue.Count,
-                mlist_completeQueue.Count,
-                mlist_waitingQueue.Count);
+                m_nextAvailableSample,
+                m_runningQueue.Count,
+                m_completeQueue.Count,
+                m_waitingQueue.Count);
             if (SamplesWaitingToRun != null)
             {
                 SamplesWaitingToRun(this, args);
@@ -2093,11 +2093,11 @@ namespace LcmsNet.SampleQueue
         public classSampleData NextSampleQuery()
         {
             classSampleData sample = null;
-            lock (mlist_runningQueue)
+            lock (m_runningQueue)
             {
-                if (mint_nextAvailableSample < mlist_runningQueue.Count && mbool_startedSamples)
+                if (m_nextAvailableSample < m_runningQueue.Count && m_startedSamples)
                 {
-                    sample = mlist_runningQueue[mint_nextAvailableSample];
+                    sample = m_runningQueue[m_nextAvailableSample];
                 }
             }
             return sample;
@@ -2133,9 +2133,9 @@ namespace LcmsNet.SampleQueue
                 classSQLiteTools.SaveSingleColumnListToCache(cartNames, enumTableTypes.CartList);
                 classSQLiteTools.SaveUserListToCache(userNames);
             }
-            classSQLiteTools.SaveQueueToCache(mlist_waitingQueue, enumTableTypes.WaitingQueue);
-            classSQLiteTools.SaveQueueToCache(mlist_runningQueue, enumTableTypes.RunningQueue);
-            classSQLiteTools.SaveQueueToCache(mlist_completeQueue, enumTableTypes.CompletedQueue);
+            classSQLiteTools.SaveQueueToCache(m_waitingQueue, enumTableTypes.WaitingQueue);
+            classSQLiteTools.SaveQueueToCache(m_runningQueue, enumTableTypes.RunningQueue);
+            classSQLiteTools.SaveQueueToCache(m_completeQueue, enumTableTypes.CompletedQueue);
             IsDirty = false;
         }
 
@@ -2159,11 +2159,11 @@ namespace LcmsNet.SampleQueue
 
         public void RetrieveQueueFromCache(bool buildConnectionString)
         {
-            mlist_completeQueue = classSQLiteTools.GetQueueFromCache(enumTableTypes.CompletedQueue);
-            foreach (var sample in mlist_completeQueue)
+            m_completeQueue = classSQLiteTools.GetQueueFromCache(enumTableTypes.CompletedQueue);
+            foreach (var sample in m_completeQueue)
             {
                 sample.RunningStatus = enumSampleRunningStatus.Complete;
-                mlist_uniqueID.Add(sample.UniqueID);
+                m_uniqueID.Add(sample.UniqueID);
 
                 if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                 {
@@ -2175,11 +2175,11 @@ namespace LcmsNet.SampleQueue
                     sample.LCMethod = null;
                 }
 
-                if (sample.UniqueID >= mint_sampleIndex)
-                    mint_sampleIndex = Convert.ToInt32(sample.UniqueID + 1);
+                if (sample.UniqueID >= m_sampleIndex)
+                    m_sampleIndex = Convert.ToInt32(sample.UniqueID + 1);
 
-                if (sample.SequenceID >= mint_sequenceIndex)
-                    mint_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
+                if (sample.SequenceID >= m_sequenceIndex)
+                    m_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
             }
 
             //
@@ -2193,7 +2193,7 @@ namespace LcmsNet.SampleQueue
             // that we always have valid LC-methods.  Otherwise when we go to run the
             // scheduler and thus program will crash hard.
             //
-            foreach (var sample in waitingSamples) // mlist_waitingQueue)
+            foreach (var sample in waitingSamples) // m_waitingQueue)
             {
                 if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                 {
@@ -2211,11 +2211,11 @@ namespace LcmsNet.SampleQueue
                     sample.LCMethod = null;
                 }
 
-                if (sample.UniqueID >= mint_sampleIndex)
-                    mint_sampleIndex = Convert.ToInt32(sample.UniqueID);
+                if (sample.UniqueID >= m_sampleIndex)
+                    m_sampleIndex = Convert.ToInt32(sample.UniqueID);
 
-                if (sample.SequenceID >= mint_sequenceIndex)
-                    mint_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
+                if (sample.SequenceID >= m_sequenceIndex)
+                    m_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
             }
 
             //ResetColumnData(true);
@@ -2229,7 +2229,7 @@ namespace LcmsNet.SampleQueue
             // we wouldnt see the completed samples...big bug.
             //
             var updated = QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
-            if (updated == false && mlist_completeQueue.Count > 0)
+            if (updated == false && m_completeQueue.Count > 0)
             {
                 if (SamplesAdded != null)
                 {
@@ -2257,11 +2257,11 @@ namespace LcmsNet.SampleQueue
         public void SaveQueue(string path, ISampleQueueWriter writer, bool includeRunning)
         {
             var samples = new List<classSampleData>();
-            if (includeRunning && mlist_runningQueue.Count > 0)
+            if (includeRunning && m_runningQueue.Count > 0)
             {
-                samples.AddRange(mlist_runningQueue);
+                samples.AddRange(m_runningQueue);
             }
-            samples.AddRange(mlist_waitingQueue);
+            samples.AddRange(m_waitingQueue);
             writer.WriteSamples(path, samples);
         }
 
@@ -2280,13 +2280,13 @@ namespace LcmsNet.SampleQueue
             // since columns have not been assigned.
             //
             var index = 0;
-            if (mlist_waitingQueue.Count > 0)
+            if (m_waitingQueue.Count > 0)
             {
-                index = mlist_columnOrders.IndexOf(mlist_waitingQueue[mlist_waitingQueue.Count - 1].ColumnData) + 1;
+                index = m_columnOrders.IndexOf(m_waitingQueue[m_waitingQueue.Count - 1].ColumnData) + 1;
             }
             else
             {
-                index = mlist_columnOrders.IndexOf(mlist_columnOrders[0]);
+                index = m_columnOrders.IndexOf(m_columnOrders[0]);
             }
 
             //
@@ -2294,7 +2294,7 @@ namespace LcmsNet.SampleQueue
             //
             //foreach (classSampleData data in waitingSamples)
             //{
-            //    classColumnData columnData = mlist_columnOrders[index % mlist_columnOrders.Count];
+            //    classColumnData columnData = m_columnOrders[index % m_columnOrders.Count];
             //    data.ColumnData            = columnData;
             //    index++;
             //}
@@ -2315,9 +2315,9 @@ namespace LcmsNet.SampleQueue
                     }
                 }
                 sample.DmsData.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-                if (sample.UniqueID >= mint_sampleIndex)
+                if (sample.UniqueID >= m_sampleIndex)
                 {
-                    mint_sampleIndex = Convert.ToInt32(sample.UniqueID);
+                    m_sampleIndex = Convert.ToInt32(sample.UniqueID);
                 }
             }
 

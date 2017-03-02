@@ -56,11 +56,11 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        int mint_TrayNumber = 0;
-        DataTable mobject_DataTable = new DataTable("DummyTable");
-        DataView mobject_DataView = new DataView();
-        bool mbool_MasterView = false;
-        bool mbool_ShowUnassigned = true;
+        int m_TrayNumber = 0;
+        DataTable m_DataTable = new DataTable("DummyTable");
+        DataView m_DataView = new DataView();
+        bool m_MasterView = false;
+        bool m_ShowUnassigned = true;
 
         #endregion
 
@@ -72,8 +72,8 @@ namespace LcmsNet.SampleQueue.Forms
 
         public int TrayNumber
         {
-            get { return mint_TrayNumber; }
-            set { mint_TrayNumber = value; }
+            get { return m_TrayNumber; }
+            set { m_TrayNumber = value; }
         }
 
         public int SampleCount
@@ -83,8 +83,8 @@ namespace LcmsNet.SampleQueue.Forms
 
         public bool MasterView
         {
-            get { return mbool_MasterView; }
-            set { mbool_MasterView = value; }
+            get { return m_MasterView; }
+            set { m_MasterView = value; }
         }
 
         #endregion
@@ -171,13 +171,13 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="samples">List of samples to display and edit</param>
         public void UpdateSampleList(ref DataTable samples)
         {
-            mobject_DataTable = samples;
+            m_DataTable = samples;
 
-            mobject_DataView.Table = mobject_DataTable;
-            dataGridView1.DataSource = mobject_DataView;
-            if (!mbool_MasterView)
+            m_DataView.Table = m_DataTable;
+            dataGridView1.DataSource = m_DataView;
+            if (!m_MasterView)
             {
-                mobject_DataView.RowFilter = "Tray = " + mint_TrayNumber.ToString();
+                m_DataView.RowFilter = "Tray = " + m_TrayNumber.ToString();
             }
             else SetDataView();
         }
@@ -187,15 +187,15 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private void SetDataView()
         {
-            if (mbool_MasterView)
+            if (m_MasterView)
             {
-                if (mbool_ShowUnassigned)
+                if (m_ShowUnassigned)
                 {
-                    mobject_DataView.RowFilter = "Tray = 0";
+                    m_DataView.RowFilter = "Tray = 0";
                 }
-                else mobject_DataView.RowFilter = "";
+                else m_DataView.RowFilter = "";
             }
-            else mobject_DataView.RowFilter = "Tray = " + mint_TrayNumber.ToString();
+            else m_DataView.RowFilter = "Tray = " + m_TrayNumber.ToString();
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="unassigned">TRUE for showing unallsigned only; FALSE otherwise</param>
         public void SetDataView(bool unassignedOnly)
         {
-            mbool_ShowUnassigned = unassignedOnly;
+            m_ShowUnassigned = unassignedOnly;
             SetDataView();
         }
 
@@ -237,10 +237,10 @@ namespace LcmsNet.SampleQueue.Forms
 
             // Crude but effective way to update the displays
             dataGridView1.DataSource = null;
-//              mobject_DataView.RowStateFilter = DataViewRowState.Added | DataViewRowState.Unchanged;
+//              m_DataView.RowStateFilter = DataViewRowState.Added | DataViewRowState.Unchanged;
             SetDataView();
-            dataGridView1.DataSource = mobject_DataView;
-            if (RowModified != null) RowModified(this, mint_TrayNumber);
+            dataGridView1.DataSource = m_DataView;
+            if (RowModified != null) RowModified(this, m_TrayNumber);
         }
 
         // Debug code

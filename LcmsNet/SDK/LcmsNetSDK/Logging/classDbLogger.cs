@@ -51,9 +51,9 @@ namespace LcmsNetDataClasses.Logging
 
         private static object mobj_lock = "AstringToLockOn";
         private static object mobj_writeLock = "AnotherStringToLockOn";
-        private static bool mbool_LogDbFileCreated = false;
-        private static string mstring_DbFileName;
-        private static string mstring_ConnStr;
+        private static bool m_LogDbFileCreated = false;
+        private static string m_DbFileName;
+        private static string m_ConnStr;
 
         #endregion
 
@@ -103,7 +103,7 @@ namespace LcmsNetDataClasses.Logging
             sqlCmdBlder.Append("'" + ReplaceQuotes(exMsg) + "')");
             lock (mobj_writeLock)
             {
-                WriteLogMsgToDb(sqlCmdBlder.ToString(), mstring_ConnStr);
+                WriteLogMsgToDb(sqlCmdBlder.ToString(), m_ConnStr);
             }
         }
 
@@ -150,7 +150,7 @@ namespace LcmsNetDataClasses.Logging
             sqlCmdBlder.Append("'')");
             lock (mobj_writeLock)
             {
-                WriteLogMsgToDb(sqlCmdBlder.ToString(), mstring_ConnStr);
+                WriteLogMsgToDb(sqlCmdBlder.ToString(), m_ConnStr);
             }
         }
 
@@ -164,13 +164,13 @@ namespace LcmsNetDataClasses.Logging
             try
             {
                 // Verify logging db is ready
-                while (!mbool_LogDbFileCreated)
+                while (!m_LogDbFileCreated)
                 {
                     var check = false;
                     try
                     {
                         check = Monitor.TryEnter(mobj_lock);
-                        if (check && !mbool_LogDbFileCreated)
+                        if (check && !m_LogDbFileCreated)
                         {
                             // Database wasn't ready, so try to create it
                             if (!InitLogDatabase())
@@ -188,7 +188,7 @@ namespace LcmsNetDataClasses.Logging
                     }
                 }
                 // Insert the log entry into the data table
-                ExecuteSQLiteCommand(sqlCmd, mstring_ConnStr);
+                ExecuteSQLiteCommand(sqlCmd, m_ConnStr);
             }
             catch (Exception ex)
             {
@@ -209,14 +209,14 @@ namespace LcmsNetDataClasses.Logging
                 // Create the database file
                 CreateDbFile();
                 // Create the data table
-                CreateLogTable(mstring_ConnStr);
-                mbool_LogDbFileCreated = true;
+                CreateLogTable(m_ConnStr);
+                m_LogDbFileCreated = true;
                 return true;
             }
             catch (Exception ex)
             {
-                mbool_LogDbFileCreated = false;
-                mstring_ConnStr = "";
+                m_LogDbFileCreated = false;
+                m_ConnStr = "";
                 var msg = "Exception initializing log database: ";
                 UnwrapExceptionMsgs(ex, out msg);
                 System.Windows.Forms.MessageBox.Show(msg, "LOG ERROR", System.Windows.Forms.MessageBoxButtons.OK,
@@ -230,8 +230,8 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         private static void CreateDbFile()
         {
-            mstring_DbFileName = Path.Combine(LogFolderPath, "LcmsNetDbLog.db3");
-            var logFile = new FileInfo(mstring_DbFileName);
+            m_DbFileName = Path.Combine(LogFolderPath, "LcmsNetDbLog.db3");
+            var logFile = new FileInfo(m_DbFileName);
 
             // Create the file if it doesn't already exist
             if (!logFile.Exists)
@@ -247,23 +247,23 @@ namespace LcmsNetDataClasses.Logging
                 }
                 catch (Exception ex)
                 {
-                    mstring_ConnStr = "";
-                    mbool_LogDbFileCreated = false;
+                    m_ConnStr = "";
+                    m_LogDbFileCreated = false;
                     throw new classDbLoggerException("Exception creating db log folder", ex);
                 }
 
                 try
                 {
-                    SQLiteConnection.CreateFile(mstring_DbFileName);
+                    SQLiteConnection.CreateFile(m_DbFileName);
                 }
                 catch (Exception ex)
                 {
-                    mstring_ConnStr = "";
-                    mbool_LogDbFileCreated = false;
+                    m_ConnStr = "";
+                    m_LogDbFileCreated = false;
                     throw new classDbLoggerException("Exception creating db log file", ex);
                 }
             }
-            mstring_ConnStr = "data source=" + mstring_DbFileName;
+            m_ConnStr = "data source=" + m_DbFileName;
         }
 
         /// <summary>

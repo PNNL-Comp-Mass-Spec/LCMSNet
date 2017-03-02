@@ -32,7 +32,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         public List<classSampleData> SampleList
         {
-            get { return mobject_SampleList; }
+            get { return m_SampleList; }
         }
 
         #endregion
@@ -50,16 +50,16 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        List<string> mobject_TrayNames = null; // List of tray names used by PAL on this cart
-        List<classSampleData> mobject_SampleList = null; // List of samples to have tray/vial assignments
+        List<string> m_TrayNames = null; // List of tray names used by PAL on this cart
+        List<classSampleData> m_SampleList = null; // List of samples to have tray/vial assignments
 
-        DataTable mobject_DataList = new DataTable("SampleTable");
+        DataTable m_DataList = new DataTable("SampleTable");
         // Table to hold data for samples in easy-to-handle format
 
-        DataView mobject_DataView = new DataView();
+        DataView m_DataView = new DataView();
         // Controls whether main form will show all samples or unassigned only
 
-        controlTray[] mobject_Trays;
+        controlTray[] m_Trays;
         // User control to be added to each tray tab; array is used to simplify later processing
 
         #endregion
@@ -81,26 +81,26 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="samples">List of samples</param>
         public void LoadSampleList(List<string> trayNames, List<classSampleData> samples)
         {
-            mobject_TrayNames = trayNames;
-            mobject_SampleList = samples;
-            mobject_DataList.Clear();
+            m_TrayNames = trayNames;
+            m_SampleList = samples;
+            m_DataList.Clear();
 
             // Load sample information into data table
-            foreach (var sample in mobject_SampleList)
+            foreach (var sample in m_SampleList)
             {
                 AddSampleToDataTable(sample);
             }
 
             // set up the overall data view
-            mobject_Trays[0].UpdateSampleList(ref mobject_DataList);
+            m_Trays[0].UpdateSampleList(ref m_DataList);
             SetDataView();
 
             // Update individual tray displays
             var captionStr = "";
-            for (var trayIndx = 1; trayIndx < mobject_Trays.Length; trayIndx++)
+            for (var trayIndx = 1; trayIndx < m_Trays.Length; trayIndx++)
             {
-                mobject_Trays[trayIndx].UpdateSampleList(ref mobject_DataList);
-                captionStr = "Tray " + (trayIndx).ToString() + " (" + mobject_Trays[trayIndx].SampleCount.ToString() +
+                m_Trays[trayIndx].UpdateSampleList(ref m_DataList);
+                captionStr = "Tray " + (trayIndx).ToString() + " (" + m_Trays[trayIndx].SampleCount.ToString() +
                              ")";
                 tabControlPlates.TabPages[trayIndx].Text = captionStr;
             }
@@ -112,19 +112,19 @@ namespace LcmsNet.SampleQueue.Forms
         private void InitForm()
         {
             // Create tray display objects and assign them to tabs for each tray
-            mobject_Trays = new controlTray[7];
-            for (var trayIndx = 0; trayIndx < mobject_Trays.Length; trayIndx++)
+            m_Trays = new controlTray[7];
+            for (var trayIndx = 0; trayIndx < m_Trays.Length; trayIndx++)
             {
-                mobject_Trays[trayIndx] = new controlTray();
-                mobject_Trays[trayIndx].TrayNumber = trayIndx;
-                mobject_Trays[trayIndx].Top = TRAY_CONTROL_TOP;
-                mobject_Trays[trayIndx].Left = TRAY_CONTROL_LEFT;
-                mobject_Trays[trayIndx].RowModified += new DelegateRowModified(UpdateTabDisplays);
-                tabControlPlates.TabPages[trayIndx].Controls.Add(mobject_Trays[trayIndx]);
-                mobject_Trays[trayIndx].Clear();
+                m_Trays[trayIndx] = new controlTray();
+                m_Trays[trayIndx].TrayNumber = trayIndx;
+                m_Trays[trayIndx].Top = TRAY_CONTROL_TOP;
+                m_Trays[trayIndx].Left = TRAY_CONTROL_LEFT;
+                m_Trays[trayIndx].RowModified += new DelegateRowModified(UpdateTabDisplays);
+                tabControlPlates.TabPages[trayIndx].Controls.Add(m_Trays[trayIndx]);
+                m_Trays[trayIndx].Clear();
             }
 
-            mobject_Trays[0].MasterView = true;
+            m_Trays[0].MasterView = true;
 
             // Create the data table to hold all of the sample data. We are using a data table because doing tray/vial assignments
             //      directly in the incoming sample list makes cancelling awkwars. Also, a data table is easier to display
@@ -139,13 +139,13 @@ namespace LcmsNet.SampleQueue.Forms
         private int GetTrayIndexFromTrayName(string trayName)
         {
             // If trayName isn't contained in tray list, return -1
-            if (!mobject_TrayNames.Contains(trayName)) return -1;
+            if (!m_TrayNames.Contains(trayName)) return -1;
 
             // Iterate through tray names until matching name is found
             var retIndx = -1;
-            for (var indx = 0; indx < mobject_TrayNames.Count; indx++)
+            for (var indx = 0; indx < m_TrayNames.Count; indx++)
             {
-                if (trayName == mobject_TrayNames[indx])
+                if (trayName == m_TrayNames[indx])
                 {
                     retIndx = indx;
                     break;
@@ -174,7 +174,7 @@ namespace LcmsNet.SampleQueue.Forms
             columnArray[6] = CreateDataColumn("Block", typeInt, "Block", true);
             columnArray[7] = CreateDataColumn("RunOrder", typeInt, "Run Order (DMS)", true);
             columnArray[8] = CreateDataColumn("UniqueID", typeInt, "Unique ID", true);
-            mobject_DataList.Columns.AddRange(columnArray);
+            m_DataList.Columns.AddRange(columnArray);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="sample">Sample object</param>
         private void AddSampleToDataTable(classSampleData sample)
         {
-            var newRow = mobject_DataList.NewRow();
+            var newRow = m_DataList.NewRow();
 
             newRow["SampleName"] = sample.DmsData.DatasetName;
             newRow["SeqNum"] = sample.SequenceID;
@@ -211,7 +211,7 @@ namespace LcmsNet.SampleQueue.Forms
             newRow["RunOrder"] = sample.DmsData.RunOrder;
             newRow["UniqueID"] = sample.UniqueID;
 
-            mobject_DataList.Rows.Add(newRow);
+            m_DataList.Rows.Add(newRow);
         }
 
         /// <summary>
@@ -221,13 +221,13 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (radbtnUnassigned.Checked)
             {
-                mobject_Trays[0].SetDataView(true);
-                tabControlPlates.TabPages[0].Text = "Unassigned (" + mobject_Trays[0].SampleCount.ToString() + ")";
+                m_Trays[0].SetDataView(true);
+                tabControlPlates.TabPages[0].Text = "Unassigned (" + m_Trays[0].SampleCount.ToString() + ")";
             }
             else
             {
-                mobject_Trays[0].SetDataView(false);
-                tabControlPlates.TabPages[0].Text = "All (" + mobject_Trays[0].SampleCount.ToString() + ")";
+                m_Trays[0].SetDataView(false);
+                tabControlPlates.TabPages[0].Text = "All (" + m_Trays[0].SampleCount.ToString() + ")";
             }
         }
 
@@ -244,24 +244,24 @@ namespace LcmsNet.SampleQueue.Forms
             SetDataView();
 
             // Update individual tray tabs
-            for (var indx = 1; indx < mobject_Trays.Length; indx++)
+            for (var indx = 1; indx < m_Trays.Length; indx++)
             {
-                tmpStr = "Tray " + indx.ToString() + " (" + mobject_Trays[indx].SampleCount.ToString() + ")";
+                tmpStr = "Tray " + indx.ToString() + " (" + m_Trays[indx].SampleCount.ToString() + ")";
                 tabControlPlates.TabPages[indx].Text = tmpStr;
             }
         }
 
         /// <summary>
-        /// Gets the index of the sample in mobject_SampleList with specified unique ID
+        /// Gets the index of the sample in m_SampleList with specified unique ID
         /// </summary>
         /// <param name="sampleId">ID to search for</param>
         /// <returns>Index of matching sampe if found; -1 otherwise</returns>
         private int GetSampleIndex(int sampleId)
         {
             var foundIndx = -1;
-            for (var indx = 0; indx < mobject_SampleList.Count; indx++)
+            for (var indx = 0; indx < m_SampleList.Count; indx++)
             {
-                if (mobject_SampleList[indx].UniqueID == sampleId)
+                if (m_SampleList[indx].UniqueID == sampleId)
                 {
                     foundIndx = indx;
                     break;
@@ -277,9 +277,9 @@ namespace LcmsNet.SampleQueue.Forms
         private void UpdateSampleList()
         {
             var sampleIndx = -1;
-            foreach (DataRow currRow in mobject_DataList.Rows)
+            foreach (DataRow currRow in m_DataList.Rows)
             {
-                // Get the index of the sample in mobject_SampleList that matches the current table row
+                // Get the index of the sample in m_SampleList that matches the current table row
                 sampleIndx = GetSampleIndex((int) currRow["UniqueID"]);
                 if (sampleIndx == -1)
                 {
@@ -287,8 +287,8 @@ namespace LcmsNet.SampleQueue.Forms
                     continue;
                 }
 
-                mobject_SampleList[sampleIndx].PAL.PALTray = GetTrayNameFromNumber((int) currRow["Tray"]);
-                mobject_SampleList[sampleIndx].PAL.Well = (int) currRow["Vial"];
+                m_SampleList[sampleIndx].PAL.PALTray = GetTrayNameFromNumber((int) currRow["Tray"]);
+                m_SampleList[sampleIndx].PAL.Well = (int) currRow["Vial"];
             }
         }
 
@@ -301,7 +301,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (trayNumber == 0) return string.Empty;
 
-            return mobject_TrayNames[trayNumber - 1];
+            return m_TrayNames[trayNumber - 1];
         }
 
         #endregion

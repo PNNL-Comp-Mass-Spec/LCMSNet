@@ -134,7 +134,7 @@ namespace LcmsNet.Method.Forms
             //
             // Add the devices to the method editor
             //
-            mdict_deviceMappings = new Dictionary<IDevice, List<classLCMethodData>>();
+            m_deviceMappings = new Dictionary<IDevice, List<classLCMethodData>>();
             RegisterDevices();
 
             //
@@ -256,7 +256,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// List of device methods and parameters to use.
         /// </summary>
-        private Dictionary<IDevice, List<classLCMethodData>> mdict_deviceMappings;
+        private Dictionary<IDevice, List<classLCMethodData>> m_deviceMappings;
 
         /// <summary>
         /// Flag indicating if this event is a placeholder so that we know it's an unlocking event
@@ -299,8 +299,8 @@ namespace LcmsNet.Method.Forms
             if (mcomboBox_devices.Items.Contains(device))
                 mcomboBox_devices.Items.Remove(device);
 
-            if (mdict_deviceMappings.ContainsKey(device) == true)
-                mdict_deviceMappings.Remove(device);
+            if (m_deviceMappings.ContainsKey(device) == true)
+                m_deviceMappings.Remove(device);
 
             if (mcomboBox_devices.Items.Count < 1)
                 mcomboBox_devices.Enabled = false;
@@ -332,10 +332,10 @@ namespace LcmsNet.Method.Forms
             if (mcomboBox_devices.Items.Contains(device) == false)
                 mcomboBox_devices.Items.Add(device);
 
-            if (mdict_deviceMappings.ContainsKey(device) == false)
+            if (m_deviceMappings.ContainsKey(device) == false)
             {
                 var methodPairs = ReflectDevice(device);
-                mdict_deviceMappings.Add(device, methodPairs);
+                m_deviceMappings.Add(device, methodPairs);
             }
 
             //
@@ -460,7 +460,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // Find the timer device.
                 //
-                foreach (var tempDevice in mdict_deviceMappings.Keys)
+                foreach (var tempDevice in m_deviceMappings.Keys)
                 {
                     timer = tempDevice as classTimerDevice;
                     if (timer != null)
@@ -473,7 +473,7 @@ namespace LcmsNet.Method.Forms
             //
             // Add the method information into the combo-box as deemed by the device.
             //
-            var methods = mdict_deviceMappings[device];
+            var methods = m_deviceMappings[device];
             foreach (var method in methods)
             {
                 mcomboBox_method.Items.Add(method);
@@ -606,7 +606,7 @@ namespace LcmsNet.Method.Forms
                     mobj_device = device;
                     if (mobj_device != null)
                     {
-                        if (mdict_deviceMappings.ContainsKey(mobj_device) == false)
+                        if (m_deviceMappings.ContainsKey(mobj_device) == false)
                         {
                             ReflectDevice(mobj_device);
                         }
@@ -681,7 +681,7 @@ namespace LcmsNet.Method.Forms
                     continue;
 
                 var methodPairs = ReflectDevice(device);
-                mdict_deviceMappings.Add(device, methodPairs);
+                m_deviceMappings.Add(device, methodPairs);
                 mcomboBox_devices.Items.Add(device);
             }
 

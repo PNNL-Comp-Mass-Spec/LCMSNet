@@ -25,9 +25,9 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public classPalData()
         {
-            mstring_palMethod = CONST_METHOD_NAME;
-            mstring_PalTray = "";
-            mint_Well = CONST_DEFAULT_VIAL_NUMBER;
+            m_palMethod = CONST_METHOD_NAME;
+            m_PalTray = "";
+            m_Well = CONST_DEFAULT_VIAL_NUMBER;
         }
 
         #endregion
@@ -41,10 +41,10 @@ namespace LcmsNetDataClasses.Data
         public object Clone()
         {
             var newData = new classPalData();
-            newData.PALTray = mstring_PalTray;
-            newData.Method = mstring_palMethod;
-            newData.Well = mint_Well;
-            newData.WellPlate = mstring_WellPlate;
+            newData.PALTray = m_PalTray;
+            newData.Method = m_palMethod;
+            newData.Well = m_Well;
+            newData.WellPlate = m_WellPlate;
 
             return newData;
         }
@@ -71,22 +71,22 @@ namespace LcmsNetDataClasses.Data
         /// <summary>
         /// Name of the PAL method to run.
         /// </summary>
-        private string mstring_palMethod = "";
+        private string m_palMethod = "";
 
         /// <summary>
         /// Name of the PAL tray to use.
         /// </summary>
-        private string mstring_PalTray = "";
+        private string m_PalTray = "";
 
         /// <summary>
         /// Vial index to use.
         /// </summary>
-        private int mint_Well = 0;
+        private int m_Well = 0;
 
         /// <summary>
         /// Wellplate name
         /// </summary>
-        private string mstring_WellPlate = "";
+        private string m_WellPlate = "";
 
         #endregion
 
@@ -97,8 +97,8 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public int Well
         {
-            get { return mint_Well; }
-            set { mint_Well = value; }
+            get { return m_Well; }
+            set { m_Well = value; }
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public string PALTray
         {
-            get { return mstring_PalTray; }
-            set { mstring_PalTray = value; }
+            get { return m_PalTray; }
+            set { m_PalTray = value; }
         }
 
         /// <summary>
@@ -115,8 +115,8 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public string Method
         {
-            get { return mstring_palMethod; }
-            set { mstring_palMethod = value; }
+            get { return m_palMethod; }
+            set { m_palMethod = value; }
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public string WellPlate
         {
-            get { return mstring_WellPlate; }
-            set { mstring_WellPlate = value; }
+            get { return m_WellPlate; }
+            set { m_WellPlate = value; }
         }
 
         #endregion

@@ -36,17 +36,17 @@ namespace LcmsNet.Method.Forms
             //
             // Create internal lists
             //
-            mlist_samples = new List<classSampleData>();
+            m_samples = new List<classSampleData>();
 
 
-            mdict_deviceColorMappings = new Dictionary<IDevice, Color>();
+            m_deviceColorMappings = new Dictionary<IDevice, Color>();
 
             // Maintain a list of errors.
-            mdict_errors = new Dictionary<int, List<classLCEvent>>();
+            m_errors = new Dictionary<int, List<classLCEvent>>();
             for (var i = 0; i < CONST_TOTAL_COLUMNS + 1; i++)
             {
-                mdict_errors.Add(i, new List<classLCEvent>());
-                mlist_samples.Add(null);
+                m_errors.Add(i, new List<classLCEvent>());
+                m_samples.Add(null);
             }
 
 
@@ -106,8 +106,8 @@ namespace LcmsNet.Method.Forms
                 columnID = CONST_TOTAL_COLUMNS;
             }
 
-            if (mlist_samples.Contains(sample) == false)
-                mlist_samples[columnID] = sample;
+            if (m_samples.Contains(sample) == false)
+                m_samples[columnID] = sample;
 
             if (InvokeRequired == true)
                 this.BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
@@ -129,10 +129,10 @@ namespace LcmsNet.Method.Forms
                     columnID = CONST_TOTAL_COLUMNS;
                 }
 
-                mlist_samples[columnID] = sample;
+                m_samples[columnID] = sample;
                 if (lcEvent != null)
                 {
-                    mdict_errors[columnID].Add(lcEvent);
+                    m_errors[columnID].Add(lcEvent);
                 }
             }
 
@@ -147,12 +147,12 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void ClearSamples()
         {
-            for (var i = 0; i < mlist_samples.Count; i++)
+            for (var i = 0; i < m_samples.Count; i++)
             {
-                mlist_samples[i] = null;
-                foreach (var key in mdict_errors.Keys)
+                m_samples[i] = null;
+                foreach (var key in m_errors.Keys)
                 {
-                    mdict_errors[key].Clear();
+                    m_errors[key].Clear();
                 }
             }
         }
@@ -183,7 +183,7 @@ namespace LcmsNet.Method.Forms
         public void RenderGraph(Graphics e)
         {
             var now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-            if (mlist_samples != null && mlist_samples.Count > 0)
+            if (m_samples != null && m_samples.Count > 0)
             {
                 try
                 {
@@ -202,7 +202,7 @@ namespace LcmsNet.Method.Forms
                     //
                     // Find the minimum and maximum time values.
                     //
-                    foreach (var data in mlist_samples)
+                    foreach (var data in m_samples)
                     {
                         if (data != null)
                         {
@@ -251,10 +251,10 @@ namespace LcmsNet.Method.Forms
                     //
                     renderer.RenderSamples(e,
                         bounds,
-                        mlist_samples,
+                        m_samples,
                         minTime,
                         span,
-                        mdict_deviceColorMappings,
+                        m_deviceColorMappings,
                         DateTime.MaxValue);
 
                     if (RenderDisplayWindow == true)
@@ -287,10 +287,10 @@ namespace LcmsNet.Method.Forms
                     }
 
 
-                    foreach (var key in mdict_errors.Keys)
+                    foreach (var key in m_errors.Keys)
                     {
                         var oldEvents = new List<classLCEvent>();
-                        var lcEvents = mdict_errors[key];
+                        var lcEvents = m_errors[key];
                         foreach (var lcEvent in lcEvents)
                         {
                             if (lcEvent.Start.Subtract(minTime).TotalMilliseconds <= 0)
@@ -330,7 +330,7 @@ namespace LcmsNet.Method.Forms
                     null,
                     now,
                     new TimeSpan(1, 0, 0),
-                    mdict_deviceColorMappings,
+                    m_deviceColorMappings,
                     DateTime.MaxValue);
             }
         }
@@ -353,12 +353,12 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// List of samples that are run on columns.
         /// </summary>
-        private List<classSampleData> mlist_samples;
+        private List<classSampleData> m_samples;
 
         /// <summary>
         /// Dictionary to map a device to a color for visual integrity
         /// </summary>
-        private Dictionary<IDevice, Color> mdict_deviceColorMappings;
+        private Dictionary<IDevice, Color> m_deviceColorMappings;
 
         /// <summary>
         /// Defines how to refresh the graphics.
@@ -368,7 +368,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Maintains a list of errors that happened on the column.
         /// </summary>
-        private Dictionary<int, List<LcmsNetDataClasses.Method.classLCEvent>> mdict_errors;
+        private Dictionary<int, List<LcmsNetDataClasses.Method.classLCEvent>> m_errors;
 
         #endregion
 
@@ -402,7 +402,7 @@ namespace LcmsNet.Method.Forms
             //
             // Clear the list so we can re-adjust the mappings
             //
-            mdict_deviceColorMappings = classLCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
+            m_deviceColorMappings = classLCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
         }
 
         #endregion

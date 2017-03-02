@@ -30,8 +30,8 @@ namespace LcmsNetDataClasses.Method
             Column = -1;
             AllowPostOverlap = true;
             AllowPreOverlap = true;
-            mlist_events = new List<classLCEvent>();
-            mlist_actualEvents = new List<classLCEvent>();
+            m_events = new List<classLCEvent>();
+            m_actualEvents = new List<classLCEvent>();
             Name = "";
             CurrentEventNumber = CONST_CURRENT_EVENT_NOT_RUN;
             IsSpecialMethod = false;
@@ -54,12 +54,12 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// List of LC-events.
         /// </summary>
-        [NonSerialized] private List<classLCEvent> mlist_events;
+        [NonSerialized] private List<classLCEvent> m_events;
 
         /// <summary>
         /// List of LC-events whose values should reflect the actual start times and durations for an LC-Event.
         /// </summary>
-        [NonSerialized] private List<classLCEvent> mlist_actualEvents;
+        [NonSerialized] private List<classLCEvent> m_actualEvents;
 
         /// <summary>
         /// End date only calculated at call of End property to get around serialization issues.
@@ -105,8 +105,8 @@ namespace LcmsNetDataClasses.Method
         /// </summary>
         public List<classLCEvent> Events
         {
-            get { return mlist_events; }
-            set { mlist_events = value; }
+            get { return m_events; }
+            set { m_events = value; }
         }
 
         /// <summary>
@@ -114,8 +114,8 @@ namespace LcmsNetDataClasses.Method
         /// </summary>
         public List<classLCEvent> ActualEvents
         {
-            get { return mlist_actualEvents; }
-            set { mlist_actualEvents = value; }
+            get { return m_actualEvents; }
+            set { m_actualEvents = value; }
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace LcmsNetDataClasses.Method
             // 
             // For each event, we tell the device to write the required used data.
             // 
-            foreach (var lcEvent in mlist_events)
+            foreach (var lcEvent in m_events)
             {
                 // 
                 // Only write this if we have performance data for this method....
@@ -265,7 +265,7 @@ namespace LcmsNetDataClasses.Method
         {
             var newMethod = new classLCMethod();
             newMethod.Name = Name;
-            if (mlist_events != null)
+            if (m_events != null)
             {
                 foreach (var lcEvent in Events)
                 {

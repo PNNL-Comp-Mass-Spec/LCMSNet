@@ -25,7 +25,7 @@ namespace LcmsNetDataClasses.Data
 
         #region "Class variables"
 
-        private static XmlDocument mobject_TriggerFileContents = null;
+        private static XmlDocument m_TriggerFileContents = null;
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace LcmsNetDataClasses.Data
             GenerateXmlDoc(sample);
 
             // Write the document to the file
-            SaveFile(mobject_TriggerFileContents, sample, sample.DmsData.DatasetName);
+            SaveFile(m_TriggerFileContents, sample, sample.DmsData.DatasetName);
         }
 
         /// <summary>
@@ -59,13 +59,13 @@ namespace LcmsNetDataClasses.Data
         private static void GenerateXmlDoc(classSampleData sample)
         {
             // Create and initialize the document
-            mobject_TriggerFileContents = new XmlDocument();
-            var docDeclaration = mobject_TriggerFileContents.CreateXmlDeclaration("1.0", null, null);
-            mobject_TriggerFileContents.AppendChild(docDeclaration);
+            m_TriggerFileContents = new XmlDocument();
+            var docDeclaration = m_TriggerFileContents.CreateXmlDeclaration("1.0", null, null);
+            m_TriggerFileContents.AppendChild(docDeclaration);
 
             // Add dataset (Root) element
-            var rootElement = mobject_TriggerFileContents.CreateElement("Dataset");
-            mobject_TriggerFileContents.AppendChild(rootElement);
+            var rootElement = m_TriggerFileContents.CreateElement("Dataset");
+            m_TriggerFileContents.AppendChild(rootElement);
 
             // Add the parameters
             AddParam(rootElement, "Dataset Name", sample.DmsData.DatasetName);
@@ -133,11 +133,11 @@ namespace LcmsNetDataClasses.Data
         {
             try
             {
-                var newElement = mobject_TriggerFileContents.CreateElement("Parameter");
-                var nameAttr = mobject_TriggerFileContents.CreateAttribute("Name");
+                var newElement = m_TriggerFileContents.CreateElement("Parameter");
+                var nameAttr = m_TriggerFileContents.CreateAttribute("Name");
                 nameAttr.Value = paramName;
                 newElement.Attributes.Append(nameAttr);
-                var valueAttr = mobject_TriggerFileContents.CreateAttribute("Value");
+                var valueAttr = m_TriggerFileContents.CreateAttribute("Value");
                 valueAttr.Value = paramValue;
                 newElement.Attributes.Append(valueAttr);
                 Parent.AppendChild(newElement);

@@ -10,7 +10,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Mapping between devices to their position in the listview.
         /// </summary>
-        private Dictionary<IDevice, ListViewItem> mdict_deviceToItemMap;
+        private Dictionary<IDevice, ListViewItem> m_deviceToItemMap;
 
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace LcmsNet.Devices
             InitializeComponent();
             TopMost = true;
 
-            mdict_deviceToItemMap = new Dictionary<IDevice, ListViewItem>();
+            m_deviceToItemMap = new Dictionary<IDevice, ListViewItem>();
 
             var columnNames = new string[] {"Device", "Status", "Type"};
             foreach (var name in columnNames)
@@ -64,7 +64,7 @@ namespace LcmsNet.Devices
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.Status.ToString()));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.DeviceType.ToString()));
             mlistview_devices.Items.Add(item);
-            mdict_deviceToItemMap.Add(device, item);
+            m_deviceToItemMap.Add(device, item);
             mlistview_devices.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             mlistview_devices.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
@@ -75,11 +75,11 @@ namespace LcmsNet.Devices
         /// <param name="device">Device to show.</param>
         private void RemoveDevice(IDevice device)
         {
-            if (mdict_deviceToItemMap.ContainsKey(device))
+            if (m_deviceToItemMap.ContainsKey(device))
             {
-                var item = mdict_deviceToItemMap[device];
+                var item = m_deviceToItemMap[device];
                 device.StatusUpdate -= device_StatusUpdate;
-                mdict_deviceToItemMap.Remove(device);
+                m_deviceToItemMap.Remove(device);
                 mlistview_devices.Items.Remove(item);
                 mlistview_devices.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
                 mlistview_devices.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -114,9 +114,9 @@ namespace LcmsNet.Devices
         /// <param name="device"></param>
         void Manager_DeviceRenamed(object sender, IDevice device)
         {
-            if (mdict_deviceToItemMap.ContainsKey(device))
+            if (m_deviceToItemMap.ContainsKey(device))
             {
-                var item = mdict_deviceToItemMap[device];
+                var item = m_deviceToItemMap[device];
                 item.Text = device.Name;
             }
         }

@@ -29,7 +29,7 @@ namespace LcmsNet.Method
         /// </summary>
         private classLCMethodManager()
         {
-            mdict_methods = new Dictionary<string, classLCMethod>();
+            m_methods = new Dictionary<string, classLCMethod>();
         }
 
         #region Events
@@ -56,7 +56,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// List of available methods.
         /// </summary>
-        private Dictionary<string, classLCMethod> mdict_methods;
+        private Dictionary<string, classLCMethod> m_methods;
 
         /// <summary>
         /// Static object that manages each LC method to be accessible to other objects.
@@ -80,9 +80,9 @@ namespace LcmsNet.Method
             if (method.Name == null)
                 return false;
 
-            if (mdict_methods.ContainsKey(method.Name) == false)
+            if (m_methods.ContainsKey(method.Name) == false)
             {
-                mdict_methods.Add(method.Name, method);
+                m_methods.Add(method.Name, method);
                 if (MethodAdded != null)
                     MethodAdded(this, method);
 
@@ -90,7 +90,7 @@ namespace LcmsNet.Method
             }
             else
             {
-                mdict_methods[method.Name] = method;
+                m_methods[method.Name] = method;
 
                 if (MethodUpdated != null)
                     MethodUpdated(this, method);
@@ -104,7 +104,7 @@ namespace LcmsNet.Method
         /// </summary>
         public Dictionary<string, classLCMethod> Methods
         {
-            get { return mdict_methods; }
+            get { return m_methods; }
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace LcmsNet.Method
                 result = MethodRemoved(this, method);
             }
             if (result != false)
-                mdict_methods.Remove(method.Name);
+                m_methods.Remove(method.Name);
 
             return result;
         }
@@ -182,7 +182,7 @@ namespace LcmsNet.Method
                 throw new Exception("The method was not able to be read.");
 
             // Figure out if the method exists.
-            if (mdict_methods.ContainsKey(method.Name) == true)
+            if (m_methods.ContainsKey(method.Name) == true)
             {
                 //TODO: Figure out what to do if a duplicate method exists.
                 var errorMessage = string.Format("The user method name from {0} conflicts with another method.",

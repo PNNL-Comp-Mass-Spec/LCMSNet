@@ -21,7 +21,7 @@ namespace LcmsNet.Devices
         /// </summary>
         public classLogDevice()
         {
-            mstring_name = "Logger";
+            m_name = "Logger";
             menum_status = enumDeviceStatus.NotInitialized;
         }
 
@@ -32,7 +32,7 @@ namespace LcmsNet.Devices
         /// <returns></returns>
         public override string ToString()
         {
-            return mstring_name;
+            return m_name;
         }
 
         #region Members
@@ -40,7 +40,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Name of the device.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
 
         /// <summary>
         /// Status of the device currently.
@@ -86,7 +86,7 @@ namespace LcmsNet.Devices
         [classLCMethodAttribute("Write Message", 3, false, "", -1, false)]
         public void DebugWrite(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("\t\t{0} -- {1}", mstring_name, message));
+            System.Diagnostics.Debug.WriteLine(string.Format("\t\t{0} -- {1}", m_name, message));
             System.Diagnostics.Debug.Flush();
         }
 
@@ -131,8 +131,8 @@ namespace LcmsNet.Devices
         /// </summary>
         public string Name
         {
-            get { return mstring_name; }
-            set { mstring_name = value; }
+            get { return m_name; }
+            set { m_name = value; }
         }
 
         /// <summary>

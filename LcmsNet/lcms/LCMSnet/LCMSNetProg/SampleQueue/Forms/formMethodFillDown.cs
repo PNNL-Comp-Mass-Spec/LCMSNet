@@ -44,40 +44,40 @@ namespace LcmsNet.SampleQueue.Forms
             if (checkBox1.Checked)
             {
                 var name = comboLcMethodCol1.Text;
-                if (mdict_methodNameMap.ContainsKey(name))
+                if (m_methodNameMap.ContainsKey(name))
                 {
-                    methods.Add(mdict_methodNameMap[name]);
+                    methods.Add(m_methodNameMap[name]);
                 }
             }
             if (checkBox2.Checked)
             {
                 var name = comboLcMethodCol2.Text;
-                if (mdict_methodNameMap.ContainsKey(name))
+                if (m_methodNameMap.ContainsKey(name))
                 {
-                    methods.Add(mdict_methodNameMap[name]);
+                    methods.Add(m_methodNameMap[name]);
                 }
             }
             if (checkBox3.Checked)
             {
                 var name = comboLcMethodCol3.Text;
-                if (mdict_methodNameMap.ContainsKey(name))
+                if (m_methodNameMap.ContainsKey(name))
                 {
-                    methods.Add(mdict_methodNameMap[name]);
+                    methods.Add(m_methodNameMap[name]);
                 }
             }
             if (checkBox4.Checked)
             {
                 var name = comboLcMethodCol4.Text;
-                if (mdict_methodNameMap.ContainsKey(name))
+                if (m_methodNameMap.ContainsKey(name))
                 {
-                    methods.Add(mdict_methodNameMap[name]);
+                    methods.Add(m_methodNameMap[name]);
                 }
             }
             if (methods.Count < 1)
                 return;
 
             var i = 0;
-            foreach (var samples in mobject_Samples)
+            foreach (var samples in m_Samples)
             {
                 var tempMethod = methods[i];
 
@@ -135,7 +135,7 @@ namespace LcmsNet.SampleQueue.Forms
                 return;
 
             var i = 0;
-            foreach (var sample in mobject_Samples)
+            foreach (var sample in m_Samples)
             {
                 sample.InstrumentData = new classInstrumentInfo();
                 sample.InstrumentData.MethodName = methods[i];
@@ -181,7 +181,7 @@ namespace LcmsNet.SampleQueue.Forms
                     return;
 
                 var i = 0;
-                foreach (var sample in mobject_Samples)
+                foreach (var sample in m_Samples)
                 {
                     sample.Volume = methods[i];
                     i++;
@@ -228,7 +228,7 @@ namespace LcmsNet.SampleQueue.Forms
                 return;
 
             var i = 0;
-            foreach (var sample in mobject_Samples)
+            foreach (var sample in m_Samples)
             {
                 sample.DmsData.DatasetType = methods[i];
                 i++;
@@ -260,13 +260,13 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        List<classSampleData> mobject_Samples;
-        Dictionary<string, classLCMethod> mdict_methodNameMap;
+        List<classSampleData> m_Samples;
+        Dictionary<string, classLCMethod> m_methodNameMap;
 
         /// <summary>
         /// Reverse lookup for methods.
         /// </summary>
-        Dictionary<classLCMethod, string> mdict_methods;
+        Dictionary<classLCMethod, string> m_methods;
 
         private classLCMethodManager m_manager;
 
@@ -283,8 +283,8 @@ namespace LcmsNet.SampleQueue.Forms
         {
             InitializeComponent();
 
-            mdict_methodNameMap = new Dictionary<string, classLCMethod>();
-            mdict_methods = new Dictionary<classLCMethod, string>();
+            m_methodNameMap = new Dictionary<string, classLCMethod>();
+            m_methods = new Dictionary<classLCMethod, string>();
             m_manager = manager;
 
             // Clear the dropdowns
@@ -339,18 +339,18 @@ namespace LcmsNet.SampleQueue.Forms
         private void UpdateMethod(classLCMethod method)
         {
             string oldName = null;
-            var contains = mdict_methods.ContainsKey(method);
+            var contains = m_methods.ContainsKey(method);
             if (contains)
             {
-                mdict_methodNameMap.Remove(oldName);
-                mdict_methodNameMap.Add(method.Name, method);
+                m_methodNameMap.Remove(oldName);
+                m_methodNameMap.Add(method.Name, method);
 
                 comboLcMethodCol1.Items.Remove(oldName);
                 comboLcMethodCol2.Items.Remove(oldName);
                 comboLcMethodCol3.Items.Remove(oldName);
                 comboLcMethodCol4.Items.Remove(oldName);
 
-                mdict_methods[method] = method.Name;
+                m_methods[method] = method.Name;
                 comboLcMethodCol1.Items.Add(method.Name);
                 comboLcMethodCol2.Items.Add(method.Name);
                 comboLcMethodCol3.Items.Add(method.Name);
@@ -360,10 +360,10 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void RemoveMethod(classLCMethod method)
         {
-            if (mdict_methodNameMap.ContainsKey(method.Name))
+            if (m_methodNameMap.ContainsKey(method.Name))
             {
-                mdict_methodNameMap.Remove(method.Name);
-                mdict_methods.Remove(method);
+                m_methodNameMap.Remove(method.Name);
+                m_methods.Remove(method);
                 comboLcMethodCol1.Items.Remove(method.Name);
                 comboLcMethodCol2.Items.Remove(method.Name);
                 comboLcMethodCol3.Items.Remove(method.Name);
@@ -373,10 +373,10 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void AddMethod(classLCMethod method)
         {
-            if (mdict_methodNameMap.ContainsKey(method.Name))
+            if (m_methodNameMap.ContainsKey(method.Name))
             {
-                mdict_methodNameMap[method.Name] = method;
-                mdict_methods[method] = method.Name;
+                m_methodNameMap[method.Name] = method;
+                m_methods[method] = method.Name;
             }
             else
             {
@@ -384,8 +384,8 @@ namespace LcmsNet.SampleQueue.Forms
                 comboLcMethodCol2.Items.Add(method.Name);
                 comboLcMethodCol3.Items.Add(method.Name);
                 comboLcMethodCol4.Items.Add(method.Name);
-                mdict_methodNameMap.Add(method.Name, method);
-                mdict_methods.Add(method, method.Name);
+                m_methodNameMap.Add(method.Name, method);
+                m_methods.Add(method, method.Name);
             }
         }
 
@@ -402,7 +402,7 @@ namespace LcmsNet.SampleQueue.Forms
         public void InitForm(List<classSampleData> samples)
         {
             // Store the sample data for later use
-            mobject_Samples = samples;
+            m_Samples = samples;
         }
 
         /// <summary>
@@ -456,7 +456,7 @@ namespace LcmsNet.SampleQueue.Forms
         public List<classSampleData> GetModifiedSampleList()
         {
             // Return and exit
-            return mobject_Samples;
+            return m_Samples;
         }
 
         #endregion

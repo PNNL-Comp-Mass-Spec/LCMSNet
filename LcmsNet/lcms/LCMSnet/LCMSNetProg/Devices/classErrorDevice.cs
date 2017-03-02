@@ -19,8 +19,8 @@ namespace LcmsNet.Devices
         /// </summary>
         public classErrorDevice()
         {
-            mstring_name = "ErrorDevice";
-            mstring_version = "Version X";
+            m_name = "ErrorDevice";
+            m_version = "Version X";
             menum_status = enumDeviceStatus.NotInitialized;
         }
 
@@ -54,7 +54,7 @@ namespace LcmsNet.Devices
         /// <returns></returns>
         public override string ToString()
         {
-            return mstring_name;
+            return m_name;
         }
 
         #region Members
@@ -62,12 +62,12 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Name of this device.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
 
         /// <summary>
         /// Version of this device.
         /// </summary>
-        private string mstring_version;
+        private string m_version;
 
         /// <summary>
         /// Status of the device currently.
@@ -93,8 +93,8 @@ namespace LcmsNet.Devices
         /// </summary>
         public string Name
         {
-            get { return mstring_name; }
-            set { mstring_name = value; }
+            get { return m_name; }
+            set { m_name = value; }
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace LcmsNet.Devices
         /// </summary>
         public string Version
         {
-            get { return mstring_version; }
-            set { mstring_version = value; }
+            get { return m_version; }
+            set { m_version = value; }
         }
 
         /// <summary>

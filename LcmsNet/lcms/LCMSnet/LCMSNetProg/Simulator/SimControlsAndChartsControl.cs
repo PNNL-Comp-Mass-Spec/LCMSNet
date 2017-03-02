@@ -177,7 +177,7 @@ namespace LcmsNet.Simulator
                 var optimizer = new classLCMethodOptimizer();
                 //optimizer.UpdateRequired += new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
                 var methods = mcontrol_selectedMethods.SelectedMethods;
-                //mint_renderUpdateCount = 0;
+                //m_renderUpdateCount = 0;
 
                 if (methods.Count > 0)
                 {
@@ -210,7 +210,7 @@ namespace LcmsNet.Simulator
             //
             // Render the updates if we animating and past the rendering threshold.
             //
-            //if (MethodPreviewOptions.Animate == true && //mint_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
+            //if (MethodPreviewOptions.Animate == true && //m_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
             //{
             //    RenderThroughput(sender.Methods);
             //    Refresh();
@@ -219,7 +219,7 @@ namespace LcmsNet.Simulator
             //    ///
             //    /// reset the number of update calls we have seen.
             //    ///
-            //    //mint_renderUpdateCount = 0;
+            //    //m_renderUpdateCount = 0;
 
             //    System.Threading.Thread.Sleep(MethodPreviewOptions.AnimateDelay);
             //}

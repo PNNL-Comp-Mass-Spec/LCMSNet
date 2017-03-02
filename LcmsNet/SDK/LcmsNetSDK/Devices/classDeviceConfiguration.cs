@@ -31,27 +31,27 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Maps devices to their settings.
         /// </summary>
-        private readonly Dictionary<string, Dictionary<string, object>> mdict_settings;
+        private readonly Dictionary<string, Dictionary<string, object>> m_settings;
 
         /// <summary>
         /// holds a list of connections and the ports that they connection
         /// unique ID of connection is the key, the ports are a comma separated string that make up the value
         /// </summary>
-        private readonly Dictionary<string, string> mlist_connections;
+        private readonly Dictionary<string, string> m_connections;
 
         /// <summary>
         /// Holds a list of devices that can be enumerated through.
         /// </summary>
-        private readonly List<string> mlist_devices;
+        private readonly List<string> m_devices;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public classDeviceConfiguration()
         {
-            mdict_settings = new Dictionary<string, Dictionary<string, object>>();
-            mlist_devices = new List<string>();
-            mlist_connections = new Dictionary<string, string>();
+            m_settings = new Dictionary<string, Dictionary<string, object>>();
+            m_devices = new List<string>();
+            m_connections = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public int DeviceCount
         {
-            get { return mlist_devices.Count; }
+            get { return m_devices.Count; }
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>Device in collection at index.</returns>
         public string this[int index]
         {
-            get { return mlist_devices[index]; }
+            get { return m_devices[index]; }
         }
 
         /// <summary>
@@ -85,12 +85,12 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="value">Value to assign.</param>
         public void AddSetting(string deviceName, string settingsName, object value)
         {
-            if (!mdict_settings.ContainsKey(deviceName))
+            if (!m_settings.ContainsKey(deviceName))
             {
-                mlist_devices.Add(deviceName);
-                mdict_settings.Add(deviceName, new Dictionary<string, object>());
+                m_devices.Add(deviceName);
+                m_settings.Add(deviceName, new Dictionary<string, object>());
             }
-            mdict_settings[deviceName].Add(settingsName, value);
+            m_settings[deviceName].Add(settingsName, value);
         }
 
         /// <summary>
@@ -100,17 +100,17 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         public Dictionary<string, object> GetDeviceSettings(string deviceName)
         {
-            return mdict_settings[deviceName];
+            return m_settings[deviceName];
         }
 
         public void AddConnection(string connId, string ports)
         {
-            mlist_connections[connId] = ports;
+            m_connections[connId] = ports;
         }
 
         public Dictionary<string, string> GetConnections()
         {
-            return mlist_connections;
+            return m_connections;
         }
     }
 }

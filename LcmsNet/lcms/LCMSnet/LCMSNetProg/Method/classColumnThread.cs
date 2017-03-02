@@ -27,7 +27,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// The ID of the column this thread is working on.
         /// </summary>
-        private int mint_columnId;
+        private int m_columnId;
 
         /// <summary>
         /// Object that contains method to run with parameters.
@@ -72,7 +72,7 @@ namespace LcmsNet.Method
 
         public classColumnThread(int id, BackgroundWorker worker)
         {
-            mint_columnId = id;
+            m_columnId = id;
             mobj_abortEvent = new ManualResetEvent(false);
             mthread_worker = worker;
             VerboseLevel = CONST_VERBOSE_EVENTS;
@@ -142,7 +142,7 @@ namespace LcmsNet.Method
             Exception ex = null;
             //We return the columnId as the "result" so the scheduler callback can determine which column events
             // are coming from.
-            e.Result = mint_columnId;
+            e.Result = m_columnId;
 
             try
             {
@@ -169,7 +169,7 @@ namespace LcmsNet.Method
                         //We send percentage(of time) complete and state of the column, currently consisting
                         //of columnID, event number, and end time of the next event to the event handler
                         var state = new List<object>();
-                        state.Add(mint_columnId);
+                        state.Add(m_columnId);
                         state.Add(eventNumber);
                         if (eventNumber <= methodEvents.Count - 1)
                         {
@@ -222,7 +222,7 @@ namespace LcmsNet.Method
                                 string.Format(
                                     "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
                                     finished.ToString(),
-                                    mint_columnId, // 1  COL ID
+                                    m_columnId, // 1  COL ID
                                     exThrown.Message, // 2  Message
                                     exThrown.StackTrace, // 3  Stack Trace
                                     lcEvent.Name,
@@ -232,7 +232,7 @@ namespace LcmsNet.Method
                                 string.Format(
                                     "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
                                     finished.ToString(),
-                                    mint_columnId, // 1  COL ID
+                                    m_columnId, // 1  COL ID
                                     exThrown.Message, // 2  Message
                                     exThrown.StackTrace, // 3  Stack Trace
                                     lcEvent.Name,
@@ -262,7 +262,7 @@ namespace LcmsNet.Method
                             {
                                 Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
                                     finished.ToString(),
-                                    mint_columnId, // 1  COL ID
+                                    m_columnId, // 1  COL ID
                                     span.TotalMilliseconds),
                                     CONST_VERBOSE_EVENTS);
                                 var timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
@@ -300,7 +300,7 @@ namespace LcmsNet.Method
             }
             catch (Exception columnEx)
             {
-                throw new classColumnException(mint_columnId, columnEx);
+                throw new classColumnException(m_columnId, columnEx);
             }
             //We may have finished the method, but if we were told to cancel between the time
             //we started the last event and now, we still have to die. Otherwise, we could cause

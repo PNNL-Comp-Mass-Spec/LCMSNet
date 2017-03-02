@@ -56,12 +56,12 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// Displays the ID - index of the column.
         /// </summary>
-        private int mint_columnID;
+        private int m_columnID;
 
         /// <summary>
         /// Flag telling combo box index changed event that event was caused by a mouse click
         /// </summary>
-        private bool mbool_ComboHasFocus = false;
+        private bool m_ComboHasFocus = false;
 
         #endregion
 
@@ -111,11 +111,11 @@ namespace LcmsNet.Configuration
         /// </summary>
         public int ColumnID
         {
-            get { return mint_columnID; }
+            get { return m_columnID; }
             set
             {
-                mint_columnID = value;
-                mbutton_color.Text = mint_columnID.ToString();
+                m_columnID = value;
+                mbutton_color.Text = m_columnID.ToString();
                 PerformLayout();
             }
         }
@@ -283,7 +283,7 @@ namespace LcmsNet.Configuration
             {
                 // If selected index changed due to user action, then update the column data
                 //  Otherwise, index may have changed because of initializing the combo box and should be ignored
-                if (mbool_ComboHasFocus)
+                if (m_ComboHasFocus)
                 {
                     mobj_columnData.Name = mcomboBox_names.SelectedItem.ToString();
                     if (ColumnNamesChanged != null)
@@ -301,7 +301,7 @@ namespace LcmsNet.Configuration
         /// <param name="e"></param>
         private void mcomboBox_names_Enter(object sender, EventArgs e)
         {
-            mbool_ComboHasFocus = true;
+            m_ComboHasFocus = true;
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace LcmsNet.Configuration
         /// <param name="e"></param>
         private void mcomboBox_names_Leave(object sender, EventArgs e)
         {
-            mbool_ComboHasFocus = false;
+            m_ComboHasFocus = false;
         }
 
         #endregion

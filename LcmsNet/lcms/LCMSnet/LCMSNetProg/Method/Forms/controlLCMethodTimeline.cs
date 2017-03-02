@@ -31,8 +31,8 @@ namespace LcmsNet.Method.Forms
             //
             // Create internal lists
             //
-            mlist_methods = new List<classLCMethod>();
-            mdict_deviceColorMappings = new Dictionary<IDevice, Color>();
+            m_methods = new List<classLCMethod>();
+            m_deviceColorMappings = new Dictionary<IDevice, Color>();
 
             //
             // We map before we register our delegates with events to make sure devices that are built-in are
@@ -102,10 +102,10 @@ namespace LcmsNet.Method.Forms
                 else if (buttonLocations[1].Contains(e.Location))
                 {
                     unmoved = false;
-                    if (mlist_methods.Count > 0)
+                    if (m_methods.Count > 0)
                     {
                         var maxIndex =
-                            FluidicsSimulator.FluidicsSimulator.BuildEventList(mlist_methods, mlist_methods[0].Start)
+                            FluidicsSimulator.FluidicsSimulator.BuildEventList(m_methods, m_methods[0].Start)
                                 .Count - 1;
                         if (StartEventIndex + 1 <= maxIndex)
                         {
@@ -123,10 +123,10 @@ namespace LcmsNet.Method.Forms
             {
                 var indexChange = e.Y - oldMouseLoc.Y;
                 var eventHeight = 48; // from classLCMethodConversationRenderer
-                if (mlist_methods.Count > 0)
+                if (m_methods.Count > 0)
                 {
                     var maxIndex =
-                        FluidicsSimulator.FluidicsSimulator.BuildEventList(mlist_methods, mlist_methods[0].Start).Count -
+                        FluidicsSimulator.FluidicsSimulator.BuildEventList(m_methods, m_methods[0].Start).Count -
                         1;
                         //numer of lists of events that happen at the same time. This is the upper bound of the index we are trying to change and track.
                     if (indexChange <= -eventHeight)
@@ -157,12 +157,12 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// The list of methods to render.
         /// </summary>
-        private List<classLCMethod> mlist_methods;
+        private List<classLCMethod> m_methods;
 
         /// <summary>
         /// Maps a device to a color.
         /// </summary>
-        private Dictionary<IDevice, Color> mdict_deviceColorMappings;
+        private Dictionary<IDevice, Color> m_deviceColorMappings;
 
         //member variables for scrolling
         private int m_index; //tracks index
@@ -203,7 +203,7 @@ namespace LcmsNet.Method.Forms
             //
             // Clear the list so we can re-adjust the mappings
             //
-            mdict_deviceColorMappings = classLCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
+            m_deviceColorMappings = classLCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
         }
 
         #endregion
@@ -226,8 +226,8 @@ namespace LcmsNet.Method.Forms
         /// <param name="method"></param>
         public void RenderLCMethod(classLCMethod method)
         {
-            mlist_methods.Clear();
-            mlist_methods.Add(method);
+            m_methods.Clear();
+            m_methods.Add(method);
             Invalidate();
         }
 
@@ -237,8 +237,8 @@ namespace LcmsNet.Method.Forms
         /// <param name="method"></param>
         public void RenderLCMethod(List<classLCMethod> methods)
         {
-            mlist_methods.Clear();
-            mlist_methods.AddRange(methods);
+            m_methods.Clear();
+            m_methods.AddRange(methods);
             Invalidate();
         }
 
@@ -257,20 +257,20 @@ namespace LcmsNet.Method.Forms
                 renderer.ColumnNames.Add(column.Name);
             }
             renderer.ColumnNames.Add("Special");
-            if (mlist_methods != null && mlist_methods.Count > 0)
+            if (m_methods != null && m_methods.Count > 0)
             {
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Map the colors appropiately if they havent already been
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                if (mdict_deviceColorMappings.Count < 1)
+                if (m_deviceColorMappings.Count < 1)
                     RemapDevicesToColors();
 
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Find the duration of the total comparison
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                startTime = mlist_methods[0].Start;
-                var endTime = mlist_methods[mlist_methods.Count - 1].End;
-                foreach (var renderData in mlist_methods)
+                startTime = m_methods[0].Start;
+                var endTime = m_methods[m_methods.Count - 1].End;
+                foreach (var renderData in m_methods)
                 {
                     var span = renderData.End.Subtract(endTime);
                     if (span.TotalMilliseconds > 0)
@@ -288,10 +288,10 @@ namespace LcmsNet.Method.Forms
 
             renderer.RenderLCMethod(e.Graphics,
                 bounds,
-                mlist_methods,
+                m_methods,
                 startTime,
                 duration,
-                mdict_deviceColorMappings,
+                m_deviceColorMappings,
                 DateTime.MaxValue);
             //Render scroll buttons
             if (RenderMode == enumLCMethodRenderMode.Conversation)

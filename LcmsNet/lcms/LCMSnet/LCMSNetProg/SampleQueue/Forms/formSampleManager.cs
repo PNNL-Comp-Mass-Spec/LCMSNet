@@ -59,7 +59,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Reference to the DMS View.
         /// </summary>
-        private formDMSView mform_dmsView;
+        private formDMSView m_dmsView;
 
         /// <summary>
         /// Manages adding the samples to the queue.
@@ -118,7 +118,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="queue"></param>
         private void Initialize(classSampleQueue queue)
         {
-            mform_dmsView = new formDMSView();
+            m_dmsView = new formDMSView();
             mobj_sampleQueue = queue;
             mdialog_importQueue = new OpenFileDialog();
 
@@ -131,12 +131,12 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Load up the data to the appropiate sub-controls.
             //
-            mcontrol_sequenceView.DMSView = mform_dmsView;
+            mcontrol_sequenceView.DMSView = m_dmsView;
             mcontrol_sequenceView.SampleQueue = mobj_sampleQueue;
-            mcontrol_column1.DMSView = mform_dmsView;
-            mcontrol_column2.DMSView = mform_dmsView;
-            mcontrol_column3.DMSView = mform_dmsView;
-            mcontrol_column4.DMSView = mform_dmsView;
+            mcontrol_column1.DMSView = m_dmsView;
+            mcontrol_column2.DMSView = m_dmsView;
+            mcontrol_column3.DMSView = m_dmsView;
+            mcontrol_column4.DMSView = m_dmsView;
             mcontrol_column1.SampleQueue = mobj_sampleQueue;
             mcontrol_column2.SampleQueue = mobj_sampleQueue;
             mcontrol_column3.SampleQueue = mobj_sampleQueue;

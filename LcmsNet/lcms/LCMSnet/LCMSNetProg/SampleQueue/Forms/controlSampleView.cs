@@ -191,7 +191,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Form that provides user interface to retrieve samples from DMS.
         /// </summary>
-        protected formDMSView mform_dmsView;
+        protected formDMSView m_dmsView;
 
         /// <summary>
         /// Object that manages the list of all samples.
@@ -206,11 +206,11 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Default sample name when a new sample is added.
         /// </summary>
-        //protected string mstring_defaultSampleName;
+        //protected string m_defaultSampleName;
         /// <summary>
         /// Starting index of listview items that can be edited.
         /// </summary>
-        protected int mint_editableIndex;
+        protected int m_editableIndex;
 
         /// <summary>
         /// Value of the cell before edits.
@@ -220,42 +220,42 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Names of the methods available on the PAL
         /// </summary>
-        protected List<string> mlist_autoSamplerMethods;
+        protected List<string> m_autoSamplerMethods;
 
         /// <summary>
         /// Names of the trays available on the PAL
         /// </summary>
-        protected List<string> mlist_autosamplerTrays;
+        protected List<string> m_autosamplerTrays;
 
         /// <summary>
         /// Names of the instrument methods available on the MS.
         /// </summary>
-        protected List<string> mlist_instrumentMethods;
+        protected List<string> m_instrumentMethods;
 
         /// <summary>
         /// Flag that turns off the coloring when a PAL item (method, tray) was not downloadable from the PAL.
         /// </summary>
-        protected bool mbool_ignoreMissingPALValues;
+        protected bool m_ignoreMissingPALValues;
 
         /// <summary>
         /// Fill down form for updating lots of samples at once.
         /// </summary>
-        protected formMethodFillDown mform_filldown;
+        protected formMethodFillDown m_filldown;
 
         /// <summary>
         /// Tray and vial assignment form.
         /// </summary>
-        protected formTrayVialAssignment mform_trayVial;
+        protected formTrayVialAssignment m_trayVial;
 
         /// <summary>
         /// Last position of the sample that is queued used to track how the user is queuing and dequeuing samples.
         /// </summary>
-        private int mint_lastQueuedSamplePosition = 0;
+        private int m_lastQueuedSamplePosition = 0;
 
         /// <summary>
         /// First position of the pulldown bar to track what samples can be queued or edited.
         /// </summary>
-        private int mint_firstQueuedSamplePosition = 0;
+        private int m_firstQueuedSamplePosition = 0;
 
         /// <summary>
         /// If autoscroll during sequence run is enabled
@@ -342,22 +342,22 @@ namespace LcmsNet.SampleQueue.Forms
             mobj_colors = new Color[2];
             mobj_colors[0] = Color.White;
             mobj_colors[1] = Color.Gainsboro;
-            mint_editableIndex = 0;
+            m_editableIndex = 0;
 
             //
             // Fill-down form for batch sample editing And Tray Vial assignmenet
             //
-            mform_filldown = new formMethodFillDown(classLCMethodManager.Manager, new List<string>());
-            mform_trayVial = new formTrayVialAssignment();
+            m_filldown = new formMethodFillDown(classLCMethodManager.Manager, new List<string>());
+            m_trayVial = new formTrayVialAssignment();
 
             mdataGrid_samples.ContextMenuStrip = mcontextMenu_options;
 
             //
             // Lists that hold information to be used by the sample queue combo boxes.
             //
-            mlist_autoSamplerMethods = new List<string>();
-            mlist_autosamplerTrays = new List<string>();
-            mlist_instrumentMethods = new List<string>();
+            m_autoSamplerMethods = new List<string>();
+            m_autosamplerTrays = new List<string>();
+            m_instrumentMethods = new List<string>();
 
             //
             // Hook into the method manager so we can update list boxes when methods change...
@@ -459,10 +459,10 @@ namespace LcmsNet.SampleQueue.Forms
         {
             // Make sure we aren't at the end of the queue.
             var N = mdataGrid_samples.Rows.Count;
-            if (rowNum <= N/* * mint_sampleItemSize*/)
+            if (rowNum <= N/* * m_sampleItemSize*/)
             {
                 var currentSample =
-                    /*Convert.ToInt32(Math.Round(Convert.ToDouble(y) / Convert.ToDouble(mint_sampleItemSize))) +
+                    /*Convert.ToInt32(Math.Round(Convert.ToDouble(y) / Convert.ToDouble(m_sampleItemSize))) +
                     mdataGrid_samples.FirstDisplayedScrollingRowIndex*/ rowNum;
 
                 if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
@@ -555,17 +555,17 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     if (rowNum < 0 || rowNum > mdataGrid_samples.Rows.Count)
                         return;
-                    if (!isRecursive && !(rowNum <= mint_firstQueuedSamplePosition || mint_lastQueuedSamplePosition > rowNum))
+                    if (!isRecursive && !(rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum))
                     {
                         this.Validate();
                             ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
                     }
                 }
 
-                if (Math.Abs(mint_lastQueuedSamplePosition - rowNum) > 1)
+                if (Math.Abs(m_lastQueuedSamplePosition - rowNum) > 1)
                 {
                     // process: if more than 1 selected, ask user for confirmation; if confirmed, recursively call this function?
-                    var isDequeue = mint_lastQueuedSamplePosition - rowNum > 0;
+                    var isDequeue = m_lastQueuedSamplePosition - rowNum > 0;
                     if (isDequeue) // dequeuing samples
                     {
                         HandleSampleValidationAndQueuing(rowNum + 1, true);
@@ -579,7 +579,7 @@ namespace LcmsNet.SampleQueue.Forms
 
                 currentTask = "Examine samples";
                 var neededRowId = 0;
-                if (rowNum <= mint_firstQueuedSamplePosition || mint_lastQueuedSamplePosition > rowNum)
+                if (rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum)
                 {
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum].Cells[CONST_COLUMN_UNIQUE_ID].Value);
                 }
@@ -589,28 +589,28 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 var sample = mobj_sampleQueue.FindSample(neededRowId);
 
-                if (rowNum <= mint_firstQueuedSamplePosition)
+                if (rowNum <= m_firstQueuedSamplePosition)
                 {
-                    if (rowNum < mint_lastQueuedSamplePosition && rowNum >= mint_firstQueuedSamplePosition)
+                    if (rowNum < m_lastQueuedSamplePosition && rowNum >= m_firstQueuedSamplePosition)
                     {
                         //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
                         mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
                     }
                     if (!isRecursive)
                     {
-                        mint_lastQueuedSamplePosition = Math.Max(0, rowNum);
+                        m_lastQueuedSamplePosition = Math.Max(0, rowNum);
                         m_sampleContainer.Refresh();
                     }
                     return;
                 }
-                if (mint_lastQueuedSamplePosition > rowNum)
+                if (m_lastQueuedSamplePosition > rowNum)
                 {
                     //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
                     mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
 
                     if (!isRecursive)
                     {
-                        mint_lastQueuedSamplePosition = rowNum;
+                        m_lastQueuedSamplePosition = rowNum;
                         m_sampleContainer.Refresh();
                     }
                     //m_sampleContainer.Refresh();
@@ -618,7 +618,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
 
                 currentTask = "Call to CanPullDownQueueBar";
-                //bool canPullDown = SelectionChangeValid(y/* - mint_columnSize*/, tsample, isRecursive);
+                //bool canPullDown = SelectionChangeValid(y/* - m_columnSize*/, tsample, isRecursive);
                 //
                 //if (!canPullDown)
                 //{
@@ -701,7 +701,7 @@ namespace LcmsNet.SampleQueue.Forms
 
                 // Handle queueing the samples by first tracking the current sample index, then
                 // seeing if it changed from last to current.
-                if (mint_lastQueuedSamplePosition < rowNum)
+                if (m_lastQueuedSamplePosition < rowNum)
                 {
                     //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples - 1]);
                     mobj_sampleQueue.MoveSamplesToRunningQueue(sample);
@@ -709,7 +709,7 @@ namespace LcmsNet.SampleQueue.Forms
 
                 if (!isRecursive)
                 {
-                    mint_lastQueuedSamplePosition = rowNum;
+                    m_lastQueuedSamplePosition = rowNum;
                     m_sampleContainer.Refresh();
                 }
             }
@@ -982,8 +982,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public virtual formDMSView DMSView
         {
-            get { return mform_dmsView; }
-            set { mform_dmsView = value; }
+            get { return m_dmsView; }
+            set { m_dmsView = value; }
         }
 
         /// <summary>
@@ -1023,12 +1023,12 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public virtual List<string> AutoSamplerMethods
         {
-            get { return mlist_autoSamplerMethods; }
+            get { return m_autoSamplerMethods; }
             set
             {
-                mlist_autoSamplerMethods = value;
-                if (mlist_autoSamplerMethods == null)
-                    mlist_autoSamplerMethods = new List<string>();
+                m_autoSamplerMethods = value;
+                if (m_autoSamplerMethods == null)
+                    m_autoSamplerMethods = new List<string>();
                 ShowAutoSamplerMethods();
             }
         }
@@ -1038,13 +1038,13 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public virtual List<string> AutoSamplerTrays
         {
-            get { return mlist_autosamplerTrays; }
+            get { return m_autosamplerTrays; }
             set
             {
                 //classApplicationLogger.LogMessage(0, "SAMPLE VIEW PROCESSING AUTOSAMPLER TRAYS!");
-                mlist_autosamplerTrays = value;
-                if (mlist_autosamplerTrays == null)
-                    mlist_autosamplerTrays = new List<string>();
+                m_autosamplerTrays = value;
+                if (m_autosamplerTrays == null)
+                    m_autosamplerTrays = new List<string>();
                 ShowAutoSamplerTrays();
             }
         }
@@ -1054,12 +1054,12 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public virtual List<string> InstrumentMethods
         {
-            get { return mlist_instrumentMethods; }
+            get { return m_instrumentMethods; }
             set
             {
-                mlist_instrumentMethods = value;
-                if (mlist_instrumentMethods == null)
-                    mlist_instrumentMethods = new List<string>();
+                m_instrumentMethods = value;
+                if (m_instrumentMethods == null)
+                    m_instrumentMethods = new List<string>();
                 ShowInstrumentMethods();
             }
         }
@@ -1372,7 +1372,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcolumn_PalTray.Items.Clear();
             mcolumn_PalTray.Items.Add(CONST_NOT_SELECTED);
 
-            foreach (var tray in mlist_autosamplerTrays)
+            foreach (var tray in m_autosamplerTrays)
             {
                 mcolumn_PalTray.Items.Add(tray);
             }
@@ -1386,7 +1386,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcolumn_instrumentMethod.Items.Clear();
             mcolumn_instrumentMethod.Items.Add(CONST_NOT_SELECTED);
 
-            foreach (var tray in mlist_instrumentMethods)
+            foreach (var tray in m_instrumentMethods)
             {
                 mcolumn_instrumentMethod.Items.Add(tray);
             }
@@ -1489,17 +1489,17 @@ namespace LcmsNet.SampleQueue.Forms
                 return;
             }
 
-            if (mlist_autosamplerTrays.Count < 6)
+            if (m_autosamplerTrays.Count < 6)
             {
                 classApplicationLogger.LogError(0, "Not enough PAL Trays are available.");
                 return;
             }
 
-            mform_trayVial.Icon = ParentForm.Icon;
-            mform_trayVial.LoadSampleList(mlist_autosamplerTrays, samples);
-            if (mform_trayVial.ShowDialog() == DialogResult.OK)
+            m_trayVial.Icon = ParentForm.Icon;
+            m_trayVial.LoadSampleList(m_autosamplerTrays, samples);
+            if (m_trayVial.ShowDialog() == DialogResult.OK)
             {
-                samples = mform_trayVial.SampleList;
+                samples = m_trayVial.SampleList;
                 mobj_sampleQueue.UpdateSamples(samples);
             }
         }
@@ -1528,17 +1528,17 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Create a new fill down form.
             //
-            mform_filldown.Icon = ParentForm.Icon;
-            mform_filldown.InitForm(samples);
+            m_filldown.Icon = ParentForm.Icon;
+            m_filldown.InitForm(samples);
 
 
-            mform_filldown.StartPosition = FormStartPosition.CenterScreen;
-            if (mform_filldown.ShowDialog() == DialogResult.OK)
+            m_filldown.StartPosition = FormStartPosition.CenterScreen;
+            if (m_filldown.ShowDialog() == DialogResult.OK)
             {
                 //
                 // Then update the sample queue...
                 //
-                var newSamples = mform_filldown.GetModifiedSampleList();
+                var newSamples = m_filldown.GetModifiedSampleList();
                 mobj_sampleQueue.UpdateSamples(newSamples);
             }
         }
@@ -1659,9 +1659,9 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void ShowDMSView()
         {
-            if (mform_dmsView != null)
+            if (m_dmsView != null)
             {
-                var result = mform_dmsView.ShowDialog();
+                var result = m_dmsView.ShowDialog();
 
                 //
                 // If the user clicks ok , then add the samples from the
@@ -1672,8 +1672,8 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 if (result == DialogResult.OK)
                 {
-                    var samples = mform_dmsView.GetNewSamplesDMSView();
-                    mform_dmsView.ClearForm();
+                    var samples = m_dmsView.GetNewSamplesDMSView();
+                    m_dmsView.ClearForm();
 
                     var insertToUnused = false;
                     if (HasUnusedSamples())
@@ -2023,7 +2023,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Move in the sample queue
             //
-            mobj_sampleQueue.MoveQueuedSamples(data, mint_editableIndex, offset, moveType);
+            mobj_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
 
             //
             // By default the first cell wants to be selected.
@@ -2515,7 +2515,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void SamplesStopped(object sender, classSampleQueueArgs data)
         {
-            mint_lastQueuedSamplePosition = data.CompleteQueueTotal;
+            m_lastQueuedSamplePosition = data.CompleteQueueTotal;
             UpdateDataView();
             SamplesUpdated(sender, data);
             m_sampleContainer.Refresh();
@@ -2656,8 +2656,8 @@ namespace LcmsNet.SampleQueue.Forms
                     maxWaitingToRun = i;
                 }
             }
-            mint_firstQueuedSamplePosition = Math.Max(0, maxComplete);
-            mint_lastQueuedSamplePosition = Math.Max(0, maxWaitingToRun);
+            m_firstQueuedSamplePosition = Math.Max(0, maxComplete);
+            m_lastQueuedSamplePosition = Math.Max(0, maxWaitingToRun);
 
             m_sampleContainer.Refresh();
         }
@@ -3370,7 +3370,7 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             var palTray = new DataGridViewComboBoxCell();
             palTray.Items.Add(CONST_NOT_SELECTED);
-            foreach (var data in mlist_autosamplerTrays)
+            foreach (var data in m_autosamplerTrays)
             {
                 palTray.Items.Add(data);
             }
@@ -3456,7 +3456,7 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             var instrumentMethod = new DataGridViewComboBoxCell();
             instrumentMethod.Items.Add(CONST_NOT_SELECTED);
-            foreach (var info in mlist_instrumentMethods)
+            foreach (var info in m_instrumentMethods)
                 instrumentMethod.Items.Add(info);
 
             instrumentMethod.Value = CONST_NOT_SELECTED;

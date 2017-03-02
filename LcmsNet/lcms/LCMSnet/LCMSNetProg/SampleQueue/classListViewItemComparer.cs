@@ -19,9 +19,9 @@ namespace LcmsNet.SampleQueue
 
         #region "Class variables"
 
-        bool mbool_SortOrderAsc = true;
+        bool m_SortOrderAsc = true;
         enumListViewComparerMode.SortModeConstants menum_SortMode = enumListViewComparerMode.SortModeConstants.text;
-        int mint_Column;
+        int m_Column;
 
         #endregion
 
@@ -32,8 +32,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public bool sortOrderAsc
         {
-            get { return mbool_SortOrderAsc; }
-            set { mbool_SortOrderAsc = value; }
+            get { return m_SortOrderAsc; }
+            set { m_SortOrderAsc = value; }
         } // End property
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace LcmsNet.SampleQueue
         private void DoConstructorTask(int column, bool sortOrderAsc,
             enumListViewComparerMode.SortModeConstants sortMode)
         {
-            mint_Column = column;
-            mbool_SortOrderAsc = sortOrderAsc;
+            m_Column = column;
+            m_SortOrderAsc = sortOrderAsc;
             menum_SortMode = sortMode;
         }
 
@@ -126,8 +126,8 @@ namespace LcmsNet.SampleQueue
                 // Column is numeric, so convert text in listviewitem to numeric value
                 double value1;
                 double value2;
-                double.TryParse(item1.SubItems[mint_Column].Text, out value1);
-                double.TryParse(item2.SubItems[mint_Column].Text, out value2);
+                double.TryParse(item1.SubItems[m_Column].Text, out value1);
+                double.TryParse(item2.SubItems[m_Column].Text, out value2);
                 // Set temp output value
                 if (value1 > value2)
                 {
@@ -141,11 +141,11 @@ namespace LcmsNet.SampleQueue
             else
             {
                 // Column is text
-                tempResult = string.Compare(item1.SubItems[mint_Column].Text, item2.SubItems[mint_Column].Text);
+                tempResult = string.Compare(item1.SubItems[m_Column].Text, item2.SubItems[m_Column].Text);
             }
 
             // If sort order is ascending, then return tempResult. Otherwise, negate tempResult before returning
-            if (mbool_SortOrderAsc)
+            if (m_SortOrderAsc)
             {
                 return tempResult;
             }

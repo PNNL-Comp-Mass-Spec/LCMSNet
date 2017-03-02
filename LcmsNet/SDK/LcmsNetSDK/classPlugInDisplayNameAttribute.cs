@@ -17,7 +17,7 @@ namespace LcmsNetDataClasses
 
         #region "Class variables"
 
-        string mstring_DisplayName;
+        string m_DisplayName;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace LcmsNetDataClasses
         public classPlugInDisplayNameAttribute(string DisplayName)
             : base()
         {
-            mstring_DisplayName = DisplayName;
+            m_DisplayName = DisplayName;
             return;
         }
 
@@ -40,7 +40,7 @@ namespace LcmsNetDataClasses
         /// <returns>String representing display name</returns>
         public override string ToString()
         {
-            return mstring_DisplayName;
+            return m_DisplayName;
         }
 
         #endregion

@@ -29,8 +29,8 @@ namespace LcmsNetDataClasses
 
         #region "Class variables"
 
-        StringDictionary mlist_QueryParams = new StringDictionary();
-        bool mbool_UnassignedOnly = false;
+        StringDictionary m_QueryParams = new StringDictionary();
+        bool m_UnassignedOnly = false;
 
         #endregion
 
@@ -39,49 +39,49 @@ namespace LcmsNetDataClasses
         public string RequestName
         {
             get { return GetValueIfFound("requestname"); }
-            set { mlist_QueryParams["requestname"] = value; }
+            set { m_QueryParams["requestname"] = value; }
         }
 
         public string MinRequestNum
         {
             get { return GetValueIfFound("minrequestnum"); }
-            set { mlist_QueryParams["minrequestnum"] = value; }
+            set { m_QueryParams["minrequestnum"] = value; }
         }
 
         public string MaxRequestNum
         {
             get { return GetValueIfFound("maxrequestnum"); }
-            set { mlist_QueryParams["maxrequestnum"] = value; }
+            set { m_QueryParams["maxrequestnum"] = value; }
         }
 
         public string BatchID
         {
             get { return GetValueIfFound("batchid"); }
-            set { mlist_QueryParams["batchid"] = value; }
+            set { m_QueryParams["batchid"] = value; }
         }
 
         public string Block
         {
             get { return GetValueIfFound("block"); }
-            set { mlist_QueryParams["block"] = value; }
+            set { m_QueryParams["block"] = value; }
         }
 
         public string Cart
         {
             get { return GetValueIfFound("cart"); }
-            set { mlist_QueryParams["cart"] = value; }
+            set { m_QueryParams["cart"] = value; }
         }
 
         public string Wellplate
         {
             get { return GetValueIfFound("wellplate"); }
-            set { mlist_QueryParams["wellplate"] = value; }
+            set { m_QueryParams["wellplate"] = value; }
         }
 
         public bool UnassignedOnly
         {
-            get { return mbool_UnassignedOnly; }
-            set { mbool_UnassignedOnly = value; }
+            get { return m_UnassignedOnly; }
+            set { m_UnassignedOnly = value; }
         }
 
         #endregion
@@ -95,9 +95,9 @@ namespace LcmsNetDataClasses
         /// <returns>Key value if found, otherwise empty string</returns>
         private String GetValueIfFound(String dictKey)
         {
-            if (mlist_QueryParams.ContainsKey(dictKey))
+            if (m_QueryParams.ContainsKey(dictKey))
             {
-                return mlist_QueryParams[dictKey];
+                return m_QueryParams[dictKey];
             }
             else
             {
@@ -110,37 +110,37 @@ namespace LcmsNetDataClasses
             var queryBldr = new StringBuilder(CMD_BASE);
 
             // Add min/max request numbers
-            queryBldr.Append("Request >= '" + mlist_QueryParams["minrequestnum"] + "'");
-            queryBldr.Append(" AND Request <= '" + mlist_QueryParams["maxrequestnum"] + "'");
+            queryBldr.Append("Request >= '" + m_QueryParams["minrequestnum"] + "'");
+            queryBldr.Append(" AND Request <= '" + m_QueryParams["maxrequestnum"] + "'");
 
             // Add request name, if applicable
-            if (mlist_QueryParams["requestname"].Length > 0)
+            if (m_QueryParams["requestname"].Length > 0)
             {
-                queryBldr.Append(" AND Name LIKE '%" + mlist_QueryParams["requestname"] + "%'");
+                queryBldr.Append(" AND Name LIKE '%" + m_QueryParams["requestname"] + "%'");
             }
 
             // Add cart, if applicable
-            if (mlist_QueryParams["cart"].Length > 0)
+            if (m_QueryParams["cart"].Length > 0)
             {
-                queryBldr.Append(" AND Cart LIKE '%" + mlist_QueryParams["cart"] + "%'");
+                queryBldr.Append(" AND Cart LIKE '%" + m_QueryParams["cart"] + "%'");
             }
 
             // Add batch ID, if applicable
-            if (mlist_QueryParams["batchid"].Length > 0)
+            if (m_QueryParams["batchid"].Length > 0)
             {
-                queryBldr.Append(" AND Batch='" + mlist_QueryParams["batchid"] + "'");
+                queryBldr.Append(" AND Batch='" + m_QueryParams["batchid"] + "'");
             }
 
             // Add block, if applicable
-            if (mlist_QueryParams["block"].Length > 0)
+            if (m_QueryParams["block"].Length > 0)
             {
-                queryBldr.Append(" AND Block='" + mlist_QueryParams["block"] + "'");
+                queryBldr.Append(" AND Block='" + m_QueryParams["block"] + "'");
             }
 
             // Addwellplate, if applicable
-            if (mlist_QueryParams["wellplate"].Length > 0)
+            if (m_QueryParams["wellplate"].Length > 0)
             {
-                queryBldr.Append(" AND [Wellplate Number] LIKE '%" + mlist_QueryParams["wellplate"] + "%'");
+                queryBldr.Append(" AND [Wellplate Number] LIKE '%" + m_QueryParams["wellplate"] + "%'");
             }
 
             // Add Order clause
@@ -151,7 +151,7 @@ namespace LcmsNetDataClasses
 
         //public bool OneParamHasValue()
         //{
-        //   foreach (string testStr in mlist_QueryParams.Values)
+        //   foreach (string testStr in m_QueryParams.Values)
         //   {
         //      if (testStr.Length > 0)
         //      { return true; }

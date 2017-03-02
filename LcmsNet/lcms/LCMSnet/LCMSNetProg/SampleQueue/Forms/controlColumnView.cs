@@ -34,9 +34,9 @@ namespace LcmsNet.SampleQueue.Forms
         public delegate void DelegateUpdateUserInterface();
 
         private const float CONST_COLUMN_HEADER_FONT_SIZE = 18.0F;
-        formExpansion mform_expand;
+        formExpansion m_expand;
 
-        private List<Button> mlist_buttons;
+        private List<Button> m_buttons;
 
         #region Members
 
@@ -194,25 +194,25 @@ namespace LcmsNet.SampleQueue.Forms
         {
             var buttonScreen = PointToScreen(mbutton_expand.Location);
             var controlScreen = PointToScreen(mpanel_control.Location);
-            mform_expand.StartPosition = FormStartPosition.Manual;
-            mform_expand.Location = new Point(buttonScreen.X, controlScreen.Y + mbutton_expand.Top);
-            mform_expand.Refresh();
-            mform_expand.UpdateButtons(mlist_expansionList);
-            mform_expand.Height = mpanel_control.Height;
+            m_expand.StartPosition = FormStartPosition.Manual;
+            m_expand.Location = new Point(buttonScreen.X, controlScreen.Y + mbutton_expand.Top);
+            m_expand.Refresh();
+            m_expand.UpdateButtons(m_expansionList);
+            m_expand.Height = mpanel_control.Height;
             var width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
 
-            var expandWidth = mform_expand.Left + mform_expand.Width;
+            var expandWidth = m_expand.Left + m_expand.Width;
 
             if (expandWidth > width)
             {
-                var p = mform_expand.Location;
-                p.X = width - mform_expand.Width;
-                mform_expand.Location = p;
+                var p = m_expand.Location;
+                p.X = width - m_expand.Width;
+                m_expand.Location = p;
             }
 
 
-            var result = mform_expand.ShowDialog();
-            mform_expand.Hide();
+            var result = m_expand.ShowDialog();
+            m_expand.Hide();
         }
 
         private void mbutton_expand_Click(object sender, EventArgs e)
@@ -331,7 +331,7 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         private const int CONST_BUTTON_PADDING = 2;
-        private List<Button> mlist_expansionList;
+        private List<Button> m_expansionList;
 
         void controlColumnView_Resize(object sender, EventArgs e)
         {
@@ -340,22 +340,22 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void UpdateExpandButtonList()
         {
-            mlist_expansionList.Clear();
+            m_expansionList.Clear();
 
             var width = 60;
             var leftmost = Width - mbutton_expand.Width - CONST_BUTTON_PADDING;
             var padding = CONST_BUTTON_PADDING;
             var left = padding;
-            for (var i = 0; i < mlist_buttons.Count; i++)
+            for (var i = 0; i < m_buttons.Count; i++)
             {
-                var button = mlist_buttons[i];
+                var button = m_buttons[i];
 
                 var widthLeft = left + width + CONST_BUTTON_PADDING;
 
                 if (widthLeft >= leftmost)
                 {
                     button.Width = width;
-                    mlist_expansionList.Add(button);
+                    m_expansionList.Add(button);
                     if (mpanel_control.Controls.Contains(button))
                     {
                         mpanel_control.Controls.Remove(button);
@@ -379,22 +379,22 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void InitializeButtons()
         {
-            mform_expand = new formExpansion();
-            mlist_buttons = new List<Button>();
-            mlist_expansionList = new List<Button>();
-            mlist_buttons.Add(mbutton_addBlank);
-            mlist_buttons.Add(mbutton_addBlankAppend);
-            mlist_buttons.Add(mbutton_addDMS);
-            mlist_buttons.Add(mbutton_removeSelected);
-            mlist_buttons.Add(mbutton_deleteUnused);
-            mlist_buttons.Add(mbutton_up);
-            mlist_buttons.Add(mbutton_down);
-            mlist_buttons.Add(mbutton_moveColumns);
-            mlist_buttons.Add(mbutton_fillDown);
-            mlist_buttons.Add(mbutton_trayVial);
-            mlist_buttons.Add(mbutton_randomize);
-            mlist_buttons.Add(mbutton_cartColumnDate);
-            mlist_buttons.Add(mbutton_dmsEdit);
+            m_expand = new formExpansion();
+            m_buttons = new List<Button>();
+            m_expansionList = new List<Button>();
+            m_buttons.Add(mbutton_addBlank);
+            m_buttons.Add(mbutton_addBlankAppend);
+            m_buttons.Add(mbutton_addDMS);
+            m_buttons.Add(mbutton_removeSelected);
+            m_buttons.Add(mbutton_deleteUnused);
+            m_buttons.Add(mbutton_up);
+            m_buttons.Add(mbutton_down);
+            m_buttons.Add(mbutton_moveColumns);
+            m_buttons.Add(mbutton_fillDown);
+            m_buttons.Add(mbutton_trayVial);
+            m_buttons.Add(mbutton_randomize);
+            m_buttons.Add(mbutton_cartColumnDate);
+            m_buttons.Add(mbutton_dmsEdit);
 
             UpdateExpandButtonList();
         }

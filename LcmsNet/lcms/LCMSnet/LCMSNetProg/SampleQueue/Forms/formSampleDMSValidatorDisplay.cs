@@ -11,7 +11,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// List of validator controls so we can check after editing if the samples are valid.
         /// </summary>
-        private List<classDMSBaseControl> mlist_validatorControls;
+        private List<classDMSBaseControl> m_validatorControls;
 
         /// <summary>
         /// Constructor.
@@ -26,7 +26,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             AutoScroll = true;
 
-            mlist_validatorControls = new List<classDMSBaseControl>();
+            m_validatorControls = new List<classDMSBaseControl>();
 
             //
             // Create a sample validator control for each sample.
@@ -47,7 +47,7 @@ namespace LcmsNet.SampleQueue.Forms
                     sampleControl.Dock = DockStyle.Top;
                     sampleControl.ID = i++;
                     sampleControl.EnterPressed += new EventHandler<DMSValidatorEventArgs>(sampleControl_EnterPressed);
-                    mlist_validatorControls.Add(sampleControl);
+                    m_validatorControls.Add(sampleControl);
                     panel1.Controls.Add(sampleControl);
 
                     sampleControl.BringToFront();
@@ -87,18 +87,18 @@ namespace LcmsNet.SampleQueue.Forms
                     return;
                 }
 
-                if (id >= mlist_validatorControls.Count - 1 && e.Modifiers != Keys.Shift)
+                if (id >= m_validatorControls.Count - 1 && e.Modifiers != Keys.Shift)
                 {
                     return;
                 }
 
                 if (e.Modifiers == Keys.Shift)
                 {
-                    mlist_validatorControls[id - 1].SetFocusOn(e);
+                    m_validatorControls[id - 1].SetFocusOn(e);
                 }
                 else
                 {
-                    mlist_validatorControls[id + 1].SetFocusOn(e);
+                    m_validatorControls[id + 1].SetFocusOn(e);
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         private bool CheckSamples()
         {
-            foreach (var validator in mlist_validatorControls)
+            foreach (var validator in m_validatorControls)
             {
                 if (validator.IsSampleValid == false)
                     return false;

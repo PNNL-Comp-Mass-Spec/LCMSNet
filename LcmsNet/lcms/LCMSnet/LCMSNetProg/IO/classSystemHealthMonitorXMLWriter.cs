@@ -15,11 +15,11 @@
 //        /// <summary>
 //        /// Values for a given device.
 //        /// </summary>
-//        private Dictionary<string, string> mdict_values;
+//        private Dictionary<string, string> m_values;
 
 //        public classSystemHealthMonitorXMLWriter()
 //        {
-//            mdict_values = new Dictionary<string, string>();
+//            m_values = new Dictionary<string, string>();
 //        }
 
 //        #region IDeviceHealthWriter Members
@@ -31,11 +31,11 @@
 //        /// <param name="value">Value to persist for that setting.</param>
 //        public void WriteValue(string deviceName, string setting, string value)
 //        {
-//            if (!mdict_values.ContainsKey(setting))
+//            if (!m_values.ContainsKey(setting))
 //            {
-//                mdict_values.Add(setting, value);
+//                m_values.Add(setting, value);
 //            }
-//            mdict_values[setting] = value;
+//            m_values[setting] = value;
 //        }
 //        #endregion
 

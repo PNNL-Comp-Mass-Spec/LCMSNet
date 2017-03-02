@@ -13,14 +13,14 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Maps devices to their settings.
         /// </summary>
-        private Dictionary<INotifier, List<NotificationSetting>> mdict_settings;
+        private Dictionary<INotifier, List<NotificationSetting>> m_settings;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public NotificationConfiguration()
         {
-            mdict_settings = new Dictionary<INotifier, List<NotificationSetting>>();
+            m_settings = new Dictionary<INotifier, List<NotificationSetting>>();
             IgnoreNotifications = true;
         }
 
@@ -33,7 +33,7 @@ namespace LcmsNet.Notification
 
         public IEnumerator<INotifier> GetEnumerator()
         {
-            return this.mdict_settings.Keys.GetEnumerator();
+            return this.m_settings.Keys.GetEnumerator();
         }
 
         #endregion
@@ -42,7 +42,7 @@ namespace LcmsNet.Notification
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.mdict_settings.Keys.GetEnumerator();
+            return this.m_settings.Keys.GetEnumerator();
         }
 
         #endregion
@@ -55,11 +55,11 @@ namespace LcmsNet.Notification
         /// <param name="value">Value to assign.</param>
         public void AddSetting(INotifier device, NotificationSetting setting)
         {
-            if (!mdict_settings.ContainsKey(device))
+            if (!m_settings.ContainsKey(device))
             {
-                mdict_settings.Add(device, new List<NotificationSetting>());
+                m_settings.Add(device, new List<NotificationSetting>());
             }
-            mdict_settings[device].Add(setting);
+            m_settings[device].Add(setting);
         }
 
         /// <summary>
@@ -69,13 +69,13 @@ namespace LcmsNet.Notification
         /// <returns></returns>
         public List<NotificationSetting> GetDeviceSettings(INotifier device)
         {
-            return mdict_settings[device];
+            return m_settings[device];
         }
 
         public List<INotifier> GetMappedNotifiers()
         {
             var devices = new List<INotifier>();
-            foreach (var device in mdict_settings.Keys)
+            foreach (var device in m_settings.Keys)
             {
                 devices.Add(device);
             }

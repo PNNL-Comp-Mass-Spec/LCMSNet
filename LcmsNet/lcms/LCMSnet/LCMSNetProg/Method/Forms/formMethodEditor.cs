@@ -18,7 +18,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private OpenFileDialog mdialog_openMethod;
 
-        private string mstring_editingMethod;
+        private string m_editingMethod;
 
         /// <summary>
         /// Constructor.
@@ -35,7 +35,7 @@ namespace LcmsNet.Method.Forms
                 mdialog_openMethod.InitialDirectory = Path.Combine(path,
                     classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             }
-            mstring_editingMethod = "";
+            m_editingMethod = "";
 
             // mcontrol_methodEditor.EventChanged += new EventHandler(mcontrol_methodEditor_EventChanged);
             mcontrol_methodEditor.UpdatingMethod +=
@@ -44,7 +44,7 @@ namespace LcmsNet.Method.Forms
 
         void mcontrol_methodEditor_UpdatingMethod(object sender, classMethodEditingEventArgs e)
         {
-            mstring_editingMethod = e.Name;
+            m_editingMethod = e.Name;
             UpdateName();
         }
 
@@ -62,7 +62,7 @@ namespace LcmsNet.Method.Forms
         //    try
         //    {
         //        mcontrol_methodEditor.SaveMethod();
-        //        mbool_requiresSave = false;
+        //        m_requiresSave = false;
         //        UpdateName();
         //    }
         //    catch(Exception ex)
@@ -72,7 +72,7 @@ namespace LcmsNet.Method.Forms
         //}
         //void mcontrol_methodEditor_EventChanged(object sender, EventArgs e)
         //{
-        //    mbool_requiresSave = true;
+        //    m_requiresSave = true;
         //    UpdateName();
         //}
         ///// <summary>
@@ -102,7 +102,7 @@ namespace LcmsNet.Method.Forms
         //private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
         //{
         //    mcontrol_methodEditor.SaveMethods();
-        //    mbool_requiresSave = false;
+        //    m_requiresSave = false;
         //    UpdateName();
         //}
         /// <summary>

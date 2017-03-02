@@ -42,7 +42,7 @@ namespace LcmsNet
         /// <summary>
         /// Reference to splash screen window.
         /// </summary>
-        private static formSplashScreen mform_splashScreen;
+        private static formSplashScreen m_splashScreen;
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace LcmsNet
             if (!string.IsNullOrWhiteSpace(emulation))
             {
                 var isEmulated = Convert.ToBoolean(emulation);
-                mform_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
+                m_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
             }
             return;
         }
@@ -168,7 +168,7 @@ namespace LcmsNet
         {
             if (messageLevel < 1)
             {
-                mform_splashScreen.Status = args.Message;
+                m_splashScreen.Status = args.Message;
             }
         }
 
@@ -280,7 +280,7 @@ namespace LcmsNet
                     //
                     // Show the splash screen
                     //
-                    mform_splashScreen = new formSplashScreen
+                    m_splashScreen = new formSplashScreen
                     {
                         SoftwareCopyright = SOFTWARE_COPYRIGHT,
                         SoftwareDevelopers = SOFTWARE_DEVELOPERS
@@ -288,7 +288,7 @@ namespace LcmsNet
 
                     var splashLoadTime = DateTime.UtcNow;
 
-                    mform_splashScreen.Show();
+                    m_splashScreen.Show();
                     Application.DoEvents();
 
                     LogVersionNumbers();
@@ -468,7 +468,7 @@ namespace LcmsNet
                         Thread.Sleep(250);
                     }
 
-                    mform_splashScreen.Hide();
+                    m_splashScreen.Hide();
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;
 
