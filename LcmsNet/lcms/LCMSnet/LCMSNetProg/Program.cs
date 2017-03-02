@@ -32,7 +32,7 @@ namespace LcmsNet
 
         public const string SOFTWARE_DEVELOPERS =
             "Brian LaMarche, Christopher Walters, " +
-            "Gordon Anderson, David Clark, Derek Hopkins, " +
+            "Gordon Anderson, David Clark, Bryson Gibbons, Derek Hopkins, " +
             "Matthew Monroe, Ron Moore, Danny Orton, John Ryan, Richard Smith";
 
 
