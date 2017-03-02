@@ -4,104 +4,193 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 12/01/2009
 //
-// Last modified 12/01/2009
 //*********************************************************************************************************
 
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace LcmsNet.SampleQueue.IO
 {
+    /// <summary>
+    /// Utilities for converting Vial (aka Well) position between LCMSNet and LCMS values
+    /// </summary>
     class classConvertVialPosition
     {
-        //*********************************************************************************************************
-        // Utilities for converting Vial (aka Well) position between LCMSNet and LCMS values
-        //**********************************************************************************************************
 
         #region "Methods"
 
         /// <summary>
-        /// Converts a vial position in LCMS format (integer 1 - 96) to LCMSNet format (string A1 - H12)
+        /// Converts a vial position in LCMS format (integer 1 - 96) to LCMSNet format (string A01 - H12)
+        /// Supports vials beyond 97, where vial 312 is vial Z12, then vial 313 is AA01, 314 is AA02, etc.
+        /// Highest vial number supported is 8424, which is ZZ12
         /// </summary>
         /// <param name="vialPosition">Vial position as integer</param>
-        /// <returns>LCMSNet string-formated vial position</returns>
-        public static string ConvertVialToString(int vialPosition)
+        /// <param name="columnsPerRow">Columns per row (default is 12)</param>
+        /// <returns>LCMSNet string-formatted vial position, or Z99 if an error</returns>
+        /// <remarks>
+        /// Vial 1 is position A01
+        /// ...
+        /// Vial 12 is position A12
+        /// Vial 13 is position B01
+        /// ...
+        /// Vial 24 is position B12
+        /// Vial 25 is position C01
+        /// ...
+        /// Vial 96 is position H12
+        /// </remarks>
+        public static string ConvertVialToString(int vialPosition, byte columnsPerRow = 12)
         {
             // Verify input position is in a valid range
-            if ((vialPosition < 1) | (vialPosition > 96))
+            if ((vialPosition < 1) | (vialPosition > 8424))
             {
                 return "Z99";
             }
 
-            // To get ASCII code for first char, divide vial position by 12 and add result to 65 ("A")
-            char firstChar = (char) (65 + (vialPosition / 12));
+            if (columnsPerRow < 1)
+                columnsPerRow = 12;
 
-            // Get the numeric part of the position via a MOD operation
-            int numericPart = vialPosition % 12;
-            // Positions go from 1 to 12, so if the result of the mod operation is 0, add 12
-            if (numericPart == 0)
+            // To get ASCII code for first char, divide vial position by columnsPerRow and add result to 65 ("A")
+            // When columnsPerRow is 12, This works for vials 1 through 312; beyond that we need to switch to AA01, AB01, etc.
+            var firstCharCode = 65 + Math.Floor((vialPosition - 1) / (double)columnsPerRow);
+
+            const char NO_PREFIX = '.';
+            var prefix = NO_PREFIX;
+            while (firstCharCode > 90)
             {
-                numericPart = numericPart + 12;
-                firstChar--;
+                if (prefix == NO_PREFIX)
+                {
+                    prefix = 'A';
+                }
+                else
+                {
+                    prefix = (char)(prefix + 1);
+                }
+                firstCharCode -= 26;
             }
 
+            var firstChar = (char)firstCharCode;
+
+            // Get the numeric part of the position; this will be a value between 1 and columnsPerRow
+            var numericPart = 1 + (vialPosition - 1) % columnsPerRow;
+
             // Combine the results into the output string
-            return firstChar.ToString() + numericPart.ToString("00");
+            if (prefix == NO_PREFIX)
+            {
+                return firstChar + numericPart.ToString("00");
+            }
+
+            return prefix.ToString() + firstChar + numericPart.ToString("00");
         }
 
         /// <summary>
         /// Converts a vial position in LCMSNet format (string A1 - H12) to LCMS format (integer 1 - 96)
+        /// Supports positions beyond H12, where position Z12 is vial 312, then position AA01 is vial 313, AA02 is 314, etc.
+        /// Highest vial position supported is ZZ12, which is vial 8424
         /// </summary>
         /// <param name="vialPosition">Vial position as string</param>
-        /// <returns>Vial position represented as an integer</returns>
-        public static int ConvertVialToInt(string vialPosition)
+        /// <param name="columnsPerRow">Columns per row (default is 12)</param>
+        /// <returns>Vial position represented as an integer, or 9999 if the format of vialPosition is not recognized</returns>
+        public static int ConvertVialToInt(string vialPosition, byte columnsPerRow = 12)
         {
-            MatchCollection mc = null;
-            char[] tmpCharArray;
-
             // Ensure valid string
-            if (vialPosition.Length < 2)
+            if (vialPosition.Length < 2 || vialPosition.Length > 4)
             {
-                return 99;
-            }
-            if (vialPosition.Length > 3)
-            {
-                return 99;
+                return 9999;
             }
 
-            string tmpPosition = vialPosition.ToUpper();
+            if (columnsPerRow < 1)
+                columnsPerRow = 12;
 
-            // Get first character
-            mc = Regex.Matches(tmpPosition, "^[A-E]");
-            if (mc.Count != 1)
-            {
-                return 99;
-            }
-            string firstChar = mc[0].ToString();
-            tmpCharArray = firstChar.ToCharArray();
+            var tmpPosition = vialPosition.ToUpper();
 
-            // Get numeric part
-            mc = Regex.Matches(tmpPosition, "[0-9]+");
-            if (mc.Count != 1)
+            // Get first character(s)
+            var match = Regex.Match(tmpPosition, "^[A-Z]+");
+            if (!match.Success || match.Value.Length > 2)
             {
-                return 99;
+                return 9999;
             }
 
-            int numericPart = int.Parse(mc[0].ToString());
-
-            // Verify valid numeric part
-            if ((numericPart < 1) | (numericPart > 12))
+            var prefixAddon = 0;
+            char columnLetter;
+            if (match.Value.Length > 1)
             {
-                return 99;
+                // Position is of the form AB02 or AC10
+                // Convert the first character to ascii, subtract 64 (1 less than "A"), then multiply by 26 * columnsPerRow
+                var prefix = match.Value[0];
+                prefixAddon = (26 * columnsPerRow) * (prefix - 64);
+                columnLetter = match.Value[1];
+            }
+            else
+            {
+                // Position is of the form A9 or C11
+                columnLetter = match.Value[0];
             }
 
-            // Assemble the integer. Start by subtracting 65 from the ASCII value for the first character
-            int tmpOutput = (int) tmpCharArray[0] - 65;
-            // Multiply the result by 12
-            tmpOutput = tmpOutput * 12;
-            // Add the numeric part and return
-            return tmpOutput + numericPart;
+            var positionInColumnText = vialPosition.Substring(match.Value.Length);
+            int positionInColumn;
+            if (!int.TryParse(positionInColumnText, out positionInColumn))
+            {
+                // Number portion is not numeric
+                return 9999;
+            }
+
+            // Convert the column letter to ascii, subtract 65 ("A"), then multiply by columnsPerRow
+            var columnAddon = columnsPerRow * (columnLetter - 65);
+
+            var vialNum = prefixAddon + columnAddon + positionInColumn;
+
+            return vialNum;
+
         }
 
+        /// <summary>
+        /// Use this function to view example column positions when columns per row is 12, 24, 36, ... 96
+        /// Also validates the round trip conversion from vial number to vial position then back to vial number
+        /// </summary>
+        public static void VerifyLCMSNetVialPosition()
+        {
+            // Test vial num 1 through 8424
+            const int MAX_VIAL_NUM = 27 * 26 * 12;
+
+            for (byte columnsPerRow = 12; columnsPerRow <= 96; columnsPerRow += 12)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Testing {0} columns per row", columnsPerRow);
+
+                var mapping = new Dictionary<int, string>();
+
+                for (var vialNum = 1; vialNum <= MAX_VIAL_NUM; vialNum++)
+                {
+                    var position = ConvertVialToString(vialNum, columnsPerRow);
+
+                    mapping.Add(vialNum, position);
+
+                    Console.WriteLine("Vial {0} is position {1}", vialNum, position);
+
+                    if (vialNum > 1248 && vialNum < 8400)
+                        vialNum += 21;
+
+                }
+
+                Console.WriteLine();
+
+                foreach (var vialInfo in mapping)
+                {
+                    var vialNum = ConvertVialToInt(vialInfo.Value, columnsPerRow);
+
+                    if (vialNum == vialInfo.Key)
+                        Console.WriteLine("Position {0} converts to vial {1}", vialInfo.Value, vialNum);
+                    else
+                        Console.WriteLine("Position {0} converts to vial {1}; mismatch!", vialInfo.Value, vialNum);
+
+                }
+
+                Console.WriteLine("Done testing {0} columns per row", columnsPerRow);
+                Console.WriteLine();
+            }
+
+        }
         #endregion
     }
 } // End namespace
