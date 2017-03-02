@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading;
 using System.Reflection;
-using System.Collections.Generic;
 using LcmsNetDataClasses.Devices;
 using LcmsNet.Method;
 

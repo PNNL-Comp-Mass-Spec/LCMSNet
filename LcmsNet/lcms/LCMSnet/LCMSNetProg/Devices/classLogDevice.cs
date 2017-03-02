@@ -2,11 +2,8 @@
 using System.Threading;
 using System.Collections.Generic;
 using System.IO;
-using LcmsNet.Devices;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Devices
 {

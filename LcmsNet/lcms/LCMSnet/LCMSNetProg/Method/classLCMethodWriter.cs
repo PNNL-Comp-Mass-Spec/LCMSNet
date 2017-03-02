@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Xml;
-using System.Collections.Generic;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNet.Method
 {

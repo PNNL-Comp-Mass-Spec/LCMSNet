@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses;
-using LcmsNet.Configuration;
 
 namespace LcmsNet.Method.Forms
 {

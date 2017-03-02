@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNetSDK.Data
+﻿namespace LcmsNetSDK.Data
 {
     public class MobilePhase
     {

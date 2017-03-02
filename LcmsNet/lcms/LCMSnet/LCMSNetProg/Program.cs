@@ -6,16 +6,13 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Configuration;
 using System.Windows.Forms;
-using System.Security.Principal;
 using System.Collections.Generic;
 using LcmsNetDataClasses;
-using LcmsNet.Configuration;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
 using LcmsNetSQLiteTools;
 using LcmsNet.Method;
-using LcmsNet.Devices;
 using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet

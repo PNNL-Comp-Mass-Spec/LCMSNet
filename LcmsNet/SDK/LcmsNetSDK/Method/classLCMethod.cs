@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNetDataClasses.Method
 {

@@ -21,7 +21,6 @@ using System.Reflection;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Devices.Pumps;
 using LcmsNetSDK.Data;
-using LcmsNetDataClasses;
 
 namespace LcmsNetDataClasses.Devices
 {

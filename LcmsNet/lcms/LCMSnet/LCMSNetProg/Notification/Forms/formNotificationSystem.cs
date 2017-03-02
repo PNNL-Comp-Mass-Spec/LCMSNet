@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
 using LcmsNet.Method;
-using LcmsNet.Notification;
 using LcmsNetDataClasses;
 using LcmsNet.Devices;
 using LcmsNetSDK.Notifications;

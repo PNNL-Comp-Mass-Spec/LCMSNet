@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Enumeration of the type of device.

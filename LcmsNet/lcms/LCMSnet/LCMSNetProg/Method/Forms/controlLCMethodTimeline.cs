@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using LcmsNet.Method.Drawing;
-using LcmsNet.Method.Forms;
 using LcmsNetDataClasses.Method;
-using LcmsNet.Configuration;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
 

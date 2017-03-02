@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses.Experiment
+﻿namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
     /// Sample Validation Result

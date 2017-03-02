@@ -16,7 +16,6 @@ using LcmsNetSQLiteTools;
 using LcmsNet.Devices.Fluidics;
 using LcmsNetSDK;
 using PDFGenerator;
-using System.Drawing;
 using System.IO;
 using LcmsNet.IO;
 using LcmsNet.Simulator;

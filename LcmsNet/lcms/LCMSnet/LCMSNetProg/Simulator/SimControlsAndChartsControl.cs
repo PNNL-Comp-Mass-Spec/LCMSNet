@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
@@ -12,7 +9,6 @@ using LcmsNetDataClasses.Method;
 using FluidicsSimulator;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses;
-using LcmsNetSDK;
 
 namespace LcmsNet.Simulator
 {

@@ -1,15 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using LcmsNet.Configuration;
-using LcmsNet.Method.Drawing;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNet.Method.Forms
 {

@@ -7,8 +7,6 @@
 // Last modified 08/20/2010
 //*********************************************************************************************************
 
-using System;
-using System.Configuration;
 using System.Reflection;
 
 namespace LcmsNet.Properties

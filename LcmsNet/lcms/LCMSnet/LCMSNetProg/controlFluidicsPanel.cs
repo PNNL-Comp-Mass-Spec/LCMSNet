@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Drawing;
-using FluidicsSDK;
-using LcmsNetDataClasses.Devices;
-using LcmsNet.Devices;
+﻿using System.Windows.Forms;
 
 namespace LcmsNet
 {

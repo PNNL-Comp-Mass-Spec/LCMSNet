@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
-using System.Collections.Generic;
 using LcmsNet.Notification;
 using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNet.Devices

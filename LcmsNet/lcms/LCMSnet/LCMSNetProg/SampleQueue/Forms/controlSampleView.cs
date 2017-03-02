@@ -10,12 +10,9 @@
 //*********************************************************************************************************
 
 using System;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
 using LcmsNetSQLiteTools;
 using LcmsNetDataClasses;
@@ -25,8 +22,6 @@ using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Configuration;
 using LcmsNet.Method;
-using LcmsNet.SampleQueue;
-using LcmsNet.Configuration;
 
 namespace LcmsNet.SampleQueue.Forms
 {

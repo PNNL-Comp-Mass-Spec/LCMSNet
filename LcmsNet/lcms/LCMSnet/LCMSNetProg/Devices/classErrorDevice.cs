@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Collections.Generic;
-using LcmsNet.Devices;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 

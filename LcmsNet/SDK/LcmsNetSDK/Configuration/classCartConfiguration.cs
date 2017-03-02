@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LcmsNetDataClasses;
+﻿using System.Collections.Generic;
 
 namespace LcmsNetDataClasses.Configuration
 {

@@ -2,7 +2,6 @@
 using System.Threading;
 
 //using LcmsNet.Devices;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 
 namespace LcmsNetDataClasses.Devices

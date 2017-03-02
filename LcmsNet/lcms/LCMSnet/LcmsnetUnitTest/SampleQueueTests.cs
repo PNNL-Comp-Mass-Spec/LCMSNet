@@ -9,18 +9,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using LcmsNet.SampleQueue;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses;
 using LcmsNet.Method;
-using LcmsNet.Configuration;
 using LcmsNetDataClasses.Configuration;
 using System.Drawing;
 using DemoPluginLibrary;
-using System.Reflection;
 
 namespace LcmsnetUnitTest
 {

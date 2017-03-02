@@ -13,12 +13,7 @@
 //*********************************************************************************************************
 
 using System;
-using System.Xml;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Collections.Generic;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNetDataClasses.Devices

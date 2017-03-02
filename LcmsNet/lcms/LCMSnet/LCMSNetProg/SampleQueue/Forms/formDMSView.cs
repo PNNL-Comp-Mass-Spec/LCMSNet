@@ -22,7 +22,6 @@ using System.Windows.Forms;
 using LcmsNetSQLiteTools;
 using LcmsNetSDK;
 using LcmsNetDataClasses;
-using System.Runtime.Serialization;
 using System.Collections;
 
 namespace LcmsNet.SampleQueue

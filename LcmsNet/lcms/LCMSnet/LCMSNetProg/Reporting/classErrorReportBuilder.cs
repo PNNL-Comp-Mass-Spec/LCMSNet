@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using LcmsNetDataClasses.Logging;
 using LcmsNet.Method;
-using Shell32;
 
 namespace LcmsNet.Reporting
 {

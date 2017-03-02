@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses.Experiment
+﻿namespace LcmsNetDataClasses.Experiment
 {
     /// <summary>
     /// Enumeration detailing how severe the validation error is.

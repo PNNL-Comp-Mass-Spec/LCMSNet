@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses.Configuration
+﻿namespace LcmsNetDataClasses.Configuration
 {
     /// <summary>
     /// Enumeration describing the status of a column.

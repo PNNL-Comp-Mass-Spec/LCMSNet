@@ -10,7 +10,6 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace LcmsNet.SampleQueue.Forms
 {

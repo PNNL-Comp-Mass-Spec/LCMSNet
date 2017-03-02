@@ -3,7 +3,6 @@ using System.IO;
 using System.Xml;
 using System.Reflection;
 using System.Collections.Generic;
-using LcmsNet.Devices;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;

@@ -16,9 +16,7 @@
 /*********************************************************************************************************/
 
 using System;
-using System.Reflection;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
 
 namespace LcmsNetDataClasses.Devices
 {

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using LcmsNetDataClasses.Devices;
 
 namespace LcmsNetDataClasses.Devices
 {

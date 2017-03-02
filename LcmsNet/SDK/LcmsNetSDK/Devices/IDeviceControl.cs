@@ -11,11 +11,6 @@
  *          Added XML settings file save and load methods.
 /*********************************************************************************************************/
 
-using System;
-using System.Xml;
-using System.Drawing;
-using System.Collections.Generic;
-
 namespace LcmsNetDataClasses.Devices
 {
     /// <summary>

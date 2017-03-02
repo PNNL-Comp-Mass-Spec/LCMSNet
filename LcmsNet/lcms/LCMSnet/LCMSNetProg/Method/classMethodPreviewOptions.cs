@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNet.Method
+﻿namespace LcmsNet.Method
 {
     /// <summary>
     /// Options for previewing a method alignment.

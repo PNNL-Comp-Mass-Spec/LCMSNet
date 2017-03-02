@@ -7,11 +7,6 @@
 // Last modified 04/02/2009
 //*********************************************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace LcmsNetDataClasses
 {
     public class classMRMFileData

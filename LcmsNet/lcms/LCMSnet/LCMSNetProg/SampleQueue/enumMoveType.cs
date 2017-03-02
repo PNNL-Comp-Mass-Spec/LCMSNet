@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNet.SampleQueue
+﻿namespace LcmsNet.SampleQueue
 {
     /// <summary>
     /// Enumeration for moving a sample data object in the sample queue.

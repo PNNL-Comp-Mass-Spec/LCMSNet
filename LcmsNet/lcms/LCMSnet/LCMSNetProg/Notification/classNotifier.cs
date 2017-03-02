@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using LcmsNetDataClasses.Devices;
-
-namespace LcmsNet.Notification
+﻿namespace LcmsNet.Notification
 {
     /// <summary>
     /// Notifies listeners

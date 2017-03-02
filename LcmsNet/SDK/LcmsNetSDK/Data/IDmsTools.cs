@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses
+﻿namespace LcmsNetDataClasses
 {
     public interface IDmsTools
     {

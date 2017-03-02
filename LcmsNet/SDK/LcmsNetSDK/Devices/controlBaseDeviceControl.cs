@@ -8,16 +8,7 @@
 //						03/02/2011 (DAC) - Added status bar and associated code
 //*********************************************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using LcmsNetDataClasses.Devices;
-using System.Xml; // DAC added for save/retrieve settings
 
 namespace LcmsNetDataClasses.Devices
 {

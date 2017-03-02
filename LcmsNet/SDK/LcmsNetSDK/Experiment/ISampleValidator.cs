@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses.Experiment
+﻿namespace LcmsNetDataClasses.Experiment
 {
     public interface ISampleValidator
     {

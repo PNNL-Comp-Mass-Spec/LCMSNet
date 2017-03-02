@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNetDataClasses.Method
+﻿namespace LcmsNetDataClasses.Method
 {
     /// <summary>
     /// Enumeration indicating what type of timeout is available.

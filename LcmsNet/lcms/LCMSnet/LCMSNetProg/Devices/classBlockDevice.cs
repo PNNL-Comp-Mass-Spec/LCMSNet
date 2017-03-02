@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
-using LcmsNet.Method;
-using LcmsNet.Devices;
-using LcmsNet.SampleQueue.IO;
 
 namespace LcmsNet.Devices
 {

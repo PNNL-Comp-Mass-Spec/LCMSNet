@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Windows.Forms;
-using System.Collections.Generic;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 

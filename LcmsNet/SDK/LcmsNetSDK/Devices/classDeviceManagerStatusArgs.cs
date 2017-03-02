@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
-
-namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Arguments for manager status arguments.

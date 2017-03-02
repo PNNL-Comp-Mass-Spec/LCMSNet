@@ -19,10 +19,8 @@
 //*********************************************************************************************************
 
 using System;
-using System.Text;
 using System.Threading;
 using System.Collections.Generic;
-using LcmsNet.Configuration;
 using LcmsNetSQLiteTools;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;

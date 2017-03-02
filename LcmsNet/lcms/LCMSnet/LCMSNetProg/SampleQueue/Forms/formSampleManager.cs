@@ -13,27 +13,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
-using LcmsNet.Configuration;
 //using LcmsNet.Devices.NetworkStart;
-using LcmsNet.Method;
-using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Experiment;
-using LcmsNetSQLiteTools;
-using LcmsNetSDK;
 
 
 namespace LcmsNet.SampleQueue.Forms

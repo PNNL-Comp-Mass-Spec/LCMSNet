@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
-using LcmsNet.Method;
-using LcmsNet.Method.Drawing;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 

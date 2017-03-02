@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices.Pumps;
 using System.Drawing;
 

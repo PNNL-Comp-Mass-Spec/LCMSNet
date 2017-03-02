@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Delegate definition when a device is added or removed.

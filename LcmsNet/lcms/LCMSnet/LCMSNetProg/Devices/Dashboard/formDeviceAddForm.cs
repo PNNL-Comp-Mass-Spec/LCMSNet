@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Devices.Dashboard
 {

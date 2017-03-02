@@ -7,11 +7,6 @@
 // Last modified 01/2/2009
 //*********************************************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace LcmsNet.SampleQueue
 {
     class enumListViewComparerMode

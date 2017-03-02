@@ -10,12 +10,10 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNet.Method;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Configuration;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNet.Method

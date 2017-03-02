@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using LcmsNet.Configuration;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses;
-using LcmsNet.Method;
 
 namespace LcmsNet.Method.Forms
 {
