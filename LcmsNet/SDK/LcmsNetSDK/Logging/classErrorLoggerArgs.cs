@@ -21,6 +21,7 @@ namespace LcmsNetDataClasses.Logging
         /// Constructor that takes the error message.
         /// </summary>
         /// <param name="message">Error message</param>
+        /// <param name="sample"></param>
         public classErrorLoggerArgs(string message, classSampleData sample) :
             base(message, sample)
         {
@@ -43,6 +44,7 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
+        /// <param name="sample"></param>
         public classErrorLoggerArgs(string message, Exception ex, classSampleData sample) :
             base(message, sample)
         {

@@ -21,6 +21,7 @@ namespace LcmsNetDataClasses.Logging
         /// Constructor that takes the error message.
         /// </summary>
         /// <param name="message">Error message</param>
+        /// <param name="sample"></param>
         public classMessageLoggerArgs(string message, classSampleData sample)
         {
             Message = message;

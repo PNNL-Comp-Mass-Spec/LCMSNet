@@ -439,7 +439,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (sender == m_columnData)
             {
-                if (InvokeRequired == true)
+                if (InvokeRequired)
                     BeginInvoke(new DelegateUpdateUserInterface(SetColumnStatus));
                 else
                     SetColumnStatus();

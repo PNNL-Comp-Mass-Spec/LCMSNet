@@ -77,7 +77,7 @@ namespace LcmsNet.Method.Forms
 
             mcheckBox_optimizeFor.Checked = methodData.OptimizeWith;
 
-            if (locked == true)
+            if (locked)
             {
                 mcomboBox_method.Items.Add("Unlock");
                 mcomboBox_method.SelectedIndex = 0;
@@ -296,7 +296,7 @@ namespace LcmsNet.Method.Forms
             if (mcomboBox_devices.Items.Contains(device))
                 mcomboBox_devices.Items.Remove(device);
 
-            if (m_deviceMappings.ContainsKey(device) == true)
+            if (m_deviceMappings.ContainsKey(device))
                 m_deviceMappings.Remove(device);
 
             if (mcomboBox_devices.Items.Count < 1)
@@ -338,7 +338,7 @@ namespace LcmsNet.Method.Forms
             //
             // Make sure we select a device
             //
-            if (isFirstDevice == true)
+            if (isFirstDevice)
             {
                 mcomboBox_devices.SelectedIndex = 0;
                 UpdateSelectedDevice();
@@ -737,7 +737,7 @@ namespace LcmsNet.Method.Forms
                                 // we skip adding a control...but allow for
                                 // other data to be loaded.
                                 //
-                                if (attr.RequiresSampleInput == true && i == attr.SampleParameterIndex)
+                                if (attr.RequiresSampleInput && i == attr.SampleParameterIndex)
                                 {
                                     parameters.AddParameter(null, null, paramInfo.Name, attr.DataProvider);
                                 }
@@ -822,7 +822,7 @@ namespace LcmsNet.Method.Forms
         {
             Control control = null;
 
-            if (t.IsEnum == true)
+            if (t.IsEnum)
             {
                 //
                 // Grab the enumeration values for the parameter

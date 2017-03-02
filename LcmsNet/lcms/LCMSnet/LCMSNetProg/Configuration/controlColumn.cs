@@ -153,7 +153,7 @@ namespace LcmsNet.Configuration
         /// <param name="newStatus"></param>
         void ColumnData_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
         {
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateUpdateStatus(SetStatusMessage), new object[] {sender, previousStatus, newStatus});
             }
@@ -267,7 +267,7 @@ namespace LcmsNet.Configuration
             {
                 if (mcheckBox_enabled.Checked == false)
                     m_columnData.Status = enumColumnStatus.Disabled;
-                if (mcheckBox_enabled.Checked == true)
+                if (mcheckBox_enabled.Checked)
                     m_columnData.Status = enumColumnStatus.Idle;
             }
         }

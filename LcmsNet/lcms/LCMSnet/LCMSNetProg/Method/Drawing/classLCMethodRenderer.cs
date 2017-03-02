@@ -553,7 +553,7 @@ namespace LcmsNet.Method.Drawing
                 // We also may want to show progress in the event...so here we only fill if it's the current event
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 var color = Color.LightGray;
-                if (colorMap.ContainsKey(lcEvent.Device) == true)
+                if (colorMap.ContainsKey(lcEvent.Device))
                     color = colorMap[lcEvent.Device];
 
 

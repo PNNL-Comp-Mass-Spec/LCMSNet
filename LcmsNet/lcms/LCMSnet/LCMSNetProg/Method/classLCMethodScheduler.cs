@@ -533,7 +533,7 @@ namespace LcmsNet.Method
             // samples to run.  Here is also where we do things like monitor the thread to make
             // sure its not going to timeout or run over its allocated time.
             //
-            while (m_isRunning == true)
+            while (m_isRunning)
             {
                 //
                 // Wait to be told to stop, if not told to stop within 100ms,

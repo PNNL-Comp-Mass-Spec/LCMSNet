@@ -45,7 +45,7 @@ namespace LcmsNet.SampleQueue
                 // Test to determine if any types in assembly implements IRandomizerInterface
                 foreach (var testType in testAssmbly.GetTypes())
                 {
-                    if (typeof (IRandomizerInterface).IsAssignableFrom(testType) == true)
+                    if (typeof (IRandomizerInterface).IsAssignableFrom(testType))
                     {
                         // This type implements the interface, so get the display name
                         var dispName = GetPluginNameFromAttributes(testType);

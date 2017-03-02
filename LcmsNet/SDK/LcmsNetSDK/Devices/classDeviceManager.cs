@@ -579,7 +579,7 @@ namespace LcmsNetDataClasses.Devices
             var deviceCount = 0;
 
             // We expect that there are not an infinite number of device names
-            while (DeviceNameExists(newName) == true)
+            while (DeviceNameExists(newName))
             {
                 newName = baseName + deviceCount.ToString();
                 deviceCount++;
@@ -625,7 +625,7 @@ namespace LcmsNetDataClasses.Devices
             // 
             // No duplicate references allowed.
             // 
-            if (m_devices.Contains(device) == true)
+            if (m_devices.Contains(device))
                 return false;
 
             // 

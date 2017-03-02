@@ -65,7 +65,7 @@ namespace LcmsNetDataClasses.Configuration
             {
                 if (data.Status != enumColumnStatus.Disabled)
                 {
-                    if (data.First == true)
+                    if (data.First)
                     {
                         ptrList = tempList2;
                         copyNew = true;
@@ -73,7 +73,7 @@ namespace LcmsNetDataClasses.Configuration
                     ptrList.Add(data);
                 }
             }
-            if (copyNew == true)
+            if (copyNew)
             {
                 ptrList.AddRange(tempList1);
             }

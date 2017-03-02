@@ -71,7 +71,7 @@ namespace LcmsNet.Method
                     // If the key exists, then we add to the list of events
                     // Otherwise, we create a new list of events
                     // 
-                    if (hash.ContainsKey(device) == true)
+                    if (hash.ContainsKey(device))
                     {
                         hash[device].Add(lcEvent);
                     }
@@ -163,7 +163,7 @@ namespace LcmsNet.Method
                 // 
                 // Compare discrete states if we have to 
                 // 
-                if (lastEvent.HasDiscreteStates == true)
+                if (lastEvent.HasDiscreteStates)
                 {
                     if (lastEvent.Parameters.Length == aligneeEvent.Parameters.Length)
                     {
@@ -229,7 +229,7 @@ namespace LcmsNet.Method
             // the alignee method ends before the baseline has begun.  And it must be 
             // > 0 for an overlap to not occur.
             // 
-            if (isOverlapped == true)
+            if (isOverlapped)
             {
                 span = aligneeMethod.End.Subtract(baselineMethod.Start);
                 isOverlapped = (span.TotalMilliseconds >= 0);
@@ -447,7 +447,7 @@ namespace LcmsNet.Method
             // We'll base adjustments after that.
             // 
             var startTime = aligneeMethod.Start;
-            if (startAligneeAtBaselineStart == true)
+            if (startAligneeAtBaselineStart)
             {
                 startTime = baselineMethod.Start;
             }
@@ -483,7 +483,7 @@ namespace LcmsNet.Method
                         // 
                         // If the baseline does not have the key, then dont worry about aligning this method
                         // 
-                        if (baselineDeviceHash.ContainsKey(aligneeEvent.Device) == true)
+                        if (baselineDeviceHash.ContainsKey(aligneeEvent.Device))
                         {
                             var deviceEvents = baselineDeviceHash[aligneeEvent.Device];
                             // 
@@ -666,7 +666,7 @@ namespace LcmsNet.Method
                     // If alignment occured, then we need to re-check all the previously overlapping methods!
                     //     This way we can never overlap critical sections in i-1, or i-n methods.
                     // 
-                    if (alignmentOccurred == true)
+                    if (alignmentOccurred)
                     {
                         // This prevents the alignment portion from entering an infinite loop.                            
                         j = lastOverlap;

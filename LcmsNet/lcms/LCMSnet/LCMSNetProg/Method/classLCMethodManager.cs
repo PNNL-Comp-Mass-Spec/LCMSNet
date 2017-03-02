@@ -125,7 +125,7 @@ namespace LcmsNet.Method
             {
                 result = MethodRemoved(this, method);
             }
-            if (result != false)
+            if (result)
                 m_methods.Remove(method.Name);
 
             return result;
@@ -177,7 +177,7 @@ namespace LcmsNet.Method
                 throw new Exception("The method was not able to be read.");
 
             // Figure out if the method exists.
-            if (m_methods.ContainsKey(method.Name) == true)
+            if (m_methods.ContainsKey(method.Name))
             {
                 //TODO: Figure out what to do if a duplicate method exists.
                 var errorMessage = string.Format("The user method name from {0} conflicts with another method.",

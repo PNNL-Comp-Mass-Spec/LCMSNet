@@ -207,7 +207,7 @@ namespace LcmsNet.Method
                 }
 
                 // If it's an enumeration, then we'll have to treat it different from the rest of things
-                if (constructedParameterType.IsEnum == true)
+                if (constructedParameterType.IsEnum)
                 {
                     parameterArray[i] = Enum.Parse(constructedParameterType, parameterValue.Value);
                     parameterNameArray[i] = parameterName.Value;
@@ -293,7 +293,7 @@ namespace LcmsNet.Method
                             i++;
                         }
 
-                        if (found == true)
+                        if (found)
                         {
                             method = info;
                             break;
@@ -435,7 +435,7 @@ namespace LcmsNet.Method
             // a run in the XML file if requested.  This provides information about
             // the performance of the software and control.
             //
-            if (readActual == true)
+            if (readActual)
             {
                 //
                 // Make sure we have some kind of events

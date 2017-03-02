@@ -126,7 +126,7 @@ namespace LcmsNet.Method
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<object, List<object>>(FillData), new object[] {sender, data});
+                Invoke(new Action<object, List<object>>(FillData), sender, data);
             }
             else
             {

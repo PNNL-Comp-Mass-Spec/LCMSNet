@@ -224,7 +224,7 @@ namespace LcmsNet.Method.Forms
             var found = false;
             foreach (var o in mcomboBox_savedMethods.Items)
             {
-                if (o.ToString().Equals(text) == true)
+                if (o.ToString().Equals(text))
                 {
                     found = true;
                     break;
@@ -453,7 +453,7 @@ namespace LcmsNet.Method.Forms
             var text = mtextBox_methodName.Text;
             foreach (var o in mcomboBox_savedMethods.Items)
             {
-                if (o.ToString().Equals(text) == true)
+                if (o.ToString().Equals(text))
                 {
                     mcomboBox_savedMethods.SelectedItem = o;
                     var method = FindMethods(text);
@@ -495,7 +495,7 @@ namespace LcmsNet.Method.Forms
 
                 foreach (var o in mcomboBox_savedMethods.Items)
                 {
-                    if (o.ToString().Equals(text) == true)
+                    if (o.ToString().Equals(text))
                     {
                         found = true;
                         break;
@@ -656,7 +656,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="clearOld"></param>
         public void LoadMethod(classLCMethod method, bool clearOld)
         {
-            if (clearOld == true)
+            if (clearOld)
                 m_events.Clear();
             SuspendLayout();
             foreach (var lcEvent in method.Events)
@@ -743,7 +743,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="optimize"></param>
         void deviceEvent_Lock(object sender, bool enabled, classLCMethodData method)
         {
-            if (enabled == true)
+            if (enabled)
             {
                 var senderEvent = sender as controlLCMethodEvent;
                 var newEvent = new controlLCMethodEvent(method, true);

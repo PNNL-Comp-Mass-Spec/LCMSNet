@@ -185,7 +185,7 @@ namespace LcmsNetDataClasses.Method
                 // to reproduce performance information to understand when the 
                 // cart misbehaves.
                 // 
-                if (lcEvent.MethodAttribute.HasPerformanceData == true)
+                if (lcEvent.MethodAttribute.HasPerformanceData)
                 {
                     lcEvent.Device.WritePerformanceData(directoryPath, lcEvent.MethodAttribute.Name, lcEvent.Parameters);
                 }

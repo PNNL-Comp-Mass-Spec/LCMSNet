@@ -98,7 +98,7 @@ namespace LcmsNet.Method.Forms
             }
 
             var columnID = sample.ColumnData.ID;
-            if (sample.LCMethod.IsSpecialMethod == true)
+            if (sample.LCMethod.IsSpecialMethod)
             {
                 columnID = CONST_TOTAL_COLUMNS;
             }
@@ -106,7 +106,7 @@ namespace LcmsNet.Method.Forms
             if (m_samples.Contains(sample) == false)
                 m_samples[columnID] = sample;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
                 BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
             else
                 Refresh();
@@ -121,7 +121,7 @@ namespace LcmsNet.Method.Forms
             if (sample != null)
             {
                 var columnID = sample.ColumnData.ID;
-                if (sample.LCMethod.IsSpecialMethod == true)
+                if (sample.LCMethod.IsSpecialMethod)
                 {
                     columnID = CONST_TOTAL_COLUMNS;
                 }
@@ -133,7 +133,7 @@ namespace LcmsNet.Method.Forms
                 }
             }
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
                 BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
             else
                 Refresh();
@@ -161,7 +161,7 @@ namespace LcmsNet.Method.Forms
         {
             Refresh();
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
                 BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
             else
                 Refresh();
@@ -214,7 +214,7 @@ namespace LcmsNet.Method.Forms
                     // Then ask, if we only want to see from now until the end...only
                     // allow DateTime.UtcNow.Subtract(new TimeSpan(8, 0 , 0)) to be shown.
                     //
-                    if (RenderCurrent == true)
+                    if (RenderCurrent)
                     {
                         minTime = now;
                     }
@@ -228,7 +228,7 @@ namespace LcmsNet.Method.Forms
                     // Now we see how long to render for...if rendering all events then we are
                     // using the time between the start time until the last event
                     //
-                    if (RenderAllEvents == true)
+                    if (RenderAllEvents)
                     {
                         span = maxTime.Subtract(minTime);
 
@@ -254,7 +254,7 @@ namespace LcmsNet.Method.Forms
                         m_deviceColorMappings,
                         DateTime.MaxValue);
 
-                    if (RenderDisplayWindow == true)
+                    if (RenderDisplayWindow)
                     {
                         var x1Seconds = Convert.ToSingle(now.Subtract(minTime).TotalSeconds);
                         var spanx = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, PreviewMilliseconds);

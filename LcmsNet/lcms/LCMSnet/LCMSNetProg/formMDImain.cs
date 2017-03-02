@@ -288,7 +288,7 @@ namespace LcmsNet
             classDeviceManager.Manager.InitialzingDevice +=
                 new EventHandler<classDeviceManagerStatusArgs>(Manager_InitialzingDevice);
             formFailedDevicesDisplay display = null;
-            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP)) == true)
+            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP)))
             {
                 classApplicationLogger.LogMessage(0, "Initializing hardware.");
                 var failedDevices = classDeviceManager.Manager.InitializeDevices();
@@ -303,7 +303,7 @@ namespace LcmsNet
             }
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
-            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)) == true)
+            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)))
             {
                 //add simulator button to main form and add simulator forms.
                 m_simCombined = new formSimulatorCombined();
@@ -366,7 +366,7 @@ namespace LcmsNet
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message, ex);
             }
 
-            if (failedDeviceFlag == true)
+            if (failedDeviceFlag)
             {
                 classApplicationLogger.LogMessage(0,
                     string.Format("System Unsure.  {0} devices failed to initialize.", failedCount));
@@ -872,7 +872,7 @@ namespace LcmsNet
         /// <param name="args"></param>
         void Scheduler_SampleProgress(object sender, classSampleProgressEventArgs args)
         {
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] {null, args});
             }
@@ -893,7 +893,7 @@ namespace LcmsNet
             var args = new classSampleProgressEventArgs(errorMessage,
                 sample,
                 enumSampleProgress.Error);
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] {null, args});
             }

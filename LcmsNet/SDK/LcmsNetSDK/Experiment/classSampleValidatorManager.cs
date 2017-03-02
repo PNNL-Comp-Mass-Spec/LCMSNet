@@ -11,8 +11,6 @@ namespace LcmsNetDataClasses.Experiment
     {
         private const string CONST_VALIDATOR_PATH = @"LCMSNet\SampleValidators";
         private static classSampleValidatorManager m_instance;
-        private readonly CompositionContainer mmef_container;
-        private readonly DirectoryCatalog mmef_directorycatalog;
 
         private classSampleValidatorManager()
         {
@@ -24,11 +22,11 @@ namespace LcmsNetDataClasses.Experiment
             if (!validatorFolder.Exists)
                 validatorFolder.Create();
 
-            mmef_directorycatalog = new DirectoryCatalog(validatorPath);
-            catalog.Catalogs.Add(mmef_directorycatalog);
-            mmef_container = new CompositionContainer(catalog);
-            mmef_container.ComposeParts(this);
-            System.Diagnostics.Debug.WriteLine(string.Format("Loaded : {0} sample validators", Validators.Count()));
+            var mmefDirectorycatalog = new DirectoryCatalog(validatorPath);
+            catalog.Catalogs.Add(mmefDirectorycatalog);
+            var mmefContainer = new CompositionContainer(catalog);
+            mmefContainer.ComposeParts(this);
+            System.Diagnostics.Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");
         }
 
         public static classSampleValidatorManager Instance

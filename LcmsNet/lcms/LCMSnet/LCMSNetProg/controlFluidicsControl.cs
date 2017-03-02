@@ -375,7 +375,7 @@ namespace LcmsNet
         {
             try
             {
-                if (dragndrop || m_moving == true)
+                if (dragndrop || m_moving)
                 {
                     m_moving = true;
                     m_NewMouseLocation = e.Location;

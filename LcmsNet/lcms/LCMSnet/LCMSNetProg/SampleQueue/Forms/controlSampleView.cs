@@ -424,7 +424,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="state"></param>
         protected void EnableQueueing(bool state)
         {
-            if (state == true)
+            if (state)
             {
                 //
                 // Handles for queuing data!
@@ -1305,7 +1305,7 @@ namespace LcmsNet.SampleQueue.Forms
                     break;
                 case CONST_COLUMN_VOLUME:
                     success = double.TryParse(cellData.ToString(), out volume);
-                    if (success == true)
+                    if (success)
                     {
                         data.Volume = Math.Max(CONST_MIN_VOLUME, volume);
                     }
@@ -2482,7 +2482,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data">Data arguments that contain the updated sample information.</param>
         protected virtual void m_sampleQueue_SamplesUpdated(object sender, classSampleQueueArgs data)
         {
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new classSampleQueue.DelegateSamplesModifiedHandler(SamplesUpdated),
                     new object[] {sender, data});
@@ -2523,7 +2523,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void m_sampleQueue_SamplesStopped(object sender, classSampleQueueArgs data)
         {
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new classSampleQueue.DelegateSamplesModifiedHandler(SamplesStopped),
                     new object[] {sender, data});
@@ -2550,7 +2550,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (data == null || data.Samples == null)
                 return;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
             }
@@ -2667,7 +2667,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (data == null || data.Samples == null)
                 return;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
                 BeginInvoke(new MethodInvoker(UpdateDataView));
@@ -2725,7 +2725,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (data == null || data.Samples == null)
                 return;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
                 BeginInvoke(new MethodInvoker(UpdateDataView));
@@ -2747,7 +2747,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (data == null || data.Samples == null)
                 return;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
                 BeginInvoke(new MethodInvoker(UpdateDataView));
@@ -2769,7 +2769,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (data == null || data.Samples == null)
                 return;
 
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new DelegateUpdateRows(SamplesAddedFromQueue), new object[] {data.Samples});
             }

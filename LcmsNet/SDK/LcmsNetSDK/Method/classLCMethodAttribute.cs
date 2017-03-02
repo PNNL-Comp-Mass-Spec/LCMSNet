@@ -118,7 +118,7 @@ namespace LcmsNetDataClasses.Method
             int dataProviderIndex,
             bool hasPerformanceData)
         {
-            if (isSampleSpecific == true && sampleParameterIndex < 0)
+            if (isSampleSpecific && sampleParameterIndex < 0)
                 throw new Exception("The SampleParameterIndex cannot be negative");
 
             HasPerformanceData = hasPerformanceData;
@@ -156,7 +156,7 @@ namespace LcmsNetDataClasses.Method
             int dataProviderIndex,
             bool hasPerformanceData)
         {
-            if (isSampleSpecific == true && sampleParameterIndex < 0)
+            if (isSampleSpecific && sampleParameterIndex < 0)
                 throw new Exception("The SampleParameterIndex cannot be negative");
 
             HasPerformanceData = hasPerformanceData;
@@ -196,7 +196,7 @@ namespace LcmsNetDataClasses.Method
             int dataProviderIndex,
             bool hasPerformanceData)
         {
-            if (isSampleSpecific == true && sampleParameterIndex < 0)
+            if (isSampleSpecific && sampleParameterIndex < 0)
                 throw new Exception("The SampleParameterIndex cannot be negative");
             HasPerformanceData = hasPerformanceData;
             Name = methodName;
@@ -261,7 +261,7 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Gets the name of the method.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Returns the name of the method.

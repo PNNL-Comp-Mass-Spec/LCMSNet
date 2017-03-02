@@ -802,7 +802,7 @@ namespace LcmsNet.SampleQueue
             // If the user wants us to clear the forward stack then we will,
             // otherwise we ignore it.
             //
-            if (clearForward == true && forwardStack != null)
+            if (clearForward && forwardStack != null)
                 forwardStack.Clear();
 
 
@@ -1087,7 +1087,7 @@ namespace LcmsNet.SampleQueue
             //
             // Now make sure we alert everyone that we added a sample
             //
-            if (added == true)
+            if (added)
             {
                 //
                 // Only re-sequence and remove if we changed the queue to not waste time
@@ -1172,7 +1172,7 @@ namespace LcmsNet.SampleQueue
         private bool RemoveSample(classSampleData sample)
         {
             var removed = false;
-            if (m_waitingQueue.Contains(sample) == true)
+            if (m_waitingQueue.Contains(sample))
             {
                 m_waitingQueue.Remove(sample);
                 removed = true;
@@ -1235,7 +1235,7 @@ namespace LcmsNet.SampleQueue
                     //
                     // Otherwise, we just make the sample name unused.
                     //
-                    if (m_waitingQueue.Contains(data) == true)
+                    if (m_waitingQueue.Contains(data))
                     {
                         m_waitingQueue.Remove(data);
                         removedSamples.Add(data);
@@ -1590,7 +1590,7 @@ namespace LcmsNet.SampleQueue
             //
             // Alert listening objects.
             //
-            if (updated == true && SamplesUpdated != null)
+            if (updated && SamplesUpdated != null)
             {
                 SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
             }

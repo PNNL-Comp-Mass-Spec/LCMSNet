@@ -306,7 +306,7 @@ namespace LcmsNet.Method.Forms
             //
             // Render the updates if we animating and past the rendering threshold.
             //
-            if (MethodPreviewOptions.Animate == true && m_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
+            if (MethodPreviewOptions.Animate && m_renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
             {
                 RenderThroughput(sender.Methods);
                 Refresh();

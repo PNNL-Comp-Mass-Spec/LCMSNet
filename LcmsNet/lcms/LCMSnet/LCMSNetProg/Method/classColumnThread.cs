@@ -195,7 +195,7 @@ namespace LcmsNet.Method
                             var tempStatus = lcEvent.Device.Status;
 
                             lcEvent.Device.Status = enumDeviceStatus.InUseByMethod;
-                            if (lcEvent.MethodAttribute.RequiresSampleInput == true)
+                            if (lcEvent.MethodAttribute.RequiresSampleInput)
                                 lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
 
                             // Try to execute the event, if it doesnt work, then we capture

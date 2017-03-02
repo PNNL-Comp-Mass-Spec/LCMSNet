@@ -22,17 +22,17 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets the names of each parameter.
         /// </summary>
-        public List<string> Names { get; private set; }
+        public List<string> Names { get; }
 
         /// <summary>
         /// Gets the values to use with the method. 
         /// </summary>
-        public List<object> Values { get; private set; }
+        public List<object> Values { get; }
 
         /// <summary>
         /// Gets the list of controls to edit the values.
         /// </summary>
-        public List<Control> Controls { get; private set; }
+        public List<Control> Controls { get; }
 
         /// <summary>
         /// List of data provider names.
@@ -44,6 +44,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="parameter">Parameter value to add.</param>
         /// <param name="editControl">Edit control to use.</param>
+        /// <param name="name"></param>
         /// <param name="dataProviderName">Name of the data provider to use.</param>
         public void AddParameter(object parameter, Control editControl, string name, string dataProviderName)
         {
@@ -65,7 +66,7 @@ namespace LcmsNet.Method
             {
                 if (value != null)
                 {
-                    data += value.ToString() + ", ";
+                    data += value + ", ";
                 }
                 else
                 {

@@ -78,26 +78,23 @@ namespace LcmsNetSDK
         public bool DoDateTimesSpanDaylightSavingsTransition(DateTime start, DateTime end)
         {
             //Construct DateTimes representing DST transition
-            var springTransition = DateTime.MinValue;
-            var fallTransition = DateTime.MinValue;
             TimeZoneInfo.TransitionTime startTransTime;
             TimeZoneInfo.TransitionTime endTransTime;
             FindDSTTransitions(start.Year, out startTransTime, out endTransTime);
-            springTransition = ConvertToDateTime(startTransTime, start.Year);
-            fallTransition = ConvertToDateTime(endTransTime, end.Year);
+            var springTransition = ConvertToDateTime(startTransTime, start.Year);
+            var fallTransition = ConvertToDateTime(endTransTime, end.Year);
             //determine if a DST transition occurs between start and end (inclusive of both)
             if (start.CompareTo(springTransition) <= 0 && end.CompareTo(springTransition) >= 0)
             {
                 return true;
             }
-            else if (start.CompareTo(fallTransition) <= 0 && end.CompareTo(fallTransition) >= 0)
+
+            if (start.CompareTo(fallTransition) <= 0 && end.CompareTo(fallTransition) >= 0)
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         private void FindDSTTransitions(int year, out TimeZoneInfo.TransitionTime startTransTime,
@@ -139,24 +136,23 @@ namespace LcmsNetSDK
             {
                 return true;
             }
+            
             // If the method starts after the fall dst transition and occurs on the DAY of that transition...
-            else if (method.Start.Subtract(dstTransitionFall).Milliseconds >= 0 &&
-                     method.Start.Date == dstTransitionFall.Date)
+            if (method.Start.Subtract(dstTransitionFall).Milliseconds >= 0 &&
+                method.Start.Date == dstTransitionFall.Date)
             {
                 return true;
             }
+            
             // method does not start after a dst transition.
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
         /// convert a daylight savings transition rule to a date
         /// </summary>
         /// <param name="transition">a TransitionTime struct for a specific TimeZoneInfo(and thus a specific timezone)</param>
-        /// <param name="date">An int representing the year to apply the rule to</param>
+        /// <param name="year">An int representing the year to apply the rule to</param>
         /// <returns>A DateTime object containing the exact date and time the transition occurs for the specified year</returns>
         private DateTime ConvertToDateTime(TimeZoneInfo.TransitionTime transition, int year)
         {
@@ -167,27 +163,27 @@ namespace LcmsNetSDK
                 return new DateTime(year, transition.Month, (int) transition.DayOfWeek, transition.TimeOfDay.Hour,
                     transition.TimeOfDay.Minute, transition.TimeOfDay.Second, localCalendar);
             }
+
+            var startOfWeek = transition.Week * 7 - 6;
+            
+            // What day of the week does the month start on? 
+            var firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
+            
+            // Determine how much start date has to be adjusted 
+            int transitionDay;
+            var changeDayOfWeek = (int) transition.DayOfWeek;
+
+            if (firstDayOfWeek <= changeDayOfWeek)
+                transitionDay = startOfWeek + (changeDayOfWeek - firstDayOfWeek);
             else
-            {
-                var startOfWeek = transition.Week * 7 - 6;
-                // What day of the week does the month start on? 
-                var firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
-                // Determine how much start date has to be adjusted 
-                int transitionDay;
-                var changeDayOfWeek = (int) transition.DayOfWeek;
+                transitionDay = startOfWeek + (7 - firstDayOfWeek + changeDayOfWeek);
 
-                if (firstDayOfWeek <= changeDayOfWeek)
-                    transitionDay = startOfWeek + (changeDayOfWeek - firstDayOfWeek);
-                else
-                    transitionDay = startOfWeek + (7 - firstDayOfWeek + changeDayOfWeek);
+            // Adjust for months with no fifth week 
+            if (transitionDay > localCalendar.GetDaysInMonth(year, transition.Month))
+                transitionDay -= 7;
 
-                // Adjust for months with no fifth week 
-                if (transitionDay > localCalendar.GetDaysInMonth(year, transition.Month))
-                    transitionDay -= 7;
-
-                return new DateTime(year, transition.Month, transitionDay, transition.TimeOfDay.Hour,
-                    transition.TimeOfDay.Minute, transition.TimeOfDay.Second);
-            }
+            return new DateTime(year, transition.Month, transitionDay, transition.TimeOfDay.Hour,
+                                transition.TimeOfDay.Minute, transition.TimeOfDay.Second);
         }
 
         #endregion

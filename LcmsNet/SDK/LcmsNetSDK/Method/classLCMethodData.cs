@@ -23,8 +23,6 @@ namespace LcmsNet.Method
         /// <summary>
         /// Constructor that takes a method, and the value to call it with.
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="val"></param>
         public classLCMethodData(IDevice device,
             MethodInfo info,
             classLCMethodAttribute attr,
@@ -49,16 +47,13 @@ namespace LcmsNet.Method
             {
                 var control = Parameters.Controls[i];
 
-                if (control != null)
+                // 
+                // Grab the controls value to be used later on
+                // 
+                var parameterControl = control as ILCEventParameter;
+                if (parameterControl != null)
                 {
-                    // 
-                    // Grab the controls value to be used later on
-                    // 
-                    var parameterControl = control as ILCEventParameter;
-                    if (parameterControl != null)
-                    {
-                        Parameters.Values[i] = parameterControl.ParameterValue;
-                    }
+                    Parameters.Values[i] = parameterControl.ParameterValue;
                 }
             }
         }

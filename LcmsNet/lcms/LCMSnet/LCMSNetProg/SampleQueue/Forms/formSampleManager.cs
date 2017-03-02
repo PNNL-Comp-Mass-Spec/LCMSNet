@@ -493,7 +493,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             var validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) &&
                                    classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL) != string.Empty;
-            if (validateSamples == true)
+            if (validateSamples)
             {
                 var dmsDisplay = new formSampleDMSValidatorDisplay(samples);
 

@@ -48,7 +48,7 @@ namespace LcmsNet.Method.Forms
                         //
                         // Make sure we have a valid method
                         //
-                        if (classLCMethodManager.Manager.Methods.ContainsKey(methodName) == true)
+                        if (classLCMethodManager.Manager.Methods.ContainsKey(methodName))
                         {
                             var method = classLCMethodManager.Manager.Methods[methodName];
                             var cloned = method.Clone() as classLCMethod;
