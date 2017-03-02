@@ -47,7 +47,7 @@ namespace LcmsNet.Configuration
                     mbutton_color.BackColor = value.Color;
 
                     var systemID = value.SystemIndex + 1;
-                    mlabel_system.Text = "System " + systemID.ToString();
+                    mlabel_system.Text = "System " + systemID;
 
                     if (m_systemData != null)
                     {

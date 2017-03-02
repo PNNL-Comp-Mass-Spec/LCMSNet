@@ -75,7 +75,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 //BackColor = m_columnData.Color;
                 BackColor = Color.White;
-                mlabel_columnNameHeader.Text = "Column: " + m_columnData.ID.ToString() + " " + m_columnData.Name;
+                mlabel_columnNameHeader.Text = "Column: " + m_columnData.ID + " " + m_columnData.Name;
             }
         }
 

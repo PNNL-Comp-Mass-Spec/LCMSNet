@@ -55,7 +55,7 @@ namespace LcmsNetSDK
         {
             //Persist the timezone setting
             classLCMSSettings.SettingChanged -= classLCMSSettings_SettingChanged;
-            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id.ToString());
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id);
         }
 
         /// <summary>

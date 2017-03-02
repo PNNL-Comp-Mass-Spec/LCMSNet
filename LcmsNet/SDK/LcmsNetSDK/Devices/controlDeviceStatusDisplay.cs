@@ -8,7 +8,7 @@ namespace LcmsNetDataClasses.Devices
     /// <summary>
     /// Header for a device control
     /// </summary>
-    public partial class controlDeviceStatusDisplay : UserControl
+    public sealed partial class controlDeviceStatusDisplay : UserControl
     {
         /// <summary>
         /// Default constructor.
@@ -49,18 +49,12 @@ namespace LcmsNetDataClasses.Devices
 
         private void bringToFrontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Parent != null)
-            {
-                Parent.BringToFront();
-            }
+            Parent?.BringToFront();
         }
 
         private void sendToBackToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Parent != null)
-            {
-                Parent.SendToBack();
-            }
+            Parent?.SendToBack();
         }
 
         private void fixErrorsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -249,7 +243,8 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="height"></param>
         /// <param name="onColor"></param>
         /// <param name="offColor"></param>
-        protected void DrawIndicator(Graphics g, int left, int top, int width, int height, Color onColor, Color offColor,
+        /// <param name="isOn"></param>
+        private void DrawIndicator(Graphics g, int left, int top, int width, int height, Color onColor, Color offColor,
             bool isOn)
         {
             var indicatorColor = onColor;

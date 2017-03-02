@@ -39,15 +39,15 @@ namespace LcmsNetDataClasses
             var assemName = assem.GetName();
             var ver = assemName.Version;
             var name = "[ApplicationInfo]\r\n";
-            name += string.Format("Application {0}\r\nVersion {1}\r\n", assemName.Name, ver.ToString());
+            name += string.Format("Application {0}\r\nVersion {1}\r\n", assemName.Name, ver);
 
             var os = Environment.OSVersion;
             ver = os.Version;
-            name += string.Format("Operating System: {0} ({1})\r\n", os.VersionString, ver.ToString());
+            name += string.Format("Operating System: {0} ({1})\r\n", os.VersionString, ver);
 
             name += string.Format("Computer Name: {0}\r\n", Environment.MachineName);
             ver = Environment.Version;
-            name += string.Format("CLR Version {0}\r\n", ver.ToString());
+            name += string.Format("CLR Version {0}\r\n", ver);
 
             return name;
         }

@@ -96,7 +96,7 @@ namespace LcmsNet.SampleQueue.Forms
             for (var trayIndx = 1; trayIndx < m_Trays.Length; trayIndx++)
             {
                 m_Trays[trayIndx].UpdateSampleList(ref m_DataList);
-                captionStr = "Tray " + (trayIndx).ToString() + " (" + m_Trays[trayIndx].SampleCount.ToString() +
+                captionStr = "Tray " + (trayIndx) + " (" + m_Trays[trayIndx].SampleCount +
                              ")";
                 tabControlPlates.TabPages[trayIndx].Text = captionStr;
             }
@@ -218,12 +218,12 @@ namespace LcmsNet.SampleQueue.Forms
             if (radbtnUnassigned.Checked)
             {
                 m_Trays[0].SetDataView(true);
-                tabControlPlates.TabPages[0].Text = "Unassigned (" + m_Trays[0].SampleCount.ToString() + ")";
+                tabControlPlates.TabPages[0].Text = "Unassigned (" + m_Trays[0].SampleCount + ")";
             }
             else
             {
                 m_Trays[0].SetDataView(false);
-                tabControlPlates.TabPages[0].Text = "All (" + m_Trays[0].SampleCount.ToString() + ")";
+                tabControlPlates.TabPages[0].Text = "All (" + m_Trays[0].SampleCount + ")";
             }
         }
 
@@ -242,7 +242,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Update individual tray tabs
             for (var indx = 1; indx < m_Trays.Length; indx++)
             {
-                tmpStr = "Tray " + indx.ToString() + " (" + m_Trays[indx].SampleCount.ToString() + ")";
+                tmpStr = "Tray " + indx + " (" + m_Trays[indx].SampleCount + ")";
                 tabControlPlates.TabPages[indx].Text = tmpStr;
             }
         }

@@ -152,14 +152,14 @@ namespace LcmsNetDataClasses
                                     {
                                         throw new Exception(
                                             "classDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
-                                            tempProp.PropertyType.ToString());
+                                            tempProp.PropertyType);
                                     }
                                 }
                                 else
                                 {
                                     throw new Exception(
                                         "classDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
-                                        tempProp.PropertyType.ToString());
+                                        tempProp.PropertyType);
                                 }
                                 break;
                         } // End switch

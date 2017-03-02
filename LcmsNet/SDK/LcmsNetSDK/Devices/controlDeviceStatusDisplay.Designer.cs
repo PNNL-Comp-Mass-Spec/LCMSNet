@@ -1,6 +1,6 @@
 ﻿namespace LcmsNetDataClasses.Devices
 {
-    partial class controlDeviceStatusDisplay
+    sealed partial class controlDeviceStatusDisplay
     {
         /// <summary> 
         /// Required designer variable.

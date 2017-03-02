@@ -67,12 +67,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// <summary>
         /// Displays the monitoring data.
         /// </summary>
-        /// <param name="time"></param>
-        /// <param name="pressure"></param>
-        /// <param name="flowrate"></param>
-        /// <param name="percentB"></param>
         public void DisplayMonitoringData(object sender, PumpDataEventArgs args)
-            //List<DateTime> time, List<double> pressure, List<double> flowrate, List<double> percentB)
         {
             try
             {

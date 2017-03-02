@@ -46,7 +46,7 @@ namespace LcmsNet
         {
             return string.Format("{0} {1}: {2}",
                 DateTime.UtcNow.Subtract(LcmsNetSDK.TimeKeeper.Instance.TimeZone.BaseUtcOffset).ToLongDateString(),
-                DateTime.UtcNow.Subtract(LcmsNetSDK.TimeKeeper.Instance.TimeZone.BaseUtcOffset).TimeOfDay.ToString(),
+                DateTime.UtcNow.Subtract(LcmsNetSDK.TimeKeeper.Instance.TimeZone.BaseUtcOffset).TimeOfDay,
                 message);
         }
 

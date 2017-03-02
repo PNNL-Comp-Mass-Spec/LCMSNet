@@ -690,7 +690,7 @@ namespace LcmsNet.SampleQueue
             }
             catch (classDatabaseStoredProcException Ex)
             {
-                var errMsg = "Error " + Ex.ReturnCode.ToString() + " while executing stored procedure ";
+                var errMsg = "Error " + Ex.ReturnCode + " while executing stored procedure ";
                 errMsg = errMsg + Ex.ProcName + ": " + Ex.ErrMessage;
                 errMsg = errMsg + "\r\n\r\nRequests in DMS may not show correct cart assignments";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);

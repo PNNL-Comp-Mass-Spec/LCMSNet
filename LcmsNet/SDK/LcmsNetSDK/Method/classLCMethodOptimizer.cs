@@ -403,7 +403,7 @@ namespace LcmsNet.Method
             System.Diagnostics.Debug.WriteLine("Optimized Methods: ");
             var formatStr = "method: {0} start time: {1} end time {2}";
             System.Diagnostics.Debug.WriteLine(string.Format("Current Time: {0}",
-                LcmsNetSDK.TimeKeeper.Instance.Now.ToString()));
+                LcmsNetSDK.TimeKeeper.Instance.Now));
             foreach (var m in methods)
             {
                 System.Diagnostics.Debug.WriteLine(string.Format(formatStr, m.Name, m.Start, m.End));

@@ -163,7 +163,7 @@ namespace LcmsNet.SampleQueue.Forms
             dataGridView1.DataSource = m_DataView;
             if (!MasterView)
             {
-                m_DataView.RowFilter = "Tray = " + TrayNumber.ToString();
+                m_DataView.RowFilter = "Tray = " + TrayNumber;
             }
             else SetDataView();
         }
@@ -181,7 +181,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 else m_DataView.RowFilter = "";
             }
-            else m_DataView.RowFilter = "Tray = " + TrayNumber.ToString();
+            else m_DataView.RowFilter = "Tray = " + TrayNumber;
         }
 
         /// <summary>
@@ -232,8 +232,8 @@ namespace LcmsNet.SampleQueue.Forms
         // Debug code
         void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Cell Value Changed: Row " + e.RowIndex.ToString() + ", Column " +
-                                               e.ColumnIndex.ToString());
+            System.Diagnostics.Debug.WriteLine("Cell Value Changed: Row " + e.RowIndex + ", Column " +
+                                               e.ColumnIndex);
         }
 
         #endregion

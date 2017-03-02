@@ -91,7 +91,7 @@ namespace LcmsNet.Devices
                 var lineData = line.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (lineData.Length == 3)
                 {
-                    configuration.AddConnection("conn" + (j - connectionsIndex).ToString(),
+                    configuration.AddConnection("conn" + (j - connectionsIndex),
                         lineData[0] + "," + lineData[1] + "," + lineData[2]);
                 }
             }

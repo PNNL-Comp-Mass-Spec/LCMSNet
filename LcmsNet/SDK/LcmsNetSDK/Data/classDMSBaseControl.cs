@@ -5,7 +5,7 @@ namespace LcmsNetDataClasses.Data
 {
     public abstract partial class classDMSBaseControl : UserControl
     {
-        public classDMSBaseControl()
+        protected classDMSBaseControl()
         {
             InitializeComponent();
         }

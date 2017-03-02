@@ -641,7 +641,7 @@ namespace LcmsNet.Method.Forms
                     eventData = string.Format("{0} - {1}",
                         deviceEvent.SelectedMethod.Device.Name,
                         deviceEvent.SelectedMethod.MethodAttribute.Name,
-                        deviceEvent.SelectedMethod.Parameters.ToString());
+                        deviceEvent.SelectedMethod.Parameters);
                 }
             }
             classApplicationLogger.LogMessage(0, "Control event added - " + eventData);

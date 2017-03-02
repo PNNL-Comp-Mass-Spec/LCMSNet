@@ -450,7 +450,7 @@ namespace LcmsNetDataClasses
                         var dmsDict = DmsData.GetPropertyValues();
                         foreach (DictionaryEntry de in dmsDict)
                         {
-                            TempDict.Add("DMS." + de.Key.ToString(), de.Value.ToString());
+                            TempDict.Add("DMS." + de.Key, de.Value.ToString());
                         }
                         break;
                     case "LcmsNetDataClasses.Data.classPalData":
@@ -458,7 +458,7 @@ namespace LcmsNetDataClasses
                         var palDict = PAL.GetPropertyValues();
                         foreach (DictionaryEntry de in palDict)
                         {
-                            TempDict.Add("PAL." + de.Key.ToString(), de.Value.ToString());
+                            TempDict.Add("PAL." + de.Key, de.Value.ToString());
                         }
                         break;
                     case "LcmsNetDataClasses.Configuration.classColumnData":
@@ -468,7 +468,7 @@ namespace LcmsNetDataClasses
                             var colDict = ColumnData.GetPropertyValues();
                             foreach (DictionaryEntry de in colDict)
                             {
-                                TempDict.Add("Col." + de.Key.ToString(), de.Value.ToString());
+                                TempDict.Add("Col." + de.Key, de.Value.ToString());
                             }
                         }
                         break;
@@ -480,7 +480,7 @@ namespace LcmsNetDataClasses
                             foreach (DictionaryEntry de in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                TempDict.Add("exp." + de.Key.ToString(), de.Value.ToString());
+                                TempDict.Add("exp." + de.Key, de.Value.ToString());
                             }
                         }
                         else
@@ -490,7 +490,7 @@ namespace LcmsNetDataClasses
                             foreach (DictionaryEntry de in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                TempDict.Add("exp." + de.Key.ToString(), de.Value.ToString());
+                                TempDict.Add("exp." + de.Key, de.Value.ToString());
                             }
                         }
                         break;
@@ -499,7 +499,7 @@ namespace LcmsNetDataClasses
                         var instDict = InstrumentData.GetPropertyValues();
                         foreach (DictionaryEntry de in instDict)
                         {
-                            TempDict.Add("Ins." + de.Key.ToString(), de.Value.ToString());
+                            TempDict.Add("Ins." + de.Key, de.Value.ToString());
                         }
                         break;
                     default:

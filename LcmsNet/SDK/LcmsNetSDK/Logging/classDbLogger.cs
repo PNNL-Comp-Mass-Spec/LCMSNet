@@ -68,13 +68,13 @@ namespace LcmsNetDataClasses.Logging
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'ERROR',");
-            sqlCmdBlder.Append("'" + errorLevel.ToString() + "',");
+            sqlCmdBlder.Append("'" + errorLevel + "',");
 
             // If sample is present, add it to the SQL string
             if (args.Sample != null)
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
-                sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID.ToString() + "',");
+                sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',");
                 var eventIndx = args.Sample.LCMethod.CurrentEventNumber;
                 if (eventIndx < 0 || eventIndx > args.Sample.LCMethod.Events.Count)
                 {
@@ -116,13 +116,13 @@ namespace LcmsNetDataClasses.Logging
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'MSG',");
-            sqlCmdBlder.Append("'" + msgLevel.ToString() + "',");
+            sqlCmdBlder.Append("'" + msgLevel + "',");
 
             // If sample is present, add it to the SQL string
             if (args.Sample != null)
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
-                sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID.ToString() + "',"); // Add column here
+                sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',"); // Add column here
                 if (args.Sample.LCMethod.CurrentEventNumber >= 0)
                 {
                     if (args.Sample.LCMethod.Events.Count > 0)

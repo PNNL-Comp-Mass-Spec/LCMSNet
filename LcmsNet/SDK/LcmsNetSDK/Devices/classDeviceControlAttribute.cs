@@ -14,7 +14,7 @@ namespace LcmsNetDataClasses.Devices
         /// 
         /// </summary>
         /// <param name="deviceControlType"></param>
-        /// <param name="dashboardGlyphType"></param>
+        /// <param name="fluidicsDeviceType"></param>
         /// <param name="name"></param>
         /// <param name="category"></param>
         public classDeviceControlAttribute(Type deviceControlType, Type fluidicsDeviceType, string name, string category)

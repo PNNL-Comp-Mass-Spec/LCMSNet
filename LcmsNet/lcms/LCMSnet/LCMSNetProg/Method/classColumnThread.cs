@@ -218,7 +218,7 @@ namespace LcmsNet.Method
                             Print(
                                 string.Format(
                                     "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
-                                    finished.ToString(),
+                                    finished,
                                     m_columnId, // 1  COL ID
                                     exThrown.Message, // 2  Message
                                     exThrown.StackTrace, // 3  Stack Trace
@@ -228,7 +228,7 @@ namespace LcmsNet.Method
                             classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                                 string.Format(
                                     "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
-                                    finished.ToString(),
+                                    finished,
                                     m_columnId, // 1  COL ID
                                     exThrown.Message, // 2  Message
                                     exThrown.StackTrace, // 3  Stack Trace
@@ -258,7 +258,7 @@ namespace LcmsNet.Method
                             if (totalMilliseconds > 2)
                             {
                                 Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
-                                    finished.ToString(),
+                                    finished,
                                     m_columnId, // 1  COL ID
                                     span.TotalMilliseconds),
                                     CONST_VERBOSE_EVENTS);

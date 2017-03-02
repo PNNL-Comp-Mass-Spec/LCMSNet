@@ -138,16 +138,16 @@ namespace LcmsNet.SampleQueue.Forms
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
             {
-                mcontrol_column1.AutoSamplerMethods.Add("method" + i.ToString());
-                mcontrol_column2.AutoSamplerMethods.Add("method" + i.ToString());
-                mcontrol_column3.AutoSamplerMethods.Add("method" + i.ToString());
-                mcontrol_column4.AutoSamplerMethods.Add("method" + i.ToString());
-                mcontrol_sequenceView.AutoSamplerMethods.Add("method" + i.ToString());
+                mcontrol_column1.AutoSamplerMethods.Add("method" + i);
+                mcontrol_column2.AutoSamplerMethods.Add("method" + i);
+                mcontrol_column3.AutoSamplerMethods.Add("method" + i);
+                mcontrol_column4.AutoSamplerMethods.Add("method" + i);
+                mcontrol_sequenceView.AutoSamplerMethods.Add("method" + i);
 
-                mcontrol_column1.AutoSamplerTrays.Add("defaultTray0" + i.ToString());
-                mcontrol_column2.AutoSamplerTrays.Add("defaultTray0" + i.ToString());
-                mcontrol_column3.AutoSamplerTrays.Add("defaultTray0" + i.ToString());
-                mcontrol_sequenceView.AutoSamplerTrays.Add("defaultTray0" + i.ToString());
+                mcontrol_column1.AutoSamplerTrays.Add("defaultTray0" + i);
+                mcontrol_column2.AutoSamplerTrays.Add("defaultTray0" + i);
+                mcontrol_column3.AutoSamplerTrays.Add("defaultTray0" + i);
+                mcontrol_sequenceView.AutoSamplerTrays.Add("defaultTray0" + i);
             }
 
             mdialog_exportQueue = new SaveFileDialog();

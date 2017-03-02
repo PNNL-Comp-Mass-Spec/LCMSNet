@@ -321,7 +321,7 @@ namespace LcmsNet.Method
                         // Tell the column thread to die..
                         //
 
-                        Print("Killing column: " + i.ToString(), CONST_VERBOSE_EVENTS);
+                        Print("Killing column: " + i, CONST_VERBOSE_EVENTS);
                         if (m_columnWorkers[i].IsBusy)
                         {
                             sampleEndTime[i] = DateTime.MinValue;
@@ -343,7 +343,7 @@ namespace LcmsNet.Method
                 }
                 catch (Exception)
                 {
-                    Print("Error occured while shutting down column" + i.ToString(), CONST_VERBOSE_LEAST);
+                    Print("Error occured while shutting down column" + i, CONST_VERBOSE_LEAST);
                 }
                 finally
                 {

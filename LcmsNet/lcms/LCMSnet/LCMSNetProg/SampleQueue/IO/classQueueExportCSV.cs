@@ -128,9 +128,9 @@ namespace LcmsNet.SampleQueue.IO
             {
                 var colNum = sample.ColumnData.ID + 1;
                 strBld.Append("\"" + sample.DmsData.DatasetName + "\",");
-                strBld.Append("\"" + sample.DmsData.RequestID.ToString() + "\",");
-                strBld.Append("\"" + colNum.ToString() + "\",");
-                strBld.Append("\"" + sample.DmsData.RunOrder.ToString() + "\",");
+                strBld.Append("\"" + sample.DmsData.RequestID + "\",");
+                strBld.Append("\"" + colNum + "\",");
+                strBld.Append("\"" + sample.DmsData.RunOrder + "\",");
                 strBld.Append(Environment.NewLine);
             }
 

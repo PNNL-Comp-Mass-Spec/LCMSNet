@@ -1689,7 +1689,7 @@ namespace LcmsNet.SampleQueue.Forms
                     // Don't add directly to the user interface in case the
                     // sample manager class has something to say about one of the samples
                     //
-                    classApplicationLogger.LogMessage(0, samples.Count.ToString() + " samples added to the queue");
+                    classApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
                 }
             }
         }
