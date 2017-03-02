@@ -5,7 +5,7 @@ namespace LcmsNet
     /// <summary>
     /// Custom panel class that includes double buffering, used for rendering fluidics objects
     /// </summary>
-    public class controlBufferedPanel : Panel
+    public sealed class controlBufferedPanel : Panel
     {
         public controlBufferedPanel()
             : base()

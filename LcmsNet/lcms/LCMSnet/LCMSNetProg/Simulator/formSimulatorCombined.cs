@@ -10,14 +10,9 @@ namespace LcmsNet.Simulator
 
         private SimControlsAndChartsControl m_controls;
 
-        /// <summary>
-        /// dictionary that will hold methods queued for simulation.
-        /// </summary>
-        private Dictionary<string, LcmsNetDataClasses.Method.classLCMethod> m_queuedMethods;
-
         public formSimulatorCombined()
         {
-            m_queuedMethods = new Dictionary<string, LcmsNetDataClasses.Method.classLCMethod>();
+            new Dictionary<string, LcmsNetDataClasses.Method.classLCMethod>();
             InitializeComponent();
             m_controls = SimControlsAndChartsControl.GetInstance;
             m_controls.Dock = DockStyle.Fill;

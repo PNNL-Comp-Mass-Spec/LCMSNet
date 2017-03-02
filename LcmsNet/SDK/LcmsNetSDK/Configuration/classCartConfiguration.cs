@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace LcmsNetDataClasses.Configuration
 {
@@ -39,7 +40,6 @@ namespace LcmsNetDataClasses.Configuration
         /// <summary>
         /// Builds a list of columns from the cart configuration object.
         /// </summary>
-        /// <param name="config">Cart configuration.</param>
         /// <param name="orderByFirst">Orders the list by the first selected column. e.g. list[0] = column3 iff column3.First = True</param>
         /// <returns>List of columns stored in cart configuration.</returns>
         public static List<classColumnData> BuildColumnList(bool orderByFirst)
@@ -112,7 +112,7 @@ namespace LcmsNetDataClasses.Configuration
 
                 return classSampleData.CONST_MIN_SAMPLE_VOLUME;
             }
-            set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME, value.ToString()); }
+            set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture)); }
         }
 
         #endregion
