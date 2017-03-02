@@ -61,7 +61,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// Flag telling combo box index changed event that event was caused by a mouse click
         /// </summary>
-        private bool m_ComboHasFocus = false;
+        private bool m_ComboHasFocus;
 
         #endregion
 

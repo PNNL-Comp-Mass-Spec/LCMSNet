@@ -55,10 +55,10 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        int m_TrayNumber = 0;
+        int m_TrayNumber;
         DataTable m_DataTable = new DataTable("DummyTable");
         readonly DataView m_DataView = new DataView();
-        bool m_MasterView = false;
+        bool m_MasterView;
         bool m_ShowUnassigned = true;
 
         #endregion

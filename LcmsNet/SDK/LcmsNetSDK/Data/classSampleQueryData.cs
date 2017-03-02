@@ -30,7 +30,7 @@ namespace LcmsNetDataClasses
         #region "Class variables"
 
         readonly StringDictionary m_QueryParams = new StringDictionary();
-        bool m_UnassignedOnly = false;
+        bool m_UnassignedOnly;
 
         #endregion
 

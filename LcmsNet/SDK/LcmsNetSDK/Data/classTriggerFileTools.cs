@@ -25,7 +25,7 @@ namespace LcmsNetDataClasses.Data
 
         #region "Class variables"
 
-        private static XmlDocument m_TriggerFileContents = null;
+        private static XmlDocument m_TriggerFileContents;
 
         #endregion
 

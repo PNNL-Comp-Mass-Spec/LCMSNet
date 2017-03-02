@@ -56,12 +56,12 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Error message importance level (0 is most important, 5 is least important)
         /// </summary>
-        private static int m_errorLevel = 0;
+        private static int m_errorLevel;
 
         /// <summary>
         /// Status message importance level (0 is most important, 5 is least important)
         /// </summary>
-        private static int m_messageLevel = 0;
+        private static int m_messageLevel;
 
         /// <summary>
         /// Gets or sets the error level to log.

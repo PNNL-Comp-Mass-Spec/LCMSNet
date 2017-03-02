@@ -11,8 +11,8 @@ namespace LcmsNet
     {
         public delegate void DelegateShowErrors(int level, classErrorLoggerArgs args);
 
-        bool m_errorLabelSelected = false;
-        bool m_messageLabelSelected = false;
+        bool m_errorLabelSelected;
+        bool m_messageLabelSelected;
 
         /// <summary>
         /// Constructor.

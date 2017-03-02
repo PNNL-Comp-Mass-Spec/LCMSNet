@@ -25,7 +25,7 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Flag indicating whether a log file has been created for this program start.
         /// </summary>
-        private static bool m_logFileCreated = false;
+        private static bool m_logFileCreated;
 
         private static string m_LogFilePath;
 

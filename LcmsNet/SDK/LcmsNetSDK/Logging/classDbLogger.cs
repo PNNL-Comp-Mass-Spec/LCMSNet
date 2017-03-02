@@ -49,7 +49,7 @@ namespace LcmsNetDataClasses.Logging
 
         private static readonly object m_lock = "AstringToLockOn";
         private static readonly object m_writeLock = "AnotherStringToLockOn";
-        private static bool m_LogDbFileCreated = false;
+        private static bool m_LogDbFileCreated;
         private static string m_DbFileName;
         private static string m_ConnStr;
 

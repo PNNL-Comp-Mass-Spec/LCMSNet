@@ -245,12 +245,12 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Last position of the sample that is queued used to track how the user is queuing and dequeuing samples.
         /// </summary>
-        private int m_lastQueuedSamplePosition = 0;
+        private int m_lastQueuedSamplePosition;
 
         /// <summary>
         /// First position of the pulldown bar to track what samples can be queued or edited.
         /// </summary>
-        private int m_firstQueuedSamplePosition = 0;
+        private int m_firstQueuedSamplePosition;
 
         /// <summary>
         /// If autoscroll during sequence run is enabled

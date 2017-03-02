@@ -78,7 +78,7 @@ namespace LcmsNetDataClasses.Data
         /// <summary>
         /// Vial index to use.
         /// </summary>
-        private int m_Well = 0;
+        private int m_Well;
 
         /// <summary>
         /// Wellplate name

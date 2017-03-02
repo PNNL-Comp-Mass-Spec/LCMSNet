@@ -73,9 +73,9 @@ namespace LcmsnetUnitTest
             samples = new List<classSampleData>();
         }
 
-        classLCMethodOptimizer optimizer = null;
-        classSampleQueue q = null;
-        List<classSampleData> samples = null;
+        classLCMethodOptimizer optimizer;
+        classSampleQueue q;
+        List<classSampleData> samples;
 
 
         [Test]

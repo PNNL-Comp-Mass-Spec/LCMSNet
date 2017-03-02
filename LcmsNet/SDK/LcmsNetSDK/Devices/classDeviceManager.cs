@@ -109,7 +109,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Static Device Manager Reference.
         /// </summary>
-        private static classDeviceManager m_deviceManager = null;
+        private static classDeviceManager m_deviceManager;
 
         /// <summary>
         /// Fired when a device is successfully added.

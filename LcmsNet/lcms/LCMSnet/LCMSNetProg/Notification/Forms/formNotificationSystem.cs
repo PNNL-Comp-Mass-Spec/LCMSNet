@@ -170,7 +170,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Current device being set.
         /// </summary>
-        private INotifier m_currentDevice = null;
+        private INotifier m_currentDevice;
 
         #endregion
 

@@ -260,7 +260,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Flag indicating if this event is a placeholder so that we know it's an unlocking event
         /// </summary>
-        private readonly bool m_isLockingEvent = false;
+        private readonly bool m_isLockingEvent;
 
         private bool m_stoppedHere;
 

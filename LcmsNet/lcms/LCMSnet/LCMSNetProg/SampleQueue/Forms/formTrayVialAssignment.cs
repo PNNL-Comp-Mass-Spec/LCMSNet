@@ -47,8 +47,8 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        List<string> m_TrayNames = null; // List of tray names used by PAL on this cart
-        List<classSampleData> m_SampleList = null; // List of samples to have tray/vial assignments
+        List<string> m_TrayNames; // List of tray names used by PAL on this cart
+        List<classSampleData> m_SampleList; // List of samples to have tray/vial assignments
 
         DataTable m_DataList = new DataTable("SampleTable");
         // Table to hold data for samples in easy-to-handle format
