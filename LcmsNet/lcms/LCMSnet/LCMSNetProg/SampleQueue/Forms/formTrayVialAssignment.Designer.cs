@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class formTrayVialAssignment
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -209,17 +212,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Button buttonApply;
-        private System.Windows.Forms.TabControl tabControlPlates;
-        private System.Windows.Forms.TabPage tabPageOverall;
-        private System.Windows.Forms.TabPage tabPagePlate1;
-        private System.Windows.Forms.TabPage tabPagePlate2;
-        private System.Windows.Forms.TabPage tabPagePlate3;
-        private System.Windows.Forms.TabPage tabPagePlate4;
-        private System.Windows.Forms.TabPage tabPagePlate5;
-        private System.Windows.Forms.TabPage tabPagePlate6;
-        private System.Windows.Forms.RadioButton radbtnUnassigned;
-        private System.Windows.Forms.RadioButton radbtnAll;
+        private Button buttonCancel;
+        private Button buttonApply;
+        private TabControl tabControlPlates;
+        private TabPage tabPageOverall;
+        private TabPage tabPagePlate1;
+        private TabPage tabPagePlate2;
+        private TabPage tabPagePlate3;
+        private TabPage tabPagePlate4;
+        private TabPage tabPagePlate5;
+        private TabPage tabPagePlate6;
+        private RadioButton radbtnUnassigned;
+        private RadioButton radbtnAll;
     }
 }

@@ -8,6 +8,6 @@
         NotInitialized,
         Initialized,
         Error,
-        InUseByMethod,
+        InUseByMethod
     }
 }

@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue
 {
     partial class formDMSView
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -447,56 +450,56 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ComboBox comboBoxSelectCart;
-        private System.Windows.Forms.ListView listviewAvailableRequests;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsReqName;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsReqNum;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsCart;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsUser;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsUsageType;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox checkBoxUnAssignedOnly;
-        private System.Windows.Forms.Button buttonFind;
-        private System.Windows.Forms.ComboBox comboBoxCarts;
-        private System.Windows.Forms.TextBox textRequestNumMax;
-        private System.Windows.Forms.TextBox textRequestNumMin;
-        private System.Windows.Forms.TextBox textRequestName;
-        private System.Windows.Forms.Label labelCarts;
-        private System.Windows.Forms.Label labelRequestsTo;
-        private System.Windows.Forms.Label labelRequestsFrom;
-        private System.Windows.Forms.Label labelRequestName;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonMoveDown;
-        private System.Windows.Forms.Button buttonMoveUp;
-        private System.Windows.Forms.Label labelLCCart;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ListView listViewRequestsToRun;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunReqName;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunReqNum;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunCart;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunUser;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunUsageType;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.Label labelPleaseWait;
-        private System.Windows.Forms.Button buttonUpdateCartList;
-        private System.Windows.Forms.Label labelRequestCount;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsBlock;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsRunOrder;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunBlock;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunRunOrder;
-        private System.Windows.Forms.ColumnHeader columnHeaderAvailRequestsBatch;
-        private System.Windows.Forms.ColumnHeader columnHeaderRequestsToRunBatch;
-        private System.Windows.Forms.TextBox textBatchID;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBlock;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textWellplate;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBoxSelectCartConfig;
-        private System.Windows.Forms.Label labelLCCartConfig;
+        private SplitContainer splitContainer1;
+        private Panel panel2;
+        private ComboBox comboBoxSelectCart;
+        private ListView listviewAvailableRequests;
+        private ColumnHeader columnHeaderAvailRequestsReqName;
+        private ColumnHeader columnHeaderAvailRequestsReqNum;
+        private ColumnHeader columnHeaderAvailRequestsCart;
+        private ColumnHeader columnHeaderAvailRequestsUser;
+        private ColumnHeader columnHeaderAvailRequestsUsageType;
+        private GroupBox groupBox1;
+        private CheckBox checkBoxUnAssignedOnly;
+        private Button buttonFind;
+        private ComboBox comboBoxCarts;
+        private TextBox textRequestNumMax;
+        private TextBox textRequestNumMin;
+        private TextBox textRequestName;
+        private Label labelCarts;
+        private Label labelRequestsTo;
+        private Label labelRequestsFrom;
+        private Label labelRequestName;
+        private Label label1;
+        private Button buttonMoveDown;
+        private Button buttonMoveUp;
+        private Label labelLCCart;
+        private Panel panel1;
+        private ListView listViewRequestsToRun;
+        private ColumnHeader columnHeaderRequestsToRunReqName;
+        private ColumnHeader columnHeaderRequestsToRunReqNum;
+        private ColumnHeader columnHeaderRequestsToRunCart;
+        private ColumnHeader columnHeaderRequestsToRunUser;
+        private ColumnHeader columnHeaderRequestsToRunUsageType;
+        private Label label2;
+        private Button buttonCancel;
+        private Button buttonOK;
+        private Label labelPleaseWait;
+        private Button buttonUpdateCartList;
+        private Label labelRequestCount;
+        private ColumnHeader columnHeaderAvailRequestsBlock;
+        private ColumnHeader columnHeaderAvailRequestsRunOrder;
+        private ColumnHeader columnHeaderRequestsToRunBlock;
+        private ColumnHeader columnHeaderRequestsToRunRunOrder;
+        private ColumnHeader columnHeaderAvailRequestsBatch;
+        private ColumnHeader columnHeaderRequestsToRunBatch;
+        private TextBox textBatchID;
+        private Label label3;
+        private TextBox textBlock;
+        private Label label4;
+        private TextBox textWellplate;
+        private Label label5;
+        private ComboBox comboBoxSelectCartConfig;
+        private Label labelLCCartConfig;
     }
 }

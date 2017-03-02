@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Configuration
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Configuration
 {
     partial class controlColumn
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -98,9 +101,9 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox mcheckBox_enabled;
-        private System.Windows.Forms.ComboBox mcomboBox_names;
-        private System.Windows.Forms.Label mlabel_status;
-        private System.Windows.Forms.Button mbutton_color;
+        private CheckBox mcheckBox_enabled;
+        private ComboBox mcomboBox_names;
+        private Label mlabel_status;
+        private Button mbutton_color;
     }
 }

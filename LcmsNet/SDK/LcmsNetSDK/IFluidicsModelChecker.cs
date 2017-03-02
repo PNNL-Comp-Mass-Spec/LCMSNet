@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using LcmsNetDataClasses;
+using LcmsNetSDK.Notifications;
 
 namespace LcmsNetSDK
 {
     /// <summary>
     /// interface for checking validity of fluidics models
     /// </summary>
-    public interface IFluidicsModelChecker : Notifications.INotifier
+    public interface IFluidicsModelChecker : INotifier
     {
         /// <summary>
         /// gets or sets if this specific model check is enabled during the simulation.

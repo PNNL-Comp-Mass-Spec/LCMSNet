@@ -1,10 +1,12 @@
 ﻿using System;
-using System.IO;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Method.Forms
 {
@@ -285,7 +287,7 @@ namespace LcmsNet.Method.Forms
                 m_renderUpdateCount = 0;
 
                 if (methods.Count > 0)
-                    methods[0].SetStartTime(LcmsNetSDK.TimeKeeper.Instance.Now);
+                    methods[0].SetStartTime(TimeKeeper.Instance.Now);
 
                 optimizer.AlignMethods(methods);
                 RenderThroughput(methods);
@@ -317,7 +319,7 @@ namespace LcmsNet.Method.Forms
                 //
                 m_renderUpdateCount = 0;
 
-                System.Threading.Thread.Sleep(MethodPreviewOptions.AnimateDelay);
+                Thread.Sleep(MethodPreviewOptions.AnimateDelay);
             }
         }
 

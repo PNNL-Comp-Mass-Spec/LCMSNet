@@ -7,9 +7,11 @@
 // Last modified 03/03/2009
 //*********************************************************************************************************
 
+using System;
+
 namespace LcmsNetDataClasses
 {
-    public class classPlugInDisplayNameAttribute : System.Attribute
+    public class classPlugInDisplayNameAttribute : Attribute
     {
         //*********************************************************************************************************
         // Custom attribute class for display of plugin name
@@ -28,10 +30,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         /// <param name="DisplayName">Plugin name to be used for display purposes</param>
         public classPlugInDisplayNameAttribute(string DisplayName)
-            : base()
         {
             m_DisplayName = DisplayName;
-            return;
         }
 
         /// <summary>

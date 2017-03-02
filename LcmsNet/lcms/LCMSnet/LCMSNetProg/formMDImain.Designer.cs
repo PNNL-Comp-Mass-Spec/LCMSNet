@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class formMDImain
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -326,33 +329,33 @@
         }
         #endregion
 
-            private System.Windows.Forms.ToolStrip toolStrip;
-            private System.Windows.Forms.StatusStrip mstatusStrip_status;
-            private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
-            private System.Windows.Forms.ToolTip toolTip;
-              private System.Windows.Forms.ToolStripButton mtoolButton_showMessages;
-              private System.Windows.Forms.ToolStripButton mtoolButton_showSampleQueue;
-              private System.Windows.Forms.ToolStripButton mbutton_MethodEditor;
-              private System.Windows.Forms.ToolStripButton mbutton_sampleProgress;
-              private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-              private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-              private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-              private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-             private System.Windows.Forms.MenuStrip menuStrip;
-             private System.Windows.Forms.ToolStripMenuItem fileMenu;
-             private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-             private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-             private System.Windows.Forms.ToolStripButton mbutton_reportError;
-             private System.Windows.Forms.ToolStripButton toolStripButton2;
-             private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-             private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-             private System.Windows.Forms.ToolStripButton toolButton_notificationSystem;
-             private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-             private System.Windows.Forms.ToolStripButton toolStripButtonAbout;
-             private System.Windows.Forms.ToolStripButton toolStripButtonFludics;
-             private System.Windows.Forms.ToolStripButton mbutton_cartButton;
-             private System.Windows.Forms.ToolStripButton toolStripButtonSimulate;
-             private System.Windows.Forms.ToolStripSeparator toolStripSeparatorSimulator;
+            private ToolStrip toolStrip;
+            private StatusStrip mstatusStrip_status;
+            private ToolStripStatusLabel toolStripStatusLabel;
+            private ToolTip toolTip;
+              private ToolStripButton mtoolButton_showMessages;
+              private ToolStripButton mtoolButton_showSampleQueue;
+              private ToolStripButton mbutton_MethodEditor;
+              private ToolStripButton mbutton_sampleProgress;
+              private ToolStripSeparator toolStripSeparator2;
+              private ToolStripSeparator toolStripSeparator4;
+              private ToolStripSeparator toolStripSeparator7;
+              private ToolStripSeparator toolStripSeparator1;
+             private MenuStrip menuStrip;
+             private ToolStripMenuItem fileMenu;
+             private ToolStripSeparator toolStripSeparator3;
+             private ToolStripMenuItem exitToolStripMenuItem;
+             private ToolStripButton mbutton_reportError;
+             private ToolStripButton toolStripButton2;
+             private ToolStripSeparator toolStripSeparator5;
+             private ToolStripSeparator toolStripSeparator8;
+             private ToolStripButton toolButton_notificationSystem;
+             private ToolStripSeparator toolStripSeparator10;
+             private ToolStripButton toolStripButtonAbout;
+             private ToolStripButton toolStripButtonFludics;
+             private ToolStripButton mbutton_cartButton;
+             private ToolStripButton toolStripButtonSimulate;
+             private ToolStripSeparator toolStripSeparatorSimulator;
     }
 }
 

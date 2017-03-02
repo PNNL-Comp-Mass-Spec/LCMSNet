@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class formSplashScreen
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -154,12 +157,12 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label labelStatus;
-        private System.Windows.Forms.Label mlabel_version;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lblCopyright;
-        private System.Windows.Forms.Label lblDevelopers;
-        private System.Windows.Forms.Label mlabel_emulated;
+        private PictureBox pictureBox1;
+        private Label labelStatus;
+        private Label mlabel_version;
+        private Panel panel1;
+        private Label lblCopyright;
+        private Label lblDevelopers;
+        private Label mlabel_emulated;
     }
 }

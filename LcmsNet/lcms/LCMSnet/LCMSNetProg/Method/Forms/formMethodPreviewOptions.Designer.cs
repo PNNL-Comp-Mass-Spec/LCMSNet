@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class formMethodPreviewOptions
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -195,15 +198,15 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox mcheckBox_animate;
-        private System.Windows.Forms.NumericUpDown mnum_delay;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button mbutton_ok;
-        private System.Windows.Forms.Button mbutton_cancel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown mnum_frameCount;
-        private System.Windows.Forms.GroupBox mgroupBox_update;
-        private System.Windows.Forms.Label mlabel_frames;
+        private CheckBox mcheckBox_animate;
+        private NumericUpDown mnum_delay;
+        private Label label1;
+        private Label label2;
+        private Button mbutton_ok;
+        private Button mbutton_cancel;
+        private Label label3;
+        private NumericUpDown mnum_frameCount;
+        private GroupBox mgroupBox_update;
+        private Label mlabel_frames;
     }
 }

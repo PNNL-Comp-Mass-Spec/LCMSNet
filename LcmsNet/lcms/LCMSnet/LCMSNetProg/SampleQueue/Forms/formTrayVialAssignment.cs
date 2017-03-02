@@ -341,9 +341,6 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 DialogResult = DialogResult.Cancel;
             }
-            else
-            {
-            }
         }
 
         #endregion

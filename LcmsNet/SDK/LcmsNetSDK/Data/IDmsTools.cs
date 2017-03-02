@@ -1,4 +1,6 @@
-﻿namespace LcmsNetDataClasses
+﻿using System.Collections.Generic;
+
+namespace LcmsNetDataClasses
 {
     public interface IDmsTools
     {
@@ -12,14 +14,14 @@
         void GetEntireColumnListListFromDMS();
         void GetExperimentListFromDMS();
         void GetInstrumentListFromDMS();
-        System.Collections.Generic.Dictionary<int, int> GetMRMFileListFromDMS(int MinID, int MaxID);
+        Dictionary<int, int> GetMRMFileListFromDMS(int MinID, int MaxID);
 
         void GetMRMFilesFromDMS(string FileIndxList,
-            ref System.Collections.Generic.List<classMRMFileData> fileData);
+            ref List<classMRMFileData> fileData);
 
         void GetProposalUsers();
 
-        System.Collections.Generic.List<classSampleData> GetSamplesFromDMS(
+        List<classSampleData> GetSamplesFromDMS(
             classSampleQueryData queryData);
 
         void GetSepTypeListFromDMS();

@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using LcmsNet.Method.Drawing;
-using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Method.Forms
 {
@@ -179,7 +180,7 @@ namespace LcmsNet.Method.Forms
 
         public void RenderGraph(Graphics e)
         {
-            var now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var now = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             if (m_samples != null && m_samples.Count > 0)
             {
                 try

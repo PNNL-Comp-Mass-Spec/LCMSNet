@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class controlLCMethodSelection
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -122,11 +125,11 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox mcomboBox_methods;
-        private System.Windows.Forms.Button mbutton_add;
-        private System.Windows.Forms.Button mbutton_remove;
-        private System.Windows.Forms.Button mbutton_up;
-        private System.Windows.Forms.Button mbutton_down;
-        private System.Windows.Forms.ListBox mlistBox_methods;
+        private ComboBox mcomboBox_methods;
+        private Button mbutton_add;
+        private Button mbutton_remove;
+        private Button mbutton_up;
+        private Button mbutton_down;
+        private ListBox mlistBox_methods;
     }
 }

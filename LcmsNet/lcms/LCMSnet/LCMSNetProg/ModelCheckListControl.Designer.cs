@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class ModelCheckListControl
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -97,9 +100,9 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBoxModelChecks;
-        private System.Windows.Forms.CheckBox enableAllModelChecks;
-        private System.Windows.Forms.Panel panelEnableAll;
-        private System.Windows.Forms.Panel panelCheckBoxes;
+        private GroupBox groupBoxModelChecks;
+        private CheckBox enableAllModelChecks;
+        private Panel panelEnableAll;
+        private Panel panelCheckBoxes;
     }
 }

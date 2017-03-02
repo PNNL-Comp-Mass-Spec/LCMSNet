@@ -1,12 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+
+namespace LcmsNet.Method.Forms
 {
     partial class formMethodEditor
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
-        private LcmsNet.Method.Forms.controlLCMethodEditor mcontrol_methodEditor;
+        private IContainer components = null;
+        private controlLCMethodEditor mcontrol_methodEditor;
 
         /// <summary>
         /// Clean up any resources being used.

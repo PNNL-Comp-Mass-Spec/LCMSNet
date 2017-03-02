@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class frmEmulationDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -107,10 +110,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblWarning;
-        private System.Windows.Forms.Button btnEnableEmulation;
-        private System.Windows.Forms.Button btnRunSimulationWithoutEmulation;
-        private System.Windows.Forms.Button btnCancelSimulationRun;
-        private System.Windows.Forms.Label lblMessage;
+        private Label lblWarning;
+        private Button btnEnableEmulation;
+        private Button btnRunSimulationWithoutEmulation;
+        private Button btnCancelSimulationRun;
+        private Label lblMessage;
     }
 }

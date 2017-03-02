@@ -14,8 +14,7 @@ namespace LcmsNet.Method
     /// Delegate defining sample progress information.
     /// </summary>
     /// <param name="sender">Scheduler sending data.</param>
-    /// <param name="sample">Sample working on.</param>
-    /// <param name="eventNumber">Events covered total</param>
+    /// <param name="args"></param>
     public delegate void DelegateSampleProgress(object sender, classSampleProgressEventArgs args);
 
     /// <summary>
@@ -28,6 +27,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="message">Message from the sender.</param>
         /// <param name="sample">Sample data whose progress is being reported for.</param>
+        /// <param name="progressType"></param>
         public classSampleProgressEventArgs(string message, classSampleData sample, enumSampleProgress progressType)
         {
             Message = message;

@@ -13,14 +13,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
-using LcmsNetSQLiteTools;
 using LcmsNetSDK;
+using LcmsNetSQLiteTools;
 
 namespace LcmsNet.Configuration
 {
@@ -102,7 +103,7 @@ namespace LcmsNet.Configuration
         {
             var comboDmsTools = sender as ComboBox;
             var selectedTool = comboDmsTools.Items[comboDmsTools.SelectedIndex].ToString();
-            var toolInfo = selectedTool.Split(new char[] {'-'});
+            var toolInfo = selectedTool.Split('-');
             try
             {
                 classDMSToolsManager.Instance.SelectTool(toolInfo[0], toolInfo[1]);
@@ -326,7 +327,7 @@ namespace LcmsNet.Configuration
                 mcombo_SepType.SelectedIndex = 0;
             }
 
-            mbutton_accept.BackColor = System.Drawing.Color.FromName("ButtonHighlight");
+            mbutton_accept.BackColor = Color.FromName("ButtonHighlight");
         }
 
         /// <summary>
@@ -388,7 +389,7 @@ namespace LcmsNet.Configuration
             var found = false;
             foreach (string itemName in mcombo_Operator.Items)
             {
-                var array = itemName.Split(new char[] {'-'});
+                var array = itemName.Split('-');
                 if (array[0].Trim() == currentName)
                 {
                     found = true;
@@ -405,7 +406,7 @@ namespace LcmsNet.Configuration
             {
                 mcombo_Operator.SelectedIndex = 0;
             }
-            mbutton_acceptOperator.BackColor = System.Drawing.Color.FromName("ButtonHighlight");
+            mbutton_acceptOperator.BackColor = Color.FromName("ButtonHighlight");
         }
 
         /// <summary>
@@ -585,12 +586,12 @@ namespace LcmsNet.Configuration
         {
             if (!m_isLoading)
                 classLCMSSettings.SetParameter(classLCMSSettings.PARAM_INSTNAME, comboBoxAvailInstruments.SelectedItem.ToString());
-            mbutton_accept.BackColor = System.Drawing.Color.FromName("ButtonHighlight");
+            mbutton_accept.BackColor = Color.FromName("ButtonHighlight");
         }
 
         private void comboBoxAvailInstruments_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mbutton_accept.BackColor = System.Drawing.Color.Red;
+            mbutton_accept.BackColor = Color.Red;
         }
 
         private void mbutton_acceptOperator_Click(object sender, EventArgs e)
@@ -609,12 +610,12 @@ namespace LcmsNet.Configuration
                         "Could not use the current user as the operator.  Was not present in the system.");
                 }
             }
-            mbutton_acceptOperator.BackColor = System.Drawing.Color.FromName("ButtonHighlight");
+            mbutton_acceptOperator.BackColor = Color.FromName("ButtonHighlight");
         }
 
         private void mcombo_Operator_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mbutton_acceptOperator.BackColor = System.Drawing.Color.Red;
+            mbutton_acceptOperator.BackColor = Color.Red;
         }
 
         #endregion

@@ -1,7 +1,6 @@
 ﻿using System;
 using LcmsNetDataClasses.Devices;
 
-
 namespace LcmsNet.Method
 {
     /// <summary>

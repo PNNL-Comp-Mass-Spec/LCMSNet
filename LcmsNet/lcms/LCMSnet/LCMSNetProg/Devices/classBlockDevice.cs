@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Method;
+using System.Threading;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Devices
 {
@@ -47,7 +48,7 @@ namespace LcmsNet.Devices
 
         #region LC-Method Registered Methods
 
-        [classLCMethodAttribute("Block", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Block", enumMethodOperationTime.Parameter, "", -1, false)]
         public void Block(double timeToBlock)
         {
             var timer = new classTimerDevice();
@@ -90,7 +91,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>
-        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+        public ManualResetEvent AbortEvent { get; set; }
 
         /// <summary>
         /// Gets or sets whether the device is emulated or not.

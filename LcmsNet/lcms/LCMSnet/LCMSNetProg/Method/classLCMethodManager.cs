@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Method;
+using System.IO;
 using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method
 {
@@ -87,14 +87,11 @@ namespace LcmsNet.Method
 
                 return true;
             }
-            else
-            {
-                m_methods[method.Name] = method;
+            m_methods[method.Name] = method;
 
-                MethodUpdated?.Invoke(this, method);
+            MethodUpdated?.Invoke(this, method);
 
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -185,13 +182,10 @@ namespace LcmsNet.Method
                 classApplicationLogger.LogMessage(0, errorMessage);
                 throw new Exception(errorMessage);
             }
-            else
-            {
-                //
-                // Otherwise, add the method so it can be registered with appropiate objects
-                //
-                AddMethod(method);
-            }
+            //
+            // Otherwise, add the method so it can be registered with appropiate objects
+            //
+            AddMethod(method);
         }
 
         /// <summary>
@@ -221,7 +215,7 @@ namespace LcmsNet.Method
                 }
                 catch (Exception exception)
                 {
-                    errors.Add(filePath, new List<Exception>() {exception});
+                    errors.Add(filePath, new List<Exception> {exception});
 
                     classApplicationLogger.LogError(0,
                         "An unhandled exception occured when reading a user method.",

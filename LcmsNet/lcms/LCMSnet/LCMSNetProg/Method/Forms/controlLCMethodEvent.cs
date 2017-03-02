@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 
@@ -860,7 +860,7 @@ namespace LcmsNet.Method.Forms
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<BreakEventArgs>(BreakPointEvent_Handler), new object[2] {sender, e});
+                BeginInvoke(new EventHandler<BreakEventArgs>(BreakPointEvent_Handler), sender, e);
             }
             else
             {

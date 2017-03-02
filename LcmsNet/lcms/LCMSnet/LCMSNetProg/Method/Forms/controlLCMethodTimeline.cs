@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 using LcmsNet.Method.Drawing;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Method.Forms
 {
@@ -247,7 +248,7 @@ namespace LcmsNet.Method.Forms
         {
             base.OnPaint(e);
             var renderer = LCRendererFactory.GetRenderer(RenderMode);
-            var startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var startTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             var duration = new TimeSpan(0, 30, 0);
             foreach (var column in classCartConfiguration.Columns)
             {

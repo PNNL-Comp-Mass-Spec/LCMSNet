@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 
 namespace LcmsNetDataClasses
@@ -20,7 +21,7 @@ namespace LcmsNetDataClasses
                 var i = 0;
                 foreach (var address in addresses)
                 {
-                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    if (address.AddressFamily == AddressFamily.InterNetwork)
                     {
                         name += string.Format("IPAddress{0} = {1}\r\n", i++, address);
                     }

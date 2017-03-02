@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class formSampleQueueOptions
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -123,11 +126,11 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox mcheckbox_displayFullName;
-        private System.Windows.Forms.GroupBox mgroupBox_triggerFileOptions;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button mbutton_ok;
+        private CheckBox mcheckbox_displayFullName;
+        private GroupBox mgroupBox_triggerFileOptions;
+        private CheckBox checkBox3;
+        private CheckBox checkBox2;
+        private CheckBox checkBox1;
+        private Button mbutton_ok;
     }
 }

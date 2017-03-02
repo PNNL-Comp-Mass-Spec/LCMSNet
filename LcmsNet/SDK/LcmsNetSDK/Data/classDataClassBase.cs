@@ -11,8 +11,8 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Drawing;
 using System.ComponentModel;
+using System.Drawing;
 using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNetDataClasses

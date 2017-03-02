@@ -7,13 +7,15 @@
  *********************************************************************************************************/
 
 using System;
-using System.Threading;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Method
 {
@@ -89,8 +91,8 @@ namespace LcmsNet.Method
         {
             if (level <= VerboseLevel)
             {
-                System.Diagnostics.Trace.WriteLine(message);
-                System.Diagnostics.Trace.Flush();
+                Trace.WriteLine(message);
+                Trace.Flush();
             }
         }
 
@@ -147,151 +149,148 @@ namespace LcmsNet.Method
                 for (var eventNumber = 0; eventNumber < methodEvents.Count; eventNumber++)
                 {
                     classLCEvent actualEvent;
-                    var start = LcmsNetSDK.TimeKeeper.Instance.Now;
-                    var finished = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    var start = TimeKeeper.Instance.Now;
+                    var finished = TimeKeeper.Instance.Now;
                     // before every event, check to see if we need to cancel operations
                     if (mthread_worker.CancellationPending)
                     {
                         e.Cancel = true;
                         break;
                     }
+                    //here we report progress, by notifying at the start of every new event.
+                    var totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
+                    var elapsedTimeInTicks = TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
+                    var percentComplete =
+                        (int)
+                        Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
+                    //We send percentage(of time) complete and state of the column, currently consisting
+                    //of columnID, event number, and end time of the next event to the event handler
+                    var state = new List<object>();
+                    state.Add(m_columnId);
+                    state.Add(eventNumber);
+                    if (eventNumber <= methodEvents.Count - 1)
+                    {
+                        state.Add(methodEvents[eventNumber].End);
+                    }
                     else
                     {
-                        //here we report progress, by notifying at the start of every new event.
-                        var totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
-                        var elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
-                        var percentComplete =
-                            (int)
-                                Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
-                        //We send percentage(of time) complete and state of the column, currently consisting
-                        //of columnID, event number, and end time of the next event to the event handler
-                        var state = new List<object>();
-                        state.Add(m_columnId);
-                        state.Add(eventNumber);
-                        if (eventNumber <= methodEvents.Count - 1)
-                        {
-                            state.Add(methodEvents[eventNumber].End);
-                        }
-                        else
-                        {
-                            state.Add(DateTime.MinValue);
-                        }
-                        mthread_worker.ReportProgress(percentComplete, state);
-                        method.CurrentEventNumber = eventNumber;
-                        // Used for statistics
-                        actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
-                        actualEvent.Start = start;
-                        actualEvent.Duration = new TimeSpan(0, 0, 0);
-                        method.ActualEvents.Add(actualEvent);
-                        var lcEvent = methodEvents[eventNumber];
+                        state.Add(DateTime.MinValue);
+                    }
+                    mthread_worker.ReportProgress(percentComplete, state);
+                    method.CurrentEventNumber = eventNumber;
+                    // Used for statistics
+                    actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
+                    actualEvent.Start = start;
+                    actualEvent.Duration = new TimeSpan(0, 0, 0);
+                    method.ActualEvents.Add(actualEvent);
+                    var lcEvent = methodEvents[eventNumber];
 
-                        // This determines when the next event should start.  Since the events are layed out in time
-                        // we know it should start by the lcEvent.End date time value.  This helps correct for any
-                        // straying events that may be a ms or two off.
-                        var next = lcEvent.End;
-                        var success = true;
+                    // This determines when the next event should start.  Since the events are layed out in time
+                    // we know it should start by the lcEvent.End date time value.  This helps correct for any
+                    // straying events that may be a ms or two off.
+                    var next = lcEvent.End;
+                    var success = true;
+                    try
+                    {
+                        var tempStatus = lcEvent.Device.Status;
+
+                        lcEvent.Device.Status = enumDeviceStatus.InUseByMethod;
+                        if (lcEvent.MethodAttribute.RequiresSampleInput)
+                            lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
+
+                        // Try to execute the event, if it doesnt work, then we capture
+                        // all relevant information and propogate it back out...At this time
+                        // if an error occurs we are done executing on this column.
+                        if (lcEvent.Duration.TotalMilliseconds > 1)
+                            success = ExecuteEvent(lcEvent);
+                        else
+                            success = true;
+                        lcEvent.Device.Status = tempStatus;
+                    }
+                    catch (Exception exThrown)
+                    {
+                        // Set the flags and variables so that we can say HEY!
+                        // there was an error!
+                        IsErrored = true;
+                        ex = exThrown;
+                        success = false;
+                        finished = TimeKeeper.Instance.Now;
+                        Print(
+                            string.Format(
+                                "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
+                                finished,
+                                m_columnId, // 1  COL ID
+                                exThrown.Message, // 2  Message
+                                exThrown.StackTrace, // 3  Stack Trace
+                                lcEvent.Name,
+                                lcEvent.Device.Name),
+                            CONST_VERBOSE_EVENTS);
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                                                        string.Format(
+                                                            "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
+                                                            finished,
+                                                            m_columnId, // 1  COL ID
+                                                            exThrown.Message, // 2  Message
+                                                            exThrown.StackTrace, // 3  Stack Trace
+                                                            lcEvent.Name,
+                                                            lcEvent.Device.Name),
+                                                        ex);
+                    }
+
+                    if (success)
+                    {
+                        actualEvent.HadError = false;
+                        //
+                        // Here we'll wait enough time so that
+                        // we dont run the next event before its scheduled start.  This is flow control.
+                        //
+                        var timer = new classTimerDevice();
+                        var span = next.Subtract(TimeKeeper.Instance.Now);
+                        var totalMilliseconds = 0;
                         try
                         {
-                            var tempStatus = lcEvent.Device.Status;
-
-                            lcEvent.Device.Status = enumDeviceStatus.InUseByMethod;
-                            if (lcEvent.MethodAttribute.RequiresSampleInput)
-                                lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
-
-                            // Try to execute the event, if it doesnt work, then we capture
-                            // all relevant information and propogate it back out...At this time
-                            // if an error occurs we are done executing on this column.
-                            if (lcEvent.Duration.TotalMilliseconds > 1)
-                                success = ExecuteEvent(lcEvent);
-                            else
-                                success = true;
-                            lcEvent.Device.Status = tempStatus;
+                            totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
                         }
-                        catch (Exception exThrown)
+                        catch (OverflowException ex2)
                         {
-                            // Set the flags and variables so that we can say HEY!
-                            // there was an error!
-                            IsErrored = true;
-                            ex = exThrown;
-                            success = false;
-                            finished = LcmsNetSDK.TimeKeeper.Instance.Now;
-                            Print(
-                                string.Format(
-                                    "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
-                                    finished,
-                                    m_columnId, // 1  COL ID
-                                    exThrown.Message, // 2  Message
-                                    exThrown.StackTrace, // 3  Stack Trace
-                                    lcEvent.Name,
-                                    lcEvent.Device.Name),
-                                CONST_VERBOSE_EVENTS);
-                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                                string.Format(
-                                    "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
-                                    finished,
-                                    m_columnId, // 1  COL ID
-                                    exThrown.Message, // 2  Message
-                                    exThrown.StackTrace, // 3  Stack Trace
-                                    lcEvent.Name,
-                                    lcEvent.Device.Name),
-                                ex);
+                            classApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
                         }
-
-                        if (success)
+                        if (totalMilliseconds > 2)
                         {
-                            actualEvent.HadError = false;
-                            //
-                            // Here we'll wait enough time so that
-                            // we dont run the next event before its scheduled start.  This is flow control.
-                            //
-                            var timer = new classTimerDevice();
-                            var span = next.Subtract(LcmsNetSDK.TimeKeeper.Instance.Now);
-                            var totalMilliseconds = 0;
-                            try
-                            {
-                                totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
-                            }
-                            catch (OverflowException ex2)
-                            {
-                                classApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
-                            }
-                            if (totalMilliseconds > 2)
-                            {
-                                Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
-                                    finished,
-                                    m_columnId, // 1  COL ID
-                                    span.TotalMilliseconds),
-                                    CONST_VERBOSE_EVENTS);
-                                var timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
-                                //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
-                                timer.WaitMilliseconds(totalMilliseconds, m_abortEvent);
-                                var timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
-                                //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
-                                // Calculate the statistics of how long it took to run.
-                            }
-                            finished = LcmsNetSDK.TimeKeeper.Instance.Now;
-                        }
-                        else if (!success)
-                        {
-                            //
-                            // Well, we had an error (exception or expected) and we dont care why, we just want to
-                            // gracefully notify people in charge, and exit.
-                            //
-
-                            lcEvent.Device.Status = enumDeviceStatus.Error;
-                            m_sampleData = null;
-                            if (ex == null)
-                            {
-                                ex = new Exception(string.Format("{0}.{1} failed.",
-                                    lcEvent.Device.Name,
-                                    lcEvent.Name));
-                            }
+                            Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
+                                                finished,
+                                                m_columnId, // 1  COL ID
+                                                span.TotalMilliseconds),
+                                  CONST_VERBOSE_EVENTS);
+                            var timerStart = TimeKeeper.Instance.Now;
+                            //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
+                            timer.WaitMilliseconds(totalMilliseconds, m_abortEvent);
+                            var timerEnd = TimeKeeper.Instance.Now.Ticks;
+                            //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
                             // Calculate the statistics of how long it took to run.
-                            finished = LcmsNetSDK.TimeKeeper.Instance.Now;
-                            throw ex;
                         }
-                        //method.ActualEvents.Add(actualEvent);
+                        finished = TimeKeeper.Instance.Now;
                     }
+                    else if (!success)
+                    {
+                        //
+                        // Well, we had an error (exception or expected) and we dont care why, we just want to
+                        // gracefully notify people in charge, and exit.
+                        //
+
+                        lcEvent.Device.Status = enumDeviceStatus.Error;
+                        m_sampleData = null;
+                        if (ex == null)
+                        {
+                            ex = new Exception(string.Format("{0}.{1} failed.",
+                                                             lcEvent.Device.Name,
+                                                             lcEvent.Name));
+                        }
+                        // Calculate the statistics of how long it took to run.
+                        finished = TimeKeeper.Instance.Now;
+                        throw ex;
+                    }
+                    //method.ActualEvents.Add(actualEvent);
                     actualEvent.Duration = finished.Subtract(start);
                 }
             }

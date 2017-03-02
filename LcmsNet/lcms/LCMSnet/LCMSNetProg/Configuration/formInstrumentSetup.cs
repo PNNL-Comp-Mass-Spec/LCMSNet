@@ -9,9 +9,9 @@
 
 using System;
 using System.Windows.Forms;
-using LcmsNetSQLiteTools;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
+using LcmsNetSQLiteTools;
 
 namespace LcmsNet
 {

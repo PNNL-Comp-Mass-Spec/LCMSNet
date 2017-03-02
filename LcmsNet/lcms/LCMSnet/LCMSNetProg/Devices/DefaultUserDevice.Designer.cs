@@ -1,11 +1,13 @@
-﻿namespace LcmsNet.Devices
+﻿using System.ComponentModel;
+
+namespace LcmsNet.Devices
 {
     partial class DefaultUserDevice
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.

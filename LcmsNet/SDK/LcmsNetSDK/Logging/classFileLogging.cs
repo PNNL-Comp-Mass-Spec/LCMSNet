@@ -14,6 +14,7 @@
 using System;
 using System.IO;
 using System.Text;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Logging
 {
@@ -72,7 +73,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 // Build the message string
                 //var msgStr = new StringBuilder(DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.fff"));
-                var msgStr = new StringBuilder(LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+                var msgStr = new StringBuilder(TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
                 msgStr.Append("\t");
                 msgStr.Append("ERROR");
                 msgStr.Append("\t");
@@ -111,7 +112,7 @@ namespace LcmsNetDataClasses.Logging
         {
             // Build the message string
             //var msgStr = new StringBuilder(DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.fff"));
-            var msgStr = new StringBuilder(LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+            var msgStr = new StringBuilder(TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
             msgStr.Append("\t");
             msgStr.Append("MSG");
             msgStr.Append("\t");
@@ -221,7 +222,7 @@ namespace LcmsNetDataClasses.Logging
         {
             var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             //string logFileName = "Log_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".txt";
-            var logFileName = "Log_" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MMddyyyy_HHmmss") + ".txt";
+            var logFileName = "Log_" + TimeKeeper.Instance.Now.ToString("MMddyyyy_HHmmss") + ".txt";
             var path = Path.Combine(appPath, AppFolder);
             return Path.Combine(Path.Combine(path, "Log"), logFileName);
         }

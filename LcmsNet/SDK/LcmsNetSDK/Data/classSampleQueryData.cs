@@ -94,10 +94,7 @@ namespace LcmsNetDataClasses
             {
                 return m_QueryParams[dictKey];
             }
-            else
-            {
-                return string.Empty;
-            }
+            return string.Empty;
         }
 
         public string BuildSqlString()

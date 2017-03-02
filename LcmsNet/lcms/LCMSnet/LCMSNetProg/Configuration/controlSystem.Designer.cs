@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Configuration
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Configuration
 {
     partial class controlSystem
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -69,7 +72,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label mlabel_system;
-        private System.Windows.Forms.Button mbutton_color;
+        private Label mlabel_system;
+        private Button mbutton_color;
     }
 }

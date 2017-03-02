@@ -9,10 +9,10 @@
 
 using System;
 using System.IO;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
 using LcmsNet.Method;
+using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
+using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -21,10 +21,6 @@ namespace LcmsNet.SampleQueue.IO
     /// </summary>
     public class classMethodFileTools : IMethodWriter
     {
-        public classMethodFileTools()
-        {
-        }
-
         #region Constants
 
         private const string METHOD_FOLDER_NAME = "MethodFiles";
@@ -78,7 +74,6 @@ namespace LcmsNet.SampleQueue.IO
             {
                 var msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
                 classApplicationLogger.LogError(0, msg, ex, sample);
-                return;
             }
             finally
             {
@@ -241,10 +236,7 @@ namespace LcmsNet.SampleQueue.IO
             {
                 return false; // No method folders to copy
             }
-            else
-            {
-                return true; // There are folders to copy
-            }
+            return true; // There are folders to copy
         }
 
         /// <summary>

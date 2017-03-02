@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
-
-//using LcmsNet.Devices;
 using LcmsNetDataClasses.Method;
+//using LcmsNet.Devices;
 
 namespace LcmsNetDataClasses.Devices
 {
@@ -86,7 +86,7 @@ namespace LcmsNetDataClasses.Devices
         /// Waits for N milliseconds.
         /// </summary>
         /// <param name="seconds">Total number of milliseconds to wait.</param> 
-        [classLCMethodAttribute("Wait N Seconds", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Wait N Seconds", enumMethodOperationTime.Parameter, "", -1, false)]
         // Note, the timeout is converted by the optimizer.
         public void WaitSeconds(double seconds)
         {
@@ -205,14 +205,14 @@ namespace LcmsNetDataClasses.Devices
 
         #region IDevice Members
 
-        public System.Collections.Generic.List<string> GetStatusNotificationList()
+        public List<string> GetStatusNotificationList()
         {
-            return new System.Collections.Generic.List<string>();
+            return new List<string>();
         }
 
-        public System.Collections.Generic.List<string> GetErrorNotificationList()
+        public List<string> GetErrorNotificationList()
         {
-            return new System.Collections.Generic.List<string>();
+            return new List<string>();
         }
 
         #endregion

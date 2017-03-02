@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class formSampleBadBlockDisplay
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -133,14 +136,14 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListView mlistview_samples;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.Button mbutton_ok;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.Button button1;
+        private Label label1;
+        private ListView mlistview_samples;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
+        private ColumnHeader columnHeader4;
+        private Button mbutton_ok;
+        private ColumnHeader columnHeader5;
+        private Button button1;
     }
 }

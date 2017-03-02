@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices
@@ -67,7 +67,7 @@ namespace LcmsNet.Devices
 
                 var deviceName = "";
                 var data = new Dictionary<string, object>();
-                var delimeter = new string[] {CONST_DELIMETER};
+                var delimeter = new[] {CONST_DELIMETER};
                 for (var j = startIndex + 1; j < lastIndex; j++)
                 {
                     var line = configLines[j];
@@ -87,7 +87,7 @@ namespace LcmsNet.Devices
             for (var j = connectionsIndex; j < configLines.Length; j++)
             {
                 var line = configLines[j];
-                var delimiter = new string[] {","};
+                var delimiter = new[] {","};
                 var lineData = line.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (lineData.Length == 3)
                 {

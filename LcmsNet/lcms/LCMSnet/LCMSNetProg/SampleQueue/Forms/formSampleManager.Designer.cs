@@ -10,7 +10,9 @@
  *
  */
 //*********************************************************************************************************
-using LcmsNetDataClasses;
+
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -19,7 +21,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -509,36 +511,36 @@ namespace LcmsNet.SampleQueue.Forms
 
         #endregion
 
-        private System.Windows.Forms.TabControl mtabControl_sampleViews;
-        private System.Windows.Forms.TabPage mtabPage_sequenceView;
-        private System.Windows.Forms.TabPage mtabPage_columnView;
-        private LcmsNet.SampleQueue.Forms.controlSequenceView mcontrol_sequenceView;
-          private System.Windows.Forms.MenuStrip mmenuStrip;
-          private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-                 private System.Windows.Forms.ToolStripMenuItem importQueueLcmsNetToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripMenuItem tToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-                      private System.Windows.Forms.ToolStripMenuItem queueToXMLToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-                      private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripMenuItem queueToExcaliburToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-                      private System.Windows.Forms.ToolStripMenuItem toCSVToolStripMenuItem;
-                      private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
-                      private System.Windows.Forms.GroupBox groupBox1;
-                      private System.Windows.Forms.Button mbutton_undo;
-                      private System.Windows.Forms.Button mbutton_redo;
-                      private System.Windows.Forms.Button mbutton_stop;
-                      private System.Windows.Forms.Button mbutton_run;
-                      private System.Windows.Forms.SplitContainer splitContainer1;
+        private TabControl mtabControl_sampleViews;
+        private TabPage mtabPage_sequenceView;
+        private TabPage mtabPage_columnView;
+        private controlSequenceView mcontrol_sequenceView;
+          private MenuStrip mmenuStrip;
+          private ToolStripMenuItem fileToolStripMenuItem;
+                 private ToolStripMenuItem importQueueLcmsNetToolStripMenuItem;
+                      private ToolStripMenuItem exportToolStripMenuItem;
+                      private ToolStripMenuItem tToolStripMenuItem;
+                      private ToolStripSeparator toolStripSeparator4;
+                      private ToolStripMenuItem queueToXMLToolStripMenuItem;
+                      private ToolStripSeparator toolStripSeparator3;
+                      private ToolStripMenuItem saveAsToolStripMenuItem;
+                      private ToolStripMenuItem queueToExcaliburToolStripMenuItem;
+                      private ToolStripSeparator toolStripSeparator1;
+                      private ToolStripMenuItem toCSVToolStripMenuItem;
+                      private ToolStripMenuItem saveToolStripMenuItem1;
+                      private GroupBox groupBox1;
+                      private Button mbutton_undo;
+                      private Button mbutton_redo;
+                      private Button mbutton_stop;
+                      private Button mbutton_run;
+                      private SplitContainer splitContainer1;
                       private controlColumnView mcontrol_column3;
                       private controlColumnView mcontrol_column4;
-                      private System.Windows.Forms.SplitContainer splitContainer2;
+                      private SplitContainer splitContainer2;
                       private controlColumnView mcontrol_column1;
                       private controlColumnView mcontrol_column2;
-                      private System.Windows.Forms.SplitContainer splitContainer3;
-                      private System.Windows.Forms.PictureBox mpicture_preview;
+                      private SplitContainer splitContainer3;
+                      private PictureBox mpicture_preview;
 
     }
 }

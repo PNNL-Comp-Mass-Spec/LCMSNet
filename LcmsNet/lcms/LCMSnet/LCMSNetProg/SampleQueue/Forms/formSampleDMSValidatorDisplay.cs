@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
+using LcmsNetSDK;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -38,7 +39,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     var sampleControl =
                         Activator.CreateInstance(
-                            LcmsNetSDK.classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as
+                            classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as
                             classDMSBaseControl; //new controlDMSValidator(sample);
                     if (sampleControl == null)
                     {

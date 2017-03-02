@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Configuration
 {
@@ -155,7 +156,7 @@ namespace LcmsNet.Configuration
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateStatus(SetStatusMessage), new object[] {sender, previousStatus, newStatus});
+                BeginInvoke(new DelegateUpdateStatus(SetStatusMessage), sender, previousStatus, newStatus);
             }
             else
             {
@@ -187,7 +188,7 @@ namespace LcmsNet.Configuration
 
             var statusMessage = string.Format("Status: {0}", status);
             //TODO: change this magic number into a constant.
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(1, statusMessage);
+            classApplicationLogger.LogMessage(1, statusMessage);
         }
 
         /// <summary>

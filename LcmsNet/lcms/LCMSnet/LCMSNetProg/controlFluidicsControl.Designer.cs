@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class controlFluidicsControl
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -227,17 +230,17 @@
         #endregion
 
         private controlBufferedPanel panelFluidicsDesign;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TrackBar trackBarScale;
-        private System.Windows.Forms.TextBox textBoxZoom;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TrackBar trackBarDeviceTransparency;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TrackBar trackBarPortTransparency;
-        private System.Windows.Forms.TrackBar trackBarConnectionTransparency;
-        private System.Windows.Forms.Panel panel1;
+        private GroupBox groupBox2;
+        private TrackBar trackBarScale;
+        private TextBox textBoxZoom;
+        private Label label4;
+        private GroupBox groupBox1;
+        private Label label3;
+        private Label label2;
+        private TrackBar trackBarDeviceTransparency;
+        private Label label1;
+        private TrackBar trackBarPortTransparency;
+        private TrackBar trackBarConnectionTransparency;
+        private Panel panel1;
     }
 }

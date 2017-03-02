@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class formSampleRandomizer
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -213,20 +216,20 @@
 
         #endregion
 
-        private System.Windows.Forms.Button buttonRandomize;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.ListView listViewInput;
-        private System.Windows.Forms.ColumnHeader lvInputColSeq;
-        private System.Windows.Forms.ColumnHeader lvInputColName;
-        private System.Windows.Forms.ListView listViewOutput;
-        private System.Windows.Forms.ColumnHeader lvOutColSeq;
-        private System.Windows.Forms.ColumnHeader lvOutColName;
-          private System.Windows.Forms.ComboBox comboBoxRandomizers;
-          private System.Windows.Forms.Label label1;
-          private System.Windows.Forms.StatusStrip statusStrip1;
-          private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-          private System.Windows.Forms.Panel panel1;
-          private System.Windows.Forms.Panel panel2;
+        private Button buttonRandomize;
+        private Button buttonOK;
+        private Button buttonCancel;
+        private ListView listViewInput;
+        private ColumnHeader lvInputColSeq;
+        private ColumnHeader lvInputColName;
+        private ListView listViewOutput;
+        private ColumnHeader lvOutColSeq;
+        private ColumnHeader lvOutColName;
+          private ComboBox comboBoxRandomizers;
+          private Label label1;
+          private StatusStrip statusStrip1;
+          private ToolStripStatusLabel statusLabel;
+          private Panel panel1;
+          private Panel panel2;
     }
 }

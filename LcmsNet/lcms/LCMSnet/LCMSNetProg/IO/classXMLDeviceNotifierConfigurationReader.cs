@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using LcmsNet.Method;
 using LcmsNet.Notification;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK.Notifications;
@@ -124,9 +125,9 @@ namespace LcmsNet.Devices
                     setting.Name = name;
                     if (!string.IsNullOrEmpty(method))
                     {
-                        if (Method.classLCMethodManager.Manager.Methods.ContainsKey(method))
+                        if (classLCMethodManager.Manager.Methods.ContainsKey(method))
                         {
-                            setting.Method = Method.classLCMethodManager.Manager.Methods[method];
+                            setting.Method = classLCMethodManager.Manager.Methods[method];
                         }
                     }
                     setting.Action = actionEnum;

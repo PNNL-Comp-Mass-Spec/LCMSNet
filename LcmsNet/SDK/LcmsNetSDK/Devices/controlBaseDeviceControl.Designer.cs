@@ -7,6 +7,9 @@
 // Last modified 08/17/2009
 //*********************************************************************************************************
 
+using System.ComponentModel;
+using System.Windows.Forms;
+
 namespace LcmsNetDataClasses.Devices
 {
     partial class controlBaseDeviceControl
@@ -14,7 +17,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -52,7 +55,7 @@ namespace LcmsNetDataClasses.Devices
 
         #endregion
 
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private SaveFileDialog saveFileDialog1;
 
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 
-
 namespace LcmsNetDataClasses.Configuration
 {
     /// <summary>

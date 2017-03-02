@@ -47,13 +47,15 @@
 //*********************************************************************************************************
 
 using System;
-using System.Collections.Specialized;
 using System.Collections;
+using System.Collections.Specialized;
+using System.IO;
 using System.Runtime.Serialization;
-using LcmsNetDataClasses.Method;
+using System.Runtime.Serialization.Formatters.Binary;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Data;
-
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses
 {
@@ -154,12 +156,12 @@ namespace LcmsNetDataClasses
         public object Clone()
         {
             //Create a formatter and a memory stream
-            IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            var ms = new System.IO.MemoryStream();
+            IFormatter formatter = new BinaryFormatter();
+            var ms = new MemoryStream();
             //Serialize the input object
             formatter.Serialize(ms, this);
             //Reset the stream to its beginning and de-serialize into the return object
-            ms.Seek(0, System.IO.SeekOrigin.Begin);
+            ms.Seek(0, SeekOrigin.Begin);
             var newSample = formatter.Deserialize(ms) as classSampleData;
             return newSample;
         }
@@ -186,7 +188,7 @@ namespace LcmsNetDataClasses
         public static void AddDateCartColumnToDatasetName(classSampleData sample)
         {
             var oldName = sample.DmsData.DatasetName;
-            var now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)); ;
+            var now = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)); ;
             var months = new[]
             {
                 "Jan",

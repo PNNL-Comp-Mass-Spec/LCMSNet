@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Devices.Fluidics
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Devices.Fluidics
 {
     partial class FluidicsDesign
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -293,24 +296,24 @@
 
         #endregion
 
-        private System.Windows.Forms.Button mbutton_removeDevice;
-        private System.Windows.Forms.Button mbutton_loadHardware;
-        private System.Windows.Forms.Button mbutton_save;
-        private System.Windows.Forms.Button mbutton_saveAs;
-        private System.Windows.Forms.Button mbutton_lock;
-        private System.Windows.Forms.Button mbutton_unlock;
-        private System.Windows.Forms.Button mbutton_initialize;
-        private System.Windows.Forms.Button mbutton_addDevice;
-        private System.Windows.Forms.Panel panelDevices;
-        private System.Windows.Forms.Panel panelDeviceQuickboard;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.TabPage tabPageModel;
-        private System.Windows.Forms.TabPage tabPageDesign;
+        private Button mbutton_removeDevice;
+        private Button mbutton_loadHardware;
+        private Button mbutton_save;
+        private Button mbutton_saveAs;
+        private Button mbutton_lock;
+        private Button mbutton_unlock;
+        private Button mbutton_initialize;
+        private Button mbutton_addDevice;
+        private Panel panelDevices;
+        private Panel panelDeviceQuickboard;
+        private TabControl tabControl1;
+        private Button btnConnect;
+        private TabPage tabPageModel;
+        private TabPage tabPageDesign;
         private controlFluidicsControl controlFluidicsControlDesigner;
-        private System.Windows.Forms.TabPage tabPageConfiguration;
+        private TabPage tabPageConfiguration;
         private AdvancedDeviceControlPanel advancedDeviceControlPanel2;
-        private System.Windows.Forms.TabPage tabPageModelStatus;
+        private TabPage tabPageModelStatus;
 
     }
 }

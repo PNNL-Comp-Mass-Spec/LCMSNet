@@ -10,11 +10,13 @@
 //*********************************************************************************************************
 
 using System;
-using System.Text;
-using System.IO;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
+using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Logging
 {
@@ -66,7 +68,7 @@ namespace LcmsNetDataClasses.Logging
         {
             var sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
-            sqlCmdBlder.Append("'" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
+            sqlCmdBlder.Append("'" + TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'ERROR',");
             sqlCmdBlder.Append("'" + errorLevel + "',");
 
@@ -114,7 +116,7 @@ namespace LcmsNetDataClasses.Logging
         {
             var sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
-            sqlCmdBlder.Append("'" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
+            sqlCmdBlder.Append("'" + TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'MSG',");
             sqlCmdBlder.Append("'" + msgLevel + "',");
 
@@ -192,8 +194,8 @@ namespace LcmsNetDataClasses.Logging
             {
                 var msg = "Exception logging error message: ";
                 UnwrapExceptionMsgs(ex, out msg);
-                System.Windows.Forms.MessageBox.Show(msg, "LOG ERROR", System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBox.Show(msg, "LOG ERROR", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -217,8 +219,8 @@ namespace LcmsNetDataClasses.Logging
                 m_ConnStr = "";
                 var msg = "Exception initializing log database: ";
                 UnwrapExceptionMsgs(ex, out msg);
-                System.Windows.Forms.MessageBox.Show(msg, "LOG ERROR", System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Error);
+                MessageBox.Show(msg, "LOG ERROR", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -302,7 +304,6 @@ namespace LcmsNetDataClasses.Logging
                     {
                         myCmd.Connection.Open();
                         AffectedRows = myCmd.ExecuteNonQuery();
-                        return;
                     }
                     catch (Exception Ex)
                     {
@@ -343,10 +344,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>

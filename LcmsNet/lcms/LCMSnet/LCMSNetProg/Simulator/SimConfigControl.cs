@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using FluidicsSDK;
+using FluidicsSDK.ModelCheckers;
 using FluidicsSimulator;
-using LcmsNetSDK;
 
 namespace LcmsNet.Simulator
 {
@@ -25,22 +25,22 @@ namespace LcmsNet.Simulator
             m_tacked = true;
             FluidicsSimulator.FluidicsSimulator.GetInstance.EventSimulated += EventSimulated_Handler;
 
-            var sinkCheck = new FluidicsSDK.ModelCheckers.NoSinksModelCheck();
+            var sinkCheck = new NoSinksModelCheck();
             sinkCheck.IsEnabled = false;
 
-            var sourceCheck = new FluidicsSDK.ModelCheckers.MultipleSourcesModelCheck();
+            var sourceCheck = new MultipleSourcesModelCheck();
             sourceCheck.IsEnabled = false;
 
-            var cycleCheck = new FluidicsSDK.ModelCheckers.FluidicsCycleCheck();
+            var cycleCheck = new FluidicsCycleCheck();
             cycleCheck.IsEnabled = false;
 
-            var testCheck = new FluidicsSDK.ModelCheckers.TestModelCheck();
+            var testCheck = new TestModelCheck();
             testCheck.IsEnabled = false;
 
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(sinkCheck as IFluidicsModelChecker);
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(sourceCheck as IFluidicsModelChecker);
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(cycleCheck as IFluidicsModelChecker);
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(testCheck as IFluidicsModelChecker);
+            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(sinkCheck);
+            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(sourceCheck);
+            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(cycleCheck);
+            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(testCheck);
             //controlConfig.UpdateImage();
         }
 

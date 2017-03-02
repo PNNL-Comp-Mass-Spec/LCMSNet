@@ -1,9 +1,11 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿using System;
+
+namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Arguments for manager status arguments.
     /// </summary>
-    public class classDeviceManagerStatusArgs : System.EventArgs
+    public class classDeviceManagerStatusArgs : EventArgs
     {
         public classDeviceManagerStatusArgs(string message)
         {

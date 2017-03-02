@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading;
 using System.Collections.Generic;
+using System.Threading;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 
@@ -147,7 +147,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Throws an exception.
         /// </summary>
-        [classLCMethodAttribute("Throw Exception", 1, false, "", -1, false)]
+        [classLCMethod("Throw Exception", 1, false, "", -1, false)]
         public bool ThrowException()
         {
             var dummyCode = false;
@@ -156,13 +156,13 @@ namespace LcmsNet.Devices
             return false;
         }
 
-        [classLCMethodAttribute("Return Error", 1, false, "", -1, false)]
+        [classLCMethod("Return Error", 1, false, "", -1, false)]
         public bool ReturnError()
         {
             return false;
         }
 
-        [classLCMethodAttribute("Event Error", 1, false, "", -1, false)]
+        [classLCMethod("Event Error", 1, false, "", -1, false)]
         public void EventError()
         {
             Error?.Invoke(this,
@@ -173,7 +173,7 @@ namespace LcmsNet.Devices
         /// This method times out, waiting indefinitely.
         /// </summary>
         /// <returns>False</returns>
-        [classLCMethodAttribute("Timeout", 1, false, "", -1, false)]
+        [classLCMethod("Timeout", 1, false, "", -1, false)]
         public bool Timeout()
         {
             Thread.Sleep(4000);
@@ -184,7 +184,7 @@ namespace LcmsNet.Devices
         /// This method times out, waiting indefinitely.
         /// </summary>
         /// <returns>False</returns>
-        [classLCMethodAttribute("Wait Full Timeout", 1, false, "", -1, false)]
+        [classLCMethod("Wait Full Timeout", 1, false, "", -1, false)]
         public bool WaitUntilTimeout()
         {
             Thread.Sleep(1000);

@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class controlLCMethodEvent
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -152,13 +155,13 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox mcomboBox_method;
-        private System.Windows.Forms.ComboBox mcomboBox_devices;
-        private System.Windows.Forms.CheckBox mcheckBox_selected;
-        private System.Windows.Forms.TableLayoutPanel mpanel_parameters;
-        private System.Windows.Forms.Panel mpanel_extras;
-        private System.Windows.Forms.CheckBox mcheckBox_optimizeFor;
+        private ComboBox mcomboBox_method;
+        private ComboBox mcomboBox_devices;
+        private CheckBox mcheckBox_selected;
+        private TableLayoutPanel mpanel_parameters;
+        private Panel mpanel_extras;
+        private CheckBox mcheckBox_optimizeFor;
         private controlBreakpoint controlBreakpoint1;
-        private System.Windows.Forms.Label labelEventNumber;
+        private Label labelEventNumber;
     }
 }

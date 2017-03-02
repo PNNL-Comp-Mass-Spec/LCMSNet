@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Collections.Generic;
 using System.Linq;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method.Drawing
 {

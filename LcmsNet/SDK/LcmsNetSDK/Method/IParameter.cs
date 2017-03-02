@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace LcmsNet.Method
 {
@@ -28,10 +28,6 @@ namespace LcmsNet.Method
     /// </summary>
     public class controlParameterTextBox : TextBox, ILCEventParameter
     {
-        public controlParameterTextBox() : base()
-        {
-        }
-
         #region IParameterBase Members
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNet.Notification
@@ -38,7 +39,7 @@ namespace LcmsNet.Notification
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return m_settings.Keys.GetEnumerator();
         }

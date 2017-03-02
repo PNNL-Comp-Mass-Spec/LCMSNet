@@ -1,11 +1,13 @@
 ﻿using System;
-using System.IO;
-using System.Xml;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Xml;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method
 {
@@ -105,7 +107,7 @@ namespace LcmsNet.Method
             }
             catch
             {
-                System.Diagnostics.Debug.WriteLine(
+                Debug.WriteLine(
                     "Null Reference Exception due to backwards compatibility check in LCMethodReader");
                 // This is to be backwards compatible.
             }
@@ -460,7 +462,7 @@ namespace LcmsNet.Method
                             ex.DeviceName,
                             i);
                     var newException = new Exception(error, ex);
-                    LcmsNetDataClasses.Logging.classApplicationLogger.LogError(1, error, ex);
+                    classApplicationLogger.LogError(1, error, ex);
                     errors.Add(newException);
                 }
             }

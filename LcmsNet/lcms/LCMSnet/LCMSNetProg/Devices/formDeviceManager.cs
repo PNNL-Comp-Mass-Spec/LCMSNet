@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices
@@ -23,7 +22,7 @@ namespace LcmsNet.Devices
 
             m_deviceToItemMap = new Dictionary<IDevice, ListViewItem>();
 
-            var columnNames = new string[] {"Device", "Status", "Type"};
+            var columnNames = new[] {"Device", "Status", "Type"};
             foreach (var name in columnNames)
             {
                 var header = new ColumnHeader();

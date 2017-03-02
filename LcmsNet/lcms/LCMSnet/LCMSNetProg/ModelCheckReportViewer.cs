@@ -24,8 +24,7 @@ namespace LcmsNet
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<ModelStatusChangeEventArgs>(StatusChangeHandler),
-                    new object[2] {sender, e});
+                BeginInvoke(new EventHandler<ModelStatusChangeEventArgs>(StatusChangeHandler), sender, e);
             }
             else
             {

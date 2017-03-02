@@ -10,11 +10,11 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using LcmsNet.Method;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Method;
 using LcmsNetSQLiteTools;
-using LcmsNetDataClasses.Configuration;
-using LcmsNet.Method;
 
 namespace LcmsNet.SampleQueue.Forms
 {

@@ -12,12 +12,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using LcmsNetDataClasses;
-using LcmsNetSDK;
-using System.IO;
 using LcmsNetDataClasses.Logging;
-using System.Linq;
+using LcmsNetSDK;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -28,13 +28,6 @@ namespace LcmsNet.SampleQueue.IO
         //**********************************************************************************************************
 
         #region "Methods"
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public classMRMFileExporter()
-        {
-        }
 
         /// <summary>
         /// Implements base class method to export MRM files to a folder
@@ -75,7 +68,6 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     var ErrMsg = "Exception writing MRM files";
                     classApplicationLogger.LogError(0, ErrMsg, Ex);
-                    continue;
                 }
             }
 

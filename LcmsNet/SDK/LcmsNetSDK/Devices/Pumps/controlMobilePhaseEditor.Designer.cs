@@ -1,11 +1,14 @@
-﻿namespace LcmsNetSDK.Devices.Pumps
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNetSDK.Devices.Pumps
 {
     partial class controlMobilePhaseEditor
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -106,11 +109,11 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox mtext_comment;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox mtext_name;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private TextBox mtext_comment;
+        private Label label1;
+        private Label label2;
+        private TextBox mtext_name;
+        private PictureBox pictureBox1;
 
     }
 }

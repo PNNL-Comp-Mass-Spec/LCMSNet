@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class ModelCheckReport
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -201,18 +204,18 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblTimeConst;
-        private System.Windows.Forms.Label lblTime;
-        private System.Windows.Forms.Label lblType;
-        private System.Windows.Forms.Label lblDevice;
-        private System.Windows.Forms.Label lblEvent;
-        private System.Windows.Forms.Label lblTypeConst;
-        private System.Windows.Forms.Label lblEventConst;
-        private System.Windows.Forms.Label lblDeviceConst;
-        private System.Windows.Forms.Label lblProblemDeviceConst;
-        private System.Windows.Forms.Label lblProblemDevice;
-        private System.Windows.Forms.Label lblMsgTypeConst;
-        private System.Windows.Forms.Label lblMsgType;
+        private Label lblTimeConst;
+        private Label lblTime;
+        private Label lblType;
+        private Label lblDevice;
+        private Label lblEvent;
+        private Label lblTypeConst;
+        private Label lblEventConst;
+        private Label lblDeviceConst;
+        private Label lblProblemDeviceConst;
+        private Label lblProblemDevice;
+        private Label lblMsgTypeConst;
+        private Label lblMsgType;
 
     }
 }

@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class formMoveToColumnSelector
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -134,12 +137,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Button mbutton_column1;
-        private System.Windows.Forms.Button mbutton_column2;
-        private System.Windows.Forms.Button mbutton_column3;
-        private System.Windows.Forms.Button mbutton_column4;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button mbutton_cancel;
-        private System.Windows.Forms.CheckBox mcheckbox_fillIn;
+        private Button mbutton_column1;
+        private Button mbutton_column2;
+        private Button mbutton_column3;
+        private Button mbutton_column4;
+        private Label label1;
+        private Button mbutton_cancel;
+        private CheckBox mcheckbox_fillIn;
     }
 }

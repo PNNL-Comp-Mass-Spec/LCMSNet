@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class controlColumnView
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -342,22 +345,22 @@
         }
 
         #endregion
-        private System.Windows.Forms.Panel mpanel_control;
-        private System.Windows.Forms.Label mlabel_columnNameHeader;
-        private System.Windows.Forms.Button mbutton_deleteUnused;
-        private System.Windows.Forms.Button mbutton_expand;
-        private System.Windows.Forms.Button mbutton_down;
-        private System.Windows.Forms.Button mbutton_up;
-        private System.Windows.Forms.Button mbutton_addDMS;
-        private System.Windows.Forms.Button mbutton_addBlankAppend;
-        private System.Windows.Forms.Button mbutton_addBlank;
-        private System.Windows.Forms.Button mbutton_removeSelected;
-        private System.Windows.Forms.Button mbutton_moveColumns;
-        private System.Windows.Forms.Button mbutton_randomize;
-        private System.Windows.Forms.Button mbutton_trayVial;
-        private System.Windows.Forms.Button mbutton_fillDown;
-        private System.Windows.Forms.Button mbutton_dmsEdit;
-        private System.Windows.Forms.Button mbutton_cartColumnDate;
+        private Panel mpanel_control;
+        private Label mlabel_columnNameHeader;
+        private Button mbutton_deleteUnused;
+        private Button mbutton_expand;
+        private Button mbutton_down;
+        private Button mbutton_up;
+        private Button mbutton_addDMS;
+        private Button mbutton_addBlankAppend;
+        private Button mbutton_addBlank;
+        private Button mbutton_removeSelected;
+        private Button mbutton_moveColumns;
+        private Button mbutton_randomize;
+        private Button mbutton_trayVial;
+        private Button mbutton_fillDown;
+        private Button mbutton_dmsEdit;
+        private Button mbutton_cartColumnDate;
 
 
 

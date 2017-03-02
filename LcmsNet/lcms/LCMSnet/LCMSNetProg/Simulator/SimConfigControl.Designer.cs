@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Simulator
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Simulator
 {
     partial class SimConfigControl
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -82,8 +85,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnTack;
+        private Button btnTack;
         private controlFluidicsControl controlConfig;
-        private System.Windows.Forms.Label lblElapsed;
+        private Label lblElapsed;
     }
 }

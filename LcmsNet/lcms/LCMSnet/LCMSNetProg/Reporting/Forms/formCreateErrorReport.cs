@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using LcmsNetDataClasses.Method;
 using LcmsNet.Method;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Reporting.Forms
 {

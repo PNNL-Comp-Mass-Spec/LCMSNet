@@ -19,15 +19,18 @@
 //*********************************************************************************************************
 
 using System;
-using System.Threading;
 using System.Collections.Generic;
-using LcmsNetSQLiteTools;
+using System.Diagnostics;
+using System.Threading;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Experiment;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue
 {
@@ -1675,7 +1678,7 @@ namespace LcmsNet.SampleQueue
             foreach (var sample in m_runningQueue)
             {
                 //DateTime next       = DateTime.UtcNow.Subtract(new TimeSpan(8, 0 , 0)).Add(new TimeSpan(0, 0, 10));
-                next = LcmsNetSDK.TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
+                next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
                 var containsMethod = classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name);
                 if (containsMethod)
                 {
@@ -1686,11 +1689,11 @@ namespace LcmsNet.SampleQueue
                 validSamples.Add(sample);
                 sample.LCMethod.SetStartTime(next);
                 // We need to look for Daylight Savings Time Transitions and adjust for them here.
-                if (LcmsNetSDK.TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(sample.LCMethod.Start,
+                if (TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(sample.LCMethod.Start,
                     sample.LCMethod.End))
                 {
-                    LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(
-                        LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                    classApplicationLogger.LogMessage(
+                        classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                         "QUEUE: some samples have been moved forward 1 hour due to a Daylight Savings Transition, this will avoid odd behavior while running the queue.");
                     next.Add(new TimeSpan(1, 0, 0));
                     sample.LCMethod.SetStartTime(next);
@@ -1699,7 +1702,7 @@ namespace LcmsNet.SampleQueue
 
             // We have not started to run so optimize this way.
             var optimizer = new classLCMethodOptimizer();
-            System.Diagnostics.Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
+            Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
             optimizer.AlignSamples(m_runningQueue);
 
             // Set the listening event so that time sensitive items will know that
@@ -1715,7 +1718,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="sample">Sample to run.</param>
         public void MoveSamplesToRunningQueue(classSampleData sample)
         {
-            MoveSamplesToRunningQueue(new List<classSampleData>() {sample});
+            MoveSamplesToRunningQueue(new List<classSampleData> {sample});
         }
 
         /// <summary>
@@ -1731,7 +1734,7 @@ namespace LcmsNet.SampleQueue
             foreach (var sample in samples)
             {
                 //DateTime next = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).Add(new TimeSpan(0, 0, 10));
-                var next = LcmsNetSDK.TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
+                var next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
                 var realSample = sample;
                 if (sample.IsDummySample)
                 {
@@ -1759,7 +1762,7 @@ namespace LcmsNet.SampleQueue
 
                 if (m_runningQueue.Count > 0 && m_nextAvailableSample > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Optimizing sample against running queue.");
+                    Debug.WriteLine("Optimizing sample against running queue.");
                     // We arent the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
                     realSample.LCMethod.SetStartTime(next);
@@ -1767,7 +1770,7 @@ namespace LcmsNet.SampleQueue
                 }
                 else if (m_runningQueue.Count == 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Setting sample start time as it is first in running queue.");
+                    Debug.WriteLine("Setting sample start time as it is first in running queue.");
                     // Otherwise we are the first ones on the queue, but we dont need to do anything
                     // for alignment.
                     realSample.LCMethod.SetStartTime(next);
@@ -1789,7 +1792,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="sample">Sample to dequeue.</param>
         public void DequeueSampleFromRunningQueue(classSampleData sample)
         {
-            DequeueSampleFromRunningQueue(new List<classSampleData>() {sample});
+            DequeueSampleFromRunningQueue(new List<classSampleData> {sample});
         }
 
         /// <summary>
@@ -1877,7 +1880,7 @@ namespace LcmsNet.SampleQueue
                 m_completeQueue.Add(sample);
             }
 
-            var samples = new classSampleData[] {sample};
+            var samples = new[] {sample};
             var args = new classSampleQueueArgs(samples,
                 m_nextAvailableSample,
                 m_runningQueue.Count,
@@ -1966,7 +1969,7 @@ namespace LcmsNet.SampleQueue
 
 
             var args = new classSampleQueueArgs(
-                new classSampleData[] {sample},
+                new[] {sample},
                 m_nextAvailableSample,
                 m_runningQueue.Count,
                 m_completeQueue.Count,
@@ -1999,12 +2002,12 @@ namespace LcmsNet.SampleQueue
                     sample = m_runningQueue[m_nextAvailableSample++];
                     sample.RunningStatus = enumSampleRunningStatus.Running;
 
-                    SamplesStarted?.Invoke(this, new classSampleQueueArgs(new classSampleData[] { sample }));
+                    SamplesStarted?.Invoke(this, new classSampleQueueArgs(new[] { sample }));
                 }
             }
 
             var args = new classSampleQueueArgs(
-                new classSampleData[] {sample},
+                new[] {sample},
                 m_nextAvailableSample,
                 m_runningQueue.Count,
                 m_completeQueue.Count,

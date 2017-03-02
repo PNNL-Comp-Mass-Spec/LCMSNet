@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Simulator
 {
@@ -12,7 +13,7 @@ namespace LcmsNet.Simulator
 
         public formSimulatorCombined()
         {
-            new Dictionary<string, LcmsNetDataClasses.Method.classLCMethod>();
+            new Dictionary<string, classLCMethod>();
             InitializeComponent();
             m_controls = SimControlsAndChartsControl.GetInstance;
             m_controls.Dock = DockStyle.Fill;

@@ -13,16 +13,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Diagnostics;
-//using LcmsNet.Devices.NetworkStart;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using LcmsNet.Method.Forms;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Experiment;
+using LcmsNetDataClasses.Logging;
+//using LcmsNet.Devices.NetworkStart;
 
 
 namespace LcmsNet.SampleQueue.Forms
@@ -164,7 +166,7 @@ namespace LcmsNet.SampleQueue.Forms
             Text = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
         }
 
-        public void PreviewAvailable(object sender, Method.Forms.SampleProgressPreviewArgs e)
+        public void PreviewAvailable(object sender, SampleProgressPreviewArgs e)
         {
             if (e != null)
             {
@@ -262,7 +264,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateToggleButtons(DetermineIfShouldSetButtons), new object[] {data});
+                BeginInvoke(new DelegateToggleButtons(DetermineIfShouldSetButtons), data);
             }
             else
             {
@@ -352,7 +354,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (mdialog_importQueue.ShowDialog() == DialogResult.OK)
             {
                 ISampleQueueReader reader = null;
-                var extension = System.IO.Path.GetExtension(mdialog_importQueue.FileName);
+                var extension = Path.GetExtension(mdialog_importQueue.FileName);
 
                 switch (extension)
                 {

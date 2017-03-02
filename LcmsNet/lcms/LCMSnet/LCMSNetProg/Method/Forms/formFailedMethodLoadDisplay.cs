@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace LcmsNet.Method.Forms
@@ -30,7 +31,7 @@ namespace LcmsNet.Method.Forms
             foreach (var  path in errors.Keys)
             {
                 var parentNode = new TreeNode();
-                parentNode.Text = System.IO.Path.GetFileNameWithoutExtension(path);
+                parentNode.Text = Path.GetFileNameWithoutExtension(path);
                 var exceptions = errors[path];
                 foreach (var ex in exceptions)
                 {

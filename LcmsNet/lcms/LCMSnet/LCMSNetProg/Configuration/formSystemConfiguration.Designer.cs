@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Configuration
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Configuration
 {
     partial class formSystemConfiguration
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -529,36 +532,36 @@
         private controlColumn mcontrol_columnTwo;
         private controlColumn mcontrol_columnThree;
         private controlColumn mcontrol_columnFour;
-        private System.Windows.Forms.Label mlabel_cartName;
-          private System.Windows.Forms.Label mlabel_Cart;
-          private System.Windows.Forms.Label lblSeparationType;
-          private System.Windows.Forms.ComboBox mcombo_SepType;
-          private System.Windows.Forms.Button mbutton_Reload;
-          private System.Windows.Forms.Button mbutton_accept;
-          private System.Windows.Forms.Label label2;
-          private System.Windows.Forms.ComboBox comboBoxAvailInstruments;
-          private System.Windows.Forms.GroupBox mgroupBox_instrument;
-          private System.Windows.Forms.GroupBox mgroupBox_cart;
-          private System.Windows.Forms.GroupBox groupBox1;
-          private System.Windows.Forms.ComboBox mcombo_Operator;
-          private System.Windows.Forms.Button mbutton_acceptOperator;
-          private System.Windows.Forms.GroupBox mgroupBox_autoUploads;
-          private System.Windows.Forms.TextBox mtextbox_triggerLocation;
-          private System.Windows.Forms.TabControl tabControl1;
-          private System.Windows.Forms.TabPage tabPage1;
-          private System.Windows.Forms.TabPage tabPage2;
-          private System.Windows.Forms.TabPage tabPage3;
-          private System.Windows.Forms.TabPage tabPage4;
-          private System.Windows.Forms.Label lblMinimumSampleVolume;
-          private System.Windows.Forms.NumericUpDown numericUpDown1;
-          private System.Windows.Forms.Label label3;
-          private System.Windows.Forms.TextBox txtPdfPath;
-          private System.Windows.Forms.Label lblWritePDFTo;
-          private System.Windows.Forms.Label lblTimeZone;
-          private System.Windows.Forms.ComboBox comboTimeZone;
-          private System.Windows.Forms.Label label7;
-          private System.Windows.Forms.ComboBox comboDmsTools;
-        private System.Windows.Forms.ComboBox mcombo_CartConfigName;
-        private System.Windows.Forms.Label lblCartConfigName;
+        private Label mlabel_cartName;
+          private Label mlabel_Cart;
+          private Label lblSeparationType;
+          private ComboBox mcombo_SepType;
+          private Button mbutton_Reload;
+          private Button mbutton_accept;
+          private Label label2;
+          private ComboBox comboBoxAvailInstruments;
+          private GroupBox mgroupBox_instrument;
+          private GroupBox mgroupBox_cart;
+          private GroupBox groupBox1;
+          private ComboBox mcombo_Operator;
+          private Button mbutton_acceptOperator;
+          private GroupBox mgroupBox_autoUploads;
+          private TextBox mtextbox_triggerLocation;
+          private TabControl tabControl1;
+          private TabPage tabPage1;
+          private TabPage tabPage2;
+          private TabPage tabPage3;
+          private TabPage tabPage4;
+          private Label lblMinimumSampleVolume;
+          private NumericUpDown numericUpDown1;
+          private Label label3;
+          private TextBox txtPdfPath;
+          private Label lblWritePDFTo;
+          private Label lblTimeZone;
+          private ComboBox comboTimeZone;
+          private Label label7;
+          private ComboBox comboDmsTools;
+        private ComboBox mcombo_CartConfigName;
+        private Label lblCartConfigName;
     }
 }

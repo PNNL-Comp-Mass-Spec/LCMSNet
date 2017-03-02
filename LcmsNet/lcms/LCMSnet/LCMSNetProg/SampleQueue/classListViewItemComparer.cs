@@ -8,6 +8,7 @@
 //*********************************************************************************************************
 
 using System.Collections;
+using System.Windows.Forms;
 
 namespace LcmsNet.SampleQueue
 {
@@ -112,8 +113,8 @@ namespace LcmsNet.SampleQueue
             var tempResult = 0;
 
             // Convert input objects to listview items
-            var item1 = x as System.Windows.Forms.ListViewItem;
-            var item2 = y as System.Windows.Forms.ListViewItem;
+            var item1 = x as ListViewItem;
+            var item2 = y as ListViewItem;
 
             if (sortMode == enumListViewComparerMode.SortModeConstants.numeric)
             {
@@ -143,10 +144,7 @@ namespace LcmsNet.SampleQueue
             {
                 return tempResult;
             }
-            else
-            {
-                return -1 * tempResult;
-            }
+            return -1 * tempResult;
         }
 
         #endregion

@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class controlParameterNumericUpDown
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -67,7 +70,7 @@
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown mnum_value;
-        private System.Windows.Forms.Button mbutton_conversion;
+        private NumericUpDown mnum_value;
+        private Button mbutton_conversion;
     }
 }

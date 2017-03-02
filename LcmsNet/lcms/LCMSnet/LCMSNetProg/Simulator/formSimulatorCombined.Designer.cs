@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Simulator
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Simulator
 {
     partial class formSimulatorCombined
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -66,6 +69,6 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitFluidicsAndControls;
+        private SplitContainer splitFluidicsAndControls;
     }
 }

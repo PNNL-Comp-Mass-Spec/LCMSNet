@@ -13,9 +13,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
-using System.IO;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
 
@@ -34,10 +34,6 @@ namespace LcmsNet.SampleQueue.IO
         #endregion
 
         #region "Methods"
-
-        public classQueueExportXML()
-        {
-        }
 
         /// <summary>
         /// Exports a queue as an XML file for use by LCMS-old

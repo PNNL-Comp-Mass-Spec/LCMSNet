@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using LcmsNetDataClasses;
 
-
 namespace LcmsNet.SampleQueue.IO
 {
     /// <summary>

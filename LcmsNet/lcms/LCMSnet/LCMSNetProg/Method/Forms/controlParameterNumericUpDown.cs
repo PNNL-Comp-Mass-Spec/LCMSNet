@@ -1,6 +1,6 @@
 ﻿using System;
-using LcmsNetDataClasses.Method;
 using System.Windows.Forms;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method.Forms
 {

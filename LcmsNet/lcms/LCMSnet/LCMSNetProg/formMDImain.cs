@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using LcmsNet.Configuration;
+using LcmsNet.Devices.Fluidics;
+using LcmsNet.IO;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
 using LcmsNet.Notification;
 using LcmsNet.Notification.Forms;
+using LcmsNet.Properties;
+using LcmsNet.Reporting.Forms;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.Forms;
+using LcmsNet.SampleQueue.IO;
+using LcmsNet.Simulator;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Devices.Pumps;
 using LcmsNetDataClasses.Logging;
-using LcmsNetSQLiteTools;
-using LcmsNet.Devices.Fluidics;
+using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSQLiteTools;
 using PDFGenerator;
-using System.IO;
-using LcmsNet.IO;
-using LcmsNet.Simulator;
 
 namespace LcmsNet
 {
@@ -171,7 +177,7 @@ namespace LcmsNet
         /// <summary>
         /// Display form for the pumps.
         /// </summary>
-        private LcmsNetDataClasses.Devices.Pumps.formPumpDisplays m_displays;
+        private formPumpDisplays m_displays;
 
         /// <summary>
         /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
@@ -196,7 +202,7 @@ namespace LcmsNet
         /// </summary>
         private void Initialize()
         {
-            System.Threading.Thread.CurrentThread.Name = "Main Thread";
+            Thread.CurrentThread.Name = "Main Thread";
             m_logger = new classApplicationLogger();
             Text = "LcmsNet Version: " + Application.ProductVersion;
             Text += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
@@ -243,7 +249,7 @@ namespace LcmsNet
             classDeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
 
             // Displays the pump data.
-            m_displays = new LcmsNetDataClasses.Devices.Pumps.formPumpDisplays();
+            m_displays = new formPumpDisplays();
             m_displays.Tack += m_displays_Tack;
             m_displays.UnTack += m_displays_UnTack;
             m_displays.Icon = Icon;
@@ -405,7 +411,7 @@ namespace LcmsNet
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<NotificationSetting>(NotifyHandler), new object[] {sender, e});
+                BeginInvoke(new EventHandler<NotificationSetting>(NotifyHandler), sender, e);
             }
             else
             {
@@ -495,12 +501,12 @@ namespace LcmsNet
 
         void m_messages_ErrorPresent(object sender, EventArgs e)
         {
-            mtoolButton_showMessages.Image = Properties.Resources.StatusMessagesError;
+            mtoolButton_showMessages.Image = Resources.StatusMessagesError;
         }
 
         void m_messages_ErrorCleared(object sender, EventArgs e)
         {
-            mtoolButton_showMessages.Image = Properties.Resources.StatusMessages;
+            mtoolButton_showMessages.Image = Resources.StatusMessages;
         }
 
         void Manager_DevicesInitialized(object sender, EventArgs e)
@@ -760,8 +766,8 @@ namespace LcmsNet
         {
             var message = "";
             var sample = args.Sample;
-            LcmsNetDataClasses.Method.classLCEvent lcEvent = null;
-            LcmsNetDataClasses.Method.classLCMethod lcMethod = null;
+            classLCEvent lcEvent = null;
+            classLCMethod lcMethod = null;
             var isError = false;
 
             //
@@ -833,7 +839,7 @@ namespace LcmsNet
                         message = string.Empty;
                         if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
                         {
-                            SampleQueue.IO.classMethodFileTools.MoveLocalMethodFiles();
+                            classMethodFileTools.MoveLocalMethodFiles();
                         }
                         var filePath =
                             FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
@@ -874,7 +880,7 @@ namespace LcmsNet
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] {null, args});
+                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), null, args);
             }
             else
             {
@@ -895,7 +901,7 @@ namespace LcmsNet
                 enumSampleProgress.Error);
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), new object[] {null, args});
+                BeginInvoke(new DelegateSampleProgress(UpdateSampleProgress), null, args);
             }
             else
             {
@@ -1053,7 +1059,6 @@ namespace LcmsNet
             if (result != DialogResult.OK)
             {
                 e.Cancel = true;
-                return;
             }
         }
 
@@ -1111,7 +1116,7 @@ namespace LcmsNet
 
 
             using (var report
-                = new Reporting.Forms.formCreateErrorReport(manager,
+                = new formCreateErrorReport(manager,
                     logPath,
                     forms
                     ))

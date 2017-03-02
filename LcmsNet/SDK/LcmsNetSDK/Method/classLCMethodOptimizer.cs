@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Method
 {
@@ -110,7 +113,6 @@ namespace LcmsNet.Method
                 // 
                 if (differenceEnd.TotalMilliseconds < 0)
                 {
-                    continue;
                 }
                 else if (differenceStart.TotalMilliseconds > 0)
                 {
@@ -246,7 +248,7 @@ namespace LcmsNet.Method
         public static List<classLCEvent> ConstructEvents(List<classLCMethodData> methods)
         {
             //DateTime startTime = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-            var startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+            var startTime = TimeKeeper.Instance.Now;
             var span = new TimeSpan(0, 0, 0, 0, 0);
 
             var events = new List<classLCEvent>();
@@ -400,20 +402,18 @@ namespace LcmsNet.Method
 
         private void PrintAlignedMethods(List<classLCMethod> methods, classLCMethod alignedMethod = null)
         {
-            System.Diagnostics.Debug.WriteLine("Optimized Methods: ");
+            Debug.WriteLine("Optimized Methods: ");
             var formatStr = "method: {0} start time: {1} end time {2}";
-            System.Diagnostics.Debug.WriteLine(string.Format("Current Time: {0}",
-                LcmsNetSDK.TimeKeeper.Instance.Now));
+            Debug.WriteLine("Current Time: {0}", TimeKeeper.Instance.Now);
             foreach (var m in methods)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format(formatStr, m.Name, m.Start, m.End));
+                Debug.WriteLine(formatStr, m.Name, m.Start, m.End);
             }
             if (alignedMethod != null)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format(formatStr, alignedMethod.Name, alignedMethod.Start,
-                    alignedMethod.End));
+                Debug.WriteLine(formatStr, alignedMethod.Name, alignedMethod.Start, alignedMethod.End);
             }
-            System.Diagnostics.Debug.WriteLine("Optimized Methods Done.");
+            Debug.WriteLine("Optimized Methods Done.");
         }
 
         /// <summary>
@@ -520,13 +520,13 @@ namespace LcmsNet.Method
             } while (aligned == false);
 
             // Adjust for DST transition, if necessary
-            if (LcmsNetSDK.TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(aligneeMethod.Start,
+            if (TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(aligneeMethod.Start,
                 aligneeMethod.End))
             {
                 AdjustForDaylightSavingsTransition(aligneeMethod);
                 aligned = true;
             }
-            else if (LcmsNetSDK.TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(baselineMethod.End,
+            else if (TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(baselineMethod.End,
                 aligneeMethod.Start))
             {
                 AdjustForDaylightSavingsTransition(aligneeMethod);
@@ -717,11 +717,11 @@ namespace LcmsNet.Method
         /// <param name="methods"></param>
         public void AdjustForDaylightSavingsTransition(classLCMethod method)
         {
-            System.Diagnostics.Debug.WriteLine(
+            Debug.WriteLine(
                 string.Format("Adjusting start time of method: {0} by 1 hour(forward) due to DST transition",
                     method.Name));
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(
-                LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+            classApplicationLogger.LogError(
+                classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                 "OPTIMIZATION occurred around a Daylight Savings Time Transition. Some methods have been moved to start one hour later in order to prevent odd behavior.");
             method.SetStartTime(method.Start.Add(new TimeSpan(1, 0, 0)));
         }

@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Reflection;
-using System.Diagnostics;
-using System.Configuration;
+using System.Threading;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using LcmsNet.Devices;
+using LcmsNet.Method;
+using LcmsNet.Properties;
+using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
 using LcmsNetSQLiteTools;
-using LcmsNet.Method;
-using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet
 {
@@ -51,11 +55,11 @@ namespace LcmsNet
         /// <returns>An object that holds the application settings.</returns>
         static void LoadSettings()
         {
-            var propColl = Properties.Settings.Default.Properties;
+            var propColl = Settings.Default.Properties;
             foreach (SettingsProperty currProperty in propColl)
             {
                 var propertyName = currProperty.Name;
-                var propertyValue = Properties.Settings.Default[propertyName].ToString();
+                var propertyValue = Settings.Default[propertyName].ToString();
                 classLCMSSettings.SetParameter(propertyName, propertyValue);
             }
 
@@ -70,7 +74,6 @@ namespace LcmsNet
                 var isEmulated = Convert.ToBoolean(emulation);
                 m_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
             }
-            return;
         }
 
         #endregion
@@ -89,8 +92,8 @@ namespace LcmsNet
 
         private static void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
-            Properties.Settings.Default[e.SettingName] = e.SettingValue;
-            Properties.Settings.Default.Save();
+            Settings.Default[e.SettingName] = e.SettingValue;
+            Settings.Default.Save();
         }
 
         #region "Constants"
@@ -290,7 +293,7 @@ namespace LcmsNet
 
                     LogVersionNumbers();
                     LogMachineInformation();
-                    classApplicationLogger.LogMessage(0, string.Format("[Log]"));
+                    classApplicationLogger.LogMessage(0, "[Log]");
 
                     //
                     // Display the splash screen mesasge first! make the log folder,
@@ -338,9 +341,9 @@ namespace LcmsNet
                     var deviceManager = classDeviceManager.Manager;
                     deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
                     deviceManager.AddDevice(new classTimerDevice());
-                    deviceManager.AddDevice(new Devices.classBlockDevice());
-                    deviceManager.AddDevice(new Devices.classLogDevice());
-                    deviceManager.AddDevice(new Devices.classApplicationDevice());
+                    deviceManager.AddDevice(new classBlockDevice());
+                    deviceManager.AddDevice(new classLogDevice());
+                    deviceManager.AddDevice(new classApplicationDevice());
 
                     //
                     // Load the device plug-ins.
@@ -382,7 +385,7 @@ namespace LcmsNet
                     //
                     // Create a device we can use for testing errors with.
                     //
-                    IDevice dev = new Devices.classErrorDevice();
+                    IDevice dev = new classErrorDevice();
                     deviceManager.AddDevice(dev);
 #endif
 
@@ -433,10 +436,10 @@ namespace LcmsNet
                     //
                     if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
                     {
-                        if (LcmsNetDataClasses.Data.classTriggerFileTools.CheckLocalTriggerFiles())
+                        if (classTriggerFileTools.CheckLocalTriggerFiles())
                         {
                             classApplicationLogger.LogMessage(-1, "Copying trigger files to DMS");
-                            LcmsNetDataClasses.Data.classTriggerFileTools.MoveLocalTriggerFiles();
+                            classTriggerFileTools.MoveLocalTriggerFiles();
                         }
                     }
 
@@ -445,10 +448,10 @@ namespace LcmsNet
                     //
                     if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
                     {
-                        if (SampleQueue.IO.classMethodFileTools.CheckLocalMethodFolders())
+                        if (classMethodFileTools.CheckLocalMethodFolders())
                         {
                             classApplicationLogger.LogMessage(-1, "Copying method folders to DMS");
-                            SampleQueue.IO.classMethodFileTools.MoveLocalMethodFiles();
+                            classMethodFileTools.MoveLocalMethodFiles();
                         }
                     }
 
@@ -507,18 +510,18 @@ namespace LcmsNet
         /// </summary>
         private static void CreateSQLCache()
         {
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() {"default"}, enumTableTypes.CartList);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() {"default"},
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> {"default"}, enumTableTypes.CartList);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> {"default"},
                 enumTableTypes.SeparationTypeList);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() {"default"}, enumTableTypes.DatasetTypeList);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> {"default"}, enumTableTypes.DatasetTypeList);
             classSQLiteTools.SaveInstListToCache(new List<classInstrumentInfo>());
             classSQLiteTools.SaveUserListToCache(new List<classUserInfo>());
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string>() {"0", "1", "2", "3", "4"},
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> {"0", "1", "2", "3", "4"},
                 enumTableTypes.ColumnList);
-            classSQLiteTools.SaveExperimentListToCache(new List<classExperimentData>() {new classExperimentData()});
-            classSQLiteTools.SaveProposalUsers(new List<LcmsNetDataClasses.Data.classProposalUser>(),
-                new List<LcmsNetDataClasses.Data.classUserIDPIDCrossReferenceEntry>(),
-                new Dictionary<string, List<LcmsNetDataClasses.Data.classUserIDPIDCrossReferenceEntry>>());
+            classSQLiteTools.SaveExperimentListToCache(new List<classExperimentData> {new classExperimentData()});
+            classSQLiteTools.SaveProposalUsers(new List<classProposalUser>(),
+                new List<classUserIDPIDCrossReferenceEntry>(),
+                new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>());
         }
 
         #endregion

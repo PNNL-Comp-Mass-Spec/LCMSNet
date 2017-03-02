@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class formMethodFillDown
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -524,37 +527,37 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboLcMethodCol3;
-        private System.Windows.Forms.ComboBox comboLcMethodCol2;
-        private System.Windows.Forms.ComboBox comboLcMethodCol1;
-        private System.Windows.Forms.ComboBox comboLcMethodCol4;
-        private System.Windows.Forms.ComboBox comboInstMethodCol1;
-        private System.Windows.Forms.ComboBox comboInstMethodCol2;
-        private System.Windows.Forms.ComboBox comboInstMethodCol3;
-        private System.Windows.Forms.ComboBox comboInstMethodCol4;
-        private System.Windows.Forms.NumericUpDown upDownVolCol1;
-        private System.Windows.Forms.NumericUpDown upDownVolCol2;
-        private System.Windows.Forms.NumericUpDown upDownVolCol3;
-        private System.Windows.Forms.NumericUpDown upDownVolCol4;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button buttonOk;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboDatasetTypeCol1;
-        private System.Windows.Forms.ComboBox comboDatasetTypeCol2;
-        private System.Windows.Forms.ComboBox comboDatasetTypeCol3;
-        private System.Windows.Forms.ComboBox comboDatasetTypeCol4;
-        private System.Windows.Forms.Button mbutton_fillVolume;
-        private System.Windows.Forms.Button mbutton_fillDatasetType;
-        private System.Windows.Forms.Button mbutton_fillInstrument;
-        private System.Windows.Forms.Button mbutton_fillLCMethod;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.Button mbutton_cancel;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label label6;
+        private ComboBox comboLcMethodCol3;
+        private ComboBox comboLcMethodCol2;
+        private ComboBox comboLcMethodCol1;
+        private ComboBox comboLcMethodCol4;
+        private ComboBox comboInstMethodCol1;
+        private ComboBox comboInstMethodCol2;
+        private ComboBox comboInstMethodCol3;
+        private ComboBox comboInstMethodCol4;
+        private NumericUpDown upDownVolCol1;
+        private NumericUpDown upDownVolCol2;
+        private NumericUpDown upDownVolCol3;
+        private NumericUpDown upDownVolCol4;
+        private Label label9;
+        private Label label10;
+        private Button buttonOk;
+        private Label label1;
+        private ComboBox comboDatasetTypeCol1;
+        private ComboBox comboDatasetTypeCol2;
+        private ComboBox comboDatasetTypeCol3;
+        private ComboBox comboDatasetTypeCol4;
+        private Button mbutton_fillVolume;
+        private Button mbutton_fillDatasetType;
+        private Button mbutton_fillInstrument;
+        private Button mbutton_fillLCMethod;
+        private Button button5;
+        private CheckBox checkBox1;
+        private CheckBox checkBox2;
+        private CheckBox checkBox3;
+        private CheckBox checkBox4;
+        private Button mbutton_cancel;
     }
 }

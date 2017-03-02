@@ -50,39 +50,27 @@ namespace LcmsNet.SampleQueue.IO
                     // if sample1 is null and sample2 is null, they're equal)
                     return 0;
                 }
-                else
-                {
-                    // If sample1 is null and sample2 is not null, sample2 is greater
-                    return -1;
-                }
+                // If sample1 is null and sample2 is not null, sample2 is greater
+                return -1;
             }
-            else
+            if (sample2 == null)
             {
-                if (sample2 == null)
-                {
-                    // If sample1 is not null and sample2 is null, sample1 is greater
-                    return 1;
-                }
-                else
-                {
-                    // Neither input is null, so compare the column indices
-                    if (sample1.DmsData.RunOrder == sample2.DmsData.RunOrder)
-                    {
-                        // Run orders are equal
-                        return 0;
-                    }
-                    else if (sample1.DmsData.RunOrder > sample2.DmsData.RunOrder)
-                    {
-                        // sample 1 run order is > sample2 run order
-                        return 1;
-                    }
-                    else
-                    {
-                        //  sample 1 run order < run order
-                        return -1;
-                    }
-                }
+                // If sample1 is not null and sample2 is null, sample1 is greater
+                return 1;
             }
+            // Neither input is null, so compare the column indices
+            if (sample1.DmsData.RunOrder == sample2.DmsData.RunOrder)
+            {
+                // Run orders are equal
+                return 0;
+            }
+            if (sample1.DmsData.RunOrder > sample2.DmsData.RunOrder)
+            {
+                // sample 1 run order is > sample2 run order
+                return 1;
+            }
+            //  sample 1 run order < run order
+            return -1;
         }
 
         /// <summary>

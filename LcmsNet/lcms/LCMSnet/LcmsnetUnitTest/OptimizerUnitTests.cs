@@ -9,10 +9,10 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
-using LcmsNetDataClasses.Method;
-using LcmsNet.Method;
 using DemoPluginLibrary;
+using LcmsNet.Method;
+using LcmsNetDataClasses.Method;
+using NUnit.Framework;
 
 namespace LcmsnetUnitTest
 {

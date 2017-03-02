@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class controlLCMethodStage
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -363,28 +366,28 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel mpanel_stage;
-        private System.Windows.Forms.Button mbutton_addEvent;
-        private System.Windows.Forms.Button mbutton_deleteEvent;
-        private System.Windows.Forms.Button mbutton_moveUp;
-        private System.Windows.Forms.Button mbutton_moveDown;
-        private System.Windows.Forms.Button mbutton_selectAll;
-        private System.Windows.Forms.Button mbutton_deselectAll;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox mcomboBox_column;
-        private System.Windows.Forms.CheckBox mcheckBox_postOverlap;
-        private System.Windows.Forms.CheckBox mcheckBox_preOverlap;
-        private System.Windows.Forms.Panel mpanel_control;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button mbutton_save;
-        private System.Windows.Forms.Button mbutton_buildUpdate;
-        private System.Windows.Forms.Button mbutton_load;
-        private System.Windows.Forms.Button mbutton_saveAll;
-        private System.Windows.Forms.Label mlabel_methodNameDescription;
-        private System.Windows.Forms.Button mbutton_build;
-        private System.Windows.Forms.TextBox mtextBox_methodName;
-        private System.Windows.Forms.ComboBox mcomboBox_savedMethods;
+        private Panel mpanel_stage;
+        private Button mbutton_addEvent;
+        private Button mbutton_deleteEvent;
+        private Button mbutton_moveUp;
+        private Button mbutton_moveDown;
+        private Button mbutton_selectAll;
+        private Button mbutton_deselectAll;
+        private Label label1;
+        private ComboBox mcomboBox_column;
+        private CheckBox mcheckBox_postOverlap;
+        private CheckBox mcheckBox_preOverlap;
+        private Panel mpanel_control;
+        private Button button3;
+        private Button button2;
+        private Button button1;
+        private Button mbutton_save;
+        private Button mbutton_buildUpdate;
+        private Button mbutton_load;
+        private Button mbutton_saveAll;
+        private Label mlabel_methodNameDescription;
+        private Button mbutton_build;
+        private TextBox mtextBox_methodName;
+        private ComboBox mcomboBox_savedMethods;
     }
 }

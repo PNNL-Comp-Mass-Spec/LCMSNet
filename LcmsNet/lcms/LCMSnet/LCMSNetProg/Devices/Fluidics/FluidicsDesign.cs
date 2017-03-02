@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Windows.Forms;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 using FluidicsSDK;
 using LcmsNet.Devices.Dashboard;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Devices.Fluidics
 {
@@ -179,7 +182,7 @@ namespace LcmsNet.Devices.Fluidics
             using (var g = Graphics.FromImage(fluidicsImage))
             {
                 //create white background
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.FillRectangle(Brushes.White, r);
                 float scale = 1;
                 m_fluidics_mod.Render(g, 255, scale, Layer.Devices);
@@ -219,7 +222,7 @@ namespace LcmsNet.Devices.Fluidics
             {
                 configuration.AddSetting(device.IDevice.Name, "dashboard-x", device.Loc.X);
                 configuration.AddSetting(device.IDevice.Name, "dashboard-y", device.Loc.Y);
-                configuration.AddSetting(device.IDevice.Name, "State", (int) device.CurrentState);
+                configuration.AddSetting(device.IDevice.Name, "State", device.CurrentState);
 
                 //for every port in a device, add any connection that is not internal to the device to the list of connections
                 foreach (var port in device.Ports)
@@ -249,7 +252,7 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         public void LoadConfiguration()
         {
-            if (System.IO.File.Exists(CONST_DEFAULT_CONFIG_FILEPATH))
+            if (File.Exists(CONST_DEFAULT_CONFIG_FILEPATH))
             {
                 LoadConfiguration(CONST_DEFAULT_CONFIG_FILEPATH);
             }
@@ -293,7 +296,7 @@ namespace LcmsNet.Devices.Fluidics
             var connections = configuration.GetConnections();
             foreach (var connection in connections.Keys)
             {
-                var delimiter = new string[] {",", "\n"};
+                var delimiter = new[] {",", "\n"};
                 var properties = connections[connection].Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (properties.Length == 3)
                 {
@@ -314,7 +317,7 @@ namespace LcmsNet.Devices.Fluidics
                         properties[0] + " port2: " + properties[1] + " style: " + properties[2]);
                 }
             }
-            System.Diagnostics.Trace.WriteLine("Configuration Loaded");
+            Trace.WriteLine("Configuration Loaded");
             m_fluidics_mod.EndModelSuspension(true);
         }
 
@@ -450,7 +453,7 @@ namespace LcmsNet.Devices.Fluidics
                 {
                     return;
                 }
-                else if (result == DialogResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     reinitialize = true;
                 }

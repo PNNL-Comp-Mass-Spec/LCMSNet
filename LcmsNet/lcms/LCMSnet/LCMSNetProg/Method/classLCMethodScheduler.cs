@@ -7,13 +7,18 @@
  *********************************************************************************************************/
 
 using System;
-using System.Threading;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
+using LcmsNet.Notification;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNet.Method
@@ -76,7 +81,7 @@ namespace LcmsNet.Method
             m_sampleQueue = sampleQueue;
 
             // Register yourself with the notification system.
-            Notification.NotificationBroadcaster.Manager.AddNotifier(this);
+            NotificationBroadcaster.Manager.AddNotifier(this);
 
             //
             // This is the event to tell the scheduler to shut everything down!
@@ -362,8 +367,8 @@ namespace LcmsNet.Method
         {
             if (level <= VerboseLevel)
             {
-                System.Diagnostics.Trace.WriteLine(message);
-                System.Diagnostics.Trace.Flush();
+                Trace.WriteLine(message);
+                Trace.Flush();
                 Exception exVal = null;
                 var error = ex != null;
                 classSampleData sampVal = null;
@@ -401,7 +406,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets or sets the logging object.
         /// </summary>
-        public LcmsNetDataClasses.Logging.ILogger Logger { get; set; }
+        public ILogger Logger { get; set; }
 
         #endregion
 
@@ -470,7 +475,7 @@ namespace LcmsNet.Method
                 // basically, we want to ensure that a method doesn't start before it's expected start time
                 // has occurred.
                 //
-                if (LcmsNetSDK.TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0)
+                if (TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0)
                     //(startSpan.Milliseconds >= 0)
                 {
                     data = m_sampleQueue.NextSampleStart();
@@ -486,7 +491,7 @@ namespace LcmsNet.Method
                         sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
                     else
 #if DEBUG
-                        sampleEndTime[sampleColumnID] = LcmsNetSDK.TimeKeeper.Instance.Now.AddSeconds(5);
+                        sampleEndTime[sampleColumnID] = TimeKeeper.Instance.Now.AddSeconds(5);
 #else
                         sampleEndTime[sampleColumnID] = LcmsNetSDK.TimeKeeper.Instance.Now;
 #endif
@@ -494,7 +499,7 @@ namespace LcmsNet.Method
                     currentEvent[sampleColumnID] = 0;
                     data.LCMethod.CurrentEventNumber = 0;
                     data.LCMethod.ActualEnd = DateTime.MaxValue;
-                    data.LCMethod.ActualStart = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    data.LCMethod.ActualStart = TimeKeeper.Instance.Now;
                     samples[sampleColumnID] = data.Clone() as classSampleData;
                     samples[sampleColumnID].LCMethod = data.LCMethod.Clone() as classLCMethod;
                     m_columnWorkers[sampleColumnID].RunWorkerAsync(new classColumnArgs(data));
@@ -562,8 +567,8 @@ namespace LcmsNet.Method
                             m_sampleQueue.StopRunningQueue();
                             m_notifyOnKill = false;
                             StatusUpdate?.Invoke(this,
-    new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(
-        LcmsNetDataClasses.Devices.enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
+    new classDeviceStatusEventArgs(
+        enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
                         }
                         Print("Done killing columns.  ", CONST_VERBOSE_EVENTS);
                         m_stoppedSamples.Set();
@@ -574,7 +579,7 @@ namespace LcmsNet.Method
                         // than acquiring locks and being turned down later because the state of a
                         // column is running or disabled.
                         //
-                        var now = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        var now = TimeKeeper.Instance.Now;
                         for (columnID = 0; columnID < currentEvent.Length; columnID++)
                         {
                             var lockTaken = false;
@@ -687,7 +692,7 @@ namespace LcmsNet.Method
 
         public List<string> GetStatusNotificationList()
         {
-            return new List<string>() {CONST_ERROR_STOPPED};
+            return new List<string> {CONST_ERROR_STOPPED};
         }
 
         public List<string> GetErrorNotificationList()
@@ -697,13 +702,13 @@ namespace LcmsNet.Method
 
         public string Name { get; set; }
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
         /// <remarks>This event is required by IDevice but this class does not use it</remarks>
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error
+        public event EventHandler<classDeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -806,7 +811,7 @@ namespace LcmsNet.Method
                 //Separation completed.
                 lock (m_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-                    var noww = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    var noww = TimeKeeper.Instance.Now;
 
                     String datasetName;
                     if (samples[columnID] != null && samples[columnID].DmsData != null)

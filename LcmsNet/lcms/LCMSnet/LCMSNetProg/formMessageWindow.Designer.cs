@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class formMessageWindow
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -237,20 +240,20 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel mpanel_errors;
-        private System.Windows.Forms.Label mlabel_errors;
-        private System.Windows.Forms.Button mbutton_acknowledgeErrors;
-        private System.Windows.Forms.Panel mpanel_messages;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label mlabel_messages;
-        private System.Windows.Forms.Panel panel3;
+        private Panel mpanel_errors;
+        private Label mlabel_errors;
+        private Button mbutton_acknowledgeErrors;
+        private Panel mpanel_messages;
+        private Button button1;
+        private Label mlabel_messages;
+        private Panel panel3;
         private CustomTabControl customTabControl1;
-        private System.Windows.Forms.TabPage mtab_messages;
-        private System.Windows.Forms.TabPage mtab_errors;
-        private System.Windows.Forms.Panel mpanel_messageIndicator;
-        private System.Windows.Forms.Panel mpanel_errorIndicator;
-        private System.Windows.Forms.ListBox mlistBox_messages;
-        private System.Windows.Forms.RichTextBox m_errorMessages;
+        private TabPage mtab_messages;
+        private TabPage mtab_errors;
+        private Panel mpanel_messageIndicator;
+        private Panel mpanel_errorIndicator;
+        private ListBox mlistBox_messages;
+        private RichTextBox m_errorMessages;
 
     }
 }

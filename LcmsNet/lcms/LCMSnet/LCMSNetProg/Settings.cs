@@ -7,6 +7,7 @@
 // Last modified 08/20/2010
 //*********************************************************************************************************
 
+using System.ComponentModel;
 using System.Reflection;
 
 namespace LcmsNet.Properties
@@ -41,7 +42,7 @@ namespace LcmsNet.Properties
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Save();
         }

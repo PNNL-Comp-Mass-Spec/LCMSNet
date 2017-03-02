@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
+using LcmsNet.Properties;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method.Forms
 {
@@ -435,7 +436,7 @@ namespace LcmsNet.Method.Forms
             }
             Build();
 
-            mbutton_saveAll.Image = Properties.Resources.SaveWithIndicator;
+            mbutton_saveAll.Image = Resources.SaveWithIndicator;
             mbutton_buildUpdate.Enabled = true;
             mbutton_build.Enabled = false;
             mbutton_saveAll.Enabled = true;
@@ -749,9 +750,6 @@ namespace LcmsNet.Method.Forms
                 var newEvent = new controlLCMethodEvent(method, true);
                 AddNewEvent(newEvent);
             }
-            else
-            {
-            }
         }
 
         /// <summary>
@@ -1025,9 +1023,9 @@ namespace LcmsNet.Method.Forms
             //
             // Construct the path
             //
-            var path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             //
             // Write the method out!
@@ -1085,7 +1083,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void LoadMethods()
         {
-            var methods = System.IO.Directory.GetFiles(MethodFolderPath, "*.xml");
+            var methods = Directory.GetFiles(MethodFolderPath, "*.xml");
             foreach (var method in methods)
             {
                 classApplicationLogger.LogMessage(0, "Loading method " + method);

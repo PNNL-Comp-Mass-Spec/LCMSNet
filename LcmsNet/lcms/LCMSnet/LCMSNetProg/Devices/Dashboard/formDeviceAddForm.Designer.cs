@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Devices.Dashboard
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Devices.Dashboard
 {
     partial class formDeviceAddForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -141,12 +144,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Button mbutton_ok;
-        private System.Windows.Forms.Button mbutton_cancel;
-        private System.Windows.Forms.ListBox mlistbox_devices;
-        private System.Windows.Forms.Button mbutton_add;
-        private System.Windows.Forms.Button mbutton_remove;
-        private System.Windows.Forms.TreeView mtree_availableDevices;
-        private System.Windows.Forms.CheckBox mcheckBox_initializeOnAdd;
+        private Button mbutton_ok;
+        private Button mbutton_cancel;
+        private ListBox mlistbox_devices;
+        private Button mbutton_add;
+        private Button mbutton_remove;
+        private TreeView mtree_availableDevices;
+        private CheckBox mcheckBox_initializeOnAdd;
     }
 }

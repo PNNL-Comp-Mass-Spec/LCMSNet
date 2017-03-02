@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class controlLCMethodEditor
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -300,23 +303,23 @@
 
         #endregion
 
-        private System.Windows.Forms.Splitter msplitter_one;
+        private Splitter msplitter_one;
         private controlLCMethodStage mcontrol_acquisitionStage;
         private controlLCMethodTimeline mcontrol_methodTimelineThroughput;
-        private System.Windows.Forms.Panel mpanel_controlPanel;
+        private Panel mpanel_controlPanel;
         private controlLCMethodSelection mcontrol_selectedMethods;
-        private System.Windows.Forms.TabControl mtabPages_methods;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Label mlabel_previewMode;
-        private System.Windows.Forms.ComboBox mcomboBox_previewMode;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox mgroupBox_update;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown mnum_delay;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDown mnum_frameCount;
-        private System.Windows.Forms.CheckBox mcheckBox_animate;
-        private System.Windows.Forms.Splitter splitter1;
+        private TabControl mtabPages_methods;
+        private TabPage tabPage1;
+        private Label mlabel_previewMode;
+        private ComboBox mcomboBox_previewMode;
+        private TabPage tabPage2;
+        private GroupBox mgroupBox_update;
+        private Label label3;
+        private NumericUpDown mnum_delay;
+        private Label label4;
+        private NumericUpDown mnum_frameCount;
+        private CheckBox mcheckBox_animate;
+        private Splitter splitter1;
 
     }
 }

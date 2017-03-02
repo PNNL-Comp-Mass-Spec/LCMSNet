@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class controlSampleView
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -614,55 +617,55 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip mcontextMenu_options;
-        private System.Windows.Forms.ToolStripMenuItem randomizeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
-        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn4;
-        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn5;
-        private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pALTrayToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pALVialToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem volumeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lCMethodToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem instrumentMethodToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem datasetTypeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem addBlankToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importFromDMSToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteSelectedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem deleteUnusedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem insertBlankIntoUnusedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem batchIDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem previewThroughputToolStripMenuItem;
+        private ContextMenuStrip mcontextMenu_options;
+        private ToolStripMenuItem randomizeToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
+        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
+        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn3;
+        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn4;
+        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn5;
+        private ToolStripMenuItem showToolStripMenuItem;
+        private ToolStripMenuItem pALTrayToolStripMenuItem;
+        private ToolStripMenuItem pALVialToolStripMenuItem;
+        private ToolStripMenuItem volumeToolStripMenuItem;
+        private ToolStripMenuItem lCMethodToolStripMenuItem;
+        private ToolStripMenuItem instrumentMethodToolStripMenuItem;
+        private ToolStripMenuItem datasetTypeToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem addBlankToolStripMenuItem;
+        private ToolStripMenuItem importFromDMSToolStripMenuItem;
+        private ToolStripMenuItem deleteSelectedToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripMenuItem deleteUnusedToolStripMenuItem;
+        private ToolStripMenuItem insertBlankIntoUnusedToolStripMenuItem;
+        private ToolStripMenuItem clearToolStripMenuItem;
+        private ToolStripMenuItem undoToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem redoToolStripMenuItem;
+        private ToolStripMenuItem batchIDToolStripMenuItem;
+        private ToolStripMenuItem previewThroughputToolStripMenuItem;
         public classDataGrid mdataGrid_samples;
-        private System.Windows.Forms.ToolStripMenuItem blockToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runOrderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem addDateCartNameColumnIDToolStripMenuItem;
-        private System.Windows.Forms.Panel m_sampleContainer;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn mcolumn_checkbox;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_sequenceNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_columnNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_uniqueID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_blockNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_runOrder;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_requestName;
-        private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_PalTray;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_palVial;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_PALVolume;
-        private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_LCMethod;
-        private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_instrumentMethod;
-        private System.Windows.Forms.DataGridViewComboBoxColumn mcolumn_datasetType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mcolumn_batchID;
-        private System.Windows.Forms.BindingSource sampleToRowTranslatorBindingSource;
+        private ToolStripMenuItem blockToolStripMenuItem;
+        private ToolStripMenuItem runOrderToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem addDateCartNameColumnIDToolStripMenuItem;
+        private Panel m_sampleContainer;
+        private DataGridViewCheckBoxColumn mcolumn_checkbox;
+        private DataGridViewTextBoxColumn Status;
+        private DataGridViewTextBoxColumn mcolumn_sequenceNumber;
+        private DataGridViewTextBoxColumn mcolumn_columnNumber;
+        private DataGridViewTextBoxColumn mcolumn_uniqueID;
+        private DataGridViewTextBoxColumn mcolumn_blockNumber;
+        private DataGridViewTextBoxColumn mcolumn_runOrder;
+        private DataGridViewTextBoxColumn mcolumn_requestName;
+        private DataGridViewComboBoxColumn mcolumn_PalTray;
+        private DataGridViewTextBoxColumn mcolumn_palVial;
+        private DataGridViewTextBoxColumn mcolumn_PALVolume;
+        private DataGridViewComboBoxColumn mcolumn_LCMethod;
+        private DataGridViewComboBoxColumn mcolumn_instrumentMethod;
+        private DataGridViewComboBoxColumn mcolumn_datasetType;
+        private DataGridViewTextBoxColumn mcolumn_batchID;
+        private BindingSource sampleToRowTranslatorBindingSource;
     }
 }

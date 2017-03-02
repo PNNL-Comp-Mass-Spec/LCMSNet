@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace LcmsNet
 {
@@ -8,7 +9,6 @@ namespace LcmsNet
     public sealed class controlBufferedPanel : Panel
     {
         public controlBufferedPanel()
-            : base()
         {
             SetStyle(
                 ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
@@ -22,7 +22,7 @@ namespace LcmsNet
             //
             // controlBufferedPanel
             //
-            BackColor = System.Drawing.Color.White;
+            BackColor = Color.White;
             ResumeLayout(false);
         }
     }

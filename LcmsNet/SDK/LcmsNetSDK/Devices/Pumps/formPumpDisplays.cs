@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
-using LcmsNetSDK.Devices.Pumps;
 using System.Drawing;
+using System.Windows.Forms;
+using LcmsNetSDK.Devices.Pumps;
 
 namespace LcmsNetDataClasses.Devices.Pumps
 {
@@ -301,12 +301,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
 
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<PumpDataEventArgs>(m_controlList[e.Pump].DisplayMonitoringData),
-                    new object[]
-                    {
-                        sender, e
-                    }
-                    );
+                BeginInvoke(new EventHandler<PumpDataEventArgs>(m_controlList[e.Pump].DisplayMonitoringData), sender, e);
             }
             else
             {

@@ -15,14 +15,15 @@
 //*********************************************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using LcmsNetSQLiteTools;
-using LcmsNetSDK;
 using LcmsNetDataClasses;
-using System.Collections;
+using LcmsNetSDK;
+using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue
 {
@@ -433,10 +434,7 @@ namespace LcmsNet.SampleQueue
                 labelRequestCount.Text = tempRequestList.Count() + "0 requests found";
                 return;
             }
-            else
-            {
-                labelRequestCount.Text = tempRequestList.Count() + " requests found";
-            }
+            labelRequestCount.Text = tempRequestList.Count() + " requests found";
 
             // Add the requests to the listview
 //              listviewAvailableRequests.BeginUpdate();
@@ -587,10 +585,7 @@ namespace LcmsNet.SampleQueue
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -725,7 +720,7 @@ namespace LcmsNet.SampleQueue
             // Set color if cart is assigned
             if (requestData.DmsData.CartName != "unknown")
             {
-                newItem.BackColor = System.Drawing.Color.Yellow;
+                newItem.BackColor = Color.Yellow;
             }
             listviewAvailableRequests.Items.Add(newItem);
         }
@@ -748,7 +743,7 @@ namespace LcmsNet.SampleQueue
             // Set color if cart is assigned
             if (requestData.DmsData.CartName != "unknown")
             {
-                newItem.BackColor = System.Drawing.Color.Yellow;
+                newItem.BackColor = Color.Yellow;
             }
             lvItemList.Add(newItem);
         }

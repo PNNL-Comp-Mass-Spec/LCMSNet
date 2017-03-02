@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using LcmsNet.Method;
-using LcmsNet.Method.Forms;
-using LcmsNetDataClasses.Method;
+using FluidicsSDK;
 using FluidicsSimulator;
-using LcmsNetDataClasses.Logging;
+using LcmsNet.Method;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Simulator
 {
@@ -28,7 +30,7 @@ namespace LcmsNet.Simulator
             simInstance.EventExecuting += simInstance_EventExecuting;
             simInstance.EventSimulated += simInstance_EventExecuting;
             simInstance.SimulationComplete += simInstance_SimulationComplete;
-            var reporter = new ModelCheckReportViewer(FluidicsSDK.classFluidicsModerator.Moderator);
+            var reporter = new ModelCheckReportViewer(classFluidicsModerator.Moderator);
             reporter.Name = "errorReporter";
             reporter.Dock = DockStyle.Fill;
             tabControlCharts.TabPages["tabPageErrors"].Controls.Add(reporter);
@@ -41,8 +43,8 @@ namespace LcmsNet.Simulator
             var settings = tabControlSimulator.TabPages["tabSimulatorSettings"];
 
 
-            var checkList = new ModelCheckListControl(FluidicsSDK.classFluidicsModerator.Moderator,
-                FluidicsSDK.classFluidicsModerator.Moderator.GetModelCheckers());
+            var checkList = new ModelCheckListControl(classFluidicsModerator.Moderator,
+                classFluidicsModerator.Moderator.GetModelCheckers());
             checkList.Location = new Point(10, 75);
             settings.Controls["mgroupBox_update"].Controls.Add(checkList);
         }
@@ -173,7 +175,7 @@ namespace LcmsNet.Simulator
                 {
                     if (mdatetime_startTime == null)
                     {
-                        mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        mdatetime_startTime = TimeKeeper.Instance.Now;
                             // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                     }
                     else
@@ -237,7 +239,7 @@ namespace LcmsNet.Simulator
                 else
                 {
                     PrepSim();
-                    mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    mdatetime_startTime = TimeKeeper.Instance.Now;
                         // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                     simInstance.Step();
                 }
@@ -261,7 +263,7 @@ namespace LcmsNet.Simulator
                 else
                 {
                     PrepSim();
-                    mdatetime_startTime = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    mdatetime_startTime = TimeKeeper.Instance.Now;
                         // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                     simInstance.Simulate();
                 }
@@ -361,9 +363,9 @@ namespace LcmsNet.Simulator
             //
             // Construct the path
             //
-            var path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             //
             // Write the method out!

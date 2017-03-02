@@ -10,5 +10,5 @@
         Error,
         DisabledProgram,
         DisabledUser
-    };
+    }
 }

@@ -17,9 +17,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
-using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Devices.Pumps;
+using LcmsNetDataClasses.Logging;
 using LcmsNetSDK.Data;
 
 namespace LcmsNetDataClasses.Devices
@@ -215,10 +216,10 @@ namespace LcmsNetDataClasses.Devices
             var data = args.Name.Split(',');
             var basicName = data[0];
             var assemblyName = basicName + ".dll";
-            var testPath = System.IO.Path.Combine(CONST_DEVICE_PLUGIN_PATH, assemblyName);
-            testPath = System.IO.Path.GetFullPath(testPath);
+            var testPath = Path.Combine(CONST_DEVICE_PLUGIN_PATH, assemblyName);
+            testPath = Path.GetFullPath(testPath);
 
-            if (System.IO.File.Exists(testPath))
+            if (File.Exists(testPath))
             {
                 return Assembly.LoadFile(testPath);
             }
@@ -303,7 +304,7 @@ namespace LcmsNetDataClasses.Devices
                 }
 
                 Type type = null;
-                if (Assembly.GetExecutingAssembly().Location != path && path != null && System.IO.File.Exists(path))
+                if (Assembly.GetExecutingAssembly().Location != path && path != null && File.Exists(path))
                 {
                     // This wasn't working...
                     //type = Assembly.LoadFrom(path).GetType(settings[CONST_DEVICE_TYPE_TAG] as string);
@@ -766,10 +767,7 @@ namespace LcmsNetDataClasses.Devices
                         device);
                     throw new classDeviceInitializationException(args);
                 }
-                else
-                {
-                    device.Status = enumDeviceStatus.Initialized;
-                }
+                device.Status = enumDeviceStatus.Initialized;
             }
             catch (classDeviceInitializationException ex)
             {
@@ -846,12 +844,12 @@ namespace LcmsNetDataClasses.Devices
         {
             try
             {
-                var files = System.IO.Directory.GetFiles(path, "*.dll");
+                var files = Directory.GetFiles(path, "*.dll");
                 foreach (var file in files)
                 {
                     try
                     {
-                        var fullPath = System.IO.Path.GetFullPath(file);
+                        var fullPath = Path.GetFullPath(file);
                         var ass = Assembly.LoadFile(fullPath);
                     }
                     catch (BadImageFormatException)
@@ -885,16 +883,13 @@ namespace LcmsNetDataClasses.Devices
                 {
                     throw new Exception("The plug-in assembly has already been loaded.");
                 }
-                else
+                // Remove the old plug-ins from the list.
+                foreach (var plugin in m_plugins[assemblyPath])
                 {
-                    // Remove the old plug-ins from the list.
-                    foreach (var plugin in m_plugins[assemblyPath])
-                    {
-                        AvailablePlugins.Remove(plugin);
-                    }
-                    // Remove the old plug-in link in the plug-in dictionary.
-                    m_plugins.Remove(assemblyPath);
+                    AvailablePlugins.Remove(plugin);
                 }
+                // Remove the old plug-in link in the plug-in dictionary.
+                m_plugins.Remove(assemblyPath);
             }
 
             // Map the assembly path to a list of available plug-ins and also update the list of available plug-ins
@@ -917,21 +912,18 @@ namespace LcmsNetDataClasses.Devices
                 {
                     throw new Exception("The plug-in assembly has already been loaded.");
                 }
-                else
+                // Remove the old plug-ins from the list.
+                foreach (var plugin in m_plugins[assemblyPath])
                 {
-                    // Remove the old plug-ins from the list.
-                    foreach (var plugin in m_plugins[assemblyPath])
-                    {
-                        AvailablePlugins.Remove(plugin);
-                    }
-                    // Remove the old plug-in link in the plug-in dictionary.
-                    m_plugins.Remove(assemblyPath);
+                    AvailablePlugins.Remove(plugin);
                 }
+                // Remove the old plug-in link in the plug-in dictionary.
+                m_plugins.Remove(assemblyPath);
             }
 
             // Map the assembly path to a list of available plug-ins and also update the list of available plug-ins
             var supportedPlugins =
-                RetrieveSupportedDevicePluginTypes(System.IO.Path.GetFullPath(assemblyPath));
+                RetrieveSupportedDevicePluginTypes(Path.GetFullPath(assemblyPath));
             AvailablePlugins.AddRange(supportedPlugins);
             m_plugins.Add(assemblyPath, supportedPlugins);
 
@@ -952,7 +944,7 @@ namespace LcmsNetDataClasses.Devices
             // Signal others we are the ones doing the loading and alerting.
             m_loadingPlugins = true;
 
-            var files = System.IO.Directory.GetFiles(directoryPath, filter);
+            var files = Directory.GetFiles(directoryPath, filter);
             foreach (var assemblyPath in files)
             {
                 LoadPlugins(assemblyPath, forceReload);

@@ -9,14 +9,14 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
-using LcmsNet.SampleQueue;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses;
-using LcmsNet.Method;
-using LcmsNetDataClasses.Configuration;
 using System.Drawing;
 using DemoPluginLibrary;
+using LcmsNet.Method;
+using LcmsNet.SampleQueue;
+using LcmsNetDataClasses;
+using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Method;
+using NUnit.Framework;
 
 namespace LcmsnetUnitTest
 {

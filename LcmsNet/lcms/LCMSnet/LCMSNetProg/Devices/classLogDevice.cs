@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Threading;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 
@@ -80,14 +81,14 @@ namespace LcmsNet.Devices
         /// Prints the message provided to the debug console.
         /// </summary>
         /// <param name="message">Message to write.</param>
-        [classLCMethodAttribute("Write Message", 3, false, "", -1, false)]
+        [classLCMethod("Write Message", 3, false, "", -1, false)]
         public void DebugWrite(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("\t\t{0} -- {1}", m_name, message));
-            System.Diagnostics.Debug.Flush();
+            Debug.WriteLine("\t\t{0} -- {1}", m_name, message);
+            Debug.Flush();
         }
 
-        [classLCMethodAttribute("Update status!", 3, false, "", -1, false)]
+        [classLCMethod("Update status!", 3, false, "", -1, false)]
         public void UpdateStatus()
         {
         }

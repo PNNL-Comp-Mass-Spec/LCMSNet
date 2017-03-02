@@ -10,6 +10,7 @@
 using System;
 using System.Globalization;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNetSDK
 {
@@ -122,7 +123,7 @@ namespace LcmsNetSDK
         /// </summary>
         /// <param name="method"></param>
         /// <returns></returns>
-        public bool AfterDSTTransition(LcmsNetDataClasses.Method.classLCMethod method)
+        public bool AfterDSTTransition(classLCMethod method)
         {
             var year = method.Start.Year;
             TimeZoneInfo.TransitionTime springTransition;

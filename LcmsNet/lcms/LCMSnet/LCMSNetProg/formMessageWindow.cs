@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
 
 namespace LcmsNet
 {
@@ -45,8 +47,8 @@ namespace LcmsNet
         private string FormatMessage(string message)
         {
             return string.Format("{0} {1}: {2}",
-                DateTime.UtcNow.Subtract(LcmsNetSDK.TimeKeeper.Instance.TimeZone.BaseUtcOffset).ToLongDateString(),
-                DateTime.UtcNow.Subtract(LcmsNetSDK.TimeKeeper.Instance.TimeZone.BaseUtcOffset).TimeOfDay,
+                DateTime.UtcNow.Subtract(TimeKeeper.Instance.TimeZone.BaseUtcOffset).ToLongDateString(),
+                DateTime.UtcNow.Subtract(TimeKeeper.Instance.TimeZone.BaseUtcOffset).TimeOfDay,
                 message);
         }
 
@@ -74,7 +76,7 @@ namespace LcmsNet
             if (mlistBox_messages.InvokeRequired)
             {
                 var d = new delegateInsertMessage(InsertMessage);
-                mlistBox_messages.Invoke(d, new object[] {message});
+                mlistBox_messages.Invoke(d, message);
             }
             else
             {
@@ -122,7 +124,7 @@ namespace LcmsNet
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateShowErrors(ShowErrorsDelegated), new object[] {level, error});
+                BeginInvoke(new DelegateShowErrors(ShowErrorsDelegated), level, error);
             }
             else
             {
@@ -158,12 +160,12 @@ namespace LcmsNet
         {
             customTabControl1.SelectedTab = mtab_errors;
             //mlabel_errors.BackColor             = System.Drawing.Color.White;
-            mlabel_errors.ForeColor = System.Drawing.Color.Black;
-            mpanel_errorIndicator.BackColor = System.Drawing.Color.DarkGray;
+            mlabel_errors.ForeColor = Color.Black;
+            mpanel_errorIndicator.BackColor = Color.DarkGray;
 
             //mlabel_messages.BackColor           = System.Drawing.Color.LightGray;
-            mlabel_messages.ForeColor = System.Drawing.Color.Gray;
-            mpanel_messageIndicator.BackColor = System.Drawing.Color.White;
+            mlabel_messages.ForeColor = Color.Gray;
+            mpanel_messageIndicator.BackColor = Color.White;
             m_errorLabelSelected = true;
             m_messageLabelSelected = false;
         }
@@ -172,12 +174,12 @@ namespace LcmsNet
         {
             customTabControl1.SelectedTab = mtab_messages;
             //mlabel_errors.BackColor             = System.Drawing.Color.LightGray;
-            mlabel_errors.ForeColor = System.Drawing.Color.Gray;
-            mpanel_errorIndicator.BackColor = System.Drawing.Color.White;
+            mlabel_errors.ForeColor = Color.Gray;
+            mpanel_errorIndicator.BackColor = Color.White;
 
             //mlabel_messages.BackColor           = System.Drawing.Color.White;
-            mlabel_messages.ForeColor = System.Drawing.Color.Black;
-            mpanel_messageIndicator.BackColor = System.Drawing.Color.DarkGray;
+            mlabel_messages.ForeColor = Color.Black;
+            mpanel_messageIndicator.BackColor = Color.DarkGray;
             m_messageLabelSelected = true;
             m_errorLabelSelected = false;
         }
@@ -187,8 +189,8 @@ namespace LcmsNet
         {
             if (!m_errorLabelSelected)
             {
-                mlabel_errors.ForeColor = System.Drawing.Color.Gray;
-                mpanel_errorIndicator.BackColor = System.Drawing.Color.White;
+                mlabel_errors.ForeColor = Color.Gray;
+                mpanel_errorIndicator.BackColor = Color.White;
             }
         }
 
@@ -196,8 +198,8 @@ namespace LcmsNet
         {
             if (!m_errorLabelSelected)
             {
-                mlabel_errors.ForeColor = System.Drawing.Color.LightGray;
-                mpanel_errorIndicator.BackColor = System.Drawing.Color.DarkGray;
+                mlabel_errors.ForeColor = Color.LightGray;
+                mpanel_errorIndicator.BackColor = Color.DarkGray;
             }
         }
 
@@ -205,8 +207,8 @@ namespace LcmsNet
         {
             if (!m_messageLabelSelected)
             {
-                mlabel_messages.ForeColor = System.Drawing.Color.Gray;
-                mpanel_messageIndicator.BackColor = System.Drawing.Color.White;
+                mlabel_messages.ForeColor = Color.Gray;
+                mpanel_messageIndicator.BackColor = Color.White;
             }
         }
 
@@ -214,8 +216,8 @@ namespace LcmsNet
         {
             if (!m_messageLabelSelected)
             {
-                mlabel_messages.ForeColor = System.Drawing.Color.LightGray;
-                mpanel_messageIndicator.BackColor = System.Drawing.Color.DarkGray;
+                mlabel_messages.ForeColor = Color.LightGray;
+                mpanel_messageIndicator.BackColor = Color.DarkGray;
             }
         }
 

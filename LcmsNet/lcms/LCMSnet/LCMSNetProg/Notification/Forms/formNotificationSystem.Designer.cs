@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Notification.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Notification.Forms
 {
     partial class formNotificationSystem
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -641,46 +644,46 @@
 
         #endregion
 
-        private System.Windows.Forms.NotifyIcon mnotify_icon;
-        private System.Windows.Forms.ListView mlistview_devices;
-        private System.Windows.Forms.ComboBox mcomboBox_actions;
-        private System.Windows.Forms.Label mlabel_action;
-        private System.Windows.Forms.NumericUpDown mnum_minimum;
-        private System.Windows.Forms.NumericUpDown mnum_maximum;
-        private System.Windows.Forms.GroupBox mgroupBox_number;
-        private System.Windows.Forms.GroupBox mgroupBox_text;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox mtextBox_statusText;
-        private System.Windows.Forms.RadioButton mradioButton_text;
-        private System.Windows.Forms.RadioButton mradioButton_number;
-        private System.Windows.Forms.RadioButton mradioButton_happens;
-        private System.Windows.Forms.ComboBox mcomboBox_methods;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox mgroupBox_actions;
-        private System.Windows.Forms.Label mlabel_status;
-        private System.Windows.Forms.Timer mtimer_notifier;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ListBox mlistBox_events;
-        private System.Windows.Forms.ListBox mlistbox_assignedEvents;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button mbutton_ignoreAll;
-        private System.Windows.Forms.Button mbutton_save;
-        private System.Windows.Forms.GroupBox mgroupBox_conditions;
-        private System.Windows.Forms.Panel settingsPanel;
-        private System.Windows.Forms.Button mbutton_disable;
-        private System.Windows.Forms.Button mbutton_enable;
-        private System.Windows.Forms.Label mlabel_enabled;
-        private System.Windows.Forms.Label mlabel_device;
-        private System.Windows.Forms.Button mbutton_ignoreThisSetting;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox mgroupBox_status;
-        private System.Windows.Forms.TextBox mtextBox_path;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown mnum_statusMinutes;
-        private System.Windows.Forms.CheckBox mcheckBox_writeStatus;
-        private System.Windows.Forms.Label mlabel_setting;
+        private NotifyIcon mnotify_icon;
+        private ListView mlistview_devices;
+        private ComboBox mcomboBox_actions;
+        private Label mlabel_action;
+        private NumericUpDown mnum_minimum;
+        private NumericUpDown mnum_maximum;
+        private GroupBox mgroupBox_number;
+        private GroupBox mgroupBox_text;
+        private Label label2;
+        private Label label1;
+        private TextBox mtextBox_statusText;
+        private RadioButton mradioButton_text;
+        private RadioButton mradioButton_number;
+        private RadioButton mradioButton_happens;
+        private ComboBox mcomboBox_methods;
+        private Label label4;
+        private GroupBox mgroupBox_actions;
+        private Label mlabel_status;
+        private Timer mtimer_notifier;
+        private ColumnHeader columnHeader1;
+        private ListBox mlistBox_events;
+        private ListBox mlistbox_assignedEvents;
+        private Label label3;
+        private Button mbutton_ignoreAll;
+        private Button mbutton_save;
+        private GroupBox mgroupBox_conditions;
+        private Panel settingsPanel;
+        private Button mbutton_disable;
+        private Button mbutton_enable;
+        private Label mlabel_enabled;
+        private Label mlabel_device;
+        private Button mbutton_ignoreThisSetting;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private GroupBox mgroupBox_status;
+        private TextBox mtextBox_path;
+        private Label label5;
+        private NumericUpDown mnum_statusMinutes;
+        private CheckBox mcheckBox_writeStatus;
+        private Label mlabel_setting;
     }
 }

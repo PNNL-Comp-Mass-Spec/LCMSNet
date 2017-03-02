@@ -1,11 +1,13 @@
-﻿namespace LcmsNetDataClasses.Experiment
+﻿using System.Collections.Generic;
+
+namespace LcmsNetDataClasses.Experiment
 {
     public interface ISampleValidator
     {
-        System.Collections.Generic.List<classSampleData> ValidateBlocks(
-            System.Collections.Generic.List<classSampleData> samples);
+        List<classSampleData> ValidateBlocks(
+            List<classSampleData> samples);
 
-        System.Collections.Generic.List<classSampleValidationError> ValidateSamples(
+        List<classSampleValidationError> ValidateSamples(
             classSampleData sample);
     }
 }

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
+using FluidicsSDK;
+using LcmsNet.Devices;
+using LcmsNet.Method;
+using LcmsNet.Properties;
+using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
-using LcmsNet.Method;
-using LcmsNetDataClasses;
-using LcmsNet.Devices;
 using LcmsNetSDK.Notifications;
 
 namespace LcmsNet.Notification.Forms
@@ -32,11 +35,11 @@ namespace LcmsNet.Notification.Forms
             mcomboBox_actions.Items.AddRange(data);
 
             // Set the total number of minutes between system health writes.
-            mnum_statusMinutes.Value = Properties.Settings.Default.NotificationWriteTimeMinutes;
-            mcheckBox_writeStatus.Checked = Properties.Settings.Default.NotificationShouldNotify;
+            mnum_statusMinutes.Value = Settings.Default.NotificationWriteTimeMinutes;
+            mcheckBox_writeStatus.Checked = Settings.Default.NotificationShouldNotify;
 
             // Place to put system health.
-            mtextBox_path.Text = Properties.Settings.Default.NotificationDirectoryPath;
+            mtextBox_path.Text = Settings.Default.NotificationDirectoryPath;
             m_notifier.Path = mtextBox_path.Text;
 
             // Add any existing devices.
@@ -54,11 +57,11 @@ namespace LcmsNet.Notification.Forms
             manager.DeviceRemoved += manager_DeviceRemoved;
             manager.DeviceAdded += manager_DeviceAdded;
 
-            var model = FluidicsSDK.classFluidicsModerator.Moderator;
+            var model = classFluidicsModerator.Moderator;
             model.ModelCheckAdded += Model_ModelCheckAdded;
             foreach (var modelCheck in model.GetModelCheckers())
             {
-                AddNotifier(modelCheck as INotifier);
+                AddNotifier(modelCheck);
             }
 
             foreach (var notifier in NotificationBroadcaster.Manager.Notifiers)
@@ -183,8 +186,8 @@ namespace LcmsNet.Notification.Forms
         {
             Disable();
 
-            var path = Properties.Settings.Default.NotificationFilePath;
-            if (System.IO.File.Exists(path))
+            var path = Settings.Default.NotificationFilePath;
+            if (File.Exists(path))
             {
                 var reader = new classXMLDeviceNotifierConfigurationReader();
                 var config = reader.ReadConfiguration(path);
@@ -227,10 +230,10 @@ namespace LcmsNet.Notification.Forms
                 }
             }
             var writer = new classXMLDeviceNotificationConfigurationWriter();
-            writer.WriteConfiguration(Properties.Settings.Default.NotificationFilePath, configuration);
+            writer.WriteConfiguration(Settings.Default.NotificationFilePath, configuration);
 
             classApplicationLogger.LogMessage(0,
-                "Notification file saved to: " + Properties.Settings.Default.NotificationFilePath);
+                "Notification file saved to: " + Settings.Default.NotificationFilePath);
         }
 
         #endregion
@@ -362,7 +365,7 @@ namespace LcmsNet.Notification.Forms
         /// <param name="device"></param>
         void manager_DeviceRemoved(object sender, IDevice device)
         {
-            RemoveNotifier(device as INotifier);
+            RemoveNotifier(device);
         }
 
         #endregion
@@ -501,8 +504,8 @@ namespace LcmsNet.Notification.Forms
         /// <param name="e"></param>
         private void mcheckBox_writeStatus_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.NotificationShouldNotify = mcheckBox_writeStatus.Checked;
-            Properties.Settings.Default.Save();
+            Settings.Default.NotificationShouldNotify = mcheckBox_writeStatus.Checked;
+            Settings.Default.Save();
 
             mtimer_notifier.Enabled = mcheckBox_writeStatus.Checked;
         }
@@ -529,8 +532,8 @@ namespace LcmsNet.Notification.Forms
             var milliSeconds = rawMinutes * 1000 * 60; // 60 seconds / minute * 1000 ms / second
             mtimer_notifier.Interval = milliSeconds;
 
-            Properties.Settings.Default.NotificationWriteTimeMinutes = rawMinutes;
-            Properties.Settings.Default.Save();
+            Settings.Default.NotificationWriteTimeMinutes = rawMinutes;
+            Settings.Default.Save();
 
             if (!m_updatingTimer)
             {
@@ -924,8 +927,8 @@ namespace LcmsNet.Notification.Forms
 
         private void mtextBox_path_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.NotificationDirectoryPath = mtextBox_path.Text;
-            Properties.Settings.Default.Save();
+            Settings.Default.NotificationDirectoryPath = mtextBox_path.Text;
+            Settings.Default.Save();
         }
 
         private void mbutton_save_Click(object sender, EventArgs e)

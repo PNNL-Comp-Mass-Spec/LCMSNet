@@ -1,11 +1,14 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNetDataClasses.Devices
 {
     sealed partial class controlDeviceStatusDisplay
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -99,11 +102,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Button mbutton_show;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fixErrorsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem bringToFrontToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sendToBackToolStripMenuItem;
+        private Button mbutton_show;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem fixErrorsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem bringToFrontToolStripMenuItem;
+        private ToolStripMenuItem sendToBackToolStripMenuItem;
     }
 }

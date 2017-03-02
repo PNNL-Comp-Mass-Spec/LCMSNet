@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using FluidicsSDK;
 using LcmsNetDataClasses.Logging;
@@ -299,7 +301,7 @@ namespace LcmsNet
             if ((ParentForm.MdiParent == null || ParentForm.MdiParent.ActiveMdiChild == ParentForm) &&
                 Visible)
             {
-                System.Diagnostics.Debug.WriteLine("Updating Image");
+                Debug.WriteLine("Updating Image");
                 try
                 {
                     m_fluidics_mod.SetWorldView(panelFluidicsDesign.ClientRectangle);
@@ -326,7 +328,7 @@ namespace LcmsNet
                     m_bitmap = new Bitmap(imageSize.Width, imageSize.Height);
                     using (var g = Graphics.FromImage(m_bitmap))
                     {
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                        g.SmoothingMode = SmoothingMode.AntiAlias;
                         //each layer is rendered at the transparency value specified by the UI transparency trackbar for that layer, possible values 0-255.
                         m_fluidics_mod.Render(g, trackBarDeviceTransparency.Value, scale, Layer.Devices);
                         m_fluidics_mod.Render(g, trackBarConnectionTransparency.Value, scale, Layer.Connections);

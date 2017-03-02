@@ -1,11 +1,16 @@
-﻿namespace LcmsNetDataClasses.Devices.Pumps
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using ZedGraph;
+using Label = System.Windows.Forms.Label;
+
+namespace LcmsNetDataClasses.Devices.Pumps
 {
     partial class controlPumpDisplay
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -170,12 +175,12 @@
 
         #endregion
 
-        private ZedGraph.ZedGraphControl mplot_monitoringDataPressure;
-        private ZedGraph.ZedGraphControl mplot_monitoringDataFlow;
-        private ZedGraph.ZedGraphControl mplot_monitoringDataB;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.Label mlabel_pumpName;
-        private System.Windows.Forms.Button mbutton_expand;
+        private ZedGraphControl mplot_monitoringDataPressure;
+        private ZedGraphControl mplot_monitoringDataFlow;
+        private ZedGraphControl mplot_monitoringDataB;
+        private SplitContainer splitContainer1;
+        private SplitContainer splitContainer2;
+        private Label mlabel_pumpName;
+        private Button mbutton_expand;
     }
 }

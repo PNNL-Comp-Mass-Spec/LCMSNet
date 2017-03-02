@@ -1,11 +1,14 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNetDataClasses.Devices
 {
     partial class formFailedDevicesDisplay
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -103,10 +106,10 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView mlistview_failedDevices;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button mbutton_ok;
-        private System.Windows.Forms.ColumnHeader mcolumn_device;
-        private System.Windows.Forms.ColumnHeader mcolumn_error;
+        private ListView mlistview_failedDevices;
+        private Label label1;
+        private Button mbutton_ok;
+        private ColumnHeader mcolumn_device;
+        private ColumnHeader mcolumn_error;
     }
 }

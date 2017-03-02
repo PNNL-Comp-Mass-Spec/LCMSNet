@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class formThroughputPreview
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -73,6 +76,6 @@
         #endregion
 
         private controlLCMethodTimeline mcontrol_throughputTimeline;
-        private System.Windows.Forms.Button mbutton_ok;
+        private Button mbutton_ok;
     }
 }

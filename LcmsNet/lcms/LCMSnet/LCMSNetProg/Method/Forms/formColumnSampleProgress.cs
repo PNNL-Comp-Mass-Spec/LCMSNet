@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method.Forms
 {
@@ -31,7 +34,7 @@ namespace LcmsNet.Method.Forms
             mcontrol_sampleProgressFull.UpdateSample(sample);
         }
 
-        public void UpdateError(classSampleData sample, LcmsNetDataClasses.Method.classLCEvent lcEvent)
+        public void UpdateError(classSampleData sample, classLCEvent lcEvent)
         {
             mcontrol_sampleProgressFull.UpdateError(sample, lcEvent);
         }
@@ -59,18 +62,18 @@ namespace LcmsNet.Method.Forms
             {
                 try
                 {
-                    var map = new System.Drawing.Bitmap(mcontrol_sampleProgressFull.Width,
+                    var map = new Bitmap(mcontrol_sampleProgressFull.Width,
                         mcontrol_sampleProgressFull.Height);
-                    var gfx = System.Drawing.Graphics.FromImage(map);
+                    var gfx = Graphics.FromImage(map);
                     mcontrol_sampleProgressFull.RenderGraph(gfx);
                         //DrawToBitmap(map,new System.Drawing.Rectangle(0, 0, mcontrol_sampleProgressFull.Width, mcontrol_sampleProgressFull.Height));
-                    PreviewAvailable(this, new SampleProgressPreviewArgs((System.Drawing.Image) map.Clone()));
+                    PreviewAvailable(this, new SampleProgressPreviewArgs((Image) map.Clone()));
                     map.Dispose();
                     gfx.Dispose();
                 }
                 catch
                 {
-                    LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0,
+                    classApplicationLogger.LogError(0,
                         "Error attempting to update column sample progress.");
                 }
             }
@@ -89,7 +92,7 @@ namespace LcmsNet.Method.Forms
     {
         public bool disposed;
 
-        public SampleProgressPreviewArgs(System.Drawing.Image image)
+        public SampleProgressPreviewArgs(Image image)
         {
             disposed = false;
             PreviewImage = image;
@@ -98,7 +101,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Gets the preview image for the sample progress
         /// </summary>
-        public System.Drawing.Image PreviewImage { get; private set; }
+        public Image PreviewImage { get; private set; }
 
         public void Dispose()
         {

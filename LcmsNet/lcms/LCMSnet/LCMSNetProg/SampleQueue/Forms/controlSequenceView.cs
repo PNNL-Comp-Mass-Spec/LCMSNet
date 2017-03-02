@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using LcmsNet.Properties;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 
@@ -26,7 +27,7 @@ namespace LcmsNet.SampleQueue.Forms
     /// <summary>
     /// Class that displays sample data in as a sequence.
     /// </summary>
-    public sealed partial class controlSequenceView : controlSampleView
+    public sealed class controlSequenceView : controlSampleView
     {
         /// <summary>
         /// Delegate defining when status updates are available in batches.
@@ -190,7 +191,7 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             buttonRefresh.BackColor = Color.Transparent;
             buttonRefresh.CausesValidation = false;
-            buttonRefresh.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            buttonRefresh.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             buttonRefresh.ForeColor = Color.Black;
             buttonRefresh.ImageAlign = ContentAlignment.TopCenter;
             buttonRefresh.Location = new Point(569, 6);
@@ -216,8 +217,8 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_dmsEdit
             // 
-            mbutton_dmsEdit.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            mbutton_dmsEdit.Image = Properties.Resources.DMSEdit;
+            mbutton_dmsEdit.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mbutton_dmsEdit.Image = Resources.DMSEdit;
             mbutton_dmsEdit.ImageAlign = ContentAlignment.TopCenter;
             mbutton_dmsEdit.Location = new Point(503, 5);
             mbutton_dmsEdit.Name = "mbutton_dmsEdit";
@@ -230,8 +231,8 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_cartColumnDate
             // 
-            mbutton_cartColumnDate.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            mbutton_cartColumnDate.Image = Properties.Resources.CartColumnName;
+            mbutton_cartColumnDate.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mbutton_cartColumnDate.Image = Resources.CartColumnName;
             mbutton_cartColumnDate.ImageAlign = ContentAlignment.TopCenter;
             mbutton_cartColumnDate.Location = new Point(437, 5);
             mbutton_cartColumnDate.Name = "mbutton_cartColumnDate";
@@ -244,9 +245,9 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_down
             // 
-            mbutton_down.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom)
-            | AnchorStyles.Right)));
-            mbutton_down.Image = Properties.Resources.Button_Down_16;
+            mbutton_down.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom)
+                                  | AnchorStyles.Right;
+            mbutton_down.Image = Resources.Button_Down_16;
             mbutton_down.Location = new Point(795, 4);
             mbutton_down.Name = "mbutton_down";
             mbutton_down.Size = new Size(60, 96);
@@ -257,9 +258,9 @@ namespace LcmsNet.SampleQueue.Forms
             // mbutton_addBlank
             // 
             mbutton_addBlank.BackColor = Color.Transparent;
-            mbutton_addBlank.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            mbutton_addBlank.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             mbutton_addBlank.ForeColor = Color.Black;
-            mbutton_addBlank.Image = Properties.Resources.add;
+            mbutton_addBlank.Image = Resources.add;
             mbutton_addBlank.ImageAlign = ContentAlignment.TopCenter;
             mbutton_addBlank.Location = new Point(39, 5);
             mbutton_addBlank.Name = "mbutton_addBlank";
@@ -272,9 +273,9 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_up
             // 
-            mbutton_up.Anchor = ((AnchorStyles)(((AnchorStyles.Top | AnchorStyles.Bottom)
-            | AnchorStyles.Right)));
-            mbutton_up.Image = Properties.Resources.Button_Up_16;
+            mbutton_up.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom)
+                                | AnchorStyles.Right;
+            mbutton_up.Image = Resources.Button_Up_16;
             mbutton_up.Location = new Point(729, 3);
             mbutton_up.Name = "mbutton_up";
             mbutton_up.Size = new Size(60, 96);
@@ -284,7 +285,7 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_addDMS
             // 
-            mbutton_addDMS.Image = Properties.Resources.AddDMS;
+            mbutton_addDMS.Image = Resources.AddDMS;
             mbutton_addDMS.ImageAlign = ContentAlignment.TopCenter;
             mbutton_addDMS.Location = new Point(105, 5);
             mbutton_addDMS.Name = "mbutton_addDMS";
@@ -298,9 +299,9 @@ namespace LcmsNet.SampleQueue.Forms
             // mbutton_removeSelected
             // 
             mbutton_removeSelected.BackColor = Color.Transparent;
-            mbutton_removeSelected.Font = new Font("Microsoft Sans Serif", 6F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            mbutton_removeSelected.Font = new Font("Microsoft Sans Serif", 6F, FontStyle.Regular, GraphicsUnit.Point, 0);
             mbutton_removeSelected.ForeColor = Color.Black;
-            mbutton_removeSelected.Image = Properties.Resources.Button_Delete_16;
+            mbutton_removeSelected.Image = Resources.Button_Delete_16;
             mbutton_removeSelected.ImageAlign = ContentAlignment.TopCenter;
             mbutton_removeSelected.Location = new Point(239, 5);
             mbutton_removeSelected.Name = "mbutton_removeSelected";
@@ -314,9 +315,9 @@ namespace LcmsNet.SampleQueue.Forms
             // mbutton_deleteUnused
             // 
             mbutton_deleteUnused.BackColor = Color.Transparent;
-            mbutton_deleteUnused.Font = new Font("Microsoft Sans Serif", 6F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            mbutton_deleteUnused.Font = new Font("Microsoft Sans Serif", 6F, FontStyle.Regular, GraphicsUnit.Point, 0);
             mbutton_deleteUnused.ForeColor = Color.Black;
-            mbutton_deleteUnused.Image = Properties.Resources.Button_Delete_16;
+            mbutton_deleteUnused.Image = Resources.Button_Delete_16;
             mbutton_deleteUnused.ImageAlign = ContentAlignment.TopCenter;
             mbutton_deleteUnused.Location = new Point(173, 5);
             mbutton_deleteUnused.Name = "mbutton_deleteUnused";
@@ -329,8 +330,8 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_fillDown
             // 
-            mbutton_fillDown.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            mbutton_fillDown.Image = Properties.Resources.Filldown;
+            mbutton_fillDown.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mbutton_fillDown.Image = Resources.Filldown;
             mbutton_fillDown.ImageAlign = ContentAlignment.TopCenter;
             mbutton_fillDown.Location = new Point(305, 5);
             mbutton_fillDown.Name = "mbutton_fillDown";
@@ -343,8 +344,8 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mbutton_trayVial
             // 
-            mbutton_trayVial.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            mbutton_trayVial.Image = Properties.Resources.testTube;
+            mbutton_trayVial.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mbutton_trayVial.Image = Resources.testTube;
             mbutton_trayVial.ImageAlign = ContentAlignment.TopCenter;
             mbutton_trayVial.Location = new Point(371, 5);
             mbutton_trayVial.Name = "mbutton_trayVial";
@@ -499,8 +500,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// Default constructor.  To use this constructor one must supply the dms view and
         /// sample queue to the respectively named properties.
         /// </summary>
-        public controlSequenceView() :
-            base()
+        public controlSequenceView()
         {
             InitializeComponent();
             DisplayColumn(CONST_COLUMN_PAL_TRAY, true);

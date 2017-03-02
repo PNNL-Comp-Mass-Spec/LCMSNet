@@ -1,11 +1,15 @@
-﻿namespace LcmsNet.Simulator
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using LcmsNet.Method.Forms;
+
+namespace LcmsNet.Simulator
 {
     partial class SimControlsAndChartsControl
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -408,30 +412,30 @@
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button btnTack;
-        private System.Windows.Forms.TabControl tabEditor;
-        private System.Windows.Forms.TabPage tabMethods;
-        private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Button btnStep;
-        private System.Windows.Forms.Button btnPause;
-        private System.Windows.Forms.Button btnPlay;
-        private System.Windows.Forms.TabControl tabControlSimulator;
-        private System.Windows.Forms.TabPage tabPageMethodSimulatorControls;
-        private Method.Forms.controlLCMethodSelection mcontrol_selectedMethods;
-        private System.Windows.Forms.TabPage tabSimulatorSettings;
-        private System.Windows.Forms.GroupBox mgroupBox_update;
-        private System.Windows.Forms.NumericUpDown mnum_delay;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TabControl tabControlCharts;
-        private System.Windows.Forms.TabPage tabPageGantt;
-        private System.Windows.Forms.TabPage tabPagConversation;
-        private Method.Forms.controlLCMethodStage controlLCMethodStage2;
-        private Method.Forms.controlLCMethodTimeline controlLCMethodTimeline1;
-        private Method.Forms.controlLCMethodTimeline controlLCMethodTimeline2;
-        private System.Windows.Forms.Button btnUntackChart;
-        private System.Windows.Forms.TabPage tabPageErrors;
+        private SplitContainer splitContainer1;
+        private GroupBox groupBox1;
+        private Button btnTack;
+        private TabControl tabEditor;
+        private TabPage tabMethods;
+        private Button btnReset;
+        private Button btnStop;
+        private Button btnStep;
+        private Button btnPause;
+        private Button btnPlay;
+        private TabControl tabControlSimulator;
+        private TabPage tabPageMethodSimulatorControls;
+        private controlLCMethodSelection mcontrol_selectedMethods;
+        private TabPage tabSimulatorSettings;
+        private GroupBox mgroupBox_update;
+        private NumericUpDown mnum_delay;
+        private Label label4;
+        private TabControl tabControlCharts;
+        private TabPage tabPageGantt;
+        private TabPage tabPagConversation;
+        private controlLCMethodStage controlLCMethodStage2;
+        private controlLCMethodTimeline controlLCMethodTimeline1;
+        private controlLCMethodTimeline controlLCMethodTimeline2;
+        private Button btnUntackChart;
+        private TabPage tabPageErrors;
     }
 }

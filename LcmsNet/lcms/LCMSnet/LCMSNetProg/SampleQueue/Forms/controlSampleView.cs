@@ -10,18 +10,21 @@
 //*********************************************************************************************************
 
 using System;
-using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Collections.Generic;
-using LcmsNetSQLiteTools;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Experiment;
-using LcmsNetDataClasses.Configuration;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using LcmsNet.Method;
+using LcmsNet.Method.Forms;
+using LcmsNetDataClasses;
+using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Data;
+using LcmsNetDataClasses.Experiment;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -55,10 +58,10 @@ namespace LcmsNet.SampleQueue.Forms
                     return;
                 }
                 // If samples are not valid...then what?
-                else if (!dmsDisplay.AreSamplesValid)
+                if (!dmsDisplay.AreSamplesValid)
                 {
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
+                                                    "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
                 }
             }
             catch (InvalidOperationException ex)
@@ -480,7 +483,7 @@ namespace LcmsNet.SampleQueue.Forms
                 IDMSValidator validator;
                 try
                 {
-                    validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                    validator = classDMSToolsManager.Instance.Validator;
                 }
                 catch (Exception)
                 {
@@ -510,7 +513,7 @@ namespace LcmsNet.SampleQueue.Forms
                         classSampleValidatorManager.Instance.Validators)
                 {
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
+                    Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
 #endif
                     var sampleValidator = reference.Value;
                     errors.AddRange(sampleValidator.ValidateSamples(sample));
@@ -643,7 +646,7 @@ namespace LcmsNet.SampleQueue.Forms
                     IDMSValidator validator;
                     try
                     {
-                        validator = LcmsNetSDK.classDMSToolsManager.Instance.Validator;
+                        validator = classDMSToolsManager.Instance.Validator;
                     }
                     catch (Exception)
                     {
@@ -673,7 +676,7 @@ namespace LcmsNet.SampleQueue.Forms
                             classSampleValidatorManager.Instance.Validators)
                     {
 #if DEBUG
-                        System.Diagnostics.Debug.WriteLine("Validating sample with validator: " +
+                        Debug.WriteLine("Validating sample with validator: " +
                                                            reference.Metadata.Name);
 #endif
                         var sampleValidator = reference.Value;
@@ -1247,7 +1250,7 @@ namespace LcmsNet.SampleQueue.Forms
                 classApplicationLogger.LogMessage(5, "Sample View Grid Data was null.");
                 return;
             }
-            else if (cellData.ToString() == CONST_NOT_SELECTED)
+            if (cellData.ToString() == CONST_NOT_SELECTED)
             {
                 //
                 // Revert back to the old data.
@@ -1842,12 +1845,12 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Validate the samples, and make sure we want to run these.
                 //
-                var preview = new Method.Forms.formThroughputPreview();
+                var preview = new formThroughputPreview();
                 preview.Show();
 
                 foreach (var data in samples)
                 {
-                    data.LCMethod.SetStartTime(LcmsNetSDK.TimeKeeper.Instance.Now);
+                    data.LCMethod.SetStartTime(TimeKeeper.Instance.Now);
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)));
                 }
 
@@ -1906,7 +1909,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (newData != null)
             {
-                AddSamplesToManager(new List<classSampleData>() {newData}, insertIntoUnused);
+                AddSamplesToManager(new List<classSampleData> {newData}, insertIntoUnused);
             }
         }
 
@@ -2109,13 +2112,11 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Select more than one sample for randomization.");
-                return;
             }
             else
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "No samples selected for randomization.");
-                return;
             }
         }
 
@@ -2305,7 +2306,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 throw new Exception("The column data cannot be null.");
             }
-            else if (data.Sample != null && data.Sample.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
+            if (data.Sample != null && data.Sample.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
             {
                 data.SpecialColumnNumber = "S";
             }
@@ -2374,7 +2375,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 throw new Exception("The column data cannot be null.");
             }
-            else if (data.LCMethod != null && data.LCMethod.IsSpecialMethod)
+            if (data.LCMethod != null && data.LCMethod.IsSpecialMethod)
             {
                 row.Cells[CONST_COLUMN_COLUMN_ID].Value = "S";
             }
@@ -2484,8 +2485,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new classSampleQueue.DelegateSamplesModifiedHandler(SamplesUpdated),
-                    new object[] {sender, data});
+                BeginInvoke(new classSampleQueue.DelegateSamplesModifiedHandler(SamplesUpdated), sender, data);
             }
             else
             {
@@ -2525,8 +2525,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new classSampleQueue.DelegateSamplesModifiedHandler(SamplesStopped),
-                    new object[] {sender, data});
+                BeginInvoke(new classSampleQueue.DelegateSamplesModifiedHandler(SamplesStopped), sender, data);
             }
             else
             {
@@ -2552,7 +2551,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
+                BeginInvoke(new DelegateUpdateRows(UpdateRows), data.Samples);
             }
             else
             {
@@ -2669,7 +2668,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
+                BeginInvoke(new DelegateUpdateRows(UpdateRows), data.Samples);
                 BeginInvoke(new MethodInvoker(UpdateDataView));
             }
             else
@@ -2727,7 +2726,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
+                BeginInvoke(new DelegateUpdateRows(UpdateRows), data.Samples);
                 BeginInvoke(new MethodInvoker(UpdateDataView));
             }
             else
@@ -2749,7 +2748,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateRows(UpdateRows), new object[] {data.Samples});
+                BeginInvoke(new DelegateUpdateRows(UpdateRows), data.Samples);
                 BeginInvoke(new MethodInvoker(UpdateDataView));
             }
             else
@@ -2771,7 +2770,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateRows(SamplesAddedFromQueue), new object[] {data.Samples});
+                BeginInvoke(new DelegateUpdateRows(SamplesAddedFromQueue), data.Samples);
             }
             else
             {
@@ -3079,7 +3078,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             Unchecked = 0,
             Checked,
-            Disabled,
+            Disabled
         }
 
         /// <summary>

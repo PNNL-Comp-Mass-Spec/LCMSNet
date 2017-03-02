@@ -8,11 +8,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
+using System.Text;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
 
@@ -180,7 +180,7 @@ namespace LcmsNetSDK
                 // Tool name was not found.
                 throw new ArgumentException("Tool " + toolName + " unavailable for selection", "toolName");
             }
-            else if (!toolSelected)
+            if (!toolSelected)
             {
                 // Tool was not found with specified version.
                 throw new ArgumentException(

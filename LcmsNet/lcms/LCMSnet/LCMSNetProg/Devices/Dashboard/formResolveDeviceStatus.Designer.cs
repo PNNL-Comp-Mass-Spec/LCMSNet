@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Devices.Dashboard
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Devices.Dashboard
 {
     partial class formResolveDeviceStatus
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -116,10 +119,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Button mbutton_leaveError;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button mbutton_clearErrors;
-        private System.Windows.Forms.Button mbutton_notInitialized;
-        private System.Windows.Forms.Button mbutton_doNothing;
+        private Button mbutton_leaveError;
+        private Label label1;
+        private Button mbutton_clearErrors;
+        private Button mbutton_notInitialized;
+        private Button mbutton_doNothing;
     }
 }

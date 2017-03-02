@@ -9,6 +9,7 @@
 
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace LcmsNet.SampleQueue.Forms
@@ -217,7 +218,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.Message);
                 }
             }
 
@@ -232,7 +233,7 @@ namespace LcmsNet.SampleQueue.Forms
         // Debug code
         void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Cell Value Changed: Row " + e.RowIndex + ", Column " +
+            Debug.WriteLine("Cell Value Changed: Row " + e.RowIndex + ", Column " +
                                                e.ColumnIndex);
         }
 

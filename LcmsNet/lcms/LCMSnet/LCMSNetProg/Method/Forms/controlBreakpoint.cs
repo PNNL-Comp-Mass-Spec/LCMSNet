@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using LcmsNet.Properties;
 
 namespace LcmsNet.Method.Forms
 {
@@ -29,11 +30,11 @@ namespace LcmsNet.Method.Forms
                 Changed?.Invoke(this, new BreakpointArgs(m_set));
                 if (m_set)
                 {
-                    BackgroundImage = Properties.Resources.breakpoint;
+                    BackgroundImage = Resources.breakpoint;
                 }
                 else
                 {
-                    BackgroundImage = Properties.Resources.breakpointDisabled;
+                    BackgroundImage = Resources.breakpointDisabled;
                 }
             }
         }

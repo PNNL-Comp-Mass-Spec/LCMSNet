@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using LcmsNetDataClasses.Devices;
 using LcmsNet.Devices.Dashboard;
+using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices
 {

@@ -12,7 +12,7 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Constructor.
         /// </summary>
-        public NotificationSetting()
+        protected NotificationSetting()
         {
             Action = enumDeviceNotificationAction.Ignore;
         }

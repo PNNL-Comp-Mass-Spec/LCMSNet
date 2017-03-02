@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Devices
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Devices
 {
     partial class AdvancedDeviceGroupControl
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -185,17 +188,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel m_selectedDevicePanel;
-        private System.Windows.Forms.Panel m_deviceButtonPanel;
-        private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button mbutton_initialize;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label1;
-        protected System.Windows.Forms.Button mbutton_RenameDevice;
-        protected System.Windows.Forms.TextBox mtextBox_NewDeviceName;
-        private System.Windows.Forms.Label mlabel_status;
-        private System.Windows.Forms.Button clearError;
+        private Panel m_selectedDevicePanel;
+        private Panel m_deviceButtonPanel;
+        private Splitter splitter1;
+        private Panel panel1;
+        private Button mbutton_initialize;
+        private GroupBox groupBox1;
+        private Label label1;
+        protected Button mbutton_RenameDevice;
+        protected TextBox mtextBox_NewDeviceName;
+        private Label mlabel_status;
+        private Button clearError;
 
     }
 }

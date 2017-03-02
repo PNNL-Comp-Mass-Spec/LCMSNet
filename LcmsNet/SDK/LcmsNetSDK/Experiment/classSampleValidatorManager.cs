@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace LcmsNetDataClasses.Experiment
 {
@@ -26,7 +27,7 @@ namespace LcmsNetDataClasses.Experiment
             catalog.Catalogs.Add(mmefDirectorycatalog);
             var mmefContainer = new CompositionContainer(catalog);
             mmefContainer.ComposeParts(this);
-            System.Diagnostics.Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");
+            Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");
         }
 
         public static classSampleValidatorManager Instance

@@ -1,11 +1,13 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+
+namespace LcmsNet.Method.Forms
 {
     partial class controlBreakpoint
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.

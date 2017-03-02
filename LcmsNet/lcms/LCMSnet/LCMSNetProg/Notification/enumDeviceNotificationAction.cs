@@ -50,8 +50,9 @@ namespace LcmsNet.Notification
         public classNotificationLinker(string name)
         {
             EventMap = new Dictionary<string, NotificationSetting>();
-            Item = new ListViewItem();
-            Item.Text = name;
+            Item = new ListViewItem {
+                Text = name
+            };
         }
 
         #region Properties

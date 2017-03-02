@@ -14,6 +14,7 @@ using System.IO;
 using System.Xml;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -24,13 +25,6 @@ namespace LcmsNet.SampleQueue.IO
         //**********************************************************************************************************
 
         #region "Methods"
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public classQueueImportXML()
-        {
-        }
 
         /// <summary>
         /// Reads the XML file into a list
@@ -140,7 +134,7 @@ namespace LcmsNet.SampleQueue.IO
 
             // Separation Method (Experiment.ExperimentName)
             var methodName = ConvertNullToString(ItemNode.SelectSingleNode("Separation/Method").InnerText);
-            retData.LCMethod = new LcmsNetDataClasses.Method.classLCMethod();
+            retData.LCMethod = new classLCMethod();
             retData.LCMethod.Name = methodName;
 
             // Acquisition Method (InstrumentData.MethodName)
@@ -183,10 +177,7 @@ namespace LcmsNet.SampleQueue.IO
             {
                 return string.Empty;
             }
-            else
-            {
-                return InpVal;
-            }
+            return InpVal;
         }
 
         /// <summary>
@@ -200,10 +191,7 @@ namespace LcmsNet.SampleQueue.IO
             {
                 return 0;
             }
-            else
-            {
-                return int.Parse(InpVal);
-            }
+            return int.Parse(InpVal);
         }
 
         /// <summary>
@@ -217,10 +205,7 @@ namespace LcmsNet.SampleQueue.IO
             {
                 return 0.0;
             }
-            else
-            {
-                return double.Parse(InpVal);
-            }
+            return double.Parse(InpVal);
         }
 
         #endregion

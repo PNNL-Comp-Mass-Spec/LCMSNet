@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Devices
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Devices
 {
     partial class formDeviceManager
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -60,7 +63,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView mlistview_devices;
+        private ListView mlistview_devices;
 
     }
 }

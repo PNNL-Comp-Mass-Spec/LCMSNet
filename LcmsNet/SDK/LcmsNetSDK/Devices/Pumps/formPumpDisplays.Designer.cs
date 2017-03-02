@@ -1,11 +1,14 @@
-﻿namespace LcmsNetDataClasses.Devices.Pumps
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNetDataClasses.Devices.Pumps
 {
     partial class formPumpDisplays
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -180,15 +183,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel mpanel_control;
-        private System.Windows.Forms.Button mbutton_expand;
-        private System.Windows.Forms.Panel mpanel_pumps;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage mobilePhaseTab;
-        private System.Windows.Forms.Panel mpanel_mobilePhase;
-        private System.Windows.Forms.Button mbutton_left;
-        private System.Windows.Forms.Button mbutton_right;
-        private System.Windows.Forms.Label mlabel_pump;
+        private Panel mpanel_control;
+        private Button mbutton_expand;
+        private Panel mpanel_pumps;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage mobilePhaseTab;
+        private Panel mpanel_mobilePhase;
+        private Button mbutton_left;
+        private Button mbutton_right;
+        private Label mlabel_pump;
     }
 }

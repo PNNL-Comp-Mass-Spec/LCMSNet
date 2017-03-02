@@ -9,6 +9,8 @@
 
 using System.Globalization;
 using System.Text;
+using LcmsNetDataClasses.Devices;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses
 {
@@ -34,20 +36,20 @@ namespace LcmsNetDataClasses
             Description = "Generic ModelStatus";
             EventDevice = null;
             Event = string.Empty;
-            Time = LcmsNetSDK.TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture);
+            Time = TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture);
                 // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString();
         }
 
         public ModelStatus(string name = "", string description = "",
             ModelStatusCategory category = ModelStatusCategory.Information, string eventName = "", string time = "",
-            Devices.IDevice device = null, Devices.IDevice problemDevice = null)
+            IDevice device = null, IDevice problemDevice = null)
         {
             UID = m_availableID++;
             Name = name;
             Description = description;
             Category = category;
             Event = eventName;
-            Time = time != string.Empty ? time : LcmsNetSDK.TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture);
+            Time = time != string.Empty ? time : TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture);
             EventDevice = device;
             ProblemDevice = problemDevice;
         }
@@ -75,10 +77,10 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// returns The IDevice that triggered this status change, if known.
         /// </summary>
-        public Devices.IDevice EventDevice { get; set; }
+        public IDevice EventDevice { get; set; }
 
 
-        public Devices.IDevice ProblemDevice { get; set; }
+        public IDevice ProblemDevice { get; set; }
 
         /// <summary>
         /// returns the event that triggered the status change, if set.

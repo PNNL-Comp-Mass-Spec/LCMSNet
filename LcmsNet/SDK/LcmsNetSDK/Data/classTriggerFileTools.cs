@@ -217,7 +217,6 @@ namespace LcmsNetDataClasses.Data
                         outputFile.Close();
                         classApplicationLogger.LogMessage(0,
                             "Remote trigger file created for sample " + sample.DmsData.DatasetName);
-                        return;
                     }
                 }
                 else
@@ -253,11 +252,8 @@ namespace LcmsNetDataClasses.Data
                 // No files found
                 return false;
             }
-            else
-            {
-                // At least one file found
-                return true;
-            }
+            // At least one file found
+            return true;
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace LcmsNet.Notification
         /// Grabs the list of all possible
         /// </summary>
         /// <returns></returns>
-        public List<INotifier> Notifiers { get; private set; }
+        public List<INotifier> Notifiers { get; }
 
         public static NotificationBroadcaster Manager
         {

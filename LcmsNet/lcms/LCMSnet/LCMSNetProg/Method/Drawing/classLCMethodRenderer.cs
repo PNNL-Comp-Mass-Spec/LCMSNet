@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Collections.Generic;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Method.Drawing
 {
@@ -74,7 +74,7 @@ namespace LcmsNet.Method.Drawing
             //
             // Iterate through the device list to map a Device to a color
             //
-            var colors = new Color[]
+            var colors = new[]
             {
                 Color.Red,
                 Color.Lime,

@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class formConvertToSeconds
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -213,17 +216,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Button mbutton_conversionOk;
-        private System.Windows.Forms.NumericUpDown mnum_minutes;
-        private System.Windows.Forms.NumericUpDown mnum_seconds;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown mnum_decimalPlaces;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private Button mbutton_conversionOk;
+        private NumericUpDown mnum_minutes;
+        private NumericUpDown mnum_seconds;
+        private Button button1;
+        private Label label1;
+        private Label label2;
+        private NumericUpDown mnum_decimalPlaces;
+        private Label label3;
+        private RadioButton radioButton1;
+        private RadioButton radioButton2;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
     }
 }

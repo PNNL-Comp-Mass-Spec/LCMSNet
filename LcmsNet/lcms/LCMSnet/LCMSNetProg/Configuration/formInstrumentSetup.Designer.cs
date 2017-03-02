@@ -1,11 +1,14 @@
-﻿namespace LcmsNet
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet
 {
     partial class formInstrumentSetup
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -91,9 +94,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBoxAvailInstruments;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonAccept;
-        private System.Windows.Forms.Button buttonCancel;
+        private ComboBox comboBoxAvailInstruments;
+        private Label label1;
+        private Button buttonAccept;
+        private Button buttonCancel;
     }
 }

@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using LcmsNetDataClasses.Method;
-using System;
 using System.IO;
-using LcmsNetDataClasses.Logging;
+using System.Threading;
+using System.Windows.Forms;
 using LcmsNet.Method;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
+using Shell32;
 
 namespace LcmsNet.Reporting
 {
@@ -232,7 +234,7 @@ namespace LcmsNet.Reporting
             fs = null;
 
             //Copy a folder and its contents into the newly created zip file
-            var sc = new Shell32.ShellClass();
+            var sc = new ShellClass();
             var sourceFolder = sc.NameSpace(Path.GetFullPath(sourcePath));
             var destFolder = sc.NameSpace(Path.GetFullPath(zipPath));
             var items = sourceFolder.Items();
@@ -246,7 +248,7 @@ namespace LcmsNet.Reporting
             //occur and you will end up with just
             //an empty zip file. So wait a second and give
             //the zipping thread time to get started
-            System.Threading.Thread.Sleep(2000);
+            Thread.Sleep(2000);
         }
 
         #endregion

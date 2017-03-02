@@ -1,6 +1,6 @@
 ﻿using System;
-using LcmsNetDataClasses.Devices;
 using System.Windows.Forms;
+using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices.Dashboard
 {

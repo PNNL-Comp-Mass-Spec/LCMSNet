@@ -8,6 +8,7 @@
 //                      - 11/20/2009 (DAC) - Changed Status property to use a delegate to avoid cross-thread problems
 //*********************************************************************************************************
 
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace LcmsNet
@@ -64,7 +65,7 @@ namespace LcmsNet
             if (labelStatus.InvokeRequired)
             {
                 var d = new delegateUpdateStatus(UpdateStatus);
-                labelStatus.Invoke(d, new object[] {newStatus});
+                labelStatus.Invoke(d, newStatus);
             }
             else
             {
@@ -78,7 +79,7 @@ namespace LcmsNet
         {
             if (visible)
             {
-                mlabel_emulated.ForeColor = System.Drawing.Color.Red;
+                mlabel_emulated.ForeColor = Color.Red;
                 mlabel_emulated.Text = cartName + "\n [EMULATED] ";
             }
             else

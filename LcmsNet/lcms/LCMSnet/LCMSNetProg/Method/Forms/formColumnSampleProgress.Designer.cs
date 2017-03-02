@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.Method.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.Method.Forms
 {
     partial class formColumnSampleProgress
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -250,17 +253,17 @@
 
         private controlSampleProgress mcontrol_sampleProgress;
         private controlSampleProgress mcontrol_sampleProgressFull;
-        private System.Windows.Forms.Label mlabel_previewMinutes;
-        private System.Windows.Forms.Label mlabel_fullPreview;
-        private System.Windows.Forms.NumericUpDown mnum_previewMinutes;
-        private System.Windows.Forms.Label mlabel_display;
-        private System.Windows.Forms.Timer mtimer_preview;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown milliseconds;
-        private System.Windows.Forms.Splitter splitter1;
+        private Label mlabel_previewMinutes;
+        private Label mlabel_fullPreview;
+        private NumericUpDown mnum_previewMinutes;
+        private Label mlabel_display;
+        private Timer mtimer_preview;
+        private Panel panel1;
+        private Label label1;
+        private NumericUpDown numericUpDown1;
+        private Label label2;
+        private NumericUpDown milliseconds;
+        private Splitter splitter1;
 
 
     }

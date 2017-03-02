@@ -1,11 +1,14 @@
-﻿namespace LcmsNet.SampleQueue.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace LcmsNet.SampleQueue.Forms
 {
     partial class controlTray
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -268,20 +271,20 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button buttonAutoAssignVials;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button buttonMoveToTray6;
-        private System.Windows.Forms.Button buttonMoveToTray5;
-        private System.Windows.Forms.Button buttonMoveToTray4;
-        private System.Windows.Forms.Button buttonMoveToTray3;
-        private System.Windows.Forms.Button buttonMoveToTray2;
-        private System.Windows.Forms.Button buttonMoveToTray1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonUnassignTray;
-        private System.Windows.Forms.NumericUpDown mnum_maxVials;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown mnum_specificVial;
-        private System.Windows.Forms.Button mbutton_assignToVial;
+        private DataGridView dataGridView1;
+        private Button buttonAutoAssignVials;
+        private Panel panel1;
+        private Button buttonMoveToTray6;
+        private Button buttonMoveToTray5;
+        private Button buttonMoveToTray4;
+        private Button buttonMoveToTray3;
+        private Button buttonMoveToTray2;
+        private Button buttonMoveToTray1;
+        private Label label1;
+        private Button buttonUnassignTray;
+        private NumericUpDown mnum_maxVials;
+        private Label label2;
+        private NumericUpDown mnum_specificVial;
+        private Button mbutton_assignToVial;
     }
 }
