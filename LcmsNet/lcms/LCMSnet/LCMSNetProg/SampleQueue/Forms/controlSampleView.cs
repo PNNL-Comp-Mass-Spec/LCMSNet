@@ -75,7 +75,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Then update the sample queue...
             //
-            mobj_sampleQueue.UpdateSamples(samples);
+            m_sampleQueue.UpdateSamples(samples);
         }
 
         #region Constants
@@ -196,12 +196,12 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Object that manages the list of all samples.
         /// </summary>
-        protected classSampleQueue mobj_sampleQueue;
+        protected classSampleQueue m_sampleQueue;
 
         /// <summary>
         /// Alternating back colors to enhance user visual feedback.
         /// </summary>
-        private Color[] mobj_colors;
+        private Color[] m_colors;
 
         /// <summary>
         /// Default sample name when a new sample is added.
@@ -215,7 +215,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Value of the cell before edits.
         /// </summary>
-        protected object mobj_cellValue;
+        protected object m_cellValue;
 
         /// <summary>
         /// Names of the methods available on the PAL
@@ -339,9 +339,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Background colors
             //
-            mobj_colors = new Color[2];
-            mobj_colors[0] = Color.White;
-            mobj_colors[1] = Color.Gainsboro;
+            m_colors = new Color[2];
+            m_colors[0] = Color.White;
+            m_colors[1] = Color.Gainsboro;
             m_editableIndex = 0;
 
             //
@@ -587,14 +587,14 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
                 }
-                var sample = mobj_sampleQueue.FindSample(neededRowId);
+                var sample = m_sampleQueue.FindSample(neededRowId);
 
                 if (rowNum <= m_firstQueuedSamplePosition)
                 {
                     if (rowNum < m_lastQueuedSamplePosition && rowNum >= m_firstQueuedSamplePosition)
                     {
                         //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
-                        mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
+                        m_sampleQueue.DequeueSampleFromRunningQueue(sample);
                     }
                     if (!isRecursive)
                     {
@@ -606,7 +606,7 @@ namespace LcmsNet.SampleQueue.Forms
                 if (m_lastQueuedSamplePosition > rowNum)
                 {
                     //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
-                    mobj_sampleQueue.DequeueSampleFromRunningQueue(sample);
+                    m_sampleQueue.DequeueSampleFromRunningQueue(sample);
 
                     if (!isRecursive)
                     {
@@ -704,7 +704,7 @@ namespace LcmsNet.SampleQueue.Forms
                 if (m_lastQueuedSamplePosition < rowNum)
                 {
                     //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples - 1]);
-                    mobj_sampleQueue.MoveSamplesToRunningQueue(sample);
+                    m_sampleQueue.MoveSamplesToRunningQueue(sample);
                 }
 
                 if (!isRecursive)
@@ -870,7 +870,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected virtual bool Manager_MethodUpdated(object sender, classLCMethod method)
         {
-            var samples = mobj_sampleQueue.GetWaitingQueue();
+            var samples = m_sampleQueue.GetWaitingQueue();
             var updateSamples = new List<classSampleData>();
             foreach (var sample in samples)
             {
@@ -886,7 +886,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
             }
 
-            mobj_sampleQueue.UpdateSamples(updateSamples);
+            m_sampleQueue.UpdateSamples(updateSamples);
 
             return true;
         }
@@ -945,7 +945,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void Undo()
         {
-            mobj_sampleQueue.Undo();
+            m_sampleQueue.Undo();
         }
 
         /// <summary>
@@ -953,7 +953,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void Redo()
         {
-            mobj_sampleQueue.Redo();
+            m_sampleQueue.Redo();
         }
 
         /// <summary>
@@ -965,11 +965,11 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (insertIntoUnused == false)
             {
-                mobj_sampleQueue.QueueSamples(samples, ColumnHandling);
+                m_sampleQueue.QueueSamples(samples, ColumnHandling);
             }
             else
             {
-                mobj_sampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
+                m_sampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
             }
         }
 
@@ -991,21 +991,21 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public virtual classSampleQueue SampleQueue
         {
-            get { return mobj_sampleQueue; }
+            get { return m_sampleQueue; }
             set
             {
-                mobj_sampleQueue = value;
+                m_sampleQueue = value;
                 if (value != null)
                 {
-                    mobj_sampleQueue.SamplesAdded += mobj_sampleQueue_SampleAdded;
-                    mobj_sampleQueue.SamplesCancelled += mobj_sampleQueue_SampleCancelled;
-                    mobj_sampleQueue.SamplesFinished += mobj_sampleQueue_SampleFinished;
-                    mobj_sampleQueue.SamplesRemoved += mobj_sampleQueue_SampleRemoved;
-                    mobj_sampleQueue.SamplesStarted += mobj_sampleQueue_SampleStarted;
-                    mobj_sampleQueue.SamplesReordered += mobj_sampleQueue_SamplesReordered;
-                    mobj_sampleQueue.SamplesUpdated += mobj_sampleQueue_SamplesUpdated;
-                    mobj_sampleQueue.SamplesWaitingToRun += mobj_sampleQueue_SamplesWaitingToRun;
-                    mobj_sampleQueue.SamplesStopped += mobj_sampleQueue_SamplesStopped;
+                    m_sampleQueue.SamplesAdded += m_sampleQueue_SampleAdded;
+                    m_sampleQueue.SamplesCancelled += m_sampleQueue_SampleCancelled;
+                    m_sampleQueue.SamplesFinished += m_sampleQueue_SampleFinished;
+                    m_sampleQueue.SamplesRemoved += m_sampleQueue_SampleRemoved;
+                    m_sampleQueue.SamplesStarted += m_sampleQueue_SampleStarted;
+                    m_sampleQueue.SamplesReordered += m_sampleQueue_SamplesReordered;
+                    m_sampleQueue.SamplesUpdated += m_sampleQueue_SamplesUpdated;
+                    m_sampleQueue.SamplesWaitingToRun += m_sampleQueue_SamplesWaitingToRun;
+                    m_sampleQueue.SamplesStopped += m_sampleQueue_SamplesStopped;
                 }
 
                 Enabled = (value != null);
@@ -1248,7 +1248,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Revert back to the old data.
                 //
-                row.Cells[e.ColumnIndex].Value = mobj_cellValue;
+                row.Cells[e.ColumnIndex].Value = m_cellValue;
                 classApplicationLogger.LogMessage(5, "Sample View Grid Data was null.");
                 return;
             }
@@ -1257,7 +1257,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Revert back to the old data.
                 //
-                row.Cells[e.ColumnIndex].Value = mobj_cellValue;
+                row.Cells[e.ColumnIndex].Value = m_cellValue;
                 return;
             }
 
@@ -1265,7 +1265,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Find the sample in the queue.
             //
             var uniqueID = Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
-            var data = mobj_sampleQueue.FindSample(uniqueID);
+            var data = m_sampleQueue.FindSample(uniqueID);
             var success = false;
             var volume = 0.0;
             var vial = 0;
@@ -1323,7 +1323,7 @@ namespace LcmsNet.SampleQueue.Forms
                     break;
             }
 
-            mobj_sampleQueue.UpdateSample(data);
+            m_sampleQueue.UpdateSample(data);
         }
 
         /// <summary>
@@ -1338,7 +1338,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             var uniqueID = Convert.ToInt64(mdataGrid_samples.Rows[e.RowIndex].Cells[CONST_COLUMN_UNIQUE_ID].Value);
-            var data = mobj_sampleQueue.FindSample(uniqueID);
+            var data = m_sampleQueue.FindSample(uniqueID);
             if (data.RunningStatus != enumSampleRunningStatus.Queued)
             {
                 e.Cancel = true;
@@ -1350,7 +1350,7 @@ namespace LcmsNet.SampleQueue.Forms
             switch (e.ColumnIndex)
             {
                 default:
-                    mobj_cellValue = mdataGrid_samples.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    m_cellValue = mdataGrid_samples.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                     break;
             }
         }
@@ -1451,7 +1451,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 classSampleData.AddDateCartColumnToDatasetName(sample);
             }
-            mobj_sampleQueue.UpdateSamples(samples);
+            m_sampleQueue.UpdateSamples(samples);
         }
 
         public void ResetDatasetName()
@@ -1472,7 +1472,7 @@ namespace LcmsNet.SampleQueue.Forms
                 classSampleData.ResetDatasetNameToRequestName(sample);
             }
 
-            mobj_sampleQueue.UpdateSamples(samples);
+            m_sampleQueue.UpdateSamples(samples);
         }
 
         protected virtual void EditTrayAndVial()
@@ -1500,7 +1500,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (m_trayVial.ShowDialog() == DialogResult.OK)
             {
                 samples = m_trayVial.SampleList;
-                mobj_sampleQueue.UpdateSamples(samples);
+                m_sampleQueue.UpdateSamples(samples);
             }
         }
 
@@ -1539,7 +1539,7 @@ namespace LcmsNet.SampleQueue.Forms
                 // Then update the sample queue...
                 //
                 var newSamples = m_filldown.GetModifiedSampleList();
-                mobj_sampleQueue.UpdateSamples(newSamples);
+                m_sampleQueue.UpdateSamples(newSamples);
             }
         }
 
@@ -1596,7 +1596,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //    backFill = enumColumnDataHandling.LeaveAlone;
                 //}
 
-                //mobj_sampleQueue.RemoveSample(ids, backFill);
+                //m_sampleQueue.RemoveSample(ids, backFill);
 
                 ////
                 //// Then re-queue the samples.
@@ -1605,12 +1605,12 @@ namespace LcmsNet.SampleQueue.Forms
                 //{
                 //    if (m_selector.InsertIntoUnused)
                 //    {
-                //        mobj_sampleQueue.InsertIntoUnusedSamples(samples, handling);
+                //        m_sampleQueue.InsertIntoUnusedSamples(samples, handling);
                 //    }
                 //    else
                 //    {
-                //        mobj_sampleQueue.UpdateSamples(
-                //        mobj_sampleQueue.QueueSamples(samples, handling);
+                //        m_sampleQueue.UpdateSamples(
+                //        m_sampleQueue.QueueSamples(samples, handling);
                 //    }
                 //}
                 //catch (Exception ex)
@@ -1619,7 +1619,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //}
                 if (samples.Count > 0)
                 {
-                    mobj_sampleQueue.UpdateSamples(samples);
+                    m_sampleQueue.UpdateSamples(samples);
                 }
             }
         }
@@ -1632,7 +1632,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="newColor"></param>
         void column_ColorChanged(object sender, Color previousColor, Color newColor)
         {
-            mobj_sampleQueue.UpdateAllSamples();
+            m_sampleQueue.UpdateAllSamples();
         }
 
         /// <summary>
@@ -1642,7 +1642,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="name"></param>
         void column_NameChanged(object sender, string name, string oldName)
         {
-            mobj_sampleQueue.UpdateWaitingSamples();
+            m_sampleQueue.UpdateWaitingSamples();
         }
 
         /// <summary>
@@ -1651,7 +1651,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected virtual bool HasUnusedSamples()
         {
-            return mobj_sampleQueue.HasUnusedSamples();
+            return m_sampleQueue.HasUnusedSamples();
         }
 
         /// <summary>
@@ -1711,8 +1711,8 @@ namespace LcmsNet.SampleQueue.Forms
                 DmsData =
                 {
                     RequestName = string.Format("{0}_{1:0000}",
-                                                mobj_sampleQueue.DefaultSampleName,
-                                                mobj_sampleQueue.RunningSampleIndex++),
+                                                m_sampleQueue.DefaultSampleName,
+                                                m_sampleQueue.RunningSampleIndex++),
                     CartName = sampleToCopy.DmsData.CartName,
                     CartConfigName = sampleToCopy.DmsData.CartConfigName,
                     DatasetType = sampleToCopy.DmsData.DatasetType
@@ -1832,7 +1832,7 @@ namespace LcmsNet.SampleQueue.Forms
             samples.RemoveAll(
                 delegate(classSampleData data)
                 {
-                    return data.DmsData.DatasetName.Contains(mobj_sampleQueue.UnusedSampleName);
+                    return data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName);
                 });
             PreviewSampleThroughput(samples);
         }
@@ -1887,7 +1887,7 @@ namespace LcmsNet.SampleQueue.Forms
                 var data = RowToSample(row);
                 if (data != null)
                 {
-                    var actualData = mobj_sampleQueue.FindSample(data.UniqueID);
+                    var actualData = m_sampleQueue.FindSample(data.UniqueID);
                     newData = CopyRequiredSampleData(actualData);
                 }
             }
@@ -1901,8 +1901,8 @@ namespace LcmsNet.SampleQueue.Forms
                     DmsData =
                     {
                         RequestName = string.Format("{0}_{1:0000}",
-                                                    mobj_sampleQueue.DefaultSampleName,
-                                                    mobj_sampleQueue.RunningSampleIndex++),
+                                                    m_sampleQueue.DefaultSampleName,
+                                                    m_sampleQueue.RunningSampleIndex++),
                         CartName = classCartConfiguration.CartName,
                         CartConfigName = classCartConfiguration.CartConfigName
                     }
@@ -1985,7 +1985,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove all of them from the sample queue.
             // This should update the other views as well.
             //
-            mobj_sampleQueue.RemoveSample(removes, enumColumnDataHandling.LeaveAlone);
+            m_sampleQueue.RemoveSample(removes, enumColumnDataHandling.LeaveAlone);
         }
 
         /// <summary>
@@ -2023,7 +2023,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Move in the sample queue
             //
-            mobj_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
+            m_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
 
             //
             // By default the first cell wants to be selected.
@@ -2055,7 +2055,7 @@ namespace LcmsNet.SampleQueue.Forms
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
             {
                 var tempData = RowToSample(row);
-                var data = mobj_sampleQueue.FindSample(tempData.UniqueID);
+                var data = m_sampleQueue.FindSample(tempData.UniqueID);
                 if (data != null && data.RunningStatus == enumSampleRunningStatus.Queued)
                 {
                     selectedIndices.Add(row.Index);
@@ -2103,7 +2103,7 @@ namespace LcmsNet.SampleQueue.Forms
                     mdataGrid_samples.Rows[0].Selected = false;
 
                     var newSamples = form.OutputSampleList;
-                    mobj_sampleQueue.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
+                    m_sampleQueue.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
                     foreach (var i in selectedIndices)
                     {
                         mdataGrid_samples.Rows[i].Selected = true;
@@ -2129,7 +2129,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            mobj_sampleQueue.RemoveUnusedSamples(resortColumns);
+            m_sampleQueue.RemoveUnusedSamples(resortColumns);
         }
 
         /// <summary>
@@ -2180,7 +2180,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove all of them from the sample queue.
             // This should update the other views as well.
             //
-            mobj_sampleQueue.RemoveSample(removes, resortColumns);
+            m_sampleQueue.RemoveSample(removes, resortColumns);
         }
 
         /// <summary>
@@ -2193,9 +2193,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Color duplicates or invalid cells with certain colors!
             //
-            var validResult = mobj_sampleQueue.IsSampleDataValid(data);
+            var validResult = m_sampleQueue.IsSampleDataValid(data);
             if (validResult == enumSampleValidResult.DuplicateRequestName &&
-                !data.DmsData.DatasetName.Contains(mobj_sampleQueue.UnusedSampleName))
+                !data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName))
             {
                 var styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle);
                 styleDuplicate.BackColor = Color.Crimson;
@@ -2336,7 +2336,7 @@ namespace LcmsNet.SampleQueue.Forms
             // samples to help the user normalize samples on columns.
             //
             var name = data.Sample.DmsData.DatasetName;
-            if (name.Contains(mobj_sampleQueue.UnusedSampleName))
+            if (name.Contains(m_sampleQueue.UnusedSampleName))
             {
                 var rowStyle = row.DefaultCellStyle;
                 rowStyle.BackColor = Color.LightGray;
@@ -2406,7 +2406,7 @@ namespace LcmsNet.SampleQueue.Forms
             // samples to help the user normalize samples on columns.
             //
             var name = data.DmsData.DatasetName;
-            if (name.Contains(mobj_sampleQueue.UnusedSampleName))
+            if (name.Contains(m_sampleQueue.UnusedSampleName))
             {
                 var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
                 rowStyle.BackColor = Color.LightGray;
@@ -2470,8 +2470,8 @@ namespace LcmsNet.SampleQueue.Forms
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
             {
                 var tempData = RowToSample(row);
-                var data = mobj_sampleQueue.FindSample(tempData.UniqueID);
-                mobj_sampleQueue.UpdateSample(data);
+                var data = m_sampleQueue.FindSample(tempData.UniqueID);
+                m_sampleQueue.UpdateSample(data);
             }
         }
 
@@ -2485,7 +2485,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender">Queue manager that is updated.</param>
         /// <param name="data">Data arguments that contain the updated sample information.</param>
-        protected virtual void mobj_sampleQueue_SamplesUpdated(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SamplesUpdated(object sender, classSampleQueueArgs data)
         {
             if (InvokeRequired == true)
             {
@@ -2526,7 +2526,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void mobj_sampleQueue_SamplesStopped(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SamplesStopped(object sender, classSampleQueueArgs data)
         {
             if (InvokeRequired == true)
             {
@@ -2550,7 +2550,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void mobj_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
             if (data == null || data.Samples == null)
                 return;
@@ -2667,7 +2667,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void mobj_sampleQueue_SampleStarted(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SampleStarted(object sender, classSampleQueueArgs data)
         {
             if (data == null || data.Samples == null)
                 return;
@@ -2689,7 +2689,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void mobj_sampleQueue_SampleRemoved(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SampleRemoved(object sender, classSampleQueueArgs data)
         {
             // Start fresh and add the samples from the queue to the list.
             // But track the position of the scroll bar to be nice to the user.
@@ -2725,7 +2725,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void mobj_sampleQueue_SampleFinished(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SampleFinished(object sender, classSampleQueueArgs data)
         {
             if (data == null || data.Samples == null)
                 return;
@@ -2747,7 +2747,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void mobj_sampleQueue_SampleCancelled(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SampleCancelled(object sender, classSampleQueueArgs data)
         {
             if (data == null || data.Samples == null)
                 return;
@@ -2769,7 +2769,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void mobj_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data)
+        protected virtual void m_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data)
         {
             if (data == null || data.Samples == null)
                 return;
@@ -2822,7 +2822,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void mobj_sampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
+        void m_sampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
         {
             var scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
             mdataGrid_samples.Rows.Clear();
@@ -3309,7 +3309,7 @@ namespace LcmsNet.SampleQueue.Forms
             batchIDCell.Value = sample.DmsData.Batch;
             var name = sample.DmsData.DatasetName;
 
-            if (name.Contains(mobj_sampleQueue.UnusedSampleName))
+            if (name.Contains(m_sampleQueue.UnusedSampleName))
             {
                 var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
                 rowStyle.BackColor = Color.LightGray;
@@ -3532,7 +3532,7 @@ namespace LcmsNet.SampleQueue.Forms
             else
                 sample.LCMethod = new classLCMethod();
 
-            var realSample = mobj_sampleQueue.FindSample(sample.UniqueID);
+            var realSample = m_sampleQueue.FindSample(sample.UniqueID);
 
             //
             // Copy the required DMS data.
@@ -3581,7 +3581,7 @@ namespace LcmsNet.SampleQueue.Forms
                 var tempData = this.RowToSample(row);
                 if (tempData != null)
                 {
-                    tempData = mobj_sampleQueue.FindSample(tempData.UniqueID);
+                    tempData = m_sampleQueue.FindSample(tempData.UniqueID);
                     data.Add(tempData);
                 }
             }

@@ -28,10 +28,10 @@ namespace LcmsNet.Notification.Forms
             m_updatingTimer = false;
             m_deviceEventTable = new Dictionary<INotifier, classNotificationLinker>();
             m_itemToDeviceMap = new Dictionary<ListViewItem, INotifier>();
-            mobj_currentSetting = null;
+            m_currentSetting = null;
 
             // Setup notifier and options.
-            mobj_notifier = new classNotifier();
+            m_notifier = new classNotifier();
             var actions = Enum.GetValues(typeof (enumDeviceNotificationAction));
             var data = new object[actions.Length];
             actions.CopyTo(data, 0);
@@ -43,7 +43,7 @@ namespace LcmsNet.Notification.Forms
 
             // Place to put system health.
             mtextBox_path.Text = Properties.Settings.Default.NotificationDirectoryPath;
-            mobj_notifier.Path = mtextBox_path.Text;
+            m_notifier.Path = mtextBox_path.Text;
 
             // Add any existing devices.
             var devices = classDeviceManager.Manager.Devices;
@@ -146,7 +146,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Notifier object that sends status to remote listeners.
         /// </summary>
-        private readonly classNotifier mobj_notifier;
+        private readonly classNotifier m_notifier;
 
         /// <summary>
         /// Flag indicating whether the timer is being set.
@@ -156,7 +156,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Current setting object.
         /// </summary>
-        private NotificationSetting mobj_currentSetting;
+        private NotificationSetting m_currentSetting;
 
         /// <summary>
         /// Maps a list view item to a device.
@@ -176,7 +176,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Current device being set.
         /// </summary>
-        private INotifier mobj_currentDevice = null;
+        private INotifier m_currentDevice = null;
 
         #endregion
 
@@ -349,9 +349,9 @@ namespace LcmsNet.Notification.Forms
             mlistview_devices.BeginUpdate();
             mlistview_devices.Items.Remove(linker.Item);
 
-            if (mobj_currentDevice == device)
+            if (m_currentDevice == device)
             {
-                mobj_currentDevice = null;
+                m_currentDevice = null;
                 mlistBox_events.Items.Clear();
                 mgroupBox_actions.Enabled = false;
                 mgroupBox_conditions.Enabled = false;
@@ -402,8 +402,8 @@ namespace LcmsNet.Notification.Forms
                     classApplicationLogger.LogMessage(0,
                         string.Format("Handling a user defined event from a device status change - {0}.",
                             setting.Name));
-                    mobj_notifier.Path = mtextBox_path.Text;
-                    //mobj_notifier.Notify(message, setting);
+                    m_notifier.Path = mtextBox_path.Text;
+                    //m_notifier.Notify(message, setting);
                     break;
                 default:
 
@@ -553,8 +553,8 @@ namespace LcmsNet.Notification.Forms
         {
             if (mcheckBox_writeStatus.Checked)
             {
-                mobj_notifier.Path = mtextBox_path.Text;
-                // mobj_notifier.WriteSystemHealth();
+                m_notifier.Path = mtextBox_path.Text;
+                // m_notifier.WriteSystemHealth();
             }
         }
 
@@ -578,10 +578,10 @@ namespace LcmsNet.Notification.Forms
                 mcomboBox_methods.Enabled = false;
             }
 
-            if (mobj_currentSetting != null)
+            if (m_currentSetting != null)
             {
                 m_updateUI = true;
-                if (mobj_currentSetting.Action == enumDeviceNotificationAction.Ignore)
+                if (m_currentSetting.Action == enumDeviceNotificationAction.Ignore)
                 {
                     mlistBox_events.Items.Remove(m_currentNotification);
                     mlistbox_assignedEvents.Items.Add(m_currentNotification);
@@ -592,7 +592,7 @@ namespace LcmsNet.Notification.Forms
                     mlistBox_events.Items.Add(m_currentNotification);
                 }
                 m_updateUI = false;
-                mobj_currentSetting.Action = action;
+                m_currentSetting.Action = action;
             }
         }
 
@@ -604,9 +604,9 @@ namespace LcmsNet.Notification.Forms
             var method = mcomboBox_methods.SelectedItem as classLCMethod;
             if (method != null)
             {
-                if (mobj_currentSetting != null)
+                if (m_currentSetting != null)
                 {
-                    mobj_currentSetting.Method = method;
+                    m_currentSetting.Method = method;
                 }
             }
         }
@@ -626,9 +626,9 @@ namespace LcmsNet.Notification.Forms
             var setting = new NotificationNumberSetting();
             setting.Minimum = Convert.ToDouble(mnum_minimum.Value);
             setting.Maximum = Convert.ToDouble(mnum_maximum.Value);
-            setting.Method = mobj_currentSetting.Method;
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            setting.Method = m_currentSetting.Method;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
 
         private void mnum_maximum_ValueChanged(object sender, EventArgs e)
@@ -641,9 +641,9 @@ namespace LcmsNet.Notification.Forms
             var setting = new NotificationNumberSetting();
             setting.Minimum = Convert.ToDouble(mnum_minimum.Value);
             setting.Maximum = Convert.ToDouble(mnum_maximum.Value);
-            setting.Method = mobj_currentSetting.Method;
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            setting.Method = m_currentSetting.Method;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
 
         private void mradioButton_number_CheckedChanged(object sender, EventArgs e)
@@ -660,11 +660,11 @@ namespace LcmsNet.Notification.Forms
                 return;
 
             var setting = new NotificationNumberSetting();
-            setting.Method = mobj_currentSetting.Method;
+            setting.Method = m_currentSetting.Method;
             setting.Minimum = Convert.ToDouble(mnum_minimum.Value);
             setting.Maximum = Convert.ToDouble(mnum_maximum.Value);
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
 
         private void mradioButton_text_CheckedChanged(object sender, EventArgs e)
@@ -683,9 +683,9 @@ namespace LcmsNet.Notification.Forms
 
             var setting = new NotificationTextSetting();
             setting.Text = mtextBox_statusText.Text;
-            setting.Method = mobj_currentSetting.Method;
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            setting.Method = m_currentSetting.Method;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
 
         private void mradioButton_happens_CheckedChanged(object sender, EventArgs e)
@@ -694,9 +694,9 @@ namespace LcmsNet.Notification.Forms
                 return;
 
             var setting = new NotificationAlwaysSetting();
-            setting.Method = mobj_currentSetting.Method;
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            setting.Method = m_currentSetting.Method;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
 
         private void mtextBox_statusText_TextChanged(object sender, EventArgs e)
@@ -706,9 +706,9 @@ namespace LcmsNet.Notification.Forms
 
             var setting = new NotificationTextSetting();
             setting.Text = mtextBox_statusText.Text;
-            setting.Method = mobj_currentSetting.Method;
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            setting.Method = m_currentSetting.Method;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
 
         private void mcomboBox_actions_SelectedIndexChanged(object sender, EventArgs e)
@@ -743,7 +743,7 @@ namespace LcmsNet.Notification.Forms
             {
                 var item = mlistview_devices.SelectedItems[0];
                 var device = m_itemToDeviceMap[item];
-                mobj_currentDevice = device;
+                m_currentDevice = device;
                 var linker = m_deviceEventTable[device];
 
                 mlabel_device.Text = "Notifier: " + device.Name;
@@ -782,8 +782,8 @@ namespace LcmsNet.Notification.Forms
 
         private void SetSetting(NotificationSetting setting)
         {
-            mobj_currentSetting = setting;
-            m_deviceEventTable[mobj_currentDevice].EventMap[m_currentNotification] = setting;
+            m_currentSetting = setting;
+            m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
 
             var type = setting.GetType();
 
@@ -836,10 +836,10 @@ namespace LcmsNet.Notification.Forms
 
         private void mlistBox_events_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mobj_currentDevice != null && !m_updateUI)
+            if (m_currentDevice != null && !m_updateUI)
             {
                 m_updateUI = true;
-                var linker = m_deviceEventTable[mobj_currentDevice];
+                var linker = m_deviceEventTable[m_currentDevice];
                 if (mlistBox_events.SelectedItem != null)
                 {
                     var key = mlistBox_events.SelectedItem.ToString();
@@ -869,10 +869,10 @@ namespace LcmsNet.Notification.Forms
         /// <param name="e"></param>
         private void mlistbox_assignedEvents_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mobj_currentDevice != null && !m_updateUI)
+            if (m_currentDevice != null && !m_updateUI)
             {
                 m_updateUI = true;
-                var linker = m_deviceEventTable[mobj_currentDevice];
+                var linker = m_deviceEventTable[m_currentDevice];
 
                 if (mlistbox_assignedEvents.SelectedItem == null)
                     return;
@@ -913,7 +913,7 @@ namespace LcmsNet.Notification.Forms
                 foreach (var item in mlistbox_assignedEvents.Items)
                 {
                     var key = item.ToString();
-                    var setting = m_deviceEventTable[mobj_currentDevice].EventMap[key];
+                    var setting = m_deviceEventTable[m_currentDevice].EventMap[key];
                     setting.Action = enumDeviceNotificationAction.Ignore;
                     removals.Add(key);
                 }

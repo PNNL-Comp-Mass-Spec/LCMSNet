@@ -23,7 +23,7 @@ namespace LcmsNet.Method.Forms
         public controlLCMethodEvent(int eventNum = 1)
         {
             InitializeComponent();
-            mobj_device = null;
+            m_device = null;
             this.labelEventNumber.Text = eventNum.ToString();
             StoppedHere = false;
             Initialize();
@@ -48,8 +48,8 @@ namespace LcmsNet.Method.Forms
             //
             if (methodData.Device.GetType().Equals(typeof (classTimerDevice)) == false)
             {
-                mobj_device = methodData.Device;
-                var index = mcomboBox_devices.Items.IndexOf(mobj_device);
+                m_device = methodData.Device;
+                var index = mcomboBox_devices.Items.IndexOf(m_device);
                 mcomboBox_devices.SelectedIndex = index;
             }
             else
@@ -57,7 +57,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // BAH! TODO: Clean this up5
                 //
-                mobj_device = methodData.Device;
+                m_device = methodData.Device;
                 var i = 0;
                 foreach (var o in mcomboBox_devices.Items)
                 {
@@ -85,7 +85,7 @@ namespace LcmsNet.Method.Forms
             }
             else
             {
-                LoadMethodInformation(mobj_device);
+                LoadMethodInformation(m_device);
                 //
                 // We have to do some reference trickery here, since method data is reconstructed
                 // for every lcevent then we need to set the method data for this object
@@ -100,7 +100,7 @@ namespace LcmsNet.Method.Forms
             }
 
             m_isLockingEvent = locked;
-            mobj_methodData = methodData;
+            m_methodData = methodData;
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace LcmsNet.Method.Forms
 
         ~controlLCMethodEvent()
         {
-            mobj_methodData.BreakPointEvent -= BreakPointEvent_Handler;
-            mobj_methodData.Simulated -= Simulated_Handler;
-            mobj_methodData.SimulatingEvent -= Simulating_Handler;
+            m_methodData.BreakPointEvent -= BreakPointEvent_Handler;
+            m_methodData.Simulated -= Simulated_Handler;
+            m_methodData.SimulatingEvent -= Simulating_Handler;
         }
 
 
@@ -156,7 +156,7 @@ namespace LcmsNet.Method.Forms
 
         void controlBreakpoint1_Changed(object sender, BreakpointArgs e)
         {
-            mobj_methodData.BreakPoint = e.IsSet;
+            m_methodData.BreakPoint = e.IsSet;
             this.Refresh();
         }
 
@@ -187,7 +187,7 @@ namespace LcmsNet.Method.Forms
             {
                 backColor = Color.Yellow;
             }
-            else if (mobj_methodData.BreakPoint)
+            else if (m_methodData.BreakPoint)
             {
                 backColor = Color.Maroon;
             }
@@ -206,7 +206,7 @@ namespace LcmsNet.Method.Forms
             {
                 backColor = Color.Yellow;
             }
-            else if (mobj_methodData.BreakPoint)
+            else if (m_methodData.BreakPoint)
             {
                 backColor = Color.Maroon;
             }
@@ -246,12 +246,12 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Device reference to control
         /// </summary>
-        private IDevice mobj_device;
+        private IDevice m_device;
 
         /// <summary>
         /// Method data that has been selected to be displayed.
         /// </summary>
-        private classLCMethodData mobj_methodData;
+        private classLCMethodData m_methodData;
 
         /// <summary>
         /// List of device methods and parameters to use.
@@ -368,24 +368,24 @@ namespace LcmsNet.Method.Forms
         {
             get
             {
-                if (mobj_methodData != null)
+                if (m_methodData != null)
                 {
                     //
                     // Link the method to a device
                     //
-                    mobj_methodData.Device = mobj_device;
-                    mobj_methodData.OptimizeWith = mcheckBox_optimizeFor.Checked;
-                    mobj_methodData.BreakPoint = controlBreakpoint1.IsSet;
+                    m_methodData.Device = m_device;
+                    m_methodData.OptimizeWith = mcheckBox_optimizeFor.Checked;
+                    m_methodData.BreakPoint = controlBreakpoint1.IsSet;
                     //
                     // Make sure that we build the method so that the values are updated
                     // from the control used to interface them....
                     //
-                    mobj_methodData.BuildMethod();
+                    m_methodData.BuildMethod();
                 }
-                mobj_methodData.BreakPointEvent += BreakPointEvent_Handler;
-                mobj_methodData.Simulated += Simulated_Handler;
-                mobj_methodData.SimulatingEvent += Simulating_Handler;
-                return mobj_methodData;
+                m_methodData.BreakPointEvent += BreakPointEvent_Handler;
+                m_methodData.Simulated += Simulated_Handler;
+                m_methodData.SimulatingEvent += Simulating_Handler;
+                return m_methodData;
             }
         }
 
@@ -416,7 +416,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public IDevice Device
         {
-            get { return mobj_device; }
+            get { return m_device; }
         }
 
         private bool IsCurrent { get; set; }
@@ -601,16 +601,16 @@ namespace LcmsNet.Method.Forms
                 // Update the user interface.
                 //
                 var device = mcomboBox_devices.Items[mcomboBox_devices.SelectedIndex] as IDevice;
-                if (device != mobj_device)
+                if (device != m_device)
                 {
-                    mobj_device = device;
-                    if (mobj_device != null)
+                    m_device = device;
+                    if (m_device != null)
                     {
-                        if (m_deviceMappings.ContainsKey(mobj_device) == false)
+                        if (m_deviceMappings.ContainsKey(m_device) == false)
                         {
-                            ReflectDevice(mobj_device);
+                            ReflectDevice(m_device);
                         }
-                        LoadMethodInformation(mobj_device);
+                        LoadMethodInformation(m_device);
                     }
                 }
             }
@@ -628,19 +628,19 @@ namespace LcmsNet.Method.Forms
                 // Update the user interface.
                 //
                 var method = mcomboBox_method.Items[mcomboBox_method.SelectedIndex] as classLCMethodData;
-                if (method != mobj_methodData)
+                if (method != m_methodData)
                 {
-                    if (mobj_methodData != null)
+                    if (m_methodData != null)
                     {
-                        mobj_methodData.BreakPointEvent -= BreakPointEvent_Handler;
-                        mobj_methodData.Simulated -= Simulated_Handler;
+                        m_methodData.BreakPointEvent -= BreakPointEvent_Handler;
+                        m_methodData.Simulated -= Simulated_Handler;
                     }
-                    mobj_methodData = method;
-                    mobj_methodData.BreakPointEvent += BreakPointEvent_Handler;
-                    mobj_methodData.Simulated += Simulated_Handler;
-                    if (mobj_device != null)
+                    m_methodData = method;
+                    m_methodData.BreakPointEvent += BreakPointEvent_Handler;
+                    m_methodData.Simulated += Simulated_Handler;
+                    if (m_device != null)
                     {
-                        LoadMethodParameters(mobj_methodData);
+                        LoadMethodParameters(m_methodData);
                     }
                 }
             }
@@ -943,7 +943,7 @@ namespace LcmsNet.Method.Forms
         {
             if (UseForOptimization != null)
                 UseForOptimization(this, mcheckBox_optimizeFor.Checked);
-            mobj_methodData.OptimizeWith = mcheckBox_optimizeFor.Checked;
+            m_methodData.OptimizeWith = mcheckBox_optimizeFor.Checked;
             OnEventChanged();
         }
 

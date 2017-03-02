@@ -46,7 +46,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Currently selected method.
         /// </summary>
-        private classLCMethod mobj_currentMethod;
+        private classLCMethod m_currentMethod;
 
         /// <summary>
         /// Constructor that allows for users to edit methods.
@@ -63,7 +63,7 @@ namespace LcmsNet.Method.Forms
                 mdialog_openMethod.InitialDirectory = Path.Combine(path,
                     classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             }
-            mobj_currentMethod = new classLCMethod();
+            m_currentMethod = new classLCMethod();
             MethodFolderPath = CONST_METHOD_FOLDER_PATH;
 
             UpdateConfiguration();
@@ -356,7 +356,7 @@ namespace LcmsNet.Method.Forms
             //
             // Renders the method built
             //
-            mobj_currentMethod = method;
+            m_currentMethod = method;
 
             //
             // Register the method
@@ -371,9 +371,9 @@ namespace LcmsNet.Method.Forms
         /// <param name="method"></param>
         private void LoadMethod(classLCMethod method)
         {
-            if (method != null && mobj_currentMethod != method)
+            if (method != null && m_currentMethod != method)
             {
-                mobj_currentMethod = method;
+                m_currentMethod = method;
                 mcontrol_acquisitionStage.LoadMethod(method, true);
 
                 mcontrol_acquisitionStage.TextBoxNameSetText(method.Name);

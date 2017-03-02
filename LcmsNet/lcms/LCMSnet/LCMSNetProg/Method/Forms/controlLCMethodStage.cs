@@ -402,7 +402,7 @@ namespace LcmsNet.Method.Forms
             //
             // Renders the method built
             //
-            //mobj_currentMethod = method;
+            //m_currentMethod = method;
 
             //
             // Register the method

@@ -268,7 +268,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Event to tell listeners that the sample is waiting to be run.
         /// </summary>
-        public AutoResetEvent mobj_sampleWaitingEvent;
+        public AutoResetEvent m_sampleWaitingEvent;
 
         #endregion
 
@@ -288,7 +288,7 @@ namespace LcmsNet.SampleQueue
             m_integrateName = CONST_DEFAULT_INTEGRATE_SAMPLENAME;
             m_resetColumns = true;
             m_sampleIndex = 1;
-            mobj_sampleWaitingEvent = new AutoResetEvent(false);
+            m_sampleWaitingEvent = new AutoResetEvent(false);
             m_columnOrders = new List<classColumnData>();
 
             // Undo - redo operations
@@ -424,7 +424,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public AutoResetEvent SampleQueuedEvent
         {
-            get { return mobj_sampleWaitingEvent; }
+            get { return m_sampleWaitingEvent; }
         }
 
         #endregion
@@ -1749,7 +1749,7 @@ namespace LcmsNet.SampleQueue
 
             // Set the listening event so that time sensitive items will know that
             // a sample is waiting on the running queue.
-            mobj_sampleWaitingEvent.Set();
+            m_sampleWaitingEvent.Set();
             m_startedSamples = true;
         }
 

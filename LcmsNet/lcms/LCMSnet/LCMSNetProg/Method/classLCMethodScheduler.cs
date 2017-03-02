@@ -66,7 +66,7 @@ namespace LcmsNet.Method
             //
             // worker thread.
             //
-            mobj_thread = null;
+            m_thread = null;
             m_stopping = false;
 
             m_notifyOnKill = false;
@@ -75,7 +75,7 @@ namespace LcmsNet.Method
             // Reference to the sample queue so that we can grab samples
             // when we need them.
             //
-            mobj_sampleQueue = sampleQueue;
+            m_sampleQueue = sampleQueue;
 
             // Register yourself with the notification system.
             Notification.NotificationBroadcaster.Manager.AddNotifier(this);
@@ -83,9 +83,9 @@ namespace LcmsNet.Method
             //
             // This is the event to tell the scheduler to shut everything down!
             //
-            mobj_abortWaiting = new ManualResetEvent(false);
-            mobj_stoppedSamples = new ManualResetEvent(false);
-            mobj_stopSamples = new ManualResetEvent(false);
+            m_abortWaiting = new ManualResetEvent(false);
+            m_stoppedSamples = new ManualResetEvent(false);
+            m_stopSamples = new ManualResetEvent(false);
         }
 
         #region Constants
@@ -151,28 +151,28 @@ namespace LcmsNet.Method
         /// <summary>
         /// Scheduling thread reference.
         /// </summary>
-        private Thread mobj_thread;
+        private Thread m_thread;
 
         /// <summary>
         /// Sample queue that handles sorting of the samples to run.
         /// </summary>
-        private readonly classSampleQueue mobj_sampleQueue;
+        private readonly classSampleQueue m_sampleQueue;
 
         /// <summary>
         /// Event that tells the background worker thread that its time to stop
         /// waiting and shutdown.
         /// </summary>
-        private readonly ManualResetEvent mobj_abortWaiting;
+        private readonly ManualResetEvent m_abortWaiting;
 
         /// <summary>
         /// Event that tells the background worker thread that its time to stop running.
         /// </summary>
-        private readonly ManualResetEvent mobj_stopSamples;
+        private readonly ManualResetEvent m_stopSamples;
 
         /// <summary>
         /// Event that tells the main thread things are ok and stopped.
         /// </summary>
-        private readonly ManualResetEvent mobj_stoppedSamples;
+        private readonly ManualResetEvent m_stoppedSamples;
 
         //
         // Here we hold a copy of the samples that are running, so we can do things like
@@ -236,7 +236,7 @@ namespace LcmsNet.Method
         /// </summary>
         private void Abort()
         {
-            if (mobj_thread != null)
+            if (m_thread != null)
             {
                 try
                 {
@@ -245,14 +245,14 @@ namespace LcmsNet.Method
                     // to stop doing what its doing when the flag is set to false
                     //
                     m_isRunning = false;
-                    mobj_thread.Abort();
+                    m_thread.Abort();
                 }
                 catch (ThreadAbortException)
                 {
                 }
                 finally
                 {
-                    mobj_thread = null;
+                    m_thread = null;
                 }
             }
         }
@@ -265,8 +265,8 @@ namespace LcmsNet.Method
             Shutdown();
             var start = new ThreadStart(RunThreaded);
             m_isRunning = true;
-            mobj_thread = new Thread(start);
-            mobj_thread.Start();
+            m_thread = new Thread(start);
+            m_thread.Start();
         }
 
         /// <summary>
@@ -286,15 +286,15 @@ namespace LcmsNet.Method
             m_stopping = true;
 
             // Tell the scheduler thread to stop
-            mobj_stopSamples.Set();
+            m_stopSamples.Set();
 
             // Wait for it to tell us its done
-            mobj_stoppedSamples.WaitOne();
+            m_stoppedSamples.WaitOne();
 
-            mobj_sampleQueue.StopRunningQueue();
+            m_sampleQueue.StopRunningQueue();
 
             // Then reset the event so it can tell us again later it's done.
-            mobj_stoppedSamples.Reset();
+            m_stoppedSamples.Reset();
 
             m_stopping = false;
         }
@@ -303,7 +303,7 @@ namespace LcmsNet.Method
         {
             m_stopping = true;
             StopSamples();
-            mobj_sampleQueue.StopRunningQueue();
+            m_sampleQueue.StopRunningQueue();
             m_stopping = false;
         }
 
@@ -335,7 +335,7 @@ namespace LcmsNet.Method
                         //
                         // Tell the sample queue to stop doing what it is doing
                         //
-                        mobj_sampleQueue.CancelRunningSample(samples[i], false);
+                        m_sampleQueue.CancelRunningSample(samples[i], false);
 
                         //
                         // Don't hold a reference to the sample if we dont need it.
@@ -443,7 +443,7 @@ namespace LcmsNet.Method
             var sampleColumnID = 0;
             classSampleData data = null;
 
-            data = mobj_sampleQueue.NextSampleQuery();
+            data = m_sampleQueue.NextSampleQuery();
 
             //
             // See if the sample is legit, then if we have an idle column.
@@ -476,7 +476,7 @@ namespace LcmsNet.Method
                 if (LcmsNetSDK.TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0)
                     //(startSpan.Milliseconds >= 0)
                 {
-                    data = mobj_sampleQueue.NextSampleStart();
+                    data = m_sampleQueue.NextSampleStart();
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
                         data.DmsData.DatasetName,
                         data.ColumnData.ID + 1, data.LCMethod.Start),
@@ -520,9 +520,9 @@ namespace LcmsNet.Method
             // Setup the event table
             //
             var j = 0;
-            events[j++] = mobj_abortWaiting;
-            events[j++] = mobj_stopSamples;
-            events[j++] = mobj_sampleQueue.SampleQueuedEvent;
+            events[j++] = m_abortWaiting;
+            events[j++] = m_stopSamples;
+            events[j++] = m_sampleQueue.SampleQueuedEvent;
 
             for (var i = 0; i < m_columnThreads.Count; i++)
             {
@@ -557,12 +557,12 @@ namespace LcmsNet.Method
                     // Stops samples from being run.
                     //
                     case CONST_EVENT_NUM_STOP_SAMPLES:
-                        mobj_stopSamples.Reset();
+                        m_stopSamples.Reset();
                         Print("Killing all samples on all columns.", CONST_VERBOSE_EVENTS);
                         StopSamples();
                         if (m_notifyOnKill)
                         {
-                            mobj_sampleQueue.StopRunningQueue();
+                            m_sampleQueue.StopRunningQueue();
                             m_notifyOnKill = false;
                             if (StatusUpdate != null)
                             {
@@ -572,7 +572,7 @@ namespace LcmsNet.Method
                             }
                         }
                         Print("Done killing columns.  ", CONST_VERBOSE_EVENTS);
-                        mobj_stoppedSamples.Set();
+                        m_stoppedSamples.Set();
                         break;
                     default:
                         //
@@ -648,7 +648,7 @@ namespace LcmsNet.Method
                                             }
 
                                             currentEvent[columnID] = CONST_CANCELLING_FLAG;
-                                            mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
+                                            m_sampleQueue.CancelRunningSample(samples[columnID], true);
                                             samples[columnID] = null;
                                             StopAllOnOverdue();
                                             ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation,
@@ -800,7 +800,7 @@ namespace LcmsNet.Method
                             samples[columnID].LCMethod.Events[currentEventNumber].Device.Name,
                             stackTrace));
 
-                    mobj_sampleQueue.CancelRunningSample(samples[columnID], true);
+                    m_sampleQueue.CancelRunningSample(samples[columnID], true);
                     samples[columnID] = null;
                     sampleEndTime[columnID] = DateTime.MinValue;
                     currentEvent[columnID] = CONST_IDLE_FLAG;
@@ -838,7 +838,7 @@ namespace LcmsNet.Method
                                 samples[columnID],
                                 enumSampleProgress.Complete));
                     }
-                    mobj_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
+                    m_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
                     //
                     // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
                     // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.

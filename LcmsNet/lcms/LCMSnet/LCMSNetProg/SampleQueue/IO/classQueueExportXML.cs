@@ -29,7 +29,7 @@ namespace LcmsNet.SampleQueue.IO
 
         #region "Class variables"
 
-        XmlDocument mobj_ExportDoc;
+        XmlDocument m_ExportDoc;
 
         #endregion
 
@@ -54,13 +54,13 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Create and initialize the document object
-            mobj_ExportDoc = new XmlDocument();
-            var docDeclaration = mobj_ExportDoc.CreateXmlDeclaration("1.0", null, null);
-            mobj_ExportDoc.AppendChild(docDeclaration);
+            m_ExportDoc = new XmlDocument();
+            var docDeclaration = m_ExportDoc.CreateXmlDeclaration("1.0", null, null);
+            m_ExportDoc.AppendChild(docDeclaration);
 
             // Add MetaData (root) element
-            var rootElement = mobj_ExportDoc.CreateElement("MetaData");
-            mobj_ExportDoc.AppendChild(rootElement);
+            var rootElement = m_ExportDoc.CreateElement("MetaData");
+            m_ExportDoc.AppendChild(rootElement);
 
             // Add QueueSettings node
             var queueSettingsElement = AddElementNoAttributes("QueueSettings", rootElement);
@@ -89,7 +89,7 @@ namespace LcmsNet.SampleQueue.IO
             AddElementWithTypeAttribute("mnuWellPlateGraphic", queueSettingsElement, "Boolean", "False");
 
             // Write the XML object to the output file and exit
-            SaveQueue(mobj_ExportDoc, ExportFileNamePath);
+            SaveQueue(m_ExportDoc, ExportFileNamePath);
 
             // Notify user
             LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Export complete");
@@ -170,7 +170,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>XMLElement that was added to document</returns>
         XmlElement AddElementNoAttributes(string ElementName, XmlElement Parent)
         {
-            var newElement = mobj_ExportDoc.CreateElement(ElementName);
+            var newElement = m_ExportDoc.CreateElement(ElementName);
             Parent.AppendChild(newElement);
             return newElement;
         }
@@ -186,7 +186,7 @@ namespace LcmsNet.SampleQueue.IO
         XmlElement AddElementWithTypeAttribute(string ElementName, XmlElement Parent, string TypeName, string ElemValue)
         {
             var newElement = AddElementNoAttributes(ElementName, Parent);
-            var newAttribute = mobj_ExportDoc.CreateAttribute("type");
+            var newAttribute = m_ExportDoc.CreateAttribute("type");
             newAttribute.Value = TypeName;
             newElement.Attributes.Append(newAttribute);
             newElement.InnerText = ElemValue;

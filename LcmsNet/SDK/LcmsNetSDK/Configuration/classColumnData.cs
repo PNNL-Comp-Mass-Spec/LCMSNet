@@ -101,7 +101,7 @@ namespace LcmsNetDataClasses.Configuration
         /// <summary>
         /// Color of the column.
         /// </summary>
-        private Color mobj_columnColor;
+        private Color m_columnColor;
 
         /// <summary>
         /// Flag indicating if this is the first column to run.
@@ -195,15 +195,15 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public Color Color
         {
-            get { return mobj_columnColor; }
+            get { return m_columnColor; }
             set
             {
-                if (mobj_columnColor != value && value != null)
+                if (m_columnColor != value && value != null)
                 {
                     if (ColorChanged != null)
-                        ColorChanged(this, mobj_columnColor, value);
+                        ColorChanged(this, m_columnColor, value);
                 }
-                mobj_columnColor = value;
+                m_columnColor = value;
             }
         }
 

@@ -32,12 +32,12 @@ namespace LcmsNet.Method
         /// <summary>
         /// Object that contains method to run with parameters.
         /// </summary>
-        private classSampleData mobj_sampleData;
+        private classSampleData m_sampleData;
 
         /// <summary>
         /// synchronization event used for classDeviceTimer
         /// </summary>
-        private readonly ManualResetEvent mobj_abortEvent;
+        private readonly ManualResetEvent m_abortEvent;
 
         /// <summary>
         /// reference to the background worker this column thread is run on. Needed so we can check for
@@ -56,7 +56,7 @@ namespace LcmsNet.Method
 
         public classSampleData Sample
         {
-            get { return mobj_sampleData; }
+            get { return m_sampleData; }
         }
 
         public bool IsErrored { get; private set; }
@@ -73,7 +73,7 @@ namespace LcmsNet.Method
         public classColumnThread(int id, BackgroundWorker worker)
         {
             m_columnId = id;
-            mobj_abortEvent = new ManualResetEvent(false);
+            m_abortEvent = new ManualResetEvent(false);
             mthread_worker = worker;
             VerboseLevel = CONST_VERBOSE_EVENTS;
         }
@@ -106,7 +106,7 @@ namespace LcmsNet.Method
         /// </summary>
         public void Abort()
         {
-            mobj_abortEvent.Set();
+            m_abortEvent.Set();
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace LcmsNet.Method
         private bool ExecuteEvent(classLCEvent lcEvent)
         {
             var flag = true;
-            lcEvent.Device.AbortEvent = mobj_abortEvent;
+            lcEvent.Device.AbortEvent = m_abortEvent;
             try
             {
                 var returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
@@ -134,11 +134,11 @@ namespace LcmsNet.Method
         public void ExecuteSample(object sender, DoWorkEventArgs e)
         {
             //Initialization
-            mobj_abortEvent.Reset();
+            m_abortEvent.Reset();
             var args = e.Argument as classColumnArgs;
-            mobj_sampleData = args.Sample;
-            var method = mobj_sampleData.LCMethod;
-            var methodEvents = mobj_sampleData.LCMethod.Events;
+            m_sampleData = args.Sample;
+            var method = m_sampleData.LCMethod;
+            var methodEvents = m_sampleData.LCMethod.Events;
             Exception ex = null;
             //We return the columnId as the "result" so the scheduler callback can determine which column events
             // are coming from.
@@ -199,7 +199,7 @@ namespace LcmsNet.Method
 
                             lcEvent.Device.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.InUseByMethod;
                             if (lcEvent.MethodAttribute.RequiresSampleInput == true)
-                                lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = mobj_sampleData;
+                                lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
 
                             // Try to execute the event, if it doesnt work, then we capture
                             // all relevant information and propogate it back out...At this time
@@ -267,7 +267,7 @@ namespace LcmsNet.Method
                                     CONST_VERBOSE_EVENTS);
                                 var timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
-                                timer.WaitMilliseconds(totalMilliseconds, mobj_abortEvent);
+                                timer.WaitMilliseconds(totalMilliseconds, m_abortEvent);
                                 var timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
                                 // Calculate the statistics of how long it took to run.
@@ -282,7 +282,7 @@ namespace LcmsNet.Method
                             //
 
                             lcEvent.Device.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.Error;
-                            mobj_sampleData = null;
+                            m_sampleData = null;
                             if (ex == null)
                             {
                                 ex = new Exception(string.Format("{0}.{1} failed.",

@@ -43,7 +43,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Data object reference to synchronize column data with.
         /// </summary>
-        private classColumnData mobj_columnData;
+        private classColumnData m_columnData;
 
         #endregion
 
@@ -54,32 +54,32 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public classColumnData Column
         {
-            get { return mobj_columnData; }
+            get { return m_columnData; }
             set
             {
                 if (value == null)
                     return;
 
-                if (mobj_columnData != null)
+                if (m_columnData != null)
                 {
-                    mobj_columnData.ColorChanged -= ColumnData_ColorChanged;
-                    mobj_columnData.StatusChanged -= ColumnData_StatusChanged;
-                    mobj_columnData.NameChanged -= ColumnData_NameChanged;
+                    m_columnData.ColorChanged -= ColumnData_ColorChanged;
+                    m_columnData.StatusChanged -= ColumnData_StatusChanged;
+                    m_columnData.NameChanged -= ColumnData_NameChanged;
                 }
 
-                mobj_columnData = value;
-                mobj_columnData.ColorChanged += new classColumnData.DelegateColorChanged(ColumnData_ColorChanged);
-                mobj_columnData.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
-                mobj_columnData.NameChanged += new classColumnData.DelegateNameChanged(ColumnData_NameChanged);
+                m_columnData = value;
+                m_columnData.ColorChanged += new classColumnData.DelegateColorChanged(ColumnData_ColorChanged);
+                m_columnData.StatusChanged += new classColumnData.DelegateStatusChanged(ColumnData_StatusChanged);
+                m_columnData.NameChanged += new classColumnData.DelegateNameChanged(ColumnData_NameChanged);
 
                 SetColumnStatus();
 
                 //
                 // Color
                 //
-                //BackColor = mobj_columnData.Color;
+                //BackColor = m_columnData.Color;
                 BackColor = Color.White;
-                mlabel_columnNameHeader.Text = "Column: " + mobj_columnData.ID.ToString() + " " + mobj_columnData.Name;
+                mlabel_columnNameHeader.Text = "Column: " + m_columnData.ID.ToString() + " " + m_columnData.Name;
             }
         }
 
@@ -92,9 +92,9 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         void mdataGrid_samples_SpecialPaint(object sender, PaintEventArgs e)
         {
-            if (mobj_columnData != null)
+            if (m_columnData != null)
             {
-                var name = mobj_columnData.Name;
+                var name = m_columnData.Name;
                 mlabel_columnNameHeader.Text = name;
             }
         }
@@ -124,7 +124,7 @@ namespace LcmsNet.SampleQueue.Forms
                     //
                     // Remove if it it does not belong to this column,
                     //
-                    if (sample.ColumnData.ID != mobj_columnData.ID)
+                    if (sample.ColumnData.ID != m_columnData.ID)
                     {
                         RemoveSamplesFromList(sample);
                     }
@@ -273,8 +273,8 @@ namespace LcmsNet.SampleQueue.Forms
 
             InitializeComponent();
             mdataGrid_samples.DataBindingComplete += (sender, args) => DisplayColumn(CONST_COLUMN_CHECKED, false);
-            mobj_columnData = new classColumnData();
-            mobj_columnData.ID = -1;
+            m_columnData = new classColumnData();
+            m_columnData.ID = -1;
 
             DisplayColumn(CONST_COLUMN_CHECKED, false);
             DisplayColumn(CONST_COLUMN_STATUS, false);
@@ -305,8 +305,8 @@ namespace LcmsNet.SampleQueue.Forms
 
             try
             {
-                mobj_columnData = new classColumnData();
-                mobj_columnData.ID = -1;
+                m_columnData = new classColumnData();
+                m_columnData.ID = -1;
 
                 DisplayColumn(CONST_COLUMN_CHECKED, false);
                 DisplayColumn(CONST_COLUMN_STATUS, false);
@@ -421,7 +421,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Status updates
             //
-            if (mobj_columnData.Status == enumColumnStatus.Disabled)
+            if (m_columnData.Status == enumColumnStatus.Disabled)
             {
                 this.Enabled = false;
                 BackColor = Color.DarkGray;
@@ -441,7 +441,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="newStatus"></param>
         void ColumnData_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
         {
-            if (sender == mobj_columnData)
+            if (sender == m_columnData)
             {
                 if (InvokeRequired == true)
                     BeginInvoke(new DelegateUpdateUserInterface(SetColumnStatus));
@@ -461,9 +461,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Make sure we have the right event.
             //
-            if (sender == mobj_columnData)
+            if (sender == m_columnData)
             {
-                if (mobj_columnData.Status != enumColumnStatus.Disabled)
+                if (m_columnData.Status != enumColumnStatus.Disabled)
                 {
                     //   BackColor = newColor;
                 }
@@ -487,15 +487,15 @@ namespace LcmsNet.SampleQueue.Forms
             // make sure we dont have duplicates.
             //
             foreach (var sample in samples)
-                sample.ColumnData = mobj_columnData;
+                sample.ColumnData = m_columnData;
 
             if (insertIntoUnused == false)
             {
-                mobj_sampleQueue.QueueSamples(samples, ColumnHandling);
+                m_sampleQueue.QueueSamples(samples, ColumnHandling);
             }
             else
             {
-                mobj_sampleQueue.InsertIntoUnusedSamples(samples, mobj_columnData, ColumnHandling);
+                m_sampleQueue.InsertIntoUnusedSamples(samples, m_columnData, ColumnHandling);
             }
         }
 
@@ -506,7 +506,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>True if added, and false if the data does not belong on this column.</returns>
         protected override bool AddSamplesToList(classSampleData sample)
         {
-            if (sample.ColumnData.ID == mobj_columnData.ID)
+            if (sample.ColumnData.ID == m_columnData.ID)
                 return base.AddSamplesToList(sample);
             return false;
         }
@@ -542,7 +542,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected override void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            mobj_sampleQueue.RemoveUnusedSamples(mobj_columnData, resortColumns);
+            m_sampleQueue.RemoveUnusedSamples(m_columnData, resortColumns);
         }
 
         /// <summary>
@@ -551,7 +551,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>True if an unused sample exists.</returns>
         protected override bool HasUnusedSamples()
         {
-            return mobj_sampleQueue.HasUnusedSamples(mobj_columnData);
+            return m_sampleQueue.HasUnusedSamples(m_columnData);
         }
 
         #endregion
@@ -560,7 +560,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         protected override bool CanAddLCMethodToItem(classLCMethod method)
         {
-            if (method.Column > -1 && method.Column == mobj_columnData.ID)
+            if (method.Column > -1 && method.Column == m_columnData.ID)
             {
                 return true;
             }
@@ -573,7 +573,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="method"></param>
         protected override void AddLCMethod(classLCMethod method)
         {
-            if (method.Column > -1 && method.Column == mobj_columnData.ID && !method.IsSpecialMethod)
+            if (method.Column > -1 && method.Column == m_columnData.ID && !method.IsSpecialMethod)
             {
                 base.AddLCMethod(method);
             }
@@ -605,13 +605,13 @@ namespace LcmsNet.SampleQueue.Forms
             var contains = ContainsMethod(method.Name);
             if (contains)
             {
-                if (method.Column != mobj_columnData.ID)
+                if (method.Column != m_columnData.ID)
                 {
                     // Remove the method from the drop down list for this guy.
                     RemoveMethodName(method.Name);
 
                     //// Also remove the reference to that method in the waiting queue.
-                    //List<classSampleData> samples = mobj_sampleQueue.GetWaitingQueue();
+                    //List<classSampleData> samples = m_sampleQueue.GetWaitingQueue();
                     //foreach (classSampleData sample in samples)
                     //{
                     //    if (sample.LCMethod != null && sample.LCMethod.Name == method.Name)

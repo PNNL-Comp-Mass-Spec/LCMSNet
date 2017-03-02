@@ -81,7 +81,7 @@ namespace LcmsNet.SampleQueue.Forms
                 this.BackColor = Color.White;
             }
 
-            mobj_sampleQueue.UpdateAllSamples();
+            m_sampleQueue.UpdateAllSamples();
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="samples"></param>
         protected override void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
-            var data = mobj_sampleQueue.NextColumnData;
+            var data = m_sampleQueue.NextColumnData;
 
             // Make sure that we have a column data,
             // and that not all of the columns are
@@ -104,7 +104,7 @@ namespace LcmsNet.SampleQueue.Forms
             //    return;
             //}
 
-            var index = mobj_sampleQueue.ColumnOrder.IndexOf(data);
+            var index = m_sampleQueue.ColumnOrder.IndexOf(data);
 
             foreach (var sample in samples)
             {
@@ -116,16 +116,16 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 // We still iterate here, in case the user wants to move the samples that were
                 // on other columns already.
-                data = mobj_sampleQueue.ColumnOrder[(++index) % mobj_sampleQueue.ColumnOrder.Count];
+                data = m_sampleQueue.ColumnOrder[(++index) % m_sampleQueue.ColumnOrder.Count];
             }
 
             if (insertIntoUnused == false)
             {
-                mobj_sampleQueue.QueueSamples(samples, ColumnHandling);
+                m_sampleQueue.QueueSamples(samples, ColumnHandling);
             }
             else
             {
-                mobj_sampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
+                m_sampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
             }
         }
 

@@ -25,7 +25,7 @@ namespace LcmsNet.Configuration
         {
             InitializeComponent();
 
-            mobj_systemData = new classSystemData();
+            m_systemData = new classSystemData();
             mdialog_color = new ColorDialog();
         }
 
@@ -38,7 +38,7 @@ namespace LcmsNet.Configuration
         /// </summary>
         public classSystemData SystemData
         {
-            get { return mobj_systemData; }
+            get { return m_systemData; }
             set
             {
                 if (value != null)
@@ -49,13 +49,13 @@ namespace LcmsNet.Configuration
                     var systemID = value.SystemIndex + 1;
                     mlabel_system.Text = "System " + systemID.ToString();
 
-                    if (mobj_systemData != null)
+                    if (m_systemData != null)
                     {
-                        mobj_systemData.ColorChanged -= SystemData_ColorChanged;
+                        m_systemData.ColorChanged -= SystemData_ColorChanged;
                     }
                     value.ColorChanged += new classSystemData.DelegateColorChanged(SystemData_ColorChanged);
                 }
-                mobj_systemData = value;
+                m_systemData = value;
             }
         }
 
@@ -70,7 +70,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// Object that describes the system information.
         /// </summary>
-        private classSystemData mobj_systemData;
+        private classSystemData m_systemData;
 
         /// <summary>
         /// Dialog box for displaying the choice of the color for the system.
@@ -109,8 +109,8 @@ namespace LcmsNet.Configuration
         {
             if (mdialog_color.ShowDialog() == DialogResult.OK)
             {
-                if (mobj_systemData != null)
-                    mobj_systemData.Color = mdialog_color.Color;
+                if (m_systemData != null)
+                    m_systemData.Color = mdialog_color.Color;
             }
         }
 

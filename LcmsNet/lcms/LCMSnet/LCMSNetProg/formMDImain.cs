@@ -72,12 +72,12 @@ namespace LcmsNet
             // Shut off the scheduler...
             try
             {
-                mobj_scheduler.Shutdown();
+                m_scheduler.Shutdown();
 
                 // Save queue to the cache
-                mobj_sampleQueue.StopRunningQueue();
+                m_sampleQueue.StopRunningQueue();
 
-                if (mobj_sampleQueue.IsDirty)
+                if (m_sampleQueue.IsDirty)
                 {
                     var result =
                         MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
@@ -85,7 +85,7 @@ namespace LcmsNet
                             ), "Confirm Queue Save", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
-                        mobj_sampleQueue.CacheQueue(true);
+                        m_sampleQueue.CacheQueue(true);
                     }
                 }
             }
@@ -126,7 +126,7 @@ namespace LcmsNet
         /// <summary>
         /// Method Scheduler and execution engine.
         /// </summary>
-        private classLCMethodScheduler mobj_scheduler;
+        private classLCMethodScheduler m_scheduler;
 
         /// <summary>
         /// Form that manages views of the sample queue class for handling sample
@@ -137,7 +137,7 @@ namespace LcmsNet
         /// <summary>
         /// Object that manages operation of the samples.
         /// </summary>
-        private classSampleQueue mobj_sampleQueue;
+        private classSampleQueue m_sampleQueue;
 
         /// <summary>
         /// Form that displays the configuration of the columns.
@@ -177,7 +177,7 @@ namespace LcmsNet
         /// <summary>
         /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
         /// </summary>
-        private classApplicationLogger mobj_logger;
+        private classApplicationLogger m_logger;
 
         /// <summary>
         /// default PDF generator, used to generate a pdf of information after a sample run.
@@ -198,7 +198,7 @@ namespace LcmsNet
         private void Initialize()
         {
             System.Threading.Thread.CurrentThread.Name = "Main Thread";
-            mobj_logger = new classApplicationLogger();
+            m_logger = new classApplicationLogger();
             this.Text = "LcmsNet Version: " + Application.ProductVersion;
             this.Text += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
             var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
@@ -235,8 +235,8 @@ namespace LcmsNet
 
 
             // Construct the sample queue object that holds and manages sample data ordering
-            mobj_sampleQueue = new classSampleQueue();
-            m_sampleManager = new formSampleManager(mobj_sampleQueue);
+            m_sampleQueue = new classSampleQueue();
+            m_sampleManager = new formSampleManager(m_sampleQueue);
 
             classDeviceManager.Manager.DeviceAdded += new DelegateDeviceUpdated(Manager_DeviceAdded);
             classDeviceManager.Manager.DeviceRemoved += new DelegateDeviceUpdated(Manager_DeviceRemoved);
@@ -255,11 +255,11 @@ namespace LcmsNet
 
 
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
-            mobj_scheduler = new classLCMethodScheduler(mobj_sampleQueue);
-            mobj_scheduler.Logger = mobj_logger;
-            mobj_scheduler.SchedulerError += new DelegateError(Scheduler_Error);
-            mobj_scheduler.SampleProgress += new DelegateSampleProgress(Scheduler_SampleProgress);
-            mobj_scheduler.Initialize();
+            m_scheduler = new classLCMethodScheduler(m_sampleQueue);
+            m_scheduler.Logger = m_logger;
+            m_scheduler.SchedulerError += new DelegateError(Scheduler_Error);
+            m_scheduler.SampleProgress += new DelegateSampleProgress(Scheduler_SampleProgress);
+            m_scheduler.Initialize();
 
             //
             // Logging and messaging
@@ -359,8 +359,8 @@ namespace LcmsNet
             //
             try
             {
-                mobj_sampleQueue.RetrieveQueueFromCache();
-                mobj_sampleQueue.IsDirty = false;
+                m_sampleQueue.RetrieveQueueFromCache();
+                m_sampleQueue.IsDirty = false;
             }
             catch (Exception ex)
             {
@@ -392,7 +392,7 @@ namespace LcmsNet
 
         void m_systemConfiguration_ColumnNameChanged(object sender, EventArgs e)
         {
-            mobj_sampleQueue.UpdateAllSamples();
+            m_sampleQueue.UpdateAllSamples();
         }
 
         #region Notification System.
@@ -420,14 +420,14 @@ namespace LcmsNet
             {
                 case enumDeviceNotificationAction.Stop:
                     classApplicationLogger.LogError(0, "The notification system is shutting down the queue");
-                    mobj_scheduler.Stop();
-                    //mobj_sampleQueue.StopRunningQueue();
+                    m_scheduler.Stop();
+                    //m_sampleQueue.StopRunningQueue();
                     classApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
                 case enumDeviceNotificationAction.Shutdown:
                     classApplicationLogger.LogError(0, "The notification system is shutting down the queue");
-                    //mobj_sampleQueue.StopRunningQueue();
-                    mobj_scheduler.Stop();
+                    //m_sampleQueue.StopRunningQueue();
+                    m_scheduler.Stop();
                     classApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
                 case enumDeviceNotificationAction.StopAndRunMethodNow:
@@ -440,8 +440,8 @@ namespace LcmsNet
                                 e.Name, e.Method.Name));
                         var columnID = e.Method.Column;
 
-                        //mobj_sampleQueue.StopRunningQueue();
-                        mobj_scheduler.Stop();
+                        //m_sampleQueue.StopRunningQueue();
+                        m_scheduler.Stop();
                         var stupidSample = new classSampleData();
                         stupidSample.DmsData.DatasetName = string.Format("NotificationAction--{0}", e.Method.Name);
                         if (columnID >= 0)
@@ -449,7 +449,7 @@ namespace LcmsNet
                             stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
                         }
                         stupidSample.LCMethod = e.Method;
-                        mobj_sampleQueue.RunNext(stupidSample);
+                        m_sampleQueue.RunNext(stupidSample);
 
 
                         classApplicationLogger.LogError(0,
@@ -474,7 +474,7 @@ namespace LcmsNet
                             stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
                         }
                         stupidSample.LCMethod = e.Method;
-                        mobj_sampleQueue.RunNext(stupidSample);
+                        m_sampleQueue.RunNext(stupidSample);
 
                         classApplicationLogger.LogError(0,
                             string.Format(
@@ -483,9 +483,9 @@ namespace LcmsNet
                                 e.Name,
                                 e.Method.Name));
 
-                        if (!mobj_sampleQueue.IsRunning)
+                        if (!m_sampleQueue.IsRunning)
                         {
-                            mobj_sampleQueue.StartSamples();
+                            m_sampleQueue.StartSamples();
                         }
                     }
                     break;
@@ -750,7 +750,7 @@ namespace LcmsNet
             //
             // Tell the scheduler to stop running!
             //
-            mobj_scheduler.Stop();
+            m_scheduler.Stop();
         }
 
         /// <summary>

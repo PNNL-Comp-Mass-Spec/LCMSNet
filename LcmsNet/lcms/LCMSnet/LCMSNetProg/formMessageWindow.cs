@@ -23,8 +23,8 @@ namespace LcmsNet
             InitializeComponent();
             m_messageLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
             m_errorLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
-            mobj_lockMessages = new object();
-            mobj_lockErrors = new object();
+            m_lockMessages = new object();
+            m_lockErrors = new object();
             SelectErrorTab();
         }
 
@@ -79,7 +79,7 @@ namespace LcmsNet
             }
             else
             {
-                lock (mobj_lockMessages)
+                lock (m_lockMessages)
                 {
                     mlistBox_messages.Items.Insert(0, message);
                     mlistBox_messages.SelectedIndex = 0;
@@ -96,7 +96,7 @@ namespace LcmsNet
                     ErrorPresent(this, new EventArgs());
                 }
                 var exceptions = "";
-                lock (mobj_lockErrors)
+                lock (m_lockErrors)
                 {
                     if (args.Exception != null)
                     {
@@ -145,7 +145,7 @@ namespace LcmsNet
 
         private void button1_Click(object sender, EventArgs e)
         {
-            lock (mobj_lockMessages)
+            lock (m_lockMessages)
             {
                 mlistBox_messages.Items.Clear();
             }
@@ -248,8 +248,8 @@ namespace LcmsNet
         /// </summary>
         private int m_errorLevel;
 
-        private readonly object mobj_lockMessages;
-        private readonly object mobj_lockErrors;
+        private readonly object m_lockMessages;
+        private readonly object m_lockErrors;
 
         #endregion
 

@@ -127,7 +127,7 @@ namespace LcmsNetDataClasses
         public classSampleData(bool isDummySample = true)
         {
             IsDummySample = isDummySample;
-            mobj_DmsData = new classDMSData();
+            m_DmsData = new classDMSData();
 
             //
             // Set the default column to the first column,
@@ -135,10 +135,10 @@ namespace LcmsNetDataClasses
             //
             mlong_sequenceNumber = -1;
 
-            mobj_palData = new classPalData();
-            mobj_columnData = new classColumnData();
-            mobj_instrumentData = new classInstrumentInfo();
-            mobj_method = null;
+            m_palData = new classPalData();
+            m_columnData = new classColumnData();
+            m_instrumentData = new classInstrumentInfo();
+            m_method = null;
             Volume = CONST_MIN_SAMPLE_VOLUME;
             //
             // Default state is always to be queued but not waiting to run.
@@ -253,7 +253,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// DMS Data structure.
         /// </summary>
-        classDMSData mobj_DmsData;
+        classDMSData m_DmsData;
 
         /// <summary>
         /// Sequence order of the sample to run.
@@ -263,7 +263,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Pal Data reference.
         /// </summary>
-        private classPalData mobj_palData;
+        private classPalData m_palData;
 
         /// <summary>
         /// Volume of sample to inject.
@@ -273,7 +273,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Information regarding what column the sample is to be, or did run on.
         /// </summary>
-        private classColumnData mobj_columnData;
+        private classColumnData m_columnData;
 
         /// <summary>
         /// Unique ID for this sample not related to request name or sequence ID.
@@ -283,12 +283,12 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface.
         /// </summary>
-        private classLCMethod mobj_method;
+        private classLCMethod m_method;
 
         /// <summary>
         /// Instrument info.
         /// </summary>
-        private classInstrumentInfo mobj_instrumentData;
+        private classInstrumentInfo m_instrumentData;
 
         /// <summary>
         /// Operator performing LC run
@@ -315,8 +315,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public classInstrumentInfo InstrumentData
         {
-            get { return mobj_instrumentData; }
-            set { mobj_instrumentData = value; }
+            get { return m_instrumentData; }
+            set { m_instrumentData = value; }
         }
 
         /// <summary>
@@ -324,8 +324,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public classLCMethod LCMethod
         {
-            get { return mobj_method; }
-            set { mobj_method = value; }
+            get { return m_method; }
+            set { m_method = value; }
         }
 
         /// <summary>
@@ -333,8 +333,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public classDMSData DmsData
         {
-            get { return mobj_DmsData; }
-            set { mobj_DmsData = value; }
+            get { return m_DmsData; }
+            set { m_DmsData = value; }
         }
 
         /// <summary>
@@ -351,8 +351,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public classPalData PAL
         {
-            get { return mobj_palData; }
-            set { mobj_palData = value; }
+            get { return m_palData; }
+            set { m_palData = value; }
         }
 
         /// <summary>
@@ -369,26 +369,26 @@ namespace LcmsNetDataClasses
         /// </summary>
         public classColumnData ColumnData
         {
-            get { return mobj_columnData; }
+            get { return m_columnData; }
             set
             {
-                if (mobj_columnData != null && mobj_columnData != value)
+                if (m_columnData != null && m_columnData != value)
                 {
-                    mobj_columnData.NameChanged -= mobj_columnData_NameChanged;
+                    m_columnData.NameChanged -= m_columnData_NameChanged;
                 }
 
-                var sameData = (mobj_columnData == value);
+                var sameData = (m_columnData == value);
 
-                mobj_columnData = value;
+                m_columnData = value;
 
-                if (mobj_columnData != null && !sameData)
+                if (m_columnData != null && !sameData)
                 {
-                    mobj_columnData.NameChanged += new classColumnData.DelegateNameChanged(mobj_columnData_NameChanged);
+                    m_columnData.NameChanged += new classColumnData.DelegateNameChanged(m_columnData_NameChanged);
                 }
             }
         }
 
-        void mobj_columnData_NameChanged(object sender, string name, string oldName)
+        void m_columnData_NameChanged(object sender, string name, string oldName)
         {
             if (oldName == "")
                 return;

@@ -28,7 +28,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// The associated device.
         /// </summary>
-        protected IDevice mobj_device;
+        protected IDevice m_device;
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="device"></param>
         protected void SetBaseDevice(IDevice device)
         {
-            mobj_device = device;
+            m_device = device;
         }
 
         #endregion
@@ -107,7 +107,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public new string Name
         {
-            get { return mobj_device.Name; }
+            get { return m_device.Name; }
             set { }
         }
 

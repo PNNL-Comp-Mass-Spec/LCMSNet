@@ -48,7 +48,7 @@ namespace LcmsNet.SampleQueue
 
         #region "Class variables"
 
-        List<classSampleData> mobj_DmsRequestList;
+        List<classSampleData> m_DmsRequestList;
         string m_MatchString;
         string m_DMSConnStr;
         string m_CartName;
@@ -446,9 +446,9 @@ namespace LcmsNet.SampleQueue
 
             // Add the requests to the listview
 //              listviewAvailableRequests.BeginUpdate();
-            if (mobj_DmsRequestList == null)
+            if (m_DmsRequestList == null)
             {
-                mobj_DmsRequestList = new List<classSampleData>();
+                m_DmsRequestList = new List<classSampleData>();
             }
 
             var availReqList = new ArrayList();
@@ -457,17 +457,17 @@ namespace LcmsNet.SampleQueue
             {
                 // Determine if already in list of requests
                 m_MatchString = request.DmsData.RequestName;
-                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                var foundIndx = m_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx == -1)
                 {
                     // Request not found, so add to list of all requests
-                    mobj_DmsRequestList.Add(request);
+                    m_DmsRequestList.Add(request);
                     // Add request data to the listview
                     AddNewItemToRunListView(request, ref availReqList);
                 }
                 else
                 {
-                    if (mobj_DmsRequestList[foundIndx].DmsData.SelectedToRun)
+                    if (m_DmsRequestList[foundIndx].DmsData.SelectedToRun)
                     {
                         // Request was found and is already in Requests To Run list, so do nothing
                     }
@@ -536,10 +536,10 @@ namespace LcmsNet.SampleQueue
                 listViewRequestsToRun.Items.Add(tempItemToMove);
                 // Update main list of DMS items
                 m_MatchString = tempItem.Text;
-                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                var foundIndx = m_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx != -1)
                 {
-                    mobj_DmsRequestList[foundIndx].DmsData.SelectedToRun = true;
+                    m_DmsRequestList[foundIndx].DmsData.SelectedToRun = true;
                 }
                 else
                 {
@@ -565,10 +565,10 @@ namespace LcmsNet.SampleQueue
             {
                 // Update main list of DMS items
                 m_MatchString = tempItem.Text;
-                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                var foundIndx = m_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx != -1)
                 {
-                    mobj_DmsRequestList.RemoveAt(foundIndx);
+                    m_DmsRequestList.RemoveAt(foundIndx);
                 }
                 else
                 {
@@ -583,7 +583,7 @@ namespace LcmsNet.SampleQueue
 
         /// <summary>
         /// Predicate function to find index of request matching specified request number
-        /// Used for mobj_DmsRequestList FindIndex method
+        /// Used for m_DmsRequestList FindIndex method
         /// </summary>
         /// <param name="request">classDMSData object passed in from List<T>.FindIndex method</param>
         /// <returns>True if match is made; otherwise False</returns>
@@ -606,7 +606,7 @@ namespace LcmsNet.SampleQueue
         {
             listviewAvailableRequests.Items.Clear();
             listViewRequestsToRun.Items.Clear();
-            mobj_DmsRequestList.Clear();
+            m_DmsRequestList.Clear();
         }
 
         /// <summary>
@@ -622,7 +622,7 @@ namespace LcmsNet.SampleQueue
             {
                 // Find index of item in master request list
                 m_MatchString = tempItem.Text;
-                var foundIndx = mobj_DmsRequestList.FindIndex(PredContainsRequestName);
+                var foundIndx = m_DmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx == -1)
                 {
                     // Request has disappeared from master list (shouldn't ever happen, but.....)
@@ -631,7 +631,7 @@ namespace LcmsNet.SampleQueue
                     retList.Clear();
                     return retList;
                 }
-                var tempSampleData = (classSampleData) mobj_DmsRequestList[foundIndx].Clone();
+                var tempSampleData = (classSampleData) m_DmsRequestList[foundIndx].Clone();
                 tempSampleData.DmsData.CartName = m_CartName;
                 tempSampleData.DmsData.CartConfigName = m_CartConfigName;
 
@@ -659,7 +659,7 @@ namespace LcmsNet.SampleQueue
             var reqIDs = "";
 
             // Build a string of request IDs for stored procedure call
-            foreach (var tempDMSData in mobj_DmsRequestList)
+            foreach (var tempDMSData in m_DmsRequestList)
             {
                 if (tempDMSData.DmsData.SelectedToRun)
                 {

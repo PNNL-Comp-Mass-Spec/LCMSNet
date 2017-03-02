@@ -27,7 +27,7 @@ namespace LcmsNet.Configuration
         public controlColumn()
         {
             InitializeComponent();
-            mobj_columnData = new classColumnData();
+            m_columnData = new classColumnData();
             mdialog_color = new ColorDialog();
 
             mcomboBox_names.SelectedIndexChanged += new EventHandler(mcomboBox_names_SelectedIndexChanged);
@@ -46,7 +46,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// Column configuration object.
         /// </summary>
-        private classColumnData mobj_columnData;
+        private classColumnData m_columnData;
 
         /// <summary>
         /// Dialog box for selecting the color of the column.
@@ -87,14 +87,14 @@ namespace LcmsNet.Configuration
         /// </summary>
         public classColumnData ColumnData
         {
-            get { return mobj_columnData; }
+            get { return m_columnData; }
             set
             {
                 //
                 // Reset the enabled
                 //
 
-                mobj_columnData = value;
+                m_columnData = value;
                 if (value != null)
                 {
                     UpdateUserInterface();
@@ -205,13 +205,13 @@ namespace LcmsNet.Configuration
         /// </summary>
         private void UpdateUserInterface()
         {
-            if (mobj_columnData == null)
+            if (m_columnData == null)
                 return;
 
-            SetColor(mobj_columnData.Color);
-            SetStatusMessage(this, mobj_columnData.Status, mobj_columnData.Status);
+            SetColor(m_columnData.Color);
+            SetStatusMessage(this, m_columnData.Status, m_columnData.Status);
 
-            if (mobj_columnData.Status != enumColumnStatus.Disabled)
+            if (m_columnData.Status != enumColumnStatus.Disabled)
                 mcheckBox_enabled.Checked = true;
             else
                 mcheckBox_enabled.Checked = false;
@@ -224,10 +224,10 @@ namespace LcmsNet.Configuration
         {
             if (mcomboBox_names.Items.Count < 1) return; // Do nothing because the names haven't been loaded yet
 
-            if ((mobj_columnData == null) || (mobj_columnData.Name == null) || (mobj_columnData.Name == ""))
+            if ((m_columnData == null) || (m_columnData.Name == null) || (m_columnData.Name == ""))
                 return; // No column name specified
 
-            var nameIndx = mcomboBox_names.FindStringExact(mobj_columnData.Name);
+            var nameIndx = mcomboBox_names.FindStringExact(m_columnData.Name);
 
             if (nameIndx == -1)
             {
@@ -252,7 +252,7 @@ namespace LcmsNet.Configuration
         {
             if (mdialog_color.ShowDialog() == DialogResult.OK)
             {
-                mobj_columnData.Color = mdialog_color.Color;
+                m_columnData.Color = mdialog_color.Color;
             }
         }
 
@@ -263,12 +263,12 @@ namespace LcmsNet.Configuration
         /// <param name="e"></param>
         private void mcheckBox_enabled_CheckedChanged(object sender, EventArgs e)
         {
-            if (mobj_columnData != null)
+            if (m_columnData != null)
             {
                 if (mcheckBox_enabled.Checked == false)
-                    mobj_columnData.Status = enumColumnStatus.Disabled;
+                    m_columnData.Status = enumColumnStatus.Disabled;
                 if (mcheckBox_enabled.Checked == true)
-                    mobj_columnData.Status = enumColumnStatus.Idle;
+                    m_columnData.Status = enumColumnStatus.Idle;
             }
         }
 
@@ -279,13 +279,13 @@ namespace LcmsNet.Configuration
         /// <param name="e"></param>
         void mcomboBox_names_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mobj_columnData != null)
+            if (m_columnData != null)
             {
                 // If selected index changed due to user action, then update the column data
                 //  Otherwise, index may have changed because of initializing the combo box and should be ignored
                 if (m_ComboHasFocus)
                 {
-                    mobj_columnData.Name = mcomboBox_names.SelectedItem.ToString();
+                    m_columnData.Name = mcomboBox_names.SelectedItem.ToString();
                     if (ColumnNamesChanged != null)
                     {
                         ColumnNamesChanged();

@@ -49,8 +49,8 @@ namespace LcmsNetDataClasses.Logging
 
         #region "Class variables"
 
-        private static readonly object mobj_lock = "AstringToLockOn";
-        private static readonly object mobj_writeLock = "AnotherStringToLockOn";
+        private static readonly object m_lock = "AstringToLockOn";
+        private static readonly object m_writeLock = "AnotherStringToLockOn";
         private static bool m_LogDbFileCreated = false;
         private static string m_DbFileName;
         private static string m_ConnStr;
@@ -101,7 +101,7 @@ namespace LcmsNetDataClasses.Logging
                 UnwrapExceptionMsgs(args.Exception, out exMsg);
             }
             sqlCmdBlder.Append("'" + ReplaceQuotes(exMsg) + "')");
-            lock (mobj_writeLock)
+            lock (m_writeLock)
             {
                 WriteLogMsgToDb(sqlCmdBlder.ToString(), m_ConnStr);
             }
@@ -148,7 +148,7 @@ namespace LcmsNetDataClasses.Logging
 
             // Create blank field for exception
             sqlCmdBlder.Append("'')");
-            lock (mobj_writeLock)
+            lock (m_writeLock)
             {
                 WriteLogMsgToDb(sqlCmdBlder.ToString(), m_ConnStr);
             }
@@ -169,7 +169,7 @@ namespace LcmsNetDataClasses.Logging
                     var check = false;
                     try
                     {
-                        check = Monitor.TryEnter(mobj_lock);
+                        check = Monitor.TryEnter(m_lock);
                         if (check && !m_LogDbFileCreated)
                         {
                             // Database wasn't ready, so try to create it
@@ -183,7 +183,7 @@ namespace LcmsNetDataClasses.Logging
                     {
                         if (check)
                         {
-                            Monitor.Exit(mobj_lock);
+                            Monitor.Exit(m_lock);
                         }
                     }
                 }

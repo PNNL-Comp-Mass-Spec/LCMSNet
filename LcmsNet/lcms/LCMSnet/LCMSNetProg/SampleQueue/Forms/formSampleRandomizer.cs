@@ -20,7 +20,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         public List<classSampleData> OutputSampleList
         {
-            get { return mobj_OutputSampleList; }
+            get { return m_OutputSampleList; }
         } // End property
 
         #endregion
@@ -48,7 +48,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             statusLabel.Text = "Randomizing input list.";
-            RandomizeSamples(mobj_InputSampleList);
+            RandomizeSamples(m_InputSampleList);
             LoadOuputListview();
             RaiseEventRandomizeComplete();
         }
@@ -61,9 +61,9 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        readonly List<classSampleData> mobj_InputSampleList;
-        List<classSampleData> mobj_OutputSampleList;
-        Dictionary<string, Type> mobj_DictRandomizers = new Dictionary<string, Type>();
+        readonly List<classSampleData> m_InputSampleList;
+        List<classSampleData> m_OutputSampleList;
+        Dictionary<string, Type> m_DictRandomizers = new Dictionary<string, Type>();
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace LcmsNet.SampleQueue.Forms
         public formSampleRandomizer(List<classSampleData> InputList)
         {
             InitializeComponent();
-            mobj_InputSampleList = InputList;
+            m_InputSampleList = InputList;
             InitControls(InputList);
         }
 
@@ -87,19 +87,19 @@ namespace LcmsNet.SampleQueue.Forms
         {
             // Load list of randomizer types
             comboBoxRandomizers.Items.Clear();
-            mobj_DictRandomizers = classRandomizerPluginTools.GetRandomizerPlugins();
+            m_DictRandomizers = classRandomizerPluginTools.GetRandomizerPlugins();
 
-            if (mobj_DictRandomizers.Count < 1)
+            if (m_DictRandomizers.Count < 1)
                 return;
 
-            foreach (var randomizer in mobj_DictRandomizers.Keys)
+            foreach (var randomizer in m_DictRandomizers.Keys)
             {
                 comboBoxRandomizers.Items.Add(randomizer);
             }
             comboBoxRandomizers.SelectedIndex = 0;
 
             // Load input listview
-            foreach (var Sample in mobj_InputSampleList)
+            foreach (var Sample in m_InputSampleList)
             {
                 var NewItem = new ListViewItem(Sample.SequenceID.ToString());
                 NewItem.SubItems.Add(Sample.DmsData.DatasetName);
@@ -115,9 +115,9 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="InputSamples">List of input samples to be randomized</param>
         void RandomizeSamples(List<classSampleData> InputSamples)
         {
-            var randomizerObject = Activator.CreateInstance(mobj_DictRandomizers[comboBoxRandomizers.Text]);
+            var randomizerObject = Activator.CreateInstance(m_DictRandomizers[comboBoxRandomizers.Text]);
             var randomizer = randomizerObject as IRandomizerInterface;
-            mobj_OutputSampleList = randomizer.RandomizeSamples(InputSamples);
+            m_OutputSampleList = randomizer.RandomizeSamples(InputSamples);
 
             statusLabel.Text = "Randomization Complete.";
 
@@ -130,7 +130,7 @@ namespace LcmsNet.SampleQueue.Forms
         void LoadOuputListview()
         {
             listViewOutput.Items.Clear();
-            foreach (var Sample in mobj_OutputSampleList)
+            foreach (var Sample in m_OutputSampleList)
             {
                 var NewItem = new ListViewItem(Sample.SequenceID.ToString());
                 NewItem.SubItems.Add(Sample.DmsData.DatasetName);

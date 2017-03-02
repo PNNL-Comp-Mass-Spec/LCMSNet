@@ -82,10 +82,10 @@ namespace LcmsNetDataClasses.Devices
         {
             get
             {
-                if (mobj_deviceManager == null)
-                    mobj_deviceManager = new classDeviceManager();
+                if (m_deviceManager == null)
+                    m_deviceManager = new classDeviceManager();
 
-                return mobj_deviceManager;
+                return m_deviceManager;
             }
             set { }
         }
@@ -110,7 +110,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Static Device Manager Reference.
         /// </summary>
-        private static classDeviceManager mobj_deviceManager = null;
+        private static classDeviceManager m_deviceManager = null;
 
         /// <summary>
         /// Fired when a device is successfully added.

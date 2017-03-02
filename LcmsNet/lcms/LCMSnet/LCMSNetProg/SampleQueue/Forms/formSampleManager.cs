@@ -64,7 +64,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Manages adding the samples to the queue.
         /// </summary>
-        private classSampleQueue mobj_sampleQueue;
+        private classSampleQueue m_sampleQueue;
 
         /// <summary>
         /// Dialog for exporting samples to a file.
@@ -119,28 +119,28 @@ namespace LcmsNet.SampleQueue.Forms
         private void Initialize(classSampleQueue queue)
         {
             m_dmsView = new formDMSView();
-            mobj_sampleQueue = queue;
+            m_sampleQueue = queue;
             mdialog_importQueue = new OpenFileDialog();
 
-            if (mobj_sampleQueue != null)
+            if (m_sampleQueue != null)
             {
-                mobj_sampleQueue.SamplesWaitingToRun +=
-                    new classSampleQueue.DelegateSamplesModifiedHandler(mobj_sampleQueue_SamplesWaitingToRun);
+                m_sampleQueue.SamplesWaitingToRun +=
+                    new classSampleQueue.DelegateSamplesModifiedHandler(m_sampleQueue_SamplesWaitingToRun);
             }
 
             //
             // Load up the data to the appropiate sub-controls.
             //
             mcontrol_sequenceView.DMSView = m_dmsView;
-            mcontrol_sequenceView.SampleQueue = mobj_sampleQueue;
+            mcontrol_sequenceView.SampleQueue = m_sampleQueue;
             mcontrol_column1.DMSView = m_dmsView;
             mcontrol_column2.DMSView = m_dmsView;
             mcontrol_column3.DMSView = m_dmsView;
             mcontrol_column4.DMSView = m_dmsView;
-            mcontrol_column1.SampleQueue = mobj_sampleQueue;
-            mcontrol_column2.SampleQueue = mobj_sampleQueue;
-            mcontrol_column3.SampleQueue = mobj_sampleQueue;
-            mcontrol_column4.SampleQueue = mobj_sampleQueue;
+            mcontrol_column1.SampleQueue = m_sampleQueue;
+            mcontrol_column2.SampleQueue = m_sampleQueue;
+            mcontrol_column3.SampleQueue = m_sampleQueue;
+            mcontrol_column4.SampleQueue = m_sampleQueue;
             mcontrol_column1.Column = classCartConfiguration.Columns[0];
             mcontrol_column2.Column = classCartConfiguration.Columns[1];
             mcontrol_column3.Column = classCartConfiguration.Columns[2];
@@ -269,7 +269,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void mobj_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
             if (InvokeRequired)
             {
@@ -327,7 +327,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             try
             {
-                mobj_sampleQueue.SaveQueue(name, writer, true);
+                m_sampleQueue.SaveQueue(name, writer, true);
                 classApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
             }
             catch (Exception ex)
@@ -345,7 +345,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 var mrmFilePath = mdialog_exportMRMFiles.SelectedPath;
                 var mrmWriter = new classMRMFileExporter();
-                mobj_sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
+                m_sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
             }
         }
 
@@ -377,7 +377,7 @@ namespace LcmsNet.SampleQueue.Forms
 
                 try
                 {
-                    mobj_sampleQueue.LoadQueue(mdialog_importQueue.FileName, reader);
+                    m_sampleQueue.LoadQueue(mdialog_importQueue.FileName, reader);
                     classApplicationLogger.LogMessage(0,
                         string.Format("The queue was successfully imported from {0}.", mdialog_importQueue.FileName));
                 }
@@ -418,7 +418,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Moves the samples from the running queue back onto the
             // waiting queue.
             //
-            mobj_sampleQueue.StopRunningQueue();
+            m_sampleQueue.StopRunningQueue();
             ToggleRunButton(true, false);
         }
 
@@ -429,12 +429,12 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void mbutton_run_Click(object sender, EventArgs e)
         {
-            if (mobj_sampleQueue.IsRunning)
+            if (m_sampleQueue.IsRunning)
             {
                 classApplicationLogger.LogMessage(0, "Samples are already running.");
                 return;
             }
-            var samples = mobj_sampleQueue.GetRunningQueue();
+            var samples = m_sampleQueue.GetRunningQueue();
 
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
@@ -525,10 +525,10 @@ namespace LcmsNet.SampleQueue.Forms
                     if (result == DialogResult.No)
                         return;
                 }
-                mobj_sampleQueue.UpdateSamples(samples);
+                m_sampleQueue.UpdateSamples(samples);
             }
             //SynchronizeSystemClock();
-            mobj_sampleQueue.StartSamples();
+            m_sampleQueue.StartSamples();
             ToggleRunButton(false, true);
         }
 
@@ -583,7 +583,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             try
             {
-                mobj_sampleQueue.CacheQueue(false);
+                m_sampleQueue.CacheQueue(false);
                 classApplicationLogger.LogMessage(0,
                     "Queue saved \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "\".");
             }
@@ -608,7 +608,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
             {
-                mobj_sampleQueue.CacheQueue(mdialog_exportQueue.FileName);
+                m_sampleQueue.CacheQueue(mdialog_exportQueue.FileName);
                 this.Text = "Sample Queue - " + mdialog_exportQueue.FileName;
                 classApplicationLogger.LogMessage(0,
                     "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
@@ -674,12 +674,12 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mbutton_undo_Click(object sender, EventArgs e)
         {
-            mobj_sampleQueue.Undo();
+            m_sampleQueue.Undo();
         }
 
         private void mbutton_redo_Click(object sender, EventArgs e)
         {
-            mobj_sampleQueue.Redo();
+            m_sampleQueue.Redo();
         }
 
         private void mcontrol_sequenceView_Load(object sender, EventArgs e)

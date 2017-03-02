@@ -61,7 +61,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Static object that manages each LC method to be accessible to other objects.
         /// </summary>
-        private static classLCMethodManager mobj_manager;
+        private static classLCMethodManager m_manager;
 
         #endregion
 
@@ -143,11 +143,11 @@ namespace LcmsNet.Method
         {
             get
             {
-                if (mobj_manager == null)
+                if (m_manager == null)
                 {
-                    mobj_manager = new classLCMethodManager();
+                    m_manager = new classLCMethodManager();
                 }
-                return mobj_manager;
+                return m_manager;
             }
         }
 
