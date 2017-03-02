@@ -55,10 +55,8 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        int m_TrayNumber;
         DataTable m_DataTable = new DataTable("DummyTable");
         readonly DataView m_DataView = new DataView();
-        bool m_MasterView;
         bool m_ShowUnassigned = true;
 
         #endregion
@@ -69,19 +67,11 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Properties"
 
-        public int TrayNumber
-        {
-            get { return m_TrayNumber; }
-            set { m_TrayNumber = value; }
-        }
+        public int TrayNumber { get; set; }
 
         public int SampleCount => dataGridView1.Rows.Count;
 
-        public bool MasterView
-        {
-            get { return m_MasterView; }
-            set { m_MasterView = value; }
-        }
+        public bool MasterView { get; set; }
 
         #endregion
 
@@ -171,9 +161,9 @@ namespace LcmsNet.SampleQueue.Forms
 
             m_DataView.Table = m_DataTable;
             dataGridView1.DataSource = m_DataView;
-            if (!m_MasterView)
+            if (!MasterView)
             {
-                m_DataView.RowFilter = "Tray = " + m_TrayNumber.ToString();
+                m_DataView.RowFilter = "Tray = " + TrayNumber.ToString();
             }
             else SetDataView();
         }
@@ -183,7 +173,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private void SetDataView()
         {
-            if (m_MasterView)
+            if (MasterView)
             {
                 if (m_ShowUnassigned)
                 {
@@ -191,7 +181,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 else m_DataView.RowFilter = "";
             }
-            else m_DataView.RowFilter = "Tray = " + m_TrayNumber.ToString();
+            else m_DataView.RowFilter = "Tray = " + TrayNumber.ToString();
         }
 
         /// <summary>
@@ -236,7 +226,7 @@ namespace LcmsNet.SampleQueue.Forms
 //              m_DataView.RowStateFilter = DataViewRowState.Added | DataViewRowState.Unchanged;
             SetDataView();
             dataGridView1.DataSource = m_DataView;
-            RowModified?.Invoke(this, m_TrayNumber);
+            RowModified?.Invoke(this, TrayNumber);
         }
 
         // Debug code

@@ -21,17 +21,14 @@ namespace LcmsNetDataClasses.Devices
     /// </summary>
     public class classAutoSampleEventArgs : EventArgs
     {
-        private readonly List<string> m_methodList;
-        private readonly List<string> m_trayList;
-
         public classAutoSampleEventArgs(List<string> trayList, List<string> methodList)
         {
-            m_trayList = trayList;
-            m_methodList = methodList;
+            TrayList = trayList;
+            MethodList = methodList;
         }
 
-        public List<string> TrayList => m_trayList;
+        public List<string> TrayList { get; }
 
-        public List<string> MethodList => m_methodList;
+        public List<string> MethodList { get; }
     }
 }

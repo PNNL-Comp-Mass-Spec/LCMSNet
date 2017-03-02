@@ -7,6 +7,7 @@
 // Last modified 04/18/2014
 //*********************************************************************************************************
 
+using System.Globalization;
 using System.Text;
 
 namespace LcmsNetDataClasses
@@ -24,7 +25,6 @@ namespace LcmsNetDataClasses
     public class ModelStatus
     {
         private static long m_availableID;
-        private string m_timeOfOccurance;
 
         public ModelStatus()
         {
@@ -34,7 +34,7 @@ namespace LcmsNetDataClasses
             Description = "Generic ModelStatus";
             EventDevice = null;
             Event = string.Empty;
-            Time = LcmsNetSDK.TimeKeeper.Instance.Now.ToString();
+            Time = LcmsNetSDK.TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture);
                 // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString();
         }
 
@@ -47,7 +47,7 @@ namespace LcmsNetDataClasses
             Description = description;
             Category = category;
             Event = eventName;
-            Time = time != string.Empty ? time : LcmsNetSDK.TimeKeeper.Instance.Now.ToString();
+            Time = time != string.Empty ? time : LcmsNetSDK.TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture);
             EventDevice = device;
             ProblemDevice = problemDevice;
         }
@@ -88,11 +88,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// returns the time that the status change was recorded.
         /// </summary>
-        public string Time
-        {
-            get { return m_timeOfOccurance; }
-            set { m_timeOfOccurance = value; }
-        }
+        public string Time { get; set; }
 
         /// <summary>
         /// provides a string representation of what happened on this mode status change.

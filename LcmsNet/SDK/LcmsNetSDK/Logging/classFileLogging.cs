@@ -27,8 +27,6 @@ namespace LcmsNetDataClasses.Logging
         /// </summary>
         private static bool m_logFileCreated;
 
-        private static string m_LogFilePath;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -57,7 +55,7 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Gets the file log path.
         /// </summary>
-        public static string LogPath => m_LogFilePath;
+        public static string LogPath { get; private set; }
 
         /// <summary>
         /// Gets the file log path.
@@ -168,18 +166,18 @@ namespace LcmsNetDataClasses.Logging
                     // because our file names will be Date_TimeOfDay which 
                     // will change.
                     // 
-                    if (m_logFileCreated == false || string.IsNullOrWhiteSpace(m_LogFilePath))
+                    if (m_logFileCreated == false || string.IsNullOrWhiteSpace(LogPath))
                     {
                         var path = CreateLogFilePath();
-                        m_LogFilePath = path;
+                        LogPath = path;
                         logFile = new FileInfo(path);
 
-                        ReportLogFilePath(m_LogFilePath);
+                        ReportLogFilePath(LogPath);
                         m_logFileCreated = true;
                     }
                     else
                     {
-                        logFile = new FileInfo(m_LogFilePath);
+                        logFile = new FileInfo(LogPath);
                     }
 
                     if (logFile.Directory == null)

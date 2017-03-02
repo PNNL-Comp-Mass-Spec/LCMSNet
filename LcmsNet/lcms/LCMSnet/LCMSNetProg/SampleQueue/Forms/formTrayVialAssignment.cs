@@ -30,7 +30,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Properties"
 
-        public List<classSampleData> SampleList => m_SampleList;
+        public List<classSampleData> SampleList { get; private set; }
 
         #endregion
 
@@ -48,7 +48,6 @@ namespace LcmsNet.SampleQueue.Forms
         #region "Class variables"
 
         List<string> m_TrayNames; // List of tray names used by PAL on this cart
-        List<classSampleData> m_SampleList; // List of samples to have tray/vial assignments
 
         DataTable m_DataList = new DataTable("SampleTable");
         // Table to hold data for samples in easy-to-handle format
@@ -79,11 +78,11 @@ namespace LcmsNet.SampleQueue.Forms
         public void LoadSampleList(List<string> trayNames, List<classSampleData> samples)
         {
             m_TrayNames = trayNames;
-            m_SampleList = samples;
+            SampleList = samples;
             m_DataList.Clear();
 
             // Load sample information into data table
-            foreach (var sample in m_SampleList)
+            foreach (var sample in SampleList)
             {
                 AddSampleToDataTable(sample);
             }
@@ -256,9 +255,9 @@ namespace LcmsNet.SampleQueue.Forms
         private int GetSampleIndex(int sampleId)
         {
             var foundIndx = -1;
-            for (var indx = 0; indx < m_SampleList.Count; indx++)
+            for (var indx = 0; indx < SampleList.Count; indx++)
             {
-                if (m_SampleList[indx].UniqueID == sampleId)
+                if (SampleList[indx].UniqueID == sampleId)
                 {
                     foundIndx = indx;
                     break;
@@ -284,8 +283,8 @@ namespace LcmsNet.SampleQueue.Forms
                     continue;
                 }
 
-                m_SampleList[sampleIndx].PAL.PALTray = GetTrayNameFromNumber((int) currRow["Tray"]);
-                m_SampleList[sampleIndx].PAL.Well = (int) currRow["Vial"];
+                SampleList[sampleIndx].PAL.PALTray = GetTrayNameFromNumber((int) currRow["Tray"]);
+                SampleList[sampleIndx].PAL.Well = (int) currRow["Vial"];
             }
         }
 

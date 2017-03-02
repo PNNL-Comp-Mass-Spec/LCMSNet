@@ -19,8 +19,6 @@ namespace LcmsNet.SampleQueue
 
         #region "Class variables"
 
-        bool m_SortOrderAsc = true;
-        enumListViewComparerMode.SortModeConstants menum_SortMode = enumListViewComparerMode.SortModeConstants.text;
         int m_Column;
 
         #endregion
@@ -30,20 +28,16 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Determines sort order. TRUE for ascending, FALSE for descending
         /// </summary>
-        public bool sortOrderAsc
-        {
-            get { return m_SortOrderAsc; }
-            set { m_SortOrderAsc = value; }
-        } // End property
+        public bool sortOrderAsc { get; set; } = true;
+
+        // End property
 
         /// <summary>
         /// Sort mode from SortModeConstants enum
         /// </summary>
-        public enumListViewComparerMode.SortModeConstants sortMode
-        {
-            get { return menum_SortMode; }
-            set { menum_SortMode = value; }
-        } // End property
+        public enumListViewComparerMode.SortModeConstants sortMode { get; set; } = enumListViewComparerMode.SortModeConstants.text;
+
+        // End property
 
         #endregion
 
@@ -101,8 +95,8 @@ namespace LcmsNet.SampleQueue
             enumListViewComparerMode.SortModeConstants sortMode)
         {
             m_Column = column;
-            m_SortOrderAsc = sortOrderAsc;
-            menum_SortMode = sortMode;
+            this.sortOrderAsc = sortOrderAsc;
+            this.sortMode = sortMode;
         }
 
         /// <summary>
@@ -121,7 +115,7 @@ namespace LcmsNet.SampleQueue
             var item1 = x as System.Windows.Forms.ListViewItem;
             var item2 = y as System.Windows.Forms.ListViewItem;
 
-            if (menum_SortMode == enumListViewComparerMode.SortModeConstants.numeric)
+            if (sortMode == enumListViewComparerMode.SortModeConstants.numeric)
             {
                 // Column is numeric, so convert text in listviewitem to numeric value
                 double value1;
@@ -145,7 +139,7 @@ namespace LcmsNet.SampleQueue
             }
 
             // If sort order is ascending, then return tempResult. Otherwise, negate tempResult before returning
-            if (m_SortOrderAsc)
+            if (sortOrderAsc)
             {
                 return tempResult;
             }

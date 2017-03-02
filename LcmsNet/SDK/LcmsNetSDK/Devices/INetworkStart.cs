@@ -16,13 +16,11 @@ namespace LcmsNetDataClasses.Devices
 
     public class classNetworkStartEventArgs : EventArgs
     {
-        private readonly List<string> m_methodList;
-
         public classNetworkStartEventArgs(List<string> methodList)
         {
-            m_methodList = methodList;
+            MethodList = methodList;
         }
 
-        public List<string> MethodList => m_methodList;
+        public List<string> MethodList { get; }
     }
 }

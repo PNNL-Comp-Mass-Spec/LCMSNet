@@ -18,7 +18,8 @@ namespace LcmsNet.SampleQueue.Forms
     {
         #region "Properties"
 
-        public List<classSampleData> OutputSampleList => m_OutputSampleList;
+        public List<classSampleData> OutputSampleList { get; private set; }
+
         // End property
 
         #endregion
@@ -60,7 +61,6 @@ namespace LcmsNet.SampleQueue.Forms
         #region "Class variables"
 
         readonly List<classSampleData> m_InputSampleList;
-        List<classSampleData> m_OutputSampleList;
         Dictionary<string, Type> m_DictRandomizers = new Dictionary<string, Type>();
 
         #endregion
@@ -115,7 +115,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             var randomizerObject = Activator.CreateInstance(m_DictRandomizers[comboBoxRandomizers.Text]);
             var randomizer = randomizerObject as IRandomizerInterface;
-            m_OutputSampleList = randomizer.RandomizeSamples(InputSamples);
+            OutputSampleList = randomizer.RandomizeSamples(InputSamples);
 
             statusLabel.Text = "Randomization Complete.";
 
@@ -128,7 +128,7 @@ namespace LcmsNet.SampleQueue.Forms
         void LoadOuputListview()
         {
             listViewOutput.Items.Clear();
-            foreach (var Sample in m_OutputSampleList)
+            foreach (var Sample in OutputSampleList)
             {
                 var NewItem = new ListViewItem(Sample.SequenceID.ToString());
                 NewItem.SubItems.Add(Sample.DmsData.DatasetName);

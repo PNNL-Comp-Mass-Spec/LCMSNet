@@ -4,13 +4,11 @@ namespace LcmsNet
 {
     public class TackEventArgs : EventArgs
     {
-        private readonly bool m_tacked;
-
         public TackEventArgs(bool tack)
         {
-            m_tacked = tack;
+            Tacked = tack;
         }
 
-        public bool Tacked => m_tacked;
+        public bool Tacked { get; }
     }
 }

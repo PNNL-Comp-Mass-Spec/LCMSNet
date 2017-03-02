@@ -30,7 +30,6 @@ namespace LcmsNetDataClasses
         #region "Class variables"
 
         readonly StringDictionary m_QueryParams = new StringDictionary();
-        bool m_UnassignedOnly;
 
         #endregion
 
@@ -78,11 +77,7 @@ namespace LcmsNetDataClasses
             set { m_QueryParams["wellplate"] = value; }
         }
 
-        public bool UnassignedOnly
-        {
-            get { return m_UnassignedOnly; }
-            set { m_UnassignedOnly = value; }
-        }
+        public bool UnassignedOnly { get; set; }
 
         #endregion
 

@@ -37,17 +37,12 @@ namespace LcmsNetSQLiteTools
     {
         #region Properties
 
-        public static string ConnString
-        {
-            get { return m_ConnectionString; }
-            set { m_ConnectionString = value; }
-        }
+        public static string ConnString { get; set; } = "";
 
         #endregion
 
         #region Class Variables
 
-        private static string m_ConnectionString = "";
         //private static string m_errroString = "";
 
         private static List<string> m_cartNames;
@@ -127,7 +122,7 @@ namespace LcmsNetSQLiteTools
                 {
                     name = "\\" + name;
                 }
-                m_ConnectionString = "data source=" + name;
+                ConnString = "data source=" + name;
             }
             catch (Exception ex)
             {
@@ -168,7 +163,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing queue data</returns>
         public static List<classSampleData> GetQueueFromCache(enumTableTypes tableType)
         {
-            return GetQueueFromCache(tableType, m_ConnectionString);
+            return GetQueueFromCache(tableType, ConnString);
         }
 
         /// <summary>
@@ -394,7 +389,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType)
         {
-            SaveQueueToCache(QueueData, tableType, m_ConnectionString);
+            SaveQueueToCache(QueueData, tableType, ConnString);
         }
 
         /// <summary>
@@ -438,7 +433,7 @@ namespace LcmsNetSQLiteTools
             var tableName = GetTableName(enumTableTypes.UserList);
 
             // Clear the cache table
-            ClearCacheTable(tableName, m_ConnectionString);
+            ClearCacheTable(tableName, ConnString);
 
             m_userInfo = new List<classUserInfo>(UserList);
 
@@ -454,7 +449,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentUser);
             }
-            SavePropertiesToCache(dataList, tableName, m_ConnectionString);
+            SavePropertiesToCache(dataList, tableName, ConnString);
         }
 
         public static void SaveExperimentListToCache(List<classExperimentData> expList)
@@ -466,7 +461,7 @@ namespace LcmsNetSQLiteTools
             var tableName = GetTableName(enumTableTypes.ExperimentList);
 
             // Clear the cache table
-            ClearCacheTable(tableName, m_ConnectionString);
+            ClearCacheTable(tableName, ConnString);
 
             m_experimentsData = new List<classExperimentData>(expList);
             // Exit if there's nothing to cache
@@ -477,11 +472,11 @@ namespace LcmsNetSQLiteTools
 
             try
             {
-                using (var connection = new SQLiteConnection(m_ConnectionString))
+                using (var connection = new SQLiteConnection(ConnString))
                 {
                     connection.Open();
 
-                    if (!VerifyTableExists(tableName, m_ConnectionString))
+                    if (!VerifyTableExists(tableName, ConnString))
                     {
                         using (var command = connection.CreateCommand())
                         {
@@ -540,8 +535,8 @@ namespace LcmsNetSQLiteTools
             var userTableName = GetTableName(enumTableTypes.PUserList);
             var referenceTableName = GetTableName(enumTableTypes.PReferenceList);
 
-            ClearCacheTable(userTableName, m_ConnectionString);
-            ClearCacheTable(referenceTableName, m_ConnectionString);
+            ClearCacheTable(userTableName, ConnString);
+            ClearCacheTable(referenceTableName, ConnString);
 
             var userCacheList = new List<ICacheInterface>();
             var referenceCacheList = new List<ICacheInterface>();
@@ -549,9 +544,9 @@ namespace LcmsNetSQLiteTools
             userCacheList.AddRange(users);
             referenceCacheList.AddRange(crossReferenceList);
 
-            SavePropertiesToCache(userCacheList, userTableName, m_ConnectionString);
+            SavePropertiesToCache(userCacheList, userTableName, ConnString);
 
-            SavePropertiesToCache(referenceCacheList, referenceTableName, m_ConnectionString);
+            SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString);
 
             m_proposalUsers = users;
             m_pidIndexedReferenceList = pidIndexedReferenceList;
@@ -563,7 +558,7 @@ namespace LcmsNetSQLiteTools
             var tableName = GetTableName(enumTableTypes.LCColumnList);
 
             // Clear the cache table
-            ClearCacheTable(tableName, m_ConnectionString);
+            ClearCacheTable(tableName, ConnString);
 
             m_lcColumns = new List<classLCColumn>(lcColumnList);
             // Exit if there's nothing to cache
@@ -575,7 +570,7 @@ namespace LcmsNetSQLiteTools
             foreach (var datum in lcColumnList)
                 dataList.Add(datum);
 
-            SavePropertiesToCache(dataList, tableName, m_ConnectionString);
+            SavePropertiesToCache(dataList, tableName, ConnString);
         }
 
         /// <summary>
@@ -588,7 +583,7 @@ namespace LcmsNetSQLiteTools
             var tableName = GetTableName(enumTableTypes.InstrumentList);
 
             // Clear the cache table
-            ClearCacheTable(tableName, m_ConnectionString, 6);
+            ClearCacheTable(tableName, ConnString, 6);
 
             m_instrumentInfo = new List<classInstrumentInfo>(InstList);
             //If no data in list, just exit
@@ -603,7 +598,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentInst);
             }
-            SavePropertiesToCache(dataList, tableName, m_ConnectionString);
+            SavePropertiesToCache(dataList, tableName, ConnString);
         }
 
         /// <summary>
@@ -911,7 +906,7 @@ namespace LcmsNetSQLiteTools
                 var tableName = GetTableName(enumTableTypes.UserList);
 
                 // Get a list of string dictionaries containing properties for each item
-                var allUserProps = GetPropertiesFromCache(tableName, m_ConnectionString);
+                var allUserProps = GetPropertiesFromCache(tableName, ConnString);
 
                 // For each row (representing one user), create a user data object 
                 //		and load the property values
@@ -946,7 +941,7 @@ namespace LcmsNetSQLiteTools
                 var tableName = GetTableName(enumTableTypes.InstrumentList);
 
                 // Get a list of string dictionaries containing properties for each instrument
-                var allInstProps = GetPropertiesFromCache(tableName, m_ConnectionString);
+                var allInstProps = GetPropertiesFromCache(tableName, ConnString);
 
                 // For each row (representing one instrument), create an instrument data object 
                 //		and load the property values
@@ -976,7 +971,7 @@ namespace LcmsNetSQLiteTools
 
                 var tableName = GetTableName(enumTableTypes.ExperimentList);
 
-                var allExpProperties = GetPropertiesFromCache(tableName, m_ConnectionString);
+                var allExpProperties = GetPropertiesFromCache(tableName, ConnString);
 
                 foreach (var props in allExpProperties)
                 {
@@ -1012,9 +1007,9 @@ namespace LcmsNetSQLiteTools
                 var userTableName = GetTableName(enumTableTypes.PUserList);
                 var referenceTableName = GetTableName(enumTableTypes.PReferenceList);
 
-                var userExpProperties = GetPropertiesFromCache(userTableName, m_ConnectionString);
+                var userExpProperties = GetPropertiesFromCache(userTableName, ConnString);
 
-                var referenceExpProperties = GetPropertiesFromCache(referenceTableName, m_ConnectionString);
+                var referenceExpProperties = GetPropertiesFromCache(referenceTableName, ConnString);
 
                 foreach (var props in userExpProperties)
                 {
@@ -1055,7 +1050,7 @@ namespace LcmsNetSQLiteTools
 
                 var tableName = GetTableName(enumTableTypes.LCColumnList);
 
-                var allLCColumnProperties = GetPropertiesFromCache(tableName, m_ConnectionString);
+                var allLCColumnProperties = GetPropertiesFromCache(tableName, ConnString);
 
                 foreach (var props in allLCColumnProperties)
                 {
@@ -1189,12 +1184,12 @@ namespace LcmsNetSQLiteTools
             var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, GENERIC_COLUMN_NAME);
 
             // If table exists, clear it. Otherwise create one
-            if (VerifyTableExists(tableName, m_ConnectionString))
+            if (VerifyTableExists(tableName, ConnString))
             {
                 // Clear table
                 try
                 {
-                    ExecuteSQLiteCommand(sqlClearCmd, m_ConnectionString);
+                    ExecuteSQLiteCommand(sqlClearCmd, ConnString);
                 }
                 catch (Exception ex)
                 {
@@ -1209,7 +1204,7 @@ namespace LcmsNetSQLiteTools
                 // Create table
                 try
                 {
-                    ExecuteSQLiteCommand(sqlCreateCmd, m_ConnectionString);
+                    ExecuteSQLiteCommand(sqlCreateCmd, ConnString);
                 }
                 catch (Exception ex)
                 {
@@ -1231,12 +1226,12 @@ namespace LcmsNetSQLiteTools
 
                 if (cmdList.Count >= MAX_ROWS_PER_TRANSACTION)
                 {
-                    StoreCmdListData(m_ConnectionString, tableName, cmdList);
+                    StoreCmdListData(ConnString, tableName, cmdList);
                     cmdList.Clear();
                 }
             }
 
-            StoreCmdListData(m_ConnectionString, tableName, cmdList);
+            StoreCmdListData(ConnString, tableName, cmdList);
         }
 
         private static void StoreCmdListData(string connectionString, string tableName, ICollection<string> cmdList)
@@ -1270,7 +1265,7 @@ namespace LcmsNetSQLiteTools
             var tableName = GetTableName(tableType);
 
             // Verify specified table exists
-            if (!VerifyTableExists(tableName, m_ConnectionString))
+            if (!VerifyTableExists(tableName, ConnString))
             {
                 var errMsg = "Data table " + tableName + " not found in cache";
                 throw new classDatabaseDataException(errMsg, new Exception());
@@ -1283,7 +1278,7 @@ namespace LcmsNetSQLiteTools
             DataTable resultTable;
             try
             {
-                resultTable = GetSQLiteDataTable(sqlQueryCmd, m_ConnectionString);
+                resultTable = GetSQLiteDataTable(sqlQueryCmd, ConnString);
             }
             catch (Exception ex)
             {

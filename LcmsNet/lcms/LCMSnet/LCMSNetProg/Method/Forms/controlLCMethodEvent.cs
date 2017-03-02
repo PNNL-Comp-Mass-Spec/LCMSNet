@@ -262,8 +262,6 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private readonly bool m_isLockingEvent;
 
-        private bool m_stoppedHere;
-
         #endregion
 
         #region Device Manager Event Listeners
@@ -414,11 +412,7 @@ namespace LcmsNet.Method.Forms
 
         private bool IsCurrent { get; set; }
 
-        private bool StoppedHere
-        {
-            get { return m_stoppedHere; }
-            set { m_stoppedHere = value; }
-        }
+        private bool StoppedHere { get; set; }
 
         #endregion
 

@@ -33,11 +33,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Connection string for DMS SQL Server connection
         /// </summary>
-        public string DMSConnStr
-        {
-            get { return m_DMSConnStr; }
-            set { m_DMSConnStr = value; }
-        } // End property
+        public string DMSConnStr { get; set; } // End property
 
         #endregion
 
@@ -49,7 +45,6 @@ namespace LcmsNet.SampleQueue
 
         List<classSampleData> m_DmsRequestList;
         string m_MatchString;
-        string m_DMSConnStr;
         string m_CartName;
         string m_CartConfigName;
 

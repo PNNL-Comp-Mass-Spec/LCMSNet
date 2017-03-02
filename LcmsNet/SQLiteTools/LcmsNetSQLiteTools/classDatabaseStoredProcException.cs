@@ -25,9 +25,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="ErrMsg">Error message returned by stored procedure</param>
         public classDatabaseStoredProcException(string SPName, int RetCode, string ErrMsg)
         {
-            m_ProcName = SPName;
-            m_ReturnCode = RetCode;
-            m_ErrMessage = ErrMsg;
+            ProcName = SPName;
+            ReturnCode = RetCode;
+            ErrMessage = ErrMsg;
         }
 
         #endregion
@@ -38,10 +38,6 @@ namespace LcmsNetSQLiteTools
 
         #region "Class variables"
 
-        int m_ReturnCode = -1;
-        string m_ProcName = "";
-        string m_ErrMessage = "";
-
         #endregion
 
         #region "Properties"
@@ -49,29 +45,23 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Stored procedure return code
         /// </summary>
-        public int ReturnCode
-        {
-            get { return m_ReturnCode; }
-            set { m_ReturnCode = value; }
-        } // End property
+        public int ReturnCode { get; set; } = -1;
+
+        // End property
 
         /// <summary>
         /// Name of stored procedure that returned error
         /// </summary>
-        public string ProcName
-        {
-            get { return m_ProcName; }
-            set { m_ProcName = value; }
-        } // End property
+        public string ProcName { get; set; } = "";
+
+        // End property
 
         /// <summary>
         /// Error message returned by stored procedure
         /// </summary>
-        public string ErrMessage
-        {
-            get { return m_ErrMessage; }
-            set { m_ErrMessage = value; }
-        } // End property
+        public string ErrMessage { get; set; } = "";
+
+        // End property
 
         #endregion
     }
