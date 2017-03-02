@@ -261,14 +261,14 @@ namespace LcmsNet.SampleQueue.Forms
         #region "Class variables"
 
         List<classSampleData> m_Samples;
-        Dictionary<string, classLCMethod> m_methodNameMap;
+        readonly Dictionary<string, classLCMethod> m_methodNameMap;
 
         /// <summary>
         /// Reverse lookup for methods.
         /// </summary>
-        Dictionary<classLCMethod, string> m_methods;
+        readonly Dictionary<classLCMethod, string> m_methods;
 
-        private classLCMethodManager m_manager;
+        private readonly classLCMethodManager m_manager;
 
         #endregion
 

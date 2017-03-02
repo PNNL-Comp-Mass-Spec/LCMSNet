@@ -27,7 +27,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// The ID of the column this thread is working on.
         /// </summary>
-        private int m_columnId;
+        private readonly int m_columnId;
 
         /// <summary>
         /// Object that contains method to run with parameters.
@@ -37,13 +37,13 @@ namespace LcmsNet.Method
         /// <summary>
         /// synchronization event used for classDeviceTimer
         /// </summary>
-        private ManualResetEvent mobj_abortEvent;
+        private readonly ManualResetEvent mobj_abortEvent;
 
         /// <summary>
         /// reference to the background worker this column thread is run on. Needed so we can check for
         /// Cancellations and other such issues.
         /// </summary>
-        private BackgroundWorker mthread_worker;
+        private readonly BackgroundWorker mthread_worker;
 
         private const int CONST_VERBOSE_LEAST = 0;
         private const int CONST_VERBOSE_EVENTS = 1;

@@ -12,7 +12,7 @@ namespace LcmsNetSDK.Devices.Pumps
 {
     public partial class controlMobilePhaseEditor : UserControl
     {
-        MobilePhase m_phase;
+        readonly MobilePhase m_phase;
 
         public controlMobilePhaseEditor()
         {

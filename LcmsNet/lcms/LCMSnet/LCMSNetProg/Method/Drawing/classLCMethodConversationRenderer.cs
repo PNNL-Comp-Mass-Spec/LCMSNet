@@ -31,7 +31,7 @@ namespace LcmsNet.Method.Drawing
 
         private const int CONST_MIN_WIDTH = 60;
 
-        private Rectangle[] buttonLocations;
+        private readonly Rectangle[] buttonLocations;
 
         /// <summary>
         /// Constructor.

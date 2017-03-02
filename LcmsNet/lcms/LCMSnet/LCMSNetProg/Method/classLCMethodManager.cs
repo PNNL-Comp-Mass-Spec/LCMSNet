@@ -56,7 +56,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// List of available methods.
         /// </summary>
-        private Dictionary<string, classLCMethod> m_methods;
+        private readonly Dictionary<string, classLCMethod> m_methods;
 
         /// <summary>
         /// Static object that manages each LC method to be accessible to other objects.

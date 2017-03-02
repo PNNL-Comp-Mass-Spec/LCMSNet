@@ -36,7 +36,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Dialog for opening a LC-Method
         /// </summary>
-        private OpenFileDialog mdialog_openMethod;
+        private readonly OpenFileDialog mdialog_openMethod;
 
         /// <summary>
         /// Render Update counts

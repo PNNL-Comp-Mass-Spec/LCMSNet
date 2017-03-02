@@ -12,7 +12,7 @@ namespace LcmsNet
 {
     public partial class ModelCheckReportViewer : UserControl
     {
-        IModelCheckController controller;
+        readonly IModelCheckController controller;
 
         public ModelCheckReportViewer()
         {

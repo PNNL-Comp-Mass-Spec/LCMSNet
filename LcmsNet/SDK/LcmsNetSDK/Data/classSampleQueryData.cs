@@ -23,13 +23,13 @@ namespace LcmsNetDataClasses
 
         #region "Constants"
 
-        string CMD_BASE = "SELECT * FROM V_Scheduled_Run_Export WHERE ";
+        readonly string CMD_BASE = "SELECT * FROM V_Scheduled_Run_Export WHERE ";
 
         #endregion
 
         #region "Class variables"
 
-        StringDictionary m_QueryParams = new StringDictionary();
+        readonly StringDictionary m_QueryParams = new StringDictionary();
         bool m_UnassignedOnly = false;
 
         #endregion

@@ -17,7 +17,7 @@ namespace LcmsNetDataClasses
 
         #region "Class variables"
 
-        string m_DisplayName;
+        readonly string m_DisplayName;
 
         #endregion
 

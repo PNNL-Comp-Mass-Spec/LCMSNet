@@ -12,7 +12,7 @@ namespace LcmsNet.Simulator
 {
     public partial class formSimConfiguration : Form
     {
-        private SimConfigControl m_config;
+        private readonly SimConfigControl m_config;
 
         public formSimConfiguration()
         {

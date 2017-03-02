@@ -14,7 +14,7 @@ namespace LcmsNet.Simulator
 {
     public partial class formSimulatorControlsAndCharts : Form
     {
-        private SimControlsAndChartsControl m_controls;
+        private readonly SimControlsAndChartsControl m_controls;
         private FluidicsSimulator.FluidicsSimulator m_simulator;
 
         public formSimulatorControlsAndCharts()

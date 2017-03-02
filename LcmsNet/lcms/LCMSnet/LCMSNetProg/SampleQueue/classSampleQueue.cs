@@ -157,7 +157,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Name of samples that are added through distribution across columns.
         /// </summary>
-        private string m_integrateName;
+        private readonly string m_integrateName;
 
         /// <summary>
         /// List of columns that are enabled or disabled.
@@ -177,12 +177,12 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// List of samples that are currently running.
         /// </summary>
-        private List<classSampleData> m_runningQueue;
+        private readonly List<classSampleData> m_runningQueue;
 
         /// <summary>
         /// List of unique ID's used in the sample queue.
         /// </summary>
-        private List<long> m_uniqueID;
+        private readonly List<long> m_uniqueID;
 
         /// <summary>
         /// Flag indicating whether to re-set the column data when a queue operation is performed.
@@ -197,12 +197,12 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Stack of waiting queues for undo operations.
         /// </summary>
-        private Stack<List<classSampleData>> mstack_undoBackWaitingQueue;
+        private readonly Stack<List<classSampleData>> mstack_undoBackWaitingQueue;
 
         /// <summary>
         /// Stack of samples for redo operations
         /// </summary>
-        private Stack<List<classSampleData>> mstack_undoForwardWaitingQueue;
+        private readonly Stack<List<classSampleData>> mstack_undoForwardWaitingQueue;
 
         /// <summary>
         ///

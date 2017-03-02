@@ -22,7 +22,7 @@ namespace LcmsNet.Simulator
 
         private bool m_tacked;
         private DateTime mdatetime_startTime;
-        private FluidicsSimulator.FluidicsSimulator simInstance;
+        private readonly FluidicsSimulator.FluidicsSimulator simInstance;
 
         private SimControlsAndChartsControl()
         {

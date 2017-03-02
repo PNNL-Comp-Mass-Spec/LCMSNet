@@ -105,7 +105,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// A current list of devices the application is using.
         /// </summary>
-        private List<IDevice> m_devices;
+        private readonly List<IDevice> m_devices;
 
         /// <summary>
         /// Static Device Manager Reference.
@@ -170,7 +170,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// A list of loaded plugin assemblies.
         /// </summary>
-        private Dictionary<string, List<classDevicePluginInformation>> m_plugins;
+        private readonly Dictionary<string, List<classDevicePluginInformation>> m_plugins;
 
         /// <summary>
         /// Flag to indicate whether plug-ins are already being loaded via a directory operation.

@@ -61,7 +61,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region "Class variables"
 
-        List<classSampleData> mobj_InputSampleList;
+        readonly List<classSampleData> mobj_InputSampleList;
         List<classSampleData> mobj_OutputSampleList;
         Dictionary<string, Type> mobj_DictRandomizers = new Dictionary<string, Type>();
 

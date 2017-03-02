@@ -8,7 +8,7 @@ namespace LcmsNet
 {
     public class TackEventArgs : EventArgs
     {
-        private bool m_tacked;
+        private readonly bool m_tacked;
 
         public TackEventArgs(bool tack)
         {

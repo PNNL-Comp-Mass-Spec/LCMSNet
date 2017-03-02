@@ -25,7 +25,7 @@ namespace LcmsNet
         private static bool m_locked;
         private bool dragndrop;
         private Image m_bitmap;
-        private classFluidicsModerator m_fluidics_mod;
+        private readonly classFluidicsModerator m_fluidics_mod;
         private bool m_moving;
         private Point m_NewMouseLocation;
         // member variables used to track mouse movement, used for movement of fluidics glyphs.

@@ -49,8 +49,8 @@ namespace LcmsNetDataClasses.Logging
 
         #region "Class variables"
 
-        private static object mobj_lock = "AstringToLockOn";
-        private static object mobj_writeLock = "AnotherStringToLockOn";
+        private static readonly object mobj_lock = "AstringToLockOn";
+        private static readonly object mobj_writeLock = "AnotherStringToLockOn";
         private static bool m_LogDbFileCreated = false;
         private static string m_DbFileName;
         private static string m_ConnStr;

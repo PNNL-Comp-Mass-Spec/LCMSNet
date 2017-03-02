@@ -13,7 +13,7 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Maps devices to their settings.
         /// </summary>
-        private Dictionary<INotifier, List<NotificationSetting>> m_settings;
+        private readonly Dictionary<INotifier, List<NotificationSetting>> m_settings;
 
         /// <summary>
         /// Default constructor.

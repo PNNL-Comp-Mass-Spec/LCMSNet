@@ -13,7 +13,7 @@ namespace LcmsNet
 {
     public partial class ModelCheckControl : UserControl
     {
-        IFluidicsModelChecker modelChecker;
+        readonly IFluidicsModelChecker modelChecker;
 
         public ModelCheckControl(IFluidicsModelChecker check)
         {

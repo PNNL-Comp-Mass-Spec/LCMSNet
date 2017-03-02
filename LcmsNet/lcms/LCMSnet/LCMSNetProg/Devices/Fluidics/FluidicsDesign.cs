@@ -88,7 +88,7 @@ namespace LcmsNet.Devices.Fluidics
         #region Members
 
         // fluidics moderator, controls access to fluidics managers and provides interface for working with them
-        private classFluidicsModerator m_fluidics_mod;
+        private readonly classFluidicsModerator m_fluidics_mod;
 
         /// <summary>
         /// Filter for file dialogs.
@@ -101,7 +101,7 @@ namespace LcmsNet.Devices.Fluidics
         private const string CONST_DEFAULT_CONFIG_FILEPATH = "HardwareConfig.ini";
 
         private bool m_locked;
-        private ModelCheckReportViewer m_reporter;
+        private readonly ModelCheckReportViewer m_reporter;
 
         #endregion
 

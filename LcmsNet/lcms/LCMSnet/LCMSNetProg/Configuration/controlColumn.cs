@@ -51,7 +51,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// Dialog box for selecting the color of the column.
         /// </summary>
-        private ColorDialog mdialog_color;
+        private readonly ColorDialog mdialog_color;
 
         /// <summary>
         /// Displays the ID - index of the column.

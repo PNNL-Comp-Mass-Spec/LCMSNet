@@ -14,7 +14,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Array of samples that have been operated on.
         /// </summary>
-        private IEnumerable<classSampleData> marray_data;
+        private readonly IEnumerable<classSampleData> marray_data;
 
         #endregion
 

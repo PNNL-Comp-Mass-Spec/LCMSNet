@@ -157,7 +157,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// The list of methods to render.
         /// </summary>
-        private List<classLCMethod> m_methods;
+        private readonly List<classLCMethod> m_methods;
 
         /// <summary>
         /// Maps a device to a color.

@@ -8,17 +8,17 @@ namespace LcmsNet.Devices
 {
     public partial class AdvancedDeviceControlPanel : UserControl
     {
-        private Dictionary<AdvancedDeviceGroupControl, TabPage> m_controlToPageMap;
+        private readonly Dictionary<AdvancedDeviceGroupControl, TabPage> m_controlToPageMap;
 
         /// <summary>
         /// Maps a device to which advanced control panel it belongs to.
         /// </summary>
-        private Dictionary<IDevice, AdvancedDeviceGroupControl> m_deviceToControlMap;
+        private readonly Dictionary<IDevice, AdvancedDeviceGroupControl> m_deviceToControlMap;
 
         /// <summary>
         /// Maps a device group name to the advanced control panel.
         /// </summary>
-        private Dictionary<string, AdvancedDeviceGroupControl> m_nameToControlMap;
+        private readonly Dictionary<string, AdvancedDeviceGroupControl> m_nameToControlMap;
 
 
         public AdvancedDeviceControlPanel()

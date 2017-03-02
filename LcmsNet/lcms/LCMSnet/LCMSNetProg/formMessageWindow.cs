@@ -248,8 +248,8 @@ namespace LcmsNet
         /// </summary>
         private int m_errorLevel;
 
-        private object mobj_lockMessages;
-        private object mobj_lockErrors;
+        private readonly object mobj_lockMessages;
+        private readonly object mobj_lockErrors;
 
         #endregion
 

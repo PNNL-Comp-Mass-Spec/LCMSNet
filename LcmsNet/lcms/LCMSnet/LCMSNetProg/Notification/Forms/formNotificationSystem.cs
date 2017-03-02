@@ -136,7 +136,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Maintains map between device and object that holds the notifications settings.
         /// </summary>
-        private Dictionary<INotifier, classNotificationLinker> m_deviceEventTable;
+        private readonly Dictionary<INotifier, classNotificationLinker> m_deviceEventTable;
 
         /// <summary>
         /// Fired when an event is required to be handled by an external component.
@@ -146,7 +146,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Notifier object that sends status to remote listeners.
         /// </summary>
-        private classNotifier mobj_notifier;
+        private readonly classNotifier mobj_notifier;
 
         /// <summary>
         /// Flag indicating whether the timer is being set.
@@ -161,7 +161,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Maps a list view item to a device.
         /// </summary>
-        private Dictionary<ListViewItem, INotifier> m_itemToDeviceMap;
+        private readonly Dictionary<ListViewItem, INotifier> m_itemToDeviceMap;
 
         /// <summary>
         /// Flag indicating the ui is being updated.

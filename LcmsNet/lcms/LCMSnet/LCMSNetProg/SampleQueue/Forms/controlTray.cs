@@ -58,7 +58,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         int m_TrayNumber = 0;
         DataTable m_DataTable = new DataTable("DummyTable");
-        DataView m_DataView = new DataView();
+        readonly DataView m_DataView = new DataView();
         bool m_MasterView = false;
         bool m_ShowUnassigned = true;
 

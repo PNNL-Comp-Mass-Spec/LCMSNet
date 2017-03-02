@@ -353,7 +353,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// List of samples that are run on columns.
         /// </summary>
-        private List<classSampleData> m_samples;
+        private readonly List<classSampleData> m_samples;
 
         /// <summary>
         /// Dictionary to map a device to a color for visual integrity
@@ -368,7 +368,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Maintains a list of errors that happened on the column.
         /// </summary>
-        private Dictionary<int, List<LcmsNetDataClasses.Method.classLCEvent>> m_errors;
+        private readonly Dictionary<int, List<LcmsNetDataClasses.Method.classLCEvent>> m_errors;
 
         #endregion
 

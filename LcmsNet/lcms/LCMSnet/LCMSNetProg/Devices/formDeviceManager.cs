@@ -10,7 +10,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Mapping between devices to their position in the listview.
         /// </summary>
-        private Dictionary<IDevice, ListViewItem> m_deviceToItemMap;
+        private readonly Dictionary<IDevice, ListViewItem> m_deviceToItemMap;
 
 
         /// <summary>

@@ -33,19 +33,19 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Maps a method name to itself so that we can update the ui from the method manager.
         /// </summary>
-        private Dictionary<string, string> m_methodMap;
+        private readonly Dictionary<string, string> m_methodMap;
 
         private bool m_triggeredUpdate;
 
         /// <summary>
         /// Maps the check box clicked to a specific column data.
         /// </summary>
-        private Dictionary<string, classColumnData> m_checkBoxToColumnDataMap;
+        private readonly Dictionary<string, classColumnData> m_checkBoxToColumnDataMap;
 
         /// <summary>
         /// List of controls that manage events.
         /// </summary>
-        private List<controlLCMethodEvent> m_events;
+        private readonly List<controlLCMethodEvent> m_events;
 
         /// <summary>
         /// Constructor for holding the list of events.

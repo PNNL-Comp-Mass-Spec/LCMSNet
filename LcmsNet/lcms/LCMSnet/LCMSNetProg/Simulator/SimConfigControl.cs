@@ -12,7 +12,7 @@ namespace LcmsNet.Simulator
         const float SCALE_OF_FLUIDICS = 1;
         private static SimConfigControl m_instance;
 
-        private classFluidicsModerator m_mod;
+        private readonly classFluidicsModerator m_mod;
 
         private bool m_tacked;
 

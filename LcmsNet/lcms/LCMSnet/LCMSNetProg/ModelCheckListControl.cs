@@ -10,8 +10,8 @@ namespace LcmsNet
 {
     public partial class ModelCheckListControl : UserControl
     {
-        IModelCheckController controller;
-        Dictionary<string, ModelCheckControl> m_checks;
+        readonly IModelCheckController controller;
+        readonly Dictionary<string, ModelCheckControl> m_checks;
 
         public ModelCheckListControl()
         {

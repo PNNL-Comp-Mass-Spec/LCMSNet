@@ -32,7 +32,7 @@ namespace LcmsNetSDK
         private IDmsMetaData mdms_metadata;
 
         private IDmsTools midmstools_selectedTools;
-        private CompositionContainer mmef_compositionContainer;
+        private readonly CompositionContainer mmef_compositionContainer;
 
         private classDMSToolsManager()
         {

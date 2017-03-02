@@ -156,23 +156,23 @@ namespace LcmsNet.Method
         /// <summary>
         /// Sample queue that handles sorting of the samples to run.
         /// </summary>
-        private classSampleQueue mobj_sampleQueue;
+        private readonly classSampleQueue mobj_sampleQueue;
 
         /// <summary>
         /// Event that tells the background worker thread that its time to stop
         /// waiting and shutdown.
         /// </summary>
-        private ManualResetEvent mobj_abortWaiting;
+        private readonly ManualResetEvent mobj_abortWaiting;
 
         /// <summary>
         /// Event that tells the background worker thread that its time to stop running.
         /// </summary>
-        private ManualResetEvent mobj_stopSamples;
+        private readonly ManualResetEvent mobj_stopSamples;
 
         /// <summary>
         /// Event that tells the main thread things are ok and stopped.
         /// </summary>
-        private ManualResetEvent mobj_stoppedSamples;
+        private readonly ManualResetEvent mobj_stoppedSamples;
 
         //
         // Here we hold a copy of the samples that are running, so we can do things like
@@ -201,17 +201,17 @@ namespace LcmsNet.Method
         /// <summary>
         /// List of backgroundworker objects that will asynchronously run the columnThreads
         /// </summary>
-        private List<BackgroundWorker> m_columnWorkers;
+        private readonly List<BackgroundWorker> m_columnWorkers;
 
         /// <summary>
         /// List of column threads that are to be used.
         /// </summary>
-        private List<classColumnThread> m_columnThreads;
+        private readonly List<classColumnThread> m_columnThreads;
 
         /// <summary>
         /// List of objects used as locks used for mutual exclusion
         /// </summary>
-        private List<object> m_threadLocks;
+        private readonly List<object> m_threadLocks;
 
         #endregion
 

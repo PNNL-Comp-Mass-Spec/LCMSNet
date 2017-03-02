@@ -75,7 +75,7 @@ namespace LcmsNet.Configuration
         /// <summary>
         /// Dialog box for displaying the choice of the color for the system.
         /// </summary>
-        private ColorDialog mdialog_color;
+        private readonly ColorDialog mdialog_color;
 
         #endregion
 

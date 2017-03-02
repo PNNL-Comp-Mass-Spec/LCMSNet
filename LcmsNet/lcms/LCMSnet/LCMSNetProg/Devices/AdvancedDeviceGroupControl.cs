@@ -14,10 +14,10 @@ namespace LcmsNet.Devices
     public partial class AdvancedDeviceGroupControl : UserControl
     {
         private const int CONST_BUTTON_HEIGHT = 48;
-        Dictionary<Button, IDevice> m_buttonToDeviceMap;
+        readonly Dictionary<Button, IDevice> m_buttonToDeviceMap;
 
-        Dictionary<IDevice, Button> m_deviceToButtonMap;
-        Dictionary<IDevice, IDeviceControl> m_deviceToControlMap;
+        readonly Dictionary<IDevice, Button> m_deviceToButtonMap;
+        readonly Dictionary<IDevice, IDeviceControl> m_deviceToControlMap;
 
         /// <summary>
         /// Selected device

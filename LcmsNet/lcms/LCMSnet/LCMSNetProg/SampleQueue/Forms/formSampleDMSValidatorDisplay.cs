@@ -11,7 +11,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// List of validator controls so we can check after editing if the samples are valid.
         /// </summary>
-        private List<classDMSBaseControl> m_validatorControls;
+        private readonly List<classDMSBaseControl> m_validatorControls;
 
         /// <summary>
         /// Constructor.

@@ -15,9 +15,9 @@ namespace LcmsNet.Reporting.Forms
 {
     public partial class formCreateErrorReport : Form
     {
-        private List<Form> m_forms;
-        private string m_logPath;
-        private classLCMethodManager m_manager;
+        private readonly List<Form> m_forms;
+        private readonly string m_logPath;
+        private readonly classLCMethodManager m_manager;
 
         public formCreateErrorReport()
         {

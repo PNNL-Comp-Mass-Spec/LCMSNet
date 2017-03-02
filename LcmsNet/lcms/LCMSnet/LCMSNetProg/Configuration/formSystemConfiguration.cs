@@ -37,7 +37,7 @@ namespace LcmsNet.Configuration
     /// </summary>
     public partial class formSystemConfiguration : Form
     {
-        bool m_isLoading;
+        readonly bool m_isLoading;
 
         #region "Constructors"
 
