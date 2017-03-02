@@ -25,6 +25,18 @@ namespace LcmsNet
     /// </summary>
     static class Program
     {
+        #region "Constants"
+
+        public const string SOFTWARE_COPYRIGHT = "Copyright Battelle Memorial Institute, 2017";
+
+        public const string SOFTWARE_DEVELOPERS =
+            "Brian LaMarche, Christopher Walters, " +
+            "Gordon Anderson, David Clark, Derek Hopkins, " +
+            "Matthew Monroe, Ron Moore, Danny Orton, John Ryan, Richard Smith";
+
+
+        #endregion
+
         #region "Class variables"
 
         /// <summary>
@@ -268,8 +280,16 @@ namespace LcmsNet
                     //
                     // Show the splash screen
                     //
-                    mform_splashScreen = new formSplashScreen();
+                    mform_splashScreen = new formSplashScreen
+                    {
+                        SoftwareCopyright = SOFTWARE_COPYRIGHT,
+                        SoftwareDevelopers = SOFTWARE_DEVELOPERS
+                    };
+
+                    var splashLoadTime = DateTime.UtcNow;
+
                     mform_splashScreen.Show();
+                    Application.DoEvents();
 
                     LogVersionNumbers();
                     LogMachineInformation();
@@ -441,6 +461,13 @@ namespace LcmsNet
                     classApplicationLogger.LogMessage(-1, "Loading main form");
                     Application.DoEvents();
                     formMDImain main = new formMDImain();
+
+                    // Assure that the splash screen has been visible for at least 3 seconds
+                    while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
+                    {
+                        Thread.Sleep(250);
+                    }
+
                     mform_splashScreen.Hide();
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;

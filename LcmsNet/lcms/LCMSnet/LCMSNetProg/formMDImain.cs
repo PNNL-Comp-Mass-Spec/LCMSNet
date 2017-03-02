@@ -337,7 +337,12 @@ namespace LcmsNet
             }
 
             AddForm(mform_fluidicsDesign);
-            mform_about = new formAbout();
+            mform_about = new formAbout
+            {
+                SoftwareCopyright = Program.SOFTWARE_COPYRIGHT,
+                SoftwareDevelopers = Program.SOFTWARE_DEVELOPERS
+            };
+
             AddForm(mform_displays);
             AddForm(mform_about);
             AddForm(mform_messages);

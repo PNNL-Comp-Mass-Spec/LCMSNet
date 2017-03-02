@@ -25,6 +25,16 @@ namespace LcmsNet
             }
         }
 
+        public string SoftwareCopyright
+        {
+            set { lblCopyright.Text = value; }
+        }
+
+        public string SoftwareDevelopers
+        {
+            set { lblDevelopers.Text = value; }
+        }
+
         #endregion
 
         //*********************************************************************************************************
@@ -46,7 +56,7 @@ namespace LcmsNet
         public formSplashScreen()
         {
             InitializeComponent();
-            mlabel_version.Text += Application.ProductVersion;
+            mlabel_version.Text += Application.ProductVersion; 
         }
 
         private void UpdateStatus(string newStatus)
