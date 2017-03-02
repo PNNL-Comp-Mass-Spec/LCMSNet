@@ -1,10 +1,14 @@
-#Note: More .gitignore files exist within the directory structure. Notably within the \pluginDLLs, and LcmsNet\lib subdirectories
-*\obj
-*\bin
-*\packages
+**/obj
+**/bin
+**/packages
+**/Installers
 *.suo
+pluginDLLs/*
 lcmsnetbuild.txt
-/LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.xml
-/LcmsNet/SQLiteTools/SQLite/x64
-/LcmsNet/SQLiteTools/SQLite/x86
-/LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.dll
+LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.xml
+LcmsNet/SQLiteTools/SQLite/x64
+LcmsNet/SQLiteTools/SQLite/x86
+LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.dll
+LcmsNet/lib/*.dll
+LcmsNet/lib/SQLite_Zips
+!LcmsNet/lib/ZedGraph.dll
