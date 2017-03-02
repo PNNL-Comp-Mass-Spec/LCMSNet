@@ -35,7 +35,7 @@ namespace LcmsNet
             }
             else
             {
-                foreach (ModelStatus status in e.StatusList)
+                foreach (var status in e.StatusList)
                 {
                     var report = new ModelCheckReport(status);
                     this.panelMessages.Controls.Add(report);

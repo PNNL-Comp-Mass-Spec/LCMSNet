@@ -25,26 +25,26 @@ namespace LcmsNet.SampleQueue.IO
             {
                 path = "\\" + path;
             }
-            string connStr = "data source=" + path;
+            var connStr = "data source=" + path;
 
             // Get a list of samples from the SQLite file
-            List<classSampleData> sampleList = new List<classSampleData>();
+            var sampleList = new List<classSampleData>();
             try
             {
                 sampleList = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue, connStr);
-                string msg = "Successfully read input queue file " + path;
+                var msg = "Successfully read input queue file " + path;
                 classApplicationLogger.LogMessage(0, msg);
             }
             catch (Exception ex)
             {
-                string errMsg = "Exception reading queue from " + path;
+                var errMsg = "Exception reading queue from " + path;
                 classApplicationLogger.LogError(0, errMsg, ex);
                 return sampleList;
             }
 
             if (sampleList == null)
             {
-                string msg = "Returned sample list is null. Additional information may be in log.";
+                var msg = "Returned sample list is null. Additional information may be in log.";
                 classApplicationLogger.LogError(0, msg);
                 return sampleList;
             }

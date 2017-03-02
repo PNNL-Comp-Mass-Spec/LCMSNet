@@ -114,7 +114,7 @@ namespace LcmsNet.Method
         /// <returns>True if the method was removed, false if not.</returns>
         public bool RemoveMethod(classLCMethod method)
         {
-            bool result = true;
+            var result = true;
 
             //
             // Don't remove anything unless the method
@@ -163,7 +163,7 @@ namespace LcmsNet.Method
         {
             //bool retValue = false;
 
-            classLCMethodReader reader = new classLCMethodReader();
+            var reader = new classLCMethodReader();
             classLCMethod method = null;
             try
             {
@@ -185,7 +185,7 @@ namespace LcmsNet.Method
             if (mdict_methods.ContainsKey(method.Name) == true)
             {
                 //TODO: Figure out what to do if a duplicate method exists.
-                string errorMessage = string.Format("The user method name from {0} conflicts with another method.",
+                var errorMessage = string.Format("The user method name from {0} conflicts with another method.",
                     filePath);
                 classApplicationLogger.LogMessage(0, errorMessage);
                 throw new Exception(errorMessage);
@@ -206,17 +206,17 @@ namespace LcmsNet.Method
         /// <returns>True if successful</returns>
         public Dictionary<string, List<Exception>> LoadMethods(string path)
         {
-            Dictionary<string, List<Exception>> errors = new Dictionary<string, List<Exception>>();
+            var errors = new Dictionary<string, List<Exception>>();
 
             //
             // Find each file in the directory
             //
-            string[] filePaths = Directory.GetFiles(path, CONST_METHOD_EXTENSION, SearchOption.TopDirectoryOnly);
-            foreach (string filePath in filePaths)
+            var filePaths = Directory.GetFiles(path, CONST_METHOD_EXTENSION, SearchOption.TopDirectoryOnly);
+            foreach (var filePath in filePaths)
             {
                 try
                 {
-                    List<Exception> methodErrors = new List<Exception>();
+                    var methodErrors = new List<Exception>();
                     LoadMethod(filePath, ref methodErrors);
 
                     if (methodErrors.Count > 0)

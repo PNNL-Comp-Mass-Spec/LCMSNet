@@ -52,7 +52,7 @@ namespace LcmsNet
                 checkerControl.CheckChanged += ModelCheckChanged;
                 m_checks[check.Name] = checkerControl;
                 checkerControl.Dock = DockStyle.Top;
-                Panel checkboxPanel = groupBoxModelChecks.Controls["panelCheckBoxes"] as Panel;
+                var checkboxPanel = groupBoxModelChecks.Controls["panelCheckBoxes"] as Panel;
                 checkboxPanel.Controls.Add(checkerControl);
                 checkerControl.BringToFront(); // keeps Z-order correct.
             }

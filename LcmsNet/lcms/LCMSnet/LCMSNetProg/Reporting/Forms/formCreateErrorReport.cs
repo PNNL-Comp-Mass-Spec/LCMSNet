@@ -36,7 +36,7 @@ namespace LcmsNet.Reporting.Forms
             m_logPath = logPath;
             m_forms = forms;
 
-            foreach (classLCMethod method in m_manager.Methods.Values)
+            foreach (var method in m_manager.Methods.Values)
             {
                 if (!mlistbox_methods.Items.Contains(method))
                 {
@@ -55,10 +55,10 @@ namespace LcmsNet.Reporting.Forms
         /// <param name="e"></param>
         private void mbutton_create_Click(object sender, EventArgs e)
         {
-            List<classLCMethod> methods = new List<classLCMethod>();
-            foreach (object o in mlistbox_methods.SelectedItems)
+            var methods = new List<classLCMethod>();
+            foreach (var o in mlistbox_methods.SelectedItems)
             {
-                classLCMethod method = o as classLCMethod;
+                var method = o as classLCMethod;
                 if (method != null)
                 {
                     methods.Add(method);
@@ -66,11 +66,11 @@ namespace LcmsNet.Reporting.Forms
             }
 
 
-            classErrorReportBuilder builder = new classErrorReportBuilder();
-            string path = builder.CreateReport(m_forms, methods, m_logPath, "hardwareconfig.ini");
+            var builder = new classErrorReportBuilder();
+            var path = builder.CreateReport(m_forms, methods, m_logPath, "hardwareconfig.ini");
 
-            string cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-            string errorReportPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_ERRORPATH);
+            var cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+            var errorReportPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_ERRORPATH);
 
             classErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
         }

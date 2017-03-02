@@ -65,7 +65,7 @@ namespace LcmsNet.Configuration
 
         private void btnSetPdfPath_Click(object sender, EventArgs e)
         {
-            string path = txtPdfPath.Text;
+            var path = txtPdfPath.Text;
             if (Directory.Exists(path))
             {
                 classLCMSSettings.SetParameter(classLCMSSettings.PARAM_PDFPATH, path);
@@ -100,9 +100,9 @@ namespace LcmsNet.Configuration
 
         private void comboDmsTools_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox comboDmsTools = sender as ComboBox;
-            string selectedTool = comboDmsTools.Items[comboDmsTools.SelectedIndex].ToString();
-            string[] toolInfo = selectedTool.Split(new char[] {'-'});
+            var comboDmsTools = sender as ComboBox;
+            var selectedTool = comboDmsTools.Items[comboDmsTools.SelectedIndex].ToString();
+            var toolInfo = selectedTool.Split(new char[] {'-'});
             try
             {
                 classDMSToolsManager.Instance.SelectTool(toolInfo[0], toolInfo[1]);
@@ -224,7 +224,7 @@ namespace LcmsNet.Configuration
             numericUpDown1.Value = Convert.ToDecimal(classCartConfiguration.MinimumVolume);
 
             //load time zones into combobox
-            foreach (TimeZoneInfo tzi in TimeZoneInfo.GetSystemTimeZones())
+            foreach (var tzi in TimeZoneInfo.GetSystemTimeZones())
             {
                 comboTimeZone.Items.Add(tzi.Id);
             }
@@ -263,7 +263,7 @@ namespace LcmsNet.Configuration
         private void LoadInstrumentInformation()
         {
             // Load combo box
-            List<classInstrumentInfo> instList = classSQLiteTools.GetInstrumentList(false);
+            var instList = classSQLiteTools.GetInstrumentList(false);
 
             if (instList == null)
             {
@@ -278,15 +278,15 @@ namespace LcmsNet.Configuration
             }
 
             comboBoxAvailInstruments.Items.Clear();
-            foreach (classInstrumentInfo instData in instList)
+            foreach (var instData in instList)
             {
                 comboBoxAvailInstruments.Items.Add(instData.DMSName);
             }
 
             // Determine if presently specified instrument name is in list. If it is, display it.
-            string currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME);
-            int indx = 0;
-            bool found = false;
+            var currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME);
+            var indx = 0;
+            var found = false;
             foreach (string itemName in comboBoxAvailInstruments.Items)
             {
                 if (itemName == currentName)
@@ -356,13 +356,13 @@ namespace LcmsNet.Configuration
 
             // Create dummy user. User is not recognized by DMS, so that trigger files will fail and let
             //      operator know that user name was not provided
-            classUserInfo tmpUser = new classUserInfo();
+            var tmpUser = new classUserInfo();
             tmpUser.PayrollNum = "None";
             tmpUser.UserName = "(None)";
             m_Users.Add(tmpUser.PayrollNum, tmpUser);
 
             // Add users to dictionary from user list
-            foreach (classUserInfo currUser in userList)
+            foreach (var currUser in userList)
             {
                 var data = string.Format("{0} - ({1})", currUser.UserName,
                     currUser.PayrollNum);
@@ -372,7 +372,7 @@ namespace LcmsNet.Configuration
 
             // Now add user list to combo box
             mcombo_Operator.Items.Clear();
-            foreach (KeyValuePair<string, classUserInfo> currKey in m_Users)
+            foreach (var currKey in m_Users)
             {
                 mcombo_Operator.Items.Add(string.Format("{0} - ({1})",
                     currKey.Value.UserName,
@@ -384,12 +384,12 @@ namespace LcmsNet.Configuration
 
 
             // Determine if presently specified operator name is in list. If it is, display it.
-            string currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_OPERATOR);
-            int indx = 0;
-            bool found = false;
+            var currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_OPERATOR);
+            var indx = 0;
+            var found = false;
             foreach (string itemName in mcombo_Operator.Items)
             {
-                string[] array = itemName.Split(new char[] {'-'});
+                var array = itemName.Split(new char[] {'-'});
                 if (array[0].Trim() == currentName)
                 {
                     found = true;

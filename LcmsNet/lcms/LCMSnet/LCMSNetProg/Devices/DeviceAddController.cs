@@ -16,9 +16,9 @@ namespace LcmsNet.Devices
         /// <returns></returns>
         public List<classDevicePluginInformation> GetAvailablePlugins()
         {
-            classDeviceManager manager = classDeviceManager.Manager;
-            List<classDevicePluginInformation> availablePlugins = new List<classDevicePluginInformation>();
-            foreach (classDevicePluginInformation plugin in manager.AvailablePlugins)
+            var manager = classDeviceManager.Manager;
+            var availablePlugins = new List<classDevicePluginInformation>();
+            foreach (var plugin in manager.AvailablePlugins)
             {
                 availablePlugins.Add(plugin);
             }
@@ -29,15 +29,15 @@ namespace LcmsNet.Devices
         public List<classDeviceErrorEventArgs> AddDevices(List<classDevicePluginInformation> plugins,
             bool initializeOnAdd)
         {
-            List<classDeviceErrorEventArgs> failedDevices = new List<classDeviceErrorEventArgs>();
+            var failedDevices = new List<classDeviceErrorEventArgs>();
 
-            foreach (classDevicePluginInformation plugin in plugins)
+            foreach (var plugin in plugins)
             {
                 if (plugin != null)
                 {
                     try
                     {
-                        bool wasAdded = classDeviceManager.Manager.AddDevice(plugin, initializeOnAdd);
+                        var wasAdded = classDeviceManager.Manager.AddDevice(plugin, initializeOnAdd);
                         if (!wasAdded)
                         {
                             classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,

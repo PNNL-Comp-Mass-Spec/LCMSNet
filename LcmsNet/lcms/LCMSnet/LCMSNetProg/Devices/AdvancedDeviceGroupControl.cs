@@ -65,7 +65,7 @@ namespace LcmsNet.Devices
         {
             if (m_deviceToButtonMap.ContainsKey(device))
             {
-                Button button = m_deviceToButtonMap[device];
+                var button = m_deviceToButtonMap[device];
                 button.Text = device.Name;
             }
         }
@@ -84,11 +84,11 @@ namespace LcmsNet.Devices
             // Remove the current selected control if one is selected
             if (m_selectedDevice != null)
             {
-                Button button = m_deviceToButtonMap[m_selectedDevice];
+                var button = m_deviceToButtonMap[m_selectedDevice];
                 button.FlatAppearance.BorderColor = NotSelectedColor;
 
-                IDeviceControl currentSelected = m_deviceToControlMap[m_selectedDevice];
-                UserControl userControl = currentSelected as UserControl;
+                var currentSelected = m_deviceToControlMap[m_selectedDevice];
+                var userControl = currentSelected as UserControl;
                 if (userControl != null)
                 {
                     m_selectedDevicePanel.Controls.Remove(userControl);
@@ -113,8 +113,8 @@ namespace LcmsNet.Devices
             }
 
             // Find the user control
-            IDeviceControl control = m_deviceToControlMap[device];
-            UserControl newUserControl = control as UserControl;
+            var control = m_deviceToControlMap[device];
+            var newUserControl = control as UserControl;
             if (newUserControl != null)
             {
                 newUserControl.Dock = DockStyle.Fill;
@@ -130,10 +130,10 @@ namespace LcmsNet.Devices
 
         void button_Click(object sender, EventArgs e)
         {
-            Button button = sender as Button;
+            var button = sender as Button;
             if (button == null) return;
 
-            IDevice device = m_buttonToDeviceMap[button];
+            var device = m_buttonToDeviceMap[button];
             RemoveSelectedDevice();
             SelectDevice(device);
         }
@@ -144,7 +144,7 @@ namespace LcmsNet.Devices
             if (m_selectedDevice == null)
                 return;
 
-            string message = "";
+            var message = "";
 
             try
             {
@@ -181,7 +181,7 @@ namespace LcmsNet.Devices
             DeviceManagerBridge.RenameDevice(device, newName);
 
             // Update the user interface with the new name
-            Button button = m_deviceToButtonMap[device];
+            var button = m_deviceToButtonMap[device];
             button.Text = device.Name;
             button.FlatStyle = FlatStyle.Flat;
             button.FlatAppearance.BorderColor = Color.Black;
@@ -204,7 +204,7 @@ namespace LcmsNet.Devices
             if (m_deviceToButtonMap.ContainsKey(device))
             {
                 // Find the button to remove
-                Button button = m_deviceToButtonMap[device];
+                var button = m_deviceToButtonMap[device];
                 button.Click -= button_Click;
 
 
@@ -229,7 +229,7 @@ namespace LcmsNet.Devices
         /// <param name="controlData"></param>
         public void AddDevice(IDevice device, IDeviceControl control)
         {
-            Button button = new Button();
+            var button = new Button();
             button.Text = device.Name;
             button.Dock = DockStyle.Top;
             button.FlatStyle = FlatStyle.Flat;

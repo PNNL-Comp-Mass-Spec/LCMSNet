@@ -54,23 +54,23 @@ namespace LcmsNet
         /// <returns>An object that holds the application settings.</returns>
         static void LoadSettings()
         {
-            SettingsPropertyCollection propColl = Properties.Settings.Default.Properties;
+            var propColl = Properties.Settings.Default.Properties;
             foreach (SettingsProperty currProperty in propColl)
             {
-                string propertyName = currProperty.Name;
-                string propertyValue = Properties.Settings.Default[propertyName].ToString();
+                var propertyName = currProperty.Name;
+                var propertyValue = Properties.Settings.Default[propertyName].ToString();
                 classLCMSSettings.SetParameter(propertyName, propertyValue);
             }
 
             // Add path to executable as a saved setting
-            FileInfo fi = new FileInfo(Application.ExecutablePath);
+            var fi = new FileInfo(Application.ExecutablePath);
             classLCMSSettings.SetParameter(classLCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
 
 
-            string emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
+            var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
             if (!string.IsNullOrWhiteSpace(emulation))
             {
-                bool isEmulated = Convert.ToBoolean(emulation);
+                var isEmulated = Convert.ToBoolean(emulation);
                 mform_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
             }
             return;
@@ -80,13 +80,13 @@ namespace LcmsNet
 
         public static void LogVersionNumbers()
         {
-            string information = SystemInformationReporter.BuildApplicationInformation();
+            var information = SystemInformationReporter.BuildApplicationInformation();
             classApplicationLogger.LogMessage(0, information);
         }
 
         public static void LogMachineInformation()
         {
-            string systemInformation = SystemInformationReporter.BuildSystemInformation();
+            var systemInformation = SystemInformationReporter.BuildSystemInformation();
             classApplicationLogger.LogMessage(0, systemInformation);
         }
 
@@ -116,8 +116,8 @@ namespace LcmsNet
         {
             try
             {
-                Process[] processes = Process.GetProcessesByName("paldriv");
-                foreach (Process process in processes)
+                var processes = Process.GetProcessesByName("paldriv");
+                foreach (var process in processes)
                 {
                     process.Kill();
                 }
@@ -134,7 +134,7 @@ namespace LcmsNet
         /// <param name="path">Local path to create.</param>
         static void CreatePath(string localPath)
         {
-            string path = Path.Combine(Application.StartupPath, localPath);
+            var path = Path.Combine(Application.StartupPath, localPath);
             //
             // See if the logging directory exists
             //
@@ -149,7 +149,7 @@ namespace LcmsNet
                     //
                     // Not much we can do here...
                     //
-                    string errorMessage =
+                    var errorMessage =
                         string.Format(
                             "LCMS could not create missing folder {0} required for operation.  Please run application with higher priveleges.  {1}",
                             localPath, ex.Message);
@@ -231,7 +231,7 @@ namespace LcmsNet
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                string mutexName = "Global\\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+                var mutexName = "Global\\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
                 //
                 // Before we do anything, let's initialize the file logging capability.
@@ -258,7 +258,7 @@ namespace LcmsNet
                 // Code adapated from K. Scott Allen's OdeToCode.com at
                 //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
                 //
-                using (Mutex mutex = new Mutex(false, mutexName))
+                using (var mutex = new Mutex(false, mutexName))
                 {
                     if (!mutex.WaitOne(0, false))
                     {
@@ -338,7 +338,7 @@ namespace LcmsNet
                     //
                     //classApplicationLogger.LogMessage(-1, "Creating the Device Manager");
                     Application.DoEvents();
-                    classDeviceManager deviceManager = classDeviceManager.Manager;
+                    var deviceManager = classDeviceManager.Manager;
                     deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
                     deviceManager.AddDevice(new LcmsNetDataClasses.Devices.classTimerDevice());
                     deviceManager.AddDevice(new LcmsNet.Devices.classBlockDevice());
@@ -349,7 +349,7 @@ namespace LcmsNet
                     // Load the device plug-ins.
                     //
                     classApplicationLogger.LogMessage(-1, "Loading necessary device plug-ins.");
-                    bool areDevicesLoaded = true;
+                    var areDevicesLoaded = true;
                     try
                     {
                         classDeviceManager.Manager.LoadPlugins(Assembly.GetExecutingAssembly(), true);
@@ -423,7 +423,7 @@ namespace LcmsNet
                     }
                     catch (Exception ex)
                     {
-                        string extensionsFolder =
+                        var extensionsFolder =
                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LCMSNet",
                                 "dmsExtensions");
                         classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
@@ -460,7 +460,7 @@ namespace LcmsNet
                     //
                     classApplicationLogger.LogMessage(-1, "Loading main form");
                     Application.DoEvents();
-                    formMDImain main = new formMDImain();
+                    var main = new formMDImain();
 
                     // Assure that the splash screen has been visible for at least 3 seconds
                     while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)

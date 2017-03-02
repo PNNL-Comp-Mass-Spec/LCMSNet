@@ -55,26 +55,26 @@ namespace LcmsNet.SampleQueue.IO
 
             // Create and initialize the document object
             mobj_ExportDoc = new XmlDocument();
-            XmlDeclaration docDeclaration = mobj_ExportDoc.CreateXmlDeclaration("1.0", null, null);
+            var docDeclaration = mobj_ExportDoc.CreateXmlDeclaration("1.0", null, null);
             mobj_ExportDoc.AppendChild(docDeclaration);
 
             // Add MetaData (root) element
-            XmlElement rootElement = mobj_ExportDoc.CreateElement("MetaData");
+            var rootElement = mobj_ExportDoc.CreateElement("MetaData");
             mobj_ExportDoc.AppendChild(rootElement);
 
             // Add QueueSettings node
-            XmlElement queueSettingsElement = AddElementNoAttributes("QueueSettings", rootElement);
+            var queueSettingsElement = AddElementNoAttributes("QueueSettings", rootElement);
 
             // Add ItemCount node
-            XmlElement itemCount = AddElementWithTypeAttribute("ItemCount", queueSettingsElement, "Integer",
+            var itemCount = AddElementWithTypeAttribute("ItemCount", queueSettingsElement, "Integer",
                 InpSamples.Count().ToString());
 
             // Loop through the queue and add nodes for each queued sample
-            int itemCntr = 1;
-            foreach (classSampleData currentSample in InpSamples)
+            var itemCntr = 1;
+            foreach (var currentSample in InpSamples)
             {
-                string itemNum = "Item" + itemCntr.ToString("0000");
-                XmlElement currentElement = AddElementNoAttributes(itemNum, queueSettingsElement);
+                var itemNum = "Item" + itemCntr.ToString("0000");
+                var currentElement = AddElementNoAttributes(itemNum, queueSettingsElement);
                 AddOneSample(currentSample, currentElement);
                 itemCntr++;
             }
@@ -103,11 +103,11 @@ namespace LcmsNet.SampleQueue.IO
         void AddOneSample(classSampleData InpSample, XmlElement ParentElement)
         {
             // Description element
-            XmlElement descElement = AddElementWithTypeAttribute("Description", ParentElement, "String",
+            var descElement = AddElementWithTypeAttribute("Description", ParentElement, "String",
                 InpSample.DmsData.DatasetName);
 
             // Selection element (PAL data)
-            XmlElement selectionElement = AddElementNoAttributes("Selection", ParentElement);
+            var selectionElement = AddElementNoAttributes("Selection", ParentElement);
             // No return type needed, since these elements don't have any children
             AddElementWithTypeAttribute("Method", selectionElement, "String", InpSample.PAL.Method);
             AddElementWithTypeAttribute("Tray", selectionElement, "String", InpSample.PAL.PALTray);
@@ -115,9 +115,9 @@ namespace LcmsNet.SampleQueue.IO
             AddElementWithTypeAttribute("Volume", selectionElement, "Integer", InpSample.Volume.ToString());
 
             // Separation element. These will be blank or zero for now
-            XmlElement separationElement = AddElementNoAttributes("Separation", ParentElement);
+            var separationElement = AddElementNoAttributes("Separation", ParentElement);
             // No return type needed, since these elements don't have any children
-            string name = "";
+            var name = "";
             if (InpSample.LCMethod != null)
             {
                 name = InpSample.LCMethod.Name;
@@ -125,12 +125,12 @@ namespace LcmsNet.SampleQueue.IO
             AddElementWithTypeAttribute("Method", separationElement, "String", name);
 
             // Acquisition element. These will be blank or zero for now
-            XmlElement acquisitionElement = AddElementNoAttributes("Acquisition", ParentElement);
+            var acquisitionElement = AddElementNoAttributes("Acquisition", ParentElement);
             // No return type needed, since these elements don't have any children
             AddElementWithTypeAttribute("Method", acquisitionElement, "String", InpSample.InstrumentData.MethodName);
 
             // DMS element
-            XmlElement dmsElement = AddElementNoAttributes("DMS", ParentElement);
+            var dmsElement = AddElementNoAttributes("DMS", ParentElement);
             // No return type needed, since these elements don't have any children
             AddElementWithTypeAttribute("RequestNumber", dmsElement, "String", InpSample.DmsData.RequestID.ToString());
             AddElementWithTypeAttribute("Comment", dmsElement, "String", InpSample.DmsData.Comment);
@@ -150,13 +150,13 @@ namespace LcmsNet.SampleQueue.IO
         {
             try
             {
-                FileStream outputFile = new FileStream(FileNamePath, FileMode.Create, FileAccess.Write);
+                var outputFile = new FileStream(FileNamePath, FileMode.Create, FileAccess.Write);
                 InpDoc.Save(outputFile);
                 outputFile.Close();
             }
             catch (Exception Ex)
             {
-                string ErrMsg = "Exception saving file " + FileNamePath + ": " + Ex.Message;
+                var ErrMsg = "Exception saving file " + FileNamePath + ": " + Ex.Message;
                 classApplicationLogger.LogError(0, ErrMsg, Ex);
                 throw new classDataExportException(ErrMsg, Ex);
             }
@@ -170,7 +170,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>XMLElement that was added to document</returns>
         XmlElement AddElementNoAttributes(string ElementName, XmlElement Parent)
         {
-            XmlElement newElement = mobj_ExportDoc.CreateElement(ElementName);
+            var newElement = mobj_ExportDoc.CreateElement(ElementName);
             Parent.AppendChild(newElement);
             return newElement;
         }
@@ -185,8 +185,8 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>XML element that was added to document</returns>
         XmlElement AddElementWithTypeAttribute(string ElementName, XmlElement Parent, string TypeName, string ElemValue)
         {
-            XmlElement newElement = AddElementNoAttributes(ElementName, Parent);
-            XmlAttribute newAttribute = mobj_ExportDoc.CreateAttribute("type");
+            var newElement = AddElementNoAttributes(ElementName, Parent);
+            var newAttribute = mobj_ExportDoc.CreateAttribute("type");
             newAttribute.Value = TypeName;
             newElement.Attributes.Append(newAttribute);
             newElement.InnerText = ElemValue;

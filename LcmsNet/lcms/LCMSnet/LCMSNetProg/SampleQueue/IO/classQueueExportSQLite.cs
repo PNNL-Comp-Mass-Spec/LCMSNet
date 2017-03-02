@@ -20,7 +20,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns></returns>
         public void WriteSamples(string path, List<classSampleData> data)
         {
-            string connStr = "data source=" + path;
+            var connStr = "data source=" + path;
 
             try
             {
@@ -28,7 +28,7 @@ namespace LcmsNet.SampleQueue.IO
             }
             catch (Exception ex)
             {
-                string errMsg = "Exception exporting queue to " + path;
+                var errMsg = "Exception exporting queue to " + path;
                 classApplicationLogger.LogError(0, errMsg, ex);
             }
         }

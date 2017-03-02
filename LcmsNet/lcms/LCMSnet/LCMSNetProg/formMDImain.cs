@@ -201,17 +201,17 @@ namespace LcmsNet
             mobj_logger = new classApplicationLogger();
             this.Text = "LcmsNet Version: " + Application.ProductVersion;
             this.Text += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-            string emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
+            var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
             if (emulation != null)
             {
-                bool isEmulated = Convert.ToBoolean(emulation);
+                var isEmulated = Convert.ToBoolean(emulation);
                 if (isEmulated)
                 {
                     this.Text += " [EMULATED] ";
                 }
             }
 
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            foreach (var column in classCartConfiguration.Columns)
             {
                 column.NameChanged += new classColumnData.DelegateNameChanged(column_NameChanged);
             }
@@ -284,15 +284,15 @@ namespace LcmsNet
             classLCMSSettings.SetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE, classSQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
-            bool failedDeviceFlag = false;
-            int failedCount = 0;
+            var failedDeviceFlag = false;
+            var failedCount = 0;
             classDeviceManager.Manager.InitialzingDevice +=
                 new EventHandler<classDeviceManagerStatusArgs>(Manager_InitialzingDevice);
             formFailedDevicesDisplay display = null;
             if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP)) == true)
             {
                 classApplicationLogger.LogMessage(0, "Initializing hardware.");
-                List<classDeviceErrorEventArgs> failedDevices = classDeviceManager.Manager.InitializeDevices();
+                var failedDevices = classDeviceManager.Manager.InitializeDevices();
                 if (failedDevices != null && failedDevices.Count > 0)
                 {
                     failedDeviceFlag = true;
@@ -323,14 +323,14 @@ namespace LcmsNet
 
             // Load the methods from the LC-Methods folder.
             classApplicationLogger.LogMessage(0, "Reading User Methods.");
-            Dictionary<string, List<Exception>> userMethodErrors =
+            var userMethodErrors =
                 classLCMethodManager.Manager.LoadMethods(
                     System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                         classLCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             if (userMethodErrors.Count > 0)
             {
-                formFailedMethodLoadDisplay failedMethods = new formFailedMethodLoadDisplay(userMethodErrors);
+                var failedMethods = new formFailedMethodLoadDisplay(userMethodErrors);
                 failedMethods.Icon = Icon;
                 failedMethods.StartPosition = FormStartPosition.CenterScreen;
                 failedMethods.ShowDialog();
@@ -438,11 +438,11 @@ namespace LcmsNet
                             string.Format(
                                 "The notification system is stopping all current runs and running the special method {1} because of the setting {0}",
                                 e.Name, e.Method.Name));
-                        int columnID = e.Method.Column;
+                        var columnID = e.Method.Column;
 
                         //mobj_sampleQueue.StopRunningQueue();
                         mobj_scheduler.Stop();
-                        classSampleData stupidSample = new classSampleData();
+                        var stupidSample = new classSampleData();
                         stupidSample.DmsData.DatasetName = string.Format("NotificationAction--{0}", e.Method.Name);
                         if (columnID >= 0)
                         {
@@ -461,14 +461,14 @@ namespace LcmsNet
                 case enumDeviceNotificationAction.RunMethodNext:
                     if (e.Method != null)
                     {
-                        int columnID = e.Method.Column;
+                        var columnID = e.Method.Column;
 
                         classApplicationLogger.LogError(0,
                             string.Format(
                                 "The notification system is queuing the special method {1} because of the setting {0}.",
                                 e.Name, e.Method.Name));
 
-                        classSampleData stupidSample = new classSampleData();
+                        var stupidSample = new classSampleData();
                         if (columnID >= 0)
                         {
                             stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
@@ -586,13 +586,13 @@ namespace LcmsNet
         /// <param name="device"></param>
         void RegisterDeviceEventHandlers(IDevice device)
         {
-            IAutoSampler sampler = device as IAutoSampler;
+            var sampler = device as IAutoSampler;
             if (sampler != null)
             {
                 sampler.TrayNames += new EventHandler<classAutoSampleEventArgs>(mform_sampleManager.AutoSamplerTrayList);
             }
 
-            INetworkStart network = device as INetworkStart;
+            var network = device as INetworkStart;
             if (network != null)
             {
                 network.MethodNames +=
@@ -606,16 +606,16 @@ namespace LcmsNet
         /// <param name="device"></param>
         void DeRegisterDeviceEventHandlers(IDevice device)
         {
-            Type type = device.GetType();
+            var type = device.GetType();
             if (type.IsAssignableFrom(typeof (IAutoSampler)))
             {
-                IAutoSampler sampler = device as IAutoSampler;
+                var sampler = device as IAutoSampler;
                 sampler.TrayNames -= mform_sampleManager.AutoSamplerTrayList;
             }
 
             if (type.IsAssignableFrom(typeof (INetworkStart)))
             {
-                INetworkStart network = device as INetworkStart;
+                var network = device as INetworkStart;
                 network.MethodNames -= mform_sampleManager.InstrumentMethodList;
             }
         }
@@ -759,11 +759,11 @@ namespace LcmsNet
         /// <param name="sample"></param>
         void UpdateSampleProgress(object sender, classSampleProgressEventArgs args)
         {
-            string message = "";
-            classSampleData sample = args.Sample;
+            var message = "";
+            var sample = args.Sample;
             LcmsNetDataClasses.Method.classLCEvent lcEvent = null;
             LcmsNetDataClasses.Method.classLCMethod lcMethod = null;
-            bool isError = false;
+            var isError = false;
 
             //
             // Construct the message to display
@@ -783,7 +783,7 @@ namespace LcmsNet
                 case enumSampleProgress.Error:
                     message = "";
                     lcMethod = sample.LCMethod;
-                    int eventNumber = lcMethod.CurrentEventNumber;
+                    var eventNumber = lcMethod.CurrentEventNumber;
                     if (eventNumber < lcMethod.Events.Count && eventNumber > -1)
                     {
                         lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
@@ -801,8 +801,8 @@ namespace LcmsNet
                     isError = true;
                     break;
                 case enumSampleProgress.Complete:
-                    Bitmap configImage = mform_fluidicsDesign.GetImage();
-                    string docPath = string.Empty;
+                    var configImage = mform_fluidicsDesign.GetImage();
+                    var docPath = string.Empty;
                     if (sample == null)
                     {
                         break;
@@ -836,7 +836,7 @@ namespace LcmsNet
                         {
                             SampleQueue.IO.classMethodFileTools.MoveLocalMethodFiles();
                         }
-                        string filePath =
+                        var filePath =
                             FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
                         m_pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
                             classCartConfiguration.NumberOfEnabledColumns.ToString(), classCartConfiguration.Columns,
@@ -891,7 +891,7 @@ namespace LcmsNet
         /// <param name="errorMessage"></param>
         void Scheduler_Error(object sender, classSampleData sample, string errorMessage)
         {
-            classSampleProgressEventArgs args = new classSampleProgressEventArgs(errorMessage,
+            var args = new classSampleProgressEventArgs(errorMessage,
                 sample,
                 enumSampleProgress.Error);
             if (InvokeRequired == true)
@@ -1046,10 +1046,10 @@ namespace LcmsNet
             //string msg = "Hey, man. Some dude said to close this here durned program. " + Environment.NewLine +
             //             "Y'all should check ta be shore no samples is runnin' afore closin' things up." + Environment.NewLine +
             //             Environment.NewLine + "Is you'uns sure ya wants ta do this?";
-            string msg = "Application shutdown requested. If samples are running, data may be lost" +
+            var msg = "Application shutdown requested. If samples are running, data may be lost" +
                          Environment.NewLine +
                          Environment.NewLine + "Are you sure you want to shut down?";
-            DialogResult result = MessageBox.Show(msg, "Closing Application", MessageBoxButtons.OKCancel,
+            var result = MessageBox.Show(msg, "Closing Application", MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question);
             if (result != DialogResult.OK)
             {
@@ -1095,9 +1095,9 @@ namespace LcmsNet
 
         private void mbutton_reportError_Click(object sender, EventArgs e)
         {
-            classLCMethodManager manager = classLCMethodManager.Manager;
-            string logPath = classFileLogging.LogPath;
-            List<Form> forms = new List<Form>();
+            var manager = classLCMethodManager.Manager;
+            var logPath = classFileLogging.LogPath;
+            var forms = new List<Form>();
 
             forms.AddRange(new Form[]
             {
@@ -1111,7 +1111,7 @@ namespace LcmsNet
             });
 
 
-            using (Reporting.Forms.formCreateErrorReport report
+            using (var report
                 = new LcmsNet.Reporting.Forms.formCreateErrorReport(manager,
                     logPath,
                     forms

@@ -29,7 +29,7 @@ namespace LcmsNet.Method.Forms
 
             mdialog_openMethod = new OpenFileDialog();
             mdialog_openMethod.Title = "Open LC-Method";
-            string path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
+            var path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
             if (!string.IsNullOrWhiteSpace(path))
             {
                 mdialog_openMethod.InitialDirectory = Path.Combine(path,
@@ -116,7 +116,7 @@ namespace LcmsNet.Method.Forms
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            formMethodPreviewOptions options = new formMethodPreviewOptions();
+            var options = new formMethodPreviewOptions();
             options.Animate = mcontrol_methodEditor.MethodPreviewOptions.Animate;
             options.AnimationDelay = mcontrol_methodEditor.MethodPreviewOptions.AnimateDelay;
             options.FrameDelay = mcontrol_methodEditor.MethodPreviewOptions.FrameDelay;

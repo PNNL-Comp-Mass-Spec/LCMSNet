@@ -128,7 +128,7 @@ namespace LcmsNet.Configuration
             set
             {
                 mcomboBox_names.Items.Clear();
-                string[] names = new string[value.Count];
+                var names = new string[value.Count];
                 value.CopyTo(names);
                 mcomboBox_names.BeginUpdate();
                 mcomboBox_names.Items.Add("NOTSET");
@@ -185,7 +185,7 @@ namespace LcmsNet.Configuration
         {
             mlabel_status.Text = string.Format("Status: {0}", status);
 
-            string statusMessage = string.Format("Status: {0}", status);
+            var statusMessage = string.Format("Status: {0}", status);
             //TODO: change this magic number into a constant.
             LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(1, statusMessage);
         }
@@ -227,7 +227,7 @@ namespace LcmsNet.Configuration
             if ((mobj_columnData == null) || (mobj_columnData.Name == null) || (mobj_columnData.Name == ""))
                 return; // No column name specified
 
-            int nameIndx = mcomboBox_names.FindStringExact(mobj_columnData.Name);
+            var nameIndx = mcomboBox_names.FindStringExact(mobj_columnData.Name);
 
             if (nameIndx == -1)
             {

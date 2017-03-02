@@ -71,12 +71,12 @@ namespace LcmsNet.Devices.Dashboard
         {
             mtree_availableDevices.BeginUpdate();
             mtree_availableDevices.Nodes.Clear();
-            foreach (classDevicePluginInformation info in plugins)
+            foreach (var info in plugins)
             {
                 TreeNode rootNode = null;
                 if (!mtree_availableDevices.Nodes.ContainsKey(info.DeviceAttribute.Category))
                 {
-                    TreeNode newParent = new TreeNode();
+                    var newParent = new TreeNode();
                     newParent.Text = info.DeviceAttribute.Category;
                     newParent.Name = info.DeviceAttribute.Category;
                     rootNode = newParent;
@@ -87,7 +87,7 @@ namespace LcmsNet.Devices.Dashboard
                     rootNode = mtree_availableDevices.Nodes[info.DeviceAttribute.Category];
                 }
 
-                TreeNode node = new TreeNode();
+                var node = new TreeNode();
                 node.Name = info.DeviceAttribute.Name;
                 node.Text = info.DeviceAttribute.Name;
                 node.Tag = info;
@@ -100,10 +100,10 @@ namespace LcmsNet.Devices.Dashboard
 
         public List<classDevicePluginInformation> GetSelectedPlugins()
         {
-            List<classDevicePluginInformation> plugins = new List<classDevicePluginInformation>();
-            foreach (object o in mlistbox_devices.Items)
+            var plugins = new List<classDevicePluginInformation>();
+            foreach (var o in mlistbox_devices.Items)
             {
-                classDevicePluginInformation plugin = o as classDevicePluginInformation;
+                var plugin = o as classDevicePluginInformation;
                 if (plugin != null)
                 {
                     plugins.Add(plugin);
@@ -162,15 +162,15 @@ namespace LcmsNet.Devices.Dashboard
             {
                 mlistbox_devices.BeginUpdate();
 
-                List<object> pluginsToRemove = new List<object>();
-                foreach (object o in mlistbox_devices.SelectedItems)
+                var pluginsToRemove = new List<object>();
+                foreach (var o in mlistbox_devices.SelectedItems)
                 {
                     if (o != null)
                     {
                         pluginsToRemove.Add(o);
                     }
                 }
-                foreach (object o in pluginsToRemove)
+                foreach (var o in pluginsToRemove)
                 {
                     mlistbox_devices.Items.Remove(o);
                 }

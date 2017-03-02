@@ -89,8 +89,8 @@ namespace LcmsNet.Method.Forms
                 //
                 // Grab the selected method items from the user interfaces
                 //
-                List<classLCMethodData> data = new List<classLCMethodData>();
-                foreach (controlLCMethodEvent lcEvent in mlist_events)
+                var data = new List<classLCMethodData>();
+                foreach (var lcEvent in mlist_events)
                 {
                     data.Add(lcEvent.SelectedMethod);
                 }
@@ -198,8 +198,8 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         private void mcomboBox_savedMethods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string name = mcomboBox_savedMethods.Text;
-            classLCMethod method = FindMethods(name);
+            var name = mcomboBox_savedMethods.Text;
+            var method = FindMethods(name);
             IgnoreUpdates = true;
             LoadMethod(method);
             TextBoxNameSetText(name);
@@ -225,9 +225,9 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         private void mtextBox_methodName_TextChanged(object sender, EventArgs e)
         {
-            string text = mtextBox_methodName.Text;
-            bool found = false;
-            foreach (object o in mcomboBox_savedMethods.Items)
+            var text = mtextBox_methodName.Text;
+            var found = false;
+            foreach (var o in mcomboBox_savedMethods.Items)
             {
                 if (o.ToString().Equals(text) == true)
                 {
@@ -283,14 +283,14 @@ namespace LcmsNet.Method.Forms
 
         public int GetColumn()
         {
-            int column = -1;
+            var column = -1;
 
             if (mcomboBox_column.SelectedItem == null)
             {
                 return column;
             }
 
-            string key = mcomboBox_column.SelectedItem.ToString();
+            var key = mcomboBox_column.SelectedItem.ToString();
             if (mdict_checkBoxToColumnDataMap.ContainsKey(key))
             {
                 column = mdict_checkBoxToColumnDataMap[key].ID;
@@ -311,9 +311,9 @@ namespace LcmsNet.Method.Forms
             if (classCartConfiguration.Columns == null)
                 return;
 
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            foreach (var column in classCartConfiguration.Columns)
             {
-                string id = (column.ID + 1).ToString();
+                var id = (column.ID + 1).ToString();
                 mdict_checkBoxToColumnDataMap.Add(id, column);
                 mcomboBox_column.Items.Add(id);
             }
@@ -361,7 +361,7 @@ namespace LcmsNet.Method.Forms
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
         public classLCMethod BuildMethod()
         {
-            classLCMethod method = classLCMethodBuilder.BuildMethod(this.LCEvents);
+            var method = classLCMethodBuilder.BuildMethod(this.LCEvents);
             if (method == null)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
@@ -369,7 +369,7 @@ namespace LcmsNet.Method.Forms
                 return null;
             }
 
-            int column = this.GetColumn();
+            var column = this.GetColumn();
             if (column < 0)
             {
                 method.IsSpecialMethod = true;
@@ -431,7 +431,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="e">Event arguments</param>
         private void mbutton_build_Click(object sender, EventArgs e)
         {
-            bool columnSelected = this.IsColumnSelected();
+            var columnSelected = this.IsColumnSelected();
             if (!columnSelected)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
@@ -455,13 +455,13 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         void mtextBox_methodName_LostFocus(object sender, EventArgs e)
         {
-            string text = mtextBox_methodName.Text;
-            foreach (object o in mcomboBox_savedMethods.Items)
+            var text = mtextBox_methodName.Text;
+            foreach (var o in mcomboBox_savedMethods.Items)
             {
                 if (o.ToString().Equals(text) == true)
                 {
                     mcomboBox_savedMethods.SelectedItem = o;
-                    classLCMethod method = FindMethods(text);
+                    var method = FindMethods(text);
                     LoadMethod(method);
                     OnEditMethod();
                     break;
@@ -493,12 +493,12 @@ namespace LcmsNet.Method.Forms
 
         private bool MethodExists()
         {
-            bool found = false;
+            var found = false;
             if (!string.IsNullOrEmpty(mtextBox_methodName.Text))
             {
-                string text = mtextBox_methodName.Text;
+                var text = mtextBox_methodName.Text;
 
-                foreach (object o in mcomboBox_savedMethods.Items)
+                foreach (var o in mcomboBox_savedMethods.Items)
                 {
                     if (o.ToString().Equals(text) == true)
                     {
@@ -568,7 +568,7 @@ namespace LcmsNet.Method.Forms
             mpanel_stage.SuspendLayout();
             mpanel_stage.Controls.Clear();
 
-            List<controlLCMethodEvent> events = new List<controlLCMethodEvent>();
+            var events = new List<controlLCMethodEvent>();
             events.AddRange(mlist_events);
             events.Reverse();
 
@@ -576,10 +576,10 @@ namespace LcmsNet.Method.Forms
             // Render them from back to front since we are using docking = top
             // This way they will show up in the order to be executed at the top
             //
-            int tabIndex = mpanel_stage.TabIndex + events.Count + 1;
-            for (int i = 0; i < events.Count; i++)
+            var tabIndex = mpanel_stage.TabIndex + events.Count + 1;
+            for (var i = 0; i < events.Count; i++)
             {
-                controlLCMethodEvent lcEvent = events[i];
+                var lcEvent = events[i];
                 lcEvent.TabIndex = tabIndex--;
                 lcEvent.BringToFront();
                 mpanel_stage.Controls.Add(lcEvent);
@@ -593,8 +593,8 @@ namespace LcmsNet.Method.Forms
         /// <returns></returns>
         private List<controlLCMethodEvent> GetSelectedEvents()
         {
-            List<controlLCMethodEvent> listEvents = new List<controlLCMethodEvent>();
-            foreach (controlLCMethodEvent stage in mlist_events)
+            var listEvents = new List<controlLCMethodEvent>();
+            foreach (var stage in mlist_events)
             {
                 if (stage.IsSelected)
                 {
@@ -609,7 +609,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void AddNewEvent()
         {
-            controlLCMethodEvent deviceEvent = new controlLCMethodEvent(mlist_events.Count + 1);
+            var deviceEvent = new controlLCMethodEvent(mlist_events.Count + 1);
             AddNewEvent(deviceEvent);
         }
 
@@ -641,7 +641,7 @@ namespace LcmsNet.Method.Forms
             deviceEvent.Lock += new DelegateLCMethodEventLocked(deviceEvent_Lock);
             deviceEvent.EventChanged += new EventHandler(deviceEvent_EventChanged);
 
-            string eventData = "";
+            var eventData = "";
             if (deviceEvent.SelectedMethod != null)
             {
                 if (deviceEvent.SelectedMethod.MethodAttribute != null)
@@ -667,14 +667,14 @@ namespace LcmsNet.Method.Forms
             if (clearOld == true)
                 mlist_events.Clear();
             SuspendLayout();
-            foreach (classLCEvent lcEvent in method.Events)
+            foreach (var lcEvent in method.Events)
             {
-                classLCMethodEventParameter parameters = new classLCMethodEventParameter();
-                for (int i = 0; i < lcEvent.Parameters.Length; i++)
+                var parameters = new classLCMethodEventParameter();
+                for (var i = 0; i < lcEvent.Parameters.Length; i++)
 
                 {
-                    object parameter = lcEvent.Parameters[i];
-                    string name = lcEvent.ParameterNames[i];
+                    var parameter = lcEvent.Parameters[i];
+                    var name = lcEvent.ParameterNames[i];
                     Control control = null;
 
                     if (lcEvent.MethodAttribute.DataProviderIndex == i)
@@ -682,7 +682,7 @@ namespace LcmsNet.Method.Forms
                         //
                         // Figure out what index to adjust the data provider for.
                         //
-                        controlParameterComboBox combo = new controlParameterComboBox();
+                        var combo = new controlParameterComboBox();
 
                         //
                         // Register the event to automatically get new data when the data provider has new
@@ -705,7 +705,7 @@ namespace LcmsNet.Method.Forms
                         name,
                         lcEvent.MethodAttribute.DataProvider);
                 }
-                classLCMethodData data = new classLCMethodData(lcEvent.Device,
+                var data = new classLCMethodData(lcEvent.Device,
                     lcEvent.Method,
                     lcEvent.MethodAttribute,
                     parameters);
@@ -713,7 +713,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // Construct an event.  We send false as locked because its not a locking event.
                 //
-                controlLCMethodEvent controlEvent = new controlLCMethodEvent(data, false);
+                var controlEvent = new controlLCMethodEvent(data, false);
                 controlEvent.SetBreakPoint(lcEvent.BreakPoint);
                 AddNewEvent(controlEvent);
                 controlEvent.updateEventNum(eventIndex(controlEvent) + 1);
@@ -725,12 +725,12 @@ namespace LcmsNet.Method.Forms
             }
             else
             {
-                classColumnData column = classCartConfiguration.Columns[method.Column];
+                var column = classCartConfiguration.Columns[method.Column];
                 if (column != null)
                 {
-                    foreach (object item in mcomboBox_column.Items)
+                    foreach (var item in mcomboBox_column.Items)
                     {
-                        string id = (column.ID + 1).ToString();
+                        var id = (column.ID + 1).ToString();
                         if (item.ToString() == id)
                         {
                             mcomboBox_column.SelectedItem = item;
@@ -753,8 +753,8 @@ namespace LcmsNet.Method.Forms
         {
             if (enabled == true)
             {
-                controlLCMethodEvent senderEvent = sender as controlLCMethodEvent;
-                controlLCMethodEvent newEvent = new controlLCMethodEvent(method, true);
+                var senderEvent = sender as controlLCMethodEvent;
+                var newEvent = new controlLCMethodEvent(method, true);
                 AddNewEvent(newEvent);
             }
             else
@@ -780,30 +780,30 @@ namespace LcmsNet.Method.Forms
             //
             // Find out what events to remove
             //
-            List<controlLCMethodEvent> listEvents = GetSelectedEvents();
+            var listEvents = GetSelectedEvents();
 
 
             //
             // Remove the events from the list
             //
-            int indexOfLastDeleted = 0;
-            foreach (controlLCMethodEvent deviceEvent in listEvents)
+            var indexOfLastDeleted = 0;
+            foreach (var deviceEvent in listEvents)
             {
                 indexOfLastDeleted = mlist_events.IndexOf(deviceEvent);
-                classLCMethodData data = deviceEvent.SelectedMethod;
+                var data = deviceEvent.SelectedMethod;
 
-                IDevice device = deviceEvent.Device;
-                Type type = device.GetType();
+                var device = deviceEvent.Device;
+                var type = device.GetType();
 
-                classLCMethodEventParameter parameter = data.Parameters;
+                var parameter = data.Parameters;
 
-                for (int i = 0; i < parameter.Names.Count; i++)
+                for (var i = 0; i < parameter.Names.Count; i++)
                 {
-                    controlParameterComboBox combo = parameter.Controls[i] as controlParameterComboBox;
+                    var combo = parameter.Controls[i] as controlParameterComboBox;
 
                     if (combo != null)
                     {
-                        string key = parameter.DataProviderNames[i];
+                        var key = parameter.DataProviderNames[i];
 
                         if (key != null)
                         {
@@ -819,7 +819,7 @@ namespace LcmsNet.Method.Forms
                         }
                     }
                 }
-                for (int i = indexOfLastDeleted; i < mlist_events.Count; i++)
+                for (var i = indexOfLastDeleted; i < mlist_events.Count; i++)
                 {
                     mlist_events[i].updateEventNum(mlist_events.IndexOf(mlist_events[i]));
                 }
@@ -837,27 +837,27 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void MoveSelectedEventsUp()
         {
-            List<controlLCMethodEvent> listEvents = GetSelectedEvents();
+            var listEvents = GetSelectedEvents();
 
             if (listEvents.Count <= 0)
                 return;
 
-            int[] indices = new int[listEvents.Count];
+            var indices = new int[listEvents.Count];
 
             //
             // Construct the pivot table.
             //
-            int i = 0;
-            foreach (controlLCMethodEvent devEvent in listEvents)
+            var i = 0;
+            foreach (var devEvent in listEvents)
             {
-                int index = mlist_events.IndexOf(devEvent);
+                var index = mlist_events.IndexOf(devEvent);
                 indices[i++] = index;
             }
 
             //
             // Use the pivot table to move the items around
             //
-            int maxPos = 0;
+            var maxPos = 0;
 
             // Dont worry about checking for the length of indices because we already did that above
             // when we checked the number of selected events being of the right size.
@@ -865,14 +865,14 @@ namespace LcmsNet.Method.Forms
             if (indices[0] == 0)
                 maxPos = 1;
 
-            for (int j = 0; j < i; j++)
+            for (var j = 0; j < i; j++)
             {
                 if (indices[j] > maxPos)
                 {
                     //
                     // Now swap the events
                     //
-                    controlLCMethodEvent preEvent = mlist_events[indices[j]];
+                    var preEvent = mlist_events[indices[j]];
                     mlist_events[indices[j]] = mlist_events[indices[j] - 1];
                     mlist_events[indices[j] - 1] = preEvent;
                     //update event list positions
@@ -895,38 +895,38 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void MoveSelectedEventsDown()
         {
-            List<controlLCMethodEvent> listEvents = GetSelectedEvents();
+            var listEvents = GetSelectedEvents();
             if (listEvents.Count <= 0)
                 return;
 
-            int[] indices = new int[listEvents.Count];
+            var indices = new int[listEvents.Count];
             //
             // Construct the pivot table.
             //
-            int i = 0;
-            foreach (controlLCMethodEvent devEvent in listEvents)
+            var i = 0;
+            foreach (var devEvent in listEvents)
             {
-                int index = mlist_events.IndexOf(devEvent);
+                var index = mlist_events.IndexOf(devEvent);
                 indices[i++] = index;
             }
 
             //
             // Use the pivot table to move the items around
             //
-            int maxPos = mlist_events.Count - 1;
+            var maxPos = mlist_events.Count - 1;
             if (maxPos == indices[indices.Length - 1])
             {
                 maxPos--;
             }
 
-            for (int j = i - 1; j >= 0; j--)
+            for (var j = i - 1; j >= 0; j--)
             {
                 if (indices[j] < maxPos)
                 {
                     //
                     // Now swap the events
                     //
-                    controlLCMethodEvent preEvent = mlist_events[indices[j]];
+                    var preEvent = mlist_events[indices[j]];
                     mlist_events[indices[j]] = mlist_events[indices[j] + 1];
                     mlist_events[indices[j] + 1] = preEvent;
                     mlist_events[indices[j]].updateEventNum(mlist_events.IndexOf(mlist_events[indices[j]]) + 1);
@@ -944,7 +944,7 @@ namespace LcmsNet.Method.Forms
 
         private void SelectAll(bool selected)
         {
-            foreach (controlLCMethodEvent lcEvent in mlist_events)
+            foreach (var lcEvent in mlist_events)
             {
                 lcEvent.IsSelected = selected;
                 lcEvent.Refresh();
@@ -1028,12 +1028,12 @@ namespace LcmsNet.Method.Forms
             //
             // Create a new writer.
             //
-            classLCMethodWriter writer = new classLCMethodWriter();
+            var writer = new classLCMethodWriter();
 
             //
             // Construct the path
             //
-            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
@@ -1050,7 +1050,7 @@ namespace LcmsNet.Method.Forms
         {
             if (mcomboBox_savedMethods.SelectedIndex >= 0 && mcomboBox_savedMethods.Items.Count > 0)
             {
-                classLCMethod method =
+                var method =
                     FindMethods(Convert.ToString(mcomboBox_savedMethods.Items[mcomboBox_savedMethods.SelectedIndex]));
                 SaveMethod(method);
             }
@@ -1061,10 +1061,10 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void SaveMethods()
         {
-            foreach (object nameObject in mcomboBox_savedMethods.Items)
+            foreach (var nameObject in mcomboBox_savedMethods.Items)
             {
-                string name = Convert.ToString(nameObject);
-                classLCMethod method = FindMethods(name);
+                var name = Convert.ToString(nameObject);
+                var method = FindMethods(name);
                 SaveMethod(method);
             }
 
@@ -1078,9 +1078,9 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void OpenMethod(string path)
         {
-            classLCMethodReader reader = new classLCMethodReader();
-            List<Exception> errors = new List<Exception>();
-            classLCMethod method = reader.ReadMethod(path, ref errors);
+            var reader = new classLCMethodReader();
+            var errors = new List<Exception>();
+            var method = reader.ReadMethod(path, ref errors);
 
             if (method != null)
             {
@@ -1093,8 +1093,8 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void LoadMethods()
         {
-            string[] methods = System.IO.Directory.GetFiles(MethodFolderPath, "*.xml");
-            foreach (string method in methods)
+            var methods = System.IO.Directory.GetFiles(MethodFolderPath, "*.xml");
+            foreach (var method in methods)
             {
                 classApplicationLogger.LogMessage(0, "Loading method " + method);
                 OpenMethod(method);

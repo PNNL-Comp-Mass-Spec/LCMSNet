@@ -18,9 +18,9 @@ namespace LcmsNetDataClasses.Devices
         {
             InitializeComponent();
             BeginUpdate();
-            mbool_isDeviceInUse = false;
-            mbool_isError = false;
-            mbool_isInitialized = false;
+            m_isDeviceInUse = false;
+            m_isError = false;
+            m_isInitialized = false;
             EndUpdate();
 
             MouseClick += new MouseEventHandler(controlDeviceStatusDisplay_MouseClick);
@@ -87,22 +87,22 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Flag that indicates if the device has an error.
         /// </summary>
-        private bool mbool_isError;
+        private bool m_isError;
 
         /// <summary>
         /// Flag that indicates if a device has been initialized.
         /// </summary>
-        private bool mbool_isInitialized;
+        private bool m_isInitialized;
 
         /// <summary>
         /// Flag that indicates if a device is in use..
         /// </summary>
-        private bool mbool_isDeviceInUse;
+        private bool m_isDeviceInUse;
 
         /// <summary>
         /// Flag indicating the control is updating and to suspend layout and painting.
         /// </summary>
-        private bool mbool_updating;
+        private bool m_updating;
 
         /// <summary>
         /// fired when the show control window is pressed.
@@ -120,11 +120,11 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public bool IsError
         {
-            get { return mbool_isError; }
+            get { return m_isError; }
             set
             {
-                mbool_isError = value;
-                if (!mbool_updating)
+                m_isError = value;
+                if (!m_updating)
                 {
                     Refresh();
                 }
@@ -136,11 +136,11 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public bool IsInitialized
         {
-            get { return mbool_isInitialized; }
+            get { return m_isInitialized; }
             set
             {
-                mbool_isInitialized = value;
-                if (!mbool_updating)
+                m_isInitialized = value;
+                if (!m_updating)
                 {
                     Refresh();
                 }
@@ -152,11 +152,11 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public bool IsInUse
         {
-            get { return mbool_isDeviceInUse; }
+            get { return m_isDeviceInUse; }
             set
             {
-                mbool_isDeviceInUse = value;
-                if (!mbool_updating)
+                m_isDeviceInUse = value;
+                if (!m_updating)
                 {
                     Refresh();
                 }
@@ -177,22 +177,22 @@ namespace LcmsNetDataClasses.Devices
             switch (e.Status)
             {
                 case enumDeviceStatus.Initialized:
-                    mbool_isInitialized = true;
-                    mbool_isError = false;
-                    mbool_isDeviceInUse = false;
+                    m_isInitialized = true;
+                    m_isError = false;
+                    m_isDeviceInUse = false;
                     break;
                 case enumDeviceStatus.NotInitialized:
-                    mbool_isInitialized = false;
-                    mbool_isDeviceInUse = false;
-                    mbool_isError = false;
+                    m_isInitialized = false;
+                    m_isDeviceInUse = false;
+                    m_isError = false;
                     break;
                 case enumDeviceStatus.InUseByMethod:
-                    mbool_isDeviceInUse = true;
-                    mbool_isError = false;
+                    m_isDeviceInUse = true;
+                    m_isError = false;
                     break;
                 case enumDeviceStatus.Error:
-                    mbool_isError = true;
-                    mbool_isDeviceInUse = false;
+                    m_isError = true;
+                    m_isDeviceInUse = false;
                     break;
             }
 
@@ -209,9 +209,9 @@ namespace LcmsNetDataClasses.Devices
         public void DeviceError(object sender, classDeviceErrorEventArgs e)
         {
             if (e.ErrorStatus == enumDeviceErrorStatus.NoError)
-                mbool_isError = false;
+                m_isError = false;
             else
-                mbool_isError = true;
+                m_isError = true;
 
             if (InvokeRequired)
             {
@@ -232,7 +232,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public void BeginUpdate()
         {
-            mbool_updating = true;
+            m_updating = true;
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public void EndUpdate()
         {
-            mbool_updating = false;
+            m_updating = false;
             Refresh();
         }
 
@@ -309,13 +309,13 @@ namespace LcmsNetDataClasses.Devices
             var left = Width - height + offset - CONST_INDICATOR_PADDING;
             var top = CONST_INDICATOR_TOP_PADDING;
             // Draw the initialized indicator.       
-            DrawIndicator(e.Graphics, left, top, width, height, Color.Lime, Color.DarkOliveGreen, mbool_isInitialized);
+            DrawIndicator(e.Graphics, left, top, width, height, Color.Lime, Color.DarkOliveGreen, m_isInitialized);
             // Draw the in use indicator.
             left -= (height + CONST_INDICATOR_PADDING);
-            DrawIndicator(e.Graphics, left, top, width, height, Color.Yellow, Color.Olive, mbool_isDeviceInUse);
+            DrawIndicator(e.Graphics, left, top, width, height, Color.Yellow, Color.Olive, m_isDeviceInUse);
             // Draw the error indicator.
             left -= (height + CONST_INDICATOR_PADDING);
-            DrawIndicator(e.Graphics, left, top, width, height, Color.Red, Color.DarkRed, mbool_isError);
+            DrawIndicator(e.Graphics, left, top, width, height, Color.Red, Color.DarkRed, m_isError);
         }
 
         /// <summary>

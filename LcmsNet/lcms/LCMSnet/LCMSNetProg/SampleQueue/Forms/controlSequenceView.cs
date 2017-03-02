@@ -57,8 +57,8 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Make sure we have at least one column that is enabled
             //
-            bool enabled = false;
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            var enabled = false;
+            foreach (var column in classCartConfiguration.Columns)
             {
                 if (column.Status != enumColumnStatus.Disabled)
                 {
@@ -94,7 +94,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="samples"></param>
         protected override void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
-            classColumnData data = mobj_sampleQueue.NextColumnData;
+            var data = mobj_sampleQueue.NextColumnData;
 
             // Make sure that we have a column data,
             // and that not all of the columns are
@@ -104,9 +104,9 @@ namespace LcmsNet.SampleQueue.Forms
             //    return;
             //}
 
-            int index = mobj_sampleQueue.ColumnOrder.IndexOf(data);
+            var index = mobj_sampleQueue.ColumnOrder.IndexOf(data);
 
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
             {
                 // Get the column data iterating through the enabled column list.
                 if (IterateThroughColumns)
@@ -429,7 +429,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mcheckbox_cycleColumns_CheckedChanged(object sender, EventArgs e)
         {
-            enumColumnDataHandling handling = enumColumnDataHandling.LeaveAlone;
+            var handling = enumColumnDataHandling.LeaveAlone;
             if (mcheckbox_cycleColumns.Checked)
             {
                 handling = enumColumnDataHandling.Resort;
@@ -485,7 +485,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             EnableQueueing(true);
 
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            foreach (var column in classCartConfiguration.Columns)
             {
                 column.StatusChanged += new classColumnData.DelegateStatusChanged(column_StatusChanged);
             }
@@ -515,7 +515,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (classCartConfiguration.Columns != null)
             {
-                foreach (classColumnData column in classCartConfiguration.Columns)
+                foreach (var column in classCartConfiguration.Columns)
                 {
                     column.StatusChanged += new classColumnData.DelegateStatusChanged(column_StatusChanged);
                 }
@@ -545,21 +545,21 @@ namespace LcmsNet.SampleQueue.Forms
 
         void mpanel_queue_MouseUp(object sender, MouseEventArgs e)
         {
-            mbool_movingQueueDown = false;
-            mbool_movingQueueUp = false;
+            m_movingQueueDown = false;
+            m_movingQueueUp = false;
         }
 
         void mpanel_queue_MouseMove(object sender, MouseEventArgs e)
         {
             System.Console.WriteLine("MOVING--rect!");
-            if (mbool_movingQueueDown == false && mbool_movingQueueUp == false)
+            if (m_movingQueueDown == false && m_movingQueueUp == false)
                 return;
 
             if (mdataGrid_samples.Rows.Count <= 0)
                 return;
 
-            int rowHeight = mdataGrid_samples.Rows[0].Height;
-            if (mbool_movingQueueDown)
+            var rowHeight = mdataGrid_samples.Rows[0].Height;
+            if (m_movingQueueDown)
             {
                 //
                 // If the mouse has been clicked and moving
@@ -572,7 +572,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Flag indicating that the user is queuing samples.
         /// </summary>
-        private bool mbool_movingQueueDown;
+        private bool m_movingQueueDown;
 
         private Panel panel2;
         private CheckBox mcheckbox_cycleColumns;
@@ -588,18 +588,18 @@ namespace LcmsNet.SampleQueue.Forms
         private Button mbutton_dmsEdit;
         private CheckBox mcheckbox_autoscroll;
         private Button buttonRefresh;
-        private bool mbool_movingQueueUp;
+        private bool m_movingQueueUp;
 
         private bool CanDeQueueSample(int rowID)
         {
-            bool canMove = false;
+            var canMove = false;
 
             return canMove;
         }
 
         private bool CanQueueSample(int rowID)
         {
-            bool canMove = false;
+            var canMove = false;
 
             return canMove;
         }
@@ -611,14 +611,14 @@ namespace LcmsNet.SampleQueue.Forms
         void mrect_queueRegion_MouseMove(object sender, MouseEventArgs e)
         {
             System.Console.WriteLine("MOVING--rect!");
-            if (mbool_movingQueueDown == false && mbool_movingQueueUp == false)
+            if (m_movingQueueDown == false && m_movingQueueUp == false)
                 return;
 
             if (mdataGrid_samples.Rows.Count <= 0)
                 return;
 
-            int rowHeight = mdataGrid_samples.Rows[0].Height;
-            if (mbool_movingQueueDown)
+            var rowHeight = mdataGrid_samples.Rows[0].Height;
+            if (m_movingQueueDown)
             {
                 //
                 // If the mouse has been clicked and moving
@@ -641,26 +641,26 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // See if we selected the queue region
             //
-            Point point = e.Location;
-            int diffYTop = Math.Abs(point.Y);
-            int diffYBottom = 0; // Math.Abs(mrect_queueRegion.Size.Height - point.Y);
-            int eps = 2;
+            var point = e.Location;
+            var diffYTop = Math.Abs(point.Y);
+            var diffYBottom = 0; // Math.Abs(mrect_queueRegion.Size.Height - point.Y);
+            var eps = 2;
 
             if (diffYTop <= eps)
             {
-                mbool_movingQueueUp = true;
+                m_movingQueueUp = true;
             }
             else if (diffYBottom <= eps)
             {
-                mbool_movingQueueDown = true;
+                m_movingQueueDown = true;
             }
             else
             {
                 //
                 // Nothing was selected
                 //
-                mbool_movingQueueUp = false;
-                mbool_movingQueueDown = false;
+                m_movingQueueUp = false;
+                m_movingQueueDown = false;
             }
         }
 

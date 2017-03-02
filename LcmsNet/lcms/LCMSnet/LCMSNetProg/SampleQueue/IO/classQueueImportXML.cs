@@ -41,36 +41,36 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>List<classSampleData> containing samples read from XML file</returns>
         public List<classSampleData> ReadSamples(string path)
         {
-            List<classSampleData> returnList = new List<classSampleData>();
+            var returnList = new List<classSampleData>();
 
             // Verify input file exists
             if (!File.Exists(path))
             {
-                string ErrMsg = "Import file " + path + " not found";
+                var ErrMsg = "Import file " + path + " not found";
                 classApplicationLogger.LogMessage(0, ErrMsg);
                 return returnList;
             }
 
             // Open the file
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             try
             {
                 doc.Load(path);
             }
             catch (Exception Ex)
             {
-                string ErrMsg = "Exception loading XML file " + path;
+                var ErrMsg = "Exception loading XML file " + path;
                 classApplicationLogger.LogError(0, ErrMsg, Ex);
                 throw new classDataImportException(ErrMsg, Ex);
             }
 
             // Get all the nodes under QueueSettings node
-            XmlNodeList nodeList = doc.SelectNodes("//QueueSettings/*");
+            var nodeList = doc.SelectNodes("//QueueSettings/*");
 
             // If no nodes found, report and exit
             if (nodeList.Count < 1)
             {
-                string ErrMsg = "No data found for import in file " + path;
+                var ErrMsg = "No data found for import in file " + path;
                 classApplicationLogger.LogMessage(0, ErrMsg);
                 return returnList;
             }
@@ -82,12 +82,12 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     try
                     {
-                        classSampleData newSample = ConvertXMLNodeToSample(currentNode);
+                        var newSample = ConvertXMLNodeToSample(currentNode);
                         returnList.Add(newSample);
                     }
                     catch (Exception Ex)
                     {
-                        string ErrMsg = "Exception converting XML item node to sample " + currentNode.Name;
+                        var ErrMsg = "Exception converting XML item node to sample " + currentNode.Name;
                         classApplicationLogger.LogError(0, ErrMsg, Ex);
                         throw new classDataImportException(ErrMsg, Ex);
                     }
@@ -104,7 +104,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>classSampleData object containing data from the XML node</returns>
         private classSampleData ConvertXMLNodeToSample(XmlNode ItemNode)
         {
-            classSampleData retData = new classSampleData(false);
+            var retData = new classSampleData(false);
             string tempStr;
 
             // Description (DMS.Name)
@@ -127,7 +127,7 @@ namespace LcmsNet.SampleQueue.IO
             retData.PAL.PALTray = ConvertNullToString(ItemNode.SelectSingleNode("Selection/Tray").InnerText);
 
             // Vial (PAL.Vial) (aka well)
-            string tmpStr = ConvertNullToString(ItemNode.SelectSingleNode("Selection/Vial").InnerText);
+            var tmpStr = ConvertNullToString(ItemNode.SelectSingleNode("Selection/Vial").InnerText);
             if (tmpStr == "")
             {
                 retData.PAL.Well = 0;
@@ -141,7 +141,7 @@ namespace LcmsNet.SampleQueue.IO
             retData.Volume = ConvertNullToDouble(ItemNode.SelectSingleNode("Selection/Volume").InnerText);
 
             // Separation Method (Experiment.ExperimentName)
-            string methodName = ConvertNullToString(ItemNode.SelectSingleNode("Separation/Method").InnerText);
+            var methodName = ConvertNullToString(ItemNode.SelectSingleNode("Separation/Method").InnerText);
             retData.LCMethod = new LcmsNetDataClasses.Method.classLCMethod();
             retData.LCMethod.Name = methodName;
 

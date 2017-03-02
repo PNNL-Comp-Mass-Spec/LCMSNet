@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formSplashScreen));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formSplashScreen));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelStatus = new System.Windows.Forms.Label();
             this.mlabel_version = new System.Windows.Forms.Label();

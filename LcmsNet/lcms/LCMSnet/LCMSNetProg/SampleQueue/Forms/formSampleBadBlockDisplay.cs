@@ -13,7 +13,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             mlistview_samples.BeginUpdate();
             mlistview_samples.Items.Clear();
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
             {
                 DisplaySample(sample);
             }
@@ -22,14 +22,14 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void DisplaySample(classSampleData sample)
         {
-            ListViewItem item = new ListViewItem();
+            var item = new ListViewItem();
             item.Text = sample.DmsData.Batch.ToString();
 
-            ListViewItem.ListViewSubItem block = new ListViewItem.ListViewSubItem(item, sample.DmsData.Block.ToString());
-            ListViewItem.ListViewSubItem dataset = new ListViewItem.ListViewSubItem(item, sample.DmsData.DatasetName);
-            ListViewItem.ListViewSubItem column = new ListViewItem.ListViewSubItem(item,
+            var block = new ListViewItem.ListViewSubItem(item, sample.DmsData.Block.ToString());
+            var dataset = new ListViewItem.ListViewSubItem(item, sample.DmsData.DatasetName);
+            var column = new ListViewItem.ListViewSubItem(item,
                 (sample.ColumnData.ID + 1).ToString());
-            ListViewItem.ListViewSubItem method = new ListViewItem.ListViewSubItem(item, sample.LCMethod.Name);
+            var method = new ListViewItem.ListViewSubItem(item, sample.LCMethod.Name);
 
             item.SubItems.Add(block);
             item.SubItems.Add(column);

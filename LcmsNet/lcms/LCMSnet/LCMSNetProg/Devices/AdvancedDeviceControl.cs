@@ -60,14 +60,14 @@ namespace LcmsNet.Devices
         {
             if (m_deviceToControlMap.ContainsKey(device))
             {
-                AdvancedDeviceGroupControl control = m_deviceToControlMap[device];
+                var control = m_deviceToControlMap[device];
                 control.RemoveDevice(device);
 
                 m_deviceToControlMap.Remove(device);
 
                 if (control.IsDeviceGroupEmpty)
                 {
-                    TabPage page = m_controlToPageMap[control];
+                    var page = m_controlToPageMap[control];
                     if (m_advancedTabControl.TabPages.Contains(page))
                     {
                         m_advancedTabControl.TabPages.Remove(page);
@@ -88,12 +88,12 @@ namespace LcmsNet.Devices
         /// <param name="device"></param>
         void Manager_DeviceAdded(object sender, IDevice device)
         {
-            Type type = device.GetType();
+            var type = device.GetType();
 
-            object[] attributes = type.GetCustomAttributes(typeof (classDeviceControlAttribute), false);
-            foreach (object o in attributes)
+            var attributes = type.GetCustomAttributes(typeof (classDeviceControlAttribute), false);
+            foreach (var o in attributes)
             {
-                classDeviceControlAttribute monitorAttribute = o as classDeviceControlAttribute;
+                var monitorAttribute = o as classDeviceControlAttribute;
                 if (monitorAttribute != null)
                 {
                     IDeviceControl control = null;
@@ -126,7 +126,7 @@ namespace LcmsNet.Devices
                 m_nameToControlMap.Add(groupName, control);
 
                 // Create the tab page
-                TabPage page = new TabPage();
+                var page = new TabPage();
                 page.Text = groupName;
                 page.BackColor = Color.White;
                 page.AutoScroll = true;
@@ -153,24 +153,24 @@ namespace LcmsNet.Devices
         /// </summary>
         private void AddDeviceToDeviceManager()
         {
-            DeviceAddController controller = new DeviceAddController();
-            formDeviceAddForm addForm = new formDeviceAddForm();
+            var controller = new DeviceAddController();
+            var addForm = new formDeviceAddForm();
             addForm.Icon = Icon;
 
-            List<classDevicePluginInformation> availablePlugins = controller.GetAvailablePlugins();
+            var availablePlugins = controller.GetAvailablePlugins();
             addForm.AddPluginInformation(availablePlugins);
             addForm.Owner = this;
 
 
-            DialogResult result = addForm.ShowDialog();
+            var result = addForm.ShowDialog();
             if (result == DialogResult.OK)
             {
-                List<classDevicePluginInformation> plugins = addForm.GetSelectedPlugins();
-                List<classDeviceErrorEventArgs> failedDevices = controller.AddDevices(plugins, addForm.InitializeOnAdd);
+                var plugins = addForm.GetSelectedPlugins();
+                var failedDevices = controller.AddDevices(plugins, addForm.InitializeOnAdd);
 
                 if (failedDevices != null && failedDevices.Count > 0)
                 {
-                    formFailedDevicesDisplay display = new formFailedDevicesDisplay(failedDevices);
+                    var display = new formFailedDevicesDisplay(failedDevices);
                     display.StartPosition = FormStartPosition.CenterScreen;
                     display.Icon = ParentForm.Icon;
                     display.ShowDialog();

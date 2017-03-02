@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formMethodFillDown));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formMethodFillDown));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label6 = new System.Windows.Forms.Label();
             this.comboLcMethodCol2 = new System.Windows.Forms.ComboBox();

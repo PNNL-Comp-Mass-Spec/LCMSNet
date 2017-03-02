@@ -45,7 +45,7 @@ namespace LcmsNet
 
         private void comboCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox s = (ComboBox) sender;
+            var s = (ComboBox) sender;
             modelChecker.Category = (ModelStatusCategory) s.SelectedItem;
         }
 

@@ -28,7 +28,7 @@ namespace LcmsNet.Simulator
         public void btnTack_OnClick(object sender, EventArgs e)
         {
             panelControl.Controls.Remove(control);
-            TabPage page = new TabPage();
+            var page = new TabPage();
             page.Text = this.Text;
             page.Controls.Add(control);
             parentControl.Controls.Add(page);

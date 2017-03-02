@@ -146,8 +146,8 @@ namespace LcmsNet.SampleQueue.Forms
             mcontrol_column3.Column = classCartConfiguration.Columns[2];
             mcontrol_column4.Column = classCartConfiguration.Columns[3];
 
-            List<string> palMethods = new List<string>();
-            for (int i = 0; i < 6; i++)
+            var palMethods = new List<string>();
+            for (var i = 0; i < 6; i++)
             {
                 mcontrol_column1.AutoSamplerMethods.Add("method" + i.ToString());
                 mcontrol_column2.AutoSamplerMethods.Add("method" + i.ToString());
@@ -181,8 +181,8 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 if (e.PreviewImage != null)
                 {
-                    int width = mpicture_preview.Width;
-                    int height = mpicture_preview.Height;
+                    var width = mpicture_preview.Width;
+                    var height = mpicture_preview.Height;
 
                     if (width <= 0)
                         return;
@@ -197,7 +197,7 @@ namespace LcmsNet.SampleQueue.Forms
                     try
                     {
                         Image x = new Bitmap(width, height);
-                        using (Graphics g = Graphics.FromImage(x))
+                        using (var g = Graphics.FromImage(x))
                         {
                             g.DrawImage(e.PreviewImage, 0, 0, width, height);
                             mpicture_preview.Image = x;
@@ -247,8 +247,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="stopButtonState"></param>
         private void DetermineIfShouldSetButtons(classSampleQueueArgs data)
         {
-            int runningCount = data.RunningSamplePosition;
-            int totalSamples = data.RunningQueueTotal;
+            var runningCount = data.RunningSamplePosition;
+            var totalSamples = data.RunningQueueTotal;
 
             if (runningCount > 0 && totalSamples > 0)
             {
@@ -287,7 +287,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="trayList">List of pal trays.</param>
         public void AutoSamplerTrayList(object sender, classAutoSampleEventArgs args)
         {
-            List<string> trays = args.TrayList;
+            var trays = args.TrayList;
 
             mcontrol_sequenceView.AutoSamplerTrays = trays;
             mcontrol_column1.AutoSamplerTrays = trays;
@@ -302,7 +302,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="methods">List of instrument MS methods.</param>
         public void InstrumentMethodList(object sender, classNetworkStartEventArgs args)
         {
-            List<string> methods = args.MethodList;
+            var methods = args.MethodList;
 
             mcontrol_sequenceView.InstrumentMethods = methods;
             mcontrol_column1.InstrumentMethods = methods;
@@ -343,8 +343,8 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (mdialog_exportMRMFiles.ShowDialog() == DialogResult.OK)
             {
-                string mrmFilePath = mdialog_exportMRMFiles.SelectedPath;
-                classMRMFileExporter mrmWriter = new classMRMFileExporter();
+                var mrmFilePath = mdialog_exportMRMFiles.SelectedPath;
+                var mrmWriter = new classMRMFileExporter();
                 mobj_sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
             }
         }
@@ -363,7 +363,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (mdialog_importQueue.ShowDialog() == DialogResult.OK)
             {
                 ISampleQueueReader reader = null;
-                string extension = System.IO.Path.GetExtension(mdialog_importQueue.FileName);
+                var extension = System.IO.Path.GetExtension(mdialog_importQueue.FileName);
 
                 switch (extension)
                 {
@@ -434,7 +434,7 @@ namespace LcmsNet.SampleQueue.Forms
                 classApplicationLogger.LogMessage(0, "Samples are already running.");
                 return;
             }
-            List<classSampleData> samples = mobj_sampleQueue.GetRunningQueue();
+            var samples = mobj_sampleQueue.GetRunningQueue();
 
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
@@ -475,7 +475,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 if (errors.Count > 0)
                 {
-                    formSampleValidatorErrorDisplay display = new formSampleValidatorErrorDisplay(errors);
+                    var display = new formSampleValidatorErrorDisplay(errors);
                     display.ShowDialog();
                     return;
                 }
@@ -484,12 +484,12 @@ namespace LcmsNet.SampleQueue.Forms
                 // Then we also want to check for running blocks on the wrong column.
                 //
 
-                List<classSampleData> badBlocks = validator.ValidateBlocks(samples);
+                var badBlocks = validator.ValidateBlocks(samples);
                 if (badBlocks.Count > 0)
                 {
                     //TODO: Add a notification.
-                    formSampleBadBlockDisplay display = new formSampleBadBlockDisplay(badBlocks);
-                    DialogResult result = display.ShowDialog();
+                    var display = new formSampleBadBlockDisplay(badBlocks);
+                    var result = display.ShowDialog();
                     if (result != DialogResult.OK)
                     {
                         return;
@@ -503,11 +503,11 @@ namespace LcmsNet.SampleQueue.Forms
             // This way they can validate if they need to all of this information.
             //
 
-            bool validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) &&
+            var validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) &&
                                    classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL) != string.Empty;
             if (validateSamples == true)
             {
-                formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
+                var dmsDisplay = new formSampleDMSValidatorDisplay(samples);
 
                 // We don't care what the result is..
                 if (dmsDisplay.ShowDialog() == DialogResult.Cancel)
@@ -516,7 +516,7 @@ namespace LcmsNet.SampleQueue.Forms
                 // If samples are not valid...then what?
                 if (!dmsDisplay.AreSamplesValid)
                 {
-                    DialogResult result =
+                    var result =
                         MessageBox.Show(
                             "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.  Do you wish to continue?",
                             "DMS Sample Validation",
@@ -538,17 +538,17 @@ namespace LcmsNet.SampleQueue.Forms
         /// <remarks>This method is unused</remarks>
         private void SynchronizeSystemClock()
         {
-            ProcessStartInfo synchStart = new ProcessStartInfo();
+            var synchStart = new ProcessStartInfo();
             synchStart.FileName = @"w32tm.exe";
             synchStart.Arguments = @"/resync";
             synchStart.UseShellExecute = false;
             synchStart.CreateNoWindow = true;
             synchStart.RedirectStandardOutput = true;
             synchStart.RedirectStandardError = true;
-            Process synch = Process.Start(synchStart);
+            var synch = Process.Start(synchStart);
             synch.WaitForExit(TIME_SYNCH_WAIT_TIME_MILLISECONDS);
-            string output = string.Empty;
-            string error = string.Empty;
+            var output = string.Empty;
+            var error = string.Empty;
             try
             {
                 output = synch.StandardOutput.ReadToEnd();

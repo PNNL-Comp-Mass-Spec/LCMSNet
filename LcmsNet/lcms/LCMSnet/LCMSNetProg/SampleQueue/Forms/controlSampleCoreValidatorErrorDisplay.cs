@@ -13,7 +13,7 @@ namespace LcmsNet.SampleQueue
             InitializeComponent();
 
             mlabel_sampleName.Text = sample.DmsData.DatasetName;
-            foreach (classSampleValidationError error in errors)
+            foreach (var error in errors)
             {
                 AddError(error);
             }
@@ -21,7 +21,7 @@ namespace LcmsNet.SampleQueue
 
         private void AddError(classSampleValidationError error)
         {
-            ListViewItem item = new ListViewItem();
+            var item = new ListViewItem();
             item.Text = error.Error;
             listView1.Items.Add(item);
         }

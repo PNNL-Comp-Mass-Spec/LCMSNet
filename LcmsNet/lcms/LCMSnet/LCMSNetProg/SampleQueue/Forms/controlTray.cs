@@ -38,7 +38,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (dataGridView1.Rows.Count < 1) return;
 
             //TODO: May want to add a warning and allow specifying a start vial number? Possibly allow selection of sample subset?
-            int vialCounter = Convert.ToInt32(mnum_specificVial.Value);
+            var vialCounter = Convert.ToInt32(mnum_specificVial.Value);
 
             foreach (DataGridViewRow currRow in dataGridView1.Rows)
             {
@@ -104,49 +104,49 @@ namespace LcmsNet.SampleQueue.Forms
             dataGridView1.AutoGenerateColumns = false;
 
             // Define columns
-            DataGridViewTextBoxColumn dsNameColumn = new DataGridViewTextBoxColumn();
+            var dsNameColumn = new DataGridViewTextBoxColumn();
             dsNameColumn.DataPropertyName = "SampleName";
             dsNameColumn.HeaderText = "Sample";
             dsNameColumn.Width = 290;
             dsNameColumn.ReadOnly = true;
 
-            DataGridViewTextBoxColumn seqNumColumn = new DataGridViewTextBoxColumn();
+            var seqNumColumn = new DataGridViewTextBoxColumn();
             seqNumColumn.DataPropertyName = "SeqNum";
             seqNumColumn.HeaderText = "Seq #";
             seqNumColumn.Width = 64;
             seqNumColumn.ReadOnly = true;
 
-            DataGridViewTextBoxColumn colNumColumn = new DataGridViewTextBoxColumn();
+            var colNumColumn = new DataGridViewTextBoxColumn();
             colNumColumn.DataPropertyName = "ColNum";
             colNumColumn.HeaderText = "Column #";
             colNumColumn.Width = 60;
             colNumColumn.ReadOnly = true;
 
-            DataGridViewTextBoxColumn trayColumn = new DataGridViewTextBoxColumn();
+            var trayColumn = new DataGridViewTextBoxColumn();
             trayColumn.DataPropertyName = "Tray";
             trayColumn.HeaderText = "Tray";
             trayColumn.Width = 50;
             trayColumn.ReadOnly = true;
 
-            DataGridViewTextBoxColumn vialColumn = new DataGridViewTextBoxColumn();
+            var vialColumn = new DataGridViewTextBoxColumn();
             vialColumn.DataPropertyName = "Vial";
             vialColumn.HeaderText = "Vial";
             vialColumn.Width = 50;
             vialColumn.ReadOnly = false;
 
-            DataGridViewTextBoxColumn batchColumn = new DataGridViewTextBoxColumn();
+            var batchColumn = new DataGridViewTextBoxColumn();
             batchColumn.DataPropertyName = "Batch";
             batchColumn.HeaderText = "Batch";
             batchColumn.Width = 50;
             batchColumn.ReadOnly = true;
 
-            DataGridViewTextBoxColumn blockColumn = new DataGridViewTextBoxColumn();
+            var blockColumn = new DataGridViewTextBoxColumn();
             blockColumn.DataPropertyName = "Block";
             blockColumn.HeaderText = "Block";
             blockColumn.Width = 50;
             blockColumn.ReadOnly = true;
 
-            DataGridViewTextBoxColumn runOrderColumn = new DataGridViewTextBoxColumn();
+            var runOrderColumn = new DataGridViewTextBoxColumn();
             runOrderColumn.DataPropertyName = "RunOrder";
             runOrderColumn.HeaderText = "Run Order (DMS)";
             runOrderColumn.Width = 86;
@@ -265,9 +265,9 @@ namespace LcmsNet.SampleQueue.Forms
             if (dataGridView1.Rows.Count < 1) return;
 
             //TODO: May want to add a warning and allow specifying a start vial number? Possibly allow selection of sample subset?
-            int vialCounter = 0;
+            var vialCounter = 0;
 
-            int mod = Convert.ToInt32(mnum_maxVials.Value);
+            var mod = Convert.ToInt32(mnum_maxVials.Value);
             foreach (DataGridViewRow currRow in dataGridView1.Rows)
             {
                 currRow.Cells[4].Value = (vialCounter % mod) + 1;

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formDMSView));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formDMSView));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.comboBoxSelectCartConfig = new System.Windows.Forms.ComboBox();

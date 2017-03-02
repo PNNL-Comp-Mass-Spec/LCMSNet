@@ -22,7 +22,7 @@ namespace LcmsNet.Method
         /// <returns>An LC-Event</returns>
         private bool WriteEventNode(XmlDocument document, XmlElement eventRoot, classLCEvent lcEvent)
         {
-            bool passed = true;
+            var passed = true;
 
             //
             // Set all of the event attributes
@@ -37,7 +37,7 @@ namespace LcmsNet.Method
             //
             // Store the device data
             //
-            XmlElement device = document.CreateElement(classLCMethodFactory.CONST_XPATH_DEVICE);
+            var device = document.CreateElement(classLCMethodFactory.CONST_XPATH_DEVICE);
             device.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, lcEvent.Device.Name);
             device.SetAttribute(classLCMethodFactory.CONST_XPATH_TYPE, lcEvent.Device.GetType().FullName);
                 //TODO: BLL AssemblyQualifiedName);
@@ -45,17 +45,17 @@ namespace LcmsNet.Method
             //
             // Store the method name
             //
-            XmlElement methodInfo = document.CreateElement(classLCMethodFactory.CONST_XPATH_METHOD_INFO);
+            var methodInfo = document.CreateElement(classLCMethodFactory.CONST_XPATH_METHOD_INFO);
             methodInfo.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, lcEvent.Method.Name);
 
             //
             // Store the parameter information
             //
-            XmlElement parameters = document.CreateElement(classLCMethodFactory.CONST_XPATH_PARAMETERS);
-            for (int i = 0; i < lcEvent.Parameters.Length; i++)
+            var parameters = document.CreateElement(classLCMethodFactory.CONST_XPATH_PARAMETERS);
+            for (var i = 0; i < lcEvent.Parameters.Length; i++)
             {
-                object parameter = lcEvent.Parameters[i];
-                string parameterName = lcEvent.ParameterNames[i];
+                var parameter = lcEvent.Parameters[i];
+                var parameterName = lcEvent.ParameterNames[i];
 
                 //TODO: Fix this sample thing, coupling
                 if (parameter == null && lcEvent.MethodAttribute.SampleParameterIndex != i)
@@ -68,10 +68,10 @@ namespace LcmsNet.Method
                             lcEvent.Method.Name));
                 }
 
-                XmlElement parameterInfo = document.CreateElement(classLCMethodFactory.CONST_XPATH_PARAMETER);
+                var parameterInfo = document.CreateElement(classLCMethodFactory.CONST_XPATH_PARAMETER);
                 parameterInfo.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, parameterName);
 
-                bool sampleSpecific = false;
+                var sampleSpecific = false;
                 string value;
                 string type;
                 //
@@ -121,10 +121,10 @@ namespace LcmsNet.Method
             if (method == null)
                 return false;
 
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
 
             // Method Name and Flag if it is "special"
-            XmlElement rootElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_METHOD);
+            var rootElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_METHOD);
             rootElement.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, method.Name);
             rootElement.SetAttribute(classLCMethodFactory.CONST_XPATH_IS_SPECIAL, method.IsSpecialMethod.ToString());
             rootElement.SetAttribute(classLCMethodFactory.CONST_XPATH_ALLOW_POST_OVERLAP,
@@ -137,9 +137,9 @@ namespace LcmsNet.Method
             //
             // Then construct the events.
             //
-            foreach (classLCEvent lcEvent in method.Events)
+            foreach (var lcEvent in method.Events)
             {
-                XmlElement eventElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_EVENTS);
+                var eventElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_EVENTS);
                 WriteEventNode(document, eventElement, lcEvent);
                 rootElement.AppendChild(eventElement);
             }
@@ -148,7 +148,7 @@ namespace LcmsNet.Method
             //
             // Dump the actual events
             //
-            XmlElement rootActualElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_ACTUAL_METHOD);
+            var rootActualElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_ACTUAL_METHOD);
             rootActualElement.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, method.Name);
 
             if (method.ActualEvents.Count > 0)
@@ -156,9 +156,9 @@ namespace LcmsNet.Method
                 //
                 // Then construct the events.
                 //
-                foreach (classLCEvent lcActualEvent in method.ActualEvents)
+                foreach (var lcActualEvent in method.ActualEvents)
                 {
-                    XmlElement actualEventElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_EVENTS);
+                    var actualEventElement = document.CreateElement(classLCMethodFactory.CONST_XPATH_EVENTS);
                     WriteEventNode(document, actualEventElement, lcActualEvent);
                     rootActualElement.AppendChild(actualEventElement);
                 }

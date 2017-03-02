@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formInsertOntoUnusedDialog));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formInsertOntoUnusedDialog));
             this.mlabel_insertDescription = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();

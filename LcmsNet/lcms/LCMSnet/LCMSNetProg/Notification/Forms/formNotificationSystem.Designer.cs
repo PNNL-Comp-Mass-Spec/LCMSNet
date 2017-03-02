@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formNotificationSystem));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formNotificationSystem));
             this.mnotify_icon = new System.Windows.Forms.NotifyIcon(this.components);
             this.mlistview_devices = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));

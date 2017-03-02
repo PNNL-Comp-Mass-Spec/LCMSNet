@@ -42,7 +42,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void EditDMSData()
         {
-            List<classSampleData> samples = GetSelectedSamples();
+            var samples = GetSelectedSamples();
 
             if (samples.Count < 1)
             {
@@ -53,7 +53,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             try
             {
-                formSampleDMSValidatorDisplay dmsDisplay = new formSampleDMSValidatorDisplay(samples);
+                var dmsDisplay = new formSampleDMSValidatorDisplay(samples);
                 // We don't care what the result is..
                 if (dmsDisplay.ShowDialog() == DialogResult.Cancel)
                 {
@@ -327,7 +327,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             m_selector = new formMoveToColumnSelector();
 
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            foreach (var column in classCartConfiguration.Columns)
             {
                 column.NameChanged += column_NameChanged;
                 column.ColorChanged += column_ColorChanged;
@@ -384,7 +384,7 @@ namespace LcmsNet.SampleQueue.Forms
             try
             {
                 datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
-                foreach (string datasetType in datasetTypes)
+                foreach (var datasetType in datasetTypes)
                 {
                     mcolumn_datasetType.Items.Add(datasetType);
                 }
@@ -458,10 +458,10 @@ namespace LcmsNet.SampleQueue.Forms
         bool SelectionChangeValid(int rowNum, classSampleData sample, bool doNotValidate = false)
         {
             // Make sure we aren't at the end of the queue.
-            int N = mdataGrid_samples.Rows.Count;
+            var N = mdataGrid_samples.Rows.Count;
             if (rowNum <= N/* * mint_sampleItemSize*/)
             {
-                int currentSample =
+                var currentSample =
                     /*Convert.ToInt32(Math.Round(Convert.ToDouble(y) / Convert.ToDouble(mint_sampleItemSize))) +
                     mdataGrid_samples.FirstDisplayedScrollingRowIndex*/ rowNum;
 
@@ -509,15 +509,15 @@ namespace LcmsNet.SampleQueue.Forms
                 }
 
                 // Validate other parts of the sample.
-                List<classSampleValidationError> errors = new List<classSampleValidationError>();
+                var errors = new List<classSampleValidationError>();
                 foreach (
-                    Lazy<ISampleValidator, ISampleValidatorMetaData> reference in
+                    var reference in
                         LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
                 {
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
 #endif
-                    ISampleValidator sampleValidator = reference.Value;
+                    var sampleValidator = reference.Value;
                     errors.AddRange(sampleValidator.ValidateSamples(sample));
                 }
                 if (errors.Count > 0)
@@ -543,12 +543,12 @@ namespace LcmsNet.SampleQueue.Forms
             var currentTask = "Initializing";
             
             // Make sure we aren't at the end of the queue.
-            int N = mdataGrid_samples.Rows.Count;
+            var N = mdataGrid_samples.Rows.Count;
 
             try
             {
                 currentTask = "Determine number of selected items";
-                int offset = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
+                var offset = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
 
                 // Find the number of items that are selected.
                 if (rowNum <= N)
@@ -565,7 +565,7 @@ namespace LcmsNet.SampleQueue.Forms
                 if (Math.Abs(mint_lastQueuedSamplePosition - rowNum) > 1)
                 {
                     // process: if more than 1 selected, ask user for confirmation; if confirmed, recursively call this function?
-                    bool isDequeue = mint_lastQueuedSamplePosition - rowNum > 0;
+                    var isDequeue = mint_lastQueuedSamplePosition - rowNum > 0;
                     if (isDequeue) // dequeuing samples
                     {
                         HandleSampleValidationAndQueuing(rowNum + 1, true);
@@ -578,7 +578,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
 
                 currentTask = "Examine samples";
-                int neededRowId = 0;
+                var neededRowId = 0;
                 if (rowNum <= mint_firstQueuedSamplePosition || mint_lastQueuedSamplePosition > rowNum)
                 {
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum].Cells[CONST_COLUMN_UNIQUE_ID].Value);
@@ -587,7 +587,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
                 }
-                classSampleData sample = mobj_sampleQueue.FindSample(neededRowId);
+                var sample = mobj_sampleQueue.FindSample(neededRowId);
 
                 if (rowNum <= mint_firstQueuedSamplePosition)
                 {
@@ -626,7 +626,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //}
                 if (rowNum <= N)
                 {
-                    int currentSample = rowNum;
+                    var currentSample = rowNum;
 
                     if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
                         return;
@@ -672,16 +672,16 @@ namespace LcmsNet.SampleQueue.Forms
                     }
 
                     // Validate other parts of the sample.
-                    List<classSampleValidationError> errors = new List<classSampleValidationError>();
+                    var errors = new List<classSampleValidationError>();
                     foreach (
-                        Lazy<ISampleValidator, ISampleValidatorMetaData> reference in
+                        var reference in
                             LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
                     {
 #if DEBUG
                         System.Diagnostics.Debug.WriteLine("Validating sample with validator: " +
                                                            reference.Metadata.Name);
 #endif
-                        ISampleValidator sampleValidator = reference.Value;
+                        var sampleValidator = reference.Value;
                         errors.AddRange(sampleValidator.ValidateSamples(sample));
                     }
                     if (errors.Count > 0)
@@ -742,14 +742,14 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     return;
                 }
-                DataGridViewCheckBoxCell checkbox = row.Cells[CONST_COLUMN_CHECKED] as DataGridViewCheckBoxCell;
+                var checkbox = row.Cells[CONST_COLUMN_CHECKED] as DataGridViewCheckBoxCell;
                 if (checkbox == null)
                 {
                     return;
                 }
                 //enumCheckboxStatus gridEditState =
                 //    GetCheckboxStatusFromCheckbox(checkbox, checkbox.EditedFormattedValue); // use checkbox.EditedFormattedValue
-                enumCheckboxStatus gridSavedState = GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value);
+                var gridSavedState = GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value);
                 if (gridSavedState != enumCheckboxStatus.Disabled)
                 {
                     if (gridSavedState == enumCheckboxStatus.Unchecked /*&& gridState == enumCheckboxStatus.Checked*/)
@@ -772,7 +772,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     return;
                 }
-                DataGridViewComboBoxCell comboBox = row.Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
+                var comboBox = row.Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
                 if (comboBox == null)
                 {
                     return;
@@ -810,9 +810,9 @@ namespace LcmsNet.SampleQueue.Forms
             if (method == null)
                 return true;
 
-            foreach (object o in mcolumn_LCMethod.Items)
+            foreach (var o in mcolumn_LCMethod.Items)
             {
-                string name = Convert.ToString(o);
+                var name = Convert.ToString(o);
                 if (name == method.Name)
                 {
                     mcolumn_LCMethod.Items.Remove(method.Name);
@@ -830,9 +830,9 @@ namespace LcmsNet.SampleQueue.Forms
         protected void RemoveMethodName(string methodName)
         {
             object oFound = null;
-            foreach (object o in mcolumn_LCMethod.Items)
+            foreach (var o in mcolumn_LCMethod.Items)
             {
-                string name = o.ToString();
+                var name = o.ToString();
                 if (methodName == name)
                 {
                     oFound = o;
@@ -851,9 +851,9 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected bool ContainsMethod(string methodName)
         {
-            foreach (object o in mcolumn_LCMethod.Items)
+            foreach (var o in mcolumn_LCMethod.Items)
             {
-                string name = o.ToString();
+                var name = o.ToString();
                 if (methodName == name)
                 {
                     return true;
@@ -870,13 +870,13 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected virtual bool Manager_MethodUpdated(object sender, classLCMethod method)
         {
-            List<classSampleData> samples = mobj_sampleQueue.GetWaitingQueue();
-            List<classSampleData> updateSamples = new List<classSampleData>();
-            foreach (classSampleData sample in samples)
+            var samples = mobj_sampleQueue.GetWaitingQueue();
+            var updateSamples = new List<classSampleData>();
+            foreach (var sample in samples)
             {
                 if (sample.LCMethod != null && sample.LCMethod.Name == method.Name)
                 {
-                    int newColID = method.Column;
+                    var newColID = method.Column;
                     if (newColID >= 0)
                     {
                         sample.ColumnData = classCartConfiguration.Columns[newColID];
@@ -904,10 +904,10 @@ namespace LcmsNet.SampleQueue.Forms
                 return true;
 
             // Find the method if name exists
-            bool found = false;
-            foreach (object o in mcolumn_LCMethod.Items)
+            var found = false;
+            foreach (var o in mcolumn_LCMethod.Items)
             {
-                string name = Convert.ToString(o);
+                var name = Convert.ToString(o);
                 if (name == method.Name)
                 {
                     found = true;
@@ -928,7 +928,7 @@ namespace LcmsNet.SampleQueue.Forms
             else
             {
                 // Here we update the method that was in the list, with the new one that was added/updated
-                int indexOf = mcolumn_LCMethod.Items.IndexOf(method.Name);
+                var indexOf = mcolumn_LCMethod.Items.IndexOf(method.Name);
                 if (indexOf >= 0)
                     mcolumn_LCMethod.Items[indexOf] = method;
             }
@@ -1233,12 +1233,12 @@ namespace LcmsNet.SampleQueue.Forms
         {
             mdataGrid_samples.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            DataGridViewRow row = mdataGrid_samples.Rows[e.RowIndex];
+            var row = mdataGrid_samples.Rows[e.RowIndex];
 
             //
             // Get the new value
             //
-            object cellData = row.Cells[e.ColumnIndex].Value;
+            var cellData = row.Cells[e.ColumnIndex].Value;
 
             //
             // Make sure the value is not null, and that the user has selected an item.
@@ -1264,12 +1264,12 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Find the sample in the queue.
             //
-            long uniqueID = Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
-            classSampleData data = mobj_sampleQueue.FindSample(uniqueID);
-            bool success = false;
-            double volume = 0.0;
-            int vial = 0;
-            string name = "";
+            var uniqueID = Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
+            var data = mobj_sampleQueue.FindSample(uniqueID);
+            var success = false;
+            var volume = 0.0;
+            var vial = 0;
+            var name = "";
 
             //
             // Update the sample data
@@ -1286,7 +1286,7 @@ namespace LcmsNet.SampleQueue.Forms
                     name = Convert.ToString(cellData);
                     if (classLCMethodManager.Manager.Methods.ContainsKey(name))
                     {
-                        classLCMethod tempMethod = classLCMethodManager.Manager.Methods[name];
+                        var tempMethod = classLCMethodManager.Manager.Methods[name];
                         if (tempMethod.Column != data.ColumnData.ID)
                         {
                             if (tempMethod.Column >= 0)
@@ -1337,8 +1337,8 @@ namespace LcmsNet.SampleQueue.Forms
             {
             }
 
-            long uniqueID = Convert.ToInt64(mdataGrid_samples.Rows[e.RowIndex].Cells[CONST_COLUMN_UNIQUE_ID].Value);
-            classSampleData data = mobj_sampleQueue.FindSample(uniqueID);
+            var uniqueID = Convert.ToInt64(mdataGrid_samples.Rows[e.RowIndex].Cells[CONST_COLUMN_UNIQUE_ID].Value);
+            var data = mobj_sampleQueue.FindSample(uniqueID);
             if (data.RunningStatus != enumSampleRunningStatus.Queued)
             {
                 e.Cancel = true;
@@ -1372,7 +1372,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcolumn_PalTray.Items.Clear();
             mcolumn_PalTray.Items.Add(CONST_NOT_SELECTED);
 
-            foreach (string tray in mlist_autosamplerTrays)
+            foreach (var tray in mlist_autosamplerTrays)
             {
                 mcolumn_PalTray.Items.Add(tray);
             }
@@ -1386,7 +1386,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcolumn_instrumentMethod.Items.Clear();
             mcolumn_instrumentMethod.Items.Add(CONST_NOT_SELECTED);
 
-            foreach (string tray in mlist_instrumentMethods)
+            foreach (var tray in mlist_instrumentMethods)
             {
                 mcolumn_instrumentMethod.Items.Add(tray);
             }
@@ -1400,7 +1400,7 @@ namespace LcmsNet.SampleQueue.Forms
             mcolumn_LCMethod.Items.Clear();
             mcolumn_LCMethod.Items.Add(CONST_NOT_SELECTED);
 
-            foreach (classLCMethod method in classLCMethodManager.Manager.Methods.Values)
+            foreach (var method in classLCMethodManager.Manager.Methods.Values)
             {
                 AddLCMethod(method);
             }
@@ -1434,7 +1434,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         public void AddDateCartnameColumnIDToDatasetName()
         {
-            List<classSampleData> samples = GetSelectedSamples();
+            var samples = GetSelectedSamples();
             if (samples.Count < 1)
                 return;
 
@@ -1447,7 +1447,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (samples.Count < 1)
                 return;
 
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
             {
                 classSampleData.AddDateCartColumnToDatasetName(sample);
             }
@@ -1456,7 +1456,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         public void ResetDatasetName()
         {
-            List<classSampleData> samples = GetSelectedSamples();
+            var samples = GetSelectedSamples();
 
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
@@ -1467,7 +1467,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (samples.Count < 1)
                 return;
 
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
             {
                 classSampleData.ResetDatasetNameToRequestName(sample);
             }
@@ -1477,7 +1477,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         protected virtual void EditTrayAndVial()
         {
-            List<classSampleData> samples = GetSelectedSamples();
+            var samples = GetSelectedSamples();
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
@@ -1512,7 +1512,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Get the list of selected samples
             //
-            List<classSampleData> samples = GetSelectedSamples();
+            var samples = GetSelectedSamples();
 
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
@@ -1538,7 +1538,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Then update the sample queue...
                 //
-                List<classSampleData> newSamples = mform_filldown.GetModifiedSampleList();
+                var newSamples = mform_filldown.GetModifiedSampleList();
                 mobj_sampleQueue.UpdateSamples(newSamples);
             }
         }
@@ -1555,8 +1555,8 @@ namespace LcmsNet.SampleQueue.Forms
             if (m_selector.ShowDialog() == DialogResult.OK &&
                 m_selector.SelectedColumn != formMoveToColumnSelector.CONST_NO_COLUMN_SELECTED)
             {
-                int column = m_selector.SelectedColumn;
-                List<classSampleData> selectedSamples = GetSelectedSamples();
+                var column = m_selector.SelectedColumn;
+                var selectedSamples = GetSelectedSamples();
 
 
                 if (selectedSamples.Count < 1)
@@ -1566,8 +1566,8 @@ namespace LcmsNet.SampleQueue.Forms
                 // Make sure the samples can actually run, e.g. dont put a sample on column 2 already back onto column 2.
                 // Don't put a column that has been run, at the end of the queue again.
                 //
-                List<classSampleData> samples = new List<classSampleData>();
-                foreach (classSampleData sample in selectedSamples)
+                var samples = new List<classSampleData>();
+                foreach (var sample in selectedSamples)
                 {
                     if (sample.RunningStatus == enumSampleRunningStatus.Queued && column != sample.ColumnData.ID)
                     {
@@ -1579,8 +1579,8 @@ namespace LcmsNet.SampleQueue.Forms
                 // Get the list of unique id's from the samples and
                 // change the column to put the samples on.
                 //
-                List<long> ids = new List<long>();
-                foreach (classSampleData sample in samples)
+                var ids = new List<long>();
+                foreach (var sample in samples)
                 {
                     ids.Add(sample.UniqueID);
                     sample.ColumnData = classCartConfiguration.Columns[column];
@@ -1661,7 +1661,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (mform_dmsView != null)
             {
-                DialogResult result = mform_dmsView.ShowDialog();
+                var result = mform_dmsView.ShowDialog();
 
                 //
                 // If the user clicks ok , then add the samples from the
@@ -1672,17 +1672,17 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 if (result == DialogResult.OK)
                 {
-                    List<classSampleData> samples = mform_dmsView.GetNewSamplesDMSView();
+                    var samples = mform_dmsView.GetNewSamplesDMSView();
                     mform_dmsView.ClearForm();
 
-                    bool insertToUnused = false;
+                    var insertToUnused = false;
                     if (HasUnusedSamples())
                     {
                         //
                         // Ask the user what to do with these samples?
                         //
-                        formInsertOntoUnusedDialog dialog = new formInsertOntoUnusedDialog();
-                        DialogResult insertResult = dialog.ShowDialog();
+                        var dialog = new formInsertOntoUnusedDialog();
+                        var insertResult = dialog.ShowDialog();
 
                         insertToUnused = (insertResult == DialogResult.Yes);
                     }
@@ -1706,7 +1706,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>New object reference of a sample with only required data copied.</returns>
         protected virtual classSampleData CopyRequiredSampleData(classSampleData sampleToCopy)
         {
-            classSampleData newSample = new classSampleData(false)
+            var newSample = new classSampleData(false)
             {
                 DmsData =
                 {
@@ -1729,7 +1729,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Make sure we copy the column data.  If it's null, then it's probably a special method.
             if (sampleToCopy.ColumnData != null)
             {
-                int id = sampleToCopy.ColumnData.ID;
+                var id = sampleToCopy.ColumnData.ID;
                 if (id < classCartConfiguration.Columns.Count && id >= 0)
                 {
                     newSample.ColumnData = classCartConfiguration.Columns[sampleToCopy.ColumnData.ID];
@@ -1750,7 +1750,7 @@ namespace LcmsNet.SampleQueue.Forms
                 newSample.LCMethod = sampleToCopy.LCMethod.Clone() as classLCMethod;
                 if (newSample.LCMethod != null && newSample.LCMethod.Column >= 0)
                 {
-                    int id = newSample.LCMethod.Column;
+                    var id = newSample.LCMethod.Column;
                     if (id < classCartConfiguration.Columns.Count && id >= 0)
                     {
                         newSample.ColumnData = classCartConfiguration.Columns[newSample.LCMethod.Column];
@@ -1811,10 +1811,10 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Get the list of selected samples
             //
-            List<classSampleData> samples = new List<classSampleData>();
+            var samples = new List<classSampleData>();
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
             {
-                classSampleData data = RowToSample(row);
+                var data = RowToSample(row);
                 samples.Add(data);
             }
 
@@ -1828,7 +1828,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public void PreviewSelectedThroughput()
         {
-            List<classSampleData> samples = GetSelectedSamples();
+            var samples = GetSelectedSamples();
             samples.RemoveAll(
                 delegate(classSampleData data)
                 {
@@ -1847,10 +1847,10 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Validate the samples, and make sure we want to run these.
                 //
-                LcmsNet.Method.Forms.formThroughputPreview preview = new LcmsNet.Method.Forms.formThroughputPreview();
+                var preview = new LcmsNet.Method.Forms.formThroughputPreview();
                 preview.Show();
 
-                foreach (classSampleData data in samples)
+                foreach (var data in samples)
                 {
                     data.LCMethod.SetStartTime(LcmsNetSDK.TimeKeeper.Instance.Now);
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)));
@@ -1883,11 +1883,11 @@ namespace LcmsNet.SampleQueue.Forms
             //
             if (mdataGrid_samples.Rows.Count > 0)
             {
-                DataGridViewRow row = mdataGrid_samples.Rows[mdataGrid_samples.Rows.Count - 1];
-                classSampleData data = RowToSample(row);
+                var row = mdataGrid_samples.Rows[mdataGrid_samples.Rows.Count - 1];
+                var data = RowToSample(row);
                 if (data != null)
                 {
-                    classSampleData actualData = mobj_sampleQueue.FindSample(data.UniqueID);
+                    var actualData = mobj_sampleQueue.FindSample(data.UniqueID);
                     newData = CopyRequiredSampleData(actualData);
                 }
             }
@@ -1922,17 +1922,17 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         protected virtual bool AddSamplesToList(classSampleData sample)
         {
-            bool added = true;
+            var added = true;
             if (sample == null)
             {
                 added = false;
             }
             else
             {
-                bool found = false;
-                for (int i = 0; i < mdataGrid_samples.Rows.Count; i++)
+                var found = false;
+                for (var i = 0; i < mdataGrid_samples.Rows.Count; i++)
                 {
-                    classSampleData sampleNext = RowToSample(mdataGrid_samples.Rows[i]);
+                    var sampleNext = RowToSample(mdataGrid_samples.Rows[i]);
                     if (sample.SequenceID < sampleNext.SequenceID &&
                         sampleNext.RunningStatus == enumSampleRunningStatus.Queued)
                     {
@@ -1959,8 +1959,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         protected virtual bool AddSamplesToList(IEnumerable<classSampleData> samples)
         {
-            bool added = true;
-            foreach (classSampleData data in samples)
+            var added = true;
+            foreach (var data in samples)
             {
                 AddSamplesToList(data);
             }
@@ -1975,7 +1975,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Get a list of sequence ID's to remove
             //
-            List<long> removes = new List<long>();
+            var removes = new List<long>();
             foreach (DataGridViewRow row in mdataGrid_samples.Rows)
             {
                 removes.Add((long)row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
@@ -2000,9 +2000,9 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
-            DataGridViewRow[] items = new DataGridViewRow[mdataGrid_samples.SelectedRows.Count];
+            var items = new DataGridViewRow[mdataGrid_samples.SelectedRows.Count];
             mdataGrid_samples.SelectedRows.CopyTo(items, 0);
-            List<classSampleData> data = ConvertRowsToData(items);
+            var data = ConvertRowsToData(items);
 
 
             //
@@ -2030,12 +2030,12 @@ namespace LcmsNet.SampleQueue.Forms
             //
             mdataGrid_samples.Rows[0].Selected = false;
 
-            foreach (classSampleData datum in data)
+            foreach (var datum in data)
             {
-                int rowID = FindRowIndexFromUID(datum.UniqueID);
+                var rowID = FindRowIndexFromUID(datum.UniqueID);
                 if (rowID != -1)
                 {
-                    DataGridViewRow row = mdataGrid_samples.Rows[rowID];
+                    var row = mdataGrid_samples.Rows[rowID];
                     if (row != null)
                         row.Selected = true;
                 }
@@ -2047,19 +2047,19 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected void RandomizeSelectedSamples()
         {
-            List<classSampleData> samplesToRandomize = new List<classSampleData>();
-            List<int> selectedIndices = new List<int>();
+            var samplesToRandomize = new List<classSampleData>();
+            var selectedIndices = new List<int>();
             //
             // Get all the data references that we want to randomize.
             //
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
             {
-                classSampleData tempData = RowToSample(row);
-                classSampleData data = mobj_sampleQueue.FindSample(tempData.UniqueID);
+                var tempData = RowToSample(row);
+                var data = mobj_sampleQueue.FindSample(tempData.UniqueID);
                 if (data != null && data.RunningStatus == enumSampleRunningStatus.Queued)
                 {
                     selectedIndices.Add(row.Index);
-                    classSampleData sample = data.Clone() as classSampleData;
+                    var sample = data.Clone() as classSampleData;
                     if (sample.LCMethod != null && sample.LCMethod.Name != null)
                     {
                         if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
@@ -2102,9 +2102,9 @@ namespace LcmsNet.SampleQueue.Forms
                     //
                     mdataGrid_samples.Rows[0].Selected = false;
 
-                    List<classSampleData> newSamples = form.OutputSampleList;
+                    var newSamples = form.OutputSampleList;
                     mobj_sampleQueue.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
-                    foreach (int i in selectedIndices)
+                    foreach (var i in selectedIndices)
                     {
                         mdataGrid_samples.Rows[i].Selected = true;
                     }
@@ -2140,7 +2140,7 @@ namespace LcmsNet.SampleQueue.Forms
         protected virtual bool RemoveSamplesFromList(classSampleData sample)
         {
             //mlistview_samples.Items.RemoveByKey(sample.UniqueID.ToString());
-            int index = FindRowIndexFromUID(sample.UniqueID);
+            var index = FindRowIndexFromUID(sample.UniqueID);
             if (index >= 0)
                 mdataGrid_samples.Rows.RemoveAt(index);
             return true;
@@ -2153,8 +2153,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected virtual bool RemoveSamplesFromList(IEnumerable<classSampleData> samples)
         {
-            bool removed = true;
-            foreach (classSampleData data in samples)
+            var removed = true;
+            foreach (var data in samples)
             {
                 removed = (removed && RemoveSamplesFromList(data));
             }
@@ -2169,10 +2169,10 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Get a list of sequence ID's to remove
             //
-            List<long> removes = new List<long>();
+            var removes = new List<long>();
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
             {
-                classSampleData data = RowToSample(row);
+                var data = RowToSample(row);
                 removes.Add(data.UniqueID);
             }
 
@@ -2193,11 +2193,11 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Color duplicates or invalid cells with certain colors!
             //
-            enumSampleValidResult validResult = mobj_sampleQueue.IsSampleDataValid(data);
+            var validResult = mobj_sampleQueue.IsSampleDataValid(data);
             if (validResult == enumSampleValidResult.DuplicateRequestName &&
                 !data.DmsData.DatasetName.Contains(mobj_sampleQueue.UnusedSampleName))
             {
-                DataGridViewCellStyle styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle);
+                var styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle);
                 styleDuplicate.BackColor = Color.Crimson;
                 row.Cells[CONST_COLUMN_REQUEST_NAME].Style = styleDuplicate;
                 row.Cells[CONST_COLUMN_REQUEST_NAME].ToolTipText = "Duplicate Request Name Found!";
@@ -2218,7 +2218,7 @@ namespace LcmsNet.SampleQueue.Forms
         protected virtual DataGridViewCellStyle GetRowStyleFromSample(classSampleData data,
             DataGridViewCellStyle defaultStyle)
         {
-            DataGridViewCellStyle rowStyle = defaultStyle;
+            var rowStyle = defaultStyle;
             switch (data.RunningStatus)
             {
                 case enumSampleRunningStatus.Running:
@@ -2277,7 +2277,7 @@ namespace LcmsNet.SampleQueue.Forms
                     break;
             }
 
-            enumColumnStatus status = data.ColumnData.Status;
+            var status = data.ColumnData.Status;
             if (status == enumColumnStatus.Disabled)
             {
                 rowStyle.BackColor = Color.FromArgb(Math.Max(0, rowStyle.BackColor.R - 128),
@@ -2296,16 +2296,16 @@ namespace LcmsNet.SampleQueue.Forms
         /// 
         protected virtual void UpdateRow(int index)
         {
-            DataGridViewRow row = mdataGrid_samples.Rows[index];
+            var row = mdataGrid_samples.Rows[index];
             if (!row.Displayed)
             {
                 mdataGrid_samples.Invalidate();
                 return;
             }
-            SampleToRowTranslator data = (SampleToRowTranslator)row.DataBoundItem;
+            var data = (SampleToRowTranslator)row.DataBoundItem;
 
 
-            DataGridViewCellStyle style = row.Cells[CONST_COLUMN_COLUMN_ID].Style;
+            var style = row.Cells[CONST_COLUMN_COLUMN_ID].Style;
             if (data.Sample.ColumnData == null)
             {
                 throw new Exception("The column data cannot be null.");
@@ -2335,10 +2335,10 @@ namespace LcmsNet.SampleQueue.Forms
             // If the name of the sample is the un-used, it means that the Sample Queue has backfilled the
             // samples to help the user normalize samples on columns.
             //
-            string name = data.Sample.DmsData.DatasetName;
+            var name = data.Sample.DmsData.DatasetName;
             if (name.Contains(mobj_sampleQueue.UnusedSampleName))
             {
-                DataGridViewCellStyle rowStyle = row.DefaultCellStyle;
+                var rowStyle = row.DefaultCellStyle;
                 rowStyle.BackColor = Color.LightGray;
                 rowStyle.ForeColor = Color.DarkGray;
             }
@@ -2347,7 +2347,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // We need to color the sample based on its status.
                 //
-                DataGridViewCellStyle rowStyle = GetRowStyleFromSample(data.Sample, row.DefaultCellStyle);
+                var rowStyle = GetRowStyleFromSample(data.Sample, row.DefaultCellStyle);
             }
             row.Cells[CONST_COLUMN_STATUS].ToolTipText = data.StatusToolTipText;
 
@@ -2370,11 +2370,11 @@ namespace LcmsNet.SampleQueue.Forms
         [Obsolete("Version used before databinding", true)]
         protected virtual void UpdateRow(classSampleData data, int index)
         {
-            DataGridViewRow row = mdataGrid_samples.Rows[index];
+            var row = mdataGrid_samples.Rows[index];
             row.Cells[CONST_COLUMN_SEQUENCE_ID].Value = data.SequenceID;
 
 
-            DataGridViewCellStyle style = new DataGridViewCellStyle();
+            var style = new DataGridViewCellStyle();
             if (data.ColumnData == null)
             {
                 throw new Exception("The column data cannot be null.");
@@ -2405,10 +2405,10 @@ namespace LcmsNet.SampleQueue.Forms
             // If the name of the sample is the un-used, it means that the Sample Queue has backfilled the
             // samples to help the user normalize samples on columns.
             //
-            string name = data.DmsData.DatasetName;
+            var name = data.DmsData.DatasetName;
             if (name.Contains(mobj_sampleQueue.UnusedSampleName))
             {
-                DataGridViewCellStyle rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
+                var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
                 rowStyle.BackColor = Color.LightGray;
                 rowStyle.ForeColor = Color.DarkGray;
                 row.DefaultCellStyle = rowStyle;
@@ -2419,7 +2419,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // We need to color the sample based on its status.
                 //
-                DataGridViewCellStyle rowStyle = GetRowStyleFromSample(data, row.DefaultCellStyle);
+                var rowStyle = GetRowStyleFromSample(data, row.DefaultCellStyle);
                 row.DefaultCellStyle = rowStyle;
                 row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.DmsData.DatasetName;
             }
@@ -2469,8 +2469,8 @@ namespace LcmsNet.SampleQueue.Forms
         {
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
             {
-                classSampleData tempData = RowToSample(row);
-                classSampleData data = mobj_sampleQueue.FindSample(tempData.UniqueID);
+                var tempData = RowToSample(row);
+                var data = mobj_sampleQueue.FindSample(tempData.UniqueID);
                 mobj_sampleQueue.UpdateSample(data);
             }
         }
@@ -2636,13 +2636,13 @@ namespace LcmsNet.SampleQueue.Forms
         private void UpdateDataView()
         {
             // Find the latest run, error, or running sample in the list.
-            int maxComplete = -1;
-            int maxWaitingToRun = -1;
-            int i = 0;
+            var maxComplete = -1;
+            var maxWaitingToRun = -1;
+            var i = 0;
             foreach (DataGridViewRow row in mdataGrid_samples.Rows)
             {
                 i++;
-                classSampleData sample = RowToSample(row);
+                var sample = RowToSample(row);
                 if (sample.RunningStatus == enumSampleRunningStatus.Complete ||
                     sample.RunningStatus == enumSampleRunningStatus.Stopped ||
                     sample.RunningStatus == enumSampleRunningStatus.Error ||
@@ -2694,14 +2694,14 @@ namespace LcmsNet.SampleQueue.Forms
             // Start fresh and add the samples from the queue to the list.
             // But track the position of the scroll bar to be nice to the user.
 
-            int scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
+            var scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
 
             mdataGrid_samples.Rows.Clear();
             AddSamplesToList(data.Samples);
 
             UpdateDataView();
 
-            int count = mdataGrid_samples.Rows.Count;
+            var count = mdataGrid_samples.Rows.Count;
             if (count > 0)
             {
                 if (scrollPosition == count)
@@ -2789,7 +2789,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // The sample queue gives all of the samples
             //
-            int scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
+            var scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
 
             if (mdataGrid_samples.Rows.Count > 0)
             {
@@ -2810,7 +2810,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             UpdateDataView();
 
-            int count = mdataGrid_samples.Rows.Count;
+            var count = mdataGrid_samples.Rows.Count;
             if (count > 0)
             {
                 mdataGrid_samples.FirstDisplayedScrollingRowIndex = Math.Min(scrollPosition, count);
@@ -2824,11 +2824,11 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         void mobj_sampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
         {
-            int scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
+            var scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
             mdataGrid_samples.Rows.Clear();
             AddSamplesToList(data.Samples);
             UpdateDataView();
-            int count = mdataGrid_samples.Rows.Count;
+            var count = mdataGrid_samples.Rows.Count;
             if (count > 0)
             {
                 mdataGrid_samples.FirstDisplayedScrollingRowIndex = Math.Min(scrollPosition, count);
@@ -3094,7 +3094,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>String representing the status of the running state.</returns>
         protected enumCheckboxStatus GetCheckboxStatusFromSampleStatus(classSampleData sample)
         {
-            enumCheckboxStatus status = enumCheckboxStatus.Disabled;
+            var status = enumCheckboxStatus.Disabled;
             switch (sample.RunningStatus)
             {
                 case enumSampleRunningStatus.Complete:
@@ -3128,7 +3128,7 @@ namespace LcmsNet.SampleQueue.Forms
         protected enumCheckboxStatus GetCheckboxStatusAndSetCheckbox(classSampleData sample,
             DataGridViewCheckBoxCell checkbox)
         {
-            enumCheckboxStatus status = GetCheckboxStatusFromSampleStatus(sample);
+            var status = GetCheckboxStatusFromSampleStatus(sample);
             if (checkbox != null)
             {
                 if (status == enumCheckboxStatus.Disabled)
@@ -3151,7 +3151,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         protected enumCheckboxStatus GetCheckboxStatusFromCheckbox(DataGridViewCheckBoxCell checkbox, object chkboxValue)
         {
-            enumCheckboxStatus status = enumCheckboxStatus.Unchecked;
+            var status = enumCheckboxStatus.Unchecked;
             if (checkbox != null)
             {
                 if (checkbox.Tag != null && checkbox.Tag.ToString() == "Disabled")
@@ -3176,7 +3176,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>String representing the status of the running state.</returns>
         protected string GetStatusMessageFromSampleStatus(classSampleData sample)
         {
-            string statusMessage = "";
+            var statusMessage = "";
             switch (sample.RunningStatus)
             {
                 case enumSampleRunningStatus.Complete:
@@ -3231,7 +3231,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>String representing the status of the running state.</returns>
         protected string GetToolTipMessageFromSampleStatus(classSampleData sample)
         {
-            string statusMessage = "";
+            var statusMessage = "";
             switch (sample.RunningStatus)
             {
                 case enumSampleRunningStatus.Complete:
@@ -3288,30 +3288,30 @@ namespace LcmsNet.SampleQueue.Forms
             if (sample == null)
                 return null;
 
-            DataGridViewRow row = new DataGridViewRow();
-            DataGridViewCheckBoxCell checkCell = new DataGridViewCheckBoxCell();
+            var row = new DataGridViewRow();
+            var checkCell = new DataGridViewCheckBoxCell();
             checkCell.TrueValue = enumCheckboxStatus.Checked;
             checkCell.FalseValue = enumCheckboxStatus.Unchecked;
             GetCheckboxStatusAndSetCheckbox(sample, checkCell);
-            DataGridViewTextBoxCell statusCell = new DataGridViewTextBoxCell();
+            var statusCell = new DataGridViewTextBoxCell();
             statusCell.Value = GetStatusMessageFromSampleStatus(sample);
             statusCell.ToolTipText = GetToolTipMessageFromSampleStatus(sample);
-            DataGridViewTextBoxCell sequenceCell = new DataGridViewTextBoxCell();
+            var sequenceCell = new DataGridViewTextBoxCell();
             sequenceCell.Value = sample.SequenceID.ToString();
-            DataGridViewTextBoxCell uniqueIDCell = new DataGridViewTextBoxCell();
+            var uniqueIDCell = new DataGridViewTextBoxCell();
             uniqueIDCell.Value = sample.UniqueID.ToString();
-            DataGridViewTextBoxCell columnIDCell = new DataGridViewTextBoxCell();
-            DataGridViewCellStyle style = new DataGridViewCellStyle();
+            var columnIDCell = new DataGridViewTextBoxCell();
+            var style = new DataGridViewCellStyle();
 
-            DataGridViewTextBoxCell requestNameCell = new DataGridViewTextBoxCell();
+            var requestNameCell = new DataGridViewTextBoxCell();
             requestNameCell.Value = sample.DmsData.DatasetName;
-            DataGridViewTextBoxCell batchIDCell = new DataGridViewTextBoxCell();
+            var batchIDCell = new DataGridViewTextBoxCell();
             batchIDCell.Value = sample.DmsData.Batch;
-            string name = sample.DmsData.DatasetName;
+            var name = sample.DmsData.DatasetName;
 
             if (name.Contains(mobj_sampleQueue.UnusedSampleName))
             {
-                DataGridViewCellStyle rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
+                var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
                 rowStyle.BackColor = Color.LightGray;
                 rowStyle.ForeColor = Color.DarkGray;
                 row.DefaultCellStyle = rowStyle;
@@ -3322,17 +3322,17 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // We need to color the sample based on its status.
                 //
-                DataGridViewCellStyle rowStyle = GetRowStyleFromSample(sample, row.DefaultCellStyle);
+                var rowStyle = GetRowStyleFromSample(sample, row.DefaultCellStyle);
                 row.DefaultCellStyle = rowStyle;
             }
 
             // Dataset Type
-            DataGridViewComboBoxCell datasetTypeCell = new DataGridViewComboBoxCell();
+            var datasetTypeCell = new DataGridViewComboBoxCell();
             try
             {
-                List<string> dsTypes = classSQLiteTools.GetDatasetTypeList(false);
+                var dsTypes = classSQLiteTools.GetDatasetTypeList(false);
                 datasetTypeCell.Items.Add(CONST_NOT_SELECTED);
-                foreach (string dsType in dsTypes)
+                foreach (var dsType in dsTypes)
                     datasetTypeCell.Items.Add(dsType);
 
                 if (sample.DmsData.DatasetType == null)
@@ -3347,7 +3347,7 @@ namespace LcmsNet.SampleQueue.Forms
 
 
             // PAL - Check to make sure pal data was initialized correctly
-            classPalData palData = sample.PAL;
+            var palData = sample.PAL;
             if (palData == null)
             {
                 palData = new classPalData();
@@ -3362,22 +3362,22 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // PAL Vial
             // -----------------------------------------------------------------------------
-            DataGridViewTextBoxCell vial = new DataGridViewTextBoxCell();
+            var vial = new DataGridViewTextBoxCell();
             vial.Value = palData.Well;
 
             // -----------------------------------------------------------------------------
             // PAL Trays
             // -----------------------------------------------------------------------------
-            DataGridViewComboBoxCell palTray = new DataGridViewComboBoxCell();
+            var palTray = new DataGridViewComboBoxCell();
             palTray.Items.Add(CONST_NOT_SELECTED);
-            foreach (string data in mlist_autosamplerTrays)
+            foreach (var data in mlist_autosamplerTrays)
             {
                 palTray.Items.Add(data);
             }
 
             if (palData.PALTray.Replace(" ", "") != "" && palTray.Items.Contains(palData.PALTray) == false)
             {
-                DataGridViewCellStyle palTrayStyle = new DataGridViewCellStyle();
+                var palTrayStyle = new DataGridViewCellStyle();
                 palTrayStyle.BackColor = Color.Red;
                 palTray.Style = palTrayStyle;
                 palTray.ToolTipText = "This tray was not available from the PAL";
@@ -3397,15 +3397,15 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Sample Volume
             // -----------------------------------------------------------------------------
-            DataGridViewTextBoxCell volume = new DataGridViewTextBoxCell();
+            var volume = new DataGridViewTextBoxCell();
             volume.Value = sample.Volume;
 
             // -----------------------------------------------------------------------------
             // LC Experiments
             // -----------------------------------------------------------------------------
-            DataGridViewComboBoxCell lcMethods = new DataGridViewComboBoxCell();
+            var lcMethods = new DataGridViewComboBoxCell();
             lcMethods.Items.Add(CONST_NOT_SELECTED);
-            foreach (classLCMethod info in classLCMethodManager.Manager.Methods.Values)
+            foreach (var info in classLCMethodManager.Manager.Methods.Values)
             {
                 if (CanAddLCMethodToItem(info))
                 {
@@ -3436,7 +3436,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             else
             {
-                int columnID = sample.ColumnData.ID;
+                var columnID = sample.ColumnData.ID;
                 if (columnID >= 0)
                 {
                     columnIDCell.Value = sample.ColumnData.ID + CONST_COLUMN_INDEX_OFFSET;
@@ -3454,9 +3454,9 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Instruments
             // -----------------------------------------------------------------------------
-            DataGridViewComboBoxCell instrumentMethod = new DataGridViewComboBoxCell();
+            var instrumentMethod = new DataGridViewComboBoxCell();
             instrumentMethod.Items.Add(CONST_NOT_SELECTED);
-            foreach (string info in mlist_instrumentMethods)
+            foreach (var info in mlist_instrumentMethods)
                 instrumentMethod.Items.Add(info);
 
             instrumentMethod.Value = CONST_NOT_SELECTED;
@@ -3466,10 +3466,10 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Run order information and blocking factors
             // -----------------------------------------------------------------------------
-            DataGridViewTextBoxCell blockID = new DataGridViewTextBoxCell();
+            var blockID = new DataGridViewTextBoxCell();
             blockID.Value = sample.DmsData.Block;
 
-            DataGridViewTextBoxCell runOrder = new DataGridViewTextBoxCell();
+            var runOrder = new DataGridViewTextBoxCell();
             runOrder.Value = sample.DmsData.RunOrder;
 
 
@@ -3504,11 +3504,11 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Don't find the real sample so we dont change anything in the reference if this is a temporary operation.
             //
-            classSampleData sample = new classSampleData(true); // Mark it as a dummy sample
+            var sample = new classSampleData(true); // Mark it as a dummy sample
             sample.SequenceID = Convert.ToInt32(row.Cells[CONST_COLUMN_SEQUENCE_ID].Value);
-            int id = 0;
-            string value = row.Cells[CONST_COLUMN_COLUMN_ID].Value.ToString();
-            bool parsed = int.TryParse(value, out id);
+            var id = 0;
+            var value = row.Cells[CONST_COLUMN_COLUMN_ID].Value.ToString();
+            var parsed = int.TryParse(value, out id);
             if (parsed)
             {
                 sample.ColumnData.ID = id - CONST_COLUMN_INDEX_OFFSET;
@@ -3524,7 +3524,7 @@ namespace LcmsNet.SampleQueue.Forms
             sample.PAL.Well = (int) row.Cells[CONST_COLUMN_PAL_VIAL].Value;
             sample.Volume = Convert.ToDouble(row.Cells[CONST_COLUMN_VOLUME].Value);
 
-            string methodName = Convert.ToString(row.Cells[CONST_COLUMN_EXPERIMENT_METHOD].Value);
+            var methodName = Convert.ToString(row.Cells[CONST_COLUMN_EXPERIMENT_METHOD].Value);
             if (classLCMethodManager.Manager.Methods.ContainsKey(methodName))
             {
                 sample.LCMethod = classLCMethodManager.Manager.Methods[methodName].Clone() as classLCMethod;
@@ -3532,7 +3532,7 @@ namespace LcmsNet.SampleQueue.Forms
             else
                 sample.LCMethod = new classLCMethod();
 
-            classSampleData realSample = mobj_sampleQueue.FindSample(sample.UniqueID);
+            var realSample = mobj_sampleQueue.FindSample(sample.UniqueID);
 
             //
             // Copy the required DMS data.
@@ -3574,11 +3574,11 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected virtual List<classSampleData> ConvertRowsToData(IEnumerable<DataGridViewRow> rows)
         {
-            List<classSampleData> data = new List<classSampleData>();
+            var data = new List<classSampleData>();
             // For every selected item find the
-            foreach (DataGridViewRow row in rows)
+            foreach (var row in rows)
             {
-                classSampleData tempData = this.RowToSample(row);
+                var tempData = this.RowToSample(row);
                 if (tempData != null)
                 {
                     tempData = mobj_sampleQueue.FindSample(tempData.UniqueID);
@@ -3595,7 +3595,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>Index of row >= 0 if found.  Or negative index if not found.</returns>
         protected int FindRowIndexFromUID(long UID)
         {
-            int index = -1;
+            var index = -1;
             foreach (DataGridViewRow row in mdataGrid_samples.Rows)
             {
                 if (Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value) == UID)

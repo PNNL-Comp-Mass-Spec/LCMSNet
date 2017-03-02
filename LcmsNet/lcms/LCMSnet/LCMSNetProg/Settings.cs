@@ -26,7 +26,7 @@ namespace LcmsNet.Properties
         {
             this.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Settings_PropertyChanged);
 
-            Version appVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
             if (this.applicationVersion != appVersion.ToString())
             {
                 this.Upgrade(); // Copies previous version's user settings to current version's user settings

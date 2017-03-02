@@ -26,16 +26,16 @@ namespace LcmsNet.Devices
 
         public classDeviceConfiguration ReadConfiguration(string path)
         {
-            string[] configLines = File.ReadAllLines(path);
+            var configLines = File.ReadAllLines(path);
 
             // Find the device headers.
-            List<int> deviceHeaders = new List<int>();
-            int i = 0;
-            int connectionsIndex = configLines.Length;
+            var deviceHeaders = new List<int>();
+            var i = 0;
+            var connectionsIndex = configLines.Length;
                 // if connection section doesn't exist, we should just go on, so set this to length of the array.
-            foreach (string line in configLines)
+            foreach (var line in configLines)
             {
-                string xline = line.Replace("\n", "");
+                var xline = line.Replace("\n", "");
                 xline = xline.Replace("\r", "");
 
                 if (xline == CONST_DEVICE_HEADER_TAG)
@@ -50,12 +50,12 @@ namespace LcmsNet.Devices
                 i++;
             }
 
-            classDeviceConfiguration configuration = new classDeviceConfiguration();
+            var configuration = new classDeviceConfiguration();
             for (i = 0; i < deviceHeaders.Count; i++)
             {
-                int k = i + 1;
-                int startIndex = deviceHeaders[i];
-                int lastIndex = startIndex;
+                var k = i + 1;
+                var startIndex = deviceHeaders[i];
+                var lastIndex = startIndex;
                 if (k == deviceHeaders.Count)
                 {
                     lastIndex = configLines.Length;
@@ -65,13 +65,13 @@ namespace LcmsNet.Devices
                     lastIndex = deviceHeaders[k];
                 }
 
-                string deviceName = "";
-                Dictionary<string, object> data = new Dictionary<string, object>();
-                string[] delimeter = new string[] {CONST_DELIMETER};
-                for (int j = startIndex + 1; j < lastIndex; j++)
+                var deviceName = "";
+                var data = new Dictionary<string, object>();
+                var delimeter = new string[] {CONST_DELIMETER};
+                for (var j = startIndex + 1; j < lastIndex; j++)
                 {
-                    string line = configLines[j];
-                    string[] lineData = line.Split(delimeter, StringSplitOptions.RemoveEmptyEntries);
+                    var line = configLines[j];
+                    var lineData = line.Split(delimeter, StringSplitOptions.RemoveEmptyEntries);
                     if (lineData.Length == 2)
                     {
                         data.Add(lineData[0], lineData[1]);
@@ -79,16 +79,16 @@ namespace LcmsNet.Devices
                 }
 
                 deviceName = Convert.ToString(data["DeviceName"]);
-                foreach (string key in data.Keys)
+                foreach (var key in data.Keys)
                 {
                     configuration.AddSetting(deviceName, key, data[key]);
                 }
             }
-            for (int j = connectionsIndex; j < configLines.Length; j++)
+            for (var j = connectionsIndex; j < configLines.Length; j++)
             {
-                string line = configLines[j];
-                string[] delimiter = new string[] {","};
-                string[] lineData = line.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+                var line = configLines[j];
+                var delimiter = new string[] {","};
+                var lineData = line.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (lineData.Length == 3)
                 {
                     configuration.AddConnection("conn" + (j - connectionsIndex).ToString(),

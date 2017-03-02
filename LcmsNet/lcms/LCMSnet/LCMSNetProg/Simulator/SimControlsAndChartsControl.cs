@@ -32,7 +32,7 @@ namespace LcmsNet.Simulator
             simInstance.EventExecuting += simInstance_EventExecuting;
             simInstance.EventSimulated += simInstance_EventExecuting;
             simInstance.SimulationComplete += simInstance_SimulationComplete;
-            ModelCheckReportViewer reporter = new ModelCheckReportViewer(FluidicsSDK.classFluidicsModerator.Moderator);
+            var reporter = new ModelCheckReportViewer(FluidicsSDK.classFluidicsModerator.Moderator);
             reporter.Name = "errorReporter";
             reporter.Dock = DockStyle.Fill;
             tabControlCharts.TabPages["tabPageErrors"].Controls.Add(reporter);
@@ -42,10 +42,10 @@ namespace LcmsNet.Simulator
                 new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodDeleted);
             mcontrol_selectedMethods.MethodUpdated +=
                 new controlLCMethodSelection.DelegateLCMethodSelected(mcontrol_selectedMethods_MethodUpdated);
-            TabPage settings = tabControlSimulator.TabPages["tabSimulatorSettings"];
+            var settings = tabControlSimulator.TabPages["tabSimulatorSettings"];
 
 
-            ModelCheckListControl checkList = new ModelCheckListControl(FluidicsSDK.classFluidicsModerator.Moderator,
+            var checkList = new ModelCheckListControl(FluidicsSDK.classFluidicsModerator.Moderator,
                 FluidicsSDK.classFluidicsModerator.Moderator.GetModelCheckers());
             checkList.Location = new Point(10, 75);
             settings.Controls["mgroupBox_update"].Controls.Add(checkList);
@@ -86,13 +86,13 @@ namespace LcmsNet.Simulator
 
         private void simInstance_EventExecuting(object sender, SimulatedEventArgs e)
         {
-            List<classLCMethod> methods = mcontrol_selectedMethods.SelectedMethods;
-            int index = -1;
-            int count = 0;
-            classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
+            var methods = mcontrol_selectedMethods.SelectedMethods;
+            var index = -1;
+            var count = 0;
+            var optimizer = new classLCMethodOptimizer();
             optimizer.AlignMethods(methods);
-            SortedSet<SimEventList> queue = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start);
-            foreach (SimEventList lst in queue)
+            var queue = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start);
+            foreach (var lst in queue)
             {
                 if (lst.Exists(evnt => evnt.Name == e.Event.Name && evnt.Start == e.Event.Start))
                 {
@@ -112,8 +112,8 @@ namespace LcmsNet.Simulator
         {
             if (e.StatusList.Count != 0)
             {
-                string statusMessages = "";
-                foreach (ModelStatus status in e.StatusList)
+                var statusMessages = "";
+                foreach (var status in e.StatusList)
                 {
                     classApplicationLogger.LogError(0, status.Description);
                     statusMessages += status.Description + Environment.NewLine;
@@ -174,9 +174,9 @@ namespace LcmsNet.Simulator
             //
             try
             {
-                classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
+                var optimizer = new classLCMethodOptimizer();
                 //optimizer.UpdateRequired += new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
-                List<classLCMethod> methods = mcontrol_selectedMethods.SelectedMethods;
+                var methods = mcontrol_selectedMethods.SelectedMethods;
                 //mint_renderUpdateCount = 0;
 
                 if (methods.Count > 0)
@@ -228,8 +228,8 @@ namespace LcmsNet.Simulator
 
         private void PrepSim()
         {
-            LcmsNet.Method.classLCMethodOptimizer optimizer = new LcmsNet.Method.classLCMethodOptimizer();
-            List<classLCMethod> methodsToRun = mcontrol_selectedMethods.SelectedMethods;
+            var optimizer = new LcmsNet.Method.classLCMethodOptimizer();
+            var methodsToRun = mcontrol_selectedMethods.SelectedMethods;
             optimizer.AlignMethods(methodsToRun);
             RenderThroughput(methodsToRun);
             simInstance.PrepSimulation(methodsToRun);
@@ -280,9 +280,9 @@ namespace LcmsNet.Simulator
 
         private bool ConfirmNoEmulation()
         {
-            bool runSimulation = true;
-            frmEmulationDialog dialog = new frmEmulationDialog();
-            DialogResult result = dialog.ShowDialog();
+            var runSimulation = true;
+            var dialog = new frmEmulationDialog();
+            var result = dialog.ShowDialog();
 
             switch (result)
             {
@@ -366,12 +366,12 @@ namespace LcmsNet.Simulator
             //
             // Create a new writer.
             //
-            classLCMethodWriter writer = new classLCMethodWriter();
+            var writer = new classLCMethodWriter();
 
             //
             // Construct the path
             //
-            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
@@ -394,7 +394,7 @@ namespace LcmsNet.Simulator
 
         private void mnum_delay_ValueChanged(object sender, EventArgs e)
         {
-            NumericUpDown s = sender as NumericUpDown;
+            var s = sender as NumericUpDown;
             simInstance.SimulationSpeed = Convert.ToInt32(s.Value);
         }
 
@@ -404,8 +404,8 @@ namespace LcmsNet.Simulator
             if (tabControlCharts.TabCount > 0)
             {
                 //grab the first chart from the list
-                UserControl untackThisControl = tabControlCharts.SelectedTab.Controls.OfType<UserControl>().First();
-                formChartPopoutWindow popout = new formChartPopoutWindow(untackThisControl, tabControlCharts);
+                var untackThisControl = tabControlCharts.SelectedTab.Controls.OfType<UserControl>().First();
+                var popout = new formChartPopoutWindow(untackThisControl, tabControlCharts);
                 popout.Text = tabControlCharts.SelectedTab.Text;
                 tabControlCharts.SelectedTab.Controls.Remove(untackThisControl);
                 tabControlCharts.Controls.Remove(tabControlCharts.SelectedTab);

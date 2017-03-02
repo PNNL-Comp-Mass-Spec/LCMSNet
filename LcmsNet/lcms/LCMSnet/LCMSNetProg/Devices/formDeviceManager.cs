@@ -23,10 +23,10 @@ namespace LcmsNet.Devices
 
             mdict_deviceToItemMap = new Dictionary<IDevice, ListViewItem>();
 
-            string[] columnNames = new string[] {"Device", "Status", "Type"};
-            foreach (string name in columnNames)
+            var columnNames = new string[] {"Device", "Status", "Type"};
+            foreach (var name in columnNames)
             {
-                ColumnHeader header = new ColumnHeader();
+                var header = new ColumnHeader();
                 header.Text = name;
                 mlistview_devices.Columns.Add(header);
             }
@@ -37,7 +37,7 @@ namespace LcmsNet.Devices
                 //
                 // Add all devices to the list of available devices
                 //
-                foreach (IDevice device in classDeviceManager.Manager.Devices)
+                foreach (var device in classDeviceManager.Manager.Devices)
                 {
                     AddDevice(device);
                 }
@@ -59,7 +59,7 @@ namespace LcmsNet.Devices
         private void AddDevice(IDevice device)
         {
             device.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(device_StatusUpdate);
-            ListViewItem item = new ListViewItem();
+            var item = new ListViewItem();
             item.Text = device.Name;
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.Status.ToString()));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.DeviceType.ToString()));
@@ -77,7 +77,7 @@ namespace LcmsNet.Devices
         {
             if (mdict_deviceToItemMap.ContainsKey(device))
             {
-                ListViewItem item = mdict_deviceToItemMap[device];
+                var item = mdict_deviceToItemMap[device];
                 device.StatusUpdate -= device_StatusUpdate;
                 mdict_deviceToItemMap.Remove(device);
                 mlistview_devices.Items.Remove(item);
@@ -116,7 +116,7 @@ namespace LcmsNet.Devices
         {
             if (mdict_deviceToItemMap.ContainsKey(device))
             {
-                ListViewItem item = mdict_deviceToItemMap[device];
+                var item = mdict_deviceToItemMap[device];
                 item.Text = device.Name;
             }
         }

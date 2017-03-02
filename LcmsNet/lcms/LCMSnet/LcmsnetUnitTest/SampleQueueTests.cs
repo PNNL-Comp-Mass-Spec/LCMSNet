@@ -85,11 +85,11 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestSampleQueueAddToQueue()
         {
-            classSampleData sampleA = new classSampleData();
-            classSampleData sampleB = new classSampleData();
+            var sampleA = new classSampleData();
+            var sampleB = new classSampleData();
 
-            classLCEvent lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
-            DemoPump pump = new DemoPump();
+            var lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
+            var pump = new DemoPump();
             lcEvent.Device = pump;
             lcEvent.Duration = new TimeSpan(0, 0, 0, 1);
             lcEvent.HadError = false;
@@ -114,7 +114,7 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            classLCEvent lcEvent2 = lcEvent.Clone() as classLCEvent;
+            var lcEvent2 = lcEvent.Clone() as classLCEvent;
 
             sampleB.ColumnData.ID = 0;
             sampleB.LCMethod = new classLCMethod();
@@ -137,11 +137,11 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestSampleQueueQuery()
         {
-            classSampleData sampleA = new classSampleData();
-            classSampleData sampleB = new classSampleData();
+            var sampleA = new classSampleData();
+            var sampleB = new classSampleData();
 
-            classLCEvent lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
-            DemoPump pump = new DemoPump();
+            var lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
+            var pump = new DemoPump();
             lcEvent.Device = pump;
             lcEvent.Duration = new TimeSpan(0, 0, 0, 1);
             lcEvent.HadError = false;
@@ -166,7 +166,7 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            classLCEvent lcEvent2 = lcEvent.Clone() as classLCEvent;
+            var lcEvent2 = lcEvent.Clone() as classLCEvent;
 
             sampleB.ColumnData.ID = 0;
             sampleB.LCMethod = new classLCMethod();
@@ -189,7 +189,7 @@ namespace LcmsnetUnitTest
             //ensure that the query returns the sample that will actually be returned to run
             Assert.AreSame(q.NextSampleQuery(), q.NextSampleStart());
             q.StopRunningQueue();
-            List<long> ids = new List<long>();
+            var ids = new List<long>();
             ids.Add(sampleA.UniqueID);
             ids.Add(sampleB.UniqueID);
             q.RemoveSample(ids, enumColumnDataHandling.LeaveAlone);
@@ -201,11 +201,11 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestSampleQueueReturnCorrectSample()
         {
-            classSampleData sampleA = new classSampleData();
-            classSampleData sampleB = new classSampleData();
+            var sampleA = new classSampleData();
+            var sampleB = new classSampleData();
 
-            classLCEvent lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
-            DemoPump pump = new DemoPump();
+            var lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
+            var pump = new DemoPump();
             lcEvent.Device = pump;
             lcEvent.Duration = new TimeSpan(0, 0, 0, 1);
             lcEvent.HadError = false;
@@ -230,7 +230,7 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            classLCEvent lcEvent2 = lcEvent.Clone() as classLCEvent;
+            var lcEvent2 = lcEvent.Clone() as classLCEvent;
 
             sampleB.ColumnData.ID = 0;
             sampleB.LCMethod = new classLCMethod();
@@ -253,7 +253,7 @@ namespace LcmsnetUnitTest
             //Sample A should be run first.
             Assert.AreSame(sampleA, q.NextSampleStart());
             q.StopRunningQueue();
-            List<long> ids = new List<long>();
+            var ids = new List<long>();
             ids.Add(sampleA.UniqueID);
             ids.Add(sampleB.UniqueID);
             q.RemoveSample(ids, enumColumnDataHandling.LeaveAlone);

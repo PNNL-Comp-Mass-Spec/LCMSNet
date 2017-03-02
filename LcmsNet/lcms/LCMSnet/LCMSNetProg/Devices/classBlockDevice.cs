@@ -54,7 +54,7 @@ namespace LcmsNet.Devices
         [classLCMethodAttribute("Block", enumMethodOperationTime.Parameter, "", -1, false)]
         public void Block(double timeToBlock)
         {
-            classTimerDevice timer = new classTimerDevice();
+            var timer = new classTimerDevice();
             timer.AbortEvent = AbortEvent;
             timer.WaitSeconds(timeToBlock);
         }

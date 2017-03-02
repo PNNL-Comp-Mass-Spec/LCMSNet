@@ -46,7 +46,7 @@ namespace LcmsNet.Configuration
                     mdialog_color.Color = value.Color;
                     mbutton_color.BackColor = value.Color;
 
-                    int systemID = value.SystemIndex + 1;
+                    var systemID = value.SystemIndex + 1;
                     mlabel_system.Text = "System " + systemID.ToString();
 
                     if (mobj_systemData != null)

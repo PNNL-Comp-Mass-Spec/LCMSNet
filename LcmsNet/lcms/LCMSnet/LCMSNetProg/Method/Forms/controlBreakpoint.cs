@@ -11,12 +11,12 @@ namespace LcmsNet.Method.Forms
 {
     public partial class controlBreakpoint : UserControl
     {
-        private bool mbool_set;
+        private bool m_set;
 
         public controlBreakpoint()
         {
             InitializeComponent();
-            mbool_set = false;
+            m_set = false;
             this.Click += new EventHandler(controlBreakpoint_Click);
         }
 
@@ -25,18 +25,18 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public bool IsSet
         {
-            get { return mbool_set; }
+            get { return m_set; }
             set
             {
-                if (mbool_set == value)
+                if (m_set == value)
                     return;
 
-                mbool_set = value;
+                m_set = value;
                 if (Changed != null)
                 {
-                    Changed(this, new BreakpointArgs(mbool_set));
+                    Changed(this, new BreakpointArgs(m_set));
                 }
-                if (mbool_set)
+                if (m_set)
                 {
                     BackgroundImage = global::LcmsNet.Properties.Resources.breakpoint;
                 }
@@ -49,7 +49,7 @@ namespace LcmsNet.Method.Forms
 
         void controlBreakpoint_Click(object sender, EventArgs e)
         {
-            IsSet = (mbool_set == false);
+            IsSet = (m_set == false);
         }
 
         public event EventHandler<BreakpointArgs> Changed;

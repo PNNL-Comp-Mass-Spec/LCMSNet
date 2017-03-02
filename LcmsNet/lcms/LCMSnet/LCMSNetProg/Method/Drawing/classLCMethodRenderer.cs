@@ -44,10 +44,10 @@ namespace LcmsNet.Method.Drawing
             out TimeSpan duration)
         {
             start = DateTime.MaxValue;
-            DateTime end = DateTime.MinValue;
+            var end = DateTime.MinValue;
             duration = new TimeSpan(0, 0, 0, 0);
 
-            foreach (classLCMethod method in methods)
+            foreach (var method in methods)
             {
                 if (start.CompareTo(method.Start) > 0)
                     start = method.Start;
@@ -69,12 +69,12 @@ namespace LcmsNet.Method.Drawing
         /// <returns>Dictionary mapping devices to colors.</returns>
         public static Dictionary<IDevice, Color> ConstructDeviceColorMap(List<IDevice> devices)
         {
-            Dictionary<IDevice, Color> deviceMap = new Dictionary<IDevice, Color>();
+            var deviceMap = new Dictionary<IDevice, Color>();
 
             //
             // Iterate through the device list to map a Device to a color
             //
-            Color[] colors = new Color[]
+            var colors = new Color[]
             {
                 Color.Red,
                 Color.Lime,
@@ -90,9 +90,9 @@ namespace LcmsNet.Method.Drawing
                 Color.PaleGreen
             };
 
-            int i = 0;
-            int count = colors.Length;
-            foreach (IDevice device in devices)
+            var i = 0;
+            var count = colors.Length;
+            foreach (var device in devices)
             {
                 deviceMap.Add(device, colors[i % count]);
                 i++;
@@ -155,32 +155,32 @@ namespace LcmsNet.Method.Drawing
             TimeSpan duration,
             List<classLCEvent> events)
         {
-            float ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
-            float startPoint = PixelPadding;
+            var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
+            var startPoint = PixelPadding;
             startPoint += Convert.ToSingle(duration.TotalSeconds * ppt);
 
             //
             // This gives us the time between ticks as time units.
             //
-            float pixelTime = TimelinePixelSpacing * (1.0F / ppt);
+            var pixelTime = TimelinePixelSpacing * (1.0F / ppt);
 
             //
             // Then we plot a number of ticks until the end - first here, we setup some variables
             // to help us in later calculations.
             //
-            float totalTime = Convert.ToSingle(duration.TotalSeconds);
+            var totalTime = Convert.ToSingle(duration.TotalSeconds);
 
-            using (SolidBrush brush = new SolidBrush(AcquisitionColor))
+            using (var brush = new SolidBrush(AcquisitionColor))
             {
-                float y = bounds.Height - 10.0F;
-                float height = 15.0F;
-                foreach (classLCEvent lcEvent in events)
+                var y = bounds.Height - 10.0F;
+                var height = 15.0F;
+                foreach (var lcEvent in events)
                 {
-                    TimeSpan span = lcEvent.Start.Subtract(start);
+                    var span = lcEvent.Start.Subtract(start);
 
-                    float startX = Convert.ToSingle(span.TotalSeconds) * ppt;
-                    float length = Convert.ToSingle(lcEvent.HoldTime.TotalSeconds) * ppt;
-                    float x = bounds.X + startX;
+                    var startX = Convert.ToSingle(span.TotalSeconds) * ppt;
+                    var length = Convert.ToSingle(lcEvent.HoldTime.TotalSeconds) * ppt;
+                    var x = bounds.X + startX;
                     g.FillRectangle(brush, x, y, length, height);
                 }
             }
@@ -198,38 +198,38 @@ namespace LcmsNet.Method.Drawing
             DateTime start,
             TimeSpan duration)
         {
-            float ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
-            float startPoint = PixelPadding;
+            var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
+            var startPoint = PixelPadding;
             startPoint += Convert.ToSingle(duration.TotalSeconds * ppt);
 
             //
             // This gives us the time between ticks as time units.
             //
-            float pixelTime = TimelinePixelSpacing * (1.0F / ppt);
+            var pixelTime = TimelinePixelSpacing * (1.0F / ppt);
 
             //
             // Then we plot a number of ticks until the end - first here, we setup some variables
             // to help us in later calculations.
             //
-            float currentTime = 0.0F;
-            float totalTime = Convert.ToSingle(duration.TotalSeconds);
+            var currentTime = 0.0F;
+            var totalTime = Convert.ToSingle(duration.TotalSeconds);
 
 
             //
             // Here we figure out the heights of ticks and variables to use to draw them.  Also draw the base tick line.
             //
-            float tickHeight = 10.0F;
-            float y = bounds.Height - 5.0F;
-            SolidBrush timelineBrush = new SolidBrush(Color.Black);
-            Pen pen = new Pen(timelineBrush);
+            var tickHeight = 10.0F;
+            var y = bounds.Height - 5.0F;
+            var timelineBrush = new SolidBrush(Color.Black);
+            var pen = new Pen(timelineBrush);
             graphics.DrawLine(pen, bounds.X, y, bounds.Width, y);
 
             //
             // Now we need to figure out how many times to draw a time...
             // Here we see how many seconds should go by before drawing a date time.
             //
-            float pixelsPerDate = ((bounds.Width - bounds.X) / TimelineDisplayDatesCount);
-            Font dateFont = new Font(FontFamily.GenericSansSerif, 6.0F);
+            var pixelsPerDate = ((bounds.Width - bounds.X) / TimelineDisplayDatesCount);
+            var dateFont = new Font(FontFamily.GenericSansSerif, 6.0F);
 
             //
             // Loop drawing the ticks...
@@ -239,7 +239,7 @@ namespace LcmsNet.Method.Drawing
                 //
                 // Now we have to conver the x value (time = currentTime) into pixels...err
                 //
-                float x = bounds.X + (currentTime * ppt);
+                var x = bounds.X + (currentTime * ppt);
 
                 //
                 // Draw a tick
@@ -252,19 +252,19 @@ namespace LcmsNet.Method.Drawing
             //
             // Draw the date strings (times if relative flag set).
             //
-            float timePerDraw = Convert.ToSingle(duration.TotalSeconds) / TimelineDisplayDatesCount;
+            var timePerDraw = Convert.ToSingle(duration.TotalSeconds) / TimelineDisplayDatesCount;
             currentTime = 0;
-            Pen datePen = new Pen(new SolidBrush(Color.LightGray));
+            var datePen = new Pen(new SolidBrush(Color.LightGray));
 
-            for (int i = 0; i <= TimelineDisplayDatesCount; i++)
+            for (var i = 0; i <= TimelineDisplayDatesCount; i++)
             {
-                string dateString = string.Format("{0:0}", currentTime);
+                var dateString = string.Format("{0:0}", currentTime);
 
                 //if (TimelineDrawRelativeTimes == false)
                 //    dateString = start.AddSeconds(currentTime).ToShortTimeString();
 
 
-                float x = bounds.X + (pixelsPerDate * Convert.ToSingle(i));
+                var x = bounds.X + (pixelsPerDate * Convert.ToSingle(i));
 
                 graphics.DrawLine(datePen, x, y - tickHeight, x, 0);
 
@@ -297,31 +297,31 @@ namespace LcmsNet.Method.Drawing
             if (methods == null || methods.Count == 0)
                 return;
 
-            float ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
-            float startPoint = PixelPadding;
+            var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
+            var startPoint = PixelPadding;
             startPoint += Convert.ToSingle(duration.TotalSeconds * ppt);
 
-            float pixelTime = TimelinePixelSpacing * (1.0F / ppt);
-            float totalTime = Convert.ToSingle(duration.TotalSeconds);
-            float y = bounds.Height - 5.0F;
+            var pixelTime = TimelinePixelSpacing * (1.0F / ppt);
+            var totalTime = Convert.ToSingle(duration.TotalSeconds);
+            var y = bounds.Height - 5.0F;
 
-            string optimize = "acquiring";
-            using (SolidBrush optBrush = new SolidBrush(AcquisitionColor))
+            var optimize = "acquiring";
+            using (var optBrush = new SolidBrush(AcquisitionColor))
             {
-                using (SolidBrush timelineBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128)))
+                using (var timelineBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128)))
                 {
-                    using (Font dateFont = new Font(FontFamily.GenericSansSerif, 6.0F))
+                    using (var dateFont = new Font(FontFamily.GenericSansSerif, 6.0F))
                     {
-                        foreach (classLCMethod method in methods)
+                        foreach (var method in methods)
                         {
-                            foreach (classLCEvent lcEvent in method.Events)
+                            foreach (var lcEvent in method.Events)
                             {
                                 if (lcEvent.OptimizeWith)
                                 {
-                                    float eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
-                                    float x = bounds.X +
+                                    var eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
+                                    var x = bounds.X +
                                               Convert.ToSingle(lcEvent.Start.Subtract(start).TotalSeconds) * ppt;
-                                    RectangleF alignedBounds = new RectangleF(x, y - 15.0F, eventWidth, 20.0F);
+                                    var alignedBounds = new RectangleF(x, y - 15.0F, eventWidth, 20.0F);
                                     graphics.SetClip(alignedBounds, CombineMode.Replace);
                                     graphics.FillRectangle(optBrush, x, y - 15.0F, eventWidth, 20.0F);
                                     graphics.DrawString(optimize, dateFont, timelineBrush, x, y);
@@ -368,18 +368,18 @@ namespace LcmsNet.Method.Drawing
             // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Setup the outline data objects
             // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            RectangleF outlineBounds = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+            var outlineBounds = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
             // If the lcEvent is currently executing, outline it in green, otherwise outline it in black.
-            SolidBrush outlineBrush = lcEvent.MethodData.Executing
+            var outlineBrush = lcEvent.MethodData.Executing
                 ? new SolidBrush(Color.Green)
                 : new SolidBrush(Color.Black);
 
             // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Render the name of the device
             // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            Font nameFont = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Bold, GraphicsUnit.Point);
+            var nameFont = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Bold, GraphicsUnit.Point);
             Brush nameBrush = new SolidBrush(Color.Black);
-            string name = lcEvent.Name;
+            var name = lcEvent.Name;
 
             if (bounds.Height >= CONST_MID_HEIGHT)
             {
@@ -389,16 +389,16 @@ namespace LcmsNet.Method.Drawing
                     bounds.X,
                     bounds.Y);
 
-                SizeF nameLength = graphics.MeasureString(name, nameFont);
+                var nameLength = graphics.MeasureString(name, nameFont);
 
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // See if the name is too long then we can make an ellipse type construct...
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 if (nameLength.Width > outlineBounds.Width)
                 {
-                    string[] names = name.Split(' ');
+                    var names = name.Split(' ');
                     name = "";
-                    foreach (string n in names)
+                    foreach (var n in names)
                     {
                         name += n[0].ToString();
                     }
@@ -431,7 +431,7 @@ namespace LcmsNet.Method.Drawing
             //
             // Finally draw the outline
             //
-            Pen outlinePen = new Pen(outlineBrush);
+            var outlinePen = new Pen(outlineBrush);
             if (lcEvent.MethodData.Executing)
             {
                 outlinePen.Width = 4;
@@ -461,34 +461,34 @@ namespace LcmsNet.Method.Drawing
             TimeSpan duration)
         {
             // Pixels per time (PPT)
-            float ppt = (allBounds.Width - allBounds.X) / Convert.ToSingle(duration.TotalSeconds);
+            var ppt = (allBounds.Width - allBounds.X) / Convert.ToSingle(duration.TotalSeconds);
 
-            float startPoint = allBounds.X + Convert.ToSingle((lcEvent.Start.Subtract(startTime)).TotalSeconds * ppt);
-            float eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
-            float x = startPoint;
-            float y = allBounds.Y;
+            var startPoint = allBounds.X + Convert.ToSingle((lcEvent.Start.Subtract(startTime)).TotalSeconds * ppt);
+            var eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
+            var x = startPoint;
+            var y = allBounds.Y;
 
-            float triHeight = CONST_TRIANGLE_HEIGHT;
-            float triWidth = triHeight / 2.0F;
+            var triHeight = CONST_TRIANGLE_HEIGHT;
+            var triWidth = triHeight / 2.0F;
 
-            RectangleF eventBounds = new RectangleF(x - triWidth, y, eventWidth, allBounds.Height * .8F);
-            Color color = Color.Red;
+            var eventBounds = new RectangleF(x - triWidth, y, eventWidth, allBounds.Height * .8F);
+            var color = Color.Red;
 
             graphics.SetClip(eventBounds, CombineMode.Replace);
 
-            PointF[] points = new PointF[3];
+            var points = new PointF[3];
             points[0] = new PointF(startPoint, y + triHeight);
             points[1] = new PointF(startPoint + triWidth, y);
             points[2] = new PointF(startPoint - triWidth, y);
 
             // Black Outline
-            using (Pen pen = new Pen(Color.Black, 2.0F))
+            using (var pen = new Pen(Color.Black, 2.0F))
             {
                 graphics.DrawPolygon(pen, points);
             }
 
             // Red Fill
-            using (SolidBrush brush = new SolidBrush(Color.Red))
+            using (var brush = new SolidBrush(Color.Red))
             {
                 graphics.FillPolygon(brush, points);
             }
@@ -513,7 +513,7 @@ namespace LcmsNet.Method.Drawing
             TimeSpan duration,
             Dictionary<IDevice, Color> colorMap)
         {
-            RectangleF bounds = allBounds;
+            var bounds = allBounds;
             bounds.Height = allBounds.Height * .80F;
 
             //
@@ -521,47 +521,47 @@ namespace LcmsNet.Method.Drawing
             //     ppt breaks the naming convention, however, we are using the
             //     standard "parts per" or "pixels per" time here.
             //
-            float ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
+            var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
 
             //
             // Identify the starting pixel using any padding for pixels
             //
-            float startPoint = bounds.X;
+            var startPoint = bounds.X;
             startPoint += Convert.ToSingle((events[0].Start.Subtract(startTime)).TotalSeconds * ppt);
 
             //
             // For every event render a rectangle.
             //
-            foreach (classLCEvent lcEvent in events)
+            foreach (var lcEvent in events)
             {
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Calculate how wide the event will be
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                float eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
+                var eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
 
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Define start x,y position for event block
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                float x = startPoint;
-                float y = bounds.Y;
+                var x = startPoint;
+                var y = bounds.Y;
 
-                RectangleF eventBounds = new RectangleF(x, y, eventWidth, bounds.Height);
+                var eventBounds = new RectangleF(x, y, eventWidth, bounds.Height);
 
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Find the color mapping, if it doesnt exist
                 //     then we assign a gradient gray color to it
                 // We also may want to show progress in the event...so here we only fill if it's the current event
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                Color color = Color.LightGray;
+                var color = Color.LightGray;
                 if (colorMap.ContainsKey(lcEvent.Device) == true)
                     color = colorMap[lcEvent.Device];
 
 
                 if (lcEvent.OptimizeWith)
                 {
-                    RectangleF alignedBounds = new RectangleF(x, y - 15.0F, eventWidth, bounds.Height + 20.0F);
+                    var alignedBounds = new RectangleF(x, y - 15.0F, eventWidth, bounds.Height + 20.0F);
                     graphics.SetClip(alignedBounds, CombineMode.Replace);
-                    using (SolidBrush optBrush = new SolidBrush(AcquisitionColor))
+                    using (var optBrush = new SolidBrush(AcquisitionColor))
                     {
                         graphics.FillRectangle(optBrush, x, y - 15.0F, eventWidth, bounds.Height + 20.0F);
                     }
@@ -592,31 +592,31 @@ namespace LcmsNet.Method.Drawing
             Dictionary<IDevice, Color> colorMap,
             DateTime progress)
         {
-            float ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
+            var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
 
             //
             // Find the first pixel
             //
-            float startPoint = bounds.X;
+            var startPoint = bounds.X;
             startPoint += Convert.ToSingle((method.Start.Subtract(startTime)).TotalSeconds * ppt);
 
             //
             // Find out the last pixel.
             //
-            float endPoint = bounds.X + Convert.ToSingle((method.End.Subtract(startTime)).TotalSeconds * ppt);
+            var endPoint = bounds.X + Convert.ToSingle((method.End.Subtract(startTime)).TotalSeconds * ppt);
 
             if (method.IsSpecialMethod)
             {
-                using (SolidBrush specialBrush = new SolidBrush(Color.FromArgb(64, Color.Orange)))
+                using (var specialBrush = new SolidBrush(Color.FromArgb(64, Color.Orange)))
                 {
-                    RectangleF newBounds = new RectangleF(startPoint - 5, bounds.Top - 5, endPoint, bounds.Height);
+                    var newBounds = new RectangleF(startPoint - 5, bounds.Top - 5, endPoint, bounds.Height);
                     graphics.FillRectangle(specialBrush, newBounds);
                 }
-                string specialName = "special";
-                using (Font font = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Italic))
+                var specialName = "special";
+                using (var font = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Italic))
                 {
-                    SizeF fontSize = graphics.MeasureString(specialName, font);
-                    using (SolidBrush specialBrush = new SolidBrush(Color.FromArgb(70, Color.Black)))
+                    var fontSize = graphics.MeasureString(specialName, font);
+                    using (var specialBrush = new SolidBrush(Color.FromArgb(70, Color.Black)))
                     {
                         graphics.DrawString(specialName, font, specialBrush, startPoint, bounds.Top + fontSize.Height);
                     }
@@ -637,8 +637,8 @@ namespace LcmsNet.Method.Drawing
             //
             // Name of the method
             //
-            Font nameFont = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Bold);
-            Font timeFont = new Font(FontFamily.GenericSansSerif, 6.0F, FontStyle.Bold);
+            var nameFont = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Bold);
+            var timeFont = new Font(FontFamily.GenericSansSerif, 6.0F, FontStyle.Bold);
             Brush brush = new SolidBrush(Color.Black);
 
             graphics.DrawString(method.Name,
@@ -651,16 +651,16 @@ namespace LcmsNet.Method.Drawing
             // Draw the duration strings for the method
             //
 
-            TimeSpan span = method.Duration;
+            var span = method.Duration;
 
-            string durationString = span.ToString();
+            var durationString = span.ToString();
 
-            SizeF nameLength = graphics.MeasureString(method.Name, nameFont);
-            SizeF startLength = graphics.MeasureString(method.Start.ToLongTimeString(), timeFont);
-            SizeF durationLength = graphics.MeasureString(durationString, timeFont);
-            SizeF endLength = graphics.MeasureString(method.End.ToLongTimeString(), timeFont);
+            var nameLength = graphics.MeasureString(method.Name, nameFont);
+            var startLength = graphics.MeasureString(method.Start.ToLongTimeString(), timeFont);
+            var durationLength = graphics.MeasureString(durationString, timeFont);
+            var endLength = graphics.MeasureString(method.End.ToLongTimeString(), timeFont);
 
-            float x = startPoint + nameLength.Width + 15.0F;
+            var x = startPoint + nameLength.Width + 15.0F;
 
             if ((x + startLength.Width) < endPoint)
             {
@@ -713,13 +713,13 @@ namespace LcmsNet.Method.Drawing
         {
             if (methods != null && methods.Count > 0)
             {
-                float top = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
+                var top = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
                 top = Math.Min(top, CONST_HEADER_PADDING_MAX);
 
                 //
                 // Re-adjust the size to fit on the screen
                 //
-                float heightPer = (Convert.ToSingle(bounds.Height) - top) / Convert.ToSingle(methods.Count);
+                var heightPer = (Convert.ToSingle(bounds.Height) - top) / Convert.ToSingle(methods.Count);
                 if (heightPer > CONST_MAX_HEIGHT)
                     heightPer = CONST_MAX_HEIGHT;
                 else if (heightPer < CONST_MIN_HEIGHT)
@@ -735,15 +735,15 @@ namespace LcmsNet.Method.Drawing
                 //
                 // Then calculate the number of pixels per second to use.
                 //
-                float pixelsPerSecond = Convert.ToSingle(bounds.Width - bounds.X) /
+                var pixelsPerSecond = Convert.ToSingle(bounds.Width - bounds.X) /
                                         Convert.ToSingle(methodDuration.TotalSeconds);
 
                 //
                 // Draw each method now
                 //
-                foreach (classLCMethod method in methods)
+                foreach (var method in methods)
                 {
-                    RectangleF methodBounds = new RectangleF(bounds.X, top, bounds.Width, heightPer);
+                    var methodBounds = new RectangleF(bounds.X, top, bounds.Width, heightPer);
                     RenderLCMethod(graphics,
                         methodBounds,
                         method,
@@ -784,8 +784,8 @@ namespace LcmsNet.Method.Drawing
             // Gather the sample methods into a list, then call the
             // drawing method.
             //
-            List<classLCMethod> methods = new List<classLCMethod>();
-            foreach (classSampleData sample in samples)
+            var methods = new List<classLCMethod>();
+            foreach (var sample in samples)
             {
                 if (sample != null)
                     methods.Add(sample.LCMethod);

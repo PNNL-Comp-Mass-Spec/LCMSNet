@@ -23,11 +23,11 @@ namespace LcmsNet.Devices.Fluidics
 
         public bool DevicesLocked
         {
-            get { return mbool_locked; }
+            get { return m_locked; }
             set
             {
-                mbool_locked = value;
-                if (mbool_locked)
+                m_locked = value;
+                if (m_locked)
                 {
                     // Locked, we want the unlock button to be pressable to unlock.
                     mbutton_lock.Enabled = false;
@@ -100,7 +100,7 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         private const string CONST_DEFAULT_CONFIG_FILEPATH = "HardwareConfig.ini";
 
-        private bool mbool_locked;
+        private bool m_locked;
         private ModelCheckReportViewer m_reporter;
 
         #endregion
@@ -129,15 +129,15 @@ namespace LcmsNet.Devices.Fluidics
 
         void FluidicsDesign_Activated(object sender, EventArgs e)
         {
-            Control[] fd0 = tabControl1.Controls.Find("controlFluidicsControlDesigner", true);
-            controlFluidicsControl fd = (controlFluidicsControl) fd0[0];
+            var fd0 = tabControl1.Controls.Find("controlFluidicsControlDesigner", true);
+            var fd = (controlFluidicsControl) fd0[0];
             fd.UpdateImage();
         }
 
         void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
-            TabControl page = sender as TabControl;
-            Control[] fd = page.Controls.Find("controlFluidicsControlDesigner", true);
+            var page = sender as TabControl;
+            var fd = page.Controls.Find("controlFluidicsControlDesigner", true);
             if (fd != null && e.TabPage == fd[0].Parent)
             {
                 fd[0].Visible = true;
@@ -167,8 +167,8 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         private void RemoveSelected()
         {
-            List<IDevice> devicesToRemoveFromDeviceManager = m_fluidics_mod.RemoveSelectedDevices();
-            foreach (IDevice device in devicesToRemoveFromDeviceManager)
+            var devicesToRemoveFromDeviceManager = m_fluidics_mod.RemoveSelectedDevices();
+            foreach (var device in devicesToRemoveFromDeviceManager)
             {
                 classDeviceManager.Manager.RemoveDevice(device);
             }
@@ -181,9 +181,9 @@ namespace LcmsNet.Devices.Fluidics
         /// <returns>the image of the current fluidics design</returns>
         public Bitmap GetImage()
         {
-            Rectangle r = m_fluidics_mod.GetBoundingBox();
-            Bitmap fluidicsImage = new Bitmap(r.Width + 150, r.Height + 150);
-            using (Graphics g = Graphics.FromImage(fluidicsImage))
+            var r = m_fluidics_mod.GetBoundingBox();
+            var fluidicsImage = new Bitmap(r.Width + 150, r.Height + 150);
+            using (var g = Graphics.FromImage(fluidicsImage))
             {
                 //create white background
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -215,23 +215,23 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         public void SaveConfiguration(string path)
         {
-            classDeviceConfiguration configuration = new classDeviceConfiguration();
+            var configuration = new classDeviceConfiguration();
             configuration.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
 
 
             classDeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);
-            List<long> connectionIds = new List<long>();
+            var connectionIds = new List<long>();
             //For each device, extract the X,Y position for persistence.
-            foreach (FluidicsDevice device in m_fluidics_mod.GetDevices())
+            foreach (var device in m_fluidics_mod.GetDevices())
             {
                 configuration.AddSetting(device.IDevice.Name, "dashboard-x", device.Loc.X);
                 configuration.AddSetting(device.IDevice.Name, "dashboard-y", device.Loc.Y);
                 configuration.AddSetting(device.IDevice.Name, "State", (int) device.CurrentState);
 
                 //for every port in a device, add any connection that is not internal to the device to the list of connections
-                foreach (Port port in device.Ports)
+                foreach (var port in device.Ports)
                 {
-                    foreach (Connection conn in port.Connections)
+                    foreach (var conn in port.Connections)
                     {
                         if (!connectionIds.Contains(conn.ID) && conn.InternalConnectionOf == null)
                         {
@@ -243,7 +243,7 @@ namespace LcmsNet.Devices.Fluidics
                 }
             }
 
-            classINIDeviceConfigurationWriter writer = new classINIDeviceConfigurationWriter();
+            var writer = new classINIDeviceConfigurationWriter();
             writer.WriteConfiguration(path, configuration);
 
             classApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.",
@@ -269,25 +269,25 @@ namespace LcmsNet.Devices.Fluidics
         public void LoadConfiguration(string path)
         {
             m_fluidics_mod.BeginModelSuspension();
-            classINIDeviceConfigurationReader reader = new classINIDeviceConfigurationReader();
-            classDeviceConfiguration configuration = reader.ReadConfiguration(path);
+            var reader = new classINIDeviceConfigurationReader();
+            var configuration = reader.ReadConfiguration(path);
 
             classDeviceManager.Manager.LoadPersistentConfiguration(configuration);
 
-            foreach (FluidicsDevice device in m_fluidics_mod.GetDevices())
+            foreach (var device in m_fluidics_mod.GetDevices())
             {
                 try
                 {
-                    Dictionary<string, object> settings = configuration.GetDeviceSettings(device.IDevice.Name);
+                    var settings = configuration.GetDeviceSettings(device.IDevice.Name);
                     if (settings.ContainsKey("dashboard-x") && settings.ContainsKey("dashboard-y"))
                     {
-                        int x = Convert.ToInt32(settings["dashboard-x"]);
-                        int y = Convert.ToInt32(settings["dashboard-y"]);
+                        var x = Convert.ToInt32(settings["dashboard-x"]);
+                        var y = Convert.ToInt32(settings["dashboard-y"]);
                         device.MoveBy(new Point(x, y));
                     }
                     if (settings.ContainsKey("State"))
                     {
-                        int stateAsInt = Convert.ToInt32(settings["State"]);
+                        var stateAsInt = Convert.ToInt32(settings["State"]);
                         device.ActivateState(stateAsInt);
                     }
                 }
@@ -297,11 +297,11 @@ namespace LcmsNet.Devices.Fluidics
                         "Could not load the position or state of the device.", ex);
                 }
             }
-            Dictionary<string, string> connections = configuration.GetConnections();
-            foreach (string connection in connections.Keys)
+            var connections = configuration.GetConnections();
+            foreach (var connection in connections.Keys)
             {
-                string[] delimiter = new string[] {",", "\n"};
-                string[] properties = connections[connection].Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+                var delimiter = new string[] {",", "\n"};
+                var properties = connections[connection].Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                 if (properties.Length == 3)
                 {
                     try
@@ -330,24 +330,24 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         private void AddDeviceToDeviceManager()
         {
-            DeviceAddController controller = new DeviceAddController();
-            formDeviceAddForm addForm = new formDeviceAddForm();
+            var controller = new DeviceAddController();
+            var addForm = new formDeviceAddForm();
             addForm.Icon = Icon;
 
-            List<classDevicePluginInformation> availablePlugins = controller.GetAvailablePlugins();
+            var availablePlugins = controller.GetAvailablePlugins();
             addForm.AddPluginInformation(availablePlugins);
             addForm.Owner = this;
 
 
-            DialogResult result = addForm.ShowDialog();
+            var result = addForm.ShowDialog();
             if (result == DialogResult.OK)
             {
-                List<classDevicePluginInformation> plugins = addForm.GetSelectedPlugins();
-                List<classDeviceErrorEventArgs> failedDevices = controller.AddDevices(plugins, addForm.InitializeOnAdd);
+                var plugins = addForm.GetSelectedPlugins();
+                var failedDevices = controller.AddDevices(plugins, addForm.InitializeOnAdd);
 
                 if (failedDevices != null && failedDevices.Count > 0)
                 {
-                    formFailedDevicesDisplay display = new formFailedDevicesDisplay(failedDevices);
+                    var display = new formFailedDevicesDisplay(failedDevices);
                     display.StartPosition = FormStartPosition.CenterScreen;
                     display.Icon = ParentForm.Icon;
                     display.ShowDialog();
@@ -360,10 +360,10 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         private void LoadHardware()
         {
-            int deviceCount = classDeviceManager.Manager.DeviceCount;
+            var deviceCount = classDeviceManager.Manager.DeviceCount;
             if (deviceCount > 0)
             {
-                DialogResult result = MessageBox.Show("Do you want to clear the existing device configuration?",
+                var result = MessageBox.Show("Do you want to clear the existing device configuration?",
                     "Clear Configuration", MessageBoxButtons.YesNo);
                 if (result == DialogResult.No)
                 {
@@ -371,7 +371,7 @@ namespace LcmsNet.Devices.Fluidics
                 }
             }
 
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = CONST_HARDWARE_CONFIG_FILTER;
                 openFileDialog.FilterIndex = 0;
@@ -396,7 +396,7 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         private void SaveHardwareAs()
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            using (var saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = CONST_HARDWARE_CONFIG_FILTER;
                 saveFileDialog.FilterIndex = 0;
@@ -445,12 +445,12 @@ namespace LcmsNet.Devices.Fluidics
         /// <param name="e"></param>
         private void mbutton_initialize_Click(object sender, EventArgs e)
         {
-            int initializedCount = classDeviceManager.Manager.InitializedDeviceCount;
+            var initializedCount = classDeviceManager.Manager.InitializedDeviceCount;
 
-            bool reinitialize = false;
+            var reinitialize = false;
             if (initializedCount > 0)
             {
-                DialogResult result =
+                var result =
                     MessageBox.Show("Some devices are initialized already.  Do you want to re-initialize those?",
                         "Initialization", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Cancel)
@@ -463,10 +463,10 @@ namespace LcmsNet.Devices.Fluidics
                 }
             }
 
-            List<classDeviceErrorEventArgs> failedDevices = classDeviceManager.Manager.InitializeDevices(reinitialize);
+            var failedDevices = classDeviceManager.Manager.InitializeDevices(reinitialize);
             if (failedDevices != null && failedDevices.Count > 0)
             {
-                formFailedDevicesDisplay display = new formFailedDevicesDisplay(failedDevices);
+                var display = new formFailedDevicesDisplay(failedDevices);
                 display.StartPosition = FormStartPosition.CenterParent;
                 display.Icon = ParentForm.Icon;
                 display.ShowDialog();
@@ -573,7 +573,7 @@ namespace LcmsNet.Devices.Fluidics
         {
             try
             {
-                DialogResult areYouSure = MessageBox.Show("Are you sure you want to delete this device or connection?",
+                var areYouSure = MessageBox.Show("Are you sure you want to delete this device or connection?",
                     "Delete Device", MessageBoxButtons.YesNo);
 
                 if (areYouSure == DialogResult.Yes)

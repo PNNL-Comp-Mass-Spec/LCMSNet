@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            LcmsNet.Method.classMethodPreviewOptions classMethodPreviewOptions1 = new LcmsNet.Method.classMethodPreviewOptions();
+            var classMethodPreviewOptions1 = new LcmsNet.Method.classMethodPreviewOptions();
             this.mcontrol_methodEditor = new LcmsNet.Method.Forms.controlLCMethodEditor();
             this.SuspendLayout();
             //

@@ -74,8 +74,8 @@ namespace LcmsNet.Notification
 
         public List<INotifier> GetMappedNotifiers()
         {
-            List<INotifier> devices = new List<INotifier>();
-            foreach (INotifier device in mdict_settings.Keys)
+            var devices = new List<INotifier>();
+            foreach (var device in mdict_settings.Keys)
             {
                 devices.Add(device);
             }

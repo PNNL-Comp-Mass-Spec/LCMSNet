@@ -39,7 +39,7 @@ namespace LcmsNet
         private void InitForm()
         {
             // Load combo box
-            List<classInstrumentInfo> instList = classSQLiteTools.GetInstrumentList(false);
+            var instList = classSQLiteTools.GetInstrumentList(false);
 
             if (instList == null)
             {
@@ -54,15 +54,15 @@ namespace LcmsNet
             }
 
             comboBoxAvailInstruments.Items.Clear();
-            foreach (classInstrumentInfo instData in instList)
+            foreach (var instData in instList)
             {
                 comboBoxAvailInstruments.Items.Add(instData.DMSName);
             }
 
             // Determine if presently specified instrument name is in list. If it is, display it.
-            string currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME);
-            int indx = 0;
-            bool found = false;
+            var currentName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME);
+            var indx = 0;
+            var found = false;
             foreach (string itemName in comboBoxAvailInstruments.Items)
             {
                 if (itemName == currentName)

@@ -50,18 +50,18 @@ namespace LcmsNet.Method
             // assemblies and their types.  Since we are loading plugins from another directory.
             // Then the CLR does not know where to look necessarily.  Here we are
             // looking within the loaded assemblies to find the type.
-            Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            List<Assembly> assemblies = new List<Assembly>();
+            var assemblies = new List<Assembly>();
             assemblies.AddRange(loadedAssemblies);
             assemblies.Add(Assembly.GetExecutingAssembly()); // Make sure we check the LCMS Net ones as well.
 
-            foreach (Assembly ass in assemblies)
+            foreach (var ass in assemblies)
             {
                 try
                 {
-                    Type[] types = ass.GetTypes();
-                    foreach (Type assType in types)
+                    var types = ass.GetTypes();
+                    foreach (var assType in types)
                     {
                         if (assType.FullName == name) //TODO: BLL if (assType.AssemblyQualifiedName == name)
                         {
@@ -85,10 +85,10 @@ namespace LcmsNet.Method
         /// <returns>An LC-Event</returns>
         private classLCEvent ReadEventNode(XmlNode node)
         {
-            classLCEvent lcEvent = new classLCEvent();
+            var lcEvent = new classLCEvent();
 
             // Read the name
-            XmlNode nameAttribute = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
+            var nameAttribute = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
             lcEvent.Name = nameAttribute.Value;
 
             XmlNode value = null;
@@ -138,23 +138,23 @@ namespace LcmsNet.Method
             }
 
             // Read the parameters
-            XmlNode parameters = node.SelectSingleNode(classLCMethodFactory.CONST_XPATH_PARAMETERS);
-            XmlNodeList parameterList = parameters.SelectNodes(classLCMethodFactory.CONST_XPATH_PARAMETER);
+            var parameters = node.SelectSingleNode(classLCMethodFactory.CONST_XPATH_PARAMETERS);
+            var parameterList = parameters.SelectNodes(classLCMethodFactory.CONST_XPATH_PARAMETER);
 
             // Create an array of expected parameters.
-            object[] parameterArray = new object[parameterList.Count];
-            string[] parameterNameArray = new string[parameterList.Count];
-            Type[] typeArray = new Type[parameterList.Count];
+            var parameterArray = new object[parameterList.Count];
+            var parameterNameArray = new string[parameterList.Count];
+            var typeArray = new Type[parameterList.Count];
 
 
             // Use this sequentially to avoid ambiguity with iterations or out of order keying.
-            for (int i = 0; i < parameterList.Count; i++)
+            for (var i = 0; i < parameterList.Count; i++)
             {
-                XmlNode parameterNode = parameterList[i];
+                var parameterNode = parameterList[i];
 
-                XmlNode parameterValue = parameterNode.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_VALUE);
-                XmlNode parameterType = parameterNode.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_TYPE);
-                XmlNode parameterName = parameterNode.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
+                var parameterValue = parameterNode.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_VALUE);
+                var parameterType = parameterNode.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_TYPE);
+                var parameterName = parameterNode.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
 
                 //
                 // Create a parameter type, if it fails?! well...
@@ -247,13 +247,13 @@ namespace LcmsNet.Method
             // Device Initialization
             //
             value = node.SelectSingleNode(classLCMethodFactory.CONST_XPATH_DEVICE);
-            XmlNode attribute = value.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
-            string deviceName = attribute.Value;
+            var attribute = value.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
+            var deviceName = attribute.Value;
             attribute = value.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_TYPE);
-            string deviceTypeName = attribute.Value;
+            var deviceTypeName = attribute.Value;
 
-            Type devicetype = FindType(deviceTypeName);
-            IDevice device = classDeviceManager.Manager.FindDevice(deviceName, devicetype);
+            var devicetype = FindType(deviceTypeName);
+            var device = classDeviceManager.Manager.FindDevice(deviceName, devicetype);
             if (device == null)
             {
                 throw new classDeviceNotFoundException("Could not find the device " + deviceName + ".", deviceName);
@@ -265,7 +265,7 @@ namespace LcmsNet.Method
             //
             value = node.SelectSingleNode(classLCMethodFactory.CONST_XPATH_METHOD_INFO);
             attribute = value.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
-            string methodName = attribute.Value;
+            var methodName = attribute.Value;
             MethodInfo[] methods = null;
             MethodInfo method = null;
             try
@@ -276,14 +276,14 @@ namespace LcmsNet.Method
                 // that have the name provided.
                 //
                 methods = devicetype.GetMethods();
-                foreach (MethodInfo info in methods)
+                foreach (var info in methods)
                 {
-                    ParameterInfo[] parameterInfo = info.GetParameters();
+                    var parameterInfo = info.GetParameters();
                     if (info.Name == methodName && parameterInfo.Length == lcEvent.Parameters.Length)
                     {
-                        int i = 0;
-                        bool found = true;
-                        foreach (ParameterInfo pinfo in parameterInfo)
+                        var i = 0;
+                        var found = true;
+                        foreach (var pinfo in parameterInfo)
                         {
                             //if (pinfo.ParameterType.Equals(typeArray[i]) == false)
                             if ((pinfo.ParameterType.Name == typeArray[i].Name) == false)
@@ -316,10 +316,10 @@ namespace LcmsNet.Method
             //
             try
             {
-                object[] methodAttributes = method.GetCustomAttributes(false);
-                foreach (object attr in methodAttributes)
+                var methodAttributes = method.GetCustomAttributes(false);
+                foreach (var attr in methodAttributes)
                 {
-                    classLCMethodAttribute meth = attr as classLCMethodAttribute;
+                    var meth = attr as classLCMethodAttribute;
                     if (meth != null)
                     {
                         lcEvent.MethodAttribute = meth;
@@ -329,7 +329,7 @@ namespace LcmsNet.Method
             }
             catch (Exception exOld)
             {
-                Exception ex = new Exception("Could not read the LC-method event for device " + deviceName, exOld);
+                var ex = new Exception("Could not read the LC-method event for device " + deviceName, exOld);
                 throw exOld;
             }
             return lcEvent;
@@ -361,7 +361,7 @@ namespace LcmsNet.Method
             //     Catch XML errors and authorization errors.
             //     We have made sure the file exists.
             //
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
             try
             {
                 document.Load(filePath);
@@ -375,7 +375,7 @@ namespace LcmsNet.Method
                 throw new Exception("You do not have authorization to open the method file.",
                     ex);
             }
-            XmlNode root = document.SelectSingleNode(classLCMethodFactory.CONST_XPATH_METHOD);
+            var root = document.SelectSingleNode(classLCMethodFactory.CONST_XPATH_METHOD);
 
             return ReadEventList(root, false, ref errors);
         }
@@ -428,7 +428,7 @@ namespace LcmsNet.Method
             //
             // Now get the list and parse each item
             //
-            XmlNodeList eventListNode = root.SelectNodes(classLCMethodFactory.CONST_XPATH_EVENTS);
+            var eventListNode = root.SelectNodes(classLCMethodFactory.CONST_XPATH_EVENTS);
 
             //
             // If the user really wanted to read the actual data, then read it instead
@@ -445,22 +445,22 @@ namespace LcmsNet.Method
                 if (eventListNode == null || eventListNode.Count < 1)
                     return null;
             }
-            int i = 0;
+            var i = 0;
             foreach (XmlNode node in eventListNode)
             {
                 i = i + 1;
                 try
                 {
-                    classLCEvent lcEvent = ReadEventNode(node);
+                    var lcEvent = ReadEventNode(node);
                     method.Events.Add(lcEvent);
                 }
                 catch (classDeviceNotFoundException ex)
                 {
-                    string error =
+                    var error =
                         string.Format("The Device \"{0}\" was missing from the hardware manager at event {1}.",
                             ex.DeviceName,
                             i);
-                    Exception newException = new Exception(error, ex);
+                    var newException = new Exception(error, ex);
                     LcmsNetDataClasses.Logging.classApplicationLogger.LogError(1, error, ex);
                     errors.Add(newException);
                 }

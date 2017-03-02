@@ -63,7 +63,7 @@ namespace LcmsNet
         {
             if (labelStatus.InvokeRequired)
             {
-                delegateUpdateStatus d = new delegateUpdateStatus(UpdateStatus);
+                var d = new delegateUpdateStatus(UpdateStatus);
                 labelStatus.Invoke(d, new object[] {newStatus});
             }
             else

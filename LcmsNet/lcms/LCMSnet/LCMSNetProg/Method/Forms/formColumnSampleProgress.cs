@@ -59,9 +59,9 @@ namespace LcmsNet.Method.Forms
             {
                 try
                 {
-                    System.Drawing.Bitmap map = new System.Drawing.Bitmap(mcontrol_sampleProgressFull.Width,
+                    var map = new System.Drawing.Bitmap(mcontrol_sampleProgressFull.Width,
                         mcontrol_sampleProgressFull.Height);
-                    System.Drawing.Graphics gfx = System.Drawing.Graphics.FromImage(map);
+                    var gfx = System.Drawing.Graphics.FromImage(map);
                     mcontrol_sampleProgressFull.RenderGraph(gfx);
                         //DrawToBitmap(map,new System.Drawing.Rectangle(0, 0, mcontrol_sampleProgressFull.Width, mcontrol_sampleProgressFull.Height));
                     PreviewAvailable(this, new SampleProgressPreviewArgs((System.Drawing.Image) map.Clone()));

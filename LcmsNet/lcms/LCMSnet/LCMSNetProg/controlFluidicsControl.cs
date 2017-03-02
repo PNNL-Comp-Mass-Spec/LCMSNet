@@ -80,7 +80,7 @@ namespace LcmsNet
         {
             try
             {
-                TrackBar bar = (TrackBar) sender;
+                var bar = (TrackBar) sender;
                 if (bar.Name == "trackBarScale")
                 {
                     //if the textbox value is different from the trackbar value, update the textbox
@@ -123,8 +123,8 @@ namespace LcmsNet
         {
             try
             {
-                TextBox self = (TextBox) sender;
-                int val = int.Parse(self.Text);
+                var self = (TextBox) sender;
+                var val = int.Parse(self.Text);
                 // if the trackbar value is not the same as the text value, it was entered by a user (or some method other than the trackbar)
                 // so change the trackbar to match
                 if (trackBarScale.Value != val)
@@ -159,7 +159,7 @@ namespace LcmsNet
         private void textBoxZoom_KeyPress(object sender, KeyPressEventArgs e)
         {
             // if enter is pressed...just tab to the trackBar_zoom
-            int enterKeyASCII = 13;
+            var enterKeyASCII = 13;
             if (e.KeyChar == (char) enterKeyASCII)
             {
                 try
@@ -204,7 +204,7 @@ namespace LcmsNet
         /// <param name="e"></param>
         private void textBoxZoom_Enter(object sender, EventArgs e)
         {
-            TextBox zoomBox = (TextBox) sender;
+            var zoomBox = (TextBox) sender;
             zoomBox.SelectAll();
         }
 
@@ -229,7 +229,7 @@ namespace LcmsNet
                             dragndrop = true;
                             //toggle dragndrop mode
                             //select the connection/port/device at the location of the mouse.
-                            Point trueLocation = new Point(e.Location.X - panelFluidicsDesign.AutoScrollPosition.X,
+                            var trueLocation = new Point(e.Location.X - panelFluidicsDesign.AutoScrollPosition.X,
                                 e.Location.Y - panelFluidicsDesign.AutoScrollPosition.Y);
                             if (Form.ModifierKeys != Keys.Control)
                             {
@@ -279,7 +279,7 @@ namespace LcmsNet
                     m_moving = false;
                     if (selectionMade && m_fluidics_mod.GetSelectedPortCount() == 2)
                     {
-                        DialogResult result = MessageBox.Show("Do you want to connect the selected ports?", "Connect",
+                        var result = MessageBox.Show("Do you want to connect the selected ports?", "Connect",
                             MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
                         {
@@ -308,10 +308,10 @@ namespace LcmsNet
                 try
                 {
                     m_fluidics_mod.SetWorldView(panelFluidicsDesign.ClientRectangle);
-                    float scale = trackBarScale.Value / SCALE_CONVERSION;
+                    var scale = trackBarScale.Value / SCALE_CONVERSION;
                     m_fluidics_mod.ScaleWorldView(scale);
                     const int bufferSize = 150;
-                    Size imageSize = m_fluidics_mod.GetBoundingBox().Size;
+                    var imageSize = m_fluidics_mod.GetBoundingBox().Size;
                     if (scale > 1)
                     {
                         imageSize.Width = (int) (imageSize.Width * scale);
@@ -329,7 +329,7 @@ namespace LcmsNet
                     }
                     m_bitmap.Dispose();
                     m_bitmap = new Bitmap(imageSize.Width, imageSize.Height);
-                    using (Graphics g = Graphics.FromImage(m_bitmap))
+                    using (var g = Graphics.FromImage(m_bitmap))
                     {
                         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                         //each layer is rendered at the transparency value specified by the UI transparency trackbar for that layer, possible values 0-255.
@@ -386,7 +386,7 @@ namespace LcmsNet
                     m_NewMouseLocation = e.Location;
                     //amount the mouse moved.
 
-                    Point amountMoved = new Point(m_NewMouseLocation.X - m_OldMouseLocation.X,
+                    var amountMoved = new Point(m_NewMouseLocation.X - m_OldMouseLocation.X,
                         m_NewMouseLocation.Y - m_OldMouseLocation.Y);
                     if (amountMoved.X + amountMoved.Y != 0)
                     {
@@ -406,10 +406,10 @@ namespace LcmsNet
 
         private void panelFluidicsDesign_DoubleClick(object sender, EventArgs e)
         {
-            MouseEventArgs me = e as MouseEventArgs;
-            Point p = Control.MousePosition;
-            Point p2 = me.Location;
-            Point trueLocation = new Point(p2.X - panelFluidicsDesign.AutoScrollPosition.X,
+            var me = e as MouseEventArgs;
+            var p = Control.MousePosition;
+            var p2 = me.Location;
+            var trueLocation = new Point(p2.X - panelFluidicsDesign.AutoScrollPosition.X,
                 p2.Y - panelFluidicsDesign.AutoScrollPosition.Y);
             m_fluidics_mod.DoubleClickActions(trueLocation);
         }

@@ -26,10 +26,10 @@ namespace LcmsNet.Devices
                 return new NotificationConfiguration();
             }
 
-            NotificationConfiguration configuration = new NotificationConfiguration();
-            XmlDocument document = new XmlDocument();
+            var configuration = new NotificationConfiguration();
+            var document = new XmlDocument();
             document.Load(path);
-            XmlNode rootElement = document.SelectSingleNode("Devices");
+            var rootElement = document.SelectSingleNode("Devices");
 
             foreach (XmlNode node in rootElement.ChildNodes)
             {
@@ -47,7 +47,7 @@ namespace LcmsNet.Devices
 
         private static void ReadNotificationSetting(NotificationConfiguration configuration, XmlNode node)
         {
-            XmlNode nameNode = node.Attributes.GetNamedItem("Ignore");
+            var nameNode = node.Attributes.GetNamedItem("Ignore");
             if (nameNode != null)
             {
                 configuration.IgnoreNotifications = Convert.ToBoolean(nameNode.Value);
@@ -56,14 +56,14 @@ namespace LcmsNet.Devices
 
         private static void ReadDevice(NotificationConfiguration configuration, XmlNode node)
         {
-            string deviceName = node.Attributes.GetNamedItem("name").Value;
-            IDevice device = classDeviceManager.Manager.FindDevice(deviceName);
+            var deviceName = node.Attributes.GetNamedItem("name").Value;
+            var device = classDeviceManager.Manager.FindDevice(deviceName);
 
 
             INotifier notifier = device;
             if (device == null)
             {
-                foreach (INotifier simpleNotifier in Notification.NotificationBroadcaster.Manager.Notifiers)
+                foreach (var simpleNotifier in Notification.NotificationBroadcaster.Manager.Notifiers)
                 {
                     if (simpleNotifier.Name == deviceName)
                     {
@@ -82,15 +82,15 @@ namespace LcmsNet.Devices
             {
                 if (notificationNode.Name == "Notification")
                 {
-                    string name = notificationNode.Attributes.GetNamedItem("name").Value;
-                    string type = notificationNode.Attributes.GetNamedItem("type").Value;
-                    string action = notificationNode.Attributes.GetNamedItem("action").Value;
-                    string method = notificationNode.Attributes.GetNamedItem("method").Value;
-                    XmlNode conditionNode = notificationNode.ChildNodes[0];
+                    var name = notificationNode.Attributes.GetNamedItem("name").Value;
+                    var type = notificationNode.Attributes.GetNamedItem("type").Value;
+                    var action = notificationNode.Attributes.GetNamedItem("action").Value;
+                    var method = notificationNode.Attributes.GetNamedItem("method").Value;
+                    var conditionNode = notificationNode.ChildNodes[0];
 
                     // Determine the action
-                    enumDeviceNotificationAction actionEnum = enumDeviceNotificationAction.Ignore;
-                    string[] names = Enum.GetNames(typeof (enumDeviceNotificationAction));
+                    var actionEnum = enumDeviceNotificationAction.Ignore;
+                    var names = Enum.GetNames(typeof (enumDeviceNotificationAction));
 
                     try
                     {
@@ -107,20 +107,20 @@ namespace LcmsNet.Devices
                     NotificationSetting setting = null;
                     if (type.ToLower() == "number")
                     {
-                        NotificationNumberSetting number = new NotificationNumberSetting();
+                        var number = new NotificationNumberSetting();
                         number.Minimum = Convert.ToDouble(conditionNode.Attributes.GetNamedItem("minimum").Value);
                         number.Maximum = Convert.ToDouble(conditionNode.Attributes.GetNamedItem("maximum").Value);
                         setting = number;
                     }
                     else if (type.ToLower() == "text")
                     {
-                        NotificationTextSetting text = new NotificationTextSetting();
+                        var text = new NotificationTextSetting();
                         text.Text = conditionNode.Attributes[0].Value;
                         setting = text;
                     }
                     else if (type.ToLower() == "always")
                     {
-                        NotificationAlwaysSetting always = new NotificationAlwaysSetting();
+                        var always = new NotificationAlwaysSetting();
                         setting = always;
                     }
                     setting.Name = name;

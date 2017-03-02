@@ -43,7 +43,7 @@ namespace LcmsNet.Method.Forms
 
             // Maintain a list of errors.
             mdict_errors = new Dictionary<int, List<classLCEvent>>();
-            for (int i = 0; i < CONST_TOTAL_COLUMNS + 1; i++)
+            for (var i = 0; i < CONST_TOTAL_COLUMNS + 1; i++)
             {
                 mdict_errors.Add(i, new List<classLCEvent>());
                 mlist_samples.Add(null);
@@ -100,7 +100,7 @@ namespace LcmsNet.Method.Forms
                 return;
             }
 
-            int columnID = sample.ColumnData.ID;
+            var columnID = sample.ColumnData.ID;
             if (sample.LCMethod.IsSpecialMethod == true)
             {
                 columnID = CONST_TOTAL_COLUMNS;
@@ -123,7 +123,7 @@ namespace LcmsNet.Method.Forms
         {
             if (sample != null)
             {
-                int columnID = sample.ColumnData.ID;
+                var columnID = sample.ColumnData.ID;
                 if (sample.LCMethod.IsSpecialMethod == true)
                 {
                     columnID = CONST_TOTAL_COLUMNS;
@@ -147,10 +147,10 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void ClearSamples()
         {
-            for (int i = 0; i < mlist_samples.Count; i++)
+            for (var i = 0; i < mlist_samples.Count; i++)
             {
                 mlist_samples[i] = null;
-                foreach (int key in mdict_errors.Keys)
+                foreach (var key in mdict_errors.Keys)
                 {
                     mdict_errors[key].Clear();
                 }
@@ -182,27 +182,27 @@ namespace LcmsNet.Method.Forms
 
         public void RenderGraph(Graphics e)
         {
-            DateTime now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var now = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             if (mlist_samples != null && mlist_samples.Count > 0)
             {
                 try
                 {
-                    RectangleF bounds = new RectangleF(this.Bounds.X, this.Bounds.Y, this.Bounds.Width,
+                    var bounds = new RectangleF(this.Bounds.X, this.Bounds.Y, this.Bounds.Width,
                         this.Bounds.Height);
-                    classLCMethodColumnModeRenderer renderer = new classLCMethodColumnModeRenderer();
-                    foreach (classColumnData column in classCartConfiguration.Columns)
+                    var renderer = new classLCMethodColumnModeRenderer();
+                    foreach (var column in classCartConfiguration.Columns)
                     {
                         renderer.ColumnNames.Add(column.Name);
                     }
                     renderer.ColumnNames.Add("Special");
 
-                    DateTime minTime = DateTime.MaxValue;
-                    DateTime maxTime = DateTime.MinValue;
+                    var minTime = DateTime.MaxValue;
+                    var maxTime = DateTime.MinValue;
 
                     //
                     // Find the minimum and maximum time values.
                     //
-                    foreach (classSampleData data in mlist_samples)
+                    foreach (var data in mlist_samples)
                     {
                         if (data != null)
                         {
@@ -226,7 +226,7 @@ namespace LcmsNet.Method.Forms
                         minTime = now;
                     }
 
-                    TimeSpan span = default(TimeSpan);
+                    var span = default(TimeSpan);
                     //
                     // Now we see how long to render for...if rendering all events then we are
                     // using the time between the start time until the last event
@@ -259,17 +259,17 @@ namespace LcmsNet.Method.Forms
 
                     if (RenderDisplayWindow == true)
                     {
-                        float x1Seconds = Convert.ToSingle(now.Subtract(minTime).TotalSeconds);
-                        TimeSpan spanx = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, PreviewMilliseconds);
-                        float x2Seconds = Convert.ToSingle(now.Add(spanx).Subtract(minTime).TotalSeconds);
-                        float ppt = (bounds.Width - bounds.X) / Convert.ToSingle(span.TotalSeconds);
+                        var x1Seconds = Convert.ToSingle(now.Subtract(minTime).TotalSeconds);
+                        var spanx = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, PreviewMilliseconds);
+                        var x2Seconds = Convert.ToSingle(now.Add(spanx).Subtract(minTime).TotalSeconds);
+                        var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(span.TotalSeconds);
 
-                        float xx = ppt * x1Seconds;
-                        float xw = ppt * x2Seconds - xx;
+                        var xx = ppt * x1Seconds;
+                        var xw = ppt * x2Seconds - xx;
 
-                        using (SolidBrush brush = new SolidBrush(Color.Black))
+                        using (var brush = new SolidBrush(Color.Black))
                         {
-                            using (Pen pen = new Pen(brush))
+                            using (var pen = new Pen(brush))
                             {
                                 e.DrawLine(pen,
                                     new PointF(xx, 0),
@@ -280,18 +280,18 @@ namespace LcmsNet.Method.Forms
                                     new PointF(Math.Min(ppt * x2Seconds, bounds.Width - 1), bounds.Height));
                             }
                         }
-                        using (SolidBrush brush = new SolidBrush(Color.FromArgb(10, 255, 0, 0)))
+                        using (var brush = new SolidBrush(Color.FromArgb(10, 255, 0, 0)))
                         {
                             e.FillRectangle(brush, xx, 0, xw, bounds.Height);
                         }
                     }
 
 
-                    foreach (int key in mdict_errors.Keys)
+                    foreach (var key in mdict_errors.Keys)
                     {
-                        List<LcmsNetDataClasses.Method.classLCEvent> oldEvents = new List<classLCEvent>();
-                        List<LcmsNetDataClasses.Method.classLCEvent> lcEvents = mdict_errors[key];
-                        foreach (LcmsNetDataClasses.Method.classLCEvent lcEvent in lcEvents)
+                        var oldEvents = new List<classLCEvent>();
+                        var lcEvents = mdict_errors[key];
+                        foreach (var lcEvent in lcEvents)
                         {
                             if (lcEvent.Start.Subtract(minTime).TotalMilliseconds <= 0)
                             {
@@ -306,7 +306,7 @@ namespace LcmsNet.Method.Forms
                                     span);
                             }
                         }
-                        foreach (LcmsNetDataClasses.Method.classLCEvent lcEvent in oldEvents)
+                        foreach (var lcEvent in oldEvents)
                         {
                             lcEvents.Remove(lcEvent);
                         }
@@ -319,8 +319,8 @@ namespace LcmsNet.Method.Forms
             }
             else
             {
-                classLCMethodColumnModeRenderer renderer = new classLCMethodColumnModeRenderer();
-                foreach (classColumnData column in classCartConfiguration.Columns)
+                var renderer = new classLCMethodColumnModeRenderer();
+                foreach (var column in classCartConfiguration.Columns)
                 {
                     renderer.ColumnNames.Add(column.Name);
                 }

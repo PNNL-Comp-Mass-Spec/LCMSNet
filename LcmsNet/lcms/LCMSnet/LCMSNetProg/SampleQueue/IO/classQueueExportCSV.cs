@@ -34,17 +34,17 @@ namespace LcmsNet.SampleQueue.IO
         public void WriteSamples(string path, List<classSampleData> data)
         {
             // Make a copy of the data list, so that the rest of the app doesn't get screwed up by the sort
-            List<classSampleData> sortedData = new List<classSampleData>();
-            foreach (classSampleData currSample in data)
+            var sortedData = new List<classSampleData>();
+            foreach (var currSample in data)
             {
-                classSampleData tmpSample = (classSampleData) currSample.Clone();
+                var tmpSample = (classSampleData) currSample.Clone();
                 sortedData.Add(tmpSample);
             }
 
             // Sort the list by RunOrder
 //              sortedData.Sort(CompareSamplesByRunOrder);
 
-            string outString = BuildOutputString(sortedData);
+            var outString = BuildOutputString(sortedData);
 
             try
             {
@@ -114,7 +114,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>String representing entire file contents</returns>
         private string BuildOutputString(List<classSampleData> samples)
         {
-            StringBuilder strBld = new StringBuilder();
+            var strBld = new StringBuilder();
 
             // Build header
             strBld.Append("\"Request Name\",");
@@ -124,9 +124,9 @@ namespace LcmsNet.SampleQueue.IO
             strBld.Append(Environment.NewLine);
 
             // Add the data for each sample
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
             {
-                int colNum = sample.ColumnData.ID + 1;
+                var colNum = sample.ColumnData.ID + 1;
                 strBld.Append("\"" + sample.DmsData.DatasetName + "\",");
                 strBld.Append("\"" + sample.DmsData.RequestID.ToString() + "\",");
                 strBld.Append("\"" + colNum.ToString() + "\",");
@@ -151,7 +151,7 @@ namespace LcmsNet.SampleQueue.IO
             }
             catch (Exception ex)
             {
-                string errMsg = "Could not write samples to file " + fileNamePath;
+                var errMsg = "Could not write samples to file " + fileNamePath;
                 classApplicationLogger.LogError(0, errMsg, ex);
                 throw new classDataExportException(errMsg, ex);
             }

@@ -25,12 +25,12 @@ namespace LcmsNet.SampleQueue
 
         public static Dictionary<string, Type> GetRandomizerPlugins()
         {
-            Dictionary<string, Type> RetDict = new Dictionary<string, Type>();
+            var RetDict = new Dictionary<string, Type>();
 
             // Get list of DLL's in plugin folder
-            FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
-            string pluginFolder = Path.Combine(fi.DirectoryName, classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PLUGINFOLDER));
-            string[] dllFiles = Directory.GetFiles(pluginFolder, "*.dll");
+            var fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
+            var pluginFolder = Path.Combine(fi.DirectoryName, classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PLUGINFOLDER));
+            var dllFiles = Directory.GetFiles(pluginFolder, "*.dll");
             if (dllFiles.GetLength(0) == 0)
             {
                 // No dll's found in folder
@@ -38,17 +38,17 @@ namespace LcmsNet.SampleQueue
             }
 
             // Load each dll and determine if it implmements IRandomizerInterface
-            foreach (string dllName in dllFiles)
+            foreach (var dllName in dllFiles)
             {
                 //Load the assembly
-                Assembly testAssmbly = Assembly.LoadFrom(dllName);
+                var testAssmbly = Assembly.LoadFrom(dllName);
                 // Test to determine if any types in assembly implements IRandomizerInterface
-                foreach (Type testType in testAssmbly.GetTypes())
+                foreach (var testType in testAssmbly.GetTypes())
                 {
                     if (typeof (IRandomizerInterface).IsAssignableFrom(testType) == true)
                     {
                         // This type implements the interface, so get the display name
-                        string dispName = GetPluginNameFromAttributes(testType);
+                        var dispName = GetPluginNameFromAttributes(testType);
                         // Load the display name and type into the return dictionary
                         RetDict.Add(dispName, testType);
                     }
@@ -65,14 +65,14 @@ namespace LcmsNet.SampleQueue
         /// <returns>The display name for the plugin</returns>
         static string GetPluginNameFromAttributes(Type Plugin)
         {
-            bool found = false;
-            string pluginName = "";
+            var found = false;
+            var pluginName = "";
             // Get all the custom attributes for the type
-            object[] attributes = Plugin.GetCustomAttributes(false);
-            foreach (object testAttribute in attributes)
+            var attributes = Plugin.GetCustomAttributes(false);
+            foreach (var testAttribute in attributes)
             {
                 // Determine if custom attribute is the correct type
-                classPlugInDisplayNameAttribute pluginAttr = testAttribute as classPlugInDisplayNameAttribute;
+                var pluginAttr = testAttribute as classPlugInDisplayNameAttribute;
                 if (pluginAttr != null)
                 {
                     pluginName = pluginAttr.ToString();

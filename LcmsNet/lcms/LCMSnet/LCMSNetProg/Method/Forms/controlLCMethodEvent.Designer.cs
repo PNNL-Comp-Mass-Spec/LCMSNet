@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(controlLCMethodEvent));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(controlLCMethodEvent));
             this.mcomboBox_method = new System.Windows.Forms.ComboBox();
             this.mcomboBox_devices = new System.Windows.Forms.ComboBox();
             this.mcheckBox_selected = new System.Windows.Forms.CheckBox();

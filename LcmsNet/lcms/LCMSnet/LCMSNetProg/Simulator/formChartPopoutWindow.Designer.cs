@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formChartPopoutWindow));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formChartPopoutWindow));
             this.panelControl = new System.Windows.Forms.Panel();
             this.btnTack = new System.Windows.Forms.Button();
             this.SuspendLayout();

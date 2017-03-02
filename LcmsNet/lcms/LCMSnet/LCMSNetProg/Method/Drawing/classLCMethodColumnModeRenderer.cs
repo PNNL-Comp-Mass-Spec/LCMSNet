@@ -54,10 +54,10 @@ namespace LcmsNet.Method.Drawing
             float x,
             float y)
         {
-            using (Font font = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Italic))
+            using (var font = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Italic))
             {
-                SizeF fontSize = graphics.MeasureString(columnName, font);
-                using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, Color.Black)))
+                var fontSize = graphics.MeasureString(columnName, font);
+                using (var brush = new SolidBrush(Color.FromArgb(128, Color.Black)))
                 {
                     graphics.DrawString(columnName, font, brush, x, y - fontSize.Height);
                 }
@@ -89,12 +89,12 @@ namespace LcmsNet.Method.Drawing
             //
             // This tells us how far down from the top of the rendering area we are before we draw anything!
             //
-            float offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
+            var offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
             //
             // This tells us how much room we get per method or column spacing.
             //
-            float heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) /
+            var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) /
                               Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
             heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, CONST_MAX_HEIGHT));
 
@@ -102,7 +102,7 @@ namespace LcmsNet.Method.Drawing
             // //////////////////////////////////////////////////////////////////////////////////////////
             // Draw the data for the columns
             // //////////////////////////////////////////////////////////////////////////////////////////
-            for (int i = 0; i < ColumnNames.Count; i++)
+            for (var i = 0; i < ColumnNames.Count; i++)
             {
                 float width, height, x, top;
                 top = offset + ((heightPer + CONST_COLUMN_SPACING) * i) - CONST_COLUMN_BACKGROUND_HEIGHT_PADDING;
@@ -110,8 +110,8 @@ namespace LcmsNet.Method.Drawing
                 width = bounds.Width;
                 height = heightPer;
 
-                RectangleF area = new RectangleF(x, top, width, height);
-                int color = 245;
+                var area = new RectangleF(x, top, width, height);
+                var color = 245;
                 graphics.FillRectangle(new LinearGradientBrush(area,
                     Color.FromArgb(255, color, color, color),
                     Color.White,
@@ -134,7 +134,7 @@ namespace LcmsNet.Method.Drawing
             }
 
 
-            List<classLCEvent> alignedEvents = new List<classLCEvent>();
+            var alignedEvents = new List<classLCEvent>();
             if (methods != null && methods.Count > 0)
             {
                 // //////////////////////////////////////////////////////////////////////////////////////////
@@ -144,12 +144,12 @@ namespace LcmsNet.Method.Drawing
                 TimeSpan methodDuration;
                 FindTimeExtremas(methods, out methodStart, out methodDuration);
 
-                foreach (classLCMethod method in methods)
+                foreach (var method in methods)
                 {
                     if (method == null)
                         continue;
 
-                    foreach (classLCEvent lcEvent in method.Events)
+                    foreach (var lcEvent in method.Events)
                     {
                         if (lcEvent.OptimizeWith)
                         {
@@ -167,8 +167,8 @@ namespace LcmsNet.Method.Drawing
                 // //////////////////////////////////////////////////////////////////////////////////////////
                 // Draw each method
                 // //////////////////////////////////////////////////////////////////////////////////////////
-                int columnID = 0;
-                foreach (classLCMethod method in methods)
+                var columnID = 0;
+                foreach (var method in methods)
                 {
                     if (method == null)
                         continue;
@@ -183,9 +183,9 @@ namespace LcmsNet.Method.Drawing
                     //
                     // Calculate the number of pixels the method should start from based on its time value.
                     //
-                    float top = offset + ((heightPer + CONST_COLUMN_SPACING) * columnID);
+                    var top = offset + ((heightPer + CONST_COLUMN_SPACING) * columnID);
 
-                    RectangleF methodBounds = new RectangleF(bounds.X, top, bounds.Width, heightPer);
+                    var methodBounds = new RectangleF(bounds.X, top, bounds.Width, heightPer);
 
                     RenderLCMethod(graphics,
                         methodBounds,

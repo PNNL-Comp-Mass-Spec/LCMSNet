@@ -31,7 +31,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <param name="data"></param>
         public void WriteSamples(string path, List<classSampleData> data)
         {
-            string outString = BuildOutputString(data);
+            var outString = BuildOutputString(data);
             WriteOutputFile(outString, path);
         }
 
@@ -92,14 +92,14 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>String representing entire file contents</returns>
         private string BuildOutputString(List<classSampleData> samples)
         {
-            StringBuilder strBld = new StringBuilder();
+            var strBld = new StringBuilder();
 
             // Build header
             strBld.Append("Bracket Type=4" + Environment.NewLine);
             strBld.Append("File Name" + Environment.NewLine);
 
             // Add the data for each sample
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
             {
                 strBld.Append(sample.DmsData.DatasetName + Environment.NewLine);
             }
@@ -121,7 +121,7 @@ namespace LcmsNet.SampleQueue.IO
             }
             catch (Exception ex)
             {
-                string errMsg = ex.Message;
+                var errMsg = ex.Message;
                 classApplicationLogger.LogError(0, errMsg, ex);
                 throw new classDataExportException(errMsg, ex);
             }

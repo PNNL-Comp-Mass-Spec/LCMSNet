@@ -36,15 +36,15 @@ namespace LcmsNet.SampleQueue.Forms
 
             Controls.Clear();
 
-            int left = 0;
-            int width = 0;
+            var left = 0;
+            var width = 0;
             if (buttons.Count > 0)
             {
                 width = 60;
-                int padding = 2;
+                var padding = 2;
                 left = 32;
                 this.Width = ((width + padding) * buttons.Count) + left;
-                foreach (Button button in buttons)
+                foreach (var button in buttons)
                 {
                     if (!mdict_registeredButton.ContainsKey(button))
                     {
@@ -65,7 +65,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         void button_Click(object sender, EventArgs e)
         {
-            Button button = sender as Button;
+            var button = sender as Button;
             if (button == null)
                 return;
 
@@ -98,8 +98,8 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void CheckIfMouseGone()
         {
-            Point cursorPoint = Cursor.Position;
-            Point cursorClient = PointToClient(cursorPoint);
+            var cursorPoint = Cursor.Position;
+            var cursorClient = PointToClient(cursorPoint);
 
             if (cursorClient.X < 0 || cursorClient.X >= Width)
             {

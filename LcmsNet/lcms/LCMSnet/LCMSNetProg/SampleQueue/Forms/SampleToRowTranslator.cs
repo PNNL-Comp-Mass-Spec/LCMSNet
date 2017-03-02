@@ -78,7 +78,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>String representing the status of the running state.</returns>
         protected controlSampleView.enumCheckboxStatus GetCheckboxStatusFromSampleStatus()
         {
-            controlSampleView.enumCheckboxStatus status = controlSampleView.enumCheckboxStatus.Disabled;
+            var status = controlSampleView.enumCheckboxStatus.Disabled;
             switch (Sample.RunningStatus)
             {
                 case enumSampleRunningStatus.Complete:
@@ -114,7 +114,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             get
             {
-                string statusMessage = "";
+                var statusMessage = "";
                 switch (Sample.RunningStatus)
                 {
                     case enumSampleRunningStatus.Complete:
@@ -158,7 +158,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             get
             {
-                string statusMessage = "";
+                var statusMessage = "";
                 switch (Sample.RunningStatus)
                 {
                     case enumSampleRunningStatus.Complete:

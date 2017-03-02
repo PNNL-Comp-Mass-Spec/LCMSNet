@@ -115,11 +115,11 @@ namespace LcmsNet.Method
         /// <param name="lcMethod">Method to execute</param>
         private bool ExecuteEvent(classLCEvent lcEvent)
         {
-            bool flag = true;
+            var flag = true;
             lcEvent.Device.AbortEvent = mobj_abortEvent;
             try
             {
-                object returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
+                var returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
                 if (returnValue != null && returnValue.GetType() == typeof (bool))
                     flag = (bool) returnValue;
                 return flag;
@@ -135,10 +135,10 @@ namespace LcmsNet.Method
         {
             //Initialization
             mobj_abortEvent.Reset();
-            classColumnArgs args = e.Argument as classColumnArgs;
+            var args = e.Argument as classColumnArgs;
             mobj_sampleData = args.Sample;
-            classLCMethod method = mobj_sampleData.LCMethod;
-            List<classLCEvent> methodEvents = mobj_sampleData.LCMethod.Events;
+            var method = mobj_sampleData.LCMethod;
+            var methodEvents = mobj_sampleData.LCMethod.Events;
             Exception ex = null;
             //We return the columnId as the "result" so the scheduler callback can determine which column events
             // are coming from.
@@ -147,11 +147,11 @@ namespace LcmsNet.Method
             try
             {
                 // Main operation
-                for (int eventNumber = 0; eventNumber < methodEvents.Count; eventNumber++)
+                for (var eventNumber = 0; eventNumber < methodEvents.Count; eventNumber++)
                 {
                     classLCEvent actualEvent;
-                    DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
-                    DateTime finished = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    var start = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    var finished = LcmsNetSDK.TimeKeeper.Instance.Now;
                     // before every event, check to see if we need to cancel operations
                     if (mthread_worker.CancellationPending)
                     {
@@ -161,14 +161,14 @@ namespace LcmsNet.Method
                     else
                     {
                         //here we report progress, by notifying at the start of every new event.
-                        decimal totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
-                        long elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
-                        int percentComplete =
+                        var totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
+                        var elapsedTimeInTicks = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
+                        var percentComplete =
                             (int)
                                 Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
                         //We send percentage(of time) complete and state of the column, currently consisting
                         //of columnID, event number, and end time of the next event to the event handler
-                        List<Object> state = new List<object>();
+                        var state = new List<object>();
                         state.Add(mint_columnId);
                         state.Add(eventNumber);
                         if (eventNumber <= methodEvents.Count - 1)
@@ -186,16 +186,16 @@ namespace LcmsNet.Method
                         actualEvent.Start = start;
                         actualEvent.Duration = new TimeSpan(0, 0, 0);
                         method.ActualEvents.Add(actualEvent);
-                        classLCEvent lcEvent = methodEvents[eventNumber];
+                        var lcEvent = methodEvents[eventNumber];
 
                         // This determines when the next event should start.  Since the events are layed out in time
                         // we know it should start by the lcEvent.End date time value.  This helps correct for any
                         // straying events that may be a ms or two off.
-                        DateTime next = lcEvent.End;
-                        bool success = true;
+                        var next = lcEvent.End;
+                        var success = true;
                         try
                         {
-                            LcmsNetDataClasses.Devices.enumDeviceStatus tempStatus = lcEvent.Device.Status;
+                            var tempStatus = lcEvent.Device.Status;
 
                             lcEvent.Device.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.InUseByMethod;
                             if (lcEvent.MethodAttribute.RequiresSampleInput == true)
@@ -247,9 +247,9 @@ namespace LcmsNet.Method
                             // Here we'll wait enough time so that
                             // we dont run the next event before its scheduled start.  This is flow control.
                             //
-                            classTimerDevice timer = new classTimerDevice();
-                            TimeSpan span = next.Subtract(LcmsNetSDK.TimeKeeper.Instance.Now);
-                            int totalMilliseconds = 0;
+                            var timer = new classTimerDevice();
+                            var span = next.Subtract(LcmsNetSDK.TimeKeeper.Instance.Now);
+                            var totalMilliseconds = 0;
                             try
                             {
                                 totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
@@ -265,10 +265,10 @@ namespace LcmsNet.Method
                                     mint_columnId, // 1  COL ID
                                     span.TotalMilliseconds),
                                     CONST_VERBOSE_EVENTS);
-                                DateTime timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
+                                var timerStart = LcmsNetSDK.TimeKeeper.Instance.Now;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
                                 timer.WaitMilliseconds(totalMilliseconds, mobj_abortEvent);
-                                long timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
+                                var timerEnd = LcmsNetSDK.TimeKeeper.Instance.Now.Ticks;
                                 //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
                                 // Calculate the statistics of how long it took to run.
                             }

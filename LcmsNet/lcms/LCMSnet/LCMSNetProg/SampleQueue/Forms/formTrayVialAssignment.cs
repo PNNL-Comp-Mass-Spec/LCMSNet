@@ -86,7 +86,7 @@ namespace LcmsNet.SampleQueue.Forms
             mobject_DataList.Clear();
 
             // Load sample information into data table
-            foreach (classSampleData sample in mobject_SampleList)
+            foreach (var sample in mobject_SampleList)
             {
                 AddSampleToDataTable(sample);
             }
@@ -96,8 +96,8 @@ namespace LcmsNet.SampleQueue.Forms
             SetDataView();
 
             // Update individual tray displays
-            string captionStr = "";
-            for (int trayIndx = 1; trayIndx < mobject_Trays.Length; trayIndx++)
+            var captionStr = "";
+            for (var trayIndx = 1; trayIndx < mobject_Trays.Length; trayIndx++)
             {
                 mobject_Trays[trayIndx].UpdateSampleList(ref mobject_DataList);
                 captionStr = "Tray " + (trayIndx).ToString() + " (" + mobject_Trays[trayIndx].SampleCount.ToString() +
@@ -113,7 +113,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             // Create tray display objects and assign them to tabs for each tray
             mobject_Trays = new controlTray[7];
-            for (int trayIndx = 0; trayIndx < mobject_Trays.Length; trayIndx++)
+            for (var trayIndx = 0; trayIndx < mobject_Trays.Length; trayIndx++)
             {
                 mobject_Trays[trayIndx] = new controlTray();
                 mobject_Trays[trayIndx].TrayNumber = trayIndx;
@@ -142,8 +142,8 @@ namespace LcmsNet.SampleQueue.Forms
             if (!mobject_TrayNames.Contains(trayName)) return -1;
 
             // Iterate through tray names until matching name is found
-            int retIndx = -1;
-            for (int indx = 0; indx < mobject_TrayNames.Count; indx++)
+            var retIndx = -1;
+            for (var indx = 0; indx < mobject_TrayNames.Count; indx++)
             {
                 if (trayName == mobject_TrayNames[indx])
                 {
@@ -159,12 +159,12 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private void InitDataTable()
         {
-            Type typeInt = Type.GetType("System.Int32");
-            Type typeLong = Type.GetType("System.Int64");
-            Type typeString = Type.GetType("System.String");
+            var typeInt = Type.GetType("System.Int32");
+            var typeLong = Type.GetType("System.Int64");
+            var typeString = Type.GetType("System.String");
 
             // Add the columns
-            DataColumn[] columnArray = new DataColumn[9];
+            var columnArray = new DataColumn[9];
             columnArray[0] = CreateDataColumn("SampleName", typeString, "Sample Name", true);
             columnArray[1] = CreateDataColumn("SeqNum", typeLong, "Seq #", true);
             columnArray[2] = CreateDataColumn("ColNum", typeInt, "Col #", true);
@@ -187,7 +187,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>Column object</returns>
         private DataColumn CreateDataColumn(string colName, Type colType, string caption, bool makeReadOnly)
         {
-            DataColumn newColumn = new DataColumn(colName, colType);
+            var newColumn = new DataColumn(colName, colType);
             newColumn.Caption = caption;
             newColumn.ReadOnly = makeReadOnly;
             return newColumn;
@@ -199,7 +199,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="sample">Sample object</param>
         private void AddSampleToDataTable(classSampleData sample)
         {
-            DataRow newRow = mobject_DataList.NewRow();
+            var newRow = mobject_DataList.NewRow();
 
             newRow["SampleName"] = sample.DmsData.DatasetName;
             newRow["SeqNum"] = sample.SequenceID;
@@ -244,7 +244,7 @@ namespace LcmsNet.SampleQueue.Forms
             SetDataView();
 
             // Update individual tray tabs
-            for (int indx = 1; indx < mobject_Trays.Length; indx++)
+            for (var indx = 1; indx < mobject_Trays.Length; indx++)
             {
                 tmpStr = "Tray " + indx.ToString() + " (" + mobject_Trays[indx].SampleCount.ToString() + ")";
                 tabControlPlates.TabPages[indx].Text = tmpStr;
@@ -258,8 +258,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>Index of matching sampe if found; -1 otherwise</returns>
         private int GetSampleIndex(int sampleId)
         {
-            int foundIndx = -1;
-            for (int indx = 0; indx < mobject_SampleList.Count; indx++)
+            var foundIndx = -1;
+            for (var indx = 0; indx < mobject_SampleList.Count; indx++)
             {
                 if (mobject_SampleList[indx].UniqueID == sampleId)
                 {
@@ -276,7 +276,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private void UpdateSampleList()
         {
-            int sampleIndx = -1;
+            var sampleIndx = -1;
             foreach (DataRow currRow in mobject_DataList.Rows)
             {
                 // Get the index of the sample in mobject_SampleList that matches the current table row

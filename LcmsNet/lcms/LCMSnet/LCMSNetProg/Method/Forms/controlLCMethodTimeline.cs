@@ -121,8 +121,8 @@ namespace LcmsNet.Method.Forms
             //if left mouse is held down and render mode is conversation...scroll this way.
             if (leftMouseDown && RenderMode == enumLCMethodRenderMode.Conversation)
             {
-                int indexChange = e.Y - oldMouseLoc.Y;
-                int eventHeight = 48; // from classLCMethodConversationRenderer
+                var indexChange = e.Y - oldMouseLoc.Y;
+                var eventHeight = 48; // from classLCMethodConversationRenderer
                 if (mlist_methods.Count > 0)
                 {
                     var maxIndex =
@@ -249,10 +249,10 @@ namespace LcmsNet.Method.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            classLCMethodRenderer renderer = LCRendererFactory.GetRenderer(RenderMode);
-            DateTime startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-            TimeSpan duration = new TimeSpan(0, 30, 0);
-            foreach (classColumnData column in classCartConfiguration.Columns)
+            var renderer = LCRendererFactory.GetRenderer(RenderMode);
+            var startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var duration = new TimeSpan(0, 30, 0);
+            foreach (var column in classCartConfiguration.Columns)
             {
                 renderer.ColumnNames.Add(column.Name);
             }
@@ -269,10 +269,10 @@ namespace LcmsNet.Method.Forms
                 // Find the duration of the total comparison
                 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 startTime = mlist_methods[0].Start;
-                DateTime endTime = mlist_methods[mlist_methods.Count - 1].End;
-                foreach (classLCMethod renderData in mlist_methods)
+                var endTime = mlist_methods[mlist_methods.Count - 1].End;
+                foreach (var renderData in mlist_methods)
                 {
-                    TimeSpan span = renderData.End.Subtract(endTime);
+                    var span = renderData.End.Subtract(endTime);
                     if (span.TotalMilliseconds > 0)
                         endTime = renderData.End;
                 }
@@ -282,7 +282,7 @@ namespace LcmsNet.Method.Forms
             {
                 renderer.StartEventIndex = StartEventIndex;
             }
-            Rectangle bounds = ClientRectangle;
+            var bounds = ClientRectangle;
             bounds.Width -= 10;
             bounds.X += 5;
 
@@ -297,14 +297,14 @@ namespace LcmsNet.Method.Forms
             if (RenderMode == enumLCMethodRenderMode.Conversation)
             {
                 buttonLocations = (renderer as classLCMethodConversationRenderer).GetButtonLocations();
-                Rectangle upButton = buttonLocations[0];
-                Rectangle downButton = buttonLocations[1];
+                var upButton = buttonLocations[0];
+                var downButton = buttonLocations[1];
 
                 //scroll up button rendering
                 e.Graphics.FillRectangle(Brushes.LightGray, upButton);
                 e.Graphics.DrawRectangle(Pens.LightSlateGray, upButton);
                 //up-pointing arrow
-                Point[] arrowPoints = new Point[3];
+                var arrowPoints = new Point[3];
                 arrowPoints[0] = new Point(upButton.X + (upButton.Width / 2), upButton.Y + upButton.Height / 3);
                 arrowPoints[1] = new Point(upButton.X + (upButton.Width / 4), upButton.Y + 2 * (upButton.Height / 3));
                 arrowPoints[2] = new Point(upButton.X + 3 * (upButton.Width / 4), upButton.Y + 2 * (upButton.Height / 3));

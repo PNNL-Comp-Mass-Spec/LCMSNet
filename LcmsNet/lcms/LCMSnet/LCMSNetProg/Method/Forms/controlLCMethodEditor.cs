@@ -57,7 +57,7 @@ namespace LcmsNet.Method.Forms
 
             mdialog_openMethod = new OpenFileDialog();
             mdialog_openMethod.Title = "Open LC-Method";
-            string path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
+            var path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
             if (!string.IsNullOrWhiteSpace(path))
             {
                 mdialog_openMethod.InitialDirectory = Path.Combine(path,
@@ -234,7 +234,7 @@ namespace LcmsNet.Method.Forms
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
         public classLCMethod BuildMethod()
         {
-            classLCMethod method = classLCMethodBuilder.BuildMethod(mcontrol_acquisitionStage.LCEvents);
+            var method = classLCMethodBuilder.BuildMethod(mcontrol_acquisitionStage.LCEvents);
             if (method == null)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
@@ -242,7 +242,7 @@ namespace LcmsNet.Method.Forms
                 return null;
             }
 
-            int column = mcontrol_acquisitionStage.GetColumn();
+            var column = mcontrol_acquisitionStage.GetColumn();
             if (column < 0)
             {
                 method.IsSpecialMethod = true;
@@ -295,10 +295,10 @@ namespace LcmsNet.Method.Forms
             //
             try
             {
-                classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
+                var optimizer = new classLCMethodOptimizer();
                 optimizer.UpdateRequired +=
                     new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
-                List<classLCMethod> methods = mcontrol_selectedMethods.SelectedMethods;
+                var methods = mcontrol_selectedMethods.SelectedMethods;
                 mint_renderUpdateCount = 0;
 
                 if (methods.Count > 0)
@@ -442,12 +442,12 @@ namespace LcmsNet.Method.Forms
             //
             // Create a new writer.
             //
-            classLCMethodWriter writer = new classLCMethodWriter();
+            var writer = new classLCMethodWriter();
 
             //
             // Construct the path
             //
-            string path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
@@ -462,9 +462,9 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void OpenMethod(string path)
         {
-            classLCMethodReader reader = new classLCMethodReader();
-            List<Exception> errors = new List<Exception>();
-            classLCMethod method = reader.ReadMethod(path, ref errors);
+            var reader = new classLCMethodReader();
+            var errors = new List<Exception>();
+            var method = reader.ReadMethod(path, ref errors);
 
             if (method != null)
             {
@@ -477,8 +477,8 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void LoadMethods()
         {
-            string[] methods = System.IO.Directory.GetFiles(MethodFolderPath, "*.xml");
-            foreach (string method in methods)
+            var methods = System.IO.Directory.GetFiles(MethodFolderPath, "*.xml");
+            foreach (var method in methods)
             {
                 classApplicationLogger.LogMessage(0, "Loading method " + method);
                 OpenMethod(method);

@@ -42,7 +42,7 @@ namespace LcmsNet.Method
             currentEvent = new int[CONST_NUMBER_THREADS + 1];
             samples = new classSampleData[CONST_NUMBER_THREADS + 1];
 
-            for (int i = 0; i < CONST_NUMBER_THREADS + 1; i++)
+            for (var i = 0; i < CONST_NUMBER_THREADS + 1; i++)
             {
                 mlist_columnWorkers.Add(new BackgroundWorker());
                 mlist_columnThreads.Add(new classColumnThread(i, mlist_columnWorkers[i]));
@@ -263,7 +263,7 @@ namespace LcmsNet.Method
         public void Initialize()
         {
             Shutdown();
-            ThreadStart start = new ThreadStart(RunThreaded);
+            var start = new ThreadStart(RunThreaded);
             mbool_isRunning = true;
             mobj_thread = new Thread(start);
             mobj_thread.Start();
@@ -312,7 +312,7 @@ namespace LcmsNet.Method
         /// </summary>
         private void StopSamples()
         {
-            for (int i = 0; i < mlist_columnThreads.Count; i++)
+            for (var i = 0; i < mlist_columnThreads.Count; i++)
             {
                 try
                 {
@@ -367,7 +367,7 @@ namespace LcmsNet.Method
                 System.Diagnostics.Trace.WriteLine(message);
                 System.Diagnostics.Trace.Flush();
                 Exception exVal = null;
-                bool error = ex != null;
+                var error = ex != null;
                 classSampleData sampVal = null;
                 if (Logger != null)
                 {
@@ -440,7 +440,7 @@ namespace LcmsNet.Method
         private void RunNextSample(ref classSampleData[] samples, ref DateTime[] sampleEndTime,
             ref int[] currentEvent)
         {
-            int sampleColumnID = 0;
+            var sampleColumnID = 0;
             classSampleData data = null;
 
             data = mobj_sampleQueue.NextSampleQuery();
@@ -514,17 +514,17 @@ namespace LcmsNet.Method
             Thread.CurrentThread.Name = "Scheduler Thread";
             //
             // A list of events to listen for
-            WaitHandle[] events = new WaitHandle[CONST_NUMBER_OF_SCHEDULER_EVENTS];
+            var events = new WaitHandle[CONST_NUMBER_OF_SCHEDULER_EVENTS];
 
             //
             // Setup the event table
             //
-            int j = 0;
+            var j = 0;
             events[j++] = mobj_abortWaiting;
             events[j++] = mobj_stopSamples;
             events[j++] = mobj_sampleQueue.SampleQueuedEvent;
 
-            for (int i = 0; i < mlist_columnThreads.Count; i++)
+            for (var i = 0; i < mlist_columnThreads.Count; i++)
             {
                 sampleEndTime[i] = DateTime.MinValue;
                 currentEvent[i] = CONST_IDLE_FLAG;
@@ -542,14 +542,14 @@ namespace LcmsNet.Method
                 // Wait to be told to stop, if not told to stop within 100ms,
                 // then check to see if a method is overdue or a column is ready for another sample.
                 //
-                int eventNumber = WaitHandle.WaitAny(events, CONST_THREAD_WAITTIMEOUT_MS);
+                var eventNumber = WaitHandle.WaitAny(events, CONST_THREAD_WAITTIMEOUT_MS);
 
 
                 //
                 // Temporary variables for setting up a new sample on a column thread.
                 //
-                int columnID = 0;
-                double timeElapsedOverdue = 0.0; // variable to see if a sample's event has gone past due.
+                var columnID = 0;
+                var timeElapsedOverdue = 0.0; // variable to see if a sample's event has gone past due.
 
                 switch (eventNumber)
                 {
@@ -580,10 +580,10 @@ namespace LcmsNet.Method
                         // than acquiring locks and being turned down later because the state of a
                         // column is running or disabled.
                         //
-                        DateTime now = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        var now = LcmsNetSDK.TimeKeeper.Instance.Now;
                         for (columnID = 0; columnID < currentEvent.Length; columnID++)
                         {
-                            bool lockTaken = false;
+                            var lockTaken = false;
                             Monitor.TryEnter(mlist_threadLocks[columnID], 1, ref lockTaken);
                                 //if we can't get the lock, it's because the column is changing state, so just move on to the next column and check again next time the scheduler takes the default action.
                             if (lockTaken)
@@ -595,7 +595,7 @@ namespace LcmsNet.Method
                                     //
                                     if (sampleEndTime[columnID] != DateTime.MinValue)
                                     {
-                                        TimeSpan overdueSpan = now.Subtract(sampleEndTime[columnID]);
+                                        var overdueSpan = now.Subtract(sampleEndTime[columnID]);
                                         timeElapsedOverdue = overdueSpan.TotalSeconds;
                                         if (Convert.ToInt32(Math.Floor(timeElapsedOverdue)) >=
                                             CONST_OVER_EVENT_TIME_LIMIT_SECONDS)
@@ -614,7 +614,7 @@ namespace LcmsNet.Method
                                             TimeSpan eventDuration;
                                             if (currentEvent[columnID] < samples[columnID].LCMethod.Events.Count)
                                             {
-                                                classLCEvent lcEvent =
+                                                var lcEvent =
                                                     samples[columnID].LCMethod.Events[currentEvent[columnID]];
                                                 deviceName = lcEvent.Device.Name;
                                                 eventName = lcEvent.Name;
@@ -626,7 +626,7 @@ namespace LcmsNet.Method
                                                 eventName = "Unknown Event";
                                                 eventDuration = new TimeSpan(0, 0, 0);
                                             }
-                                            string message = string.Format(
+                                            var message = string.Format(
                                                 "\tCOLUMN-{0} did not finish. Device: {2}, Event: {3}, Expected End Time: {1}, Late by {4:F2} seconds; Stopping all samples",
                                                 columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                                 sampleEndTime[columnID],
@@ -640,7 +640,7 @@ namespace LcmsNet.Method
                                             if (currentEvent[columnID] <
                                                 mlist_columnThreads[columnID].Sample.LCMethod.ActualEvents.Count)
                                             {
-                                                classLCEvent evt =
+                                                var evt =
                                                     mlist_columnThreads[columnID].Sample.LCMethod.ActualEvents[
                                                         currentEvent[columnID]];
                                                 evt.Duration =
@@ -721,10 +721,10 @@ namespace LcmsNet.Method
 
         public void ColumnProgressChanged_Handler(object sender, ProgressChangedEventArgs e)
         {
-            List<Object> columnState = e.UserState as List<Object>;
-            int columnID = (int) columnState[0];
-            int columnCurrentEvent = (int) columnState[1];
-            DateTime columnEndOfCurrentEvent = (DateTime) columnState[2];
+            var columnState = e.UserState as List<Object>;
+            var columnID = (int) columnState[0];
+            var columnCurrentEvent = (int) columnState[1];
+            var columnEndOfCurrentEvent = (DateTime) columnState[2];
             lock (mlist_threadLocks[columnID]) //We want to block, so as to make sure this is done.
             {
                 if (samples[columnID] != null && columnCurrentEvent >= 0)
@@ -764,7 +764,7 @@ namespace LcmsNet.Method
         {
             if (e.Cancelled)
             {
-                int workerIndex = mlist_columnWorkers.FindIndex(x => x.Equals(sender));
+                var workerIndex = mlist_columnWorkers.FindIndex(x => x.Equals(sender));
                 if (workerIndex == -1)
                 {
                     //Note: This shouldn't be possible, this is here just in case something funky happens.
@@ -779,17 +779,17 @@ namespace LcmsNet.Method
             }
             else if (e.Error != null)
             {
-                classColumnException ex = e.Error as classColumnException;
-                int columnID = ex.ColumnID;
+                var ex = e.Error as classColumnException;
+                var columnID = ex.ColumnID;
                 lock (mlist_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-                    int EVENT_ADJUST = 1;
-                    int currentEventNumber = currentEvent[columnID] + EVENT_ADJUST <
+                    var EVENT_ADJUST = 1;
+                    var currentEventNumber = currentEvent[columnID] + EVENT_ADJUST <
                                              samples[columnID].LCMethod.Events.Count
                         ? currentEvent[columnID] + EVENT_ADJUST
                         : currentEvent[columnID];
                     // we use currentEvent[columnID] + EVENT_ADJUST here as the scheduler still thinks we're on the old event.
-                    string stackTrace = UnwrapException(ex);
+                    var stackTrace = UnwrapException(ex);
                     HandleError(samples[columnID],
                         string.Format(
                             "Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
@@ -811,11 +811,11 @@ namespace LcmsNet.Method
             }
             else
             {
-                int columnID = (int) e.Result;
+                var columnID = (int) e.Result;
                 //Separation completed.
                 lock (mlist_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-                    DateTime noww = LcmsNetSDK.TimeKeeper.Instance.Now;
+                    var noww = LcmsNetSDK.TimeKeeper.Instance.Now;
 
                     String datasetName;
                     if (samples[columnID] != null && samples[columnID].DmsData != null)
@@ -823,7 +823,7 @@ namespace LcmsNet.Method
                     else
                         datasetName = "Unknown_Dataset since samples[columnID] is null for columnID = " + columnID;
 
-                    string mm = string.Format("END SAMPLE {2} on COLUMN-{0} COMPLETED at {1} ",
+                    var mm = string.Format("END SAMPLE {2} on COLUMN-{0} COMPLETED at {1} ",
                         columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                         sampleEndTime[columnID],
                         datasetName);
@@ -852,7 +852,7 @@ namespace LcmsNet.Method
 
         private string UnwrapException(Exception ex)
         {
-            string returnVal = ex.Message + " " + ex.StackTrace;
+            var returnVal = ex.Message + " " + ex.StackTrace;
             if (ex.InnerException != null)
             {
                 returnVal += UnwrapException(ex.InnerException);

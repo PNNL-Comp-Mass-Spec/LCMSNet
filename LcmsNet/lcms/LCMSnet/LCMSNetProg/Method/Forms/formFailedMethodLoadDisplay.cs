@@ -27,14 +27,14 @@ namespace LcmsNet.Method.Forms
         {
             m_tree.BeginUpdate();
             m_tree.Nodes.Clear();
-            foreach (string  path in errors.Keys)
+            foreach (var  path in errors.Keys)
             {
-                TreeNode parentNode = new TreeNode();
+                var parentNode = new TreeNode();
                 parentNode.Text = System.IO.Path.GetFileNameWithoutExtension(path);
-                List<Exception> exceptions = errors[path];
-                foreach (Exception ex in exceptions)
+                var exceptions = errors[path];
+                foreach (var ex in exceptions)
                 {
-                    TreeNode childNode = new TreeNode();
+                    var childNode = new TreeNode();
                     childNode.Text = ex.Message;
                     parentNode.Nodes.Add(childNode);
                 }

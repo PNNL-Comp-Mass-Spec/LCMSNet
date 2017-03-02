@@ -54,14 +54,14 @@ namespace LcmsNet.Devices
         {
             if (m_deviceToControlMap.ContainsKey(device))
             {
-                AdvancedDeviceGroupControl control = m_deviceToControlMap[device];
+                var control = m_deviceToControlMap[device];
                 control.RemoveDevice(device);
 
                 m_deviceToControlMap.Remove(device);
 
                 if (control.IsDeviceGroupEmpty)
                 {
-                    TabPage page = m_controlToPageMap[control];
+                    var page = m_controlToPageMap[control];
                     if (m_advancedTabControl.TabPages.Contains(page))
                     {
                         m_advancedTabControl.TabPages.Remove(page);
@@ -82,12 +82,12 @@ namespace LcmsNet.Devices
         /// <param name="device"></param>
         void Manager_DeviceAdded(object sender, IDevice device)
         {
-            Type type = device.GetType();
+            var type = device.GetType();
 
-            object[] attributes = type.GetCustomAttributes(typeof (classDeviceControlAttribute), false);
-            foreach (object o in attributes)
+            var attributes = type.GetCustomAttributes(typeof (classDeviceControlAttribute), false);
+            foreach (var o in attributes)
             {
-                classDeviceControlAttribute monitorAttribute = o as classDeviceControlAttribute;
+                var monitorAttribute = o as classDeviceControlAttribute;
                 if (monitorAttribute != null)
                 {
                     IDeviceControl control = null;
@@ -120,7 +120,7 @@ namespace LcmsNet.Devices
                 m_nameToControlMap.Add(groupName, control);
 
                 // Create the tab page
-                TabPage page = new TabPage();
+                var page = new TabPage();
                 page.Text = groupName;
                 page.BackColor = Color.White;
                 page.AutoScroll = true;

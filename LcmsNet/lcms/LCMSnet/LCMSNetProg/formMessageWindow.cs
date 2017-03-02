@@ -74,7 +74,7 @@ namespace LcmsNet
         {
             if (mlistBox_messages.InvokeRequired)
             {
-                delegateInsertMessage d = new delegateInsertMessage(InsertMessage);
+                var d = new delegateInsertMessage(InsertMessage);
                 mlistBox_messages.Invoke(d, new object[] {message});
             }
             else
@@ -95,14 +95,14 @@ namespace LcmsNet
                 {
                     ErrorPresent(this, new EventArgs());
                 }
-                string exceptions = "";
+                var exceptions = "";
                 lock (mobj_lockErrors)
                 {
                     if (args.Exception != null)
                     {
                         m_errorMessages.Text = FormatMessage(args.Exception.StackTrace) + "\n" + m_errorMessages.Text;
 
-                        Exception ex = args.Exception;
+                        var ex = args.Exception;
                         while (ex != null)
                         {
                             exceptions += ex.Message + "\n";

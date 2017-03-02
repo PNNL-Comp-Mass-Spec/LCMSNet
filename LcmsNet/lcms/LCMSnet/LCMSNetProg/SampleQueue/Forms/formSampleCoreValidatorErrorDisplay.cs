@@ -14,13 +14,13 @@ namespace LcmsNet.SampleQueue
             InitializeComponent();
 
 
-            int i = 0;
-            foreach (classSampleData sample in errors.Keys)
+            var i = 0;
+            foreach (var sample in errors.Keys)
             {
-                foreach (classSampleValidationError error in errors[sample])
+                foreach (var error in errors[sample])
                 {
                     i = i + 1;
-                    ListViewItem item = new ListViewItem();
+                    var item = new ListViewItem();
                     item.Text = sample.DmsData.DatasetName;
                     item.SubItems.Add(error.Error);
                     if ((i % 2) == 0)

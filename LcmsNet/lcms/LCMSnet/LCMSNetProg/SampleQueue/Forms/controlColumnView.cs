@@ -94,7 +94,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             if (mobj_columnData != null)
             {
-                string name = mobj_columnData.Name;
+                var name = mobj_columnData.Name;
                 mlabel_columnNameHeader.Text = name;
             }
         }
@@ -119,7 +119,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Then delete the rows that are not part of this column.
                 //
-                foreach (classSampleData sample in data.Samples)
+                foreach (var sample in data.Samples)
                 {
                     //
                     // Remove if it it does not belong to this column,
@@ -133,7 +133,7 @@ namespace LcmsNet.SampleQueue.Forms
                     //
                     else
                     {
-                        int index = FindRowIndexFromUID(sample.UniqueID);
+                        var index = FindRowIndexFromUID(sample.UniqueID);
                         if (index < 0)
                         {
                             AddSamplesToList(sample);
@@ -192,26 +192,26 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void ShowExpansion()
         {
-            Point buttonScreen = PointToScreen(mbutton_expand.Location);
-            Point controlScreen = PointToScreen(mpanel_control.Location);
+            var buttonScreen = PointToScreen(mbutton_expand.Location);
+            var controlScreen = PointToScreen(mpanel_control.Location);
             mform_expand.StartPosition = FormStartPosition.Manual;
             mform_expand.Location = new Point(buttonScreen.X, controlScreen.Y + mbutton_expand.Top);
             mform_expand.Refresh();
             mform_expand.UpdateButtons(mlist_expansionList);
             mform_expand.Height = mpanel_control.Height;
-            int width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+            var width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
 
-            int expandWidth = mform_expand.Left + mform_expand.Width;
+            var expandWidth = mform_expand.Left + mform_expand.Width;
 
             if (expandWidth > width)
             {
-                Point p = mform_expand.Location;
+                var p = mform_expand.Location;
                 p.X = width - mform_expand.Width;
                 mform_expand.Location = p;
             }
 
 
-            DialogResult result = mform_expand.ShowDialog();
+            var result = mform_expand.ShowDialog();
             mform_expand.Hide();
         }
 
@@ -342,15 +342,15 @@ namespace LcmsNet.SampleQueue.Forms
         {
             mlist_expansionList.Clear();
 
-            int width = 60;
-            int leftmost = Width - mbutton_expand.Width - CONST_BUTTON_PADDING;
-            int padding = CONST_BUTTON_PADDING;
-            int left = padding;
-            for (int i = 0; i < mlist_buttons.Count; i++)
+            var width = 60;
+            var leftmost = Width - mbutton_expand.Width - CONST_BUTTON_PADDING;
+            var padding = CONST_BUTTON_PADDING;
+            var left = padding;
+            for (var i = 0; i < mlist_buttons.Count; i++)
             {
-                Button button = mlist_buttons[i];
+                var button = mlist_buttons[i];
 
-                int widthLeft = left + width + CONST_BUTTON_PADDING;
+                var widthLeft = left + width + CONST_BUTTON_PADDING;
 
                 if (widthLeft >= leftmost)
                 {
@@ -486,7 +486,7 @@ namespace LcmsNet.SampleQueue.Forms
             // We dont add to our list first so the manager can verify the sample and
             // make sure we dont have duplicates.
             //
-            foreach (classSampleData sample in samples)
+            foreach (var sample in samples)
                 sample.ColumnData = mobj_columnData;
 
             if (insertIntoUnused == false)
@@ -518,7 +518,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="offset">Amount to move the samples (-1 for lower sequence numbers) (1 for higher sequence numbers)</param>
         protected override void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
-            int numEnabledColumns = classCartConfiguration.NumberOfEnabledColumns;
+            var numEnabledColumns = classCartConfiguration.NumberOfEnabledColumns;
 
             //
             // We are moving the sample by N in the queue to offset for the enabled / disabled columns.
@@ -602,7 +602,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (method == null)
                 return false;
 
-            bool contains = ContainsMethod(method.Name);
+            var contains = ContainsMethod(method.Name);
             if (contains)
             {
                 if (method.Column != mobj_columnData.ID)

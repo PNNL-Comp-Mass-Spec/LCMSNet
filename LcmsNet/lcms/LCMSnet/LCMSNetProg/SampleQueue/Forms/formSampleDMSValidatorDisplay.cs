@@ -31,12 +31,12 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Create a sample validator control for each sample.
             //
-            int i = 0;
-            foreach (classSampleData sample in samples)
+            var i = 0;
+            foreach (var sample in samples)
             {
                 try
                 {
-                    classDMSBaseControl sampleControl =
+                    var sampleControl =
                         Activator.CreateInstance(
                             LcmsNetSDK.classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as
                             classDMSBaseControl; //new controlDMSValidator(sample);
@@ -77,10 +77,10 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         void sampleControl_EnterPressed(object sender, DMSValidatorEventArgs e)
         {
-            classDMSBaseControl validator = sender as classDMSBaseControl;
+            var validator = sender as classDMSBaseControl;
             if (validator != null)
             {
-                int id = validator.ID;
+                var id = validator.ID;
 
                 if (id == 0 && e.Modifiers == Keys.Shift)
                 {
@@ -109,7 +109,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         private bool CheckSamples()
         {
-            foreach (classDMSBaseControl validator in mlist_validatorControls)
+            foreach (var validator in mlist_validatorControls)
             {
                 if (validator.IsSampleValid == false)
                     return false;

@@ -11,20 +11,20 @@ namespace LcmsNet.Method
             //
             // Copy???
             //
-            List<classLCEvent> events = new List<classLCEvent>();
+            var events = new List<classLCEvent>();
             events.AddRange(stageEvents);
 
             if (events.Count == 0)
                 return null;
 
-            classLCEvent firstEvent = events[0];
-            DateTime startTime = firstEvent.Start;
+            var firstEvent = events[0];
+            var startTime = firstEvent.Start;
 
             //
             // Construct the method and set the start time.
             //     The duration is auto-calculated by the method.
             //
-            classLCMethod method = new classLCMethod();
+            var method = new classLCMethod();
             method.Events = events;
             method.SetStartTime(firstEvent.Start);
 

@@ -187,8 +187,8 @@ namespace LcmsNet.Devices
         /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
-            Random rand = new Random();
-            string data = "test" + rand.Next(0, 100).ToString();
+            var rand = new Random();
+            var data = "test" + rand.Next(0, 100).ToString();
             using (TextWriter writer = File.CreateText(Path.Combine(directoryPath, "test.txt")))
             {
                 writer.WriteLine(data);

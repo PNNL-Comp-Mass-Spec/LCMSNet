@@ -40,10 +40,10 @@ namespace LcmsNet.SampleQueue.Forms
         private void mbutton_fillLCMethod_Click(object sender, EventArgs e)
         {
             EnsureItemsAreSelected();
-            List<classLCMethod> methods = new List<classLCMethod>();
+            var methods = new List<classLCMethod>();
             if (checkBox1.Checked)
             {
-                string name = comboLcMethodCol1.Text;
+                var name = comboLcMethodCol1.Text;
                 if (mdict_methodNameMap.ContainsKey(name))
                 {
                     methods.Add(mdict_methodNameMap[name]);
@@ -51,7 +51,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             if (checkBox2.Checked)
             {
-                string name = comboLcMethodCol2.Text;
+                var name = comboLcMethodCol2.Text;
                 if (mdict_methodNameMap.ContainsKey(name))
                 {
                     methods.Add(mdict_methodNameMap[name]);
@@ -59,7 +59,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             if (checkBox3.Checked)
             {
-                string name = comboLcMethodCol3.Text;
+                var name = comboLcMethodCol3.Text;
                 if (mdict_methodNameMap.ContainsKey(name))
                 {
                     methods.Add(mdict_methodNameMap[name]);
@@ -67,7 +67,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             if (checkBox4.Checked)
             {
-                string name = comboLcMethodCol4.Text;
+                var name = comboLcMethodCol4.Text;
                 if (mdict_methodNameMap.ContainsKey(name))
                 {
                     methods.Add(mdict_methodNameMap[name]);
@@ -76,10 +76,10 @@ namespace LcmsNet.SampleQueue.Forms
             if (methods.Count < 1)
                 return;
 
-            int i = 0;
-            foreach (classSampleData samples in mobject_Samples)
+            var i = 0;
+            foreach (var samples in mobject_Samples)
             {
-                classLCMethod tempMethod = methods[i];
+                var tempMethod = methods[i];
 
                 if (tempMethod.Column != samples.ColumnData.ID)
                 {
@@ -110,32 +110,32 @@ namespace LcmsNet.SampleQueue.Forms
             EnsureItemsAreSelected();
 
 
-            List<string> methods = new List<string>();
+            var methods = new List<string>();
             if (checkBox1.Checked)
             {
-                string name = comboInstMethodCol1.Text;
+                var name = comboInstMethodCol1.Text;
                 methods.Add(name);
             }
             if (checkBox2.Checked)
             {
-                string name = comboInstMethodCol2.Text;
+                var name = comboInstMethodCol2.Text;
                 methods.Add(name);
             }
             if (checkBox3.Checked)
             {
-                string name = comboInstMethodCol3.Text;
+                var name = comboInstMethodCol3.Text;
                 methods.Add(name);
             }
             if (checkBox4.Checked)
             {
-                string name = comboInstMethodCol4.Text;
+                var name = comboInstMethodCol4.Text;
                 methods.Add(name);
             }
             if (methods.Count < 1)
                 return;
 
-            int i = 0;
-            foreach (classSampleData sample in mobject_Samples)
+            var i = 0;
+            foreach (var sample in mobject_Samples)
             {
                 sample.InstrumentData = new classInstrumentInfo();
                 sample.InstrumentData.MethodName = methods[i];
@@ -156,32 +156,32 @@ namespace LcmsNet.SampleQueue.Forms
             EnsureItemsAreSelected();
             try
             {
-                List<double> methods = new List<double>();
+                var methods = new List<double>();
                 if (checkBox1.Checked)
                 {
-                    double value = (double) upDownVolCol1.Value;
+                    var value = (double) upDownVolCol1.Value;
                     methods.Add(value);
                 }
                 if (checkBox2.Checked)
                 {
-                    double value = (double) upDownVolCol2.Value;
+                    var value = (double) upDownVolCol2.Value;
                     methods.Add(value);
                 }
                 if (checkBox3.Checked)
                 {
-                    double value = (double) upDownVolCol3.Value;
+                    var value = (double) upDownVolCol3.Value;
                     methods.Add(value);
                 }
                 if (checkBox4.Checked)
                 {
-                    double value = (double) upDownVolCol4.Value;
+                    var value = (double) upDownVolCol4.Value;
                     methods.Add(value);
                 }
                 if (methods.Count < 1)
                     return;
 
-                int i = 0;
-                foreach (classSampleData sample in mobject_Samples)
+                var i = 0;
+                foreach (var sample in mobject_Samples)
                 {
                     sample.Volume = methods[i];
                     i++;
@@ -203,32 +203,32 @@ namespace LcmsNet.SampleQueue.Forms
         private void mbutton_fillDatasetType_Click(object sender, EventArgs e)
         {
             EnsureItemsAreSelected();
-            List<string> methods = new List<string>();
+            var methods = new List<string>();
             if (checkBox1.Checked)
             {
-                string value = comboDatasetTypeCol1.Text;
+                var value = comboDatasetTypeCol1.Text;
                 methods.Add(value);
             }
             if (checkBox2.Checked)
             {
-                string value = comboDatasetTypeCol2.Text;
+                var value = comboDatasetTypeCol2.Text;
                 methods.Add(value);
             }
             if (checkBox3.Checked)
             {
-                string value = comboDatasetTypeCol3.Text;
+                var value = comboDatasetTypeCol3.Text;
                 methods.Add(value);
             }
             if (checkBox4.Checked)
             {
-                string value = comboDatasetTypeCol4.Text;
+                var value = comboDatasetTypeCol4.Text;
                 methods.Add(value);
             }
             if (methods.Count < 1)
                 return;
 
-            int i = 0;
-            foreach (classSampleData sample in mobject_Samples)
+            var i = 0;
+            foreach (var sample in mobject_Samples)
             {
                 sample.DmsData.DatasetType = methods[i];
                 i++;
@@ -291,7 +291,7 @@ namespace LcmsNet.SampleQueue.Forms
             ClearDropDowns();
 
             // Fill the instrument method dropdowns
-            foreach (string tmpStr in instrumentMethods)
+            foreach (var tmpStr in instrumentMethods)
             {
                 comboInstMethodCol1.Items.Add(tmpStr);
                 comboInstMethodCol2.Items.Add(tmpStr);
@@ -299,15 +299,15 @@ namespace LcmsNet.SampleQueue.Forms
                 comboInstMethodCol4.Items.Add(tmpStr);
             }
             // Fill the dataset type dropdowns
-            List<string> datesetTypeList = classSQLiteTools.GetDatasetTypeList(false);
-            foreach (string tmpStr in datesetTypeList)
+            var datesetTypeList = classSQLiteTools.GetDatasetTypeList(false);
+            foreach (var tmpStr in datesetTypeList)
             {
                 comboDatasetTypeCol1.Items.Add(tmpStr);
                 comboDatasetTypeCol2.Items.Add(tmpStr);
                 comboDatasetTypeCol3.Items.Add(tmpStr);
                 comboDatasetTypeCol4.Items.Add(tmpStr);
             }
-            foreach (classLCMethod method in m_manager.Methods.Values)
+            foreach (var method in m_manager.Methods.Values)
             {
                 AddMethod(method);
             }
@@ -339,7 +339,7 @@ namespace LcmsNet.SampleQueue.Forms
         private void UpdateMethod(classLCMethod method)
         {
             string oldName = null;
-            bool contains = mdict_methods.ContainsKey(method);
+            var contains = mdict_methods.ContainsKey(method);
             if (contains)
             {
                 mdict_methodNameMap.Remove(oldName);
@@ -414,7 +414,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 if (testControl.GetType() == typeof (ComboBox))
                 {
-                    ComboBox tempControl = (ComboBox) testControl;
+                    var tempControl = (ComboBox) testControl;
                     if (tempControl.Items.Count > 0)
                         tempControl.SelectedIndex = 0;
                 }
@@ -427,7 +427,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 if (testControl.GetType() == typeof (ComboBox))
                 {
-                    ComboBox tempControl = (ComboBox) testControl;
+                    var tempControl = (ComboBox) testControl;
                     if (tempControl.Items.Count > 0 && tempControl.SelectedIndex < 0)
                         tempControl.SelectedIndex = 0;
                 }
@@ -443,7 +443,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 if (testControl.GetType() == typeof (ComboBox))
                 {
-                    ComboBox tempControl = (ComboBox) testControl;
+                    var tempControl = (ComboBox) testControl;
                     tempControl.Items.Clear();
                 }
             }

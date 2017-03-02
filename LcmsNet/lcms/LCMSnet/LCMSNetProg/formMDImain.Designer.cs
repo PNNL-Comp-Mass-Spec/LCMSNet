@@ -31,7 +31,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formMDImain));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formMDImain));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.mtoolButton_showSampleQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();

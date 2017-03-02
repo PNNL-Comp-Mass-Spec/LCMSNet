@@ -39,15 +39,15 @@ namespace LcmsNet.Reporting
             string logPath,
             string hardwarePath)
         {
-            DateTime now = DateTime.Now;
-            string newPath = string.Format("report_{0:0000}{1:00}{2:00}_{3:00}{4:00}{5:00}", now.Year,
+            var now = DateTime.Now;
+            var newPath = string.Format("report_{0:0000}{1:00}{2:00}_{3:00}{4:00}{5:00}", now.Year,
                 now.Day,
                 now.Month,
                 now.Hour,
                 now.Minute,
                 now.Second);
 
-            bool didCreate = CreateAppropiatePaths(BasePath, newPath);
+            var didCreate = CreateAppropiatePaths(BasePath, newPath);
             if (!didCreate)
             {
                 return null;
@@ -75,7 +75,7 @@ namespace LcmsNet.Reporting
                 classApplicationLogger.LogError(0, "Could not copy the current hardware configuration file.", ex);
             }
 
-            string zipPath = newPath + ".zip";
+            var zipPath = newPath + ".zip";
             try
             {
                 CreateZip(newPath, zipPath);
@@ -102,8 +102,8 @@ namespace LcmsNet.Reporting
             {
                 try
                 {
-                    string cartPath = Path.Combine(errorPath, cart);
-                    bool exists = Directory.Exists(cartPath);
+                    var cartPath = Path.Combine(errorPath, cart);
+                    var exists = Directory.Exists(cartPath);
 
                     if (!exists)
                     {
@@ -128,8 +128,8 @@ namespace LcmsNet.Reporting
         /// <returns></returns>
         private Image CreateImage(Form form)
         {
-            Bitmap image = new Bitmap(form.Width, form.Height);
-            using (Graphics graphics = form.CreateGraphics())
+            var image = new Bitmap(form.Width, form.Height);
+            using (var graphics = form.CreateGraphics())
             {
                 form.DrawToBitmap(image, new Rectangle(0, 0, form.Width, form.Height));
             }
@@ -144,12 +144,12 @@ namespace LcmsNet.Reporting
         {
             try
             {
-                foreach (Form form in forms)
+                foreach (var form in forms)
                 {
-                    string name = form.Name;
-                    string imagePath = Path.Combine(path, name + ".png");
+                    var name = form.Name;
+                    var imagePath = Path.Combine(path, name + ".png");
 
-                    using (Image image = CreateImage(form))
+                    using (var image = CreateImage(form))
                     {
                         image.Save(imagePath);
                     }
@@ -202,8 +202,8 @@ namespace LcmsNet.Reporting
         /// <param name="methods"></param>
         private void SaveMethods(string path, List<classLCMethod> methods)
         {
-            classLCMethodWriter writer = new classLCMethodWriter();
-            foreach (classLCMethod method in methods)
+            var writer = new classLCMethodWriter();
+            foreach (var method in methods)
             {
                 try
                 {
@@ -220,23 +220,23 @@ namespace LcmsNet.Reporting
         private void CreateZip(string sourcePath, string zipPath)
         {
             //Create an empty zip file
-            byte[] emptyzip = new byte[]
+            var emptyzip = new byte[]
             {
                 80, 75, 5, 6, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             };
 
-            FileStream fs = File.Create(zipPath);
+            var fs = File.Create(zipPath);
             fs.Write(emptyzip, 0, emptyzip.Length);
             fs.Flush();
             fs.Close();
             fs = null;
 
             //Copy a folder and its contents into the newly created zip file
-            Shell32.ShellClass sc = new Shell32.ShellClass();
-            Shell32.Folder sourceFolder = sc.NameSpace(Path.GetFullPath(sourcePath));
-            Shell32.Folder destFolder = sc.NameSpace(Path.GetFullPath(zipPath));
-            Shell32.FolderItems items = sourceFolder.Items();
+            var sc = new Shell32.ShellClass();
+            var sourceFolder = sc.NameSpace(Path.GetFullPath(sourcePath));
+            var destFolder = sc.NameSpace(Path.GetFullPath(zipPath));
+            var items = sourceFolder.Items();
             destFolder.CopyHere(items, 20);
 
             //Ziping a file using the Windows Shell API

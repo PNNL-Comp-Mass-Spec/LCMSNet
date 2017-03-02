@@ -29,23 +29,23 @@ namespace LcmsNet.Devices
         {
             using (TextWriter writer = File.CreateText(path))
             {
-                string systemInformation = SystemInformationReporter.BuildSystemInformation();
+                var systemInformation = SystemInformationReporter.BuildSystemInformation();
                 writer.WriteLine(systemInformation);
 
-                for (int i = 0; i < configuration.DeviceCount; i++)
+                for (var i = 0; i < configuration.DeviceCount; i++)
                 {
                     writer.WriteLine(CONST_DEVICE_HEADER_TAG);
-                    string deviceName = configuration[i];
-                    Dictionary<string, object> settings = configuration.GetDeviceSettings(deviceName);
-                    foreach (string setting in settings.Keys)
+                    var deviceName = configuration[i];
+                    var settings = configuration.GetDeviceSettings(deviceName);
+                    foreach (var setting in settings.Keys)
                     {
-                        object value = settings[setting];
+                        var value = settings[setting];
                         writer.WriteLine("{0}{1}{2}", setting, CONST_DELIMETER, value);
                     }
                 }
                 writer.WriteLine(CONST_CONNECTION_HEADER_TAG);
-                Dictionary<string, string> connections = configuration.GetConnections();
-                foreach (string connID in connections.Keys)
+                var connections = configuration.GetConnections();
+                foreach (var connID in connections.Keys)
                 {
                     writer.WriteLine(connections[connID]);
                 }

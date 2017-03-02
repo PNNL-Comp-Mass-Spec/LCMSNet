@@ -79,7 +79,7 @@ namespace LcmsNet.Method.Forms
         private void mbutton_conversion_Click(object sender, EventArgs e)
         {
             using (
-                formConvertToSeconds conversion = new formConvertToSeconds(Convert.ToInt32(mnum_value.Value),
+                var conversion = new formConvertToSeconds(Convert.ToInt32(mnum_value.Value),
                     DecimalPlaces))
             {
                 conversion.StartPosition = FormStartPosition.Manual;

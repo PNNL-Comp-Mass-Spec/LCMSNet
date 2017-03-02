@@ -46,8 +46,8 @@ namespace LcmsNet.Method.Forms
 
         public int GetTimeInSeconds()
         {
-            int minutes = Convert.ToInt32(mnum_minutes.Value);
-            int seconds = Convert.ToInt32(mnum_seconds.Value);
+            var minutes = Convert.ToInt32(mnum_minutes.Value);
+            var seconds = Convert.ToInt32(mnum_seconds.Value);
 
             return minutes * 60 + seconds;
         }

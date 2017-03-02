@@ -52,17 +52,17 @@ namespace LcmsNet.SampleQueue.IO
             // Exit if method folder creation disabled
             if (!bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS)))
             {
-                string msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
+                var msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
                              ", Method folder creation disabled";
                 classApplicationLogger.LogMessage(0, msg);
                 return;
             }
 
             // Make the method transfer folder
-            string localFolder = MakeLocalMethodFolder(sample);
+            var localFolder = MakeLocalMethodFolder(sample);
             if (localFolder == "")
             {
-                string message = "Could not create a folder for the output method data for: " + sample.LCMethod.Name;
+                var message = "Could not create a folder for the output method data for: " + sample.LCMethod.Name;
                 classApplicationLogger.LogError(0, message);
                 return;
             }
@@ -70,16 +70,16 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
-            string methodFileName = classSampleData.GetTriggerFileName(sample, ".incompleteLcmethod");
-            string lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
-            classLCMethodWriter lcWriter = new classLCMethodWriter();
+            var methodFileName = classSampleData.GetTriggerFileName(sample, ".incompleteLcmethod");
+            var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
+            var lcWriter = new classLCMethodWriter();
             try
             {
                 lcWriter.WriteMethod(lcMethodFileNamePath, sample.LCMethod);
             }
             catch (Exception ex)
             {
-                string msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
+                var msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
                 classApplicationLogger.LogError(0, msg, ex, sample);
                 return;
             }
@@ -104,17 +104,17 @@ namespace LcmsNet.SampleQueue.IO
             // Exit if method folder creation disabled
             if (!bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS)))
             {
-                string msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
+                var msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
                              ", Method folder creation disabled";
                 classApplicationLogger.LogMessage(0, msg);
                 return;
             }
 
             // Make the method transfer folder
-            string localFolder = MakeLocalMethodFolder(sample);
+            var localFolder = MakeLocalMethodFolder(sample);
             if (localFolder == "")
             {
-                string message = "Could not create a folder for the output method data for: " + sample.LCMethod.Name;
+                var message = "Could not create a folder for the output method data for: " + sample.LCMethod.Name;
                 classApplicationLogger.LogError(0, message);
                 return;
             }
@@ -122,17 +122,17 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
-            classLCMethodWriter methodWriter = new classLCMethodWriter();
-            string methodFileName = classSampleData.GetTriggerFileName(sample, ".lcmethod");
-            string lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
-            classLCMethodWriter lcWriter = new classLCMethodWriter();
+            var methodWriter = new classLCMethodWriter();
+            var methodFileName = classSampleData.GetTriggerFileName(sample, ".lcmethod");
+            var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
+            var lcWriter = new classLCMethodWriter();
             try
             {
                 lcWriter.WriteMethod(lcMethodFileNamePath, sample.LCMethod);
             }
             catch (Exception ex)
             {
-                string msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
+                var msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
                 classApplicationLogger.LogError(0, msg, ex, sample);
                 return;
             }
@@ -159,37 +159,37 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Exit if method folder copy disabled
             // ----------------------------------------------------------------------------------------------------
-            bool shouldCopyFolder = bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS));
+            var shouldCopyFolder = bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS));
             if (!shouldCopyFolder)
             {
-                string msg = "The method data was not copied to the server for: " + sample.DmsData.DatasetName +
+                var msg = "The method data was not copied to the server for: " + sample.DmsData.DatasetName +
                              ".  the method folder copy is disabled";
                 classApplicationLogger.LogMessage(0, msg);
                 return;
             }
 
             // Move the collected method data to the xfer server
-            string remoteTargetFolder = CreateRemoteFolderPath();
+            var remoteTargetFolder = CreateRemoteFolderPath();
             try
             {
-                bool remoteFolderExists = Directory.Exists(remoteTargetFolder);
+                var remoteFolderExists = Directory.Exists(remoteTargetFolder);
                 if (!remoteFolderExists)
                 {
                     Directory.CreateDirectory(remoteTargetFolder);
                 }
 
-                string localName = Path.GetFileName(lcMethodFileNamePath);
+                var localName = Path.GetFileName(lcMethodFileNamePath);
                 File.Copy(lcMethodFileNamePath, Path.Combine(remoteTargetFolder, localName), true);
                 File.Delete(lcMethodFileNamePath);
 
-                string message = string.Format("Method information for {0} was copied to {1}",
+                var message = string.Format("Method information for {0} was copied to {1}",
                     sample.DmsData.DatasetName,
                     remoteTargetFolder);
                 classApplicationLogger.LogMessage(0, message, sample);
             }
             catch (Exception ex)
             {
-                string message = string.Format("Method information for {0} was NOT copied to {1}",
+                var message = string.Format("Method information for {0} was NOT copied to {1}",
                     sample.DmsData.DatasetName,
                     remoteTargetFolder);
                 classApplicationLogger.LogError(0, message, ex, sample);
@@ -206,7 +206,7 @@ namespace LcmsNet.SampleQueue.IO
             string message;
 
             // Verify local method folder exists. Otherwise, create the folder.
-            string localFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var localFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 LOCAL_METHOD_FOLDER_NAME);
             if (!Directory.Exists(localFolder))
             {
@@ -231,13 +231,13 @@ namespace LcmsNet.SampleQueue.IO
         public static bool CheckLocalMethodFolders()
         {
             // Check for presence of local method directory
-            string localMethodXferFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var localMethodXferFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 LOCAL_METHOD_FOLDER_NAME);
             if (!Directory.Exists(localMethodXferFolder))
                 return false; // If no directory, there are no folders needing transfer
 
             // Get a list of the folders in the transfer folder
-            string[] methodFolders = Directory.GetDirectories(localMethodXferFolder);
+            var methodFolders = Directory.GetDirectories(localMethodXferFolder);
 
             // Check for method folders in the transfer folder
             if (methodFolders.Length < 1)
@@ -255,7 +255,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         public static void MoveLocalMethodFiles()
         {
-            string localFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var localFolder = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 LOCAL_METHOD_FOLDER_NAME);
 
             if (!Directory.Exists(localFolder))
@@ -264,8 +264,8 @@ namespace LcmsNet.SampleQueue.IO
                 return;
             }
 
-            string remoteFolder = CreateRemoteFolderPath();
-            bool exists = Directory.Exists(remoteFolder);
+            var remoteFolder = CreateRemoteFolderPath();
+            var exists = Directory.Exists(remoteFolder);
             if (!exists)
             {
                 classApplicationLogger.LogError(0, "Creating the remote folder: " + remoteFolder);
@@ -280,14 +280,14 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Get a list of the folders in the transfer folder
-            string[] files = Directory.GetFiles(localFolder, "*.lcmethod");
+            var files = Directory.GetFiles(localFolder, "*.lcmethod");
 
-            foreach (string file in files)
+            foreach (var file in files)
             {
                 try
                 {
-                    string fileName = Path.GetFileName(file);
-                    string remotePath = CreateRemoteFolderPath();
+                    var fileName = Path.GetFileName(file);
+                    var remotePath = CreateRemoteFolderPath();
 
                     System.IO.File.Copy(file, Path.Combine(remotePath, fileName), true);
                     System.IO.File.Delete(file);
@@ -307,11 +307,11 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns></returns>
         public static string CreateRemoteFolderPath()
         {
-            string path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER), METHOD_FOLDER_NAME);
-            DateTime now = DateTime.Now;
-            int month = now.Month;
-            int year = now.Year;
-            int quarter = (month / 4) + 1;
+            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER), METHOD_FOLDER_NAME);
+            var now = DateTime.Now;
+            var month = now.Month;
+            var year = now.Year;
+            var quarter = (month / 4) + 1;
             path = Path.Combine(path, string.Format("{0}_{1}", year, quarter));
             return path;
         }

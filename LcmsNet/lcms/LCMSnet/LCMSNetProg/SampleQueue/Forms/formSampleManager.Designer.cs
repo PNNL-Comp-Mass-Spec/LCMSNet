@@ -42,7 +42,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formSampleManager));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(formSampleManager));
             this.mtabControl_sampleViews = new System.Windows.Forms.TabControl();
             this.mtabPage_sequenceView = new System.Windows.Forms.TabPage();
             this.mcontrol_sequenceView = new LcmsNet.SampleQueue.Forms.controlSequenceView();

@@ -92,16 +92,16 @@ namespace LcmsNet.SampleQueue.Forms
             if (mobj_DictRandomizers.Count < 1)
                 return;
 
-            foreach (string randomizer in mobj_DictRandomizers.Keys)
+            foreach (var randomizer in mobj_DictRandomizers.Keys)
             {
                 comboBoxRandomizers.Items.Add(randomizer);
             }
             comboBoxRandomizers.SelectedIndex = 0;
 
             // Load input listview
-            foreach (classSampleData Sample in mobj_InputSampleList)
+            foreach (var Sample in mobj_InputSampleList)
             {
-                ListViewItem NewItem = new ListViewItem(Sample.SequenceID.ToString());
+                var NewItem = new ListViewItem(Sample.SequenceID.ToString());
                 NewItem.SubItems.Add(Sample.DmsData.DatasetName);
                 listViewInput.Items.Add(NewItem);
             }
@@ -115,8 +115,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="InputSamples">List of input samples to be randomized</param>
         void RandomizeSamples(List<classSampleData> InputSamples)
         {
-            object randomizerObject = Activator.CreateInstance(mobj_DictRandomizers[comboBoxRandomizers.Text]);
-            IRandomizerInterface randomizer = randomizerObject as IRandomizerInterface;
+            var randomizerObject = Activator.CreateInstance(mobj_DictRandomizers[comboBoxRandomizers.Text]);
+            var randomizer = randomizerObject as IRandomizerInterface;
             mobj_OutputSampleList = randomizer.RandomizeSamples(InputSamples);
 
             statusLabel.Text = "Randomization Complete.";
@@ -130,9 +130,9 @@ namespace LcmsNet.SampleQueue.Forms
         void LoadOuputListview()
         {
             listViewOutput.Items.Clear();
-            foreach (classSampleData Sample in mobj_OutputSampleList)
+            foreach (var Sample in mobj_OutputSampleList)
             {
-                ListViewItem NewItem = new ListViewItem(Sample.SequenceID.ToString());
+                var NewItem = new ListViewItem(Sample.SequenceID.ToString());
                 NewItem.SubItems.Add(Sample.DmsData.DatasetName);
                 listViewOutput.Items.Add(NewItem);
             }

@@ -21,35 +21,35 @@ namespace LcmsNet.Devices
         /// <param name="configuration"></param>
         public void WriteConfiguration(string path, NotificationConfiguration configuration)
         {
-            XmlDocument document = new XmlDocument();
-            XmlElement rootElement = document.CreateElement("Devices");
+            var document = new XmlDocument();
+            var rootElement = document.CreateElement("Devices");
 
-            XmlElement notiferSetting = document.CreateElement("SystemSettings");
+            var notiferSetting = document.CreateElement("SystemSettings");
             notiferSetting.SetAttribute("Ignore", configuration.IgnoreNotifications.ToString());
             rootElement.AppendChild(notiferSetting);
 
-            foreach (INotifier device in configuration)
+            foreach (var device in configuration)
             {
-                XmlElement deviceElement = document.CreateElement("Device");
+                var deviceElement = document.CreateElement("Device");
                 deviceElement.SetAttribute("name", device.Name);
 
-                foreach (NotificationSetting setting in configuration.GetDeviceSettings(device))
+                foreach (var setting in configuration.GetDeviceSettings(device))
                 {
-                    XmlElement notifyElement = document.CreateElement("Notification");
+                    var notifyElement = document.CreateElement("Notification");
                     notifyElement.SetAttribute("name", setting.Name);
                     notifyElement.SetAttribute("action", setting.Action.ToString());
 
-                    NotificationConditionNode conditions = setting.GetConditions();
+                    var conditions = setting.GetConditions();
                     notifyElement.SetAttribute("type", conditions.Name);
 
-                    XmlElement conditionElement = document.CreateElement("Conditions");
-                    foreach (string condition in conditions.Conditions.Keys)
+                    var conditionElement = document.CreateElement("Conditions");
+                    foreach (var condition in conditions.Conditions.Keys)
                     {
                         conditionElement.SetAttribute(condition, conditions.Conditions[condition].ToString());
                     }
                     notifyElement.AppendChild(conditionElement);
 
-                    string methodName = "";
+                    var methodName = "";
                     if (setting.Method != null)
                     {
                         methodName = setting.Method.Name;

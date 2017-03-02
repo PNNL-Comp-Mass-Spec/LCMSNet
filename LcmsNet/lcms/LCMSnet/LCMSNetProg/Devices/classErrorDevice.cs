@@ -137,7 +137,7 @@ namespace LcmsNet.Devices
 
         public List<string> GetErrorNotificationList()
         {
-            List<string> errors = new List<string>();
+            var errors = new List<string>();
             errors.Add("Error!");
             return errors;
         }
@@ -152,7 +152,7 @@ namespace LcmsNet.Devices
         [classLCMethodAttribute("Throw Exception", 1, false, "", -1, false)]
         public bool ThrowException()
         {
-            bool dummyCode = false;
+            var dummyCode = false;
             if (!dummyCode)
                 throw new Exception("This exception was thrown on purpose.");
             return false;

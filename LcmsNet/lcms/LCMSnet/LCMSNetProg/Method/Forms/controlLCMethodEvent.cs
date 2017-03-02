@@ -49,7 +49,7 @@ namespace LcmsNet.Method.Forms
             if (methodData.Device.GetType().Equals(typeof (classTimerDevice)) == false)
             {
                 mobj_device = methodData.Device;
-                int index = mcomboBox_devices.Items.IndexOf(mobj_device);
+                var index = mcomboBox_devices.Items.IndexOf(mobj_device);
                 mcomboBox_devices.SelectedIndex = index;
             }
             else
@@ -58,10 +58,10 @@ namespace LcmsNet.Method.Forms
                 // BAH! TODO: Clean this up5
                 //
                 mobj_device = methodData.Device;
-                int i = 0;
-                foreach (object o in mcomboBox_devices.Items)
+                var i = 0;
+                foreach (var o in mcomboBox_devices.Items)
                 {
-                    IDevice device = o as IDevice;
+                    var device = o as IDevice;
                     if (device != null && device.Name == "Timer")
                     {
                         break;
@@ -92,14 +92,14 @@ namespace LcmsNet.Method.Forms
                 // with the method we previously selected.  This way we preserve the parameter values
                 // etc.
                 //
-                int index = FindMethodIndex(methodData);
+                var index = FindMethodIndex(methodData);
                 mcomboBox_method.Items[index] = methodData;
                 mcomboBox_method.SelectedIndex = index;
 
                 LoadMethodParameters(methodData);
             }
 
-            mbool_isLockingEvent = locked;
+            m_isLockingEvent = locked;
             mobj_methodData = methodData;
         }
 
@@ -162,10 +162,10 @@ namespace LcmsNet.Method.Forms
 
         private int FindMethodIndex(classLCMethodData method)
         {
-            int i = 0;
-            foreach (object o in mcomboBox_method.Items)
+            var i = 0;
+            foreach (var o in mcomboBox_method.Items)
             {
-                classLCMethodData data = o as classLCMethodData;
+                var data = o as classLCMethodData;
                 if (data != null)
                 {
                     if (data.MethodAttribute.Name.Equals(method.MethodAttribute.Name))
@@ -178,7 +178,7 @@ namespace LcmsNet.Method.Forms
 
         private void mpanel_parameters_Paint(object sender, PaintEventArgs e)
         {
-            Color backColor = Color.White;
+            var backColor = Color.White;
             if (IsCurrent && !StoppedHere)
             {
                 backColor = Color.Green;
@@ -197,7 +197,7 @@ namespace LcmsNet.Method.Forms
 
         private void controlLCMethodEvent_Paint(object sender, PaintEventArgs e)
         {
-            Color backColor = Color.White;
+            var backColor = Color.White;
             if (IsCurrent && !StoppedHere)
             {
                 backColor = Color.Green;
@@ -228,7 +228,7 @@ namespace LcmsNet.Method.Forms
                 if (t == null)
                     return false;
 
-                bool isNumeric = false;
+                var isNumeric = false;
                 isNumeric = isNumeric || (typeof (int) == t);
                 isNumeric = isNumeric || (typeof (uint) == t);
                 isNumeric = isNumeric || (typeof (ulong) == t);
@@ -261,9 +261,9 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Flag indicating if this event is a placeholder so that we know it's an unlocking event
         /// </summary>
-        private bool mbool_isLockingEvent = false;
+        private bool m_isLockingEvent = false;
 
-        private bool mbool_stoppedHere;
+        private bool m_stoppedHere;
 
         #endregion
 
@@ -281,7 +281,7 @@ namespace LcmsNet.Method.Forms
 
             if (mcomboBox_devices.Items.Contains(device))
             {
-                int index = mcomboBox_devices.Items.IndexOf(device);
+                var index = mcomboBox_devices.Items.IndexOf(device);
                 mcomboBox_devices.Items[index] = device;
             }
         }
@@ -317,7 +317,7 @@ namespace LcmsNet.Method.Forms
             // If this was the first device added for some odd reason, then make sure we enable the
             // device.
             //
-            bool isFirstDevice = false;
+            var isFirstDevice = false;
 
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
@@ -334,7 +334,7 @@ namespace LcmsNet.Method.Forms
 
             if (mdict_deviceMappings.ContainsKey(device) == false)
             {
-                List<classLCMethodData> methodPairs = ReflectDevice(device);
+                var methodPairs = ReflectDevice(device);
                 mdict_deviceMappings.Add(device, methodPairs);
             }
 
@@ -408,7 +408,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public bool IsLockingEvent
         {
-            get { return mbool_isLockingEvent; }
+            get { return m_isLockingEvent; }
         }
 
         /// <summary>
@@ -423,8 +423,8 @@ namespace LcmsNet.Method.Forms
 
         private bool StoppedHere
         {
-            get { return mbool_stoppedHere; }
-            set { mbool_stoppedHere = value; }
+            get { return m_stoppedHere; }
+            set { m_stoppedHere = value; }
         }
 
         #endregion
@@ -454,13 +454,13 @@ namespace LcmsNet.Method.Forms
             // if this is true, if so, then we need to just find the device in the
             // device manager and get the device method mappings that way.
             //
-            classTimerDevice timer = device as classTimerDevice;
+            var timer = device as classTimerDevice;
             if (timer != null)
             {
                 //
                 // Find the timer device.
                 //
-                foreach (IDevice tempDevice in mdict_deviceMappings.Keys)
+                foreach (var tempDevice in mdict_deviceMappings.Keys)
                 {
                     timer = tempDevice as classTimerDevice;
                     if (timer != null)
@@ -473,8 +473,8 @@ namespace LcmsNet.Method.Forms
             //
             // Add the method information into the combo-box as deemed by the device.
             //
-            List<classLCMethodData> methods = mdict_deviceMappings[device];
-            foreach (classLCMethodData method in methods)
+            var methods = mdict_deviceMappings[device];
+            foreach (var method in methods)
             {
                 mcomboBox_method.Items.Add(method);
             }
@@ -507,7 +507,7 @@ namespace LcmsNet.Method.Forms
             {
                 foreach (Control c in mpanel_parameters.Controls)
                 {
-                    ILCEventParameter param = c as ILCEventParameter;
+                    var param = c as ILCEventParameter;
                     if (param != null)
                     {
                         param.EventChanged -= this.param_EventChanged;
@@ -523,19 +523,19 @@ namespace LcmsNet.Method.Forms
             //
             // If the method requires sample input then we just ignore adding any controls.
             //
-            classLCMethodEventParameter parameters = method.Parameters;
+            var parameters = method.Parameters;
 
             //
             // This readjusts the number of parameters that are sample specific
             //
-            int count = parameters.Controls.Count * 2;
-            int indexOfSampleData = method.MethodAttribute.SampleParameterIndex;
+            var count = parameters.Controls.Count * 2;
+            var indexOfSampleData = method.MethodAttribute.SampleParameterIndex;
 
             //
             // Update the style so we have the right spacing
             //
-            float percent = 100.0F / Convert.ToSingle(count);
-            for (int i = 0; i < parameters.Controls.Count; i++)
+            var percent = 100.0F / Convert.ToSingle(count);
+            for (var i = 0; i < parameters.Controls.Count; i++)
             {
                 if (i != indexOfSampleData)
                     mpanel_parameters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, percent));
@@ -544,24 +544,24 @@ namespace LcmsNet.Method.Forms
             //
             // Add the controls to the mpanel_parameter controls
             //
-            for (int j = 0; j < parameters.Controls.Count; j++)
+            for (var j = 0; j < parameters.Controls.Count; j++)
             {
                 if (j != indexOfSampleData)
                 {
                     //
                     // Get the name of the parameter
                     //
-                    string name = parameters.Names[j];
+                    var name = parameters.Names[j];
 
                     //
                     // Get the control for the parameter
                     //
-                    Control control = parameters.Controls[j];
+                    var control = parameters.Controls[j];
 
                     //
                     // Construct the description for the parameter
                     //
-                    Label descriptionLabel = new Label();
+                    var descriptionLabel = new Label();
                     descriptionLabel.Text = name;
                     descriptionLabel.AutoSize = true;
                     mpanel_parameters.Controls.Add(descriptionLabel);
@@ -573,7 +573,7 @@ namespace LcmsNet.Method.Forms
                     control.BringToFront();
                     mpanel_parameters.Controls.Add(control);
 
-                    ILCEventParameter param = control as ILCEventParameter;
+                    var param = control as ILCEventParameter;
                     param.ParameterValue = parameters.Values[j];
                     param.EventChanged += new EventHandler(param_EventChanged);
                 }
@@ -600,7 +600,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // Update the user interface.
                 //
-                IDevice device = mcomboBox_devices.Items[mcomboBox_devices.SelectedIndex] as IDevice;
+                var device = mcomboBox_devices.Items[mcomboBox_devices.SelectedIndex] as IDevice;
                 if (device != mobj_device)
                 {
                     mobj_device = device;
@@ -627,7 +627,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // Update the user interface.
                 //
-                classLCMethodData method = mcomboBox_method.Items[mcomboBox_method.SelectedIndex] as classLCMethodData;
+                var method = mcomboBox_method.Items[mcomboBox_method.SelectedIndex] as classLCMethodData;
                 if (method != mobj_methodData)
                 {
                     if (mobj_methodData != null)
@@ -675,12 +675,12 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void RegisterDevices()
         {
-            foreach (IDevice device in classDeviceManager.Manager.Devices)
+            foreach (var device in classDeviceManager.Manager.Devices)
             {
                 if (device.DeviceType == enumDeviceType.Fluidics)
                     continue;
 
-                List<classLCMethodData> methodPairs = ReflectDevice(device);
+                var methodPairs = ReflectDevice(device);
                 mdict_deviceMappings.Add(device, methodPairs);
                 mcomboBox_devices.Items.Add(device);
             }
@@ -704,32 +704,32 @@ namespace LcmsNet.Method.Forms
             if (device == null)
                 throw new NullReferenceException("Device cannot be null.");
 
-            Type type = device.GetType();
+            var type = device.GetType();
 
             //
             // List of method editing pairs
             //
-            List<classLCMethodData> methodPairs = new List<classLCMethodData>();
+            var methodPairs = new List<classLCMethodData>();
 
             //
             // We are trying to enumerate all the methods for this device building their method-parameter pairs.
             //
-            foreach (MethodInfo method in type.GetMethods())
+            foreach (var method in type.GetMethods())
             {
-                object[] customAttributes = method.GetCustomAttributes(typeof (classLCMethodAttribute), true);
-                foreach (object objAttribute in customAttributes)
+                var customAttributes = method.GetCustomAttributes(typeof (classLCMethodAttribute), true);
+                foreach (var objAttribute in customAttributes)
                 {
                     //
                     // If the method has a custom LC Method Attribute, then we want to look at the parameters used
                     //
-                    classLCMethodAttribute attr = objAttribute as classLCMethodAttribute;
+                    var attr = objAttribute as classLCMethodAttribute;
                     if (attr != null)
                     {
                         //
                         // Grab the parameters used for this method
                         //
-                        ParameterInfo[] info = method.GetParameters();
-                        classLCMethodEventParameter parameters = new classLCMethodEventParameter();
+                        var info = method.GetParameters();
+                        var parameters = new classLCMethodEventParameter();
 
                         //
                         // Here we are looking to see if the method has a parameter
@@ -742,8 +742,8 @@ namespace LcmsNet.Method.Forms
                             // the parameter we are going to use is a sample data object.
                             // Then for each parameter, see if we can add it to a control to display.
                             //
-                            int i = 0;
-                            foreach (ParameterInfo paramInfo in info)
+                            var i = 0;
+                            foreach (var paramInfo in info)
                             {
                                 Control control = null;
                                 object value = null;
@@ -763,7 +763,7 @@ namespace LcmsNet.Method.Forms
                                     // Figure out what index to adjust the data provider for.
                                     //
                                     control = null;
-                                    controlParameterComboBox combo = new controlParameterComboBox();
+                                    var combo = new controlParameterComboBox();
 
                                     //
                                     // Register the event to automatically get new data when the data provider has new
@@ -793,8 +793,8 @@ namespace LcmsNet.Method.Forms
                                     //
                                     if (paramInfo.ParameterType.IsEnum)
                                     {
-                                        Array aenums = Enum.GetValues(paramInfo.ParameterType);
-                                        object[] enums = new object[aenums.Length];
+                                        var aenums = Enum.GetValues(paramInfo.ParameterType);
+                                        var enums = new object[aenums.Length];
                                         aenums.CopyTo(enums, 0);
                                         value = enums[0];
                                     }
@@ -818,7 +818,7 @@ namespace LcmsNet.Method.Forms
                         // during the reflection phase and add it to the list of
                         // possible methods to call for this device.
                         //
-                        classLCMethodData newMethod = new classLCMethodData(device,
+                        var newMethod = new classLCMethodData(device,
                             method,
                             attr,
                             parameters);
@@ -843,14 +843,14 @@ namespace LcmsNet.Method.Forms
                 //
                 // Grab the enumeration values for the parameter
                 //
-                Array aenums = Enum.GetValues(t);
-                object[] enums = new object[aenums.Length];
+                var aenums = Enum.GetValues(t);
+                var enums = new object[aenums.Length];
                 aenums.CopyTo(enums, 0);
 
                 //
                 // Add the parameters to the combo box before we do anything.
                 //
-                controlParameterComboBox box = new controlParameterComboBox();
+                var box = new controlParameterComboBox();
                 box.DropDownStyle = ComboBoxStyle.DropDownList;
                 box.Items.AddRange(enums);
                 box.SelectedIndex = 0;
@@ -928,7 +928,7 @@ namespace LcmsNet.Method.Forms
         {
             if (Lock != null)
             {
-                classLCMethodData methodData = mcomboBox_method.SelectedItem as classLCMethodData;
+                var methodData = mcomboBox_method.SelectedItem as classLCMethodData;
                 //Lock(this, mcheckBox_hold.Checked, methodData);
             }
             OnEventChanged();

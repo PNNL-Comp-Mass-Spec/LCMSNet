@@ -40,10 +40,10 @@ namespace LcmsNet.Method.Forms
         {
             get
             {
-                List<classLCMethod> methods = new List<classLCMethod>();
-                foreach (object o in mlistBox_methods.Items)
+                var methods = new List<classLCMethod>();
+                foreach (var o in mlistBox_methods.Items)
                 {
-                    string methodName = (string) o;
+                    var methodName = (string) o;
                     if (methodName != null)
                     {
                         //
@@ -51,8 +51,8 @@ namespace LcmsNet.Method.Forms
                         //
                         if (classLCMethodManager.Manager.Methods.ContainsKey(methodName) == true)
                         {
-                            classLCMethod method = classLCMethodManager.Manager.Methods[methodName];
-                            classLCMethod cloned = method.Clone() as classLCMethod;
+                            var method = classLCMethodManager.Manager.Methods[methodName];
+                            var cloned = method.Clone() as classLCMethod;
 
                             if (cloned != null)
                                 methods.Add(cloned);
@@ -101,16 +101,16 @@ namespace LcmsNet.Method.Forms
             //
             // Finds the method in the listbox
             //
-            object[] objects = new object[mlistBox_methods.Items.Count];
+            var objects = new object[mlistBox_methods.Items.Count];
             mlistBox_methods.Items.CopyTo(objects, 0);
-            List<string> removeMethods = FindMethodsInList(objects, method.Name);
+            var removeMethods = FindMethodsInList(objects, method.Name);
 
             //
             // The method exists, so then we need to remove it's instances.
             //
             if (removeMethods != null)
             {
-                foreach (string removeMethod in removeMethods)
+                foreach (var removeMethod in removeMethods)
                     mlistBox_methods.Items.Remove(removeMethod);
             }
 
@@ -125,7 +125,7 @@ namespace LcmsNet.Method.Forms
                 //
                 // Remove here
                 //
-                foreach (string removeMethod in removeMethods)
+                foreach (var removeMethod in removeMethods)
                     mlistBox_methods.Items.Remove(removeMethod);
 
                 if (MethodDeleted != null)
@@ -160,9 +160,9 @@ namespace LcmsNet.Method.Forms
             // has the right number of events, OR add the method if it
             // does not exist.
             //
-            object[] objects = new object[mcomboBox_methods.Items.Count];
+            var objects = new object[mcomboBox_methods.Items.Count];
             mcomboBox_methods.Items.CopyTo(objects, 0);
-            List<string> foundMethods = FindMethodsInList(objects, method.Name);
+            var foundMethods = FindMethodsInList(objects, method.Name);
 
             //
             // If the method was not found in the combobox then add it to the combobox.
@@ -186,9 +186,9 @@ namespace LcmsNet.Method.Forms
             //
             if (foundMethods != null && foundMethods.Count > 0)
             {
-                foreach (string foundMethod in foundMethods)
+                foreach (var foundMethod in foundMethods)
                 {
-                    int indexOf = mlistBox_methods.Items.IndexOf(foundMethod);
+                    var indexOf = mlistBox_methods.Items.IndexOf(foundMethod);
                     mlistBox_methods.Items[indexOf] = method.Name;
                 }
 
@@ -250,15 +250,15 @@ namespace LcmsNet.Method.Forms
         /// <returns></returns>
         private List<string> FindMethodsInList(IEnumerable<object> methods, string method)
         {
-            List<string> foundMethods = new List<string>();
+            var foundMethods = new List<string>();
 
             //
             // BAH!  we have to sort through the names here of the methods
             // maybe we could hash them?
             //
-            foreach (object o in methods)
+            foreach (var o in methods)
             {
-                string lcMethod = (string) o;
+                var lcMethod = (string) o;
 
                 if (lcMethod != null)
                 {
@@ -288,7 +288,7 @@ namespace LcmsNet.Method.Forms
         {
             if (mcomboBox_methods.SelectedItem != null)
             {
-                string method = (string) mcomboBox_methods.SelectedItem;
+                var method = (string) mcomboBox_methods.SelectedItem;
                 if (method != null)
                 {
                     mlistBox_methods.Items.Add(method);
@@ -313,9 +313,9 @@ namespace LcmsNet.Method.Forms
                 //
                 // Remove the objects
                 //
-                object[] objects = new object[mlistBox_methods.SelectedItems.Count];
+                var objects = new object[mlistBox_methods.SelectedItems.Count];
                 mlistBox_methods.SelectedItems.CopyTo(objects, 0);
-                foreach (object o in objects)
+                foreach (var o in objects)
                     mlistBox_methods.Items.Remove(o);
 
                 //
@@ -339,34 +339,34 @@ namespace LcmsNet.Method.Forms
             //
             // Hold on to what items were moved
             //
-            int[] indices = new int[mlistBox_methods.SelectedIndices.Count];
+            var indices = new int[mlistBox_methods.SelectedIndices.Count];
 
             //
             // Otherwise, we'll sort this out using an array to locally copy the
             // items, then clear and readd them in the suited array as they
             // are ordered.
             //
-            object[] objects = new object[mlistBox_methods.Items.Count];
+            var objects = new object[mlistBox_methods.Items.Count];
             mlistBox_methods.Items.CopyTo(objects, 0);
 
             //
             // The top will be the lowest index the guy can move to.
             //
-            int top = -1;
-            for (int i = 0; i < mlistBox_methods.SelectedIndices.Count; i++)
+            var top = -1;
+            for (var i = 0; i < mlistBox_methods.SelectedIndices.Count; i++)
             {
                 //
                 // Calculate the new index
                 //
-                int newIndex = mlistBox_methods.SelectedIndices[i];
-                int prevIndex = newIndex;
+                var newIndex = mlistBox_methods.SelectedIndices[i];
+                var prevIndex = newIndex;
 
                 newIndex = Math.Max(newIndex - 1, top + 1);
 
                 //
                 // swap the data
                 //
-                object temp = objects[prevIndex];
+                var temp = objects[prevIndex];
                 objects[prevIndex] = objects[newIndex];
                 objects[newIndex] = temp;
 
@@ -387,7 +387,7 @@ namespace LcmsNet.Method.Forms
             // Reselect any objects that were previously based on their
             // new indices
             //
-            foreach (int i in indices)
+            foreach (var i in indices)
                 mlistBox_methods.SetSelected(i, true);
 
             mlistBox_methods.EndUpdate();
@@ -406,34 +406,34 @@ namespace LcmsNet.Method.Forms
             //
             // Hold on to what items were moved
             //
-            int[] indices = new int[mlistBox_methods.SelectedIndices.Count];
+            var indices = new int[mlistBox_methods.SelectedIndices.Count];
 
             //
             // Otherwise, we'll sort this out using an array to locally copy the
             // items, then clear and readd them in the suited array as they
             // are ordered.
             //
-            object[] objects = new object[mlistBox_methods.Items.Count];
+            var objects = new object[mlistBox_methods.Items.Count];
             mlistBox_methods.Items.CopyTo(objects, 0);
 
             //
             // The top will be the lowest index the guy can move to.
             //
-            int top = mlistBox_methods.Items.Count;
-            for (int i = mlistBox_methods.SelectedIndices.Count - 1; i > -1; i--)
+            var top = mlistBox_methods.Items.Count;
+            for (var i = mlistBox_methods.SelectedIndices.Count - 1; i > -1; i--)
             {
                 //
                 // Calculate the new index
                 //
-                int newIndex = mlistBox_methods.SelectedIndices[i];
-                int prevIndex = newIndex;
+                var newIndex = mlistBox_methods.SelectedIndices[i];
+                var prevIndex = newIndex;
 
                 newIndex = Math.Min(newIndex + 1, top - 1);
 
                 //
                 // swap the data
                 //
-                object temp = objects[prevIndex];
+                var temp = objects[prevIndex];
                 objects[prevIndex] = objects[newIndex];
                 objects[newIndex] = temp;
 
@@ -453,7 +453,7 @@ namespace LcmsNet.Method.Forms
             // Reselect any objects that were previously based on their
             // new indices
             //
-            foreach (int i in indices)
+            foreach (var i in indices)
                 mlistBox_methods.SetSelected(i, true);
 
             mlistBox_methods.EndUpdate();

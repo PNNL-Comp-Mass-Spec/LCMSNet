@@ -34,11 +34,11 @@ namespace LcmsNetDataClasses.Devices
         {
             mlistview_failedDevices.BeginUpdate();
             mlistview_failedDevices.Items.Clear();
-            foreach (classDeviceErrorEventArgs error in deviceErrors)
+            foreach (var error in deviceErrors)
             {
-                ListViewItem item = new ListViewItem();
+                var item = new ListViewItem();
                 item.Text = error.Device.Name;
-                string exceptionMessage = "";
+                var exceptionMessage = "";
                 if (error.Exception != null)
                 {
                     exceptionMessage = error.Exception.Message;

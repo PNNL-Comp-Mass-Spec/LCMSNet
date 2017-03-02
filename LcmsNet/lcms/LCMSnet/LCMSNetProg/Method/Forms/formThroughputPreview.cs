@@ -38,7 +38,7 @@ namespace LcmsNet.Method.Forms
             //
             // Align the samples
             //
-            classLCMethodOptimizer optimizer = new classLCMethodOptimizer();
+            var optimizer = new classLCMethodOptimizer();
             optimizer.UpdateRequired += new classLCMethodOptimizer.DelegateUpdateUserInterface(optimizer_UpdateRequired);
             optimizer.AlignSamples(samples);
 
@@ -63,8 +63,8 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         void UpdateSampleMethods(List<classSampleData> samples)
         {
-            List<classLCMethod> methods = new List<classLCMethod>();
-            foreach (classSampleData sample in samples)
+            var methods = new List<classLCMethod>();
+            foreach (var sample in samples)
             {
                 if (sample != null && sample.LCMethod != null)
                 {

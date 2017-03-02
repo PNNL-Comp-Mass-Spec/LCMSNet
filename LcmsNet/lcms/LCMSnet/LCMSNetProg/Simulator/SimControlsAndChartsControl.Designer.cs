@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimControlsAndChartsControl));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(SimControlsAndChartsControl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControlSimulator = new System.Windows.Forms.TabControl();
             this.tabPageMethodSimulatorControls = new System.Windows.Forms.TabPage();

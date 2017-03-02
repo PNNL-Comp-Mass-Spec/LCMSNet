@@ -115,11 +115,11 @@ namespace LcmsNet.SampleQueue
         /// If sortorder set to descending, returns -1 if x>y, 1 if x<y</returns>
         public int Compare(object x, object y)
         {
-            int tempResult = 0;
+            var tempResult = 0;
 
             // Convert input objects to listview items
-            System.Windows.Forms.ListViewItem item1 = x as System.Windows.Forms.ListViewItem;
-            System.Windows.Forms.ListViewItem item2 = y as System.Windows.Forms.ListViewItem;
+            var item1 = x as System.Windows.Forms.ListViewItem;
+            var item2 = y as System.Windows.Forms.ListViewItem;
 
             if (menum_SortMode == enumListViewComparerMode.SortModeConstants.numeric)
             {
