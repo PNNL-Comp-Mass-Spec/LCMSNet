@@ -98,11 +98,12 @@ namespace LcmsNetDataClasses
         /// <param name="ItemValue">Value of item</param>
         public static void SetParameter(string ItemKey, string ItemValue)
         {
-            if (SettingChanged != null)
-            {
-                SettingChanged(null, new SettingChangedEventArgs(ItemKey, ItemValue));
-            }
-            mstringdict_SettingsDict[ItemKey] = ItemValue;
+            SettingChanged?.Invoke(null, new SettingChangedEventArgs(ItemKey, ItemValue));
+
+            if (m_Settings.ContainsKey(ItemKey))
+                m_Settings[ItemKey] = ItemValue;
+            else
+                m_Settings.Add(ItemKey, ItemValue);
         }
 
         /// <summary>
@@ -112,7 +113,10 @@ namespace LcmsNetDataClasses
         /// <returns></returns>
         public static string GetParameter(string ItemKey)
         {
-            return mstringdict_SettingsDict[ItemKey];
+            if (m_Settings.ContainsKey(ItemKey))
+                return m_Settings[ItemKey];
+
+            return string.Empty;
         }
 
         #endregion
