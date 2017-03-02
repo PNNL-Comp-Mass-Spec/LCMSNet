@@ -117,6 +117,10 @@ namespace LcmsNet.Configuration
         #region "Class variables"
 
         private const int CONST_TOTAL_COLUMNS = 4;
+        /// <summary>
+        /// List of cart configuration names
+        /// </summary>
+        private List<string> m_CartConfigNames;
 
         /// <summary>
         /// List of available separation types
@@ -132,6 +136,21 @@ namespace LcmsNet.Configuration
 
         #region "Properties"
 
+        /// <summary>
+        /// Cart configuration names
+        /// </summary>
+        public List<string> CartConfigNames
+        {
+            set
+            {
+                m_CartConfigNames = value;
+                mcombo_CartConfigName.Items.Clear();
+                foreach (var cartConfigName in m_CartConfigNames)
+                {
+                    mcombo_CartConfigName.Items.Add(cartConfigName);
+                }
+            }
+        }
         /// <summary>
         /// Sets the list of column names.
         /// </summary>
@@ -391,6 +410,23 @@ namespace LcmsNet.Configuration
         }
 
         /// <summary>
+        /// Sets the cart configuration name in use
+        /// </summary>
+        /// <param name="cartConfigName">Cart configuration name</param>
+        public void SetCartConfigName(string cartConfigName)
+        {
+            var indx = mcombo_CartConfigName.FindString(cartConfigName, -1);
+            if (indx == -1 && mcombo_CartConfigName.Items.Count > 0)
+            {
+                mcombo_CartConfigName.SelectedIndex = 0;
+            }
+            else
+            {
+                mcombo_CartConfigName.SelectedIndex = indx;
+            }
+        }
+
+        /// <summary>
         /// Sets the separation type
         /// </summary>
         /// <param name="separationType">New separation type</param>
@@ -434,6 +470,11 @@ namespace LcmsNet.Configuration
 
         #region Form Events
 
+        private void mcombo_CartConfigName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME, mcombo_CartConfigName.Text);
+            classSQLiteTools.SaveSelectedCartConfigName(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME));
+        }
 
         private void mcombo_SepType_SelectedIndexChanged(object sender, EventArgs e)
         {

@@ -913,10 +913,17 @@ namespace LcmsNet
         /// </summary>
         private void ShowCartConfiguration()
         {
+            var cartConfigNames = classSQLiteTools.GetCartConfigNameList(false);
+            mform_systemConfiguration.CartConfigNames = cartConfigNames;
 
             var separationTypes = classSQLiteTools.GetSepTypeList(false);
             mform_systemConfiguration.SeparationTypes = separationTypes;
 
+            var cartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
+            if (!string.IsNullOrWhiteSpace(cartConfigName))
+            {
+                mform_systemConfiguration.SetCartConfigName(cartConfigName);
+            }
 
             var separationType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE);
             if (string.IsNullOrWhiteSpace(separationType))

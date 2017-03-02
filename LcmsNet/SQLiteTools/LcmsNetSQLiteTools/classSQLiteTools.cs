@@ -309,7 +309,7 @@ namespace LcmsNetSQLiteTools
                 return false;
             }
 
-            if (resultSet1.Rows.Count != 1)
+            if (resultSet1.Rows.Count < 1)
             {
                 return false;
             }
@@ -401,7 +401,7 @@ namespace LcmsNetSQLiteTools
         /// Saves the contents of specified sample queue to an SQLite database file
         /// Overload requires database connection string be specified
         /// </summary>
-        /// <param name="QueueData">List&lt;classSampleData&gt; containing the sample data to save</param>
+        /// <param name="QueueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
         public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType,
@@ -431,7 +431,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Saves a list of users to cache
         /// </summary>
-        /// <param name="UserList">List&lt;classUserInfo&gt; containing user data</param>
+        /// <param name="UserList">List containing user data</param>
         public static void SaveUserListToCache(List<classUserInfo> UserList)
         {
             var dataInList = (UserList.Count > 0);
@@ -812,8 +812,18 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart lists
         /// </summary>
-        /// <returns>List&lt;string&gt; containing cart names</returns>
+        /// <returns>List containing cart names</returns>
+        [Obsolete("Use GetCartNameList that does not have parameter force (since force is not used)")] 
         public static List<string> GetCartNameList(bool force)
+        {
+            return GetCartNameList();
+        }
+
+        /// <summary>
+        /// Wrapper around generic retrieval method specifically for cart lists
+        /// </summary>
+        /// <returns>List containing cart names</returns>
+        public static List<string> GetCartNameList()
         {
             if (m_cartNames == null)
             {
@@ -825,10 +835,10 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart config name lists
         /// </summary>
-        /// <returns>List&lt;string&gt; containing cart names</returns>
+        /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(bool force)
         {
-            if (m_cartConfigNames == null)
+            if (m_cartConfigNames == null || force)
             {
                 m_cartConfigNames = GetSingleColumnListFromCache(enumTableTypes.CartConfigNameList);
             }
@@ -838,7 +848,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for LC column lists
         /// </summary>
-        /// <returns>List&lt;string&gt; containing cart names</returns>
+        /// <returns>List containing cart names</returns>
         public static List<string> GetColumnList(bool force)
         {
             if (m_columnNames == null || force)
@@ -851,7 +861,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for separation type lists
         /// </summary>
-        /// <returns>List&lt;string&gt;containing separation types</returns>
+        /// <returns>List containing separation types</returns>
         public static List<string> GetSepTypeList(bool force)
         {
             if (m_separationNames == null)
@@ -864,7 +874,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for dataset name lists
         /// </summary>
-        /// <returns>List&lt;string&gt;containing separation types</returns>
+        /// <returns>List containing separation types</returns>
         public static List<string> GetDatasetList()
         {
             if (m_datasetNames == null)
@@ -890,7 +900,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Gets user list from cache
         /// </summary>
-        /// <returns>List&lt;classUserInfo&gt; of user data</returns>
+        /// <returns>List of user data</returns>
         public static List<classUserInfo> GetUserList(bool force)
         {
             if (m_userInfo == null || force)
@@ -925,7 +935,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Gets a list of instruments from the cache
         /// </summary>
-        /// <returns>List&lt;classInstrumentInfo&gt; of instruments</returns>
+        /// <returns>List of instruments</returns>
         public static List<classInstrumentInfo> GetInstrumentList(bool force)
         {
             if (m_instrumentInfo == null)
@@ -1061,12 +1071,53 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Caches the cart configuration name that is currently selected for this cart
+        /// </summary>
+        /// <param name="cartConfigName">Cart configuration name</param>
+        public static void SaveSelectedCartConfigName(string cartConfigName)
+        {
+            // Create a list for the Save call to use (it requires a list)
+            var cartConfigTypes = new List<string>
+            {
+                cartConfigName
+            };
+
+            SaveSingleColumnListToCache(cartConfigTypes, enumTableTypes.CartConfigNameSelected);
+        }
+
+        /// <summary>
+        /// Retrieves the cached cart configuration name
+        /// </summary>
+        /// <returns>Cart configuration name</returns>
+        public static string GetDefaultCartConfigName()
+        {
+            List<string> cartConfigNames;
+            try
+            {
+                cartConfigNames = GetSingleColumnListFromCache(enumTableTypes.CartConfigNameSelected);
+            }
+            catch
+            {
+                // Table T_CartConfigNameSelected not found
+                // This will happen if the default has not yet been saved
+                return string.Empty;
+            }
+
+            if (cartConfigNames.Count < 1)
+            {
+                return string.Empty;
+            }
+
+            return cartConfigNames[0];
+        }
+
+        /// <summary>
         /// Caches the separation type that is currently selected for this cart
         /// </summary>
         /// <param name="separationType">Separation type</param>
         public static void SaveSelectedSeparationType(string separationType)
         {
-            // Create a list for the Save call to use
+            // Create a list for the Save call to use (it requires a list)
             var sepTypes = new List<string>
             {
                 separationType
@@ -1109,7 +1160,7 @@ namespace LcmsNetSQLiteTools
                 return string.Empty;
             }
 
-            if (sepType.Count != 1)
+            if (sepType.Count < 1)
             {
                 return string.Empty;
             }
@@ -1121,8 +1172,8 @@ namespace LcmsNetSQLiteTools
         /// Generic method for saving a single column list to the cache db
         /// </summary>
         /// <param name="tableType">enumTableNames specifying table name suffix</param>
-        /// <param name="ListData">List&lt;string&gt; of data for storing in table</param>
-        /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, and T_DatasetList</remarks>
+        /// <param name="ListData">List of data for storing in table</param>
+        /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
         public static void SaveSingleColumnListToCache(List<string> ListData, enumTableTypes tableType)
         {
             const string GENERIC_COLUMN_NAME = "Column1";
@@ -1210,7 +1261,7 @@ namespace LcmsNetSQLiteTools
         /// Generic method for retrieving data from a single column table
         /// </summary>
         /// <param name="tableType">enumTableTypes specifying type of table to retrieve</param>
-        /// <returns>List&lt;string&gt; containing cached data</returns>
+        /// <returns>List containing cached data</returns>
         private static List<string> GetSingleColumnListFromCache(enumTableTypes tableType)
         {
             var returnList = new List<string>();

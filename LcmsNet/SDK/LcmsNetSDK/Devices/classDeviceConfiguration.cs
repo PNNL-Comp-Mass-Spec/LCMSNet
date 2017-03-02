@@ -54,7 +54,9 @@ namespace LcmsNetDataClasses.Devices
             mlist_connections = new Dictionary<string, string>();
         }
 
-
+        /// <summary>
+        /// Cart name
+        /// </summary>
         public string CartName { get; set; }
 
         /// <summary>
