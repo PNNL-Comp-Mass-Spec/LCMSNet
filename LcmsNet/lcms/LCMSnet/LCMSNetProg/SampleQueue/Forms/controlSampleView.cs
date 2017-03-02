@@ -1786,6 +1786,23 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
+        /// Returns a list of all queued samples
+        /// </summary>
+        /// <returns></returns>
+        private List<classSampleData> GetAllSamples()
+        {
+            var samples = new List<classSampleData>();
+            foreach (DataGridViewRow row in mdataGrid_samples.Rows)
+            {
+                var data = RowToSample(row);
+                samples.Add(data);
+            }
+
+            samples.Sort(new classAscendingSampleIDComparer());
+
+            return samples;
+        }
+        /// <summary>
         /// Returns the list of selected samples.
         /// </summary>
         /// <returns></returns>
@@ -1928,7 +1945,8 @@ namespace LcmsNet.SampleQueue.Forms
                 if (!found)
                 {
                     sampleToRowTranslatorBindingSource.List.Add(new SampleToRowTranslator(sample));
-                    UpdateRow(mdataGrid_samples.RowCount - 1);
+                    if (mdataGrid_samples.RowCount > 0)
+                        UpdateRow(mdataGrid_samples.RowCount - 1);
                 }
             }
             return added;
@@ -2772,9 +2790,23 @@ namespace LcmsNet.SampleQueue.Forms
             // The sample queue gives all of the samples
             //
             int scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
-            mdataGrid_samples.Rows.Clear();
-            AddSamplesToList(samples);
 
+            if (mdataGrid_samples.Rows.Count > 0)
+            {
+                // Rows.Clear() cannot be used since it results in error 
+                //  "Rows collection cannot be programmatically cleared
+                //   when the DataGridView control is data-bound 
+                //   to anything else than an IBindingList that supports
+                //   change notification and allows deletion"
+                // mdataGrid_samples.Rows.Clear();
+
+                // Instead, use GetAllSamples then .RemoveAll
+                var existingSamples = GetAllSamples();
+                existingSamples.RemoveAll(delegate { return true; });
+
+            }
+
+            AddSamplesToList(samples);
 
             UpdateDataView();
 
