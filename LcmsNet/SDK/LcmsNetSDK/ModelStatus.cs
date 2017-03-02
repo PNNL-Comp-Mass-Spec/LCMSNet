@@ -40,7 +40,7 @@ namespace LcmsNetDataClasses
 
         public ModelStatus(string name = "", string description = "",
             ModelStatusCategory category = ModelStatusCategory.Information, string eventName = "", string time = "",
-            LcmsNetDataClasses.Devices.IDevice device = null, LcmsNetDataClasses.Devices.IDevice problemDevice = null)
+            Devices.IDevice device = null, Devices.IDevice problemDevice = null)
         {
             UID = m_availableID++;
             Name = name;
@@ -75,10 +75,10 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// returns The IDevice that triggered this status change, if known.
         /// </summary>
-        public LcmsNetDataClasses.Devices.IDevice EventDevice { get; set; }
+        public Devices.IDevice EventDevice { get; set; }
 
 
-        public LcmsNetDataClasses.Devices.IDevice ProblemDevice { get; set; }
+        public Devices.IDevice ProblemDevice { get; set; }
 
         /// <summary>
         /// returns the event that triggered the status change, if set.

@@ -105,9 +105,9 @@ namespace LcmsNet.Devices.Fluidics
             InitializeComponent();
 
             classDeviceManager.Manager.DeviceAdded +=
-                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+                new DelegateDeviceUpdated(Manager_DeviceAdded);
             classDeviceManager.Manager.DeviceRemoved +=
-                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+                new DelegateDeviceUpdated(Manager_DeviceRemoved);
             classDeviceManager.Manager.DeviceRenamed += new DelegateDeviceUpdated(Manager_DeviceRenamed);
             m_fluidics_mod = classFluidicsModerator.Moderator;
             m_reporter = new ModelCheckReportViewer(m_fluidics_mod);
@@ -143,7 +143,7 @@ namespace LcmsNet.Devices.Fluidics
 
         private void Manager_DeviceRenamed(object sender, IDevice device)
         {
-            this.Refresh();
+            Refresh();
         }
 
         /// <summary>
@@ -509,7 +509,7 @@ namespace LcmsNet.Devices.Fluidics
         {
             if (InvokeRequired)
             {
-                this.BeginInvoke(new EventHandler(changeHandler));
+                BeginInvoke(new EventHandler(changeHandler));
             }
             else
             {

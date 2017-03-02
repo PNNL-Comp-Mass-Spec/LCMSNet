@@ -26,8 +26,8 @@ namespace LcmsNetDataClasses.Experiment
 
             mmef_directorycatalog = new DirectoryCatalog(validatorPath);
             catalog.Catalogs.Add(mmef_directorycatalog);
-            this.mmef_container = new CompositionContainer(catalog);
-            this.mmef_container.ComposeParts(this);
+            mmef_container = new CompositionContainer(catalog);
+            mmef_container.ComposeParts(this);
             System.Diagnostics.Debug.WriteLine(string.Format("Loaded : {0} sample validators", Validators.Count()));
         }
 

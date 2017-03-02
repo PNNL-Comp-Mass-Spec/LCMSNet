@@ -39,7 +39,7 @@ namespace LcmsNet
                 {
                     m_checks[key].Check(checkValue);
                 }
-                this.Refresh();
+                Refresh();
             }
         }
 
@@ -77,7 +77,7 @@ namespace LcmsNet
         {
             var check = e.ModelChecker;
             AddCheckerControl(check);
-            this.Refresh();
+            Refresh();
         }
 
         private void CheckRemovedHandler(object sender, ModelCheckControllerEventArgs e)
@@ -88,7 +88,7 @@ namespace LcmsNet
                 groupBoxModelChecks.Controls.Remove(m_checks[check.Name]);
                 m_checks.Remove(check.Name);
             }
-            this.Refresh();
+            Refresh();
         }
     }
 }

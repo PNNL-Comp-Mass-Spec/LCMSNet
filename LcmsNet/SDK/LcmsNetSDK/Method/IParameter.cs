@@ -124,9 +124,9 @@ namespace LcmsNet.Method
         /// <param name="data"></param>
         public void FillData(object sender, List<object> data)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new Action<object, List<object>>(FillData), new object[] {sender, data});
+                Invoke(new Action<object, List<object>>(FillData), new object[] {sender, data});
             }
             else
             {
@@ -156,14 +156,14 @@ namespace LcmsNet.Method
                         ParameterValue = Items[0];
                     }
                 }
-                this.Sorted = true;
+                Sorted = true;
             }
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
-            this.OnEventChanged();
+            OnEventChanged();
         }
 
         #endregion

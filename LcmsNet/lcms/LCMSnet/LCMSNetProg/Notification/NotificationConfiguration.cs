@@ -31,7 +31,7 @@ namespace LcmsNet.Notification
 
         public IEnumerator<INotifier> GetEnumerator()
         {
-            return this.m_settings.Keys.GetEnumerator();
+            return m_settings.Keys.GetEnumerator();
         }
 
         #endregion
@@ -40,7 +40,7 @@ namespace LcmsNet.Notification
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.m_settings.Keys.GetEnumerator();
+            return m_settings.Keys.GetEnumerator();
         }
 
         #endregion

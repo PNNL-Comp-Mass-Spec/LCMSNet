@@ -38,7 +38,7 @@ namespace LcmsNet.SampleQueue.Forms
                 width = 60;
                 var padding = 2;
                 left = 32;
-                this.Width = ((width + padding) * buttons.Count) + left;
+                Width = ((width + padding) * buttons.Count) + left;
                 foreach (var button in buttons)
                 {
                     if (!m_registeredButton.ContainsKey(button))

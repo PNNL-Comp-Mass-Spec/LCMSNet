@@ -29,8 +29,8 @@ namespace LcmsNet.Notification
 
         public override void SetConditions(NotificationConditionNode node)
         {
-            Maximum = System.Convert.ToDouble(node.Conditions["maximum"]);
-            Minimum = System.Convert.ToDouble(node.Conditions["minimum"]);
+            Maximum = Convert.ToDouble(node.Conditions["maximum"]);
+            Minimum = Convert.ToDouble(node.Conditions["minimum"]);
         }
 
         /// <summary>

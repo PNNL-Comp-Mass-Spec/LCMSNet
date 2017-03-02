@@ -195,7 +195,7 @@ namespace LcmsNet.SampleQueue.Forms
             m_expand.Refresh();
             m_expand.UpdateButtons(m_expansionList);
             m_expand.Height = mpanel_control.Height;
-            var width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+            var width = Screen.PrimaryScreen.WorkingArea.Width;
 
             var expandWidth = m_expand.Left + m_expand.Width;
 
@@ -419,12 +419,12 @@ namespace LcmsNet.SampleQueue.Forms
             //
             if (m_columnData.Status == enumColumnStatus.Disabled)
             {
-                this.Enabled = false;
+                Enabled = false;
                 BackColor = Color.DarkGray;
             }
             else
             {
-                this.Enabled = true;
+                Enabled = true;
                 BackColor = Color.White;
             }
         }

@@ -25,7 +25,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             base.OnPaint(e);
 
-            if (this.SpecialPaint != null)
+            if (SpecialPaint != null)
                 SpecialPaint(this, e);
         }
     }

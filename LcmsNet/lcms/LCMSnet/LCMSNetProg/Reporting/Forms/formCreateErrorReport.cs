@@ -79,7 +79,7 @@ namespace LcmsNet.Reporting.Forms
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        bool m_manager_MethodRemoved(object sender, LcmsNetDataClasses.Method.classLCMethod method)
+        bool m_manager_MethodRemoved(object sender, classLCMethod method)
         {
             if (!mlistbox_methods.Items.Contains(method))
                 return true;
@@ -94,7 +94,7 @@ namespace LcmsNet.Reporting.Forms
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        bool m_manager_MethodAdded(object sender, LcmsNetDataClasses.Method.classLCMethod method)
+        bool m_manager_MethodAdded(object sender, classLCMethod method)
         {
             if (mlistbox_methods.Items.Contains(method))
                 return true;

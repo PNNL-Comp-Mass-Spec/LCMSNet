@@ -30,9 +30,9 @@ namespace LcmsNet
 
         public controlFluidicsControl()
         {
-            this.SetStyle(
+            SetStyle(
                 ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            this.UpdateStyles();
+            UpdateStyles();
             InitializeComponent();
             m_fluidics_mod = classFluidicsModerator.Moderator;
             panelFluidicsDesign.MouseDown += panelFluidicsDesign_MouseDown;
@@ -40,12 +40,12 @@ namespace LcmsNet
             panelFluidicsDesign.MouseMove += panelFluidicsDesign_MouseMove;
             panelFluidicsDesign.DoubleClick += panelFluidicsDesign_DoubleClick;
             panelFluidicsDesign.Paint += panelFluidicsDesign_Paint;
-            this.VisibleChanged += new EventHandler((sender, e) =>
+            VisibleChanged += new EventHandler((sender, e) =>
             {
                 if ((sender as Control).Visible)
                 {
-                    this.UpdateImage();
-                    this.Refresh();
+                    UpdateImage();
+                    Refresh();
                 }
             }); // ensures that the control has the most up-to-date image when a user switches to it.
             trackBarScale.Value = 100;
@@ -226,7 +226,7 @@ namespace LcmsNet
                             //select the connection/port/device at the location of the mouse.
                             var trueLocation = new Point(e.Location.X - panelFluidicsDesign.AutoScrollPosition.X,
                                 e.Location.Y - panelFluidicsDesign.AutoScrollPosition.Y);
-                            if (Form.ModifierKeys != Keys.Control)
+                            if (ModifierKeys != Keys.Control)
                             {
                                 selectionMade = m_fluidics_mod.Select(trueLocation, MULTISELECT_NO);
                             }
@@ -239,7 +239,7 @@ namespace LcmsNet
                     //only deselect if you did *not* just select something or taken an action
                     if ((!selectionMade))
                     {
-                        if (Form.ModifierKeys != Keys.Control)
+                        if (ModifierKeys != Keys.Control)
                         {
                             m_fluidics_mod.Deselect(e.Location, MULTISELECT_NO);
                         }
@@ -296,8 +296,8 @@ namespace LcmsNet
 
         public void UpdateImage()
         {
-            if ((this.ParentForm.MdiParent == null || this.ParentForm.MdiParent.ActiveMdiChild == this.ParentForm) &&
-                this.Visible)
+            if ((ParentForm.MdiParent == null || ParentForm.MdiParent.ActiveMdiChild == ParentForm) &&
+                Visible)
             {
                 System.Diagnostics.Debug.WriteLine("Updating Image");
                 try
@@ -402,7 +402,7 @@ namespace LcmsNet
         private void panelFluidicsDesign_DoubleClick(object sender, EventArgs e)
         {
             var me = e as MouseEventArgs;
-            var p = Control.MousePosition;
+            var p = MousePosition;
             var p2 = me.Location;
             var trueLocation = new Point(p2.X - panelFluidicsDesign.AutoScrollPosition.X,
                 p2.Y - panelFluidicsDesign.AutoScrollPosition.Y);

@@ -25,16 +25,16 @@ namespace LcmsNet.Simulator
             }
             else
             {
-                this.Show();
+                Show();
             }
         }
 
         public new void Show()
         {
-            this.Controls.Add(m_controls);
+            Controls.Add(m_controls);
             if (!m_controls.Tacked)
             {
-                this.MdiParent = null;
+                MdiParent = null;
             }
             base.Show();
         }

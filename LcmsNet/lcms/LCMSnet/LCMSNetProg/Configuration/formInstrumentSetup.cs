@@ -100,13 +100,13 @@ namespace LcmsNet
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void buttonAccept_Click(object sender, EventArgs e)
         {
             classLCMSSettings.SetParameter(classLCMSSettings.PARAM_INSTNAME, comboBoxAvailInstruments.SelectedItem.ToString());
-            this.Close();
+            Close();
         }
 
         #endregion

@@ -58,7 +58,7 @@ namespace LcmsNet.Devices
         {
             try
             {
-                LcmsNet.SampleQueue.IO.classMethodFileTools.WriteMethodFiles(sampleData);
+                SampleQueue.IO.classMethodFileTools.WriteMethodFiles(sampleData);
             }
             catch (Exception)
             {

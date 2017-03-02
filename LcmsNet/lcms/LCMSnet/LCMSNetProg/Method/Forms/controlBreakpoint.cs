@@ -11,7 +11,7 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
             m_set = false;
-            this.Click += new EventHandler(controlBreakpoint_Click);
+            Click += new EventHandler(controlBreakpoint_Click);
         }
 
         /// <summary>
@@ -29,11 +29,11 @@ namespace LcmsNet.Method.Forms
                 Changed?.Invoke(this, new BreakpointArgs(m_set));
                 if (m_set)
                 {
-                    BackgroundImage = global::LcmsNet.Properties.Resources.breakpoint;
+                    BackgroundImage = Properties.Resources.breakpoint;
                 }
                 else
                 {
-                    BackgroundImage = global::LcmsNet.Properties.Resources.breakpointDisabled;
+                    BackgroundImage = Properties.Resources.breakpointDisabled;
                 }
             }
         }

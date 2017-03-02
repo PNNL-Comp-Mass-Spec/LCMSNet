@@ -464,7 +464,7 @@ namespace LcmsNet.SampleQueue.Forms
                     return false;
                 if (!doNotValidate)
                 {
-                    this.Validate(); ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                    Validate(); ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
                 }
                 //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
                 //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
@@ -507,7 +507,7 @@ namespace LcmsNet.SampleQueue.Forms
                 var errors = new List<classSampleValidationError>();
                 foreach (
                     var reference in
-                        LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+                        classSampleValidatorManager.Instance.Validators)
                 {
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
@@ -552,7 +552,7 @@ namespace LcmsNet.SampleQueue.Forms
                         return;
                     if (!isRecursive && !(rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum))
                     {
-                        this.Validate();
+                        Validate();
                             ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
                     }
                 }
@@ -670,7 +670,7 @@ namespace LcmsNet.SampleQueue.Forms
                     var errors = new List<classSampleValidationError>();
                     foreach (
                         var reference in
-                            LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+                            classSampleValidatorManager.Instance.Validators)
                     {
 #if DEBUG
                         System.Diagnostics.Debug.WriteLine("Validating sample with validator: " +
@@ -1842,7 +1842,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 // Validate the samples, and make sure we want to run these.
                 //
-                var preview = new LcmsNet.Method.Forms.formThroughputPreview();
+                var preview = new Method.Forms.formThroughputPreview();
                 preview.Show();
 
                 foreach (var data in samples)
@@ -2889,7 +2889,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void mbutton_addNew_Click(object sender, EventArgs e)
         {
-            this.Validate();
+            Validate();
             // Ensures that rows are valid and that we don't get any bad data from previous row when adding a new sample.
             AddNewSample(false);
         }
@@ -3573,7 +3573,7 @@ namespace LcmsNet.SampleQueue.Forms
             // For every selected item find the
             foreach (var row in rows)
             {
-                var tempData = this.RowToSample(row);
+                var tempData = RowToSample(row);
                 if (tempData != null)
                 {
                     tempData = m_sampleQueue.FindSample(tempData.UniqueID);

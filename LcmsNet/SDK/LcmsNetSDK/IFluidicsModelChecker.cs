@@ -6,7 +6,7 @@ namespace LcmsNetSDK
     /// <summary>
     /// interface for checking validity of fluidics models 
     /// </summary>
-    public interface IFluidicsModelChecker : LcmsNetSDK.Notifications.INotifier
+    public interface IFluidicsModelChecker : Notifications.INotifier
     {
         /// <summary>
         /// gets or sets if this specific model check is enabled during the simulation.

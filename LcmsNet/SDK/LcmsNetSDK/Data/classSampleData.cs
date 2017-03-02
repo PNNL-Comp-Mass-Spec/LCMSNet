@@ -402,7 +402,7 @@ namespace LcmsNetDataClasses
             if (length < 1)
                 return;
 
-            var contains = this.DmsData.DatasetName.Contains(cartColumn);
+            var contains = DmsData.DatasetName.Contains(cartColumn);
             if (contains)
             {
                 var cartColumnNew = BuildCartColumnName(this);
@@ -439,7 +439,7 @@ namespace LcmsNetDataClasses
             var TempDict = new StringDictionary();
 
             // Use reflection to get the name and value for each property and store in a string dictionary
-            var classType = this.GetType();
+            var classType = GetType();
             var properties = classType.GetProperties();
             foreach (var tempProp in properties)
             {
@@ -447,7 +447,7 @@ namespace LcmsNetDataClasses
                 {
                     case "LcmsNetDataClasses.classDMSData":
                         // Special case - get the DMS data for this object and add properties to string dictionary
-                        var dmsDict = this.DmsData.GetPropertyValues();
+                        var dmsDict = DmsData.GetPropertyValues();
                         foreach (DictionaryEntry de in dmsDict)
                         {
                             TempDict.Add("DMS." + de.Key.ToString(), de.Value.ToString());
@@ -455,7 +455,7 @@ namespace LcmsNetDataClasses
                         break;
                     case "LcmsNetDataClasses.Data.classPalData":
                         // Special case - get the PAL data for this object and add properties to string dictionary
-                        var palDict = this.PAL.GetPropertyValues();
+                        var palDict = PAL.GetPropertyValues();
                         foreach (DictionaryEntry de in palDict)
                         {
                             TempDict.Add("PAL." + de.Key.ToString(), de.Value.ToString());
@@ -465,7 +465,7 @@ namespace LcmsNetDataClasses
                         if (ColumnData != null)
                         {
                             // Special case - get the column data for this object and add properties to string dictionary
-                            var colDict = this.ColumnData.GetPropertyValues();
+                            var colDict = ColumnData.GetPropertyValues();
                             foreach (DictionaryEntry de in colDict)
                             {
                                 TempDict.Add("Col." + de.Key.ToString(), de.Value.ToString());
@@ -476,7 +476,7 @@ namespace LcmsNetDataClasses
                         if (LCMethod != null)
                         {
                             // Special case - get the experiment data for this object and add properties to string dictionary
-                            var expDict = this.LCMethod.GetPropertyValues();
+                            var expDict = LCMethod.GetPropertyValues();
                             foreach (DictionaryEntry de in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
@@ -496,7 +496,7 @@ namespace LcmsNetDataClasses
                         break;
                     case "LcmsNetDataClasses.classInstrumentInfo":
                         // Special case - get the experiment data for this object and add properties to string dictionary
-                        var instDict = this.InstrumentData.GetPropertyValues();
+                        var instDict = InstrumentData.GetPropertyValues();
                         foreach (DictionaryEntry de in instDict)
                         {
                             TempDict.Add("Ins." + de.Key.ToString(), de.Value.ToString());
@@ -557,18 +557,18 @@ namespace LcmsNetDataClasses
 
             // Call each of LoadPropertyValues methods for properties that represent objects
             base.LoadPropertyValues(baseProps);
-            this.DmsData.LoadPropertyValues(dmsProps);
-            this.PAL.LoadPropertyValues(palProps);
+            DmsData.LoadPropertyValues(dmsProps);
+            PAL.LoadPropertyValues(palProps);
 
             if (colProps.Count > 0)
             {
-                this.ColumnData = new classColumnData();
-                this.ColumnData.LoadPropertyValues(colProps);
+                ColumnData = new classColumnData();
+                ColumnData.LoadPropertyValues(colProps);
             }
             if (expProps.Count > 0)
             {
-                this.LCMethod = new classLCMethod();
-                this.LCMethod.LoadPropertyValues(expProps);
+                LCMethod = new classLCMethod();
+                LCMethod.LoadPropertyValues(expProps);
             }
         }
 

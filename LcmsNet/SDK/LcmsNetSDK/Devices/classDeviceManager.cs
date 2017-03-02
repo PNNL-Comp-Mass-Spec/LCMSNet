@@ -813,7 +813,7 @@ namespace LcmsNetDataClasses.Devices
                 }
                 catch (classDeviceInitializationException ex)
                 {
-                    LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0,
+                    classApplicationLogger.LogError(0,
                         string.Format("{0} could not be initialized.  {1}",
                             device.Name,
                             ex.ErrorDetails.Error), ex.ErrorDetails.Exception);

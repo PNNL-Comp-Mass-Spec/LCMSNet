@@ -17,22 +17,22 @@ namespace LcmsNetDataClasses
             //this.Concentration	= null;
 
             //this.Container		= null;
-            this.Created = null;
+            Created = null;
             //this.Enzyme			= null;
-            this.Experiment = null;
+            Experiment = null;
 
-            this.ID = null;
+            ID = null;
             //this.Labeling		= null;
             //this.Location		= null;
             //this.Notebook		= null;
 
-            this.Organism = null;
+            Organism = null;
             //this.Postdigest		= null;
             //this.Predigest		= null;
-            this.Reason = null;
+            Reason = null;
 
-            this.Request = null;
-            this.Researcher = null;
+            Request = null;
+            Researcher = null;
             //this.Well			= null;
             //this.Wellplate		= null;
         }

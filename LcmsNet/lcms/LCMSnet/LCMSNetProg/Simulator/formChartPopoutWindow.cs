@@ -21,10 +21,10 @@ namespace LcmsNet.Simulator
         {
             panelControl.Controls.Remove(control);
             var page = new TabPage();
-            page.Text = this.Text;
+            page.Text = Text;
             page.Controls.Add(control);
             parentControl.Controls.Add(page);
-            this.Close();
+            Close();
         }
 
         public void OnClose()

@@ -61,9 +61,9 @@ namespace LcmsNet.Method.Forms
                     // Register device additions and deletions so that we remap color information for display.
                     //
                     classDeviceManager.Manager.DeviceAdded +=
-                        new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+                        new DelegateDeviceUpdated(Manager_DeviceAdded);
                     classDeviceManager.Manager.DeviceRemoved +=
-                        new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+                        new DelegateDeviceUpdated(Manager_DeviceRemoved);
                 }
             }
             catch
@@ -107,7 +107,7 @@ namespace LcmsNet.Method.Forms
                 m_samples[columnID] = sample;
 
             if (InvokeRequired == true)
-                this.BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
+                BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
             else
                 Refresh();
         }
@@ -134,7 +134,7 @@ namespace LcmsNet.Method.Forms
             }
 
             if (InvokeRequired == true)
-                this.BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
+                BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
             else
                 Refresh();
         }
@@ -162,7 +162,7 @@ namespace LcmsNet.Method.Forms
             Refresh();
 
             if (InvokeRequired == true)
-                this.BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
+                BeginInvoke(new DelegateUpdateGraphics(DelegateRefresh));
             else
                 Refresh();
         }
@@ -184,8 +184,8 @@ namespace LcmsNet.Method.Forms
             {
                 try
                 {
-                    var bounds = new RectangleF(this.Bounds.X, this.Bounds.Y, this.Bounds.Width,
-                        this.Bounds.Height);
+                    var bounds = new RectangleF(Bounds.X, Bounds.Y, Bounds.Width,
+                        Bounds.Height);
                     var renderer = new classLCMethodColumnModeRenderer();
                     foreach (var column in classCartConfiguration.Columns)
                     {
@@ -365,7 +365,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Maintains a list of errors that happened on the column.
         /// </summary>
-        private readonly Dictionary<int, List<LcmsNetDataClasses.Method.classLCEvent>> m_errors;
+        private readonly Dictionary<int, List<classLCEvent>> m_errors;
 
         #endregion
 

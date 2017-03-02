@@ -221,7 +221,7 @@ namespace LcmsNetDataClasses.Logging
         /// <returns>Name and path of error log file</returns>
         private static string CreateLogFilePath()
         {
-            var appPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             //string logFileName = "Log_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".txt";
             var logFileName = "Log_" + LcmsNetSDK.TimeKeeper.Instance.Now.ToString("MMddyyyy_HHmmss") + ".txt";
             var path = Path.Combine(appPath, AppFolder);

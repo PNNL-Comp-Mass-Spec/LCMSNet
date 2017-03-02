@@ -32,9 +32,9 @@ namespace LcmsNet.Method.Forms
             {
                 if (radioButton1.Checked)
                 {
-                    return Forms.ConversionType.Time;
+                    return ConversionType.Time;
                 }
-                return Forms.ConversionType.Precision;
+                return ConversionType.Precision;
             }
         }
 

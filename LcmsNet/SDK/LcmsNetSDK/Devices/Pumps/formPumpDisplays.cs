@@ -166,7 +166,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceRemoved(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void Manager_DeviceRemoved(object sender, IDevice device)
         {
             // Is this a pump?
             var pump = device as IPump;
@@ -218,7 +218,7 @@ namespace LcmsNetDataClasses.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceAdded(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void Manager_DeviceAdded(object sender, IDevice device)
         {
             // Make sure the device is a pump.
             var pump = device as IPump;
@@ -259,9 +259,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
                     height += editor.Height + 15;
                     box.Controls.Add(editor);
                     box.ForeColor = Color.DarkRed;
-                    editor.Size = new System.Drawing.Size(editor.Width - 5, editor.Height);
+                    editor.Size = new Size(editor.Width - 5, editor.Height);
                 }
-                box.Size = new System.Drawing.Size(box.Width, height);
+                box.Size = new Size(box.Width, height);
                 box.Dock = DockStyle.Top;
                 mpanel_mobilePhase.Controls.Add(box);
                 m_mobilePhases.Add(pump, box);

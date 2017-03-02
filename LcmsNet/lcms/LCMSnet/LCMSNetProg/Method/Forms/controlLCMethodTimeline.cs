@@ -42,9 +42,9 @@ namespace LcmsNet.Method.Forms
                 // Register device additions and deletions so that we remap color information for display.
                 //
                 classDeviceManager.Manager.DeviceAdded +=
-                    new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+                    new DelegateDeviceUpdated(Manager_DeviceAdded);
                 classDeviceManager.Manager.DeviceRemoved +=
-                    new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+                    new DelegateDeviceUpdated(Manager_DeviceRemoved);
             }
             catch
             {
@@ -68,14 +68,14 @@ namespace LcmsNet.Method.Forms
                 m_index = value;
                 if (!unmoved)
                 {
-                    this.Refresh();
+                    Refresh();
                 }
             }
         }
 
         private void controlLCMethodTimeline_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 leftMouseDown = true;
                 oldMouseLoc = e.Location;
@@ -85,7 +85,7 @@ namespace LcmsNet.Method.Forms
 
         private void controlLCMethodTimeline_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left && RenderMode == enumLCMethodRenderMode.Conversation)
+            if (e.Button == MouseButtons.Left && RenderMode == enumLCMethodRenderMode.Conversation)
             {
                 leftMouseDown = false;
                 if (buttonLocations[0].Contains(e.Location))

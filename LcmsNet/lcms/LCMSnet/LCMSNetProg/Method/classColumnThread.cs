@@ -194,7 +194,7 @@ namespace LcmsNet.Method
                         {
                             var tempStatus = lcEvent.Device.Status;
 
-                            lcEvent.Device.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.InUseByMethod;
+                            lcEvent.Device.Status = enumDeviceStatus.InUseByMethod;
                             if (lcEvent.MethodAttribute.RequiresSampleInput == true)
                                 lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
 
@@ -278,7 +278,7 @@ namespace LcmsNet.Method
                             // gracefully notify people in charge, and exit.
                             //
 
-                            lcEvent.Device.Status = LcmsNetDataClasses.Devices.enumDeviceStatus.Error;
+                            lcEvent.Device.Status = enumDeviceStatus.Error;
                             m_sampleData = null;
                             if (ex == null)
                             {

@@ -328,7 +328,7 @@ namespace LcmsNet.SampleQueue.Forms
         private void buttonApply_Click(object sender, EventArgs e)
         {
             UpdateSampleList();
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
         /// <summary>

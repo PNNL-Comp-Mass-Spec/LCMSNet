@@ -22,9 +22,9 @@ namespace LcmsNet
 
         private void StatusChangeHandler(object sender, ModelStatusChangeEventArgs e)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.BeginInvoke(new EventHandler<ModelStatusChangeEventArgs>(StatusChangeHandler),
+                BeginInvoke(new EventHandler<ModelStatusChangeEventArgs>(StatusChangeHandler),
                     new object[2] {sender, e});
             }
             else
@@ -32,7 +32,7 @@ namespace LcmsNet
                 foreach (var status in e.StatusList)
                 {
                     var report = new ModelCheckReport(status);
-                    this.panelMessages.Controls.Add(report);
+                    panelMessages.Controls.Add(report);
                     report.Dock = DockStyle.Top;
                 }
             }

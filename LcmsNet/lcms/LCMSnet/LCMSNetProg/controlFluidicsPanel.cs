@@ -5,25 +5,25 @@ namespace LcmsNet
     /// <summary>
     /// Custom panel class that includes double buffering, used for rendering fluidics objects
     /// </summary>
-    public class controlBufferedPanel : System.Windows.Forms.Panel
+    public class controlBufferedPanel : Panel
     {
         public controlBufferedPanel()
             : base()
         {
-            this.SetStyle(
+            SetStyle(
                 ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            this.UpdateStyles();
-            this.AutoScroll = true;
+            UpdateStyles();
+            AutoScroll = true;
         }
 
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            SuspendLayout();
             //
             // controlBufferedPanel
             //
-            this.BackColor = System.Drawing.Color.White;
-            this.ResumeLayout(false);
+            BackColor = System.Drawing.Color.White;
+            ResumeLayout(false);
         }
     }
 }

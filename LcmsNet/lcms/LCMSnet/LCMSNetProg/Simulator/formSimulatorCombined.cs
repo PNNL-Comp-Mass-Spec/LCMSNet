@@ -27,7 +27,7 @@ namespace LcmsNet.Simulator
             m_config.Tack += new EventHandler<TackEventArgs>(controlsTack);
             splitFluidicsAndControls.Panel2.Controls.Add(m_controls);
             splitFluidicsAndControls.Panel1.Controls.Add(m_config);
-            this.Activated += formSimulatorCombined_Activated;
+            Activated += formSimulatorCombined_Activated;
         }
 
         public event EventHandler<TackEventArgs> Tack;

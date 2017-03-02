@@ -104,8 +104,8 @@ namespace LcmsNet.SampleQueue
             if (UpdateDMSCartAssignment())
             {
                 // Hide the form if update was successful
-                this.Hide();
-                this.DialogResult = DialogResult.OK;
+                Hide();
+                DialogResult = DialogResult.OK;
             }
         }
 
@@ -231,7 +231,7 @@ namespace LcmsNet.SampleQueue
             catch (Exception)
             {
             }
-            this.Text = "LcmsNet V" + Application.ProductVersion + dbInUse;
+            Text = "LcmsNet V" + Application.ProductVersion + dbInUse;
 
             //Listview information
             mstringdict_ListViewColumns.Add("listviewAvailableRequests", "0");
@@ -401,7 +401,7 @@ namespace LcmsNet.SampleQueue
 
             // Blank listview and display wait message
             labelPleaseWait.Visible = true;
-            this.Refresh();
+            Refresh();
 
             // Clear the available datasets listview
             listviewAvailableRequests.Items.Clear();

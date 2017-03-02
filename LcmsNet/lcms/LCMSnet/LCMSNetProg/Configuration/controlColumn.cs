@@ -31,8 +31,8 @@ namespace LcmsNet.Configuration
             mdialog_color = new ColorDialog();
 
             mcomboBox_names.SelectedIndexChanged += new EventHandler(mcomboBox_names_SelectedIndexChanged);
-            this.ColumnObjectChanged += new delegateColumnObjectChanged(SelectColumnNameFromData);
-            this.ColumnNamesChanged += new delegateColumnNamesChanged(SelectColumnNameFromData);
+            ColumnObjectChanged += new delegateColumnObjectChanged(SelectColumnNameFromData);
+            ColumnNamesChanged += new delegateColumnNamesChanged(SelectColumnNameFromData);
         }
 
         #endregion

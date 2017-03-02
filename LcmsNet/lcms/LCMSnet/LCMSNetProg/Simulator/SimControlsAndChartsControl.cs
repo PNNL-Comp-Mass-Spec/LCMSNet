@@ -98,7 +98,7 @@ namespace LcmsNet.Simulator
             }
             controlLCMethodTimeline2.StartEventIndex = index;
             RenderAlignMethods();
-            this.Refresh();
+            Refresh();
         }
 
         private void simInstance_SimulationComplete(object sender, ModelStatusChangeEventArgs e)
@@ -113,7 +113,7 @@ namespace LcmsNet.Simulator
                 }
                 MessageBox.Show(statusMessages);
             }
-            this.Refresh();
+            Refresh();
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace LcmsNet.Simulator
 
         private void PrepSim()
         {
-            var optimizer = new LcmsNet.Method.classLCMethodOptimizer();
+            var optimizer = new classLCMethodOptimizer();
             var methodsToRun = mcontrol_selectedMethods.SelectedMethods;
             optimizer.AlignMethods(methodsToRun);
             RenderThroughput(methodsToRun);

@@ -61,13 +61,13 @@ namespace LcmsNet.Notification.Forms
                 AddNotifier(modelCheck as INotifier);
             }
 
-            foreach (var notifier in Notification.NotificationBroadcaster.Manager.Notifiers)
+            foreach (var notifier in NotificationBroadcaster.Manager.Notifiers)
             {
                 AddNotifier(notifier);
             }
-            Notification.NotificationBroadcaster.Manager.Added +=
+            NotificationBroadcaster.Manager.Added +=
                 new EventHandler<NotifierChangedEventArgs>(Manager_Added);
-            Notification.NotificationBroadcaster.Manager.Removed +=
+            NotificationBroadcaster.Manager.Removed +=
                 new EventHandler<NotifierChangedEventArgs>(Manager_Removed);
 
             // Add any existing methods.
@@ -274,7 +274,7 @@ namespace LcmsNet.Notification.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void manager_DeviceRenamed(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void manager_DeviceRenamed(object sender, IDevice device)
         {
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
@@ -289,7 +289,7 @@ namespace LcmsNet.Notification.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void manager_DeviceAdded(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void manager_DeviceAdded(object sender, IDevice device)
         {
             if (device == null)
                 return;
@@ -360,7 +360,7 @@ namespace LcmsNet.Notification.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void manager_DeviceRemoved(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void manager_DeviceRemoved(object sender, IDevice device)
         {
             RemoveNotifier(device as INotifier);
         }

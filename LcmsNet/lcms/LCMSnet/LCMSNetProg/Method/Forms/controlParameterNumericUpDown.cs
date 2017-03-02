@@ -74,7 +74,7 @@ namespace LcmsNet.Method.Forms
                     DecimalPlaces))
             {
                 conversion.StartPosition = FormStartPosition.Manual;
-                conversion.Location = this.PointToScreen(this.Location);
+                conversion.Location = PointToScreen(Location);
 
                 if (ParentForm != null && ParentForm.Icon != null)
                 {

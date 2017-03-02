@@ -92,7 +92,7 @@ namespace LcmsNet.SampleQueue.IO
             SaveQueue(m_ExportDoc, ExportFileNamePath);
 
             // Notify user
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Export complete");
+            classApplicationLogger.LogMessage(0, "Export complete");
         }
 
         /// <summary>

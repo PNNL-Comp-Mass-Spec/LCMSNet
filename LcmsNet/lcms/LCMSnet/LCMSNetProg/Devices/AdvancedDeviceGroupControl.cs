@@ -227,8 +227,8 @@ namespace LcmsNet.Devices
             button.Dock = DockStyle.Top;
             button.FlatStyle = FlatStyle.Flat;
             button.Margin = new Padding(5);
-            button.Size = new System.Drawing.Size(button.Width, CONST_BUTTON_HEIGHT);
-            button.Font = new System.Drawing.Font(button.Font.FontFamily, 12, FontStyle.Bold);
+            button.Size = new Size(button.Width, CONST_BUTTON_HEIGHT);
+            button.Font = new Font(button.Font.FontFamily, 12, FontStyle.Bold);
             button.Click += new EventHandler(button_Click);
 
             m_buttonToDeviceMap.Add(button, device);

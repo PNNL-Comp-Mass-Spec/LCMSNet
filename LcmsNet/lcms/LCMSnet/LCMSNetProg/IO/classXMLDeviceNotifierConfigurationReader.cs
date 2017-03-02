@@ -61,7 +61,7 @@ namespace LcmsNet.Devices
             INotifier notifier = device;
             if (device == null)
             {
-                foreach (var simpleNotifier in Notification.NotificationBroadcaster.Manager.Notifiers)
+                foreach (var simpleNotifier in NotificationBroadcaster.Manager.Notifiers)
                 {
                     if (simpleNotifier.Name == deviceName)
                     {
@@ -124,9 +124,9 @@ namespace LcmsNet.Devices
                     setting.Name = name;
                     if (!string.IsNullOrEmpty(method))
                     {
-                        if (LcmsNet.Method.classLCMethodManager.Manager.Methods.ContainsKey(method))
+                        if (Method.classLCMethodManager.Manager.Methods.ContainsKey(method))
                         {
-                            setting.Method = LcmsNet.Method.classLCMethodManager.Manager.Methods[method];
+                            setting.Method = Method.classLCMethodManager.Manager.Methods[method];
                         }
                     }
                     setting.Action = actionEnum;

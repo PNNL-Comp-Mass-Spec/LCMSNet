@@ -286,8 +286,8 @@ namespace LcmsNet.SampleQueue.IO
                     var fileName = Path.GetFileName(file);
                     var remotePath = CreateRemoteFolderPath();
 
-                    System.IO.File.Copy(file, Path.Combine(remotePath, fileName), true);
-                    System.IO.File.Delete(file);
+                    File.Copy(file, Path.Combine(remotePath, fileName), true);
+                    File.Delete(file);
                     classApplicationLogger.LogMessage(1,
                         string.Format("Copying method file data.  Copied {0} to {1}.", file, remotePath));
                 }
@@ -319,22 +319,22 @@ namespace LcmsNet.SampleQueue.IO
 
         void IMethodWriter.WriteMethodFiles(classSampleData sample)
         {
-            classMethodFileTools.WriteMethodFiles(sample);
+            WriteMethodFiles(sample);
         }
 
         bool IMethodWriter.CheckLocalMethodFolders()
         {
-            return classMethodFileTools.CheckLocalMethodFolders();
+            return CheckLocalMethodFolders();
         }
 
         void IMethodWriter.MoveLocalMethodFiles()
         {
-            classMethodFileTools.MoveLocalMethodFiles();
+            MoveLocalMethodFiles();
         }
 
         string IMethodWriter.CreateRemoteFolderPath()
         {
-            return classMethodFileTools.CreateRemoteFolderPath();
+            return CreateRemoteFolderPath();
         }
 
         #endregion

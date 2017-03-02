@@ -29,22 +29,22 @@ namespace LcmsNetDataClasses
 
         public classDMSData()
         {
-            this.Batch = -1;
-            this.Block = -1;
-            this.CartName = "";
-            this.CartConfigName = "";
-            this.Comment = "";
-            this.DatasetName = "";
-            this.DatasetType = "";
-            this.Experiment = "";
-            this.MRMFileID = -1;
-            this.ProposalID = "";
-            this.RequestID = 0;
-            this.RequestName = "";
-            this.RunOrder = -1;
-            this.SelectedToRun = false;
-            this.UsageType = "";
-            this.UserList = "";
+            Batch = -1;
+            Block = -1;
+            CartName = "";
+            CartConfigName = "";
+            Comment = "";
+            DatasetName = "";
+            DatasetType = "";
+            Experiment = "";
+            MRMFileID = -1;
+            ProposalID = "";
+            RequestID = 0;
+            RequestName = "";
+            RunOrder = -1;
+            SelectedToRun = false;
+            UsageType = "";
+            UserList = "";
         }
 
         #region "Properties"

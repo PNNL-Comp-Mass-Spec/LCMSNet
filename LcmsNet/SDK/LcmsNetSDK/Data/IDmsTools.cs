@@ -15,11 +15,11 @@
         System.Collections.Generic.Dictionary<int, int> GetMRMFileListFromDMS(int MinID, int MaxID);
 
         void GetMRMFilesFromDMS(string FileIndxList,
-            ref System.Collections.Generic.List<LcmsNetDataClasses.classMRMFileData> fileData);
+            ref System.Collections.Generic.List<classMRMFileData> fileData);
 
         void GetProposalUsers();
 
-        System.Collections.Generic.List<LcmsNetDataClasses.classSampleData> GetSamplesFromDMS(
+        System.Collections.Generic.List<classSampleData> GetSamplesFromDMS(
             classSampleQueryData queryData);
 
         void GetSepTypeListFromDMS();

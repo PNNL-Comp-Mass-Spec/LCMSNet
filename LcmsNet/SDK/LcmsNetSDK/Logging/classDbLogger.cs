@@ -296,7 +296,7 @@ namespace LcmsNetDataClasses.Logging
             {
                 using (var myCmd = new SQLiteCommand(Cn))
                 {
-                    myCmd.CommandType = System.Data.CommandType.Text;
+                    myCmd.CommandType = CommandType.Text;
                     myCmd.CommandText = CmdStr;
                     try
                     {

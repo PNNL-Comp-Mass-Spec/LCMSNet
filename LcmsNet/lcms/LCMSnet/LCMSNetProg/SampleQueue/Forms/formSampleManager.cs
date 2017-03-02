@@ -164,7 +164,7 @@ namespace LcmsNet.SampleQueue.Forms
             Text = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
         }
 
-        public void PreviewAvailable(object sender, LcmsNet.Method.Forms.SampleProgressPreviewArgs e)
+        public void PreviewAvailable(object sender, Method.Forms.SampleProgressPreviewArgs e)
         {
             if (e != null)
             {
@@ -444,7 +444,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             var errors = new Dictionary<classSampleData, List<classSampleValidationError>>();
 
-            foreach (var reference in LcmsNetDataClasses.Experiment.classSampleValidatorManager.Instance.Validators)
+            foreach (var reference in classSampleValidatorManager.Instance.Validators)
             {
                 var validator = reference.Value;
                 foreach (var sample in samples)
@@ -597,7 +597,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
             {
                 m_sampleQueue.CacheQueue(mdialog_exportQueue.FileName);
-                this.Text = "Sample Queue - " + mdialog_exportQueue.FileName;
+                Text = "Sample Queue - " + mdialog_exportQueue.FileName;
                 classApplicationLogger.LogMessage(0,
                     "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
                     "\" and is now the default queue.");

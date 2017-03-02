@@ -51,7 +51,7 @@ namespace LcmsNetDataClasses
         {
             var TempDict = new StringDictionary();
             // Use reflection to get the name and value for each property and store in a string dictionary
-            var classType = this.GetType();
+            var classType = GetType();
             var properties = classType.GetProperties();
             foreach (var tempProp in properties)
             {
@@ -83,7 +83,7 @@ namespace LcmsNetDataClasses
         /// <param name="PropValues">String dictionary containing property names and values</param>
         public virtual void LoadPropertyValues(StringDictionary PropValues)
         {
-            var classType = this.GetType();
+            var classType = GetType();
             var properties = classType.GetProperties();
             foreach (DictionaryEntry currentEntry in PropValues)
             {

@@ -22,13 +22,13 @@ namespace LcmsNet.Properties
 
         public Settings()
         {
-            this.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Settings_PropertyChanged);
+            PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Settings_PropertyChanged);
 
             var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            if (this.applicationVersion != appVersion.ToString())
+            if (applicationVersion != appVersion.ToString())
             {
-                this.Upgrade(); // Copies previous version's user settings to current version's user settings
-                this.applicationVersion = appVersion.ToString();
+                Upgrade(); // Copies previous version's user settings to current version's user settings
+                applicationVersion = appVersion.ToString();
             }
         }
 
@@ -43,7 +43,7 @@ namespace LcmsNet.Properties
         /// <param name="e"></param>
         void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            this.Save();
+            Save();
         }
 
         #endregion

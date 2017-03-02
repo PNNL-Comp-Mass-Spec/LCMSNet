@@ -59,9 +59,9 @@ namespace LcmsNet.Method.Forms
             m_checkBoxToColumnDataMap = new Dictionary<string, classColumnData>();
             UpdateConfiguration();
             mtextBox_methodName.LostFocus += new EventHandler(mtextBox_methodName_LostFocus);
-            classLCMethodManager.Manager.MethodAdded += new DelegateMethodUpdated(this.Manager_MethodAdded);
-            classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(this.Manager_MethodRemoved);
-            classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(this.Manager_MethodUpdated);
+            classLCMethodManager.Manager.MethodAdded += new DelegateMethodUpdated(Manager_MethodAdded);
+            classLCMethodManager.Manager.MethodRemoved += new DelegateMethodUpdated(Manager_MethodRemoved);
+            classLCMethodManager.Manager.MethodUpdated += new DelegateMethodUpdated(Manager_MethodUpdated);
         }
 
         private bool IgnoreUpdates { get; set; }
@@ -114,13 +114,13 @@ namespace LcmsNet.Method.Forms
         bool Manager_MethodUpdated(object sender, classLCMethod method)
         {
             //only stages that already have this method loaded should reload it.
-            if (this.TextBoxNameGetText() == method.Name && !this.m_triggeredUpdate)
+            if (TextBoxNameGetText() == method.Name && !m_triggeredUpdate)
             {
                 LoadMethod(method);
             }
             else
             {
-                this.m_triggeredUpdate = false;
+                m_triggeredUpdate = false;
             }
             return true;
         }
@@ -153,12 +153,12 @@ namespace LcmsNet.Method.Forms
 
         public void ComboBoxSavedItemsRemoveItem(string name)
         {
-            this.mcomboBox_savedMethods.Items.Remove(name);
+            mcomboBox_savedMethods.Items.Remove(name);
         }
 
         public void ComboBoxSavedItemsAddItem(string name)
         {
-            this.mcomboBox_savedMethods.Items.Add(name);
+            mcomboBox_savedMethods.Items.Add(name);
         }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace LcmsNet.Method.Forms
         {
             if (method != null)
             {
-                this.LoadMethod(method, true);
-                this.TextBoxNameSetText(method.Name);
+                LoadMethod(method, true);
+                TextBoxNameSetText(method.Name);
             }
         }
 
@@ -356,7 +356,7 @@ namespace LcmsNet.Method.Forms
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
         public classLCMethod BuildMethod()
         {
-            var method = classLCMethodBuilder.BuildMethod(this.LCEvents);
+            var method = classLCMethodBuilder.BuildMethod(LCEvents);
             if (method == null)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
@@ -364,7 +364,7 @@ namespace LcmsNet.Method.Forms
                 return null;
             }
 
-            var column = this.GetColumn();
+            var column = GetColumn();
             if (column < 0)
             {
                 method.IsSpecialMethod = true;
@@ -374,8 +374,8 @@ namespace LcmsNet.Method.Forms
                 method.IsSpecialMethod = false;
             }
             method.Column = column;
-            method.AllowPreOverlap = this.AllowPreOverlap;
-            method.AllowPostOverlap = this.AllowPostOverlap;
+            method.AllowPreOverlap = AllowPreOverlap;
+            method.AllowPostOverlap = AllowPostOverlap;
             return method;
         }
 
@@ -392,7 +392,7 @@ namespace LcmsNet.Method.Forms
             if (method == null)
                 return;
 
-            method.Name = this.TextBoxNameGetText();
+            method.Name = TextBoxNameGetText();
 
             //
             // Renders the method built
@@ -426,7 +426,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="e">Event arguments</param>
         private void mbutton_build_Click(object sender, EventArgs e)
         {
-            var columnSelected = this.IsColumnSelected();
+            var columnSelected = IsColumnSelected();
             if (!columnSelected)
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
@@ -435,7 +435,7 @@ namespace LcmsNet.Method.Forms
             }
             Build();
 
-            mbutton_saveAll.Image = global::LcmsNet.Properties.Resources.SaveWithIndicator;
+            mbutton_saveAll.Image = Properties.Resources.SaveWithIndicator;
             mbutton_buildUpdate.Enabled = true;
             mbutton_build.Enabled = false;
             mbutton_saveAll.Enabled = true;
@@ -644,7 +644,7 @@ namespace LcmsNet.Method.Forms
                         deviceEvent.SelectedMethod.Parameters.ToString());
                 }
             }
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Control event added - " + eventData);
+            classApplicationLogger.LogMessage(0, "Control event added - " + eventData);
             m_events.Add(deviceEvent);
             RenderEventList();
         }
@@ -805,7 +805,7 @@ namespace LcmsNet.Method.Forms
                             }
                             catch (Exception ex)
                             {
-                                LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0,
+                                classApplicationLogger.LogError(0,
                                     "There was an error when removing the device event. " + ex.Message, ex);
                             }
                         }
@@ -817,7 +817,7 @@ namespace LcmsNet.Method.Forms
                 }
                 mpanel_stage.Controls.Remove(deviceEvent);
                 m_events.Remove(deviceEvent);
-                LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0,
+                classApplicationLogger.LogMessage(0,
                     string.Format("A control event for the device {0} was  removed from method {1}.",
                         deviceEvent.Device.Name,
                         data.Method.Name));
@@ -878,7 +878,7 @@ namespace LcmsNet.Method.Forms
                 }
             }
 
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Control event moved up.");
+            classApplicationLogger.LogMessage(0, "Control event moved up.");
             RenderEventList();
         }
 
@@ -930,7 +930,7 @@ namespace LcmsNet.Method.Forms
                 maxPos = indices[j];
             }
 
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Control event moved down.");
+            classApplicationLogger.LogMessage(0, "Control event moved down.");
             RenderEventList();
         }
 
@@ -1092,7 +1092,7 @@ namespace LcmsNet.Method.Forms
                 OpenMethod(method);
             }
 
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Methods loaded.");
+            classApplicationLogger.LogMessage(0, "Methods loaded.");
         }
 
         #endregion

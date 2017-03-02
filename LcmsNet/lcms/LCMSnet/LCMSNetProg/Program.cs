@@ -228,7 +228,7 @@ namespace LcmsNet
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                var mutexName = "Global\\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+                var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
 
                 //
                 // Before we do anything, let's initialize the file logging capability.
@@ -337,10 +337,10 @@ namespace LcmsNet
                     Application.DoEvents();
                     var deviceManager = classDeviceManager.Manager;
                     deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
-                    deviceManager.AddDevice(new LcmsNetDataClasses.Devices.classTimerDevice());
-                    deviceManager.AddDevice(new LcmsNet.Devices.classBlockDevice());
-                    deviceManager.AddDevice(new LcmsNet.Devices.classLogDevice());
-                    deviceManager.AddDevice(new LcmsNet.Devices.classApplicationDevice());
+                    deviceManager.AddDevice(new classTimerDevice());
+                    deviceManager.AddDevice(new Devices.classBlockDevice());
+                    deviceManager.AddDevice(new Devices.classLogDevice());
+                    deviceManager.AddDevice(new Devices.classApplicationDevice());
 
                     //
                     // Load the device plug-ins.
@@ -382,7 +382,7 @@ namespace LcmsNet
                     //
                     // Create a device we can use for testing errors with.
                     //
-                    LcmsNetDataClasses.Devices.IDevice dev = new LcmsNet.Devices.classErrorDevice();
+                    IDevice dev = new Devices.classErrorDevice();
                     deviceManager.AddDevice(dev);
 #endif
 

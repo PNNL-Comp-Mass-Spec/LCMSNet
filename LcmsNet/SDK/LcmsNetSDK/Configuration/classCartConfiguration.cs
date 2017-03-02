@@ -45,7 +45,7 @@ namespace LcmsNetDataClasses.Configuration
         public static List<classColumnData> BuildColumnList(bool orderByFirst)
         {
             var orderList = new List<classColumnData>();
-            foreach (var column in classCartConfiguration.Columns)
+            foreach (var column in Columns)
             {
                 orderList.Add(column);
             }

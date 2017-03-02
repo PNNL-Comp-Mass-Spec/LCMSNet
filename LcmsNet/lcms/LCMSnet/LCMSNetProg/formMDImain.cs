@@ -198,15 +198,15 @@ namespace LcmsNet
         {
             System.Threading.Thread.CurrentThread.Name = "Main Thread";
             m_logger = new classApplicationLogger();
-            this.Text = "LcmsNet Version: " + Application.ProductVersion;
-            this.Text += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+            Text = "LcmsNet Version: " + Application.ProductVersion;
+            Text += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
             var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
             if (emulation != null)
             {
                 var isEmulated = Convert.ToBoolean(emulation);
                 if (isEmulated)
                 {
-                    this.Text += " [EMULATED] ";
+                    Text += " [EMULATED] ";
                 }
             }
 
@@ -224,7 +224,7 @@ namespace LcmsNet
 
             // Fludics Design display
             m_fluidicsDesign = new FluidicsDesign();
-            m_fluidicsDesign.Icon = this.Icon;
+            m_fluidicsDesign.Icon = Icon;
             m_fluidicsDesign.Dock = DockStyle.Fill;
 
             // Notification System
@@ -298,7 +298,7 @@ namespace LcmsNet
                     failedCount = failedDevices.Count;
                     display = new formFailedDevicesDisplay(failedDevices);
                     display.StartPosition = FormStartPosition.CenterParent;
-                    display.Icon = this.Icon;
+                    display.Icon = Icon;
                 }
             }
 
@@ -324,7 +324,7 @@ namespace LcmsNet
             classApplicationLogger.LogMessage(0, "Reading User Methods.");
             var userMethodErrors =
                 classLCMethodManager.Manager.LoadMethods(
-                    System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+                    Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                         classLCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             if (userMethodErrors.Count > 0)
@@ -495,12 +495,12 @@ namespace LcmsNet
 
         void m_messages_ErrorPresent(object sender, EventArgs e)
         {
-            mtoolButton_showMessages.Image = global::LcmsNet.Properties.Resources.StatusMessagesError;
+            mtoolButton_showMessages.Image = Properties.Resources.StatusMessagesError;
         }
 
         void m_messages_ErrorCleared(object sender, EventArgs e)
         {
-            mtoolButton_showMessages.Image = global::LcmsNet.Properties.Resources.StatusMessages;
+            mtoolButton_showMessages.Image = Properties.Resources.StatusMessages;
         }
 
         void Manager_DevicesInitialized(object sender, EventArgs e)
@@ -704,9 +704,9 @@ namespace LcmsNet
         {
             if (args != null && messageLevel <= classApplicationLogger.CONST_STATUS_LEVEL_USER)
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.Invoke(new statusDelegate(SetStatusMessage), messageLevel, args.Message);
+                    Invoke(new statusDelegate(SetStatusMessage), messageLevel, args.Message);
                 }
                 else
                 {
@@ -722,11 +722,11 @@ namespace LcmsNet
         /// <param name="args"></param>
         void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                if (!this.IsDisposed)
+                if (!IsDisposed)
                 {
-                    this.Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
+                    Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
                 }
             }
             else
@@ -1111,7 +1111,7 @@ namespace LcmsNet
 
 
             using (var report
-                = new LcmsNet.Reporting.Forms.formCreateErrorReport(manager,
+                = new Reporting.Forms.formCreateErrorReport(manager,
                     logPath,
                     forms
                     ))

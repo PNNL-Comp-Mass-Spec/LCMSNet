@@ -95,7 +95,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to remove.</param>
         /// <returns>True always, that the method was removed.</returns>
-        bool Manager_MethodRemoved(object sender, LcmsNetDataClasses.Method.classLCMethod method)
+        bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
             //
             // Finds the method in the listbox
@@ -148,7 +148,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to add.</param>
         /// <returns>True if a method was added, false if the method was null.</returns>
-        bool Manager_MethodAdded(object sender, LcmsNetDataClasses.Method.classLCMethod method)
+        bool Manager_MethodAdded(object sender, classLCMethod method)
         {
             if (method == null)
                 return false;

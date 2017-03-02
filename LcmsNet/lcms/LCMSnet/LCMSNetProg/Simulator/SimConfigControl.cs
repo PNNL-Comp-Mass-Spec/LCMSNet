@@ -85,7 +85,7 @@ namespace LcmsNet.Simulator
         {
             if (InvokeRequired)
             {
-                this.BeginInvoke(new EventHandler(changeHandler));
+                BeginInvoke(new EventHandler(changeHandler));
             }
             else
             {
@@ -96,7 +96,7 @@ namespace LcmsNet.Simulator
         void changeHandler(object sender, EventArgs e)
         {
             controlConfig.UpdateImage();
-            this.Refresh();
+            Refresh();
         }
 
         public void TackOnRequest()

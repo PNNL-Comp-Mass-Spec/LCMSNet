@@ -49,7 +49,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>
-        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+        public ManualResetEvent AbortEvent { get; set; }
 
 
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)

@@ -27,7 +27,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void buttonOk_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
         #endregion
@@ -312,7 +312,7 @@ namespace LcmsNet.SampleQueue.Forms
                 AddMethod(method);
             }
             // Set initial dropdown values
-            SetInitialDropdownValue(this.tableLayoutPanel1.Controls);
+            SetInitialDropdownValue(tableLayoutPanel1.Controls);
             manager.MethodAdded += new DelegateMethodUpdated(manager_MethodAdded);
             manager.MethodRemoved += new DelegateMethodUpdated(manager_MethodRemoved);
             manager.MethodUpdated += new DelegateMethodUpdated(manager_MethodUpdated);
@@ -423,7 +423,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void EnsureItemsAreSelected()
         {
-            foreach (Control testControl in this.tableLayoutPanel1.Controls)
+            foreach (Control testControl in tableLayoutPanel1.Controls)
             {
                 if (testControl.GetType() == typeof (ComboBox))
                 {

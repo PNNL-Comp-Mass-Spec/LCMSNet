@@ -23,7 +23,7 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
             m_device = null;
-            this.labelEventNumber.Text = eventNum.ToString();
+            labelEventNumber.Text = eventNum.ToString();
             StoppedHere = false;
             Initialize();
         }
@@ -146,17 +146,17 @@ namespace LcmsNet.Method.Forms
             // Register to listen for device additions or deletions.
             //
             classDeviceManager.Manager.DeviceAdded +=
-                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceAdded);
+                new DelegateDeviceUpdated(Manager_DeviceAdded);
             classDeviceManager.Manager.DeviceRemoved +=
-                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRemoved);
+                new DelegateDeviceUpdated(Manager_DeviceRemoved);
             classDeviceManager.Manager.DeviceRenamed +=
-                new LcmsNetDataClasses.Devices.DelegateDeviceUpdated(Manager_DeviceRenamed);
+                new DelegateDeviceUpdated(Manager_DeviceRenamed);
         }
 
         void controlBreakpoint1_Changed(object sender, BreakpointArgs e)
         {
             m_methodData.BreakPoint = e.IsSet;
-            this.Refresh();
+            Refresh();
         }
 
         private int FindMethodIndex(classLCMethodData method)
@@ -209,7 +209,7 @@ namespace LcmsNet.Method.Forms
             {
                 backColor = Color.Maroon;
             }
-            this.BackColor = backColor;
+            BackColor = backColor;
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceRemoved(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void Manager_DeviceRemoved(object sender, IDevice device)
         {
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
@@ -310,7 +310,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceAdded(object sender, LcmsNetDataClasses.Devices.IDevice device)
+        void Manager_DeviceAdded(object sender, IDevice device)
         {
             //
             // If this was the first device added for some odd reason, then make sure we enable the
@@ -503,7 +503,7 @@ namespace LcmsNet.Method.Forms
                     var param = c as ILCEventParameter;
                     if (param != null)
                     {
-                        param.EventChanged -= this.param_EventChanged;
+                        param.EventChanged -= param_EventChanged;
                     }
                 }
             }
@@ -584,9 +584,9 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void UpdateSelectedDevice()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new Action(UpdateSelectedDevice));
+                Invoke(new Action(UpdateSelectedDevice));
             }
             else
             {
@@ -611,9 +611,9 @@ namespace LcmsNet.Method.Forms
 
         private void UpdateSelectedMethod()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new Action(UpdateSelectedMethod));
+                Invoke(new Action(UpdateSelectedMethod));
             }
             else
             {
@@ -653,7 +653,7 @@ namespace LcmsNet.Method.Forms
         /// <param name="eventNum">integer representing the place in the event list of this event</param>
         public void updateEventNum(int eventNum)
         {
-            this.labelEventNumber.Text = eventNum.ToString();
+            labelEventNumber.Text = eventNum.ToString();
         }
 
         #endregion
@@ -871,20 +871,20 @@ namespace LcmsNet.Method.Forms
             else
             {
                 StoppedHere = e.IsStopped;
-                this.Refresh();
+                Refresh();
             }
         }
 
         private void Simulating_Handler(object sender, EventArgs e)
         {
             IsCurrent = true;
-            this.Refresh();
+            Refresh();
         }
 
         private void Simulated_Handler(object sender, EventArgs e)
         {
             IsCurrent = false;
-            this.Refresh();
+            Refresh();
         }
 
         /// <summary>

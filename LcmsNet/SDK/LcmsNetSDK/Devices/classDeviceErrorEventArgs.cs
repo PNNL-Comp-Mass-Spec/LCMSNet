@@ -5,7 +5,7 @@ namespace LcmsNetDataClasses.Devices
     /// <summary>
     /// Event argument class when a device has an error.
     /// </summary>
-    public class classDeviceErrorEventArgs : System.EventArgs
+    public class classDeviceErrorEventArgs : EventArgs
     {
         /// <summary>
         /// String indicating that there is no notification required.

@@ -427,9 +427,9 @@ namespace LcmsNet.Method.Forms
             //
             // Construct the path
             //
-            var path = System.IO.Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
+            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH),
                 classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = System.IO.Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             //
             // Write the method out!
@@ -457,14 +457,14 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         public void LoadMethods()
         {
-            var methods = System.IO.Directory.GetFiles(MethodFolderPath, "*.xml");
+            var methods = Directory.GetFiles(MethodFolderPath, "*.xml");
             foreach (var method in methods)
             {
                 classApplicationLogger.LogMessage(0, "Loading method " + method);
                 OpenMethod(method);
             }
 
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(0, "Methods loaded.");
+            classApplicationLogger.LogMessage(0, "Methods loaded.");
         }
 
         #endregion

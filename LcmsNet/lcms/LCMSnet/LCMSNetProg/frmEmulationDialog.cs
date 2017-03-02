@@ -14,7 +14,7 @@ namespace LcmsNet
                                     Environment.NewLine + "and may result in operation of actual hardware." +
                                     Environment.NewLine + "Do you wish to enable emulation mode?";
             lblMessage.Text = warningMessage;
-            this.Icon = SystemIcons.Warning;
+            Icon = SystemIcons.Warning;
         }
     }
 }
