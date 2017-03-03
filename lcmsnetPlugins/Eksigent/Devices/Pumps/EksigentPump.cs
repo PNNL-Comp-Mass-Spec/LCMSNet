@@ -72,19 +72,19 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// List of times monitoring data was received.
         /// </summar;y>
-        public List<DateTime> mlist_times;
+        public List<DateTime> m_times;
         /// <summary>
         /// List of pressures used throughout the run.
         /// </summary>
-        public List<double> mlist_pressures;
+        public List<double> m_pressures;
         /// <summary>
         /// List of flowrates used throughout the run.
         /// </summary>
-        public List<double> mlist_flowrates;
+        public List<double> m_flowrates;
         /// <summary>
         /// List of %B compositions throughout the run.
         /// </summary>
-        public List<double> mlist_percentB;
+        public List<double> m_percentB;
         private const int CONST_MONITORING_MINUTES = 10;
         private const int CONST_MONITORING_SECONDS_ELAPSED = 10;
         private const string MethodFolder1 = @"C:\Program Files (x86)\Eksigent NanoLC\settings\method";
@@ -133,10 +133,10 @@ namespace Eksigent.Devices.Pumps
                 "Waiting for flow stabilization",
             };
 
-            mlist_flowrates = new List<double>();
-            mlist_percentB = new List<double>();
-            mlist_pressures = new List<double>();
-            mlist_times = new List<DateTime>();
+            m_flowrates = new List<double>();
+            m_percentB = new List<double>();
+            m_pressures = new List<double>();
+            m_times = new List<DateTime>();
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
@@ -184,7 +184,7 @@ namespace Eksigent.Devices.Pumps
         }
         #endregion
 
-        private string mstring_name;
+        private string m_name;
 
         #region IDevice Members
         /// <summary>
@@ -194,11 +194,11 @@ namespace Eksigent.Devices.Pumps
         {
             get
             {
-                return mstring_name;
+                return m_name;
             }
             set
             {
-                mstring_name = value;
+                m_name = value;
                 DeviceSaveRequired?.Invoke(this, null);
             }
         }
@@ -210,7 +210,7 @@ namespace Eksigent.Devices.Pumps
             get;
             set;
         }
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
         /// <summary>
         /// Gets or sets Current Status of device
         /// </summary>
@@ -218,11 +218,11 @@ namespace Eksigent.Devices.Pumps
         {
             get
             {
-                return menum_status;
+                return m_status;
             }
             set
             {
-                menum_status = value;
+                m_status = value;
                 StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
             }
         }
@@ -654,31 +654,31 @@ namespace Eksigent.Devices.Pumps
             //UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);
 
             // Update log collections.
-            mlist_times.Add(time);
-          //  mlist_pressures.Add(pressure);
-           // mlist_flowrates.Add(flowrate);
-          //  mlist_percentB.Add(compositionB);
+            m_times.Add(time);
+          //  m_pressures.Add(pressure);
+           // m_flowrates.Add(flowrate);
+          //  m_percentB.Add(compositionB);
 
             /// 
             /// Find old data to remove -- needs to be updated (or could be) using LINQ
             /// 
-            var count = mlist_times.Count;
+            var count = m_times.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
             {
                 var i = 0;
-                while (time.Subtract(mlist_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < mlist_times.Count)
+                while (time.Subtract(m_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_times.Count)
                 {
                     i++;
                 }
 
                 if (i > 0)
                 {
-                    i = Math.Min(i, mlist_times.Count - 1);
-                    mlist_times.RemoveRange(0, i);
-                    mlist_flowrates.RemoveRange(0, i);
-                    mlist_pressures.RemoveRange(0, i);
-                    mlist_percentB.RemoveRange(0, i);
+                    i = Math.Min(i, m_times.Count - 1);
+                    m_times.RemoveRange(0, i);
+                    m_flowrates.RemoveRange(0, i);
+                    m_pressures.RemoveRange(0, i);
+                    m_percentB.RemoveRange(0, i);
                 }
             }
 
@@ -687,10 +687,10 @@ namespace Eksigent.Devices.Pumps
             {
                 MonitoringDataReceived?.Invoke(this,
         new PumpDataEventArgs(this,
-                                mlist_times,
-                                mlist_pressures,
-                                mlist_flowrates,
-                                mlist_percentB));
+                                m_times,
+                                m_pressures,
+                                m_flowrates,
+                                m_percentB));
             }
             catch
             {

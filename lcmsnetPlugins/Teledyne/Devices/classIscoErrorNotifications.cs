@@ -17,50 +17,50 @@ namespace LcmsNet.Devices.Pumps
     public static class classIscoErrorNotifications
     {
         #region "Class variables"
-            static readonly Dictionary<string, string> mobj_NotifyList = new Dictionary<string, string>();
+            static readonly Dictionary<string, string> m_NotifyList = new Dictionary<string, string>();
         #endregion
 
         #region "Constructor"
             static classIscoErrorNotifications()
             {
                 //NOTE: This method may need updating if the enums it's based on change!!!
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.DeviceNotInitialized),
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.DeviceNotInitialized),
                     "Device Not Initialized");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.ComError),
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.ComError),
                     "Communication Error");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.InitializationError),
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.InitializationError),
                     "Initialization Error");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MessageParseError),
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MessageParseError),
                     "Message Parse Error");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "A",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "A",
                     "Pump A: Cylinder at bottom");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "B",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "B",
                     "Pump B: Cylinder at bottom");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "C",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "C",
                     "Pump C: Cylinder at bottom");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "A",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "A",
                     "Pump A: Cylinder empty");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "B",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "B",
                     "Pump B: Cylinder empty");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "C",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "C",
                     "Pump C: Cylinder empty");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "A",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "A",
                     "Pump A: Motor Failure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "B",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "B",
                     "Pump B: Motor Failure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "C",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "C",
                     "Pump C: Motor Failure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "A",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "A",
                     "Pump A: Over pressure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "B",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "B",
                     "Pump B: Over pressure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "C",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "C",
                     "Pump C: Over pressure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "A",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "A",
                     "Pump A: Under pressure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "B",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "B",
                     "Pump B: Under pressure");
-                mobj_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "C",
+                m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "C",
                     "Pump C: Under pressure");
             }
         #endregion
@@ -73,9 +73,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Notification string</returns>
             public static string GetNotificationString(string key)
             {
-                if (mobj_NotifyList.ContainsKey(key))
+                if (m_NotifyList.ContainsKey(key))
                 {
-                    return mobj_NotifyList[key];
+                    return m_NotifyList[key];
                 }
                 else return "";
             }   
@@ -88,7 +88,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 var returnList = new List<string>();
 
-                foreach (var curItem in mobj_NotifyList)
+                foreach (var curItem in m_NotifyList)
                 {
                     returnList.Add(curItem.Value);
                 }

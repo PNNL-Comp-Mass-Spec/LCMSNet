@@ -32,14 +32,14 @@ namespace LcmsNet.Devices.BrukerStart
             AsyncCallback mobjecct_RcxCallback;
         readonly Queue<byte> mobject_IncomingBytes = new Queue<byte>();
             classFtmsResponse mobject_ResponseData = null;
-            bool mbool_Connected = false;
-            string mstring_OutputFolderLocal = "";
-            string mstring_MethodFolderLocal = "";
-            string mstring_InstAddress = "";
-            int mint_InstPort = -256;
-            string mstring_Msg;
-            bool mbool_ListenToSxc = true;
-            int mint_ZeroByteMsgCount = 0;
+            bool m_Connected = false;
+            string m_OutputFolderLocal = "";
+            string m_MethodFolderLocal = "";
+            string m_InstAddress = "";
+            int m_InstPort = -256;
+            string m_Msg;
+            bool m_ListenToSxc = true;
+            int m_ZeroByteMsgCount = 0;
         #endregion
 
         #region "Delegats"
@@ -55,11 +55,11 @@ namespace LcmsNet.Devices.BrukerStart
         /// <summary>
         /// 
         /// </summary>
-        public bool SocketConneted { get { return mbool_Connected; }}
+        public bool SocketConneted { get { return m_Connected; }}
         /// <summary>
         /// 
         /// </summary>
-        public string Msg { get { return mstring_Msg; }}
+        public string Msg { get { return m_Msg; }}
         /// <summary>
         /// Gets or sets the IP Address
         /// </summary>
@@ -67,11 +67,11 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return mstring_InstAddress;
+                return m_InstAddress;
             }
             set
             {
-                mstring_InstAddress = value;
+                m_InstAddress = value;
             }
         }
         /// <summary>
@@ -81,11 +81,11 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return mint_InstPort;
+                return m_InstPort;
             }
             set
             {
-                mint_InstPort = value;
+                m_InstPort = value;
             }
         }
         #endregion
@@ -93,10 +93,10 @@ namespace LcmsNet.Devices.BrukerStart
         #region "Constructors"
         public classBrukerMsgTools(string outFolderLocal, string methodFolderLocal, string instAddress, int instPort)
         {
-            mstring_OutputFolderLocal = outFolderLocal;
-            mstring_MethodFolderLocal = methodFolderLocal;
-            mstring_InstAddress = instAddress;
-            mint_InstPort = instPort;
+            m_OutputFolderLocal = outFolderLocal;
+            m_MethodFolderLocal = methodFolderLocal;
+            m_InstAddress = instAddress;
+            m_InstPort = instPort;
 
             DataReceived += new delegateOnDataReceived(sXcDataReceived);
         }
@@ -110,34 +110,34 @@ namespace LcmsNet.Devices.BrukerStart
             public bool ConnectSxcSocket()
             {
                 // Check to see if socket is already connected
-                if ((mobject_Socket != null) || (mbool_Connected))
+                if ((mobject_Socket != null) || (m_Connected))
                 {
-                    mstring_Msg = "classBrukerMsgTools.ConnectSXC: sXc socket already exists or in use";
+                    m_Msg = "classBrukerMsgTools.ConnectSXC: sXc socket already exists or in use";
                     return false;
                 }
 
                 try
                 {
-                    mobject_Socket = ConnectSocket(mstring_InstAddress, mint_InstPort);
+                    mobject_Socket = ConnectSocket(m_InstAddress, m_InstPort);
                     if (mobject_Socket != null)
                     {
-                        mbool_Connected = true;
-                        mbool_ListenToSxc = true;
+                        m_Connected = true;
+                        m_ListenToSxc = true;
                         return true;
                     }
                     else
                     {
-                        mstring_Msg = "classBrukerMsgTools: Socket not connected";
-                        mbool_Connected = false;
+                        m_Msg = "classBrukerMsgTools: Socket not connected";
+                        m_Connected = false;
                         mobject_Socket = null;
                         return false;
                     }
                 }
                 catch (Exception ex)
                 {
-                    mstring_Msg = "classBrukerMsgTools: Exception making socket connection: " + ex.Message;
+                    m_Msg = "classBrukerMsgTools: Exception making socket connection: " + ex.Message;
                     mobject_Socket = null;
-                    mbool_Connected = false;
+                    m_Connected = false;
                     return false;
                 }
             }   
@@ -149,9 +149,9 @@ namespace LcmsNet.Devices.BrukerStart
             public bool InitFTMS()
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.InitFTMS: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.InitFTMS: Socket not connected";
                     return false;
                 }
 
@@ -173,9 +173,9 @@ namespace LcmsNet.Devices.BrukerStart
             public bool SendSampleInfo(string sampleXML)
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendSampleInfo: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.SendSampleInfo: Socket not connected";
                     return false;
                 }
 
@@ -195,9 +195,9 @@ namespace LcmsNet.Devices.BrukerStart
             public bool PrepareAcquisition()
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.PrepareAcquisition: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.PrepareAcquisition: Socket not connected";
                     return false;
                 }
 
@@ -218,9 +218,9 @@ namespace LcmsNet.Devices.BrukerStart
             public bool StartAcquisition()
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.StartAcquisition: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.StartAcquisition: Socket not connected";
                     return false;
                 }
 
@@ -241,9 +241,9 @@ namespace LcmsNet.Devices.BrukerStart
             public bool FinishAcq()
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.FinishAcq: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.FinishAcq: Socket not connected";
                     return false;
                 }
 
@@ -273,9 +273,9 @@ namespace LcmsNet.Devices.BrukerStart
             public bool ExitFTMS()
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.ExitFTMS: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.ExitFTMS: Socket not connected";
                     return false;
                 }
 
@@ -300,17 +300,17 @@ namespace LcmsNet.Devices.BrukerStart
                 classApplicationLogger.LogMessage(2, "DisconnectSXC() starting");
 
                 // Verify socket isn't already disconnected
-                if ((mobject_Socket == null) || (!mbool_Connected))
+                if ((mobject_Socket == null) || (!m_Connected))
                 {
-                    mstring_Msg = "classBrukerMsgTools.DisconnectSXC: Socket already disconnected";
+                    m_Msg = "classBrukerMsgTools.DisconnectSXC: Socket already disconnected";
                     mobject_Socket = null;
-                    mbool_Connected = false;
+                    m_Connected = false;
                     return false;
                 }
 
                 mobject_Socket.Disconnect(false);
                 mobject_Socket = null;
-                mbool_Connected = false;
+                m_Connected = false;
 
                 classApplicationLogger.LogMessage(2, "DisconnectSXC() socket disconnected");
                 return true;
@@ -325,7 +325,7 @@ namespace LcmsNet.Devices.BrukerStart
                 // Log program location for debugging
                 classApplicationLogger.LogMessage(2, "StartListeningToSXC()");
 
-                if (!mbool_ListenToSxc)
+                if (!m_ListenToSxc)
                 {
                     classApplicationLogger.LogMessage(2, "sXc listening disabled");
                     return false;
@@ -345,7 +345,7 @@ namespace LcmsNet.Devices.BrukerStart
             public bool StopListeningToSXC()
             {
                 classApplicationLogger.LogMessage(2, "StopListeningToSXC()");
-                mbool_ListenToSxc = false;
+                m_ListenToSxc = false;
 
                 //TODO: Does something else need to be done here?
                 return true;
@@ -402,9 +402,9 @@ namespace LcmsNet.Devices.BrukerStart
             private bool SendShortInt(short shortData)
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendShortInt: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.SendShortInt: Socket not connected";
                     return false;
                 }
 
@@ -420,7 +420,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
                 catch (Exception ex)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendShortInt: Exception sending command " + shortData.ToString() + ": " + ex.Message;
+                    m_Msg = "classBrukerMsgTools.SendShortInt: Exception sending command " + shortData.ToString() + ": " + ex.Message;
                     return false;
                 }
             }   
@@ -433,9 +433,9 @@ namespace LcmsNet.Devices.BrukerStart
             private bool SendString(string msgString)
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendString: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.SendString: Socket not connected";
                     return false;
                 }
 
@@ -455,7 +455,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
                 catch (Exception ex)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendString: Exception sending command " + msgString + ": " + ex.Message;
+                    m_Msg = "classBrukerMsgTools.SendString: Exception sending command " + msgString + ": " + ex.Message;
                     return false;
                 }
             }   
@@ -468,9 +468,9 @@ namespace LcmsNet.Devices.BrukerStart
             private bool SendInt(int intData)
             {
                 // Verify socket is connected
-                if (!mbool_Connected)
+                if (!m_Connected)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendInt: Socket not connected";
+                    m_Msg = "classBrukerMsgTools.SendInt: Socket not connected";
                     return false;
                 }
 
@@ -486,7 +486,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
                 catch (Exception ex)
                 {
-                    mstring_Msg = "classBrukerMsgTools.SendInt: Exception sending command " + intData.ToString() + ": " + ex.Message;
+                    m_Msg = "classBrukerMsgTools.SendInt: Exception sending command " + intData.ToString() + ": " + ex.Message;
                     return false;
                 }
             }   
@@ -665,7 +665,7 @@ namespace LcmsNet.Devices.BrukerStart
                 SocketError myError;
 
                 // If we're not listening anymore, just exit
-                if (!mbool_ListenToSxc) return;
+                if (!m_ListenToSxc) return;
 
                 bytesReceived = mobject_Socket.EndReceive(syncResult, out myError);
 
@@ -680,20 +680,20 @@ namespace LcmsNet.Devices.BrukerStart
                     {
                         mobject_IncomingBytes.Enqueue(mbyte_DataBuffer[byteIndx]);
                     }
-                    mint_ZeroByteMsgCount = 0;
+                    m_ZeroByteMsgCount = 0;
                 }
                 else
                 {
-                    mint_ZeroByteMsgCount++;
+                    m_ZeroByteMsgCount++;
                     classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: 0-byte message received from sXc");
                 }
 
                 // Check to see if multiple consecutive 0-byte responses have been received (indicates sXc probably disconnected)
-                if (mint_ZeroByteMsgCount > MAX_ZERO_BYTE_RESPONSE_COUNT)
+                if (m_ZeroByteMsgCount > MAX_ZERO_BYTE_RESPONSE_COUNT)
                 {
-                    mstring_Msg = "classBrukerMsgTools.OnDataReceived: Excessive consecutive 0-byte messages. Disabling receive";
-                    classApplicationLogger.LogMessage(2, mstring_Msg);
-                    mbool_ListenToSxc = false;
+                    m_Msg = "classBrukerMsgTools.OnDataReceived: Excessive consecutive 0-byte messages. Disabling receive";
+                    classApplicationLogger.LogMessage(2, m_Msg);
+                    m_ListenToSxc = false;
                 }
 
                 classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: Firing DataReceived event");

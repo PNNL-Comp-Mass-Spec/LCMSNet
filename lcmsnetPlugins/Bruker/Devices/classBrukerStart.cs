@@ -39,40 +39,40 @@ namespace LcmsNet.Devices.BrukerStart
             /// <summary>
             /// Device name
             /// </summary>
-            private string mstring_Name;
+            private string m_Name;
 
             /// <summary>
             /// Device version
             /// </summary>
-            private string mstring_Version;
+            private string m_Version;
 
             /// <summary>
             /// Indicates if device is currently running
             /// </summary>
-            private bool mbool_Running;
+            private bool m_Running;
 
             /// <summary>
             /// Determines if device is in emulation mode
             /// </summary>
-            private bool mbool_Emulation;
+            private bool m_Emulation;
 
             /// <summary>
             /// Holds the status of the device.
             /// </summary>
-            private enumDeviceStatus menum_status;
+            private enumDeviceStatus m_status;
 
         readonly classBrukerMsgTools mobject_MsgTools;
-        readonly string mstring_OuputFolderLocal;
-        readonly string mstring_OutputFolderRemote;
-        readonly string mstring_MethodFolderLocal;
-        readonly string mstring_BrukerNetName;
-        readonly int mint_BrukerPort = -256;
+        readonly string m_OuputFolderLocal;
+        readonly string m_OutputFolderRemote;
+        readonly string m_MethodFolderLocal;
+        readonly string m_BrukerNetName;
+        readonly int m_BrukerPort = -256;
             classBrukerComConstants.SxcReplies mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
-            bool mbool_AcquisitionInProgress = false;
+            bool m_AcquisitionInProgress = false;
         readonly Timer mobject_CmdTimeoutTimer;
-            bool mbool_DeviceError = false;
+            bool m_DeviceError = false;
 //          string m_DeviceErrorMessage = "";
-            bool mbool_CmdTimedOut = false;
+            bool m_CmdTimedOut = false;
         #endregion
 
         #region "Events"
@@ -101,16 +101,16 @@ namespace LcmsNet.Devices.BrukerStart
         #region "Constructors"
             public classBrukerStart()
             {
-                mstring_Name = "Bruker Start";
+                m_Name = "Bruker Start";
 
                 //TODO: Remove this kind of coupling to the outside...
-                mstring_OutputFolderRemote  = Bruker.Properties.Settings.Default.BrukerOutputFolderShareName;
-                mstring_OuputFolderLocal    = Bruker.Properties.Settings.Default.BrukerOutputFolderLocalName;
-                mstring_MethodFolderLocal   = Bruker.Properties.Settings.Default.BrukerMethodFolderLocalName;
-                mstring_BrukerNetName       = Bruker.Properties.Settings.Default.BrukerInstNetName;
-                mint_BrukerPort             = Bruker.Properties.Settings.Default.BrukerInstPort;
+                m_OutputFolderRemote  = Bruker.Properties.Settings.Default.BrukerOutputFolderShareName;
+                m_OuputFolderLocal    = Bruker.Properties.Settings.Default.BrukerOutputFolderLocalName;
+                m_MethodFolderLocal   = Bruker.Properties.Settings.Default.BrukerMethodFolderLocalName;
+                m_BrukerNetName       = Bruker.Properties.Settings.Default.BrukerInstNetName;
+                m_BrukerPort             = Bruker.Properties.Settings.Default.BrukerInstPort;
 
-                mobject_MsgTools = new classBrukerMsgTools(mstring_OuputFolderLocal, mstring_MethodFolderLocal, mstring_BrukerNetName, mint_BrukerPort);
+                mobject_MsgTools = new classBrukerMsgTools(m_OuputFolderLocal, m_MethodFolderLocal, m_BrukerNetName, m_BrukerPort);
                 mobject_MsgTools.BrukerMsgReceived += new delegateBrukerMsgReceived(BrukerMsgReceived);
 
                 mobject_CmdTimeoutTimer = new Timer();
@@ -131,11 +131,11 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return mbool_Emulation;
+                return m_Emulation;
             }
             set
             {
-                mbool_Emulation = value;
+                m_Emulation = value;
             }
         }
 
@@ -146,13 +146,13 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return menum_status;
+                return m_status;
             }
             set
             {
-                if (value != menum_status && StatusUpdate != null)
+                if (value != m_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status Changed", this));
-                menum_status = value;
+                m_status = value;
             }
         }
         /// <summary>
@@ -193,11 +193,11 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return mbool_Running;
+                return m_Running;
             }
             set
             {
-                mbool_Running = value;
+                m_Running = value;
             }
         }
 
@@ -208,11 +208,11 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return mstring_Name;
+                return m_Name;
             }
             set
             {
-                mstring_Name = value;
+                m_Name = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -224,11 +224,11 @@ namespace LcmsNet.Devices.BrukerStart
         {
             get
             {
-                return mstring_Version;
+                return m_Version;
             }
             set
             {
-                mstring_Version=value;
+                m_Version=value;
             }
         }
         #endregion
@@ -274,7 +274,7 @@ namespace LcmsNet.Devices.BrukerStart
             /// <returns>True for success, False for failure</returns>
             public bool Shutdown()
             {
-                if (mbool_Emulation)
+                if (m_Emulation)
                 {
                     return true;
                 }
@@ -289,20 +289,20 @@ namespace LcmsNet.Devices.BrukerStart
          [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "", -1, false)]
          public bool StartAcquisition(double timeout, classSampleData sample)
          {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
                 if (System.Threading.Thread.CurrentThread.Name == "")
                     System.Threading.Thread.CurrentThread.Name = "StartAcquisition";
 
                 var waitResult = false;
 
-                mbool_DeviceError = false;
+                m_DeviceError = false;
                 var msg = "";
                 var sampleName = sample.DmsData.DatasetName + ".d";
                 var methodName = sample.InstrumentData.MethodName;
 
                 // Check for acquistion already in progress
-                if (mbool_AcquisitionInProgress)
+                if (m_AcquisitionInProgress)
                 {
                     msg = "StartAcquisition: Acquisition already in progress";
                     classApplicationLogger.LogError(0, msg);
@@ -422,7 +422,7 @@ new classDeviceErrorEventArgs(msg,
 
                     // Send the sample info
                     mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
-                    var sampleInfoXml = classBrukerXmlBuilder.CreateXmlString(mstring_OuputFolderLocal, mstring_MethodFolderLocal, sampleName, methodName);
+                    var sampleInfoXml = classBrukerXmlBuilder.CreateXmlString(m_OuputFolderLocal, m_MethodFolderLocal, sampleName, methodName);
                     if (!mobject_MsgTools.SendSampleInfo(sampleInfoXml))
                     {
                         msg = "StartAcquistion: Problem sending sample info - " + mobject_MsgTools.Msg;
@@ -510,7 +510,7 @@ new classDeviceErrorEventArgs(msg,
                     }
 
                     //NOTE: START_ACQUISITION returns a SOCKET_REQUEST_FTMS_START, which we're going to try ignoring. Therefore we're done with this method
-                    mbool_AcquisitionInProgress = true;
+                    m_AcquisitionInProgress = true;
                     return true;
                 }
                 catch (Exception ex)
@@ -535,11 +535,11 @@ new classDeviceErrorEventArgs(msg,
          [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
          public bool StopAcquisition(double timeout)
          {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
                 string msg;
 
-                if (!mbool_AcquisitionInProgress)
+                if (!m_AcquisitionInProgress)
                 {
                     msg = "EndAcquisition: No acquisition in progress";
                     classApplicationLogger.LogError(0, msg);
@@ -592,7 +592,7 @@ new classDeviceErrorEventArgs(msg,
                     var result = StopSxcCommunication();
                     if (!result) return false;
 
-                    mbool_AcquisitionInProgress = false;
+                    m_AcquisitionInProgress = false;
                     return true;
                 }
                 catch (Exception ex)
@@ -670,7 +670,7 @@ new classDeviceErrorEventArgs(msg,
                 return false;
                 }
 
-                mbool_AcquisitionInProgress = false;
+                m_AcquisitionInProgress = false;
                 return true;
             }   
 
@@ -684,15 +684,15 @@ new classDeviceErrorEventArgs(msg,
                 
 //              System.Threading.Thread.CurrentThread.Name = "WaitForReady";
 
-                mbool_CmdTimedOut = false;
+                m_CmdTimedOut = false;
 
                 mobject_CmdTimeoutTimer.Enabled = true;
-                while ((mobject_sXcReply != classBrukerComConstants.SxcReplies.FTMS_READY) && (!mbool_DeviceError)
-                            && (!mbool_CmdTimedOut) && (!mbool_DeviceError))
+                while ((mobject_sXcReply != classBrukerComConstants.SxcReplies.FTMS_READY) && (!m_DeviceError)
+                            && (!m_CmdTimedOut) && (!m_DeviceError))
                 {
                     //TODO: Figure out how to log this, if necessary
                     //clsLogTools.LogDebugMsg("WaitForReady: m_sXcReply = " + m_sXcReply.ToString());
-                    if (mbool_DeviceError)
+                    if (m_DeviceError)
                     {
                         msg = "clsBrukerStart.WaitForReady: Error received from Bruker";
                         classApplicationLogger.LogError(0, msg);
@@ -702,7 +702,7 @@ new classDeviceErrorEventArgs(msg,
                 }
 
                 // Check to see if wait loop exited because FTMS_READY received, or because there was a problem.
-                if ((mobject_sXcReply == classBrukerComConstants.SxcReplies.FTMS_READY) && (!mbool_DeviceError))
+                if ((mobject_sXcReply == classBrukerComConstants.SxcReplies.FTMS_READY) && (!m_DeviceError))
                 {
                     // FTMS_READY received
                     mobject_CmdTimeoutTimer.Enabled = false;
@@ -733,7 +733,7 @@ new classDeviceErrorEventArgs(msg,
                         mobject_CmdTimeoutTimer.Enabled = false;
                         msg = "Critical error " + sXcReply.ToString() + " received from Bruker";
                         classApplicationLogger.LogError(0, msg);
-                        mbool_DeviceError = true;
+                        m_DeviceError = true;
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
         new classDeviceErrorEventArgs(msg,
                                      null,
@@ -745,7 +745,7 @@ new classDeviceErrorEventArgs(msg,
                         mobject_CmdTimeoutTimer.Enabled = false;
                         msg = "Error " + sXcReply.ToString() + " received from Bruker";
                         classApplicationLogger.LogError(0, msg);
-                        mbool_DeviceError = true;
+                        m_DeviceError = true;
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
         new classDeviceErrorEventArgs(msg,
@@ -774,7 +774,7 @@ new classDeviceErrorEventArgs(msg,
             {
                 var methods = new List<string>();
 
-                if (mbool_Emulation)
+                if (m_Emulation)
                 {
                     methods.Add("Dummy-Bruker-01");
                     methods.Add("Dummy-Bruker-02");
@@ -827,7 +827,7 @@ new classDeviceErrorEventArgs(msg,
             private classFolderCreateResults MakeOutputFolder(string datasetName)
             {
                 var result = new classFolderCreateResults();
-                var outFolderName = Path.Combine(mstring_OutputFolderRemote, datasetName);
+                var outFolderName = Path.Combine(m_OutputFolderRemote, datasetName);
 
                 try
                 {
@@ -908,7 +908,7 @@ new classDeviceErrorEventArgs(msg,
 
             public override string ToString()
             {
-                return mstring_Name;
+                return m_Name;
             }
 
             public void WritePerformanceData(string directoryPath, string name, object[] parameters)
@@ -938,9 +938,9 @@ new classDeviceErrorEventArgs(msg,
                 System.Threading.Thread.CurrentThread.Name = "CmdTimeoutTimerElapsed";
 
                 mobject_CmdTimeoutTimer.Enabled = false;
-                mbool_DeviceError = true;
+                m_DeviceError = true;
                 mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_INVALID;
-                mbool_CmdTimedOut = true;
+                m_CmdTimedOut = true;
                 classApplicationLogger.LogError(1, "classBrukerStart: Command timeout");
             }
         #endregion

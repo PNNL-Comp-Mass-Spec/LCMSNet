@@ -16,7 +16,7 @@ namespace LcmsNet.Devices.Pumps
     public class classPumpIscoData
     {
         #region "Member variables"
-            enumIscoOperationMode menum_OpMode = enumIscoOperationMode.ConstantPressure;
+            enumIscoOperationMode m_OpMode = enumIscoOperationMode.ConstantPressure;
         #endregion
 
         #region "Properties"
@@ -55,8 +55,8 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public enumIscoOperationMode OperationMode
             {
-                get { return menum_OpMode; }
-                set { menum_OpMode = value; }
+                get { return m_OpMode; }
+                set { m_OpMode = value; }
             }
 
             /// <summary>

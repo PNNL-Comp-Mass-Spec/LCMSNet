@@ -44,37 +44,37 @@ namespace LcmsNet.Devices.Valves
         ///     Stop Bits   One
         ///     Data Bits   8
         ///     Handshake   None
-        private readonly System.IO.Ports.SerialPort mobj_serialPort;
+        private readonly System.IO.Ports.SerialPort m_serialPort;
         /// <summary>
         /// The last measured position of the valve.
         /// </summary>
-        private TwoPositionState mobj_lastMeasuredPosition;
+        private TwoPositionState m_lastMeasuredPosition;
         /// <summary>
         /// The last sent position to the valve.
         /// </summary>
-        private TwoPositionState mobj_lastSentPosition;
+        private TwoPositionState m_lastSentPosition;
         /// <summary>
         /// The valve's ID.
         /// </summary>
-        private char mobj_valveID;
+        private char m_valveID;
         /// <summary>
         /// The valve's version information.
         /// </summary>
-        private string mobj_versionInfo;
+        private string m_versionInfo;
         /// <summary>
         /// The valve's name
         /// </summary>
-        private string mstring_name;
+        private string m_name;
         /// <summary>
         /// Holds the status of the device.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
         /// <summary>
         /// Decides if valve is in emulation mode.
         /// </summary>
-        private bool mbool_emulation;
-        private static readonly int mint_rotationDelayTimems = 145;  //milliseconds
-        private static readonly int mint_IDChangeDelayTimems = 325;  //milliseconds
+        private bool m_emulation;
+        private static readonly int m_rotationDelayTimems = 145;  //milliseconds
+        private static readonly int m_IDChangeDelayTimems = 325;  //milliseconds
         private const int CONST_READTIMEOUT = 500;          //milliseconds
         private const int CONST_WRITETIMEOUT = 500;         //milliseconds
         #endregion
@@ -110,26 +110,26 @@ namespace LcmsNet.Devices.Valves
             ///     Stop Bits   One
             ///     Data Bits   8
             ///     Handshake   None
-            mobj_serialPort             = new System.IO.Ports.SerialPort();
-            mobj_serialPort.PortName    = "COM1";
-            mobj_serialPort.BaudRate    = 9600;
-            mobj_serialPort.StopBits    = StopBits.One;
-            mobj_serialPort.DataBits    = 8;
-            mobj_serialPort.Handshake   = Handshake.None;
-            mobj_serialPort.Parity      = Parity.None;
-            mobj_serialPort.ReadTimeout = CONST_READTIMEOUT;
-            mobj_serialPort.WriteTimeout = CONST_WRITETIMEOUT;
-            mobj_lastMeasuredPosition   = TwoPositionState.Unknown;
-            mobj_lastSentPosition       = TwoPositionState.Unknown;
+            m_serialPort             = new System.IO.Ports.SerialPort();
+            m_serialPort.PortName    = "COM1";
+            m_serialPort.BaudRate    = 9600;
+            m_serialPort.StopBits    = StopBits.One;
+            m_serialPort.DataBits    = 8;
+            m_serialPort.Handshake   = Handshake.None;
+            m_serialPort.Parity      = Parity.None;
+            m_serialPort.ReadTimeout = CONST_READTIMEOUT;
+            m_serialPort.WriteTimeout = CONST_WRITETIMEOUT;
+            m_lastMeasuredPosition   = TwoPositionState.Unknown;
+            m_lastSentPosition       = TwoPositionState.Unknown;
 
             /// 
             /// Set ID to a space (i.e. nonexistant)
             /// NOTE: Spaces are ignored by the controller in sent commands
             /// 
-            mobj_valveID                = ' ';
-            mobj_versionInfo            = "";
+            m_valveID                = ' ';
+            m_versionInfo            = "";
 
-            mstring_name = "valve";
+            m_name = "valve";
         }
         /// <summary>
         /// Constructor from a supplied serial port object.
@@ -138,17 +138,17 @@ namespace LcmsNet.Devices.Valves
         public classValveVICI2Pos(SerialPort port)
         {
             //Set positions to unknown
-            mobj_lastMeasuredPosition   = TwoPositionState.Unknown;
-            mobj_lastSentPosition       = TwoPositionState.Unknown;
+            m_lastMeasuredPosition   = TwoPositionState.Unknown;
+            m_lastSentPosition       = TwoPositionState.Unknown;
 
             //Set ID to a space (i.e. nonexistant)
             //Note: spaces are ignored by the controller in sent commands
-            mobj_valveID        = ' ';
-            mobj_versionInfo    = "";
+            m_valveID        = ' ';
+            m_versionInfo    = "";
 
-            mobj_serialPort     = port;
-            //mstring_name        = classDeviceManager.Manager.CreateUniqueDeviceName("valve");
-            mstring_name = "valve";
+            m_serialPort     = port;
+            //m_name        = classDeviceManager.Manager.CreateUniqueDeviceName("valve");
+            m_name = "valve";
         }
         #endregion
 
@@ -161,11 +161,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mbool_emulation;
+                return m_emulation;
             }
             set
             {
-                mbool_emulation = value;
+                m_emulation = value;
             }
         }
         /// <summary>
@@ -180,14 +180,14 @@ namespace LcmsNet.Devices.Valves
                     return enumDeviceStatus.Initialized;
                 }
                 {
-                    return menum_status;
+                    return m_status;
                 }
             }
             set
             {
-                if (value != menum_status && StatusUpdate != null)
+                if (value != m_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "StatusChange", this));
-                menum_status = value;
+                m_status = value;
             }
         }
         /// <summary>
@@ -197,11 +197,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mstring_name;
+                return m_name;
             }
             set
             {
-                 mstring_name = value;
+                 m_name = value;
                  OnDeviceSaveRequired();
             }
         }
@@ -212,7 +212,7 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_serialPort;
+                return m_serialPort;
             }
         }
         /// <summary>
@@ -223,11 +223,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_serialPort.PortName;
+                return m_serialPort.PortName;
             }
             set
             {
-                mobj_serialPort.PortName = value;
+                m_serialPort.PortName = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -239,11 +239,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_serialPort.ReadTimeout;
+                return m_serialPort.ReadTimeout;
             }
             set
             {
-                mobj_serialPort.ReadTimeout = value;
+                m_serialPort.ReadTimeout = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -255,11 +255,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_serialPort.WriteTimeout;
+                return m_serialPort.WriteTimeout;
             }
             set
             {
-                mobj_serialPort.WriteTimeout = value;
+                m_serialPort.WriteTimeout = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -270,7 +270,7 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_lastMeasuredPosition;
+                return m_lastMeasuredPosition;
             }
         }
         /// <summary>
@@ -280,7 +280,7 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_lastSentPosition;
+                return m_lastSentPosition;
             }
         }
         /// <summary>
@@ -290,11 +290,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_valveID;
+                return m_valveID;
             }
             set
             {
-                mobj_valveID = value;
+                m_valveID = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -305,11 +305,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return mobj_versionInfo;
+                return m_versionInfo;
             }
             set
             {
-                mobj_versionInfo = value;
+                m_versionInfo = value;
             }
         }
         #endregion
@@ -336,13 +336,13 @@ namespace LcmsNet.Devices.Valves
         /// <returns>True on success.</returns>
         public bool Shutdown()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
-                return mbool_emulation;
+                return m_emulation;
             }
             try
             {
-                mobj_serialPort.Close();
+                m_serialPort.Close();
             }
             catch (UnauthorizedAccessException)
             {
@@ -360,21 +360,21 @@ namespace LcmsNet.Devices.Valves
         /// <returns>True on success.</returns>
         public bool Initialize(ref string errorMessage)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 //Fill in fake ID, version, position
-                mobj_valveID                = '1';
-                mobj_versionInfo            = "Device is in emulation";
-                mobj_lastMeasuredPosition   = TwoPositionState.PositionA;
+                m_valveID                = '1';
+                m_versionInfo            = "Device is in emulation";
+                m_lastMeasuredPosition   = TwoPositionState.PositionA;
                 return true;
             }
 
             //If the serial port is not open, open it
-            if (!mobj_serialPort.IsOpen)
+            if (!m_serialPort.IsOpen)
             {
                 try
                 {
-                    mobj_serialPort.Open();
+                    m_serialPort.Open();
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -383,9 +383,9 @@ namespace LcmsNet.Devices.Valves
                     return false;
                 }
             }
-            //mobj_serialPort.ReadTimeout = CONST_READTIMEOUT;
-            //mobj_serialPort.WriteTimeout = CONST_WRITETIMEOUT;
-            mobj_serialPort.NewLine         = "\r";
+            //m_serialPort.ReadTimeout = CONST_READTIMEOUT;
+            //m_serialPort.WriteTimeout = CONST_WRITETIMEOUT;
+            m_serialPort.NewLine         = "\r";
 
             try
             {
@@ -454,17 +454,17 @@ namespace LcmsNet.Devices.Valves
         /// <returns>The position as an enumValvePosition2Pos.</returns>
         public int GetPosition()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
-                return (int)mobj_lastSentPosition;
+                return (int)m_lastSentPosition;
             }
 
             //If the serial port is not open, open it
-            if (!mobj_serialPort.IsOpen)
+            if (!m_serialPort.IsOpen)
             {
                 try
                 {
-                    mobj_serialPort.Open();
+                    m_serialPort.Open();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -474,7 +474,7 @@ namespace LcmsNet.Devices.Valves
 
             try
             {
-                mobj_serialPort.WriteLine(mobj_valveID + "CP");
+                m_serialPort.WriteLine(m_valveID + "CP");
             }
             catch (TimeoutException)
             {
@@ -491,7 +491,7 @@ namespace LcmsNet.Devices.Valves
             var tempBuffer = "";
             try
             {
-                tempBuffer = mobj_serialPort.ReadLine();
+                tempBuffer = m_serialPort.ReadLine();
             }
             catch (TimeoutException)
             {
@@ -519,19 +519,19 @@ namespace LcmsNet.Devices.Valves
 
             if (tempPosition == "A")
             {
-                mobj_lastMeasuredPosition = TwoPositionState.PositionA;
+                m_lastMeasuredPosition = TwoPositionState.PositionA;
                 return (int)TwoPositionState.PositionA;
             }
 
             else if (tempPosition == "B")
             {
-                mobj_lastMeasuredPosition = TwoPositionState.PositionB;
+                m_lastMeasuredPosition = TwoPositionState.PositionB;
                 return (int)TwoPositionState.PositionB;
             }
 
             else
             {
-                mobj_lastMeasuredPosition = TwoPositionState.Unknown;
+                m_lastMeasuredPosition = TwoPositionState.Unknown;
                 return (int)TwoPositionState.Unknown;
             }
         }
@@ -541,17 +541,17 @@ namespace LcmsNet.Devices.Valves
         /// <returns>A string containing the version.</returns>
         public string GetVersion()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return "3.1337";
             }
 
             //If the serial port is not open, open it
-            if (!mobj_serialPort.IsOpen)
+            if (!m_serialPort.IsOpen)
             {
                 try
                 {
-                    mobj_serialPort.Open();
+                    m_serialPort.Open();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -561,7 +561,7 @@ namespace LcmsNet.Devices.Valves
 
             try
             {
-                mobj_serialPort.WriteLine(mobj_valveID + "VR");
+                m_serialPort.WriteLine(m_valveID + "VR");
             }
             catch (TimeoutException)
             {
@@ -576,7 +576,7 @@ namespace LcmsNet.Devices.Valves
             //Version info is displayed on 2 lines
             try
             {
-                tempBuffer = mobj_serialPort.ReadLine() + " " + mobj_serialPort.ReadLine();
+                tempBuffer = m_serialPort.ReadLine() + " " + m_serialPort.ReadLine();
                 tempBuffer = tempBuffer.Replace("\r", " "); //Readability
             }
             catch (TimeoutException)
@@ -588,7 +588,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            mobj_versionInfo = tempBuffer;
+            m_versionInfo = tempBuffer;
             return tempBuffer;
         }
         /// <summary>
@@ -597,17 +597,17 @@ namespace LcmsNet.Devices.Valves
         /// <returns></returns>
         public char GetHardwareID()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return '0';
             }
 
             //If the serial port is not open, open it
-            if (!mobj_serialPort.IsOpen)
+            if (!m_serialPort.IsOpen)
             {
                 try
                 {
-                    mobj_serialPort.Open();
+                    m_serialPort.Open();
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -617,7 +617,7 @@ namespace LcmsNet.Devices.Valves
 
             try
             {
-                mobj_serialPort.WriteLine(mobj_valveID + "ID");
+                m_serialPort.WriteLine(m_valveID + "ID");
             }
             catch (TimeoutException)
             {
@@ -633,7 +633,7 @@ namespace LcmsNet.Devices.Valves
 
             try
             {
-                tempBuffer = mobj_serialPort.ReadLine();
+                tempBuffer = m_serialPort.ReadLine();
             }
             catch (TimeoutException)
             {
@@ -663,7 +663,7 @@ namespace LcmsNet.Devices.Valves
             }
 
             //Set the valveID (software ID) to the one we just found.
-            mobj_valveID = tempID;
+            m_valveID = tempID;
             return tempID;
         }
         /// <summary>
@@ -672,7 +672,7 @@ namespace LcmsNet.Devices.Valves
         /// <param name="newID">The new ID, as a character 0-9.</param>
         public enumValveErrors SetHardwareID(char newID)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return enumValveErrors.Success;
             }
@@ -681,11 +681,11 @@ namespace LcmsNet.Devices.Valves
             if (newID - '0' <= 9 && newID - '0' >= 0)
             {
                 //If the serial port is not open, open it
-                if (!mobj_serialPort.IsOpen)
+                if (!m_serialPort.IsOpen)
                 {
                     try
                     {
-                        mobj_serialPort.Open();
+                        m_serialPort.Open();
                     }
                     catch (UnauthorizedAccessException)
                     {
@@ -695,12 +695,12 @@ namespace LcmsNet.Devices.Valves
 
                 try
                 {
-                    mobj_serialPort.WriteLine(mobj_valveID + "ID" + newID);
-                    mobj_valveID = newID;
+                    m_serialPort.WriteLine(m_valveID + "ID" + newID);
+                    m_valveID = newID;
 
                     //Wait 325ms for the command to go through
 
-                    System.Threading.Thread.Sleep(mint_IDChangeDelayTimems);
+                    System.Threading.Thread.Sleep(m_IDChangeDelayTimems);
                 }
                 catch (TimeoutException)
                 {
@@ -724,19 +724,19 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public enumValveErrors ClearHardwareID()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return enumValveErrors.Success;
             }
 
             try
             {
-                mobj_serialPort.WriteLine(mobj_valveID + "ID*");
-                mobj_valveID = ' ';
+                m_serialPort.WriteLine(m_valveID + "ID*");
+                m_valveID = ' ';
 
                 //Wait 325ms for the command to go through
 
-                System.Threading.Thread.Sleep(mint_IDChangeDelayTimems);
+                System.Threading.Thread.Sleep(m_IDChangeDelayTimems);
             }
             catch (TimeoutException)
             {
@@ -755,7 +755,7 @@ namespace LcmsNet.Devices.Valves
         /// <returns></returns>
         public override string ToString()
         {
-            return mstring_name;
+            return m_name;
         }
         #endregion
 
@@ -772,23 +772,23 @@ namespace LcmsNet.Devices.Valves
 //            System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
 //#endif
 
-//            if (mbool_emulation == true)
+//            if (m_emulation == true)
 //            {
-//                mobj_lastSentPosition = mobj_lastMeasuredPosition = newPosition;
-//                OnPositionChanged(mobj_lastMeasuredPosition);
+//                m_lastSentPosition = m_lastMeasuredPosition = newPosition;
+//                OnPositionChanged(m_lastMeasuredPosition);
 //                return enumValveErrors.Success;
 //            }
 //            // short circuit..if we're already in that position, why bother trying to move to it?
-//            if (newPosition == mobj_lastMeasuredPosition)
+//            if (newPosition == m_lastMeasuredPosition)
 //            {
 //                return enumValveErrors.Success;
 //            }
 //            //If the serial port is not open, open it
-//            if (!mobj_serialPort.IsOpen)
+//            if (!m_serialPort.IsOpen)
 //            {
 //                try
 //                {
-//                    mobj_serialPort.Open();
+//                    m_serialPort.Open();
 //                }
 //                catch (UnauthorizedAccessException)
 //                {
@@ -799,14 +799,14 @@ namespace LcmsNet.Devices.Valves
 //            string cmd = null;
 //            if (newPosition == TwoPositionState.PositionA)
 //            {
-//                mobj_lastSentPosition = TwoPositionState.PositionA;
-//                cmd = mobj_valveID.ToString() + "GOA";
+//                m_lastSentPosition = TwoPositionState.PositionA;
+//                cmd = m_valveID.ToString() + "GOA";
 //            }
 
 //            else if (newPosition == TwoPositionState.PositionB)
 //            {
-//                mobj_lastSentPosition = TwoPositionState.PositionB;
-//                cmd = mobj_valveID.ToString() + "GOB";
+//                m_lastSentPosition = TwoPositionState.PositionB;
+//                cmd = m_valveID.ToString() + "GOB";
 //            }
 //            else
 //            {
@@ -815,7 +815,7 @@ namespace LcmsNet.Devices.Valves
 
 //            try
 //            {               
-//                mobj_serialPort.WriteLine(cmd);
+//                m_serialPort.WriteLine(cmd);
 //            }
 //            catch (TimeoutException)
 //            {
@@ -830,7 +830,7 @@ namespace LcmsNet.Devices.Valves
 //            //NOTE: This can be shortened if there are more than 4 ports but still
 //            //      2 positions; see manual page 1 for switching times
 
-//            System.Threading.Thread.Sleep(mint_rotationDelayTimems);
+//            System.Threading.Thread.Sleep(m_rotationDelayTimems);
 
 //            //Doublecheck that the position change was correctly executed
 //            try
@@ -846,13 +846,13 @@ namespace LcmsNet.Devices.Valves
 //                return enumValveErrors.UnauthorizedAccess;
 //            }
 
-//            if (mobj_lastMeasuredPosition != mobj_lastSentPosition)
+//            if (m_lastMeasuredPosition != m_lastSentPosition)
 //            {
 //                return enumValveErrors.ValvePositionMismatch;
 //            }
 //            else
 //            {
-//                OnPositionChanged(mobj_lastMeasuredPosition);
+//                OnPositionChanged(m_lastMeasuredPosition);
 //                return enumValveErrors.Success;
 //            }
 //        }
@@ -869,51 +869,51 @@ namespace LcmsNet.Devices.Valves
             System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
 #endif
 
-            if (mbool_emulation)
+            if (m_emulation)
             {
-                mobj_lastSentPosition = mobj_lastMeasuredPosition = newPosition;
-                OnPositionChanged(mobj_lastMeasuredPosition);
+                m_lastSentPosition = m_lastMeasuredPosition = newPosition;
+                OnPositionChanged(m_lastMeasuredPosition);
                 return;
             }
             // short circuit..if we're already in that position, why bother trying to move to it?
-            if (newPosition == mobj_lastMeasuredPosition)
+            if (newPosition == m_lastMeasuredPosition)
             {
                 return;
             }
             //If the serial port is not open, open it
-            if (!mobj_serialPort.IsOpen)
+            if (!m_serialPort.IsOpen)
             {
-                mobj_serialPort.Open();
+                m_serialPort.Open();
             }
 
             string cmd = null;
             if (newPosition == TwoPositionState.PositionA)
             {
-                mobj_lastSentPosition = TwoPositionState.PositionA;
-                cmd = mobj_valveID.ToString() + "GOA";
+                m_lastSentPosition = TwoPositionState.PositionA;
+                cmd = m_valveID.ToString() + "GOA";
             }
 
             else if (newPosition == TwoPositionState.PositionB)
             {
-                mobj_lastSentPosition = TwoPositionState.PositionB;
-                cmd = mobj_valveID.ToString() + "GOB";
+                m_lastSentPosition = TwoPositionState.PositionB;
+                cmd = m_valveID.ToString() + "GOB";
             }
             else
             {
                 throw new ArgumentOutOfRangeException("Invalid Position to set" + newPosition.ToCustomString());
             }
             
-            mobj_serialPort.WriteLine(cmd);
+            m_serialPort.WriteLine(cmd);
 
             //Wait 145ms for valve to actually switch before proceeding
             //NOTE: This can be shortened if there are more than 4 ports but still
             //      2 positions; see manual page 1 for switching times
 
-            System.Threading.Thread.Sleep(mint_rotationDelayTimems);
+            System.Threading.Thread.Sleep(m_rotationDelayTimems);
 
             //Doublecheck that the position change was correctly executed
             GetPosition();
-            OnPositionChanged(mobj_lastMeasuredPosition);
+            OnPositionChanged(m_lastMeasuredPosition);
         }
         #endregion
 
@@ -970,14 +970,14 @@ namespace LcmsNet.Devices.Valves
               measurementSentPosition.Name = "Set Position";
               measurementSentPosition.Type = FinchDataType.Integer;
               measurementSentPosition.Units = "";
-              measurementSentPosition.Value = this.mobj_lastSentPosition.ToString();
+              measurementSentPosition.Value = this.m_lastSentPosition.ToString();
               component.Signals.Add(measurementSentPosition);
 
               FinchScalarSignal measurementMeasuredPosition = new FinchScalarSignal();
               measurementMeasuredPosition.Name = "Measured Position";
               measurementMeasuredPosition.Type = FinchDataType.Integer;
               measurementMeasuredPosition.Units = "";
-              measurementMeasuredPosition.Value = this.mobj_lastMeasuredPosition.ToString();
+              measurementMeasuredPosition.Value = this.m_lastMeasuredPosition.ToString();
               component.Signals.Add(measurementMeasuredPosition);
 
               FinchScalarSignal port = new FinchScalarSignal();

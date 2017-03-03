@@ -29,17 +29,17 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The contact closure class used for triggering a pulse.
         /// </summary>
-        private classContactClosureU12 mobj_contactClosure;
+        private classContactClosureU12 m_contactClosure;
 
         /// <summary>
         /// An event listener to watch for events from the contact closure class.
         /// </summary>
-        //private CCEventListener mobj_CCEventListener;
+        //private CCEventListener m_CCEventListener;
 
         private const int CONST_MINIMUMVOLTAGE = -5;
         private const int CONST_MAXIMUMVOLTAGE = 5;
         private const int CONST_MINIMUMPULSELENGTH = 0;
-        private bool mbool_loading;
+        private bool m_loading;
 
         #endregion
 
@@ -61,17 +61,17 @@ namespace LcmsNet.Devices.ContactClosure
         private void RegisterDevice(IDevice device)
         {
 
-            mbool_loading = true;
-            mobj_contactClosure = device as classContactClosureU12;
+            m_loading = true;
+            m_contactClosure = device as classContactClosureU12;
 
-            if (mobj_contactClosure != null)
+            if (m_contactClosure != null)
             {
-                mcomboBox_Ports.SelectedItem = mobj_contactClosure.Port;
+                mcomboBox_Ports.SelectedItem = m_contactClosure.Port;
             }
             mcomboBox_Ports.SelectedValueChanged   += new EventHandler(mcomboBox_Ports_SelectedValueChanged);
-            mobj_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);
-            SetBaseDevice(mobj_contactClosure);
-            mbool_loading = false;
+            m_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);
+            SetBaseDevice(m_contactClosure);
+            m_loading = false;
         }
         #endregion
 
@@ -83,7 +83,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mobj_contactClosure.Port;
+                return m_contactClosure.Port;
             }
             set
             {
@@ -98,17 +98,17 @@ namespace LcmsNet.Devices.ContactClosure
             get
             {
                 var emulated = true;
-                if (mobj_contactClosure != null)
+                if (m_contactClosure != null)
                 {
-                    emulated = mobj_contactClosure.Emulation;
+                    emulated = m_contactClosure.Emulation;
                 }
                 return emulated;
             }
             set
             {
-                if (mobj_contactClosure != null)
+                if (m_contactClosure != null)
                 {
-                    mobj_contactClosure.Emulation = value;
+                    m_contactClosure.Emulation = value;
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace LcmsNet.Devices.ContactClosure
             get
             {
                 
-                return mobj_contactClosure;
+                return m_contactClosure;
             }
             set
             {
@@ -141,8 +141,8 @@ namespace LcmsNet.Devices.ContactClosure
         }
         private void mcomboBox_Ports_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (mbool_loading == false)
-                mobj_contactClosure.Port = (enumLabjackU12OutputPorts)Enum.Parse(typeof(enumLabjackU12OutputPorts), this.mcomboBox_Ports.Text);
+            if (m_loading == false)
+                m_contactClosure.Port = (enumLabjackU12OutputPorts)Enum.Parse(typeof(enumLabjackU12OutputPorts), this.mcomboBox_Ports.Text);
         }
         /// <summary>
         /// Handles sending a pulse to the Contact Closure when the user presses the button to do so.
@@ -155,7 +155,7 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 try
                 {
-                    mobj_contactClosure.Trigger(Convert.ToInt32(mnum_pulseLength.Value), Convert.ToDouble(mnum_voltage.Value));
+                    m_contactClosure.Trigger(Convert.ToInt32(mnum_pulseLength.Value), Convert.ToDouble(mnum_voltage.Value));
                     
                 }
                 catch (Exception ex)

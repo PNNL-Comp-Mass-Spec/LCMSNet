@@ -23,7 +23,7 @@ namespace LcmsNet.Devices
         {
             m_name = "Application";
             m_version = "Version 1.0";
-            menum_status = enumDeviceStatus.NotInitialized;
+            m_status = enumDeviceStatus.NotInitialized;
 
         }
 
@@ -108,7 +108,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Status of the device currently.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
 
         #endregion
 
@@ -154,12 +154,12 @@ namespace LcmsNet.Devices
         /// </summary>
         public enumDeviceStatus Status
         {
-            get { return menum_status; }
+            get { return m_status; }
             set
             {
-                if (value != menum_status && StatusUpdate != null)
+                if (value != m_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
-                menum_status = value;
+                m_status = value;
             }
         }
 

@@ -53,7 +53,7 @@ namespace LcmsNet.Method.Forms
 
         public event EventHandler<SampleProgressPreviewArgs> PreviewAvailable;
 
-        private void mtimer_preview_Tick(object sender, EventArgs e)
+        private void m_previewTimer_Tick(object sender, EventArgs e)
         {
             mcontrol_sampleProgress.Refresh();
             mcontrol_sampleProgressFull.Refresh();

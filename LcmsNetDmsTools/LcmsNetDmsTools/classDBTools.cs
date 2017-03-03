@@ -56,7 +56,7 @@ namespace LcmsNetDmsTools
     public class classDBTools : IDmsTools
     {
         #region "Class variables"
-        string mstring_ErrMsg = "";
+        string m_ErrMsg = "";
 
         private bool mConnectionStringLogged;
 
@@ -94,11 +94,11 @@ namespace LcmsNetDmsTools
         {
             get
             {
-                return mstring_ErrMsg;
+                return m_ErrMsg;
             }
             set
             {
-                mstring_ErrMsg = value;
+                m_ErrMsg = value;
             }
         }
 
@@ -905,9 +905,9 @@ namespace LcmsNetDmsTools
             }
             catch (Exception ex)
             {
-                mstring_ErrMsg = "Exception getting MRM file data from DMS";
-                classApplicationLogger.LogError(0, mstring_ErrMsg, ex);
-                throw new classDatabaseDataException(mstring_ErrMsg, ex);
+                m_ErrMsg = "Exception getting MRM file data from DMS";
+                classApplicationLogger.LogError(0, m_ErrMsg, ex);
+                throw new classDatabaseDataException(m_ErrMsg, ex);
             }
 
             if (dt != null)
@@ -946,9 +946,9 @@ namespace LcmsNetDmsTools
             }
             catch (Exception ex)
             {
-                mstring_ErrMsg = "Exception getting MRM file list from DMS";
-                classApplicationLogger.LogError(0, mstring_ErrMsg, ex);
-                throw new classDatabaseDataException(mstring_ErrMsg, ex);
+                m_ErrMsg = "Exception getting MRM file list from DMS";
+                classApplicationLogger.LogError(0, m_ErrMsg, ex);
+                throw new classDatabaseDataException(m_ErrMsg, ex);
             }
 
             // Pull the data from the table
@@ -1042,7 +1042,7 @@ namespace LcmsNetDmsTools
             // Verify request list is < 8000 chars (stored procedure limitation)
             if (requestList.Length > 8000)
             {
-                mstring_ErrMsg = "Too many requests selected for import.\r\nReduce the number of requests being imported.";
+                m_ErrMsg = "Too many requests selected for import.\r\nReduce the number of requests being imported.";
                 return false;
             }
 

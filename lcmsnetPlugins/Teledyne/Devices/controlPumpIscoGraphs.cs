@@ -30,11 +30,11 @@ namespace LcmsNet.Devices.Pumps
         #region "Class variables"
             ZedGraphControl[] mplot_PumpGraphArray;
             
-            bool mbool_FirstPointReceived = false;
+            bool m_FirstPointReceived = false;
             DateTime mdate_GraphStartTime = LcmsNetSDK.TimeKeeper.Instance.Now;//DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-            List<DateTime>[] mlist_SampleTimes;
-            List<double>[] mlist_FlowData;
-            List<double>[] mlist_PressData;
+            List<DateTime>[] m_SampleTimes;
+            List<double>[] m_FlowData;
+            List<double>[] m_PressData;
         #endregion
 
         #region "Delegates"
@@ -73,9 +73,9 @@ namespace LcmsNet.Devices.Pumps
                 InitPlot(ref mplot_PumpGraphArray[2], "Pump C");
 
                 // Initialize pump data arrays
-                mlist_SampleTimes = new List<DateTime>[] { new List<DateTime>(), new List<DateTime>(), new List<DateTime>() };
-                mlist_FlowData = new List<double>[] { new List<double>(), new List<double>(), new List<double>() };
-                mlist_PressData = new List<double>[] { new List<double>(), new List<double>(), new List<double>() };
+                m_SampleTimes = new List<DateTime>[] { new List<DateTime>(), new List<DateTime>(), new List<DateTime>() };
+                m_FlowData = new List<double>[] { new List<double>(), new List<double>(), new List<double>() };
+                m_PressData = new List<double>[] { new List<double>(), new List<double>(), new List<double>() };
             }   
             
             ///// <summary>
@@ -147,8 +147,8 @@ namespace LcmsNet.Devices.Pumps
             {
                 for (var indx = 0; indx < mplot_PumpGraphArray.Length; indx++)
                 {
-                    UpdatePlotDataLists(pumpData[indx], ref mlist_SampleTimes[indx], ref mlist_PressData[indx], ref mlist_FlowData[indx]);
-                    UpdatePlot(mplot_PumpGraphArray[indx], mlist_SampleTimes[indx], mlist_PressData[indx], mlist_FlowData[indx]);
+                    UpdatePlotDataLists(pumpData[indx], ref m_SampleTimes[indx], ref m_PressData[indx], ref m_FlowData[indx]);
+                    UpdatePlot(mplot_PumpGraphArray[indx], m_SampleTimes[indx], m_PressData[indx], m_FlowData[indx]);
                     //UpdatePlot(mplot_PumpGraphArray[indx], pumpData[indx]);
                 }
             }   
@@ -268,9 +268,9 @@ namespace LcmsNet.Devices.Pumps
             //   GraphPane pumpPane = inpGraph.GraphPane;
 
             //   // If this is the first point in a new graph, then set appropriate class variables and clear point arrays
-            //   if (!mbool_FirstPointReceived)
+            //   if (!m_FirstPointReceived)
             //   {
-            //      mbool_FirstPointReceived = true;
+            //      m_FirstPointReceived = true;
             //      mdate_GraphStartTime = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             //      foreach (LineItem currentCurve in pumpPane.CurveList)
@@ -326,7 +326,7 @@ namespace LcmsNet.Devices.Pumps
             private void ClearPlot(ref ZedGraphControl inpGraph)
             {
                 // All that is necessary is to clear the data received flag. UpdatePlot takes care of the rest
-                mbool_FirstPointReceived = false;
+                m_FirstPointReceived = false;
             }   
         #endregion
     }   

@@ -44,39 +44,39 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Network socket / stream for connecting to instrument.
         /// </summary>
-        private TcpClient       mobj_socketForServer;
+        private TcpClient       m_socketForServer;
         /// <summary>
         /// Stream reader to read underlying network stream data.
         /// </summary>
-        private StreamReader    mobj_reader;
+        private StreamReader    m_reader;
         /// <summary>
         /// Stream writer for writing to underlying network stream data.
         /// </summary>
-        private StreamWriter    mobj_writer;
+        private StreamWriter    m_writer;
         /// <summary>
         /// Network stream for establishing connections.
         /// </summary>
-        private NetworkStream   mobj_networkstream;
+        private NetworkStream   m_networkstream;
         /// <summary>
         /// The name of the port (e.g. "COM1") used for communication with the Agilent pumps
         /// </summary>
-        private string mstring_address;
+        private string m_address;
         /// <summary>
         /// Port of server instrument.
         /// </summary>
-        private int mint_port;
+        private int m_port;
         /// <summary>
         /// The device's name.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
         /// <summary>
         /// The device's verion.
         /// </summary>
-        private string mstring_version;
+        private string m_version;
         /// <summary>
         /// Status of the device.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
         #endregion
 
         #region Events
@@ -105,11 +105,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// </summary>
         public classNetStartSocket()
         {
-            mstring_address = "localhost";
-            mstring_name = "network start"; // classDeviceManager.Manager.CreateUniqueDeviceName("networkStart");
-            mstring_version = "May-2010";
-            mint_port       = CONST_SERVER_PORT;
-            menum_status    = enumDeviceStatus.NotInitialized;
+            m_address = "localhost";
+            m_name = "network start"; // classDeviceManager.Manager.CreateUniqueDeviceName("networkStart");
+            m_version = "May-2010";
+            m_port       = CONST_SERVER_PORT;
+            m_status    = enumDeviceStatus.NotInitialized;
 
             AbortEvent      = new System.Threading.ManualResetEvent(false);
             Emulation       = true;
@@ -135,11 +135,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             get
             {
-                return mstring_address;
+                return m_address;
             }
             set
             {
-                mstring_address = value;
+                m_address = value;
             }
         }
         /// <summary>
@@ -150,11 +150,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             get
             {
-                return mint_port;
+                return m_port;
             }
             set
             {
-                mint_port = value;
+                m_port = value;
             }
         }
         #endregion
@@ -174,15 +174,15 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
             try
             {
-                mobj_socketForServer = new TcpClient(server, port);
+                m_socketForServer = new TcpClient(server, port);
 
-                mobj_socketForServer.SendTimeout = Math.Max(SendTimeout, CONST_MIN_TIMEOUT_SEND);
-                mobj_socketForServer.ReceiveTimeout = Math.Max(ReceiveTimeout, CONST_MIN_TIMEOUT_RECEIVE);
+                m_socketForServer.SendTimeout = Math.Max(SendTimeout, CONST_MIN_TIMEOUT_SEND);
+                m_socketForServer.ReceiveTimeout = Math.Max(ReceiveTimeout, CONST_MIN_TIMEOUT_RECEIVE);
 
-                mobj_networkstream = mobj_socketForServer.GetStream();
+                m_networkstream = m_socketForServer.GetStream();
 
-                mobj_reader = new System.IO.StreamReader(mobj_networkstream);
-                mobj_writer = new System.IO.StreamWriter(mobj_networkstream);
+                m_reader = new System.IO.StreamReader(m_networkstream);
+                m_writer = new System.IO.StreamWriter(m_networkstream);
                 connected = true;
             }
             catch (Exception ex)
@@ -202,9 +202,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 if (Emulation)
                     return true;
 
-                if (mobj_networkstream != null)
+                if (m_networkstream != null)
                 {
-                    mobj_networkstream.Close();
+                    m_networkstream.Close();
                     return true;
                 }
             }
@@ -236,9 +236,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 try
                 {
                     var arguments = new List<classNetStartArgument>();
-                    SendMessage(mobj_writer, enumNetStartMessageTypes.Query, 0, CONST_QUERY_GETMETHODNAMES, arguments);
+                    SendMessage(m_writer, enumNetStartMessageTypes.Query, 0, CONST_QUERY_GETMETHODNAMES, arguments);
 
-                    var rawMessage = mobj_reader.ReadLine();
+                    var rawMessage = m_reader.ReadLine();
                     var message = UnpackMessage(rawMessage);
 
 
@@ -370,9 +370,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             {
                 string outputString;
                 var i = 0;
-                Connect(mstring_address, mint_port);
-                var streamReader = mobj_reader;
-                var streamWriter = mobj_writer;
+                Connect(m_address, m_port);
+                var streamReader = m_reader;
+                var streamWriter = m_writer;
                 SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
 
                 outputString = streamReader.ReadLine();     //IDLE
@@ -414,7 +414,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                             if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
                             {
                                 SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQSTART", arguments);
-                                var startResponse = mobj_reader.ReadLine();
+                                var startResponse = m_reader.ReadLine();
 
                                 SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQSTARTED", arguments);
                                 outputString = streamReader.ReadLine();     //STARTED
@@ -463,10 +463,10 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 return true;
             }
 
-            Connect(mstring_address, mint_port);
+            Connect(m_address, m_port);
 
-            var streamReader = mobj_reader;
-            var streamWriter = mobj_writer;
+            var streamReader = m_reader;
+            var streamWriter = m_writer;
             var arguments = new List<classNetStartArgument>();
             var receivedMessage = new classNetStartMessage();
 
@@ -496,11 +496,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             get
             {
-                return mstring_name;
+                return m_name;
             }
             set
             {
-                mstring_name = value;
+                m_name = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -511,11 +511,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             get
             {
-                return mstring_version;
+                return m_version;
             }
             set
             {
-                mstring_version = value;
+                m_version = value;
             }
         }
         /// <summary>
@@ -533,13 +533,13 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             get
             {
-                return menum_status;
+                return m_status;
             }
             set
             {
-                if (value != menum_status && StatusUpdate != null)
+                if (value != m_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
-                menum_status = value;
+                m_status = value;
             }
         }
         /// <summary>
@@ -562,7 +562,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             var success = false;
             try
             {
-                var connected = Connect(mstring_address, mint_port);
+                var connected = Connect(m_address, m_port);
                 if (connected == false)
                 {
                     errorMessage = "Could not connect to the remote instrument.";

@@ -30,9 +30,9 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// The valve object
         /// </summary>
-        protected classValveVICI2Pos mobj_valve;
+        protected classValveVICI2Pos m_valve;
 
-        //public ValveEventListener mobj_valveEventListener;
+        //public ValveEventListener m_valveEventListener;
 
         #endregion
 
@@ -48,20 +48,20 @@ namespace LcmsNet.Devices.Valves
 
         public virtual void RegisterDevice(IDevice device)
         {
-            mobj_valve = device as classValveVICI2Pos;
+            m_valve = device as classValveVICI2Pos;
             
             //TODO: Throw error!
-            if (mobj_valve == null)
+            if (m_valve == null)
                 return;
     
             
             
-            mobj_valve.PositionChanged    += new EventHandler<ValvePositionEventArgs<TwoPositionState>>(OnPosChanged);
-            mobj_valve.DeviceSaveRequired += new EventHandler(Valve_DeviceSaveRequired);
+            m_valve.PositionChanged    += new EventHandler<ValvePositionEventArgs<TwoPositionState>>(OnPosChanged);
+            m_valve.DeviceSaveRequired += new EventHandler(Valve_DeviceSaveRequired);
             
-            SetBaseDevice(mobj_valve);
+            SetBaseDevice(m_valve);
 
-            mpropertyGrid_Serial.SelectedObject = mobj_valve.Port;
+            mpropertyGrid_Serial.SelectedObject = m_valve.Port;
         }
 
         #endregion
@@ -85,11 +85,11 @@ namespace LcmsNet.Devices.Valves
         //{
         //    get
         //    {
-        //        return mobj_valve.Emulation;
+        //        return m_valve.Emulation;
         //    }
         //    set
         //    {
-        //        mobj_valve.Emulation = value;
+        //        m_valve.Emulation = value;
         //    }
         //}
         /// <summary>
@@ -99,19 +99,19 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return (classValveVICI2Pos)mobj_valve;
+                return (classValveVICI2Pos)m_valve;
             }
             set
             {
                 if (!DesignMode)
                 {
-                    //mobj_valve = (classValveVICI2Pos)value;
+                    //m_valve = (classValveVICI2Pos)value;
                     RegisterDevice(value);
                     //try
                     //{
                     //    string errorMessage = "";
-                    //    mobj_valve.Initialize(ref errorMessage);
-                    //    mpropertyGrid_Serial.SelectedObject = mobj_valve.Port;
+                    //    m_valve.Initialize(ref errorMessage);
+                    //    mpropertyGrid_Serial.SelectedObject = m_valve.Port;
                     //}
                     //catch (ValveExceptionReadTimeout ex)
                     //{
@@ -126,7 +126,7 @@ namespace LcmsNet.Devices.Valves
                     //    ShowError("Unauthorized access when attempting to initialize valve", ex);
                     //}
                 }
-                //mobj_valveEventListener = new ValveEventListener(mobj_valve, this);
+                //m_valveEventListener = new ValveEventListener(m_valve, this);
             }
         }
         #endregion
@@ -182,18 +182,18 @@ namespace LcmsNet.Devices.Valves
         }
         private void tabControl1_Validated(object sender, EventArgs e)
         {
-            UpdatePositionTextBox(mobj_valve.LastMeasuredPosition);
+            UpdatePositionTextBox(m_valve.LastMeasuredPosition);
         }   
 
         private void btnA_Click(object sender, EventArgs e)
         {
               try
               {
-                  /*Thread p = new Thread(() => mobj_valve.SetPosition(TwoPositionState.PositionA));
+                  /*Thread p = new Thread(() => m_valve.SetPosition(TwoPositionState.PositionA));
                   p.Start();
                   p = null;*/
-                  mobj_valve.SetPosition(TwoPositionState.PositionA);
-                  //UpdatePositionTextBox(mobj_valve.LastMeasuredPosition);
+                  m_valve.SetPosition(TwoPositionState.PositionA);
+                  //UpdatePositionTextBox(m_valve.LastMeasuredPosition);
               }
               catch (ValveExceptionReadTimeout ex)
               {
@@ -221,11 +221,11 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                /*Thread p = new Thread(() => mobj_valve.SetPosition(TwoPositionState.PositionB));
+                /*Thread p = new Thread(() => m_valve.SetPosition(TwoPositionState.PositionB));
                 p.Start();
                 p = null;*/
-                mobj_valve.SetPosition(TwoPositionState.PositionB);
-                //UpdatePositionTextBox(mobj_valve.LastMeasuredPosition);
+                m_valve.SetPosition(TwoPositionState.PositionB);
+                //UpdatePositionTextBox(m_valve.LastMeasuredPosition);
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -249,7 +249,7 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                UpdatePositionTextBox((TwoPositionState)mobj_valve.GetPosition());
+                UpdatePositionTextBox((TwoPositionState)m_valve.GetPosition());
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -269,7 +269,7 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                mtextbox_VersionInfo.Text = mobj_valve.GetVersion();
+                mtextbox_VersionInfo.Text = m_valve.GetVersion();
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -289,9 +289,9 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                if (!mobj_valve.Port.IsOpen)
+                if (!m_valve.Port.IsOpen)
                 {
-                    mobj_valve.Port.Open();
+                    m_valve.Port.Open();
                 }
             }
             catch (NullReferenceException ex)
@@ -308,7 +308,7 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                mobj_valve.Port.Close();
+                m_valve.Port.Close();
             }
             catch (NullReferenceException ex)
             {
@@ -325,8 +325,8 @@ namespace LcmsNet.Devices.Valves
             var newID = mcomboBox_setID.SelectedItem.ToString()[0];
             try
             {
-                mobj_valve.SetHardwareID(newID);
-                mtextbox_currentID.Text = mobj_valve.GetHardwareID().ToString();
+                m_valve.SetHardwareID(newID);
+                mtextbox_currentID.Text = m_valve.GetHardwareID().ToString();
                 OnSaveRequired();
             }
             catch (ValveExceptionReadTimeout ex)
@@ -347,7 +347,7 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                mtextbox_currentID.Text = mobj_valve.GetHardwareID().ToString();
+                mtextbox_currentID.Text = m_valve.GetHardwareID().ToString();
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -367,8 +367,8 @@ namespace LcmsNet.Devices.Valves
         {
             try
             {
-                mobj_valve.ClearHardwareID();
-                mtextbox_currentID.Text = mobj_valve.GetHardwareID().ToString();
+                m_valve.ClearHardwareID();
+                mtextbox_currentID.Text = m_valve.GetHardwareID().ToString();
                 mcomboBox_setID.SelectedIndex = 10;
                 OnSaveRequired();
             }
@@ -401,7 +401,7 @@ namespace LcmsNet.Devices.Valves
             try
             {
                 var errorMessage = "";
-                var success = mobj_valve.Initialize(ref errorMessage);
+                var success = m_valve.Initialize(ref errorMessage);
                 
                 if (success == false)
                     ShowError("Could not initialize the valve. " + errorMessage);
@@ -419,9 +419,9 @@ namespace LcmsNet.Devices.Valves
                 ShowError("Unauthorized access when attempting to initialize valve", ex);
             }
 
-            mtextbox_VersionInfo.Text = mobj_valve.Version;
-            mtextbox_CurrentPos.Text = mobj_valve.LastMeasuredPosition.ToString();
-            mtextbox_currentID.Text = mobj_valve.SoftwareID.ToString();
+            mtextbox_VersionInfo.Text = m_valve.Version;
+            mtextbox_CurrentPos.Text = m_valve.LastMeasuredPosition.ToString();
+            mtextbox_currentID.Text = m_valve.SoftwareID.ToString();
         }
     }   
 }

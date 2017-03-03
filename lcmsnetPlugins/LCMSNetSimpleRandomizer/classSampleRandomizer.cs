@@ -24,7 +24,7 @@ namespace LcmsNet.SampleQueue
     public class classSampleRandomizer : IRandomizerInterface, IEnumerable
     {
         #region "Class variables"
-            List<long> mobj_Items;
+            List<long> m_Items;
         #endregion
 
         #region "Methods"
@@ -42,7 +42,7 @@ namespace LcmsNet.SampleQueue
                 // Reassign the sequence numbers and return
                 for (long Indx = 0; Indx < InputSampleList.Count(); Indx++)
                 {
-                    InputSampleList[Convert.ToInt32(Indx)].SequenceID = mobj_Items[Convert.ToInt32(Indx)];
+                    InputSampleList[Convert.ToInt32(Indx)].SequenceID = m_Items[Convert.ToInt32(Indx)];
                 }
                 // Return the original sample list, with new sequence assignment
                 return InputSampleList;
@@ -56,13 +56,13 @@ namespace LcmsNet.SampleQueue
             {
                 //  Code for this function adapted from section 3.19 of The Microsoft Visual Basic.Net
                 // Programmer's Cookbook, by Mattew MacDonald, published by Microsoft Press
-                mobj_Items = new List<long>();
+                m_Items = new List<long>();
                 var RandNumGen = new Random();
                 foreach (long SeqID in InpSeqList)
                 {
                     // Randomly pick sequence ID's from input list and store them in the return list
-                    var NextIndx = RandNumGen.Next(0, mobj_Items.Count +1);
-                    mobj_Items.Insert(NextIndx, SeqID);
+                    var NextIndx = RandNumGen.Next(0, m_Items.Count +1);
+                    m_Items.Insert(NextIndx, SeqID);
                 }
                 return;
             }   
@@ -73,7 +73,7 @@ namespace LcmsNet.SampleQueue
             /// <returns>Enumerator</returns>
             public System.Collections.IEnumerator GetEnumerator()
             {
-                return mobj_Items.GetEnumerator();
+                return m_Items.GetEnumerator();
             }
 
             /// <summary>

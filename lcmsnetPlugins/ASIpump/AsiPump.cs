@@ -226,19 +226,19 @@ namespace ASIpump
         /// <summary>
         /// List of times monitoring data was received.
         /// </summary>
-        public List<DateTime> mlist_times;
+        public List<DateTime> m_times;
         /// <summary>
         /// List of pressures used throughout the run.
         /// </summary>
-        public List<double> mlist_pressures;
+        public List<double> m_pressures;
         /// <summary>
         /// List of flowrates used throughout the run.
         /// </summary>
-        public List<double> mlist_flowrates;
+        public List<double> m_flowrates;
         /// <summary>
         /// List of %B compositions throughout the run.
         /// </summary>
-        public List<double> mlist_percentB;
+        public List<double> m_percentB;
         #endregion
 
         #region Properties

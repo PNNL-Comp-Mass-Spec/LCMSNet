@@ -33,50 +33,50 @@ namespace LcmsNet.Devices.Pumps
 
         #region "Class variables"
             // Device name
-            string mstring_Name;
+            string m_Name;
 
             // Device version
-            string mstring_Version;
+            string m_Version;
 
             // Device status
-            enumDeviceStatus menum_Status;
+            enumDeviceStatus m_Status;
 
             // Emulation mode
-            bool mbool_Emulation;
+            bool m_Emulation;
 
             // Address for pump controller
-            int mint_UnitAddr;
+            int m_UnitAddr;
 
             // Flags for initialization
-            bool mbool_Initialized = false;
-            bool mbool_Initializing = true;
+            bool m_Initialized = false;
+            bool m_Initializing = true;
 
             // timer for autoupdating pump status
-            System.Threading.Timer mtimer_refresh;
+            System.Threading.Timer m_refresh;
 
             // Pump control mode (local/remote)
-            enumIscoControlMode menum_ControlMode = enumIscoControlMode.Local;
+            enumIscoControlMode m_ControlMode = enumIscoControlMode.Local;
             
             // Pump operation mode (Constant pressure/Constant flow)
-            enumIscoOperationMode menum_OpMode = enumIscoOperationMode.ConstantPressure;
+            enumIscoOperationMode m_OpMode = enumIscoOperationMode.ConstantPressure;
 
             // Number of pumps connected to this controller (3 max)
-            int mint_PumpCount;
+            int m_PumpCount;
 
             // Status data for each pump
-            classPumpIscoData[] mobj_PumpData;
+            classPumpIscoData[] m_PumpData;
 
             // Maximum ranges for pump parameters
-        readonly classPumpIscoRangeData[] mobj_PumpRanges;
+        readonly classPumpIscoRangeData[] m_PumpRanges;
 
             // Setpoint limits for the pumps
-        readonly classPumpIscoSetpointLimits[] mobj_SetpointLimits;
+        readonly classPumpIscoSetpointLimits[] m_SetpointLimits;
 
             // Serial port properties
-        readonly classIscoSerPortProps mobj_PortProps;
+        readonly classIscoSerPortProps m_PortProps;
 
             // Serial port object
-            SerialPort mobj_SerialPort;
+            SerialPort m_SerialPort;
 
             /// <summary>
             /// Pump models
@@ -102,8 +102,8 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public bool Emulation
             {
-                get { return mbool_Emulation; }
-                set { mbool_Emulation = value; }
+                get { return m_Emulation; }
+                set { m_Emulation = value; }
             }
 
             /// <summary>
@@ -112,13 +112,13 @@ namespace LcmsNet.Devices.Pumps
             [classPersistenceAttribute("PortName")]
             public string PortName
             {
-                get { return mobj_SerialPort.PortName; }
-                set { mobj_SerialPort.PortName = value; }
+                get { return m_SerialPort.PortName; }
+                set { m_SerialPort.PortName = value; }
             }
 
             public bool IsOpen()
             {
-                return mobj_SerialPort.IsOpen;
+                return m_SerialPort.IsOpen;
             }
             
             /// <summary>
@@ -127,8 +127,8 @@ namespace LcmsNet.Devices.Pumps
             [classPersistenceAttribute("BaudRate")]
             public int BaudRate
             {
-                get { return mobj_SerialPort.BaudRate; }
-                set { mobj_SerialPort.BaudRate = value; }
+                get { return m_SerialPort.BaudRate; }
+                set { m_SerialPort.BaudRate = value; }
             }
 
             /// <summary>
@@ -137,8 +137,8 @@ namespace LcmsNet.Devices.Pumps
             [classPersistenceAttribute("ReadTimeout")]
             public int ReadTimeout
             {
-                get { return mobj_SerialPort.ReadTimeout; }
-                set { mobj_SerialPort.ReadTimeout = value; }
+                get { return m_SerialPort.ReadTimeout; }
+                set { m_SerialPort.ReadTimeout = value; }
             }
 
             /// <summary>
@@ -147,8 +147,8 @@ namespace LcmsNet.Devices.Pumps
             [classPersistenceAttribute("WriteTimeout")]
             public int WriteTimeout
             {
-                get { return mobj_SerialPort.WriteTimeout; }
-                set { mobj_SerialPort.WriteTimeout = value; }
+                get { return m_SerialPort.WriteTimeout; }
+                set { m_SerialPort.WriteTimeout = value; }
             }
 
             /// <summary>
@@ -156,7 +156,7 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public bool Initialized
             {
-                get { return mbool_Initialized; }
+                get { return m_Initialized; }
             }
 
             /// <summary>
@@ -165,8 +165,8 @@ namespace LcmsNet.Devices.Pumps
             [classPersistenceAttribute("PumpCount")]
             public int PumpCount
             {
-                get { return mint_PumpCount; }
-                set { mint_PumpCount = value; }
+                get { return m_PumpCount; }
+                set { m_PumpCount = value; }
             }
 
             /// <summary>
@@ -175,30 +175,30 @@ namespace LcmsNet.Devices.Pumps
             [classPersistenceAttribute("UnitAddress")]
             public int UnitAddress
             {
-                get { return mint_UnitAddr; }
+                get { return m_UnitAddr; }
                 set
                 { 
-                    mint_UnitAddr = value;
-                    mobj_PortProps.UnitAddress = mint_UnitAddr;
+                    m_UnitAddr = value;
+                    m_PortProps.UnitAddress = m_UnitAddr;
                 }
             }
 
             /// <summary>
             /// Minimum pump controller address
             /// </summary>
-            public int UnitAddressMin { get { return mobj_PortProps.UnitAddressMin; } }
+            public int UnitAddressMin { get { return m_PortProps.UnitAddressMin; } }
 
             /// <summary>
             /// Maximum pump controller address
             /// </summary>
-            public int UnitAddressMax { get { return mobj_PortProps.UnitAddressMax; } }
+            public int UnitAddressMax { get { return m_PortProps.UnitAddressMax; } }
 
             /// <summary>
             /// Control mode (local/remote)
             /// </summary>
             public enumIscoControlMode ControlMode
             {
-                get { return menum_ControlMode; }
+                get { return m_ControlMode; }
                 set { SetControlMode(value); }
             }
 
@@ -207,41 +207,41 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public enumIscoOperationMode OperationMode
             {
-                get { return menum_OpMode; }
+                get { return m_OpMode; }
                 set { SetOperationMode(value); }
             }
 
             /// <summary>
             /// Current data for all pumps
             /// </summary>
-            public classPumpIscoData[] PumpData { get { return mobj_PumpData; } }
+            public classPumpIscoData[] PumpData { get { return m_PumpData; } }
         #endregion
 
         #region "Constructors"
             public classPumpIsco()
             {
-                mstring_Name = "Isco Pump";
+                m_Name = "Isco Pump";
 
                 models = new enumISCOModel[CONST_MAX_PUMPS];
 
-                //mstring_Name = classDeviceManager.Manager.CreateUniqueDeviceName(mstring_Name);
+                //m_Name = classDeviceManager.Manager.CreateUniqueDeviceName(m_Name);
                 // Initialize pump data array
-                mobj_PumpData = new classPumpIscoData[] { new classPumpIscoData(), new classPumpIscoData(),
+                m_PumpData = new classPumpIscoData[] { new classPumpIscoData(), new classPumpIscoData(),
                                         new classPumpIscoData() };
 
                 // Initialize setpoint array
-                mobj_SetpointLimits = new classPumpIscoSetpointLimits[] { new classPumpIscoSetpointLimits(),
+                m_SetpointLimits = new classPumpIscoSetpointLimits[] { new classPumpIscoSetpointLimits(),
                                                 new classPumpIscoSetpointLimits(), new classPumpIscoSetpointLimits() };
 
                 // Initialize pump range array
-                mobj_PumpRanges = new classPumpIscoRangeData[] { new classPumpIscoRangeData(),
+                m_PumpRanges = new classPumpIscoRangeData[] { new classPumpIscoRangeData(),
                                                 new classPumpIscoRangeData(), new classPumpIscoRangeData() };
 
-                mobj_SerialPort = new SerialPort();
+                m_SerialPort = new SerialPort();
 
                 // Configure the serial port with default settings
-                mobj_PortProps = new classIscoSerPortProps();
-                ConfigSerialPort(mobj_PortProps);
+                m_PortProps = new classIscoSerPortProps();
+                ConfigSerialPort(m_PortProps);
             }   
         #endregion
 
@@ -290,9 +290,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Object containing pump data</returns>
             public classPumpIscoData GetPumpData(int pumpIndx)
             {
-                if (pumpIndx < mobj_PumpData.Length)
+                if (pumpIndx < m_PumpData.Length)
                 {
-                    return mobj_PumpData[pumpIndx];
+                    return m_PumpData[pumpIndx];
                 }
                 else return null;
             }
@@ -304,9 +304,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Object containing range data</returns>
             public classPumpIscoRangeData GetPumpRanges(int pumpIndx)
             {
-                if (pumpIndx < mobj_PumpRanges.Length)
+                if (pumpIndx < m_PumpRanges.Length)
                 {
-                    return mobj_PumpRanges[pumpIndx];
+                    return m_PumpRanges[pumpIndx];
                 }
                 else return null;
             }   
@@ -318,9 +318,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Object containing setpoint limit data</returns>
             public classPumpIscoSetpointLimits GetSetpointLimits(int pumpIndx)
             {
-                if (pumpIndx < mobj_SetpointLimits.Length)
+                if (pumpIndx < m_SetpointLimits.Length)
                 {
-                    return mobj_SetpointLimits[pumpIndx];
+                    return m_SetpointLimits[pumpIndx];
                 }
                 else return null;
             }   
@@ -336,11 +336,11 @@ namespace LcmsNet.Devices.Pumps
                 LogMessage("Beginning Disconnect"); // DAC testing
 #endif
                 
-                if (mbool_Emulation)
+                if (m_Emulation)
                 {
                     // Emulation mode - just fake disconnecting
-                    //menum_ControlMode = enumIscoControlMode.Local; // we don't want to do this because it stops the pumps
-                    mbool_Initialized = false;
+                    //m_ControlMode = enumIscoControlMode.Local; // we don't want to do this because it stops the pumps
+                    m_Initialized = false;
                 Disconnected?.Invoke();
                 return true;
                 }
@@ -349,7 +349,7 @@ namespace LcmsNet.Devices.Pumps
                 LogMessage("Disconnect: Testing initialization");   // DAC testing
 #endif
 
-                if (mbool_Initialized)
+                if (m_Initialized)
                 {
 #if DACTEST
                     LogMessage("Disconnect: Setting control mode to Local");    // DAC testing
@@ -365,7 +365,7 @@ namespace LcmsNet.Devices.Pumps
                     // Close the serial port
                     try
                     {
-                        mobj_SerialPort.Close();
+                        m_SerialPort.Close();
                     }
                     catch (Exception ex)
                     {
@@ -381,7 +381,7 @@ namespace LcmsNet.Devices.Pumps
 #endif
 
 
-                    mbool_Initialized = false;
+                    m_Initialized = false;
                 }
 
 #if DACTEST
@@ -400,18 +400,18 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>TRUE for success; FALSE otherwise</returns>
             public bool SetControlMode(enumIscoControlMode newMode)
             {
-                if (mbool_Emulation)
+                if (m_Emulation)
                 {
-                    menum_ControlMode = newMode;
+                    m_ControlMode = newMode;
                 ControlModeSet?.Invoke(newMode);
                 return true;
                 }
 
                 // If already in same mode, no need to change it
-                if (menum_ControlMode == newMode) return true;
+                if (m_ControlMode == newMode) return true;
 
                 // check initialization state
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -445,8 +445,8 @@ namespace LcmsNet.Devices.Pumps
                 try
                 {
                     resp = SendCommand(cmd, true);
-                    menum_ControlMode = newMode;
-                    var args = new classDeviceStatusEventArgs(menum_Status, notifyString, this);
+                    m_ControlMode = newMode;
+                    var args = new classDeviceStatusEventArgs(m_Status, notifyString, this);
                 StatusUpdate?.Invoke(this, args);
             ControlModeSet?.Invoke(newMode);
                 return true;
@@ -457,7 +457,7 @@ namespace LcmsNet.Devices.Pumps
                                                 enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
-            ControlModeSet?.Invoke(menum_ControlMode);
+            ControlModeSet?.Invoke(m_ControlMode);
                 return false;
                 }
             }
@@ -473,15 +473,15 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>TRUE for success; FALSE otherwise</returns>
             public bool SetOperationMode(enumIscoOperationMode newMode)
             {
-                if (mbool_Emulation)
+                if (m_Emulation)
                 {
-                    menum_OpMode = newMode;
+                    m_OpMode = newMode;
                 OperationModeSet?.Invoke(newMode);
                 return true;
                 }
 
                 // If already in same mode, no need to change it
-                if (menum_OpMode == newMode) return true;
+                if (m_OpMode == newMode) return true;
 
                 var baseCmd = "";
                 var notifyString = "";
@@ -500,7 +500,7 @@ namespace LcmsNet.Devices.Pumps
                 }
 
                 var success = true;
-                for (var indx = 0; indx < mint_PumpCount; indx++)
+                for (var indx = 0; indx < m_PumpCount; indx++)
                 {
                     // Build the command for each pump
                     var cmd = baseCmd + ConvertPumpIndxToString(indx, true);
@@ -523,15 +523,15 @@ namespace LcmsNet.Devices.Pumps
                 // All finished - save and report status
                 if (success)
                 {
-                    menum_OpMode = newMode;
-                    var args = new classDeviceStatusEventArgs(menum_Status, notifyString, this);
+                    m_OpMode = newMode;
+                    var args = new classDeviceStatusEventArgs(m_Status, notifyString, this);
                 StatusUpdate?.Invoke(this, args);
             OperationModeSet?.Invoke(newMode);
                 return true;
                 }
                 else
                 {
-                OperationModeSet?.Invoke(menum_OpMode);
+                OperationModeSet?.Invoke(m_OpMode);
                 return false;
                 }
             }   
@@ -547,7 +547,7 @@ namespace LcmsNet.Devices.Pumps
             Initializing?.Invoke();
 
             // If in emulation mode, just return
-            if (mbool_Emulation)
+            if (m_Emulation)
                     return true;
 
                 // Close and reopen com port (to ensure any settings changes take effect)
@@ -562,15 +562,15 @@ namespace LcmsNet.Devices.Pumps
                 return false;
                 }
 
-                mbool_Initializing = true;
+                m_Initializing = true;
 
                 // Load the com port parameters and open the port
                 try
                 {
-                    mobj_SerialPort.Open();
-                    if (!mobj_SerialPort.IsOpen)
+                    m_SerialPort.Open();
+                    if (!m_SerialPort.IsOpen)
                     {
-                        throw new Exception(string.Format("The serial port on the ISCO pump {0} could not be opened.", mstring_Name));
+                        throw new Exception(string.Format("The serial port on the ISCO pump {0} could not be opened.", m_Name));
                     }
                 }
                 catch (Exception ex)
@@ -607,22 +607,22 @@ namespace LcmsNet.Devices.Pumps
                 }
 
                 // Get the setpoint and operating limits data
-                for (var pumpIndx = 0; pumpIndx < mint_PumpCount; pumpIndx++)
+                for (var pumpIndx = 0; pumpIndx < m_PumpCount; pumpIndx++)
                 {
                     // Setpoint limits
-                    mobj_SetpointLimits[pumpIndx].MinFlowSp    = ReadMinFlowSetpoint(pumpIndx);
-                    mobj_SetpointLimits[pumpIndx].MaxFlowSp    = ReadMaxFlowSetpoint(pumpIndx);
-                    mobj_SetpointLimits[pumpIndx].MinPressSp   = ReadMinPressSetpoint(pumpIndx);
-                    mobj_SetpointLimits[pumpIndx].MaxPressSp   = ReadMaxPressSetpoint(pumpIndx);
-                    mobj_SetpointLimits[pumpIndx].MaxFlowLimit = ReadMaxFlowLimit(pumpIndx);
+                    m_SetpointLimits[pumpIndx].MinFlowSp    = ReadMinFlowSetpoint(pumpIndx);
+                    m_SetpointLimits[pumpIndx].MaxFlowSp    = ReadMaxFlowSetpoint(pumpIndx);
+                    m_SetpointLimits[pumpIndx].MinPressSp   = ReadMinPressSetpoint(pumpIndx);
+                    m_SetpointLimits[pumpIndx].MaxPressSp   = ReadMaxPressSetpoint(pumpIndx);
+                    m_SetpointLimits[pumpIndx].MaxFlowLimit = ReadMaxFlowLimit(pumpIndx);
 
                     // Range limits
-                    mobj_PumpRanges[pumpIndx] = ReadPumpRanges(pumpIndx);
+                    m_PumpRanges[pumpIndx] = ReadPumpRanges(pumpIndx);
                 }
 
                 // we've already got the control mode for the pumps in PumpData, and since we use them all in the same control mode
                 // setting current mode here lets SetControlMode decide properly if it needs to change the mode or not.
-                menum_ControlMode = PumpData[0].ControlMode;
+                m_ControlMode = PumpData[0].ControlMode;
 
                 // Set remote mode
                 if (!SetControlMode(enumIscoControlMode.Remote))
@@ -631,26 +631,26 @@ namespace LcmsNet.Devices.Pumps
                     return false;
                 }
 
-                mbool_Initializing = false;
-                mbool_Initialized = true;
+                m_Initializing = false;
+                m_Initialized = true;
 
             // Tell world initializaion is complete
             InitializationComplete?.Invoke();
 
             // setup refresh timer so fluidics glyph will show updated status every CONST_DEFAULT_TIMER_INTERVAL ms
-            mtimer_refresh = new System.Threading.Timer(new TimerCallback(mtimer_refresh_Elapsed));
-                mtimer_refresh.Change(0L, CONST_DEFAULT_TIMER_INTERVAL);
+            m_refresh = new System.Threading.Timer(new TimerCallback(m_refresh_Elapsed));
+                m_refresh.Change(0L, CONST_DEFAULT_TIMER_INTERVAL);
                 return true;
             }
 
-            private void mtimer_refresh_Elapsed(object state)
+            private void m_refresh_Elapsed(object state)
             {
                 Refresh();
             }
 
             private bool GetModels()
             {
-                if(mbool_Emulation)
+                if(m_Emulation)
                 {
                     return true;
                 }
@@ -661,7 +661,7 @@ namespace LcmsNet.Devices.Pumps
                 //The models should be in tokens 1,3, and 5.
                 var retval = true;
                 var m = 1;
-                for(var i = 0; i < mint_PumpCount; i++)
+                for(var i = 0; i < m_PumpCount; i++)
                 {
                     var tokenOfInterest = tokens[m];
                     m += 2;
@@ -689,9 +689,9 @@ namespace LcmsNet.Devices.Pumps
             public bool Refresh()
             {
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "ISCO REFRESH STATUS DATA");
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -717,7 +717,7 @@ namespace LcmsNet.Devices.Pumps
 
                 try
                 {
-                    mobj_PumpData = ParseStatusMessage(resp);
+                    m_PumpData = ParseStatusMessage(resp);
                 }
                 catch (Exception ex)
                 {
@@ -730,16 +730,16 @@ namespace LcmsNet.Devices.Pumps
                 }
 
                 // Get operation mode and setpoint for each pump
-                for (var pumpIndx = 0; pumpIndx < mint_PumpCount; pumpIndx++)
+                for (var pumpIndx = 0; pumpIndx < m_PumpCount; pumpIndx++)
                 {
                     // Operation mode
-                    mobj_PumpData[pumpIndx].OperationMode = menum_OpMode;
+                    m_PumpData[pumpIndx].OperationMode = m_OpMode;
 
                     // Setpoint
-                    mobj_PumpData[pumpIndx].SetPoint = ReadSetpoint(pumpIndx, mobj_PumpData[pumpIndx].OperationMode);
+                    m_PumpData[pumpIndx].SetPoint = ReadSetpoint(pumpIndx, m_PumpData[pumpIndx].OperationMode);
 
                     // Refill rate
-                    mobj_PumpData[pumpIndx].RefillRate = ReadRefillRate(pumpIndx);
+                    m_PumpData[pumpIndx].RefillRate = ReadRefillRate(pumpIndx);
                 }
                 
                 // Check for errors
@@ -755,7 +755,7 @@ namespace LcmsNet.Devices.Pumps
             public double GetPumpVolume(double timeout, enumISCOPumpChannels pump)
             {
                 Refresh();
-                return mobj_PumpData[(int)pump].Volume;
+                return m_PumpData[(int)pump].Volume;
             }
 
             /// <summary>
@@ -766,9 +766,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Current setpoint; -1000 if there's a problem</returns>
             public double ReadSetpoint(int pumpIndx, enumIscoOperationMode opMode)
             {
-                if (mbool_Emulation) return 0.0;
+                if (m_Emulation) return 0.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -815,9 +815,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Min flow setpoint; -1000 if there's a problem</returns>
             public double ReadMinFlowSetpoint(int pumpIndx)
             {
-                if (mbool_Emulation) return 0.0;
+                if (m_Emulation) return 0.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -853,9 +853,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Max flow setpoint; -1000 if there's a problem</returns>
             public double ReadMaxFlowSetpoint(int pumpIndx)
             {
-                if (mbool_Emulation) return 0.0;
+                if (m_Emulation) return 0.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -891,9 +891,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Max flow limit; -1000 if there's a problem</returns>
             public double ReadMaxFlowLimit(int pumpIndx)
             {
-                if (mbool_Emulation) return 30.0;
+                if (m_Emulation) return 30.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -929,9 +929,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Min pressure setpoint; -1000 if there's a problem</returns>
             public double ReadMinPressSetpoint(int pumpIndx)
             {
-                if (mbool_Emulation) return 0.0;
+                if (m_Emulation) return 0.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -967,9 +967,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Max pressure setpoint; -1000 if there's a problem</returns>
             public double ReadMaxPressSetpoint(int pumpIndx)
             {
-                if (mbool_Emulation) return 0.0;
+                if (m_Emulation) return 0.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1005,9 +1005,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Object containing pump range data</returns>
             public classPumpIscoRangeData ReadPumpRanges(int pumpIndx)
             {
-                if (mbool_Emulation) return null;
+                if (m_Emulation) return null;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1051,9 +1051,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>TRUE for success; FALSE otherwise</returns>
             public bool StartRefill(int pumpIndx, double refillRate)
             {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
-                if (!mbool_Initialized)
+                if (!m_Initialized)
                 {
                     var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1126,9 +1126,9 @@ namespace LcmsNet.Devices.Pumps
             ///             
             public bool StartPump(double timeout, int pumpIndx)
             {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
-                if (!mbool_Initialized)
+                if (!m_Initialized)
                 {
                     var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1175,9 +1175,9 @@ namespace LcmsNet.Devices.Pumps
             }            
             public bool StopPump(double timeout, int pumpIndx)
             {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
-                if (!mbool_Initialized)
+                if (!m_Initialized)
                 {
                     var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1223,9 +1223,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>TRUE for success; FALSE otherwise</returns>
             public bool SetFlow(int pumpIndx, double newFlow)
             {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
-                if (!mbool_Initialized)
+                if (!m_Initialized)
                 {
                     var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1271,9 +1271,9 @@ namespace LcmsNet.Devices.Pumps
             }
             public bool SetPressure(int pumpIndx, double newPress)
             {
-                if (mbool_Emulation) return true;
+                if (m_Emulation) return true;
 
-                if (!mbool_Initialized)
+                if (!m_Initialized)
                 {
                     var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1314,11 +1314,11 @@ namespace LcmsNet.Devices.Pumps
                 var notifyMsg = "";
                 bool errorFound;
 
-                for (var indx = 0; indx < mint_PumpCount; indx++)
+                for (var indx = 0; indx < m_PumpCount; indx++)
                 {
                     notifyMsg = "";
                     errorFound = false;
-                    switch (mobj_PumpData[indx].ProblemStatus)
+                    switch (m_PumpData[indx].ProblemStatus)
                     {
                         case enumIscoProblemStatus.None:
                             // No action necessary
@@ -1365,14 +1365,14 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             private bool ReadPumpUnits()
             {
-                if (mbool_Emulation)
+                if (m_Emulation)
                 {
                     classIscoConversions.FlowUnits = enumIscoFlowUnits.ul_min;
                     classIscoConversions.PressUnits = enumIscoPressureUnits.psi;
                     return true;
                 }
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
                     classIscoConversions.PressUnits = enumIscoPressureUnits.error;
@@ -1420,9 +1420,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Refill rate; -1000 on error</returns>
             private double ReadRefillRate(int pumpIndx)
             {
-                if (mbool_Emulation) return 5.0;
+                if (m_Emulation) return 5.0;
 
-                if (!(mbool_Initialized || mbool_Initializing))
+                if (!(m_Initialized || m_Initializing))
                 {
                     var args = new classDeviceErrorEventArgs("Device not initialized", null,
                                         enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
@@ -1459,25 +1459,25 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="portProps">Port properties</param>
             private void ConfigSerialPort(classIscoSerPortProps portProps)
             {
-                if (mobj_SerialPort == null)
+                if (m_SerialPort == null)
                 {
-                    mobj_SerialPort = new SerialPort();
+                    m_SerialPort = new SerialPort();
                 }
-                else if (mobj_SerialPort.IsOpen)
+                else if (m_SerialPort.IsOpen)
                 {
-                    mobj_SerialPort.Close();
+                    m_SerialPort.Close();
                 }
 
-                mobj_SerialPort.PortName = portProps.PortName;
-                mobj_SerialPort.BaudRate = portProps.BaudRate;
-                mobj_SerialPort.StopBits = portProps.StopBits;
-                mobj_SerialPort.DataBits = portProps.DataBits;
-                mobj_SerialPort.Handshake = portProps.HandShake;
-                mobj_SerialPort.Parity = portProps.Parity;
-                mobj_SerialPort.NewLine = portProps.NewLine;
-                mobj_SerialPort.ReadTimeout = portProps.ReadTimeout;
-                mobj_SerialPort.WriteTimeout = portProps.WriteTimeout;
-                mint_UnitAddr = portProps.UnitAddress;
+                m_SerialPort.PortName = portProps.PortName;
+                m_SerialPort.BaudRate = portProps.BaudRate;
+                m_SerialPort.StopBits = portProps.StopBits;
+                m_SerialPort.DataBits = portProps.DataBits;
+                m_SerialPort.Handshake = portProps.HandShake;
+                m_SerialPort.Parity = portProps.Parity;
+                m_SerialPort.NewLine = portProps.NewLine;
+                m_SerialPort.ReadTimeout = portProps.ReadTimeout;
+                m_SerialPort.WriteTimeout = portProps.WriteTimeout;
+                m_UnitAddr = portProps.UnitAddress;
             }   
 
             /// <summary>
@@ -1554,11 +1554,11 @@ namespace LcmsNet.Devices.Pumps
                 string errMsg;
 
                 // If the serial port isn't open, then open it
-                if (!mobj_SerialPort.IsOpen)
+                if (!m_SerialPort.IsOpen)
                 {
                     try
                     {
-                        mobj_SerialPort.Open();
+                        m_SerialPort.Open();
                     }
                     catch (UnauthorizedAccessException ex)
                     {
@@ -1566,7 +1566,7 @@ namespace LcmsNet.Devices.Pumps
                     }
                 }
 
-                var cmd = BuildCtrlMsgFrame(0, mint_UnitAddr, cmdStr, ack);
+                var cmd = BuildCtrlMsgFrame(0, m_UnitAddr, cmdStr, ack);
 
                 // Send the command
                 try
@@ -1574,7 +1574,7 @@ namespace LcmsNet.Devices.Pumps
 #if DACTEST
                     LogMessage("SEND: " + cmd); // DAC testing
 #endif
-                    mobj_SerialPort.WriteLine("\r" + cmd); // DASNET messages are preceded by CR to ensure controller is listening
+                    m_SerialPort.WriteLine("\r" + cmd); // DASNET messages are preceded by CR to ensure controller is listening
                 }
                 catch (TimeoutException)
                 {
@@ -1594,7 +1594,7 @@ namespace LcmsNet.Devices.Pumps
                 {
                     try
                     {
-                        msgIn = mobj_SerialPort.ReadLine();
+                        msgIn = m_SerialPort.ReadLine();
 #if DACTEST
                         LogMessage("RECV: " + msgIn);   // DAC testing
 #endif
@@ -1977,7 +1977,7 @@ namespace LcmsNet.Devices.Pumps
                   
                     // Parse the field data and store
                     var tokenIndx = 0;
-                    for (var pump = 0; pump < mint_PumpCount; pump++)
+                    for (var pump = 0; pump < m_PumpCount; pump++)
                     {
                         // Sample time
                         retArray[pump].PointTime = LcmsNetSDK.TimeKeeper.Instance.Now;// DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -2169,12 +2169,12 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public string Name
             {
-                get { return mstring_Name; }
+                get { return m_Name; }
                 set
                 {
-                    if (value != null && value != mstring_Name)
+                    if (value != null && value != m_Name)
                     {
-                        mstring_Name = value;
+                        m_Name = value;
                     DeviceSaveRequired?.Invoke(this, null);
                 }
                 }
@@ -2185,8 +2185,8 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public string Version
             {
-                get { return mstring_Version; }
-                set { mstring_Version = value; }
+                get { return m_Version; }
+                set { m_Version = value; }
             }
 
             /// <summary>
@@ -2194,8 +2194,8 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             public enumDeviceStatus Status
             {
-                get { return menum_Status; }
-                set { menum_Status = value; }
+                get { return m_Status; }
+                set { m_Status = value; }
             }
 
             public System.Threading.ManualResetEvent AbortEvent

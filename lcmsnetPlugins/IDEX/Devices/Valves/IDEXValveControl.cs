@@ -16,7 +16,7 @@ namespace ASUTGen.Devices.Valves
         /// <summary>
         /// Notification driver object.
         /// </summary>
-        private IDEXValve mobj_valve;
+        private IDEXValve m_valve;
 
         public IDEXValveControl()
         {
@@ -25,12 +25,12 @@ namespace ASUTGen.Devices.Valves
 
         private void mbutton_injectFailure_Click(object sender, EventArgs e)
         {
-            mobj_valve.ChangePosition(100, 100);
+            m_valve.ChangePosition(100, 100);
         }
         
         public void RegisterDevice(IDevice device)
         {
-            mobj_valve = device as IDEXValve;
+            m_valve = device as IDEXValve;
         }
         #region IDeviceControl Members
 
@@ -47,7 +47,7 @@ namespace ASUTGen.Devices.Valves
         {
             get
             {
-                return mobj_valve;
+                return m_valve;
             }
             set
             {

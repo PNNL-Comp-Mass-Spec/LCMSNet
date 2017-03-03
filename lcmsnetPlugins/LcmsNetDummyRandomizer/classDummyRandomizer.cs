@@ -22,7 +22,7 @@ namespace LcmsNet.SampleQueue
     public class classDummyRandomizer : IRandomizerInterface, IEnumerable
     {
         #region "Class variables"
-            List<long> mobj_Items;
+            List<long> m_Items;
         #endregion
 
         #region "Methods"
@@ -51,7 +51,7 @@ namespace LcmsNet.SampleQueue
             /// <returns>Enumerator</returns>
             public IEnumerator GetEnumerator()
             {
-                return mobj_Items.GetEnumerator();
+                return m_Items.GetEnumerator();
             }
 
             /// <summary>

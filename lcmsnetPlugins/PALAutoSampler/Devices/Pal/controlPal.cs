@@ -33,12 +33,12 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The class which controls the PAL itself.
         /// </summary>
-        private classPal mobj_Pal;
+        private classPal m_Pal;
 
         /// <summary>
         /// An event listener to watch for events from the PAL class
         /// </summary>
-        //public PalEventListener mobj_PalEventListener;
+        //public PalEventListener m_PalEventListener;
 
         #endregion
 
@@ -65,17 +65,17 @@ namespace LcmsNet.Devices.Pal
         private void RegisterDevice(IDevice device)
         {
           
-            mobj_Pal = device as classPal;
+            m_Pal = device as classPal;
            
-            mobj_Pal.DeviceSaveRequired += new EventHandler(Pal_DeviceSaveRequired);
-            mobj_Pal.Free               += new DelegateDeviceFree(OnFree);
-            mobj_Pal.TrayNames          += new EventHandler<classAutoSampleEventArgs>(mobj_Pal_PalTrayListReceived);
-            mobj_Pal.MethodNames        += new EventHandler<classAutoSampleEventArgs>((object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); });
+            m_Pal.DeviceSaveRequired += new EventHandler(Pal_DeviceSaveRequired);
+            m_Pal.Free               += new DelegateDeviceFree(OnFree);
+            m_Pal.TrayNames          += new EventHandler<classAutoSampleEventArgs>(m_Pal_PalTrayListReceived);
+            m_Pal.MethodNames        += new EventHandler<classAutoSampleEventArgs>((object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); });
      
             mcomboBox_VialRange.DataSource      = System.Enum.GetNames(typeof(enumVialRanges));
-            mcomboBox_VialRange.SelectedItem    = mobj_Pal.VialRange.ToString();
+            mcomboBox_VialRange.SelectedItem    = m_Pal.VialRange.ToString();
             
-            SetBaseDevice(mobj_Pal);
+            SetBaseDevice(m_Pal);
         }
 
         #endregion
@@ -110,11 +110,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mobj_Pal.Emulation;
+                return m_Pal.Emulation;
             }
             set
             {
-                mobj_Pal.Emulation = value;
+                m_Pal.Emulation = value;
             }
         }
 
@@ -125,16 +125,16 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mobj_Pal;
+                return m_Pal;
             }
             set
             {
-                mobj_Pal = value as classPal;
-                if (mobj_Pal != null && !DesignMode)
+                m_Pal = value as classPal;
+                if (m_Pal != null && !DesignMode)
                 {
                     try
                     {
-                        mcombo_portNames.SelectedText = mobj_Pal.PortName;
+                        mcombo_portNames.SelectedText = m_Pal.PortName;
                     }
                     catch
                     { 
@@ -153,7 +153,7 @@ namespace LcmsNet.Devices.Pal
         public virtual void OnFree(object sender)
         {
             Free?.Invoke(this);
-            // mbool_runningMethodManually = false;
+            // m_runningMethodManually = false;
             //mButton_RunMethod.Text = "Run Method";
         }
 
@@ -191,7 +191,7 @@ namespace LcmsNet.Devices.Pal
         /// Handles when the PAL says it has tray data.
         /// </summary>
         /// <param name="trayList">List of detected tray names.</param>
-        void mobj_Pal_PalTrayListReceived(object sender, classAutoSampleEventArgs args)
+        void m_Pal_PalTrayListReceived(object sender, classAutoSampleEventArgs args)
         {
             ProcessTrays(args.TrayList);
         }
@@ -222,8 +222,8 @@ namespace LcmsNet.Devices.Pal
 
         private void mButton_RefreshMethods_Click(object sender, EventArgs e)
         {
-             mobj_Pal.ListMethods();
-             mobj_Pal.ListTrays();
+             m_Pal.ListMethods();
+             m_Pal.ListTrays();
         }
 
         private void mButton_RunMethod_Click(object sender, EventArgs e)
@@ -240,14 +240,14 @@ namespace LcmsNet.Devices.Pal
             }
             else
             {
-                if (mobj_Pal.GetStatus().Contains("READY"))
+                if (m_Pal.GetStatus().Contains("READY"))
                 {
-                    mobj_Pal.LoadMethod(mcomboBox_MethodList.SelectedItem.ToString(), mcomboBox_tray.SelectedItem.ToString(), Convert.ToInt32(mnum_vial.Value), Convert.ToString(mnum_volume.Value));
-                    mobj_Pal.StartMethod(1000);
+                    m_Pal.LoadMethod(mcomboBox_MethodList.SelectedItem.ToString(), mcomboBox_tray.SelectedItem.ToString(), Convert.ToInt32(mnum_vial.Value), Convert.ToString(mnum_volume.Value));
+                    m_Pal.StartMethod(1000);
                 }
                 else
                 {
-                    mobj_Pal.ContinueMethod(0);
+                    m_Pal.ContinueMethod(0);
                 }
             }
         }
@@ -257,7 +257,7 @@ namespace LcmsNet.Devices.Pal
             try
             {
                 var errorMessage = "";
-                mobj_Pal.Initialize(ref errorMessage);
+                m_Pal.Initialize(ref errorMessage);
             }
             catch
             {
@@ -267,23 +267,23 @@ namespace LcmsNet.Devices.Pal
 
         private void mButton_StatusRefresh_Click(object sender, EventArgs e)
         {
-            mTextBox_Status.Text = mobj_Pal.GetStatus();
+            mTextBox_Status.Text = m_Pal.GetStatus();
         }
 
         #endregion
         private void mbutton_stopMethod_Click(object sender, EventArgs e)
         {
-            mobj_Pal.StopMethod();
+            m_Pal.StopMethod();
         }
         private void mcomboBox_VialRange_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            mobj_Pal.VialRange = (enumVialRanges)System.Enum.Parse(typeof(enumVialRanges), mcomboBox_VialRange.Text);
+            m_Pal.VialRange = (enumVialRanges)System.Enum.Parse(typeof(enumVialRanges), mcomboBox_VialRange.Text);
         }
 
         private void mbutton_apply_Click(object sender, EventArgs e)
         {
-            mobj_Pal.PortName       = mcombo_portNames.SelectedItem as string;
-            mTextBox_Status.Text    = "Port name changed to " + mobj_Pal.PortName;
+            m_Pal.PortName       = mcombo_portNames.SelectedItem as string;
+            mTextBox_Status.Text    = "Port name changed to " + m_Pal.PortName;
         }
     }
 }

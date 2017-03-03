@@ -6,21 +6,21 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 {
     class classNetStartMessage
     {
-        private enumNetStartMessageTypes mobj_type;
-        private int mint_sequence;
+        private enumNetStartMessageTypes m_type;
+        private int m_sequence;
         private string mstr_descriptor;
-        private List<classNetStartArgument> mobj_arglist;
+        private List<classNetStartArgument> m_arglist;
 
         public enumNetStartMessageTypes Type
         {
-            get { return mobj_type; }
-            set { mobj_type = value; }
+            get { return m_type; }
+            set { m_type = value; }
         }
 
         public int Sequence
         {
-            get { return mint_sequence; }
-            set { mint_sequence = value; }
+            get { return m_sequence; }
+            set { m_sequence = value; }
         }
 
         public string Descriptor
@@ -31,8 +31,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
         public List<classNetStartArgument> ArgumentList
         {
-            get { return mobj_arglist; }
-            set { mobj_arglist = value; }
+            get { return m_arglist; }
+            set { m_arglist = value; }
         }
     }
 }

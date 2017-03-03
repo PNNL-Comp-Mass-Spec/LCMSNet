@@ -19,7 +19,7 @@ namespace LcmsNetDataClasses.Configuration
             m_name = "";
             m_columnIndex = 0;
             m_systemIndex = 0;
-            menum_status = enumColumnStatus.Idle;
+            m_status = enumColumnStatus.Idle;
             m_first = false;
         }
 
@@ -68,7 +68,7 @@ namespace LcmsNetDataClasses.Configuration
         /// <summary>
         /// Status of the column
         /// </summary>
-        private enumColumnStatus menum_status;
+        private enumColumnStatus m_status;
 
         /// <summary>
         /// Fired when the status of a column changes.
@@ -126,20 +126,20 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public enumColumnStatus Status
         {
-            get { return menum_status; }
+            get { return m_status; }
             set
             {
                 // 
                 // If the status has changed,
                 // let someone know.
                 // 
-                if (value != menum_status)
+                if (value != m_status)
                 {
-                    var previousStatus = menum_status;
-                    menum_status = value;
-                    StatusChanged?.Invoke(this, previousStatus, menum_status);
+                    var previousStatus = m_status;
+                    m_status = value;
+                    StatusChanged?.Invoke(this, previousStatus, m_status);
                 }
-                menum_status = value;
+                m_status = value;
             }
         }
 

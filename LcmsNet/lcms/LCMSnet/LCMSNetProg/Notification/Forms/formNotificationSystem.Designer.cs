@@ -52,7 +52,7 @@ namespace LcmsNet.Notification.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.mgroupBox_actions = new System.Windows.Forms.GroupBox();
             this.mlabel_status = new System.Windows.Forms.Label();
-            this.mtimer_notifier = new System.Windows.Forms.Timer(this.components);
+            this.m_notifierTimer = new System.Windows.Forms.Timer(this.components);
             this.mlistBox_events = new System.Windows.Forms.ListBox();
             this.mlistbox_assignedEvents = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -324,11 +324,11 @@ namespace LcmsNet.Notification.Forms
             this.mlabel_status.TabIndex = 20;
             this.mlabel_status.Text = "Unassigned Events";
             //
-            // mtimer_notifier
+            // m_notifierTimer
             //
-            this.mtimer_notifier.Enabled = true;
-            this.mtimer_notifier.Interval = 20000;
-            this.mtimer_notifier.Tick += new System.EventHandler(this.mtimer_notifier_Tick);
+            this.m_notifierTimer.Enabled = true;
+            this.m_notifierTimer.Interval = 20000;
+            this.m_notifierTimer.Tick += new System.EventHandler(this.m_notifierTimer_Tick);
             //
             // mlistBox_events
             //
@@ -662,7 +662,7 @@ namespace LcmsNet.Notification.Forms
         private Label label4;
         private GroupBox mgroupBox_actions;
         private Label mlabel_status;
-        private Timer mtimer_notifier;
+        private Timer m_notifierTimer;
         private ColumnHeader columnHeader1;
         private ListBox mlistBox_events;
         private ListBox mlistbox_assignedEvents;

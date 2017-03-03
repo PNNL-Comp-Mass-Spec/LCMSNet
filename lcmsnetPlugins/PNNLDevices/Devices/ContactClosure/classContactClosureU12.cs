@@ -37,27 +37,27 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
-        private readonly classLabjackU12 mobj_labjack;
+        private readonly classLabjackU12 m_labjack;
         /// <summary>
         /// The port on the labjack on which to apply the voltage.
         /// </summary>
-        private enumLabjackU12OutputPorts mobj_port;
+        private enumLabjackU12OutputPorts m_port;
         /// <summary>
         /// The name, used in software for the symbol.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
         /// <summary>
         /// The version.
         /// </summary>
-        private string mstring_version;
+        private string m_version;
         /// <summary>
         /// The current status of the Labjack.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
         /// <summary>
         /// Flag indicating if the device is in emulation mode.
         /// </summary>
-        private bool mbool_emulation;
+        private bool m_emulation;
         private const char CONST_ANALOGPREFIX = 'A';
         private const int CONST_ANALOGHIGH = 5;
         private const int CONST_DIGITALHIGH = 1;
@@ -87,9 +87,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         public classContactClosureU12()
         {
-            mobj_labjack = new classLabjackU12();
-            mobj_port    = enumLabjackU12OutputPorts.AO1;
-            mstring_name = "Contact Closure";
+            m_labjack = new classLabjackU12();
+            m_port    = enumLabjackU12OutputPorts.AO1;
+            m_name = "Contact Closure";
         }
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="lj">The labjack</param>
         public classContactClosureU12(classLabjackU12 lj)
         {
-            mobj_labjack = lj;
-            mobj_port    = enumLabjackU12OutputPorts.AO1;
-            mstring_name = "Contact Closure";
+            m_labjack = lj;
+            m_port    = enumLabjackU12OutputPorts.AO1;
+            m_name = "Contact Closure";
         }
 
         /// <summary>
@@ -109,9 +109,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
         public classContactClosureU12(enumLabjackU12OutputPorts newPort)
         {
-            mobj_labjack = new classLabjackU12();
-            mobj_port    = newPort;
-            mstring_name = "Contact Closure";
+            m_labjack = new classLabjackU12();
+            m_port    = newPort;
+            m_name = "Contact Closure";
         }
 
         /// <summary>
@@ -121,9 +121,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
         public classContactClosureU12(classLabjackU12 lj, enumLabjackU12OutputPorts newPort)
         {
-            mobj_labjack = lj;
-            mobj_port    = newPort;
-            mstring_name = "Contact Closure";
+            m_labjack = lj;
+            m_port    = newPort;
+            m_name = "Contact Closure";
         }
 
         #endregion
@@ -142,11 +142,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mbool_emulation;
+                return m_emulation;
             }
             set
             {                
-                mbool_emulation = value;
+                m_emulation = value;
             }
         }
         /// <summary>
@@ -156,15 +156,15 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return menum_status;
+                return m_status;
             }
             set
             {
-                if (value != menum_status && StatusUpdate != null)
+                if (value != m_status && StatusUpdate != null)
                 {
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
                 }
-                menum_status = value;
+                m_status = value;
             }
         }
 
@@ -175,11 +175,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mstring_name;
+                return m_name;
             }
             set
             {
-                mstring_name = value;
+                m_name = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -191,11 +191,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mstring_version;
+                return m_version;
             }
             set
             {
-                mstring_version = value;
+                m_version = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -207,11 +207,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mobj_port;
+                return m_port;
             }
             set
             {
-                mobj_port = value;
+                m_port = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -220,11 +220,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mobj_labjack.LocalID;
+                return m_labjack.LocalID;
             }
             set
             {
-                mobj_labjack.LocalID = value;
+                m_labjack.LocalID = value;
             }
         }
         #endregion
@@ -236,11 +236,11 @@ namespace LcmsNet.Devices.ContactClosure
         public bool Initialize(ref string errorMessage)
         {
             //Get the version info
-            mobj_labjack.GetDriverVersion();
-            mobj_labjack.GetFirmwareVersion();
+            m_labjack.GetDriverVersion();
+            m_labjack.GetFirmwareVersion();
 
             //If we got anything, call it good
-            if (mobj_labjack.FirmwareVersion.ToString().Length > 0 && mobj_labjack.DriverVersion.ToString().Length > 0)
+            if (m_labjack.FirmwareVersion.ToString().Length > 0 && m_labjack.DriverVersion.ToString().Length > 0)
             {
                 return true;
             }
@@ -275,7 +275,7 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
-            return Trigger(timeout, mobj_port, pulseLengthSeconds);
+            return Trigger(timeout, m_port, pulseLengthSeconds);
         }
         /// <summary>
         /// Triggers a 5V pulse of the specified length.
@@ -286,12 +286,12 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, enumLabjackU12OutputPorts port, double pulseLengthSeconds)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), mobj_port).ToString();
+            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), m_port).ToString();
 
             var error = 0;
 
@@ -299,11 +299,11 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 if (tempPortName[0] == CONST_ANALOGPREFIX)
                 {
-                    mobj_labjack.Write(port, CONST_ANALOGHIGH);
+                    m_labjack.Write(port, CONST_ANALOGHIGH);
                 }
                 else
                 {
-                    mobj_labjack.Write(port, CONST_DIGITALHIGH);
+                    m_labjack.Write(port, CONST_DIGITALHIGH);
                 }
             }
             catch (classLabjackU12Exception ex)
@@ -324,7 +324,7 @@ namespace LcmsNet.Devices.ContactClosure
 
             try
             {
-                mobj_labjack.Write(port, CONST_ANALOGLOW);
+                m_labjack.Write(port, CONST_ANALOGLOW);
             }
             catch (classLabjackU12Exception ex)
             {
@@ -349,7 +349,7 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, double voltage)
         {
-            return Trigger(pulseLengthSeconds, mobj_port, voltage);
+            return Trigger(pulseLengthSeconds, m_port, voltage);
         }
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
@@ -361,22 +361,22 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), mobj_port).ToString();
+            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), m_port).ToString();
             var error = 0;
             try
             {
                 if (tempPortName[0] == CONST_ANALOGPREFIX)
                 {
-                    mobj_labjack.Write(port, voltage);
+                    m_labjack.Write(port, voltage);
                 }
                 else
                 {
-                    mobj_labjack.Write(port, CONST_DIGITALHIGH);
+                    m_labjack.Write(port, CONST_DIGITALHIGH);
                 }
             }
             catch (classLabjackU12Exception ex)
@@ -389,7 +389,7 @@ namespace LcmsNet.Devices.ContactClosure
 
             try
             {
-                mobj_labjack.Write(port, CONST_ANALOGLOW);
+                m_labjack.Write(port, CONST_ANALOGLOW);
             }
             catch (classLabjackU12Exception ex)
             {
@@ -400,7 +400,7 @@ namespace LcmsNet.Devices.ContactClosure
         }
         public override string ToString()
         {
-            return mstring_name;
+            return m_name;
         }
         #endregion
 

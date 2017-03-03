@@ -18,7 +18,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Notification driver object.
         /// </summary>
-        private EksigentPump mobj_pump;
+        private EksigentPump m_pump;
         /// <summary>
         /// Delegate for updating text on the form from another thread.
         /// </summary>
@@ -33,17 +33,17 @@ namespace Eksigent.Devices.Pumps
         
         public void RegisterDevice(IDevice device)
         {
-            mobj_pump                   = device as EksigentPump;
-            mobj_pump.Error             += new EventHandler<classDeviceErrorEventArgs>(mobj_pump_Error);
-            mobj_pump.StatusUpdate      += new EventHandler<classDeviceStatusEventArgs>(mobj_pump_StatusUpdate);
-            mobj_pump.RequiresOCXInitialization += new EventHandler(mobj_pump_RequiresOCXInitialization);
-            mobj_pump.PumpStatus        += new EventHandler<classDeviceStatusEventArgs>(mobj_pump_PumpStatus);
-            mobj_pump.MethodNames       += new DelegateDeviceHasData(mobj_pump_MethodNames);
-            mobj_pump.ChannelNumbers    += new EksigentPump.DelegateChannelNumbers(mobj_pump_ChannelNumbers);
+            m_pump                   = device as EksigentPump;
+            m_pump.Error             += new EventHandler<classDeviceErrorEventArgs>(m_pump_Error);
+            m_pump.StatusUpdate      += new EventHandler<classDeviceStatusEventArgs>(m_pump_StatusUpdate);
+            m_pump.RequiresOCXInitialization += new EventHandler(m_pump_RequiresOCXInitialization);
+            m_pump.PumpStatus        += new EventHandler<classDeviceStatusEventArgs>(m_pump_PumpStatus);
+            m_pump.MethodNames       += new DelegateDeviceHasData(m_pump_MethodNames);
+            m_pump.ChannelNumbers    += new EksigentPump.DelegateChannelNumbers(m_pump_ChannelNumbers);
             SetBaseDevice(device);
         }
 
-        void mobj_pump_RequiresOCXInitialization(object sender, EventArgs e)
+        void m_pump_RequiresOCXInitialization(object sender, EventArgs e)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Eksigent.Devices.Pumps
         {
             get
             {
-                return mobj_pump;
+                return m_pump;
             }
             set
             {
@@ -81,7 +81,7 @@ namespace Eksigent.Devices.Pumps
         /// Handles the channel numbers.
         /// </summary>
         /// <param name="totalChannels"></param>
-        void mobj_pump_ChannelNumbers(int totalChannels)
+        void m_pump_ChannelNumbers(int totalChannels)
         {
             var value = Convert.ToInt32(mnum_channels.Value);
 
@@ -102,7 +102,7 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_pump_PumpStatus(object sender, classDeviceStatusEventArgs e)
+        void m_pump_PumpStatus(object sender, classDeviceStatusEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -118,7 +118,7 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void mobj_pump_MethodNames(object sender, List<object> data)
+        void m_pump_MethodNames(object sender, List<object> data)
         {
             mcomboBox_methods.BeginUpdate();
             mcomboBox_methods.Items.Clear();
@@ -133,11 +133,11 @@ namespace Eksigent.Devices.Pumps
                 mcomboBox_methods.SelectedIndex = 0;
             }
         }
-        void mobj_pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+        void m_pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
         {
             base.UpdateStatusDisplay(e.Message);
         }
-        void mobj_pump_Error(object sender, classDeviceErrorEventArgs e)
+        void m_pump_Error(object sender, classDeviceErrorEventArgs e)
         {
             base.UpdateStatusDisplay(e.Error);
         }
@@ -147,7 +147,7 @@ namespace Eksigent.Devices.Pumps
         private void mbutton_updateMethods_Click(object sender, EventArgs e)
         {
             UpdateStatusDisplay("");
-            mobj_pump.GetMethods();
+            m_pump.GetMethods();
         }
         private void mbutton_methodMenu_Click(object sender, EventArgs e)
         {
@@ -164,7 +164,7 @@ namespace Eksigent.Devices.Pumps
                 UpdateStatusDisplay("Select a method first.");
                 return;
             }
-            mobj_pump.ShowMethodMenu(Convert.ToInt32(mnum_channels.Value), methodData.ToString());
+            m_pump.ShowMethodMenu(Convert.ToInt32(mnum_channels.Value), methodData.ToString());
         }
         private void mbutton_DirectControl_Click(object sender, EventArgs e)
         {
@@ -176,7 +176,7 @@ namespace Eksigent.Devices.Pumps
             }
             try
             {
-                mobj_pump.ShowDirectControl(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
+                m_pump.ShowDirectControl(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -194,7 +194,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                mobj_pump.ShowMobilePhaseMenu(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
+                m_pump.ShowMobilePhaseMenu(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -207,7 +207,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                mobj_pump.ShowInstrumentConfigMenu();
+                m_pump.ShowInstrumentConfigMenu();
             }
             catch (Exception ex)
             {
@@ -220,7 +220,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                mobj_pump.ShowAdvancedSettings(this.Handle.ToInt32());
+                m_pump.ShowAdvancedSettings(this.Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -238,7 +238,7 @@ namespace Eksigent.Devices.Pumps
 
             try
             {
-                mobj_pump.ShowDiagnosticsMenu(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
+                m_pump.ShowDiagnosticsMenu(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -251,7 +251,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                mobj_pump.ShowMainWindow(this.Handle.ToInt32());
+                m_pump.ShowMainWindow(this.Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -264,7 +264,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                mobj_pump.ShowAlertsMenu();
+                m_pump.ShowAlertsMenu();
             }
             catch (Exception ex)
             {
@@ -288,7 +288,7 @@ namespace Eksigent.Devices.Pumps
                     UpdateStatusDisplay("Select a method first.");
                     return;
                 }
-                mobj_pump.StartMethod(0, Convert.ToDouble(mnum_channels.Value), methodData.ToString());
+                m_pump.StartMethod(0, Convert.ToDouble(mnum_channels.Value), methodData.ToString());
             }
             catch (Exception ex)
             {
@@ -307,7 +307,7 @@ namespace Eksigent.Devices.Pumps
 
             try
             {
-                mobj_pump.StopMethod(0, Convert.ToInt32(mnum_channels.Value));
+                m_pump.StopMethod(0, Convert.ToInt32(mnum_channels.Value));
             }
             catch (Exception ex)
             {

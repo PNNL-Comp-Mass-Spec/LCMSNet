@@ -16,7 +16,7 @@ namespace ASUTGen.Devices.Pumps
         /// <summary>
         /// Notification driver object.
         /// </summary>
-        private IDEXPump mobj_valve;
+        private IDEXPump m_valve;
 
         public IDEXPumpControl()
         {
@@ -25,7 +25,7 @@ namespace ASUTGen.Devices.Pumps
         
         public void RegisterDevice(IDevice device)
         {
-            mobj_valve = device as IDEXPump;
+            m_valve = device as IDEXPump;
         }
 
         #region IDeviceControl Members
@@ -43,7 +43,7 @@ namespace ASUTGen.Devices.Pumps
         {
             get
             {
-                return mobj_valve;
+                return m_valve;
             }
             set
             {

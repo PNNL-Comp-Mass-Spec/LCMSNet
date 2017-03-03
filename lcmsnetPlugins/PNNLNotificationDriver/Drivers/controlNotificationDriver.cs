@@ -16,7 +16,7 @@ namespace FailureInjector.Drivers
         /// <summary>
         /// Notification driver object.
         /// </summary>
-        private NotificationDriver mobj_driver;
+        private NotificationDriver m_driver;
 
         public controlNotificationDriver()
         {
@@ -25,13 +25,13 @@ namespace FailureInjector.Drivers
 
         private void mbutton_injectFailure_Click(object sender, EventArgs e)
         {
-            mobj_driver.InjectFailure();
+            m_driver.InjectFailure();
         }
         
         public void RegisterDevice(IDevice device)
         {
-            mobj_driver = device as NotificationDriver;
-            SetBaseDevice(mobj_driver);
+            m_driver = device as NotificationDriver;
+            SetBaseDevice(m_driver);
         }
         #region IDeviceControl Members
 
@@ -48,7 +48,7 @@ namespace FailureInjector.Drivers
         {
             get
             {
-                return mobj_driver;
+                return m_driver;
             }
             set
             {

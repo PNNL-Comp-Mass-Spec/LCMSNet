@@ -14,7 +14,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Pump to purge.
         /// </summary>
-        private readonly classPumpAgilent mobj_pump;
+        private readonly classPumpAgilent m_pump;
 
         /// <summary>
         /// Constructor.
@@ -24,47 +24,47 @@ namespace Agilent.Devices.Pumps
         {
             InitializeComponent();
 
-            mobj_pump = pump;
+            m_pump = pump;
             pump.DeviceSaveRequired += new EventHandler(pump_DeviceSaveRequired);
-            Text = "Purge Pumps " + mobj_pump.Name;
+            Text = "Purge Pumps " + m_pump.Name;
         }
 
         void pump_DeviceSaveRequired(object sender, EventArgs e)
         {
-            Text = "Purge Pumps " + mobj_pump.Name;
+            Text = "Purge Pumps " + m_pump.Name;
         }
 
         private void mbutton_purgeB2_Click(object sender, EventArgs e)
         {            
             var flow  = Convert.ToDouble(mnum_flowB2.Value);
             var mins  = Convert.ToDouble(mnum_timeB2.Value);
-            mobj_pump.PurgePump(0, enumPurgePumpChannel.B2, flow, mins);
+            m_pump.PurgePump(0, enumPurgePumpChannel.B2, flow, mins);
         }
 
         private void mbutton_purgeB1_Click(object sender, EventArgs e)
         {
             var flow = Convert.ToDouble(mnum_flowB1.Value);
             var mins = Convert.ToDouble(mnum_timeB1.Value);
-            mobj_pump.PurgePump(0, enumPurgePumpChannel.B1, flow, mins);
+            m_pump.PurgePump(0, enumPurgePumpChannel.B1, flow, mins);
         }
 
         private void mbutton_purgeA2_Click(object sender, EventArgs e)
         {
             var flow = Convert.ToDouble(mnum_flowA2.Value);
             var mins = Convert.ToDouble(mnum_timeA2.Value);
-            mobj_pump.PurgePump(0, enumPurgePumpChannel.A2, flow, mins);
+            m_pump.PurgePump(0, enumPurgePumpChannel.A2, flow, mins);
         }
 
         private void mbutton_purgeA1_Click(object sender, EventArgs e)
         {
             var flow = Convert.ToDouble(mnum_flowA1.Value);
             var mins = Convert.ToDouble(mnum_timeA1.Value);
-            mobj_pump.PurgePump(0, enumPurgePumpChannel.A1, flow, mins);
+            m_pump.PurgePump(0, enumPurgePumpChannel.A1, flow, mins);
         }
 
         private void mbutton_abortPurges_Click(object sender, EventArgs e)
         {
-            mobj_pump.AbortPurges(0);
+            m_pump.AbortPurges(0);
         }     
     }
 }

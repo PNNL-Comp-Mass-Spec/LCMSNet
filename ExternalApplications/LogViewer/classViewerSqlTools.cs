@@ -25,8 +25,8 @@ namespace LogViewer
         #endregion
 
         #region "Class variables"
-            string mstring_DataFileNamePath;
-            string mstring_ConnStr = "";
+            string m_DataFileNamePath;
+            string m_ConnStr = "";
         #endregion
 
         #region "Delegates"
@@ -38,17 +38,17 @@ namespace LogViewer
         #region "Properties"
             public string DataFileNamePath
             {
-                get { return mstring_DataFileNamePath; }
+                get { return m_DataFileNamePath; }
                 set
                 {
-                    mstring_DataFileNamePath = value;
-                    mstring_ConnStr = "data source=" + mstring_DataFileNamePath;
+                    m_DataFileNamePath = value;
+                    m_ConnStr = "data source=" + m_DataFileNamePath;
                 }
             }
 
             public string ConnString
             {
-                get { return mstring_ConnStr; }
+                get { return m_ConnStr; }
             }
         #endregion
 
@@ -180,14 +180,14 @@ namespace LogViewer
             /// <returns>Data table containing log entries</returns>
             public DataTable GetLogEntries(classLogQueryData queryData)
             {
-                if (mstring_ConnStr == "")
+                if (m_ConnStr == "")
                 { throw new classLogViewerDataException("Connection string not specified", new Exception()); }
 
                 var sqlStr = BuildSelectString(queryData);
 
                 try
                 {
-                    return GetSQLiteDataTable(sqlStr, mstring_ConnStr);
+                    return GetSQLiteDataTable(sqlStr, m_ConnStr);
                 }
                 catch (Exception ex)
                 {

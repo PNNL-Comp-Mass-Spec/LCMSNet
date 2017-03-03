@@ -17,7 +17,7 @@ namespace LcmsNetDataClasses.Devices
         public classTimerDevice()
         {
             m_name = "Timer";
-            menum_status = enumDeviceStatus.NotInitialized;
+            m_status = enumDeviceStatus.NotInitialized;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Status of the device currently.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
 
         #endregion
 
@@ -170,13 +170,13 @@ namespace LcmsNetDataClasses.Devices
         /// </summary>
         public enumDeviceStatus Status
         {
-            get { return menum_status; }
+            get { return m_status; }
             set
             {
-                menum_status = value;
-                if (value != menum_status && StatusUpdate != null)
+                m_status = value;
+                if (value != m_status && StatusUpdate != null)
                 {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(menum_status, "", this));
+                    StatusUpdate(this, new classDeviceStatusEventArgs(m_status, "", this));
                 }
             }
         }

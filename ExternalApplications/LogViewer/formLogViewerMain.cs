@@ -29,7 +29,7 @@ namespace LogViewer
 
         #region "Class variables"
 
-        readonly classViewerSqlTools mobj_SqlTools;
+        readonly classViewerSqlTools m_SqlTools;
         #endregion
 
         #region "Delegates"
@@ -46,7 +46,7 @@ namespace LogViewer
             {
                 InitializeComponent();
 
-                mobj_SqlTools = new classViewerSqlTools();
+                m_SqlTools = new classViewerSqlTools();
 
                 dateTimePickStart.Value = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).AddHours(-2);
                 dateTimePickStop.Value = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).AddHours(2);
@@ -87,7 +87,7 @@ namespace LogViewer
                 DataTable logData = null;
                 try
                 {
-                    logData = mobj_SqlTools.GetLogEntries(queryData);
+                    logData = m_SqlTools.GetLogEntries(queryData);
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +139,7 @@ namespace LogViewer
             if (fileOpenDlg.ShowDialog() == DialogResult.OK)
             {
                 textLogFile.Text = fileOpenDlg.FileName;
-                mobj_SqlTools.DataFileNamePath = textLogFile.Text;
+                m_SqlTools.DataFileNamePath = textLogFile.Text;
             }
 
         }   

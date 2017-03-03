@@ -40,62 +40,62 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// An object which can use the PAL dll functions.
         /// </summary>
-        private P.PalClass mobj_PALDrvr;
+        private P.PalClass m_PALDrvr;
 
         /// <summary>
         /// The location of the directory containing the PAL methods.
         /// </summary>
-        private String mstring_methodsFolder;
+        private String m_methodsFolder;
 
         /// <summary>
         /// A flag indicating whether or not the PAL has been initialized.
         /// </summary>
-        private bool mbool_accessible;
+        private bool m_accessible;
 
         /// <summary>
         /// The current method to execute.
         /// </summary>
-        private string mstring_method = "";
+        private string m_method = "";
 
         /// <summary>
         /// The current tray to use.
         /// </summary>
-        private string mstring_tray = "";
+        private string m_tray = "";
 
         /// <summary>
         /// The current vial to use.
         /// </summary>
-        private int mint_vial = 0;
+        private int m_vial = 0;
 
         /// <summary>
         /// The valid range of vials.
         /// </summary>
-        private enumVialRanges mobj_vialRange;// = enumVialRanges._96Well;
+        private enumVialRanges m_vialRange;// = enumVialRanges._96Well;
 
         /// <summary>
         /// The current volume setting.
         /// </summary>
-        private string mstring_volume = "";
+        private string m_volume = "";
 
         /// <summary>
         /// Name for fluidics designer.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
 
         /// <summary>
         /// The PAL's version information.
         /// </summary>
-        private string mstring_version;
+        private string m_version;
 
         /// <summary>
         /// The current status of the PAL.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
 
         /// <summary>
         /// Indicates whether or not the PAL is in emulation mode.
         /// </summary>
-        private bool mbool_emulation;
+        private bool m_emulation;
 
         private const int CONST_PALERR_PORTUNAVAILABLE = 2;
         private const int CONST_PALERR_PORTINUSE = 3;
@@ -140,8 +140,8 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public classPal()
         {
-            mobj_vialRange  = enumVialRanges.Well96;
-            mstring_name    = "pal";
+            m_vialRange  = enumVialRanges.Well96;
+            m_name    = "pal";
             AbortEvent      = new System.Threading.ManualResetEvent(false);
             StatusPollDelay = 10;
         }
@@ -161,11 +161,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mbool_emulation;
+                return m_emulation;
             }
             set
             {
-                mbool_emulation = value;
+                m_emulation = value;
             }
         }
         /// <summary>
@@ -175,12 +175,12 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return menum_status;
+                return m_status;
             }
             set
             {
                 StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
-                menum_status = value;
+                m_status = value;
             }
         }
         /// <summary>
@@ -190,11 +190,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mstring_version;
+                return m_version;
             }
             set
             {
-                mstring_version = value;
+                m_version = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -205,11 +205,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mstring_name;
+                return m_name;
             }
             set
             {
-                mstring_name = value;
+                m_name = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -221,12 +221,12 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mstring_methodsFolder;
+                return m_methodsFolder;
             }
             set
             {
-                mstring_methodsFolder = value;
-                if (mbool_emulation == false)
+                m_methodsFolder = value;
+                if (m_emulation == false)
                 {
                     if (value == null)
                     {
@@ -236,7 +236,7 @@ namespace LcmsNet.Devices.Pal
                     {
                         throw new System.IO.DirectoryNotFoundException("The directory does not exist: " + value + "");
                     }
-                    mobj_PALDrvr.SelectMethodFolder(value);
+                    m_PALDrvr.SelectMethodFolder(value);
                 }
             }
         }
@@ -248,11 +248,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mstring_method;
+                return m_method;
             }
             set
             {
-                mstring_method = value;
+                m_method = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -264,11 +264,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mstring_tray;
+                return m_tray;
             }
             set
             {
-                mstring_tray = value;
+                m_tray = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -279,11 +279,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mobj_vialRange;
+                return m_vialRange;
             }
             set
             {
-                mobj_vialRange = value;
+                m_vialRange = value;
             }
         }
         /// <summary>
@@ -294,13 +294,13 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mint_vial;
+                return m_vial;
             }
             set
             {
                 if (ValidateVial(value))
                 {
-                    mint_vial = value;
+                    m_vial = value;
                 }
                 else
                 {
@@ -317,11 +317,11 @@ namespace LcmsNet.Devices.Pal
         {
             get
             {
-                return mstring_volume;
+                return m_volume;
             }
             set
             {
-                mstring_volume = value;
+                m_volume = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -392,7 +392,7 @@ namespace LcmsNet.Devices.Pal
         /// <returns></returns>
         private bool ValidateVial(int vial)
         {
-            return (vial >= 1 && vial <= (int)mobj_vialRange);
+            return (vial >= 1 && vial <= (int)m_vialRange);
         }
 
         /// <summary>
@@ -409,19 +409,19 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public bool Initialize(ref string errorMessage)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
-                mbool_accessible = true;
+                m_accessible = true;
                 ListMethods();
                 ListTrays();
                 return true;
             }
 
-            if (mbool_accessible == false)
+            if (m_accessible == false)
             {
-                if( mobj_PALDrvr == null )
+                if( m_PALDrvr == null )
                 {
-                    mobj_PALDrvr = new P.PalClass();
+                    m_PALDrvr = new P.PalClass();
                 }
 
                 if (PortName == null)
@@ -431,7 +431,7 @@ namespace LcmsNet.Devices.Pal
                 }
 
                 //Start paldriv.exe
-                var error = mobj_PALDrvr.StartDriver("1", PortName);
+                var error = m_PALDrvr.StartDriver("1", PortName);
                 switch (error)
                 {
                     case CONST_PALERR_PORTUNAVAILABLE:
@@ -449,7 +449,7 @@ namespace LcmsNet.Devices.Pal
                 if (error > 0)
                 {
                     var tempStatus = "";
-                    mobj_PALDrvr.GetStatus(ref tempStatus);
+                    m_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
                     OnFree();
@@ -465,11 +465,11 @@ namespace LcmsNet.Devices.Pal
                 writer.Close();
 
                 //Reset the pal
-                error = mobj_PALDrvr.ResetPAL();
+                error = m_PALDrvr.ResetPAL();
                 if (error > 0)
                 {
                     var tempStatus = "";
-                    mobj_PALDrvr.GetStatus(ref tempStatus);
+                    m_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
                     OnFree();
@@ -479,12 +479,12 @@ namespace LcmsNet.Devices.Pal
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
                 
                 //Load configuration
-                error = mobj_PALDrvr.LoadConfiguration();
+                error = m_PALDrvr.LoadConfiguration();
                                 
                 if (error > 0)
                 {
                     var tempStatus = "";
-                    mobj_PALDrvr.GetStatus(ref tempStatus);
+                    m_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
                     OnFree();
@@ -517,7 +517,7 @@ namespace LcmsNet.Devices.Pal
                 MethodsFolder = methodsFolder;
                 WaitUntilReady(CONST_WAITTIMEOUT);
                 //If we made it this far, success! We can now access the PAL.
-                mbool_accessible = true;
+                m_accessible = true;
                 //list methods
                 ListMethods();
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
@@ -534,17 +534,17 @@ namespace LcmsNet.Devices.Pal
         /// <param name="newFolderPath">The path to the new folder.</param>
         public void SetMethodFolder(string newFolderPath)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
 
-            var error = mobj_PALDrvr.SelectMethodFolder(newFolderPath);
+            var error = m_PALDrvr.SelectMethodFolder(newFolderPath);
             //Error Checking
             if (error > 0)
             {
                 var tempStatus = "";
-                mobj_PALDrvr.GetStatus(ref tempStatus);
+                m_PALDrvr.GetStatus(ref tempStatus);
                 HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                 OnFree();
                 return;
@@ -558,16 +558,16 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public bool Shutdown()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
-                mbool_accessible = false;
+                m_accessible = false;
                 return true;
             }
 
-            if (mbool_accessible)
+            if (m_accessible)
             {
-                mobj_PALDrvr = null;
-                mbool_accessible = false;
+                m_PALDrvr = null;
+                m_accessible = false;
             }            
             OnDeviceSaveRequired();
             return true;
@@ -583,9 +583,9 @@ namespace LcmsNet.Devices.Pal
             /// 
             /// Find the methods from the device (or emulated one)
             /// 
-            if (mbool_emulation == false)
+            if (m_emulation == false)
             {
-                var error = mobj_PALDrvr.GetMethodNames(ref methods);
+                var error = m_PALDrvr.GetMethodNames(ref methods);
                 //TODO: Handle error.
             }
             else
@@ -634,12 +634,12 @@ namespace LcmsNet.Devices.Pal
             var trays = "";
             var tries = 0;
             var MAX_TRIES = 50;
-            if (mbool_emulation == false)
+            if (m_emulation == false)
             {
                 var error = 0; //assume success
                 while (string.IsNullOrEmpty(trays) && tries <= MAX_TRIES)
                 {
-                    error = mobj_PALDrvr.GetTrayNames(ref trays);
+                    error = m_PALDrvr.GetTrayNames(ref trays);
                     System.Threading.Thread.Sleep(250);
                     tries++;
                 }
@@ -685,12 +685,12 @@ namespace LcmsNet.Devices.Pal
         /// <returns>A string containing the status</returns>
         public string GetStatus()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return "Emulated";
             }
             var tempString = "";
-            var error = mobj_PALDrvr.GetStatus(ref tempString);
+            var error = m_PALDrvr.GetStatus(ref tempString);
             //TODO: Handle error.
             OnFree();
             return tempString;
@@ -701,12 +701,12 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public void ResetPAL()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
 
-            var error = mobj_PALDrvr.ResetPAL();
+            var error = m_PALDrvr.ResetPAL();
             //TODO: Handle error.
             OnDeviceSaveRequired();
             OnFree();
@@ -717,7 +717,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool LoadMethod(double timeout, classSampleData sample, string methodName)
         {
-            if(mbool_emulation)
+            if(m_emulation)
             {
                 return true;
             }
@@ -758,23 +758,23 @@ namespace LcmsNet.Devices.Pal
         /// <param name="volume">The volume (string)</param>
         public bool LoadMethod(string method, string tray, int vial, string volume)
         {
-            if(mbool_emulation)
+            if(m_emulation)
             {
                 return true;
             }
 
-            mstring_method = method;
-            mstring_tray   = tray;
+            m_method = method;
+            m_tray   = tray;
             if (ValidateVial(vial))
             {
-                mint_vial = vial;
+                m_vial = vial;
             }
             else
             {
                 HandleError("Vial number out of range");
                 return false;
             }
-            mstring_volume = volume;
+            m_volume = volume;
             return true;
         }
         /// <summary>
@@ -784,13 +784,13 @@ namespace LcmsNet.Devices.Pal
         {  
             var timeout = Convert.ToInt32(waitTimeout);
 
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return true;
             }
-            var tempArgs     = "Tray=" + mstring_tray + "; Index=" + mint_vial.ToString() + "; Volume=" + mstring_volume;
+            var tempArgs     = "Tray=" + m_tray + "; Index=" + m_vial.ToString() + "; Volume=" + m_volume;
             var errorMessage = "";
-            var error           = mobj_PALDrvr.StartMethod(mstring_method, ref tempArgs, ref errorMessage);
+            var error           = m_PALDrvr.StartMethod(m_method, ref tempArgs, ref errorMessage);
                         
             /// 
             /// Check for an error!
@@ -815,7 +815,7 @@ namespace LcmsNet.Devices.Pal
             var delayTime = StatusPollDelay * 1000;
             while (end.Subtract(start).TotalSeconds < timeout)
             {
-                var statusCheckError = mobj_PALDrvr.GetStatus(ref status);
+                var statusCheckError = m_PALDrvr.GetStatus(ref status);
                 /*if (this.StatusUpdate != null)
                 {
                     this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
@@ -866,11 +866,11 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Pause Method", .5, "", -1, false)]
         public void PauseMethod()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
-            mobj_PALDrvr.PauseMethod();
+            m_PALDrvr.PauseMethod();
             OnDeviceSaveRequired();
         }
 
@@ -881,11 +881,11 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Resume Method", 500, "", -1, false)]
         public void ResumeMethod()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
-            mobj_PALDrvr.ResumeMethod();
+            m_PALDrvr.ResumeMethod();
             OnDeviceSaveRequired();
         }
 
@@ -895,7 +895,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
         public void ContinueMethod(double timeout)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
@@ -903,10 +903,10 @@ namespace LcmsNet.Devices.Pal
             this.StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
     "continue method",
     this));
-            mobj_PALDrvr.ContinueMethod();
+            m_PALDrvr.ContinueMethod();
             
             var statusMessage = "";
-            var errorCode = mobj_PALDrvr.GetStatus(ref statusMessage);
+            var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
             this.StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
     "continue method end: " + statusMessage + " " + errorCode.ToString(),
     this));
@@ -918,11 +918,11 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Stop Method", .5, "", -1, false)]
         public void StopMethod()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
-            mobj_PALDrvr.StopMethod();
+            m_PALDrvr.StopMethod();
         }
 
         /// <summary>
@@ -935,7 +935,7 @@ namespace LcmsNet.Devices.Pal
         {
             var timeoutms = Convert.ToInt32(waitTimeoutms);
 
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0;
             }
@@ -982,7 +982,7 @@ namespace LcmsNet.Devices.Pal
         /// <returns></returns>
         public override string ToString()
         {
-            return mstring_name;
+            return m_name;
         }
 
         #endregion

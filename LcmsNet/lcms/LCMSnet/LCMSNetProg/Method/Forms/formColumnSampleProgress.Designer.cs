@@ -36,7 +36,7 @@ namespace LcmsNet.Method.Forms
             this.mlabel_fullPreview = new System.Windows.Forms.Label();
             this.mnum_previewMinutes = new System.Windows.Forms.NumericUpDown();
             this.mlabel_display = new System.Windows.Forms.Label();
-            this.mtimer_preview = new System.Windows.Forms.Timer(this.components);
+            this.m_previewTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -101,11 +101,11 @@ namespace LcmsNet.Method.Forms
             this.mlabel_display.TabIndex = 5;
             this.mlabel_display.Text = "Display (minutes : seconds: milliseconds)";
             //
-            // mtimer_preview
+            // m_previewTimer
             //
-            this.mtimer_preview.Enabled = true;
-            this.mtimer_preview.Interval = 1000;
-            this.mtimer_preview.Tick += new System.EventHandler(this.mtimer_preview_Tick);
+            this.m_previewTimer.Enabled = true;
+            this.m_previewTimer.Interval = 1000;
+            this.m_previewTimer.Tick += new System.EventHandler(this.m_previewTimer_Tick);
             //
             // panel1
             //
@@ -257,7 +257,7 @@ namespace LcmsNet.Method.Forms
         private Label mlabel_fullPreview;
         private NumericUpDown mnum_previewMinutes;
         private Label mlabel_display;
-        private Timer mtimer_preview;
+        private Timer m_previewTimer;
         private Panel panel1;
         private Label label1;
         private NumericUpDown numericUpDown1;

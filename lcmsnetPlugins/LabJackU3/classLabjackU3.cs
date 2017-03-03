@@ -22,7 +22,7 @@ namespace LcmsNet.Devices.ContactClosure
         #region Members
 
         // The Labjack's ID. Defaults to 0.
-        private int mint_localID;
+        private int m_localID;
         // The U12 returned float, the U3 returns double
         private double mdouble_firmwareVersion;
         private double mdouble_driverVersion;
@@ -48,7 +48,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="labjackID">The labjack's local ID</param>
         public classLabjackU3(int labjackID)
         {
-            mint_localID            = labjackID;
+            m_localID            = labjackID;
             mdouble_firmwareVersion = 0;
             mdouble_driverVersion    = 0;
         }
@@ -65,11 +65,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mint_localID;
+                return m_localID;
             }
             set
             {
-                mint_localID = value;
+                m_localID = value;
             }
         }
 
@@ -103,7 +103,7 @@ namespace LcmsNet.Devices.ContactClosure
             // Per example code
             // If an ID other than 0 is wanted for the U3 object being initialized
             // it must be changed before calling initialize, or initialze must be called again afterwards.
-            m_device = new U3(LJUD.CONNECTION.USB, mint_localID.ToString(), true);
+            m_device = new U3(LJUD.CONNECTION.USB, m_localID.ToString(), true);
             //Start by using the pin_configuration_reset IOType so that all
             //pin assignments are in the factory default condition.
             LJUD.ePut(m_device.ljhandle, LJUD.IO.PIN_CONFIGURATION_RESET, 0, 0, 0);

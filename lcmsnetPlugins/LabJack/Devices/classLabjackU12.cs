@@ -24,9 +24,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The Labjack's ID. Defaults to 0.
         /// </summary>
-        private int mint_localID;
-        private float mfloat_firmwareVersion;
-        private float mfloat_driverVersion;
+        private int m_localID;
+        private float m_firmwareVersion;
+        private float m_driverVersion;
 
         private const char CONST_ANALOGPREFIX_1 = 'A';
         private const char CONST_ANALOGPREFIX_2 = 'O';
@@ -45,9 +45,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         public classLabjackU12()
         {
-            mint_localID = 0;
-            mfloat_firmwareVersion = 0;
-            mfloat_driverVersion = 0;
+            m_localID = 0;
+            m_firmwareVersion = 0;
+            m_driverVersion = 0;
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="labjackID">The labjack's local ID</param>
         public classLabjackU12(int labjackID)
         {
-            mint_localID = labjackID;
-            mfloat_firmwareVersion = 0;
-            mfloat_driverVersion = 0;
+            m_localID = labjackID;
+            m_firmwareVersion = 0;
+            m_driverVersion = 0;
         }
 
         #endregion
@@ -73,11 +73,11 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mint_localID;
+                return m_localID;
             }
             set
             {
-                mint_localID = value;
+                m_localID = value;
             }
         }
 
@@ -88,7 +88,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mfloat_firmwareVersion;
+                return m_firmwareVersion;
             }
         }
 
@@ -99,7 +99,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                return mfloat_driverVersion;
+                return m_driverVersion;
             }
         }
 
@@ -176,7 +176,7 @@ namespace LcmsNet.Devices.ContactClosure
             var overVoltage = 0;
             var voltage = 0.0f;
 
-            var result = lj.LabJack.EAnalogIn(ref mint_localID, 0, channel, 0, ref overVoltage, ref voltage);
+            var result = lj.LabJack.EAnalogIn(ref m_localID, 0, channel, 0, ref overVoltage, ref voltage);
             if (result != 0)
             {
 
@@ -198,11 +198,11 @@ namespace LcmsNet.Devices.ContactClosure
 
             if (channel == 0)
             {
-                result = lj.LabJack.EAnalogOut(ref mint_localID, 0, voltage, 0.0f);
+                result = lj.LabJack.EAnalogOut(ref m_localID, 0, voltage, 0.0f);
             }
             else if (channel == 1)
             {
-                result = lj.LabJack.EAnalogOut(ref mint_localID, 0, 0.0f, voltage);
+                result = lj.LabJack.EAnalogOut(ref m_localID, 0, 0.0f, voltage);
             }
             else
             {
@@ -228,7 +228,7 @@ namespace LcmsNet.Devices.ContactClosure
         {            
             var state = 0;
 
-            var result = lj.LabJack.EDigitalIn(ref mint_localID, 0, channel, 1, ref state);
+            var result = lj.LabJack.EDigitalIn(ref m_localID, 0, channel, 1, ref state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -246,7 +246,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             var state = 0;
 
-            var result = lj.LabJack.EDigitalIn(ref mint_localID, 0, channel, 0, ref state);
+            var result = lj.LabJack.EDigitalIn(ref m_localID, 0, channel, 0, ref state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -264,7 +264,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteDigital(int channel, int state)
         {
-            var result = lj.LabJack.EDigitalOut(ref mint_localID, 0, channel, 1, state);
+            var result = lj.LabJack.EDigitalOut(ref m_localID, 0, channel, 1, state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -281,7 +281,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteIO(int channel, int state)
         {
-            var result = lj.LabJack.EDigitalOut(ref mint_localID, 0, channel, 0, state);
+            var result = lj.LabJack.EDigitalOut(ref m_localID, 0, channel, 0, state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -297,7 +297,7 @@ namespace LcmsNet.Devices.ContactClosure
         public float GetDriverVersion()
         {
             var tempVersion = lj.LabJack.GetDriverVersion();
-            mfloat_driverVersion = tempVersion;
+            m_driverVersion = tempVersion;
             if (tempVersion == 0)
             {
                 ThrowErrorMessage("Unable to get driver version.", 12);
@@ -323,8 +323,8 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The firmware version, as a float</returns>
         public float GetFirmwareVersion()
         {
-            var tempVersion = lj.LabJack.GetFirmwareVersion(ref mint_localID);
-            mfloat_firmwareVersion = tempVersion;
+            var tempVersion = lj.LabJack.GetFirmwareVersion(ref m_localID);
+            m_firmwareVersion = tempVersion;
             return (tempVersion);
         }
 

@@ -14,12 +14,12 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Sample data to interrogate for validity.
         /// </summary>
-        private readonly classSampleData mobj_sample;
+        private readonly classSampleData m_sample;
 
         /// <summary>
         /// Flag indicating that this Sample is ok.
         /// </summary>
-        private bool mbool_isOK;
+        private bool m_isOK;
         #endregion
 
         public new event EventHandler<DMSValidatorEventArgs> EnterPressed;
@@ -41,15 +41,15 @@ namespace LcmsNetDmsTools
             if (sample == null)
                 throw new Exception("The sample was null and cannot be displayed.");
 
-            mobj_sample = sample;
+            m_sample = sample;
 
             mlabel_sampleName.Text = sample.DmsData.DatasetName;
 
-            mtextBox_experimentName.Text = mobj_sample.DmsData.Experiment;
-            mtextbox_proposalID.Text     = mobj_sample.DmsData.ProposalID;
-            mcomboBox_usageType.Text     = mobj_sample.DmsData.UsageType;
-            mtextbox_user.Text           = mobj_sample.DmsData.UserList;
-            mnum_requestNumber.Value     = Convert.ToDecimal(mobj_sample.DmsData.RequestID);
+            mtextBox_experimentName.Text = m_sample.DmsData.Experiment;
+            mtextbox_proposalID.Text     = m_sample.DmsData.ProposalID;
+            mcomboBox_usageType.Text     = m_sample.DmsData.UsageType;
+            mtextbox_user.Text           = m_sample.DmsData.UserList;
+            mnum_requestNumber.Value     = Convert.ToDecimal(m_sample.DmsData.RequestID);
 
             this.mcomboBox_usageType.TextChanged        += this.mtextbox_usageType_TextChanged;
             this.mcomboBox_usageType.KeyUp              += this.KeyUpHandler;
@@ -146,7 +146,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         private void UpdateUserInterface()
         {
-            if (mobj_sample == null)
+            if (m_sample == null)
                 return;
 
             var drawingBackgroundColors = new Dictionary<bool, Color>();
@@ -157,9 +157,9 @@ namespace LcmsNetDmsTools
             drawingForegroundColors.Add(false, Color.White);
             drawingForegroundColors.Add(true, Color.Black);
 
-            mbool_isOK = true;
+            m_isOK = true;
 
-            if (mobj_sample.DmsData.RequestID > 0)
+            if (m_sample.DmsData.RequestID > 0)
             {
                 mtextBox_experimentName.Enabled     = false;
                 mtextBox_experimentName.BackColor   = Color.LightGray;
@@ -181,32 +181,32 @@ namespace LcmsNetDmsTools
                 mcomboBox_usageType.Enabled     = true;
                 mtextbox_user.Enabled           = true;
 
-                var sampleOK = classDMSSampleValidator.IsEMSLProposalIDValid(mobj_sample);
+                var sampleOK = classDMSSampleValidator.IsEMSLProposalIDValid(m_sample);
                 mtextbox_proposalID.BackColor = drawingBackgroundColors[sampleOK];
                 mtextbox_proposalID.ForeColor = drawingForegroundColors[sampleOK];
-                mbool_isOK = mbool_isOK & sampleOK;
+                m_isOK = m_isOK & sampleOK;
 
-                sampleOK = classDMSSampleValidator.IsEMSLUsageTypeValid(mobj_sample);
+                sampleOK = classDMSSampleValidator.IsEMSLUsageTypeValid(m_sample);
                 mcomboBox_usageType.BackColor = drawingBackgroundColors[sampleOK];
                 mcomboBox_usageType.ForeColor = drawingForegroundColors[sampleOK];
-                mbool_isOK = mbool_isOK & sampleOK;
+                m_isOK = m_isOK & sampleOK;
 
-                sampleOK = classDMSSampleValidator.IsEMSLUserValid(mobj_sample);
+                sampleOK = classDMSSampleValidator.IsEMSLUserValid(m_sample);
                 mtextbox_user.BackColor = drawingBackgroundColors[sampleOK];
                 mtextbox_user.ForeColor = drawingForegroundColors[sampleOK];
-                mbool_isOK = mbool_isOK & sampleOK;
+                m_isOK = m_isOK & sampleOK;
 
-                sampleOK = classDMSSampleValidator.IsExperimentNameValid(mobj_sample);
+                sampleOK = classDMSSampleValidator.IsExperimentNameValid(m_sample);
                 mtextBox_experimentName.BackColor = drawingBackgroundColors[sampleOK];
                 mtextBox_experimentName.ForeColor = drawingForegroundColors[sampleOK];
-                mbool_isOK = mbool_isOK & sampleOK;
+                m_isOK = m_isOK & sampleOK;
 
                 /// 
                 /// Make it look nice for the user so they can tell what is going on
                 /// Here we just pick an image to display next to the sample to draw their
                 /// attention to it.
                 /// 
-                if (mbool_isOK == false)
+                if (m_isOK == false)
                 {
                     mpictureBox_glyph.Image = global::LcmsNetDmsTools.Properties.Resources.ButtonDeleteRed;
                 }
@@ -227,7 +227,7 @@ namespace LcmsNetDmsTools
         {
             get
             {
-                return mbool_isOK;
+                return m_isOK;
             }
         }
         #endregion
@@ -235,31 +235,31 @@ namespace LcmsNetDmsTools
         #region Form Event Handlers
         private void mnum_requestNumber_ValueChanged(object sender, EventArgs e)
         {
-            mobj_sample.DmsData.RequestID = Convert.ToInt32(mnum_requestNumber.Value);
+            m_sample.DmsData.RequestID = Convert.ToInt32(mnum_requestNumber.Value);
             UpdateUserInterface();
         }
 
         private void mtextbox_usageType_TextChanged(object sender, EventArgs e)
         {
-            mobj_sample.DmsData.UsageType = mcomboBox_usageType.Text;
+            m_sample.DmsData.UsageType = mcomboBox_usageType.Text;
             UpdateUserInterface();
         }
 
         private void mtextbox_proposalID_TextChanged(object sender, EventArgs e)
         {
-            mobj_sample.DmsData.ProposalID = mtextbox_proposalID.Text;
+            m_sample.DmsData.ProposalID = mtextbox_proposalID.Text;
             UpdateUserInterface();
         }
 
         private void mtextbox_user_TextChanged(object sender, EventArgs e)
         {
-            mobj_sample.DmsData.UserList = mtextbox_user.Text;
+            m_sample.DmsData.UserList = mtextbox_user.Text;
             UpdateUserInterface();
         }
 
         private void mtextBox_experimentName_TextChanged(object sender, EventArgs e)
         {
-            mobj_sample.DmsData.Experiment = mtextBox_experimentName.Text;
+            m_sample.DmsData.Experiment = mtextBox_experimentName.Text;
             UpdateUserInterface();
         }
         #endregion

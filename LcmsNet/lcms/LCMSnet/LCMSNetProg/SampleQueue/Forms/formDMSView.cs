@@ -51,8 +51,8 @@ namespace LcmsNet.SampleQueue
         // These two string dictionaries hold selected column and sort orders for the listview
         // Using string dictionaries allows me to make the event handler for the column click event common
         //   to both listviews
-        readonly StringDictionary mstringdict_ListViewColumns = new StringDictionary();
-        readonly StringDictionary mstringdict_ListViewSortOrder = new StringDictionary();
+        readonly StringDictionary m_ListViewColumns = new StringDictionary();
+        readonly StringDictionary m_ListViewSortOrder = new StringDictionary();
 
         #endregion
 
@@ -229,10 +229,10 @@ namespace LcmsNet.SampleQueue
             Text = "LcmsNet V" + Application.ProductVersion + dbInUse;
 
             //Listview information
-            mstringdict_ListViewColumns.Add("listviewAvailableRequests", "0");
-            mstringdict_ListViewColumns.Add("listViewRequestsToRun", "0");
-            mstringdict_ListViewSortOrder.Add("listviewAvailableRequests", "true");
-            mstringdict_ListViewSortOrder.Add("listViewRequestsToRun", "true");
+            m_ListViewColumns.Add("listviewAvailableRequests", "0");
+            m_ListViewColumns.Add("listViewRequestsToRun", "0");
+            m_ListViewSortOrder.Add("listviewAvailableRequests", "true");
+            m_ListViewSortOrder.Add("listViewRequestsToRun", "true");
 
             //Section removed because moving listviews to aplit display changed how Controls collection works
             //foreach (object tempControl in this.Controls)
@@ -240,8 +240,8 @@ namespace LcmsNet.SampleQueue
             //   if (tempControl is System.Windows.Forms.ListView)
             //   {
             //      ListView tempListView = tempControl as ListView;
-            //      mstringdict_ListViewColumns.Add(tempListView.Name,"0"); // Initializes all listviews to column 0
-            //      mstringdict_ListViewSortOrder.Add(tempListView.Name, "true");   // Initializes all listviews to asc sort order
+            //      m_ListViewColumns.Add(tempListView.Name,"0"); // Initializes all listviews to column 0
+            //      m_ListViewSortOrder.Add(tempListView.Name, "true");   // Initializes all listviews to asc sort order
             //   }
             //}
 
@@ -755,8 +755,8 @@ namespace LcmsNet.SampleQueue
         /// <param name="e">Arguments for listview column click event</param>
         private void SortListview(ListView selectedView, ColumnClickEventArgs e)
         {
-            var selectedColumn = int.Parse(mstringdict_ListViewColumns[selectedView.Name]);
-            var sortOrderAscending = bool.Parse(mstringdict_ListViewSortOrder[selectedView.Name]);
+            var selectedColumn = int.Parse(m_ListViewColumns[selectedView.Name]);
+            var sortOrderAscending = bool.Parse(m_ListViewSortOrder[selectedView.Name]);
 
             // selected column is same as previously selected column, then reverse sort order.
             // Otherwise, sort newly selected column in ascending order
@@ -771,8 +771,8 @@ namespace LcmsNet.SampleQueue
             }
 
             // Update the stored column index and sort order for this ListView
-            mstringdict_ListViewColumns[selectedView.Name] = selectedColumn.ToString();
-            mstringdict_ListViewSortOrder[selectedView.Name] = sortOrderAscending.ToString();
+            m_ListViewColumns[selectedView.Name] = selectedColumn.ToString();
+            m_ListViewSortOrder[selectedView.Name] = sortOrderAscending.ToString();
 
             // Perform sort. For DMS View listviews, columns 1, 6, and 7 are numeric, all other columns are string
             if ((selectedColumn == 1) || (selectedColumn == 6) || (selectedColumn == 7))

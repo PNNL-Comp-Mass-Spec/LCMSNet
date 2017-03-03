@@ -22,50 +22,50 @@ namespace LogViewer
     {
         #region "Class variables"
 
-        readonly StringDictionary mlist_QueryParams = new StringDictionary();
+        readonly StringDictionary m_QueryParams = new StringDictionary();
         #endregion
 
         #region "Properties"
             public string StartTime
             {
                 get { return GetValueIfFound("starttime"); }
-                set { mlist_QueryParams["starttime"] = value; }
+                set { m_QueryParams["starttime"] = value; }
             }
 
             public string StopTime
             {
                 get { return GetValueIfFound("stoptime"); }
-                set { mlist_QueryParams["stoptime"] = value; }
+                set { m_QueryParams["stoptime"] = value; }
             }
 
             public string Type
             {
                 get { return GetValueIfFound("type"); }
-                set { mlist_QueryParams["type"] = value; }
+                set { m_QueryParams["type"] = value; }
             }
 
             public string Sample
             {
                 get { return GetValueIfFound("sample"); }
-                set { mlist_QueryParams["sample"] = value; }
+                set { m_QueryParams["sample"] = value; }
             }
 
             public string Column
             {
                 get { return GetValueIfFound("column"); }
-                set { mlist_QueryParams["column"] = value; }
+                set { m_QueryParams["column"] = value; }
             }
 
             public string Device
             {
                 get { return GetValueIfFound("device"); }
-                set { mlist_QueryParams["device"] = value; }
+                set { m_QueryParams["device"] = value; }
             }
 
             public string Message
             {
                 get { return GetValueIfFound("message"); }
-                set { mlist_QueryParams["message"] = value; }
+                set { m_QueryParams["message"] = value; }
             }
         #endregion
 
@@ -77,9 +77,9 @@ namespace LogViewer
             /// <returns>Key value if found, otherwise empty string</returns>
             private String GetValueIfFound(String dictKey)
             {
-                if (mlist_QueryParams.ContainsKey(dictKey))
+                if (m_QueryParams.ContainsKey(dictKey))
                 {
-                    return mlist_QueryParams[dictKey];
+                    return m_QueryParams[dictKey];
                 }
                 else
                 {
@@ -89,7 +89,7 @@ namespace LogViewer
 
             public bool OneParamHasValue()
             {
-                foreach (string testStr in mlist_QueryParams.Values)
+                foreach (string testStr in m_QueryParams.Values)
                 {
                     if (testStr.Length > 0)
                     { return true; }

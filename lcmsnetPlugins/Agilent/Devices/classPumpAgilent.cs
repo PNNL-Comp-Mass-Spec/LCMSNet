@@ -39,43 +39,43 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers
         /// </summary>
-        private Instrument mobj_pumps;
+        private Instrument m_pumps;
         /// <summary>
         /// A 'module' object for the Agilent pump drivers
         /// </summary>
-        private Module mobj_module;
+        private Module m_module;
         /// <summary>
         /// Error reporting channel.
         /// </summary>
-        private Channel mobj_evChannel;
+        private Channel m_evChannel;
         /// <summary>
         /// Channel for retrieving methods from the pumps.
         /// </summary>
-        private Channel mobj_listChannel;
+        private Channel m_listChannel;
         /// <summary>
         /// A 'channel' object for the Agilent pump drivers
         /// </summary>
-        private Channel mobj_inChannel;
+        private Channel m_inChannel;
         /// <summary>
         /// Channel when monitoring the instrument.
         /// </summary>
-        private Channel mobj_monitorChannel;
+        private Channel m_monitorChannel;
         /// <summary>
         /// The device's name.
         /// </summary>
-        private string mstring_name;
+        private string m_name;
         /// <summary>
         /// The device's verion.
         /// </summary>
-        private string mstring_version;
+        private string m_version;
         /// <summary>
         /// Indicates if the device is currently running.
         /// </summary>
-        private bool mbool_running;
+        private bool m_running;
         /// <summary>
         /// Indicates if the device is being emulated.
         /// </summary>
-        private bool mbool_emulation;
+        private bool m_emulation;
         /// <summary>
         /// The flow rate (used for save/load)
         /// </summary>
@@ -101,7 +101,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Status of the device.
         /// </summary>
-        private enumDeviceStatus menum_status;
+        private enumDeviceStatus m_status;
         private const string CONST_DEFAULTPORT  = "COM1";
         private const int CONST_DEFAULTTIMEOUT  = 6000; //milliseconds
         private const int CONST_WRITETIMEOUT    = 10000; //milliseconds
@@ -171,19 +171,19 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// List of times monitoring data was received.
         /// </summar;y>
-        public List<DateTime> mlist_times;
+        public List<DateTime> m_times;
         /// <summary>
         /// List of pressures used throughout the run.
         /// </summary>
-        public List<double> mlist_pressures;
+        public List<double> m_pressures;
         /// <summary>
         /// List of flowrates used throughout the run.
         /// </summary>
-        public List<double> mlist_flowrates;
+        public List<double> m_flowrates;
         /// <summary>
         /// List of %B compositions throughout the run.
         /// </summary>
-        public List<double> mlist_percentB;
+        public List<double> m_percentB;
         #endregion
 
         #region Constructors
@@ -214,13 +214,13 @@ namespace Agilent.Devices.Pumps
                     mwatcher_methods.EnableRaisingEvents = true;
                 }
             }
-            mstring_name    = "pump";
+            m_name    = "pump";
 
-            mlist_flowrates = new List<double>();
-            mlist_percentB  = new List<double>();
-            mlist_pressures = new List<double>();
-            mlist_times     = new List<DateTime>();
-            menum_status    = enumDeviceStatus.NotInitialized;
+            m_flowrates = new List<double>();
+            m_percentB  = new List<double>();
+            m_pressures = new List<double>();
+            m_times     = new List<DateTime>();
+            m_status    = enumDeviceStatus.NotInitialized;
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
@@ -285,11 +285,11 @@ namespace Agilent.Devices.Pumps
         {
             get
             {
-                return mbool_emulation;
+                return m_emulation;
             }
             set
             {
-                mbool_emulation = value;
+                m_emulation = value;
             }
         }
         /// <summary>
@@ -299,13 +299,13 @@ namespace Agilent.Devices.Pumps
         {
             get
             {
-                return menum_status;
+                return m_status;
             }
             set
             {
-                if (value != menum_status && StatusUpdate != null)
+                if (value != m_status && StatusUpdate != null)
                     StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
-                menum_status = value;
+                m_status = value;
             }
         }
         /// <summary>
@@ -315,11 +315,11 @@ namespace Agilent.Devices.Pumps
         {
             get
             {
-                return mbool_running;
+                return m_running;
             }
             set
             {
-                mbool_running = value;
+                m_running = value;
             }
         }
         /// <summary>
@@ -329,11 +329,11 @@ namespace Agilent.Devices.Pumps
         {
             get
             {
-                return mstring_name;
+                return m_name;
             }
             set
             {
-                mstring_name = value;
+                m_name = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -344,11 +344,11 @@ namespace Agilent.Devices.Pumps
         {
             get
             {
-                return mstring_version;
+                return m_version;
             }
             set
             {
-                mstring_version = value;
+                m_version = value;
             }
         }
         /// <summary>
@@ -512,7 +512,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_pumps_ErrorOccurred(object sender, Agilent.Licop.ErrorEventArgs e)
+        void m_pumps_ErrorOccurred(object sender, Agilent.Licop.ErrorEventArgs e)
         {            
             var name =  e.Message;
             if (e.Message == null)
@@ -588,18 +588,18 @@ namespace Agilent.Devices.Pumps
         /// <returns>True on success</returns>
         public bool Initialize(ref string errorMessage)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return true;
             }
             
-            mobj_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
-            mobj_pumps.ErrorOccurred += new EventHandler<Agilent.Licop.ErrorEventArgs>(mobj_pumps_ErrorOccurred);
+            m_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
+            m_pumps.ErrorOccurred += new EventHandler<Agilent.Licop.ErrorEventArgs>(m_pumps_ErrorOccurred);
 
             /// 
             /// Try initial connection
             /// 
-            if (mobj_pumps.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
+            if (m_pumps.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
             {
                 errorMessage = "Could not connect to the Agilent Pumps.";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -607,14 +607,14 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
                         
-            mobj_module = mobj_pumps.CreateModule(mobj_pumps.GetAccessPointIdentifier());
+            m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
 
 
             /// 
             /// Open a list channel to read time tables.
             /// 
-            mobj_listChannel = mobj_module.CreateChannel("LI");
-            if (mobj_listChannel.TryOpen(ReadMode.Polling) == false)
+            m_listChannel = m_module.CreateChannel("LI");
+            if (m_listChannel.TryOpen(ReadMode.Polling) == false)
             {
                 errorMessage = "Could not open the communication channel for time table data.";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -624,9 +624,9 @@ namespace Agilent.Devices.Pumps
             /// 
             /// And an EV channel.Channel for errors or state events
             /// 
-            mobj_evChannel               = mobj_module.CreateChannel("EV");
-            mobj_evChannel.DataReceived += new EventHandler<DataEventArgs>(mobj_evChannel_DataReceived);
-            if (mobj_evChannel.TryOpen(ReadMode.Events) == false)
+            m_evChannel               = m_module.CreateChannel("EV");
+            m_evChannel.DataReceived += new EventHandler<DataEventArgs>(m_evChannel_DataReceived);
+            if (m_evChannel.TryOpen(ReadMode.Events) == false)
             {
                 //"Could not open EV channel."
                 errorMessage = "Could not open the communication channel for error events";
@@ -637,8 +637,8 @@ namespace Agilent.Devices.Pumps
             /// 
             /// Channel for inputs
             /// 
-            mobj_inChannel = mobj_module.CreateChannel("IN");
-            if (mobj_inChannel.TryOpen(ReadMode.Polling) == false)
+            m_inChannel = m_module.CreateChannel("IN");
+            if (m_inChannel.TryOpen(ReadMode.Polling) == false)
             {
                 //"Could not open IN channel."
                 errorMessage = "Could not open the communication channel for input";
@@ -649,9 +649,9 @@ namespace Agilent.Devices.Pumps
             /// 
             /// Monitoring for the pumps
             /// 
-            mobj_monitorChannel                  = mobj_module.CreateChannel("MO");
-            mobj_monitorChannel.DataReceived += new EventHandler<DataEventArgs>(mobj_monitorChannel_DataReceived);
-            if (mobj_monitorChannel.TryOpen(ReadMode.Events) == false)
+            m_monitorChannel                  = m_module.CreateChannel("MO");
+            m_monitorChannel.DataReceived += new EventHandler<DataEventArgs>(m_monitorChannel_DataReceived);
+            if (m_monitorChannel.TryOpen(ReadMode.Events) == false)
             {
                 errorMessage = "Could not open the communication channel for monitoring data";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -714,7 +714,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_evChannel_DataReceived(object sender, DataEventArgs e)
+        void m_evChannel_DataReceived(object sender, DataEventArgs e)
         {            
             var data = e.AsciiData;
 
@@ -770,7 +770,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_monitorChannel_DataReceived(object sender, DataEventArgs e)
+        void m_monitorChannel_DataReceived(object sender, DataEventArgs e)
         {
             try
             {
@@ -819,31 +819,31 @@ namespace Agilent.Devices.Pumps
             UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);
             
             // Update log collections.
-            mlist_times.Add(time);
-            mlist_pressures.Add(pressure);
-            mlist_flowrates.Add(flowrate);
-            mlist_percentB.Add(compositionB);
+            m_times.Add(time);
+            m_pressures.Add(pressure);
+            m_flowrates.Add(flowrate);
+            m_percentB.Add(compositionB);
 
             /// 
             /// Find old data to remove -- needs to be updated (or could be) using LINQ
             /// 
-            var count = mlist_times.Count;
+            var count = m_times.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
             {
                 var i = 0;
-                while (time.Subtract(mlist_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < mlist_times.Count)
+                while (time.Subtract(m_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_times.Count)
                 {
                     i++;
                 }
                 
                 if (i > 0)
                 {
-                    i = Math.Min(i, mlist_times.Count - 1);
-                    mlist_times.RemoveRange(0, i);
-                    mlist_flowrates.RemoveRange(0, i);
-                    mlist_pressures.RemoveRange(0, i);
-                    mlist_percentB.RemoveRange(0, i);
+                    i = Math.Min(i, m_times.Count - 1);
+                    m_times.RemoveRange(0, i);
+                    m_flowrates.RemoveRange(0, i);
+                    m_pressures.RemoveRange(0, i);
+                    m_percentB.RemoveRange(0, i);
                 }
             }
 
@@ -852,10 +852,10 @@ namespace Agilent.Devices.Pumps
             {
                 MonitoringDataReceived?.Invoke(this,
         new PumpDataEventArgs(this,
-                                mlist_times,
-                                mlist_pressures,
-                                mlist_flowrates,
-                                mlist_percentB));
+                                m_times,
+                                m_pressures,
+                                m_flowrates,
+                                m_percentB));
             }
             catch
             {
@@ -869,27 +869,27 @@ namespace Agilent.Devices.Pumps
         /// <returns>True on success</returns>
         public bool Shutdown()
         {              
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return true;
             }
            
-            if (mobj_evChannel == null)
+            if (m_evChannel == null)
                 return true;
 
             // close EV channel
-            mobj_evChannel.Close();
+            m_evChannel.Close();
 
             // close IN channel
-            mobj_inChannel.Close();
+            m_inChannel.Close();
 
-            mobj_monitorChannel.DataReceived -= mobj_monitorChannel_DataReceived;
+            m_monitorChannel.DataReceived -= m_monitorChannel_DataReceived;
             
             // disconnect
-            if (mobj_pumps == null)
+            if (m_pumps == null)
                 return true;
 
-            mobj_pumps.Disconnect();
+            m_pumps.Disconnect();
 
             return true;
         }
@@ -902,7 +902,7 @@ namespace Agilent.Devices.Pumps
         /// <returns></returns>
         private bool SendCommand(string command, ref string reply, string errorstring)
         {
-            return SendCommand(command, ref reply, errorstring, mobj_inChannel);
+            return SendCommand(command, ref reply, errorstring, m_inChannel);
         }
         /// <summary>
         /// 
@@ -914,14 +914,14 @@ namespace Agilent.Devices.Pumps
         /// <returns></returns>
         private bool SendCommand(string command, ref string reply, string errorstring, Channel readChannel)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return true;
             }
             //Send the command over our serial port
             //TODO: Wrap this in exception checking
             //      (if there is an error, send out errorstring)
-            if (mobj_inChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
+            if (m_inChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
             {
                 //Couldn't send instruction
                 return false;
@@ -944,7 +944,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Mode", 1, "", -1, false)]
         public void SetMode(enumPumpAgilentModes newMode)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
@@ -960,7 +960,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Flow Rate", 1, "", -1, false)]
         public void SetFlowRate(double newFlowRate)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
@@ -975,7 +975,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Mixer Volume", 1, "", -1, false)]
         public void SetMixerVolume(double newVolumeuL)
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return;
             }
@@ -1086,7 +1086,7 @@ namespace Agilent.Devices.Pumps
         /// <returns></returns>
         public double GetPercentB()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0.0;
             }
@@ -1134,13 +1134,13 @@ namespace Agilent.Devices.Pumps
         public string RetrieveMethod()
         {
             var methodString = "";
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 methodString = "test;\ntest12";
             }
             else
             {
-                SendCommand("LIST \"TT\"", ref methodString, "Attempting to retrieve method", mobj_listChannel);
+                SendCommand("LIST \"TT\"", ref methodString, "Attempting to retrieve method", m_listChannel);
             }            
             return methodString;
         }
@@ -1150,7 +1150,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The flow rate</returns>
         public double GetFlowRate()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0.0;
             }
@@ -1178,7 +1178,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The pressure</returns>
         public double GetPressure()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0.0;
             }
@@ -1225,7 +1225,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The current mixer volume</returns>
         public double GetMixerVolume()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0.0;
             }
@@ -1252,7 +1252,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The actual measured current flow rate</returns>
         public double GetActualFlow()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return 0.0;
             }
@@ -1279,7 +1279,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The current pump mode</returns>
         public enumPumpAgilentModes GetMode()
         {
-            if (mbool_emulation)
+            if (m_emulation)
             {
                 return enumPumpAgilentModes.Unknown;
             }
@@ -1440,8 +1440,8 @@ namespace Agilent.Devices.Pumps
             plotPressure.Name       = "Pressure";
             plotPressure.XDataType  = FinchDataType.DateTime;
             plotPressure.YDataType  = FinchDataType.Double;
-            plotPressure.SetX<DateTime>(mlist_times);
-            plotPressure.SetY<double>(mlist_pressures);
+            plotPressure.SetX<DateTime>(m_times);
+            plotPressure.SetY<double>(m_pressures);
             component.Signals.Add(plotPressure);
             
             FinchDataTuple percentBPlot = new FinchDataTuple();
@@ -1450,8 +1450,8 @@ namespace Agilent.Devices.Pumps
             percentBPlot.Name       = "Composition";
             percentBPlot.XDataType  = FinchDataType.DateTime;
             percentBPlot.YDataType  = FinchDataType.Double;
-            percentBPlot.SetX<DateTime>(mlist_times);
-            percentBPlot.SetY<double>(mlist_percentB);
+            percentBPlot.SetX<DateTime>(m_times);
+            percentBPlot.SetY<double>(m_percentB);
             component.Signals.Add(percentBPlot);
                         
             FinchDataTuple flowratePlot = new FinchDataTuple();
@@ -1460,8 +1460,8 @@ namespace Agilent.Devices.Pumps
             flowratePlot.Name       = "Flowrate";
             flowratePlot.XDataType  = FinchDataType.DateTime;
             flowratePlot.YDataType  = FinchDataType.Double;
-            flowratePlot.SetX<DateTime>(mlist_times);
-            flowratePlot.SetY<double>(mlist_flowrates);
+            flowratePlot.SetX<DateTime>(m_times);
+            flowratePlot.SetY<double>(m_flowrates);
             component.Signals.Add(flowratePlot);
 
             return component;

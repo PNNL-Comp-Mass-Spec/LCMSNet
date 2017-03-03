@@ -29,7 +29,7 @@ namespace LcmsNet.Devices.BrukerStart
             /// <summary>
             /// BrukerStart object to use
             /// </summary>
-            private classBrukerStart mobj_BrukerStart;
+            private classBrukerStart m_BrukerStart;
         #endregion
 
         #region "Private delegates"
@@ -50,14 +50,14 @@ namespace LcmsNet.Devices.BrukerStart
         }
         public void RegisterDevice(IDevice device)
         {
-            mobj_BrukerStart                 = device as classBrukerStart;
-            mobj_BrukerStart.MethodNames    += new DelegateDeviceHasData(mobj_BrukerStart_MethodNames);
-            mobj_BrukerStart.Error          += new EventHandler<classDeviceErrorEventArgs>(mobj_BrukerStart_Error);
+            m_BrukerStart                 = device as classBrukerStart;
+            m_BrukerStart.MethodNames    += new DelegateDeviceHasData(m_BrukerStart_MethodNames);
+            m_BrukerStart.Error          += new EventHandler<classDeviceErrorEventArgs>(m_BrukerStart_Error);
             
-            mtextbox_ipAddress.Text = mobj_BrukerStart.IPAddress;
-            mnum_port.Value         = Convert.ToDecimal(mobj_BrukerStart.Port);
+            mtextbox_ipAddress.Text = m_BrukerStart.IPAddress;
+            mnum_port.Value         = Convert.ToDecimal(m_BrukerStart.Port);
 
-            SetBaseDevice(mobj_BrukerStart);
+            SetBaseDevice(m_BrukerStart);
         }
         #endregion
 
@@ -69,7 +69,7 @@ namespace LcmsNet.Devices.BrukerStart
             {
                 get
                 {
-                     return mobj_BrukerStart;
+                     return m_BrukerStart;
                 }
                 set
                 {
@@ -84,11 +84,11 @@ namespace LcmsNet.Devices.BrukerStart
             {
                 get
                 {
-                     return mobj_BrukerStart.Emulation;
+                     return m_BrukerStart.Emulation;
                 }
                 set
                 {
-                     mobj_BrukerStart.Emulation = value;
+                     m_BrukerStart.Emulation = value;
                 }
             }
         #endregion
@@ -100,32 +100,32 @@ namespace LcmsNet.Devices.BrukerStart
         /// <param name="status"></param>
         private void SetStatus(enumDeviceStatus status, string message)
         {
-            mlabel_status.Text = "Status: " + mobj_BrukerStart.Status + " - " + message;
+            mlabel_status.Text = "Status: " + m_BrukerStart.Status + " - " + message;
         }
         /// <summary>
         /// Updates the user interface.
         /// </summary>
         private void UpdateUserInterface()
         {
-            mtextbox_ipAddress.Text = mobj_BrukerStart.IPAddress;
-            mnum_port.Value = Convert.ToDecimal(mobj_BrukerStart.Port);
-            SetStatus(mobj_BrukerStart.Status, "");
+            mtextbox_ipAddress.Text = m_BrukerStart.IPAddress;
+            mnum_port.Value = Convert.ToDecimal(m_BrukerStart.Port);
+            SetStatus(m_BrukerStart.Status, "");
         }
 
-        void mobj_BrukerStart_Error(object sender, classDeviceErrorEventArgs e)
+        void m_BrukerStart_Error(object sender, classDeviceErrorEventArgs e)
         {
 
             if (InvokeRequired)
             {
-                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { mobj_BrukerStart.Status, e.Error });
+                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { m_BrukerStart.Status, e.Error });
             }
             else
             {
-                SetStatus(mobj_BrukerStart.Status, e.Error);
+                SetStatus(m_BrukerStart.Status, e.Error);
             }
         }
 
-        void mobj_BrukerStart_MethodNames(object sender, List<object> data)
+        void m_BrukerStart_MethodNames(object sender, List<object> data)
         {
 
             var methodNames = new List<string>();
@@ -150,7 +150,7 @@ namespace LcmsNet.Devices.BrukerStart
                 var methodName = "";
                 if (mcomboBox_methods.SelectedIndex < 0)
                 {
-                    SetStatus(mobj_BrukerStart.Status, "No method selected.");
+                    SetStatus(m_BrukerStart.Status, "No method selected.");
                     return;
                 }
                 methodName = mcomboBox_methods.SelectedItem.ToString();
@@ -159,28 +159,28 @@ namespace LcmsNet.Devices.BrukerStart
                 sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
                 sample.InstrumentData.MethodName = methodName;
 
-                mobj_BrukerStart.StartAcquisition(20, sample);
+                m_BrukerStart.StartAcquisition(20, sample);
             }   
 
             private void mbutton_stopAcquisition_Click(object sender, EventArgs e)
             {
-                mobj_BrukerStart.StopAcquisition(20);
+                m_BrukerStart.StopAcquisition(20);
             }   
 
             private void mbutton_getMethods_Click(object sender, EventArgs e)
             {
-                mobj_BrukerStart.GetMethods();
+                m_BrukerStart.GetMethods();
             }   
 
             private void mtextbox_ipAddress_TextChanged(object sender, EventArgs e)
             {
                 OnSaveRequired();
-                mobj_BrukerStart.IPAddress = mtextbox_ipAddress.Text;
+                m_BrukerStart.IPAddress = mtextbox_ipAddress.Text;
             }   
 
             private void mnum_port_ValueChanged(object sender, EventArgs e)
             {
-                mobj_BrukerStart.Port = Convert.ToInt32(mnum_port.Value);
+                m_BrukerStart.Port = Convert.ToInt32(mnum_port.Value);
                 OnSaveRequired();
             }   
         #endregion

@@ -28,8 +28,8 @@ namespace LcmsNet.Devices.Pumps
         #endregion
 
         #region "Class variables"
-            int mint_PumpIndx;
-            enumIscoOperationMode menum_OperationMode;
+            int m_PumpIndx;
+            enumIscoOperationMode m_OperationMode;
 
             double mdouble_MaxPressureSp = 10000D;  // PSI
             double mdouble_MinPressureSp = 10D;
@@ -68,7 +68,7 @@ namespace LcmsNet.Devices.Pumps
             }
 
             // Pump index
-            public int PumpIndex { get { return mint_PumpIndx; } }
+            public int PumpIndex { get { return m_PumpIndx; } }
 
             // Operation mode
             public enumIscoOperationMode OperationMode { set { SetOperationModeDisplays(value); } }
@@ -139,9 +139,9 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="indx">Zero-based index for pump</param>
             private void SetPumpIndex(int indx)
             {
-                mint_PumpIndx = indx;
+                m_PumpIndx = indx;
                 var pumpStr = "";
-                switch (mint_PumpIndx)
+                switch (m_PumpIndx)
                 {
                     case 0:
                         pumpStr = "A";
@@ -163,7 +163,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="newMode">New operation mode</param>
             private void SetOperationModeDisplays(enumIscoOperationMode newMode)
             {
-                menum_OperationMode = newMode;
+                m_OperationMode = newMode;
                 switch (newMode)
                 {
                     case enumIscoOperationMode.ConstantFlow:
@@ -320,7 +320,7 @@ namespace LcmsNet.Devices.Pumps
 
                 bool validInput;
 
-                if (menum_OperationMode == enumIscoOperationMode.ConstantFlow)
+                if (m_OperationMode == enumIscoOperationMode.ConstantFlow)
                 {
                     validInput = IsValueInRange(testVal, mdouble_MinFlowSp, mdouble_MaxFlowSp);
                 }
@@ -328,7 +328,7 @@ namespace LcmsNet.Devices.Pumps
 
                 if (validInput)
                 {
-                SetpointChanged?.Invoke(this, mint_PumpIndx, double.Parse(mtextBox_Setpoint.Text));
+                SetpointChanged?.Invoke(this, m_PumpIndx, double.Parse(mtextBox_Setpoint.Text));
             }
                 else MessageBox.Show("Input value not in valid range");
             }   
@@ -340,7 +340,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void Refill_Clicked(object sender, EventArgs e)
             {
-            StartRefill?.Invoke(this, mint_PumpIndx);
+            StartRefill?.Invoke(this, m_PumpIndx);
         }   
 
             /// <summary>
@@ -350,7 +350,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void StartPump_Clicked(object sender, EventArgs e)
             {
-            StartPump?.Invoke(this, mint_PumpIndx);
+            StartPump?.Invoke(this, m_PumpIndx);
         }   
 
             /// <summary>
@@ -360,7 +360,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void StopPump_Clicked(object sender, EventArgs e)
             {
-            StopPump?.Invoke(this, mint_PumpIndx);
+            StopPump?.Invoke(this, m_PumpIndx);
         }   
         #endregion
 

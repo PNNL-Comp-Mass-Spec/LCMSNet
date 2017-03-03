@@ -43,7 +43,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// A pump object to use.
         /// </summary>
-        private classPumpAgilent mobj_pump;
+        private classPumpAgilent m_pump;
         /// <summary>
         /// Fired when a new method is available from the pumps.
         /// </summary>
@@ -62,22 +62,22 @@ namespace Agilent.Devices.Pumps
         }
         private void RegisterDevice(IDevice device)
         {
-            mobj_pump = device as classPumpAgilent;
+            m_pump = device as classPumpAgilent;
 
-            mform_purges = new formAgilentPumpPurge(mobj_pump);
+            mform_purges = new formAgilentPumpPurge(m_pump);
             /// 
             /// Initialie the underlying device class'
             /// 
-            mobj_pump.MethodAdded            += new EventHandler<classPumpMethodEventArgs>(mobj_pump_MethodAdded);
-            mobj_pump.MethodUpdated          += new EventHandler<classPumpMethodEventArgs>(mobj_pump_MethodUpdated);
-            mobj_pump.MonitoringDataReceived += new EventHandler<PumpDataEventArgs>(mobj_pump_MonitoringDataReceived);
+            m_pump.MethodAdded            += new EventHandler<classPumpMethodEventArgs>(m_pump_MethodAdded);
+            m_pump.MethodUpdated          += new EventHandler<classPumpMethodEventArgs>(m_pump_MethodUpdated);
+            m_pump.MonitoringDataReceived += new EventHandler<PumpDataEventArgs>(m_pump_MonitoringDataReceived);
             mcomboBox_Mode.DataSource         = System.Enum.GetValues(typeof(enumPumpAgilentModes));
 
             controlPumpAgilent.NewMethodAvailable += new EventHandler(controlPumpAgilent_NewMethodAvailable);
             /// 
             /// Add to the device manager.
             /// 
-            SetBaseDevice(mobj_pump);
+            SetBaseDevice(m_pump);
             
             /// 
             /// Add a list of available serial port names to the combo box.
@@ -85,9 +85,9 @@ namespace Agilent.Devices.Pumps
             mcomboBox_comPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
             if (mcomboBox_comPort.Items.Count > 0)
                 mcomboBox_comPort.SelectedIndex = 0;
-            if (mcomboBox_comPort.Items.Contains(mobj_pump.PortName))
+            if (mcomboBox_comPort.Items.Contains(m_pump.PortName))
             {
-                var index = mcomboBox_comPort.Items.IndexOf(mobj_pump.PortName);
+                var index = mcomboBox_comPort.Items.IndexOf(m_pump.PortName);
                 if (index >= 0)
                 {
                     mcomboBox_comPort.SelectedIndex = index;
@@ -122,7 +122,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="pressure"></param>
         /// <param name="flowrate"></param>
         /// <param name="percentB"></param>
-        void mobj_pump_MonitoringDataReceived(object sender, PumpDataEventArgs args)
+        void m_pump_MonitoringDataReceived(object sender, PumpDataEventArgs args)
         {
             if (InvokeRequired)
             {
@@ -149,11 +149,11 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_pump_MethodUpdated(object sender, classPumpMethodEventArgs e)
+        void m_pump_MethodUpdated(object sender, classPumpMethodEventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new Action<object, classPumpMethodEventArgs>(mobj_pump_MethodUpdated), new object[]{sender, e});
+                this.Invoke(new Action<object, classPumpMethodEventArgs>(m_pump_MethodUpdated), new object[]{sender, e});
             }
             else if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
             {
@@ -165,11 +165,11 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_pump_MethodAdded(object sender, classPumpMethodEventArgs e)
+        void m_pump_MethodAdded(object sender, classPumpMethodEventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new Action<object, classPumpMethodEventArgs>(mobj_pump_MethodAdded), new object[]{sender, e});
+                this.Invoke(new Action<object, classPumpMethodEventArgs>(m_pump_MethodAdded), new object[]{sender, e});
             }
             else if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
             {
@@ -211,15 +211,15 @@ namespace Agilent.Devices.Pumps
             /// Clear any existing pump methods
             /// 
             if (filenames.Length > 0)
-                mobj_pump.ClearMethods();
+                m_pump.ClearMethods();
             var methods = new Dictionary<string, string>();
             foreach (var filename in filenames)
             {
                 var method = System.IO.File.ReadAllText(filename);
                 methods[System.IO.Path.GetFileNameWithoutExtension(filename)] = method;
-                mobj_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(filename), method);
+                m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(filename), method);
             }
-            //mobj_pump.AddMethods(methods);
+            //m_pump.AddMethods(methods);
             if(selectedMethod != null)
             {
                 // try to select the last selected method, if it has been loaded back in to the system.
@@ -237,7 +237,7 @@ namespace Agilent.Devices.Pumps
         {
             get
             {
-                return mobj_pump;
+                return m_pump;
             }
             set
             {
@@ -252,11 +252,11 @@ namespace Agilent.Devices.Pumps
         {
           get
           {
-              return mobj_pump.Emulation;
+              return m_pump.Emulation;
           }
           set
           {
-              mobj_pump.Emulation = value;
+              m_pump.Emulation = value;
           }
         }
 
@@ -276,34 +276,34 @@ namespace Agilent.Devices.Pumps
         #region Control Event Handlers
         private void mbutton_SetFlowRate_Click(object sender, EventArgs e)
         {
-            mobj_pump.SetFlowRate(Convert.ToDouble(mnum_flowRate.Value));
+            m_pump.SetFlowRate(Convert.ToDouble(mnum_flowRate.Value));
         }
         private void mbutton_GetFlowRate_Click(object sender, EventArgs e)
         {
-            mtextBox_ActualFlowRate.Text = mobj_pump.GetActualFlow().ToString();
+            mtextBox_ActualFlowRate.Text = m_pump.GetActualFlow().ToString();
         }
         private void mbutton_SetMixerVol_Click(object sender, EventArgs e)
         {
-            mobj_pump.SetMixerVolume(Convert.ToDouble(mnum_mixerVolume.Value));
+            m_pump.SetMixerVolume(Convert.ToDouble(mnum_mixerVolume.Value));
         }
         private void mbutton_GetMixerVol_Click(object sender, EventArgs e)
         {
-            mtextBox_GetMixerVol.Text = mobj_pump.GetMixerVolume().ToString();
+            mtextBox_GetMixerVol.Text = m_pump.GetMixerVolume().ToString();
         }
         private void mbutton_GetPressure_Click(object sender, EventArgs e)
         {
-            mtextBox_Pressure.Text = mobj_pump.GetPressure().ToString();
+            mtextBox_Pressure.Text = m_pump.GetPressure().ToString();
         }
         private void mbutton_SetMode_Click(object sender, EventArgs e)
         {
-            mobj_pump.SetMode((enumPumpAgilentModes)mcomboBox_Mode.SelectedValue);
+            m_pump.SetMode((enumPumpAgilentModes)mcomboBox_Mode.SelectedValue);
         }
         private void mbutton_retrieve_Click(object sender, EventArgs e)
         {
             /// 
             /// Get the pump method from the device
             /// 
-            var method = mobj_pump.RetrieveMethod();
+            var method = m_pump.RetrieveMethod();
             /// 
             /// Allow the user to edit it.
             /// 
@@ -332,7 +332,7 @@ namespace Agilent.Devices.Pumps
                 /// 
                 /// Make sure we add it to the list of methods as well.
                 /// 
-                mobj_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), mtextbox_method.Text);
+                m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), mtextbox_method.Text);
 
                 NewMethodAvailable?.Invoke(this, null);
             }
@@ -344,7 +344,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void mbutton_on_Click(object sender, EventArgs e)
         {
-            mobj_pump.PumpOn();
+            m_pump.PumpOn();
         }
         /// <summary>
         /// Turns the pumps off.
@@ -353,7 +353,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void mbutton_off_Click(object sender, EventArgs e)
         {
-            mobj_pump.PumpOff();
+            m_pump.PumpOff();
         }
         /// <summary>
         /// Starts the pumps currently loaded time table.
@@ -367,7 +367,7 @@ namespace Agilent.Devices.Pumps
                 return;
 
             methodName = mcomboBox_methods.Items[mcomboBox_methods.SelectedIndex].ToString();
-            mobj_pump.StartMethod(methodName);
+            m_pump.StartMethod(methodName);
         }
         /// <summary>
         /// Stops the pumps currently running method.
@@ -376,7 +376,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void mbutton_stop_Click(object sender, EventArgs e)
         {
-            mobj_pump.StopMethod();
+            m_pump.StopMethod();
         }
         /// <summary>
         /// Sets the percent B of the pump.
@@ -385,11 +385,11 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void mbutton_setPercentB_Click(object sender, EventArgs e)
         {
-            mobj_pump.SetPercentB(Convert.ToDouble(mnum_percentB.Value));
+            m_pump.SetPercentB(Convert.ToDouble(mnum_percentB.Value));
         }
         private void mbutton_getPercentB_Click(object sender, EventArgs e)
         {
-            mtextbox_percentB.Text = string.Format("{0:0.0}", mobj_pump.GetPercentB());
+            mtextbox_percentB.Text = string.Format("{0:0.0}", m_pump.GetPercentB());
         }
         private void mbutton_loadMethods_Click(object sender, EventArgs e)
         {
@@ -410,8 +410,8 @@ namespace Agilent.Devices.Pumps
             //#if DEBUG
             if (Emulation)
             {
-                timer1.Interval = mobj_pump.TotalMonitoringSecondElapsed * 1000;
-                mobj_pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());
+                timer1.Interval = m_pump.TotalMonitoringSecondElapsed * 1000;
+                m_pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());
             }
             //#endif
         }
@@ -423,9 +423,9 @@ namespace Agilent.Devices.Pumps
             if (index < 0)
                 return;
 
-            mobj_pump.PortName = mcomboBox_comPort.Items[index].ToString();
+            m_pump.PortName = mcomboBox_comPort.Items[index].ToString();
             var errorMessage = "";
-            mobj_pump.Initialize(ref errorMessage);
+            m_pump.Initialize(ref errorMessage);
         }
 
         private void mbutton_purge_Click(object sender, EventArgs e)
@@ -448,7 +448,7 @@ namespace Agilent.Devices.Pumps
             if (index < 0)
                 return;
 
-            mobj_pump.PortName = mcomboBox_comPort.Items[index].ToString();
+            m_pump.PortName = mcomboBox_comPort.Items[index].ToString();
         }
     }
 }

@@ -19,9 +19,9 @@ namespace LcmsNet.Devices.Pumps
     public partial class controlPumpIsco : controlBaseDeviceControl, IDeviceControl
     {
         #region "Class variables"
-            classPumpIsco mobj_Pump;
-            classPumpIscoDisplayArray mobj_PumpDisplays;
-            int mint_PumpCount = 3;
+            classPumpIsco m_Pump;
+            classPumpIscoDisplayArray m_PumpDisplays;
+            int m_PumpCount = 3;
             double[] mdouble_refillRates;
             double[] mdouble_MaxRefillRates;
         #endregion
@@ -29,14 +29,14 @@ namespace LcmsNet.Devices.Pumps
         #region "Properties"
             public IDevice Device
             {
-                get { return mobj_Pump; }
+                get { return m_Pump; }
                 set { RegisterDevice(value); }
             }
 
             public bool Emulation
             {
-                get { return mobj_Pump.Emulation; }
-                set { mobj_Pump.Emulation = value; }
+                get { return m_Pump.Emulation; }
+                set { m_Pump.Emulation = value; }
             }
         #endregion
 
@@ -60,7 +60,7 @@ namespace LcmsNet.Devices.Pumps
 
                 // Add a list of available unit addresses to the unit address combo box
                 mcomboBox_UnitAddress.Items.Clear();
-                for (var indx = mobj_Pump.UnitAddressMin; indx < mobj_Pump.UnitAddressMax + 1; indx++)
+                for (var indx = m_Pump.UnitAddressMin; indx < m_Pump.UnitAddressMax + 1; indx++)
                 {
                     mcomboBox_UnitAddress.Items.Add(indx);
                 }
@@ -78,37 +78,37 @@ namespace LcmsNet.Devices.Pumps
                 mtextBox_Notes.Text = noteStr;
 
                 // Initialize the pump display controls
-                mobj_PumpDisplays = new classPumpIscoDisplayArray();
-                mobj_PumpDisplays.AddDisplayControl(mcontrol_PumpA);
-                mobj_PumpDisplays.AddDisplayControl(mcontrol_PumpB);
-                mobj_PumpDisplays.AddDisplayControl(mcontrol_PumpC);
-                for (var indx = 0; indx < mobj_PumpDisplays.Count; indx++)
+                m_PumpDisplays = new classPumpIscoDisplayArray();
+                m_PumpDisplays.AddDisplayControl(mcontrol_PumpA);
+                m_PumpDisplays.AddDisplayControl(mcontrol_PumpB);
+                m_PumpDisplays.AddDisplayControl(mcontrol_PumpC);
+                for (var indx = 0; indx < m_PumpDisplays.Count; indx++)
                 {
-                    mobj_PumpDisplays[indx].InitControl(indx);
+                    m_PumpDisplays[indx].InitControl(indx);
                 }
 
                 // Assign pump display control event handlers
-                mobj_PumpDisplays.SetpointChanged += new DelegateIscoPumpDisplaySetpointHandler(mobj_PumpDisplays_SetpointChanged);
-                mobj_PumpDisplays.StartPump += new DelegateIscoPumpDisplayHandler(mobj_PumpDisplays_StartPump);
-                mobj_PumpDisplays.StopPump += new DelegateIscoPumpDisplayHandler(mobj_PumpDisplays_StopPump);
-                mobj_PumpDisplays.StartRefill += new DelegateIscoPumpDisplayHandler(mobj_PumpDisplays_StartRefill);
+                m_PumpDisplays.SetpointChanged += new DelegateIscoPumpDisplaySetpointHandler(m_PumpDisplays_SetpointChanged);
+                m_PumpDisplays.StartPump += new DelegateIscoPumpDisplayHandler(m_PumpDisplays_StartPump);
+                m_PumpDisplays.StopPump += new DelegateIscoPumpDisplayHandler(m_PumpDisplays_StopPump);
+                m_PumpDisplays.StartRefill += new DelegateIscoPumpDisplayHandler(m_PumpDisplays_StartRefill);
 
                 // Assign pump class event handlers
-                mobj_Pump.RefreshComplete += new DelegateIscoPumpRefreshCompleteHandler(mobj_Pump_RefreshComplete);
-                mobj_Pump.InitializationComplete += new DelegateIscoPumpInitializationCompleteHandler(mobj_Pump_InitializationComplete);
-                mobj_Pump.ControlModeSet += new DelegateIscoPumpControlModeSetHandler(mobj_Pump_ControlModeSet);
-                mobj_Pump.OperationModeSet += new DelegateIscoPumpOpModeSetHandler(mobj_Pump_OperationModeSet);
-                mobj_Pump.Disconnected += new DelegateIscoPumpDisconnected(mobj_Pump_Disconnected);
+                m_Pump.RefreshComplete += new DelegateIscoPumpRefreshCompleteHandler(m_Pump_RefreshComplete);
+                m_Pump.InitializationComplete += new DelegateIscoPumpInitializationCompleteHandler(m_Pump_InitializationComplete);
+                m_Pump.ControlModeSet += new DelegateIscoPumpControlModeSetHandler(m_Pump_ControlModeSet);
+                m_Pump.OperationModeSet += new DelegateIscoPumpOpModeSetHandler(m_Pump_OperationModeSet);
+                m_Pump.Disconnected += new DelegateIscoPumpDisconnected(m_Pump_Disconnected);
 
 #if DACTEST
-                mobj_Pump.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(mobj_Pump_StatusUpdate);
-                mobj_Pump.Error += new EventHandler<classDeviceErrorEventArgs>(mobj_Pump_Error);
+                m_Pump.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(m_Pump_StatusUpdate);
+                m_Pump.Error += new EventHandler<classDeviceErrorEventArgs>(m_Pump_Error);
 #endif
                 // Initial control mode display
                 mcomboBox_ControlMode.SelectedIndex = 0;
 
                 // Set initial number of pumps to max
-                mcomboBox_PumpCount.SelectedIndex = mobj_Pump.PumpCount - 1;
+                mcomboBox_PumpCount.SelectedIndex = m_Pump.PumpCount - 1;
 
                 // Set initial operation mode display
                 mcomboBox_OperationMode.SelectedIndex = 1;
@@ -120,7 +120,7 @@ namespace LcmsNet.Devices.Pumps
                 // Initialize max refill rate array
                 mdouble_MaxRefillRates = new double[] { 30D, 30D, 30D };
 
-                var index = mcomboBox_Ports.Items.IndexOf(mobj_Pump.PortName);
+                var index = mcomboBox_Ports.Items.IndexOf(m_Pump.PortName);
                 if (index >= 0)
                 {
                     mcomboBox_Ports.SelectedIndex = index;
@@ -129,11 +129,11 @@ namespace LcmsNet.Devices.Pumps
 
             private void RegisterDevice(IDevice device)
             {
-                mobj_Pump = device as classPumpIsco;
+                m_Pump = device as classPumpIsco;
                 InitControl();
 
                 // Add to the device manager
-                SetBaseDevice(mobj_Pump);
+                SetBaseDevice(m_Pump);
             }   
 
             //public override bool RemoveDevice()
@@ -141,11 +141,11 @@ namespace LcmsNet.Devices.Pumps
             //    try
             //    {
             //        // Shutdown the object's connections
-            //        mobj_Pump.Shutdown();
+            //        m_Pump.Shutdown();
             //    }
             //    catch (Exception ex)
             //    {
-            //        throw new IscoException("Exception shutting down ISCO pump", mobj_Pump.GetBaseException(ex));
+            //        throw new IscoException("Exception shutting down ISCO pump", m_Pump.GetBaseException(ex));
             //    }
             //    return classDeviceManager.Manager.RemoveDevice(this.Device);
             //} 
@@ -183,7 +183,7 @@ namespace LcmsNet.Devices.Pumps
                                                         new ListViewItem("Max Flow Value (Note 2)"),
                                                         new ListViewItem("Min Refill Rate SP"), new ListViewItem("Max Refill Rate SP")};
 
-                for (var indx = 0; indx < mobj_PumpDisplays.Count; indx++)
+                for (var indx = 0; indx < m_PumpDisplays.Count; indx++)
                 {
                     // Flow units
                     itemArray[0].SubItems.Add(classIscoConversions.GetFlowUnitsString());
@@ -195,19 +195,19 @@ namespace LcmsNet.Devices.Pumps
                     itemArray[2].SubItems.Add("mL");
 
                     // Min press SP
-                    itemArray[3].SubItems.Add(mobj_PumpDisplays[indx].MinPressSp.ToString());
+                    itemArray[3].SubItems.Add(m_PumpDisplays[indx].MinPressSp.ToString());
 
                     // Max press SP
-                    itemArray[4].SubItems.Add(mobj_PumpDisplays[indx].MaxPressSp.ToString());
+                    itemArray[4].SubItems.Add(m_PumpDisplays[indx].MaxPressSp.ToString());
 
                     // Min flow SP
-                    itemArray[5].SubItems.Add(mobj_PumpDisplays[indx].MinFlowSp.ToString());
+                    itemArray[5].SubItems.Add(m_PumpDisplays[indx].MinFlowSp.ToString());
 
                     // Max flow SP
-                    itemArray[6].SubItems.Add(mobj_PumpDisplays[indx].MaxFlowSp.ToString());
+                    itemArray[6].SubItems.Add(m_PumpDisplays[indx].MaxFlowSp.ToString());
 
                     // Max flow limit
-                    itemArray[7].SubItems.Add(mobj_PumpDisplays[indx].MaxFlowLimit.ToString());
+                    itemArray[7].SubItems.Add(m_PumpDisplays[indx].MaxFlowLimit.ToString());
 
                     // Min refill rate SP
                     itemArray[8].SubItems.Add("0.0");
@@ -229,9 +229,9 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="pumpIndx"></param>
-            void mobj_PumpDisplays_StartRefill(object sender, int pumpIndx)
+            void m_PumpDisplays_StartRefill(object sender, int pumpIndx)
             {
-                if (mobj_Pump.StartRefill(pumpIndx, mdouble_refillRates[pumpIndx]))
+                if (m_Pump.StartRefill(pumpIndx, mdouble_refillRates[pumpIndx]))
                 {
                     UpdateStatusDisplay("Refill started");
                 }
@@ -243,9 +243,9 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="pumpIndx"></param>
-            void mobj_PumpDisplays_StopPump(object sender, int pumpIndx)
+            void m_PumpDisplays_StopPump(object sender, int pumpIndx)
             {
-                if (mobj_Pump.StopPump(0, pumpIndx))
+                if (m_Pump.StopPump(0, pumpIndx))
                 {
                     UpdateStatusDisplay("Pump stopped");
                 }
@@ -257,9 +257,9 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="pumpIndx"></param>
-            void mobj_PumpDisplays_StartPump(object sender, int pumpIndx)
+            void m_PumpDisplays_StartPump(object sender, int pumpIndx)
             {
-                if (mobj_Pump.StartPump(0, pumpIndx))
+                if (m_Pump.StartPump(0, pumpIndx))
                 {
                     UpdateStatusDisplay("Pump started");
                     
@@ -273,15 +273,15 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="sender"></param>
             /// <param name="pumpIndex">Pump to change</param>
             /// <param name="newValue">new setpoint</param>
-            void mobj_PumpDisplays_SetpointChanged(object sender, int pumpIndex, double newValue)
+            void m_PumpDisplays_SetpointChanged(object sender, int pumpIndex, double newValue)
             {
                 var success = true;
 
-                if (mobj_Pump.OperationMode == enumIscoOperationMode.ConstantFlow)
+                if (m_Pump.OperationMode == enumIscoOperationMode.ConstantFlow)
                 {
-                    success = mobj_Pump.SetFlow(pumpIndex, newValue);
+                    success = m_Pump.SetFlow(pumpIndex, newValue);
                 }
-                else success = mobj_Pump.SetPressure(pumpIndex, newValue);
+                else success = m_Pump.SetPressure(pumpIndex, newValue);
 
                 if (success)
                 {
@@ -297,7 +297,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void mbutton_Refresh_Click(object sender, EventArgs e)
             {
-                if (!mobj_Pump.Refresh())
+                if (!m_Pump.Refresh())
                 {
                     UpdateStatusDisplay("Problem refreshing pump status");
                 }
@@ -313,9 +313,9 @@ namespace LcmsNet.Devices.Pumps
             {
                 var success = true;
 
-                for (var pumpIndx = 0; pumpIndx < mint_PumpCount; pumpIndx++)
+                for (var pumpIndx = 0; pumpIndx < m_PumpCount; pumpIndx++)
                 {
-                    if (!mobj_Pump.StartPump(0, pumpIndx)) success = false;
+                    if (!m_Pump.StartPump(0, pumpIndx)) success = false;
                 }
 
                 if (success)
@@ -334,9 +334,9 @@ namespace LcmsNet.Devices.Pumps
             {
                 var success = true;
 
-                for (var pumpIndx = 0; pumpIndx < mint_PumpCount; pumpIndx++)
+                for (var pumpIndx = 0; pumpIndx < m_PumpCount; pumpIndx++)
                 {
-                    if (!mobj_Pump.StopPump(0, pumpIndx)) success = false;
+                    if (!m_Pump.StopPump(0, pumpIndx)) success = false;
                 }
 
                 if (success)
@@ -353,16 +353,16 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void mbutton_SetAllFlow_Click(object sender, EventArgs e)
             {
-                if (!(mobj_Pump.OperationMode == enumIscoOperationMode.ConstantFlow))
+                if (!(m_Pump.OperationMode == enumIscoOperationMode.ConstantFlow))
                 {
                     UpdateStatusDisplay("Pump must be in constant flow mode");
                     return;
                 }
 
                 var success = true;
-                for (var indx = 0; indx < mint_PumpCount; indx++)
+                for (var indx = 0; indx < m_PumpCount; indx++)
                 {
-                    if (!mobj_Pump.SetFlow(indx, mobj_PumpDisplays[indx].Setpoint)) success = false;
+                    if (!m_Pump.SetFlow(indx, m_PumpDisplays[indx].Setpoint)) success = false;
                 }
 
                 if (success)
@@ -379,16 +379,16 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void mbuttonSetAllPress_Click(object sender, EventArgs e)
             {
-                if (!(mobj_Pump.OperationMode == enumIscoOperationMode.ConstantPressure))
+                if (!(m_Pump.OperationMode == enumIscoOperationMode.ConstantPressure))
                 {
                     UpdateStatusDisplay("Pump must be in constant pressure mode");
                     return;
                 }
 
                 var success = true;
-                for (var indx = 0; indx < mint_PumpCount; indx++)
+                for (var indx = 0; indx < m_PumpCount; indx++)
                 {
-                    if (!mobj_Pump.SetPressure(indx, mobj_PumpDisplays[indx].Setpoint)) success = false;
+                    if (!m_Pump.SetPressure(indx, m_PumpDisplays[indx].Setpoint)) success = false;
                 }
 
                 if (success)
@@ -406,9 +406,9 @@ namespace LcmsNet.Devices.Pumps
             private void mbutton_RefillAll_Click(object sender, EventArgs e)
             {
                 var success = true;
-                for (var pumpIndx = 0; pumpIndx < mint_PumpCount; pumpIndx++)
+                for (var pumpIndx = 0; pumpIndx < m_PumpCount; pumpIndx++)
                 {
-                    if (!mobj_Pump.StartRefill(pumpIndx, mdouble_refillRates[pumpIndx])) success = false;
+                    if (!m_Pump.StartRefill(pumpIndx, mdouble_refillRates[pumpIndx])) success = false;
                 }
 
                 if (success)
@@ -433,7 +433,7 @@ namespace LcmsNet.Devices.Pumps
                 }
                 else newMode = enumIscoControlMode.Remote;
 
-                if (mobj_Pump.SetControlMode(newMode))
+                if (m_Pump.SetControlMode(newMode))
                 {
                     UpdateStatusDisplay("Control mode changed");
                 }
@@ -447,8 +447,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void mcomboBox_PumpCount_SelectedIndexChanged(object sender, EventArgs e)
             {
-                mint_PumpCount = int.Parse(mcomboBox_PumpCount.SelectedItem.ToString());
-                mobj_Pump.PumpCount = mint_PumpCount;
+                m_PumpCount = int.Parse(mcomboBox_PumpCount.SelectedItem.ToString());
+                m_Pump.PumpCount = m_PumpCount;
             }   
 
             /// <summary>
@@ -466,11 +466,11 @@ namespace LcmsNet.Devices.Pumps
                 }
                 else newMode = enumIscoOperationMode.ConstantPressure;
 
-                if (mobj_Pump.SetOperationMode(newMode))
+                if (m_Pump.SetOperationMode(newMode))
                 {
-                    for (var indx = 0; indx < mobj_PumpDisplays.Count; indx++)
+                    for (var indx = 0; indx < m_PumpDisplays.Count; indx++)
                     {
-                        mobj_PumpDisplays[indx].OperationMode = newMode;
+                        m_PumpDisplays[indx].OperationMode = newMode;
                     }
                     UpdateStatusDisplay("Operation mode changed");
                 }
@@ -484,14 +484,14 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void mbutton_SetPortProperties_Click(object sender, EventArgs e)
             {
-                if (mobj_Pump.IsOpen())
+                if (m_Pump.IsOpen())
                 {                    
                 }
-                mobj_Pump.PortName = (string)mcomboBox_Ports.SelectedItem;
-                mobj_Pump.BaudRate = int.Parse(mtextBox_BaudRate.Text);
-                mobj_Pump.ReadTimeout = int.Parse(mtextBox_ReadTimeout.Text);
-                mobj_Pump.WriteTimeout = int.Parse(mtextBox_WriteTimeout.Text);
-                mobj_Pump.UnitAddress = (int)mcomboBox_UnitAddress.SelectedItem;
+                m_Pump.PortName = (string)mcomboBox_Ports.SelectedItem;
+                m_Pump.BaudRate = int.Parse(mtextBox_BaudRate.Text);
+                m_Pump.ReadTimeout = int.Parse(mtextBox_ReadTimeout.Text);
+                m_Pump.WriteTimeout = int.Parse(mtextBox_WriteTimeout.Text);
+                m_Pump.UnitAddress = (int)mcomboBox_UnitAddress.SelectedItem;
             }   
 
             /// <summary>
@@ -502,7 +502,7 @@ namespace LcmsNet.Devices.Pumps
             private void mbutton_SetRefillRate_Click(object sender, EventArgs e)
             {
                 // Warn if pump isn't initialized, which means range limits aren't available
-                if (!mobj_Pump.Initialized)
+                if (!m_Pump.Initialized)
                 {
                     UpdateStatusDisplay("Pump not initialized");
                     return;
@@ -542,30 +542,30 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Refresh complete handler
             /// </summary>
-            void mobj_Pump_RefreshComplete()
+            void m_Pump_RefreshComplete()
             {
                 try
                 {
-                    for (var pumpIndx = 0; pumpIndx < mobj_PumpDisplays.Count; pumpIndx++)
+                    for (var pumpIndx = 0; pumpIndx < m_PumpDisplays.Count; pumpIndx++)
                     {
-                        var pumpData = mobj_Pump.GetPumpData(pumpIndx);
+                        var pumpData = m_Pump.GetPumpData(pumpIndx);
                         if (pumpData != null)
                         {
-                            mobj_PumpDisplays[pumpIndx].FlowRate = pumpData.Flow;
-                            mobj_PumpDisplays[pumpIndx].Pressure = pumpData.Pressure;
-                            mobj_PumpDisplays[pumpIndx].Volume = pumpData.Volume;
-                            //mobj_PumpDisplays[pumpIndx].Setpoint = pumpData.SetPoint;
-                            mobj_PumpDisplays[pumpIndx].ProblemStatus = pumpData.ProblemStatus;
+                            m_PumpDisplays[pumpIndx].FlowRate = pumpData.Flow;
+                            m_PumpDisplays[pumpIndx].Pressure = pumpData.Pressure;
+                            m_PumpDisplays[pumpIndx].Volume = pumpData.Volume;
+                            //m_PumpDisplays[pumpIndx].Setpoint = pumpData.SetPoint;
+                            m_PumpDisplays[pumpIndx].ProblemStatus = pumpData.ProblemStatus;
                         }
 
-                        //classPumpIscoSetpointLimits setpointLimits = mobj_Pump.GetSetpointLimits(pumpIndx);
+                        //classPumpIscoSetpointLimits setpointLimits = m_Pump.GetSetpointLimits(pumpIndx);
                         //if (setpointLimits != null)
                         //{
-                        //   mobj_PumpDisplays[pumpIndx].MinFlowSp = setpointLimits.MinFlowSp;
-                        //   mobj_PumpDisplays[pumpIndx].MaxFlowSp = setpointLimits.MaxFlowSp;
-                        //   mobj_PumpDisplays[pumpIndx].MinPressSp = setpointLimits.MinPressSp;
-                        //   mobj_PumpDisplays[pumpIndx].MaxPressSp = setpointLimits.MaxPressSp;
-                        //   mobj_PumpDisplays[pumpIndx].MaxFlowLimit = setpointLimits.MaxFlowLimit;
+                        //   m_PumpDisplays[pumpIndx].MinFlowSp = setpointLimits.MinFlowSp;
+                        //   m_PumpDisplays[pumpIndx].MaxFlowSp = setpointLimits.MaxFlowSp;
+                        //   m_PumpDisplays[pumpIndx].MinPressSp = setpointLimits.MinPressSp;
+                        //   m_PumpDisplays[pumpIndx].MaxPressSp = setpointLimits.MaxPressSp;
+                        //   m_PumpDisplays[pumpIndx].MaxFlowLimit = setpointLimits.MaxFlowLimit;
                         //}
                     }
 
@@ -574,44 +574,44 @@ namespace LcmsNet.Devices.Pumps
                 {
                     classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Exception occured trying to refresh pump data " + ex.StackTrace);
                 }
-                //mcontrol_IscoGraphs.UpdateAllPlots(mobj_Pump.PumpData);
+                //mcontrol_IscoGraphs.UpdateAllPlots(m_Pump.PumpData);
             }   
             
             /// <summary>
             /// Initialization complete handler
             /// </summary>
-            void mobj_Pump_InitializationComplete()
+            void m_Pump_InitializationComplete()
             {
                 // Set the operation mode displays
-                var currOpMode = mobj_Pump.OperationMode;
+                var currOpMode = m_Pump.OperationMode;
                 if (currOpMode == enumIscoOperationMode.ConstantFlow)
                 {
                     mcomboBox_OperationMode.SelectedIndex = 0;
                 }
                 else mcomboBox_OperationMode.SelectedIndex = 1;
-                for (var indx = 0; indx < mobj_PumpDisplays.Count; indx++)
+                for (var indx = 0; indx < m_PumpDisplays.Count; indx++)
                 {
-                    mobj_PumpDisplays[indx].OperationMode = currOpMode;
+                    m_PumpDisplays[indx].OperationMode = currOpMode;
                 }
 
                 // Get data for limits display
-                for (var indx = 0; indx < mint_PumpCount; indx++)
+                for (var indx = 0; indx < m_PumpCount; indx++)
                 {
-                    var rangeData = mobj_Pump.GetPumpRanges(indx);
-                    var setpointLimits = mobj_Pump.GetSetpointLimits(indx);
+                    var rangeData = m_Pump.GetPumpRanges(indx);
+                    var setpointLimits = m_Pump.GetSetpointLimits(indx);
 
                     if (rangeData == null) rangeData = new classPumpIscoRangeData(); // Use the defaults in the class
                     if (setpointLimits == null) setpointLimits = new classPumpIscoSetpointLimits(); // Use the defaults in the class
 
-                    mobj_PumpDisplays[indx].MinFlowSp = setpointLimits.MinFlowSp;
-                    mobj_PumpDisplays[indx].MaxFlowSp = setpointLimits.MaxFlowSp;
-                    mobj_PumpDisplays[indx].MinPressSp = setpointLimits.MinPressSp;
-                    mobj_PumpDisplays[indx].MaxPressSp = setpointLimits.MaxPressSp;
-                    mobj_PumpDisplays[indx].MaxFlowLimit = setpointLimits.MaxFlowLimit;
+                    m_PumpDisplays[indx].MinFlowSp = setpointLimits.MinFlowSp;
+                    m_PumpDisplays[indx].MaxFlowSp = setpointLimits.MaxFlowSp;
+                    m_PumpDisplays[indx].MinPressSp = setpointLimits.MinPressSp;
+                    m_PumpDisplays[indx].MaxPressSp = setpointLimits.MaxPressSp;
+                    m_PumpDisplays[indx].MaxFlowLimit = setpointLimits.MaxFlowLimit;
 
                     mdouble_MaxRefillRates[indx] = rangeData.MaxRefillRate;
 
-                    mdouble_refillRates[indx] = mobj_Pump.GetPumpData(indx).RefillRate;
+                    mdouble_refillRates[indx] = m_Pump.GetPumpData(indx).RefillRate;
                 }
 
                 // Fill in limits display
@@ -630,7 +630,7 @@ namespace LcmsNet.Devices.Pumps
             /// OperationModeSet handler
             /// </summary>
             /// <param name="newMode"></param>
-            void mobj_Pump_OperationModeSet(enumIscoOperationMode newMode)
+            void m_Pump_OperationModeSet(enumIscoOperationMode newMode)
             {
                 if (newMode == enumIscoOperationMode.ConstantFlow)
                 {
@@ -643,7 +643,7 @@ namespace LcmsNet.Devices.Pumps
             /// ControlModeSet handler
             /// </summary>
             /// <param name="newMode"></param>
-            void mobj_Pump_ControlModeSet(enumIscoControlMode newMode)
+            void m_Pump_ControlModeSet(enumIscoControlMode newMode)
             {
                 if (newMode == enumIscoControlMode.Local)
                 {
@@ -655,19 +655,19 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Handles pump class disconnect
             /// </summary>
-            void mobj_Pump_Disconnected()
+            void m_Pump_Disconnected()
             {
                 //Included for future use
             }        
 
 #if DACTEST
-            void mobj_Pump_Error(object sender, classDeviceErrorEventArgs e)
+            void m_Pump_Error(object sender, classDeviceErrorEventArgs e)
             {
                 string msg = "ERROR: " + e.Notification;
                 LogDebugMessage(msg);
             }
 
-            void mobj_Pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+            void m_Pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
             {
                 string msg = "STATUS: " + e.Notification;
                 LogDebugMessage(msg);
@@ -685,7 +685,7 @@ namespace LcmsNet.Devices.Pumps
             //{
             //   XmlDocument doc = new XmlDocument();
             //   XmlElement element = doc.CreateElement("PumpSettings");
-            //   mobj_device.SaveDeviceSettings(element);
+            //   m_device.SaveDeviceSettings(element);
             //   return element;
             //} 
 
@@ -696,39 +696,39 @@ namespace LcmsNet.Devices.Pumps
             //public void LoadDeviceSettings(System.Xml.XmlElement deviceNode)
             //{
             //   // Get the settings
-            //   mobj_device.LoadDeviceSettings(deviceNode);
+            //   m_device.LoadDeviceSettings(deviceNode);
 
             //   // Serial port
-            //   if (mcomboBox_Ports.Items.Contains(mobj_Pump.PortName))
+            //   if (mcomboBox_Ports.Items.Contains(m_Pump.PortName))
             //   {
-            //      int index = mcomboBox_Ports.Items.IndexOf(mobj_Pump.PortName);
+            //      int index = mcomboBox_Ports.Items.IndexOf(m_Pump.PortName);
             //      mcomboBox_Ports.SelectedIndex = index;
             //   }
 
             //   // Unit address
-            //   if (mcomboBox_UnitAddress.Items.Contains(mobj_Pump.UnitAddress))
+            //   if (mcomboBox_UnitAddress.Items.Contains(m_Pump.UnitAddress))
             //   {
-            //      int index = mcomboBox_UnitAddress.Items.IndexOf(mobj_Pump.UnitAddress);
+            //      int index = mcomboBox_UnitAddress.Items.IndexOf(m_Pump.UnitAddress);
             //      mcomboBox_UnitAddress.SelectedIndex = index;
             //   }
 
             //   // Pump count
-            //   if (mcomboBox_PumpCount.Items.Contains(mobj_Pump.PumpCount))
+            //   if (mcomboBox_PumpCount.Items.Contains(m_Pump.PumpCount))
             //   {
-            //      int index = mcomboBox_PumpCount.Items.IndexOf(mobj_Pump.PumpCount);
+            //      int index = mcomboBox_PumpCount.Items.IndexOf(m_Pump.PumpCount);
             //      mcomboBox_PumpCount.SelectedIndex = index;
             //   }
 
             //   // Baud rate
-            //   mtextBox_BaudRate.Text = mobj_Pump.BaudRate.ToString();
+            //   mtextBox_BaudRate.Text = m_Pump.BaudRate.ToString();
 
             //   // Write timeout
-            //   mtextBox_WriteTimeout.Text = mobj_Pump.WriteTimeout.ToString();
+            //   mtextBox_WriteTimeout.Text = m_Pump.WriteTimeout.ToString();
 
             //   // Read timeout
-            //   mtextBox_ReadTimeout.Text = mobj_Pump.ReadTimeout.ToString();
+            //   mtextBox_ReadTimeout.Text = m_Pump.ReadTimeout.ToString();
 
-            //   OnNameChanged(mobj_device.Name);
+            //   OnNameChanged(m_device.Name);
             //}
         #endregion
 

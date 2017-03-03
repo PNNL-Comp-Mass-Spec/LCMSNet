@@ -28,7 +28,7 @@ namespace LcmsNet.Notification.Forms
             m_currentSetting = null;
 
             // Setup notifier and options.
-            m_notifier = new classNotifier();
+            m_classNotifier = new classNotifier();
             var actions = Enum.GetValues(typeof (enumDeviceNotificationAction));
             var data = new object[actions.Length];
             actions.CopyTo(data, 0);
@@ -40,7 +40,7 @@ namespace LcmsNet.Notification.Forms
 
             // Place to put system health.
             mtextBox_path.Text = Settings.Default.NotificationDirectoryPath;
-            m_notifier.Path = mtextBox_path.Text;
+            m_classNotifier.Path = mtextBox_path.Text;
 
             // Add any existing devices.
             var devices = classDeviceManager.Manager.Devices;
@@ -143,7 +143,7 @@ namespace LcmsNet.Notification.Forms
         /// <summary>
         /// Notifier object that sends status to remote listeners.
         /// </summary>
-        private readonly classNotifier m_notifier;
+        private readonly classNotifier m_classNotifier;
 
         /// <summary>
         /// Flag indicating whether the timer is being set.
@@ -399,8 +399,8 @@ namespace LcmsNet.Notification.Forms
                     classApplicationLogger.LogMessage(0,
                         string.Format("Handling a user defined event from a device status change - {0}.",
                             setting.Name));
-                    m_notifier.Path = mtextBox_path.Text;
-                    //m_notifier.Notify(message, setting);
+                    m_classNotifier.Path = mtextBox_path.Text;
+                    //m_classNotifier.Notify(message, setting);
                     break;
                 default:
 
@@ -507,7 +507,7 @@ namespace LcmsNet.Notification.Forms
             Settings.Default.NotificationShouldNotify = mcheckBox_writeStatus.Checked;
             Settings.Default.Save();
 
-            mtimer_notifier.Enabled = mcheckBox_writeStatus.Checked;
+            m_notifierTimer.Enabled = mcheckBox_writeStatus.Checked;
         }
 
         /// <summary>
@@ -530,7 +530,7 @@ namespace LcmsNet.Notification.Forms
         private void SetTime(int rawMinutes)
         {
             var milliSeconds = rawMinutes * 1000 * 60; // 60 seconds / minute * 1000 ms / second
-            mtimer_notifier.Interval = milliSeconds;
+            m_notifierTimer.Interval = milliSeconds;
 
             Settings.Default.NotificationWriteTimeMinutes = rawMinutes;
             Settings.Default.Save();
@@ -546,12 +546,12 @@ namespace LcmsNet.Notification.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void mtimer_notifier_Tick(object sender, EventArgs e)
+        private void m_notifierTimer_Tick(object sender, EventArgs e)
         {
             if (mcheckBox_writeStatus.Checked)
             {
-                m_notifier.Path = mtextBox_path.Text;
-                // m_notifier.WriteSystemHealth();
+                m_classNotifier.Path = mtextBox_path.Text;
+                // m_classNotifier.WriteSystemHealth();
             }
         }
 

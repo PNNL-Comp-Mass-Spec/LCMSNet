@@ -28,7 +28,7 @@ namespace LcmsNet.Devices.NetworkStart
         /// <summary>
         /// A NesStart object to use
         /// </summary>
-        private classNetStartSocket mobj_netStart;
+        private classNetStartSocket m_netStart;
         private delegate void UpdateStatus(enumDeviceStatus status, string message);
         /// <summary>
         /// Fired when the instrument methods are updated.
@@ -44,12 +44,12 @@ namespace LcmsNet.Devices.NetworkStart
         }
         private void RegisterDevice(IDevice device)
         {
-            mobj_netStart              = device as classNetStartSocket;
-            mobj_netStart.MethodNames += new DelegateDeviceHasData(mobj_netStart_MethodNames);
-            mobj_netStart.Error       += new EventHandler<classDeviceErrorEventArgs>(mobj_netStart_Error);
+            m_netStart              = device as classNetStartSocket;
+            m_netStart.MethodNames += new DelegateDeviceHasData(m_netStart_MethodNames);
+            m_netStart.Error       += new EventHandler<classDeviceErrorEventArgs>(m_netStart_Error);
             UpdateUserInterface();
             
-            SetBaseDevice(mobj_netStart);
+            SetBaseDevice(m_netStart);
         }
         #endregion
 
@@ -61,7 +61,7 @@ namespace LcmsNet.Devices.NetworkStart
         {
             get
             {
-                return mobj_netStart;
+                return m_netStart;
             }
             set
             {
@@ -76,11 +76,11 @@ namespace LcmsNet.Devices.NetworkStart
         {
             get
             {
-                return mobj_netStart.Emulation;
+                return m_netStart.Emulation;
             }
             set
             {
-                mobj_netStart.Emulation = value;
+                m_netStart.Emulation = value;
             }
         }
         #endregion
@@ -91,18 +91,18 @@ namespace LcmsNet.Devices.NetworkStart
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void mobj_netStart_Error(object sender, classDeviceErrorEventArgs e)
+        void m_netStart_Error(object sender, classDeviceErrorEventArgs e)
         {
             if (InvokeRequired)
             {
-                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { mobj_netStart.Status, e.Error });
+                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { m_netStart.Status, e.Error });
             }
             else
             {
-                SetStatus(mobj_netStart.Status, e.Error);
+                SetStatus(m_netStart.Status, e.Error);
             }
         }
-        void mobj_netStart_MethodNames(object sender, System.Collections.Generic.List<object> data)
+        void m_netStart_MethodNames(object sender, System.Collections.Generic.List<object> data)
         {
             var methodNames = new List<string>();
 
@@ -126,9 +126,9 @@ namespace LcmsNet.Devices.NetworkStart
         /// </summary>
         private void UpdateUserInterface()
         {
-            mtextbox_ipAddress.Text = mobj_netStart.Address;
-            mnum_port.Value         = Convert.ToDecimal(mobj_netStart.Port);
-            SetStatus(mobj_netStart.Status, "");
+            mtextbox_ipAddress.Text = m_netStart.Address;
+            mnum_port.Value         = Convert.ToDecimal(m_netStart.Port);
+            SetStatus(m_netStart.Status, "");
         }
         /// <summary>
         /// Updates the status of the device.
@@ -136,7 +136,7 @@ namespace LcmsNet.Devices.NetworkStart
         /// <param name="status"></param>
         private void SetStatus(enumDeviceStatus status, string message)
         {
-            mlabel_status.Text = "Status: " + mobj_netStart.Status + " - " + message;
+            mlabel_status.Text = "Status: " + m_netStart.Status + " - " + message;
         }
 
         #region Form Event Handlers
@@ -150,7 +150,7 @@ namespace LcmsNet.Devices.NetworkStart
             var methodName = "";
             if (mcomboBox_methods.SelectedIndex < 0)
             {
-                SetStatus(mobj_netStart.Status, "No method selected.");
+                SetStatus(m_netStart.Status, "No method selected.");
                 return;
             }
             methodName = mcomboBox_methods.SelectedItem.ToString();
@@ -159,7 +159,7 @@ namespace LcmsNet.Devices.NetworkStart
             sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
             sample.InstrumentData.MethodName = methodName;
 
-            mobj_netStart.StartAcquisition(20, sample);
+            m_netStart.StartAcquisition(20, sample);
         }
         /// <summary>
         /// Manually stops the acquisition.
@@ -168,23 +168,23 @@ namespace LcmsNet.Devices.NetworkStart
         /// <param name="e"></param>
         private void mbutton_stopAcquisition_Click(object sender, EventArgs e)
         {
-            mobj_netStart.StopAcquisition(1000);
+            m_netStart.StopAcquisition(1000);
         }
         private void mbutton_getMethods_Click(object sender, EventArgs e)
         {
-            mobj_netStart.GetMethods();
+            m_netStart.GetMethods();
         }
         #endregion
 
         private void mtextbox_ipAddress_TextChanged(object sender, EventArgs e)
         {
             OnSaveRequired();
-            mobj_netStart.Address = mtextbox_ipAddress.Text;
+            m_netStart.Address = mtextbox_ipAddress.Text;
         }
 
         private void mnum_port_ValueChanged(object sender, EventArgs e)
         {
-            mobj_netStart.Port = Convert.ToInt32(mnum_port.Value);
+            m_netStart.Port = Convert.ToInt32(mnum_port.Value);
             OnSaveRequired();
         }
     }   

@@ -19,15 +19,15 @@ namespace LcmsNet.Devices.Pumps
     public static class classIscoConversions
     {
         #region "Class variables"
-            static enumIscoFlowUnits menum_FlowUnits = enumIscoFlowUnits.ul_min;
+            static enumIscoFlowUnits m_FlowUnits = enumIscoFlowUnits.ul_min;
             static enumIscoPressureUnits menu_PressUnits = enumIscoPressureUnits.psi;
         #endregion
 
         #region "Properties"
             public static enumIscoFlowUnits FlowUnits
             {
-                get { return menum_FlowUnits; }
-                set { menum_FlowUnits = value; }
+                get { return m_FlowUnits; }
+                set { m_FlowUnits = value; }
             }
 
             public static enumIscoPressureUnits PressUnits
@@ -46,7 +46,7 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Flow in user units; -1000 on failure</returns>
             public static double ConvertFlowFromString(string inpFlow)
             {
-                return ConvertFlowFromString(inpFlow, menum_FlowUnits);
+                return ConvertFlowFromString(inpFlow, m_FlowUnits);
             }   
 
             /// <summary>
@@ -191,7 +191,7 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>String specifying flow units; Empty string on error</returns>
             public static string GetFlowUnitsString()
             {
-                return GetFlowUnitsString(menum_FlowUnits);
+                return GetFlowUnitsString(m_FlowUnits);
             }   
 
             /// <summary>
