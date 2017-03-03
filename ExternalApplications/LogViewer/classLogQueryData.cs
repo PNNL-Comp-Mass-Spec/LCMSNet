@@ -23,76 +23,74 @@ namespace LogViewer
         #endregion
 
         #region "Properties"
-            public string StartTime
-            {
-                get { return GetValueIfFound("starttime"); }
-                set { m_QueryParams["starttime"] = value; }
-            }
+        public string StartTime
+        {
+            get { return GetValueIfFound("starttime"); }
+            set { m_QueryParams["starttime"] = value; }
+        }
 
-            public string StopTime
-            {
-                get { return GetValueIfFound("stoptime"); }
-                set { m_QueryParams["stoptime"] = value; }
-            }
+        public string StopTime
+        {
+            get { return GetValueIfFound("stoptime"); }
+            set { m_QueryParams["stoptime"] = value; }
+        }
 
-            public string Type
-            {
-                get { return GetValueIfFound("type"); }
-                set { m_QueryParams["type"] = value; }
-            }
+        public string Type
+        {
+            get { return GetValueIfFound("type"); }
+            set { m_QueryParams["type"] = value; }
+        }
 
-            public string Sample
-            {
-                get { return GetValueIfFound("sample"); }
-                set { m_QueryParams["sample"] = value; }
-            }
+        public string Sample
+        {
+            get { return GetValueIfFound("sample"); }
+            set { m_QueryParams["sample"] = value; }
+        }
 
-            public string Column
-            {
-                get { return GetValueIfFound("column"); }
-                set { m_QueryParams["column"] = value; }
-            }
+        public string Column
+        {
+            get { return GetValueIfFound("column"); }
+            set { m_QueryParams["column"] = value; }
+        }
 
-            public string Device
-            {
-                get { return GetValueIfFound("device"); }
-                set { m_QueryParams["device"] = value; }
-            }
+        public string Device
+        {
+            get { return GetValueIfFound("device"); }
+            set { m_QueryParams["device"] = value; }
+        }
 
-            public string Message
-            {
-                get { return GetValueIfFound("message"); }
-                set { m_QueryParams["message"] = value; }
-            }
+        public string Message
+        {
+            get { return GetValueIfFound("message"); }
+            set { m_QueryParams["message"] = value; }
+        }
         #endregion
 
         #region "Methods"
-            /// <summary>
-            /// Tests for existence of spcified key in dictionary
-            /// </summary>
-            /// <param name="dictKey">Key name</param>
-            /// <returns>Key value if found, otherwise empty string</returns>
-            private String GetValueIfFound(String dictKey)
+        /// <summary>
+        /// Tests for existence of spcified key in dictionary
+        /// </summary>
+        /// <param name="dictKey">Key name</param>
+        /// <returns>Key value if found, otherwise empty string</returns>
+        private String GetValueIfFound(String dictKey)
+        {
+            if (m_QueryParams.ContainsKey(dictKey))
             {
-                if (m_QueryParams.ContainsKey(dictKey))
-                {
-                    return m_QueryParams[dictKey];
-                }
-                else
-                {
-                    return "";
-                }
-            }   
+                return m_QueryParams[dictKey];
+            }
 
-            public bool OneParamHasValue()
+            return "";
+        }
+
+        public bool OneParamHasValue()
+        {
+            foreach (string testStr in m_QueryParams.Values)
             {
-                foreach (string testStr in m_QueryParams.Values)
-                {
-                    if (testStr.Length > 0)
-                    { return true; }
-                }
-                return false;
-            }   
+                if (testStr.Length > 0)
+                { return true; }
+            }
+            return false;
+        }
         #endregion
-    }   
+    }
 }
