@@ -26,12 +26,18 @@ namespace TestTool
 
                 dbt.LoadCacheFromDMS();
 
+                Console.WriteLine("Data loaded");
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(@"Exception: " + ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
+
+            Console.WriteLine("");
+            Console.WriteLine("Closing in 3 seconds");
+            System.Threading.Thread.Sleep(3000);
         }
 
         static void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
