@@ -30,31 +30,33 @@ if exist %LOGFILE% DEL %LOGFILE%
 
 rem Build LcmsNetSDK solution
 echo Building LcmsNetSDK solution...
-@echo on
+echo %MSBuildExe% %CONFIG% %BOPTS% "%ROOTPATH%SDK\LcmsNetSDKs.sln"
 %MSBuildExe% %CONFIG% %BOPTS% "%ROOTPATH%SDK\LcmsNetSDKs.sln"
-@echo off
 if errorlevel 1 goto :ERROR
 echo Done.
+echo.
 
 rem Build LcmsNetSQLiteTools solution
 echo Building LcmsNetSQLiteTools solution...
-@echo on
+echo %MSBuildExe% %CONFIG% %BOPTS% "%ROOTPATH%SQLiteTools\SQLiteTools.sln"
 %MSBuildExe% %CONFIG% %BOPTS% "%ROOTPATH%SQLiteTools\SQLiteTools.sln"
-@echo off
 if errorlevel 1 goto :ERROR
 echo Done.
+echo.
 
 rem Build Main solution.
 echo Building LcmsNet...
-@echo on
+echo %MSBuildExe% /p:Configuration=Debug /p:targetPlatform=x86 %BOPTS% "%ROOTPATH%lcms\LCMSNet\LCMSNet.sln"
 %MSBuildExe% /p:Configuration=Debug /p:targetPlatform=x86 %BOPTS% "%ROOTPATH%lcms\LCMSNet\LCMSNet.sln"
-@echo off
 if errorlevel 1 goto :ERROR
 echo Done.
+echo.
 
 echo Copying Core Validator to %APPDATA%\LCMSNet\SampleValidators
 xcopy /y /q /d "%ROOTPATH%SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll" %APPDATA%\LCMSNet\SampleValidators\
 echo Done. 
+echo.
+
 if errorlevel 1 goto :ERROR
 goto :COMPLETE
 

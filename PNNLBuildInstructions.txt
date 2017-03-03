@@ -1,22 +1,39 @@
 PNNL Internal Build Instructions:
-Easy way: run buildall.bat with MSBuild in your PATH environment variable.
 
-For release: run buildall.bat with the command line parameter "release" without the quotes, and then run the installer script.
+Option 1)
+	Run buildall.bat
+	(if MSBuild is not in your path, will use C:\Program Files (x86)\MSBuild\14.0\Bin\)
 
-Hard way:
-To build a fully functional and up-to-date LcmsNet use:
-1.      Build the SDK solution in \LcmsNet\SDK
+	For release, use:
+	buildall.bat release
 
-2.      Build the SQLiteTools solution in \LcmsNet\SQLiteTools
+	Next, run the installer script at Installer\LCMSNet_X86-pnnl.iss
 
-3.      Build the plugin solution in \lcmsnetPlugins
 
-4.      Build the DMS solution in \LcmsNetDmsTools
-	        Copy LcmsNetDmsTools.dll (plus the other DLLs) to C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
-	        Also place PrismDMS.config in C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
+Option 2)
+	Open solution LCMSNet_BuildAll.sln
+	Build with the PNNLRelease configuration as x86
 
-5.      Build LcmsNet main solution in \LcmsNet\lcms\LCMSnet
+	Next, run the installer script at Installer\LCMSNet_X86-pnnl.iss
 
-6debug. Copy Files from \InternalLibs into the output directory of the main solution. Copy files from \pluginDLLs into the \Plugins directory of the output directory of the main solution.
+Option 3)
+	Build each project individually:
+	1. Build the SDK solution in \LcmsNet\SDK
 
-6deploy. Run LCMSNet_X86-pnnl.iss installer script in the \Installer directory to generate the install file. Inno Setup will be necessary.
+	2. Build the SQLiteTools solution in \LcmsNet\SQLiteTools
+
+	3. Build the plugin solution in \lcmsnetPlugins
+
+	4. Build the DMS solution in \LcmsNetDmsTools
+		 Copy LcmsNetDmsTools.dll (plus the other DLLs) to C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
+		 Also place PrismDMS.config in C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
+
+	5. Build LcmsNet main solution in \LcmsNet\lcms\LCMSnet
+
+	6. Debug
+		 Copy Files from \InternalLibs into the output directory of the main solution. 
+		 Copy files from \pluginDLLs into the \Plugins directory of the output directory of the main solution.
+
+	7. Deploy
+		 Run installer script Installer\LCMSNet_X86-pnnl.iss to generate the install file. 
+		 Inno Setup is required
