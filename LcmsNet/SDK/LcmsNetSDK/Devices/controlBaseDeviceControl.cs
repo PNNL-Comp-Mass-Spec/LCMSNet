@@ -52,8 +52,6 @@ namespace LcmsNetDataClasses.Devices
 
         #region Delegates
 
-        private delegate void delegateStatusUpdate(string newStatus);
-
         #endregion
 
         #region Events
@@ -93,7 +91,8 @@ namespace LcmsNetDataClasses.Devices
         public new string Name
         {
             get { return m_device.Name; }
-            set { }
+            // ReSharper disable once ValueParameterNotUsed (used in LcmsNetSDK\Devices\controlBaseDeviceControl.Designer.cs)
+            protected set { }
         }
 
         #endregion

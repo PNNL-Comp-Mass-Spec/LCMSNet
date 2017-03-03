@@ -204,7 +204,7 @@ namespace LcmsNetDataClasses.Method
         public bool BreakPoint
         {
             get { return MethodData.BreakPoint; }
-            private set { }
+            private set { MethodData.BreakPoint = value; }
         }
 
         #endregion
