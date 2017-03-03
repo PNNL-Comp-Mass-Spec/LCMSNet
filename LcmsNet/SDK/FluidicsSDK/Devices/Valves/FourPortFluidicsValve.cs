@@ -24,9 +24,9 @@ namespace FluidicsSDK.Devices
             var StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
             var StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
             //add left control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), RightButtonAction);
         }
 
         private void SetValvePosition(TwoPositionState pos)
@@ -40,7 +40,7 @@ namespace FluidicsSDK.Devices
             try
             {
                 //m_valve.SetPosition(10);
-                m_valve.PositionChanged += new EventHandler<ValvePositionEventArgs<TwoPositionState>>(m_valve_PositionChanged);
+                m_valve.PositionChanged += m_valve_PositionChanged;
             }
             catch(Exception)
             {

@@ -587,7 +587,7 @@ namespace Agilent.Devices.Pumps
             }
             
             m_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
-            m_pumps.ErrorOccurred += new EventHandler<Agilent.Licop.ErrorEventArgs>(m_pumps_ErrorOccurred);
+            m_pumps.ErrorOccurred += m_pumps_ErrorOccurred;
 
             /// 
             /// Try initial connection
@@ -618,7 +618,7 @@ namespace Agilent.Devices.Pumps
             /// And an EV channel.Channel for errors or state events
             /// 
             m_evChannel               = m_module.CreateChannel("EV");
-            m_evChannel.DataReceived += new EventHandler<DataEventArgs>(m_evChannel_DataReceived);
+            m_evChannel.DataReceived += m_evChannel_DataReceived;
             if (m_evChannel.TryOpen(ReadMode.Events) == false)
             {
                 //"Could not open EV channel."
@@ -643,7 +643,7 @@ namespace Agilent.Devices.Pumps
             /// Monitoring for the pumps
             /// 
             m_monitorChannel                  = m_module.CreateChannel("MO");
-            m_monitorChannel.DataReceived += new EventHandler<DataEventArgs>(m_monitorChannel_DataReceived);
+            m_monitorChannel.DataReceived += m_monitorChannel_DataReceived;
             if (m_monitorChannel.TryOpen(ReadMode.Events) == false)
             {
                 errorMessage = "Could not open the communication channel for monitoring data";

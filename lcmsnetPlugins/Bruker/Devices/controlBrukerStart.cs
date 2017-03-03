@@ -47,8 +47,8 @@ namespace LcmsNet.Devices.BrukerStart
         public void RegisterDevice(IDevice device)
         {
             m_BrukerStart                 = device as classBrukerStart;
-            m_BrukerStart.MethodNames    += new DelegateDeviceHasData(m_BrukerStart_MethodNames);
-            m_BrukerStart.Error          += new EventHandler<classDeviceErrorEventArgs>(m_BrukerStart_Error);
+            m_BrukerStart.MethodNames    += m_BrukerStart_MethodNames;
+            m_BrukerStart.Error          += m_BrukerStart_Error;
             
             mtextbox_ipAddress.Text = m_BrukerStart.IPAddress;
             mnum_port.Value         = Convert.ToDecimal(m_BrukerStart.Port);

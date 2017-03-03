@@ -57,8 +57,8 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 mcomboBox_Ports.SelectedItem = m_contactClosure.Port;
             }
-            mcomboBox_Ports.SelectedValueChanged   += new EventHandler(mcomboBox_Ports_SelectedValueChanged);
-            m_contactClosure.DeviceSaveRequired += new EventHandler(CC_DeviceSaveRequired);
+            mcomboBox_Ports.SelectedValueChanged   += mcomboBox_Ports_SelectedValueChanged;
+            m_contactClosure.DeviceSaveRequired += CC_DeviceSaveRequired;
             SetBaseDevice(m_contactClosure);
             m_loading = false;
         }

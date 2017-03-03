@@ -55,8 +55,8 @@ namespace LcmsNet.Devices.Valves
     
             
             
-            m_valve.PositionChanged    += new EventHandler<ValvePositionEventArgs<TwoPositionState>>(OnPosChanged);
-            m_valve.DeviceSaveRequired += new EventHandler(Valve_DeviceSaveRequired);
+            m_valve.PositionChanged    += OnPosChanged;
+            m_valve.DeviceSaveRequired += Valve_DeviceSaveRequired;
             
             SetBaseDevice(m_valve);
 

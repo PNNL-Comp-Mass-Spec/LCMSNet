@@ -77,17 +77,17 @@ namespace LcmsNet.Devices.Pumps
                 }
 
                 // Assign pump display control event handlers
-                m_PumpDisplays.SetpointChanged += new DelegateIscoPumpDisplaySetpointHandler(m_PumpDisplays_SetpointChanged);
-                m_PumpDisplays.StartPump += new DelegateIscoPumpDisplayHandler(m_PumpDisplays_StartPump);
-                m_PumpDisplays.StopPump += new DelegateIscoPumpDisplayHandler(m_PumpDisplays_StopPump);
-                m_PumpDisplays.StartRefill += new DelegateIscoPumpDisplayHandler(m_PumpDisplays_StartRefill);
+                m_PumpDisplays.SetpointChanged += m_PumpDisplays_SetpointChanged;
+                m_PumpDisplays.StartPump += m_PumpDisplays_StartPump;
+                m_PumpDisplays.StopPump += m_PumpDisplays_StopPump;
+                m_PumpDisplays.StartRefill += m_PumpDisplays_StartRefill;
 
                 // Assign pump class event handlers
-                m_Pump.RefreshComplete += new DelegateIscoPumpRefreshCompleteHandler(m_Pump_RefreshComplete);
-                m_Pump.InitializationComplete += new DelegateIscoPumpInitializationCompleteHandler(m_Pump_InitializationComplete);
-                m_Pump.ControlModeSet += new DelegateIscoPumpControlModeSetHandler(m_Pump_ControlModeSet);
-                m_Pump.OperationModeSet += new DelegateIscoPumpOpModeSetHandler(m_Pump_OperationModeSet);
-                m_Pump.Disconnected += new DelegateIscoPumpDisconnected(m_Pump_Disconnected);
+                m_Pump.RefreshComplete += m_Pump_RefreshComplete;
+                m_Pump.InitializationComplete += m_Pump_InitializationComplete;
+                m_Pump.ControlModeSet += m_Pump_ControlModeSet;
+                m_Pump.OperationModeSet += m_Pump_OperationModeSet;
+                m_Pump.Disconnected += m_Pump_Disconnected;
 
 #if DACTEST
                 m_Pump.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(m_Pump_StatusUpdate);

@@ -57,12 +57,12 @@ namespace FluidicsSDK
             m_portManager = PortManager.GetPortManager;
 
             // assign event handlers
-            m_fluidicsDevManager.DeviceAdded += new EventHandler<Devices.FluidicsDeviceChangeEventArgs>(m_fluidicsDevManager_DeviceAdded);
-            m_fluidicsDevManager.DeviceRemoved += new EventHandler<Devices.FluidicsDeviceChangeEventArgs>(m_fluidicsDevManager_DeviceChanged);
-            m_fluidicsDevManager.DeviceChanged += new EventHandler(m_fluidicsDevManager_DeviceChanged);
+            m_fluidicsDevManager.DeviceAdded += m_fluidicsDevManager_DeviceAdded;
+            m_fluidicsDevManager.DeviceRemoved += m_fluidicsDevManager_DeviceChanged;
+            m_fluidicsDevManager.DeviceChanged += m_fluidicsDevManager_DeviceChanged;
 
-            m_conManager.ConnectionChanged += new EventHandler<Managers.ConnectionChangedEventArgs<Connection>>(m_conManager_ConnectionChanged);
-            m_portManager.PortChanged += new EventHandler<Managers.PortChangedEventArgs<Port>>(m_portManager_PortChanged);
+            m_conManager.ConnectionChanged += m_conManager_ConnectionChanged;
+            m_portManager.PortChanged += m_portManager_PortChanged;
 
             //setup member variables
             m_methodRunning = false;
@@ -72,9 +72,9 @@ namespace FluidicsSDK
             m_last_scaled_at = 0F;
             m_worldView = new Rectangle();
             m_fluidicsCheckers = new List<IFluidicsModelChecker>();
-            var sinkCheck = new FluidicsSDK.ModelCheckers.NoSinksModelCheck();
-            var cycleCheck = new FluidicsSDK.ModelCheckers.FluidicsCycleCheck();
-            var multipleCheck = new FluidicsSDK.ModelCheckers.MultipleSourcesModelCheck();
+            var sinkCheck = new ModelCheckers.NoSinksModelCheck();
+            var cycleCheck = new ModelCheckers.FluidicsCycleCheck();
+            var multipleCheck = new ModelCheckers.MultipleSourcesModelCheck();
             // Disable the model checkers by default. They're too slow for normal use. They can
             // be turned on/off for use with the simulator this way.
             sinkCheck.IsEnabled = false;
@@ -83,12 +83,9 @@ namespace FluidicsSDK
             m_fluidicsCheckers.Add(sinkCheck);
             m_fluidicsCheckers.Add(cycleCheck);
             m_fluidicsCheckers.Add(multipleCheck);
-            if(ModelCheckAdded != null)
-            {
-                ModelCheckAdded(this, new LcmsNetDataClasses.ModelCheckControllerEventArgs(sinkCheck));
-                ModelCheckAdded(this, new LcmsNetDataClasses.ModelCheckControllerEventArgs(cycleCheck));
-                ModelCheckAdded(this, new LcmsNetDataClasses.ModelCheckControllerEventArgs(multipleCheck));
-            }
+            ModelCheckAdded?.Invoke(this, new ModelCheckControllerEventArgs(sinkCheck));
+            ModelCheckAdded?.Invoke(this, new ModelCheckControllerEventArgs(cycleCheck));
+            ModelCheckAdded?.Invoke(this, new ModelCheckControllerEventArgs(multipleCheck));
             m_suspendModelUpdates = false;
             m_holdModelUpdates = false;
             m_suspendCounter = 0;
@@ -170,9 +167,13 @@ namespace FluidicsSDK
                 conn.Color = Color.Black;
             }
             var modelStatus = CheckErrors();
-            if (modelStatus.Count() > 0 && ModelStatusChangeEvent != null)
+            if (modelStatus != null)
             {
-                ModelStatusChangeEvent(this, new LcmsNetDataClasses.ModelStatusChangeEventArgs(modelStatus.ToList()));
+                var errorMessages = modelStatus.ToList();
+                if (errorMessages.Any())
+                {
+                    ModelStatusChangeEvent?.Invoke(this, new ModelStatusChangeEventArgs(errorMessages));
+                }
             }
             ModelChanged?.Invoke();
         }
@@ -182,7 +183,8 @@ namespace FluidicsSDK
         /// </summary>
         /// <param name="g">the Graphics object to be used for rendering</param>
         /// <param name="alpha">Transparency value to be  applied to the devices</param>
-        /// <param name="scale">scale all objects in the layer by this amount</param>        
+        /// <param name="scale">scale all objects in the layer by this amount</param>
+        /// <param name="layer"></param>        
         public void Render(Graphics g, int alpha, float scale, Layer layer)
         {
             //System.Diagnostics.Trace.WriteLine(string.Format("Moderator Render called for {0}", layer));
@@ -217,7 +219,8 @@ namespace FluidicsSDK
         /// <summary>
         /// selects the first connection, port, or device found at the specified location
         /// </summary>
-        /// <param name="location">a Point representing the location of the item to be selected</param>
+        /// <param name="mouse_location">a Point representing the location of the item to be selected</param>
+        /// <param name="multiple_select"></param>
         public bool Select(Point mouse_location, bool multiple_select)
         {
             BeginModelSuspension();
@@ -236,9 +239,8 @@ namespace FluidicsSDK
             var devUnderMouse = m_fluidicsDevManager.Select(rescaledLocation);
             if(m_selectedDevices.Count == 1 && m_selectedDevices.Contains(devUnderMouse) && !multiple_select)
             {
-                selected = true;
                 EndModelSuspension(true);
-                return selected;
+                return true;
             }
             if(portUnderMouse == null && devUnderMouse == null && conUnderMouse == null)
             {
@@ -272,8 +274,7 @@ namespace FluidicsSDK
                     selected = true;
                    
                 }          
-            }
-            
+            }            
             else if (devUnderMouse != null)
             {
                 if (!m_selectedDevices.Contains(devUnderMouse))
@@ -291,8 +292,9 @@ namespace FluidicsSDK
             }
             else
             {
-                EndModelSuspension(false);
-                // select nothing if nothing is under the mouse.
+                // Select nothing if nothing is under the mouse.
+                // Based on the above logic, this code should never be reached
+                EndModelSuspension(false);                
             }
             if (selected)
             {
@@ -342,13 +344,12 @@ namespace FluidicsSDK
         public void ScaleWorldView(float scale)
         {
             // only change the world view if scale is different from last time we scaled.
-            if (scale != m_last_scaled_at)
+            if (Math.Abs(scale - m_last_scaled_at) > float.Epsilon)
             {
                 m_last_scaled_at = scale;
                 var scaleWidthValue = (int)(m_worldView.Size.Width - (m_worldView.Size.Width * scale));
                 var scaleHeightValue = (int)(m_worldView.Size.Height - (m_worldView.Size.Height * scale));
-                Rectangle scaledView;
-                scaledView = new Rectangle(m_worldView.X, m_worldView.Y, m_worldView.Width - scaleWidthValue, m_worldView.Height - scaleHeightValue);
+                var scaledView = new Rectangle(m_worldView.X, m_worldView.Y, m_worldView.Width - scaleWidthValue, m_worldView.Height - scaleHeightValue);
                 if (scaledView.Size.Width < m_worldView.Size.Width || scaledView.Size.Height < m_worldView.Size.Height)
                 {
                     m_scaledWorldView = m_worldView;
@@ -573,15 +574,12 @@ namespace FluidicsSDK
         /// <param name="devices"></param>
         private void MoveDevices(Point amountMoved, List<FluidicsDevice> devices)
         {
-            //devicesMoved allows us to undo device moves in case one fails
-            var devicesMoved = new List<FluidicsDevice>();
             //normalize amount moved so that the devices move the same way at any scale.
             var normalizedAmountMoved = new Point((int)(amountMoved.X * (1/ m_last_scaled_at)), (int)(amountMoved.Y * (1 / m_last_scaled_at)));
             BeginModelSuspension();
             foreach (var device in devices)
             {
                 device.MoveBy(normalizedAmountMoved);
-                devicesMoved.Add(device);
             }
             //reorder the list as necessary.
             m_fluidicsDevManager.BringToFront(new List<FluidicsDevice>(devices));
@@ -625,6 +623,7 @@ namespace FluidicsSDK
         /// </summary>
         /// <param name="p1">the ID of the first port</param>
         /// <param name="p2">the ID of the second port</param>
+        /// <param name="connectionStyle"></param>
         public void CreateConnection(string p1, string p2, string connectionStyle)
         {
             var p1Real = m_portManager.FindPort(p1);
@@ -656,10 +655,7 @@ namespace FluidicsSDK
         public void DoubleClickActions(Point location)
         {
             var clickedConnection = m_conManager.Select(location);
-            if (clickedConnection != null)
-            {
-                clickedConnection.DoubleClicked();
-            }
+            clickedConnection?.DoubleClicked();
             OnModelChanged();
         }
      
@@ -671,44 +667,17 @@ namespace FluidicsSDK
         /// the "world view" of the fluidics system. All fluidics devices exist/move around within this world view.
         /// it controls the boundaries
         /// </summary>
-        public Rectangle WorldView
-        {
-            get
-            {
-                return new Rectangle(m_scaledWorldView.X, m_scaledWorldView.Y, m_scaledWorldView.Width, m_scaledWorldView.Height);
-            }
-            private set
-            {
-                SetWorldView(value);
-            }
-        }
+        public Rectangle WorldView => new Rectangle(m_scaledWorldView.X, m_scaledWorldView.Y, m_scaledWorldView.Width, m_scaledWorldView.Height);
 
         /// <summary>
         /// Static instance property. Returns instance of the moderator class
         /// </summary>
-        public static classFluidicsModerator Moderator
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new classFluidicsModerator();
-                }
-                return m_instance;
-            }
-        }
+        public static classFluidicsModerator Moderator { get; } = m_instance ?? (m_instance = new classFluidicsModerator());
 
         /// <summary>
         /// Property for determining if a method is currently running on the system
         /// </summary>
-        public bool MethodRunning
-        {
-            get
-            {
-                return m_methodRunning;
-            }
-            private set { }
-        }
+        public bool MethodRunning => m_methodRunning;
 
         #endregion
 
@@ -727,13 +696,13 @@ namespace FluidicsSDK
             OnModelChanged();
         }
 
-        void m_conManager_ConnectionChanged(object sender, Managers.ConnectionChangedEventArgs<Connection> e)
+        void m_conManager_ConnectionChanged(object sender, ConnectionChangedEventArgs<Connection> e)
         {
             //System.Diagnostics.Trace.WriteLine("ConnectionChange sender: " + sender.ToString());
             OnModelChanged();
         }
 
-        void m_portManager_PortChanged(object sender, Managers.PortChangedEventArgs<Port> e)
+        void m_portManager_PortChanged(object sender, PortChangedEventArgs<Port> e)
         {
             //System.Diagnostics.Trace.WriteLine("PortChange sender: " + sender.ToString());
             OnModelChanged();
@@ -745,9 +714,9 @@ namespace FluidicsSDK
             return m_conManager.GetConnections();
         }
 
-        public event EventHandler<LcmsNetDataClasses.ModelCheckControllerEventArgs> ModelCheckAdded;
+        public event EventHandler<ModelCheckControllerEventArgs> ModelCheckAdded;
 
-        public event EventHandler<LcmsNetDataClasses.ModelCheckControllerEventArgs> ModelCheckRemoved
+        public event EventHandler<ModelCheckControllerEventArgs> ModelCheckRemoved
         {
             add { }
             remove { }
@@ -761,6 +730,6 @@ namespace FluidicsSDK
         }
 #pragma warning restore 67
 
-        public event EventHandler<LcmsNetDataClasses.ModelStatusChangeEventArgs> ModelStatusChangeEvent;
+        public event EventHandler<ModelStatusChangeEventArgs> ModelStatusChangeEvent;
     }
 }

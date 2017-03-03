@@ -19,8 +19,8 @@ namespace Newport.ESP300
         {
             m_obj = device as classNewportStage;
             SetBaseDevice(m_obj);
-            m_obj.PositionsLoaded +=new EventHandler(PositionLoadHandler);
-            m_obj.PositionChanged += new EventHandler(PositionChangedHandler);
+            m_obj.PositionsLoaded +=PositionLoadHandler;
+            m_obj.PositionChanged += PositionChangedHandler;
             m_obj.StatusUpdate += m_obj_StatusUpdate;
             UpdatePositionListBox();
             UpdatePositionLabel(m_obj.CurrentPos);

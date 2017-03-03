@@ -44,8 +44,8 @@ namespace LcmsNet.Devices.NetworkStart
         private void RegisterDevice(IDevice device)
         {
             m_netStart              = device as classNetStartSocket;
-            m_netStart.MethodNames += new DelegateDeviceHasData(m_netStart_MethodNames);
-            m_netStart.Error       += new EventHandler<classDeviceErrorEventArgs>(m_netStart_Error);
+            m_netStart.MethodNames += m_netStart_MethodNames;
+            m_netStart.Error       += m_netStart_Error;
             UpdateUserInterface();
             
             SetBaseDevice(m_netStart);

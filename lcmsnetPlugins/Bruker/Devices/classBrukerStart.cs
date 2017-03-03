@@ -110,10 +110,10 @@ namespace LcmsNet.Devices.BrukerStart
                 m_BrukerPort             = Bruker.Properties.Settings.Default.BrukerInstPort;
 
                 mobject_MsgTools = new classBrukerMsgTools(m_OuputFolderLocal, m_MethodFolderLocal, m_BrukerNetName, m_BrukerPort);
-                mobject_MsgTools.BrukerMsgReceived += new delegateBrukerMsgReceived(BrukerMsgReceived);
+                mobject_MsgTools.BrukerMsgReceived += BrukerMsgReceived;
 
                 mobject_CmdTimeoutTimer = new Timer();
-                mobject_CmdTimeoutTimer.Elapsed += new ElapsedEventHandler(CmdTimeoutTimer_Elapsed);
+                mobject_CmdTimeoutTimer.Elapsed += CmdTimeoutTimer_Elapsed;
                 mobject_CmdTimeoutTimer.BeginInit();
                 mobject_CmdTimeoutTimer.Interval = COMMAND_TIMEOUT_MSEC;
                 mobject_CmdTimeoutTimer.Enabled = false;

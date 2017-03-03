@@ -22,18 +22,21 @@ namespace Eksigent.Devices.Pumps
         {
             InitializeComponent();
 
-            m_statusUpdateDelegate = new EventHandler<classDeviceStatusEventArgs>(UpdateStatusLabelText);
+            m_statusUpdateDelegate = UpdateStatusLabelText;
         }
         
         public void RegisterDevice(IDevice device)
         {
             m_pump                   = device as EksigentPump;
-            m_pump.Error             += new EventHandler<classDeviceErrorEventArgs>(m_pump_Error);
-            m_pump.StatusUpdate      += new EventHandler<classDeviceStatusEventArgs>(m_pump_StatusUpdate);
-            m_pump.RequiresOCXInitialization += new EventHandler(m_pump_RequiresOCXInitialization);
-            m_pump.PumpStatus        += new EventHandler<classDeviceStatusEventArgs>(m_pump_PumpStatus);
-            m_pump.MethodNames       += new DelegateDeviceHasData(m_pump_MethodNames);
-            m_pump.ChannelNumbers    += new EksigentPump.DelegateChannelNumbers(m_pump_ChannelNumbers);
+            if (m_pump != null)
+            {
+                m_pump.Error             += m_pump_Error;
+                m_pump.StatusUpdate      += m_pump_StatusUpdate;
+                m_pump.RequiresOCXInitialization += m_pump_RequiresOCXInitialization;
+                m_pump.PumpStatus        += m_pump_PumpStatus;
+                m_pump.MethodNames       += m_pump_MethodNames;
+                m_pump.ChannelNumbers    += m_pump_ChannelNumbers;
+            }
             SetBaseDevice(device);
         }
 
@@ -50,13 +53,7 @@ namespace Eksigent.Devices.Pumps
         }
 
         #region IDeviceControl Members
-        public event DelegateNameChanged  NameChanged;
-        public event DelegateSaveRequired SaveRequired;
-        public bool Running
-        {
-            get;
-            set;
-        }
+       
         public IDevice Device
         {
             get
@@ -100,7 +97,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (InvokeRequired)
             {
-                Invoke(m_statusUpdateDelegate, new object[] { sender, e });
+                Invoke(m_statusUpdateDelegate, sender, e);
             }
             else
             {
@@ -129,11 +126,11 @@ namespace Eksigent.Devices.Pumps
         }
         void m_pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
         {
-            base.UpdateStatusDisplay(e.Message);
+            UpdateStatusDisplay(e.Message);
         }
         void m_pump_Error(object sender, classDeviceErrorEventArgs e)
         {
-            base.UpdateStatusDisplay(e.Error);
+            UpdateStatusDisplay(e.Error);
         }
         #endregion
 
@@ -170,7 +167,7 @@ namespace Eksigent.Devices.Pumps
             }
             try
             {
-                m_pump.ShowDirectControl(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
+                m_pump.ShowDirectControl(Convert.ToInt32(mnum_channels.Value), Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -188,7 +185,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                m_pump.ShowMobilePhaseMenu(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
+                m_pump.ShowMobilePhaseMenu(Convert.ToInt32(mnum_channels.Value), Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -214,7 +211,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                m_pump.ShowAdvancedSettings(this.Handle.ToInt32());
+                m_pump.ShowAdvancedSettings(Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -232,7 +229,7 @@ namespace Eksigent.Devices.Pumps
 
             try
             {
-                m_pump.ShowDiagnosticsMenu(Convert.ToInt32(mnum_channels.Value), this.Handle.ToInt32());
+                m_pump.ShowDiagnosticsMenu(Convert.ToInt32(mnum_channels.Value), Handle.ToInt32());
             }
             catch (Exception ex)
             {
@@ -245,7 +242,7 @@ namespace Eksigent.Devices.Pumps
             
             try
             {
-                m_pump.ShowMainWindow(this.Handle.ToInt32());
+                m_pump.ShowMainWindow(Handle.ToInt32());
             }
             catch (Exception ex)
             {

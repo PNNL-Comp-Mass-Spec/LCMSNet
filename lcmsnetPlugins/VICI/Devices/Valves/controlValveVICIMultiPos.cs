@@ -42,7 +42,7 @@ namespace LcmsNet.Devices.Valves
         private void RegisterDevice(IDevice device)
         {
             m_valve              = device as classValveVICIMultiPos;
-            m_valve.PosChanged += new EventHandler<ValvePositionEventArgs<int>>(OnPosChanged);
+            m_valve.PosChanged += OnPosChanged;
             SetBaseDevice(m_valve);
             
             mpropertyGrid_Serial.SelectedObject     = m_valve.Port;

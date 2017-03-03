@@ -58,12 +58,12 @@ namespace Agilent.Devices.Pumps
             /// 
             /// Initialie the underlying device class'
             /// 
-            m_pump.MethodAdded            += new EventHandler<classPumpMethodEventArgs>(m_pump_MethodAdded);
-            m_pump.MethodUpdated          += new EventHandler<classPumpMethodEventArgs>(m_pump_MethodUpdated);
-            m_pump.MonitoringDataReceived += new EventHandler<PumpDataEventArgs>(m_pump_MonitoringDataReceived);
+            m_pump.MethodAdded            += m_pump_MethodAdded;
+            m_pump.MethodUpdated          += m_pump_MethodUpdated;
+            m_pump.MonitoringDataReceived += m_pump_MonitoringDataReceived;
             mcomboBox_Mode.DataSource         = System.Enum.GetValues(typeof(enumPumpAgilentModes));
 
-            controlPumpAgilent.NewMethodAvailable += new EventHandler(controlPumpAgilent_NewMethodAvailable);
+            controlPumpAgilent.NewMethodAvailable += controlPumpAgilent_NewMethodAvailable;
             /// 
             /// Add to the device manager.
             /// 

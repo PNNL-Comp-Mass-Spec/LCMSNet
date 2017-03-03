@@ -100,7 +100,7 @@ namespace LcmsNet.Devices.BrukerStart
             m_InstAddress = instAddress;
             m_InstPort = instPort;
 
-            DataReceived += new delegateOnDataReceived(sXcDataReceived);
+            DataReceived += sXcDataReceived;
         }
         #endregion
 
@@ -335,7 +335,7 @@ namespace LcmsNet.Devices.BrukerStart
 
                 classApplicationLogger.LogMessage(2, "sXc listening enabled");
 
-                if (mobjecct_RcxCallback == null) mobjecct_RcxCallback = new AsyncCallback(OnDataReceived);
+                if (mobjecct_RcxCallback == null) mobjecct_RcxCallback = OnDataReceived;
                 mobject_AsyncResult = mobject_Socket.BeginReceive(mbyte_DataBuffer, 0, mbyte_DataBuffer.Length, SocketFlags.None, mobjecct_RcxCallback, null);
                 return true;
             }   

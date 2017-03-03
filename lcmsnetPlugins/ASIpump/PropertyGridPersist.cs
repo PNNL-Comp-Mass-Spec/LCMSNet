@@ -26,7 +26,7 @@ namespace ASIpump
                 var notify = value as INotifyPropertyChanged;
                 if (notify != null)
                 {
-                    notify.PropertyChanged += new PropertyChangedEventHandler(notify_PropertyChanged);
+                    notify.PropertyChanged += notify_PropertyChanged;
                 }
 
                 this.SelectedObject = mDisplayedObject;

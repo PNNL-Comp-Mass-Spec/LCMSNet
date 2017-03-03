@@ -33,7 +33,7 @@ namespace ASIpump
 
         public SerialDevice()
         {
-            mPort.DataReceived += new SerialDataReceivedEventHandler(mPort_DataReceived);
+            mPort.DataReceived += mPort_DataReceived;
 
             Timeout = 1;
         }
@@ -177,11 +177,11 @@ namespace ASIpump
 
         public override string ToString()
         {
-            return (PortName.ToString() +
-                        " baud=" + BaudRate.ToString() +
-                        " parity=" + Parity.ToString() +
-                        " data=" + DataBits.ToString() +
-                        " stop=" + StopBits.ToString());
+            return (PortName +
+                        " baud=" + BaudRate +
+                        " parity=" + Parity +
+                        " data=" + DataBits +
+                        " stop=" + StopBits);
         }
 
         public string[] Split(string line, string delimeter)
@@ -277,9 +277,5 @@ namespace ASIpump
             ParseConcatStr();
         }
 
-        private void mPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
-        {
-
-        }
     }
 }

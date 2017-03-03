@@ -25,9 +25,9 @@ namespace FluidicsSDK.Devices
             var StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
             var StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
             //add left control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), new Action(RightButtonAction));
+            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), RightButtonAction);
             //add top "injection port"
             base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width/4, Loc.Y - 30), new Size((int)Size.Width/2, 10), Color.Black,  Brushes.White));
             base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) -5), Loc.Y - 20), new Size(10, 20), Color.Black,  Brushes.White));
@@ -70,8 +70,8 @@ namespace FluidicsSDK.Devices
             try
             {
                 Volume = m_valve.InjectionVolume;
-                m_valve.PositionChanged += new EventHandler<ValvePositionEventArgs<TwoPositionState>>(m_valve_PositionChanged);
-                m_valve.InjectionVolumeChanged += new EventHandler(m_valve_InjectionVolumeChanged);
+                m_valve.PositionChanged += m_valve_PositionChanged;
+                m_valve.InjectionVolumeChanged += m_valve_InjectionVolumeChanged;
             }
             catch (Exception)
             {

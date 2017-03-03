@@ -41,7 +41,7 @@ namespace LcmsNet.Devices.Pal
             InitializeComponent();
             var names = System.IO.Ports.SerialPort.GetPortNames();
             mcombo_portNames.Items.AddRange(names);
-            mcombo_portNames.SelectedIndexChanged += new EventHandler(mcombo_portNames_SelectedIndexChanged);
+            mcombo_portNames.SelectedIndexChanged += mcombo_portNames_SelectedIndexChanged;
         }
 
         void mcombo_portNames_SelectedIndexChanged(object sender, EventArgs e)
@@ -56,10 +56,10 @@ namespace LcmsNet.Devices.Pal
           
             m_Pal = device as classPal;
            
-            m_Pal.DeviceSaveRequired += new EventHandler(Pal_DeviceSaveRequired);
-            m_Pal.Free               += new DelegateDeviceFree(OnFree);
-            m_Pal.TrayNames          += new EventHandler<classAutoSampleEventArgs>(m_Pal_PalTrayListReceived);
-            m_Pal.MethodNames        += new EventHandler<classAutoSampleEventArgs>((object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); });
+            m_Pal.DeviceSaveRequired += Pal_DeviceSaveRequired;
+            m_Pal.Free               += OnFree;
+            m_Pal.TrayNames          += m_Pal_PalTrayListReceived;
+            m_Pal.MethodNames        += (object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); };
      
             mcomboBox_VialRange.DataSource      = System.Enum.GetNames(typeof(enumVialRanges));
             mcomboBox_VialRange.SelectedItem    = m_Pal.VialRange.ToString();

@@ -334,11 +334,11 @@ namespace Eksigent.Devices.Pumps
                     m_comDriver = m_hardware.get_COMInterface();
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS");
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "flowprofilecomplete");
-                    m_comDriver.FlowProfileComplete += new __COM_Driver_FlowProfileCompleteEventHandler(driv_FlowProfileComplete);
+                    m_comDriver.FlowProfileComplete += driv_FlowProfileComplete;
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "devicemessage");
-                    m_comDriver.DeviceMessage += new __COM_Driver_DeviceMessageEventHandler(driv_DeviceMessage);
+                    m_comDriver.DeviceMessage += driv_DeviceMessage;
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "davavail");
-                    m_comDriver.DataAvailable += new __COM_Driver_DataAvailableEventHandler(driv_DataAvailable);
+                    m_comDriver.DataAvailable += driv_DataAvailable;
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS COMPLETE");
                 }
                 catch(Exception)

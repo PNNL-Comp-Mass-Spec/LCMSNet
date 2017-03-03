@@ -19,7 +19,7 @@ namespace Agilent.Devices.Pumps
             InitializeComponent();
 
             m_pump = pump;
-            pump.DeviceSaveRequired += new EventHandler(pump_DeviceSaveRequired);
+            pump.DeviceSaveRequired += pump_DeviceSaveRequired;
             Text = "Purge Pumps " + m_pump.Name;
         }
 
