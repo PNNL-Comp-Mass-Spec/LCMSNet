@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace LcmsNetDataClasses.Devices
 {
@@ -118,7 +119,7 @@ namespace LcmsNetDataClasses.Devices
         {
             foreach (var value in values)
             {
-                YValues.Add(value.ToString());
+                YValues.Add(value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -134,7 +135,7 @@ namespace LcmsNetDataClasses.Devices
         {
             foreach (var value in values)
             {
-                XValues.Add(value.ToString());
+                XValues.Add(value.ToString(CultureInfo.InvariantCulture));
             }
         }
     }

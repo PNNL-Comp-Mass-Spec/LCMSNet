@@ -49,7 +49,7 @@ namespace DemoPluginLibrary
         {
             get
             {
-                return m_valve as IDevice;
+                return m_valve;
             }
             set
             {

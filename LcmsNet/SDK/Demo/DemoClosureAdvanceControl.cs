@@ -35,7 +35,7 @@ namespace DemoPluginLibrary
         {
             get
             {
-                return m_closure as IDevice;
+                return m_closure;
             }
             set
             {
