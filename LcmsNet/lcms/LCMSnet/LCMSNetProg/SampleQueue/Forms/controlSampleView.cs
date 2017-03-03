@@ -180,8 +180,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected const int CONST_MIN_VOLUME = 0;
 
-        private const int CONST_BAR_SIZE = 5;
-
         #endregion
 
         #region Members
@@ -1846,11 +1844,6 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-        }
-
         #endregion
 
         #region Queue User Interface Methods
@@ -2841,6 +2834,9 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
+        /*
+         * Unused
+         * 
         /// <summary>
         /// Handle when the user clicks to load data from DMS.
         /// </summary>
@@ -2850,6 +2846,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             ShowDMSView();
         }
+        */
 
         /// <summary>
         /// Randomizes the selected samples.
@@ -2861,6 +2858,9 @@ namespace LcmsNet.SampleQueue.Forms
             RandomizeSelectedSamples();
         }
 
+        /*
+         * Unused methods
+         * 
         /// <summary>
         /// Randomizes the selected samples.
         /// </summary>
@@ -2917,6 +2917,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             RemoveSelectedSamples(ColumnHandling);
         }
+        */
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2937,6 +2938,9 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
+        /*
+         * Unused methods
+         * 
         private void blankToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddNewSample(false);
@@ -2950,6 +2954,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             ShowDMSView();
         }
+        */
 
         private void deleteSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2971,10 +2976,14 @@ namespace LcmsNet.SampleQueue.Forms
             AddNewSample(true);
         }
 
+        /*
+         * Unused
+         * 
         private void mbutton_redo_Click(object sender, EventArgs e)
         {
             Redo();
         }
+        */
 
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2991,10 +3000,14 @@ namespace LcmsNet.SampleQueue.Forms
             PreviewSelectedThroughput();
         }
 
+        /*
+         * Unused
+         * 
         private void mbutton_moveSelectedSamplesToColumn_Click(object sender, EventArgs e)
         {
             MoveSamplesToColumn(enumColumnDataHandling.LeaveAlone);
         }
+        */
 
         /// <summary>
         /// Add the data cart name and column information to the sample datasetname.
@@ -3006,6 +3019,9 @@ namespace LcmsNet.SampleQueue.Forms
             AddDateCartnameColumnIDToDatasetName();
         }
 
+        /*
+         * Unused methods
+         * 
         private void resetNameToOriginalRequestNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ResetDatasetName();
@@ -3034,12 +3050,16 @@ namespace LcmsNet.SampleQueue.Forms
         {
             EditTrayAndVial();
         }
+        */
 
         private void deleteUnusedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone);
         }
 
+        /*
+         * Unused
+         * 
         /// <summary>
         /// Handles undo-ing any operations on the sample queue.
         /// </summary>
@@ -3049,6 +3069,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             Undo();
         }
+        */
 
         /// <summary>
         /// Handles undo-ing any operations on the sample queue.

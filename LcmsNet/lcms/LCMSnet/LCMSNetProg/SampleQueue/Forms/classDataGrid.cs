@@ -16,11 +16,6 @@ namespace LcmsNet.SampleQueue.Forms
 
         public event DelegateOnPaint SpecialPaint;
 
-        protected override void SetSelectedRowCore(int rowIndex, bool selected)
-        {
-            base.SetSelectedRowCore(rowIndex, selected);
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

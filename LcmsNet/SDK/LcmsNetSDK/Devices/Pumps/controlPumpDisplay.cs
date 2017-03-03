@@ -94,10 +94,9 @@ namespace LcmsNetDataClasses.Devices.Pumps
                 paneB.CurveList.Clear();
 
 
-                var pressureItems = panePressure.AddCurve("Pressure (psi)", x, pressurePoints, Color.Red,
-                    SymbolType.Circle);
-                var flowItems = paneFlow.AddCurve("Flow Rate", x, flowrates, Color.DarkGreen, SymbolType.Triangle);
-                var percentItems = paneB.AddCurve("% B", x, percentBs, Color.Blue, SymbolType.Square);
+                // var pressureItems = panePressure.AddCurve("Pressure (psi)", x, pressurePoints, Color.Red, SymbolType.Circle);
+                // var flowItems = paneFlow.AddCurve("Flow Rate", x, flowrates, Color.DarkGreen, SymbolType.Triangle);
+                // var percentItems = paneB.AddCurve("% B", x, percentBs, Color.Blue, SymbolType.Square);
 
                 paneB.AxisChange();
                 paneFlow.AxisChange();
