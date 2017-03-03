@@ -355,9 +355,10 @@ namespace LcmsNet.SampleQueue
             List<classSampleData> tempRequestList;
 
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
-            var queryData = new classSampleQueryData();
+            var queryData = new classSampleQueryData {
+                RequestName = textRequestName.Text
+            };
 
-            queryData.RequestName = textRequestName.Text;
 
             // If min request number input is not specified, set it to 0
             if (string.IsNullOrEmpty(textRequestNumMin.Text))

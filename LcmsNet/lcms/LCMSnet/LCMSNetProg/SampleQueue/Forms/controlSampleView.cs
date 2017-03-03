@@ -2173,8 +2173,9 @@ namespace LcmsNet.SampleQueue.Forms
             if (validResult == enumSampleValidResult.DuplicateRequestName &&
                 !data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName))
             {
-                var styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle);
-                styleDuplicate.BackColor = Color.Crimson;
+                var styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle) {
+                    BackColor = Color.Crimson
+                };
                 row.Cells[CONST_COLUMN_REQUEST_NAME].Style = styleDuplicate;
                 row.Cells[CONST_COLUMN_REQUEST_NAME].ToolTipText = "Duplicate Request Name Found!";
             }
@@ -2384,9 +2385,11 @@ namespace LcmsNet.SampleQueue.Forms
             var name = data.DmsData.DatasetName;
             if (name.Contains(m_sampleQueue.UnusedSampleName))
             {
-                var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
-                rowStyle.BackColor = Color.LightGray;
-                rowStyle.ForeColor = Color.DarkGray;
+                var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle)
+                {
+                    BackColor = Color.LightGray,
+                    ForeColor = Color.DarkGray
+                };
                 row.DefaultCellStyle = rowStyle;
                 row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.DmsData.RequestName;
             }
@@ -3294,31 +3297,35 @@ namespace LcmsNet.SampleQueue.Forms
                 return null;
 
             var row = new DataGridViewRow();
-            var checkCell = new DataGridViewCheckBoxCell();
-            checkCell.TrueValue = enumCheckboxStatus.Checked;
-            checkCell.FalseValue = enumCheckboxStatus.Unchecked;
+            var checkCell = new DataGridViewCheckBoxCell
+            {
+                TrueValue = enumCheckboxStatus.Checked,
+                FalseValue = enumCheckboxStatus.Unchecked
+            };
+
             GetCheckboxStatusAndSetCheckbox(sample, checkCell);
-            var statusCell = new DataGridViewTextBoxCell();
-            statusCell.Value = GetStatusMessageFromSampleStatus(sample);
-            statusCell.ToolTipText = GetToolTipMessageFromSampleStatus(sample);
-            var sequenceCell = new DataGridViewTextBoxCell();
-            sequenceCell.Value = sample.SequenceID.ToString();
-            var uniqueIDCell = new DataGridViewTextBoxCell();
-            uniqueIDCell.Value = sample.UniqueID.ToString();
+
+            var statusCell = new DataGridViewTextBoxCell
+            {
+                Value = GetStatusMessageFromSampleStatus(sample),
+                ToolTipText = GetToolTipMessageFromSampleStatus(sample)
+            };
+            var sequenceCell = new DataGridViewTextBoxCell {Value = sample.SequenceID.ToString()};
+            var uniqueIDCell = new DataGridViewTextBoxCell {Value = sample.UniqueID.ToString()};
             var columnIDCell = new DataGridViewTextBoxCell();
             var style = new DataGridViewCellStyle();
 
-            var requestNameCell = new DataGridViewTextBoxCell();
-            requestNameCell.Value = sample.DmsData.DatasetName;
-            var batchIDCell = new DataGridViewTextBoxCell();
-            batchIDCell.Value = sample.DmsData.Batch;
+            var requestNameCell = new DataGridViewTextBoxCell {Value = sample.DmsData.DatasetName};
+            var batchIDCell = new DataGridViewTextBoxCell {Value = sample.DmsData.Batch};
             var name = sample.DmsData.DatasetName;
 
             if (name.Contains(m_sampleQueue.UnusedSampleName))
             {
-                var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle);
-                rowStyle.BackColor = Color.LightGray;
-                rowStyle.ForeColor = Color.DarkGray;
+                var rowStyle = new DataGridViewCellStyle(row.DefaultCellStyle)
+                {
+                    BackColor = Color.LightGray,
+                    ForeColor = Color.DarkGray
+                };
                 row.DefaultCellStyle = rowStyle;
                 requestNameCell.Value = sample.DmsData.RequestName;
             }
@@ -3340,10 +3347,7 @@ namespace LcmsNet.SampleQueue.Forms
                 foreach (var dsType in dsTypes)
                     datasetTypeCell.Items.Add(dsType);
 
-                if (sample.DmsData.DatasetType == null)
-                    datasetTypeCell.Value = CONST_NOT_SELECTED;
-                else
-                    datasetTypeCell.Value = sample.DmsData.DatasetType;
+                datasetTypeCell.Value = sample.DmsData.DatasetType ?? CONST_NOT_SELECTED;
             }
             catch (Exception ex)
             {
@@ -3355,9 +3359,11 @@ namespace LcmsNet.SampleQueue.Forms
             var palData = sample.PAL;
             if (palData == null)
             {
-                palData = new classPalData();
-                palData.PALTray = CONST_NOT_SELECTED;
-                palData.Well = 0;
+                palData = new classPalData
+                {
+                    PALTray = CONST_NOT_SELECTED,
+                    Well = 0
+                };
             }
 
             if (palData.PALTray == null)
@@ -3367,8 +3373,9 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // PAL Vial
             // -----------------------------------------------------------------------------
-            var vial = new DataGridViewTextBoxCell();
-            vial.Value = palData.Well;
+            var vial = new DataGridViewTextBoxCell {
+                Value = palData.Well
+            };
 
             // -----------------------------------------------------------------------------
             // PAL Trays
@@ -3382,8 +3389,9 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (palData.PALTray.Replace(" ", "") != "" && palTray.Items.Contains(palData.PALTray) == false)
             {
-                var palTrayStyle = new DataGridViewCellStyle();
-                palTrayStyle.BackColor = Color.Red;
+                var palTrayStyle = new DataGridViewCellStyle {
+                    BackColor = Color.Red
+                };
                 palTray.Style = palTrayStyle;
                 palTray.ToolTipText = "This tray was not available from the PAL";
                 palTray.Items.Add(palData.PALTray);
@@ -3402,8 +3410,9 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Sample Volume
             // -----------------------------------------------------------------------------
-            var volume = new DataGridViewTextBoxCell();
-            volume.Value = sample.Volume;
+            var volume = new DataGridViewTextBoxCell {
+                Value = sample.Volume
+            };
 
             // -----------------------------------------------------------------------------
             // LC Experiments
@@ -3450,8 +3459,9 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 else
                 {
-                    sample.ColumnData = new classColumnData();
-                    sample.ColumnData.ID = columnID;
+                    sample.ColumnData = new classColumnData {
+                        ID = columnID
+                    };
                 }
             }
             columnIDCell.Style = style;
@@ -3471,12 +3481,13 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Run order information and blocking factors
             // -----------------------------------------------------------------------------
-            var blockID = new DataGridViewTextBoxCell();
-            blockID.Value = sample.DmsData.Block;
+            var blockID = new DataGridViewTextBoxCell {
+                Value = sample.DmsData.Block
+            };
 
-            var runOrder = new DataGridViewTextBoxCell();
-            runOrder.Value = sample.DmsData.RunOrder;
-
+            var runOrder = new DataGridViewTextBoxCell {
+                Value = sample.DmsData.RunOrder
+            };
 
             row.Cells.Add(checkCell);
             row.Cells.Add(statusCell);
@@ -3507,11 +3518,13 @@ namespace LcmsNet.SampleQueue.Forms
         protected virtual classSampleData RowToSample(DataGridViewRow row)
         {
             //
-            // Don't find the real sample so we dont change anything in the reference if this is a temporary operation.
+            // Don't find the real sample so we don't change anything in the reference if this is a temporary operation.
             //
-            var sample = new classSampleData(true); // Mark it as a dummy sample
-            sample.SequenceID = Convert.ToInt32(row.Cells[CONST_COLUMN_SEQUENCE_ID].Value);
-            var id = 0;
+            var sample = new classSampleData(isDummySample: true) {
+                SequenceID = Convert.ToInt32(row.Cells[CONST_COLUMN_SEQUENCE_ID].Value)
+            };
+
+            int id;
             var value = row.Cells[CONST_COLUMN_COLUMN_ID].Value.ToString();
             var parsed = int.TryParse(value, out id);
             if (parsed)
