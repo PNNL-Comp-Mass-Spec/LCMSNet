@@ -289,7 +289,10 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                var errMsg = "Exception getting LC cart list from DMS: " + ex.InnerException.Message + "\r\n" +
+                var innerException = string.Empty;
+                if (ex.InnerException != null)
+                    innerException = ex.InnerException.Message;
+                var errMsg = "Exception getting LC cart list from DMS: " + innerException + "\r\n" +
                     "As a workaround, you may manually type the cart name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
@@ -331,7 +334,10 @@ namespace LcmsNet.SampleQueue
             catch (classDatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                var errMsg = "Exception getting LC cart config name list from DMS: " + ex.InnerException.Message + "\r\n" +
+                var innerException = string.Empty;
+                if (ex.InnerException != null)
+                    innerException = ex.InnerException.Message;
+                var errMsg = "Exception getting LC cart config name list from DMS: " + innerException + "\r\n" +
                     "As a workaround, you may manually type the cart config name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
@@ -417,7 +423,10 @@ namespace LcmsNet.SampleQueue
             }
             catch (classDatabaseDataException ex)
             {
-                var errMsg = ex.Message + ": " + ex.InnerException.Message;
+                var errMsg = ex.Message;
+                if (ex.InnerException != null)
+                    errMsg += ": " + ex.InnerException.Message;
+
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             }
@@ -678,8 +687,11 @@ namespace LcmsNet.SampleQueue
             }
             catch (classDatabaseDataException ex)
             {
-                var errMsg = ex.Message + ": " + ex.InnerException.Message + "\r\n\r\n";
-                errMsg = errMsg + " Requests in DMS may not show correct cart assignments";
+                var errMsg = ex.Message;
+                if (ex.InnerException != null)
+                    errMsg += ": " + ex.InnerException.Message;
+
+                errMsg = errMsg + "\r\n\r\n Requests in DMS may not show correct cart assignments";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
             }

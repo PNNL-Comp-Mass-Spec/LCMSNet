@@ -98,24 +98,27 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="value">The value to write (0/1 for digital)</param>
         public void Write(enumLabjackU12OutputPorts channel, double value)
         {
-            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), channel).ToString();
+            var portName = Enum.GetName(typeof(enumLabjackU12OutputPorts), channel);
+            if (portName == null)
+                return;
 
-            //Determine which type of port we are writing to
-            //AO = Analog
-            //D = Digital
-            //IO = Digital on top of labjack
-            if (tempPortName[0] == CONST_ANALOGPREFIX_1 && tempPortName[1] == CONST_ANALOGPREFIX_2)
-            {   
-                WriteAnalog(tempPortName[2]-'0', (float)value);
+            // Determine which type of port we are writing to
+            // AO, D, or IO
+            if (portName[0] == CONST_ANALOGPREFIX_1 && portName[1] == CONST_ANALOGPREFIX_2)
+            {
+                // AO = Analog
+                WriteAnalog(portName[2]-'0', (float)value);
                 //              ^-Finds the distance from '0' char (converts int to char)
             }
-            else if (tempPortName[0] == CONST_DIGITALPREFIX)
+            else if (portName[0] == CONST_DIGITALPREFIX)
             {
-                WriteDigital(tempPortName[1]-'0', (int)value);
+                // D = Digital
+                WriteDigital(portName[1]-'0', (int)value);
             }
-            else if (tempPortName[0] == CONST_IOPREFIX_1 && tempPortName[1] == CONST_IOPREFIX_2)
+            else if (portName[0] == CONST_IOPREFIX_1 && portName[1] == CONST_IOPREFIX_2)
             {
-                WriteIO(tempPortName[2] - '0', (int)value);
+                // IO = Digital on top of labjack
+                WriteIO(portName[2] - '0', (int)value);
             }
         }
 
@@ -123,31 +126,36 @@ namespace LcmsNet.Devices.ContactClosure
         /// General method for reading from a port
         /// </summary>
         /// <param name="channel">Enumerated port to read from</param>
-        /// <returns>The measured value</returns>
+        /// <returns>The measured value, or -1 if a problem</returns>
         public float Read(enumLabjackU12InputPorts channel)
         {
-            var tempPortName = Enum.GetName(typeof(enumLabjackU12InputPorts), channel).ToString();
+            var portName = Enum.GetName(typeof(enumLabjackU12InputPorts), channel);
+            if (portName == null)
+            {
+                return -1;
+            }
 
-            //Determine which type of port we are reading from
-            //AI = Analog
-            //D = Digital
-            //IO = Digital on top of labjack
-            if (tempPortName[0] == CONST_ANALOGPREFIX_1 && tempPortName[1] == CONST_ANALOGPREFIX_3)
+            // Determine which type of port we are reading from
+            // AI, D, or IO
+            if (portName[0] == CONST_ANALOGPREFIX_1 && portName[1] == CONST_ANALOGPREFIX_3)
             {
-                return (ReadAnalog(tempPortName[2] - '0'));
+                // AI = Analog
+                return (ReadAnalog(portName[2] - '0'));
             }
-            else if (tempPortName[0] == CONST_DIGITALPREFIX)
+
+            if (portName[0] == CONST_DIGITALPREFIX)
             {
-                return (ReadDigital(tempPortName[1] - '0'));
+                // D = Digital
+                return (ReadDigital(portName[1] - '0'));
             }
-            else if (tempPortName[0] == CONST_IOPREFIX_1 && tempPortName[1] == CONST_IOPREFIX_2)
+
+            if (portName[0] == CONST_IOPREFIX_1 && portName[1] == CONST_IOPREFIX_2)
             {
-                return (ReadIO(tempPortName[2] - '0'));
+                // IO = Digital on top of labjack
+                return (ReadIO(portName[2] - '0'));
             }
-            else
-            {
-                return (-1);    //Is this a bad idea? Theoretically, we're never going to be here.
-            }
+
+            return -1;
         }
 
         /// <summary>
@@ -192,11 +200,13 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 result = CONST_ERROR_INVALIDINPUT; //Error code 40 - Invalid Input
             }
+
             if (result != 0)
             {                
                 var error = GetErrorString(result);
                 ThrowErrorMessage("Error writing analog output.  " + error, result);
             }
+
             return result;
 
 
@@ -282,7 +292,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             var tempVersion = lj.LabJack.GetDriverVersion();
             m_driverVersion = tempVersion;
-            if (tempVersion == 0)
+            if (Math.Abs(tempVersion) < float.Epsilon)
             {
                 ThrowErrorMessage("Unable to get driver version.", 12);
             }

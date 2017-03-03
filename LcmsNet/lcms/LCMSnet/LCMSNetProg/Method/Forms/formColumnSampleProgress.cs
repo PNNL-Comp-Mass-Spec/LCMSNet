@@ -46,8 +46,10 @@ namespace LcmsNet.Method.Forms
         /// <param name="e"></param>
         private void mnum_previewMinutes_ValueChanged(object sender, EventArgs e)
         {
-            mlabel_previewMinutes.Text = Convert.ToString(mnum_previewMinutes.Value) + "-minute-preview";
-            mcontrol_sampleProgress.PreviewMinutes = Convert.ToInt32(mnum_previewMinutes.Value);
+            var previewMinutes = Convert.ToInt32(mnum_previewMinutes.Value);
+
+            mlabel_previewMinutes.Text = previewMinutes + "-minute-preview";
+            mcontrol_sampleProgress.PreviewMinutes = previewMinutes;
             mcontrol_sampleProgressFull.PreviewMinutes = mcontrol_sampleProgress.PreviewMinutes;
         }
 

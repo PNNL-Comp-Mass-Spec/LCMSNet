@@ -643,6 +643,11 @@ namespace LcmsNetDataClasses.Devices
         public bool AddDevice(classDevicePluginInformation plugin, bool initialize)
         {
             var device = Activator.CreateInstance(plugin.DeviceType) as IDevice;
+            if (device == null)
+            {
+                return false;
+            }
+
             device.Name = CreateUniqueDeviceName(device.Name);
             var added = AddDevice(device);
 
@@ -867,6 +872,9 @@ namespace LcmsNetDataClasses.Devices
         public void LoadPlugins(Assembly assembly, bool forceReload)
         {
             var assemblyPath = assembly.Location;
+            if (assemblyPath == null)
+                return;
+
             if (m_plugins.ContainsKey(assemblyPath))
             {
                 if (!forceReload)
