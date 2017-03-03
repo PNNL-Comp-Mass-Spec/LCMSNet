@@ -131,7 +131,7 @@ namespace LcmsNet
         /// <summary>
         /// Creates the path required for local operation.
         /// </summary>
-        /// <param name="path">Local path to create.</param>
+        /// <param name="localPath">Local path to create.</param>
         static void CreatePath(string localPath)
         {
             var path = Path.Combine(Application.StartupPath, localPath);
@@ -423,9 +423,8 @@ namespace LcmsNet
                     }
                     catch (Exception ex)
                     {
-                        var extensionsFolder =
-                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LCMSNet",
-                                "dmsExtensions");
+                        var extensionsFolder = classDMSToolsManager.GetDMSExtensionsDllFolderPathForUser();
+
                         classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             @"Unable to load cache from DMS.  If inside PNNL, assure folder " + extensionsFolder +
                             " exists and has the required DLLs (including LcmsNetDmsTools.dll): " + ex.Message);
@@ -480,7 +479,7 @@ namespace LcmsNet
                     {
                         classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             "Program Failed!", ex);
-                        throw ex;
+                        throw;
                     }
                 }
             }

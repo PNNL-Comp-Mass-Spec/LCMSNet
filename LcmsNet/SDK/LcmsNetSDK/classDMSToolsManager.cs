@@ -38,8 +38,9 @@ namespace LcmsNetSDK
             var catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new AssemblyCatalog(typeof (classDMSToolsManager).Assembly));
 
-            var catalogPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            catalogPath = Path.Combine(catalogPath, "LCMSNet", "dmsExtensions");
+            // Construct the catalog path, for example
+            // C:\Users\d3l243\AppData\Roaming\LCMSNet\dmsExtensions            
+            var catalogPath = GetDMSExtensionsDllFolderPathForUser();
 
             try
             {
@@ -59,6 +60,13 @@ namespace LcmsNetSDK
             {
                 classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, string.Empty);
             }
+        }
+
+        public static string GetDMSExtensionsDllFolderPathForUser()
+        {
+            var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var dmsExtensionsDllFolderPath = Path.Combine(appDataFolder, "LCMSNet", "dmsExtensions");
+            return dmsExtensionsDllFolderPath;
         }
 
         /// <summary>
