@@ -150,11 +150,11 @@ namespace LcmsNet.SampleQueue.IO
                 InpDoc.Save(outputFile);
                 outputFile.Close();
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                var ErrMsg = "Exception saving file " + FileNamePath + ": " + Ex.Message;
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
-                throw new classDataExportException(ErrMsg, Ex);
+                var ErrMsg = "Exception saving file " + FileNamePath + ": " + ex.Message;
+                classApplicationLogger.LogError(0, ErrMsg, ex);
+                throw new classDataExportException(ErrMsg, ex);
             }
         }
 

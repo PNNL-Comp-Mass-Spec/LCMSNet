@@ -22,9 +22,9 @@ namespace LcmsNet.SampleQueue
         /// Constructor
         /// </summary>
         /// <param name="message">Message to accompany exception</param>
-        /// <param name="Ex">Exception to report</param>
-        public classDataImportException(string message, Exception Ex) :
-            base(message, Ex)
+        /// <param name="ex">Exception to report</param>
+        public classDataImportException(string message, Exception ex) :
+            base(message, ex)
         {
         }
 

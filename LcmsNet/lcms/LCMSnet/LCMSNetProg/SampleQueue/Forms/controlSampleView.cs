@@ -275,10 +275,10 @@ namespace LcmsNet.SampleQueue.Forms
                 InitializeComponent();
                 Initialize(dmsView, sampleQueue);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 classApplicationLogger.LogError(0,
-                    "An exception occurred while trying to build the sample queue controls.  Constructor.", Ex);
+                    "An exception occurred while trying to build the sample queue controls.  Constructor.", ex);
             }
             finally
             {
@@ -303,10 +303,10 @@ namespace LcmsNet.SampleQueue.Forms
                 InitializeComponent();
                 Initialize(null, null);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 classApplicationLogger.LogError(0,
-                    "An exception occurred while trying to build the sample queue controls.  Constructor", Ex);
+                    "An exception occurred while trying to build the sample queue controls.  Constructor", ex);
             }
             finally
             {

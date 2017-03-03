@@ -305,10 +305,10 @@ namespace LcmsNetDataClasses.Logging
                         myCmd.Connection.Open();
                         AffectedRows = myCmd.ExecuteNonQuery();
                     }
-                    catch (Exception Ex)
+                    catch (Exception ex)
                     {
                         var ErrMsg = "SQLite exception executing command " + CmdStr;
-                        throw new classDbLoggerException(ErrMsg, Ex);
+                        throw new classDbLoggerException(ErrMsg, ex);
                     }
                     finally
                     {
@@ -333,10 +333,10 @@ namespace LcmsNetDataClasses.Logging
                 // Get a list of database tables matching the specified table name
                 tableList = GetSQLiteDataTable(sqlString, connStr);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 var ErrMsg = "SQLite exception verifying table " + TableName + " exists";
-                throw new classDbLoggerException(ErrMsg, Ex);
+                throw new classDbLoggerException(ErrMsg, ex);
             }
 
             // If exactly 1 row returned, then table exists
@@ -369,10 +369,10 @@ namespace LcmsNetDataClasses.Logging
                         {
                             FilledRows = Da.Fill(returnTable);
                         }
-                        catch (Exception Ex)
+                        catch (Exception ex)
                         {
                             var ErrMsg = "SQLite exception getting data table via query " + CmdStr;
-                            throw new classDbLoggerException(ErrMsg, Ex);
+                            throw new classDbLoggerException(ErrMsg, ex);
                         }
                     }
                 }

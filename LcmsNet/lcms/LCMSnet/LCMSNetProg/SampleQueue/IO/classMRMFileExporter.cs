@@ -64,10 +64,10 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     WriteToMRMFile(path, fileData);
                 }
-                catch (Exception Ex)
+                catch (Exception ex)
                 {
                     var ErrMsg = "Exception writing MRM files";
-                    classApplicationLogger.LogError(0, ErrMsg, Ex);
+                    classApplicationLogger.LogError(0, ErrMsg, ex);
                 }
             }
 
@@ -96,9 +96,9 @@ namespace LcmsNet.SampleQueue.IO
             {
                 idDict = classDMSToolsManager.Instance.SelectedTool.GetMRMFileListFromDMS(minRequest, maxRequest);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Exception getting list of MRM file ID's", Ex);
+                classApplicationLogger.LogError(0, "Exception getting list of MRM file ID's", ex);
                 return retList;
             }
 
@@ -170,10 +170,10 @@ namespace LcmsNet.SampleQueue.IO
                     {
                         classDMSToolsManager.Instance.SelectedTool.GetMRMFilesFromDMS(sqlStrBld.ToString(), ref retData);
                     }
-                    catch (Exception Ex)
+                    catch (Exception ex)
                     {
                         var ErrMsg = "Exception getting MRM files from DMS";
-                        classApplicationLogger.LogError(0, ErrMsg, Ex);
+                        classApplicationLogger.LogError(0, ErrMsg, ex);
                         return retData;
                     }
 
@@ -192,10 +192,10 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     classDMSToolsManager.Instance.SelectedTool.GetMRMFilesFromDMS(sqlStrBld.ToString(), ref retData);
                 }
-                catch (Exception Ex)
+                catch (Exception ex)
                 {
                     var ErrMsg = "Exception getting MRM files from DMS";
-                    classApplicationLogger.LogError(0, ErrMsg, Ex);
+                    classApplicationLogger.LogError(0, ErrMsg, ex);
                     return retData;
                 }
             }
@@ -267,9 +267,9 @@ namespace LcmsNet.SampleQueue.IO
                 fileWriter.Write(InpData.FileContents);
                 classApplicationLogger.LogMessage(0, "Completed writing MRM file " + mrmFileNamePath);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                throw new Exception("Exception writing MRM file" + mrmFileNamePath, Ex);
+                throw new Exception("Exception writing MRM file" + mrmFileNamePath, ex);
             }
             finally
             {

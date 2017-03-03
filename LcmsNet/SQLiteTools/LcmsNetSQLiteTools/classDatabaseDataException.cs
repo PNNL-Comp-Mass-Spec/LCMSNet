@@ -18,8 +18,8 @@ namespace LcmsNetSQLiteTools
     /// </summary>
     public class classDatabaseDataException : Exception
     {
-        public classDatabaseDataException(string message, Exception Ex) :
-            base(message, Ex)
+        public classDatabaseDataException(string message, Exception ex) :
+            base(message, ex)
         {
         }
     }

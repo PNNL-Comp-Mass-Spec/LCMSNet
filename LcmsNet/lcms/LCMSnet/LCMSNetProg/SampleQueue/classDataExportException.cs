@@ -17,8 +17,8 @@ namespace LcmsNet.SampleQueue
     /// </summary>
     class classDataExportException : Exception
     {
-        public classDataExportException(string message, Exception Ex) :
-            base(message, Ex)
+        public classDataExportException(string message, Exception ex) :
+            base(message, ex)
         {
         }
     }

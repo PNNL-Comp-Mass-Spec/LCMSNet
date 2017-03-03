@@ -52,11 +52,11 @@ namespace LcmsNet.SampleQueue.IO
             {
                 doc.Load(path);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
                 var ErrMsg = "Exception loading XML file " + path;
-                classApplicationLogger.LogError(0, ErrMsg, Ex);
-                throw new classDataImportException(ErrMsg, Ex);
+                classApplicationLogger.LogError(0, ErrMsg, ex);
+                throw new classDataImportException(ErrMsg, ex);
             }
 
             // Get all the nodes under QueueSettings node
@@ -80,11 +80,11 @@ namespace LcmsNet.SampleQueue.IO
                         var newSample = ConvertXMLNodeToSample(currentNode);
                         returnList.Add(newSample);
                     }
-                    catch (Exception Ex)
+                    catch (Exception ex)
                     {
                         var ErrMsg = "Exception converting XML item node to sample " + currentNode.Name;
-                        classApplicationLogger.LogError(0, ErrMsg, Ex);
-                        throw new classDataImportException(ErrMsg, Ex);
+                        classApplicationLogger.LogError(0, ErrMsg, ex);
+                        throw new classDataImportException(ErrMsg, ex);
                     }
                 }
             }
