@@ -80,18 +80,22 @@ namespace FluidicsSDK.Graphic
         /// Constructor for a graphics object
         /// </summary>
         /// <param name="myColor">the primary color to draw the object</param>
-        /// <param name="loc">a System.Drawing.Point defining where on screen to draw the object</param>
-        /// <param name="brushType">A selection from the BrushType enum determining the type of brush to use when filling the object</param>
         /// <param name="fill">boolean, determines if the graphic is filled </param>
-        public GraphicsPrimitive(Nullable<Color> myColor = null, bool fill = true, float atScale = 1):
-            this(new SolidBrush(Color.White), myColor:myColor, fill:fill, atScale:atScale)
-        {            
+        protected GraphicsPrimitive(Color? myColor = null, bool fill = true) :
+            this(new SolidBrush(Color.White), myColor: myColor, fill: fill)
+        {
         }
 
-        public GraphicsPrimitive(Brush fillbrush , Nullable<Color> myColor = null, bool fill = true, float atScale = 1)
-        {                 
-            m_fill  = fill;
-            m_color = myColor != null ? (Color)myColor : DEFAULT_COLOR;
+        /// <summary>
+        /// Constructor for a graphics object
+        /// </summary>
+        /// <param name="fillbrush"></param>
+        /// <param name="myColor"></param>
+        /// <param name="fill"></param>
+        protected GraphicsPrimitive(Brush fillbrush, Color? myColor = null, bool fill = true)
+        {
+            m_fill = fill;
+            m_color = myColor ?? DEFAULT_COLOR;
             m_fillBrush = fillbrush;
             m_drawingPen = new Pen(new SolidBrush(m_color));
             m_drawingPen.Width = PEN_WIDTH;
