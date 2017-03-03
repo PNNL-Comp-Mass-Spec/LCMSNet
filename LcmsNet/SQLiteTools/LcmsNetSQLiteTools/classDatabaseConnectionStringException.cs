@@ -22,5 +22,5 @@ namespace LcmsNetSQLiteTools
             base(message)
         {
         }
-    } //End class
-} // End namespace
+    }
+}

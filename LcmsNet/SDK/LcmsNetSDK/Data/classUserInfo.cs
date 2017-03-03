@@ -22,13 +22,13 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Name of user
         /// </summary>
-        public string UserName { get; set; } // End property
+        public string UserName { get; set; }
 
         /// <summary>
         /// Payroll number (network login) of user
         /// </summary>
-        public string PayrollNum { get; set; } // End property
+        public string PayrollNum { get; set; }
 
         #endregion
     }
-} // End namespace
+}

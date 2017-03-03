@@ -299,4 +299,4 @@ namespace LcmsNet.SampleQueue.Forms
 
         #endregion
     }
-} // End namespace
+}

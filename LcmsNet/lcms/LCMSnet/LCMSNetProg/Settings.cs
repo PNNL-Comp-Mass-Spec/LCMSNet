@@ -49,4 +49,4 @@ namespace LcmsNet.Properties
 
         #endregion
     }
-} // End namespace
+}

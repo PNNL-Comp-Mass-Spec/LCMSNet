@@ -92,4 +92,4 @@ namespace LcmsNet.SampleQueue
 
         #endregion
     }
-} // End namespace
+}

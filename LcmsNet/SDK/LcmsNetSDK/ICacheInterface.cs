@@ -26,5 +26,5 @@ namespace LcmsNetDataClasses
         void LoadPropertyValues(StringDictionary PropValues);
 
         #endregion
-    } // End interface
-} // End namespace
+    }
+}

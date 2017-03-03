@@ -22,4 +22,4 @@ namespace LcmsNet.SampleQueue
         {
         }
     }
-} // End namespace
+}

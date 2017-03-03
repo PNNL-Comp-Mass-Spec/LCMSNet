@@ -34,7 +34,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Connection string for DMS SQL Server connection
         /// </summary>
-        public string DMSConnStr { get; set; } // End property
+        public string DMSConnStr { get; set; }
 
         #endregion
 
@@ -414,13 +414,11 @@ namespace LcmsNet.SampleQueue
                 errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
-            } // End catch1
             catch (classDatabaseDataException Ex)
             {
                 var errMsg = Ex.Message + ": " + Ex.InnerException.Message;
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
-            } // End catch2
             finally
             {
                 labelPleaseWait.Visible = false;
@@ -792,4 +790,4 @@ namespace LcmsNet.SampleQueue
         #endregion
         
     }
-} // End namespace
+}

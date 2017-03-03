@@ -116,4 +116,4 @@ namespace LcmsNet.Configuration
 
         #endregion
     }
-} // End namespace
+}

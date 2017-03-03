@@ -193,4 +193,4 @@ namespace LcmsNet.SampleQueue.IO
         }
         #endregion
     }
-} // End namespace
+}

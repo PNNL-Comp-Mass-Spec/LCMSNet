@@ -24,5 +24,5 @@ namespace LcmsNetDataClasses
         List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList);
 
         #endregion
-    } // End interface
-} // End namespace
+    }
+}

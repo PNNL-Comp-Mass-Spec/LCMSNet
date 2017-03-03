@@ -26,4 +26,4 @@ namespace LcmsNetDataClasses.Logging
 
         #endregion
     }
-} // End namespace
+}

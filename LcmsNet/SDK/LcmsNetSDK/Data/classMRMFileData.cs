@@ -29,4 +29,4 @@ namespace LcmsNetDataClasses
 
         #endregion
     }
-} // End namespace
+}
