@@ -77,32 +77,41 @@ namespace LcmsNetSDK
             get
             {
                 // Check that we have a tool available, if not, report via exception otherwise, return the selected, or first available tool.
-                if (midmstools_selectedTools == null && DmsTools.Count() != 0)
+                if (m_SelectedDMSTools != null)
+                    return m_SelectedDMSTools;
+
+                if (m_SelectedDMSTools == null && DmsTools.Count() != 0)
                 {
                     var lastSelectedTool = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL);
-                    var toolTokens = lastSelectedTool.Split(new[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
                     if (!string.IsNullOrWhiteSpace(lastSelectedTool))
                     {
-                        midmstools_selectedTools =
-                            DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1])
-                                .Value;
-                        mdms_metadata =
-                            DmsTools.Single(x => x.Metadata.Name == toolTokens[0] && x.Metadata.Version == toolTokens[1])
-                                .Metadata;
+                        // lastSelectedTool is of the form: PrismDMSTools-1.0
+
+                        var toolTokens = lastSelectedTool.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        var query = (from item in DmsTools
+                                     where item.Metadata.Name == toolTokens[0] && item.Metadata.Version == toolTokens[1]
+                                     select item).ToList();
+
+                        if (query.Count > 0)
+                        {
+                            m_SelectedDMSTools = query.First().Value;
+                            m_DMSMetaData = query.First().Metadata;
+                            return m_SelectedDMSTools;
+                        }                                                
                     }
-                    else
-                    {
-                        midmstools_selectedTools = DmsTools.First().Value; // Just grab the first off the list.
-                        mdms_metadata = DmsTools.First().Metadata;
-                        classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL,
-                            DmsTools.First().Metadata.Name + "-" + DmsTools.First().Metadata.Version);
-                    }
+
+                    // Just grab the first off the list
+                    var firstTool = DmsTools.First();
+                    m_SelectedDMSTools = firstTool.Value;
+                    m_DMSMetaData = firstTool.Metadata;
+                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, firstTool.Metadata.Name + "-" + firstTool.Metadata.Version);
+
+                    return m_SelectedDMSTools;
                 }
-                else if (DmsTools.Count() == 0)
-                {
-                    throw new InvalidOperationException("No dms tools available");
-                }
-                return midmstools_selectedTools;
+
+                var folderPath = GetDMSExtensionsDllFolderPathForUser();
+                throw new InvalidOperationException(string.Format("No DMS tools available; assure that {0} has file LcmsNetDmsTools.dll", folderPath));
             }
         }
 

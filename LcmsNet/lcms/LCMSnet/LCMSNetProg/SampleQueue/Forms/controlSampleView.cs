@@ -1657,43 +1657,42 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void ShowDMSView()
         {
-            if (m_dmsView != null)
+            if (m_dmsView == null) return;
+
+            var result = m_dmsView.ShowDialog();
+
+            //
+            // If the user clicks ok , then add the samples from the
+            // form into the sample queue.  Don't add them directly to the
+            // form so that the event model will update both this view
+            // and any other views that we may have.  For the sequence
+            // we dont care how we add them to the form.
+            //
+            if (result == DialogResult.OK)
             {
-                var result = m_dmsView.ShowDialog();
+                var samples = m_dmsView.GetNewSamplesDMSView();
+                m_dmsView.ClearForm();
 
-                //
-                // If the user clicks ok , then add the samples from the
-                // form into the sample queue.  Don't add them directly to the
-                // form so that the event model will update both this view
-                // and any other views that we may have.  For the sequence
-                // we dont care how we add them to the form.
-                //
-                if (result == DialogResult.OK)
+                var insertToUnused = false;
+                if (HasUnusedSamples())
                 {
-                    var samples = m_dmsView.GetNewSamplesDMSView();
-                    m_dmsView.ClearForm();
-
-                    var insertToUnused = false;
-                    if (HasUnusedSamples())
-                    {
-                        //
-                        // Ask the user what to do with these samples?
-                        //
-                        var dialog = new formInsertOntoUnusedDialog();
-                        var insertResult = dialog.ShowDialog();
-
-                        insertToUnused = (insertResult == DialogResult.Yes);
-                    }
-
-
-                    AddSamplesToManager(samples, insertToUnused);
-
                     //
-                    // Don't add directly to the user interface in case the
-                    // sample manager class has something to say about one of the samples
+                    // Ask the user what to do with these samples?
                     //
-                    classApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
+                    var dialog = new formInsertOntoUnusedDialog();
+                    var insertResult = dialog.ShowDialog();
+
+                    insertToUnused = (insertResult == DialogResult.Yes);
                 }
+
+
+                AddSamplesToManager(samples, insertToUnused);
+
+                //
+                // Don't add directly to the user interface in case the
+                // sample manager class has something to say about one of the samples
+                //
+                classApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
             }
         }
 
