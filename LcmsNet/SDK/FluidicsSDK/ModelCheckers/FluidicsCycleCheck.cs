@@ -12,6 +12,7 @@ using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
 using System.Drawing;
+using System.Globalization;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -53,18 +54,17 @@ namespace FluidicsSDK.ModelCheckers
             watch.Start();
             var status = new List<ModelStatus>();
             var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source);
-            var cycleFound = false;
             foreach (var source in sources)
             {
                 var pathTaken = new List<Connection>();
-                cycleFound = FindCycles(source, new List<Port>(), pathTaken);
+                var cycleFound = FindCycles(source, new List<Port>(), pathTaken);
                 if (cycleFound)
                 {
                     foreach(var connection in pathTaken)
                     {
                         connection.Color = Color.Red;
                     }
-                    status.Add(new ModelStatus("Cycle found", "Cycle found in path", Category, null, LcmsNetSDK.TimeKeeper.Instance.Now.ToString(), null, source.ParentDevice.IDevice));
+                    status.Add(new ModelStatus("Cycle found", "Cycle found in path", Category, null, TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture), null, source.ParentDevice.IDevice));
                     if (StatusUpdate != null)
                     {
                         const string message = "Cycle in physical configuration";
@@ -79,9 +79,8 @@ namespace FluidicsSDK.ModelCheckers
         }
 
         //Uses a depth-first search to find cycles.
-        private bool FindCycles(Port startingSource, List<Port> visitedPorts, List<Connection> pathTaken, Connection PrevConnection=null)
+        private bool FindCycles(Port startingSource, ICollection<Port> visitedPorts, ICollection<Connection> pathTaken, Connection PrevConnection=null)
         {
-            var cycleFound = false;
             visitedPorts.Add(startingSource);
             // check where every connection from the starting source goes
             foreach(var conn in startingSource.Connections)
@@ -94,17 +93,18 @@ namespace FluidicsSDK.ModelCheckers
                     // or in other words, we have connections that lead in a "circular" path back to a place we've already been
                     if (visitedPorts.Contains(otherEnd))
                     {                        
-                        cycleFound = true;
-                        return cycleFound;
+                        // cycleFound = true;
+                        return true;
                     }
-                    else
-                    {                       
-                        cycleFound = FindCycles(otherEnd, visitedPorts, pathTaken, conn);
+
+                    var cycleFound = FindCycles(otherEnd, visitedPorts, pathTaken, conn);
+                    if (cycleFound) {
+                        return true;
                     }
-                    if (cycleFound) { return cycleFound; }
                 }                
             }        
-            return cycleFound;
+            // cycleFound is false
+            return false;
         }
 
 

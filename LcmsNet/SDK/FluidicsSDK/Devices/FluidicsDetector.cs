@@ -13,7 +13,7 @@ using System.Drawing;
 
 namespace FluidicsSDK.Devices
 {
-    public class FluidicsDetector:FluidicsDevice
+    public sealed class FluidicsDetector:FluidicsDevice
     {
         private const int WIDTH = 100;
         private const int HEIGHT = 50;

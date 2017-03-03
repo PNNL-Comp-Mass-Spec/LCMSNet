@@ -15,7 +15,7 @@ namespace FluidicsSDK.Graphic
 
     public enum Orient { Right, Down, Left, Up };
 
-    public class FluidicsTriangle : GraphicsPrimitive
+    public sealed class FluidicsTriangle : GraphicsPrimitive
     {
         #region Members
         Rectangle m_area;
@@ -55,21 +55,21 @@ namespace FluidicsSDK.Graphic
                 point.Y = Convert.ToInt32(Convert.ToSingle(point.Y) * scale) + moveby.Y;
                 newPoints[i] = point;
             }          
-            if (base.Fill)
+            if (Fill)
             {
                 Brush fillBrush;
                 if (selected)
                 {
-                    fillBrush = base.Highlighter.Brush; ;
+                    fillBrush = Highlighter.Brush;
                 }
                 else if (error)
                 {
-                    fillBrush = base.ErrorPen.Brush;
+                    fillBrush = ErrorPen.Brush;
                 }
                 
                 else
                 {
-                    fillBrush = base.Pen.Brush;
+                    fillBrush = Pen.Brush;
                 }
                 g.FillPolygon(fillBrush, newPoints);
             }
@@ -78,28 +78,28 @@ namespace FluidicsSDK.Graphic
                 Pen drawingPen;
                 if (selected)
                 {
-                    drawingPen = base.Highlighter;
+                    drawingPen = Highlighter;
                 }
                 else if (error)
                 {
-                    drawingPen = base.ErrorPen;
+                    drawingPen = ErrorPen;
                 }              
                 else
                 {
-                    drawingPen = base.Pen;
+                    drawingPen = Pen;
                 }
                 g.DrawPolygon(drawingPen, newPoints);
             }
         }
 
         /// <summary>
-        /// determine location of the three point where lines meet in the triangle
+        /// Determine location of the three point where lines meet in the triangle
         /// </summary>
-        /// <param name="or">enum representing the orientation of the triangle</param>
-        private void DeterminePoints(Orient or)
+        /// <param name="currentOrientation">enum representing the orientation of the triangle</param>
+        private void DeterminePoints(Orient currentOrientation)
         {
             var half = m_area.Width / 2;
-            switch (Orientation)
+            switch (currentOrientation)
             {                
                 case Orient.Down:                       
                     m_points[0] = new Point(m_area.X, m_area.Y);

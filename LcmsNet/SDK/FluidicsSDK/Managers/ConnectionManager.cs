@@ -59,12 +59,13 @@ namespace FluidicsSDK.Managers
                 }
             }
             return null;
-        }   
+        }
 
         /// <summary>
         /// Remove a connection from the connection manager's list
         /// </summary>
         /// <param name="connection">a classConnection object</param>
+        /// <param name="device"></param>
         /// <exception cref="ArgumentException">tried to remove a connection internal to a device, or a connection the manager doesn't know about</exception>"
         public void Remove(Connection connection, FluidicsDevice device = null)
         {           
@@ -106,11 +107,14 @@ namespace FluidicsSDK.Managers
                 }
             }
         }
+
         /// <summary>
         /// Connect two ports
         /// </summary>
         /// <param name="port1">a classPort object</param>
         /// <param name="port2">a classPort object</param>
+        /// <param name="device"></param>
+        /// <param name="style"></param>
         /// <exception cref="ArgumentException">tried to connect a port to itself</exception>"
         public void Connect(Port port1, Port port2, FluidicsDevice device = null, ConnectionStyles? style = null)
         {
@@ -199,17 +203,7 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// Property to return class instance of classConnectionManager
         /// </summary>
-        public static ConnectionManager GetConnectionManager
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new ConnectionManager();
-                }
-                return m_instance;
-            }
-        }
+        public static ConnectionManager GetConnectionManager => m_instance ?? (m_instance = new ConnectionManager());
 
         #endregion
 
