@@ -10,12 +10,11 @@ using System;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Class to hold constants and enums required for communication with Bruker solarXcontrol
+    /// </summary>
     public class classBrukerComConstants
     {
-        //*********************************************************************************************************
-        // Class to hold constants and enums required for communication with Bruker solarXcontrol
-        //**********************************************************************************************************
-
         #region "Enums"
         // Represents response from sXc
         public enum SxcReplies : short
@@ -112,4 +111,4 @@ namespace LcmsNet.Devices.BrukerStart
         }   
         #endregion
     }   
-}   // End namespace
+}

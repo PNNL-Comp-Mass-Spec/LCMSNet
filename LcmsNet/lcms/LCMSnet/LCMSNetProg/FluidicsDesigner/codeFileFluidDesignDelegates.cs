@@ -14,10 +14,10 @@ using LcmsNetDataClasses;
 
 namespace LcmsNet.FluidicsDesigner
 {
-    //*********************************************************************************************************
-    // Delegates for use with Fluidics Designer
-    //**********************************************************************************************************
+    #region "Delegates for use with Fluidics Designer
 
     public delegate void DelegateOperationError(string message);
     public delegate void DelegateSaveRequired(LcmsNetDataClasses.Devices.IDeviceControl device);
-}   // End namespace
+    
+    #endregion
+}

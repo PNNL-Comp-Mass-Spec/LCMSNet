@@ -10,12 +10,11 @@ using System;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Holds status data for one ISCO pump
+    /// </summary>
     public class classPumpIscoData
     {
-        //*********************************************************************************************************
-        // Holds status data for one ISCO pump
-        //**********************************************************************************************************
-
         #region "Member variables"
             enumIscoOperationMode menum_OpMode = enumIscoOperationMode.ConstantPressure;
         #endregion
@@ -114,4 +113,4 @@ namespace LcmsNet.Devices.Pumps
             }
         #endregion
     }   //End class
-}   // End namespace
+}

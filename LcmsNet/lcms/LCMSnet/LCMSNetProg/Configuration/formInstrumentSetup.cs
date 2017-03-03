@@ -15,6 +15,9 @@ using LcmsNetSQLiteTools;
 
 namespace LcmsNet
 {
+    /// <summary>
+    /// Form for specifying instrument that is connected to cart
+    /// </summary>
     public partial class formInstrumentSetup : Form
     {
         #region "Constructors"
@@ -75,10 +78,6 @@ namespace LcmsNet
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Form for specifying instrument that is connected to cart
-        //**********************************************************************************************************
 
         #region "Constants"
 

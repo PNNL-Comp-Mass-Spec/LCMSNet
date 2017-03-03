@@ -19,17 +19,17 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.FluidicsDesigner
 {
+    /// <summary>
+    /// Fluidics Designer class for 10-port, 2-position valve
+    /// </summary>
     class classSymbolValve10Port : classSymbolValveBase, IDeviceSymbol
     {
-        //*********************************************************************************************************
-        // Fluidics Destigner class for 10-port, 2-position valve
-        //**********************************************************************************************************
 
         #region "Methods"
         public classSymbolValve10Port(Syncfusion.Windows.Forms.Diagram.Controls.Diagram TargetDiagram) :
                 base(TargetDiagram)
             {
-            }   // end sub
+            }
 
             protected override void CreateSymbolGroup()
             {
@@ -273,5 +273,5 @@ namespace LcmsNet.FluidicsDesigner
                 mobj_Symbol = newSymGrp;
             }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

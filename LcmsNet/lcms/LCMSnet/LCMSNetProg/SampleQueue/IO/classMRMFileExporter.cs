@@ -21,11 +21,11 @@ using LcmsNetSDK;
 
 namespace LcmsNet.SampleQueue.IO
 {
+    /// <summary>
+    /// Class for retrieving MRM files from DMS and exporting them to a folder
+    /// </summary>
     class classMRMFileExporter : ISampleQueueWriter
     {
-        //*********************************************************************************************************
-        // Class for retrieving MRM files from DMS and exporting them to a folder
-        //**********************************************************************************************************
 
         #region "Methods"
 

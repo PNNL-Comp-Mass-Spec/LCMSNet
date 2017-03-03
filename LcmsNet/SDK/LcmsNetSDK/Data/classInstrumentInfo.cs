@@ -23,9 +23,6 @@ namespace LcmsNetDataClasses
     [Serializable]
     public class classInstrumentInfo : classDataClassBase
     {
-        //*********************************************************************************************************
-        // Class to hold data about the instrument connected to the LC cart
-        //**********************************************************************************************************
 
         #region "Properties"
 

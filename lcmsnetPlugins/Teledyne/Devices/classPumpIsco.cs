@@ -18,18 +18,14 @@ using System.Threading;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Interface to ISCO pumps
+    /// </summary>
     [Serializable]
 
-    [classDeviceControlAttribute(typeof(controlPumpIsco),
-                                          typeof(classPumpIscoGlyph),
-                                          "ISCO Pump",
-                                          "Pumps")]
+    [classDeviceControlAttribute(typeof(controlPumpIsco), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
     public class classPumpIsco : IDevice
     {
-        //*********************************************************************************************************
-        // Interface to ISCO pumps
-        //**********************************************************************************************************
-
         #region "Constants"
         const int CONST_MAX_PUMPS = 3;
         const long CONST_DEFAULT_TIMER_INTERVAL = 10000; //10000ms = 10 seconds = 6 times/min
@@ -2471,4 +2467,4 @@ namespace LcmsNet.Devices.Pumps
             return 0.0;
         }
     }   
-}   // End namespace
+}

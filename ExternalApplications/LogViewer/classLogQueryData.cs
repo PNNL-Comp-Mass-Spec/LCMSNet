@@ -15,12 +15,11 @@ using System.Collections.Specialized;
 
 namespace LogViewer
 {
+    /// <summary>
+    /// Class for holding data used to query log db
+    /// </summary>
     class classLogQueryData
     {
-        //*********************************************************************************************************
-        // Class for holding data used to query log db
-        //**********************************************************************************************************
-
         #region "Class variables"
             StringDictionary mlist_QueryParams = new StringDictionary();
         #endregion
@@ -98,4 +97,4 @@ namespace LogViewer
             }   
         #endregion
     }   
-}   // End namespace
+}

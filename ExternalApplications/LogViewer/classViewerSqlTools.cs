@@ -16,12 +16,11 @@ using System.Data.SQLite;
 
 namespace LogViewer
 {
+    /// <summary>
+    /// Class for handling SQLite database file access
+    /// </summary>
     class classViewerSqlTools
     {
-        //*********************************************************************************************************
-        // Class for handling SQLite database file access
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -231,4 +230,4 @@ namespace LogViewer
             }   
         #endregion
     }   
-}   // End namespace
+}

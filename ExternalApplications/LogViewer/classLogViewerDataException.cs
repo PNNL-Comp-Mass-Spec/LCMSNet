@@ -13,12 +13,11 @@ using System.Text;
 
 namespace LogViewer
 {
+    /// <summary>
+    /// Log viewer custom exception class
+    /// </summary>
     class classLogViewerDataException : Exception
     {
-        //*********************************************************************************************************
-        // Log viewer custom exception class
-        //**********************************************************************************************************
-
         #region "Constructors"
             public classLogViewerDataException(string message, Exception ex) :
                 base(message,ex)
@@ -26,4 +25,4 @@ namespace LogViewer
             }
         #endregion
     }   
-}   // End namespace
+}

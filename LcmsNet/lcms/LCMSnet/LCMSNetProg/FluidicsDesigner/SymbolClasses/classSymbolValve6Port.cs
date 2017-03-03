@@ -19,17 +19,17 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.FluidicsDesigner
 {
+    /// <summary>
+    /// Fluidics Designer class for 6-port, 2-position valve
+    /// </summary>
     class classSymbolValve6Port : classSymbolValveBase, IDeviceSymbol
     {
-        //*********************************************************************************************************
-        // Fluidics Destigner class for 6-port, 2-position valve
-        //**********************************************************************************************************
 
         #region "Methods"
             public classSymbolValve6Port(Syncfusion.Windows.Forms.Diagram.Controls.Diagram TargetDiagram) :
                 base(TargetDiagram)
             {
-            }   // end sub
+            }
 
             protected override void CreateSymbolGroup()
             {
@@ -210,4 +210,4 @@ namespace LcmsNet.FluidicsDesigner
             }
         #endregion
     }   // Ens class
-}   // End namespace
+}

@@ -21,12 +21,12 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {
+    /// <summary>
+    /// Class for generating XML export files
+    /// </summary>
     class classQueueExportXML : ISampleQueueWriter
     {
-        //*********************************************************************************************************
-        // Class for generating XML export files
-        //**********************************************************************************************************
-
+        
         #region "Class variables"
 
         XmlDocument m_ExportDoc;

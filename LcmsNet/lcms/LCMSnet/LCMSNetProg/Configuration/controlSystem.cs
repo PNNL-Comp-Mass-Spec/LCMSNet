@@ -14,6 +14,9 @@ using System.Windows.Forms;
 
 namespace LcmsNet.Configuration
 {
+    /// <summary>
+    /// Control representing a cart system (2 columns)
+    /// </summary>
     public partial class controlSystem : UserControl
     {
         #region "Constructors"
@@ -60,10 +63,6 @@ namespace LcmsNet.Configuration
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Control representing a cart system (2 columns)
-        //**********************************************************************************************************
 
         #region "Class variables"
 

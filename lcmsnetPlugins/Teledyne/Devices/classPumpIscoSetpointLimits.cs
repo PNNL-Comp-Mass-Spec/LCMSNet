@@ -10,12 +10,11 @@
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Holds instrument setpoint ranges
+    /// </summary>
     public class classPumpIscoSetpointLimits
     {
-        //*********************************************************************************************************
-        // Holds instrument setpoint ranges
-        //**********************************************************************************************************
-
         #region "Properties"
             /// <summary>
             /// Min flow SP

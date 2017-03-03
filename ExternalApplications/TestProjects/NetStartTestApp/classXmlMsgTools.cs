@@ -15,12 +15,11 @@ using System.Collections.Generic;
 
 namespace NetStartTestApp
 {
+    /// <summary>
+    /// Formats and parses messages passed between instrument and cart
+    /// </summary>
     class classXmlMsgTools
     {
-        //*********************************************************************************************************
-        // Formats and parses messages passed between instrument and cart
-        //**********************************************************************************************************
-
         #region "Methods"
             /// <summary>
             /// Creates an XML-formatted string representing a Start Acquisition response
@@ -77,7 +76,7 @@ namespace NetStartTestApp
 
                 // Return the XML string
                 return xmlText;
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates an XML-formatted string representing a response to a Stop Acquisition command
@@ -131,7 +130,7 @@ namespace NetStartTestApp
 
                 // Return the XML string
                 return xmlText;
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates an XML-formatted command to get a list of instrument methods
@@ -191,7 +190,7 @@ namespace NetStartTestApp
                 // Return the XML string
                 return xmlText;
                 
-            }   // End sub
+            }
 
             /// <summary>
             /// Parses an XML response received from an instrument
@@ -242,7 +241,7 @@ namespace NetStartTestApp
                 }
 
                 return returnDict;
-            }   // End sub
+            }
         #endregion
-    }   // End class
+    }
 }   // End region

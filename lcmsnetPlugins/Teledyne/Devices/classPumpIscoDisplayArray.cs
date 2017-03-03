@@ -14,12 +14,11 @@ using System.Text;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Creates a control array for Isco display controls
+    /// </summary>
     class classPumpIscoDisplayArray : System.Collections.CollectionBase
     {
-        //*********************************************************************************************************
-        // Creates a control array for Isco display controls
-        //**********************************************************************************************************
-
         #region "Events"
             public event DelegateIscoPumpDisplaySetpointHandler SetpointChanged;
             public event DelegateIscoPumpDisplayHandler StartRefill;
@@ -123,4 +122,4 @@ namespace LcmsNet.Devices.Pumps
             }   
         #endregion
     }   
-}   // End namespace
+}

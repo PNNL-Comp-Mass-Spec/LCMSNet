@@ -18,6 +18,9 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Configuration
 {
+    /// <summary>
+    /// Control for displaying information about the column.
+    /// </summary>
     public partial class controlColumn : UserControl
     {
         #region "Constructors"
@@ -37,10 +40,6 @@ namespace LcmsNet.Configuration
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Control for displaying information about the column.
-        //**********************************************************************************************************
 
         #region "Class variables"
 

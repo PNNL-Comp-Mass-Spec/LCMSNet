@@ -18,12 +18,11 @@ using log4net;
 
 namespace BrukerStartTest
 {
+    /// <summary>
+    /// Logging class for test program
+    /// </summary>
     class classTestLogger
     {
-        //*********************************************************************************************************
-        // Logging class for test program
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -55,7 +54,7 @@ namespace BrukerStartTest
                 outStrBld.Append(msg);
                 outStrBld.Append(Environment.NewLine);
                 m_FileLogger.Debug(outStrBld.ToString());
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

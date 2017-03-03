@@ -40,7 +40,7 @@ namespace ActiveMQTools
                 mobject_Connection = connection;
                 mstring_CorrelationId = correleationID;
                 mobject_ResponseQueue = responseQueue;
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -69,4 +69,4 @@ namespace ActiveMQTools
             }
         #endregion
     }   // Dnd class
-}   // End namespace
+}

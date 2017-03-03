@@ -42,7 +42,7 @@ namespace NetStartTestApp
                 InitializeComponent();
 
                 Initialize();
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -120,7 +120,7 @@ namespace NetStartTestApp
                     default:
                         break;
                 }   // End switch
-            }   // End sub
+            }
 
             private void CreateStartAcqMessage(StringDictionary receivedData)
             {
@@ -157,7 +157,7 @@ namespace NetStartTestApp
 
                 // Create the XML-formatted message
                 m_xmlToSend = classXmlMsgTools.CreateStartAcqResponse(responseData);
-            }   // End sub
+            }
 
             private void CreateDelayedStartAcqMessage(StringDictionary receivedData)
             {
@@ -183,7 +183,7 @@ namespace NetStartTestApp
 
                 // Create the XML-formatted message
                 m_xmlToSendDelayed = classXmlMsgTools.CreateStartAcqResponse(responseData);
-            }   // End sub
+            }
 
             private void CreateStopAcqMessage(StringDictionary receivedData)
             {
@@ -211,7 +211,7 @@ namespace NetStartTestApp
 
                 // Create the XML-formatted message
                 m_xmlToSend = classXmlMsgTools.CreateStopAcqResponse(responseData);
-            }   // End sub
+            }
 
             private void SendMessage(string xmlText)
             {
@@ -225,7 +225,7 @@ namespace NetStartTestApp
                 //{
                 //   MessageBox.Show("Reply sent and acknowledged", "NetStart Tester");
                 //}
-            }   // End sub
+            }
 
             private void DisplayReceivedData(StringDictionary receivedData)
             {
@@ -247,7 +247,7 @@ namespace NetStartTestApp
                     txtReceivedMsg.Text = receivedString.ToString();
                     Application.DoEvents();
                 }
-            }   // End sub
+            }
 
             private void btnMethReqSendNow_Click(object sender, EventArgs e)
             {
@@ -310,7 +310,7 @@ namespace NetStartTestApp
             private void btnClear_Click(object sender, EventArgs e)
             {
                 txtReceivedMsg.Text = "";
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

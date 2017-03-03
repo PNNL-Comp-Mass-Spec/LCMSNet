@@ -18,11 +18,11 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.FluidicsDesigner
 {
+    /// <summary>
+    /// Defines a device to be added to the designer
+    /// </summary>
     interface IDeviceSymbol
     {
-        //*********************************************************************************************************
-        // Defines a device to be added to the designer
-        //**********************************************************************************************************
 
         #region "Events"
         event DelegateOperationError    OperationError;

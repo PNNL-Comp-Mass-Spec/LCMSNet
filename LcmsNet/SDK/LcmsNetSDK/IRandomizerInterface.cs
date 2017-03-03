@@ -13,11 +13,11 @@ using System.Collections.Generic;
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Inteface for sample run order randomizer
+    /// </summary>
     public interface IRandomizerInterface
     {
-        //*********************************************************************************************************
-        // Inteface for sample run order randomizer
-        //**********************************************************************************************************
 
         #region "Methods"
 

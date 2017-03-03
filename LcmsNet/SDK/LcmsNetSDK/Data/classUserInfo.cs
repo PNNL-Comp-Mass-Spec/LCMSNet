@@ -11,12 +11,11 @@
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Class to hold data about LcmsNet users
+    /// </summary>
     public class classUserInfo : classDataClassBase
     {
-        //*********************************************************************************************************
-        // Class to hold data about LcmsNet users
-        //**********************************************************************************************************
-
         #region "Properties"
 
         /// <summary>

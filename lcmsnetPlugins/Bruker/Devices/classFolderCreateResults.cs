@@ -14,12 +14,11 @@ using System.Text;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Class used for transferring results of output folder creation
+    /// </summary>
     class classFolderCreateResults
     {
-        //*********************************************************************************************************
-        // Class used for transferring results of output folder creation
-        //**********************************************************************************************************
-
         #region "Properties"
             public bool Success { get; set; }
             public string DirectoryName { get; set; }
@@ -37,4 +36,4 @@ namespace LcmsNet.Devices.BrukerStart
             }
         #endregion
     }   
-}   // End namespace
+}

@@ -15,12 +15,11 @@ using System.Text;
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Class for holding data used to query DMS for samples to run
+    /// </summary>
     public class classSampleQueryData
     {
-        //*********************************************************************************************************
-        // Class for holding data used to query DMS for samples to run
-        //**********************************************************************************************************
-
         #region "Constants"
 
         readonly string CMD_BASE = "SELECT * FROM V_Scheduled_Run_Export WHERE ";

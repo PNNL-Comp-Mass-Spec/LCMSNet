@@ -18,10 +18,13 @@ using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.SampleQueue.IO
 {
+    /// <summary>
+    /// Imports an XML file from LCMS
+    /// </summary>
     class classQueueImportXML : ISampleQueueReader
     {
         //*********************************************************************************************************
-        // Imports an XML file from LCMS
+        // 
         //**********************************************************************************************************
 
         #region "Methods"

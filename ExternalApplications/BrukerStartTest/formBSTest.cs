@@ -22,12 +22,11 @@ using LcmsNetDataClasses.Logging;
 
 namespace BrukerStartTest
 {
+    /// <summary>
+    /// Form for testing Bruker Start class operation
+    /// </summary>
     public partial class formBSTest : Form
     {
-        //*********************************************************************************************************
-        // Form for testing Bruker Start class operation
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -65,7 +64,7 @@ namespace BrukerStartTest
 
                 msg = "Program initialization completed";
                 classTestLogger.LogDebugMessage(msg);
-            }   // End sub
+            }
 
             private void GetMethodList()
             {
@@ -97,7 +96,7 @@ namespace BrukerStartTest
 
                 lblStatus.Text = cboMethodName.Items.Count.ToString() + " method names retrieved";
                 classTestLogger.LogDebugMessage(lblStatus.Text);
-            }   // End sub
+            }
 
             private void StartAcquisition()
             {
@@ -131,7 +130,7 @@ namespace BrukerStartTest
                 
                 classTestLogger.LogDebugMessage(lblStatus.Text);
 
-            }   // End sub
+            }
 
             private void EndAcquisition()
             {
@@ -147,24 +146,24 @@ namespace BrukerStartTest
 
                 classTestLogger.LogDebugMessage(lblStatus.Text);
 
-            }   // End sub
+            }
         #endregion
 
         #region "Event handlers"
             private void btnGetMethods_Click(object sender, EventArgs e)
             {
                 GetMethodList();
-            }   // End sub
+            }
 
             private void btnStartAcq_Click(object sender, EventArgs e)
             {
                 StartAcquisition();
-            }   // End sub
+            }
 
             private void btnEndAcq_Click(object sender, EventArgs e)
             {
                 EndAcquisition();
-            }   // End sub
+            }
 
             void OnBrukerError(object sender, LcmsNetDataClasses.Devices.classDeviceErrorArgs e)
             {
@@ -178,7 +177,7 @@ namespace BrukerStartTest
             private void formBSTest_FormClosing(object sender, FormClosingEventArgs e)
             {
                 classTestLogger.LogDebugMessage("Closing program");
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

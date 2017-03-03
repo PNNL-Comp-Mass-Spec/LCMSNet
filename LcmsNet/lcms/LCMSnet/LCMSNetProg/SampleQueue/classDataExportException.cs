@@ -12,11 +12,11 @@ using System;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Custom exception for reporting problems during data export
+    /// </summary>
     class classDataExportException : Exception
     {
-        //*********************************************************************************************************
-        // Custom exception for reporting problems during data export
-        //**********************************************************************************************************
         public classDataExportException(string message, Exception Ex) :
             base(message, Ex)
         {

@@ -14,6 +14,9 @@ using System.Windows.Forms;
 
 namespace LcmsNet.SampleQueue.Forms
 {
+    /// <summary>
+    /// User control for tray/vial assignment form
+    /// </summary>
     public partial class controlTray : UserControl
     {
         #region "Constructors"
@@ -45,10 +48,6 @@ namespace LcmsNet.SampleQueue.Forms
                 currRow.Cells[4].Value = vialCounter;
             }
         }
-
-        //*********************************************************************************************************
-        // User control for tray/vial assignment form
-        //**********************************************************************************************************
 
         #region "Constants"
 

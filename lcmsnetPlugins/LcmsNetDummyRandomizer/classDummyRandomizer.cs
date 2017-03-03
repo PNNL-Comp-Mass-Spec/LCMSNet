@@ -15,13 +15,12 @@ using System.Collections;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Plugin for testing randomizer loading. This merely inverts the input list
+    /// </summary>
     [classPlugInDisplayName("Invert")]
     public class classDummyRandomizer : IRandomizerInterface, IEnumerable
     {
-        //*********************************************************************************************************
-        // Plugin for testing randomizer loading. This merely inverts the input list
-        //**********************************************************************************************************
-
         #region "Class variables"
             List<long> mobj_Items;
         #endregion
@@ -71,4 +70,4 @@ namespace LcmsNet.SampleQueue
             }   
         #endregion
     }   
-}   // End namespace
+}

@@ -17,13 +17,12 @@ using System.Collections;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Plugin class for doing simple randomization of sample run order
+    /// </summary>
     [classPlugInDisplayName("Simple")]
     public class classSampleRandomizer : IRandomizerInterface, IEnumerable
     {
-        //*********************************************************************************************************
-        // Plugin class for doing simple randomization of sample run order
-        //**********************************************************************************************************
-
         #region "Class variables"
             List<long> mobj_Items;
         #endregion
@@ -93,4 +92,4 @@ namespace LcmsNet.SampleQueue
             }   
         #endregion
     }   
-}   // End namespace
+}

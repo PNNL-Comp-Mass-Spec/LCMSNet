@@ -22,6 +22,9 @@ using System.IO;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Class for detector using Bruker network trigger
+    /// </summary>
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [classDeviceControlAttribute(typeof(controlBrukerStart),
@@ -31,10 +34,6 @@ namespace LcmsNet.Devices.BrukerStart
     ]
     public class classBrukerStart : IDevice
     {
-        //*********************************************************************************************************
-        // Class for detector using Bruker network trigger
-        //**********************************************************************************************************
-
         #region "Constants"
             const double COMMAND_TIMEOUT_MSEC = 20000;
         #endregion
@@ -1099,4 +1098,4 @@ namespace LcmsNet.Devices.BrukerStart
         }
         #endregion
     }   
-}   // End namespace
+}

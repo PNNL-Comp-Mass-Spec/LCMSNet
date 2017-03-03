@@ -13,12 +13,11 @@ using System.Text;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Utility class for converting between units and setting display captions in ISCO pump classes
+    /// </summary>
     public static class classIscoConversions
     {
-        //*********************************************************************************************************
-        // Utility class for converting between units and setting display captions in ISCO pump classes
-        //**********************************************************************************************************
-
         #region "Class variables"
             static enumIscoFlowUnits menum_FlowUnits = enumIscoFlowUnits.ul_min;
             static enumIscoPressureUnits menu_PressUnits = enumIscoPressureUnits.psi;
@@ -328,4 +327,4 @@ namespace LcmsNet.Devices.Pumps
             }   
         #endregion
     }   
-}   // End namespace
+}

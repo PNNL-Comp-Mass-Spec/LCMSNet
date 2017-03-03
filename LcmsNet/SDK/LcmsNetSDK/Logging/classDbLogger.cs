@@ -20,12 +20,12 @@ using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Logging
 {
+    /// <summary>
+    /// Logs errors and messages to a SQLite database
+    /// </summary>
     public static class classDbLogger
     {
-        //*********************************************************************************************************
-        // Logs errors and messages to a SQLite database
-        //**********************************************************************************************************
-
+        
         #region "Constants"
 
         private const string INSERT_CMD_BASE = "INSERT INTO T_LogData('Date','Type','Level','Sample',"

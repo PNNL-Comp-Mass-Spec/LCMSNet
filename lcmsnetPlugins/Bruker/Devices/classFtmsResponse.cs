@@ -9,12 +9,11 @@
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Class for holding response data from sXc
+    /// </summary>
     class classFtmsResponse
     {
-        //*********************************************************************************************************
-        // Class for holding response data from sXc
-        //**********************************************************************************************************
-
         #region "Properties"
             public short CommandCode { get; set; }
             public short ParamCode { get; set; }
@@ -32,4 +31,4 @@ namespace LcmsNet.Devices.BrukerStart
             }
         #endregion
     }   
-}   // End namespace
+}

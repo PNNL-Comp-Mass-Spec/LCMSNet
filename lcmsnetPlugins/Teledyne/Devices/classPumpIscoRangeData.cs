@@ -9,12 +9,11 @@
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Holds data from a the response to a RANGE command
+    /// </summary>
     public class classPumpIscoRangeData
     {
-        //*********************************************************************************************************
-        // Holds data from a the response to a RANGE command
-        //**********************************************************************************************************
-
         #region "Properties"
             /// <summary>
             /// Max pressure (PSI)
@@ -50,4 +49,4 @@ namespace LcmsNet.Devices.Pumps
             }
         #endregion
     }   
-}   // End namespace
+}

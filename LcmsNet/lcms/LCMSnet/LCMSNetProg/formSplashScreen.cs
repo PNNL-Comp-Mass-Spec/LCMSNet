@@ -13,6 +13,9 @@ using System.Windows.Forms;
 
 namespace LcmsNet
 {
+    /// <summary>
+    /// Startup splash screen
+    /// </summary>
     public partial class formSplashScreen : Form
     {
         #region "Properties"
@@ -37,10 +40,6 @@ namespace LcmsNet
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Startup splash screen
-        //**********************************************************************************************************
 
         #region "Delegates"
 

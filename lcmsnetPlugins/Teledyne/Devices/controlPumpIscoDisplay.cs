@@ -19,12 +19,11 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Control UI for one of the ISCO pumps in a controller
+    /// </summary>
     public partial class controlPumpIscoDisplay : UserControl
     {
-        //*********************************************************************************************************
-        // Control UI for one of the ISCO pumps in a controller
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -370,4 +369,4 @@ namespace LcmsNet.Devices.Pumps
 
             }
     }   
-}   // End namespace
+}

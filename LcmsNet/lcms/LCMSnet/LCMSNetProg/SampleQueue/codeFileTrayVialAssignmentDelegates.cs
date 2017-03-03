@@ -9,9 +9,10 @@
 
 namespace LcmsNet.SampleQueue
 {
-    //*********************************************************************************************************
-    // Delegates for use with Tray/Vial assignment form
-    //**********************************************************************************************************
-
+    /// <summary>
+    /// Delegate for use with Tray/Vial assignment form
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="trayNumber"></param>
     public delegate void DelegateRowModified(object sender, int trayNumber);
 }

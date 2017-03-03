@@ -18,11 +18,11 @@ using LcmsNet.Devices.NetworkStart.Socket;
 
 namespace LcmsNet.Devices.NetworkStart
 {
-    public partial class controlNetStart :  controlBaseDeviceControl, IDeviceControl
+    /// <summary>
+    /// Control for detector triggered by network start signal (presently just a stub)
+    /// </summary>
+    public partial class controlNetStart : controlBaseDeviceControl, IDeviceControl
     {
-        //*********************************************************************************************************
-        // Control for detector triggered by network start signal (presently just a stub)
-        //**********************************************************************************************************
 
         #region Members
         /// <summary>

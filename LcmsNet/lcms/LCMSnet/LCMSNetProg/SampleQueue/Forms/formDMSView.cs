@@ -27,6 +27,9 @@ using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Form for retrieval of run requests from DMS
+    /// </summary>
     public partial class formDMSView : Form
     {
         #region "Properties"
@@ -37,10 +40,6 @@ namespace LcmsNet.SampleQueue
         public string DMSConnStr { get; set; }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Form for retrieval of run requests from DMS
-        //*********************************************************************************************************
 
         #region "Class variables"
 

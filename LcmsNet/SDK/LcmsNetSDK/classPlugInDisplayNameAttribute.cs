@@ -11,12 +11,11 @@ using System;
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Custom attribute class for display of plugin name
+    /// </summary>
     public class classPlugInDisplayNameAttribute : Attribute
     {
-        //*********************************************************************************************************
-        // Custom attribute class for display of plugin name
-        //**********************************************************************************************************
-
         #region "Class variables"
 
         readonly string m_DisplayName;

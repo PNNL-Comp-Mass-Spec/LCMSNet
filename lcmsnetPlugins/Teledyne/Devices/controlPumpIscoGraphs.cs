@@ -19,12 +19,11 @@ using ZedGraph;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Control for display of Isco operation graphs
+    /// </summary>
     public partial class controlPumpIscoGraphs : UserControl
     {
-        //*********************************************************************************************************
-        // Control for display of Isco operation graphs
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -331,4 +330,4 @@ namespace LcmsNet.Devices.Pumps
             }   
         #endregion
     }   
-}   // End namespace
+}

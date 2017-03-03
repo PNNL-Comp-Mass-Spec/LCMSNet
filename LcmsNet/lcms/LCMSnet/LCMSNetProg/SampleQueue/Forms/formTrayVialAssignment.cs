@@ -15,6 +15,9 @@ using LcmsNetDataClasses;
 
 namespace LcmsNet.SampleQueue.Forms
 {
+    /// <summary>
+    /// Form for making tray/vial assignments to samples
+    /// </summary>
     public partial class formTrayVialAssignment : Form
     {
         #region "Constructors"
@@ -33,10 +36,6 @@ namespace LcmsNet.SampleQueue.Forms
         public List<classSampleData> SampleList { get; private set; }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Form for making tray/vial assignments to samples
-        //**********************************************************************************************************
 
         #region "Constants"
 

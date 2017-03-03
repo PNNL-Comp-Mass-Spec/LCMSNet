@@ -18,13 +18,12 @@ using System;
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Class file for handling data used in communication with DMS
+    /// </summary>
     [Serializable]
     public class classDMSData : classDataClassBase
     {
-        //*********************************************************************************************************
-        // Class file for handling data used in communication with DMS
-        //**********************************************************************************************************
-
         private string m_requestName;
 
         public classDMSData()

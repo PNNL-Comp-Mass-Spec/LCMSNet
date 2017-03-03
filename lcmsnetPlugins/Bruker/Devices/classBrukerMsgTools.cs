@@ -15,12 +15,11 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Tools for handling Bruker sXc messages
+    /// </summary>
     class classBrukerMsgTools : IDisposable
     {
-        //*********************************************************************************************************
-        // Tools for handling Bruker sXc messages
-        //**********************************************************************************************************
-
         #region "Constants"
             const int DEFAULT_TIME_OFFSET = 0;
             const int MAX_ZERO_BYTE_RESPONSE_COUNT = 4;
@@ -714,4 +713,4 @@ namespace LcmsNet.Devices.BrukerStart
         }   
         #endregion
     }   
-}   // End namespace
+}

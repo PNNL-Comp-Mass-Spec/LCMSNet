@@ -9,12 +9,11 @@
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Enums for use by Listview classListViewItemComparer
+    /// </summary>
     class enumListViewComparerMode
     {
-        //*********************************************************************************************************
-        // Enums for use by Listview classListViewItemComparer
-        //**********************************************************************************************************
-
         #region "Enums"
 
         /// <summary>

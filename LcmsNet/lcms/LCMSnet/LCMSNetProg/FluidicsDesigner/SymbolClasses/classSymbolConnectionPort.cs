@@ -83,7 +83,7 @@ namespace LcmsNet.FluidicsDesigner
                 {
                     System.Windows.Forms.MessageBox.Show("Exception creating detector" + Ex.Message);
                 }
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -93,7 +93,7 @@ namespace LcmsNet.FluidicsDesigner
             public void ShowProps()
             {
                 // Do nothing
-            }   // End sub
+            }
 
             /// <summary>
             /// Unsubscribes event handlers
@@ -101,7 +101,7 @@ namespace LcmsNet.FluidicsDesigner
             public void Dispose()
             {
                 // Do nothing - method is here to satisfy interface requirement
-            }   // End sub
+            }
 
             /// <summary>
             /// Adds the settings for this symbol to the config file
@@ -113,7 +113,7 @@ namespace LcmsNet.FluidicsDesigner
 
                 // Add a couple sample symbol properties
                 xPath = "//SymbolName[@Name='" + parentName + "']";
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates the symbol to display on the diagram
@@ -174,7 +174,7 @@ namespace LcmsNet.FluidicsDesigner
 
                 // Add new symbol to drawing field
                 mobj_Symbol = NewSymGrp;
-            }   // End sub
+            }
         #endregion
 
         #region "Event handlers"
@@ -185,7 +185,7 @@ namespace LcmsNet.FluidicsDesigner
             public void OnNameChange(object Sender, string NewName)
             {
                 // Do nothing
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

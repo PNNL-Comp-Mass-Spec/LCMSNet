@@ -19,12 +19,11 @@ using System.IO;
 
 namespace LogViewer
 {
+    /// <summary>
+    /// Main for for SQLite log viewer
+    /// </summary>
     public partial class formLogViewerMain : Form
     {
-        //*********************************************************************************************************
-        // Main for for SQLite log viewer
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -155,4 +154,4 @@ namespace LogViewer
         }
         #endregion
     }   
-}   // End namespace
+}

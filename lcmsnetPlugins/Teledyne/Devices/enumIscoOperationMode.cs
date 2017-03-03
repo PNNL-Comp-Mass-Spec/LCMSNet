@@ -13,9 +13,9 @@ using System.Text;
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO pump operation control constants
-    //**********************************************************************************************************
+    /// <summary>
+    /// Enum for ISCO pump operation control constants
+    /// </summary>
     public enum enumIscoOperationMode
     {
         ConstantPressure,

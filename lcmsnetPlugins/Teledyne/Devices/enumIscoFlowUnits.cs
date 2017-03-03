@@ -9,10 +9,9 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO flow unit displays and conversions
-    //**********************************************************************************************************
-
+    /// <summary>
+    /// Enum for ISCO flow unit displays and conversions
+    /// </summary>
     public enum enumIscoFlowUnits
     {
         ml_min,

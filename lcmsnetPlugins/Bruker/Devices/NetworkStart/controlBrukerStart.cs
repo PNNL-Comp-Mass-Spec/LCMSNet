@@ -19,11 +19,11 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Control for detector triggered by Bruker start commands
+    /// </summary>
     public partial class controlBrukerStart : controlBaseDeviceControl, IDeviceControl
     {
-        //*********************************************************************************************************
-        // Control for detector triggered by Bruker start commands
-        //**********************************************************************************************************
 
         #region "Class variables"
             /// <summary>
@@ -186,4 +186,4 @@ namespace LcmsNet.Devices.BrukerStart
             }   
         #endregion
     }   
-}   // End namespace
+}

@@ -17,12 +17,11 @@ using LcmsNetDataClasses;
 
 namespace LcmsNet.FluidicsDesigner
 {
+    /// <summary>
+    /// Fluidics Destigner base class for 2-position valves
+    /// </summary>
     public class classSymbolValveBase
     {
-        //*********************************************************************************************************
-        // Fluidics Destigner base class for 2-position valves
-        //**********************************************************************************************************
-
         #region "Delegates"
             /// <summary>
             /// Used internally for setting the caption on a valve
@@ -91,7 +90,7 @@ namespace LcmsNet.FluidicsDesigner
                 mobj_Device.PosChanged += new DelegatePositionChanged(OnPositionChange);
                 mobj_Device.SaveRequired += new LcmsNetDataClasses.Devices.DelegateSaveRequired(OnSaveRequired);
                 CreateSymbolGroup();
-            }   // End sub
+            }
 
             /// <summary>
             /// Unsubscribes event handlers
@@ -101,7 +100,7 @@ namespace LcmsNet.FluidicsDesigner
                 mobj_Device.NameChanged -= OnNameChange;
                 mobj_Device.PosChanged -= OnPositionChange;
                 mobj_Device.SaveRequired -= OnSaveRequired;
-            }   // End sub
+            }
 
             /// <summary>
             /// Sets text in symbol caption field using a delegate
@@ -119,7 +118,7 @@ namespace LcmsNet.FluidicsDesigner
                     TextNode SymTextNode = (TextNode)mobj_Symbol.GetChildByName("Caption");
                     SymTextNode.Text = NewText;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Sets text in valve position field using a delegate
@@ -138,7 +137,7 @@ namespace LcmsNet.FluidicsDesigner
                     string vlvPosition = "POS: " + NewPosition;
                     SymPositionNode.Text = vlvPosition;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Brings up the device status page
@@ -164,7 +163,7 @@ namespace LcmsNet.FluidicsDesigner
                     return;
                 }
                 // Remainder of method is in derived classes
-            }   // End sub
+            }
 
             /// <summary>
             /// Adds the settings for this symbol to the config file
@@ -187,7 +186,7 @@ namespace LcmsNet.FluidicsDesigner
                     string msg = "Unable to load settings from device control";
                     classConfigTools.CreateElement(xPath, "DeviceData", "ErrMsg", msg);
                 }
-            }   // End sub
+            }
         #endregion
 
         #region "Event handlers"
@@ -198,7 +197,7 @@ namespace LcmsNet.FluidicsDesigner
             public void OnNameChange(object Sender, string NewName)
             {
                 SetCaption(NewName);
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles the valve position changing event via a delegate call
@@ -208,7 +207,7 @@ namespace LcmsNet.FluidicsDesigner
             public void OnPositionChange(object Sender, string NewPosition)
             {
                 SetPositionDisplay(NewPosition);
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles SaveRequired event from control
@@ -217,7 +216,7 @@ namespace LcmsNet.FluidicsDesigner
             void OnSaveRequired(object sender)
             {
                 if (SaveRequired != null) SaveRequired(mobj_Device);
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

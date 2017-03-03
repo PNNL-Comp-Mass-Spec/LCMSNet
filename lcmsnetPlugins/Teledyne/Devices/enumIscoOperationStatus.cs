@@ -9,10 +9,9 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO operation status
-    //**********************************************************************************************************
-
+    /// <summary>
+    /// Enum for ISCO operation status
+    /// </summary>
     public enum enumIscoOperationStatus
     {
         Stopped,

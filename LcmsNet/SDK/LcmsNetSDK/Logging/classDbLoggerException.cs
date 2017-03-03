@@ -11,12 +11,11 @@ using System;
 
 namespace LcmsNetDataClasses.Logging
 {
+    /// <summary>
+    /// Custom exception for database logging problems
+    /// </summary>
     class classDbLoggerException : Exception
     {
-        //*********************************************************************************************************
-        // Custom exception for database logging problems
-        //**********************************************************************************************************
-
         #region "Constructors"
 
         public classDbLoggerException(string message, Exception ex) :

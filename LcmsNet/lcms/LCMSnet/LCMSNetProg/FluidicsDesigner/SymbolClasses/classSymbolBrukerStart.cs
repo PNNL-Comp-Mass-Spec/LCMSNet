@@ -87,7 +87,7 @@ namespace LcmsNet.FluidicsDesigner
                 {
                     System.Windows.Forms.MessageBox.Show("Exception creating detector" + Ex.Message);
                 }
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -107,7 +107,7 @@ namespace LcmsNet.FluidicsDesigner
                     TextNode SymTextNode = (TextNode)mobj_Symbol.GetChildByName("Caption");
                     SymTextNode.Text = NewText;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Unsubscribes event handlers
@@ -116,7 +116,7 @@ namespace LcmsNet.FluidicsDesigner
             {
                 mobj_Device.NameChanged -= OnNameChange;
                 mobj_Device.SaveRequired -= OnSaveRequired;
-            }   // End sub
+            }
 
             /// <summary>
             /// Brings up the device status page
@@ -147,7 +147,7 @@ namespace LcmsNet.FluidicsDesigner
                     string msg = "Unable to load settings from device control";
                     classConfigTools.CreateElement(xPath, "DeviceData", "ErrMsg", msg);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates the symbol to display on the diagram
@@ -268,7 +268,7 @@ namespace LcmsNet.FluidicsDesigner
 
                 // Assign the new symbol to its field
                 mobj_Symbol = newSymGrp;
-            }   // End sub
+            }
         #endregion
 
         #region "Event handlers"
@@ -279,7 +279,7 @@ namespace LcmsNet.FluidicsDesigner
             public void OnNameChange(object Sender, string NewName)
             {
                 SetCaption(NewName);
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles SaveRequired event from control
@@ -288,7 +288,7 @@ namespace LcmsNet.FluidicsDesigner
             void OnSaveRequired(object sender)
             {
                 if (SaveRequired != null) SaveRequired(mobj_Device);
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

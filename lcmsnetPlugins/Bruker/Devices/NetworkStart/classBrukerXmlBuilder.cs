@@ -12,12 +12,11 @@ using System.Xml;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Class to provide methods for building XML strings required by sXc
+    /// </summary>
     class classBrukerXmlBuilder
     {
-        //*********************************************************************************************************
-        // Class to provide methods for building XML strings required by sXc
-        //**********************************************************************************************************
-
         #region "Class variables"
             static XmlDocument m_Doc;
         #endregion
@@ -110,4 +109,4 @@ namespace LcmsNet.Devices.BrukerStart
             }   
         #endregion
     }   
-}   // End namespace
+}

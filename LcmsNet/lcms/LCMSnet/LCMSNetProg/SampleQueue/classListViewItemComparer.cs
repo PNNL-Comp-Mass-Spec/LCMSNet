@@ -12,12 +12,11 @@ using System.Windows.Forms;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Class for comparison of listview items in DMS view form listviews
+    /// </summary>
     class classListViewItemComparer : IComparer
     {
-        //*********************************************************************************************************
-        // Class for comparison of listview items in DMS view form listviews
-        //**********************************************************************************************************
-
         #region "Class variables"
 
         int m_Column;

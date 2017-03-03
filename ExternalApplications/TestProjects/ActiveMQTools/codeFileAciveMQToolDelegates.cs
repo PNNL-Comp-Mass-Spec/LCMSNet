@@ -9,9 +9,7 @@
 //*********************************************************************************************************
 namespace ActiveMQTools
 {
-    //*********************************************************************************************************
-    // Delegates for use with ActiveMQ tools DLL
-    //**********************************************************************************************************
+    #region "Delegates for use with ActiveMQ tools DLL#
 
     /// <summary>
     /// Received commands are sent to a delegate function with this signature
@@ -27,4 +25,5 @@ namespace ActiveMQTools
     /// <param name="cmdText">Text of received command</param>
     public delegate void DelegateControlCmdReceived(object sender, string cmdText);
 
-}   // End namespace
+    #endregion
+}

@@ -13,6 +13,9 @@ using System;
 
 namespace LcmsNetSQLiteTools
 {
+    /// <summary>
+    /// Custom exception for reporting errors during stored procedure execution
+    /// </summary>
     public class classDatabaseStoredProcException : Exception
     {
         #region "Methods"
@@ -31,10 +34,6 @@ namespace LcmsNetSQLiteTools
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Custom exception for reporting errors during stored procedure execution
-        //**********************************************************************************************************
 
         #region "Class variables"
 

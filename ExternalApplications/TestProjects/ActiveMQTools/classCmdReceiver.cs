@@ -77,7 +77,7 @@ namespace ActiveMQTools
                 {
                     //TODO: Figure out what to do besides eat the exception
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Hendles a command/response message received from the broker
@@ -104,7 +104,7 @@ namespace ActiveMQTools
                     // Trigger the event
                     commandReceived(textMsg.Text, respSender);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Initializes the CommandReceiver object
@@ -123,7 +123,7 @@ namespace ActiveMQTools
                 {
                     DestroyConnection();
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Disconnects the object from the broker
@@ -135,7 +135,7 @@ namespace ActiveMQTools
                     mobject_Connection.Dispose();
                     mbool_HasConnection = false;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Implements IDisposable.Dispose
@@ -144,7 +144,7 @@ namespace ActiveMQTools
             {
                 DestroyConnection();
                 mbool_IsDisposed = true;
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

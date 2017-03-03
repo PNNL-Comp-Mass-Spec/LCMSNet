@@ -57,7 +57,7 @@ namespace LCMSNetProg
                     System.Diagnostics.Debug.WriteLine("There should be no data since last entry");
                 }
                 // End DAC test code
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -77,7 +77,7 @@ namespace LCMSNetProg
 
                 //Start timer for loading next form
                 timerNextForm.Enabled = true;   // 3 second delay
-            }   // End sub
+            }
 
             void LoadParamsFromSettingsFile()
             {
@@ -91,8 +91,8 @@ namespace LCMSNetProg
                     mobj_LCMSSettings.SetParam(propertyName, propertyValue);
                     //mobj_LCMSSettings.SetParam(currProperty.Name, currProperty.
                 }
-            }   // End sub
+            }
 
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

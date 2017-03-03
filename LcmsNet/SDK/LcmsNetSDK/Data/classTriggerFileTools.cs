@@ -17,12 +17,11 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNetDataClasses.Data
 {
+    /// <summary>
+    /// Tools for generation of trigger files
+    /// </summary>
     public class classTriggerFileTools
     {
-        //*********************************************************************************************************
-        // Tools for generation of trigger files
-        //**********************************************************************************************************
-
         #region "Class variables"
 
         private static XmlDocument m_TriggerFileContents;

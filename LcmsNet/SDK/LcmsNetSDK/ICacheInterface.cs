@@ -13,11 +13,11 @@ using System.Collections.Specialized;
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Interface for data classes that use the cache database
+    /// </summary>
     public interface ICacheInterface
     {
-        //*********************************************************************************************************
-        // Interface for data classes that use the cache database
-        //**********************************************************************************************************
 
         #region "Methods"
 

@@ -25,12 +25,11 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.FluidicsDesigner
 {
+    /// <summary>
+    /// Main Fluidics Designer form
+    /// </summary>
     public partial class formFluidicsDesigner : Form
     {
-        //*********************************************************************************************************
-        // Main Fluidics Designer form
-        //**********************************************************************************************************
-
         #region "Constants"
             private const string DEFAULT_CONFIG_NAME = "DefaultConfig.xml";
         #endregion
@@ -68,7 +67,7 @@ namespace LcmsNet.FluidicsDesigner
                 InitializeComponent();
 
                 Init();
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -84,7 +83,7 @@ namespace LcmsNet.FluidicsDesigner
 
                 mform_pumpDataDisplay       = new formPumpDisplays();
                 mform_pumpDataDisplay.Icon  = Icon;
-            }   // End sub
+            }
 
             /// <summary>
             /// Removes selected symbol from fluidics designer
@@ -142,7 +141,7 @@ namespace LcmsNet.FluidicsDesigner
                     string Msg = "Select a single component for deletion";
                     MessageBox.Show(Msg, "Invalid Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Saves the diagram to a file (not currently used)
@@ -179,7 +178,7 @@ namespace LcmsNet.FluidicsDesigner
                         outStream.Close();
                     }
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Saves the configuration data to an XML file
@@ -208,7 +207,7 @@ namespace LcmsNet.FluidicsDesigner
 
                 if (Status != null)
                     Status(this, new classStatusEventArgs("Save Complete."));
-            }   // End sub
+            }
 
             /// <summary>
             /// Loads the configuration data from an XML file
@@ -218,7 +217,7 @@ namespace LcmsNet.FluidicsDesigner
             private void LoadSymbolConfig(string fileNamePath)
             {
                 LoadSymbolConfig(fileNamePath, true);
-            }   // End sub
+            }
 
             /// <summary>
             /// Loads the configuration data from an XML file
@@ -448,7 +447,7 @@ namespace LcmsNet.FluidicsDesigner
                         inStream.Close();
                     }
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Displays the properties for a control
@@ -483,7 +482,7 @@ namespace LcmsNet.FluidicsDesigner
                         }
                     }
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Loads a default configuration file
@@ -504,7 +503,7 @@ namespace LcmsNet.FluidicsDesigner
                     //TODO: Handle this exeception
                 }
 
-            }   // End sub
+            }
         #endregion
 
         #region "Event handlers"
@@ -515,7 +514,7 @@ namespace LcmsNet.FluidicsDesigner
             void OnSaveRequired(LcmsNetDataClasses.Devices.IDeviceControl device)
             {
                 mbool_SaveRequired = true;
-            }   // End sub
+            }
 
             /// <summary>
             /// Handler for node double-click event
@@ -524,7 +523,7 @@ namespace LcmsNet.FluidicsDesigner
             private void OnNodeDoubleClickEvent(NodeMouseEventArgs evtArgs)
             {
                 DisplayProperties();
-            }   // End sub
+            }
 
             /// <summary>
             /// Handler for node right-click event
@@ -533,7 +532,7 @@ namespace LcmsNet.FluidicsDesigner
             private void OnNodeRightClickEvent(NodeMouseEventArgs evtArgs)
             {
                 DisplayProperties();
-            }   // End sub
+            }
 
             /// <summary>
             /// Sets flag to indicate which button was clicked
@@ -550,7 +549,7 @@ namespace LcmsNet.FluidicsDesigner
                 {
                     mbool_LeftButtonClicked = false;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles addition of 4-port, 2-position valve
@@ -588,7 +587,7 @@ namespace LcmsNet.FluidicsDesigner
                     NewVlv.GroupName = vlvName;
                     mobject_SymbolList.Add(vlvName, NewVlv);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles addition of a 9-port, multi-position valve
@@ -607,7 +606,7 @@ namespace LcmsNet.FluidicsDesigner
                     NewVlv.GroupName = vlvName;
                     mobject_SymbolList.Add(vlvName, NewVlv);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles addition of a 10-port, 2-position valve
@@ -626,7 +625,7 @@ namespace LcmsNet.FluidicsDesigner
                     NewVlv.GroupName = vlvName;
                     mobject_SymbolList.Add(vlvName, NewVlv);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles addition of a PAL
@@ -666,7 +665,7 @@ namespace LcmsNet.FluidicsDesigner
                     newPump.GroupName = pumpName;
                     mobject_SymbolList.Add(pumpName, newPump);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Hendles addition of a detector with contact closure trigger
@@ -685,7 +684,7 @@ namespace LcmsNet.FluidicsDesigner
                     newDetectCC.GroupName = detectName;
                     mobject_SymbolList.Add(detectName, newDetectCC);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles addition of a port
@@ -702,7 +701,7 @@ namespace LcmsNet.FluidicsDesigner
                     newConnPort.GroupName = connName;
                     mobject_SymbolList.Add(connName, newConnPort);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Hendles addition of a detector with network start trigger
@@ -741,7 +740,7 @@ namespace LcmsNet.FluidicsDesigner
                     newDetectorBS.GroupName = detectName;
                     mobject_SymbolList.Add(detectName, newDetectorBS);
                 }
-            }   // End sub
+            }
             /// <summary>
             /// Forwards the list received event from the PAL to any subscribed objects
             /// </summary>
@@ -750,7 +749,7 @@ namespace LcmsNet.FluidicsDesigner
             {
                 if (PalTrayListReceived != null)
                     PalTrayListReceived(trayList);
-            }   // End sub
+            }
             /// <summary>
             /// Forwards the list received event from the PAL to any subscribed objects
             /// </summary>
@@ -759,7 +758,7 @@ namespace LcmsNet.FluidicsDesigner
             {
                 if (InstrumentMethodListReceived != null)
                     InstrumentMethodListReceived(trayList);
-            }   // End sub
+            }
 
             /// <summary>
             /// Handles deletion of a symbol
@@ -769,7 +768,7 @@ namespace LcmsNet.FluidicsDesigner
             private void menuItemDelete_Click(object sender, EventArgs e)
             {
                 DeleteSymbol();
-            }   // End sub
+            }
 
             /// <summary>
             /// Connects two symbols with a line link
@@ -784,7 +783,7 @@ namespace LcmsNet.FluidicsDesigner
                     MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Connects two symbols with an orthagonal link
@@ -815,7 +814,7 @@ namespace LcmsNet.FluidicsDesigner
                 {
                     LoadSymbolConfig(fileOpenDlg.FileName);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Saves the fluidics Designer to a file
@@ -832,7 +831,7 @@ namespace LcmsNet.FluidicsDesigner
                     SaveSymbolConfig(fileSaveDlg.FileName);
                     mbool_SaveRequired = false;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Saves the current fluidics designer configuration as the default configuration
@@ -897,5 +896,5 @@ namespace LcmsNet.FluidicsDesigner
                  mform_pumpDataDisplay.Show();
          }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

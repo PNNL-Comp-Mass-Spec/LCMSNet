@@ -13,11 +13,11 @@ using System;
 
 namespace LcmsNetSQLiteTools
 {
+    /// <summary>
+    ///  Custom exception for reporting problems during a database query
+    /// </summary>
     public class classDatabaseDataException : Exception
     {
-        //*********************************************************************************************************
-        // Custom exception for reporting problems during a database query
-        //**********************************************************************************************************
         public classDatabaseDataException(string message, Exception Ex) :
             base(message, Ex)
         {

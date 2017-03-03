@@ -9,9 +9,8 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Delegates for use ISCO pump control
-    //**********************************************************************************************************
+
+    #region "Delegates for use with ISCO pump control"
 
     public delegate void DelegateIscoPumpDisplayHandler(object sender, int pumpIndx);
 
@@ -28,4 +27,7 @@ namespace LcmsNet.Devices.Pumps
     public delegate void DelegateIscoPumpControlModeSetHandler(enumIscoControlMode newMode);
 
     public delegate void DelegateIscoPumpDisconnected();
+
+    #endregion
+
 }

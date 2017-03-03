@@ -9,10 +9,9 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO pressure unit displays and conversions
-    //**********************************************************************************************************
-
+    /// <summary>
+    /// Enum for ISCO pressure unit displays and conversions
+    /// </summary>
     public enum enumIscoPressureUnits
     {
         atm,

@@ -14,12 +14,11 @@ using System.Collections.Generic;
 
 namespace LcmsNet.FluidicsDesigner
 {
+    /// <summary>
+    /// Handles creation of an XML Fluidics Designer config file
+    /// </summary>
     class classConfigTools
     {
-        //*********************************************************************************************************
-        // Handles creation of an XML Fluidics Designer config file
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -55,7 +54,7 @@ namespace LcmsNet.FluidicsDesigner
                 // Create a root element
                 XmlElement rootElement = mobject_xDocument.CreateElement("Root");
                 mobject_xDocument.AppendChild(rootElement);
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates an XML element for storing the settings for one symbol
@@ -77,7 +76,7 @@ namespace LcmsNet.FluidicsDesigner
                 XmlElement xmlEl = mobject_xDocument.CreateElement("SymbolName");
                 rootNode.AppendChild(xmlEl);
                 xmlEl.SetAttribute("Name", symbolName);
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates an XML element (overloaded for use when no attributes specified)
@@ -104,7 +103,7 @@ namespace LcmsNet.FluidicsDesigner
                 // Create the element
                 XmlElement newElement = mobject_xDocument.CreateElement(elementName);
                 parentNode.AppendChild(newElement);
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates an XML element with attributes (overloaded for specifying attributes)
@@ -134,7 +133,7 @@ namespace LcmsNet.FluidicsDesigner
                 XmlElement newElement = mobject_xDocument.CreateElement(elementName);
                 newElement.SetAttribute(attName, attVal);
                 parentNode.AppendChild(newElement);
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates an XML element from an imported node
@@ -167,7 +166,7 @@ namespace LcmsNet.FluidicsDesigner
 
                 // Add the new element to the parent node and we're done
                 parentNode.AppendChild(newElement);
-            }   // End sub
+            }
 
             /// <summary>
             /// Writes the XML to a file
@@ -200,7 +199,7 @@ namespace LcmsNet.FluidicsDesigner
                     //TODO: Notify the operator
                     return false;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             ///  Checks to see if config XML doc has been initialized
@@ -216,7 +215,7 @@ namespace LcmsNet.FluidicsDesigner
                 {
                     return true;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Find the parent node specified in xPath
@@ -227,7 +226,7 @@ namespace LcmsNet.FluidicsDesigner
             {
                 XmlNode retNode = mobject_xDocument.SelectSingleNode(xPath);
                 return retNode;
-            }   // End sub
+            }
 
             /// <summary>
             /// Loads the config file into an XML document
@@ -246,7 +245,7 @@ namespace LcmsNet.FluidicsDesigner
                 {
                     //TODO: Handle exception
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Gets a list of XML nodes representing device symbols
@@ -260,7 +259,7 @@ namespace LcmsNet.FluidicsDesigner
                 string xPath = "//SymbolName";
                 XmlNodeList retList = mobject_xDocument.SelectNodes(xPath);
                 return retList;
-            }   // End sub
+            }
 
             /// <summary>
             /// Gets the value of specified attribute
@@ -273,7 +272,7 @@ namespace LcmsNet.FluidicsDesigner
                 XmlElement currElement = (XmlElement)currNode.SelectSingleNode(xPath);
                 string retStr = currElement.GetAttribute(attribName);
                 return retStr;
-            }   // End sub
+            }
 
             /// <summary>
             /// Closes the XML config doc
@@ -281,7 +280,7 @@ namespace LcmsNet.FluidicsDesigner
             public static void CloseConfigDoc()
             {
                 mobject_xDocument = null;
-            }   // End sub
+            }
 
             /// <summary>
             /// Retrieves device data config node from config file copy in memory
@@ -294,7 +293,7 @@ namespace LcmsNet.FluidicsDesigner
                 //      device data is in a node named DeviceData under the current node
                 string xPath = "./DeviceData";
                 return currNode.SelectSingleNode(xPath);
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

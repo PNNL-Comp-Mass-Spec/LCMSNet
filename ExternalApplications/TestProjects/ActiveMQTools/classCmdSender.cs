@@ -49,7 +49,7 @@ namespace ActiveMQTools
                 mstring_BrokerURI = brokerURI;
                 mstring_QueueName = queueName;
                 mstring_StatusTopicName = statusTopicName;
-            }   // End sub
+            }
         #endregion
 
         #region "Methods"
@@ -79,7 +79,7 @@ namespace ActiveMQTools
                     // Since connection is probably dead, kill it to make sure
                     DestroyConnection();
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Sends a status message to the ActiveMQ broker
@@ -106,7 +106,7 @@ namespace ActiveMQTools
                 {
                     //TODO: Handle exception
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Creates a connection to the ActiveMQ broker
@@ -125,7 +125,7 @@ namespace ActiveMQTools
                 {
                     //TODO: Figure out what to do here
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Removes the ActiveMQ broker connectiion
@@ -137,7 +137,7 @@ namespace ActiveMQTools
                     mobject_Connection.Dispose();
                     mbool_HasConnection = false;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Implements IDisposable.Dispose
@@ -149,7 +149,7 @@ namespace ActiveMQTools
                     DestroyConnection();
                     mbool_IsDisposed = true;
                 }
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

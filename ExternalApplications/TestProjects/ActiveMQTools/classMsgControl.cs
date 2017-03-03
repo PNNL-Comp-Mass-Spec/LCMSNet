@@ -97,7 +97,7 @@ namespace ActiveMQTools
                     InitCommandSender(mstring_BrokerURI, replyQueueName, mstring_StatusTopicName);
                     InitCommandReceiver(mstring_BrokerURI, cmdQueueName);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Event handler for commands received via the command queue.
@@ -120,7 +120,7 @@ namespace ActiveMQTools
 
                     ControlCmdReceived(null, cmdText);
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Inititializes the CommandReceiver object
@@ -131,7 +131,7 @@ namespace ActiveMQTools
             {
                 mobject_CmdReceiver = new classCmdReceiver(brokerURI, queueName);
                 mobject_CmdReceiver.commandReceived += new DelegateCmdProcessorMsgReceived(HandleCmd);
-            }   // End sub
+            }
 
             /// <summary>
             /// Disconnects event handlers and closes command receiver
@@ -150,7 +150,7 @@ namespace ActiveMQTools
                     mobject_CmdSender.Dispose();
                     mobject_CmdSender = null;
                 }
-            }   // End sub
+            }
 
             /// <summary>
             /// Initializes the CommandSender object
@@ -161,7 +161,7 @@ namespace ActiveMQTools
             private static void InitCommandSender(string brokerURI, string queueName, string statusTopicName)
             {
                 mobject_CmdSender = new classCmdSender(brokerURI, queueName, statusTopicName);
-            }   // End sub
+            }
 
             /// <summary>
             /// Sends a command to the command queue
@@ -170,7 +170,7 @@ namespace ActiveMQTools
             public static void SendCommand(string cmdText)
             {
                 mobject_CmdSender.SendCmd(cmdText);
-            }   // End sub
+            }
 
             /// <summary>
             /// Sends a status message to a status topic. This method doesn't support command/response queues
@@ -181,7 +181,7 @@ namespace ActiveMQTools
                 string msgToSend = statusMsg.Replace("InsertCartHere", mstring_InstName);   // Cheezy way to ensure cart name
                                                                                                                     // is in status message
                 mobject_CmdSender.SendStatus(mstring_InstName, msgToSend);
-            }   // End sub
+            }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

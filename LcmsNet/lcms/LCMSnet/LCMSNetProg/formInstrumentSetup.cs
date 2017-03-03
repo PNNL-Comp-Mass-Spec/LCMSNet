@@ -21,12 +21,11 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet
 {
+    /// <summary>
+    /// Form for specifying instrument that is connected to cart
+    /// </summary>
     public partial class formInstrumentSetup : Form
     {
-        //*********************************************************************************************************
-        // Form for specifying instrument that is connected to cart
-        //**********************************************************************************************************
-
         #region "Constants"
         #endregion
 
@@ -108,5 +107,5 @@ namespace LcmsNet
                 this.Close();
             }
         #endregion
-    }   // End class
-}   // End namespace
+    }
+}

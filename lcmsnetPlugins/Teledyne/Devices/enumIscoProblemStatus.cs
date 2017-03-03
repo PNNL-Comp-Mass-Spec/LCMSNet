@@ -9,10 +9,9 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO pump problem reporting constants
-    //**********************************************************************************************************
-
+    /// <summary>
+    /// Enum for ISCO pump problem reporting constants
+    /// </summary>
     public enum enumIscoProblemStatus
     {
         None,

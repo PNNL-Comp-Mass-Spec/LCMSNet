@@ -15,12 +15,11 @@ using System.IO.Ports;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// Class to hold settings for the pump serial port
+    /// </summary>
     class classIscoSerPortProps
     {
-        //*********************************************************************************************************
-        // Class to hold settings for the pump serial port
-        //**********************************************************************************************************
-
         #region "Constants"
             const string CONST_DFLT_COMM_PORT = "COM1";
             const int CONST_DFLT_BAUD_RATE = 9600;
@@ -67,4 +66,4 @@ namespace LcmsNet.Devices.Pumps
             }
         #endregion
     }   
-}   // End namespace
+}

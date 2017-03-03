@@ -9,10 +9,9 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO message acknowledge codes
-    //**********************************************************************************************************
-
+    /// <summary>
+    /// Enum for ISCO message acknowledge codes
+    /// </summary>
     public enum enumIscoMsgAckCodes
     {
         Recvd = 0,

@@ -47,15 +47,14 @@ using System.IO;
 
 namespace LcmsNetDmsTools
 {
+    /// <summary>
+    /// Class for interacting with DMS database
+    /// </summary>
     [Export(typeof(IDmsTools))]
     [ExportMetadata("Name", "PrismDMSTools")]
     [ExportMetadata("Version", "1.0")]
     public class classDBTools : IDmsTools
     {
-        //*********************************************************************************************************
-        // Class for interacting with DMS database
-        //**********************************************************************************************************
-
         #region "Class variables"
         string mstring_ErrMsg = "";
 

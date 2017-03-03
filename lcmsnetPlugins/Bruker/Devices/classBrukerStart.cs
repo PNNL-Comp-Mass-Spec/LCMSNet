@@ -23,18 +23,14 @@ using FluidicsSDK.Devices;
 
 namespace LcmsNet.Devices.BrukerStart
 {
+    /// <summary>
+    /// Class for detector using Bruker network trigger
+    /// </summary>
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(controlBrukerStart),
-                                 "Bruker",
-                                 "Detectors")
-    ]
+    [classDeviceControlAttribute(typeof(controlBrukerStart), "Bruker", "Detectors")]
     public class classBrukerStart : IDevice, IFluidicsClosure
     {
-        //*********************************************************************************************************
-        // Class for detector using Bruker network trigger
-        //**********************************************************************************************************
-
         #region "Constants"
             const double COMMAND_TIMEOUT_MSEC = 20000;
         #endregion
@@ -1104,4 +1100,4 @@ namespace LcmsNet.Devices.BrukerStart
 
         #endregion
     }   
-}   // End namespace
+}

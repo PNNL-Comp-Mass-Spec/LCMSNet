@@ -9,9 +9,9 @@
 
 namespace LcmsNet.Devices.Pumps
 {
-    //*********************************************************************************************************
-    // Enum for ISCO pump control sources
-    //**********************************************************************************************************
+    /// <summary>
+    /// Enum for ISCO pump control sources
+    /// </summary>
     public enum enumIscoControlMode
     {
         Local,

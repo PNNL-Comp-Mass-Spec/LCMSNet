@@ -41,12 +41,11 @@ using LcmsNetDataClasses.Data;
 
 namespace LcmsNetDmsTools
 {
+    /// <summary>
+    /// Class for interacting with DMS database
+    /// </summary>
     public class classDBTools
     {
-        //*********************************************************************************************************
-        // Class for interacting with DMS database
-        //**********************************************************************************************************
-
         #region "Class variables"
         static string mstring_ErrMsg = "";
         #endregion
@@ -997,4 +996,4 @@ namespace LcmsNetDmsTools
 
         #endregion
     }
-}   // End namespace
+}

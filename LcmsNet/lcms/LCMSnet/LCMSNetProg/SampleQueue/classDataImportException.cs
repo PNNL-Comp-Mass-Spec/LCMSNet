@@ -11,6 +11,9 @@ using System;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Custom exception for reporting problems during data import
+    /// </summary>
     class classDataImportException : Exception
     {
         #region "Methods"
@@ -26,10 +29,6 @@ namespace LcmsNet.SampleQueue
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Custom exception for reporting problems during data import
-        //**********************************************************************************************************
 
         #region "Constants"
 

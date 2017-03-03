@@ -11,12 +11,11 @@ using System.Collections.Generic;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// This class provides a wrapper around a dictionary containing ISCO pump error notification strings
+    /// </summary>
     public static class classIscoErrorNotifications
     {
-        //*********************************************************************************************************
-        // This class provides a wrapper around a dictionary containing ISCO pump error notification strings
-        //**********************************************************************************************************
-
         #region "Class variables"
             static Dictionary<string, string> mobj_NotifyList = new Dictionary<string, string>();
         #endregion
@@ -98,4 +97,4 @@ namespace LcmsNet.Devices.Pumps
             }   
         #endregion
     }   
-}   // End namespace
+}

@@ -14,6 +14,9 @@ using LcmsNetDataClasses;
 
 namespace LcmsNet.SampleQueue.Forms
 {
+    /// <summary>
+    /// Form for choosing sample queue randomization technique and randomizing
+    /// </summary>
     public partial class formSampleRandomizer : Form
     {
         #region "Properties"
@@ -53,10 +56,6 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         #endregion
-
-        //*********************************************************************************************************
-        // Form for choosing sample queue randomization technique and randomizing
-        //**********************************************************************************************************
 
         #region "Class variables"
 

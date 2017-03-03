@@ -16,12 +16,11 @@ using LcmsNetDataClasses;
 
 namespace LcmsNet.SampleQueue
 {
+    /// <summary>
+    /// Tools for finding and loading randomizer plugins
+    /// </summary>
     public class classRandomizerPluginTools
     {
-        //*********************************************************************************************************
-        // Tools for finding and loading randomizer plugins
-        //**********************************************************************************************************
-
         #region "Methods"
 
         public static Dictionary<string, Type> GetRandomizerPlugins()

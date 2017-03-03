@@ -11,12 +11,11 @@ using System;
 
 namespace LcmsNet.Devices.Pumps
 {
+    /// <summary>
+    /// This class provides a wrapper around a dictionary containing ISCO pump status notification strings
+    /// </summary>
     public static class classIscoStatusNotifications
     {
-        //*********************************************************************************************************
-        // This class provides a wrapper around a dictionary containing ISCO pump status notification strings
-        //**********************************************************************************************************
-
         #region "Class variables"
             static Dictionary<string, string> mobj_NotifyList = new Dictionary<string, string>();
         #endregion

@@ -9,12 +9,11 @@
 
 namespace LcmsNetDataClasses
 {
+    /// <summary>
+    /// Holds MRM file data downloaded from DMS
+    /// </summary>
     public class classMRMFileData
     {
-        //*********************************************************************************************************
-        // Holds MRM file data downloaded from DMS
-        //**********************************************************************************************************
-
         #region "Properties"
 
         /// <summary>
