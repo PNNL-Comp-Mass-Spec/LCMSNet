@@ -47,10 +47,10 @@ namespace LcmsNet.Devices.Pumps
                 newDisplay.Tag = this.Count;
                 newDisplay.InitControl(this.Count - 1);
 
-                newDisplay.SetpointChanged += new DelegateIscoPumpDisplaySetpointHandler(SetpointChange_Clicked);
-                newDisplay.StartRefill += new DelegateIscoPumpDisplayHandler(Refill_Clicked);
-                newDisplay.StartPump += new DelegateIscoPumpDisplayHandler(StartPump_Clicked);
-                newDisplay.StopPump += new DelegateIscoPumpDisplayHandler(StopPump_Clicked);
+                newDisplay.SetpointChanged += SetpointChange_Clicked;
+                newDisplay.StartRefill += Refill_Clicked;
+                newDisplay.StartPump += StartPump_Clicked;
+                newDisplay.StopPump += StopPump_Clicked;
             }   
 
             ///// <summary>
