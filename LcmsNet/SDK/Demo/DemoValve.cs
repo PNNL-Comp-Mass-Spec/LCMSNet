@@ -74,10 +74,7 @@ namespace DemoPluginLibrary
                 throw new Exception("The position is invalid.");
             }
             Position = (int)position;
-            if (PositionChanged != null)
-            {
-                PositionChanged(this, new ValvePositionEventArgs<TwoPositionState>(position));
-            }            
+            PositionChanged?.Invoke(this, new ValvePositionEventArgs<TwoPositionState>(position));
         }
         #endregion
 

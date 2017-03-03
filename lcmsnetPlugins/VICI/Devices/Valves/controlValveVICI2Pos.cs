@@ -149,10 +149,7 @@ namespace LcmsNet.Devices.Valves
             }
             else
             {
-                if (PosChanged != null)
-                {
-                    PosChanged(this, newPosition.Position.ToCustomString());
-                }
+                PosChanged?.Invoke(this, newPosition.Position.ToCustomString());
                 UpdatePositionTextBox(newPosition.Position);
             }
         }

@@ -85,10 +85,7 @@ namespace FluidicsSDK.Devices
         void m_valve_InjectionVolumeChanged(object sender, EventArgs e)
         {
             Volume = m_valve.InjectionVolume;
-            if (DeviceChanged != null)
-            {
-                DeviceChanged(this, new FluidicsDevChangeEventArgs());
-            }
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
 
         /// <summary>

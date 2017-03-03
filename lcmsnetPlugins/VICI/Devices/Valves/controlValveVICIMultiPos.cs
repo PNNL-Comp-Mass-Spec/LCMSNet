@@ -83,10 +83,7 @@ namespace LcmsNet.Devices.Valves
             }
             else
             {
-                if (PositionChanged != null)
-                {
-                    PositionChanged(this, new ValvePositionEventArgs<int>(newPosition.Position));
-                }
+                PositionChanged?.Invoke(this, new ValvePositionEventArgs<int>(newPosition.Position));
                 mtextbox_CurrentPos.Text = newPosition.Position.ToString();
             }
         }        

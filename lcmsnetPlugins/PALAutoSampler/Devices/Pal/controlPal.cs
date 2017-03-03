@@ -152,11 +152,8 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public virtual void OnFree(object sender)
         {
-            if (Free != null)
-            {
-                Free(this);
-            }
-           // mbool_runningMethodManually = false;
+            Free?.Invoke(this);
+            // mbool_runningMethodManually = false;
             //mButton_RunMethod.Text = "Run Method";
         }
 

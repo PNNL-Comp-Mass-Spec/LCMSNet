@@ -61,20 +61,14 @@ namespace FluidicsSDK.Managers
         public void AddPorts(List<Port> ports)
         {
             m_ports.AddRange(ports);
-            if (PortChanged != null)
-            {
-                PortChanged(this, new PortChangedEventArgs<Port>());
-            }
+            PortChanged?.Invoke(this, new PortChangedEventArgs<Port>());
         }
 
 
         public void AddPort(Port port)
         {
             m_ports.Add(port);
-            if (PortChanged != null)
-            {
-                PortChanged(this, new PortChangedEventArgs<Port>());
-            }
+            PortChanged?.Invoke(this, new PortChangedEventArgs<Port>());
         }
         /// <summary>
         /// remove a port from the lsit of ports managed
@@ -83,10 +77,7 @@ namespace FluidicsSDK.Managers
         public void RemovePort(Port port)
         {
             m_ports.Remove(port);
-            if (PortChanged != null)
-            {
-                PortChanged(this, new PortChangedEventArgs<Port>());
-            }
+            PortChanged?.Invoke(this, new PortChangedEventArgs<Port>());
         }
 
         /// <summary>

@@ -190,10 +190,7 @@ namespace Newport.ESP300
             //    }
             //}
             m_position = positionName;
-            if (PositionChanged != null)
-            {
-                PositionChanged(this, new EventArgs());
-            }
+            PositionChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -275,10 +272,7 @@ namespace Newport.ESP300
                 cmd.Append(CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
                 m_motorStatus[axis - 1] = true;
-                if (StatusUpdate != null)
-                {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(Status, "Motor", axis.ToString() + " On", this));
-                }
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Motor", axis.ToString() + " On", this));
             }
         }
 
@@ -301,10 +295,7 @@ namespace Newport.ESP300
                 cmd.Append(CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
                 m_motorStatus[axis - 1] = false;
-                if (StatusUpdate != null)
-                {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(Status, "Motor", axis.ToString() + " Off", this));
-                }
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Motor", axis.ToString() + " Off", this));
             }
         }
 
@@ -479,10 +470,7 @@ namespace Newport.ESP300
             catch (Exception)
             {
                 ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs("Error writing data to stage on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs("Error writing data to stage on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
             }  
             try
             {
@@ -491,10 +479,7 @@ namespace Newport.ESP300
             catch (Exception)
             {
                 ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs("Error reading data from stage on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs("Error reading data from stage on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
             }
             try
             {
@@ -506,10 +491,7 @@ namespace Newport.ESP300
             catch (Exception)
             {
                 ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs("Error converting response token on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs("Error converting response token on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
             }           
         }
 
@@ -555,10 +537,7 @@ namespace Newport.ESP300
                 catch (Exception)
                 {
                     ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
-                    if (Error != null)
-                    {
-                        Error(this, new classDeviceErrorEventArgs("Error writing to stage", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                    }
+                    Error?.Invoke(this, new classDeviceErrorEventArgs("Error writing to stage", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
                 }
                 if (waitForResponse)
                 {
@@ -569,10 +548,7 @@ namespace Newport.ESP300
                     catch (Exception)
                     {
                         ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
-                        if (Error != null)
-                        {
-                            Error(this, new classDeviceErrorEventArgs("Error reading from stage", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                        }
+                        Error?.Invoke(this, new classDeviceErrorEventArgs("Error reading from stage", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
                     }
                 }
                 var errcode = -1;
@@ -583,10 +559,7 @@ namespace Newport.ESP300
                 {
                     m_reportedErrors.Add(description + " happened at time: " + Convert.ToString(timestamp));
                     ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
-                    if (Error != null)
-                    {
-                        Error(this, new classDeviceErrorEventArgs(description, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                    }
+                    Error?.Invoke(this, new classDeviceErrorEventArgs(description, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
                 }
                 return response;
             }
@@ -902,10 +875,7 @@ namespace Newport.ESP300
                             m_positions[key] = persistedPosition;
                         }
                     }
-                    if (PositionsLoaded != null)
-                    {
-                        PositionsLoaded(this, new EventArgs());
-                    }
+                PositionsLoaded?.Invoke(this, new EventArgs());
             }
         }
 
@@ -936,10 +906,7 @@ namespace Newport.ESP300
             set
             {
                 m_position = value;
-                if (PositionChanged != null)
-                {
-                    PositionChanged(this, new EventArgs());
-                }
+                PositionChanged?.Invoke(this, new EventArgs());
             }
         }
         #endregion
@@ -990,10 +957,7 @@ namespace Newport.ESP300
             MotorOff(3);
             ClosePort();
             Status = enumDeviceStatus.NotInitialized;
-            if (StatusUpdate != null)
-            {
-                StatusUpdate(this, new classDeviceStatusEventArgs(Status, "Shutdown", this));
-            }
+            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Shutdown", this));
             return true;
         }
 
@@ -1006,10 +970,7 @@ namespace Newport.ESP300
                 MotorOn(i);
             }
                 Status = enumDeviceStatus.Initialized;
-            if(StatusUpdate != null)
-            {
-                StatusUpdate(this, new classDeviceStatusEventArgs(Status, "Initialized", this));
-            }
+            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Initialized", this));
             return true;
         }
 

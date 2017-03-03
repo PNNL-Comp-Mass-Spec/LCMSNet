@@ -142,8 +142,7 @@ namespace LcmsNetDmsTools
 
         public void OnProgressUpdate(ProgressEventArgs e)
         {
-            if (ProgressEvent != null)
-                ProgressEvent(this, e);
+            ProgressEvent?.Invoke(this, e);
         }
 
         #endregion

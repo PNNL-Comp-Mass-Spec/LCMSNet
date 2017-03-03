@@ -320,10 +320,7 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }
         /// <summary>
         /// Indicates that the device's position has changed.
@@ -331,10 +328,7 @@ namespace LcmsNet.Devices.Valves
         /// <param name="position">The new position</param>
         protected virtual void OnPositionChanged(TwoPositionState position)
         {
-            if (PositionChanged != null)
-            {
-                PositionChanged(this, new ValvePositionEventArgs<TwoPositionState>(position));
-            }
+            PositionChanged?.Invoke(this, new ValvePositionEventArgs<TwoPositionState>(position));
         }
         /// <summary>
         /// Disconnects from the valve.

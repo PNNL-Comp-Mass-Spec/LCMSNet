@@ -175,10 +175,7 @@ namespace FluidicsSDK
             {
                 ModelStatusChangeEvent(this, new LcmsNetDataClasses.ModelStatusChangeEventArgs(modelStatus.ToList()));
             }
-            if (ModelChanged != null)
-            {
-                ModelChanged();
-            }
+            ModelChanged?.Invoke();
         }
 
         /// <summary>

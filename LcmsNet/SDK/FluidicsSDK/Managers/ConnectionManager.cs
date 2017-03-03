@@ -80,10 +80,7 @@ namespace FluidicsSDK.Managers
                 {
                     m_connections.Remove(connection);
                     connection.Destroy();
-                    if (ConnectionChanged != null)
-                    {
-                        ConnectionChanged(this, new ConnectionChangedEventArgs<Connection>());
-                    }
+                    ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs<Connection>());
                 }
                 else
                 {
@@ -127,10 +124,7 @@ namespace FluidicsSDK.Managers
                 {
                     var newConnection = new Connection(port1, port2, device, style);
                     m_connections.Add(newConnection);
-                    if (ConnectionChanged != null)
-                    {
-                        ConnectionChanged(this, new ConnectionChangedEventArgs<Connection>());
-                    }
+                    ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs<Connection>());
                 }
                 else
                 {

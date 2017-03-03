@@ -619,10 +619,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }
 
         #region IDevice Data Provider Methods
@@ -675,14 +672,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <param name="ex"></param>
         private void HandleError(string message, Exception ex)
         {
-            if (Error != null)
-            {
-                Error(this, new classDeviceErrorEventArgs(message,
-                                                 ex,
-                                                 enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                 this,
-                                                 "None"));
-            }
+            Error?.Invoke(this, new classDeviceErrorEventArgs(message,
+                                 ex,
+                                 enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                 this,
+                                 "None"));
         }
 
         #region IDevice Members

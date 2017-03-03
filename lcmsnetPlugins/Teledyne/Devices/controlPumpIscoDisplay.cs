@@ -328,8 +328,8 @@ namespace LcmsNet.Devices.Pumps
 
                 if (validInput)
                 {
-                    if (SetpointChanged != null) SetpointChanged(this, mint_PumpIndx, double.Parse(mtextBox_Setpoint.Text));
-                }
+                SetpointChanged?.Invoke(this, mint_PumpIndx, double.Parse(mtextBox_Setpoint.Text));
+            }
                 else MessageBox.Show("Input value not in valid range");
             }   
 
@@ -340,8 +340,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void Refill_Clicked(object sender, EventArgs e)
             {
-                if (StartRefill != null) StartRefill(this, mint_PumpIndx);
-            }   
+            StartRefill?.Invoke(this, mint_PumpIndx);
+        }   
 
             /// <summary>
             /// Start Pump button clicked
@@ -350,8 +350,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void StartPump_Clicked(object sender, EventArgs e)
             {
-                if (StartPump != null) StartPump(this, mint_PumpIndx);
-            }   
+            StartPump?.Invoke(this, mint_PumpIndx);
+        }   
 
             /// <summary>
             /// Stop Pump button clicked
@@ -360,8 +360,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void StopPump_Clicked(object sender, EventArgs e)
             {
-                if (StopPump != null) StopPump(this, mint_PumpIndx);
-            }   
+            StopPump?.Invoke(this, mint_PumpIndx);
+        }   
         #endregion
 
             private void label2_Click(object sender, EventArgs e)

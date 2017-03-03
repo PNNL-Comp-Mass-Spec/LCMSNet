@@ -79,20 +79,14 @@ namespace FluidicsSDK.Base
             {
                 p.ID = this.DeviceName + "." + m_portList.IndexOf(p);
             }
-            if (DeviceChanged != null)
-            {
-                DeviceChanged(this, new FluidicsDevChangeEventArgs());
-            }
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
 
         public virtual void DeregisterDevice(IDevice device)
         {
             //TODO: Remove any error handlers
             ClearDevice(device);
-            if (DeviceChanged != null)
-            {
-                DeviceChanged(this, new FluidicsDevChangeEventArgs());
-            }
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
 
         /// <summary>
@@ -413,11 +407,8 @@ namespace FluidicsSDK.Base
             {
                 prim.MoveBy(translateRelativeValues);
             }
-            if (DeviceChanged != null)
-            {
-                DeviceChanged(this, new FluidicsDevChangeEventArgs());
-            }
-           
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
+
         }             
             
         /// <summary>
@@ -470,10 +461,7 @@ namespace FluidicsSDK.Base
                 var oldLoc = m_loc;
                 m_loc = value;
                 //m_info_controls_box.Location = new Point(value.X, value.Y + (int)Size.Height + 5);
-                if (DeviceChanged != null)
-                {
-                    DeviceChanged(this, new FluidicsDevChangeEventArgs(oldLoc));
-                }
+                DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs(oldLoc));
             }
         }
             

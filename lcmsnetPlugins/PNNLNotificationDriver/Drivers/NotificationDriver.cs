@@ -48,10 +48,7 @@ namespace FailureInjector.Drivers
             set
             {
                 m_status = value;
-                if (StatusUpdate != null)
-                {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(m_status, "Status", this));
-                }
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(m_status, "Status", this));
             }
         }
         public System.Threading.ManualResetEvent AbortEvent
@@ -90,10 +87,7 @@ namespace FailureInjector.Drivers
         public bool Initialize(ref string errorMessage)
         {
             Status = enumDeviceStatus.Initialized;
-            if (StatusUpdate != null)
-            {
-                StatusUpdate(this, new classDeviceStatusEventArgs(this.Status, "Initialized", this));
-            }
+            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(this.Status, "Initialized", this));
             return true;
         }
         public bool Shutdown()

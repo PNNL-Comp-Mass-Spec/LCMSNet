@@ -45,10 +45,7 @@ namespace LcmsNet.Devices.Pumps
 
         private void m_device_RefreshComplete()
         {
-            if(DeviceChanged != null)
-            {
-                DeviceChanged(this, new FluidicsDevChangeEventArgs("ISCO refreshed"));
-            }
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs("ISCO refreshed"));
         }
 
         public override string StateString()

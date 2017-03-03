@@ -334,8 +334,7 @@ namespace Agilent.Devices.Pumps
                 /// 
                 mobj_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), mtextbox_method.Text);
 
-                if (NewMethodAvailable != null)
-                    NewMethodAvailable(this, null);
+                NewMethodAvailable?.Invoke(this, null);
             }
         }
         /// <summary>

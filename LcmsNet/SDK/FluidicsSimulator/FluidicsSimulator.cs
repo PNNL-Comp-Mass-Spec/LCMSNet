@@ -288,11 +288,8 @@ namespace FluidicsSimulator
                 IsReady = false;
                 Thread.Sleep(500);
                 m_completedEvents.Peek().MethodData.IsDone();
-                if (SimulationComplete != null)
-                {
-                    // report simulation complete and pass any and all status changes that occured, that the user hasn't asked not to be notified about
-                    SimulationComplete(this, new ModelStatusChangeEventArgs(FilterStatusChanges(m_AllStatusChangesThisRun, CategoriesRequested)));
-                }
+                // report simulation complete and pass any and all status changes that occured, that the user hasn't asked not to be notified about
+                SimulationComplete?.Invoke(this, new ModelStatusChangeEventArgs(FilterStatusChanges(m_AllStatusChangesThisRun, CategoriesRequested)));
             }
         }
 
@@ -391,10 +388,7 @@ namespace FluidicsSimulator
             }
             m_completedEvents.Push(m_currentEvent);
             m_elapsedTime = m_currentStartTime.Subtract(m_FirstStartTime).Add(m_currentEvent.Duration);
-            if (EventSimulated != null)
-            {
-                EventSimulated(this, new SimulatedEventArgs(m_currentEvent, m_elapsedTime));
-            }
+            EventSimulated?.Invoke(this, new SimulatedEventArgs(m_currentEvent, m_elapsedTime));
             m_currentEvent = null;
         }
 
@@ -420,10 +414,7 @@ namespace FluidicsSimulator
                 if (!m_modelCheckers.Contains(check) && !(m_modelCheckers.Any(x => x.Name.Equals(check.Name))))
                 {
                     m_modelCheckers.Add(check);
-                    if(ModelCheckAdded != null)
-                    {
-                        ModelCheckAdded(this, new ModelCheckControllerEventArgs(check));
-                    }
+                    ModelCheckAdded?.Invoke(this, new ModelCheckControllerEventArgs(check));
                 }
             }
         }
@@ -437,10 +428,7 @@ namespace FluidicsSimulator
             if (!FluidicsSimulator.GetInstance.InProgress)
             {
                 m_modelCheckers.Remove(check);
-                if(ModelCheckRemoved != null)
-                {
-                    ModelCheckRemoved(this, new ModelCheckControllerEventArgs(check));
-                }
+                ModelCheckRemoved?.Invoke(this, new ModelCheckControllerEventArgs(check));
             }
         }
         /// <summary>
@@ -453,10 +441,7 @@ namespace FluidicsSimulator
             {
                 var c = m_modelCheckers.Find(x => x.Name.Equals(check));
                 m_modelCheckers.Remove(c);
-                if(ModelCheckRemoved != null)
-                {
-                    ModelCheckRemoved(this, new ModelCheckControllerEventArgs(c));
-                }
+                ModelCheckRemoved?.Invoke(this, new ModelCheckControllerEventArgs(c));
             }
         }
 

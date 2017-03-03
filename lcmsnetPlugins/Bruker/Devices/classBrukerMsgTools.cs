@@ -540,8 +540,8 @@ namespace LcmsNet.Devices.BrukerStart
                         classApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
 
                         classApplicationLogger.LogMessage(2, "ProcessResponse: Firing BrukerMsgReceived event");
-                        if (BrukerMsgReceived != null) BrukerMsgReceived(tmpReply);
-                        classApplicationLogger.LogMessage(2, "ProcessResponse: BrukerMsgReceived event handling complete");
+                    BrukerMsgReceived?.Invoke(tmpReply);
+                    classApplicationLogger.LogMessage(2, "ProcessResponse: BrukerMsgReceived event handling complete");
                         return;
                     }
                     else
@@ -568,8 +568,8 @@ namespace LcmsNet.Devices.BrukerStart
                             tmpResp = (short)(responseData.ParamCode + 20);
                             tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
                             classApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
-                            if (BrukerMsgReceived != null) BrukerMsgReceived(tmpReply);
-                            return;
+                        BrukerMsgReceived?.Invoke(tmpReply);
+                        return;
                         }
                         else
                         {
@@ -587,8 +587,8 @@ namespace LcmsNet.Devices.BrukerStart
                     tmpResp = (short)(responseData.ParamCode + 20);
                     tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
                     classApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
-                    if (BrukerMsgReceived != null) BrukerMsgReceived(tmpReply);
-                    return;
+                BrukerMsgReceived?.Invoke(tmpReply);
+                return;
                 }
                 else
                 {
@@ -697,8 +697,8 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: Firing DataReceived event");
-                if (DataReceived != null) DataReceived();
-                classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: DataReceived event handling complete");
+            DataReceived?.Invoke();
+            classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: DataReceived event handling complete");
 
                 System.Threading.Thread.Sleep(20);
 

@@ -56,10 +56,7 @@ namespace LcmsNet.Devices.Valves
             {
                 m_volume = value;
 
-                if (InjectionVolumeChanged != null)
-                {
-                    InjectionVolumeChanged(this, new EventArgs());
-                }
+                InjectionVolumeChanged?.Invoke(this, new EventArgs());
             }
         }   
 

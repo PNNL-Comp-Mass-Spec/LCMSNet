@@ -47,10 +47,7 @@ namespace FluidicsSDK.ModelCheckers
         {
             var testList = new List<ModelStatus>();
             testList.Add(new ModelStatus("Test Check", "This status was created by the Test Model Check. The Model Checks are being run.", Category));
-            if( StatusUpdate != null)
-            {
-                StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.NotInitialized, "Test Model Check Run.", null));
-            }
+            StatusUpdate?.Invoke(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.NotInitialized, "Test Model Check Run.", null));
             return testList;
         }
 

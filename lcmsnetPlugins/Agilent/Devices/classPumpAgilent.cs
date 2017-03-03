@@ -556,18 +556,12 @@ namespace Agilent.Devices.Pumps
             if (mdict_methods.ContainsKey(methodname) == true)
             {
                 mdict_methods[methodname] = method;
-                if (MethodUpdated != null)
-                {
-                    MethodUpdated(this, new classPumpMethodEventArgs(methodname));
-                }
+                MethodUpdated?.Invoke(this, new classPumpMethodEventArgs(methodname));
             }
             else
             {
                 mdict_methods.Add(methodname, method);
-                if (MethodAdded != null)
-                {
-                    MethodAdded(this, new classPumpMethodEventArgs(methodname));
-                }
+                MethodAdded?.Invoke(this, new classPumpMethodEventArgs(methodname));
 
                 ListMethods();
             }
@@ -726,47 +720,35 @@ namespace Agilent.Devices.Pumps
 
             if (data.Contains("EE 2014"))
             {
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE,
-                        null,
-                        enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                        this,
-                        CONST_ERROR_ABOVE_PRESSURE));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE,
+    null,
+    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    this,
+    CONST_ERROR_ABOVE_PRESSURE));
             }
             else if (data.Contains("EE 2015"))
             {
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE,
-                        null,
-                        enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                        this,
-                        CONST_ERROR_BELOW_PRESSURE));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE,
+    null,
+    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    this,
+    CONST_ERROR_BELOW_PRESSURE));
             }
             else if (data.Contains("EE 2064"))
             {
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS,
-                        null,
-                        enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                        this,
-                        CONST_ERROR_FLOW_EXCEEDS));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS,
+    null,
+    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    this,
+    CONST_ERROR_FLOW_EXCEEDS));
             }
             else if (data.Contains("EE 2066"))
             {
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE,
-                        null,
-                        enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                        this,
-                        CONST_ERROR_FLOW_UNSTABLE));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE,
+    null,
+    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    this,
+    CONST_ERROR_FLOW_UNSTABLE));
             }
             else
             {                                
@@ -868,15 +850,12 @@ namespace Agilent.Devices.Pumps
             // Alert the user data is ready
             try
             {
-                if (MonitoringDataReceived != null)
-                {
-                    MonitoringDataReceived(this,
-                            new PumpDataEventArgs(  this,
-                                                    mlist_times,
-                                                    mlist_pressures,
-                                                    mlist_flowrates,
-                                                    mlist_percentB));
-                }
+                MonitoringDataReceived?.Invoke(this,
+        new PumpDataEventArgs(this,
+                                mlist_times,
+                                mlist_pressures,
+                                mlist_flowrates,
+                                mlist_percentB));
             }
             catch
             {
@@ -1324,10 +1303,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }       
         #endregion
 

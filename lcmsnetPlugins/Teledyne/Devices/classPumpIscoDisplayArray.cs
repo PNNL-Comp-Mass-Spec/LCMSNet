@@ -88,8 +88,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void SetpointChange_Clicked(object sender, int pumpIndex, double newSetpoint)
             {
-                if (SetpointChanged != null) SetpointChanged(sender, pumpIndex, newSetpoint);
-            }   
+            SetpointChanged?.Invoke(sender, pumpIndex, newSetpoint);
+        }   
 
             /// <summary>
             /// Refill button clicked
@@ -98,8 +98,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void Refill_Clicked(object sender, int pumpIndex)
             {
-                if (StartRefill != null) StartRefill(sender, pumpIndex);
-            }   
+            StartRefill?.Invoke(sender, pumpIndex);
+        }   
 
             /// <summary>
             /// Start Pump button clicked
@@ -108,8 +108,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void StartPump_Clicked(object sender, int pumpIndex)
             {
-                if (StartPump != null) StartPump(sender, pumpIndex);
-            }   
+            StartPump?.Invoke(sender, pumpIndex);
+        }   
 
             /// <summary>
             /// Stop Pump button clicked
@@ -118,8 +118,8 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="e"></param>
             private void StopPump_Clicked(object sender, int pumpIndex)
             {
-                if (StopPump != null) StopPump(sender, pumpIndex);
-            }   
+            StopPump?.Invoke(sender, pumpIndex);
+        }   
         #endregion
     }   
 }

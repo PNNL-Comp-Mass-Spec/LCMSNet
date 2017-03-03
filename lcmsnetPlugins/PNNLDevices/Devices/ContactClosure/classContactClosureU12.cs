@@ -265,10 +265,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }
 
         /// <summary>
@@ -311,13 +308,10 @@ namespace LcmsNet.Devices.ContactClosure
             }
             catch (classLabjackU12Exception ex)
             {
-                if (Error != null)
-                {
-                    Error(this, new classDeviceErrorEventArgs("Could not start the trigger.",
-                                                         ex,
-                                                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                         this));
-                }
+                Error?.Invoke(this, new classDeviceErrorEventArgs("Could not start the trigger.",
+                                     ex,
+                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                     this));
                 throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
@@ -334,15 +328,11 @@ namespace LcmsNet.Devices.ContactClosure
             }
             catch (classLabjackU12Exception ex)
             {
-                if (Error != null)
-                {
-                    Error(this,
-                                        new classDeviceErrorEventArgs("Could not stop the trigger.",
-                                                                 ex,
-                                                                 enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                 this));
-
-                }
+                Error?.Invoke(this,
+                    new classDeviceErrorEventArgs("Could not stop the trigger.",
+                                             ex,
+                                             enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                             this));
                 error = 1;
                 throw ex;
             }

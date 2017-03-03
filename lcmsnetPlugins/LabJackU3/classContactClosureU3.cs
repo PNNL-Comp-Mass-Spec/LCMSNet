@@ -266,10 +266,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }     
 
         /// <summary>

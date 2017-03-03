@@ -104,10 +104,7 @@ namespace DemoPluginLibrary
         {
             if (Contains(mouse_location))
                 Selected = true;
-                if (DeviceChanged != null)
-                {
-                    DeviceChanged(this, new FluidicsDevChangeEventArgs());
-                }
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
 
         }
 

@@ -201,10 +201,7 @@ namespace ASIpump
 
                     mPort.Write(sendStr + mSendDelimeter);
 
-                    if (MessageSent != null)
-                    {
-                        MessageSent(sendStr);
-                    }
+                    MessageSent?.Invoke(sendStr);
                 }
             }
             catch { }

@@ -228,10 +228,7 @@ namespace DemoPluginLibrary
             set
             {
                 m_flowrate = value;
-                if (FlowChanged != null)
-                {
-                    FlowChanged(this, new PumpEventArgs<double>(Flowrate));
-                }
+                FlowChanged?.Invoke(this, new PumpEventArgs<double>(Flowrate));
             }
 
         }
@@ -259,10 +256,7 @@ namespace DemoPluginLibrary
             set
             {
                 m_pressure = value;
-                if (PressureChanged != null)
-                {
-                    PressureChanged(this, new PumpEventArgs<double>(Pressure));
-                }
+                PressureChanged?.Invoke(this, new PumpEventArgs<double>(Pressure));
             }
         }
 
@@ -278,10 +272,7 @@ namespace DemoPluginLibrary
             set
             {
                 m_percentB = value;
-                if(PercentBChanged != null)
-                {
-                    PercentBChanged(this, new PumpEventArgs<double>(PercentB));
-                }
+                PercentBChanged?.Invoke(this, new PumpEventArgs<double>(PercentB));
             }
         }     
         /// <summary>

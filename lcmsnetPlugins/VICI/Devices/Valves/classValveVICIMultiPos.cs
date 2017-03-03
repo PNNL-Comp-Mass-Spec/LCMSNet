@@ -105,10 +105,7 @@ namespace LcmsNet.Devices.Valves
         public event EventHandler<ValvePositionEventArgs<int>> PosChanged;
         protected virtual void OnPosChanged(int position)
         {
-            if (PosChanged != null)
-            {   
-                PosChanged(this, new ValvePositionEventArgs<int>(position));
-            }
+            PosChanged?.Invoke(this, new ValvePositionEventArgs<int>(position));
         }
 
         public virtual Type GetStateType()
@@ -118,10 +115,7 @@ namespace LcmsNet.Devices.Valves
 
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }
 
         #endregion
@@ -438,10 +432,7 @@ namespace LcmsNet.Devices.Valves
                 if (mobj_lastMeasuredPosition == -1)
                 {
                     errorMessage = "The valve position is unknown.  Make sure it is plugged in.";
-                    if (Error != null)
-                    {
-                        Error(this, new classDeviceErrorEventArgs(errorMessage, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Valve Position"));
-                    }
+                    Error?.Invoke(this, new classDeviceErrorEventArgs(errorMessage, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Valve Position"));
                     return false;
                 }
             }

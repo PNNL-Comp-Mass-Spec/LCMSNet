@@ -62,11 +62,8 @@ namespace FluidicsSDK.Managers
                         fluidicsDevice.RegisterDevice(device);
                         //fluidicsDevice.MoveBy(new Point(GetBoundingBox(false).Width, 0));
                         fluidicsDevice.DeviceChanged += new EventHandler<FluidicsDevChangeEventArgs>(fluidicsDevice_DeviceChanged);
-                        if (DeviceAdded != null)
-                        {
-                            DeviceAdded(this, new FluidicsDeviceChangeEventArgs(fluidicsDevice));
-                        }
-                    }    
+                    DeviceAdded?.Invoke(this, new FluidicsDeviceChangeEventArgs(fluidicsDevice));
+                }    
 
                 }
                 catch (InvalidCustomFluidicsDeviceException)
@@ -77,11 +74,8 @@ namespace FluidicsSDK.Managers
             
             void fluidicsDevice_DeviceChanged(object sender, FluidicsDevChangeEventArgs e)
             {
-               if(DeviceChanged != null)
-               {
-                   DeviceChanged(sender, e);
-               }
-            }
+            DeviceChanged?.Invoke(sender, e);
+        }
 
             /// <summary>
             /// Try to remove specified IDevice from fluidics manager
@@ -111,11 +105,8 @@ namespace FluidicsSDK.Managers
                     m_devices.Remove(deviceToRemove);
                     GC.SuppressFinalize(deviceToRemove);
                     GC.Collect();
-                    if (DeviceRemoved != null)
-                    {
-                        DeviceRemoved(this, new FluidicsDeviceChangeEventArgs(deviceToRemove));
-                    }
-                }                
+                DeviceRemoved?.Invoke(this, new FluidicsDeviceChangeEventArgs(deviceToRemove));
+            }                
                 
             }
 

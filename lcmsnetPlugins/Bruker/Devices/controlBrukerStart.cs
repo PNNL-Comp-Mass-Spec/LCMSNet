@@ -140,8 +140,7 @@ namespace LcmsNet.Devices.BrukerStart
             mcomboBox_methods.EndUpdate();
 
 
-            if (InstrumentMethodListReceived != null)
-                InstrumentMethodListReceived(methodNames);
+            InstrumentMethodListReceived?.Invoke(methodNames);
         }
         #endregion
 

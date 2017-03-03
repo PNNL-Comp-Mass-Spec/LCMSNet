@@ -179,8 +179,7 @@ namespace LcmsNet.Devices.Pal
             }
             set
             {
-                if (StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
                 menum_status = value;
             }
         }
@@ -366,10 +365,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public virtual void OnFree()
         {
-            if (Free != null)
-            {
-                Free(this);
-            }
+            Free?.Invoke(this);
         }
 
 
@@ -378,10 +374,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            if (DeviceSaveRequired != null)
-            {
-                DeviceSaveRequired(this, null);
-            }
+            DeviceSaveRequired?.Invoke(this, null);
         }
 
         /// <summary>
@@ -407,10 +400,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         private void HandleError(string message, Exception ex)
         {
-            if (Error != null)
-            {
-                    Error(this, new classDeviceErrorEventArgs(message, ex, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, message));
-            }            
+            Error?.Invoke(this, new classDeviceErrorEventArgs(message, ex, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, message));
         }
         /// <summary>
         /// Initializes the PAL.
@@ -856,12 +846,9 @@ namespace LcmsNet.Devices.Pal
                 end = LcmsNetSDK.TimeKeeper.Instance.Now;
             }
 
-            if (this.StatusUpdate != null)
-            {
-                this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
-                    "Done Injecting start method",
-                    this));
-            }
+            this.StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+    "Done Injecting start method",
+    this));
             OnFree();
             return true;
         }
@@ -870,10 +857,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
         public void ThrowError(int timeToThrowup)
         {
-            if (Error != null)
-            {
-                    Error(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
-            }
+            Error?.Invoke(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
         }
         /// <summary>
         /// Pauses the currently running method.
@@ -916,22 +900,16 @@ namespace LcmsNet.Devices.Pal
                 return;
             }
 
-            if (this.StatusUpdate != null)
-            {
-                this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
-                    "continue method",
-                    this));
-            }
+            this.StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+    "continue method",
+    this));
             mobj_PALDrvr.ContinueMethod();
             
             var statusMessage = "";
             var errorCode = mobj_PALDrvr.GetStatus(ref statusMessage);
-            if (this.StatusUpdate != null)
-            {
-                this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
-                    "continue method end: " + statusMessage + " " + errorCode.ToString(),
-                    this));
-            }
+            this.StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+    "continue method end: " + statusMessage + " " + errorCode.ToString(),
+    this));
         }
 
         /// <summary>

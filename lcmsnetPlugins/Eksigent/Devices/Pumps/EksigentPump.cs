@@ -199,10 +199,7 @@ namespace Eksigent.Devices.Pumps
             set
             {
                 mstring_name = value;
-                if (DeviceSaveRequired != null)
-                {
-                    DeviceSaveRequired(this, null);
-                }
+                DeviceSaveRequired?.Invoke(this, null);
             }
         }
         /// <summary>
@@ -226,10 +223,7 @@ namespace Eksigent.Devices.Pumps
             set
             {
                 menum_status = value;
-                if (StatusUpdate != null)
-                {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
-                }
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
             }
         }
         /// <summary>
@@ -386,10 +380,7 @@ namespace Eksigent.Devices.Pumps
                 return false;
             }
             Status = enumDeviceStatus.Initialized;
-            if (StatusUpdate != null)
-            {
-                StatusUpdate(this, new classDeviceStatusEventArgs(Status, CONST_INITIALIZED, this));
-            }
+            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, CONST_INITIALIZED, this));
             classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent INITIALIZED!");
             return true;
         }
@@ -572,10 +563,7 @@ namespace Eksigent.Devices.Pumps
                     break;
             }
 
-            if (PumpStatus != null)
-            {
-                PumpStatus(this, new classDeviceStatusEventArgs(Status, "None", message, this));
-            }
+            PumpStatus?.Invoke(this, new classDeviceStatusEventArgs(Status, "None", message, this));
             if (code < m_notifyStrings.Length && code > -1)
             {
                 HandleStatusType(m_notifyStrings[code], message);
@@ -697,15 +685,12 @@ namespace Eksigent.Devices.Pumps
             // Alert the user data is ready
             try
             {
-                if (MonitoringDataReceived != null)
-                {
-                    MonitoringDataReceived(this,
-                            new PumpDataEventArgs(this,
-                                                    mlist_times,
-                                                    mlist_pressures,
-                                                    mlist_flowrates,
-                                                    mlist_percentB));
-                }
+                MonitoringDataReceived?.Invoke(this,
+        new PumpDataEventArgs(this,
+                                mlist_times,
+                                mlist_pressures,
+                                mlist_flowrates,
+                                mlist_percentB));
             }
             catch
             {

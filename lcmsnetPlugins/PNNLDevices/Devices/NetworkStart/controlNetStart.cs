@@ -116,8 +116,7 @@ namespace LcmsNet.Devices.NetworkStart
             mcomboBox_methods.EndUpdate();
 
 
-            if (InstrumentMethodListReceived != null)
-                InstrumentMethodListReceived(methodNames);
+            InstrumentMethodListReceived?.Invoke(methodNames);
         }
 
         #endregion

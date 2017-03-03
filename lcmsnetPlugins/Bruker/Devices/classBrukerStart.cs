@@ -239,11 +239,8 @@ namespace LcmsNet.Devices.BrukerStart
             /// </summary>
             public virtual void OnDeviceSaveRequired()
             {
-                if (DeviceSaveRequired != null)
-                {
-                    DeviceSaveRequired(this, null);
-                }
-            }   
+            DeviceSaveRequired?.Invoke(this, null);
+        }   
 
             /// <summary>
             /// De-registers event handlers for this object
@@ -309,13 +306,10 @@ namespace LcmsNet.Devices.BrukerStart
                 {
                     msg = "StartAcquisition: Acquisition already in progress";
                     classApplicationLogger.LogError(0, msg);
-                    if (Error != null)
-                    {
-                        //Error(this, new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
-                        Error(this,
-                            new classDeviceErrorEventArgs(msg, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
-                    }
-                    return false;
+                //Error(this, new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                Error?.Invoke(this,
+                    new classDeviceErrorEventArgs(msg, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
+                return false;
                 }
 
                 // Make the output folder
@@ -324,12 +318,9 @@ namespace LcmsNet.Devices.BrukerStart
                 {
                     // There was a problem making the folder. Details are in result
                     classApplicationLogger.LogError(0, result.Message, result.CreationException, sample);
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, result.Message, enumDeviceErrorStatus.ErrorSampleOnly, result.CreationException));
-                            new classDeviceErrorEventArgs(result.Message, result.CreationException, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
-                    }
-                    return false;
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, result.Message, enumDeviceErrorStatus.ErrorSampleOnly, result.CreationException));
+new classDeviceErrorEventArgs(result.Message, result.CreationException, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
+                return false;
                 }
 
                 // Make the method output folder
@@ -339,16 +330,13 @@ namespace LcmsNet.Devices.BrukerStart
                 {
                     // There was a problem making the folder. Details are in result
                     classApplicationLogger.LogError(0, result.Message, result.CreationException, sample);
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, result.Message, enumDeviceErrorStatus.ErrorSampleOnly, result.CreationException));
-                                new classDeviceErrorEventArgs(result.Message,
-                                                     result.CreationException,
-                                                     enumDeviceErrorStatus.ErrorSampleOnly,
-                                                     this,
-                                                     "None"));
-                    }
-                    return false;
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, result.Message, enumDeviceErrorStatus.ErrorSampleOnly, result.CreationException));
+    new classDeviceErrorEventArgs(result.Message,
+                         result.CreationException,
+                         enumDeviceErrorStatus.ErrorSampleOnly,
+                         this,
+                         "None"));
+                return false;
                 }
 
                 // Start the acquisition on sXc
@@ -359,33 +347,27 @@ namespace LcmsNet.Devices.BrukerStart
                     {
                         msg = "StartAcquisiton: Socket already connected - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                            new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
                     if (!mobject_MsgTools.ConnectSxcSocket())
                     {
                         msg = "StartAcquisiton: Problem connecting to sXc - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                            new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     // Start listening for messages from sXc
@@ -393,17 +375,14 @@ namespace LcmsNet.Devices.BrukerStart
                     {
                         msg = "StartAcquisition: Problem starting message listen method - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                            new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        mobject_MsgTools.DisconnectSXC();
+new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    mobject_MsgTools.DisconnectSXC();
                         return false;
                     }
                     // Send INIT_FTMS
@@ -413,16 +392,13 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem sending INIT_FTMS - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
-                                    new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+    new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     // Wait for a READY reply from sXc
@@ -432,17 +408,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem waiting for READY response to INIT_FTMS - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     classApplicationLogger.LogMessage(2, "StartAcuisition.WaitForReady completed OK");
@@ -455,17 +428,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem sending sample info - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     // Wait for a READY reply from sXc
@@ -475,17 +445,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem waiting for READY response to sample info - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     classApplicationLogger.LogMessage(2, "StartAcuisition.WaitForReady completed OK");
@@ -497,17 +464,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem sending PREPARE_ACQUISITION - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     // Wait for a READY reply from sXc
@@ -517,17 +481,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem waiting for READY response to PREPARE_ACQUISITION - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     classApplicationLogger.LogMessage(2, "StartAcuisition.WaitForReady completed OK");
@@ -538,17 +499,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "StartAcquistion: Problem sending START_ACQUISITION - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     //NOTE: START_ACQUISITION returns a SOCKET_REQUEST_FTMS_START, which we're going to try ignoring. Therefore we're done with this method
@@ -560,17 +518,14 @@ namespace LcmsNet.Devices.BrukerStart
                     msg = "Exception starting acquisition";
                     classApplicationLogger.LogError(0, msg, ex, sample);
                     StopSxcCommunication();
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                    }
-                    return false;
+            new classDeviceErrorEventArgs(msg,
+                         null,
+                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                         this,
+                         "None"));
+                return false;
                 }
             }   
 
@@ -588,17 +543,14 @@ namespace LcmsNet.Devices.BrukerStart
                 {
                     msg = "EndAcquisition: No acquisition in progress";
                     classApplicationLogger.LogError(0, msg);
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                    }
-                    return false;
+            new classDeviceErrorEventArgs(msg,
+                         null,
+                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                         this,
+                         "None"));
+                return false;
                 }
 
                 try
@@ -610,17 +562,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "EndAcquistion: Problem sending FINISHACQUISITION - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     // Wait for a READY reply from sXc
@@ -629,17 +578,14 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "EndAcquistion: Problem waiting for READY response to FINISHACQUISITION - " + mobject_MsgTools.Msg;
                         classApplicationLogger.LogError(0, msg);
                         StopSxcCommunication();
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                        }
-                        return false;
+        new classDeviceErrorEventArgs(msg,
+                     null,
+                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                     this,
+                     "None"));
+                    return false;
                     }
 
                     // Stop the rest of the sXc communication process
@@ -653,17 +599,14 @@ namespace LcmsNet.Devices.BrukerStart
                 {
                     msg = "StopAcquisition: Exception stopping acquisition" + ex.Message;
                     classApplicationLogger.LogError(0, msg, ex);
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                    }
-                    return false;
+            new classDeviceErrorEventArgs(msg,
+                         null,
+                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                         this,
+                         "None"));
+                return false;
                 }
             }   
 
@@ -684,17 +627,14 @@ namespace LcmsNet.Devices.BrukerStart
                     classApplicationLogger.LogError(0, msg);
                     mobject_MsgTools.ExitFTMS();
                     mobject_MsgTools.DisconnectSXC();
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                     null,
-                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                     this,
-                                                     "None"));
-                    }
-                    return false;
+            new classDeviceErrorEventArgs(msg,
+                         null,
+                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                         this,
+                         "None"));
+                return false;
                 }
 
                 // Send EXIT_FTMS
@@ -705,16 +645,13 @@ namespace LcmsNet.Devices.BrukerStart
                     msg = "StopSxcCommunication: Problem sending EXIT_FTMS - " + mobject_MsgTools.Msg;
                     classApplicationLogger.LogError(0, msg);
                     mobject_MsgTools.DisconnectSXC();
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
-                                    new classDeviceErrorEventArgs(msg,
-                                                                     null,
-                                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                     this,
-                                                                     "None"));
-                    }
-                    return false;
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+        new classDeviceErrorEventArgs(msg,
+                                         null,
+                                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                         this,
+                                         "None"));
+                return false;
                 }
 
                 // Disconnect from sXc listening port
@@ -724,16 +661,13 @@ namespace LcmsNet.Devices.BrukerStart
                 {
                     msg = "StopSxcCommunication: Problem disconnecting from sXc - " + mobject_MsgTools.Msg;
                     classApplicationLogger.LogError(0, msg);
-                    if (Error != null)
-                    {
-                        Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
-                                    new classDeviceErrorEventArgs(msg,
-                                                                     null,
-                                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                     this,
-                                                                     "None"));
-                    }
-                    return false;
+                Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+        new classDeviceErrorEventArgs(msg,
+                                         null,
+                                         enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                         this,
+                                         "None"));
+                return false;
                 }
 
                 mbool_AcquisitionInProgress = false;
@@ -800,32 +734,26 @@ namespace LcmsNet.Devices.BrukerStart
                         msg = "Critical error " + sXcReply.ToString() + " received from Bruker";
                         classApplicationLogger.LogError(0, msg);
                         mbool_DeviceError = true;
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
-                                        new classDeviceErrorEventArgs(msg,
-                                                                     null,
-                                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                     this,
-                                                                     "None"));
-                        }
-                        break;
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+        new classDeviceErrorEventArgs(msg,
+                                     null,
+                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                     this,
+                                     "None"));
+                    break;
                     case classBrukerComConstants.SxcReplies.FTMS_ERROR:
                         mobject_CmdTimeoutTimer.Enabled = false;
                         msg = "Error " + sXcReply.ToString() + " received from Bruker";
                         classApplicationLogger.LogError(0, msg);
                         mbool_DeviceError = true;
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, null));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                                     null,
-                                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                     this,
-                                                                     "None"));
-                        }
-                        break;
+        new classDeviceErrorEventArgs(msg,
+                                     null,
+                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                     this,
+                                     "None"));
+                    break;
                     case classBrukerComConstants.SxcReplies.SXC_INVALID:
                         classApplicationLogger.LogError(0,"Invalid message recevied from Bruker");
                         break;
@@ -869,17 +797,14 @@ namespace LcmsNet.Devices.BrukerStart
                     catch (Exception ex)
                     {
                         var msg = "Could not retrieve the methods from the Bruker instrument";
-                        if (Error != null)
-                        {
-                            Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, ex));
+                    Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, ex));
 
-                                        new classDeviceErrorEventArgs(msg,
-                                                                     ex,
-                                                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                                                                     this,
-                                                                     "None"));
-                        }
-                    }
+        new classDeviceErrorEventArgs(msg,
+                                     ex,
+                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                     this,
+                                     "None"));
+                }
                     
                 }
 
