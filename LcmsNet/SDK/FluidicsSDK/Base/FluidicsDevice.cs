@@ -354,10 +354,12 @@ namespace FluidicsSDK.Base
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
         protected virtual void AddRectangle(Point loc, Size size, Color color,  Brush fillBrush, bool fill=true, Action action = null)
         {
-            var rect = new FluidicsRectangle(loc, size, Color.Black, fillBrush);
-            rect.Color      = color;
-            rect.Fill       = fill;
-            this.AddPrimitive(rect, action);
+            var rect = new FluidicsRectangle(loc, size, Color.Black, fillBrush)
+            {
+                Color = color,
+                Fill = fill
+            };
+            AddPrimitive(rect, action);
         }
 
         /// <summary>
@@ -471,13 +473,14 @@ namespace FluidicsSDK.Base
         {
             get
             {
-                var s = new SizeF();
-                s.Width = m_primitives[PRIMARY_PRIMITIVE].Size.Width;
-                s.Height = m_primitives[PRIMARY_PRIMITIVE].Size.Height;
+                var s = new SizeF
+                {
+                    Width = m_primitives[PRIMARY_PRIMITIVE].Size.Width,
+                    Height = m_primitives[PRIMARY_PRIMITIVE].Size.Height
+                };
                 s.Height += m_info_controls_box.Size.Height;
                 return s;
             }
-            set { }
         }
          
         /// <summary>
@@ -502,17 +505,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// property for device name
         /// </summary>
-        public virtual string DeviceName
-        {
-            get
-            {
-                return IDevice.Name;
-            }
-            private set
-            {
-                //m_deviceName = value;
-            }
-        }
+        public virtual string DeviceName => IDevice.Name;
 
         /// <summary>
         /// property for retrieving the IDevice associated with the device
@@ -553,14 +546,7 @@ namespace FluidicsSDK.Base
             set;
         }
 
-        public virtual List<Port> Ports
-        {
-            get
-            {
-                return new List<Port>(m_portList);
-            }
-            private set { }
-        }
+        public virtual List<Port> Ports => new List<Port>(m_portList);
 
         /// <summary>
         /// stateless devices should return -1

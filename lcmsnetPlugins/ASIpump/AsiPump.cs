@@ -107,9 +107,10 @@ namespace ASIpump
             FinalIsoTime = 0;
 
             MobilePhases  = new List<MobilePhase>();
-            mdict_methods = new Dictionary<string, string>();
-            mdict_methods.Add("Method A", "Some Data");
-            mdict_methods.Add("Method B", "Some Data Too");
+            mdict_methods = new Dictionary<string, string> {
+                { "Method A", "Some Data"},
+                { "Method B", "Some Data Too"}
+            };
             Name          = "AsiPump";
         }
 

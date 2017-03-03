@@ -21,8 +21,8 @@ namespace LcmsNet.Devices
         /// </summary>
         public classApplicationDevice()
         {
-            m_name = "Application";
-            m_version = "Version 1.0";
+            Name = "Application";
+            Version = "Version 1.0";
             m_status = enumDeviceStatus.NotInitialized;
 
         }
@@ -90,20 +90,10 @@ namespace LcmsNet.Devices
         /// <returns></returns>
         public override string ToString()
         {
-            return m_name;
+            return Name;
         }
 
         #region Members
-
-        /// <summary>
-        /// Name of this device.
-        /// </summary>
-        private string m_name;
-
-        /// <summary>
-        /// Version of this device.
-        /// </summary>
-        private string m_version;
 
         /// <summary>
         /// Status of the device currently.
@@ -116,8 +106,6 @@ namespace LcmsNet.Devices
         {
             return null;
         }*/
-        /// <returns></returns>
-        /// </summary>
 
         #region IDevice Members
 
@@ -132,22 +120,14 @@ namespace LcmsNet.Devices
         public bool Emulation { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Name of this device.
         /// </summary>
-        public string Name
-        {
-            get { return m_name; }
-            set { m_name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the version number.
+        /// Version of this device.
         /// </summary>
-        public string Version
-        {
-            get { return m_version; }
-            set { m_version = value; }
-        }
+        public string Version { get; set; }
 
         /// <summary>
         /// Gets or sets the status of this device.
@@ -157,8 +137,8 @@ namespace LcmsNet.Devices
             get { return m_status; }
             set
             {
-                if (value != m_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
+                if (value != m_status)
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }
@@ -202,8 +182,5 @@ namespace LcmsNet.Devices
 
         #endregion
 
-        /// Application device.
-
-        /// <summary>
     }
 }

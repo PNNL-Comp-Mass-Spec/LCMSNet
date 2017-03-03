@@ -39,11 +39,12 @@ namespace DemoPluginLibrary
             m_primLines["top"] = newLine;
             foreach (var p in GeneratePortLocs())
             {
-                base.AddPort(p);
+                AddPort(p);
             }
-            var Connections = new List<Tuple<int, int>>();
-            Connections.Add(new Tuple<int, int>(0, 1));
-            Connections.Add(new Tuple<int, int>(2, 1));
+            var Connections = new List<Tuple<int, int>> {
+                new Tuple<int, int>(0, 1),
+                new Tuple<int, int>(2, 1)
+            };
             m_info_controls_box.Width = 70;
             m_info_controls_box.Height = 46;
             ActivateState(Connections);

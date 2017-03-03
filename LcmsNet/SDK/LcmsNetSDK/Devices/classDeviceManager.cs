@@ -78,17 +78,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Gets or sets the static device manager reference.
         /// </summary>
-        public static classDeviceManager Manager
-        {
-            get
-            {
-                if (m_deviceManager == null)
-                    m_deviceManager = new classDeviceManager();
-
-                return m_deviceManager;
-            }
-            set { }
-        }
+        public static classDeviceManager Manager => m_deviceManager ?? (m_deviceManager = new classDeviceManager());
 
         #endregion
 

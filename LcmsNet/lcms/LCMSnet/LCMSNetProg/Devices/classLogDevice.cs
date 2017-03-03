@@ -171,8 +171,8 @@ namespace LcmsNet.Devices
             get { return m_status; }
             set
             {
-                if (value != m_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
+                if (value != m_status)
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }

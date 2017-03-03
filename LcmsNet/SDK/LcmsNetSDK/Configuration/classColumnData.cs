@@ -187,7 +187,7 @@ namespace LcmsNetDataClasses.Configuration
             get { return m_columnColor; }
             set
             {
-                if (m_columnColor != value && value != null)
+                if (m_columnColor != value)
                 {
                     ColorChanged?.Invoke(this, m_columnColor, value);
                 }

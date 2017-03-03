@@ -213,8 +213,9 @@ namespace LcmsNet.Notification.Forms
         /// </summary>
         public void SaveNotificationFile()
         {
-            var configuration = new NotificationConfiguration();
-            configuration.IgnoreNotifications = IgnoreEvents;
+            var configuration = new NotificationConfiguration {
+                IgnoreNotifications = IgnoreEvents
+            };
 
             foreach (var device in m_deviceEventTable.Keys)
             {
@@ -298,7 +299,7 @@ namespace LcmsNet.Notification.Forms
                 return;
 
             // Make sure we only add components, and the error device(for testing)
-            if (device.DeviceType != enumDeviceType.Component && !device.GetType().Equals(typeof (classErrorDevice)))
+            if (device.DeviceType != enumDeviceType.Component && !(device.GetType() == typeof (classErrorDevice)))
                 return;
 
             AddNotifier(device);
@@ -420,10 +421,7 @@ namespace LcmsNet.Notification.Forms
         /// <param name="e"></param>
         void device_StatusUpdate(object sender, classDeviceStatusEventArgs e)
         {
-            if (e == null)
-                return;
-
-            if (e.Notifier == null)
+            if (e?.Notifier == null)
                 return;
 
             if (e.Notification == null)
@@ -460,10 +458,7 @@ namespace LcmsNet.Notification.Forms
         /// <param name="e"></param>
         void device_Error(object sender, classDeviceErrorEventArgs e)
         {
-            if (e == null)
-                return;
-
-            if (e.Device == null)
+            if (e?.Device == null)
                 return;
 
             if (e.Notification == null)
@@ -532,7 +527,7 @@ namespace LcmsNet.Notification.Forms
             var milliSeconds = rawMinutes * 1000 * 60; // 60 seconds / minute * 1000 ms / second
             m_notifierTimer.Interval = milliSeconds;
 
-            Settings.Default.NotificationWriteTimeMinutes = rawMinutes;
+            Settings.Default.NotificationWriteTimeMinutes = minutes;
             Settings.Default.Save();
 
             if (!m_updatingTimer)
@@ -620,10 +615,12 @@ namespace LcmsNet.Notification.Forms
 
             mnum_maximum.Minimum = mnum_minimum.Value;
 
-            var setting = new NotificationNumberSetting();
-            setting.Minimum = Convert.ToDouble(mnum_minimum.Value);
-            setting.Maximum = Convert.ToDouble(mnum_maximum.Value);
-            setting.Method = m_currentSetting.Method;
+            var setting = new NotificationNumberSetting
+            {
+                Minimum = Convert.ToDouble(mnum_minimum.Value),
+                Maximum = Convert.ToDouble(mnum_maximum.Value),
+                Method = m_currentSetting.Method
+            };
             m_currentSetting = setting;
             m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
@@ -635,10 +632,12 @@ namespace LcmsNet.Notification.Forms
             if (m_updateUI)
                 return;
 
-            var setting = new NotificationNumberSetting();
-            setting.Minimum = Convert.ToDouble(mnum_minimum.Value);
-            setting.Maximum = Convert.ToDouble(mnum_maximum.Value);
-            setting.Method = m_currentSetting.Method;
+            var setting = new NotificationNumberSetting
+            {
+                Minimum = Convert.ToDouble(mnum_minimum.Value),
+                Maximum = Convert.ToDouble(mnum_maximum.Value),
+                Method = m_currentSetting.Method
+            };
             m_currentSetting = setting;
             m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
@@ -656,10 +655,12 @@ namespace LcmsNet.Notification.Forms
             if (m_updateUI)
                 return;
 
-            var setting = new NotificationNumberSetting();
-            setting.Method = m_currentSetting.Method;
-            setting.Minimum = Convert.ToDouble(mnum_minimum.Value);
-            setting.Maximum = Convert.ToDouble(mnum_maximum.Value);
+            var setting = new NotificationNumberSetting
+            {
+                Method = m_currentSetting.Method,
+                Minimum = Convert.ToDouble(mnum_minimum.Value),
+                Maximum = Convert.ToDouble(mnum_maximum.Value)
+            };
             m_currentSetting = setting;
             m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
@@ -678,9 +679,11 @@ namespace LcmsNet.Notification.Forms
             if (m_updateUI)
                 return;
 
-            var setting = new NotificationTextSetting();
-            setting.Text = mtextBox_statusText.Text;
-            setting.Method = m_currentSetting.Method;
+            var setting = new NotificationTextSetting
+            {
+                Text = mtextBox_statusText.Text,
+                Method = m_currentSetting.Method
+            };
             m_currentSetting = setting;
             m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
@@ -690,8 +693,9 @@ namespace LcmsNet.Notification.Forms
             if (m_updateUI)
                 return;
 
-            var setting = new NotificationAlwaysSetting();
-            setting.Method = m_currentSetting.Method;
+            var setting = new NotificationAlwaysSetting {
+                Method = m_currentSetting.Method
+            };
             m_currentSetting = setting;
             m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
@@ -701,9 +705,11 @@ namespace LcmsNet.Notification.Forms
             if (m_updateUI)
                 return;
 
-            var setting = new NotificationTextSetting();
-            setting.Text = mtextBox_statusText.Text;
-            setting.Method = m_currentSetting.Method;
+            var setting = new NotificationTextSetting
+            {
+                Text = mtextBox_statusText.Text,
+                Method = m_currentSetting.Method
+            };
             m_currentSetting = setting;
             m_deviceEventTable[m_currentDevice].EventMap[m_currentNotification] = setting;
         }
@@ -787,16 +793,19 @@ namespace LcmsNet.Notification.Forms
             if (type == typeof (NotificationTextSetting))
             {
                 var text = setting as NotificationTextSetting;
-                mtextBox_statusText.Text = text.Text;
+                mtextBox_statusText.Text = text != null ? text.Text : string.Empty;
                 mradioButton_text.Checked = true;
             }
             else if (type == typeof (NotificationNumberSetting))
             {
                 var number = setting as NotificationNumberSetting;
-                mnum_minimum.Minimum = Convert.ToDecimal(number.Minimum);
-                mnum_minimum.Value = Convert.ToDecimal(number.Minimum);
-                mnum_maximum.Maximum = Convert.ToDecimal(number.Maximum);
-                mnum_maximum.Value = Convert.ToDecimal(number.Maximum);
+                if (number != null)
+                {
+                    mnum_minimum.Minimum = Convert.ToDecimal(number.Minimum);
+                    mnum_minimum.Value = Convert.ToDecimal(number.Minimum);
+                    mnum_maximum.Maximum = Convert.ToDecimal(number.Maximum);
+                    mnum_maximum.Value = Convert.ToDecimal(number.Maximum);
+                }
 
                 mradioButton_number.Checked = true;
             }
@@ -837,22 +846,20 @@ namespace LcmsNet.Notification.Forms
             {
                 m_updateUI = true;
                 var linker = m_deviceEventTable[m_currentDevice];
-                if (mlistBox_events.SelectedItem != null)
+                var key = mlistBox_events.SelectedItem?.ToString();
+
+                if (key != null)
                 {
-                    var key = mlistBox_events.SelectedItem.ToString();
-                    if (key != null)
+                    mlabel_setting.Text = key;
+                    m_currentNotification = key;
+                    if (linker.EventMap.ContainsKey(key))
                     {
-                        mlabel_setting.Text = key;
-                        m_currentNotification = key;
-                        if (linker.EventMap.ContainsKey(key))
+                        if (mlistbox_assignedEvents.SelectedIndex >= 0)
                         {
-                            if (mlistbox_assignedEvents.SelectedIndex >= 0)
-                            {
-                                mlistbox_assignedEvents.SetSelected(mlistbox_assignedEvents.SelectedIndex, false);
-                            }
-                            var setting = linker.EventMap[key];
-                            SetSetting(setting);
+                            mlistbox_assignedEvents.SetSelected(mlistbox_assignedEvents.SelectedIndex, false);
                         }
+                        var setting = linker.EventMap[key];
+                        SetSetting(setting);
                     }
                 }
                 m_updateUI = false;
@@ -875,20 +882,18 @@ namespace LcmsNet.Notification.Forms
                     return;
 
                 var key = mlistbox_assignedEvents.SelectedItem.ToString();
-                if (key != null)
-                {
-                    m_currentNotification = key;
-                    if (linker.EventMap.ContainsKey(key))
-                    {
-                        mlabel_setting.Text = key;
-                        if (mlistBox_events.SelectedIndex >= 0)
-                        {
-                            mlistBox_events.SetSelected(mlistBox_events.SelectedIndex, false);
-                        }
+                m_currentNotification = key;
 
-                        var setting = linker.EventMap[key];
-                        SetSetting(setting);
+                if (linker.EventMap.ContainsKey(key))
+                {
+                    mlabel_setting.Text = key;
+                    if (mlistBox_events.SelectedIndex >= 0)
+                    {
+                        mlistBox_events.SetSelected(mlistBox_events.SelectedIndex, false);
                     }
+
+                    var setting = linker.EventMap[key];
+                    SetSetting(setting);
                 }
                 m_updateUI = false;
             }

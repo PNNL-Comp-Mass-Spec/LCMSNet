@@ -27,7 +27,7 @@ namespace FluidicsSDK.Base
             Message = message;
         }
         
-        public Nullable<Point> OldLocation
+        public Point? OldLocation
         {
             get;
             private set;

@@ -41,7 +41,7 @@ namespace FluidicsSDK.Base
         /// <returns>a string representation of the state</returns>
         public static string ToCustomString(this FifteenPositionState s)
         {
-            string customString = null;
+            string customString;
             switch (s)
             {    
                 case FifteenPositionState.P1:
@@ -101,7 +101,7 @@ namespace FluidicsSDK.Base
 
         public static string ToCustomString(this EightPositionState s)
         {
-            string customString = null;
+            string customString;
             switch (s)
             {
                 case EightPositionState.P1:
@@ -145,7 +145,7 @@ namespace FluidicsSDK.Base
         /// <returns>a string representation of the state</returns>
         public static string ToCustomString(this TenPositionState s)
         {
-            string customString = null;
+            string customString;
             switch (s)
             {
                 case TenPositionState.P1:
@@ -195,7 +195,7 @@ namespace FluidicsSDK.Base
         /// <returns></returns>
         public static string ToCustomString(this TwoPositionState s)
         {
-            string customString = null;
+            string customString;
             switch (s)
             {
                 case TwoPositionState.PositionA:
