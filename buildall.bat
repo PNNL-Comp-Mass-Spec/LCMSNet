@@ -125,3 +125,5 @@ DEL %LOGFILE%
 echo BUILD COMPLETE.
 
 :END
+
+sleep 3
