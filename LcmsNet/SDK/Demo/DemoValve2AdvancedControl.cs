@@ -12,7 +12,7 @@ namespace DemoPluginLibrary
 {
     public partial class DemoValve2AdvancedControl : controlBaseDeviceControl, IDeviceControl
     {
-        DemoValve2 m_device;
+        DemoValve2 m_valve;
 
         public DemoValve2AdvancedControl()
         {
@@ -37,23 +37,23 @@ namespace DemoPluginLibrary
         {
             get
             {
-                return m_device as IDevice;
+                return m_valve;
             }
             set
             {
-                m_device = value as DemoValve2;
+                m_valve = value as DemoValve2;
                 SetBaseDevice(value);
             }
         }
 
         public void btnSetPosition_Click(object sender, EventArgs e)
         {
-            m_device.SetPosition((FluidicsSDK.Base.EightPositionState)Enum.Parse(typeof(FluidicsSDK.Base.EightPositionState), comboPosition.SelectedItem.ToString()));
+            m_valve.SetPosition((FluidicsSDK.Base.EightPositionState)Enum.Parse(typeof(FluidicsSDK.Base.EightPositionState), comboPosition.SelectedItem.ToString()));
         }
 
         public void btnRefresh_Click(object sender, EventArgs e)
         {
-            txtState.Text = ((FluidicsSDK.Base.EightPositionState)m_device.GetPosition()).ToString();
+            txtState.Text = ((FluidicsSDK.Base.EightPositionState)m_valve.GetPosition()).ToString();
         }
     }
 }

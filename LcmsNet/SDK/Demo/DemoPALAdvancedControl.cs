@@ -12,7 +12,7 @@ namespace DemoPluginLibrary
 {
     public partial class DemoPALAdvancedControl : controlBaseDeviceControl, IDeviceControl
     {
-        DemoPAL m_device;
+        DemoPAL m_PALdevice;
 
         public DemoPALAdvancedControl()
         {
@@ -33,11 +33,11 @@ namespace DemoPluginLibrary
         {
             get
             {
-                return m_device as IDevice;
+                return m_PALdevice;
             }
             set
             {
-                m_device = value as DemoPAL;
+                m_PALdevice = value as DemoPAL;
                 SetBaseDevice(value);
             }
         }
@@ -45,7 +45,7 @@ namespace DemoPluginLibrary
         private void btnRunMethod_Click(object sender, EventArgs e)
         {
             // use a defaulted sampledata object since there's no sample associated with a user clicking "run"
-            m_device.RunMethod(Convert.ToDouble(numTimeout.Value), new LcmsNetDataClasses.classSampleData(), comboMethod.SelectedItem.ToString());
+            m_PALdevice.RunMethod(Convert.ToDouble(numTimeout.Value), new LcmsNetDataClasses.classSampleData(), comboMethod.SelectedItem.ToString());
         }
 
 

@@ -378,10 +378,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Add the dataset type items to the data grid
             //
-            List<string> datasetTypes;
             try
             {
-                datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
+                var datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
                 foreach (var datasetType in datasetTypes)
                 {
                     mcolumn_datasetType.Items.Add(datasetType);
@@ -451,7 +450,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Determines if a queue can be pulled down or not.
         /// </summary>
-        /// <param name="rowNum">The row number</param>
         /// <returns></returns>
         bool SelectionChangeValid(int rowNum, classSampleData sample, bool doNotValidate = false)
         {
@@ -490,10 +488,9 @@ namespace LcmsNet.SampleQueue.Forms
                     // no dms tools validator
                     validator = null;
                 }
-                bool isSampleValid;
                 if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) && validator != null)
                 {
-                    isSampleValid = validator.IsSampleValid(sample);
+                    var isSampleValid = validator.IsSampleValid(sample);
                     if (!isSampleValid && false)
                     {
                         return false;
@@ -576,7 +573,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
 
                 currentTask = "Examine samples";
-                var neededRowId = 0;
+                int neededRowId;
                 if (rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum)
                 {
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum].Cells[CONST_COLUMN_UNIQUE_ID].Value);
@@ -653,14 +650,9 @@ namespace LcmsNet.SampleQueue.Forms
                         // no dms tools validator
                         validator = null;
                     }
-                    bool isSampleValid;
                     if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) && validator != null)
                     {
-                        isSampleValid = validator.IsSampleValid(sample);
-                        if (!isSampleValid && false)
-                        {
-                            return;
-                        }
+                        var isSampleValid = validator.IsSampleValid(sample);
                     }
                     else
                     {
@@ -1258,10 +1250,7 @@ namespace LcmsNet.SampleQueue.Forms
             //
             var uniqueID = Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
             var data = m_sampleQueue.FindSample(uniqueID);
-            var success = false;
-            var volume = 0.0;
-            var vial = 0;
-            var name = "";
+            bool success;
 
             //
             // Update the sample data
@@ -1275,7 +1264,7 @@ namespace LcmsNet.SampleQueue.Forms
                     //
                     // Make sure that we have a valid method here.
                     //
-                    name = Convert.ToString(cellData);
+                    var name = Convert.ToString(cellData);
                     if (classLCMethodManager.Manager.Methods.ContainsKey(name))
                     {
                         var tempMethod = classLCMethodManager.Manager.Methods[name];
@@ -1293,6 +1282,7 @@ namespace LcmsNet.SampleQueue.Forms
                     data.PAL.PALTray = Convert.ToString(cellData);
                     break;
                 case CONST_COLUMN_PAL_VIAL:
+                    int vial;
                     success = int.TryParse(cellData.ToString(), out vial);
                     if (success)
                     {
@@ -1301,6 +1291,7 @@ namespace LcmsNet.SampleQueue.Forms
                     }
                     break;
                 case CONST_COLUMN_VOLUME:
+                    double volume;
                     success = double.TryParse(cellData.ToString(), out volume);
                     if (success)
                     {
@@ -1636,6 +1627,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="name"></param>
+        /// <param name="oldName"></param>
         void column_NameChanged(object sender, string name, string oldName)
         {
             m_sampleQueue.UpdateWaitingSamples();
@@ -1951,12 +1943,11 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         protected virtual bool AddSamplesToList(IEnumerable<classSampleData> samples)
         {
-            var added = true;
             foreach (var data in samples)
             {
                 AddSamplesToList(data);
             }
-            return added;
+            return true;
         }
 
         /// <summary>
@@ -2072,12 +2063,15 @@ namespace LcmsNet.SampleQueue.Forms
             //
             if (samplesToRandomize.Count > 1)
             {
-                formSampleRandomizer form = null;
+                formSampleRandomizer form;
                 try
                 {
-                    form = new formSampleRandomizer(samplesToRandomize);
-                    form.Icon = ParentForm.Icon;
-                    form.StartPosition = FormStartPosition.CenterParent;
+                    form = new formSampleRandomizer(samplesToRandomize)
+                    {
+                        StartPosition = FormStartPosition.CenterParent
+                    };
+                    if (ParentForm != null)
+                        form.Icon = ParentForm.Icon;
                 }
                 catch
                 {

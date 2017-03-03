@@ -26,12 +26,11 @@ namespace LcmsNetSDK
         private static classDMSToolsManager m_instance;
 
         /// <summary>
-        /// reference to metadata of our selectedTools.
+        /// Reference to metadata of our selectedTools.
         /// </summary>
-        private IDmsMetaData mdms_metadata;
+        private IDmsMetaData m_DMSMetaData;
 
-        private IDmsTools midmstools_selectedTools;
-        private readonly CompositionContainer mmef_compositionContainer;
+        private IDmsTools m_SelectedDMSTools;
 
         private classDMSToolsManager()
         {
@@ -54,8 +53,13 @@ namespace LcmsNetSDK
             }
 
             catalog.Catalogs.Add(new DirectoryCatalog(catalogPath));
-            mmef_compositionContainer = new CompositionContainer(catalog);
-            mmef_compositionContainer.ComposeParts(this);
+
+            // Find DLLs that have classes marked with attribute Export(typeof(IDmsTools)) or attribute Export(typeof(IDMSValidator))
+            // Typically classes classDBTools and classDMSSampleValidator in LcmsNetDmsTools.dll have those attributes
+            // For each found DLL, update auto-properties DmsTools and Validators to include instances of the corresponding class
+            var mefCompositionContainer = new CompositionContainer(catalog);
+            mefCompositionContainer.ComposeParts(this);
+
             if (ToolCount == 0)
             {
                 classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, string.Empty);
@@ -127,8 +131,8 @@ namespace LcmsNetSDK
                     return
                         Validators.Single(
                             x =>
-                                x.Metadata.RelatedToolName == mdms_metadata.Name &&
-                                Convert.ToDouble(mdms_metadata.Version) >=
+                                x.Metadata.RelatedToolName == m_DMSMetaData.Name &&
+                                Convert.ToDouble(m_DMSMetaData.Version) >=
                                 Convert.ToDouble(x.Metadata.RequiredDMSToolVersion)).Value;
                 }
                 catch (InvalidCastException)
@@ -177,7 +181,7 @@ namespace LcmsNetSDK
                     if (tool.Metadata.Version == toolVersion)
                     {
                         toolSelected = true;
-                        midmstools_selectedTools = tool.Value;
+                        m_SelectedDMSTools = tool.Value;
                         classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, toolName + "-" + toolVersion);
                     }
                 }
@@ -185,13 +189,13 @@ namespace LcmsNetSDK
             if (!toolSelected && !toolFound)
             {
                 // Tool name was not found.
-                throw new ArgumentException("Tool " + toolName + " unavailable for selection", "toolName");
+                throw new ArgumentException("Tool " + toolName + " unavailable for selection", nameof(toolName));
             }
             if (!toolSelected)
             {
                 // Tool was not found with specified version.
                 throw new ArgumentException(
-                    "Tool version " + toolVersion + " unavailable for selection, version not found.", "toolVersion");
+                    "Tool version " + toolVersion + " unavailable for selection, version not found.", nameof(toolVersion));
             }
         }
 

@@ -279,18 +279,18 @@ namespace LcmsNet.SampleQueue
             {
                 cartList = classSQLiteTools.GetCartNameList();
             }
-            catch (classDatabaseConnectionStringException Ex)
+            catch (classDatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
-                var errMsg = Ex.Message + " while getting LC cart listing.\r\n" +
+                var errMsg = ex.Message + " while getting LC cart listing.\r\n" +
                     "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             }
-            catch (classDatabaseDataException Ex)
+            catch (classDatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                var errMsg = "Exception getting LC cart list from DMS: " + Ex.InnerException.Message + "\r\n" +
+                var errMsg = "Exception getting LC cart list from DMS: " + ex.InnerException.Message + "\r\n" +
                     "As a workaround, you may manually type the cart name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
@@ -321,18 +321,18 @@ namespace LcmsNet.SampleQueue
             {
                 cartConfigList = classSQLiteTools.GetCartConfigNameList(false);
             }
-            catch (classDatabaseConnectionStringException Ex)
+            catch (classDatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
-                var errMsg = Ex.Message + " while getting LC cart config name listing.\r\n" +
+                var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
                     "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             }
-            catch (classDatabaseDataException Ex)
+            catch (classDatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
-                var errMsg = "Exception getting LC cart config name list from DMS: " + Ex.InnerException.Message + "\r\n" +
+                var errMsg = "Exception getting LC cart config name list from DMS: " + ex.InnerException.Message + "\r\n" +
                     "As a workaround, you may manually type the cart config name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
@@ -407,18 +407,20 @@ namespace LcmsNet.SampleQueue
             {
                 tempRequestList = classDMSToolsManager.Instance.SelectedTool.GetSamplesFromDMS(queryData);
             }
-            catch (classDatabaseConnectionStringException Ex)
+            catch (classDatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
-                var errMsg = Ex.Message + " while getting request listing\r\n";
+                var errMsg = ex.Message + " while getting request listing\r\n";
                 errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
-            catch (classDatabaseDataException Ex)
+            }
+            catch (classDatabaseDataException ex)
             {
-                var errMsg = Ex.Message + ": " + Ex.InnerException.Message;
+                var errMsg = ex.Message + ": " + ex.InnerException.Message;
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
+            }
             finally
             {
                 labelPleaseWait.Visible = false;
@@ -661,30 +663,30 @@ namespace LcmsNet.SampleQueue
                 }
             }
             // Call the DMS stored procedure to update the cart assignments
-            var success = false;
+            bool success;
             try
             {
                 success = classDMSToolsManager.Instance.SelectedTool.UpdateDMSCartAssignment(reqIDs, m_CartName, m_CartConfigName, true);
             }
-            catch (classDatabaseConnectionStringException Ex)
+            catch (classDatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
-                var errMsg = Ex.Message + " while getting LC cart listing\r\n";
+                var errMsg = ex.Message + " while getting LC cart listing\r\n";
                 errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return false;
             }
-            catch (classDatabaseDataException Ex)
+            catch (classDatabaseDataException ex)
             {
-                var errMsg = Ex.Message + ": " + Ex.InnerException.Message + "\r\n\r\n";
+                var errMsg = ex.Message + ": " + ex.InnerException.Message + "\r\n\r\n";
                 errMsg = errMsg + " Requests in DMS may not show correct cart assignments";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
             }
-            catch (classDatabaseStoredProcException Ex)
+            catch (classDatabaseStoredProcException ex)
             {
-                var errMsg = "Error " + Ex.ReturnCode + " while executing stored procedure ";
-                errMsg = errMsg + Ex.ProcName + ": " + Ex.ErrMessage;
+                var errMsg = "Error " + ex.ReturnCode + " while executing stored procedure ";
+                errMsg = errMsg + ex.ProcName + ": " + ex.ErrMessage;
                 errMsg = errMsg + "\r\n\r\nRequests in DMS may not show correct cart assignments";
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return true;
