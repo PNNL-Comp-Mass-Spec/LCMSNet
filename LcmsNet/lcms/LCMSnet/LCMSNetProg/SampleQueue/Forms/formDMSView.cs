@@ -492,7 +492,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Tests downloaded samples to determine if any have blocking enabled
         /// </summary>
-        /// <param name="InpData">List<classSampleData> containing downloaded samples</param>
+        /// <param name="InpData">List containing downloaded samples</param>
         /// <returns>TRUE if any samples have blcoking enabled; otherwise FALSE</returns>
         private bool IsBlockingEnabled(List<classSampleData> InpData)
         {
@@ -578,7 +578,7 @@ namespace LcmsNet.SampleQueue
         /// Predicate function to find index of request matching specified request number
         /// Used for m_DmsRequestList FindIndex method
         /// </summary>
-        /// <param name="request">classDMSData object passed in from List<T>.FindIndex method</param>
+        /// <param name="request">classDMSData object passed in from FindIndex method</param>
         /// <returns>True if match is made; otherwise False</returns>
         private bool PredContainsRequestName(classSampleData request)
         {

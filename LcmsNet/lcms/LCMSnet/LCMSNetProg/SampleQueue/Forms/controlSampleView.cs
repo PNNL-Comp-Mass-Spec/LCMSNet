@@ -1932,7 +1932,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Adds samples to the list but optimizes layout and updates for rendering controls.
         /// </summary>
-        /// <param name="sample">Sample to display in the list view.</param>
+        /// <param name="samples">Sample to display in the list view.</param>
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         protected virtual bool AddSamplesToList(IEnumerable<classSampleData> samples)
         {
@@ -2111,7 +2111,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Removes the single sample from the list view.
         /// </summary>
-        /// <param name="samples"></param>
+        /// <param name="sample"></param>
         /// <returns></returns>
         protected virtual bool RemoveSamplesFromList(classSampleData sample)
         {

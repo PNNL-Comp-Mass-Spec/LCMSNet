@@ -19,8 +19,13 @@ using LcmsNetDataClasses.Data;
 namespace LcmsNetSDK
 {
     /// <summary>
-    /// Class that handles loading of DmsTools extensions.
+    /// Class that handles loading of DmsTools extensions using the Managed Extensibility Framework (MEF)
     /// </summary>
+    /// <remarks>
+    /// Looks for DLLs in C:\Users\Username\AppData\Roaming\LCMSNet\dmsExtensions
+    /// that have classes marked with attribute Export(typeof(IDmsTools)) or attribute Export(typeof(IDMSValidator))
+    /// Typically classes classDBTools and classDMSSampleValidator in LcmsNetDmsTools.dll have those attributes
+    /// </remarks>
     public class classDMSToolsManager
     {
         private static classDMSToolsManager m_instance;
@@ -143,15 +148,17 @@ namespace LcmsNetSDK
         }
 
         /// <summary>
-        /// Contains the MEF references to DmsTools
+        /// Contains the Managed Extensibility Framework (MEF) references to DmsTools
         /// </summary>
         [ImportMany]
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local (the setter is used when we run mefCompositionContainer.ComposeParts)
         private IEnumerable<Lazy<IDmsTools, IDmsMetaData>> DmsTools { get; set; }
 
         /// <summary>
         /// Contains the MEF references to the validators
         /// </summary>
         [ImportMany]
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local (the setter is used when we run mefCompositionContainer.ComposeParts)
         private IEnumerable<Lazy<IDMSValidator, IDMSValidatorMetaData>> Validators { get; set; }
 
         /// <summary>

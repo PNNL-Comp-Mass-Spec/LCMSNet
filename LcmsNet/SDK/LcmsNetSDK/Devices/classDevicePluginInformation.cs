@@ -11,7 +11,7 @@ namespace LcmsNetDataClasses.Devices
         /// Constructor.
         /// </summary>
         /// <param name="deviceType"></param>
-        /// <param name="name"></param>
+        /// <param name="attribute"></param>
         public classDevicePluginInformation(Type deviceType, classDeviceControlAttribute attribute)
         {
             DeviceType = deviceType;

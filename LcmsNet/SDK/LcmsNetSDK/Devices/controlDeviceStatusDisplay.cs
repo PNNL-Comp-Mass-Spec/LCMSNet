@@ -237,6 +237,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Draws the indicator.
         /// </summary>
+        /// <param name="g"></param>
         /// <param name="left"></param>
         /// <param name="top"></param>
         /// <param name="width"></param>

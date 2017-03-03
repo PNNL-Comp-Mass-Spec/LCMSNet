@@ -40,7 +40,6 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="ex"></param>
         /// <param name="status"></param>
         /// <param name="device"></param>
-        /// <param name="notifyStr"></param>
         public classDeviceErrorEventArgs(string errorMessage,
             Exception ex,
             enumDeviceErrorStatus status,
