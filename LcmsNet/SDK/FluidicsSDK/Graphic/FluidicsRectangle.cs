@@ -37,7 +37,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="fill">a bool determining if rectangle should be filled with fillColor or not</param>
         /// <param name="atScale">scale of the rectangle</param>
         public FluidicsRectangle(Point loc, Size size, Color color, Brush fillBrush, bool fill = true, float atScale = 1):
-            base(fillBrush, myColor:color, fill:fill, atScale:atScale)
+            base(fillBrush, myColor:color, fill:fill)
         {
             m_rect = new Rectangle(loc, size);
         }

@@ -60,7 +60,7 @@ namespace DemoPluginLibrary
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="portName">The port to send the voltage on</param>
         /// <param name="voltage">The voltage to set</param>        
         [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
