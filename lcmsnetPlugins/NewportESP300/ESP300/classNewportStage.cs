@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
@@ -57,14 +58,16 @@ namespace Newport.ESP300
         /// Creates stage on specified port with specified current position and number of axes.
         /// </summary>
         /// <param name="port">a System.IO.Ports SerialPort, defaults to COM1</param>
+        /// <param name="currentPos"></param>
         /// <param name="numAxes">an integer representing the number of axes of movement available to this stage</param>
         public classNewportStage(SerialPort port, string currentPos, int numAxes)
         {
             m_disposed = false;
             if (port == null)
             {
-                Port = new SerialPort("COM1", CONST_BAUDRATE, CONST_PARITY, CONST_DATABITS, CONST_STOPBITS);
-                Port.Handshake = CONST_HANDSHAKE;
+                Port = new SerialPort("COM1", CONST_BAUDRATE, CONST_PARITY, CONST_DATABITS, CONST_STOPBITS) {
+                    Handshake = CONST_HANDSHAKE
+                };
             }
             else
             {
@@ -119,7 +122,7 @@ namespace Newport.ESP300
         }
 
         #endregion
-        
+
         #region Methods
 
         #region OperationMethods
@@ -127,18 +130,20 @@ namespace Newport.ESP300
         /// <summary>
         /// Set the x,y,z coodinates of a position
         /// </summary>
-        /// <param name="positionNumber">the position whose coordinates to set</param>
+        /// <param name="positionName">the position whose coordinates to set</param>
         /// <param name="axis1Coord">the x coordinate</param>
         /// <param name="axis2Coord">the y coordinate </param>
         /// <param name="axis3Coord">the z coordinate, currently unused, pass zero</param>
         //[classLCMethodAttribute("Define Position", 1, true, "", -1, false)]
         public void SetPositionCoordinates(string positionName, float axis1Coord, float axis2Coord, float axis3Coord)
         {
-            var position = new classStagePosition();
-            position.NumAxes = 2;
-            position[0] = axis1Coord;
-            position[1] = axis2Coord;
-            position[2] = axis3Coord;
+            var position = new classStagePosition
+            {
+                NumAxes = 2,
+                [0] = axis1Coord,
+                [1] = axis2Coord,
+                [2] = axis3Coord
+            };
             m_positions[positionName] = position;
         }
 
@@ -155,8 +160,8 @@ namespace Newport.ESP300
         /// <summary>
         /// Go to a specified 2D/3D position defined by a stage position
         /// </summary>
-        /// <param name="positionIndex">the position to go to</param>
-        /// <param name="block">waits for the position to be reached if true, doesn't wait if false, deprecated</param>
+        /// <param name="timeout"></param>
+        /// <param name="positionName">the position to go to</param>
         [classLCMethodAttribute("Go To Predefined Position", enumMethodOperationTime.Parameter, "POSNAMES", 1,false)]
         public void GoToPosition(double timeout, string positionName) // bool block = true)
         {
@@ -198,16 +203,15 @@ namespace Newport.ESP300
         /// <returns>double representing position of the axis</returns>
         //[classLCMethodAttribute("Query Axis Position", 1, true, "", -1, false)]
         public double QueryPosition(int axis)
-        {           
-            string response;
+        {
             var cmd = new StringBuilder();
-            cmd.Append(axis.ToString() + "TP" + CONST_CMD_TERMINATOR);
+            cmd.Append(axis + "TP" + CONST_CMD_TERMINATOR);
             
             if (!Emulation)
             {
                 if (ValidateAxis(axis))
                 {
-                    response = WriteCommand(cmd.ToString(), true);
+                    var response = WriteCommand(cmd.ToString(), true);
                     try
                     {
                         return Convert.ToDouble(response);
@@ -225,10 +229,8 @@ namespace Newport.ESP300
                 }
                 return 0.0;
             }
-            else
-            {
-                return 0.0;
-            }
+
+            return 0.0;
         }
 
         /// <summary>
@@ -246,7 +248,7 @@ namespace Newport.ESP300
             if (ValidateAxis(axis))
             {
                 var cmd = new StringBuilder();
-                cmd.Append(axis.ToString() + "PA" + position.ToString() + CONST_CMD_TERMINATOR);
+                cmd.Append(axis + "PA" + position.ToString(CultureInfo.InvariantCulture) + CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
             }
         }
@@ -307,7 +309,7 @@ namespace Newport.ESP300
         /// Move specified axis in a specified direction, optionally at slow speed
         /// </summary>
         /// <param name="axis">integer specifying which axis to move</param>
-        /// <param name="mvnegative">boolean specifying direction, true to move in the positive direction, false to move in the negative direction</param>
+        /// <param name="mvNegative">boolean specifying direction, true to move in the positive direction, false to move in the negative direction</param>
         /// <param name="slow"></param>
         //[classLCMethodAttribute("Move Axis in Direction", 1, true, "", -1, false)]
         public void MoveAxis(int axis, bool mvNegative, bool slow = false)
@@ -328,7 +330,7 @@ namespace Newport.ESP300
                     //prepending change of acceleration command to move command.
                     var divisor = 10.0;
                     cmd.Insert(0, ";");
-                    cmd.Insert(0, string.Format("0.00000", m_SpeedNormal[axis] / divisor));
+                    cmd.Insert(0, (m_SpeedNormal[axis] / divisor).ToString("0.00000"));
                     cmd.Insert(0, axis.ToString());
                     m_AtSlowSpeed = true;
                 }
@@ -355,17 +357,15 @@ namespace Newport.ESP300
                 cmd.Append("MD");
                 cmd.Append(CONST_CMD_TERMINATOR);
                 var response = WriteCommand(cmd.ToString(), true);
-                response.Trim('\r');
+                response = response.Trim('\r');
                 try
                 {
                     if (!Emulation)
                     {
                         return Convert.ToBoolean(Convert.ToInt32(response));
                     }
-                    else
-                    {
-                        return true;
-                    }
+
+                    return true;
                 }
                 catch
                 {
@@ -403,7 +403,7 @@ namespace Newport.ESP300
                 {
                     //prepending the change in acceleration command to the stop command
                     cmd.Insert(firstChar, ";");
-                    cmd.Insert(firstChar, string.Format("0.00000", m_SpeedNormal[axis]));
+                    cmd.Insert(firstChar, m_SpeedNormal[axis].ToString("0.00000"));
                     cmd.Insert(firstChar, "VA");
                     cmd.Insert(firstChar, axis.ToString());
                 }
@@ -417,11 +417,10 @@ namespace Newport.ESP300
             {
                 return true;
             }
-            else
-            {
-                LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Attempt to modify invalid axis detected");
-                return false;
-            }
+
+            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, 
+                "Attempt to modify invalid axis detected");
+            return false;
         }
 
         /// <summary>
@@ -459,7 +458,6 @@ namespace Newport.ESP300
                 return;
             }
             var response = string.Empty;
-            string[] tokens;
             // we are not using WriteCommand here to avoid infinite recursion, since this is called within WriteCommand.
             try
             {
@@ -481,7 +479,7 @@ namespace Newport.ESP300
             }
             try
             {
-                tokens = response.Split(',');
+                var tokens = response.Split(',');
                 errcode = Convert.ToInt32(tokens[0]);
                 timestamp = Convert.ToInt64(tokens[1]);
                 description = tokens[2];
@@ -521,7 +519,7 @@ namespace Newport.ESP300
         /// <summary>
         /// Write command to the serial port associated with this stage
         /// </summary>
-        /// <param name="cmnd">string containing the command to write to the stage, should follow the stage command syntax</param>
+        /// <param name="command">string containing the command to write to the stage, should follow the stage command syntax</param>
         /// <param name="waitForResponse">boolean determining if the software waits for the stage to respond to the command</param>
         public string WriteCommand(string command, bool waitForResponse = false)
         {
@@ -561,10 +559,8 @@ namespace Newport.ESP300
                 }
                 return response;
             }
-            else
-            {
-                return "Emulated Write Complete";
-            }
+
+            return "Emulated Write Complete";
         }
 
         /// <summary>
@@ -583,8 +579,7 @@ namespace Newport.ESP300
         /// <summary>
         /// Attempt to open the serial port
         /// </summary>
-        /// <param name="port"></param>
-        //[classLCMethodAttribute("Open Port", 1, true, "", -1, false)]
+        [classLCMethodAttribute("Open Port", 1, true, "", -1, false)]
         public void OpenPort()
         {
             if(Emulation)
@@ -599,7 +594,7 @@ namespace Newport.ESP300
                 {
                     // this writecommand is to clear out anything that may have been erroneously sent to the newport by another device, we don't care about errors reported from it
                     // since if something else sent a command, it likely did not exist anyway and will throw one.
-                    WriteCommand("" + CONST_CMD_TERMINATOR, false);
+                    WriteCommand("" + CONST_CMD_TERMINATOR);
                     Port.ReadLine();
                     ClearErrors();
                     for (var axis = 1; axis < NumAxes + 1; axis++)
@@ -641,7 +636,7 @@ namespace Newport.ESP300
 
                 var data = new List<object>();
                 data.AddRange(keys);
-                PosNames(this, (List<object>)data);
+                PosNames(this, data);
             }
         }
         #endregion
@@ -836,9 +831,9 @@ namespace Newport.ESP300
                     var pos = m_positions[key];
                     semicolonSeparatedPositions.Append(key);
                     semicolonSeparatedPositions.Append(positionInfoSeparator);
-                    var axis1Pos = pos[0].ToString();
-                    var axis2Pos = pos[1].ToString();
-                    var axis3Pos = pos[2].ToString();
+                    var axis1Pos = pos[0].ToString(CultureInfo.InvariantCulture);
+                    var axis2Pos = pos[1].ToString(CultureInfo.InvariantCulture);
+                    var axis3Pos = pos[2].ToString(CultureInfo.InvariantCulture);
                     semicolonSeparatedPositions.Append(axis1Pos);
                     semicolonSeparatedPositions.Append(positionInfoSeparator);
                     semicolonSeparatedPositions.Append(axis2Pos);
@@ -933,7 +928,8 @@ namespace Newport.ESP300
             switch (key.ToUpper())
             {
                 case "POSNAMES":
-                    PosNames -= remoteMethod;
+                    if (PosNames != null)
+                        PosNames -= remoteMethod;
                     break;
             }
         }
@@ -977,6 +973,7 @@ namespace Newport.ESP300
         #endregion
 
         #region Events
+        /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;

@@ -8,15 +8,15 @@ namespace Newport.ESP300
     public class classStagePosition
     {
         private readonly List<float> m_coordinates;
-        private int m_numAxes;
 
         public classStagePosition()
         {
-            m_numAxes = 2;
-            m_coordinates = new List<float>();
-            m_coordinates.Add(0.0f);
-            m_coordinates.Add(0.0f);
-            m_coordinates.Add(0.0f);
+            NumAxes = 2;
+            m_coordinates = new List<float> {
+                0.0f,
+                0.0f,
+                0.0f
+            };
         }
 
 
@@ -40,16 +40,6 @@ namespace Newport.ESP300
         /// <summary>
         /// Gets or Sets number of axes available to this position.
         /// </summary>
-        public int NumAxes
-        {
-            get
-            {
-                return m_numAxes;
-            }
-            set
-            {
-                m_numAxes = value;
-            }
-        }
+        public int NumAxes { get; set; }
     }
 }

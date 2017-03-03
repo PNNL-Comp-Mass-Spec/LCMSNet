@@ -44,7 +44,7 @@ namespace LcmsNet.Devices.Valves
         ///     Stop Bits   One
         ///     Data Bits   8
         ///     Handshake   None
-        private readonly System.IO.Ports.SerialPort m_serialPort;
+        private readonly SerialPort m_serialPort;
         /// <summary>
         /// The last measured position of the valve.
         /// </summary>
@@ -105,27 +105,29 @@ namespace LcmsNet.Devices.Valves
         public classValveVICI2Pos()
         {
 
-            ///     Baud Rate   9600
-            ///     Parity      None
-            ///     Stop Bits   One
-            ///     Data Bits   8
-            ///     Handshake   None
-            m_serialPort             = new System.IO.Ports.SerialPort();
-            m_serialPort.PortName    = "COM1";
-            m_serialPort.BaudRate    = 9600;
-            m_serialPort.StopBits    = StopBits.One;
-            m_serialPort.DataBits    = 8;
-            m_serialPort.Handshake   = Handshake.None;
-            m_serialPort.Parity      = Parity.None;
-            m_serialPort.ReadTimeout = CONST_READTIMEOUT;
-            m_serialPort.WriteTimeout = CONST_WRITETIMEOUT;
+            //     Baud Rate   9600
+            //     Parity      None
+            //     Stop Bits   One
+            //     Data Bits   8
+            //     Handshake   None
+            m_serialPort = new SerialPort
+            {
+                PortName = "COM1",
+                BaudRate = 9600,
+                StopBits = StopBits.One,
+                DataBits = 8,
+                Handshake = Handshake.None,
+                Parity = Parity.None,
+                ReadTimeout = CONST_READTIMEOUT,
+                WriteTimeout = CONST_WRITETIMEOUT
+            };
             m_lastMeasuredPosition   = TwoPositionState.Unknown;
             m_lastSentPosition       = TwoPositionState.Unknown;
 
-            /// 
-            /// Set ID to a space (i.e. nonexistant)
-            /// NOTE: Spaces are ignored by the controller in sent commands
-            /// 
+            // 
+            // Set ID to a space (i.e. nonexistant)
+            // NOTE: Spaces are ignored by the controller in sent commands
+            // 
             m_valveID                = ' ';
             m_versionInfo            = "";
 
@@ -171,7 +173,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets or sets the status of the device
         /// </summary>
-        public LcmsNetDataClasses.Devices.enumDeviceStatus Status
+        public enumDeviceStatus Status
         {
             get
             {
@@ -185,8 +187,8 @@ namespace LcmsNet.Devices.Valves
             }
             set
             {
-                if (value != m_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "StatusChange", this));
+                if (value != m_status)
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "StatusChange", this));
                 m_status = value;
             }
         }
@@ -473,7 +475,7 @@ namespace LcmsNet.Devices.Valves
             //Read in whatever is waiting in the buffer
             //This should look like
             //  Position is "B"
-            var tempBuffer = "";
+            string tempBuffer;
             try
             {
                 tempBuffer = m_serialPort.ReadLine();
@@ -494,7 +496,8 @@ namespace LcmsNet.Devices.Valves
             //Grab the actual position from the above string
             if (tempBuffer.Length > 1)  //Make sure we have content in the string
             {
-                var tempCharIndex = tempBuffer.IndexOf("Position is \"");   //Find the "
+                //Find the "
+                var tempCharIndex = tempBuffer.IndexOf("Position is \"", StringComparison.Ordinal);
                 if (tempCharIndex >= 0)  //Make sure we found it
                 {
                     //Change the position to be the character following the "
@@ -508,18 +511,16 @@ namespace LcmsNet.Devices.Valves
                 return (int)TwoPositionState.PositionA;
             }
 
-            else if (tempPosition == "B")
+            if (tempPosition == "B")
             {
                 m_lastMeasuredPosition = TwoPositionState.PositionB;
                 return (int)TwoPositionState.PositionB;
             }
 
-            else
-            {
-                m_lastMeasuredPosition = TwoPositionState.Unknown;
-                return (int)TwoPositionState.Unknown;
-            }
+            m_lastMeasuredPosition = TwoPositionState.Unknown;
+            return (int)TwoPositionState.Unknown;
         }
+
         /// <summary>
         /// Gets the version (date) of the valve.
         /// </summary>
@@ -557,7 +558,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            var tempBuffer = "";
+            string tempBuffer;
             //Version info is displayed on 2 lines
             try
             {
@@ -614,7 +615,7 @@ namespace LcmsNet.Devices.Valves
             }
 
             var tempID = ' ';  //Default to blank space
-            var tempBuffer = "";
+            string tempBuffer;
 
             try
             {
@@ -633,12 +634,13 @@ namespace LcmsNet.Devices.Valves
             //  ID = 0
             //If there is no ID present, it will read
             //  ID = not used
-            if (tempBuffer.IndexOf("not used") == -1)   //Only do this if string doesn't contain "not used"
+            if (tempBuffer.IndexOf("not used", StringComparison.Ordinal) == -1)   //Only do this if string doesn't contain "not used"
             {
                 //Grab the actual position from the above string
                 if (tempBuffer.Length > 1)  //Make sure we have content in the string
                 {
-                    var tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
+                    //Find the first =
+                    var tempCharIndex = tempBuffer.IndexOf("=", StringComparison.Ordinal);
                     if (tempCharIndex >= 0)  //Make sure we found a =
                     {
                         //Change the position to be the second character following the first =
@@ -699,10 +701,7 @@ namespace LcmsNet.Devices.Valves
                 return enumValveErrors.Success;
             }
 
-            else
-            {
-                return enumValveErrors.BadArgument;
-            }
+            return enumValveErrors.BadArgument;
         }
         /// <summary>
         /// Clears the hardware ID.
@@ -871,7 +870,7 @@ namespace LcmsNet.Devices.Valves
                 m_serialPort.Open();
             }
 
-            string cmd = null;
+            string cmd;
             if (newPosition == TwoPositionState.PositionA)
             {
                 m_lastSentPosition = TwoPositionState.PositionA;
