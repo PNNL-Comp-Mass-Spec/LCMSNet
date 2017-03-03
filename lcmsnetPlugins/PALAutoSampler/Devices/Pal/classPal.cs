@@ -409,7 +409,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public bool Initialize(ref string errorMessage)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 mbool_accessible = true;
                 ListMethods();
@@ -534,7 +534,7 @@ namespace LcmsNet.Devices.Pal
         /// <param name="newFolderPath">The path to the new folder.</param>
         public void SetMethodFolder(string newFolderPath)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -558,13 +558,13 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public bool Shutdown()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 mbool_accessible = false;
                 return true;
             }
 
-            if (mbool_accessible == true)
+            if (mbool_accessible)
             {
                 mobj_PALDrvr = null;
                 mbool_accessible = false;
@@ -685,7 +685,7 @@ namespace LcmsNet.Devices.Pal
         /// <returns>A string containing the status</returns>
         public string GetStatus()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return "Emulated";
             }
@@ -701,7 +701,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public void ResetPAL()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -717,7 +717,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool LoadMethod(double timeout, classSampleData sample, string methodName)
         {
-            if(mbool_emulation == true)
+            if(mbool_emulation)
             {
                 return true;
             }
@@ -784,7 +784,7 @@ namespace LcmsNet.Devices.Pal
         {  
             var timeout = Convert.ToInt32(waitTimeout);
 
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return true;
             }
@@ -866,7 +866,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Pause Method", .5, "", -1, false)]
         public void PauseMethod()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -881,7 +881,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Resume Method", 500, "", -1, false)]
         public void ResumeMethod()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -895,7 +895,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
         public void ContinueMethod(double timeout)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -918,7 +918,7 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Stop Method", .5, "", -1, false)]
         public void StopMethod()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -935,7 +935,7 @@ namespace LcmsNet.Devices.Pal
         {
             var timeoutms = Convert.ToInt32(waitTimeoutms);
 
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0;
             }

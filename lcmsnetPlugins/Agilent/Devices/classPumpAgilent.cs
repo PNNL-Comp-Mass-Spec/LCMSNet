@@ -553,7 +553,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="method">Method data to store.</param>
         public void AddMethod(string methodname, string method)
         {
-            if (mdict_methods.ContainsKey(methodname) == true)
+            if (mdict_methods.ContainsKey(methodname))
             {
                 mdict_methods[methodname] = method;
                 MethodUpdated?.Invoke(this, new classPumpMethodEventArgs(methodname));
@@ -588,7 +588,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>True on success</returns>
         public bool Initialize(ref string errorMessage)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return true;
             }
@@ -869,7 +869,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>True on success</returns>
         public bool Shutdown()
         {              
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return true;
             }
@@ -914,7 +914,7 @@ namespace Agilent.Devices.Pumps
         /// <returns></returns>
         private bool SendCommand(string command, ref string reply, string errorstring, Channel readChannel)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return true;
             }
@@ -944,7 +944,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Mode", 1, "", -1, false)]
         public void SetMode(enumPumpAgilentModes newMode)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -960,7 +960,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Flow Rate", 1, "", -1, false)]
         public void SetFlowRate(double newFlowRate)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -975,7 +975,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Mixer Volume", 1, "", -1, false)]
         public void SetMixerVolume(double newVolumeuL)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return;
             }
@@ -1086,7 +1086,7 @@ namespace Agilent.Devices.Pumps
         /// <returns></returns>
         public double GetPercentB()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0.0;
             }
@@ -1134,7 +1134,7 @@ namespace Agilent.Devices.Pumps
         public string RetrieveMethod()
         {
             var methodString = "";
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 methodString = "test;\ntest12";
             }
@@ -1150,7 +1150,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The flow rate</returns>
         public double GetFlowRate()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0.0;
             }
@@ -1178,7 +1178,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The pressure</returns>
         public double GetPressure()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0.0;
             }
@@ -1225,7 +1225,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The current mixer volume</returns>
         public double GetMixerVolume()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0.0;
             }
@@ -1252,7 +1252,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The actual measured current flow rate</returns>
         public double GetActualFlow()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0.0;
             }
@@ -1279,7 +1279,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>The current pump mode</returns>
         public enumPumpAgilentModes GetMode()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return enumPumpAgilentModes.Unknown;
             }
@@ -1348,7 +1348,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="methodData"></param>
         private void WriteMethod(string directoryPath, string methodName)
         {            
-            if (mdict_methods.ContainsKey(methodName) == true)
+            if (mdict_methods.ContainsKey(methodName))
             {
                 var methodData = mdict_methods[methodName];
             }

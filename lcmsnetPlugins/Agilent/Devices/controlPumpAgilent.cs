@@ -124,7 +124,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="percentB"></param>
         void mobj_pump_MonitoringDataReceived(object sender, PumpDataEventArgs args)
         {
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 BeginInvoke(new EventHandler<PumpDataEventArgs>(mcontrol_pumpDisplay.DisplayMonitoringData), new object[] { sender, args });
             }
@@ -408,7 +408,7 @@ namespace Agilent.Devices.Pumps
         private void timer1_Tick(object sender, EventArgs e)
         {
             //#if DEBUG
-            if (Emulation == true)
+            if (Emulation)
             {
                 timer1.Interval = mobj_pump.TotalMonitoringSecondElapsed * 1000;
                 mobj_pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());

@@ -93,7 +93,7 @@ namespace LcmsNet.Devices.NetworkStart
         /// <param name="e"></param>
         void mobj_netStart_Error(object sender, classDeviceErrorEventArgs e)
         {
-            if (InvokeRequired == true)
+            if (InvokeRequired)
             {
                 mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { mobj_netStart.Status, e.Error });
             }

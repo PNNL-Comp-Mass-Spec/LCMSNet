@@ -274,7 +274,7 @@ namespace LcmsNet.Devices.BrukerStart
             /// <returns>True for success, False for failure</returns>
             public bool Shutdown()
             {
-                if (mbool_Emulation == true)
+                if (mbool_Emulation)
                 {
                     return true;
                 }

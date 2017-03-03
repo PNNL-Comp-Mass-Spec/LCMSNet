@@ -336,7 +336,7 @@ namespace LcmsNet.Devices.Valves
         /// <returns>True on success.</returns>
         public bool Shutdown()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return mbool_emulation;
             }
@@ -360,7 +360,7 @@ namespace LcmsNet.Devices.Valves
         /// <returns>True on success.</returns>
         public bool Initialize(ref string errorMessage)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 //Fill in fake ID, version, position
                 mobj_valveID                = '1';
@@ -454,7 +454,7 @@ namespace LcmsNet.Devices.Valves
         /// <returns>The position as an enumValvePosition2Pos.</returns>
         public int GetPosition()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return (int)mobj_lastSentPosition;
             }
@@ -541,7 +541,7 @@ namespace LcmsNet.Devices.Valves
         /// <returns>A string containing the version.</returns>
         public string GetVersion()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return "3.1337";
             }
@@ -597,7 +597,7 @@ namespace LcmsNet.Devices.Valves
         /// <returns></returns>
         public char GetHardwareID()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return '0';
             }
@@ -672,7 +672,7 @@ namespace LcmsNet.Devices.Valves
         /// <param name="newID">The new ID, as a character 0-9.</param>
         public enumValveErrors SetHardwareID(char newID)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return enumValveErrors.Success;
             }
@@ -724,7 +724,7 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public enumValveErrors ClearHardwareID()
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return enumValveErrors.Success;
             }
@@ -869,7 +869,7 @@ namespace LcmsNet.Devices.Valves
             System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
 #endif
 
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 mobj_lastSentPosition = mobj_lastMeasuredPosition = newPosition;
                 OnPositionChanged(mobj_lastMeasuredPosition);

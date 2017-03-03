@@ -286,7 +286,7 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, enumLabjackU12OutputPorts port, double pulseLengthSeconds)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0;
             }
@@ -361,7 +361,7 @@ namespace LcmsNet.Devices.ContactClosure
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)
         {
-            if (mbool_emulation == true)
+            if (mbool_emulation)
             {
                 return 0;
             }

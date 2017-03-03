@@ -52,7 +52,7 @@ namespace FluidicsSDK.ModelCheckers
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             var status = new List<ModelStatus>();
-            var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source == true);
+            var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source);
             var otherSourceFound = false;
             
             foreach(var source in sources)
@@ -105,7 +105,7 @@ namespace FluidicsSDK.ModelCheckers
                     if (!visitedPorts.Contains(otherEnd)) // keeps us from getting stuck in a cycle in the graph, checking ports we've already checked.
                     {
                         //If the other end of the connection has a source, at least two sources can see each other, and thus we return true.
-                        if (otherEnd.Source == true)
+                        if (otherEnd.Source)
                         {
                             otherSourceFound = true;
                         }

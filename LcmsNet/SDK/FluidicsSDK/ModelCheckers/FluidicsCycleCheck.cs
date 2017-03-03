@@ -54,7 +54,7 @@ namespace FluidicsSDK.ModelCheckers
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             var status = new List<ModelStatus>();
-            var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source == true);
+            var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source);
             var cycleFound = false;
             foreach (var source in sources)
             {

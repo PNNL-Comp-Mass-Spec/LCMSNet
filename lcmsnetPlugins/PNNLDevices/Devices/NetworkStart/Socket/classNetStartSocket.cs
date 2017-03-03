@@ -169,7 +169,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             var connected = false;
 
-            if (Emulation == true)
+            if (Emulation)
                 return true;
 
             try
@@ -199,7 +199,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             try
             {
-                if (Emulation == true)
+                if (Emulation)
                     return true;
 
                 if (mobj_networkstream != null)
@@ -224,7 +224,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         public List<string> GetMethods()
         {
             var methods = new List<string>();
-            if (Emulation == true)
+            if (Emulation)
             {
                 methods.Add("Dummy-Instrument-01");
                 methods.Add("Dummy-Instrument-02");
@@ -350,7 +350,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             /// 
             /// Emulate starting an acquisition
             /// 
-            if (Emulation == true)
+            if (Emulation)
             {
                 return true;
             }
@@ -458,7 +458,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             /// 
             /// Emulate stopping an acquisition
             /// 
-            if (Emulation == true)
+            if (Emulation)
             {
                 return true;
             }
