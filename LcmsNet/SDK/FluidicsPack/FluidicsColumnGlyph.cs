@@ -9,8 +9,8 @@ using FluidicsSDK.Graphic;
 namespace FluidicsPack
 {
 
-    public class FluidicsColumnGlyph : FluidicsDevice , IFluidicsDevice
-    {        
+    public sealed class FluidicsColumnGlyph : FluidicsDevice, IFluidicsDevice
+    {
         public event EventHandler DeviceSaveRequired
         {
             add { }
@@ -18,8 +18,6 @@ namespace FluidicsPack
         }
 
         private IDevice m_device;
-        private readonly Port m_inputPort;
-        private readonly Port m_exitPort;
 
         public FluidicsColumnGlyph()
         {
@@ -32,24 +30,28 @@ namespace FluidicsPack
 
             AddPrimitive(primitive);
 
-            var points      = GeneratePortLocs();
-            m_inputPort         = new Port(points[0], this);
-            m_inputPort.Source  = false;
-            m_inputPort.Sink = false;
+            var points = GeneratePortLocs();
+            var inputPort = new Port(points[0], this)
+            {
+                Source = false,
+                Sink = false
+            };
 
-            m_exitPort        = new Port(points[1], this);
-            m_exitPort.Source = false;
-            m_exitPort.Sink   = false;
+            var exitPort = new Port(points[1], this)
+            {
+                Source = false,
+                Sink = false
+            };
 
-            AddPort(m_inputPort);
-            AddPort(m_exitPort);
-            ConnectionManager.GetConnectionManager.Connect(m_inputPort, m_exitPort, this);
-            var c = ConnectionManager.GetConnectionManager.FindConnection(m_inputPort, m_exitPort);
+            AddPort(inputPort);
+            AddPort(exitPort);
+            ConnectionManager.GetConnectionManager.Connect(inputPort, exitPort, this);
+            var c = ConnectionManager.GetConnectionManager.FindConnection(inputPort, exitPort);
             c.Transparent = true;
             m_info_controls_box.Width = 20;
             m_info_controls_box.Height = 200;
 
-            
+
         }
 
         protected override void SetDevice(IDevice device)
@@ -64,12 +66,12 @@ namespace FluidicsPack
 
         public override void ActivateState(int state)
         {
-            
+
         }
 
-        protected Point[] GeneratePortLocs()
+        private Point[] GeneratePortLocs()
         {
-            var points  = new Point[2];
+            var points = new Point[2];
             points[0] = new Point(Convert.ToInt32(Loc.X + (Size.Width / 2)), Loc.Y);
             points[1] = new Point(Convert.ToInt32(Loc.X + (Size.Width / 2)), Loc.Y + Convert.ToInt32(Size.Height - m_info_controls_box.Size.Height));
 
@@ -86,10 +88,11 @@ namespace FluidicsPack
         protected override void DrawControls(Graphics g, int alpha, float scale)
         {
             var realColor = Color.FromArgb(alpha, Color.Black.R, Color.Black.G, Color.Black.B);
-            using (IDisposable p = new Pen(realColor), b = new SolidBrush(realColor))
+
+            using (new Pen(realColor))
+            using (IDisposable b = new SolidBrush(realColor))
             {
-                var pen = p as Pen;
-                var br = b as SolidBrush;
+                var br = (SolidBrush)b;
                 //determine font size, used to scale font with graphics primitives
                 var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
                 using (var stringFont = new Font("Calibri", 11 + stringScale))
@@ -125,13 +128,13 @@ namespace FluidicsPack
         /// create location of a string to be drawn in the control box.
         /// </summary>
         /// <param name="y"></param>
-        /// <param name="stringWidth"></param>
+        /// <param name="stringHeight"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
         protected override Point CreateStringLocation(int y, float stringHeight, float scale)
         {
             // The height is actually our "width" here, since we are drawing the string vertically.
-            return new Point((int)((m_info_controls_box.X * scale) - stringHeight/2),
+            return new Point((int)((m_info_controls_box.X * scale) - stringHeight / 2),
                     (int)(y + 10));
         }
 

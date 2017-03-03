@@ -228,7 +228,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Gets the list of available plug-ins.
         /// </summary>
-        public List<classDevicePluginInformation> AvailablePlugins { get; private set; }
+        public List<classDevicePluginInformation> AvailablePlugins { get; }
 
         /// <summary>
         /// Gets or sets whether to emulate the devices or not.
@@ -1024,6 +1024,6 @@ namespace LcmsNetDataClasses.Devices
             ErrorDetails = errorArgs;
         }
 
-        public classDeviceErrorEventArgs ErrorDetails { get; private set; }
+        public classDeviceErrorEventArgs ErrorDetails { get; }
     }
 }

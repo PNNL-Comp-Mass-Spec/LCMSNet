@@ -51,13 +51,11 @@ namespace FluidicsSDK.ModelCheckers
             watch.Start();
             var status = new List<ModelStatus>();
             var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source);
-            var otherSourceFound = false;
-            
+
             foreach(var source in sources)
             {
-                var visitedPorts = new List<Port>();
                 List<Connection> pathTaken;
-                otherSourceFound = FindOtherSources(source, out pathTaken);
+                var otherSourceFound = FindOtherSources(source, out pathTaken);
                 if (otherSourceFound)
                 {
                     // Multiple sources found on a path, color path red.
@@ -68,10 +66,10 @@ namespace FluidicsSDK.ModelCheckers
                     if (StatusUpdate != null)
                     {
                         const string message = "Multiple Sources";
-                        var deviceName = source.ParentDevice.DeviceName;
                         StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, this));
                     }
-                    status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null, LcmsNetSDK.TimeKeeper.Instance.Now.ToString(), null, source.ParentDevice.IDevice));
+                    status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null, 
+                        TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture), null, source.ParentDevice.IDevice));
                 }
             }
             watch.Stop();
@@ -82,8 +80,8 @@ namespace FluidicsSDK.ModelCheckers
         /// <summary>
         /// find other sources from a starting port
         /// </summary>
-        /// <param name="startingSource"></param>
-        /// <param name="visitedPorts"></param>
+        /// <param name="source"></param>
+        /// <param name="pathTaken"></param>
         /// <returns></returns>
         // this algorithm is a basic Breadth-First-Search
         private bool FindOtherSources(Port source, out List<Connection> pathTaken)
@@ -114,10 +112,13 @@ namespace FluidicsSDK.ModelCheckers
                             //otherSourceFound = FindOtherSources(otherEnd, visitedPorts, pathTaken);
                         }
                     }
-                    if (otherSourceFound) { return otherSourceFound; } //short circuit out, we've found another source on the same path.
+                    if (otherSourceFound) {
+                        //short circuit out, we've found another source on the same path.
+                        return true;
+                    } 
                 }
             }
-            return otherSourceFound;
+            return false;
         }
 
         public List<string> GetStatusNotificationList()

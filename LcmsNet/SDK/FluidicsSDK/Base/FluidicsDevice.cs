@@ -43,10 +43,9 @@ namespace FluidicsSDK.Base
         #region Methods
             
         /// <summary>
-        /// class constructor
+        /// Constructor
         /// </summary>
-        /// <param name="device"> the IDevice that the fluidics device will represent</param>
-        public FluidicsDevice()
+        protected FluidicsDevice()
         {
             m_primitives = new List<GraphicsPrimitive>();
             m_actionPrims = new List<GraphicsPrimitive>();
@@ -76,7 +75,7 @@ namespace FluidicsSDK.Base
             SetDevice(device);
             foreach (var p in m_portList)
             {
-                p.ID = this.DeviceName + "." + m_portList.IndexOf(p);
+                p.ID = DeviceName + "." + m_portList.IndexOf(p);
             }
             DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
@@ -178,6 +177,7 @@ namespace FluidicsSDK.Base
         /// Render device to screen
         /// </summary>
         /// <param name="g">Graphics object to draw with/on</param>
+        /// <param name="alpha"></param>
         /// <param name="scale">scale device by this amount on screen</param>         
         public virtual void Render(Graphics g, int alpha, float scale = 1)
         {
@@ -205,10 +205,11 @@ namespace FluidicsSDK.Base
         protected virtual void DrawControls(Graphics g, int alpha, float scale)
         {
             var realColor = Color.FromArgb(alpha, Color.Black.R, Color.Black.G, Color.Black.B);
-            using(IDisposable p = new Pen(realColor), b = new SolidBrush(realColor))
+
+            using (new Pen(realColor))
+            using(IDisposable b = new SolidBrush(realColor))
             {
-                var pen = p as Pen;
-                var br = b as SolidBrush;
+                var br = (SolidBrush)b;
                 //determine font size, used to scale font with graphics primitives
                 var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
                 using(var stringFont = new Font("Calibri", 11 + stringScale))
@@ -330,16 +331,17 @@ namespace FluidicsSDK.Base
         /// <param name="loc">Point representing the location of the circle on screen</param>
         /// <param name="radius">an int representing the radius of the circle</param>
         /// <param name="color">a Color representing the primary color of the circle</param>
-        /// <param name="fillColor">a Color representing the color the circle should be filled with(used if Brushtype is not Solid)</param>
-        /// <param name="type">a FluidicsSDK.Graphic.BrushType representing type of brush to use to fill circle</param>
+        /// <param name="fillBrush">a Color representing the color the circle should be filled with(used if Brushtype is not Solid)</param>
         /// <param name="fill">a boolean defining if the circle should be filled or not</param>
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
         protected virtual void AddCircle(Point loc, int radius, Color color, Brush fillBrush, bool fill=true, Action action = null)
         {
-            var circle   = new FluidicsCircle( loc, Color.Black, fillBrush, radius);
-            circle.Color            = color;
-            circle.Fill             = fill;
-            this.AddPrimitive(circle, action);
+            var circle = new FluidicsCircle(loc, Color.Black, fillBrush, radius)
+            {
+                Color = color,
+                Fill = fill
+            };
+            AddPrimitive(circle, action);
         }
 
         /// <summary>
@@ -348,8 +350,7 @@ namespace FluidicsSDK.Base
         /// <param name="loc">a System.Drawing.Point representing the location the device should be drawn on screen</param>
         /// <param name="size">a System.Drawing.SizeF representing the size of the primitive</param>
         /// <param name="color">a System.Drawing.Color representing the primary draw color(pen color) of the primitive</param>
-        /// <param name="fillColor">a System.Drawing.Color representing the color to fill the primitive with(only used when fill=true)</param>
-        /// <param name="type">a FuildicsSDK.Graphic.Brushtype type determining what type of brush to use when filling the rectangle</param>
+        /// <param name="fillBrush">a System.Drawing.Color representing the color to fill the primitive with(only used when fill=true)</param>
         /// <param name="fill">boolean that determines if the primitive is filled or not</param>
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
         protected virtual void AddRectangle(Point loc, Size size, Color color,  Brush fillBrush, bool fill=true, Action action = null)
@@ -375,7 +376,6 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// Add a port to the device
         /// </summary>
-        /// <param name="location">Point representing location of the port within the device</param>
         protected virtual void AddPort(Port port)
         {            
             m_portList.Add(port);
@@ -395,15 +395,16 @@ namespace FluidicsSDK.Base
             /*  translation*/
             var oldLoc = m_primitives[PRIMARY_PRIMITIVE].Loc;
             var moveTo = new Point(oldLoc.X + translateRelativeValues.X, oldLoc.Y + translateRelativeValues.Y);
-            this.Loc = moveTo;
+            Loc = moveTo;
             m_primitives[PRIMARY_PRIMITIVE].MoveBy(translateRelativeValues);
+
             // move ports with device
-            for (var i = 0; i < m_portList.Count; i++)
+            foreach (var p in m_portList)
             {
-                var p = m_portList[i];
                 p.MoveBy(translateRelativeValues);
             }
-            //don't change the primitive at index PRIMARY_PRIMITIVE since it was already moved.
+
+            // Don't change the primitive at index PRIMARY_PRIMITIVE since it was already moved.
             foreach (var prim in m_primitives.GetRange(PRIMARY_PRIMITIVE + 1, m_primitives.Count - 1))
             {
                 prim.MoveBy(translateRelativeValues);
@@ -416,8 +417,6 @@ namespace FluidicsSDK.Base
         ///  all fluidics devices should be able to determine if they contain a specified point within their bounds
         /// </summary>
         /// <param name="location">a System.Drawing.Point specifying the location to be checkeda against</param>
-        /// <param name="max_variance">an int representing the variation in pixels that is tolerable for determining if a location
-        /// is contained by the device</param>
         /// <returns>a bool determing if the device contains that location</returns>
         public virtual bool Contains(Point location)
         {

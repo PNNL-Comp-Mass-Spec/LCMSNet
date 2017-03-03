@@ -7,36 +7,43 @@ using FluidicsSDK.Graphic;
 
 namespace DemoPluginLibrary
 {
-    public class FluidicsTee:FluidicsDevice
+    public sealed class FluidicsTee:FluidicsDevice
     {
         readonly Dictionary<string, FluidicsLine> m_primLines;
         public FluidicsTee()
         {
             m_primLines = new Dictionary<string, FluidicsLine>();
+
             //left line going down
             var newLine = new FluidicsLine(new Point(0,0), new Point(0,29));
             AddPrimitive(newLine);
             m_primLines["left"] = newLine;
+
             //left line angled in
             newLine = new FluidicsLine(new Point(0, 28), new Point(10, 46));
             AddPrimitive(newLine);
             m_primLines["leftAngled"] = newLine;
+
             //bottom line across
             newLine = new FluidicsLine(new Point(10, 46), new Point(58, 46));
             AddPrimitive(newLine);
             m_primLines["bottom"] = newLine;
+
             //right line angled in
             newLine = new FluidicsLine(new Point(57, 46), new Point(70, 26));
             AddPrimitive(newLine);
             m_primLines["rightAngled"] = newLine;
+
             // right line going up
             newLine = new FluidicsLine(new Point(70,27), new Point(70,0));
             AddPrimitive(newLine);
             m_primLines["right"] = newLine;
+
             //top line going from right line to left line
             newLine = new FluidicsLine(new Point(70,0), new Point(0,0));
             AddPrimitive(newLine);
             m_primLines["top"] = newLine;
+
             foreach (var p in GeneratePortLocs())
             {
                 AddPort(p);
@@ -55,12 +62,11 @@ namespace DemoPluginLibrary
             return string.Empty;
         }
 
-        protected Point[] GeneratePortLocs()
+        private Point[] GeneratePortLocs()
         {
             var points = new Point[3];
-            Point orig, term;
-            orig = m_primLines["left"].Origin;
-            term = m_primLines["left"].Term;
+            var orig = m_primLines["left"].Origin;
+            var term = m_primLines["left"].Term;
             points[0] = new Point(orig.X - Port.PORT_DEFAULT_RADIUS, (orig.Y + term.Y)/2);
             orig = m_primLines["bottom"].Origin;
             term = m_primLines["bottom"].Term;

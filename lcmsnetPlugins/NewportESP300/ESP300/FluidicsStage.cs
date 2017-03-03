@@ -4,7 +4,7 @@ using LcmsNetDataClasses.Devices;
 
 namespace Newport.ESP300
 {
-    public class FluidicsStage:FluidicsDevice
+    public sealed class FluidicsStage : FluidicsDevice
     {
         private classNewportStage m_obj;
 
@@ -13,9 +13,9 @@ namespace Newport.ESP300
 
         public FluidicsStage()
         {
-            base.AddRectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT), Color.Black, new SolidBrush(Color.White), true, null);
-            base.AddPort(new Point(STAGE_WIDTH + 14, STAGE_HEIGHT/2));
-            base.AddPort(new Point(this.Loc.X - 14, this.Loc.Y + STAGE_HEIGHT / 2));
+            AddRectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT), Color.Black, new SolidBrush(Color.White), true, null);
+            AddPort(new Point(STAGE_WIDTH + 14, STAGE_HEIGHT / 2));
+            AddPort(new Point(Loc.X - 14, Loc.Y + STAGE_HEIGHT / 2));
             m_info_controls_box = new Rectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT));
         }
 
@@ -34,7 +34,7 @@ namespace Newport.ESP300
 
         protected override Rectangle UpdateControlBoxLocation()
         {
-            return new Rectangle(this.Loc.X, this.Loc.Y, STAGE_WIDTH, STAGE_HEIGHT);
+            return new Rectangle(Loc.X, Loc.Y, STAGE_WIDTH, STAGE_HEIGHT);
         }
 
         public override string StateString()
@@ -55,7 +55,7 @@ namespace Newport.ESP300
         protected override void SetDevice(IDevice device)
         {
             m_obj = device as classNewportStage;
-        }    
+        }
 
     }
 }
