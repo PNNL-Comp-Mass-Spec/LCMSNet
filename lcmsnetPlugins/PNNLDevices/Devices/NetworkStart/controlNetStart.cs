@@ -44,10 +44,13 @@ namespace LcmsNet.Devices.NetworkStart
         private void RegisterDevice(IDevice device)
         {
             m_netStart              = device as classNetStartSocket;
-            m_netStart.MethodNames += m_netStart_MethodNames;
-            m_netStart.Error       += m_netStart_Error;
-            UpdateUserInterface();
-            
+            if (m_netStart != null)
+            {
+                m_netStart.MethodNames += m_netStart_MethodNames;
+                m_netStart.Error       += m_netStart_Error;
+                UpdateUserInterface();                           
+            }
+
             SetBaseDevice(m_netStart);
         }
         #endregion
@@ -94,14 +97,14 @@ namespace LcmsNet.Devices.NetworkStart
         {
             if (InvokeRequired)
             {
-                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { m_netStart.Status, e.Error });
+                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), m_netStart.Status, e.Error);
             }
             else
             {
                 SetStatus(m_netStart.Status, e.Error);
             }
         }
-        void m_netStart_MethodNames(object sender, System.Collections.Generic.List<object> data)
+        void m_netStart_MethodNames(object sender, List<object> data)
         {
             var methodNames = new List<string>();
 
@@ -129,10 +132,12 @@ namespace LcmsNet.Devices.NetworkStart
             mnum_port.Value         = Convert.ToDecimal(m_netStart.Port);
             SetStatus(m_netStart.Status, "");
         }
+
         /// <summary>
         /// Updates the status of the device.
         /// </summary>
         /// <param name="status"></param>
+        /// <param name="message"></param>
         private void SetStatus(enumDeviceStatus status, string message)
         {
             mlabel_status.Text = "Status: " + m_netStart.Status + " - " + message;
@@ -146,17 +151,18 @@ namespace LcmsNet.Devices.NetworkStart
         /// <param name="e"></param>
         private void mbutton_startAcquisition_Click(object sender, EventArgs e)
         {
-            var methodName = "";
             if (mcomboBox_methods.SelectedIndex < 0)
             {
                 SetStatus(m_netStart.Status, "No method selected.");
                 return;
             }
-            methodName = mcomboBox_methods.SelectedItem.ToString();
+            var methodName = mcomboBox_methods.SelectedItem.ToString();
 
-            var sample           = new classSampleData();
-            sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
-            sample.InstrumentData.MethodName = methodName;
+            var sample = new classSampleData
+            {
+                DmsData = {DatasetName = mtextbox_sampleName.Text},
+                InstrumentData = {MethodName = methodName}
+            };
 
             m_netStart.StartAcquisition(20, sample);
         }

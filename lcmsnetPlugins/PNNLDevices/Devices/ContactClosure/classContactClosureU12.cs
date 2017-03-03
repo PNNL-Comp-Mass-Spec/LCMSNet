@@ -13,6 +13,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
@@ -153,9 +154,9 @@ namespace LcmsNet.Devices.ContactClosure
             }
             set
             {
-                if (value != m_status && StatusUpdate != null)
+                if (value != m_status)
                 {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
                 }
                 m_status = value;
             }
@@ -233,15 +234,14 @@ namespace LcmsNet.Devices.ContactClosure
             m_labjack.GetFirmwareVersion();
 
             //If we got anything, call it good
-            if (m_labjack.FirmwareVersion.ToString().Length > 0 && m_labjack.DriverVersion.ToString().Length > 0)
+            if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 && 
+                m_labjack.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
             {
                 return true;
             }
-            else
-            {
-                errorMessage = "Could not get the firmware version or driver version information.";
-                return false;
-            }
+
+            errorMessage = "Could not get the firmware version or driver version information.";
+            return false;
         }
 
         /// <summary>
@@ -264,7 +264,8 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Triggers a 5V pulse of the specified length.
         /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
+        /// <param name="timeout"></param>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         [classLCMethodAttribute("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
@@ -275,7 +276,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="port"></param>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         [classLCMethodAttribute("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, enumLabjackU12OutputPorts port, double pulseLengthSeconds)
         {
@@ -308,7 +309,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
-            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new classTimerDevice();
             if (AbortEvent != null)
             {
                 timer.AbortEvent = AbortEvent;
@@ -327,7 +328,7 @@ namespace LcmsNet.Devices.ContactClosure
                                              enumDeviceErrorStatus.ErrorAffectsAllColumns,
                                              this));
                 error = 1;
-                throw ex;
+                throw;
             }
             return error;
         }
@@ -337,7 +338,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="voltage">The voltage to set</param>        
         [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, double voltage)
@@ -349,7 +350,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="voltage">The voltage to set</param>        
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)

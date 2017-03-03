@@ -66,10 +66,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// The device's name.
         /// </summary>
         private string m_name;
-        /// <summary>
-        /// The device's verion.
-        /// </summary>
-        private string m_version;
+
         /// <summary>
         /// Status of the device.
         /// </summary>
@@ -104,7 +101,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             m_address = "localhost";
             m_name = "network start"; // classDeviceManager.Manager.CreateUniqueDeviceName("networkStart");
-            m_version = "May-2010";
+            Version = "May-2010";
             m_port       = CONST_SERVER_PORT;
             m_status    = enumDeviceStatus.NotInitialized;
 
@@ -171,15 +168,16 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
             try
             {
-                m_socketForServer = new TcpClient(server, port);
-
-                m_socketForServer.SendTimeout = Math.Max(SendTimeout, CONST_MIN_TIMEOUT_SEND);
-                m_socketForServer.ReceiveTimeout = Math.Max(ReceiveTimeout, CONST_MIN_TIMEOUT_RECEIVE);
+                m_socketForServer = new TcpClient(server, port)
+                {
+                    SendTimeout = Math.Max(SendTimeout, CONST_MIN_TIMEOUT_SEND),
+                    ReceiveTimeout = Math.Max(ReceiveTimeout, CONST_MIN_TIMEOUT_RECEIVE)
+                };
 
                 m_networkstream = m_socketForServer.GetStream();
 
-                m_reader = new System.IO.StreamReader(m_networkstream);
-                m_writer = new System.IO.StreamWriter(m_networkstream);
+                m_reader = new StreamReader(m_networkstream);
+                m_writer = new StreamWriter(m_networkstream);
                 connected = true;
             }
             catch (Exception ex)
@@ -207,7 +205,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             }
             catch
             {
-               
+                // ignored
             }
             return false;
         }
@@ -250,9 +248,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 }
             }
             
-            /// 
-            /// Alert listeners that we have new methods!
-            /// 
+            // 
+            // Alert listeners that we have new methods!
+            // 
             if (MethodNames != null)
             {
                 var methodObjects = new List<object>();
@@ -275,7 +273,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <param name="sequence">Message Sequence Number</param>
         /// <param name="descriptor">Message Description (e.g. ACQSTARTED...)</param>
         /// <param name="arglist">Arguments to send with message (e.g. sample name or method name).</param>
-        private void SendMessage(System.IO.StreamWriter streamWriter, enumNetStartMessageTypes type, int sequence, string descriptor, List<classNetStartArgument> arglist)
+        private void SendMessage(TextWriter streamWriter, enumNetStartMessageTypes type, int sequence, string descriptor, List<classNetStartArgument> arglist)
         {
             //Console.WriteLine(descriptor);
 
@@ -335,20 +333,21 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         #endregion
 
         #region Acquisition Start/Stop methods.
+
         /// <summary>
         /// Starts instrument acquisition.
         /// </summary>
-        /// <param name="sampleName">Name of sample to run.</param>
-        /// <param name="methodName">Instrument method to use.</param>
+        /// <param name="timeout"></param>
+        /// <param name="sample">Name of sample to run.</param>
         /// <returns>True if start successful.  False if start failed for any reason.</returns>
         [classLCMethodAttribute("Start Acquisition", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool StartAcquisition(double timeout, classSampleData sample)
         {
-            /// 
-            /// Emulate starting an acquisition
-            /// 
             if (Emulation)
             {
+                // 
+                // Emulate starting an acquisition
+                // 
                 return true;
             }
 
@@ -365,14 +364,13 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
             try
             {
-                string outputString;
                 var i = 0;
                 Connect(m_address, m_port);
                 var streamReader = m_reader;
                 var streamWriter = m_writer;
                 SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
 
-                outputString = streamReader.ReadLine();     //IDLE
+                var outputString = streamReader.ReadLine();
                 if (UnpackMessage(outputString).Descriptor == "ACQIDLE")
                 {
                     arguments.Add(new classNetStartArgument("Method", methodName));
@@ -382,30 +380,30 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
                     outputString = streamReader.ReadLine();     //RECEIVED
 
-                    /// 
-                    /// Now see if the system is ready
-                    /// 
+                    // 
+                    // Now see if the system is ready
+                    // 
                     SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQREADY", arguments);
                     outputString = streamReader.ReadLine();     //READY
 
                     if (UnpackMessage(outputString).Descriptor == "ACQREADY")
                     {
 
-                        ///
-                        /// Tell the system to prepare for acquisition
-                        /// 
+                        //
+                        // Tell the system to prepare for acquisition
+                        // 
                         SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
                         outputString = streamReader.ReadLine();     // Read off auto-response
 
-                        /// 
-                        /// Then ask if it is prepared...this should be in some kind of loop
-                        /// 
+                        // 
+                        // Then ask if it is prepared...this should be in some kind of loop
+                        // 
                         {
                             SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
 
-                            /// 
-                            /// Check to see if it is prepared...
-                            /// 
+                            // 
+                            // Check to see if it is prepared...
+                            // 
                             outputString = streamReader.ReadLine();     // Read off response for PREPARED
                             var preparedMessage = UnpackMessage(outputString);
                             if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
@@ -437,10 +435,6 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                     HandleError("Could not disconnect from the server.", exDisconnect);
                 }
             }
-            finally
-            {
-                //TODO: Clean-up code to use disposable's
-            }
 
             return success;
         }
@@ -452,11 +446,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             var startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
-            /// 
-            /// Emulate stopping an acquisition
-            /// 
             if (Emulation)
             {
+                // 
+                // Emulate stopping an acquisition
+                // 
                 return true;
             }
 
@@ -467,7 +461,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             var arguments = new List<classNetStartArgument>();
             var receivedMessage = new classNetStartMessage();
 
-            var success = false;
+            bool success;
             try
             {
                 string outputString;
@@ -502,19 +496,10 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             }
         }
         /// <summary>
-        /// Gets or sets the version id.
+        /// The device's verion.
         /// </summary>
-        public string Version
-        {
-            get
-            {
-                return m_version;
-            }
-            set
-            {
-                m_version = value;
-            }
-        }
+        public string Version { get; set; }
+
         /// <summary>
         /// Gets or sets the Emulation state.
         /// </summary>
@@ -534,8 +519,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             }
             set
             {
-                if (value != m_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "None", this));
+                if (value != m_status)
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }
@@ -658,7 +643,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <returns>String name of the device.</returns>
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
         #endregion
 
