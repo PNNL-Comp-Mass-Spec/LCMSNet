@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FluidicsSDK.Base;
 using System.Drawing;
-using FluidicsSDK.Managers;
 using FluidicsSDK.Graphic;
 using LcmsNetDataClasses.Devices;
-using System.Windows.Forms;
 
 namespace FluidicsSDK.Devices.Valves
 {

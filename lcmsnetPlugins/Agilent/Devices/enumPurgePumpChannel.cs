@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Agilent.Devices.Pumps
 {
     public enum enumPurgePumpChannel

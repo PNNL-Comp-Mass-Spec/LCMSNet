@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace LcmsNet.Devices.NetworkStart.Socket
+﻿namespace LcmsNet.Devices.NetworkStart.Socket
 {
     public enum enumNetStartMessageTypes
     {

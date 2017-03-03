@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Ports;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
-using System.Timers;
 using FluidicsSDK.Base;
 
 namespace DemoPluginLibrary

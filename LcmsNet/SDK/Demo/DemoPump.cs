@@ -8,14 +8,11 @@
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.IO.Ports;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
-using System.Timers;
 using LcmsNetSDK.Data;
-using LcmsNetDataClasses;
 
 namespace DemoPluginLibrary
 {

@@ -13,7 +13,6 @@ using System.Xml;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
-using FluidicsSDK.Devices;
 using System.Threading;
 
 namespace LcmsNet.Devices.Pumps

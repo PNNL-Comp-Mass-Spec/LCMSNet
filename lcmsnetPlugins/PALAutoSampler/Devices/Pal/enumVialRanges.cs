@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNet.Devices.Pal
+﻿namespace LcmsNet.Devices.Pal
 {
     /// <summary>
     /// Specifies different ranges of valid vial numbers

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNet.Devices.Pumps
+﻿namespace LcmsNet.Devices.Pumps
 {
     public enum enumISCOModel
     {

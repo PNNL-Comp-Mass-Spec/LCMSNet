@@ -69,12 +69,12 @@ namespace LcmsnetUnitTest
 
                 optimizer = new classLCMethodOptimizer();
             }
-            q = new classSampleQueue();
+            q = new LcmsNet.SampleQueue.classSampleQueue();
             samples = new List<classSampleData>();
         }
 
         classLCMethodOptimizer optimizer;
-        classSampleQueue q;
+        LcmsNet.SampleQueue.classSampleQueue q;
         List<classSampleData> samples;
 
 

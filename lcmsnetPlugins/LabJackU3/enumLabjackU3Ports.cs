@@ -7,11 +7,6 @@
 // Last modified 1/10/2014
 //*********************************************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace LcmsNet.Devices.ContactClosure
 {
     /// <summary>

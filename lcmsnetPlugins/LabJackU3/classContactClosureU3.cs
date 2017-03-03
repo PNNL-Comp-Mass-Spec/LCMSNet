@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using LcmsNet.Devices;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;

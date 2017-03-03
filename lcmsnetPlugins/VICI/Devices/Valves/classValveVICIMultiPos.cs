@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Xml;
-using System.Linq;
-using System.Text;
 using System.IO.Ports;
 using System.Collections.Generic;
-
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
 

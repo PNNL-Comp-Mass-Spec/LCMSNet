@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LcmsNet.Devices.NetworkStart.Socket
+﻿namespace LcmsNet.Devices.NetworkStart.Socket
 {
     public class classNetStartArgument
     {

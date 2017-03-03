@@ -7,14 +7,11 @@
  * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using FluidicsSDK.Base;
 using DemoPluginLibrary;
 using FluidicsSDK.Managers;
-using FluidicsSDK;
 using System.Drawing;
 
 namespace FluidicsSDKUnitTests

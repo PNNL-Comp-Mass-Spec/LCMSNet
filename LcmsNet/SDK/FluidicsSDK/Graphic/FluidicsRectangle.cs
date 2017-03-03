@@ -6,10 +6,7 @@
  *
  * Last Modified 10/17/2013 By Christopher Walters
  ********************************************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using System.Drawing;
 
 namespace FluidicsSDK.Graphic

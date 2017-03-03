@@ -6,9 +6,6 @@
  * Last Modified 6/5/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FluidicsSDK.Devices;
 using LcmsNetDataClasses.Devices;
 using System.IO.Ports;

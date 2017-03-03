@@ -8,14 +8,12 @@
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Drawing;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
 using System.Windows.Forms;
 using FluidicsSDK.Base;
-using FluidicsSDK.Managers;
 
 namespace FluidicsSDK
 {

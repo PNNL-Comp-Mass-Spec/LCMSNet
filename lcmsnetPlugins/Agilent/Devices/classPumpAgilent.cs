@@ -12,11 +12,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml;
 using System.IO;
 
 using Agilent.Licop;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;

@@ -14,7 +14,6 @@ using LcmsNetDataClasses.Logging;
 using System;
 using System.IO.Ports;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace LcmsNet.Devices.Valves
 {

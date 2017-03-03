@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-// insert using statement for the devices driver library here
+﻿// insert using statement for the devices driver library here
 
 /*
 [Serializable]

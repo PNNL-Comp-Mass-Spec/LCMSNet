@@ -8,7 +8,6 @@
 //                      06/29/2010 (DAC) - Added details for Bruker operation
 //*********************************************************************************************************
 using System;
-using System.Xml;
 using System.Collections.Generic;
 
 using LcmsNetDataClasses.Devices;

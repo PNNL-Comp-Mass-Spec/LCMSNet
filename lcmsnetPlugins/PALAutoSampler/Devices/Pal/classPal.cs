@@ -11,16 +11,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using P;
-using System.Xml;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
-using LcmsNet.Devices;
 using LcmsNetDataClasses.Logging;
-using System.IO.Ports;
 using FluidicsSDK.Devices;
 
 namespace LcmsNet.Devices.Pal

@@ -7,9 +7,6 @@
 // Last modified 5/19/2014
 //*********************************************************************************************************
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LabJack.LabJackUD;
 
 namespace LcmsNet.Devices.ContactClosure

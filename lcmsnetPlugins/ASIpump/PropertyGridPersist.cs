@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 
 using System.Windows.Forms;
-using LcmsNetDataClasses.Devices;
 
 namespace ASIpump
 {

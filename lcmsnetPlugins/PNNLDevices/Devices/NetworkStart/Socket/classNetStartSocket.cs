@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Xml;
 using System.Net.Sockets;
 using System.Collections.Generic;
 
@@ -8,8 +7,6 @@ using System.Collections.Generic;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
-
-using LcmsNet.Devices;
 
 namespace LcmsNet.Devices.NetworkStart.Socket
 {

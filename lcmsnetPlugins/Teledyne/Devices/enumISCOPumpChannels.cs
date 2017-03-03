@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace LcmsNet.Devices.Pumps
 {
     public enum enumISCOPumpChannels

@@ -12,14 +12,7 @@
 //********************************************************************************************************/
 
 using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Linq;
-
-using LcmsNet.Devices;
-using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;

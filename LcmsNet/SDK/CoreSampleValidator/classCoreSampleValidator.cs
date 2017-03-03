@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Configuration;
 
 namespace LcmsNetDataClasses.Experiment
 {

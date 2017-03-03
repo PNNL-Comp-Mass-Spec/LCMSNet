@@ -7,10 +7,6 @@
 //
 // Last modified 03/17/2011
 //*********************************************************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LcmsNet.Devices.Pumps
 {

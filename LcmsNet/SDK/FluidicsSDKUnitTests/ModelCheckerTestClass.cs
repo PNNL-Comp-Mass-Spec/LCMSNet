@@ -6,19 +6,14 @@
  *
  * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
-using System;
-using System.Collections.Generic;
+
 using System.Linq;
-using System.Text;
-using FluidicsSDK.Base;
-using FluidicsSDK.Devices;
 using FluidicsSDK.Managers;
 using FluidicsSDK.ModelCheckers;
 using FluidicsSDK;
 using NUnit.Framework;
 using LcmsNetDataClasses.Devices;
 using DemoPluginLibrary;
-using LcmsNetDataClasses;
 
 namespace FluidicsSDKUnitTests
 {

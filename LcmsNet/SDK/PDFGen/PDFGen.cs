@@ -9,16 +9,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
-using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Devices;
 using System.Drawing;
-using System.IO;
 
 namespace PDFGenerator
 {

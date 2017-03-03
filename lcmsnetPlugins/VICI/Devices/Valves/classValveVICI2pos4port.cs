@@ -6,13 +6,8 @@
  * Last Modified 6/5/2014 By Christopher Walters
  *********************************************************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
-using FluidicsSDK.Base;
 using System.IO.Ports;
 
 namespace LcmsNet.Devices.Valves

@@ -7,12 +7,7 @@
  * Last Modified 10/21/2013 By Christopher Walters
  ********************************************************************************************************/
 using System;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FluidicsSDK.Graphic
 {

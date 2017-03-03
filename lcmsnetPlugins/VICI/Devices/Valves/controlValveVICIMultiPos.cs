@@ -10,19 +10,9 @@
 *********************************************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.IO.Ports;
 using LcmsNetDataClasses.Devices;
-using System.Xml;
-using System.Xml.Linq;
 using FluidicsSDK.Devices;
-using FluidicsSDK.Base;
 using System.Threading;
 
 namespace LcmsNet.Devices.Valves
