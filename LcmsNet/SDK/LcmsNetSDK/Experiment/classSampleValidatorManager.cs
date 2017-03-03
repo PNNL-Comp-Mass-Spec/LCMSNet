@@ -30,17 +30,7 @@ namespace LcmsNetDataClasses.Experiment
             Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");
         }
 
-        public static classSampleValidatorManager Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new classSampleValidatorManager();
-                }
-                return m_instance;
-            }
-        }
+        public static classSampleValidatorManager Instance => m_instance ?? (m_instance = new classSampleValidatorManager());
 
         [ImportMany]
         public IEnumerable<Lazy<ISampleValidator, ISampleValidatorMetaData>> Validators { get; set; }

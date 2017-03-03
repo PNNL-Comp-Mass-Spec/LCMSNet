@@ -19,15 +19,7 @@ namespace LcmsNet.Notification
         /// <returns></returns>
         public List<INotifier> Notifiers { get; }
 
-        public static NotificationBroadcaster Manager
-        {
-            get
-            {
-                if (m_manager == null)
-                    m_manager = new NotificationBroadcaster();
-                return m_manager;
-            }
-        }
+        public static NotificationBroadcaster Manager => m_manager ?? (m_manager = new NotificationBroadcaster());
 
         public event EventHandler<NotifierChangedEventArgs> Added;
         public event EventHandler<NotifierChangedEventArgs> Removed;

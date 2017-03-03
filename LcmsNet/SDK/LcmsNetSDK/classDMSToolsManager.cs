@@ -141,17 +141,7 @@ namespace LcmsNetSDK
         /// <summary>
         /// Get a reference to the classDMSTools instance.
         /// </summary>
-        public static classDMSToolsManager Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new classDMSToolsManager();
-                }
-                return m_instance;
-            }
-        }
+        public static classDMSToolsManager Instance => m_instance ?? (m_instance = new classDMSToolsManager());
 
         /// <summary>
         /// Select the Dms tool for future use

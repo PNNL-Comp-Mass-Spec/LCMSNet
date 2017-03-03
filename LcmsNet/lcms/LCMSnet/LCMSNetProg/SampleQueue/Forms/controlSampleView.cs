@@ -1440,7 +1440,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
             samples.RemoveAll(
-                delegate(classSampleData sample) { return sample.RunningStatus != enumSampleRunningStatus.Queued; });
+                sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
                 return;
@@ -1460,7 +1460,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
             samples.RemoveAll(
-                delegate(classSampleData sample) { return sample.RunningStatus != enumSampleRunningStatus.Queued; });
+                sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
                 return;
@@ -1480,7 +1480,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
             samples.RemoveAll(
-                delegate(classSampleData sample) { return sample.RunningStatus != enumSampleRunningStatus.Queued; });
+                sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
             {
@@ -1516,7 +1516,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
             samples.RemoveAll(
-                delegate(classSampleData sample) { return sample.RunningStatus != enumSampleRunningStatus.Queued; });
+                sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
             {
@@ -1828,10 +1828,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             var samples = GetSelectedSamples();
             samples.RemoveAll(
-                delegate(classSampleData data)
-                {
-                    return data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName);
-                });
+                data => data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName));
             PreviewSampleThroughput(samples);
         }
 
@@ -2007,7 +2004,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
             data.RemoveAll(
-                delegate(classSampleData sample) { return sample.RunningStatus != enumSampleRunningStatus.Queued; });
+                sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (data.Count < 1)
                 return;

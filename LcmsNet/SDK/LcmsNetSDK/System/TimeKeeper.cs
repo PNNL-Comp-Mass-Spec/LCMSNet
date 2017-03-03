@@ -194,11 +194,7 @@ namespace LcmsNetSDK
         /// <summary>
         /// get current time as defined by the currently selected timezone
         /// </summary>
-        public DateTime Now
-        {
-            get { return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, m_current_timezone); }
-            private set { }
-        }
+        public DateTime Now => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, m_current_timezone);
 
         public TimeZoneInfo TimeZone
         {
@@ -210,18 +206,7 @@ namespace LcmsNetSDK
             }
         }
 
-        public static TimeKeeper Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new TimeKeeper();
-                }
-                return m_instance;
-            }
-            private set { }
-        }
+        public static TimeKeeper Instance => m_instance ?? (m_instance = new TimeKeeper());
 
         #endregion
     }
