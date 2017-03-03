@@ -28,9 +28,9 @@ namespace FluidicsPack
         #region Methods
         public FluidicsUnion()
         {
-            Point mainStartPoint = new Point(0, 0);
-            Point leftMostStartPoint = new Point(-(MAIN_RECT_WIDTH / 3) - 5, 0);
-            Point rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
+            var mainStartPoint = new Point(0, 0);
+            var leftMostStartPoint = new Point(-(MAIN_RECT_WIDTH / 3) - 5, 0);
+            var rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
             //main rectangle
             base.AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
@@ -39,7 +39,7 @@ namespace FluidicsPack
             base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // bottom left parallelogram + connecting line
-            FluidicsPolygon leftPara = new FluidicsPolygon();
+            var leftPara = new FluidicsPolygon();
             leftPara.AddPoint(new Point(leftMostStartPoint.X, leftMostStartPoint.Y + MAIN_RECT_HEIGHT));
             leftPara.AddPoint(new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10));
 
@@ -55,7 +55,7 @@ namespace FluidicsPack
 
 
             //bottom middle trapezoid
-            FluidicsPolygon botmid = new FluidicsPolygon();
+            var botmid = new FluidicsPolygon();
             botmid.AddPoint(new Point(mainStartPoint.X, mainStartPoint.Y + MAIN_RECT_HEIGHT));
             botmid.AddPoint(new Point(mainStartPoint.X + 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10));
 
@@ -68,7 +68,7 @@ namespace FluidicsPack
 
 
             // bottom right parallelogram + connecting line
-            FluidicsPolygon botRt = new FluidicsPolygon();
+            var botRt = new FluidicsPolygon();
             botRt.AddPoint(new Point(rightMostStartPoint.X, rightMostStartPoint.Y + MAIN_RECT_HEIGHT));
             botRt.AddPoint(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10));
 
@@ -84,7 +84,7 @@ namespace FluidicsPack
             base.AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // upper left parallelogram + connecting line
-            FluidicsPolygon upLft = new FluidicsPolygon();
+            var upLft = new FluidicsPolygon();
             upLft.AddPoint(leftMostStartPoint);
             upLft.AddPoint(new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y - 10));
 
@@ -97,7 +97,7 @@ namespace FluidicsPack
             base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 2, leftMostStartPoint.Y - 10), new Point(mainStartPoint.X + 3, mainStartPoint.Y - 5)));
 
             // upper middle trapezoid
-            FluidicsPolygon upMid = new FluidicsPolygon();
+            var upMid = new FluidicsPolygon();
             upMid.AddPoint(mainStartPoint);
             upMid.AddPoint(new Point(mainStartPoint.X + 5, mainStartPoint.Y - 10));
 
@@ -110,7 +110,7 @@ namespace FluidicsPack
 
 
             // upper right parallelogram + connecting line
-            FluidicsPolygon upRt = new FluidicsPolygon();
+            var upRt = new FluidicsPolygon();
             upRt.AddPoint(rightMostStartPoint);
             upRt.AddPoint(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y - 10));
 
@@ -126,17 +126,17 @@ namespace FluidicsPack
             base.AddPort(new Point(leftMostStartPoint.X - 12, leftMostStartPoint.Y + MAIN_RECT_HEIGHT / 2));
             base.AddPort(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 12, rightMostStartPoint.Y + MAIN_RECT_HEIGHT / 2));
             ConnectionManager.GetConnectionManager.Connect(Ports[0], Ports[1], this);
-            Connection c = ConnectionManager.GetConnectionManager.FindConnection(Ports[0], Ports[1]);
+            var c = ConnectionManager.GetConnectionManager.FindConnection(Ports[0], Ports[1]);
             c.Transparent = true;
         }
 
         public override bool Contains(Point location)
         {
-            bool contains = false;
-            int minX = m_primitives.Min(z => z.Loc.X);
-            int maxX = m_primitives.Max(z => z.Loc.X);
-            int minY = m_primitives.Min(z => z.Loc.Y);
-            int maxY = m_primitives.Max(z => z.Loc.Y);
+            var contains = false;
+            var minX = m_primitives.Min(z => z.Loc.X);
+            var maxX = m_primitives.Max(z => z.Loc.X);
+            var minY = m_primitives.Min(z => z.Loc.Y);
+            var maxY = m_primitives.Max(z => z.Loc.Y);
             if ((minX <= location.X && location.X <= maxX) && (minY <= location.Y && location.Y <= maxY))
             {
                 contains = true;

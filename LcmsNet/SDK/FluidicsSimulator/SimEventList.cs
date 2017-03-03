@@ -45,7 +45,7 @@ namespace FluidicsSimulator
         /// <returns></returns>
         int IComparable.CompareTo(Object other)
         {
-            SimEventList otherLst = (SimEventList)other;
+            var otherLst = (SimEventList)other;
             return this.Time.CompareTo(otherLst.Time);
         }
 

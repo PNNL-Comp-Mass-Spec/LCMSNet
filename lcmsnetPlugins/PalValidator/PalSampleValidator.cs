@@ -23,7 +23,7 @@ namespace PALAutoSampler.Validator
 
         public List<classSampleValidationError> ValidateSamples(LcmsNetDataClasses.classSampleData sample)
         {
-            List<classSampleValidationError> errors = new List<classSampleValidationError>();
+            var errors = new List<classSampleValidationError>();
             
             /// 
             /// We've validated the method, and the devices... Now we need to validate the PAL settings.

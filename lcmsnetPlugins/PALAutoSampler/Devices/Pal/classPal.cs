@@ -441,7 +441,7 @@ namespace LcmsNet.Devices.Pal
                 }
 
                 //Start paldriv.exe
-                int error = mobj_PALDrvr.StartDriver("1", PortName);
+                var error = mobj_PALDrvr.StartDriver("1", PortName);
                 switch (error)
                 {
                     case CONST_PALERR_PORTUNAVAILABLE:
@@ -458,7 +458,7 @@ namespace LcmsNet.Devices.Pal
 
                 if (error > 0)
                 {
-                    string tempStatus = "";
+                    var tempStatus = "";
                     mobj_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
@@ -466,7 +466,7 @@ namespace LcmsNet.Devices.Pal
                     return false;
                 }
                 
-                int status = WaitUntilReady(CONST_WAITTIMEOUT);
+                var status = WaitUntilReady(CONST_WAITTIMEOUT);
                 if (System.IO.File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal"))
                 {
                     System.IO.File.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal");
@@ -478,7 +478,7 @@ namespace LcmsNet.Devices.Pal
                 error = mobj_PALDrvr.ResetPAL();
                 if (error > 0)
                 {
-                    string tempStatus = "";
+                    var tempStatus = "";
                     mobj_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
@@ -493,7 +493,7 @@ namespace LcmsNet.Devices.Pal
                                 
                 if (error > 0)
                 {
-                    string tempStatus = "";
+                    var tempStatus = "";
                     mobj_PALDrvr.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
@@ -504,8 +504,8 @@ namespace LcmsNet.Devices.Pal
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
                 
                 //10 second delay (this kind of sucks)
-                DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-                DateTime end = start;
+                var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                var end = start;
                 while (end.Subtract(start).TotalMilliseconds < CONST_WAITTIMEOUT)
                 {
                     System.Threading.Thread.Sleep(StatusPollDelay);
@@ -513,11 +513,11 @@ namespace LcmsNet.Devices.Pal
                     end = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                 }
 
-                string methodsFolder = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PALMETHODSFOLDER);
-                bool exists = System.IO.Directory.Exists(methodsFolder);
+                var methodsFolder = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PALMETHODSFOLDER);
+                var exists = System.IO.Directory.Exists(methodsFolder);
                 if (!exists)
                 {
-                    string newMethodsFolder = methodsFolder.Replace("Program Files (x86)", "Program Files");
+                    var newMethodsFolder = methodsFolder.Replace("Program Files (x86)", "Program Files");
                     LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0,
                                         string.Format("Could not find the PAL Methods folder {0}.  Looking for folder path: {1}",
                                             methodsFolder,
@@ -549,11 +549,11 @@ namespace LcmsNet.Devices.Pal
                 return;
             }
 
-            int error = mobj_PALDrvr.SelectMethodFolder(newFolderPath);
+            var error = mobj_PALDrvr.SelectMethodFolder(newFolderPath);
             //Error Checking
             if (error > 0)
             {
-                string tempStatus = "";
+                var tempStatus = "";
                 mobj_PALDrvr.GetStatus(ref tempStatus);
                 HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                 OnFree();
@@ -589,13 +589,13 @@ namespace LcmsNet.Devices.Pal
         /// <returns>A string containing the methods</returns>
         public string ListMethods()
         {
-            string methods = "";
+            var methods = "";
             /// 
             /// Find the methods from the device (or emulated one)
             /// 
             if (mbool_emulation == false)
             {
-                int error = mobj_PALDrvr.GetMethodNames(ref methods);
+                var error = mobj_PALDrvr.GetMethodNames(ref methods);
                 //TODO: Handle error.
             }
             else
@@ -608,9 +608,9 @@ namespace LcmsNet.Devices.Pal
             /// 
             if (methods != null)
             {
-                string[] methodNames = methods.Split(new string [] {";"}, StringSplitOptions.RemoveEmptyEntries);
+                var methodNames = methods.Split(new string [] {";"}, StringSplitOptions.RemoveEmptyEntries);
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL METHODS LENGTH: " + methodNames.Length);
-                List<string> data    = new List<string>();
+                var data    = new List<string>();
 
                 if (methodNames.Length > 0)
                     data.AddRange(methodNames);
@@ -623,8 +623,8 @@ namespace LcmsNet.Devices.Pal
                 // For method editor.  Needs to be refactored to use event args like above.
                 if (data.Count > 0 && Methods != null)
                 {
-                    List<object> objects = new List<object>();
-                    foreach (string name in data)
+                    var objects = new List<object>();
+                    foreach (var name in data)
                     {
                         objects.Add(name);
                     }
@@ -641,12 +641,12 @@ namespace LcmsNet.Devices.Pal
         public List<string> ListTrays()
         {
             
-            string trays = "";
-            int tries = 0;
-            int MAX_TRIES = 50;
+            var trays = "";
+            var tries = 0;
+            var MAX_TRIES = 50;
             if (mbool_emulation == false)
             {
-                int error = 0; //assume success
+                var error = 0; //assume success
                 while (string.IsNullOrEmpty(trays) && tries <= MAX_TRIES)
                 {
                     error = mobj_PALDrvr.GetTrayNames(ref trays);
@@ -666,10 +666,10 @@ namespace LcmsNet.Devices.Pal
             /// 
             /// Do the parsing for us !
             /// 
-            List<string> trayList = new List<string>();
+            var trayList = new List<string>();
             if (!string.IsNullOrEmpty(trays))
             {
-                string[] names = trays.Split(new string []{";"}, StringSplitOptions.RemoveEmptyEntries);
+                var names = trays.Split(new string []{";"}, StringSplitOptions.RemoveEmptyEntries);
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL TRAYS LIST: " + names.Length);
                 trayList.AddRange(names);
 
@@ -699,8 +699,8 @@ namespace LcmsNet.Devices.Pal
             {
                 return "Emulated";
             }
-            string tempString = "";
-            int error = mobj_PALDrvr.GetStatus(ref tempString);
+            var tempString = "";
+            var error = mobj_PALDrvr.GetStatus(ref tempString);
             //TODO: Handle error.
             OnFree();
             return tempString;
@@ -716,7 +716,7 @@ namespace LcmsNet.Devices.Pal
                 return;
             }
 
-            int error = mobj_PALDrvr.ResetPAL();
+            var error = mobj_PALDrvr.ResetPAL();
             //TODO: Handle error.
             OnDeviceSaveRequired();
             OnFree();
@@ -735,7 +735,7 @@ namespace LcmsNet.Devices.Pal
             /// 
             /// We let start method run
             /// 
-            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
+            var start = LcmsNetSDK.TimeKeeper.Instance.Now;
   
             /// 
             /// Load the method...
@@ -751,7 +751,7 @@ namespace LcmsNet.Devices.Pal
             /// 
             /// We see if we ran over or not...if so then return failure, otherwise let it continue.
             /// 
-            TimeSpan span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
+            var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
             if (timeout > span.TotalSeconds)
                 ContinueMethod(timeout - span.TotalSeconds);
             else
@@ -792,20 +792,20 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public bool StartMethod(double waitTimeout)
         {  
-            int timeout = Convert.ToInt32(waitTimeout);
+            var timeout = Convert.ToInt32(waitTimeout);
 
             if (mbool_emulation == true)
             {
                 return true;
             }
-            string tempArgs     = "Tray=" + mstring_tray + "; Index=" + mint_vial.ToString() + "; Volume=" + mstring_volume;
-            string errorMessage = "";
-            int error           = mobj_PALDrvr.StartMethod(mstring_method, ref tempArgs, ref errorMessage);
+            var tempArgs     = "Tray=" + mstring_tray + "; Index=" + mint_vial.ToString() + "; Volume=" + mstring_volume;
+            var errorMessage = "";
+            var error           = mobj_PALDrvr.StartMethod(mstring_method, ref tempArgs, ref errorMessage);
                         
             /// 
             /// Check for an error!
             /// 
-            string status   = "";
+            var status   = "";
             if (error == 1)
             {
                 if (errorMessage.Contains("syringe"))
@@ -819,13 +819,13 @@ namespace LcmsNet.Devices.Pal
                 return false;
             }
 
-            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now;
-            DateTime end    = start;
+            var start = LcmsNetSDK.TimeKeeper.Instance.Now;
+            var end    = start;
 
-            int delayTime = StatusPollDelay * 1000;
+            var delayTime = StatusPollDelay * 1000;
             while (end.Subtract(start).TotalSeconds < timeout)
             {
-                int statusCheckError = mobj_PALDrvr.GetStatus(ref status);
+                var statusCheckError = mobj_PALDrvr.GetStatus(ref status);
                 /*if (this.StatusUpdate != null)
                 {
                     this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
@@ -924,8 +924,8 @@ namespace LcmsNet.Devices.Pal
             }
             mobj_PALDrvr.ContinueMethod();
             
-            string statusMessage = "";
-            int errorCode = mobj_PALDrvr.GetStatus(ref statusMessage);
+            var statusMessage = "";
+            var errorCode = mobj_PALDrvr.GetStatus(ref statusMessage);
             if (this.StatusUpdate != null)
             {
                 this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
@@ -955,20 +955,20 @@ namespace LcmsNet.Devices.Pal
         [classLCMethodAttribute("Wait Until Ready", enumMethodOperationTime.Parameter, "", -1, false)]
         public int WaitUntilReady(double waitTimeoutms)
         {
-            int timeoutms = Convert.ToInt32(waitTimeoutms);
+            var timeoutms = Convert.ToInt32(waitTimeoutms);
 
             if (mbool_emulation == true)
             {
                 return 0;
             }
-            DateTime endTime = LcmsNetSDK.TimeKeeper.Instance.Now + TimeSpan.FromMilliseconds(timeoutms - 100);
-            string status    = GetStatus();
-            DateTime currentTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var endTime = LcmsNetSDK.TimeKeeper.Instance.Now + TimeSpan.FromMilliseconds(timeoutms - 100);
+            var status    = GetStatus();
+            var currentTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             while(currentTime < endTime && !status.Contains("READY"))
             {
-                System.Threading.WaitHandle[] handles = new System.Threading.WaitHandle[1];
+                var handles = new System.Threading.WaitHandle[1];
                 handles[0]  = this.AbortEvent;
-                bool done   = System.Threading.WaitHandle.WaitAll(handles, 500);
+                var done   = System.Threading.WaitHandle.WaitAll(handles, 500);
                 if (!done)
                 {
                     return 1;

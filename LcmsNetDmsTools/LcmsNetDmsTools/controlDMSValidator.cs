@@ -149,8 +149,8 @@ namespace LcmsNetDmsTools
             if (mobj_sample == null)
                 return;
 
-            Dictionary<bool, Color> drawingBackgroundColors = new Dictionary<bool, Color>();
-            Dictionary<bool, Color> drawingForegroundColors = new Dictionary<bool, Color>();
+            var drawingBackgroundColors = new Dictionary<bool, Color>();
+            var drawingForegroundColors = new Dictionary<bool, Color>();
 
             drawingBackgroundColors.Add(false, Color.Red);
             drawingBackgroundColors.Add(true, Color.White);
@@ -181,7 +181,7 @@ namespace LcmsNetDmsTools
                 mcomboBox_usageType.Enabled     = true;
                 mtextbox_user.Enabled           = true;
 
-                bool sampleOK = classDMSSampleValidator.IsEMSLProposalIDValid(mobj_sample);
+                var sampleOK = classDMSSampleValidator.IsEMSLProposalIDValid(mobj_sample);
                 mtextbox_proposalID.BackColor = drawingBackgroundColors[sampleOK];
                 mtextbox_proposalID.ForeColor = drawingForegroundColors[sampleOK];
                 mbool_isOK = mbool_isOK & sampleOK;

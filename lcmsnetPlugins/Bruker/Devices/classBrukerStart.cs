@@ -297,12 +297,12 @@ namespace LcmsNet.Devices.BrukerStart
                 if (System.Threading.Thread.CurrentThread.Name == "")
                     System.Threading.Thread.CurrentThread.Name = "StartAcquisition";
 
-                bool waitResult = false;
+                var waitResult = false;
 
                 mbool_DeviceError = false;
-                string msg = "";
-                string sampleName = sample.DmsData.DatasetName + ".d";
-                string methodName = sample.InstrumentData.MethodName;
+                var msg = "";
+                var sampleName = sample.DmsData.DatasetName + ".d";
+                var methodName = sample.InstrumentData.MethodName;
 
                 // Check for acquistion already in progress
                 if (mbool_AcquisitionInProgress)
@@ -319,7 +319,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Make the output folder
-                classFolderCreateResults result = MakeOutputFolder(sampleName);
+                var result = MakeOutputFolder(sampleName);
                 if (!result.Success)
                 {
                     // There was a problem making the folder. Details are in result
@@ -333,7 +333,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Make the method output folder
-                string datasetFolder = result.DirectoryName;
+                var datasetFolder = result.DirectoryName;
                 result = MakeMethodOutputFolder(datasetFolder, methodName);
                 if (!result.Success)
                 {
@@ -449,7 +449,7 @@ namespace LcmsNet.Devices.BrukerStart
 
                     // Send the sample info
                     mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
-                    string sampleInfoXml = classBrukerXmlBuilder.CreateXmlString(mstring_OuputFolderLocal, mstring_MethodFolderLocal, sampleName, methodName);
+                    var sampleInfoXml = classBrukerXmlBuilder.CreateXmlString(mstring_OuputFolderLocal, mstring_MethodFolderLocal, sampleName, methodName);
                     if (!mobject_MsgTools.SendSampleInfo(sampleInfoXml))
                     {
                         msg = "StartAcquistion: Problem sending sample info - " + mobject_MsgTools.Msg;
@@ -643,7 +643,7 @@ namespace LcmsNet.Devices.BrukerStart
                     }
 
                     // Stop the rest of the sXc communication process
-                    bool result = StopSxcCommunication();
+                    var result = StopSxcCommunication();
                     if (!result) return false;
 
                     mbool_AcquisitionInProgress = false;
@@ -844,7 +844,7 @@ namespace LcmsNet.Devices.BrukerStart
             /// <returns>List of method names</returns>
             public List<string> GetMethods()
             {
-                List<string> methods = new List<string>();
+                var methods = new List<string>();
 
                 if (mbool_Emulation)
                 {
@@ -855,20 +855,20 @@ namespace LcmsNet.Devices.BrukerStart
                 }
                 else
                 {
-                    string methodFolder = Bruker.Properties.Settings.Default.BrukerMethodFolderShareName;
+                    var methodFolder = Bruker.Properties.Settings.Default.BrukerMethodFolderShareName;
 
                     try
                     {
-                        string[] directoryList = Directory.GetDirectories(methodFolder, "*.m");
-                        foreach (string tmpDirectory in directoryList)
+                        var directoryList = Directory.GetDirectories(methodFolder, "*.m");
+                        foreach (var tmpDirectory in directoryList)
                         {
-                            DirectoryInfo di = new DirectoryInfo(tmpDirectory);
+                            var di = new DirectoryInfo(tmpDirectory);
                             methods.Add(di.Name);
                         }
                     }
                     catch (Exception ex)
                     {
-                        string msg = "Could not retrieve the methods from the Bruker instrument";
+                        var msg = "Could not retrieve the methods from the Bruker instrument";
                         if (Error != null)
                         {
                             Error(this, //new classDeviceErrorArgs(this, msg, enumDeviceErrorStatus.ErrorAffectsAllColumns, ex));
@@ -886,8 +886,8 @@ namespace LcmsNet.Devices.BrukerStart
                 // Alert listeners that new methods are available
                 if (MethodNames != null)
                 {
-                    List<object> methodObjects = new List<object>();
-                    foreach (string method in methods) methodObjects.Add(method);
+                    var methodObjects = new List<object>();
+                    foreach (var method in methods) methodObjects.Add(method);
                     MethodNames(this, methodObjects);
                 }
 
@@ -901,8 +901,8 @@ namespace LcmsNet.Devices.BrukerStart
             /// <returns>Object describing results</returns>
             private classFolderCreateResults MakeOutputFolder(string datasetName)
             {
-                classFolderCreateResults result = new classFolderCreateResults();
-                string outFolderName = Path.Combine(mstring_OutputFolderRemote, datasetName);
+                var result = new classFolderCreateResults();
+                var outFolderName = Path.Combine(mstring_OutputFolderRemote, datasetName);
 
                 try
                 {
@@ -945,8 +945,8 @@ namespace LcmsNet.Devices.BrukerStart
             /// <returns>Object describing results</returns>
             private classFolderCreateResults MakeMethodOutputFolder(string datasetFolderName, string methodFolderName)
             {
-                classFolderCreateResults result = new classFolderCreateResults();
-                string outFolderName = Path.Combine(datasetFolderName, methodFolderName);
+                var result = new classFolderCreateResults();
+                var outFolderName = Path.Combine(datasetFolderName, methodFolderName);
 
                 try
                 {

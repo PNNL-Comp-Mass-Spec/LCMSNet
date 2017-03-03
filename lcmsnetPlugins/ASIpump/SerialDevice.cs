@@ -70,7 +70,7 @@ namespace ASIpump
             {
                 if (value != null)
                 {
-                    bool wasOpen = mPort.IsOpen;
+                    var wasOpen = mPort.IsOpen;
 
                     if (mPort.IsOpen)
                     {
@@ -183,7 +183,7 @@ namespace ASIpump
 
         public string[] Split(string line, string delimeter)
         {
-            string[] delim = new string[1];
+            var delim = new string[1];
             delim[0] = delimeter;
             return (line.Split(delim, StringSplitOptions.None));
         }
@@ -197,7 +197,7 @@ namespace ASIpump
                     // clear these so unneeded replies don't build up
                     mReplyStr = null;
                     mConcatStr = "";
-                    string inputStr = mPort.ReadExisting();
+                    var inputStr = mPort.ReadExisting();
 
                     mPort.Write(sendStr + mSendDelimeter);
 
@@ -219,7 +219,7 @@ namespace ASIpump
             mConcatStr = "";
 
             // clear stuff unread on the port
-            string inputStr = mPort.ReadExisting();
+            var inputStr = mPort.ReadExisting();
 
             Send(queryString);
 
@@ -253,7 +253,7 @@ namespace ASIpump
 
                 while (mConcatStr.Contains(mReplyDelimeter))
                 {
-                    int pos = mConcatStr.IndexOf(mReplyDelimeter);
+                    var pos = mConcatStr.IndexOf(mReplyDelimeter);
                     mReplyStr += mConcatStr.Substring(0, pos);
                     mConcatStr = mConcatStr.Substring(pos + mReplyDelimeter.Length);
                 }
@@ -269,7 +269,7 @@ namespace ASIpump
 
         private void mPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            string inputStr = mPort.ReadExisting();
+            var inputStr = mPort.ReadExisting();
 
             mConcatStr += inputStr;
 

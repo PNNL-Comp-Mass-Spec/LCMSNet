@@ -48,13 +48,13 @@ namespace FluidicsSDK.ModelCheckers
         private static bool FindSinks(Port fromPort, out List<Connection> pathTaken)
         {
             // if visitedPorts is null, this is our starting point and we should create a list of visited ports
-            Queue<Port> unexplored = new Queue<Port>();
-            List<Port> visitedPorts = new List<Port>();
+            var unexplored = new Queue<Port>();
+            var visitedPorts = new List<Port>();
             pathTaken = new List<Connection>();
             unexplored.Enqueue(fromPort);
             while (unexplored.Count > 0)
             {
-                Port unexploredPort = unexplored.Dequeue();
+                var unexploredPort = unexplored.Dequeue();
                 visitedPorts.Add(unexploredPort);
                 // trace each connection leaving fromPort.
                 foreach (var connection in unexploredPort.Connections)
@@ -100,7 +100,7 @@ namespace FluidicsSDK.ModelCheckers
         public IEnumerable<ModelStatus> CheckModel()
         {
             const string message = "No fluidics path found from source {0} to a sink";
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             var status = new List<ModelStatus>();
             //for each port in the device, see if it leads to a sink, if and only if, that port has not been previously tested and that port is a source.
@@ -114,7 +114,7 @@ namespace FluidicsSDK.ModelCheckers
                 if (sinkFound) continue;
 
                 //No sink was found, so color the path red.
-                foreach(Connection connection in pathTaken)
+                foreach(var connection in pathTaken)
                 {
                     connection.Color = Color.Red;
                 }

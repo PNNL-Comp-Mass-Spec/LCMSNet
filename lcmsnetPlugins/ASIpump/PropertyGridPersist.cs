@@ -24,7 +24,7 @@ namespace ASIpump
             set
             {
                 mDisplayedObject = value;
-                INotifyPropertyChanged notify = value as INotifyPropertyChanged;
+                var notify = value as INotifyPropertyChanged;
                 if (notify != null)
                 {
                     notify.PropertyChanged += new PropertyChangedEventHandler(notify_PropertyChanged);

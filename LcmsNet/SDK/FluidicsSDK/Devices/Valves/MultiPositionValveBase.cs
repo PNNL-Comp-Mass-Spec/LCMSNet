@@ -46,8 +46,8 @@ namespace FluidicsSDK.Devices
             base.AddCircle(new Point(0, 0), m_radius, Color.Black, Brushes.White, fill: true);
             m_info_controls_box = new Rectangle(base.Loc.X, base.Loc.Y + (int)base.Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             m_numberOfPorts = numberOfPorts;
-            Point[] portLocs = GeneratePortLocs();
-            foreach (Point p in portLocs)
+            var portLocs = GeneratePortLocs();
+            foreach (var p in portLocs)
             {
                 base.AddPort(p);
             }
@@ -67,17 +67,17 @@ namespace FluidicsSDK.Devices
             // simply assign each one to an point that is on a vector corresponding to
             // an angle which is a multiple of this one. e.g. port 4 is on the vector
             // of (angle * 4). So 4 ports would be placed at pi/2, pi, 3pi/2, and 2pi.
-            double currentAngle = (3*Math.PI) / 2;
-            double angle = (2 * Math.PI) / (m_numberOfPorts - 1);
+            var currentAngle = (3*Math.PI) / 2;
+            var angle = (2 * Math.PI) / (m_numberOfPorts - 1);
 
-            Point[] points = new Point[m_numberOfPorts];
+            var points = new Point[m_numberOfPorts];
             points[0] = new Point(Center.X, Center.Y);
-            for (int i = 1; i < m_numberOfPorts; i++)
+            for (var i = 1; i < m_numberOfPorts; i++)
             {
                 // place them on a circle at a radius of m_radius/2 from the center
                 // of the valve.
-                int x = (int)((m_radius * .75) * Math.Cos(currentAngle)) + Center.X;
-                int y = (int)((m_radius * .75) * Math.Sin(currentAngle)) + Center.Y;
+                var x = (int)((m_radius * .75) * Math.Cos(currentAngle)) + Center.X;
+                var y = (int)((m_radius * .75) * Math.Sin(currentAngle)) + Center.Y;
                 points[i] = new Point(x, y);
 
                 currentAngle -= angle;

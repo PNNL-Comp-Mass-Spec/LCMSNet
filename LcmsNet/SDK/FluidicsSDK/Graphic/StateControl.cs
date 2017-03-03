@@ -29,7 +29,7 @@ namespace FluidicsSDK.Graphic
             base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
             base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
             
-            RectangleF scaledRect = new RectangleF(m_rect.X * scale, m_rect.Y * scale, m_rect.Size.Width * scale, m_rect.Size.Height * scale);
+            var scaledRect = new RectangleF(m_rect.X * scale, m_rect.Y * scale, m_rect.Size.Width * scale, m_rect.Size.Height * scale);
             if (base.Fill)
             {
                 if (!selected)
@@ -70,8 +70,8 @@ namespace FluidicsSDK.Graphic
         public override void MoveBy(Point relativeValues)
         {
 
-            int oldX = m_rect.X;
-            int oldY = m_rect.Y;
+            var oldX = m_rect.X;
+            var oldY = m_rect.Y;
             m_rect.X += relativeValues.X;
             if (m_rect.X < 0)
             {

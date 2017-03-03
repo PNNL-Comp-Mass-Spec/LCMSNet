@@ -49,28 +49,28 @@ namespace FluidicsSDK.ModelCheckers
 
         public IEnumerable<ModelStatus> CheckModel()
         {
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            List<ModelStatus> status = new List<ModelStatus>();
-            List<Port> sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source == true);
-            bool otherSourceFound = false;
+            var status = new List<ModelStatus>();
+            var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source == true);
+            var otherSourceFound = false;
             
-            foreach(Port source in sources)
+            foreach(var source in sources)
             {
-                List<Port> visitedPorts = new List<Port>();
+                var visitedPorts = new List<Port>();
                 List<Connection> pathTaken;
                 otherSourceFound = FindOtherSources(source, out pathTaken);
                 if (otherSourceFound)
                 {
                     // Multiple sources found on a path, color path red.
-                    foreach(Connection connection in pathTaken)
+                    foreach(var connection in pathTaken)
                     {
                         connection.Color = Color.Red;
                     }
                     if (StatusUpdate != null)
                     {
                         const string message = "Multiple Sources";
-                        string deviceName = source.ParentDevice.DeviceName;
+                        var deviceName = source.ParentDevice.DeviceName;
                         StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, this));
                     }
                     status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null, LcmsNetSDK.TimeKeeper.Instance.Now.ToString(), null, source.ParentDevice.IDevice));
@@ -90,18 +90,18 @@ namespace FluidicsSDK.ModelCheckers
         // this algorithm is a basic Breadth-First-Search
         private bool FindOtherSources(Port source, out List<Connection> pathTaken)
         {
-            Queue<Port> unexplored = new Queue<Port>();
-            List<Port> visitedPorts = new List<Port>();
+            var unexplored = new Queue<Port>();
+            var visitedPorts = new List<Port>();
             pathTaken = new List<Connection>();
             unexplored.Enqueue(source);
-            bool otherSourceFound = false;
+            var otherSourceFound = false;
             while(unexplored.Count > 0)
             {
-                Port unexploredPort = unexplored.Dequeue();
+                var unexploredPort = unexplored.Dequeue();
                 visitedPorts.Add(unexploredPort);
-                foreach(Connection connection in unexploredPort.Connections)
+                foreach(var connection in unexploredPort.Connections)
                 {
-                    Port otherEnd = connection.FindOppositeEndOfConnection(unexploredPort);
+                    var otherEnd = connection.FindOppositeEndOfConnection(unexploredPort);
                     if (!visitedPorts.Contains(otherEnd)) // keeps us from getting stuck in a cycle in the graph, checking ports we've already checked.
                     {
                         //If the other end of the connection has a source, at least two sources can see each other, and thus we return true.

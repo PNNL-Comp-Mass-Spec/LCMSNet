@@ -28,11 +28,11 @@ namespace FluidicsSDK.Devices
             m_states = SetupStates();
             m_currentState = TwoPositionState.PositionA;
             base.ActivateState(m_states[m_currentState]);
-            Size StateControlSize = new Size(15, 15);
-            Point StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 2), base.Center.Y - (StateControlSize.Height / 2));
-            Point StateControl2Loc = new Point(base.Center.X + StateControlSize.Width, base.Center.Y - (StateControlSize.Height / 2));
-            Rectangle StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
-            Rectangle StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
+            var StateControlSize = new Size(15, 15);
+            var StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 2), base.Center.Y - (StateControlSize.Height / 2));
+            var StateControl2Loc = new Point(base.Center.X + StateControlSize.Width, base.Center.Y - (StateControlSize.Height / 2));
+            var StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
+            var StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
             //add left control
             base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
             //add right control
@@ -45,8 +45,8 @@ namespace FluidicsSDK.Devices
         public override void Render(Graphics g, int alpha, float scale = 1)
         {
             base.Render(g, alpha, scale);
-            int stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
-            using (Font f = new Font("Calibri", 11 + stringScale))
+            var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
+            using (var f = new Font("Calibri", 11 + stringScale))
             {
                 g.DrawString("SPE", f, Brushes.Black, new PointF(Center.X - 20, Center.Y - 10));
             }
@@ -76,7 +76,7 @@ namespace FluidicsSDK.Devices
         /// <returns>a dictionary of with TwoPositionState enums as the keys and lists of tuples of int, int type as the values </returns>
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
-            Dictionary<TwoPositionState, List<Tuple<int, int>>> states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
+            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
             states.Add(TwoPositionState.PositionA, GenerateState(0, Ports.Count - 1));
             states.Add(TwoPositionState.PositionB, GenerateState(1, Ports.Count));
             return states;
@@ -95,7 +95,7 @@ namespace FluidicsSDK.Devices
 
         private void ChangePosition(bool left)
         {
-            int pos = (int)m_currentState;
+            var pos = (int)m_currentState;
             if (m_currentState != TwoPositionState.Unknown)
             {
                 if (left)

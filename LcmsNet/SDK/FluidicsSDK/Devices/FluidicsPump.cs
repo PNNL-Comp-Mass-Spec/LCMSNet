@@ -57,7 +57,7 @@ namespace FluidicsSDK
         public FluidicsPump()
         {
             base.AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
-            Point portLoc = GeneratePortLoc();
+            var portLoc = GeneratePortLoc();
             base.AddPort(portLoc);
             m_states = SetupStates();
             MaxVariance = MAX_PIXEL_VARIANCE;
@@ -74,7 +74,7 @@ namespace FluidicsSDK
         public FluidicsPump(Point loc)
         {
             base.AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
-            Point portLoc = GeneratePortLoc();
+            var portLoc = GeneratePortLoc();
             base.AddPort(portLoc);
         }
 
@@ -94,7 +94,7 @@ namespace FluidicsSDK
         /// <returns></returns>
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
-            Dictionary<TwoPositionState, List<Tuple<int, int>>> states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
+            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
             // pump only has no states, it is a source
             return states;
         }
@@ -127,7 +127,7 @@ namespace FluidicsSDK
 
         public override string StateString()
         {
-            StringBuilder stateString = new StringBuilder();
+            var stateString = new StringBuilder();
             stateString.Append("Flow Rate: ");
             stateString.Append(m_pump.GetFlowRate());
             stateString.Append(Environment.NewLine);

@@ -167,7 +167,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <param name="port"></param>
         public bool Connect(string server, int port)
         {
-            bool connected = false;
+            var connected = false;
 
             if (Emulation == true)
                 return true;
@@ -223,7 +223,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <returns></returns>
         public List<string> GetMethods()
         {
-            List<string> methods = new List<string>();
+            var methods = new List<string>();
             if (Emulation == true)
             {
                 methods.Add("Dummy-Instrument-01");
@@ -235,14 +235,14 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             {
                 try
                 {
-                    List<classNetStartArgument> arguments = new List<classNetStartArgument>();
+                    var arguments = new List<classNetStartArgument>();
                     SendMessage(mobj_writer, enumNetStartMessageTypes.Query, 0, CONST_QUERY_GETMETHODNAMES, arguments);
 
-                    string rawMessage = mobj_reader.ReadLine();
-                    classNetStartMessage message = UnpackMessage(rawMessage);
+                    var rawMessage = mobj_reader.ReadLine();
+                    var message = UnpackMessage(rawMessage);
 
 
-                    foreach (classNetStartArgument argument in message.ArgumentList)
+                    foreach (var argument in message.ArgumentList)
                     {
                         methods.Add(argument.Value);
                     }
@@ -258,8 +258,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             /// 
             if (MethodNames != null)
             {
-                List<object> methodObjects = new List<object>();
-                foreach (string method in methods)
+                var methodObjects = new List<object>();
+                foreach (var method in methods)
                     methodObjects.Add(method);
 
                 MethodNames(this, methodObjects);
@@ -282,7 +282,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             //Console.WriteLine(descriptor);
 
-            string message = PackMessage(type, sequence, descriptor, arglist);
+            var message = PackMessage(type, sequence, descriptor, arglist);
 
             streamWriter.WriteLine(message);
             Console.WriteLine("Send: " + message);
@@ -290,17 +290,17 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         }
         private string PackMessage(enumNetStartMessageTypes type, int sequence, string descriptor, List<classNetStartArgument> arglist)
         {
-            string message = type.GetHashCode().ToString() + ":" + sequence.ToString() + "|" + descriptor;
+            var message = type.GetHashCode().ToString() + ":" + sequence.ToString() + "|" + descriptor;
             if (type == enumNetStartMessageTypes.Post || type == enumNetStartMessageTypes.Response || type == enumNetStartMessageTypes.Execute)
             {
-                foreach (classNetStartArgument arg in arglist)
+                foreach (var arg in arglist)
                 {
                     message += "@" + arg.Key + "=" + arg.Value;
                 }
             }
             else if (type == enumNetStartMessageTypes.Query)
             {
-                foreach (classNetStartArgument arg in arglist)
+                foreach (var arg in arglist)
                 {
                     message += "@" + arg.Key;
                 }
@@ -317,16 +317,16 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             //<type>:<sqnc>|<dscp>@<argS1>=<argV1>@<argS1>=<argV1>...@<argSn>=<argVn>
 
-            classNetStartMessage msg = new classNetStartMessage();
-            List<classNetStartArgument> args = new List<classNetStartArgument>();
+            var msg = new classNetStartMessage();
+            var args = new List<classNetStartArgument>();
             char[] tokens = {':','@','|','='};
-            string[] messagepieces = message.Split(tokens);
+            var messagepieces = message.Split(tokens);
 
             msg.Type = (enumNetStartMessageTypes)Enum.Parse(typeof(enumNetStartMessageTypes), messagepieces[0]);
             msg.Sequence = Int32.Parse(messagepieces[1]);
             msg.Descriptor = messagepieces[2];
 
-            for (int i = 3; i < messagepieces.Length - 1; i+=2)
+            for (var i = 3; i < messagepieces.Length - 1; i+=2)
             {
                 args.Add(new classNetStartArgument(messagepieces[i], messagepieces[i+1]));
             }
@@ -355,24 +355,24 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                 return true;
             }
 
-            List<classNetStartArgument> arguments   = new List<classNetStartArgument>();
-            classNetStartMessage receivedMessage    = new classNetStartMessage();
+            var arguments   = new List<classNetStartArgument>();
+            var receivedMessage    = new classNetStartMessage();
             
-            bool success = false;
+            var success = false;
 
             if (sample == null)
                 return false;
 
-            string methodName = sample.InstrumentData.MethodName;
-            string sampleName = sample.DmsData.DatasetName;
+            var methodName = sample.InstrumentData.MethodName;
+            var sampleName = sample.DmsData.DatasetName;
 
             try
             {
                 string outputString;
-                int i = 0;
+                var i = 0;
                 Connect(mstring_address, mint_port);
-                StreamReader streamReader = mobj_reader;
-                StreamWriter streamWriter = mobj_writer;
+                var streamReader = mobj_reader;
+                var streamWriter = mobj_writer;
                 SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
 
                 outputString = streamReader.ReadLine();     //IDLE
@@ -410,16 +410,16 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                             /// Check to see if it is prepared...
                             /// 
                             outputString = streamReader.ReadLine();     // Read off response for PREPARED
-                            classNetStartMessage preparedMessage = UnpackMessage(outputString);
+                            var preparedMessage = UnpackMessage(outputString);
                             if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
                             {
                                 SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQSTART", arguments);
-                                string startResponse = mobj_reader.ReadLine();
+                                var startResponse = mobj_reader.ReadLine();
 
                                 SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQSTARTED", arguments);
                                 outputString = streamReader.ReadLine();     //STARTED
 
-                                classNetStartMessage startedMessage = UnpackMessage(outputString);
+                                var startedMessage = UnpackMessage(outputString);
                                 if (startedMessage.Descriptor.ToUpper() == "ACQSTARTED" && startedMessage.ArgumentList.Count > 0 && startedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
                                     success = true;
                             }
@@ -453,7 +453,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopAcquisition(double delayTime)
         {
-            DateTime startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             /// 
             /// Emulate stopping an acquisition
@@ -465,12 +465,12 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
             Connect(mstring_address, mint_port);
 
-            StreamReader streamReader = mobj_reader;
-            StreamWriter streamWriter = mobj_writer;
-            List<classNetStartArgument> arguments = new List<classNetStartArgument>();
-            classNetStartMessage receivedMessage = new classNetStartMessage();
+            var streamReader = mobj_reader;
+            var streamWriter = mobj_writer;
+            var arguments = new List<classNetStartArgument>();
+            var receivedMessage = new classNetStartMessage();
 
-            bool success = false;
+            var success = false;
             try
             {
                 string outputString;
@@ -559,10 +559,10 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <returns>True if it could connect, false if error occured.</returns>
         public bool Initialize(ref string errorMessage)
         {
-            bool success = false;
+            var success = false;
             try
             {
-                bool connected = Connect(mstring_address, mint_port);
+                var connected = Connect(mstring_address, mint_port);
                 if (connected == false)
                 {
                     errorMessage = "Could not connect to the remote instrument.";

@@ -36,29 +36,29 @@ namespace Agilent.Devices.Pumps
 
         private void mbutton_purgeB2_Click(object sender, EventArgs e)
         {            
-            double flow  = Convert.ToDouble(mnum_flowB2.Value);
-            double mins  = Convert.ToDouble(mnum_timeB2.Value);
+            var flow  = Convert.ToDouble(mnum_flowB2.Value);
+            var mins  = Convert.ToDouble(mnum_timeB2.Value);
             mobj_pump.PurgePump(0, enumPurgePumpChannel.B2, flow, mins);
         }
 
         private void mbutton_purgeB1_Click(object sender, EventArgs e)
         {
-            double flow = Convert.ToDouble(mnum_flowB1.Value);
-            double mins = Convert.ToDouble(mnum_timeB1.Value);
+            var flow = Convert.ToDouble(mnum_flowB1.Value);
+            var mins = Convert.ToDouble(mnum_timeB1.Value);
             mobj_pump.PurgePump(0, enumPurgePumpChannel.B1, flow, mins);
         }
 
         private void mbutton_purgeA2_Click(object sender, EventArgs e)
         {
-            double flow = Convert.ToDouble(mnum_flowA2.Value);
-            double mins = Convert.ToDouble(mnum_timeA2.Value);
+            var flow = Convert.ToDouble(mnum_flowA2.Value);
+            var mins = Convert.ToDouble(mnum_timeA2.Value);
             mobj_pump.PurgePump(0, enumPurgePumpChannel.A2, flow, mins);
         }
 
         private void mbutton_purgeA1_Click(object sender, EventArgs e)
         {
-            double flow = Convert.ToDouble(mnum_flowA1.Value);
-            double mins = Convert.ToDouble(mnum_timeA1.Value);
+            var flow = Convert.ToDouble(mnum_flowA1.Value);
+            var mins = Convert.ToDouble(mnum_timeA1.Value);
             mobj_pump.PurgePump(0, enumPurgePumpChannel.A1, flow, mins);
         }
 

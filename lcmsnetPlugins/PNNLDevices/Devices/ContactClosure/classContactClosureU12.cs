@@ -294,9 +294,9 @@ namespace LcmsNet.Devices.ContactClosure
                 return 0;
             }
 
-            string tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), mobj_port).ToString();
+            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), mobj_port).ToString();
 
-            int error = 0;
+            var error = 0;
 
             try
             {
@@ -321,7 +321,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
-            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             if (AbortEvent != null)
             {
                 timer.AbortEvent = AbortEvent;
@@ -376,8 +376,8 @@ namespace LcmsNet.Devices.ContactClosure
                 return 0;
             }
 
-            string tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), mobj_port).ToString();
-            int error = 0;
+            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), mobj_port).ToString();
+            var error = 0;
             try
             {
                 if (tempPortName[0] == CONST_ANALOGPREFIX)
@@ -394,7 +394,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw ex;
             }
 
-            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try

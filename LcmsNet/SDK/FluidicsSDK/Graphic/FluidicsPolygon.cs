@@ -33,12 +33,12 @@ namespace FluidicsSDK.Graphic
 
         private void UpdateBoundingBox()
         {
-            int minX = vertices.Min(x => x.X);
-            int maxX = vertices.Max(x => x.X);
-            int minY = vertices.Min(x => x.Y);
-            int maxY = vertices.Max(x => x.Y);
-            Point start = new Point(minX, minY);
-            Size sz = new Size(maxX - minX, maxY - minY);
+            var minX = vertices.Min(x => x.X);
+            var maxX = vertices.Max(x => x.X);
+            var minY = vertices.Min(x => x.Y);
+            var maxY = vertices.Max(x => x.Y);
+            var start = new Point(minX, minY);
+            var sz = new Size(maxX - minX, maxY - minY);
             BoundingBox = new Rectangle(start, sz);
         }
 
@@ -70,8 +70,8 @@ namespace FluidicsSDK.Graphic
             base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
             //Color fillColor = Color.FromArgb(alpha, base.FillColor.R, base.FillColor.G, base.FillColor.B);
             Pen drawingPen;
-            Point[] scaledVertices = new Point[vertices.Count];
-            for (int i = 0; i < vertices.Count; i++)
+            var scaledVertices = new Point[vertices.Count];
+            for (var i = 0; i < vertices.Count; i++)
             {
                 scaledVertices[i].X = (int)(vertices[i].X * scale);
                 scaledVertices[i].Y = (int)(vertices[i].Y * scale);
@@ -113,9 +113,9 @@ namespace FluidicsSDK.Graphic
 
         public override void MoveBy(Point relativeValues)
         {
-            for (int i = 0; i < vertices.Count; i++)
+            for (var i = 0; i < vertices.Count; i++)
             {
-                Point p = new Point();
+                var p = new Point();
                 p.X = vertices[i].X + relativeValues.X;
                 p.Y = vertices[i].Y + relativeValues.Y;
                 vertices[i] = p;

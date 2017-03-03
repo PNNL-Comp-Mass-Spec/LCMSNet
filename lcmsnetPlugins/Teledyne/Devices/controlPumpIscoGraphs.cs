@@ -96,7 +96,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="grphTitle">Title of graph</param>
             private void InitPlot(ref ZedGraphControl inpGraph, string grphTitle)
             {
-                GraphPane pumpPane = inpGraph.GraphPane;
+                var pumpPane = inpGraph.GraphPane;
 
                 pumpPane.Title.Text = grphTitle;
                 pumpPane.Legend.IsVisible = false;
@@ -145,7 +145,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="pumpData">New data for all pumps</param>
             public void UpdateAllPlots(classPumpIscoData[] pumpData)
             {
-                for (int indx = 0; indx < mplot_PumpGraphArray.Length; indx++)
+                for (var indx = 0; indx < mplot_PumpGraphArray.Length; indx++)
                 {
                     UpdatePlotDataLists(pumpData[indx], ref mlist_SampleTimes[indx], ref mlist_PressData[indx], ref mlist_FlowData[indx]);
                     UpdatePlot(mplot_PumpGraphArray[indx], mlist_SampleTimes[indx], mlist_PressData[indx], mlist_FlowData[indx]);
@@ -163,7 +163,7 @@ namespace LcmsNet.Devices.Pumps
             private void UpdatePlotDataLists(classPumpIscoData pumpData, ref List<DateTime> times, ref List<double> press,
                 ref List<double> flow)
             {
-                DateTime currTime = LcmsNetSDK.TimeKeeper.Instance.Now; //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                var currTime = LcmsNetSDK.TimeKeeper.Instance.Now; //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
                 // Add data points to storage lists
                 times.Add(pumpData.PointTime);
@@ -171,7 +171,7 @@ namespace LcmsNet.Devices.Pumps
                 flow.Add(pumpData.Flow);
 
                 // Remove data more than two hours old
-                int indx = 0;
+                var indx = 0;
                 // Get index of first time that's less than two hours old
                 while (currTime.Subtract(times[indx]).TotalMinutes > 120 && indx < times.Count) indx++;
                 // Remove the old time values
@@ -195,7 +195,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 if (inpGraph.InvokeRequired)
                 {
-                    delegateUpdateGraphHandler d = new delegateUpdateGraphHandler(UpdatePlot);
+                    var d = new delegateUpdateGraphHandler(UpdatePlot);
                     inpGraph.BeginInvoke(d, new object[] { inpGraph, time, pressure, flow });
                 }
                 else UpdatePlot_Delegated(inpGraph, time, pressure, flow);
@@ -225,30 +225,30 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="flow">List of flows</param>
             private void UpdatePlot_Delegated(ZedGraphControl inpGraph, List<DateTime> time, List<double> pressure, List<double> flow)
             {
-                GraphPane pumpPane = inpGraph.GraphPane;
+                var pumpPane = inpGraph.GraphPane;
 
                 // Fill a time array for the plot
-                double[] tempTime = new double[time.Count];
-                int indx = 0;
-                foreach (DateTime tick in time)
+                var tempTime = new double[time.Count];
+                var indx = 0;
+                foreach (var tick in time)
                 {
                     tempTime[indx] = tick.ToOADate();
                     indx++;
                 }
 
                 // Fill the pressure array
-                double[] pressurePoints = new double[pressure.Count];
+                var pressurePoints = new double[pressure.Count];
                 pressure.CopyTo(pressurePoints, 0);
 
                 // Fill the flow array
-                double[] flowPoints = new double[flow.Count];
+                var flowPoints = new double[flow.Count];
                 flow.CopyTo(flowPoints, 0);
 
                 // Clear the existing plot
                 pumpPane.CurveList.Clear();
 
-                LineItem pressLine = pumpPane.AddCurve("Press", tempTime, pressurePoints, Color.Black, SymbolType.None);
-                LineItem flowLine = pumpPane.AddCurve("Flow", tempTime, flowPoints, Color.Red, SymbolType.None);
+                var pressLine = pumpPane.AddCurve("Press", tempTime, pressurePoints, Color.Black, SymbolType.None);
+                var flowLine = pumpPane.AddCurve("Flow", tempTime, flowPoints, Color.Red, SymbolType.None);
                 flowLine.IsY2Axis = true;
 
                 // Force rescale

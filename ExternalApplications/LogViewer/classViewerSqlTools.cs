@@ -63,9 +63,9 @@ namespace LogViewer
             /// <returns>SELECT statement as a string</returns>
             private string BuildSelectString(classLogQueryData queryData)
             {
-                bool andNeeded = false;
+                var andNeeded = false;
 
-                StringBuilder sqlBldr = new StringBuilder("SELECT * FROM T_LogData");
+                var sqlBldr = new StringBuilder("SELECT * FROM T_LogData");
                 
                 // Check to see if there are any parameters to add to a WHERE clause
                 if (!queryData.OneParamHasValue()) { return sqlBldr.ToString(); }
@@ -183,7 +183,7 @@ namespace LogViewer
                 if (mstring_ConnStr == "")
                 { throw new classLogViewerDataException("Connection string not specified", new Exception()); }
 
-                string sqlStr = BuildSelectString(queryData);
+                var sqlStr = BuildSelectString(queryData);
 
                 try
                 {
@@ -203,13 +203,13 @@ namespace LogViewer
             /// <returns></returns>
             private DataTable GetSQLiteDataTable(string sqlStr, string connStr)
             {
-                DataTable returnTable = new DataTable();
-                int FilledRows = 0;
-                using (SQLiteConnection Cn = new SQLiteConnection(connStr))
+                var returnTable = new DataTable();
+                var FilledRows = 0;
+                using (var Cn = new SQLiteConnection(connStr))
                 {
-                    using (SQLiteDataAdapter Da = new SQLiteDataAdapter())
+                    using (var Da = new SQLiteDataAdapter())
                     {
-                        using (SQLiteCommand Cmd = new SQLiteCommand(sqlStr, Cn))
+                        using (var Cmd = new SQLiteCommand(sqlStr, Cn))
                         {
                             Cmd.CommandType = CommandType.Text;
                             Da.SelectCommand = Cmd;
@@ -219,7 +219,7 @@ namespace LogViewer
                             }
                             catch (Exception Ex)
                             {
-                                string ErrMsg = "SQLite exception getting data table via query " + sqlStr;
+                                var ErrMsg = "SQLite exception getting data table via query " + sqlStr;
                                 throw new classLogViewerDataException(ErrMsg, Ex);
                             }
                         }

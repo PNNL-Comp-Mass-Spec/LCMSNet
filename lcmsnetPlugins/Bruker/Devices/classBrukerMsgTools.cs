@@ -156,7 +156,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Send command
-                short codeToSend = classBrukerComConstants.SOCKET_INITFTMS;
+                var codeToSend = classBrukerComConstants.SOCKET_INITFTMS;
                 if (!SendShortInt(codeToSend)) return false;
                 // Send parameter
                 codeToSend = classBrukerComConstants.PARAM_INITFTMS_ESI;
@@ -180,7 +180,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Send command
-                short codeToSend = classBrukerComConstants.SOCKET_PROCESSLCMSSAMPLEINFORMATION;
+                var codeToSend = classBrukerComConstants.SOCKET_PROCESSLCMSSAMPLEINFORMATION;
                 if (!SendShortInt(codeToSend)) return false;
                 // Send XML data
                 if (!SendString(sampleXML)) return false;
@@ -202,7 +202,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Send command
-                short codeToSend = classBrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
+                var codeToSend = classBrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
                 if (!SendShortInt(codeToSend)) return false;
                 // Send parameter
                 codeToSend = classBrukerComConstants.PARAM_STARTSTOP_PREPARE;
@@ -225,10 +225,10 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Send command
-                short codeToSend = classBrukerComConstants.SOCKET_STARTACQUISITION;
+                var codeToSend = classBrukerComConstants.SOCKET_STARTACQUISITION;
                 if (!SendShortInt(codeToSend)) return false;
                 // Send parameter
-                int intCodeToSend = DEFAULT_TIME_OFFSET;
+                var intCodeToSend = DEFAULT_TIME_OFFSET;
                 if (!SendInt(intCodeToSend)) return false;
 
                 return true;
@@ -248,7 +248,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Send command
-                short codeToSend = classBrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
+                var codeToSend = classBrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
                 if (!SendShortInt(codeToSend)) return false;
                 // Send parameter
                 codeToSend = classBrukerComConstants.PARAM_STARTSTOP_FINISH;
@@ -280,7 +280,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
 
                 // Send command
-                short codeToSend = classBrukerComConstants.SOCKET_EXITFTMS;
+                var codeToSend = classBrukerComConstants.SOCKET_EXITFTMS;
                 if (!SendShortInt(codeToSend)) return false;
                 // Send parameter
                 codeToSend = 0;
@@ -371,10 +371,10 @@ namespace LcmsNet.Devices.BrukerStart
                 // Loop through the AddressList to obtain the supported AddressFamily. This is to avoid
                 // an exception that occurs when the host IP Address is not compatible with the address family
                 // (typical in the IPv6 case).
-                foreach (IPAddress address in hostEntry.AddressList)
+                foreach (var address in hostEntry.AddressList)
                 {
-                    IPEndPoint ipe = new IPEndPoint(address, port);
-                    Socket tempSocket =
+                    var ipe = new IPEndPoint(address, port);
+                    var tempSocket =
                          new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
                     tempSocket.Connect(ipe);
@@ -408,7 +408,7 @@ namespace LcmsNet.Devices.BrukerStart
                     return false;
                 }
 
-                byte[] bytesToSend = BitConverter.GetBytes(shortData);
+                var bytesToSend = BitConverter.GetBytes(shortData);
 
                 // Log outgoing bytes for debugging purposes
                 LogOutgoingBytes(bytesToSend, bytesToSend.Length);
@@ -439,9 +439,9 @@ namespace LcmsNet.Devices.BrukerStart
                     return false;
                 }
 
-                byte[] strBytesToSend = Encoding.Unicode.GetBytes(msgString);
-                int byteCount = strBytesToSend.Length;
-                byte[] byteCountToSend = BitConverter.GetBytes(byteCount);
+                var strBytesToSend = Encoding.Unicode.GetBytes(msgString);
+                var byteCount = strBytesToSend.Length;
+                var byteCountToSend = BitConverter.GetBytes(byteCount);
                 
                 // Log outgoing bytes
                 LogOutgoingBytes(byteCountToSend, byteCountToSend.Length);
@@ -474,7 +474,7 @@ namespace LcmsNet.Devices.BrukerStart
                     return false;
                 }
 
-                byte[] bytesToSend = BitConverter.GetBytes(intData);
+                var bytesToSend = BitConverter.GetBytes(intData);
 
                 // Log outgoing bytes for debug purposes
                 LogOutgoingBytes(bytesToSend, bytesToSend.Length);
@@ -498,8 +498,8 @@ namespace LcmsNet.Devices.BrukerStart
             private short GetShortIntFromRcvQueue()
             {
                 // Pop the first two bytes off the queue and convert to a short int
-                byte tmpByte1 = mobject_IncomingBytes.Dequeue();
-                byte tmpByte2 = mobject_IncomingBytes.Dequeue();
+                var tmpByte1 = mobject_IncomingBytes.Dequeue();
+                var tmpByte2 = mobject_IncomingBytes.Dequeue();
                 byte[] tmpByteArray = { tmpByte1, tmpByte2 };
                 return BitConverter.ToInt16(tmpByteArray, 0);
             }   
@@ -521,7 +521,7 @@ namespace LcmsNet.Devices.BrukerStart
                     //TODO: Figure out how to log this, if necessary
                     //clsLogTools.LogDebugMsg("Label 1");
                     //clsLogTools.LogBytes(m_IncomingBytes.ToArray(), m_IncomingBytes.Count, "ProcessResponse: m_IncomingBytes content");
-                    short tmpRcvdValue = GetShortIntFromRcvQueue();
+                    var tmpRcvdValue = GetShortIntFromRcvQueue();
 
                     // If command code already received, this is the parm code; otherwise it's the command code
                     classApplicationLogger.LogMessage(2, "ProcessResponse: tmpRcvdValue = " + tmpRcvdValue.ToString());
@@ -608,9 +608,9 @@ namespace LcmsNet.Devices.BrukerStart
             /// <param name="byteCount">Number of bytes received</param>
             private void LogIncomingBytes(byte[] dataBuffer, int byteCount)
             {
-                StringBuilder outStrBld = new StringBuilder();
+                var outStrBld = new StringBuilder();
                 outStrBld.Append("Data bytes received from Bruker: ");
-                for (int byteIndx = 0; byteIndx < byteCount; byteIndx++)
+                for (var byteIndx = 0; byteIndx < byteCount; byteIndx++)
                 {
                     outStrBld.Append(dataBuffer[byteIndx].ToString() + ",");
                 }
@@ -625,9 +625,9 @@ namespace LcmsNet.Devices.BrukerStart
             /// <param name="byteCount">Number of bytes being sent</param>
             private void LogOutgoingBytes(byte[] dataBuffer, int byteCount)
             {
-                StringBuilder outStrBld = new StringBuilder();
+                var outStrBld = new StringBuilder();
                 outStrBld.Append("Data bytes sent to Bruker: ");
-                for (int byteIndx = 0; byteIndx < byteCount; byteIndx++)
+                for (var byteIndx = 0; byteIndx < byteCount; byteIndx++)
                 {
                     outStrBld.Append(dataBuffer[byteIndx].ToString() + ",");
                 }
@@ -661,7 +661,7 @@ namespace LcmsNet.Devices.BrukerStart
                 // Log location in program for debugging
                 classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived()");
 
-                int bytesReceived = 0;
+                var bytesReceived = 0;
                 SocketError myError;
 
                 // If we're not listening anymore, just exit
@@ -676,7 +676,7 @@ namespace LcmsNet.Devices.BrukerStart
                     LogIncomingBytes(mbyte_DataBuffer, bytesReceived);
 
                     // Add incoming data to byte queue
-                    for (int byteIndx = 0; byteIndx < bytesReceived; byteIndx++)
+                    for (var byteIndx = 0; byteIndx < bytesReceived; byteIndx++)
                     {
                         mobject_IncomingBytes.Enqueue(mbyte_DataBuffer[byteIndx]);
                     }

@@ -489,7 +489,7 @@ namespace LcmsNet.Devices.Valves
         /// <param name="newPosition">The new position.</param>   
         public enumValveErrors SetPosition(int position)
         {
-            int newPosition = Convert.ToInt32(position);
+            var newPosition = Convert.ToInt32(position);
             if (mbool_emulation == true)
             {
                 mobj_lastSentPosition = mobj_lastMeasuredPosition = newPosition;
@@ -538,7 +538,7 @@ namespace LcmsNet.Devices.Valves
                 if (AbortEvent == null)
                     AbortEvent = new System.Threading.ManualResetEvent(false);
 
-                bool waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, mint_rotationDelayTimems);
+                var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, mint_rotationDelayTimems);
                 if (waited == true)
                     return enumValveErrors.BadArgument;
                 
@@ -625,18 +625,18 @@ namespace LcmsNet.Devices.Valves
             //Read in whatever is waiting in the buffer
             //This should look like
             //  Position is "B"
-            string tempBuffer = "";
+            var tempBuffer = "";
             try
             {
                 tempBuffer    = mobj_serialPort.ReadExisting();
-                bool contains = tempBuffer.Contains("Position is =");
+                var contains = tempBuffer.Contains("Position is =");
 
                 
-                string [] data = tempBuffer.Split(new string [] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
+                var data = tempBuffer.Split(new string [] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
                 tempBuffer = "";
-                for (int i = data.Length - 1; i >= 0; i--)
+                for (var i = data.Length - 1; i >= 0; i--)
                 {
-                    string x = data[i];
+                    var x = data[i];
                     x = x.Replace(" ", "").ToLower();
                     if (x.Contains("positionis="))
                     {
@@ -659,10 +659,10 @@ namespace LcmsNet.Devices.Valves
             /// 
             if (tempBuffer.Length > 1)
             {
-                string[] positions = tempBuffer.Split('=');
-                string   tempPosition = positions[positions.Length - 1];
+                var positions = tempBuffer.Split('=');
+                var   tempPosition = positions[positions.Length - 1];
 
-                int position = -1;
+                var position = -1;
                 if (int.TryParse(tempPosition, out position) == true)
                 {              
                     if (position >= 0 && position <= NumberOfPositions)
@@ -712,7 +712,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            string tempBuffer = "";
+            var tempBuffer = "";
             //Version info is displayed on 2 lines
             try
             {
@@ -768,8 +768,8 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            char tempID = ' ';  //Default to blank space
-            string tempBuffer = "";
+            var tempID = ' ';  //Default to blank space
+            var tempBuffer = "";
 
             try
             {
@@ -793,7 +793,7 @@ namespace LcmsNet.Devices.Valves
                 //Grab the actual position from the above string
                 if (tempBuffer.Length > 1)  //Make sure we have content in the string
                 {
-                    int tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
+                    var tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
                     if (tempCharIndex >= 0)  //Make sure we found a =
                     {
                         //Change the position to be the second character following the first =
@@ -933,7 +933,7 @@ namespace LcmsNet.Devices.Valves
                 return mint_numberOfPositions;
             }
 
-            int tempNumPositions = -1;
+            var tempNumPositions = -1;
 
             //If the serial port is not open, open it
             if (!mobj_serialPort.IsOpen)
@@ -961,7 +961,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            string tempBuffer = "";
+            var tempBuffer = "";
 
             try
             {
@@ -981,7 +981,7 @@ namespace LcmsNet.Devices.Valves
             //Grab the actual #positions from the above string
             if (tempBuffer.Length > 1)  //Make sure we have content in the string
             {
-                int tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
+                var tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
                 if (tempCharIndex >= 0)  //Make sure we found a =
                 {
                     //Change the position to be the second character following the first =

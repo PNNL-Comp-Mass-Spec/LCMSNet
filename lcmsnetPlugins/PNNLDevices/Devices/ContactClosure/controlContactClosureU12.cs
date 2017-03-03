@@ -97,7 +97,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                bool emulated = true;
+                var emulated = true;
                 if (mobj_contactClosure != null)
                 {
                     emulated = mobj_contactClosure.Emulation;

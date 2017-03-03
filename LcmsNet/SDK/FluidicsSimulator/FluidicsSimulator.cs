@@ -189,7 +189,7 @@ namespace FluidicsSimulator
                     IsReady = false;
                     return;
                 }
-                DateTime startTime = DateTime.Now;
+                var startTime = DateTime.Now;
                 
                 m_simulationQueue = BuildEventList(Methods, startTime);
                 m_FirstStartTime = m_simulationQueue.Min.Time;
@@ -210,9 +210,9 @@ namespace FluidicsSimulator
             {            
                 foreach (var evt in method.Events)
                 {
-                    DateTime timeOfNextEvent = evt.Start;
+                    var timeOfNextEvent = evt.Start;
                     //grab the list that is supposed to run at that time..if there is one.
-                    SimEventList current = sequence.FirstOrDefault(x => x.Time == timeOfNextEvent);
+                    var current = sequence.FirstOrDefault(x => x.Time == timeOfNextEvent);
                     if (current == null)
                     {
                         //if there isn't create one.
@@ -451,7 +451,7 @@ namespace FluidicsSimulator
         {
             if (!FluidicsSimulator.GetInstance.InProgress)
             {
-                IFluidicsModelChecker c = m_modelCheckers.Find(x => x.Name.Equals(check));
+                var c = m_modelCheckers.Find(x => x.Name.Equals(check));
                 m_modelCheckers.Remove(c);
                 if(ModelCheckRemoved != null)
                 {
@@ -466,7 +466,7 @@ namespace FluidicsSimulator
         /// <returns>a list of ISimulationModelChecker objects</returns>
         public List<IFluidicsModelChecker> GetModelCheckers()
         {
-            List<IFluidicsModelChecker> m_checks = new List<IFluidicsModelChecker>(m_modelCheckers);
+            var m_checks = new List<IFluidicsModelChecker>(m_modelCheckers);
             return m_checks;
         }
 
@@ -478,7 +478,7 @@ namespace FluidicsSimulator
         /// <returns>A filtered list of ModelStatus objects</returns>
         private List<ModelStatus> FilterStatusChanges(List<ModelStatus> status, WantedStatusChanges categories)
         {
-            List<ModelStatus> filteredStatus = new List<ModelStatus>();
+            var filteredStatus = new List<ModelStatus>();
             switch (categories)
             {
                 case WantedStatusChanges.All:
@@ -511,12 +511,12 @@ namespace FluidicsSimulator
         /// </summary>
         private void CheckModel(classLCEvent lcEvent)
         {
-            foreach (IFluidicsModelChecker check in m_modelCheckers)
+            foreach (var check in m_modelCheckers)
             {
                 if (check.IsEnabled)
                 {
-                    IEnumerable<ModelStatus> statusChanges = check.CheckModel();
-                    foreach(ModelStatus change in statusChanges)
+                    var statusChanges = check.CheckModel();
+                    foreach(var change in statusChanges)
                     {
                         change.Event = lcEvent.Name;
                         change.EventDevice = lcEvent.Device;

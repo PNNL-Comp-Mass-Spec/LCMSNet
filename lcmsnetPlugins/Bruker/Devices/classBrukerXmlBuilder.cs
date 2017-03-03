@@ -26,11 +26,11 @@ namespace LcmsNet.Devices.BrukerStart
             {
                 // Create and initialize document object
                 m_Doc = new XmlDocument();
-                XmlDeclaration docDeclaration = m_Doc.CreateXmlDeclaration("1.0", null, null);
+                var docDeclaration = m_Doc.CreateXmlDeclaration("1.0", null, null);
                 m_Doc.AppendChild(docDeclaration);
 
                 // Add root element
-                XmlElement rootElement = m_Doc.CreateElement("Acquisition");
+                var rootElement = m_Doc.CreateElement("Acquisition");
                 m_Doc.AppendChild(rootElement);
 
                 XmlAttribute newAttrbute;
@@ -57,7 +57,7 @@ namespace LcmsNet.Devices.BrukerStart
 
                 // Result Method Path
                 newAttrbute = m_Doc.CreateAttribute("resultMethodPath");
-                string tmpPath = Path.Combine(outputPath, sampleName);
+                var tmpPath = Path.Combine(outputPath, sampleName);
                 newAttrbute.Value = Path.Combine(tmpPath, MethodName);
                 rootElement.Attributes.Append(newAttrbute);
 
@@ -91,15 +91,15 @@ namespace LcmsNet.Devices.BrukerStart
                 //newAttrbute.Value = "";
                 //rootElement.Attributes.Append(newAttrbute);
 
-                MemoryStream memStream = new MemoryStream();
-                XmlTextWriter xmWriter = new XmlTextWriter(memStream, System.Text.Encoding.UTF8);
+                var memStream = new MemoryStream();
+                var xmWriter = new XmlTextWriter(memStream, System.Text.Encoding.UTF8);
 
                 m_Doc.Save(memStream);
 //              m_Doc.Save(@"D:\Temporary\BrukerXMLTest.xml");  // Debug statement
 
                 memStream.Seek(0, SeekOrigin.Begin);
-                StreamReader memStreamReader = new StreamReader(memStream);
-                string xmlText = memStreamReader.ReadToEnd();
+                var memStreamReader = new StreamReader(memStream);
+                var xmlText = memStreamReader.ReadToEnd();
 
                 memStreamReader.Close();
                 memStream.Close();

@@ -175,7 +175,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 try
                 {
-                    double tmpVal = double.Parse(inpVol);
+                    var tmpVal = double.Parse(inpVol);
                     return (tmpVal / Math.Pow(10, 6));  // Data from pump is in liters; this converts to mL
                 }
                 catch
@@ -202,7 +202,7 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>String specifying flow units; Empty string on error</returns>
             public static string GetFlowUnitsString(enumIscoFlowUnits units)
             {
-                string retStr = "";
+                var retStr = "";
                 switch (units)
                 {
                     case enumIscoFlowUnits.ml_hour:
@@ -243,7 +243,7 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>String specifying pressure units; Empty string on error</returns>
             public static string GetPressUnitsString(enumIscoPressureUnits units)
             {
-                string retStr = "";
+                var retStr = "";
                 switch (units)
                 {
                     case enumIscoPressureUnits.atm:
@@ -273,7 +273,7 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Enum specified by input string</returns>
             public static enumIscoFlowUnits ConvertFlowStrToEnum(string inpStr)
             {
-                enumIscoFlowUnits retVal = enumIscoFlowUnits.error;
+                var retVal = enumIscoFlowUnits.error;
                 switch (inpStr.ToLower())
                 {
                     case "ml/min":
@@ -303,7 +303,7 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>Enum specified by input string</returns>
             public static enumIscoPressureUnits ConvertPressStrToEnum(string inpStr)
             {
-                enumIscoPressureUnits retVal = enumIscoPressureUnits.error;
+                var retVal = enumIscoPressureUnits.error;
                 switch (inpStr.ToLower())
                 {
                     case "atm":

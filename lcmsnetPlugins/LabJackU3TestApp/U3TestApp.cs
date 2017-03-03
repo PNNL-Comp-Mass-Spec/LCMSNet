@@ -17,19 +17,19 @@ namespace LabJackU3TestApp
     {
         static void Main(string[] args)
         {
-            classLabjackU3 myU3 = new classLabjackU3();
+            var myU3 = new classLabjackU3();
             myU3.Initialize();
                
-            string cmdStr = string.Empty;
+            var cmdStr = string.Empty;
             PrintMenu();
             while (true)
             {
                 try
                 {
                     Console.Write("What is your command? ");
-                    string[] input = Console.ReadLine().Split();
+                    var input = Console.ReadLine().Split();
                     cmdStr = input[0];
-                    int channelNum = -1;
+                    var channelNum = -1;
                     if (input.Length > 1)
                     {
                         channelNum = Convert.ToInt32(input[1]);

@@ -42,7 +42,7 @@ namespace FluidicsSDK.Managers
             public void Add(IDevice device)
             {
                 // Make sure someone doesnt add this device twice....
-                foreach (FluidicsDevice fdevice in m_devices)
+                foreach (var fdevice in m_devices)
                 {
                     if (fdevice.IDevice == device)
                     {
@@ -51,11 +51,11 @@ namespace FluidicsSDK.Managers
                 }
                 
                 // Then parse out the potential fluidics device types so we can add to the user interface.
-                Type type = device.GetType();
+                var type = device.GetType();
                 
                 try
                 {
-                    FluidicsDevice fluidicsDevice = FluidicsDeviceTypeFactory.CreateDevice(type);
+                    var fluidicsDevice = FluidicsDeviceTypeFactory.CreateDevice(type);
                     if (fluidicsDevice != null)
                     {
                         m_devices.Add(fluidicsDevice);
@@ -90,10 +90,10 @@ namespace FluidicsSDK.Managers
             /// <exception cref="ArgumentException">the device was not found</exception>
             public void Remove(IDevice device)
             {
-                List<FluidicsDevice> tempLst  = new List<FluidicsDevice>(m_devices);
-                bool deviceRemoved            = false;
+                var tempLst  = new List<FluidicsDevice>(m_devices);
+                var deviceRemoved            = false;
                 FluidicsDevice deviceToRemove = null;
-                foreach (FluidicsDevice fluidicsDevice in tempLst)
+                foreach (var fluidicsDevice in tempLst)
                 {
                     if (fluidicsDevice.IDevice == device)
                     {                       
@@ -127,7 +127,7 @@ namespace FluidicsSDK.Managers
             /// <param name="scale">a float repsenting how much to scale the devices by</param>
             public void Render(Graphics g, int alpha, float scale)
             {
-                foreach (FluidicsDevice device in m_devices)
+                foreach (var device in m_devices)
                 {
                     try
                     {
@@ -152,9 +152,9 @@ namespace FluidicsSDK.Managers
                 // search devices from back of list to front..this provides inherent z ordering, since
                 // devices that were created after others(or were moved in front of others), will appear at the
                 // back of the list.
-                List<FluidicsDevice> tmpList = new List<FluidicsDevice>(m_devices);
+                var tmpList = new List<FluidicsDevice>(m_devices);
                 tmpList.Reverse();
-                foreach (FluidicsDevice device in tmpList)
+                foreach (var device in tmpList)
                 {
                     if (device.Contains(location))
                     {
@@ -175,15 +175,15 @@ namespace FluidicsSDK.Managers
                     return new Rectangle(0, 0, 0, 0);
                 }
                 // extra pixels around edge of bounding box to ensure images taken using bounding box get full image
-                int buffer = 200;
+                var buffer = 200;
                 if(!addBuffer)
                 {
                     buffer = 10;
                 }
-                int maxX = m_devices.Max(z => (int)(z.Loc.X + z.Size.Width));
-                int maxY = m_devices.Max(z => (int)(z.Loc.Y + z.Size.Height));
-                int x = m_devices.Min(z => z.Loc.X);
-                int y = m_devices.Min(z => z.Loc.Y);
+                var maxX = m_devices.Max(z => (int)(z.Loc.X + z.Size.Width));
+                var maxY = m_devices.Max(z => (int)(z.Loc.Y + z.Size.Height));
+                var x = m_devices.Min(z => z.Loc.X);
+                var y = m_devices.Min(z => z.Loc.Y);
                 return new Rectangle(x - buffer, y - buffer , maxX  + buffer, maxY + buffer);
             }
             /// <summary>
@@ -214,8 +214,8 @@ namespace FluidicsSDK.Managers
                 //remove each device from the list, and then add them back to
                 //the end of the list, preserving order of the devices, but putting them
                 // at the "top" of the list, since searches are done from back to front
-                List<FluidicsDevice> oldOrder = new List<FluidicsDevice>(m_devices);
-                foreach (FluidicsDevice device in oldOrder)
+                var oldOrder = new List<FluidicsDevice>(m_devices);
+                foreach (var device in oldOrder)
                 {
                     if(devices.Contains(device))
                     {
@@ -233,8 +233,8 @@ namespace FluidicsSDK.Managers
         /// <returns>a list of tuples</returns>
         public List<Tuple<string, string, string>> ListDevicesAndStatus()
         {
-            List<Tuple<string, string, string>> listOfDevices = new List<Tuple<string,string, string>>();
-            foreach (FluidicsDevice dev in m_devices)
+            var listOfDevices = new List<Tuple<string,string, string>>();
+            foreach (var dev in m_devices)
             {
                 listOfDevices.Add(new Tuple<string, string, string>(dev.IDevice.Name, dev.IDevice.Status.ToString(), dev.IDevice.ErrorType.ToString()));
             }
@@ -279,7 +279,7 @@ namespace FluidicsSDK.Managers
             public FluidicsDevice FindDevice(IDevice device)
             {
                 FluidicsDevice fdevice = null;
-                foreach (FluidicsDevice fdevicei in m_devices)
+                foreach (var fdevicei in m_devices)
                 {
                     if (fdevicei.IDevice == device)
                     {
@@ -305,8 +305,8 @@ namespace FluidicsSDK.Managers
             /// <returns>true if an action is taken, false otherwise</returns>
             public bool TakeAction(Point location)
             {
-                bool actiontaken = false;
-                foreach (FluidicsDevice dev in m_devices)
+                var actiontaken = false;
+                foreach (var dev in m_devices)
                 {
                     actiontaken = dev.TakeAction(location);
                     if(actiontaken)

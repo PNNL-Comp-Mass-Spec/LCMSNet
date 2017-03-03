@@ -62,9 +62,9 @@ namespace LcmsNet.Devices.Valves
         {
             if (mobj_valve != null)
             {
-                Array enums = Enum.GetValues(mobj_valve.GetStateType());
+                var enums = Enum.GetValues(mobj_valve.GetStateType());
 
-                foreach(object o in enums)
+                foreach(var o in enums)
                 {
                     mcomboBox_Position.Items.Add(o);
                 }
@@ -258,7 +258,7 @@ namespace LcmsNet.Devices.Valves
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            char newID = mcomboBox_setID.SelectedItem.ToString()[0];
+            var newID = mcomboBox_setID.SelectedItem.ToString()[0];
             try
             {
                 mobj_valve.SetHardwareID(newID);
@@ -336,8 +336,8 @@ namespace LcmsNet.Devices.Valves
                 LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_USER, "A valve position selection should be made.");
                 return;
             }
-            int pos = (int)mcomboBox_Position.SelectedItem;
-            Thread p = new Thread(() => SetPosition(pos));
+            var pos = (int)mcomboBox_Position.SelectedItem;
+            var p = new Thread(() => SetPosition(pos));
             p.Start();
             p = null;
         }
@@ -368,7 +368,7 @@ namespace LcmsNet.Devices.Valves
 
             mpropertyGrid_Serial.SelectedObject = mobj_valve.Port;
 
-            string errorMessage = "";
+            var errorMessage = "";
             try
             {
                 mobj_valve.Initialize(ref errorMessage);

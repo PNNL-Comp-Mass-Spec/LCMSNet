@@ -48,8 +48,8 @@ namespace FluidicsSDK.Devices
             base.AddCircle(new Point(0, 0), m_radius, Color.Black, Brushes.White, fill:true);
             m_info_controls_box = new Rectangle(base.Loc.X, base.Loc.Y + (int)base.Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             m_numberOfPorts = numberOfPorts;
-            Point[] portLocs = GeneratePortLocs();
-            foreach (Point p in portLocs)
+            var portLocs = GeneratePortLocs();
+            foreach (var p in portLocs)
             {
                 base.AddPort(p);
             }
@@ -69,17 +69,17 @@ namespace FluidicsSDK.Devices
             // simply assign each one to an point that is on a vector corresponding to
             // an angle which is a multiple of this one. e.g. port 4 is on the vector
             // of (angle * 4). So 4 ports would be placed at 0, pi/2, pi, and 3pi/2.
-            double angle = (2 * Math.PI) / m_numberOfPorts;
-            Point[] points = new Point[m_numberOfPorts];
-            int shiftX = Center.X;
-            for (int i = 0; i < m_numberOfPorts; i++)
+            var angle = (2 * Math.PI) / m_numberOfPorts;
+            var points = new Point[m_numberOfPorts];
+            var shiftX = Center.X;
+            for (var i = 0; i < m_numberOfPorts; i++)
             {
                 // Position the first port above the center point, shift all other ports to correct locations after.
-                double currentAngle = (Math.PI/2) + (angle * i);
+                var currentAngle = (Math.PI/2) + (angle * i);
                 // place them on a circle at a radius of m_radius* 3/4 from the center
                 // of the valve.
-                int x = (int)((m_radius * M_DISTFROMCENTER) * Math.Cos(currentAngle) + shiftX);
-                int y = (int)((m_radius * M_DISTFROMCENTER) * Math.Sin(currentAngle) + Center.Y);
+                var x = (int)((m_radius * M_DISTFROMCENTER) * Math.Cos(currentAngle) + shiftX);
+                var y = (int)((m_radius * M_DISTFROMCENTER) * Math.Sin(currentAngle) + Center.Y);
                            
                 points[i] = new Point(x, y);
             }         
@@ -93,7 +93,7 @@ namespace FluidicsSDK.Devices
 
         public override void ActivateState(int state)
         {
-            TwoPositionState requestedState = (TwoPositionState)state;
+            var requestedState = (TwoPositionState)state;
             m_currentState = requestedState;
             if (m_currentState != TwoPositionState.Unknown)
             {

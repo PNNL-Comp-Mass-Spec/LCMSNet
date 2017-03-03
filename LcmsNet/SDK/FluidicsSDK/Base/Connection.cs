@@ -73,12 +73,12 @@ namespace FluidicsSDK.Base
         /// <returns></returns>
         protected virtual List<GraphicsPrimitive> SetupLines(Port from, Port to)
         {
-            List<GraphicsPrimitive> lines = new List<GraphicsPrimitive>();
+            var lines = new List<GraphicsPrimitive>();
             if (ConnectionStyle == ConnectionStyles.Elbow)
             {
-                int diffX = Math.Abs(to.Center.X - from.Center.X);
-                int diffY = Math.Abs(to.Center.Y - from.Center.Y);
-                Point midPoint = new Point(0,0);
+                var diffX = Math.Abs(to.Center.X - from.Center.X);
+                var diffY = Math.Abs(to.Center.Y - from.Center.Y);
+                var midPoint = new Point(0,0);
                 if (diffY > diffX)
                 {
                     midPoint = new Point(from.Center.X, to.Center.Y);
@@ -87,7 +87,7 @@ namespace FluidicsSDK.Base
                 {
                     midPoint = new Point(to.Center.X, from.Center.Y);
                 }
-                FluidicsLine line = new FluidicsLine(from.Center, midPoint);
+                var line = new FluidicsLine(from.Center, midPoint);
                 lines.Add(line);
                 // elbow off to port "to"
                 line = new FluidicsLine(midPoint, to.Center);
@@ -95,7 +95,7 @@ namespace FluidicsSDK.Base
             }
             else
             {
-                FluidicsLine line = new FluidicsLine(new Point(from.Center.X, from.Center.Y), new Point(to.Center.X, to.Center.Y));
+                var line = new FluidicsLine(new Point(from.Center.X, from.Center.Y), new Point(to.Center.X, to.Center.Y));
                 lines.Add(line);
             }
             return lines;
@@ -127,9 +127,9 @@ namespace FluidicsSDK.Base
         {
             if (ConnectionStyle == ConnectionStyles.Elbow)
             {
-                int diffX = Math.Abs(P2.Center.X - P1.Center.X);
-                int diffY = Math.Abs(P2.Center.Y - P1.Center.Y);
-                Point midPoint = new Point(0,0);
+                var diffX = Math.Abs(P2.Center.X - P1.Center.X);
+                var diffY = Math.Abs(P2.Center.Y - P1.Center.Y);
+                var midPoint = new Point(0,0);
                 if (diffY > diffX)
                 {
                     midPoint = new Point(P1.Center.X, P2.Center.Y);
@@ -140,7 +140,7 @@ namespace FluidicsSDK.Base
                     midPoint = new Point(P2.Center.X, P1.Center.Y);
                   
                 }
-                FluidicsLine line = m_prims[0] as FluidicsLine;
+                var line = m_prims[0] as FluidicsLine;
                 line.Origin = P1.Center;
                 line.Term = midPoint;
                 line = m_prims[1] as FluidicsLine;
@@ -149,7 +149,7 @@ namespace FluidicsSDK.Base
             }
             else
             {
-                FluidicsLine line = m_prims[0] as FluidicsLine;
+                var line = m_prims[0] as FluidicsLine;
                 line.Origin  = P1.Center;
                 line.Term = P2.Center;
             }
@@ -194,7 +194,7 @@ namespace FluidicsSDK.Base
         public virtual bool OnPoint(Point location)
         {
             //check to see if the point is on any of the lines that make up the connection
-            bool existsOnPoint = false;
+            var existsOnPoint = false;
             if (!Transparent) // if the connection is transparent, we don't want to be able to select it
             {
                 
@@ -314,7 +314,7 @@ namespace FluidicsSDK.Base
             private get { return Color.Black; }
             set
             {
-                foreach (GraphicsPrimitive prim in m_prims)
+                foreach (var prim in m_prims)
                 {
                     prim.Color = value;
                 }

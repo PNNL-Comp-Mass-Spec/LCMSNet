@@ -135,7 +135,7 @@ namespace FailureInjector.Drivers
         {
             if (this.Error != null)
             {
-                classDeviceErrorEventArgs args = new classDeviceErrorEventArgs(
+                var args = new classDeviceErrorEventArgs(
                     "Method Failure",
                     null,
                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
@@ -156,7 +156,7 @@ namespace FailureInjector.Drivers
         {
             if (StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(
+                var args = new classDeviceStatusEventArgs(
                     enumDeviceStatus.InUseByMethod,
                     "Number Change",
                     number.ToString(),
@@ -176,7 +176,7 @@ namespace FailureInjector.Drivers
             {
                 Status = enumDeviceStatus.Error;
 
-                classDeviceErrorEventArgs args = new classDeviceErrorEventArgs(
+                var args = new classDeviceErrorEventArgs(
                     "Inject Failure",
                     null,
                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
@@ -202,7 +202,7 @@ namespace FailureInjector.Drivers
         {
             if (this.StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(
+                var args = new classDeviceStatusEventArgs(
                     enumDeviceStatus.InUseByMethod,
                     "Method Status",
                     this);
@@ -219,7 +219,7 @@ namespace FailureInjector.Drivers
         {
             if (this.StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(
+                var args = new classDeviceStatusEventArgs(
                     enumDeviceStatus.InUseByMethod,
                     "Inject Status",
                     this);

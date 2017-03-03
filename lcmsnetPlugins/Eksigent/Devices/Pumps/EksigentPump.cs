@@ -279,7 +279,7 @@ namespace Eksigent.Devices.Pumps
             {
                 return true;
             }           
-            bool worked = GetMethodsFromFolder(MethodsFolder);
+            var worked = GetMethodsFromFolder(MethodsFolder);
             if (!worked)
             {
                 errorMessage = "Eksigent methods folder is empty or does not exist.";
@@ -297,7 +297,7 @@ namespace Eksigent.Devices.Pumps
                     errorMessage = ex.Message;
                     throw ex;
                 }          
-                bool initialized = m_hardware.Initialize();
+                var initialized = m_hardware.Initialize();
                 if (!initialized)
                 {
                     errorMessage = "Could not create an interface to the Eksigent SDK.";
@@ -310,12 +310,12 @@ namespace Eksigent.Devices.Pumps
                     ChannelNumbers(m_numberOfChannels);
                 }
 
-                for (int i = 0; i < m_numberOfChannels; i++)
+                for (var i = 0; i < m_numberOfChannels; i++)
                 {                    
                     HandleStatus("Getting Eksigent instrument status for channel " + i.ToString());
-                    int status = -1;
-                    int lastStatus = -1;
-                    int counts = 0;
+                    var status = -1;
+                    var lastStatus = -1;
+                    var counts = 0;
                     while (status != 1 && counts < CONST_STATUS_TRIES)
                     {
                         status = m_hardware.GetStatus(Convert.ToByte(i));
@@ -427,7 +427,7 @@ namespace Eksigent.Devices.Pumps
       
         public List<string> GetStatusNotificationList()
         {
-            List<string> notifications =  new List<string>() { "Status" };
+            var notifications =  new List<string>() { "Status" };
             notifications.AddRange(m_notifyStrings);
             notifications.Add(CONST_INITIALIZED);
             return notifications;
@@ -448,7 +448,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (Error != null)
             {
-                classDeviceErrorEventArgs args = new classDeviceErrorEventArgs(error, ex, ErrorType, this, "Error");
+                var args = new classDeviceErrorEventArgs(error, ex, ErrorType, this, "Error");
                 Error(this, args);
             }
             else
@@ -464,7 +464,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {                
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, "Status", status, this);
+                var args = new classDeviceStatusEventArgs(Status, "Status", status, this);
 
                 StatusUpdate(this, args);
             }
@@ -482,7 +482,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, statusNotifyString, status, this);
+                var args = new classDeviceStatusEventArgs(Status, statusNotifyString, status, this);
 
                 StatusUpdate(this, args);
             }
@@ -493,7 +493,7 @@ namespace Eksigent.Devices.Pumps
         }
         private void ConvertAndLogStatus(int code)
         {
-            string message = ConvertStatusCode(code);
+            var message = ConvertStatusCode(code);
             HandleStatus(message);
         }
         /// <summary>
@@ -503,7 +503,7 @@ namespace Eksigent.Devices.Pumps
         /// <returns></returns>
         private string ConvertStatusCode(int code)
         {
-            string message = "";
+            var message = "";
 
             switch (code)
             {
@@ -588,7 +588,7 @@ namespace Eksigent.Devices.Pumps
         /// <param name="folder"></param>
         private bool GetMethodsFromFolder(string folder)
         {
-            bool worked = false;
+            var worked = false;
 
             if (folder == null)
             {
@@ -598,15 +598,15 @@ namespace Eksigent.Devices.Pumps
 
             if (Directory.Exists(MethodsFolder))
             {
-                string[] files = Directory.GetFiles(folder, "*.ini");
+                var files = Directory.GetFiles(folder, "*.ini");
                 Methods.Clear();
                 m_methodPaths.Clear();
 
                 if (files != null && files.Length > 0)
                 {
-                    foreach (string file in files)
+                    foreach (var file in files)
                     {
-                        string method = Path.GetFileNameWithoutExtension(file);
+                        var method = Path.GetFileNameWithoutExtension(file);
                         m_methodPaths.Add(method, file);
                         Methods.Add(method);
                     }
@@ -628,8 +628,8 @@ namespace Eksigent.Devices.Pumps
         {
             if (MethodNames != null)
             {
-                List<object> data = new List<object>();
-                foreach (string name in Methods)
+                var data = new List<object>();
+                foreach (var name in Methods)
                 {
                     data.Add(name);
                 }
@@ -647,7 +647,7 @@ namespace Eksigent.Devices.Pumps
         }
         void driv_DeviceMessage(ref byte ChannelNumber, ref byte MessageNumber, ref object MessageData)
         {
-            string message = ConvertStatusCode(Convert.ToInt32(MessageNumber));
+            var message = ConvertStatusCode(Convert.ToInt32(MessageNumber));
             HandleStatus(string.Format("Eksigent device - {0} - had a message for channel {1} - {2}",
                                             Name,
                                             ChannelNumber,
@@ -655,7 +655,7 @@ namespace Eksigent.Devices.Pumps
         }
         void driv_DataAvailable(ref byte colnum, ref Array values, ref float T, ref float Qa, ref float Qb, ref float Pa, ref float Pb, ref float PnodeA, ref float PnodeB, ref float PowA, ref float PowB)
         {
-            DateTime time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
             //if (mdouble_flowrate != 0)
@@ -674,11 +674,11 @@ namespace Eksigent.Devices.Pumps
             /// 
             /// Find old data to remove -- needs to be updated (or could be) using LINQ
             /// 
-            int count = mlist_times.Count;
-            int total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
+            var count = mlist_times.Count;
+            var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
             {
-                int i = 0;
+                var i = 0;
                 while (time.Subtract(mlist_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < mlist_times.Count)
                 {
                     i++;
@@ -738,31 +738,31 @@ namespace Eksigent.Devices.Pumps
             {
                 return true;
             }
-            int intChannel = Convert.ToInt32(channel);
+            var intChannel = Convert.ToInt32(channel);
 
-            bool containsMethod = m_methodPaths.ContainsKey(methodName);
+            var containsMethod = m_methodPaths.ContainsKey(methodName);
             if (!containsMethod)
             {
                 HandleError("The specified method does not exist or was not mapped to a file correctly.",
                                         new FileNotFoundException("Could not find the file."));
                 return false;
             }
-            string method = m_methodPaths[methodName];
+            var method = m_methodPaths[methodName];
             int startMode, runFlag;
             double injVol;
 
             injVol                  = 0;
             runFlag                 = 0;
             startMode               = 0;
-            string vialName         = "A1";
-            bool worked             = m_hardware.PrepareForRun(Convert.ToByte(intChannel),
+            var vialName         = "A1";
+            var worked             = m_hardware.PrepareForRun(Convert.ToByte(intChannel),
                                                                 method,
                                                                 0,
                                                                 ref startMode,
                                                                 vialName,
                                                                 ref injVol,
                                                                 ref runFlag);
-            int status              = m_hardware.GetStatus(Convert.ToByte(intChannel));
+            var status              = m_hardware.GetStatus(Convert.ToByte(intChannel));
 
             if (!worked)
             {
@@ -776,7 +776,7 @@ namespace Eksigent.Devices.Pumps
                 {
                     AbortEvent = new System.Threading.ManualResetEvent(false);
                 }
-                System.Threading.WaitHandle[] handles = new System.Threading.WaitHandle[] {AbortEvent};
+                var handles = new System.Threading.WaitHandle[] {AbortEvent};
                 worked = false;
                 while(!worked)
                 {
@@ -810,8 +810,8 @@ namespace Eksigent.Devices.Pumps
             {
                 return true;
             }
-            int intChannel  = Convert.ToInt32(channel);
-            bool worked     = m_hardware.StopRun(Convert.ToByte(intChannel));
+            var intChannel  = Convert.ToInt32(channel);
+            var worked     = m_hardware.StopRun(Convert.ToByte(intChannel));
             if (!worked)
             {
                 ConvertAndLogStatus(m_hardware.GetStatus(Convert.ToByte(intChannel)));
@@ -830,7 +830,7 @@ namespace Eksigent.Devices.Pumps
         {
             string path = null;
 
-            bool containsMethod = m_methodPaths.ContainsKey(methodName);
+            var containsMethod = m_methodPaths.ContainsKey(methodName);
             if (containsMethod)
             {
                 path = m_methodPaths[methodName];
@@ -846,7 +846,7 @@ namespace Eksigent.Devices.Pumps
         public void ShowMethodMenu(int channelNumber, string methodName)
         {
 
-            string path = GetPathFromMethod(methodName);
+            var path = GetPathFromMethod(methodName);
             if (path == null)
             {
                 HandleError("The method you requested does not exist.", null);

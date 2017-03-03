@@ -61,7 +61,7 @@ namespace LogViewer
                 // Verify a log file has been specified
                 if (textLogFile.Text == "")
                 {
-                    string msg = "Log file must be specified";
+                    var msg = "Log file must be specified";
                     MessageBox.Show(msg);
                     return;
                 }
@@ -69,12 +69,12 @@ namespace LogViewer
                 // Verify specified log file exists (in case file string has been manually edited)
                 if (!File.Exists(textLogFile.Text))
                 {
-                    string msg = "Log file " + textLogFile.Text + " not found";
+                    var msg = "Log file " + textLogFile.Text + " not found";
                     MessageBox.Show(msg);
                 }
 
                 // Fill a query data object from the selected fields in the screen
-                classLogQueryData queryData = new classLogQueryData();
+                var queryData = new classLogQueryData();
                 queryData.Column = textColumn.Text;
                 queryData.Device = textDevice.Text;
                 queryData.Message = textMessage.Text;
@@ -90,14 +90,14 @@ namespace LogViewer
                 }
                 catch (Exception ex)
                 {
-                    string msg = "";
+                    var msg = "";
                     UnwrapExceptionMsgs(ex, out msg);
                     MessageBox.Show(msg);
                 }
 
                 if (logData == null)
                 {
-                    string msg = "Returned log data list is NULL";
+                    var msg = "Returned log data list is NULL";
                     MessageBox.Show(msg);
                     return;
                 }
@@ -132,7 +132,7 @@ namespace LogViewer
         /// <param name="e"></param>
         private void buttonLogFileSelect_Click(object sender, EventArgs e)
         {
-            OpenFileDialog fileOpenDlg = new OpenFileDialog();
+            var fileOpenDlg = new OpenFileDialog();
             fileOpenDlg.Filter = "Log files (*.db3)|*.db3|All files(*.*)|*.*";
             fileOpenDlg.FilterIndex = 0;
             if (fileOpenDlg.ShowDialog() == DialogResult.OK)

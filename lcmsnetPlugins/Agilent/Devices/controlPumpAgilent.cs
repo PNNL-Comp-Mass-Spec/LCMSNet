@@ -87,7 +87,7 @@ namespace Agilent.Devices.Pumps
                 mcomboBox_comPort.SelectedIndex = 0;
             if (mcomboBox_comPort.Items.Contains(mobj_pump.PortName))
             {
-                int index = mcomboBox_comPort.Items.IndexOf(mobj_pump.PortName);
+                var index = mcomboBox_comPort.Items.IndexOf(mobj_pump.PortName);
                 if (index >= 0)
                 {
                     mcomboBox_comPort.SelectedIndex = index;
@@ -193,13 +193,13 @@ namespace Agilent.Devices.Pumps
             /// data.  We will catch an event from adding a method that one was added...and thus update
             /// the user interface intrinsically.
             /// 
-            string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ExecutablePath), CONST_PUMP_METHOD_PATH);
+            var path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ExecutablePath), CONST_PUMP_METHOD_PATH);
             if (!System.IO.Directory.Exists(path))
             {
                 throw new System.IO.DirectoryNotFoundException("The directory " + path + " does not exist.");
             }
 
-            string[] filenames = System.IO.Directory.GetFiles(path, "*.txt");
+            var filenames = System.IO.Directory.GetFiles(path, "*.txt");
             
 
             string selectedMethod = null;
@@ -212,10 +212,10 @@ namespace Agilent.Devices.Pumps
             /// 
             if (filenames.Length > 0)
                 mobj_pump.ClearMethods();
-            Dictionary<string, string> methods = new Dictionary<string, string>();
-            foreach (string filename in filenames)
+            var methods = new Dictionary<string, string>();
+            foreach (var filename in filenames)
             {
-                string method = System.IO.File.ReadAllText(filename);
+                var method = System.IO.File.ReadAllText(filename);
                 methods[System.IO.Path.GetFileNameWithoutExtension(filename)] = method;
                 mobj_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(filename), method);
             }
@@ -303,7 +303,7 @@ namespace Agilent.Devices.Pumps
             /// 
             /// Get the pump method from the device
             /// 
-            string method = mobj_pump.RetrieveMethod();
+            var method = mobj_pump.RetrieveMethod();
             /// 
             /// Allow the user to edit it.
             /// 
@@ -319,7 +319,7 @@ namespace Agilent.Devices.Pumps
             if (string.IsNullOrEmpty(mtextbox_method.Text))
                 return;
 
-            SaveFileDialog dialog   = new SaveFileDialog();
+            var dialog   = new SaveFileDialog();
             dialog.InitialDirectory = CONST_PUMP_METHOD_PATH;
             dialog.FileName         = "pumpMethod";
             dialog.DefaultExt       = ".txt";
@@ -363,7 +363,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void mbutton_start_Click(object sender, EventArgs e)
         {
-            string methodName = "";
+            var methodName = "";
             if (mcomboBox_methods.SelectedIndex < 0)
                 return;
 
@@ -420,12 +420,12 @@ namespace Agilent.Devices.Pumps
         private void mbutton_initializeDevice_Click(object sender, EventArgs e)
         {
 
-            int index = mcomboBox_comPort.SelectedIndex;
+            var index = mcomboBox_comPort.SelectedIndex;
             if (index < 0)
                 return;
 
             mobj_pump.PortName = mcomboBox_comPort.Items[index].ToString();
-            string errorMessage = "";
+            var errorMessage = "";
             mobj_pump.Initialize(ref errorMessage);
         }
 
@@ -445,7 +445,7 @@ namespace Agilent.Devices.Pumps
 
         private void mbutton_setPortName_Click(object sender, EventArgs e)
         {
-            int index = mcomboBox_comPort.SelectedIndex;
+            var index = mcomboBox_comPort.SelectedIndex;
             if (index < 0)
                 return;
 

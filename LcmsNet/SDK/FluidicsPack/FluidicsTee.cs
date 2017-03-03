@@ -12,7 +12,7 @@ namespace FluidicsPack
     {
         public FluidicsTee()
         {
-            FluidicsPolygon teePolygon = new FluidicsPolygon();
+            var teePolygon = new FluidicsPolygon();
             teePolygon.AddPoint(new Point(0,0));
             teePolygon.AddPoint(new Point(0, 29));
 
@@ -31,11 +31,11 @@ namespace FluidicsPack
             teePolygon.AddPoint(new Point(70, 0));
             teePolygon.AddPoint(new Point(0, 0));
             base.AddPrimitive(teePolygon);
-            foreach (Point p in GeneratePortLocs())
+            foreach (var p in GeneratePortLocs())
             {
                 base.AddPort(p);
             }
-            List<Tuple<int, int>> Connections = new List<Tuple<int, int>>();
+            var Connections = new List<Tuple<int, int>>();
             Connections.Add(new Tuple<int,int>(0, 1));
             Connections.Add(new Tuple<int,int>(2,1));
             m_info_controls_box.Width = 70;
@@ -52,7 +52,7 @@ namespace FluidicsPack
 
         protected Point[] GeneratePortLocs()
         {
-            Point[] points = new Point[3];
+            var points = new Point[3];
             points[0] = new Point(0 - Port.PORT_DEFAULT_RADIUS, 29/2);
             points[1] = new Point( (10 + 58)/ 2, 46 + Port.PORT_DEFAULT_RADIUS);
             points[2] = new Point(70 + Port.PORT_DEFAULT_RADIUS, (27 + 0) /2);
@@ -106,9 +106,9 @@ namespace FluidicsPack
 
         protected override Rectangle UpdateControlBoxLocation()
         {
-            int padding = 5;
-            int left = m_primitives.Min(x => x.Loc.X);
-            int top = m_primitives.Min(x => x.Loc.Y);
+            var padding = 5;
+            var left = m_primitives.Min(x => x.Loc.X);
+            var top = m_primitives.Min(x => x.Loc.Y);
             return new Rectangle(left, top + padding, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 

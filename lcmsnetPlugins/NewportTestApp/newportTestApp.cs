@@ -17,7 +17,7 @@ namespace NewportTestApp
     {
         static void Main(string[] args)
         {
-            classNewportStage stage = new classNewportStage();
+            var stage = new classNewportStage();
             stage.OpenPort();
             PrintMenu();
             string input;
@@ -25,19 +25,19 @@ namespace NewportTestApp
             {
                 Console.Write("What is your command?");
                 input = Console.ReadLine();
-                string[] tokens = input.Split();
+                var tokens = input.Split();
                 if (tokens[0] == "fh")
                 {
-                    for (int axis = 1; axis < stage.NumAxes + 1; axis++)
+                    for (var axis = 1; axis < stage.NumAxes + 1; axis++)
                     {
                         stage.FindHome(axis);
                     }
                 }
                 else if (tokens[0] == "re")
                 {
-                    int err = -1;
+                    var err = -1;
                     long timestamp = -1;
-                    string description = string.Empty;
+                    var description = string.Empty;
                     stage.ReadErrorMessage(ref err, ref timestamp, ref description);
                     Console.WriteLine(description);
                 }
@@ -47,57 +47,57 @@ namespace NewportTestApp
                 }
                 else if(tokens[0] == "mv")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
-                    float position = Convert.ToSingle(tokens[2]);
+                    var axis = Convert.ToInt32(tokens[1]);
+                    var position = Convert.ToSingle(tokens[2]);
                     stage.MoveToPosition(axis, position);
                 }
                 else if (tokens[0] == "md")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
-                    bool done = stage.MotionDone(axis);
+                    var axis = Convert.ToInt32(tokens[1]);
+                    var done = stage.MotionDone(axis);
                     Console.WriteLine(done.ToString());
                 }
                 else if(tokens[0] == "mo")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
+                    var axis = Convert.ToInt32(tokens[1]);
                     stage.MotorOn(axis);
                     Console.WriteLine(axis.ToString() + "Motor ON!");
                 }
                 else if(tokens[0] == "mf")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
+                    var axis = Convert.ToInt32(tokens[1]);
                     stage.MotorOff(axis);
                     Console.WriteLine(axis.ToString() + "Motor OFF!");
                 }
                 else if (tokens[0] == "sm")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
+                    var axis = Convert.ToInt32(tokens[1]);
                     stage.StopMotion(axis);
                     Console.WriteLine("Stopped Axis " + axis.ToString());
                 }
                 else if (tokens[0] == "mva")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
-                    bool reverse = Convert.ToBoolean(tokens[2]);
-                    bool slow = Convert.ToBoolean(tokens[3]);
+                    var axis = Convert.ToInt32(tokens[1]);
+                    var reverse = Convert.ToBoolean(tokens[2]);
+                    var slow = Convert.ToBoolean(tokens[3]);
                     stage.MoveAxis(axis, reverse, slow);
                 }
                 else if (tokens[0] == "qp")
                 {
-                    int axis = Convert.ToInt32(tokens[1]);
+                    var axis = Convert.ToInt32(tokens[1]);
                     Console.WriteLine("Axis " + axis.ToString() + " is at position: " + stage.QueryPosition(axis).ToString());
                 }
                 else if (tokens[0] == "sp")
                 {
-                    int position = Convert.ToInt32(tokens[1]);
-                    float axis1 = Convert.ToSingle(stage.QueryPosition(1));
-                    float axis2 = Convert.ToSingle(stage.QueryPosition(2));
+                    var position = Convert.ToInt32(tokens[1]);
+                    var axis1 = Convert.ToSingle(stage.QueryPosition(1));
+                    var axis2 = Convert.ToSingle(stage.QueryPosition(2));
                     float axis3 = 0;
                     stage.SetPositionCoordinates(tokens[1], axis1, axis2, axis3);
                 }
                 else if (tokens[0] == "gp")
                 {
-                    int position = Convert.ToInt32(tokens[1]);
+                    var position = Convert.ToInt32(tokens[1]);
                     stage.GoToPosition(0.0d, tokens[1]);
                 }
                 else if (tokens[0] == string.Empty)

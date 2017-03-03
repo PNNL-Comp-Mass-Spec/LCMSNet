@@ -50,7 +50,7 @@ namespace LcmsNet.Devices.Pal
         public controlPal()
         {
             InitializeComponent();
-            string[] names = System.IO.Ports.SerialPort.GetPortNames();
+            var names = System.IO.Ports.SerialPort.GetPortNames();
             mcombo_portNames.Items.AddRange(names);
             mcombo_portNames.SelectedIndexChanged += new EventHandler(mcombo_portNames_SelectedIndexChanged);
         }
@@ -182,7 +182,7 @@ namespace LcmsNet.Devices.Pal
                 mcomboBox_MethodList.Items.Clear();
 
                 //That was cool, so now fill up the combobox
-                foreach (string s in rawMethodList)
+                foreach (var s in rawMethodList)
                 {
                     mcomboBox_MethodList.Items.Add(s);
                 }
@@ -215,7 +215,7 @@ namespace LcmsNet.Devices.Pal
                 mcomboBox_tray.BeginUpdate();
 
                 //That was cool, so now fill up the combobox
-                foreach (string s in trayList)
+                foreach (var s in trayList)
                 {
                     mcomboBox_tray.Items.Add(s);
                 }
@@ -259,7 +259,7 @@ namespace LcmsNet.Devices.Pal
         {
             try
             {
-                string errorMessage = "";
+                var errorMessage = "";
                 mobj_Pal.Initialize(ref errorMessage);
             }
             catch

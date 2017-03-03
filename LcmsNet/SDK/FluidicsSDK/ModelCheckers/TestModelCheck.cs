@@ -45,7 +45,7 @@ namespace FluidicsSDK.ModelCheckers
 
         IEnumerable<ModelStatus> IFluidicsModelChecker.CheckModel()
         {
-            List<ModelStatus> testList = new List<ModelStatus>();
+            var testList = new List<ModelStatus>();
             testList.Add(new ModelStatus("Test Check", "This status was created by the Test Model Check. The Model Checks are being run.", Category));
             if( StatusUpdate != null)
             {
@@ -56,7 +56,7 @@ namespace FluidicsSDK.ModelCheckers
 
         public List<string> GetStatusNotificationList()
         {
-            List<string> statusNotifications = new List<string>();
+            var statusNotifications = new List<string>();
             statusNotifications.Add("Test Check Run");
             return statusNotifications;
         }

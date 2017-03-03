@@ -92,7 +92,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             get
             {
-                bool emulated = true;
+                var emulated = true;
                 if (mobj_contactClosure != null)
                 {
                     emulated = mobj_contactClosure.Emulation;
@@ -147,7 +147,7 @@ namespace LcmsNet.Devices.ContactClosure
         private void mbutton_SendPulse_Click(object sender, EventArgs e)
         {
             double pulse = Convert.ToInt32(mnum_pulseLength.Value);
-            double voltage = Convert.ToDouble(mnum_voltage.Value);
+            var voltage = Convert.ToDouble(mnum_voltage.Value);
             if ( CONST_MINIMUMVOLTAGE <= voltage  && voltage <= CONST_MAXIMUMVOLTAGE &&  CONST_MINIMUMPULSELENGTH <=  pulse)
             {
                 try

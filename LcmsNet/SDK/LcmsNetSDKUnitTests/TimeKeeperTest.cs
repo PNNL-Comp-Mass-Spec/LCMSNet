@@ -13,23 +13,23 @@ namespace LcmsnetUnitTest
         [Test]
         public void MatchPST()
         {
-            TimeZoneInfo pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            DateTime now = DateTime.UtcNow;
+            var pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var now = DateTime.UtcNow;
             TimeKeeper.Instance.TimeZone = pst;
-            DateTime timeKeeperTime = TimeKeeper.Instance.Now;
-            DateTime nowPst = TimeZoneInfo.ConvertTimeFromUtc(now, pst);
+            var timeKeeperTime = TimeKeeper.Instance.Now;
+            var nowPst = TimeZoneInfo.ConvertTimeFromUtc(now, pst);
             NUnit.Framework.Assert.IsTrue(nowPst.ToString() == timeKeeperTime.ToString());
         }
 
         [Test]
         public void MatchAustralianEasternTimeZoneViaConversionMethod()
         {
-            TimeZoneInfo pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            TimeZoneInfo aet = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+            var pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var aet = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
             TimeKeeper.Instance.TimeZone = pst;
-            DateTime now = DateTime.UtcNow;
-            DateTime timeKeeperTime = TimeKeeper.Instance.Now;
-            DateTime nowAet = TimeZoneInfo.ConvertTimeFromUtc(now, aet);
+            var now = DateTime.UtcNow;
+            var timeKeeperTime = TimeKeeper.Instance.Now;
+            var nowAet = TimeZoneInfo.ConvertTimeFromUtc(now, aet);
             // timekeeper time should be waaay different from aet time as it's set to pst.
             // but mathematically, they would be the same(or close to the same) so we check the strings
             // to see if they actually are different
@@ -42,8 +42,8 @@ namespace LcmsnetUnitTest
         public void DoDatesSpanTransition()
         {
             //These two dates span a daylight savings transition as they are one second before, and one second after the switch.
-            DateTime start = new DateTime(2014, 11, 2, 1, 59, 59);
-            DateTime end = new DateTime(2014, 11, 2, 2, 0, 1);
+            var start = new DateTime(2014, 11, 2, 1, 59, 59);
+            var end = new DateTime(2014, 11, 2, 2, 0, 1);
             NUnit.Framework.Assert.IsTrue(TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(start, end));
         }
 
@@ -51,8 +51,8 @@ namespace LcmsnetUnitTest
         public void DoDatesNotSpanTransition()
         {
             //These two dates do not span a daylight savings transition, as they are both after the fall transition and before the spring transition.
-            DateTime start = new DateTime(2014, 11, 9);
-            DateTime end = new DateTime(2014, 11, 10);
+            var start = new DateTime(2014, 11, 9);
+            var end = new DateTime(2014, 11, 10);
             NUnit.Framework.Assert.IsFalse(TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(start, end));
         }
 

@@ -136,7 +136,7 @@ namespace Newport.ESP300
         //[classLCMethodAttribute("Define Position", 1, true, "", -1, false)]
         public void SetPositionCoordinates(string positionName, float axis1Coord, float axis2Coord, float axis3Coord)
         {
-            classStagePosition position = new classStagePosition();
+            var position = new classStagePosition();
             position.NumAxes = 2;
             position[0] = axis1Coord;
             position[1] = axis2Coord;
@@ -167,7 +167,7 @@ namespace Newport.ESP300
                 return;
             }
             // newport stage indexes axes starting from 1, so we go from 1 to numAxes +1
-            for(int i = 1; i < m_numAxes + 1; i++)
+            for(var i = 1; i < m_numAxes + 1; i++)
             {
                 try
                 {
@@ -205,7 +205,7 @@ namespace Newport.ESP300
         public double QueryPosition(int axis)
         {           
             string response;
-            StringBuilder cmd = new StringBuilder();
+            var cmd = new StringBuilder();
             cmd.Append(axis.ToString() + "TP" + CONST_CMD_TERMINATOR);
             
             if (!Emulation)
@@ -250,7 +250,7 @@ namespace Newport.ESP300
             }
             if (ValidateAxis(axis))
             {
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString() + "PA" + position.ToString() + CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
             }
@@ -269,7 +269,7 @@ namespace Newport.ESP300
             }
             if (ValidateAxis(axis))
             {
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString());
                 cmd.Append("MO");
                 cmd.Append(CONST_CMD_TERMINATOR);
@@ -295,7 +295,7 @@ namespace Newport.ESP300
             }
             if (ValidateAxis(axis))
             {
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString());
                 cmd.Append("MF");
                 cmd.Append(CONST_CMD_TERMINATOR);
@@ -329,7 +329,7 @@ namespace Newport.ESP300
             }
             if (ValidateAxis(axis))
             {
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString());
                 cmd.Append("MV");
                 cmd.Append(mvNegative ? "-" : "+");
@@ -337,7 +337,7 @@ namespace Newport.ESP300
                 if (slow)
                 {
                     //prepending change of acceleration command to move command.
-                    double divisor = 10.0;
+                    var divisor = 10.0;
                     cmd.Insert(0, ";");
                     cmd.Insert(0, string.Format("0.00000", m_SpeedNormal[axis] / divisor));
                     cmd.Insert(0, axis.ToString());
@@ -361,11 +361,11 @@ namespace Newport.ESP300
             }
             if (ValidateAxis(axis))
             {
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString());
                 cmd.Append("MD");
                 cmd.Append(CONST_CMD_TERMINATOR);
-                string response = WriteCommand(cmd.ToString(), true);
+                var response = WriteCommand(cmd.ToString(), true);
                 response.Trim('\r');
                 try
                 {
@@ -405,7 +405,7 @@ namespace Newport.ESP300
             if (ValidateAxis(axis))
             {
                 const int firstChar = 0;
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString());
                 cmd.Append("ST");
                 cmd.Append(CONST_CMD_TERMINATOR);
@@ -447,7 +447,7 @@ namespace Newport.ESP300
             }
             if (ValidateAxis(axis))
             {
-                StringBuilder cmd = new StringBuilder();
+                var cmd = new StringBuilder();
                 cmd.Append(axis.ToString() + "OR4" + CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
             }          
@@ -469,7 +469,7 @@ namespace Newport.ESP300
                 description = string.Empty;
                 return;
             }
-            string response = string.Empty;
+            var response = string.Empty;
             string[] tokens;
             // we are not using WriteCommand here to avoid infinite recursion, since this is called within WriteCommand.
             try
@@ -519,7 +519,7 @@ namespace Newport.ESP300
             {
                 return "No Errors Reported.";
             }
-            StringBuilder errString = new StringBuilder();
+            var errString = new StringBuilder();
             m_reportedErrors.ForEach(x=> errString.Append(x));
             if (errString.ToString().Equals(string.Empty))
             {
@@ -545,7 +545,7 @@ namespace Newport.ESP300
         /// <param name="waitForResponse">boolean determining if the software waits for the stage to respond to the command</param>
         public string WriteCommand(string command, bool waitForResponse = false)
         {
-            string response = string.Empty;
+            var response = string.Empty;
             if (!Emulation)
             {
                 try
@@ -575,9 +575,9 @@ namespace Newport.ESP300
                         }
                     }
                 }
-                int errcode = -1;
+                var errcode = -1;
                 long timestamp = -1;
-                string description = string.Empty;
+                var description = string.Empty;
                 ReadErrorMessage(ref errcode, ref timestamp, ref description);
                 if (errcode != 0)
                 {
@@ -631,10 +631,10 @@ namespace Newport.ESP300
                     WriteCommand("" + CONST_CMD_TERMINATOR, false);
                     Port.ReadLine();
                     ClearErrors();
-                    for (int axis = 1; axis < NumAxes + 1; axis++)
+                    for (var axis = 1; axis < NumAxes + 1; axis++)
                     {
                         Port.Write(axis.ToString() + "VA?" + CONST_CMD_TERMINATOR);
-                        string resp = Port.ReadLine();
+                        var resp = Port.ReadLine();
                         m_SpeedNormal[axis - 1] = Convert.ToDouble(resp);
                     }
                 }
@@ -665,10 +665,10 @@ namespace Newport.ESP300
         {
             if (PosNames != null)
             {
-                string[] keys = new string[m_positions.Keys.Count];
+                var keys = new string[m_positions.Keys.Count];
                 m_positions.Keys.CopyTo(keys, 0);
 
-                List<object> data = new List<object>();
+                var data = new List<object>();
                 data.AddRange(keys);
                 PosNames(this, (List<object>)data);
             }
@@ -761,8 +761,8 @@ namespace Newport.ESP300
         {
             get
             {
-                char separator = ',';
-                StringBuilder persistedPort = new StringBuilder();
+                var separator = ',';
+                var persistedPort = new StringBuilder();
                 persistedPort.Append(Port.PortName);
                 persistedPort.Append(separator);
                 persistedPort.Append(Port.BaudRate);
@@ -779,11 +779,11 @@ namespace Newport.ESP300
             set
             {
                 ClosePort();
-                string[] tokenizedValue = value.Split(',');
+                var tokenizedValue = value.Split(',');
                 Port.PortName = tokenizedValue[0];
                 Port.BaudRate = Convert.ToInt32(tokenizedValue[1]);
                 Port.DataBits = Convert.ToInt32(tokenizedValue[2]);
-                string parity = tokenizedValue[3];
+                var parity = tokenizedValue[3];
                 if (parity == "None")
                 {
                     Port.Parity = Parity.None;
@@ -808,7 +808,7 @@ namespace Newport.ESP300
                 {
                     throw new ESP300Exception("Invalid Port Parity");
                 }
-                string stop = tokenizedValue[4];
+                var stop = tokenizedValue[4];
                 if (stop == "One")
                 {
                     Port.StopBits = StopBits.One;
@@ -829,7 +829,7 @@ namespace Newport.ESP300
                 {
                     throw new ESP300Exception("Invalid Port Stopbits");
                 }
-                string handshake = tokenizedValue[5];
+                var handshake = tokenizedValue[5];
                 if (handshake == "RequestToSend")
                 {
                     Port.Handshake = Handshake.RequestToSend;
@@ -863,17 +863,17 @@ namespace Newport.ESP300
             get
             {
                 //create string of semicolon separated positions, each position contains 3 comma separated values for Axis1/2/3 position
-                char positionInfoSeparator = ',';
-                char positionSeparator = ';';
-                StringBuilder semicolonSeparatedPositions = new StringBuilder();
-                foreach (string key in m_positions.Keys)
+                var positionInfoSeparator = ',';
+                var positionSeparator = ';';
+                var semicolonSeparatedPositions = new StringBuilder();
+                foreach (var key in m_positions.Keys)
                 {
-                    classStagePosition pos = m_positions[key];
+                    var pos = m_positions[key];
                     semicolonSeparatedPositions.Append(key);
                     semicolonSeparatedPositions.Append(positionInfoSeparator);
-                    string axis1Pos = pos[0].ToString();
-                    string axis2Pos = pos[1].ToString();
-                    string axis3Pos = pos[2].ToString();
+                    var axis1Pos = pos[0].ToString();
+                    var axis2Pos = pos[1].ToString();
+                    var axis3Pos = pos[2].ToString();
                     semicolonSeparatedPositions.Append(axis1Pos);
                     semicolonSeparatedPositions.Append(positionInfoSeparator);
                     semicolonSeparatedPositions.Append(axis2Pos);
@@ -886,16 +886,16 @@ namespace Newport.ESP300
             }
             set
             {
-                char positionInfoSeparator = ',';
-                char positionSeparator = ';';
-                    string[] tokenizedPositions = value.Split(positionSeparator);
-                    foreach (string position in tokenizedPositions)
+                var positionInfoSeparator = ',';
+                var positionSeparator = ';';
+                    var tokenizedPositions = value.Split(positionSeparator);
+                    foreach (var position in tokenizedPositions)
                     {
                         if (position != string.Empty)
                         {
-                            string[] positionInfo = position.Split(positionInfoSeparator);
-                            classStagePosition persistedPosition = new classStagePosition();
-                            string key = positionInfo[0];
+                            var positionInfo = position.Split(positionInfoSeparator);
+                            var persistedPosition = new classStagePosition();
+                            var key = positionInfo[0];
                             persistedPosition[0] = Convert.ToSingle(positionInfo[1]);
                             persistedPosition[1] = Convert.ToSingle(positionInfo[2]);
                             persistedPosition[2] = Convert.ToSingle(positionInfo[3]);
@@ -1001,7 +1001,7 @@ namespace Newport.ESP300
         public bool Initialize(ref string astring)
         {
             OpenPort();
-            for (int i = 1; i <= NumAxes;i++)
+            for (var i = 1; i <= NumAxes;i++)
             {
                 MotorOn(i);
             }

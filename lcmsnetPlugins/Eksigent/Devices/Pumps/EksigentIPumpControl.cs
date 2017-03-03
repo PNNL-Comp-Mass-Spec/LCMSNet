@@ -83,7 +83,7 @@ namespace Eksigent.Devices.Pumps
         /// <param name="totalChannels"></param>
         void mobj_pump_ChannelNumbers(int totalChannels)
         {
-            int value = Convert.ToInt32(mnum_channels.Value);
+            var value = Convert.ToInt32(mnum_channels.Value);
 
             if (value > totalChannels)
             {
@@ -122,7 +122,7 @@ namespace Eksigent.Devices.Pumps
         {
             mcomboBox_methods.BeginUpdate();
             mcomboBox_methods.Items.Clear();
-            foreach (object datum in data)
+            foreach (var datum in data)
             {
                 mcomboBox_methods.Items.Add(datum);
             }
@@ -158,7 +158,7 @@ namespace Eksigent.Devices.Pumps
                 UpdateStatusDisplay("Set the channel first other than zero.");
                 return;
             }
-            object methodData = mcomboBox_methods.SelectedItem;
+            var methodData = mcomboBox_methods.SelectedItem;
             if (methodData == null)
             {
                 UpdateStatusDisplay("Select a method first.");
@@ -282,7 +282,7 @@ namespace Eksigent.Devices.Pumps
             }
             try
             {
-                object methodData = mcomboBox_methods.SelectedItem;
+                var methodData = mcomboBox_methods.SelectedItem;
                 if (methodData == null)
                 {
                     UpdateStatusDisplay("Select a method first.");

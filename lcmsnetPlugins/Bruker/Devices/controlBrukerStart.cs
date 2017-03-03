@@ -128,11 +128,11 @@ namespace LcmsNet.Devices.BrukerStart
         void mobj_BrukerStart_MethodNames(object sender, List<object> data)
         {
 
-            List<string> methodNames = new List<string>();
+            var methodNames = new List<string>();
 
             mcomboBox_methods.Items.Clear();
             mcomboBox_methods.BeginUpdate();
-            foreach (object o in data)
+            foreach (var o in data)
             {
                 methodNames.Add(o.ToString());
                 mcomboBox_methods.Items.Add(o);
@@ -148,7 +148,7 @@ namespace LcmsNet.Devices.BrukerStart
         #region Form Event Handlers
             private void mbutton_startAcquisition_Click(object sender, EventArgs e)
             {
-                string methodName = "";
+                var methodName = "";
                 if (mcomboBox_methods.SelectedIndex < 0)
                 {
                     SetStatus(mobj_BrukerStart.Status, "No method selected.");
@@ -156,7 +156,7 @@ namespace LcmsNet.Devices.BrukerStart
                 }
                 methodName = mcomboBox_methods.SelectedItem.ToString();
 
-                classSampleData sample           = new classSampleData();
+                var sample           = new classSampleData();
                 sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
                 sample.InstrumentData.MethodName = methodName;
 

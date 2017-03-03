@@ -30,7 +30,7 @@ namespace LcmsNet.Devices.Pumps
             base.AddPort(new Point((int)(CONST_WIDTH * 0.25), -10));
             base.AddPort(new Point((int)(CONST_WIDTH * 0.5), -10));
             base.AddPort(new Point((int)(CONST_WIDTH * 0.75), -10));
-            foreach(Port port in Ports)
+            foreach(var port in Ports)
             {
                 port.Source = true;
             }
@@ -53,13 +53,13 @@ namespace LcmsNet.Devices.Pumps
 
         public override string StateString()
         {       
-            string formatStr = "{0, -7}{1,6}{2,-7}{3, -7}{4,6}{5, -7}{6,-7}{7,6}{8,-7}\n";
-            string pressUnits = classIscoConversions.GetPressUnitsString();
-            string flowUnits = classIscoConversions.GetFlowUnitsString();
-            string volUnits = "mL";
-            string pumpA = string.Format(formatStr, new object[9] { "PresA:", m_device.PumpData[0].Pressure, pressUnits + "         ",  " PresB:", m_device.PumpData[1].Pressure, pressUnits, "        PresC:", m_device.PumpData[2].Pressure, pressUnits });
-            string pumpB = string.Format(formatStr, new object[9] { "FlowA:", m_device.PumpData[0].Flow, flowUnits, "   FlowB:", m_device.PumpData[1].Flow, flowUnits, "   FlowC:", m_device.PumpData[2].Flow, flowUnits });
-            string pumpC = string.Format(formatStr, new object[9] { "VolA   :", m_device.PumpData[0].Volume, volUnits + "      ", "    VolB  :",  m_device.PumpData[1].Volume, volUnits, "       VolC  :", m_device.PumpData[2].Volume, volUnits });
+            var formatStr = "{0, -7}{1,6}{2,-7}{3, -7}{4,6}{5, -7}{6,-7}{7,6}{8,-7}\n";
+            var pressUnits = classIscoConversions.GetPressUnitsString();
+            var flowUnits = classIscoConversions.GetFlowUnitsString();
+            var volUnits = "mL";
+            var pumpA = string.Format(formatStr, new object[9] { "PresA:", m_device.PumpData[0].Pressure, pressUnits + "         ",  " PresB:", m_device.PumpData[1].Pressure, pressUnits, "        PresC:", m_device.PumpData[2].Pressure, pressUnits });
+            var pumpB = string.Format(formatStr, new object[9] { "FlowA:", m_device.PumpData[0].Flow, flowUnits, "   FlowB:", m_device.PumpData[1].Flow, flowUnits, "   FlowC:", m_device.PumpData[2].Flow, flowUnits });
+            var pumpC = string.Format(formatStr, new object[9] { "VolA   :", m_device.PumpData[0].Volume, volUnits + "      ", "    VolB  :",  m_device.PumpData[1].Volume, volUnits, "       VolC  :", m_device.PumpData[2].Volume, volUnits });
             return pumpA + pumpB + pumpC;
         }
 

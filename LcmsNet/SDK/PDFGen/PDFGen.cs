@@ -40,7 +40,7 @@ namespace PDFGenerator
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
             EMSL.DocumentGenerator.Core.Services.IDocumentWriter writer = new EMSL.DocumentGenerator.PDFSharp.PDFWriter();
-            EMSL.DocumentGenerator.Core.Document doc = new EMSL.DocumentGenerator.Core.Document();
+            var doc = new EMSL.DocumentGenerator.Core.Document();
             doc.DocumentWriter = writer;
             doc.FontSize = 11;
             doc.Font = "Courier New";
@@ -51,33 +51,33 @@ namespace PDFGenerator
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Configuration");
             int[] FieldWidths = {-20, -20};
             string[] cartData = { "Cart-Name:", sample.DmsData.CartName };
-            string cartConfigString = FormatString(FieldWidths, cartData);
+            var cartConfigString = FormatString(FieldWidths, cartData);
             
             string[] configData = { "Enabled-Columns:", numEnabledColumns };
             cartConfigString += FormatString(FieldWidths, configData);
             doc.AddParagraph(cartConfigString);
             
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Columns");
-            string columnDataString = CreateColumnString(columnData);
+            var columnDataString = CreateColumnString(columnData);
             doc.AddParagraph(columnDataString);
                 //solvent data currently unavailable. TODO: implement if/when solvent information is available
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Mobile Phases");
                 ////TODO: get solvent info from lcmsnet
-            List<LcmsNetDataClasses.Devices.Pumps.IPump> pumps = new List<LcmsNetDataClasses.Devices.Pumps.IPump>();
-            foreach(IDevice device in devices)
+            var pumps = new List<LcmsNetDataClasses.Devices.Pumps.IPump>();
+            foreach(var device in devices)
             {
                 if(device is LcmsNetDataClasses.Devices.Pumps.IPump)
                 {
                     pumps.Add(device as LcmsNetDataClasses.Devices.Pumps.IPump);
                 }
             }
-            StringBuilder mobilePhases = new StringBuilder();
+            var mobilePhases = new StringBuilder();
             int[] fieldWidths = { -5, -15, -13, -15, -8, -15 };
-            foreach(LcmsNetDataClasses.Devices.Pumps.IPump pump in pumps)
+            foreach(var pump in pumps)
             {                           
                 if (pump.MobilePhases.Count > 0)
                 {                                      
-                    foreach (MobilePhase phase in pump.MobilePhases)
+                    foreach (var phase in pump.MobilePhases)
                     {                        
                         string[] mobilePhaseData = {"Pump:", pump.Name, "Mobile Phase:", phase.Name, "Comment:", phase.Comment };
                         mobilePhases.Append(FormatString(fieldWidths, mobilePhaseData));
@@ -108,11 +108,11 @@ namespace PDFGenerator
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Fluidics Configuration");
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Table of Devices");
 
-            string fluidicsDevString = CreateDeviceString(devices);
+            var fluidicsDevString = CreateDeviceString(devices);
             doc.AddParagraph(fluidicsDevString);
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Configuration");
-            Bitmap rfluidicsImage = ScaleImage(fluidicsImage);
-            EMSL.DocumentGenerator.Core.Model.ImageContent imageC = new EMSL.DocumentGenerator.Core.Model.ImageContent(rfluidicsImage);
+            var rfluidicsImage = ScaleImage(fluidicsImage);
+            var imageC = new EMSL.DocumentGenerator.Core.Model.ImageContent(rfluidicsImage);
             doc.AddImage(imageC);
             
             //error section
@@ -131,11 +131,11 @@ namespace PDFGenerator
         /// <returns>a formatted string of device data</returns>
         private static string CreateDeviceString(List<IDevice> devices)
         {
-            string formattedString = string.Empty;
+            var formattedString = string.Empty;
             int[] fieldWidths = { -20, -20, -20 };
             string[] headers = { "Device", "Status", "Error" };
             formattedString += FormatString(fieldWidths, headers);
-            foreach (IDevice device in devices)
+            foreach (var device in devices)
             {
                 string[] data = {device.Name, device.Status.ToString(), device.ErrorType.ToString() };
                 formattedString += FormatString(fieldWidths, data);
@@ -153,8 +153,8 @@ namespace PDFGenerator
             // create bitmap image of fluidics design, rescale it, and add it to the document model
             // image no wider than an 8" page with 0.5" margins---aka 7" and no taller than 5"
             // while maintaining aspect ratio
-            float maxWidth = (7 * fluidicsImage.HorizontalResolution);
-            float maxHeight = (5 * fluidicsImage.VerticalResolution);
+            var maxWidth = (7 * fluidicsImage.HorizontalResolution);
+            var maxHeight = (5 * fluidicsImage.VerticalResolution);
             float scale = 1;
             if (maxWidth < fluidicsImage.Width || maxHeight < fluidicsImage.Height)
             {
@@ -162,7 +162,7 @@ namespace PDFGenerator
                 scale = Math.Min(maxWidth / fluidicsImage.Width, maxHeight / fluidicsImage.Height);
             }
 
-            Bitmap rfluidicsImage = resizeBitmap(fluidicsImage, (int)(fluidicsImage.Width * scale), (int)(fluidicsImage.Height * scale));
+            var rfluidicsImage = resizeBitmap(fluidicsImage, (int)(fluidicsImage.Width * scale), (int)(fluidicsImage.Height * scale));
             fluidicsImage.Dispose();
             return rfluidicsImage;
         }
@@ -176,14 +176,14 @@ namespace PDFGenerator
         {
             int[] fieldWidths = {-20, -20, -20, -20};
             string[]  row = {"Device", "Event Name", "Duration", "HadError"};
-            string lcMethodString = FormatString(fieldWidths, row);
+            var lcMethodString = FormatString(fieldWidths, row);
 
-            foreach (LcmsNetDataClasses.Method.classLCEvent lcEvent in sample.LCMethod.Events)
+            foreach (var lcEvent in sample.LCMethod.Events)
             {
-                string deviceName = lcEvent.Device.Name;
-                int deviceNameLength = lcEvent.Device.Name.Length;
-                string lcEventName = lcEvent.Name;
-                int eventNameLength = lcEvent.Name.Length;
+                var deviceName = lcEvent.Device.Name;
+                var deviceNameLength = lcEvent.Device.Name.Length;
+                var lcEventName = lcEvent.Name;
+                var eventNameLength = lcEvent.Name.Length;
 
                 // substrings are 20 characters long for columnation, each index is a column
                 string[] LCEventRow = {deviceName.Substring(0, (deviceNameLength < 20 ? deviceNameLength: 20)),     // device name
@@ -195,8 +195,8 @@ namespace PDFGenerator
                 // We also want to store the methods and their parameters.
                 if (lcEvent.Parameters != null && lcEvent.ParameterNames != null && lcEvent.ParameterNames.Length > 0)
                 {
-                    string[] data = new string[lcEvent.ParameterNames.Length];
-                    for (int i = 0; i < lcEvent.ParameterNames.Length; i++)
+                    var data = new string[lcEvent.ParameterNames.Length];
+                    for (var i = 0; i < lcEvent.ParameterNames.Length; i++)
                     {
                         lcMethodString += string.Format("{0,-20}{1,-20}{2,-20}{3}", "", lcEvent.ParameterNames[i], lcEvent.Parameters[i], Environment.NewLine);
                     }
@@ -219,8 +219,8 @@ namespace PDFGenerator
             //Column data, we want to be able to determine other column names and status..but this would only happen at the *end* of the run, perhaps not so useful?  
             int[] FieldWidths = { -20, -20};
             string[] colData = {"Column Name", "Status"};
-            string columnDataString = FormatString(FieldWidths, colData);
-            foreach (LcmsNetDataClasses.Configuration.classColumnData cData in columnData)
+            var columnDataString = FormatString(FieldWidths, colData);
+            foreach (var cData in columnData)
             {
                 string[] data = {cData.Name, cData.Status.ToString() };
                 columnDataString += FormatString(FieldWidths, data);
@@ -239,49 +239,49 @@ namespace PDFGenerator
                contains the actual information such as "42" */
             int[] FieldWidths = { -20, -20 };
             string[] datasetName = { "Dataset Name:", sample.DmsData.DatasetName };
-            string datasetNameString = FormatString(FieldWidths, datasetName);
+            var datasetNameString = FormatString(FieldWidths, datasetName);
             string[] requestData = { "Request:", sample.DmsData.RequestName };
-            string requestString = FormatString(FieldWidths, requestData);
+            var requestString = FormatString(FieldWidths, requestData);
             string[] rid = {"Request Id:", sample.DmsData.RequestID.ToString()};
-            string requestIdString = FormatString(FieldWidths, rid);
+            var requestIdString = FormatString(FieldWidths, rid);
 
             string[] sTime = {"Start Time:", sample.LCMethod.Start.ToLongTimeString() + " " + sample.LCMethod.Start.ToLongDateString()};
-            string startFormatted = FormatString(FieldWidths, sTime);
+            var startFormatted = FormatString(FieldWidths, sTime);
 
             string[] eTime = {"End Time:", sample.LCMethod.End.ToLongTimeString() + " " + sample.LCMethod.End.ToLongDateString()};
-            string endFormatted = FormatString(FieldWidths, eTime);
+            var endFormatted = FormatString(FieldWidths, eTime);
 
             string[] cd = { "Column:", sample.ColumnData.Name };
-            string columnString = FormatString(FieldWidths, cd);
+            var columnString = FormatString(FieldWidths, cd);
 
             string[] lcm = { "LCMethod:", sample.LCMethod.Name };
-            string LCMethodString = FormatString(FieldWidths, lcm);
+            var LCMethodString = FormatString(FieldWidths, lcm);
 
             string[] pt = { "PAL Tray:", sample.PAL.PALTray };
-            string PALTrayString =  FormatString(FieldWidths, pt);
+            var PALTrayString =  FormatString(FieldWidths, pt);
 
             string[] pv = { "Pal Vial:", sample.PAL.Well.ToString() };
-            string PALVialString = FormatString(FieldWidths, pv);
+            var PALVialString = FormatString(FieldWidths, pv);
 
             string[] iv = { "Injection Volume:", sample.Volume.ToString() };
-            string injectionVolume = FormatString(FieldWidths, iv);
+            var injectionVolume = FormatString(FieldWidths, iv);
 
             string[] t = { "Dataset Type:", sample.DmsData.DatasetType };
-            string type = FormatString(FieldWidths, t);
+            var type = FormatString(FieldWidths, t);
 
             string[] ba = { "Batch:", sample.DmsData.Batch.ToString() };
-            string batch = FormatString(FieldWidths, ba);
+            var batch = FormatString(FieldWidths, ba);
 
             string[] bl = { "Block:", sample.DmsData.Block.ToString() };
-            string block = FormatString(FieldWidths, bl);
+            var block = FormatString(FieldWidths, bl);
             
             string[] ro = {"Run Order:", sample.DmsData.RunOrder.ToString()};
-            string runOrder = FormatString(FieldWidths, ro);
+            var runOrder = FormatString(FieldWidths, ro);
             
             string[] co = {"Comment:", sample.DmsData.Comment};
-            string comment = FormatString(FieldWidths, co);
+            var comment = FormatString(FieldWidths, co);
 
-            string paragraph = datasetNameString + requestString + requestIdString + startFormatted + endFormatted + columnString + LCMethodString + PALTrayString + PALVialString + injectionVolume + type + batch +
+            var paragraph = datasetNameString + requestString + requestIdString + startFormatted + endFormatted + columnString + LCMethodString + PALTrayString + PALVialString + injectionVolume + type + batch +
                 block + runOrder + comment;
 
             return paragraph;
@@ -296,10 +296,10 @@ namespace PDFGenerator
         /// <returns>a columned string filled with the provided data</returns>
         private static string FormatString(int[] fieldWidths, string[] data)
         {
-            int count = 0;
-            StringBuilder stringFormatter = new StringBuilder();
-            string formattedString = string.Empty;
-            foreach (int fieldWidth in fieldWidths)
+            var count = 0;
+            var stringFormatter = new StringBuilder();
+            var formattedString = string.Empty;
+            foreach (var fieldWidth in fieldWidths)
             {
                 // create format string of {<count>, <fieldwidth>}, ex {0, 20} for the first element in data and a field width of 20 characters
                 stringFormatter.Append("{" + count.ToString() + "," + fieldWidth.ToString() + "}");
@@ -320,9 +320,9 @@ namespace PDFGenerator
         /// <returns></returns>
         private static Bitmap resizeBitmap(Bitmap bmp, int width, int height)
         {
-            Bitmap resizedBmp = new Bitmap(width, height);
+            var resizedBmp = new Bitmap(width, height);
             resizedBmp.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
-            using (Graphics g = Graphics.FromImage(resizedBmp))
+            using (var g = Graphics.FromImage(resizedBmp))
             {
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;

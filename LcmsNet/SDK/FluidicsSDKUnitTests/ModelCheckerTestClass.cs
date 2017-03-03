@@ -38,16 +38,16 @@ namespace FluidicsSDKUnitTests
             {
                 cm = ConnectionManager.GetConnectionManager;
                 dm = FluidicsDeviceManager.DeviceManager;
-                DemoPump pump1 = new DemoPump();
-                DemoPump pump2 = new DemoPump();
+                var pump1 = new DemoPump();
+                var pump2 = new DemoPump();
                 pump2.Name = "Stupid Pump2";
-                DemoTee t = new DemoTee();
+                var t = new DemoTee();
                 dm.Add(pump1);
                 dm.Add(pump2);
                 dm.Add(t);
-                FluidicsPump p1 = dm.FindDevice(pump1 as IDevice) as FluidicsPump;
-                FluidicsPump p2 = dm.FindDevice(pump2 as IDevice) as FluidicsPump;
-                FluidicsTee t1 = dm.FindDevice(t as IDevice) as FluidicsTee;
+                var p1 = dm.FindDevice(pump1 as IDevice) as FluidicsPump;
+                var p2 = dm.FindDevice(pump2 as IDevice) as FluidicsPump;
+                var t1 = dm.FindDevice(t as IDevice) as FluidicsTee;
                 cm.Connect(t1.Ports[2], p2.Ports[0]);
                 cm.Connect(t1.Ports[0], p1.Ports[0]); // these two lines create a loop in the system.
                 cm.Connect(t1.Ports[1], p1.Ports[0]);
@@ -60,8 +60,8 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void Testa()
         {
-            NoSinksModelCheck noSinkCheck = new NoSinksModelCheck();
-            List<ModelStatus> status = noSinkCheck.CheckModel().ToList();
+            var noSinkCheck = new NoSinksModelCheck();
+            var status = noSinkCheck.CheckModel().ToList();
             Assert.IsNotEmpty(status); // there will be either 0 or 1 entries(1 if working) at this point. If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
 
@@ -71,10 +71,10 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void Testb()
         {
-            FluidicsSprayNeedle needle = new FluidicsSprayNeedle();
+            var needle = new FluidicsSprayNeedle();
             cm.Connect(needle.Ports[0], FluidicsDeviceManager.DeviceManager.GetDevices().Find(x => x.DeviceName == "Test Tee").Ports[1]);
-            NoSinksModelCheck noSinkCheck = new NoSinksModelCheck();
-            List<ModelStatus> status = noSinkCheck.CheckModel().ToList();
+            var noSinkCheck = new NoSinksModelCheck();
+            var status = noSinkCheck.CheckModel().ToList();
             Assert.IsEmpty(status);
         }
 
@@ -84,8 +84,8 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void TestC()
         {
-            MultipleSourcesModelCheck multipleSourceCheck = new MultipleSourcesModelCheck();
-            List<ModelStatus> status = multipleSourceCheck.CheckModel().ToList();
+            var multipleSourceCheck = new MultipleSourcesModelCheck();
+            var status = multipleSourceCheck.CheckModel().ToList();
             Assert.IsNotEmpty(status); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
 
@@ -95,10 +95,10 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void TestE()
         {
-            List<FluidicsDevice> pumps = dm.GetDevices().FindAll(x => x.DeviceName.Contains("Stupid Pump")).ToList();
+            var pumps = dm.GetDevices().FindAll(x => x.DeviceName.Contains("Stupid Pump")).ToList();
             cm.RemoveConnections(pumps[1].Ports[0]);
-            MultipleSourcesModelCheck multipleSourceCheck = new MultipleSourcesModelCheck();
-            List<ModelStatus> status = multipleSourceCheck.CheckModel().ToList();
+            var multipleSourceCheck = new MultipleSourcesModelCheck();
+            var status = multipleSourceCheck.CheckModel().ToList();
             Assert.IsEmpty(status); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
         
@@ -108,8 +108,8 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void TestD()
         {
-            FluidicsCycleCheck fluidicsCycleCheck = new FluidicsCycleCheck();
-            List<ModelStatus> status = fluidicsCycleCheck.CheckModel().ToList();
+            var fluidicsCycleCheck = new FluidicsCycleCheck();
+            var status = fluidicsCycleCheck.CheckModel().ToList();
             Assert.AreEqual(2, status.Count); // It will find the loop from both sources, if working correctly.
         }
 
@@ -119,12 +119,12 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void TestF()
         {
-            FluidicsDevice t = dm.GetDevices().Find(x => x.DeviceName == "Test Tee");
+            var t = dm.GetDevices().Find(x => x.DeviceName == "Test Tee");
             cm.RemoveConnections(t.Ports[0]);
             cm.RemoveConnections(t.Ports[1]);
             cm.RemoveConnections(t.Ports[2]);
-            FluidicsCycleCheck fluidicsCycleCheck = new FluidicsCycleCheck();
-            List<ModelStatus> status = fluidicsCycleCheck.CheckModel().ToList();
+            var fluidicsCycleCheck = new FluidicsCycleCheck();
+            var status = fluidicsCycleCheck.CheckModel().ToList();
             Assert.AreEqual(0, status.Count); // It will find no loop if working correctly.
         }
     }

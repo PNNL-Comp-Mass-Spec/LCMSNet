@@ -18,11 +18,11 @@ namespace FluidicsSDK.Devices
             m_states = SetupStates();
             m_currentState = (int)EightPositionState.P1;
             base.ActivateState(m_states[m_currentState]);
-            Size StateControlSize = new Size(15, 15);
-            Point StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 3), base.Center.Y - (StateControlSize.Height / 2));
-            Point StateControl2Loc = new Point(base.Center.X + StateControlSize.Width * 2, base.Center.Y - (StateControlSize.Height / 2));
-            Rectangle StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
-            Rectangle StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
+            var StateControlSize = new Size(15, 15);
+            var StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 3), base.Center.Y - (StateControlSize.Height / 2));
+            var StateControl2Loc = new Point(base.Center.X + StateControlSize.Width * 2, base.Center.Y - (StateControlSize.Height / 2));
+            var StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
+            var StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
             //add left control
             base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), new Action(LeftButtonAction));
             //add right control
@@ -59,8 +59,8 @@ namespace FluidicsSDK.Devices
         /// <returns>a dictionary of with TwoPositionState enums as the keys and lists of tuples of int, int type as the values </returns>
         protected Dictionary<int, List<Tuple<int, int>>> SetupStates()
         {
-            Dictionary<int, List<Tuple<int, int>>> states = new Dictionary<int, List<Tuple<int, int>>>();
-            for (int i = 1; i < 9; i++)
+            var states = new Dictionary<int, List<Tuple<int, int>>>();
+            for (var i = 1; i < 9; i++)
             {
                 states.Add(i, GenerateState(0,i));
             }
@@ -80,7 +80,7 @@ namespace FluidicsSDK.Devices
 
         private void ChangePosition(bool left)
         {            
-            int state = m_currentState;
+            var state = m_currentState;
             if (m_currentState != (int)EightPositionState.Unknown)
             {
                 if (left)
@@ -117,7 +117,7 @@ namespace FluidicsSDK.Devices
         {
             //the nine port valve connects the center port to one of the outer ports, so it's states are unique
             //so we override the generation.
-            List<Tuple<int, int>> stateConnection = new List<Tuple<int, int>>();
+            var stateConnection = new List<Tuple<int, int>>();
             //if startingPortIndex == -1, return empty list representing a "no connections" state
             if (startingPortIndex == -1) { return stateConnection; } 
             stateConnection.Add(new Tuple<int, int>(startingPortIndex, endingPortIndex));

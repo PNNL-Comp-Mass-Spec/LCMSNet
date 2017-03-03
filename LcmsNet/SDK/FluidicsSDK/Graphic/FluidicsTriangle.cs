@@ -50,10 +50,10 @@ namespace FluidicsSDK.Graphic
             * figure out which point to move in x-plane and which to move in y-plane
             * move points
             */
-            Point[] newPoints = new Point[3];
-            for(int i = 0; i < m_points.Length; i++)
+            var newPoints = new Point[3];
+            for(var i = 0; i < m_points.Length; i++)
             {
-                Point point  = m_points[i];
+                var point  = m_points[i];
                 point.X = Convert.ToInt32(Convert.ToSingle(point.X) * scale) + moveby.X;
                 point.Y = Convert.ToInt32(Convert.ToSingle(point.Y) * scale) + moveby.Y;
                 newPoints[i] = point;
@@ -101,7 +101,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="or">enum representing the orientation of the triangle</param>
         private void DeterminePoints(Orient or)
         {
-            int half = m_area.Width / 2;
+            var half = m_area.Width / 2;
             switch (Orientation)
             {                
                 case Orient.Down:                       
@@ -132,12 +132,12 @@ namespace FluidicsSDK.Graphic
       
         public override void MoveBy(Point relativeValues)
         {      
-            int maxx = 0;
-            int maxy = 0;
-            int minx = int.MaxValue;
-            int miny = int.MaxValue;
+            var maxx = 0;
+            var maxy = 0;
+            var minx = int.MaxValue;
+            var miny = int.MaxValue;
 
-            for (int i = 0; i < m_points.Length; i++)
+            for (var i = 0; i < m_points.Length; i++)
             {
                 m_points[i].X += relativeValues.X;
                 m_points[i].Y += relativeValues.Y;
@@ -179,10 +179,10 @@ namespace FluidicsSDK.Graphic
             {
                 m_area.Location = value;
                 DeterminePoints(Orientation);
-                int minx = m_points.Min(x => x.X);
-                int miny = m_points.Min(x => x.Y);
-                int maxx = m_points.Max(x => x.X);
-                int maxy = m_points.Max(x => x.Y);
+                var minx = m_points.Min(x => x.X);
+                var miny = m_points.Min(x => x.Y);
+                var maxx = m_points.Max(x => x.X);
+                var maxy = m_points.Max(x => x.Y);
                 m_scaledArea = new Rectangle(minx, miny, maxx - minx, maxy - miny);
             }
         }   

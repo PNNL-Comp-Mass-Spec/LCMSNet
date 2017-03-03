@@ -41,7 +41,7 @@ namespace LcmsnetUnitTest
             methods.Add(new classLCMethod());
             methods.Add(new classLCMethod());
             classLCEvent[] events = { new classLCEvent(), new classLCEvent() }; //events for the methods
-            DemoPump pump = new DemoPump();
+            var pump = new DemoPump();
             events[0].Device = pump;
             events[1].Device = pump;
 
@@ -88,7 +88,7 @@ namespace LcmsnetUnitTest
         public void TwoMethodsOnSameColumnWithOverlapSameDevice()
         {                      
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
+            var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }
 
@@ -101,7 +101,7 @@ namespace LcmsnetUnitTest
         public void TwoMethodsOnTheSameColumnWithOverlapDifferentDevices()
         {
             //Changing method[1], Event[0] to use a different device.
-            DemoValve valve = new DemoValve();
+            var valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -114,7 +114,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
+            var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }
 
@@ -129,7 +129,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPreOverlap = false;
             methods[0].AllowPostOverlap = false;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
+            var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }
         
@@ -144,7 +144,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPreOverlap = false;
             methods[0].AllowPostOverlap = false;
             //Changing method[1], Event[0] to use a different device.
-            DemoValve valve = new DemoValve();
+            var valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -157,7 +157,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
+            var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }
         
@@ -171,7 +171,7 @@ namespace LcmsnetUnitTest
         {
             methods[1].Column = 1;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds;
+            var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
         }
 
@@ -184,7 +184,7 @@ namespace LcmsnetUnitTest
         public void TwoMethodsOnDifferentColumnsWithOverlapDifferentDevice()
         {
             //Changing method[1], Event[0] to use a different device.
-            DemoValve valve = new DemoValve();
+            var valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -213,7 +213,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPostOverlap = false;
             methods[1].Column = 1;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
+            var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }        
 
@@ -229,7 +229,7 @@ namespace LcmsnetUnitTest
             methods[0].AllowPostOverlap = false;
             methods[0].AllowPreOverlap = false;
             //Changing method[1], Event[0] to use a different device.
-            DemoValve valve = new DemoValve();
+            var valve = new DemoValve();
             methods[1].Events[0].Device = valve;
             methods[1].Events[0].HadError = false;
             methods[1].Events[0].Name = "SetPosition";
@@ -242,7 +242,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
-            double expectedDifference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;
+            var expectedDifference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
         }
 
@@ -257,7 +257,7 @@ namespace LcmsnetUnitTest
             methods[0].Name = "Zero";
             methods[1].Name = "One";
             optimizer.AlignMethods(methods[0], methods[1], true);
-            double  expectedDifference = new TimeSpan(1,0,1).TotalMilliseconds;
+            var  expectedDifference = new TimeSpan(1,0,1).TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
         } 
 
@@ -270,7 +270,7 @@ namespace LcmsnetUnitTest
             methods[0].Name = "Zero";
             methods[1].Name = "One";
             optimizer.AlignMethods(methods[0], methods[1], false);
-            double expectedDifference = new TimeSpan(0, 0, 10).TotalMilliseconds;
+            var expectedDifference = new TimeSpan(0, 0, 10).TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
         }
 
@@ -282,7 +282,7 @@ namespace LcmsnetUnitTest
         /// <param name="expectedDifference"></param>
         private void CheckDifferenceInStartTimes(double expectedDifference)
         {
-            double difference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;
+            var difference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;
             Assert.AreEqual(expectedDifference, difference);
         }
 

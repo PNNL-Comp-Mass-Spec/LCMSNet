@@ -79,7 +79,7 @@ namespace DemoPluginLibrary
         {
             if (Methods != null)
             {
-                List<object> data = new List<object>();
+                var data = new List<object>();
                 data.Add("ExampleMethod1");
                 data.Add("ExampleMethod2");
                 data.Add("ExampleMethod3");

@@ -325,7 +325,7 @@ namespace LcmsNet.Devices.Valves
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            char newID = mcomboBox_setID.SelectedItem.ToString()[0];
+            var newID = mcomboBox_setID.SelectedItem.ToString()[0];
             try
             {
                 mobj_valve.SetHardwareID(newID);
@@ -403,8 +403,8 @@ namespace LcmsNet.Devices.Valves
 
             try
             {
-                string errorMessage = "";
-                bool success = mobj_valve.Initialize(ref errorMessage);
+                var errorMessage = "";
+                var success = mobj_valve.Initialize(ref errorMessage);
                 
                 if (success == false)
                     ShowError("Could not initialize the valve. " + errorMessage);

@@ -47,7 +47,7 @@ namespace ASIpump
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            string errMsg = "";
+            var errMsg = "";
 
             Pump.Initialize(ref errMsg);
         }

@@ -49,8 +49,8 @@ namespace FluidicsSDK.Graphic
         {
             base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
             base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
-            Point scaled_orig = new Point((int)(m_orig.X * scale), (int)(m_orig.Y * scale));
-            Point scaled_term = new Point((int)(m_term.X * scale), (int)(m_term.Y * scale));
+            var scaled_orig = new Point((int)(m_orig.X * scale), (int)(m_orig.Y * scale));
+            var scaled_term = new Point((int)(m_term.X * scale), (int)(m_term.Y * scale));
             Pen drawingPen;
             if (selected)
             {
@@ -75,7 +75,7 @@ namespace FluidicsSDK.Graphic
             //to ensure they can select while scaled.
             float crossProduct = ((location.Y - Origin.Y) * (Term.X - Origin.X)) - ((location.X - Origin.X) * (Term.Y - Origin.Y));
             float dotProduct = ((location.X - Origin.X) * (Term.X - Origin.X)) + ((location.Y - Origin.Y) * (Term.Y - Origin.Y));
-            double squaredLength = Math.Pow((Term.X - Origin.X), 2) + Math.Pow((Term.Y - Origin.Y), 2);
+            var squaredLength = Math.Pow((Term.X - Origin.X), 2) + Math.Pow((Term.Y - Origin.Y), 2);
             if ((-max_variance) <= crossProduct && crossProduct <= (max_variance) && dotProduct > 0 && dotProduct < squaredLength)
             {
                 return true;

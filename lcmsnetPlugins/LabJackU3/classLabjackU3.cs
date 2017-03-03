@@ -120,7 +120,7 @@ namespace LcmsNet.Devices.ContactClosure
         public void Write(enumLabjackU3OutputPorts channel, double value)
         {
             //Determine which type of port we are writing to
-            int port = (int)channel;
+            var port = (int)channel;
             if (channel.ToString().EndsWith("Analog"))
             {
                 port -= 20; // DAC ports are channel 0 and 1 for the function purposes, but we have 20-21 in enums representing DACs. so correct port number via substracting 20.
@@ -139,10 +139,10 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The measured value</returns>
         public double Read(enumLabjackU3InputPorts channel)
         {
-            string tempPortName = Enum.GetName(typeof(enumLabjackU3InputPorts), channel).ToString();
+            var tempPortName = Enum.GetName(typeof(enumLabjackU3InputPorts), channel).ToString();
 
             //Determine which type of port we are reading from
-            int port = (int) channel;
+            var port = (int) channel;
             if (tempPortName.EndsWith("Analog"))
             {
                 port -= 20; // analog port configuration are represented by number 20-35 in the enum, but they are the same
@@ -172,20 +172,20 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns></returns>
         private double ReadAnalog(int channel)
         {
-            double voltage = 0.0;
-            int differentialchannel = 31; // not checking for differential so set to 31 as per 4.2.17 of the U3 user guide.
-            int range = 0; // ignore on U3
-            int resolution = 0; // non-zero for Quicksampling
-            int settling = 0; // non-zero for LongSettling
-            int binary = 0; // non-zero to return raw binary value of the voltage
+            var voltage = 0.0;
+            var differentialchannel = 31; // not checking for differential so set to 31 as per 4.2.17 of the U3 user guide.
+            var range = 0; // ignore on U3
+            var resolution = 0; // non-zero for Quicksampling
+            var settling = 0; // non-zero for LongSettling
+            var binary = 0; // non-zero to return raw binary value of the voltage
 
             ValidateDevice();
 
-            LJUD.LJUDERROR result = U3.eAIN(m_device.ljhandle, channel, differentialchannel, ref voltage, range, resolution, settling, binary);
+            var result = U3.eAIN(m_device.ljhandle, channel, differentialchannel, ref voltage, range, resolution, settling, binary);
             if (result != LJUD.LJUDERROR.NOERROR)
             {
 
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading analog input.  " + error, result);
             }
             return voltage;
@@ -203,9 +203,9 @@ namespace LcmsNet.Devices.ContactClosure
             LJUD.LJUDERROR result;
             if (channel == 0 || channel == 1)
             {
-                int binary = 0; // non-zero to set voltage via binary
-                int reserved1 = 0; // not used currently by driver, pass 0 as per 4.2.18 of U3 user guide, same for reserved 2
-                int reserved2 = 0;
+                var binary = 0; // non-zero to set voltage via binary
+                var reserved1 = 0; // not used currently by driver, pass 0 as per 4.2.18 of U3 user guide, same for reserved 2
+                var reserved2 = 0;
                 result = U3.eDAC(m_device.ljhandle, channel, voltage, binary, reserved1, reserved2);
             }         
             else
@@ -214,7 +214,7 @@ namespace LcmsNet.Devices.ContactClosure
             }
             if (result != LJUD.LJUDERROR.NOERROR)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error writing analog output.  " + error, result);
             }
             return result;
@@ -229,12 +229,12 @@ namespace LcmsNet.Devices.ContactClosure
         private int ReadDigital(int channel)
         {
             ValidateDevice();
-            int state = 0;
+            var state = 0;
 
-            LJUD.LJUDERROR result = U3.eDI(m_device.ljhandle, channel, ref state);
+            var result = U3.eDI(m_device.ljhandle, channel, ref state);
             if (result !=  LJUD.LJUDERROR.NOERROR)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading digital input.  " + error, result);
             }
             return state;
@@ -249,10 +249,10 @@ namespace LcmsNet.Devices.ContactClosure
         private LJUD.LJUDERROR WriteDigital(int channel, int state)
         {
             ValidateDevice();
-            LJUD.LJUDERROR result = LJUD.eDO(m_device.ljhandle, channel, state);
+            var result = LJUD.eDO(m_device.ljhandle, channel, state);
             if (result != LJUD.LJUDERROR.NOERROR)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error setting digital output.  " + error, result);
             }
             return result;
@@ -264,7 +264,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The driver version, as a float</returns>
         public double GetDriverVersion()
         {
-            double tempVersion = LJUD.GetDriverVersion();
+            var tempVersion = LJUD.GetDriverVersion();
             mdouble_driverVersion = tempVersion;
             if (tempVersion == 0)
             {
@@ -280,9 +280,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error description, as a string</returns>
         public string GetErrorString(LJUD.LJUDERROR errorCode)
         {            
-            char[] errorString = new char[CONST_ERROR_STRING_BUFFER_SIZE];
+            var errorString = new char[CONST_ERROR_STRING_BUFFER_SIZE];
             U3.ErrorToString(errorCode, errorString);
-            string tmpStr = new string(errorString);
+            var tmpStr = new string(errorString);
             return (tmpStr);
         }
 
@@ -293,7 +293,7 @@ namespace LcmsNet.Devices.ContactClosure
         public double GetFirmwareVersion()
         {
             ValidateDevice();
-            double tempVersion = m_device.firmwareversion;
+            var tempVersion = m_device.firmwareversion;
             mdouble_firmwareVersion = tempVersion;
             return (tempVersion);
         }
@@ -305,7 +305,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="errorCode">The integer errorcode</param>
         private void ThrowErrorMessage(string msg, LJUD.LJUDERROR errorCode)
         {
-            string errorString = GetErrorString(errorCode);
+            var errorString = GetErrorString(errorCode);
             throw new classLabjackU3Exception(msg + ":\r\n\r\n" + errorString);
         }
 
@@ -325,10 +325,10 @@ namespace LcmsNet.Devices.ContactClosure
         private LJUD.LJUDERROR WriteIO(int channel, int state)
         {
             ValidateDevice();
-            LJUD.LJUDERROR result = U3.eDO(m_device.ljhandle, channel, state);
+            var result = U3.eDO(m_device.ljhandle, channel, state);
             if (result != LJUD.LJUDERROR.NOERROR)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error setting digital output.  " + error, result);
             }
             return result;
@@ -346,12 +346,12 @@ namespace LcmsNet.Devices.ContactClosure
         private int ReadIO(int channel)
         {
             ValidateDevice();
-            int state = 0;
+            var state = 0;
 
-            LJUD.LJUDERROR result = U3.eDI(m_device.ljhandle, channel, ref state);
+            var result = U3.eDI(m_device.ljhandle, channel, ref state);
             if (result != LJUD.LJUDERROR.NOERROR)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading digital input.  " + error, result);
             }
 

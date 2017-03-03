@@ -15,7 +15,7 @@ namespace DemoPluginLibrary
         {
             m_primLines = new Dictionary<string, FluidicsLine>();
             //left line going down
-            FluidicsLine newLine = new FluidicsLine(new Point(0,0), new Point(0,29));
+            var newLine = new FluidicsLine(new Point(0,0), new Point(0,29));
             AddPrimitive(newLine);
             m_primLines["left"] = newLine;
             //left line angled in
@@ -38,11 +38,11 @@ namespace DemoPluginLibrary
             newLine = new FluidicsLine(new Point(70,0), new Point(0,0));
             AddPrimitive(newLine);
             m_primLines["top"] = newLine;
-            foreach (Point p in GeneratePortLocs())
+            foreach (var p in GeneratePortLocs())
             {
                 base.AddPort(p);
             }
-            List<Tuple<int, int>> Connections = new List<Tuple<int, int>>();
+            var Connections = new List<Tuple<int, int>>();
             Connections.Add(new Tuple<int, int>(0, 1));
             Connections.Add(new Tuple<int, int>(2, 1));
             m_info_controls_box.Width = 70;
@@ -57,7 +57,7 @@ namespace DemoPluginLibrary
 
         protected Point[] GeneratePortLocs()
         {
-            Point[] points = new Point[3];
+            var points = new Point[3];
             Point orig, term;
             orig = m_primLines["left"].Origin;
             term = m_primLines["left"].Term;
@@ -113,20 +113,20 @@ namespace DemoPluginLibrary
 
         public override bool Contains(Point location)
         {
-            int minx = m_primitives.Min(x => x.Loc.X);
-            int miny = m_primitives.Min(x => x.Loc.Y);
-            int maxx = m_primitives.Max(x => x.Loc.X);
-            int maxy = m_primitives.Max(x => x.Loc.Y);
-            Rectangle rect = new Rectangle(minx, miny, maxx - minx, maxy - miny);
+            var minx = m_primitives.Min(x => x.Loc.X);
+            var miny = m_primitives.Min(x => x.Loc.Y);
+            var maxx = m_primitives.Max(x => x.Loc.X);
+            var maxy = m_primitives.Max(x => x.Loc.Y);
+            var rect = new Rectangle(minx, miny, maxx - minx, maxy - miny);
             return rect.Contains(location);
         }
 
         protected override Rectangle UpdateControlBoxLocation()
         {
-            int padding = 10;
-            int left = m_primitives.Min(x => x.Loc.X);
-            int maxyDevice = m_primitives.Max(x => x.Loc.Y);
-            int maxyPorts = m_portList.Max(x => x.Loc.Y + x.Radius);
+            var padding = 10;
+            var left = m_primitives.Min(x => x.Loc.X);
+            var maxyDevice = m_primitives.Max(x => x.Loc.Y);
+            var maxyPorts = m_portList.Max(x => x.Loc.Y + x.Radius);
             return new Rectangle(left, (maxyDevice < maxyPorts ? maxyPorts : maxyDevice) + padding, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 

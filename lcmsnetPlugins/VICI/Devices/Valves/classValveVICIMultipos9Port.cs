@@ -40,7 +40,7 @@ namespace LcmsNet.Devices.Valves
         [classLCMethodAttribute("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
         public void SetPosition(EightPositionState position)
         {
-           enumValveErrors err = base.SetPosition((int)position);
+           var err = base.SetPosition((int)position);
         }
 
         public override Type GetStateType()

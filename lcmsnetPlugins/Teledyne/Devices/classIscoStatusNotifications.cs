@@ -105,9 +105,9 @@ namespace LcmsNet.Devices.Pumps
             /// <returns>List of notification strings</returns>
             public static List<string> GetNotificationListStrings()
             {
-                List<string> returnList = new List<string>();
+                var returnList = new List<string>();
 
-                foreach (KeyValuePair<string, string> curItem in mobj_NotifyList)
+                foreach (var curItem in mobj_NotifyList)
                 {
                     returnList.Add(curItem.Value);
                 }

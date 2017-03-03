@@ -29,8 +29,8 @@ namespace ASIpump
 
         public static Y SafeThreadGet<Y, T>(this T control, Func<T, Y> call) where T : Control
         {
-            IAsyncResult result = control.BeginInvoke(call, control);
-            object result2 = control.EndInvoke(result);
+            var result = control.BeginInvoke(call, control);
+            var result2 = control.EndInvoke(result);
             return (Y)result2;
         }
 
@@ -41,7 +41,7 @@ namespace ASIpump
                 foreach (EventHandler ev in ToRaise.GetInvocationList())
                 {
                     //Take a look at the object "receiving" the event.  If it is a Control, invoke on the control.
-                    System.Windows.Forms.Control target = ev.Target as System.Windows.Forms.Control;
+                    var target = ev.Target as System.Windows.Forms.Control;
                     try
                     {
                         if (target != null)
@@ -65,7 +65,7 @@ namespace ASIpump
                 foreach (PropertyChangedEventHandler ev in ToRaise.GetInvocationList())
                 {
                     //Take a look at the object "receiving" the event.  If it is a Control, invoke on the control.
-                    System.Windows.Forms.Control target = ev.Target as System.Windows.Forms.Control;
+                    var target = ev.Target as System.Windows.Forms.Control;
                     try
                     {
                         if (target != null)
@@ -89,12 +89,12 @@ namespace ASIpump
             if (values.Count() > 0)
             {
                 //Compute the Average
-                double avg = values.Average();
+                var avg = values.Average();
 
                 //Perform the Sum of (value-avg)_2_2
-                double sum = values.Sum(d => Math.Pow(d - avg, 2));
+                var sum = values.Sum(d => Math.Pow(d - avg, 2));
 
-                double x2 = (sum) / (double) (values.Count()-1);
+                var x2 = (sum) / (double) (values.Count()-1);
 
                 //Put it all together
                 ret = Math.Sqrt(x2);

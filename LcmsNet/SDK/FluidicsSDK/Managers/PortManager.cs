@@ -42,9 +42,9 @@ namespace FluidicsSDK.Managers
         public Port FindPort(string portID)
         {
             Port foundPort = null;
-            foreach (Port port in m_ports)
+            foreach (var port in m_ports)
             {
-                int equals = string.Compare(port.ID, portID, StringComparison.CurrentCulture);
+                var equals = string.Compare(port.ID, portID, StringComparison.CurrentCulture);
                 if ( equals == 0)
                 {
                     foundPort = port;
@@ -96,7 +96,7 @@ namespace FluidicsSDK.Managers
         public void RemovePorts(FluidicsDevice device)
         {
 
-            foreach (Port port in new List<Port>(m_ports))
+            foreach (var port in new List<Port>(m_ports))
             {
                 if (port.ParentDevice == device)
                 {
@@ -113,7 +113,7 @@ namespace FluidicsSDK.Managers
         /// <param name="scale">a float representing the scale at which to draw the ports</param>
         public void Render(Graphics g, int alpha, float scale)
         {
-            foreach (Port port in m_ports)
+            foreach (var port in m_ports)
             {
                 port.Render(g, alpha, scale);
             }
@@ -127,9 +127,9 @@ namespace FluidicsSDK.Managers
         internal Port Select(Point location)
         {
             //reverse the ports list, search from newest created to oldest created.
-            List<Port> tmpList = new List<Port>(m_ports);
+            var tmpList = new List<Port>(m_ports);
             tmpList.Reverse();
-            foreach(Port port in tmpList)
+            foreach(var port in tmpList)
             {
                 if(port.Contains(location))
                 {

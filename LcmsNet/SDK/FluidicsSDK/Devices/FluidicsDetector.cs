@@ -24,7 +24,7 @@ namespace FluidicsSDK.Devices
 
         public FluidicsDetector()
         {
-            FluidicsRectangle myRectangle = new FluidicsRectangle(new Point(0,0), m_size, Color.Black, Brushes.White);
+            var myRectangle = new FluidicsRectangle(new Point(0,0), m_size, Color.Black, Brushes.White);
             AddPrimitive(myRectangle);
             m_deviceName = "Detector";
         }
@@ -36,7 +36,7 @@ namespace FluidicsSDK.Devices
 
         protected override void SetDevice(LcmsNetDataClasses.Devices.IDevice device)
         {
-            IFluidicsClosure detector = device as IFluidicsClosure;
+            var detector = device as IFluidicsClosure;
             if (detector != null)
             {
                 ClosureType = detector.GetClosureType();

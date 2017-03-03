@@ -52,7 +52,7 @@ namespace FluidicsSDK.Managers
         /// <returns>a classConnection object or null if one is not found.</returns>
         public Connection FindConnection(Port port1, Port port2)
         {
-            foreach (Connection conn in m_connections)
+            foreach (var conn in m_connections)
             {
                 if ((conn.P1 == port1 || conn.P1 == port2) &&
                     (conn.P2 == port1 || conn.P2 == port2))
@@ -100,7 +100,7 @@ namespace FluidicsSDK.Managers
 
         public void RemoveConnections(Port port)
         {
-            foreach (Connection conn in new List<Connection>(m_connections))
+            foreach (var conn in new List<Connection>(m_connections))
             {
                 if (conn.P1 == port || conn.P2 == port)
                 {
@@ -125,7 +125,7 @@ namespace FluidicsSDK.Managers
                 //but if port1 IS port 2, throw an error, as you cannot connect a port to itself.
                 if (port1 != port2)
                 {
-                    Connection newConnection = new Connection(port1, port2, device, style);
+                    var newConnection = new Connection(port1, port2, device, style);
                     m_connections.Add(newConnection);
                     if (ConnectionChanged != null)
                     {
@@ -152,7 +152,7 @@ namespace FluidicsSDK.Managers
         /// <param name="scale">a float repsenting how much to scale the connections by</param>
         public void Render(Graphics g, int alpha, float scale)
         {
-            foreach (Connection connection in m_connections)
+            foreach (var connection in m_connections)
             {
                 connection.Render(g, alpha, scale);
             }
@@ -166,9 +166,9 @@ namespace FluidicsSDK.Managers
         internal Connection Select(Point location)
         {
             //start with most recently created connection and work down.
-            List<Connection> tmpList = new List<Connection>(m_connections);
+            var tmpList = new List<Connection>(m_connections);
             tmpList.Reverse(); //so list is from most-recently created to first-created
-            foreach (Connection connection in tmpList)
+            foreach (var connection in tmpList)
             {
                 if (connection.OnPoint(location) && connection.InternalConnectionOf == null)
                 {                   

@@ -37,7 +37,7 @@ namespace FluidicsSDK.Base
             /// </summary>
             private Port()
             {
-                Point f = new Point(0,0);
+                var f = new Point(0,0);
                 DefinePort(f, null);
             }
 
@@ -57,7 +57,7 @@ namespace FluidicsSDK.Base
                 m_connections = new Dictionary<long, Connection>();
 
                 // this makes the provided location the center point of the port, instead of the top left corner.
-                Point trueLoc = new Point(loc.X - Radius, loc.Y - Radius);
+                var trueLoc = new Point(loc.X - Radius, loc.Y - Radius);
                 ParentDevice = parent;
                 m_fluids = new List<Fluid>();
                 m_primitive = new FluidicsCircle(trueLoc, Color.Black, Brushes.White, Radius);
@@ -139,7 +139,7 @@ namespace FluidicsSDK.Base
             internal bool Contains(Point location)
             {
                 //standard pythagorean to determine if point is in/on the circle
-                int dist = (int)Math.Sqrt(Math.Pow((Center.X - location.X) , 2) + Math.Pow((Center.Y - location.Y)  ,2));
+                var dist = (int)Math.Sqrt(Math.Pow((Center.X - location.X) , 2) + Math.Pow((Center.Y - location.Y)  ,2));
                 return (dist <= (m_radius + MAX_PIXEL_VARIANCE));
             }
 
@@ -147,7 +147,7 @@ namespace FluidicsSDK.Base
             public void MoveBy(Point amtToMove)
             {
                 //we are moving the center point of the circle, but locations are based on the upper left corner, so adjust for the radius
-                Point newLoc = new Point(Loc.X + amtToMove.X + m_radius, Loc.Y + amtToMove.Y + m_radius);
+                var newLoc = new Point(Loc.X + amtToMove.X + m_radius, Loc.Y + amtToMove.Y + m_radius);
                 Loc = newLoc;
             }
 
@@ -198,11 +198,11 @@ namespace FluidicsSDK.Base
                 }
                 set
                 {
-                    Point oldLoc = this.Center;
+                    var oldLoc = this.Center;
                     // make the new location the center point of the port, not the top left corner.
                     m_primitive.Loc = new Point(value.X -m_radius, value.Y - m_radius);
                     //tell connections about the move.
-                    foreach (Connection connection in m_connections.Values)
+                    foreach (var connection in m_connections.Values)
                     {
                         connection.MoveWith(this);
                     }
@@ -233,7 +233,7 @@ namespace FluidicsSDK.Base
             {
                 get
                 {
-                    List<Connection> temp = new List<Connection>(m_connections.Values);
+                    var temp = new List<Connection>(m_connections.Values);
                     return temp;
                 }
                 private set {  }

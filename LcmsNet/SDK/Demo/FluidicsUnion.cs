@@ -27,9 +27,9 @@ namespace DemoPluginLibrary
         #region Methods
         public FluidicsUnion()
         {
-            Point mainStartPoint = new Point(0, 0);
-            Point leftMostStartPoint = new Point(-(MAIN_RECT_WIDTH / 3) - 5, 0);
-            Point rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
+            var mainStartPoint = new Point(0, 0);
+            var leftMostStartPoint = new Point(-(MAIN_RECT_WIDTH / 3) - 5, 0);
+            var rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
             //main rectangle
             base.AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black,  Brushes.White);
@@ -91,11 +91,11 @@ namespace DemoPluginLibrary
 
         public override bool Contains(Point location)
         {
-            bool contains = false;
-            int minX = m_primitives.Min(z => z.Loc.X);
-            int maxX = m_primitives.Max(z => z.Loc.X);
-            int minY = m_primitives.Min(z => z.Loc.Y);
-            int maxY = m_primitives.Max(z => z.Loc.Y);
+            var contains = false;
+            var minX = m_primitives.Min(z => z.Loc.X);
+            var maxX = m_primitives.Max(z => z.Loc.X);
+            var minY = m_primitives.Min(z => z.Loc.Y);
+            var maxY = m_primitives.Max(z => z.Loc.Y);
             if ((minX <= location.X && location.X <= maxX) && (minY <= location.Y && location.Y <= maxY))
             {
                 contains = true;

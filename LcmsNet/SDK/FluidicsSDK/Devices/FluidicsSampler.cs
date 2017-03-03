@@ -47,20 +47,20 @@ namespace FluidicsSDK.Devices
 
             //define sampler arm
             // offset from base rectangle(25, -35)
-            Point samplerArmBase = new Point(basePoint.X + 25, basePoint.Y - 35);
+            var samplerArmBase = new Point(basePoint.X + 25, basePoint.Y - 35);
             base.AddRectangle(samplerArmBase, new Size(35, 110), Color.Black, Brushes.White, true);
             // offset from sampler arm outer rectangle(5, 45)
             base.AddRectangle(new Point(samplerArmBase.X + 5, samplerArmBase.Y + 45), new Size(25, 62), Color.Black, Brushes.Gray, true);
 
             //define sample cabinet + drawers
             //offset from base rectangle (90, 41)
-            Point cabinetBase = new Point(basePoint.X + 90, basePoint.Y + 41);
+            var cabinetBase = new Point(basePoint.X + 90, basePoint.Y + 41);
             base.AddRectangle(cabinetBase, new Size(80, 110), Color.Black, Brushes.White, true);
             //offset from cabinet outer rectangle (5, 8)
-            Point firstDrawerBase = new Point(cabinetBase.X + 5, cabinetBase.Y + 8);
+            var firstDrawerBase = new Point(cabinetBase.X + 5, cabinetBase.Y + 8);
             base.AddRectangle(firstDrawerBase, new Size(70, 25), Color.Black, Brushes.White, true);
             //offset from first drawer(0, 35)
-            Point secondDrawerBase = new Point(firstDrawerBase.X, firstDrawerBase.Y + 35);
+            var secondDrawerBase = new Point(firstDrawerBase.X, firstDrawerBase.Y + 35);
             base.AddRectangle(secondDrawerBase, new Size(70, 25), Color.Black, Brushes.White, true);
             //offset from second drawer(0, 35)
             base.AddRectangle(new Point(secondDrawerBase.X, secondDrawerBase.Y + 35), new Size(70, 25), Color.Black, Brushes.White, true);
@@ -124,8 +124,8 @@ namespace FluidicsSDK.Devices
             get
             {
                 // get the primitve with the highest value for location + size in both width and height
-                int width = m_primitives.Max(x => x.Loc.X + x.Size.Width);
-                int height = m_primitives.Max(x => x.Loc.Y + x.Size.Height);
+                var width = m_primitives.Max(x => x.Loc.X + x.Size.Width);
+                var height = m_primitives.Max(x => x.Loc.Y + x.Size.Height);
                 //subtract the smallest x and y from respective measures
                 width -= m_primitives.Min(x => x.Loc.X);
                 height -= m_primitives.Min(x => x.Loc.Y);

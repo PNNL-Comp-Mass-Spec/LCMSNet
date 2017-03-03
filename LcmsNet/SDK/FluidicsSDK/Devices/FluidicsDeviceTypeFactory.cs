@@ -59,17 +59,17 @@ namespace FluidicsSDK.Devices
         public static FluidicsDevice CreateDevice(Type deviceType)
         {
             FluidicsDevice device  = null;
-            object[] attributes         = deviceType.GetCustomAttributes(typeof(LcmsNetDataClasses.Devices.classDeviceControlAttribute), false);
-            foreach (object o in attributes)
+            var attributes         = deviceType.GetCustomAttributes(typeof(LcmsNetDataClasses.Devices.classDeviceControlAttribute), false);
+            foreach (var o in attributes)
             {
-                classDeviceControlAttribute monitorAttribute = o as classDeviceControlAttribute;
+                var monitorAttribute = o as classDeviceControlAttribute;
                 if (monitorAttribute != null)
                 {
-                    Type fluidicsDeviceType = monitorAttribute.FluidicsDeviceType;
+                    var fluidicsDeviceType = monitorAttribute.FluidicsDeviceType;
                     /// Create a provided instance.
                     if (fluidicsDeviceType == null)
                     {
-                        foreach(Type interfaceType in m_supportedInterfaces.Keys)
+                        foreach(var interfaceType in m_supportedInterfaces.Keys)
                         {
                             if (interfaceType.IsAssignableFrom(deviceType))
                             {

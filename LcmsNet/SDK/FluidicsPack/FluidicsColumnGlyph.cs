@@ -26,7 +26,7 @@ namespace FluidicsPack
 
         public FluidicsColumnGlyph()
         {
-            Size newsize = new Size(20, 200);
+            var newsize = new Size(20, 200);
 
             GraphicsPrimitive primitive = new FluidicsRectangle(new Point(0, 0),
                                                                 newsize,
@@ -35,7 +35,7 @@ namespace FluidicsPack
 
             AddPrimitive(primitive);
 
-            Point[] points      = GeneratePortLocs();
+            var points      = GeneratePortLocs();
             m_inputPort         = new Port(points[0], this);
             m_inputPort.Source  = false;
             m_inputPort.Sink = false;
@@ -47,7 +47,7 @@ namespace FluidicsPack
             AddPort(m_inputPort);
             AddPort(m_exitPort);
             ConnectionManager.GetConnectionManager.Connect(m_inputPort, m_exitPort, this);
-            Connection c = ConnectionManager.GetConnectionManager.FindConnection(m_inputPort, m_exitPort);
+            var c = ConnectionManager.GetConnectionManager.FindConnection(m_inputPort, m_exitPort);
             c.Transparent = true;
             m_info_controls_box.Width = 20;
             m_info_controls_box.Height = 200;
@@ -72,7 +72,7 @@ namespace FluidicsPack
 
         protected Point[] GeneratePortLocs()
         {
-            Point[] points  = new Point[2];
+            var points  = new Point[2];
             points[0] = new Point(Convert.ToInt32(Loc.X + (Size.Width / 2)), Loc.Y);
             points[1] = new Point(Convert.ToInt32(Loc.X + (Size.Width / 2)), Loc.Y + Convert.ToInt32(Size.Height - m_info_controls_box.Size.Height));
 
@@ -88,25 +88,25 @@ namespace FluidicsPack
         /// <param name="scale"></param>
         protected override void DrawControls(Graphics g, int alpha, float scale)
         {
-            Color realColor = Color.FromArgb(alpha, Color.Black.R, Color.Black.G, Color.Black.B);
+            var realColor = Color.FromArgb(alpha, Color.Black.R, Color.Black.G, Color.Black.B);
             using (IDisposable p = new Pen(realColor), b = new SolidBrush(realColor))
             {
                 var pen = p as Pen;
                 var br = b as SolidBrush;
                 //determine font size, used to scale font with graphics primitives
-                int stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
-                using (Font stringFont = new Font("Calibri", 11 + stringScale))
+                var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
+                using (var stringFont = new Font("Calibri", 11 + stringScale))
                 {
                     // draw name to screen
-                    string name = DeviceName;
+                    var name = DeviceName;
 
                     m_info_controls_box = UpdateControlBoxLocation();
 
                     //place the name at the top middle of the box
-                    System.Drawing.StringFormat sf = new StringFormat(StringFormatFlags.DirectionVertical);
-                    SizeF nameSize = g.MeasureString(name, stringFont);
+                    var sf = new StringFormat(StringFormatFlags.DirectionVertical);
+                    var nameSize = g.MeasureString(name, stringFont);
 
-                    Point nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Height, scale);
+                    var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Height, scale);
                     g.DrawString(name, stringFont, br, nameLocation, sf);
                 }
             }
@@ -119,8 +119,8 @@ namespace FluidicsPack
         /// <returns></returns>
         protected override Rectangle UpdateControlBoxLocation()
         {
-            int top = Ports[0].Center.Y + Ports[0].Radius;
-            int x = Ports[0].Center.X;
+            var top = Ports[0].Center.Y + Ports[0].Radius;
+            var x = Ports[0].Center.X;
             return new Rectangle(x, top, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 

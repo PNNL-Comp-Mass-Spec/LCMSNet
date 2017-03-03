@@ -30,7 +30,7 @@ namespace FluidicsSDKUnitTests
         public void PortManagerAddAndRemove()
         {
             //add
-            Port pt = new Port(new Point(0,0), null); // ports add themselves to the port manager...
+            var pt = new Port(new Point(0,0), null); // ports add themselves to the port manager...
             Assert.AreEqual(1, PortManager.GetPortManager.Ports.Count);
             //remove
             PortManager.GetPortManager.RemovePort(pt);
@@ -44,7 +44,7 @@ namespace FluidicsSDKUnitTests
         public void DeviceManagerAddAndRemove()
         {
             //add
-            DemoPump p = new DemoPump();
+            var p = new DemoPump();
             FluidicsDeviceManager.DeviceManager.Add(p);
             Assert.AreEqual(1, FluidicsDeviceManager.DeviceManager.GetDevices().Count);
             //remove
@@ -61,8 +61,8 @@ namespace FluidicsSDKUnitTests
         public void ConnectionManagerAddAndRemove()
         {
             //add
-            Port p1 = new Port(new Point(0,0), null);
-            Port p2 = new Port(new Point(0, 0), null);
+            var p1 = new Port(new Point(0,0), null);
+            var p2 = new Port(new Point(0, 0), null);
             ConnectionManager.GetConnectionManager.Connect(p1, p2);
             Assert.AreEqual(1, ConnectionManager.GetConnectionManager.GetConnections().ToList().Count);
             //remove
@@ -89,7 +89,7 @@ namespace FluidicsSDKUnitTests
         /// </summary>
         private void DoNotConnectHelper()
         {
-            Port p1 = new Port(new Point(0, 0), null);
+            var p1 = new Port(new Point(0, 0), null);
             ConnectionManager.GetConnectionManager.Connect(p1, p1);
         }
 
@@ -111,8 +111,8 @@ namespace FluidicsSDKUnitTests
         /// </summary>
         private void OnlyOnceHelper()
         {
-            Port p1 = new Port(new Point(0, 0), null);
-            Port p2 = new Port(new Point(0, 0), null);
+            var p1 = new Port(new Point(0, 0), null);
+            var p2 = new Port(new Point(0, 0), null);
             ConnectionManager.GetConnectionManager.Connect(p1, p2);
             ConnectionManager.GetConnectionManager.Connect(p1, p2);
         }
@@ -123,9 +123,9 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void MoveDevice()
         {
-            DemoPump p = new DemoPump();
+            var p = new DemoPump();
             FluidicsDeviceManager.DeviceManager.Add(p);
-            FluidicsDevice fp = FluidicsDeviceManager.DeviceManager.FindDevice(p);
+            var fp = FluidicsDeviceManager.DeviceManager.FindDevice(p);
             fp.MoveBy(new Point(10, 10));
             Assert.IsTrue(fp.Loc.X == 10 && fp.Loc.Y == 10); // Device starts at point 0,0 So when moved 10x10 should be at point (10,10)
             PortManager.GetPortManager.RemovePorts(fp);

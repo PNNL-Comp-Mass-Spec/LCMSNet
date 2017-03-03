@@ -34,11 +34,11 @@ namespace LcmsNet.SampleQueue
             public List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList)
             {
                 // Create a list of the sequence numbers from the input sample list
-                List<long> SeqList = GetSeqNumbers(InputSampleList);
+                var SeqList = GetSeqNumbers(InputSampleList);
                 // Invert the sequence number list
                 SeqList.Reverse();
                 // Reassign the sequence numbers and return
-                for (int Indx = 0; Indx < InputSampleList.Count(); Indx++)
+                for (var Indx = 0; Indx < InputSampleList.Count(); Indx++)
                 {
                     InputSampleList[Indx].SequenceID = SeqList[Indx];
                 }
@@ -61,8 +61,8 @@ namespace LcmsNet.SampleQueue
             /// <returns>List of sequence numbers</returns>
             List<long> GetSeqNumbers(List<classSampleData> InpSamples)
             {
-                List<long> SeqNums = new List<long>();
-                foreach (classSampleData Sample in InpSamples)
+                var SeqNums = new List<long>();
+                foreach (var Sample in InpSamples)
                 {
                     SeqNums.Add(Sample.SequenceID);
                 }

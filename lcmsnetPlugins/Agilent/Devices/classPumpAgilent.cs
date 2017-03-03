@@ -202,7 +202,7 @@ namespace Agilent.Devices.Pumps
             }
             if(mwatcher_methods == null)
             {
-                string path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+                var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
                 path = Path.Combine(Path.GetDirectoryName(path), "..\\pumpmethods");
                 path = path.Substring(path.IndexOf(":") + 2); // gets rid of the file:/ tag.
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
@@ -241,7 +241,7 @@ namespace Agilent.Devices.Pumps
 
         void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
         {
-            bool methodLoaded = false;
+            var methodLoaded = false;
             do
             {
                 try
@@ -400,15 +400,15 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Purge Channel", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool PurgePump(double timeout, enumPurgePumpChannel channel, double flow, double numberOfMinutes)
         {
-            string command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
-            string reply = "";
-            string error = "";
-            bool worked = SendCommand(command, ref reply, error);
+            var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
+            var reply = "";
+            var error = "";
+            var worked = SendCommand(command, ref reply, error);
 
             if (!worked)
                 return worked;
 
-            int bitField = 0;
+            var bitField = 0;
             switch (channel)
             {
                 case enumPurgePumpChannel.A1:
@@ -439,10 +439,10 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Abort Purge", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool AbortPurges(double timeout)
         { 
-            string reply    = "";
-            string error    = "";
-            string command  = string.Format("PRGE 0, 0, 0");
-            bool worked     = SendCommand(command, ref reply, error);
+            var reply    = "";
+            var error    = "";
+            var command  = string.Format("PRGE 0, 0, 0");
+            var worked     = SendCommand(command, ref reply, error);
             return worked;
         }
         #endregion
@@ -452,7 +452,7 @@ namespace Agilent.Devices.Pumps
         {
             if (m_errorCodes == null)
             {
-                Dictionary<string, string> map = new Dictionary<string, string>();
+                var map = new Dictionary<string, string>();
 
 
                 map.Add("ER 2037", "STRT while purging");
@@ -477,7 +477,7 @@ namespace Agilent.Devices.Pumps
         {
             if (m_statusCodes == null)
             {
-                Dictionary<string, string> map = new Dictionary<string, string>();
+                var map = new Dictionary<string, string>();
                 map.Add("EV 2227", "no start allowed while purging.");
                 map.Add("EV 2228", "no start allowed while fast composition change.");
                 map.Add("EV 2229", "Column flow in limit.");
@@ -514,14 +514,14 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         void mobj_pumps_ErrorOccurred(object sender, Agilent.Licop.ErrorEventArgs e)
         {            
-            string name =  e.Message;
+            var name =  e.Message;
             if (e.Message == null)
                 return;
 
-            string [] errorMessage = e.Message.Split(',');
+            var errorMessage = e.Message.Split(',');
             if (m_errorCodes.ContainsKey(errorMessage[0]))
             {
-                string displayedError = m_errorCodes[errorMessage[0]];
+                var displayedError = m_errorCodes[errorMessage[0]];
                 HandleError(displayedError, displayedError);
             }
             else
@@ -579,10 +579,10 @@ namespace Agilent.Devices.Pumps
         {
             if (MethodNames != null)
             {
-                string[] keys = new string[mdict_methods.Keys.Count];
+                var keys = new string[mdict_methods.Keys.Count];
                 mdict_methods.Keys.CopyTo(keys, 0);
 
-                List<object> data = new List<object>();
+                var data = new List<object>();
                 data.AddRange(keys);
 
                 MethodNames(this, (List<object>)data);
@@ -664,8 +664,8 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
 
-            string reply = "";
-            bool worked = SendCommand(
+            var reply = "";
+            var worked = SendCommand(
                 string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondElapsed),
                 ref reply,
                 errorMessage);
@@ -709,7 +709,7 @@ namespace Agilent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, type, message, this);
+                var args = new classDeviceStatusEventArgs(Status, type, message, this);
                 StatusUpdate(this, args);
             }
         }
@@ -722,7 +722,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         void mobj_evChannel_DataReceived(object sender, DataEventArgs e)
         {            
-            string data = e.AsciiData;
+            var data = e.AsciiData;
 
             if (data.Contains("EE 2014"))
             {
@@ -770,10 +770,10 @@ namespace Agilent.Devices.Pumps
             }
             else
             {                                
-                string[] errorMessage = data.Split(',');
+                var errorMessage = data.Split(',');
                 if (m_statusCodes.ContainsKey(errorMessage[0]))
                 {
-                    string displayedError = m_statusCodes[errorMessage[0]];
+                    var displayedError = m_statusCodes[errorMessage[0]];
                     HandleError(displayedError, displayedError);
                 }
                 else
@@ -801,14 +801,14 @@ namespace Agilent.Devices.Pumps
                 compositionB = double.NaN;
                 
                 // Parse out the data
-                string[] dataArray = e.AsciiData.Split(new string[] { "ACT:FLOW" }, StringSplitOptions.RemoveEmptyEntries);
+                var dataArray = e.AsciiData.Split(new string[] { "ACT:FLOW" }, StringSplitOptions.RemoveEmptyEntries);
                 if (dataArray.Length > 1)
                 {
-                    string data = dataArray[1].Replace(";ACT:", ",");
+                    var data = dataArray[1].Replace(";ACT:", ",");
                     data = data.Replace("COMP", "");
                     data = data.Replace("PRES", "");
 
-                    string[] values = data.Split(',');
+                    var values = data.Split(',');
                     flowrate = Convert.ToDouble(values[0]);
                     pressure = Convert.ToDouble(values[1]);
                     compositionB = Convert.ToDouble(values[3]);
@@ -826,12 +826,12 @@ namespace Agilent.Devices.Pumps
         }
         private void ProcessMonitoringData(double flowrate, double pressure, double compositionB)
         {
-            DateTime time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
             if (mdouble_flowrate != 0)
             {
-                double percentFlowChange = (mdouble_flowrate - flowrate) / mdouble_flowrate;
+                var percentFlowChange = (mdouble_flowrate - flowrate) / mdouble_flowrate;
                 UpdateNotificationStatus(percentFlowChange.ToString(), CONST_FLOW_CHANGE);
             }
             UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);
@@ -845,11 +845,11 @@ namespace Agilent.Devices.Pumps
             /// 
             /// Find old data to remove -- needs to be updated (or could be) using LINQ
             /// 
-            int count = mlist_times.Count;
-            int total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
+            var count = mlist_times.Count;
+            var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
             {
-                int i = 0;
+                var i = 0;
                 while (time.Subtract(mlist_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < mlist_times.Count)
                 {
                     i++;
@@ -970,7 +970,7 @@ namespace Agilent.Devices.Pumps
                 return;
             }
 
-            string reply = "";
+            var reply = "";
             SendCommand("MODE " + (int)newMode, ref reply, "Attempting to set mode to " + newMode.ToString());
         }
         /// <summary>
@@ -986,7 +986,7 @@ namespace Agilent.Devices.Pumps
                 return;
             }
             mdouble_flowrate    = newFlowRate;
-            string reply        = "";
+            var reply        = "";
             SendCommand("FLOW " + newFlowRate.ToString(), ref reply, "Attempting to set flow rate to " + newFlowRate.ToString());
         }
         /// <summary>
@@ -1001,7 +1001,7 @@ namespace Agilent.Devices.Pumps
                 return;
             }
             
-            string reply = "";
+            var reply = "";
             if (newVolumeuL >= 0 && newVolumeuL <= 2000)
                 SendCommand("MVOL " + newVolumeuL.ToString(), ref reply, "Attempting to set mixer volume to " + newVolumeuL.ToString());
         }
@@ -1012,7 +1012,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Set Percent B", 1, "", -1, false)]
         public void SetPercentB(double percent)
         {
-            string reply = "";
+            var reply = "";
             SendCommand("COMP " + Convert.ToInt32(percent).ToString() + ",-1,-1", ref reply, "Attempting to set percent of solvent B");
         }
         /// <summary>
@@ -1022,16 +1022,16 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
         public void StartMethod(double timeout, string method)
         {
-            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             
             StartMethod(method);
 
             /// 
             /// We see if we ran over or not...if so then return failure, otherwise let it continue.
             /// 
-            TimeSpan span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
+            var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
 
-            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             timer.WaitSeconds(span.TotalSeconds);
         }
         /// <summary>
@@ -1049,8 +1049,8 @@ namespace Agilent.Devices.Pumps
             /// 
             /// Then send commands to start the method
             /// 
-            string methodData = mdict_methods[method];
-            string reply = "";
+            var methodData = mdict_methods[method];
+            var reply = "";
 
             /// 
             /// The reason why we delete the time table, is to clear out any
@@ -1077,7 +1077,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Stop Method", 1, "", -1, false)]
         public void StopMethod()
         {
-            string reply = "";
+            var reply = "";
             SendCommand("STOP", ref reply, "Attempting to stop a method.");
         }
         /// <summary>
@@ -1086,7 +1086,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Turn Pump On", 1, "", -1, false)]
         public void PumpOn()
         {
-            string reply = "";
+            var reply = "";
             SendCommand("PUMP 1", ref reply, "Attempting to turn pumps on.");
         }
         /// <summary>
@@ -1095,7 +1095,7 @@ namespace Agilent.Devices.Pumps
         [classLCMethodAttribute("Turn Pump Off", 1, "", -1, false)]
         public void PumpOff()
         {
-            string reply = "";
+            var reply = "";
             SendCommand("PUMP 0", ref reply, "Attempting to turn pumps off.");
         }
         #endregion
@@ -1111,19 +1111,19 @@ namespace Agilent.Devices.Pumps
             {
                 return 0.0;
             }
-            string reply = "";
+            var reply = "";
             SendCommand("ACT:COMP?", ref reply, "Attmempting to query composition of solvent B.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("COMP"))
             {
-                string [] replies = reply.Split(' ');
+                var replies = reply.Split(' ');
                 if (replies.Length != 4)
                 {
                     HandleError("Invalid pump response to composition request", CONST_COMPOSITION_B_SET);
                     return double.NaN;
                 }
-                string[] percents = replies[3].Split(',');
+                var percents = replies[3].Split(',');
                 return Convert.ToDouble(percents[1]);
             }
             else
@@ -1132,13 +1132,13 @@ namespace Agilent.Devices.Pumps
                 SendCommand("ACT:COMP?", ref reply, "Attmempting to query composition of solvent B.");
                 if (reply.Contains("COMP"))
                 {
-                    string[] replies = reply.Split(' ');
+                    var replies = reply.Split(' ');
                     if (replies.Length != 4)
                     {
                         HandleError("Invalid pump response to composition request", CONST_COMPOSITION_B_SET);
                         return double.NaN;
                     }
-                    string[] percents = replies[3].Split(',');
+                    var percents = replies[3].Split(',');
                     return Convert.ToDouble(percents[1]);
                 }
                 else
@@ -1154,7 +1154,7 @@ namespace Agilent.Devices.Pumps
         /// <returns>Method string kept on the pump.</returns>
         public string RetrieveMethod()
         {
-            string methodString = "";
+            var methodString = "";
             if (mbool_emulation == true)
             {
                 methodString = "test;\ntest12";
@@ -1175,11 +1175,11 @@ namespace Agilent.Devices.Pumps
             {
                 return 0.0;
             }
-            string reply = "";
+            var reply = "";
             SendCommand("FLOW?", ref reply, "Attempting to query flow rate.");
             //We expect something like:
             //reply = "RA 0000 FLOW 2.000";
-            int start = reply.IndexOf("FLOW");
+            var start = reply.IndexOf("FLOW");
             if (start == -1)
             {
                 SendCommand("FLOW?", ref reply, "Attempting to re-query flow rate.");
@@ -1203,13 +1203,13 @@ namespace Agilent.Devices.Pumps
             {
                 return 0.0;
             }
-            string reply = "";
+            var reply = "";
             SendCommand("ACT:PRES?", ref reply, "Attmempting to query pressure.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("ACT:PRES"))
             {
-                string[] replies = reply.Split(' ');
+                var replies = reply.Split(' ');
                 if (replies.Length != 4)
                 {
                     HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
@@ -1225,7 +1225,7 @@ namespace Agilent.Devices.Pumps
 
                 if (reply.Contains("ACT:PRES"))
                 {
-                    string[] replies = reply.Split(' ');
+                    var replies = reply.Split(' ');
                     if (replies.Length != 4)
                     {
                         HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
@@ -1250,9 +1250,9 @@ namespace Agilent.Devices.Pumps
             {
                 return 0.0;
             }
-            string reply = "";
+            var reply = "";
             SendCommand("MVOL?", ref reply, "Attempting to query mixer volume.");
-            int start = reply.IndexOf("MVOL");
+            var start = reply.IndexOf("MVOL");
             if (start == -1)
             {
                 reply = "";
@@ -1277,9 +1277,9 @@ namespace Agilent.Devices.Pumps
             {
                 return 0.0;
             }
-            string reply = "";
+            var reply = "";
             SendCommand("ACT:FLOW?", ref reply, "Attempting to query actual flow.");
-            int start = reply.IndexOf("ACT:FLOW");
+            var start = reply.IndexOf("ACT:FLOW");
             if (start == -1)
             {
                 reply = "";
@@ -1304,10 +1304,10 @@ namespace Agilent.Devices.Pumps
             {
                 return enumPumpAgilentModes.Unknown;
             }
-            string reply = "";
+            var reply = "";
             SendCommand("MODE?", ref reply, "Attempting to query mode.");
             //reply = "RA 000 MODE 1
-            int start = reply.IndexOf("MODE");
+            var start = reply.IndexOf("MODE");
             if (start == -1)
             {
                 //TODO: Error!
@@ -1374,7 +1374,7 @@ namespace Agilent.Devices.Pumps
         {            
             if (mdict_methods.ContainsKey(methodName) == true)
             {
-                string methodData = mdict_methods[methodName];
+                var methodData = mdict_methods[methodName];
             }
         }
         /// <summary>
@@ -1397,12 +1397,12 @@ namespace Agilent.Devices.Pumps
         }
         public List<string> GetStatusNotificationList()
         {
-            List<string> notifications = new List<string>() { "Status"
+            var notifications = new List<string>() { "Status"
                                                             };
 
             notifications.AddRange(m_notificationStrings);
 
-            foreach (string value in m_statusCodes.Values)
+            foreach (var value in m_statusCodes.Values)
             {
                 notifications.Add(value);
             }
@@ -1410,7 +1410,7 @@ namespace Agilent.Devices.Pumps
           }
         public List<string> GetErrorNotificationList()
         {
-            List<string> notifications = new List<string>() {   
+            var notifications = new List<string>() {   
                                         CONST_COMPOSITION_B_SET,
                                         CONST_INITIALIZE_ERROR,
                                         CONST_PRESSURE_SET,
@@ -1424,7 +1424,7 @@ namespace Agilent.Devices.Pumps
             };
 
             
-            foreach (string value in m_errorCodes.Values)
+            foreach (var value in m_errorCodes.Values)
             {
                 notifications.Add(value);
             }

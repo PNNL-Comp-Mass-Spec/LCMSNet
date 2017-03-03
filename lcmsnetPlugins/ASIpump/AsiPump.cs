@@ -360,9 +360,9 @@ namespace ASIpump
             // wait for the query to be written
             Thread.Sleep(500);
 
-            double rounded = Math.Round(data);
+            var rounded = Math.Round(data);
 
-            int intData = (int) rounded;
+            var intData = (int) rounded;
 
             Send(MotorAddress + intData.ToString());
         }
@@ -426,7 +426,7 @@ namespace ASIpump
         /// <returns>Method string kept on the pump.</returns>
         public string RetrieveMethod()
         {
-            string methodString = "";
+            var methodString = "";
             
             return methodString;
         }
@@ -484,10 +484,10 @@ namespace ASIpump
         {
             if (MethodNames != null)
             {
-                string[] keys = new string[mdict_methods.Keys.Count];
+                var keys = new string[mdict_methods.Keys.Count];
                 mdict_methods.Keys.CopyTo(keys, 0);
 
-                List<object> data = new List<object>();
+                var data = new List<object>();
                 data.AddRange(keys);
 
                 MethodNames(this, data);
@@ -548,7 +548,7 @@ namespace ASIpump
         }
         public List<string> GetStatusNotificationList()
         {
-            List<string> notifications = new List<string>() { "Status"
+            var notifications = new List<string>() { "Status"
                                                             };
 
             
@@ -556,7 +556,7 @@ namespace ASIpump
         }
         public List<string> GetErrorNotificationList()
         {
-            List<string> notifications = new List<string>() {  "" };
+            var notifications = new List<string>() {  "" };
 
             return notifications;
         }
@@ -578,7 +578,7 @@ namespace ASIpump
         [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, true)]
         public void StartMethod(double timeout, double flowrate, string methodName)
         {
-            DateTime start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             //Some method starting private function StartMethod(methodName);
         }

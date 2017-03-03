@@ -287,7 +287,7 @@ namespace LcmsNet.Devices.ContactClosure
                 return 0;
             }
            
-            int error = 0;
+            var error = 0;
             try
             {
                 if (port.ToString().EndsWith("Analog"))
@@ -304,7 +304,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw;
             }
 
-            LcmsNetDataClasses.Devices.classTimerDevice timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try

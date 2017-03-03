@@ -36,7 +36,7 @@ namespace Newport.ESP300
 
         private void m_obj_StatusUpdate(object sender, classDeviceStatusEventArgs e)
         {
-            string[] tokens = e.Message.Split(new char[' ']);
+            var tokens = e.Message.Split(new char[' ']);
             if(e.Notification == "Motor")
             {
                 switch(tokens[0])
@@ -191,7 +191,7 @@ namespace Newport.ESP300
             {
                 if (lstPositions.SelectedItem != null)
                 {
-                    string pos = lstPositions.SelectedItem.ToString();
+                    var pos = lstPositions.SelectedItem.ToString();
                     m_obj.GoToPosition(5000, pos);
                     UpdateAxisPositions();
                 }
@@ -204,12 +204,12 @@ namespace Newport.ESP300
 
         private void btnSetPos_Click(object sender, EventArgs e)
         {
-            string pos = txtPosName.Text;
+            var pos = txtPosName.Text;
             if (pos != string.Empty)
             {
-                double axis1Pos = m_obj.QueryPosition(1);
-                double axis2Pos = m_obj.QueryPosition(2);
-                double axis3Pos = m_obj.QueryPosition(3);
+                var axis1Pos = m_obj.QueryPosition(1);
+                var axis2Pos = m_obj.QueryPosition(2);
+                var axis3Pos = m_obj.QueryPosition(3);
                 m_obj.SetPositionCoordinates(pos, Convert.ToSingle(axis1Pos), Convert.ToSingle(axis2Pos), Convert.ToSingle(axis3Pos));
                 UpdatePositionListBox();
                 lblCurrentPos.Text = pos;
@@ -228,7 +228,7 @@ namespace Newport.ESP300
         private void UpdatePositionListBox()
         {
             lstPositions.Items.Clear();
-            foreach (string Key in m_obj.Positions.Keys)
+            foreach (var Key in m_obj.Positions.Keys)
             {
                 lstPositions.Items.Add(Key);
             }            
@@ -241,7 +241,7 @@ namespace Newport.ESP300
 
         private void PositionChangedHandler(object sender, EventArgs e)
         {
-            classNewportStage stage = sender as classNewportStage;
+            var stage = sender as classNewportStage;
             UpdatePositionLabel(stage.CurrentPos);
         }
 
@@ -254,7 +254,7 @@ namespace Newport.ESP300
         {
             if (lstPositions.SelectedItem != null)
             {
-                string pos = lstPositions.SelectedItem.ToString();
+                var pos = lstPositions.SelectedItem.ToString();
                 m_obj.RemovePosition(pos);
                 UpdatePositionListBox();
                 if (lblCurrentPos.Text == pos)
@@ -286,7 +286,7 @@ namespace Newport.ESP300
 
         private bool ToggleMotor(int axis)
         {
-            bool motorOn = m_obj.GetMotorStatus(axis);
+            var motorOn = m_obj.GetMotorStatus(axis);
             if (motorOn)
             {
                 m_obj.MotorOff(axis);

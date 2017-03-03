@@ -36,7 +36,7 @@ namespace LcmsNet.SampleQueue
             public List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList)
             {
                 // Create a list of the sequence numbers from the input sample list
-                List<long> SeqList = GetSeqNumbers(InputSampleList);
+                var SeqList = GetSeqNumbers(InputSampleList);
                 // Randomize the sequence number list
                 RandomizeSequenceList(SeqList);
                 // Reassign the sequence numbers and return
@@ -57,11 +57,11 @@ namespace LcmsNet.SampleQueue
                 //  Code for this function adapted from section 3.19 of The Microsoft Visual Basic.Net
                 // Programmer's Cookbook, by Mattew MacDonald, published by Microsoft Press
                 mobj_Items = new List<long>();
-                Random RandNumGen = new Random();
+                var RandNumGen = new Random();
                 foreach (long SeqID in InpSeqList)
                 {
                     // Randomly pick sequence ID's from input list and store them in the return list
-                    int NextIndx = RandNumGen.Next(0, mobj_Items.Count +1);
+                    var NextIndx = RandNumGen.Next(0, mobj_Items.Count +1);
                     mobj_Items.Insert(NextIndx, SeqID);
                 }
                 return;
@@ -83,8 +83,8 @@ namespace LcmsNet.SampleQueue
             /// <returns>List of sequence numbers</returns>
             List<long> GetSeqNumbers(List<classSampleData> InpSamples)
             {
-                List<long> SeqNums = new List<long>();
-                foreach (classSampleData Sample in InpSamples)
+                var SeqNums = new List<long>();
+                foreach (var Sample in InpSamples)
                 {
                     SeqNums.Add(Sample.SequenceID);
                 }

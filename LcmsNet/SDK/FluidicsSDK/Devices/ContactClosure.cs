@@ -77,7 +77,7 @@ namespace FluidicsSDK.Devices
         /// <returns></returns>
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
-            Dictionary<TwoPositionState, List<Tuple<int, int>>> states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
+            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
             // contact closure has no states, it is a source
             return states;
         }

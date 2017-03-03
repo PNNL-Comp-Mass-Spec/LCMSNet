@@ -114,7 +114,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="value">The value to write (0/1 for digital)</param>
         public void Write(enumLabjackU12OutputPorts channel, double value)
         {
-            string tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), channel).ToString();
+            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), channel).ToString();
 
             //Determine which type of port we are writing to
             //AO = Analog
@@ -142,7 +142,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The measured value</returns>
         public float Read(enumLabjackU12InputPorts channel)
         {
-            string tempPortName = Enum.GetName(typeof(enumLabjackU12InputPorts), channel).ToString();
+            var tempPortName = Enum.GetName(typeof(enumLabjackU12InputPorts), channel).ToString();
 
             //Determine which type of port we are reading from
             //AI = Analog
@@ -173,14 +173,14 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns></returns>
         private float ReadAnalog(int channel)
         {            
-            int overVoltage = 0;
-            float voltage = 0.0f;
+            var overVoltage = 0;
+            var voltage = 0.0f;
 
-            int result = lj.LabJack.EAnalogIn(ref mint_localID, 0, channel, 0, ref overVoltage, ref voltage);
+            var result = lj.LabJack.EAnalogIn(ref mint_localID, 0, channel, 0, ref overVoltage, ref voltage);
             if (result != 0)
             {
 
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading analog input.  "  + error, result);
             }
             return voltage;
@@ -210,7 +210,7 @@ namespace LcmsNet.Devices.ContactClosure
             }
             if (result != 0)
             {                
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error writing analog output.  " + error, result);
             }
             return result;
@@ -226,12 +226,12 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The state of the channel</returns>
         private int ReadDigital(int channel)
         {            
-            int state = 0;
+            var state = 0;
 
-            int result = lj.LabJack.EDigitalIn(ref mint_localID, 0, channel, 1, ref state);
+            var result = lj.LabJack.EDigitalIn(ref mint_localID, 0, channel, 1, ref state);
             if (result != 0)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading digital input.  " + error, result);
             }
             return state;
@@ -244,12 +244,12 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The state of the channel</returns>
         private int ReadIO(int channel)
         {
-            int state = 0;
+            var state = 0;
 
-            int result = lj.LabJack.EDigitalIn(ref mint_localID, 0, channel, 0, ref state);
+            var result = lj.LabJack.EDigitalIn(ref mint_localID, 0, channel, 0, ref state);
             if (result != 0)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading digital input.  " + error, result);
             }
 
@@ -264,10 +264,10 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteDigital(int channel, int state)
         {
-            int result = lj.LabJack.EDigitalOut(ref mint_localID, 0, channel, 1, state);
+            var result = lj.LabJack.EDigitalOut(ref mint_localID, 0, channel, 1, state);
             if (result != 0)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error setting digital output.  " + error, result);
             }
             return result;
@@ -281,10 +281,10 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteIO(int channel, int state)
         {
-            int result = lj.LabJack.EDigitalOut(ref mint_localID, 0, channel, 0, state);
+            var result = lj.LabJack.EDigitalOut(ref mint_localID, 0, channel, 0, state);
             if (result != 0)
             {
-                string error = GetErrorString(result);
+                var error = GetErrorString(result);
                 ThrowErrorMessage("Error setting digital output.  " + error, result);
             }
             return result;
@@ -296,7 +296,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The driver version, as a float</returns>
         public float GetDriverVersion()
         {
-            float tempVersion = lj.LabJack.GetDriverVersion();
+            var tempVersion = lj.LabJack.GetDriverVersion();
             mfloat_driverVersion = tempVersion;
             if (tempVersion == 0)
             {
@@ -312,7 +312,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error description, as a string</returns>
         public string GetErrorString(int errorCode)
         {
-            StringBuilder tempBuilder = new StringBuilder(100);
+            var tempBuilder = new StringBuilder(100);
             lj.LabJack.GetErrorString(errorCode, tempBuilder);
             return (tempBuilder.ToString());
         }
@@ -323,7 +323,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The firmware version, as a float</returns>
         public float GetFirmwareVersion()
         {
-            float tempVersion = lj.LabJack.GetFirmwareVersion(ref mint_localID);
+            var tempVersion = lj.LabJack.GetFirmwareVersion(ref mint_localID);
             mfloat_firmwareVersion = tempVersion;
             return (tempVersion);
         }
@@ -335,7 +335,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="errorCode">The integer errorcode</param>
         private void ThrowErrorMessage(string msg, int errorCode)
         {
-            StringBuilder errorString = new StringBuilder(50);
+            var errorString = new StringBuilder(50);
             lj.LabJack.GetErrorString(errorCode, errorString);
             throw new classLabjackU12Exception(msg + ":\r\n\r\n" + errorString);
         }

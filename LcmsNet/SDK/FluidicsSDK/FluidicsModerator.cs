@@ -104,11 +104,11 @@ namespace FluidicsSDK
         private IEnumerable<ModelStatus> CheckErrors()
         {           
             //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-            List<ModelStatus> statusChanges = new List<ModelStatus>();
+            var statusChanges = new List<ModelStatus>();
             if (m_fluidicsCheckers.Count > 0)
             {
                 //watch.Start();
-                foreach (IFluidicsModelChecker check in m_fluidicsCheckers)
+                foreach (var check in m_fluidicsCheckers)
                 {
                     if (check.IsEnabled)
                     {
@@ -166,11 +166,11 @@ namespace FluidicsSDK
                 return;
             }
             // This foreach loop resets the color of all connections after every change in the model.
-            foreach(Connection conn in m_conManager.GetConnections())
+            foreach(var conn in m_conManager.GetConnections())
             {
                 conn.Color = Color.Black;
             }
-            IEnumerable<ModelStatus> modelStatus = CheckErrors();
+            var modelStatus = CheckErrors();
             if (modelStatus.Count() > 0 && ModelStatusChangeEvent != null)
             {
                 ModelStatusChangeEvent(this, new LcmsNetDataClasses.ModelStatusChangeEventArgs(modelStatus.ToList()));
@@ -214,7 +214,7 @@ namespace FluidicsSDK
         /// <returns>true if action taken, false if not</returns>
         public bool TakeAction(Point location)
         {
-            bool retVal = m_fluidicsDevManager.TakeAction(location);
+            var retVal = m_fluidicsDevManager.TakeAction(location);
             return retVal;
         }
 
@@ -226,7 +226,7 @@ namespace FluidicsSDK
         {
             BeginModelSuspension();
             Point rescaledLocation;
-            bool selected = false;
+            var selected = false;
             if (m_last_scaled_at < 1)
             {
                 rescaledLocation = new Point((int)(mouse_location.X * (1 / m_last_scaled_at)), (int)(mouse_location.Y * (1 / m_last_scaled_at)));
@@ -235,9 +235,9 @@ namespace FluidicsSDK
             {
                 rescaledLocation = new Point((int)(mouse_location.X / m_last_scaled_at), (int)(mouse_location.Y / m_last_scaled_at));
             }
-            Connection conUnderMouse = m_conManager.Select(rescaledLocation);
-            Port portUnderMouse = m_portManager.Select(rescaledLocation);
-            FluidicsDevice devUnderMouse = m_fluidicsDevManager.Select(rescaledLocation);
+            var conUnderMouse = m_conManager.Select(rescaledLocation);
+            var portUnderMouse = m_portManager.Select(rescaledLocation);
+            var devUnderMouse = m_fluidicsDevManager.Select(rescaledLocation);
             if(m_selectedDevices.Count == 1 && m_selectedDevices.Contains(devUnderMouse) && !multiple_select)
             {
                 selected = true;
@@ -318,11 +318,11 @@ namespace FluidicsSDK
         /// <returns>true or false</returns>
         public bool MouseOnSelected(Point mouse_location)
         {
-            bool devFound = false;
-            Point realLoc = new Point((int)(mouse_location.X / m_last_scaled_at), (int)(mouse_location.Y / m_last_scaled_at));
+            var devFound = false;
+            var realLoc = new Point((int)(mouse_location.X / m_last_scaled_at), (int)(mouse_location.Y / m_last_scaled_at));
             // if the mouse is located over one of the selected devices
             // return true, otherwise false
-            foreach(FluidicsDevice device in m_selectedDevices)
+            foreach(var device in m_selectedDevices)
             {
                 if(device.Contains(realLoc))
                 {
@@ -349,8 +349,8 @@ namespace FluidicsSDK
             if (scale != m_last_scaled_at)
             {
                 m_last_scaled_at = scale;
-                int scaleWidthValue = (int)(m_worldView.Size.Width - (m_worldView.Size.Width * scale));
-                int scaleHeightValue = (int)(m_worldView.Size.Height - (m_worldView.Size.Height * scale));
+                var scaleWidthValue = (int)(m_worldView.Size.Width - (m_worldView.Size.Width * scale));
+                var scaleHeightValue = (int)(m_worldView.Size.Height - (m_worldView.Size.Height * scale));
                 Rectangle scaledView;
                 scaledView = new Rectangle(m_worldView.X, m_worldView.Y, m_worldView.Width - scaleWidthValue, m_worldView.Height - scaleHeightValue);
                 if (scaledView.Size.Width < m_worldView.Size.Width || scaledView.Size.Height < m_worldView.Size.Height)
@@ -359,9 +359,9 @@ namespace FluidicsSDK
                 }
                 else
                 {
-                    Rectangle deviceBoundingBox = m_fluidicsDevManager.GetBoundingBox(false);
-                    int boxWidth = deviceBoundingBox.Size.Width;
-                    int boxHeight = deviceBoundingBox.Size.Height;
+                    var deviceBoundingBox = m_fluidicsDevManager.GetBoundingBox(false);
+                    var boxWidth = deviceBoundingBox.Size.Width;
+                    var boxHeight = deviceBoundingBox.Size.Height;
                     // this is to take care of the case when a user scales down devices drags them around, and then scales up again...which may leave the devices outside the "worldview"
                     // if we don't do this.
                     scaledView.Size = new Size(scaledView.Size.Width < boxWidth ? (int)(boxWidth * scale) : scaledView.Size.Width, scaledView.Size.Height  < boxHeight ? (int)(boxHeight * scale) : scaledView.Size.Height);
@@ -376,17 +376,17 @@ namespace FluidicsSDK
         /// </summary>
         public void ClearSelected()
         {
-            foreach (Connection connection in m_selectedConnections)
+            foreach (var connection in m_selectedConnections)
             {
                 connection.Deselect();
             }
             m_selectedConnections.Clear();
-            foreach (FluidicsDevice device in m_selectedDevices)
+            foreach (var device in m_selectedDevices)
             {
                 device.Deselect();
             }
             m_selectedDevices.Clear();
-            foreach (Port port in m_selectedPorts)
+            foreach (var port in m_selectedPorts)
             {
                 port.Deselect();
             }
@@ -400,9 +400,9 @@ namespace FluidicsSDK
         /// <param name="multiselect">bool determining if multiselect mode is active</param>
         public void Deselect(Point location, bool multiselect)
         {
-            Connection conUnderMouse = m_conManager.Select(location);
-            Port portUnderMouse = m_portManager.Select(location);
-            FluidicsDevice devUnderMouse = m_fluidicsDevManager.Select(location);
+            var conUnderMouse = m_conManager.Select(location);
+            var portUnderMouse = m_portManager.Select(location);
+            var devUnderMouse = m_fluidicsDevManager.Select(location);
             //add the first one detected to the list of selected items.
             if (conUnderMouse != null)
             {
@@ -443,7 +443,7 @@ namespace FluidicsSDK
         /// </summary>
         public void DeselectPorts()
         {
-            foreach (Port port in m_selectedPorts)
+            foreach (var port in m_selectedPorts)
             {
                 port.Deselect();
             }
@@ -481,8 +481,8 @@ namespace FluidicsSDK
         {
             // find the ports associated with the device
             BeginModelSuspension();
-            FluidicsDevice fdevice = FluidicsDeviceManager.DeviceManager.FindDevice(device);
-            foreach (Port port in fdevice.Ports)
+            var fdevice = FluidicsDeviceManager.DeviceManager.FindDevice(device);
+            foreach (var port in fdevice.Ports)
             {
                 //remove the connections associated with those ports
                 m_conManager.RemoveConnections(port);
@@ -501,9 +501,9 @@ namespace FluidicsSDK
         /// </summary>        
         public List<IDevice> RemoveSelectedDevices()
         {
-            List<IDevice> removedDevices = new List<IDevice>();
+            var removedDevices = new List<IDevice>();
             BeginModelSuspension();
-            foreach (FluidicsDevice device in m_selectedDevices)
+            foreach (var device in m_selectedDevices)
             {
                 if (!m_methodRunning)
                 {
@@ -524,7 +524,7 @@ namespace FluidicsSDK
             if (!m_methodRunning)
             {
                 BeginModelSuspension();
-                foreach (Connection connection in connections)
+                foreach (var connection in connections)
                 {
                     m_conManager.Remove(connection);
                     if(m_selectedConnections.Contains(connection))
@@ -543,7 +543,7 @@ namespace FluidicsSDK
         public void RemoveSelectedConnections()
         {
             BeginModelSuspension();
-            List<Connection> tmp = new List<Connection>(m_selectedConnections);
+            var tmp = new List<Connection>(m_selectedConnections);
             RemoveConnections(tmp);
             EndModelSuspension(true);
         }
@@ -578,11 +578,11 @@ namespace FluidicsSDK
         private void MoveDevices(Point amountMoved, List<FluidicsDevice> devices)
         {
             //devicesMoved allows us to undo device moves in case one fails
-            List<FluidicsDevice> devicesMoved = new List<FluidicsDevice>();
+            var devicesMoved = new List<FluidicsDevice>();
             //normalize amount moved so that the devices move the same way at any scale.
-            Point normalizedAmountMoved = new Point((int)(amountMoved.X * (1/ m_last_scaled_at)), (int)(amountMoved.Y * (1 / m_last_scaled_at)));
+            var normalizedAmountMoved = new Point((int)(amountMoved.X * (1/ m_last_scaled_at)), (int)(amountMoved.Y * (1 / m_last_scaled_at)));
             BeginModelSuspension();
-            foreach (FluidicsDevice device in devices)
+            foreach (var device in devices)
             {
                 device.MoveBy(normalizedAmountMoved);
                 devicesMoved.Add(device);
@@ -631,11 +631,11 @@ namespace FluidicsSDK
         /// <param name="p2">the ID of the second port</param>
         public void CreateConnection(string p1, string p2, string connectionStyle)
         {
-            Port p1Real = m_portManager.FindPort(p1);
-            Port p2Real = m_portManager.FindPort(p2);
+            var p1Real = m_portManager.FindPort(p1);
+            var p2Real = m_portManager.FindPort(p2);
             if (p1Real != null && p2Real != null)
             {
-                ConnectionStyles style = (ConnectionStyles) Enum.Parse(typeof(ConnectionStyles), connectionStyle);
+                var style = (ConnectionStyles) Enum.Parse(typeof(ConnectionStyles), connectionStyle);
                 m_conManager.Connect(p1Real, p2Real, null, style);
             }
             else
@@ -659,7 +659,7 @@ namespace FluidicsSDK
         /// <param name="location"></param>
         public void DoubleClickActions(Point location)
         {
-            Connection clickedConnection = m_conManager.Select(location);
+            var clickedConnection = m_conManager.Select(location);
             if (clickedConnection != null)
             {
                 clickedConnection.DoubleClicked();

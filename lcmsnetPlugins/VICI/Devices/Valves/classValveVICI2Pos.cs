@@ -494,7 +494,7 @@ namespace LcmsNet.Devices.Valves
             //Read in whatever is waiting in the buffer
             //This should look like
             //  Position is "B"
-            string tempBuffer = "";
+            var tempBuffer = "";
             try
             {
                 tempBuffer = mobj_serialPort.ReadLine();
@@ -510,12 +510,12 @@ namespace LcmsNet.Devices.Valves
 
 
             //Make a string containing the position
-            string tempPosition = "Unknown";        //Default to unknown
+            var tempPosition = "Unknown";        //Default to unknown
 
             //Grab the actual position from the above string
             if (tempBuffer.Length > 1)  //Make sure we have content in the string
             {
-                int tempCharIndex = tempBuffer.IndexOf("Position is \"");   //Find the "
+                var tempCharIndex = tempBuffer.IndexOf("Position is \"");   //Find the "
                 if (tempCharIndex >= 0)  //Make sure we found it
                 {
                     //Change the position to be the character following the "
@@ -578,7 +578,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            string tempBuffer = "";
+            var tempBuffer = "";
             //Version info is displayed on 2 lines
             try
             {
@@ -634,8 +634,8 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            char tempID = ' ';  //Default to blank space
-            string tempBuffer = "";
+            var tempID = ' ';  //Default to blank space
+            var tempBuffer = "";
 
             try
             {
@@ -659,7 +659,7 @@ namespace LcmsNet.Devices.Valves
                 //Grab the actual position from the above string
                 if (tempBuffer.Length > 1)  //Make sure we have content in the string
                 {
-                    int tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
+                    var tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
                     if (tempCharIndex >= 0)  //Make sure we found a =
                     {
                         //Change the position to be the second character following the first =

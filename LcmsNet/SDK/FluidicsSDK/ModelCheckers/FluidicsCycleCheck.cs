@@ -51,18 +51,18 @@ namespace FluidicsSDK.ModelCheckers
 
         public IEnumerable<ModelStatus> CheckModel()
         {
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            List<ModelStatus> status = new List<ModelStatus>();
-            List<Port> sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source == true);
-            bool cycleFound = false;
-            foreach (Port source in sources)
+            var status = new List<ModelStatus>();
+            var sources = PortManager.GetPortManager.Ports.FindAll(x => x.Source == true);
+            var cycleFound = false;
+            foreach (var source in sources)
             {
-                List<Connection> pathTaken = new List<Connection>();
+                var pathTaken = new List<Connection>();
                 cycleFound = FindCycles(source, new List<Port>(), pathTaken);
                 if (cycleFound)
                 {
-                    foreach(Connection connection in pathTaken)
+                    foreach(var connection in pathTaken)
                     {
                         connection.Color = Color.Red;
                     }
@@ -70,7 +70,7 @@ namespace FluidicsSDK.ModelCheckers
                     if (StatusUpdate != null)
                     {
                         const string message = "Cycle in physical configuration";
-                        string deviceName = source.ParentDevice.IDevice.Name;
+                        var deviceName = source.ParentDevice.IDevice.Name;
                         StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, deviceName, this));
                     }
                 }
@@ -83,12 +83,12 @@ namespace FluidicsSDK.ModelCheckers
         //Uses a depth-first search to find cycles.
         private bool FindCycles(Port startingSource, List<Port> visitedPorts, List<Connection> pathTaken, Connection PrevConnection=null)
         {
-            bool cycleFound = false;
+            var cycleFound = false;
             visitedPorts.Add(startingSource);
             // check where every connection from the starting source goes
-            foreach(Connection conn in startingSource.Connections)
+            foreach(var conn in startingSource.Connections)
             {                
-                Port otherEnd = conn.FindOppositeEndOfConnection(startingSource);
+                var otherEnd = conn.FindOppositeEndOfConnection(startingSource);
                 if (PrevConnection == null || conn.ID != PrevConnection.ID) // if conn.ID is the same as PrevConnection.ID, ignore it, since that's the connection we just traveled, and we don't want to go backwards as this would be detected as a cycle, when in reality it is not.
                 {
                     pathTaken.Add(conn);

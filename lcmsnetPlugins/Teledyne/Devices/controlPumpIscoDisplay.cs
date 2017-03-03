@@ -140,7 +140,7 @@ namespace LcmsNet.Devices.Pumps
             private void SetPumpIndex(int indx)
             {
                 mint_PumpIndx = indx;
-                string pumpStr = "";
+                var pumpStr = "";
                 switch (mint_PumpIndx)
                 {
                     case 0:
@@ -201,7 +201,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 if (mtextBox_ActualFlow.InvokeRequired)
                 {
-                    delegateUpdateNumericDisplayHandler d = new delegateUpdateNumericDisplayHandler(UpdateFlowrateDisplay);
+                    var d = new delegateUpdateNumericDisplayHandler(UpdateFlowrateDisplay);
                     mtextBox_ActualFlow.BeginInvoke(d, new object[] { newFlow });
                 }
                 else mtextBox_ActualFlow.Text = newFlow.ToString();
@@ -215,7 +215,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 if (mtextBox_ActualPressure.InvokeRequired)
                 {
-                    delegateUpdateNumericDisplayHandler d = new delegateUpdateNumericDisplayHandler(UpdatePressDisplay);
+                    var d = new delegateUpdateNumericDisplayHandler(UpdatePressDisplay);
                     mtextBox_ActualPressure.BeginInvoke(d, new object[] { newPres });
                 }
                 else mtextBox_ActualPressure.Text = newPres.ToString();
@@ -229,7 +229,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 if (mtextBox_ActualVolume.InvokeRequired)
                 {
-                    delegateUpdateNumericDisplayHandler d = new delegateUpdateNumericDisplayHandler(UpdateVolumeDisplay);
+                    var d = new delegateUpdateNumericDisplayHandler(UpdateVolumeDisplay);
                     mtextBox_ActualVolume.BeginInvoke(d, new object[] { newVol });
                 }
                 else mtextBox_ActualVolume.Text = newVol.ToString("##0.000");
@@ -243,7 +243,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 if (mtextBox_Setpoint.InvokeRequired)
                 {
-                    delegateUpdateNumericDisplayHandler d = new delegateUpdateNumericDisplayHandler(UpdateSetPointDisplay);
+                    var d = new delegateUpdateNumericDisplayHandler(UpdateSetPointDisplay);
                     mtextBox_Setpoint.BeginInvoke(d, new object[] { newSetpoint });
                 }
                 else mtextBox_Setpoint.Text = newSetpoint.ToString();
@@ -255,7 +255,7 @@ namespace LcmsNet.Devices.Pumps
             /// <param name="newStatus"></param>
             private void UpdateProblemLabel(enumIscoProblemStatus newStatus)
             {
-                string tmpStr = "";
+                var tmpStr = "";
                 switch (newStatus)
                 {
                     case enumIscoProblemStatus.CylinderBottom:
@@ -292,7 +292,7 @@ namespace LcmsNet.Devices.Pumps
             {
                 if (mlabel_ProbStatus.InvokeRequired)
                 {
-                    delegateUpdateTextDisplayHandler d = new delegateUpdateTextDisplayHandler(UpdateProblemLabelDelegated);
+                    var d = new delegateUpdateTextDisplayHandler(UpdateProblemLabelDelegated);
                     mlabel_ProbStatus.BeginInvoke(d, new object[] { newValue });
                 }
                 else mlabel_ProbStatus.Text = newValue;

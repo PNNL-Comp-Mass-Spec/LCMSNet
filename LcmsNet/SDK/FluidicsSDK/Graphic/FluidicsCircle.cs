@@ -70,7 +70,7 @@ namespace FluidicsSDK.Graphic
                 base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
                 base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
                 //base.FillColor = Color.FromArgb(alpha, base.FillColor.R, base.FillColor.G, base.FillColor.B);
-                    Rectangle scaledRect = new Rectangle();
+                    var scaledRect = new Rectangle();
                     scaledRect.Location = new Point((int)(m_rect.Location.X * scale), (int)(m_rect.Location.Y * scale));
                     scaledRect.Size = new Size((int)(m_rect.Size.Width * scale), (int)(m_rect.Height * scale));
                     Pen drawingPen;

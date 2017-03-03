@@ -24,7 +24,7 @@ namespace LcmsNetDataClasses.Experiment
         /// <returns></returns>
         public List<classSampleValidationError> ValidateSamples(classSampleData sample)
         {
-            List<classSampleValidationError> errors = new List<classSampleValidationError>();
+            var errors = new List<classSampleValidationError>();
 
             ///////////////////////////////////////////////////////////////////////////////////////////// 
             /// Validate the LC-Method
@@ -35,19 +35,19 @@ namespace LcmsNetDataClasses.Experiment
             }
             else
             {
-                classDeviceManager manager = classDeviceManager.Manager;
+                var manager = classDeviceManager.Manager;
                 if (sample.LCMethod.Events.Count < 1)
                 {
                     errors.Add(new classSampleValidationError("The LC-Method was not selected or does not contain any events.", enumSampleValidationError.LCMethodHasNoEvents));
                 }
                 else
                 {
-                    foreach (classLCEvent lcEvent in sample.LCMethod.Events)
+                    foreach (var lcEvent in sample.LCMethod.Events)
                     {
                         ////////////////////////////////////////////////////////////////////////////////////////// 
                         /// VALIDATE THE DEVICE!!!
                         //////////////////////////////////////////////////////////////////////////////////////////
-                        IDevice device = lcEvent.Device;
+                        var device = lcEvent.Device;
                         /// 
                         /// Make sure the device is not null and somehow snuck in
                         /// 
@@ -91,18 +91,18 @@ namespace LcmsNetDataClasses.Experiment
             /// First we want to bin the samples based on block number, then we want to
             /// figure out for each block if we are scheduled to run on the same column.
             /// 
-            Dictionary<string, List<classSampleData>> tempDictionary = new Dictionary<string,List<classSampleData>>();
-            foreach (classSampleData sample in samples)
+            var tempDictionary = new Dictionary<string,List<classSampleData>>();
+            foreach (var sample in samples)
             {
-                int block = sample.DmsData.Block;
-                int batch = sample.DmsData.Batch;
+                var block = sample.DmsData.Block;
+                var batch = sample.DmsData.Batch;
                 // If the items are blocked, then they need to run on one column.  For batched samples we dont care.
                 if (block < 1)
                 {
                     continue;
                 }
 
-                string key = batch.ToString() + "-" + block.ToString();
+                var key = batch.ToString() + "-" + block.ToString();
                 if (tempDictionary.ContainsKey(key))
                 {
                     tempDictionary[key].Add(sample);
@@ -117,25 +117,25 @@ namespace LcmsNetDataClasses.Experiment
             /// I could probably make this one line of code...
             /// But here we are seeing what blocks are distributed across columns.
             /// 
-            List<classSampleData> badSamples = new List<classSampleData>();
+            var badSamples = new List<classSampleData>();
             /// 
             /// Iterate over the batches
             /// 
-            foreach (string itemKey in tempDictionary.Keys)
+            foreach (var itemKey in tempDictionary.Keys)
             {
                 /// 
                 /// Iterate over the blocks
                 /// 
-                List<classSampleData> tempSamples   = tempDictionary[itemKey];
-                classLCMethod method                = tempSamples[0].LCMethod;
-                int columnID                        = tempSamples[0].ColumnData.ID;
+                var tempSamples   = tempDictionary[itemKey];
+                var method                = tempSamples[0].LCMethod;
+                var columnID                        = tempSamples[0].ColumnData.ID;
 
                 /// 
                 /// Find a mis match between any of the columns. By communicative property
                 /// we only need to use one of the column id values to do this and perform a
                 /// O(n) search.
                 /// 
-                for (int i = 1; i < tempSamples.Count; i++)
+                for (var i = 1; i < tempSamples.Count; i++)
                 {
                     /// 
                     /// Make sure we also look at the sample method ... this is important.
