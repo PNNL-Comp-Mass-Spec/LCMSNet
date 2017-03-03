@@ -127,11 +127,9 @@ namespace FluidicsSDK.Devices
                 // return new size, as width - smallest x = total width of the device
                 // and height - smallest y = total height of the device.
                 return new Size(width, height);
-            }
-            set
-            {
-            }
+            }            
         }
+
         #region IFluidicsDevice Members
 
         public event EventHandler DeviceSaveRequired

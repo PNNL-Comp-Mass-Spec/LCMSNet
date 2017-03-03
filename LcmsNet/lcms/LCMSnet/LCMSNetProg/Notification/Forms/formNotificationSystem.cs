@@ -930,11 +930,12 @@ namespace LcmsNet.Notification.Forms
             }
         }
 
-        private void mtextBox_path_TextChanged(object sender, EventArgs e)
-        {
-            Settings.Default.NotificationDirectoryPath = mtextBox_path.Text;
-            Settings.Default.Save();
-        }
+        // Unused
+        //private void mtextBox_path_TextChanged(object sender, EventArgs e)
+        //{
+        //    Settings.Default.NotificationDirectoryPath = mtextBox_path.Text;
+        //    Settings.Default.Save();
+        //}
 
         private void mbutton_save_Click(object sender, EventArgs e)
         {

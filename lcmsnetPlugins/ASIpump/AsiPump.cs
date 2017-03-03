@@ -476,16 +476,7 @@ namespace ASIpump
         #endregion
 
         #region Performance and Error Notifications
-        /// <summary>
-        /// Writes the pump method time-table to the directory provided.
-        /// </summary>
-        /// <param name="filepath"></param>
-        /// <param name="methodName"></param>
-        /// <param name="methodData"></param>
-        private void WriteMethod(string directoryPath, string methodName)
-        {
-            
-        }
+
         /// <summary>
         /// Writes the required data to the directory path provided.
         /// </summary>

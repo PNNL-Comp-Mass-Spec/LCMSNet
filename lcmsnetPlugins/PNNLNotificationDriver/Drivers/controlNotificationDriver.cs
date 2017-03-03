@@ -3,6 +3,7 @@ using LcmsNetDataClasses.Devices;
 
 namespace FailureInjector.Drivers
 {
+    [Obsolete("This class appears unused")]
     public partial class controlNotificationDriver : controlBaseDeviceControl, IDeviceControl
     {
         /// <summary>
@@ -26,15 +27,6 @@ namespace FailureInjector.Drivers
             SetBaseDevice(m_driver);
         }
         #region IDeviceControl Members
-
-        public event DelegateNameChanged  NameChanged;
-        public event DelegateSaveRequired SaveRequired;
-
-        public bool Running
-        {
-            get;
-            set;
-        }
 
         public IDevice Device
         {
