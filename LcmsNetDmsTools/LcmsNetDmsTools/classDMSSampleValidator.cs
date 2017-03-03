@@ -138,12 +138,6 @@ namespace LcmsNetDmsTools
             return true;
         }
      
-        public Type DMSValidatorControl
-        {
-            get
-            {
-                return typeof(controlDMSValidator);
-            }
-        }    
+        public Type DMSValidatorControl => typeof(controlDMSValidator);
     }
 }

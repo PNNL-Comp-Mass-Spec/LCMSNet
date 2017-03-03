@@ -149,13 +149,7 @@ namespace FluidicsSDK.Graphic
             /// <summary>
             /// Property for finding the center point of the circle
             /// </summary>
-            public Point Center
-            {
-                get
-                {
-                    return new Point(Loc.X + m_myRadius, Loc.Y + m_myRadius);
-                }
-            }
+            public Point Center => new Point(Loc.X + m_myRadius, Loc.Y + m_myRadius);
 
         #endregion
     }

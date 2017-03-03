@@ -60,9 +60,9 @@ namespace LcmsNet.Devices.Pumps
             }
 
             // Pump index
-            public int PumpIndex { get { return m_PumpIndx; } }
+            public int PumpIndex => m_PumpIndx;
 
-            // Operation mode
+        // Operation mode
             public enumIscoOperationMode OperationMode { set { SetOperationModeDisplays(value); } }
 
             // Max flow setpoint

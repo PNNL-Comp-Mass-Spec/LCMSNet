@@ -92,10 +92,7 @@ namespace DemoPluginLibrary
         #endregion
 
         #region Properties
-        public enumDeviceType DeviceType
-        {
-            get { return enumDeviceType.Component; }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
 
         public enumDeviceErrorStatus ErrorType
         {

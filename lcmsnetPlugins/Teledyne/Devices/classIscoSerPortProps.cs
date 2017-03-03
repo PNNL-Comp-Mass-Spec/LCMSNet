@@ -43,8 +43,9 @@ namespace LcmsNet.Devices.Pumps
             public Handshake HandShake { get; set; }
             public Parity Parity { get; set; }
             public string NewLine { get; set; }
-            public int UnitAddressMin { get { return CONST_MIN_UNIT_ADDR; } }
-            public int UnitAddressMax { get { return CONST_MAX_UNIT_ADDR; } }
+            public int UnitAddressMin => CONST_MIN_UNIT_ADDR;
+        public int UnitAddressMax => CONST_MAX_UNIT_ADDR;
+
         #endregion
 
         #region "Constructors"

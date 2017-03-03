@@ -26,7 +26,7 @@ namespace LcmsNet.Devices.Pumps
         #region "Class variables"
             ZedGraphControl[] mplot_PumpGraphArray;
             
-            bool m_FirstPointReceived = false;
+            bool m_FirstPointReceived;
             DateTime mdate_GraphStartTime = LcmsNetSDK.TimeKeeper.Instance.Now;//DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             List<DateTime>[] m_SampleTimes;
             List<double>[] m_FlowData;

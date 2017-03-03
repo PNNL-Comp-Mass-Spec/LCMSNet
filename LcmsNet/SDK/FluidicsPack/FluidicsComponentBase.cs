@@ -81,10 +81,7 @@ namespace FluidicsPack
             set;
         }
 
-        public enumDeviceType DeviceType
-        {
-            get { return enumDeviceType.Fluidics; }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Fluidics;
 
         public bool Emulation
         {

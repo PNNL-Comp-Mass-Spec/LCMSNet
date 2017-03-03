@@ -430,13 +430,8 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the device type.
         /// </summary>
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         #endregion
 
         #region IDevice Members

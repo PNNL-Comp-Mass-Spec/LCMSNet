@@ -224,13 +224,8 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets or sets the serial port.
         /// </summary>
-        public SerialPort Port
-        {
-            get
-            {
-                return m_serialPort;
-            }         
-        }
+        public SerialPort Port => m_serialPort;
+
         /// <summary>
         /// 
         /// </summary>
@@ -279,23 +274,13 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets the last measured position of the valve.
         /// </summary>
-        public int LastMeasuredPosition
-        {
-            get
-            {
-                return m_lastMeasuredPosition;
-            }
-        }
+        public int LastMeasuredPosition => m_lastMeasuredPosition;
+
         /// <summary>
         /// Gets the last position sent to the valve.
         /// </summary>
-        public int LastSentPosition
-        {
-            get
-            {
-                return m_lastSentPosition;
-            }
-        }
+        public int LastSentPosition => m_lastSentPosition;
+
         /// <summary>
         /// 
         /// </summary>
@@ -987,13 +972,8 @@ namespace LcmsNet.Devices.Valves
         /// Gets or sets the abort event for scheduling.
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }        
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }

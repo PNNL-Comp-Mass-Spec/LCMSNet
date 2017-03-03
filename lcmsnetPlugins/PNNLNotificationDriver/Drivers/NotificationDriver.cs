@@ -65,10 +65,8 @@ namespace FailureInjector.Drivers
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType
-        {
-            get { return enumDeviceType.Component; }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
         /// </summary>

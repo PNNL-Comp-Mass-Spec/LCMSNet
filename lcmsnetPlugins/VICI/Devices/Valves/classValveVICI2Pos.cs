@@ -208,13 +208,8 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets or sets the serial port.
         /// </summary>
-        public SerialPort Port
-        {
-            get
-            {
-                return m_serialPort;
-            }
-        }
+        public SerialPort Port => m_serialPort;
+
         /// <summary>
         /// 
         /// </summary>
@@ -266,23 +261,13 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets the last measured position of the valve.
         /// </summary>
-        public TwoPositionState LastMeasuredPosition
-        {
-            get
-            {
-                return m_lastMeasuredPosition;
-            }
-        }
+        public TwoPositionState LastMeasuredPosition => m_lastMeasuredPosition;
+
         /// <summary>
         /// Gets the last position sent to the valve.
         /// </summary>
-        public TwoPositionState LastSentPosition
-        {
-            get
-            {
-                return m_lastSentPosition;
-            }
-        }
+        public TwoPositionState LastSentPosition => m_lastSentPosition;
+
         /// <summary>
         /// Gets and sets the valve's ID in the software. DOES NOT CHANGE THE VALVE'S HARDWARE ID.
         /// </summary>
@@ -950,15 +935,9 @@ namespace LcmsNet.Devices.Valves
               set;
           }
 
-          public enumDeviceType DeviceType
-          {
-              get
-              {
-                  return enumDeviceType.Component;
-              }
-          }
+          public enumDeviceType DeviceType => enumDeviceType.Component;
 
-          /*public FinchComponentData GetData()
+        /*public FinchComponentData GetData()
           {
               FinchComponentData component = new FinchComponentData();
               component.Status = Status.ToString();

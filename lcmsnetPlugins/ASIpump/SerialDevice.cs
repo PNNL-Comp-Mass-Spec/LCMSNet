@@ -14,12 +14,12 @@ namespace ASIpump
     {
         public delegate void MessageReplyDelegate(string sentStr, string replyStr);
 
-        public delegate void MessageSentDelegate( string rcvStr);
-        public event MessageSentDelegate MessageSent = null;
+        public delegate void MessageSentDelegate(string rcvStr);
+        public event MessageSentDelegate MessageSent;
 
 
         public delegate void MessageStreamDelegate(string rcvStr);
-        public event MessageStreamDelegate MessageStreamed = null;
+        public event MessageStreamDelegate MessageStreamed;
 
         protected string mConcatStr = "";
         protected string mReplyStr = "";
@@ -129,7 +129,8 @@ namespace ASIpump
             get { return mPort.BaudRate; }
             set
             {
-                if (value == 0) value = 9600;
+                if (value == 0)
+                    value = 9600;
                 mPort.BaudRate = value;
             }
         }
@@ -143,7 +144,8 @@ namespace ASIpump
             get { return mPort.DataBits; }
             set
             {
-                if (value == 0) value = 8;
+                if (value == 0)
+                    value = 8;
                 mPort.DataBits = value;
             }
         }
@@ -157,7 +159,8 @@ namespace ASIpump
             get { return mPort.StopBits; }
             set
             {
-                if (value == System.IO.Ports.StopBits.None) value = System.IO.Ports.StopBits.One;
+                if (value == StopBits.None)
+                    value = StopBits.One;
                 mPort.StopBits = value;
             }
         }
@@ -210,7 +213,8 @@ namespace ASIpump
         // failure to get a reply returns a null
         public string Query(string queryString)
         {
-            if (mPort.IsOpen == false) return null;
+            if (mPort.IsOpen == false)
+                return null;
 
             mReplyStr = null;
             mConcatStr = "";
@@ -241,7 +245,7 @@ namespace ASIpump
             }
 
             return mReplyStr;
-        }       
+        }
 
         public virtual void ParseConcatStr()
         {
@@ -250,7 +254,7 @@ namespace ASIpump
 
                 while (mConcatStr.Contains(mReplyDelimeter))
                 {
-                    var pos = mConcatStr.IndexOf(mReplyDelimeter);
+                    var pos = mConcatStr.IndexOf(mReplyDelimeter, StringComparison.Ordinal);
                     mReplyStr += mConcatStr.Substring(0, pos);
                     mConcatStr = mConcatStr.Substring(pos + mReplyDelimeter.Length);
                 }
@@ -264,7 +268,7 @@ namespace ASIpump
             }
         }
 
-        private void mPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        private void mPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var inputStr = mPort.ReadExisting();
 
@@ -273,9 +277,9 @@ namespace ASIpump
             ParseConcatStr();
         }
 
-        private void mPort_ErrorReceived(object sender, System.IO.Ports.SerialErrorReceivedEventArgs e)
+        private void mPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
-            
+
         }
     }
 }

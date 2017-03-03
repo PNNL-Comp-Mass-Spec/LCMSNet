@@ -73,24 +73,12 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets the firmware version, as retrieved from the U3
         /// </summary>
-        public double FirmwareVersion
-        {
-            get
-            {
-                return mdouble_firmwareVersion;
-            }
-        }
+        public double FirmwareVersion => mdouble_firmwareVersion;
 
         /// <summary>
         /// Gets the driver version, as set by the GetDriverVersion() driver function
         /// </summary>
-        public double DriverVersion
-        {
-            get
-            {
-                return mdouble_driverVersion;
-            }
-        }
+        public double DriverVersion => mdouble_driverVersion;
 
         #endregion
 

@@ -7,12 +7,9 @@ namespace ASIpump
     public partial class AsiUI : UserControl, IDeviceControl
     {
 
-        private AsiPump _Pump = null;
+        private AsiPump _Pump;
 
-        public AsiPump Pump
-        {
-            get { return _Pump; }
-        }
+        public AsiPump Pump => _Pump;
 
         public AsiUI()
         {

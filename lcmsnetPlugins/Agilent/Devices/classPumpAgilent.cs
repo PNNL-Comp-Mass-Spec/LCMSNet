@@ -369,13 +369,8 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets the system device type.
         /// </summary>
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>

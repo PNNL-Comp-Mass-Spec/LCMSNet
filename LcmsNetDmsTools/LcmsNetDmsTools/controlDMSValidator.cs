@@ -223,13 +223,8 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets to the flag indicating if this sample is valid or not.
         /// </summary>
-        public override bool IsSampleValid
-        {
-            get
-            {
-                return m_isOK;
-            }
-        }
+        public override bool IsSampleValid => m_isOK;
+
         #endregion
 
         #region Form Event Handlers

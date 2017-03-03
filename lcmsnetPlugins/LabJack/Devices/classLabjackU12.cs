@@ -80,24 +80,12 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets the firmware version, as set by the getFirmwareVersion() function
         /// </summary>
-        public float FirmwareVersion
-        {
-            get
-            {
-                return m_firmwareVersion;
-            }
-        }
+        public float FirmwareVersion => m_firmwareVersion;
 
         /// <summary>
         /// Gets the driver version, as set by the getDriverVersion() function
         /// </summary>
-        public float DriverVersion
-        {
-            get
-            {
-                return m_driverVersion;
-            }
-        }
+        public float DriverVersion => m_driverVersion;
 
         #endregion
 

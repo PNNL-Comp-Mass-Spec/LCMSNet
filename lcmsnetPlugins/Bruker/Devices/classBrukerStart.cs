@@ -67,11 +67,11 @@ namespace LcmsNet.Devices.BrukerStart
         readonly string m_BrukerNetName;
         readonly int m_BrukerPort = -256;
             classBrukerComConstants.SxcReplies mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
-            bool m_AcquisitionInProgress = false;
+            bool m_AcquisitionInProgress;
         readonly Timer mobject_CmdTimeoutTimer;
-            bool m_DeviceError = false;
+            bool m_DeviceError;
 //          string m_DeviceErrorMessage = "";
-            bool m_CmdTimedOut = false;
+            bool m_CmdTimedOut;
         #endregion
 
         #region "Events"
@@ -979,13 +979,8 @@ new classDeviceErrorEventArgs(msg,
              get;
              set;
          }
-         public enumDeviceType DeviceType
-         {
-             get
-             {
-                 return enumDeviceType.Component;
-             }
-         }
+         public enumDeviceType DeviceType => enumDeviceType.Component;
+
         #endregion
 
         #region IDevice Members

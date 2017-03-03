@@ -73,68 +73,26 @@ namespace ASIpump
         // calculated values
 
         [Category("Calculated Values")]
-        public double TotalVolumePumpB
-        {
-            get
-            {
-                return  ((GradientTime/60.0)*TotalFlow/2.0) + (((StartPercentB/100.0)*TotalFlow)*(InitialIsoTime/60.0)) +
-                        (((StartPercentA/100.0)*TotalFlow)*(FinalIsoTime/60.0));
-            }
-        }
+        public double TotalVolumePumpB => ((GradientTime/60.0)*TotalFlow/2.0) + (((StartPercentB/100.0)*TotalFlow)*(InitialIsoTime/60.0)) +
+                                          (((StartPercentA/100.0)*TotalFlow)*(FinalIsoTime/60.0));
 
         [Category("Calculated Values")]
-        public double NumPlateaus
-        {
-            get
-            {
-                return (StartSpeedB - StartSpeedA);
-            }
-        }
+        public double NumPlateaus => (StartSpeedB - StartSpeedA);
 
         [Category("Calculated Values")]
-        public double StartSpeedA
-        {
-            get
-            {
-                return ((((StartPercentA / 100.0) * TotalFlow) / 60.0) * uStepPeruL);
-            }
-        }
+        public double StartSpeedA => ((((StartPercentA / 100.0) * TotalFlow) / 60.0) * uStepPeruL);
 
         [Category("Calculated Values")]
-        public double StartSpeedB
-        {
-            get
-            {
-                return ((((TotalFlow / 100.0) * StartPercentB) / 60.0) * uStepPeruL);
-            }
-        }
+        public double StartSpeedB => ((((TotalFlow / 100.0) * StartPercentB) / 60.0) * uStepPeruL);
 
         [Category("Calculated Values")]
-        public double PlateauTime
-        {
-            get
-            {
-                return (1.0 / (NumPlateaus / GradientTime));
-            }
-        }
+        public double PlateauTime => (1.0 / (NumPlateaus / GradientTime));
 
         [Category("Calculated Values")]
-        public double FullPlateuTime
-        {
-            get
-            {
-                return (PlateauTime * 1000.0)-7.0;
-            }
-        }
+        public double FullPlateuTime => (PlateauTime * 1000.0)-7.0;
 
         [Category("Calculated Values")]
-        public double PartialPlateuTime
-        {
-            get
-            {
-                return (1000.0 * (NumPlateaus - (int)NumPlateaus) * PlateauTime);
-            }
-        }
+        public double PartialPlateuTime => (1000.0 * (NumPlateaus - (int)NumPlateaus) * PlateauTime);
 
         #endregion
 
@@ -295,13 +253,8 @@ namespace ASIpump
         /// <summary>
         /// Gets the system device type.
         /// </summary>
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>

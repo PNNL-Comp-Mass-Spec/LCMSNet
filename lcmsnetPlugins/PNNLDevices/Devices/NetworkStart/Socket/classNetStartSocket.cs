@@ -682,13 +682,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             get;
             set;
         }
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         #endregion
         
         /*/// <summary>

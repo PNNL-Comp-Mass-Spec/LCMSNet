@@ -59,7 +59,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The current vial to use.
         /// </summary>
-        private int m_vial = 0;
+        private int m_vial;
 
         /// <summary>
         /// The valid range of vials.
@@ -343,13 +343,8 @@ namespace LcmsNet.Devices.Pal
             set;
         }
 
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }    
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         #endregion
 
         #region Methods

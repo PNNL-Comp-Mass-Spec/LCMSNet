@@ -23,8 +23,8 @@ namespace FluidicsSDKUnitTests
     [TestFixture]
     public class ModelCheckerTestClass
     {
-        ConnectionManager cm = null;
-        FluidicsDeviceManager dm = null;
+        ConnectionManager cm;
+        FluidicsDeviceManager dm;
        
         [SetUp]
         public void SetUp()

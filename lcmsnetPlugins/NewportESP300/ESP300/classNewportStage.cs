@@ -700,13 +700,7 @@ namespace Newport.ESP300
         /// <summary>
         /// Gets the status of the serial port
         /// </summary>
-        public bool PortOpen
-        {
-            get
-            {
-                return Port.IsOpen;
-            }
-        }
+        public bool PortOpen => Port.IsOpen;
 
         /// <summary>
         /// Gets or Sets the number of Axes available on this ESP300.
@@ -978,13 +972,8 @@ namespace Newport.ESP300
             set;
         }
 
-        public enumDeviceType DeviceType
-        {
-            get
-            {
-                return enumDeviceType.Component;
-            }
-        }        
+        public enumDeviceType DeviceType => enumDeviceType.Component;
+
         #endregion
 
         #region Events

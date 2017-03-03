@@ -28,10 +28,8 @@ namespace LcmsNet.Devices.Pumps
             /// </summary>
             /// <param name="indx">Index of requested control</param>
             /// <returns>Requested control</returns>
-            public controlPumpIscoDisplay this[int indx]
-            {
-                get { return (controlPumpIscoDisplay)this.List[indx]; }
-            }
+            public controlPumpIscoDisplay this[int indx] => (controlPumpIscoDisplay)this.List[indx];
+
         #endregion
 
         #region "Constructors"

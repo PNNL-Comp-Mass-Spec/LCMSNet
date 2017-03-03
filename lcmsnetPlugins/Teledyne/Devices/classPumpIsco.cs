@@ -47,7 +47,7 @@ namespace LcmsNet.Devices.Pumps
             int m_UnitAddr;
 
             // Flags for initialization
-            bool m_Initialized = false;
+            bool m_Initialized;
             bool m_Initializing = true;
 
             // timer for autoupdating pump status
@@ -153,12 +153,9 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Class initialization state
             /// </summary>
-            public bool Initialized
-            {
-                get { return m_Initialized; }
-            }
+            public bool Initialized => m_Initialized;
 
-            /// <summary>
+        /// <summary>
             /// Number of pumps connected to this controller (1 min, 3 max)
             /// </summary>
             [classPersistenceAttribute("PumpCount")]
@@ -185,14 +182,14 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Minimum pump controller address
             /// </summary>
-            public int UnitAddressMin { get { return m_PortProps.UnitAddressMin; } }
+            public int UnitAddressMin => m_PortProps.UnitAddressMin;
 
-            /// <summary>
+        /// <summary>
             /// Maximum pump controller address
             /// </summary>
-            public int UnitAddressMax { get { return m_PortProps.UnitAddressMax; } }
+            public int UnitAddressMax => m_PortProps.UnitAddressMax;
 
-            /// <summary>
+        /// <summary>
             /// Control mode (local/remote)
             /// </summary>
             public enumIscoControlMode ControlMode
@@ -213,7 +210,8 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Current data for all pumps
             /// </summary>
-            public classPumpIscoData[] PumpData { get { return m_PumpData; } }
+            public classPumpIscoData[] PumpData => m_PumpData;
+
         #endregion
 
         #region "Constructors"
@@ -2211,10 +2209,8 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Device type for component
             /// </summary>
-            public enumDeviceType DeviceType
-            {
-                get { return enumDeviceType.Component; }
-            }
+            public enumDeviceType DeviceType => enumDeviceType.Component;
+
         #endregion
 
         #region "IDevice Methods"

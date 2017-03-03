@@ -82,13 +82,7 @@ namespace LcmsNetDmsTools
         #endregion
 
         #region "Properties"
-        public bool ForceValidation
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool ForceValidation => true;
 
         public string ErrMsg
         {
@@ -102,13 +96,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        public string DMSVersion
-        {
-            get
-            {
-                return configuration[CONST_DMS_VERSION_KEY];
-            }
-        }
+        public string DMSVersion => configuration[CONST_DMS_VERSION_KEY];
 
         /// <summary>
         /// Controls whether datasets are loaded when LoadCacheFromDMS() is called

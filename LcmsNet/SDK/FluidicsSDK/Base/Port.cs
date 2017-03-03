@@ -219,15 +219,9 @@ namespace FluidicsSDK.Base
             /// <summary>
             /// property for getting the center of the port.
             /// </summary>
-            public Point Center
-            {
-                get
-                {
-                    return m_primitive.Center;
-                }
-            }
+            public Point Center => m_primitive.Center;
 
-            public List<Connection> Connections
+        public List<Connection> Connections
             {
                 get
                 {

@@ -187,10 +187,7 @@ namespace DemoPluginLibrary
             set;
         }
 
-        public enumDeviceType DeviceType
-        {
-            get { return enumDeviceType.Component; }
-        }
+        public enumDeviceType DeviceType => enumDeviceType.Component;
 
         public bool Emulation
         {

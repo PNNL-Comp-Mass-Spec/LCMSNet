@@ -44,10 +44,8 @@ namespace LogViewer
                 }
             }
 
-            public string ConnString
-            {
-                get { return m_ConnStr; }
-            }
+            public string ConnString => m_ConnStr;
+
         #endregion
 
         #region "Constructors"

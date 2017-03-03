@@ -27,7 +27,7 @@ namespace FluidicsSDK.Base
         protected long m_id;
         //we want each connection to have a unique id, this tracks the next available id..first connection made will get ID 0, next connection 1, next connection 2, etc.
         //no need for it to be a GUUID or such, since it's incredibly unlikely that any program would need 2^64 -1 ports.
-        protected static long availableId = 0;
+        protected static long availableId;
         #endregion
 
         #region Methods

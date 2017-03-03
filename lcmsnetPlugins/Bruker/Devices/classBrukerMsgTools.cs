@@ -26,20 +26,20 @@ namespace LcmsNet.Devices.BrukerStart
         #endregion
 
         #region "Class variables"
-            Socket mobject_Socket = null;
+            Socket mobject_Socket;
         readonly byte[] mbyte_DataBuffer = new byte[128];
             IAsyncResult mobject_AsyncResult;
             AsyncCallback mobjecct_RcxCallback;
         readonly Queue<byte> mobject_IncomingBytes = new Queue<byte>();
-            classFtmsResponse mobject_ResponseData = null;
-            bool m_Connected = false;
+            classFtmsResponse mobject_ResponseData;
+            bool m_Connected;
             string m_OutputFolderLocal = "";
             string m_MethodFolderLocal = "";
             string m_InstAddress = "";
             int m_InstPort = -256;
             string m_Msg;
             bool m_ListenToSxc = true;
-            int m_ZeroByteMsgCount = 0;
+            int m_ZeroByteMsgCount;
         #endregion
 
         #region "Delegats"
@@ -55,11 +55,13 @@ namespace LcmsNet.Devices.BrukerStart
         /// <summary>
         /// 
         /// </summary>
-        public bool SocketConneted { get { return m_Connected; }}
+        public bool SocketConneted => m_Connected;
+
         /// <summary>
         /// 
         /// </summary>
-        public string Msg { get { return m_Msg; }}
+        public string Msg => m_Msg;
+
         /// <summary>
         /// Gets or sets the IP Address
         /// </summary>

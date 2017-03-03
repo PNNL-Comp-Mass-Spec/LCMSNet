@@ -16,7 +16,7 @@ namespace ASIpump
         }
 
 
-        private object mDisplayedObject = null;
+        private object mDisplayedObject;
         public object DisplayedObject
         {
             get { return mDisplayedObject; }
