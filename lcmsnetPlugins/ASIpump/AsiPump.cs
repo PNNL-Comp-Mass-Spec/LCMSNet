@@ -225,7 +225,7 @@ namespace ASIpump
         public event EventHandler<classDeviceErrorEventArgs> Error;
         /// <summary>
         /// List of times monitoring data was received.
-        /// </summar;y>
+        /// </summary>
         public List<DateTime> mlist_times;
         /// <summary>
         /// List of pressures used throughout the run.

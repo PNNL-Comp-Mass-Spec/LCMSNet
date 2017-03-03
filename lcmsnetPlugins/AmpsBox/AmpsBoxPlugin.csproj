@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -93,7 +93,7 @@
       <HintPath>..\..\..\lib\SDK\AmpsBox\AmpsBoxSdk.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\LcmsNetNoPluginsTest\lib\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\LcmsNet\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -107,7 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmpsBoxDevicePlugin.cs" />
-    <Compile Include="AmpsBoxControl.cs" />
+    <Compile Include="AmpsBoxControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="AmpsBoxControl.Designer.cs">
       <DependentUpon>AmpsBoxControl.cs</DependentUpon>
     </Compile>
@@ -148,8 +150,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetDir)*.dll "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
-copy $(TargetDir)*.dll "$(ProjectDir)..\..\..\lib\plugins\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /d $(TargetDir)*.dll "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
+xcopy /y /f /d $(TargetDir)*.dll "$(ProjectDir)..\..\..\lib\plugins\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

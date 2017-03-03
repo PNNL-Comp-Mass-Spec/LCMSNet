@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -156,8 +156,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetDir)*.dll "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
-copy $(TargetDir)*.dll "$(SolutionDir)..\lib\Plugins\PNNL"
+    <PostBuildEvent>xcopy /y /f /d $(TargetDir)*.dll "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
+xcopy /y /f /d $(TargetDir)*.dll "$(SolutionDir)..\lib\Plugins\PNNL"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
