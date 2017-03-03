@@ -22,7 +22,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
-        private classLabjackU3 mobj_labjack;
+        private readonly classLabjackU3 mobj_labjack;
         /// <summary>
         /// The port on the labjack on which to apply the voltage.
         /// </summary>

@@ -67,13 +67,13 @@ namespace LcmsNet.Devices.Pumps
             classPumpIscoData[] mobj_PumpData;
 
             // Maximum ranges for pump parameters
-            classPumpIscoRangeData[] mobj_PumpRanges;
+        readonly classPumpIscoRangeData[] mobj_PumpRanges;
 
             // Setpoint limits for the pumps
-            classPumpIscoSetpointLimits[] mobj_SetpointLimits;
+        readonly classPumpIscoSetpointLimits[] mobj_SetpointLimits;
 
             // Serial port properties
-            classIscoSerPortProps mobj_PortProps;
+        readonly classIscoSerPortProps mobj_PortProps;
 
             // Serial port object
             SerialPort mobj_SerialPort;
@@ -81,7 +81,7 @@ namespace LcmsNet.Devices.Pumps
             /// <summary>
             /// Pump models
             /// </summary>
-            enumISCOModel[] models; // up to 3 per controller...
+            readonly enumISCOModel[] models; // up to 3 per controller...
         #endregion
 
         #region "Delegates"

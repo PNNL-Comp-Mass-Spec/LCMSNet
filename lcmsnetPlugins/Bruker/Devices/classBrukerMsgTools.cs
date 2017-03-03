@@ -27,10 +27,10 @@ namespace LcmsNet.Devices.BrukerStart
 
         #region "Class variables"
             Socket mobject_Socket = null;
-            byte[] mbyte_DataBuffer = new byte[128];
+        readonly byte[] mbyte_DataBuffer = new byte[128];
             IAsyncResult mobject_AsyncResult;
             AsyncCallback mobjecct_RcxCallback;
-            Queue<byte> mobject_IncomingBytes = new Queue<byte>();
+        readonly Queue<byte> mobject_IncomingBytes = new Queue<byte>();
             classFtmsResponse mobject_ResponseData = null;
             bool mbool_Connected = false;
             string mstring_OutputFolderLocal = "";

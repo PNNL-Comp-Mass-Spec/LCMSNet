@@ -19,7 +19,7 @@ namespace FluidicsSDK.ModelCheckers
 {
     public class FluidicsCycleCheck:IFluidicsModelChecker
     {
-        private List<string> m_notifications;
+        private readonly List<string> m_notifications;
 
         private const string cycle = "Cycle in physical configuration";
 

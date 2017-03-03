@@ -23,7 +23,7 @@ namespace FluidicsSDK.Graphic
         #region Members
         Rectangle m_area;
         Rectangle m_scaledArea;
-        Point[] m_points;
+        readonly Point[] m_points;
         #endregion
 
         #region Methods

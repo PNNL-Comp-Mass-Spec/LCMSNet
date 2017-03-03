@@ -34,7 +34,7 @@ namespace FluidicsSDK.Base
         private IDevice m_lcmsDevice;
         // dictionary of actions that can be taken by this device, keyed by the primitves that
         // activate them
-        private Dictionary<GraphicsPrimitive, Action> m_actions;
+        private readonly Dictionary<GraphicsPrimitive, Action> m_actions;
         //list of primitives that are associated with actions..aka controls.
         protected List<GraphicsPrimitive> m_actionPrims;
         //box to be drawn around controls and info strings, also determines positioning of said controls and strings

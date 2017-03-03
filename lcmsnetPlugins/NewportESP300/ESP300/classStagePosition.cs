@@ -10,7 +10,7 @@ namespace Newport.ESP300
     /// </summary>
     public class classStagePosition
     {
-        private List<float> m_coordinates;
+        private readonly List<float> m_coordinates;
         private int m_numAxes;
 
         public classStagePosition()

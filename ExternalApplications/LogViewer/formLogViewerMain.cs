@@ -28,7 +28,8 @@ namespace LogViewer
         #endregion
 
         #region "Class variables"
-            classViewerSqlTools mobj_SqlTools;
+
+        readonly classViewerSqlTools mobj_SqlTools;
         #endregion
 
         #region "Delegates"

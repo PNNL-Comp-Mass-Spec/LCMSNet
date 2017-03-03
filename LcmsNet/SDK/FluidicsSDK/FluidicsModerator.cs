@@ -26,21 +26,21 @@ namespace FluidicsSDK
     {
         #region Members
         private static classFluidicsModerator m_instance;
-        private ConnectionManager m_conManager;
-        private FluidicsDeviceManager m_fluidicsDevManager;
-        private PortManager m_portManager;
-        private bool m_methodRunning;
-        private List<FluidicsDevice> m_selectedDevices;
-        private List<Connection> m_selectedConnections;
-        private List<Port> m_selectedPorts;
+        private readonly ConnectionManager m_conManager;
+        private readonly FluidicsDeviceManager m_fluidicsDevManager;
+        private readonly PortManager m_portManager;
+        private readonly bool m_methodRunning;
+        private readonly List<FluidicsDevice> m_selectedDevices;
+        private readonly List<Connection> m_selectedConnections;
+        private readonly List<Port> m_selectedPorts;
         private float m_last_scaled_at;
         private Rectangle m_worldView;
         private Rectangle m_scaledWorldView;
         public delegate void ModelChange();
         public event ModelChange ModelChanged;
         private bool m_suspendModelUpdates;
-        private bool m_holdModelUpdates;
-        private List<IFluidicsModelChecker> m_fluidicsCheckers;
+        private readonly bool m_holdModelUpdates;
+        private readonly List<IFluidicsModelChecker> m_fluidicsCheckers;
         private int m_suspendCounter;
 
         #endregion

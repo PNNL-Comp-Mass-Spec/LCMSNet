@@ -44,7 +44,7 @@ namespace LcmsNet.Devices.Valves
         ///     Stop Bits   One
         ///     Data Bits   8
         ///     Handshake   None
-        private System.IO.Ports.SerialPort mobj_serialPort;
+        private readonly System.IO.Ports.SerialPort mobj_serialPort;
         /// <summary>
         /// The last measured position of the valve.
         /// </summary>
@@ -73,8 +73,8 @@ namespace LcmsNet.Devices.Valves
         /// Decides if valve is in emulation mode.
         /// </summary>
         private bool mbool_emulation;
-        private static int mint_rotationDelayTimems = 145;  //milliseconds
-        private static int mint_IDChangeDelayTimems = 325;  //milliseconds
+        private static readonly int mint_rotationDelayTimems = 145;  //milliseconds
+        private static readonly int mint_IDChangeDelayTimems = 325;  //milliseconds
         private const int CONST_READTIMEOUT = 500;          //milliseconds
         private const int CONST_WRITETIMEOUT = 500;         //milliseconds
         #endregion

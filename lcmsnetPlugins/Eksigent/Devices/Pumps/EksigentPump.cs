@@ -56,11 +56,11 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Maps method names to the method path where the physical file is located.
         /// </summary>
-        Dictionary<string, string> m_methodPaths;
+        readonly Dictionary<string, string> m_methodPaths;
         /// <summary>
         /// List of notification strings.
         /// </summary>
-        string[] m_notifyStrings;
+        readonly string[] m_notifyStrings;
         /// <summary>
         /// Total number of status attempts to make.
         /// </summary>

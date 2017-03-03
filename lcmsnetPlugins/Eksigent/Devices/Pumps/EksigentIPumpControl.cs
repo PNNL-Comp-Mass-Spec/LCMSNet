@@ -22,7 +22,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Delegate for updating text on the form from another thread.
         /// </summary>
-        private EventHandler<classDeviceStatusEventArgs> m_statusUpdateDelegate;
+        private readonly EventHandler<classDeviceStatusEventArgs> m_statusUpdateDelegate;
 
         public EksigentPumpControl()
         {

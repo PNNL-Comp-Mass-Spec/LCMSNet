@@ -19,7 +19,7 @@ namespace FluidicsSDK.Managers
     {
         #region Members
         private static ConnectionManager m_instance;
-        private List<Connection> m_connections;
+        private readonly List<Connection> m_connections;
         public event EventHandler<ConnectionChangedEventArgs<Connection>> ConnectionChanged;
   
         #endregion

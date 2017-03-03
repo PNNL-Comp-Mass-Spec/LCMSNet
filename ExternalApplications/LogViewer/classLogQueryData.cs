@@ -21,7 +21,8 @@ namespace LogViewer
     class classLogQueryData
     {
         #region "Class variables"
-            StringDictionary mlist_QueryParams = new StringDictionary();
+
+        readonly StringDictionary mlist_QueryParams = new StringDictionary();
         #endregion
 
         #region "Properties"

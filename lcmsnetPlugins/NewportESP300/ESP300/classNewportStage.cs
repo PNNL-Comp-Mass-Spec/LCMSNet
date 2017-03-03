@@ -21,11 +21,11 @@ namespace Newport.ESP300
         private SerialPort m_port;
         private int m_numAxes;
         private bool m_AtSlowSpeed;
-        private double[] m_SpeedNormal;
-        private bool[] m_motorStatus;
+        private readonly double[] m_SpeedNormal;
+        private readonly bool[] m_motorStatus;
         private bool m_disposed;
         private Dictionary<string, classStagePosition> m_positions;
-        private List<string> m_reportedErrors;
+        private readonly List<string> m_reportedErrors;
         private string m_name;
         private string m_position;
 

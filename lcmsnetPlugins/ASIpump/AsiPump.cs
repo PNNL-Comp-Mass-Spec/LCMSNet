@@ -26,7 +26,7 @@ namespace ASIpump
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
         /// </summary>
-        private Dictionary<string, string> mdict_methods;
+        private readonly Dictionary<string, string> mdict_methods;
 
         #region Program parameters
 

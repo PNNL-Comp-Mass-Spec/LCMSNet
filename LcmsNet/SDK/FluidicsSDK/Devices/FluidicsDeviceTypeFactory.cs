@@ -14,7 +14,7 @@ namespace FluidicsSDK.Devices
         /// <summary>
         /// Map of internally support device types.
         /// </summary>
-        private static Dictionary<Type, Type> m_supportedInterfaces;
+        private static readonly Dictionary<Type, Type> m_supportedInterfaces;
 
         /// <summary>
         /// Default constructor.

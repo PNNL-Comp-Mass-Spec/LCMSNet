@@ -21,8 +21,8 @@ namespace FluidicsPack
         }
 
         private IDevice m_device;
-        private Port m_inputPort;
-        private Port m_exitPort;
+        private readonly Port m_inputPort;
+        private readonly Port m_exitPort;
 
         public FluidicsColumnGlyph()
         {

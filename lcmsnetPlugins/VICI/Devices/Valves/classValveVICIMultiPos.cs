@@ -37,7 +37,7 @@ namespace LcmsNet.Devices.Valves
         ///     Stop Bits   One
         ///     Data Bits   8
         ///     Handshake   None
-        private SerialPort mobj_serialPort;
+        private readonly SerialPort mobj_serialPort;
         /// <summary>
         /// The last measured position of the valve.
         /// </summary>
@@ -79,8 +79,8 @@ namespace LcmsNet.Devices.Valves
         //More positions reduces time it takes to rotate, but we can't know how many positions there are
         //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the
         //method isn't killed over 150ms + concurrency delays.
-        private static int mint_rotationDelayTimems = 4000;
-        private static int mint_IDChangeDelayTimems = 325;
+        private static readonly int mint_rotationDelayTimems = 4000;
+        private static readonly int mint_IDChangeDelayTimems = 325;
         private const int CONST_DEAFULT_TIMEOUT = 1500;
 
         #endregion

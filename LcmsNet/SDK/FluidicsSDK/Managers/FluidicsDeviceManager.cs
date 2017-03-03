@@ -20,7 +20,7 @@ namespace FluidicsSDK.Managers
     {
         #region Members
             private static FluidicsDeviceManager m_instance;
-            private List<FluidicsDevice> m_devices;
+            private readonly List<FluidicsDevice> m_devices;
             public event EventHandler<FluidicsDeviceChangeEventArgs> DeviceAdded;
             public event EventHandler<FluidicsDeviceChangeEventArgs> DeviceRemoved;
             public event EventHandler DeviceChanged;

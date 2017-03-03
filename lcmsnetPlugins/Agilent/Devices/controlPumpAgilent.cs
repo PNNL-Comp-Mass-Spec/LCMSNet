@@ -404,7 +404,7 @@ namespace Agilent.Devices.Pumps
         }
         #endregion
 
-        Random r = new Random();
+        readonly Random r = new Random();
         private void timer1_Tick(object sender, EventArgs e)
         {
             //#if DEBUG

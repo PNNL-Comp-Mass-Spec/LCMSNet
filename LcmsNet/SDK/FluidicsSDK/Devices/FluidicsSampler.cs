@@ -19,8 +19,7 @@ namespace FluidicsSDK.Devices
 {
     class FluidicsSampler: FluidicsDevice, IFluidicsDevice
     {
-
-        Point DEFAULT_POINT = new Point(0, 0);
+        readonly Point DEFAULT_POINT = new Point(0, 0);
 
         public FluidicsSampler()
             : base()

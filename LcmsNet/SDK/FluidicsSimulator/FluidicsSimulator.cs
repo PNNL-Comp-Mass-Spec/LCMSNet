@@ -72,7 +72,7 @@ namespace FluidicsSimulator
         /// <summary>
         /// Stack to hold the completed events, lets us step backwards through simulation.
         /// </summary>
-        private Stack<LcmsNetDataClasses.Method.classLCEvent> m_completedEvents;
+        private readonly Stack<LcmsNetDataClasses.Method.classLCEvent> m_completedEvents;
 
         /// <summary>
         /// Sorted Set allows us to enumerate over simulation event lists as if they were in a priority queue.

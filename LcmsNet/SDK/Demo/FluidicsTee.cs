@@ -10,7 +10,7 @@ namespace DemoPluginLibrary
 {
     public class FluidicsTee:FluidicsDevice
     {
-        Dictionary<string, FluidicsLine> m_primLines;
+        readonly Dictionary<string, FluidicsLine> m_primLines;
         public FluidicsTee()
         {
             m_primLines = new Dictionary<string, FluidicsLine>();

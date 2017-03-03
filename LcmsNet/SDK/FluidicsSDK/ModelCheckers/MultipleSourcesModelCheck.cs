@@ -19,7 +19,7 @@ namespace FluidicsSDK.ModelCheckers
 {
     public class MultipleSourcesModelCheck:IFluidicsModelChecker
     {
-        private List<string> m_notifications;
+        private readonly List<string> m_notifications;
         private const string notification = "Multiple Sources";
         public MultipleSourcesModelCheck()
         {

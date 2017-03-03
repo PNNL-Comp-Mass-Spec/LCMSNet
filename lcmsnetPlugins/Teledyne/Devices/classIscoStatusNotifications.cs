@@ -17,7 +17,7 @@ namespace LcmsNet.Devices.Pumps
     public static class classIscoStatusNotifications
     {
         #region "Class variables"
-            static Dictionary<string, string> mobj_NotifyList = new Dictionary<string, string>();
+            static readonly Dictionary<string, string> mobj_NotifyList = new Dictionary<string, string>();
         #endregion
 
         #region "Constructor"

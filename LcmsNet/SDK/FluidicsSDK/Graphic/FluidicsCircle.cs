@@ -21,7 +21,7 @@ namespace FluidicsSDK.Graphic
             Rectangle m_rect;
             // Used for default constructor
             const int DEFAULT_RADIUS = 10;
-            int m_myRadius;
+        readonly int m_myRadius;
 
         #endregion
 

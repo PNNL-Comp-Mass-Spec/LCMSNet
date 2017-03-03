@@ -61,15 +61,15 @@ namespace LcmsNet.Devices.BrukerStart
             /// </summary>
             private enumDeviceStatus menum_status;
 
-            classBrukerMsgTools mobject_MsgTools;
-            string mstring_OuputFolderLocal;
-            string mstring_OutputFolderRemote;
-            string mstring_MethodFolderLocal;
-            string mstring_BrukerNetName;
-            int mint_BrukerPort = -256;
+        readonly classBrukerMsgTools mobject_MsgTools;
+        readonly string mstring_OuputFolderLocal;
+        readonly string mstring_OutputFolderRemote;
+        readonly string mstring_MethodFolderLocal;
+        readonly string mstring_BrukerNetName;
+        readonly int mint_BrukerPort = -256;
             classBrukerComConstants.SxcReplies mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
             bool mbool_AcquisitionInProgress = false;
-            Timer mobject_CmdTimeoutTimer;
+        readonly Timer mobject_CmdTimeoutTimer;
             bool mbool_DeviceError = false;
 //          string m_DeviceErrorMessage = "";
             bool mbool_CmdTimedOut = false;

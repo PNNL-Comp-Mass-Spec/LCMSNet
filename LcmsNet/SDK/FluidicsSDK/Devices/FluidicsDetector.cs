@@ -20,7 +20,7 @@ namespace FluidicsSDK.Devices
     {
         private const int WIDTH = 100;
         private const int HEIGHT = 50;
-        private Size m_size = new Size(WIDTH, HEIGHT);
+        private readonly Size m_size = new Size(WIDTH, HEIGHT);
 
         public FluidicsDetector()
         {

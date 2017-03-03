@@ -223,7 +223,7 @@ namespace ASIpump
             return ReceiveData();
         }
 
-        private Stopwatch timeoutWatch = new Stopwatch();
+        private readonly Stopwatch timeoutWatch = new Stopwatch();
         // pull data from the receive queue
         public string ReceiveData()
         {
