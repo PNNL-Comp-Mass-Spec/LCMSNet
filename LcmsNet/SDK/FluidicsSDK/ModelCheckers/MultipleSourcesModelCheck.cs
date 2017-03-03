@@ -12,6 +12,7 @@ using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
 using System.Drawing;
+using System.Globalization;
 
 namespace FluidicsSDK.ModelCheckers
 {

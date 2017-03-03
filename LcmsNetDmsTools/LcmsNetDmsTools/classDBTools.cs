@@ -197,10 +197,8 @@ namespace LcmsNetDmsTools
             {
                 throw new InvalidOperationException(e.Message, e.Exception);
             }
-            else
-            {
-                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DmsTools Configuration warning: " + e.Message);
-            }
+
+            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DmsTools Configuration warning: " + e.Message);
         }
 
         /// <summary>

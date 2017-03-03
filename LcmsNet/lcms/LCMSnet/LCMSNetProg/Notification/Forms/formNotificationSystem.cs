@@ -522,9 +522,9 @@ namespace LcmsNet.Notification.Forms
         /// Sets the timer value.
         /// </summary>
         /// <param name="minutes"></param>
-        private void SetTime(int rawMinutes)
+        private void SetTime(int minutes)
         {
-            var milliSeconds = rawMinutes * 1000 * 60; // 60 seconds / minute * 1000 ms / second
+            var milliSeconds = minutes * 60 * 1000;
             m_notifierTimer.Interval = milliSeconds;
 
             Settings.Default.NotificationWriteTimeMinutes = minutes;

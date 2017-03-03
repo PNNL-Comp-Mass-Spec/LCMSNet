@@ -237,8 +237,8 @@ namespace ASIpump
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
-        [classPersistenceAttribute("PortName")]
-        public string PortName
+        [classPersistence("PortName")]
+        public new string PortName
         {
             get { return base.PortName; }
             set { base.PortName = value; }
@@ -286,23 +286,21 @@ namespace ASIpump
                 errorMessage = "Port is not opened";
                 return false;
             }
-            else
-            {
-                ReplyDelimeter = "\r\n"; //carriage return linefeed
-                SendDelimeter = "\n"; //Carriage return
+
+            ReplyDelimeter = "\r\n"; //carriage return linefeed
+            SendDelimeter = "\n"; //Carriage return
 
 
-                // catch messages sent by the pump
-                // add this here so it gets on the end of the event queue
-                // otherwise the send/replies get printed out of order in the UI
-                MessageStreamed += AsiPump_MessageStreamed;
+            // catch messages sent by the pump
+            // add this here so it gets on the end of the event queue
+            // otherwise the send/replies get printed out of order in the UI
+            MessageStreamed += AsiPump_MessageStreamed;
 
-                // initialize party mode
-                Send("");
+            // initialize party mode
+            Send("");
 
-                errorMessage = "Port is opened";
-                return true;
-            }
+            errorMessage = "Port is opened";
+            return true;
         }
 
         public void SendData(double data)
@@ -515,7 +513,9 @@ namespace ASIpump
         /// <summary>
         /// Runs the method provided by a string.
         /// </summary>
-        /// <param name="method">Method to run stored on the pumps.</param>
+        /// <param name="timeout"></param>
+        /// <param name="flowrate"></param>
+        /// <param name="methodName">Method to run stored on the pumps.</param>
         [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, true)]
         public void StartMethod(double timeout, double flowrate, string methodName)
         {

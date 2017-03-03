@@ -276,7 +276,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Loads a devcie
         /// </summary>
-        /// <param name="filePath">Path to load configuration from.</param>
+        /// <param name="configuration">Configuration</param>
         public void LoadPersistentConfiguration(classDeviceConfiguration configuration)
         {
             var exceptionsToThrow = new List<Exception>();
@@ -324,7 +324,7 @@ namespace LcmsNetDataClasses.Devices
                 // 2. Name the device
                 // 3. Extract settings and bind them to the device.
 
-                IDevice device = null;
+                IDevice device;
 
                 try
                 {
@@ -395,7 +395,7 @@ namespace LcmsNetDataClasses.Devices
                     {
                         var isComment = key.Contains(CONST_MOBILE_PHASE_COMMENT);
                         var isName = key.Contains(CONST_MOBILE_PHASE_NAME);
-                        var phaseId = 0;
+                        int phaseId;
 
                         if (isComment && int.TryParse(key.Replace(CONST_MOBILE_PHASE_COMMENT, ""), out phaseId))
                         {
@@ -433,7 +433,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Saves all devices to the configuration
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="configuration"></param>
         public void ExtractToPersistConfiguration(ref classDeviceConfiguration configuration)
         {
             foreach (var device in Devices)
@@ -523,7 +523,7 @@ namespace LcmsNetDataClasses.Devices
             {
                 var name = dev.Name;
                 var devType = dev.GetType();
-                if (dev.Name == deviceName && devType.Equals(deviceType))
+                if (dev.Name == deviceName && devType == deviceType)
                 {
                     device = dev;
                     break;
@@ -536,7 +536,6 @@ namespace LcmsNetDataClasses.Devices
         /// Finds a device just by name.
         /// </summary>
         /// <param name="deviceName"></param>
-        /// <param name="deviceType"></param>
         /// <returns></returns>
         public IDevice FindDevice(string deviceName)
         {
@@ -744,11 +743,10 @@ namespace LcmsNetDataClasses.Devices
         public bool InitializeDevice(IDevice device)
         {
             InitialzingDevice?.Invoke(this, new classDeviceManagerStatusArgs("Initializing " + device.Name));
-            var initialized = false;
             try
             {
                 var errorMessage = "";
-                initialized = device.Initialize(ref errorMessage);
+                var initialized = device.Initialize(ref errorMessage);
                 if (initialized == false)
                 {
                     device.Status = enumDeviceStatus.Error;
@@ -764,10 +762,10 @@ namespace LcmsNetDataClasses.Devices
                 }
                 device.Status = enumDeviceStatus.Initialized;
             }
-            catch (classDeviceInitializationException ex)
+            catch (classDeviceInitializationException)
             {
                 device.Status = enumDeviceStatus.Error;
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {

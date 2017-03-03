@@ -106,10 +106,11 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Waits for N milliseconds blocking.
         /// </summary>          
-        /// <param name="seconds">Total number of milliseconds to wait.</param>
+        /// <param name="milliSeconds">Total number of milliseconds to wait.</param>
+        /// <param name="resetEvent">Event to wait on</param>
         public void WaitMilliseconds(int milliSeconds, ManualResetEvent resetEvent)
         {
-            var wait = resetEvent.WaitOne(milliSeconds);
+            resetEvent.WaitOne(milliSeconds);
         }
 
         #endregion
@@ -174,9 +175,9 @@ namespace LcmsNetDataClasses.Devices
             set
             {
                 m_status = value;
-                if (value != m_status && StatusUpdate != null)
+                if (value != m_status)
                 {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(m_status, "", this));
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(m_status, "", this));
                 }
             }
         }
