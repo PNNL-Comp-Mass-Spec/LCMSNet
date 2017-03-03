@@ -389,18 +389,21 @@ namespace LcmsNetDataClasses
 
         void m_columnData_NameChanged(object sender, string name, string oldName)
         {
-            if (oldName == "")
+            if (DmsData == null || oldName == "")
                 return;
 
             var cartName = "";
-            if (DmsData?.CartName != null)
+            if (DmsData.CartName != null)
             {
                 cartName = DmsData.CartName;
             }
-            var cartColumn = DmsData.CartName + "_" + oldName;
+            var cartColumn = cartName + "_" + oldName;
 
             // Make sure we actually have a cart and column name.
-            var length = DmsData.CartName.Length + oldName.Length;
+            var length = oldName.Length;
+            if (DmsData.CartName != null)
+                length += DmsData.CartName.Length;
+
             if (length < 1)
                 return;
 

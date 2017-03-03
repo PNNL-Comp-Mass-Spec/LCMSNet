@@ -184,9 +184,9 @@ namespace LcmsNetDataClasses.Logging
         {
             var info = errorInfo as ThreadPoolStateObject;
 
-            if (info != null && (info.MessageLevel <= m_errorLevel && Error != null))
+            if (info != null && info.MessageLevel <= m_errorLevel)
             {
-                Error(info.MessageLevel, info.EventArgs as classErrorLoggerArgs);
+                Error?.Invoke(info.MessageLevel, info.EventArgs as classErrorLoggerArgs);
             }
         }
 
@@ -198,9 +198,9 @@ namespace LcmsNetDataClasses.Logging
         {
             var info = messageInfo as ThreadPoolStateObject;
 
-            if (info != null && (info.MessageLevel <= m_messageLevel && Message != null))
+            if (info != null && info.MessageLevel <= m_messageLevel)
             {
-                Message(info.MessageLevel, info.EventArgs as classMessageLoggerArgs);
+                Message?.Invoke(info.MessageLevel, info.EventArgs as classMessageLoggerArgs);
             }
         }
 

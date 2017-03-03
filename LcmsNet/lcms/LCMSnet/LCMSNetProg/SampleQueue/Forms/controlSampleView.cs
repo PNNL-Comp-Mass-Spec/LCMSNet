@@ -1024,9 +1024,7 @@ namespace LcmsNet.SampleQueue.Forms
             get { return m_autoSamplerMethods; }
             set
             {
-                m_autoSamplerMethods = value;
-                if (m_autoSamplerMethods == null)
-                    m_autoSamplerMethods = new List<string>();
+                m_autoSamplerMethods = value ?? new List<string>();
                 ShowAutoSamplerMethods();
             }
         }
@@ -1040,9 +1038,7 @@ namespace LcmsNet.SampleQueue.Forms
             set
             {
                 //classApplicationLogger.LogMessage(0, "SAMPLE VIEW PROCESSING AUTOSAMPLER TRAYS!");
-                m_autosamplerTrays = value;
-                if (m_autosamplerTrays == null)
-                    m_autosamplerTrays = new List<string>();
+                m_autosamplerTrays = value ?? new List<string>();
                 ShowAutoSamplerTrays();
             }
         }
@@ -1055,9 +1051,7 @@ namespace LcmsNet.SampleQueue.Forms
             get { return m_instrumentMethods; }
             set
             {
-                m_instrumentMethods = value;
-                if (m_instrumentMethods == null)
-                    m_instrumentMethods = new List<string>();
+                m_instrumentMethods = value ?? new List<string>();
                 ShowInstrumentMethods();
             }
         }
@@ -1493,7 +1487,9 @@ namespace LcmsNet.SampleQueue.Forms
                 return;
             }
 
-            m_trayVial.Icon = ParentForm.Icon;
+            if (ParentForm != null)
+                m_trayVial.Icon = ParentForm.Icon;
+
             m_trayVial.LoadSampleList(m_autosamplerTrays, samples);
             if (m_trayVial.ShowDialog() == DialogResult.OK)
             {
@@ -1526,7 +1522,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Create a new fill down form.
             //
-            m_filldown.Icon = ParentForm.Icon;
+            if (ParentForm != null)
+                m_filldown.Icon = ParentForm.Icon;
+
             m_filldown.InitForm(samples);
 
 
@@ -2030,8 +2028,7 @@ namespace LcmsNet.SampleQueue.Forms
                 if (rowID != -1)
                 {
                     var row = mdataGrid_samples.Rows[rowID];
-                    if (row != null)
-                        row.Selected = true;
+                    row.Selected = true;
                 }
             }
         }
@@ -2054,7 +2051,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     selectedIndices.Add(row.Index);
                     var sample = data.Clone() as classSampleData;
-                    if (sample.LCMethod != null && sample.LCMethod.Name != null)
+                    if (sample?.LCMethod?.Name != null)
                     {
                         if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                         {
@@ -2302,7 +2299,7 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 throw new Exception("The column data cannot be null.");
             }
-            if (data.Sample != null && data.Sample.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
+            if (data.Sample?.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
             {
                 data.SpecialColumnNumber = "S";
             }
@@ -2542,7 +2539,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
-            if (data == null || data.Samples == null)
+            if (data?.Samples == null)
                 return;
 
             if (InvokeRequired)
@@ -2561,6 +2558,9 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="samples">Samples to update view of.</param>
         protected virtual void UpdateRows(IEnumerable<classSampleData> samples)
         {
+            if (samples == null)
+                return;
+
             var dtStart = DateTime.UtcNow;
             var samplesUpdated = 0;
             var totalSamples = samples.Count();
@@ -2659,7 +2659,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void m_sampleQueue_SampleStarted(object sender, classSampleQueueArgs data)
         {
-            if (data == null || data.Samples == null)
+            if (data?.Samples == null)
                 return;
 
             if (InvokeRequired)
@@ -2717,7 +2717,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void m_sampleQueue_SampleFinished(object sender, classSampleQueueArgs data)
         {
-            if (data == null || data.Samples == null)
+            if (data?.Samples == null)
                 return;
 
             if (InvokeRequired)
@@ -2739,7 +2739,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void m_sampleQueue_SampleCancelled(object sender, classSampleQueueArgs data)
         {
-            if (data == null || data.Samples == null)
+            if (data?.Samples == null)
                 return;
 
             if (InvokeRequired)
@@ -2761,7 +2761,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="data"></param>
         protected virtual void m_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data)
         {
-            if (data == null || data.Samples == null)
+            if (data?.Samples == null)
                 return;
 
             if (InvokeRequired)

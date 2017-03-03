@@ -498,7 +498,7 @@ namespace LcmsNetSQLiteTools
                                         datum.ID,
                                         datum.Organism,
                                         datum.Researcher,
-                                        datum.Reason == null ? "" : datum.Reason.Replace("'", ""),
+                                        datum.Reason?.Replace("'", "") ?? "",
                                         datum.Request,
                                         datum.Experiment,
                                         datum.Created ?? DateTime.MinValue);
