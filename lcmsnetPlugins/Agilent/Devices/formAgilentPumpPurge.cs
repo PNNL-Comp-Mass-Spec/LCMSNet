@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Agilent.Devices.Pumps
 {
-    public partial class formAgilentPumpPurge : Form
+    public sealed partial class formAgilentPumpPurge : Form
     {
         /// <summary>
         /// Pump to purge.

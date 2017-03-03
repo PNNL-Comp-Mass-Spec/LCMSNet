@@ -1,6 +1,6 @@
 ﻿namespace Agilent.Devices.Pumps
 {
-    partial class formAgilentPumpPurge
+    sealed partial class formAgilentPumpPurge
     {
         /// <summary>
         /// Required designer variable.

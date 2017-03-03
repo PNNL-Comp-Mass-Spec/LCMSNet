@@ -12,7 +12,7 @@ using LcmsNetSDK.Data;
 
 namespace Eksigent.Devices.Pumps
 {
-    
+
     /// <summary>
     /// Software interface to the Eksigent pumps.
     /// </summary>
@@ -71,7 +71,7 @@ namespace Eksigent.Devices.Pumps
         private const string CONST_INITIALIZED = "Initialized";
         /// <summary>
         /// List of times monitoring data was received.
-        /// </summar;y>
+        /// </summary>
         public List<DateTime> m_times;
         /// <summary>
         /// List of pressures used throughout the run.
@@ -97,9 +97,9 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         public EksigentPump()
         {
-            Name                = "Eksigent";
-            Version             = "1.0";
-            if(Directory.Exists(MethodFolder1))
+            Name = "Eksigent";
+            Version = "1.0";
+            if (Directory.Exists(MethodFolder1))
             {
                 MethodsFolder = MethodFolder1;
             }
@@ -107,10 +107,10 @@ namespace Eksigent.Devices.Pumps
             {
                 MethodsFolder = MethodFolder2;
             }
-            Methods             = new List<string>();
-            m_methodPaths       = new Dictionary<string,string>();
-            m_numberOfChannels  = -1;
-            m_notifyStrings     = new string[] {
+            Methods = new List<string>();
+            m_methodPaths = new Dictionary<string, string>();
+            m_numberOfChannels = -1;
+            m_notifyStrings = new[] {
                 "Initializing",
                 "Ready to download",
                 "Downloading Method",
@@ -139,11 +139,11 @@ namespace Eksigent.Devices.Pumps
             m_times = new List<DateTime>();
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
-            TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
+            TotalMonitoringSecondElapsed = CONST_MONITORING_SECONDS_ELAPSED;
         }
 
         #region Properties
-        
+
         [classPersistenceAttribute("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
@@ -164,7 +164,7 @@ namespace Eksigent.Devices.Pumps
         {
             get;
             set;
-        }       
+        }
         /// <summary>
         /// Path to the methods folder.
         /// </summary>
@@ -267,10 +267,10 @@ namespace Eksigent.Devices.Pumps
         /// <returns></returns>
         public bool Initialize(ref string errorMessage)
         {
-            if(Emulation)
+            if (Emulation)
             {
                 return true;
-            }           
+            }
             var worked = GetMethodsFromFolder(MethodsFolder);
             if (!worked)
             {
@@ -281,29 +281,26 @@ namespace Eksigent.Devices.Pumps
             if (m_hardware == null)
             {
                 try
-                {    
+                {
                     m_hardware = new EksigentInterfaceClass();
                 }
                 catch (Exception ex)
                 {
                     errorMessage = ex.Message;
-                    throw ex;
-                }          
+                    throw;
+                }
                 var initialized = m_hardware.Initialize();
                 if (!initialized)
                 {
                     errorMessage = "Could not create an interface to the Eksigent SDK.";
                     return false;
-                }                
+                }
                 HandleStatus("Getting number of channels on Eksigent Pump.");
                 m_numberOfChannels = m_hardware.GetNumChannels();
-                if (this.ChannelNumbers != null)
-                {
-                    ChannelNumbers(m_numberOfChannels);
-                }
+                ChannelNumbers?.Invoke(m_numberOfChannels);
 
                 for (var i = 0; i < m_numberOfChannels; i++)
-                {                    
+                {
                     HandleStatus("Getting Eksigent instrument status for channel " + i.ToString());
                     var status = -1;
                     var lastStatus = -1;
@@ -341,7 +338,7 @@ namespace Eksigent.Devices.Pumps
                     m_comDriver.DataAvailable += driv_DataAvailable;
                     //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS COMPLETE");
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     // for some reason, assigning the event handlers above causes an invalid cast error to be thrown.
                     // it seems to have no effect on the functionality of the plugin, so we're ignoring it
@@ -349,7 +346,7 @@ namespace Eksigent.Devices.Pumps
                     //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
                 }
 
-                if (this.RequiresOCXInitialization != null)
+                if (RequiresOCXInitialization != null)
                 {
                     try
                     {
@@ -360,21 +357,21 @@ namespace Eksigent.Devices.Pumps
                     {
                         classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent OCXINITFAILED");
                         HandleError("The registration failed for the Eksigent OCX.", ex);
-                        errorMessage    = "The registration failed for the Eksigent OCX.";
+                        errorMessage = "The registration failed for the Eksigent OCX.";
                         return false;
                     }
                 }
                 else
                 {
                     classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent STEPNOTPERFORMED");
-                    errorMessage    = "A step in the initialization was not performed that is required by the software.";
+                    errorMessage = "A step in the initialization was not performed that is required by the software.";
                     return false;
                 }
             }
             else
             {
                 classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent SDKFAILURE");
-                errorMessage        = "Could not get a software hold on the Eksigent SDK objects required to control this device.";
+                errorMessage = "Could not get a software hold on the Eksigent SDK objects required to control this device.";
                 return false;
             }
             Status = enumDeviceStatus.Initialized;
@@ -384,7 +381,7 @@ namespace Eksigent.Devices.Pumps
         }
 
         public bool Shutdown()
-        {            
+        {
             return true;
         }
 
@@ -411,12 +408,12 @@ namespace Eksigent.Devices.Pumps
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            
+
         }
-      
+
         public List<string> GetStatusNotificationList()
         {
-            var notifications =  new List<string>() { "Status" };
+            var notifications = new List<string>() { "Status" };
             notifications.AddRange(m_notifyStrings);
             notifications.Add(CONST_INITIALIZED);
             return notifications;
@@ -424,7 +421,7 @@ namespace Eksigent.Devices.Pumps
         public List<string> GetErrorNotificationList()
         {
             return new List<string>() { "Error" };
-        }        
+        }
         #endregion
 
         #region Utility Methods
@@ -452,7 +449,7 @@ namespace Eksigent.Devices.Pumps
         private void HandleStatus(string status)
         {
             if (StatusUpdate != null)
-            {                
+            {
                 var args = new classDeviceStatusEventArgs(Status, "Status", status, this);
 
                 StatusUpdate(this, args);
@@ -492,7 +489,7 @@ namespace Eksigent.Devices.Pumps
         /// <returns></returns>
         private string ConvertStatusCode(int code)
         {
-            var message = "";
+            string message;
 
             switch (code)
             {
@@ -565,7 +562,7 @@ namespace Eksigent.Devices.Pumps
             if (code < m_notifyStrings.Length && code > -1)
             {
                 HandleStatusType(m_notifyStrings[code], message);
-            }            
+            }
             return message;
         }
         /// <summary>
@@ -579,7 +576,7 @@ namespace Eksigent.Devices.Pumps
             if (folder == null)
             {
                 HandleError("Methods folder name is not set in the configuration file.", null);
-                return worked;
+                return false;
             }
 
             if (Directory.Exists(MethodsFolder))
@@ -588,20 +585,23 @@ namespace Eksigent.Devices.Pumps
                 Methods.Clear();
                 m_methodPaths.Clear();
 
-                if (files != null && files.Length > 0)
+                if (files.Length > 0)
                 {
                     foreach (var file in files)
                     {
                         var method = Path.GetFileNameWithoutExtension(file);
-                        m_methodPaths.Add(method, file);
-                        Methods.Add(method);
+                        if (method != null)
+                        {
+                            m_methodPaths.Add(method, file);
+                            Methods.Add(method);
+                        }
                     }
                     worked = true;
                     ListMethods();
                 }
                 else
                 {
-                    HandleError(string.Format("No Eksigent methods were found in the specified location.", folder), null);
+                    HandleError(string.Format("No Eksigent methods were found in folder {0}", folder), null);
                 }
             }
             else
@@ -629,7 +629,7 @@ namespace Eksigent.Devices.Pumps
         {
             HandleStatus(string.Format("The Eksigent - {1} - flow profile has completed for channel: {0}",
                                                 colnum,
-                                                this.Name));
+                                                Name));
         }
         void driv_DeviceMessage(ref byte ChannelNumber, ref byte MessageNumber, ref object MessageData)
         {
@@ -653,13 +653,12 @@ namespace Eksigent.Devices.Pumps
 
             // Update log collections.
             m_times.Add(time);
-          //  m_pressures.Add(pressure);
-           // m_flowrates.Add(flowrate);
-          //  m_percentB.Add(compositionB);
+            //  m_pressures.Add(pressure);
+            // m_flowrates.Add(flowrate);
+            //  m_percentB.Add(compositionB);
 
-            /// 
-            /// Find old data to remove -- needs to be updated (or could be) using LINQ
-            /// 
+            // Find old data to remove -- needs to be updated (or could be) using LINQ
+            // 
             var count = m_times.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
@@ -692,8 +691,8 @@ namespace Eksigent.Devices.Pumps
             }
             catch
             {
+                // ignored
             }
-
         }
         #endregion
 
@@ -704,7 +703,7 @@ namespace Eksigent.Devices.Pumps
         /// <returns></returns>
         //[classLCMethodAttribute("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool SetFlowRate(double timeout, double flowRate)
-        {            
+        {
             return true;
         }
         /// <summary>
@@ -717,7 +716,7 @@ namespace Eksigent.Devices.Pumps
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
-            if(Emulation)
+            if (Emulation)
             {
                 return true;
             }
@@ -731,21 +730,19 @@ namespace Eksigent.Devices.Pumps
                 return false;
             }
             var method = m_methodPaths[methodName];
-            int startMode, runFlag;
-            double injVol;
 
-            injVol                  = 0;
-            runFlag                 = 0;
-            startMode               = 0;
-            var vialName         = "A1";
-            var worked             = m_hardware.PrepareForRun(Convert.ToByte(intChannel),
+            double injVol = 0;
+            var runFlag = 0;
+            var startMode = 0;
+            var vialName = "A1";
+            var worked = m_hardware.PrepareForRun(Convert.ToByte(intChannel),
                                                                 method,
                                                                 0,
                                                                 ref startMode,
                                                                 vialName,
                                                                 ref injVol,
                                                                 ref runFlag);
-            var status              = m_hardware.GetStatus(Convert.ToByte(intChannel));
+            var status = m_hardware.GetStatus(Convert.ToByte(intChannel));
 
             if (!worked)
             {
@@ -753,31 +750,25 @@ namespace Eksigent.Devices.Pumps
                 ConvertAndLogStatus(status);
                 return false;
             }
-            else
-            {
-                if (AbortEvent == null)
-                {
-                    AbortEvent = new System.Threading.ManualResetEvent(false);
-                }
-                var handles = new System.Threading.WaitHandle[] {AbortEvent};
-                worked = false;
-                while(!worked)
-                {
-                    worked = m_hardware.StartRun(Convert.ToByte(intChannel));
-                    System.Threading.WaitHandle.WaitAny(handles, 100);
-                    if (!worked)
-                    {
-                        status = m_hardware.GetStatus(Convert.ToByte(intChannel));
-                        ConvertAndLogStatus(status);
-                    }
-                }
 
+            if (AbortEvent == null)
+            {
+                AbortEvent = new System.Threading.ManualResetEvent(false);
+            }
+
+            var handles = new System.Threading.WaitHandle[] { AbortEvent };
+            worked = false;
+            while (!worked)
+            {
+                worked = m_hardware.StartRun(Convert.ToByte(intChannel));
+                System.Threading.WaitHandle.WaitAny(handles, 100);
                 if (!worked)
                 {
-                    HandleError("Could not start the Eksigent pump method " + methodName, null);
-                    return false;
+                    status = m_hardware.GetStatus(Convert.ToByte(intChannel));
+                    ConvertAndLogStatus(status);
                 }
-            }            
+            }
+
             return true;
         }
         /// <summary>
@@ -789,12 +780,12 @@ namespace Eksigent.Devices.Pumps
         [classLCMethodAttribute("Stop Method", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopMethod(double timeout, double channel)
         {
-            if(Emulation)
+            if (Emulation)
             {
                 return true;
             }
-            var intChannel  = Convert.ToInt32(channel);
-            var worked     = m_hardware.StopRun(Convert.ToByte(intChannel));
+            var intChannel = Convert.ToInt32(channel);
+            var worked = m_hardware.StopRun(Convert.ToByte(intChannel));
             if (!worked)
             {
                 ConvertAndLogStatus(m_hardware.GetStatus(Convert.ToByte(intChannel)));
@@ -886,7 +877,7 @@ namespace Eksigent.Devices.Pumps
 
         #region IDisposable Members
         public void Dispose()
-        {            
+        {
         }
         #endregion
 
@@ -927,15 +918,9 @@ namespace Eksigent.Devices.Pumps
         }
 
 
-        public List<LcmsNetSDK.Data.MobilePhase> MobilePhases
+        public List<MobilePhase> MobilePhases
         {
-            get
-            {
-                if (m_mobilePhases == null)
-                    m_mobilePhases = new List<MobilePhase>();
-
-                return m_mobilePhases;
-            }
+            get { return m_mobilePhases ?? (m_mobilePhases = new List<MobilePhase>()); }
             set
             {
                 // DO NOTHING

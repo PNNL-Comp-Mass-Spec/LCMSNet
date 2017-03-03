@@ -168,7 +168,7 @@ namespace Agilent.Devices.Pumps
         public event EventHandler<classDeviceErrorEventArgs> Error;
         /// <summary>
         /// List of times monitoring data was received.
-        /// </summar;y>
+        /// </summary>
         public List<DateTime> m_times;
         /// <summary>
         /// List of pressures used throughout the run.
