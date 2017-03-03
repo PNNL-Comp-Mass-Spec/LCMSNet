@@ -432,10 +432,10 @@ namespace LcmsNet.SampleQueue
             if (!tempRequestList.Any())
             {
                 MessageBox.Show("No requests found in DMS");
-                labelRequestCount.Text = tempRequestList.Count() + "0 requests found";
+                labelRequestCount.Text = "0 requests found";
                 return;
             }
-            labelRequestCount.Text = tempRequestList.Count() + " requests found";
+            labelRequestCount.Text = tempRequestList.Count + " requests found";
 
             // Add the requests to the listview
 //              listviewAvailableRequests.BeginUpdate();
