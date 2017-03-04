@@ -78,7 +78,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// The flow rate (used for save/load)
         /// </summary>
-        private double mdouble_flowrate = -1.0;
+        private double m_flowrate = -1.0;
         /// <summary>
         /// Filesystem watcher for real-time updating of pump methods.
         /// </summary>
@@ -803,9 +803,9 @@ namespace Agilent.Devices.Pumps
             var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
-            if (Math.Abs(mdouble_flowrate) > float.Epsilon)
+            if (Math.Abs(m_flowrate) > float.Epsilon)
             {
-                var percentFlowChange = (mdouble_flowrate - flowrate) / mdouble_flowrate;
+                var percentFlowChange = (m_flowrate - flowrate) / m_flowrate;
                 UpdateNotificationStatus(percentFlowChange.ToString("0.00"), CONST_FLOW_CHANGE);
             }
             UpdateNotificationStatus(pressure.ToString("0.000"), CONST_PRESSURE_VALUE);
@@ -954,7 +954,7 @@ namespace Agilent.Devices.Pumps
             {
                 return;
             }
-            mdouble_flowrate = newFlowRate;
+            m_flowrate = newFlowRate;
             var reply = "";
             SendCommand("FLOW " + newFlowRate.ToString(CultureInfo.InvariantCulture),
                 ref reply, "Attempting to set flow rate to " + newFlowRate.ToString(CultureInfo.InvariantCulture));

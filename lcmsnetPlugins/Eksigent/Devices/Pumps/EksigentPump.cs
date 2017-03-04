@@ -644,9 +644,9 @@ namespace Eksigent.Devices.Pumps
             var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
-            //if (mdouble_flowrate != 0)
+            //if (m_flowrate != 0)
             //{
-            //    double percentFlowChange = (mdouble_flowrate - flowrate) / mdouble_flowrate;
+            //    double percentFlowChange = (m_flowrate - flowrate) / m_flowrate;
             //   UpdateNotificationStatus(percentFlowChange.ToString(), CONST_FLOW_CHANGE);
             //}
             //UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);

@@ -11,8 +11,8 @@ namespace LcmsNet.Devices.Pumps
         classPumpIsco m_Pump;
         classPumpIscoDisplayArray m_PumpDisplays;
         int m_PumpCount = 3;
-        double[] mdouble_refillRates;
-        double[] mdouble_MaxRefillRates;
+        double[] m_refillRates;
+        double[] m_MaxRefillRates;
         #endregion
 
         #region "Properties"
@@ -111,13 +111,13 @@ namespace LcmsNet.Devices.Pumps
             mcomboBox_OperationMode.SelectedIndex = 1;
 
             // Initialize refill rate array
-            mdouble_refillRates = new[] {
+            m_refillRates = new[] {
                 double.Parse(mtextBox_RefillSpA.Text),
                 double.Parse(mtextBox_RefillSpB.Text),
                 double.Parse(mtextBox_RefillSpC.Text) };
 
             // Initialize max refill rate array
-            mdouble_MaxRefillRates = new[] { 30D, 30D, 30D };
+            m_MaxRefillRates = new[] { 30D, 30D, 30D };
 
             var index = mcomboBox_Ports.Items.IndexOf(m_Pump.PortName);
             if (index >= 0)
@@ -212,7 +212,7 @@ namespace LcmsNet.Devices.Pumps
                 itemArray[8].SubItems.Add("0.0");
 
                 // Max refill rate SP
-                itemArray[9].SubItems.Add(mdouble_MaxRefillRates[indx].ToString("0.000"));
+                itemArray[9].SubItems.Add(m_MaxRefillRates[indx].ToString("0.000"));
             }
 
             mlistView_Limits.BeginUpdate();
@@ -230,7 +230,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="pumpIndx"></param>
         void m_PumpDisplays_StartRefill(object sender, int pumpIndx)
         {
-            if (m_Pump.StartRefill(pumpIndx, mdouble_refillRates[pumpIndx]))
+            if (m_Pump.StartRefill(pumpIndx, m_refillRates[pumpIndx]))
             {
                 UpdateStatusDisplay("Refill started");
             }
@@ -420,7 +420,7 @@ namespace LcmsNet.Devices.Pumps
             var success = true;
             for (var pumpIndx = 0; pumpIndx < m_PumpCount; pumpIndx++)
             {
-                if (!m_Pump.StartRefill(pumpIndx, mdouble_refillRates[pumpIndx]))
+                if (!m_Pump.StartRefill(pumpIndx, m_refillRates[pumpIndx]))
                     success = false;
             }
 
@@ -529,7 +529,7 @@ namespace LcmsNet.Devices.Pumps
             // For ease of manipulation, put the setpoint text boxes into an array
             var spTextBoxes = new TextBox[] { mtextBox_RefillSpA, mtextBox_RefillSpB, mtextBox_RefillSpC };
 
-            for (var indx = 0; indx < mdouble_refillRates.Length; indx++)
+            for (var indx = 0; indx < m_refillRates.Length; indx++)
             {
                 double newSp;
                 try
@@ -543,9 +543,9 @@ namespace LcmsNet.Devices.Pumps
                 }
 
                 // Check to see if new SP is within allowed range
-                if ((newSp >= 0) && (newSp <= mdouble_MaxRefillRates[indx]))
+                if ((newSp >= 0) && (newSp <= m_MaxRefillRates[indx]))
                 {
-                    mdouble_refillRates[indx] = newSp;
+                    m_refillRates[indx] = newSp;
                 }
                 else
                 {
@@ -630,18 +630,18 @@ namespace LcmsNet.Devices.Pumps
                 m_PumpDisplays[indx].MaxPressSp = setpointLimits.MaxPressSp;
                 m_PumpDisplays[indx].MaxFlowLimit = setpointLimits.MaxFlowLimit;
 
-                mdouble_MaxRefillRates[indx] = rangeData.MaxRefillRate;
+                m_MaxRefillRates[indx] = rangeData.MaxRefillRate;
 
-                mdouble_refillRates[indx] = m_Pump.GetPumpData(indx).RefillRate;
+                m_refillRates[indx] = m_Pump.GetPumpData(indx).RefillRate;
             }
 
             // Fill in limits display
             UpdateLimitDisplay();
 
             // Init refill rate displays
-            mtextBox_RefillSpA.Text = mdouble_refillRates[0].ToString("0.000");
-            mtextBox_RefillSpB.Text = mdouble_refillRates[1].ToString("0.000");
-            mtextBox_RefillSpC.Text = mdouble_refillRates[2].ToString("0.000");
+            mtextBox_RefillSpA.Text = m_refillRates[0].ToString("0.000");
+            mtextBox_RefillSpB.Text = m_refillRates[1].ToString("0.000");
+            mtextBox_RefillSpC.Text = m_refillRates[2].ToString("0.000");
 
             //// Clear the pump displays
             //mcontrol_IscoGraphs.ClearGraphs();

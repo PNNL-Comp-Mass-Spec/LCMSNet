@@ -132,7 +132,7 @@ namespace LcmsNetDataClasses
             // Set the default column to the first column,
             // and sequence number to non-existent.
             //
-            mlong_sequenceNumber = -1;
+            m_sequenceNumber = -1;
 
             m_palData = new classPalData();
             m_columnData = new classColumnData();
@@ -256,7 +256,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Sequence order of the sample to run.
         /// </summary>
-        private long mlong_sequenceNumber;
+        private long m_sequenceNumber;
 
         /// <summary>
         /// Pal Data reference.
@@ -266,7 +266,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Volume of sample to inject.
         /// </summary>
-        private double mdouble_volume;
+        private double m_volume;
 
         /// <summary>
         /// Information regarding what column the sample is to be, or did run on.
@@ -276,7 +276,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Unique ID for this sample not related to request name or sequence ID.
         /// </summary>
-        private long mlong_uniqueID;
+        private long m_uniqueID;
 
         /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface.
@@ -340,8 +340,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public long SequenceID
         {
-            get { return mlong_sequenceNumber; }
-            set { mlong_sequenceNumber = value; }
+            get { return m_sequenceNumber; }
+            set { m_sequenceNumber = value; }
         }
 
         /// <summary>
@@ -358,8 +358,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public double Volume
         {
-            get { return mdouble_volume; }
-            set { mdouble_volume = value; }
+            get { return m_volume; }
+            set { m_volume = value; }
         }
 
         /// <summary>
@@ -419,8 +419,8 @@ namespace LcmsNetDataClasses
         /// </summary>
         public long UniqueID
         {
-            get { return mlong_uniqueID; }
-            set { mlong_uniqueID = value; }
+            get { return m_uniqueID; }
+            set { m_uniqueID = value; }
         }
 
         public string Operator

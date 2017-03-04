@@ -21,8 +21,8 @@ namespace LcmsNet.Devices.ContactClosure
         // The Labjack's ID. Defaults to 0.
         private int m_localID;
         // The U12 returned float, the U3 returns double
-        private double mdouble_firmwareVersion;
-        private double mdouble_driverVersion;
+        private double m_firmwareVersion;
+        private double m_driverVersion;
         //   U3 driver's ErrorToString requires a char[] of at least 256 characters.
         private const int CONST_ERROR_STRING_BUFFER_SIZE = 256;
 
@@ -46,8 +46,8 @@ namespace LcmsNet.Devices.ContactClosure
         public classLabjackU3(int labjackID)
         {
             m_localID            = labjackID;
-            mdouble_firmwareVersion = 0;
-            mdouble_driverVersion    = 0;
+            m_firmwareVersion = 0;
+            m_driverVersion    = 0;
         }
         
         #endregion
@@ -73,12 +73,12 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets the firmware version, as retrieved from the U3
         /// </summary>
-        public double FirmwareVersion => mdouble_firmwareVersion;
+        public double FirmwareVersion => m_firmwareVersion;
 
         /// <summary>
         /// Gets the driver version, as set by the GetDriverVersion() driver function
         /// </summary>
-        public double DriverVersion => mdouble_driverVersion;
+        public double DriverVersion => m_driverVersion;
 
         #endregion
 
@@ -250,7 +250,7 @@ namespace LcmsNet.Devices.ContactClosure
         public double GetDriverVersion()
         {
             var tempVersion = LJUD.GetDriverVersion();
-            mdouble_driverVersion = tempVersion;
+            m_driverVersion = tempVersion;
             if (tempVersion == 0)
             {
                 ThrowErrorMessage("Unable to get driver version.", LJUD.LJUDERROR.USB_DRIVER_NOT_FOUND);
@@ -279,7 +279,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             ValidateDevice();
             var tempVersion = m_device.firmwareversion;
-            mdouble_firmwareVersion = tempVersion;
+            m_firmwareVersion = tempVersion;
             return (tempVersion);
         }
 
