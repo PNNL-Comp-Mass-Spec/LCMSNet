@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDmsTools;
 
@@ -10,23 +11,7 @@ namespace TestTool
         {
             try
             {
-                classApplicationLogger.Error += classApplicationLogger_Error;
-                classApplicationLogger.ErrorLevel = 3;
-
-                classApplicationLogger.Message += classApplicationLogger_Message;
-                classApplicationLogger.MessageLevel = 2;
-
-                var dbt = new classDBTools
-                {
-                    LoadExperiments = true,
-                    LoadDatasets = true,
-                    RecentExperimentsMonthsToLoad = 18,
-                    RecentDatasetsMonthsToLoad = 12
-                };
-
-                dbt.LoadCacheFromDMS();
-
-                Console.WriteLine("Data loaded");
+                TestDMSDataLoading();
 
             }
             catch (Exception ex)
@@ -40,7 +25,29 @@ namespace TestTool
             System.Threading.Thread.Sleep(3000);
         }
 
-        static void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
+        private static void TestDMSDataLoading()
+        {
+
+            classApplicationLogger.Error += classApplicationLogger_Error;
+            classApplicationLogger.ErrorLevel = 3;
+
+            classApplicationLogger.Message += classApplicationLogger_Message;
+            classApplicationLogger.MessageLevel = 2;
+
+            var dbt = new classDBTools
+            {
+                LoadExperiments = true,
+                LoadDatasets = true,
+                RecentExperimentsMonthsToLoad = 18,
+                RecentDatasetsMonthsToLoad = 12
+            };
+
+            dbt.LoadCacheFromDMS();
+
+            Console.WriteLine("Data loaded");
+        }
+
+        private static void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
         {
             Console.WriteLine(@"=== Exception ===");
             Console.WriteLine(args.Message);
@@ -49,7 +56,7 @@ namespace TestTool
                 Console.WriteLine(args.Exception.Message);
         }
 
-        static void classApplicationLogger_Message(int messageLevel, classMessageLoggerArgs args)
+        private static void classApplicationLogger_Message(int messageLevel, classMessageLoggerArgs args)
         {
             Console.WriteLine(args.Message);
         }

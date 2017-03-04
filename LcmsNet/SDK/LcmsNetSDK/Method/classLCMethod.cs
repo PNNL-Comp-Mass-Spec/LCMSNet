@@ -252,8 +252,10 @@ namespace LcmsNetDataClasses.Method
         /// <returns></returns>
         public object Clone()
         {
-            var newMethod = new classLCMethod();
-            newMethod.Name = Name;
+            var newMethod = new classLCMethod {
+                Name = Name
+            };
+
             if (m_events != null)
             {
                 foreach (var lcEvent in Events)
@@ -286,8 +288,9 @@ namespace LcmsNetDataClasses.Method
         /// <returns>StringDictionary containing the name of the LC Method</returns>
         public override StringDictionary GetPropertyValues()
         {
-            var dictionary = new StringDictionary();
-            dictionary.Add(CONST_NAME_METHOD_KEY, Name);
+            var dictionary = new StringDictionary {
+                { CONST_NAME_METHOD_KEY, Name}
+            };
 
             return dictionary;
         }
