@@ -375,10 +375,10 @@ namespace LcmsNet.SampleQueue
                 queryData.MinRequestNum = textRequestNumMin.Text;
             }
 
-            //If max request number input is not specified, set it to 1,000,000
+            //If max request number input is not specified, set it to 1,000,000,000
             if (string.IsNullOrEmpty(textRequestNumMax.Text))
             {
-                queryData.MaxRequestNum = "1000000";
+                queryData.MaxRequestNum = "1000000000";
             }
             else
             {
