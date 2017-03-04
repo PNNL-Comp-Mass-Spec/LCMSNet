@@ -840,13 +840,13 @@ namespace LcmsNetDmsTools
                     }
                 };
 
-                var tmpStr = currRow[schedRunList.Columns["Well Number"]] as string;
-                if ((tmpStr == null) || tmpStr == "na")
-                    tmpStr = "0";
+                var wellNumber = currRow[schedRunList.Columns["Well Number"]] as string;
+                if (string.IsNullOrWhiteSpace(wellNumber) || wellNumber == "na")
+                    wellNumber = "0";
 
                 try
                 {
-                    tmpDMSData.PAL.Well = ConvertWellStringToInt(tmpStr);
+                    tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
                 }
                 catch
                 {
@@ -1187,62 +1187,29 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Converts a letter/number or just number string representing a well/vial into an integer
         /// </summary>
-        /// <param name="inpStr">Input string</param>
+        /// <param name="vialPosition">Input string</param>
         /// <returns>Integer position</returns>
-        private int ConvertWellStringToInt(string inpStr)
+        private int ConvertWellStringToInt(string vialPosition)
         {
-            const string regexAlpha = @"^[a-hA-H]\d{1,2}$";
-            const string regexNum = @"^\d{1,2}$";
+            const string regexNum = @"^\d+$";
+            int vialNumber;
 
             // First, we'll see if it's a simple number
             var re = new Regex(regexNum);
-            var mc = re.Matches(inpStr);
-            if (mc.Count == 1) return int.Parse(mc[0].ToString());
-
-            // Didn't find a nubmer, so try an alpha
-            re = new Regex(regexAlpha);
-            mc = re.Matches(inpStr);
-            if (mc.Count != 1) return 0;    // Input string isn't a proper vial number
-
-            // It's an alpha. Pull off the first character
-            var tmpStr = mc[0].ToString();
-            var firstChar = tmpStr.Substring(0, 1);
-
-            // Strip first char off of tmpStr and convert rest to int
-            var colNum = int.Parse(tmpStr.Replace(firstChar, ""));
-
-            // Convert first char to row multiplier (ugly brute force here, but it works)
-            var tmpRowMult = 0;
-            switch (firstChar.ToLower())
+            var match = re.Match(vialPosition);
+            if (match.Success)
             {
-                case "a":
-                    tmpRowMult = 0;
-                    break;
-                case "b":
-                    tmpRowMult = 1;
-                    break;
-                case "c":
-                    tmpRowMult = 2;
-                    break;
-                case "d":
-                    tmpRowMult = 3;
-                    break;
-                case "e":
-                    tmpRowMult = 4;
-                    break;
-                case "f":
-                    tmpRowMult = 5;
-                    break;
-                case "g":
-                    tmpRowMult = 6;
-                    break;
-                case "h":
-                    tmpRowMult = 7;
-                    break;
+                // vialPosition is simply an integer
+                vialNumber = int.Parse(match.Value);
+            }
+            else
+            {
+                // vialPosition is in the form A1 or B10
+                // Convert it using ConvertVialToInt
+                vialNumber = LcmsNetSDK.Data.classConvertVialPosition.ConvertVialToInt(vialPosition);
             }
 
-            // Now assemble the whole number and return
-            return (tmpRowMult * 12) + colNum;
+            return vialNumber;
         }
 
 

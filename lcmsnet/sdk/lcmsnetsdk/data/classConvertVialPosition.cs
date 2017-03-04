@@ -10,12 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Utilities for converting Vial (aka Well) position between LCMSNet and LCMS values
     /// </summary>
-    class classConvertVialPosition
+    public class classConvertVialPosition
     {
 
         #region "Methods"

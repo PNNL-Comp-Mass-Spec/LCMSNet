@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classDMSToolsManager.cs" />
+    <Compile Include="Data\classConvertVialPosition.cs" />
     <Compile Include="Data\classDMSBaseControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

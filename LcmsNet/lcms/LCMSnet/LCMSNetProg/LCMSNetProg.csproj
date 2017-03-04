@@ -504,7 +504,6 @@
     <Compile Include="SampleQueue\Forms\SampleToRowTranslator.cs" />
     <Compile Include="SampleQueue\IO\ISampleQueueReader.cs" />
     <Compile Include="SampleQueue\IO\ISampleQueueWriter.cs" />
-    <Compile Include="SampleQueue\IO\classConvertVialPosition.cs" />
     <Compile Include="SampleQueue\IO\classMethodFileTools.cs" />
     <Compile Include="SampleQueue\IO\classMRMFileExporter.cs" />
     <Compile Include="SampleQueue\IO\classQueueExportCSV.cs" />
