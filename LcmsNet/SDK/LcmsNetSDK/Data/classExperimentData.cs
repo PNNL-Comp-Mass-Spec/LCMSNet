@@ -349,10 +349,12 @@ namespace LcmsNetDataClasses
 
         public override string ToString()
         {
-            if (m_id.HasValue)
-                return m_id + ": " + (m_experiment ?? string.Empty);
+            var experiment = string.IsNullOrWhiteSpace(m_experiment) ? "Undefined experiment" : m_experiment;
 
-            return m_experiment ?? string.Empty;
+            if (m_id.HasValue)
+                return m_id + ": " + experiment;
+
+            return experiment;
         }
 
         #endregion

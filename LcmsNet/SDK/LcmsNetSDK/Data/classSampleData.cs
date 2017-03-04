@@ -239,12 +239,11 @@ namespace LcmsNetDataClasses
 
         public override string ToString()
         {
-            var name = base.ToString();
             if (DmsData != null)
             {
-                name = DmsData.DatasetName;
+                return DmsData.ToString();
             }
-            return name;
+            return base.ToString();            
         }
 
         #region "Members"

@@ -86,7 +86,7 @@ namespace LcmsNet.Method
         /// <returns>Name of the method</returns>
         public override string ToString()
         {
-            return MethodAttribute.Name;
+            return string.IsNullOrWhiteSpace(MethodAttribute.Name) ? "Undefined method" : MethodAttribute.Name;
         }
 
         #region Properties

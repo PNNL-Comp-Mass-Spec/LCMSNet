@@ -243,7 +243,7 @@ namespace LcmsNetDataClasses.Method
         /// <returns></returns>
         public override string ToString()
         {
-            return Name;
+            return string.IsNullOrWhiteSpace(Name) ? "Undefined method" : Name;
         }
 
         /// <summary>

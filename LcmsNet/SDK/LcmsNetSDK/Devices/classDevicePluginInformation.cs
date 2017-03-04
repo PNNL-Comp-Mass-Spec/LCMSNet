@@ -25,7 +25,7 @@ namespace LcmsNetDataClasses.Devices
         public override string ToString()
         {
             var name = base.ToString();
-            if (DeviceAttribute != null)
+            if (!string.IsNullOrWhiteSpace(DeviceAttribute?.Name))
             {
                 name = DeviceAttribute.Name;
             }

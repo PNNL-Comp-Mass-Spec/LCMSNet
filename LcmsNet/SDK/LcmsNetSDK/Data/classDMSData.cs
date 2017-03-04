@@ -113,7 +113,6 @@ namespace LcmsNetDataClasses
         /// </summary>
         public string CartConfigName { get; set; }
 
-
         /// <summary>
         /// Comment field
         /// </summary>
@@ -138,6 +137,31 @@ namespace LcmsNetDataClasses
         /// Batch number for blocking/randomizing
         /// </summary>
         public int Batch { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(DatasetName))
+            {
+                if (string.Equals(RequestName, DatasetName))
+                {
+                    return "Request " + RequestName;
+                }
+
+                return "Dataset " + DatasetName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Experiment))
+                return "Experiment " + Experiment;
+
+            if (!string.IsNullOrWhiteSpace(RequestName))
+                return "Request " + RequestName;
+
+            return "RequestID " + RequestID;
+        }
 
         #endregion
     }

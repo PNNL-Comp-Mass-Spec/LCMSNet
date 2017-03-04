@@ -56,14 +56,13 @@ namespace LcmsNetDataClasses.Devices
         {
         }
 
-
         /// <summary>
         /// Returns the name of the device.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return m_name;
+            return string.IsNullOrWhiteSpace(m_name) ? "Undefined timer" : m_name;
         }
 
         #region Members

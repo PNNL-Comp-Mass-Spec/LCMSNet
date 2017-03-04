@@ -20,6 +20,11 @@ namespace LcmsNetDataClasses.Data
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public override string ToString()
+        {
+            return m_userID + ": " + (string.IsNullOrWhiteSpace(m_userName) ? "Undefined user" : m_userName);
+        }
+
         #endregion
 
         #region Properties

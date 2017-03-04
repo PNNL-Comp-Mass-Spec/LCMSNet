@@ -20,9 +20,14 @@ namespace LcmsNetDataClasses
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public override string ToString()
+        {
+            return string.IsNullOrWhiteSpace(m_lcColumn) ? "Undefined column" : m_lcColumn;
+        }
+
         #endregion
 
-        #region Initializtion
+        #region Initialization
 
         #endregion
 

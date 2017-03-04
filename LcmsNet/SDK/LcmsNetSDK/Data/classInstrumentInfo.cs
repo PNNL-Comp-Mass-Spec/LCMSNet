@@ -61,5 +61,21 @@ namespace LcmsNetDataClasses
         public string SharePath { get; set; }
 
         #endregion
+
+        #region Methods
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(DMSName))
+                return DMSName;
+
+            if (!string.IsNullOrWhiteSpace(CommonName))
+                return CommonName;            
+
+            return "Undefined instrument";
+        }
+
+        #endregion
+
     }
 }

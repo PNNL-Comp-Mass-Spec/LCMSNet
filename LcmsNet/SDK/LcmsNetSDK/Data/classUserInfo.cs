@@ -29,5 +29,21 @@ namespace LcmsNetDataClasses
         public string PayrollNum { get; set; }
 
         #endregion
+
+        #region Methods
+
+        public override string ToString()
+        {
+            var name = string.IsNullOrWhiteSpace(UserName) ? "Undefined user" : UserName;
+
+            if (string.IsNullOrWhiteSpace(PayrollNum))
+            {
+                return name;
+            }
+
+            return PayrollNum + ": " + name;
+        }
+
+        #endregion
     }
 }
