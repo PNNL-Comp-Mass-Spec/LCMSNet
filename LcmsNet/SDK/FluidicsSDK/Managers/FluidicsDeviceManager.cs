@@ -113,7 +113,7 @@ namespace FluidicsSDK.Managers
                 {
                     device.Render(g, alpha, scale);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //TODO: Propagate errors out but allow for the rest of the devices to be rendered.
 

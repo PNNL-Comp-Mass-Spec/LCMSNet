@@ -10,7 +10,8 @@ namespace FluidicsPack
         public FluidicsWasteComponent()
         {
             const int size = 50;
-            //don't really need an "object" so we'll just create a 10x10 pixel rectangle and overlay a port
+            
+            // don't really need an "object" so we'll just create a 10x10 pixel rectangle and overlay a port
             AddPrimitive(new FluidicsRectangle(new Point(0, 0), new Size(size, size), Color.Black, Brushes.White, true, 1));
             AddPort(new Point(size /2, size /2));
             m_info_controls_box.Width = 50;

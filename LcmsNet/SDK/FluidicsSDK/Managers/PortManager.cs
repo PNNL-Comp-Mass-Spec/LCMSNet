@@ -16,7 +16,7 @@ namespace FluidicsSDK.Managers
     public class PortManager
     {
         #region Members
-        private List<Port> m_ports;
+        private readonly List<Port> m_ports;
         private static PortManager m_instance;
         public event EventHandler<PortChangedEventArgs<Port>> PortChanged;
         #endregion
@@ -55,7 +55,7 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// add a list of ports to the list of ports managed
         /// </summary>
-        /// <param name="port">a classPort object</param>
+        /// <param name="ports">a list of classPort objects</param>
         public void AddPorts(List<Port> ports)
         {
             m_ports.AddRange(ports);
@@ -81,7 +81,7 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// remove a list of ports that belong to specified device
         /// </summary>
-        /// <param name="ports">a list of classPort objects</param>
+        /// <param name="device">fluidics device</param>
         public void RemovePorts(FluidicsDevice device)
         {
 
@@ -151,30 +151,11 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// Property for retrieving the class instance of the port manager
         /// </summary>
-        public static PortManager GetPortManager
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new PortManager();
-                }
-                return m_instance;
-            }
-        }
+        public static PortManager GetPortManager => m_instance ?? (m_instance = new PortManager());
 
 
-        public List<Port> Ports
-        {
-            get
-            {
-                return m_ports;
-            }
-            private set
-            {
-                m_ports = value;
-            }
-        }
+        public List<Port> Ports => m_ports;
+
         #endregion
     }
 }

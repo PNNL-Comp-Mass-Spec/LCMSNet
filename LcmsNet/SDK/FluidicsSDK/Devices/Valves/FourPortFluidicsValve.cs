@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace FluidicsSDK.Devices
 {
-    public class FourPortFluidicsValve: TwoPositionValve
+    public sealed class FourPortFluidicsValve: TwoPositionValve
     {
         private const int NUMBER_OF_PORTS = 4;
         IFourPortValve m_valve;
@@ -18,15 +18,15 @@ namespace FluidicsSDK.Devices
             m_states = SetupStates();
             m_currentState = TwoPositionState.PositionA;
             base.ActivateState(m_states[m_currentState]);
-            var StateControlSize = new Size(15, 15);
-            var StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 2), base.Center.Y - (StateControlSize.Height / 2));
-            var StateControl2Loc = new Point(base.Center.X + StateControlSize.Width, base.Center.Y - (StateControlSize.Height /2));
-            var StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
-            var StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
+            var stateControlSize = new Size(15, 15);
+            var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 2), Center.Y - (stateControlSize.Height / 2));
+            var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height /2));
+            var stateControlRectangle = new Rectangle(stateControl1Loc, stateControlSize);
+            var stateControlRectangle2 = new Rectangle(stateControl2Loc, stateControlSize);
             //add left control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), LeftButtonAction);
+            AddPrimitive(new FluidicsTriangle(stateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), RightButtonAction);
+            AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
         }
 
         private void SetValvePosition(TwoPositionState pos)
@@ -40,11 +40,12 @@ namespace FluidicsSDK.Devices
             try
             {
                 //m_valve.SetPosition(10);
-                m_valve.PositionChanged += m_valve_PositionChanged;
+                if (m_valve != null)
+                    m_valve.PositionChanged += m_valve_PositionChanged;
             }
             catch(Exception)
             {
-               // MessageBox.Show("This is crap..." + ex.Message);
+                // MessageBox.Show("Null valve: " + ex.Message);
             }
         }
 
@@ -52,11 +53,13 @@ namespace FluidicsSDK.Devices
         /// Setup the devices states
         /// </summary>
         /// <returns>a dictionary of with TwoPositionState enums as the keys and lists of tuples of int, int type as the values </returns>
-        protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
+        private Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
-            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
-            states.Add(TwoPositionState.PositionA, GenerateState(0, Ports.Count - 1));
-            states.Add(TwoPositionState.PositionB, GenerateState(1, Ports.Count));
+            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>
+            {
+                {TwoPositionState.PositionA, GenerateState(0, Ports.Count - 1)},
+                {TwoPositionState.PositionB, GenerateState(1, Ports.Count)}
+            };
             return states;
         }
 

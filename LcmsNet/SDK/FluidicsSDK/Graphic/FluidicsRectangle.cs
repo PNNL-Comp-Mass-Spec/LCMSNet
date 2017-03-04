@@ -11,7 +11,7 @@ using System.Drawing;
 
 namespace FluidicsSDK.Graphic
 {
-    public class FluidicsRectangle:GraphicsPrimitive
+    public class FluidicsRectangle : GraphicsPrimitive
     {
         #region Members
         Rectangle m_rect;
@@ -32,8 +32,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="loc">a System.Drawing.Point representing the rectangle's location on screen</param>
         /// <param name="size">a System.Drawing.Size representing the size of the rectangle</param>
         /// <param name="color">a System.Drawing.Color representing the color of the rectangle</param>
-        /// <param name="fillColor">a System.Drawing.Color representing the color to fill the rectangle with</param>
-        /// <param name="type">a BrushType object representing which brush to draw with</param>
+        /// <param name="fillBrush">a System.Drawing.Color representing the color to fill the rectangle with</param>
         /// <param name="fill">a bool determining if rectangle should be filled with fillColor or not</param>
         /// <param name="atScale">scale of the rectangle</param>
         public FluidicsRectangle(Point loc, Size size, Color color, Brush fillBrush, bool fill = true, float atScale = 1):
@@ -49,11 +48,12 @@ namespace FluidicsSDK.Graphic
         /// <param name="alpha">an integer representing the alpha value to draw the rectangle at</param>
         /// <param name="scale">a float representing the scale to draw the rectangle at</param>
         /// <param name="selected">a bool representing if the rectangle is hilighted or not</param>
+        /// <param name="error"></param>
         public override void Render(Graphics g, int alpha, float scale, bool selected, bool error)
         {
             // alter the color of the circle to be proper alpha, EXCEPT for error which should always be solid.
-            base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
-            base.Highlight  = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
+            Color = Color.FromArgb(alpha, Color.R, Color.G, Color.B);
+            Highlight  = Color.FromArgb(alpha, Highlight.R, Highlight.G, Highlight.B);
             
             // Color fillColor = Color.FromArgb(alpha, base.FillColor.R, base.FillColor.G, base.FillColor.B);
              
@@ -61,20 +61,20 @@ namespace FluidicsSDK.Graphic
             Pen drawingPen;
             if (selected)
             {
-                drawingPen = base.Highlighter;
+                drawingPen = Highlighter;
             }
             else if (error)
             {
-                drawingPen = base.ErrorPen;
+                drawingPen = ErrorPen;
             }
             
             else
             {
-                drawingPen = base.Pen;
+                drawingPen = Pen;
             }
-            if (base.Fill)
+            if (Fill)
             {
-                g.FillRectangle(base.FillBrush, scaledRect);
+                g.FillRectangle(FillBrush, scaledRect);
             }
             //for some reason there is no DrawRectangle overload that takes a RectangleF, so we have to draw it this way.
             g.DrawRectangle(drawingPen, scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);

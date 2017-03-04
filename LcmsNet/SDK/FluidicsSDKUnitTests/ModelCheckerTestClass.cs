@@ -12,7 +12,6 @@ using FluidicsSDK.Managers;
 using FluidicsSDK.ModelCheckers;
 using FluidicsSDK;
 using NUnit.Framework;
-using LcmsNetDataClasses.Devices;
 using DemoPluginLibrary;
 
 namespace FluidicsSDKUnitTests
@@ -34,18 +33,23 @@ namespace FluidicsSDKUnitTests
                 cm = ConnectionManager.GetConnectionManager;
                 dm = FluidicsDeviceManager.DeviceManager;
                 var pump1 = new DemoPump();
-                var pump2 = new DemoPump();
-                pump2.Name = "Stupid Pump2";
+                var pump2 = new DemoPump {
+                    Name = "Stupid Pump2"
+                };
+
                 var t = new DemoTee();
                 dm.Add(pump1);
                 dm.Add(pump2);
                 dm.Add(t);
-                var p1 = dm.FindDevice(pump1 as IDevice) as FluidicsPump;
-                var p2 = dm.FindDevice(pump2 as IDevice) as FluidicsPump;
-                var t1 = dm.FindDevice(t as IDevice) as FluidicsTee;
-                cm.Connect(t1.Ports[2], p2.Ports[0]);
-                cm.Connect(t1.Ports[0], p1.Ports[0]); // these two lines create a loop in the system.
-                cm.Connect(t1.Ports[1], p1.Ports[0]);
+                var p1 = dm.FindDevice(pump1) as FluidicsPump;
+                var p2 = dm.FindDevice(pump2) as FluidicsPump;
+                var t1 = dm.FindDevice(t) as FluidicsTee;
+                if (t1 != null && p2 != null && p1 != null)
+                {
+                    cm.Connect(t1.Ports[2], p2.Ports[0]);
+                    cm.Connect(t1.Ports[0], p1.Ports[0]); // these two lines create a loop in the system.
+                    cm.Connect(t1.Ports[1], p1.Ports[0]);
+                }
             }
         }
 

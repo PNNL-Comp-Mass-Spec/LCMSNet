@@ -16,7 +16,7 @@ using FluidicsSDK.Graphic;
 
 namespace FluidicsPack
 {
-    public class FluidicsSprayNeedle:FluidicsDevice
+    public sealed class FluidicsSprayNeedle:FluidicsDevice
     {
         #region Members
         private const int MAIN_RECT_WIDTH = 50;
@@ -32,10 +32,10 @@ namespace FluidicsPack
 
 
            //main rectangle
-            base.AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             //left most rectangle
-            base.AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // bottom left parallelogram + connecting line
             var leftPara = new FluidicsPolygon();
@@ -48,9 +48,9 @@ namespace FluidicsPack
             leftPara.AddPoint(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10));
             leftPara.AddPoint(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT));
 
-            base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
+            AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
 
-            base.AddPrimitive(leftPara);
+            AddPrimitive(leftPara);
             
             
             //bottom middle trapezoid
@@ -63,7 +63,7 @@ namespace FluidicsPack
 
             botmid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 5, mainStartPoint.Y + MAIN_RECT_HEIGHT + 10));
             botmid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH, mainStartPoint.Y + MAIN_RECT_HEIGHT));
-            base.AddPrimitive(botmid);
+            AddPrimitive(botmid);
 
 
             // bottom right parallelogram + connecting line
@@ -74,13 +74,13 @@ namespace FluidicsPack
             botRt.AddPoint(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10));
             botRt.AddPoint(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT));
             
-            base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
-            base.AddPrimitive(botRt);
+            AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
+            AddPrimitive(botRt);
 
                                     
             
             // rightmost rectangle
-            base.AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
 
             // upper left parallelogram + connecting line
             var upLft = new FluidicsPolygon();
@@ -92,8 +92,8 @@ namespace FluidicsPack
 
             upLft.AddPoint(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y - 10));
             upLft.AddPoint(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3, leftMostStartPoint.Y));
-            base.AddPrimitive(upLft);
-            base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 2, leftMostStartPoint.Y - 10), new Point(mainStartPoint.X + 3, mainStartPoint.Y - 5)));
+            AddPrimitive(upLft);
+            AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 2, leftMostStartPoint.Y - 10), new Point(mainStartPoint.X + 3, mainStartPoint.Y - 5)));
             
             // upper middle trapezoid
             var upMid = new FluidicsPolygon();
@@ -105,7 +105,7 @@ namespace FluidicsPack
 
             upMid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 5, mainStartPoint.Y - 10));
             upMid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH, mainStartPoint.Y));
-            base.AddPrimitive(upMid);
+            AddPrimitive(upMid);
          
            
             // upper right parallelogram + connecting line
@@ -118,24 +118,24 @@ namespace FluidicsPack
 
             upRt.AddPoint(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y - 10));
             upRt.AddPoint(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3, rightMostStartPoint.Y));
-            base.AddPrimitive(upRt);
+            AddPrimitive(upRt);
         
-            base.AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 2, rightMostStartPoint.Y - 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y - 5)));
+            AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 2, rightMostStartPoint.Y - 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y - 5)));
 
             // needle
             var needleStartPoint = new Point(leftMostStartPoint.X - MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 3);
-            base.AddRectangle(needleStartPoint, new Size(MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 2), Color.Black, Brushes.White);
+            AddRectangle(needleStartPoint, new Size(MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 2), Color.Black, Brushes.White);
             //needle tip
-            base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X - MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 3), new Point(needleStartPoint.X - 25, (MAIN_RECT_HEIGHT / 3) +
+            AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X - MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 3), new Point(needleStartPoint.X - 25, (MAIN_RECT_HEIGHT / 3) +
                 MAIN_RECT_HEIGHT / 4)));
-            base.AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X - MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 3 + (MAIN_RECT_HEIGHT / 2)), new Point(needleStartPoint.X- 25,
+            AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X - MAIN_RECT_WIDTH / 2, MAIN_RECT_HEIGHT / 3 + (MAIN_RECT_HEIGHT / 2)), new Point(needleStartPoint.X- 25,
                 (MAIN_RECT_HEIGHT / 3) + MAIN_RECT_HEIGHT / 4)));
 
-            base.AddPort(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH/3 + 12, rightMostStartPoint.Y + MAIN_RECT_HEIGHT/2));
+            AddPort(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH/3 + 12, rightMostStartPoint.Y + MAIN_RECT_HEIGHT/2));
             Sink = true;
             Source = false;
             // need to set port as sink for model checking.
-            base.Ports[0].Sink = true;
+            Ports[0].Sink = true;
             m_info_controls_box.X = leftMostStartPoint.X;
             m_info_controls_box.Y = m_primitives.Max(x => x.Loc.Y);
         }

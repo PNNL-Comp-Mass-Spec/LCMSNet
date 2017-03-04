@@ -17,7 +17,7 @@ using FluidicsSDK.Base;
 
 namespace FluidicsSDK
 {
-    public class FluidicsPump: FluidicsDevice
+    public sealed class FluidicsPump: FluidicsDevice
     {
 
         #region members
@@ -35,9 +35,6 @@ namespace FluidicsSDK
             const int WIDTH = 50;
             const int MAX_PIXEL_VARIANCE = 5;
 
-            private Dictionary<TwoPositionState, List<Tuple<int, int>>> m_states;
-            //private TwoPositionState m_currentState;
-
             IFluidicsPump m_pump;
 
         #endregion
@@ -54,15 +51,15 @@ namespace FluidicsSDK
         /// </summary>
         public FluidicsPump()
         {
-            base.AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
             var portLoc = GeneratePortLoc();
-            base.AddPort(portLoc);
-            m_states = SetupStates();
+            AddPort(portLoc);
+            var states = SetupStates();
             MaxVariance = MAX_PIXEL_VARIANCE;
             Source = true;
             Sink = false;
             // set port as source for model checking.
-            base.Ports[0].Source = true;
+            Ports[0].Source = true;
         }
 
         /// <summary>
@@ -71,16 +68,16 @@ namespace FluidicsSDK
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public FluidicsPump(Point loc)
         {
-            base.AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
             var portLoc = GeneratePortLoc();
-            base.AddPort(portLoc);
+            AddPort(portLoc);
         }
 
         /// <summary>
         /// generate the locations of the ports associated with the pump, used at creation or when the device is moved around the screen
         /// </summary>
         /// <returns>a list of System.Drawing.Point objects, one for each port</returns>
-        protected Point GeneratePortLoc()
+        private Point GeneratePortLoc()
         {           
             //create port1 to left side of pump
             return new Point(Loc.X + (int)(Size.Width/2), Loc.Y - MIN_DIST_FROM_EDGE);
@@ -90,7 +87,7 @@ namespace FluidicsSDK
         /// setup the states
         /// </summary>
         /// <returns></returns>
-        protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
+        private Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
             var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
             // pump only has no states, it is a source

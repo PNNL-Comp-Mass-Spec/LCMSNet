@@ -41,24 +41,25 @@ namespace FluidicsSDK.Graphic
         /// <param name="alpha">an integer representing the alpha value to draw the line with</param>
         /// <param name="scale">a float determining how much to scale the line by</param>
         /// <param name="selected">bool determining if the line is drawn hilighted or not</param>
+        /// <param name="error"></param>
         public override void Render(Graphics g, int alpha, float scale, bool selected, bool error)
         {
-            base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
-            base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
+            Color = Color.FromArgb(alpha, Color.R, Color.G, Color.B);
+            Highlight = Color.FromArgb(alpha, Highlight.R, Highlight.G, Highlight.B);
             var scaled_orig = new Point((int)(m_orig.X * scale), (int)(m_orig.Y * scale));
             var scaled_term = new Point((int)(m_term.X * scale), (int)(m_term.Y * scale));
             Pen drawingPen;
             if (selected)
             {
-                drawingPen = base.Highlighter;
+                drawingPen = Highlighter;
             }
             else if(error)
             {
-                drawingPen = base.ErrorPen;
+                drawingPen = ErrorPen;
             }
             else
             {
-                drawingPen = base.Pen;
+                drawingPen = Pen;
             }
             g.DrawLine(drawingPen, scaled_orig, scaled_term);
         }

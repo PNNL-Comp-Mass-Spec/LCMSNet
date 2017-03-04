@@ -20,21 +20,22 @@ namespace FluidicsSDK.Graphic
         /// <param name="alpha">an integer representing the alpha value to draw the rectangle at</param>
         /// <param name="scale">a float representing the scale to draw the rectangle at</param>
         /// <param name="selected">a bool representing if the rectangle is hilighted or not</param>
+        /// <param name="error"></param>
         public override void Render(Graphics g, int alpha, float scale, bool selected, bool error)
         {            
-            base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
-            base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
+            Color = Color.FromArgb(alpha, Color.R, Color.G, Color.B);
+            Highlight = Color.FromArgb(alpha, Highlight.R, Highlight.G, Highlight.B);
             
             var scaledRect = new RectangleF(m_rect.X * scale, m_rect.Y * scale, m_rect.Size.Width * scale, m_rect.Size.Height * scale);
-            if (base.Fill)
+            if (Fill)
             {
                 if (!selected)
                 {
-                    g.FillRectangle(base.FillBrush, scaledRect);
+                    g.FillRectangle(FillBrush, scaledRect);
                 }
                 else
                 {
-                    g.FillRectangle(base.Highlighter.Brush, scaledRect);
+                    g.FillRectangle(Highlighter.Brush, scaledRect);
                 }
             }
             else
@@ -42,11 +43,11 @@ namespace FluidicsSDK.Graphic
                 //for some reason there is no DrawRectangle overload that takes a RectangleF, so we have to draw it this way.
                 if (!selected)
                 {
-                    g.DrawRectangle(base.Pen, scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
+                    g.DrawRectangle(Pen, scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
                 }
                 else
                 {
-                    g.DrawRectangle(base.Highlighter, scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
+                    g.DrawRectangle(Highlighter, scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
                 }
             }
         }

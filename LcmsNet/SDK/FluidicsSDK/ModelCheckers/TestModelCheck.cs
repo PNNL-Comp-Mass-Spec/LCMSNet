@@ -43,16 +43,19 @@ namespace FluidicsSDK.ModelCheckers
 
         IEnumerable<ModelStatus> IFluidicsModelChecker.CheckModel()
         {
-            var testList = new List<ModelStatus>();
-            testList.Add(new ModelStatus("Test Check", "This status was created by the Test Model Check. The Model Checks are being run.", Category));
+            var testList = new List<ModelStatus>
+            {
+                new ModelStatus("Test Check", "This status was created by the Test Model Check. The Model Checks are being run.", Category)
+            };
             StatusUpdate?.Invoke(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.NotInitialized, "Test Model Check Run.", null));
             return testList;
         }
 
         public List<string> GetStatusNotificationList()
         {
-            var statusNotifications = new List<string>();
-            statusNotifications.Add("Test Check Run");
+            var statusNotifications = new List<string> {
+                "Test Check Run"
+            };
             return statusNotifications;
         }
 

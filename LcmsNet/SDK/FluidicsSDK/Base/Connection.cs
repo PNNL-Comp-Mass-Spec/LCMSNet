@@ -13,21 +13,26 @@ using System.Drawing;
 
 namespace FluidicsSDK.Base
 {
-    public class Connection:IRenderable
+    public sealed class Connection:IRenderable
     {
         #region Members
         // the list of line primitives that make up the device
-        protected List<GraphicsPrimitive> m_prims;
+        private List<GraphicsPrimitive> m_prims;
+
         // the device the connection belongs to, if it is a connection internal to a device.
-        protected FluidicsDevice m_device;
+        private FluidicsDevice m_device;
+        
         //max  variance is used to give users leeway when attempting to click on a connection, so they do not have to be pixel accurate with their clicks.
         // 400 because the formula tell if a point is on a line uses derivatives, and 400 gives a few pixels worth of inaccuracy to users.
         const int MAX_VARIANCE = 800;
+        
         // an id to identify the connection
-        protected long m_id;
+        private readonly long m_id;
+        
         //we want each connection to have a unique id, this tracks the next available id..first connection made will get ID 0, next connection 1, next connection 2, etc.
         //no need for it to be a GUUID or such, since it's incredibly unlikely that any program would need 2^64 -1 ports.
-        protected static long availableId;
+        private static long availableId;
+        
         #endregion
 
         #region Methods
@@ -50,13 +55,15 @@ namespace FluidicsSDK.Base
         /// </summary>
         /// <param name="from">a classPort object representing where the connection is coming from</param>
         /// <param name="to">a classPort object repsenting where the connection is going to</param>
+        /// <param name="device"></param>
+        /// <param name="style"></param>
         public Connection(Port from, Port to, FluidicsDevice device, ConnectionStyles? style = null)
         {
             //assign the availableId to this, and then increment it so the next class gets availableId+1 as its id.
             m_id = availableId++;
             from.AddConnection(m_id, this);
             to.AddConnection(m_id, this);
-            ConnectionStyle = style == null ? ConnectionStyles.Standard : (ConnectionStyles)style;
+            ConnectionStyle = style ?? ConnectionStyles.Standard;
             m_prims = SetupLines(from, to);
             P1 = from;
             P2 = to;
@@ -69,7 +76,7 @@ namespace FluidicsSDK.Base
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        protected virtual List<GraphicsPrimitive> SetupLines(Port from, Port to)
+        private List<GraphicsPrimitive> SetupLines(Port from, Port to)
         {
             var lines = new List<GraphicsPrimitive>();
             if (ConnectionStyle == ConnectionStyles.Elbow)
@@ -105,12 +112,13 @@ namespace FluidicsSDK.Base
         /// <param name="g">a System.Drawing Graphics object</param>
         /// <param name="alpha">a integer representing the alpha value to draw the connections with</param>
         /// <param name="scale">a float representing the value to scale the connections by</param>
-        public virtual void Render(Graphics g, int alpha, float scale)
+        public void Render(Graphics g, int alpha, float scale)
         {
             if (!Transparent)
             {
-                foreach (FluidicsLine line in m_prims)
+                foreach (var singleLine in m_prims)
                 {
+                    var line = (FluidicsLine)singleLine;
                     line.Render(g, alpha, scale, Selected, false);
                 }
             }
@@ -120,8 +128,7 @@ namespace FluidicsSDK.Base
         /// move the connection with the port
         /// </summary>
         /// <param name="port">a classPort object</param>
-        /// <param name="oldLoc">A System.Drawing.Point representing the old location of the port</param>
-        public virtual void MoveWith(Port port)
+        public void MoveWith(Port port)
         {
             if (ConnectionStyle == ConnectionStyles.Elbow)
             {
@@ -138,18 +145,28 @@ namespace FluidicsSDK.Base
                     midPoint = new Point(P2.Center.X, P1.Center.Y);
                   
                 }
-                var line = m_prims[0] as FluidicsLine;
-                line.Origin = P1.Center;
-                line.Term = midPoint;
-                line = m_prims[1] as FluidicsLine;
-                line.Origin = midPoint;
-                line.Term = P2.Center;
+                var lineA = m_prims[0] as FluidicsLine;
+                if (lineA != null)
+                {
+                    lineA.Origin = P1.Center;
+                    lineA.Term = midPoint;
+                }
+
+                var lineB = m_prims[1] as FluidicsLine;
+                if (lineB != null)
+                {
+                    lineB.Origin = midPoint;
+                    lineB.Term = P2.Center;
+                }
             }
             else
             {
                 var line = m_prims[0] as FluidicsLine;
-                line.Origin  = P1.Center;
-                line.Term = P2.Center;
+                if (line != null)
+                {
+                    line.Origin  = P1.Center;
+                    line.Term = P2.Center;
+                }
             }
          
             //if (port.ID == P1.ID)
@@ -177,7 +194,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// destroy this connection
         /// </summary>
-        public virtual void Destroy()
+        public void Destroy()
         {
             P1.RemoveConnection(m_id);
             P2.RemoveConnection(m_id);
@@ -189,27 +206,29 @@ namespace FluidicsSDK.Base
         /// </summary>
         /// <param name="location">a System.Drawing.Point object</param>
         /// <returns>true if so, false if not</returns>
-        public virtual bool OnPoint(Point location)
+        public bool OnPoint(Point location)
         {
             //check to see if the point is on any of the lines that make up the connection
-            var existsOnPoint = false;
             if (!Transparent) // if the connection is transparent, we don't want to be able to select it
             {
                 
-                foreach (FluidicsLine line in m_prims)
+                foreach (var singleLine in m_prims)
                 {
-                    existsOnPoint = line.Contains(location, MAX_VARIANCE);
-                    if (existsOnPoint) { return true; }
+                    var line = (FluidicsLine)singleLine;
+                    var existsOnPoint = line.Contains(location, MAX_VARIANCE);
+                    if (existsOnPoint) {
+                        return true;
+                    }
                 }
-                return existsOnPoint;
+                return false;
             }
-            return existsOnPoint;
+            return false;
         }
 
         /// <summary>
         /// Select the connection
         /// </summary>
-        public virtual void Select()
+        public void Select()
         {
             if (!Transparent)
             {
@@ -220,13 +239,13 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// Deselect the connection
         /// </summary>
-        public virtual void Deselect()
+        public void Deselect()
         {
             Selected = false;
         }
 
 
-        public virtual void DoubleClicked()
+        public void DoubleClicked()
         {
             if (!Transparent) //if transparent, we don't want to be able to do this
             {
@@ -249,10 +268,8 @@ namespace FluidicsSDK.Base
             {
                 return P2;
             }
-            else
-            {
-                return P1;
-            }
+
+            return P1;
         }
         #endregion
 
@@ -273,9 +290,7 @@ namespace FluidicsSDK.Base
         public Port P1
         {
             get;
-            protected set;
         }
-
 
         /// <summary>
         /// Property determing the Outbound port.
@@ -283,7 +298,6 @@ namespace FluidicsSDK.Base
         public Port P2
         {
             get;
-            protected set;
         }
 
         /// <summary>
@@ -297,7 +311,7 @@ namespace FluidicsSDK.Base
             }
             protected set
             {
-                if (value is FluidicsDevice)
+                if (value != null)
                 {
                     m_device = value;
                 }
@@ -309,7 +323,6 @@ namespace FluidicsSDK.Base
         /// </summary>
         public Color Color
         {
-            private get { return Color.Black; }
             set
             {
                 foreach (var prim in m_prims)
@@ -331,14 +344,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// ID to identify connection
         /// </summary>
-        public long ID
-        {
-            get
-            {
-                return m_id;
-            }
-            private set { }
-        }
+        public long ID => m_id;
 
         /// <summary>
         /// Internal volume of the connection

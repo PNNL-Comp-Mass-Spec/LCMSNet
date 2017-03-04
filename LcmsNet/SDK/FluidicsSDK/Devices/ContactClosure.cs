@@ -14,7 +14,7 @@ using FluidicsSDK.Base;
 
 namespace FluidicsSDK.Devices
 {
-    public class ContactClosure : FluidicsDevice
+    public sealed class ContactClosure : FluidicsDevice
     {
 
         #region members
@@ -52,7 +52,7 @@ namespace FluidicsSDK.Devices
         /// </summary>
         public ContactClosure()
         {
-            base.AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
             MaxVariance = MAX_PIXEL_VARIANCE;
         }
 
@@ -62,7 +62,7 @@ namespace FluidicsSDK.Devices
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public ContactClosure(Point loc)
         {
-            base.AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
         }
 
 
@@ -70,7 +70,7 @@ namespace FluidicsSDK.Devices
         /// setup the states
         /// </summary>
         /// <returns></returns>
-        protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
+        private Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
             var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
             // contact closure has no states, it is a source

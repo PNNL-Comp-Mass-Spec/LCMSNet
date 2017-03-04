@@ -60,13 +60,13 @@ namespace FluidicsSDK.Graphic
             UpdateBoundingBox();
         }
 
-        public override void Render(System.Drawing.Graphics g, int alpha, float scale, bool selected, bool error)
+        public override void Render(Graphics g, int alpha, float scale, bool selected, bool error)
         {
 
             // alter the color of the circle to be proper alpha, EXCEPT for error which should always be solid.
             m_scale = scale;
-            base.Color = Color.FromArgb(alpha, base.Color.R, base.Color.G, base.Color.B);
-            base.Highlight = Color.FromArgb(alpha, base.Highlight.R, base.Highlight.G, base.Highlight.B);
+            Color = Color.FromArgb(alpha, Color.R, Color.G, Color.B);
+            Highlight = Color.FromArgb(alpha, Highlight.R, Highlight.G, Highlight.B);
             //Color fillColor = Color.FromArgb(alpha, base.FillColor.R, base.FillColor.G, base.FillColor.B);
             Pen drawingPen;
             var scaledVertices = new Point[vertices.Count];
@@ -78,19 +78,19 @@ namespace FluidicsSDK.Graphic
             }
             if (selected)
             {
-                drawingPen = base.Highlighter;
+                drawingPen = Highlighter;
             }
             else if (error)
             {
-                drawingPen = base.ErrorPen;
+                drawingPen = ErrorPen;
             }
             else
             {
-                drawingPen = base.Pen;
+                drawingPen = Pen;
             }
-            if (base.Fill)
+            if (Fill)
             {
-                g.FillPolygon(base.FillBrush, scaledVertices.ToArray());
+                g.FillPolygon(FillBrush, scaledVertices.ToArray());
 
             }
             g.DrawPolygon(drawingPen, scaledVertices.ToArray());
@@ -98,7 +98,7 @@ namespace FluidicsSDK.Graphic
 
         }
 
-        public override void Render(System.Drawing.Graphics g, int alpha, float scale, System.Drawing.Point moveby, bool highlight, bool error)
+        public override void Render(Graphics g, int alpha, float scale, Point moveby, bool highlight, bool error)
         {
             g.ScaleTransform(scale / 2, scale / 2);
             g.TranslateTransform(scale / 2, scale / 2);
@@ -107,16 +107,18 @@ namespace FluidicsSDK.Graphic
 
         private Point scalePoint(Point p)
         {
-            return new Point((int)(p.X* this.m_scale), (int)(p.Y * this.m_scale));
+            return new Point((int)(p.X* m_scale), (int)(p.Y * m_scale));
         }
 
         public override void MoveBy(Point relativeValues)
         {
             for (var i = 0; i < vertices.Count; i++)
             {
-                var p = new Point();
-                p.X = vertices[i].X + relativeValues.X;
-                p.Y = vertices[i].Y + relativeValues.Y;
+                var p = new Point
+                {
+                    X = vertices[i].X + relativeValues.X,
+                    Y = vertices[i].Y + relativeValues.Y
+                };
                 vertices[i] = p;
             }
             UpdateBoundingBox();

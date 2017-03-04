@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using FluidicsSDK.Base;
 using System.Drawing;
+using System.Globalization;
 using FluidicsSDK.Managers;
 using FluidicsSDK.Graphic;
 using LcmsNetDataClasses.Devices;
 
 namespace FluidicsSDK.Devices
 {
-    public class SixPortInjectionFluidicsValve : TwoPositionValve
+    public sealed class SixPortInjectionFluidicsValve : TwoPositionValve
     {
         private const int NUMBER_OF_PORTS = 6;
         ISixPortInjectionValve m_valve;
@@ -19,21 +20,21 @@ namespace FluidicsSDK.Devices
             m_states = SetupStates();
             m_currentState = TwoPositionState.PositionA;
             base.ActivateState(m_states[m_currentState]);
-            var StateControlSize = new Size(15, 15);
-            var StateControl1Loc = new Point(base.Center.X - (StateControlSize.Width * 2), base.Center.Y - (StateControlSize.Height / 2));
-            var StateControl2Loc = new Point(base.Center.X + StateControlSize.Width, base.Center.Y - (StateControlSize.Height / 2));
-            var StateControlRectangle = new Rectangle(StateControl1Loc, StateControlSize);
-            var StateControlRectangle2 = new Rectangle(StateControl2Loc, StateControlSize);
+            var stateControlSize = new Size(15, 15);
+            var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 2), Center.Y - (stateControlSize.Height / 2));
+            var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height / 2));
+            var stateControlRectangle = new Rectangle(stateControl1Loc, stateControlSize);
+            var stateControlRectangle2 = new Rectangle(stateControl2Loc, stateControlSize);
             //add left control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle, Orient.Left), LeftButtonAction);
+            AddPrimitive(new FluidicsTriangle(stateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
-            base.AddPrimitive(new FluidicsTriangle(StateControlRectangle2, Orient.Right), RightButtonAction);
+            AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
             //add top "injection port"
-            base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width/4, Loc.Y - 30), new Size((int)Size.Width/2, 10), Color.Black,  Brushes.White));
-            base.AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) -5), Loc.Y - 20), new Size(10, 20), Color.Black,  Brushes.White));
+            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width/4, Loc.Y - 30), new Size((int)Size.Width/2, 10), Color.Black,  Brushes.White));
+            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) -5), Loc.Y - 20), new Size(10, 20), Color.Black,  Brushes.White));
             // add injection loop
-            base.AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
-            base.AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50,30), Color.Black, Brushes.White, true, 1));
+            AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
+            AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50,30), Color.Black, Brushes.White, true, 1));
         }
 
 
@@ -43,7 +44,7 @@ namespace FluidicsSDK.Devices
             var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
             using(var f = new Font("Calibri", 11 + stringScale))
             {
-                g.DrawString(Volume.ToString() + " \u00b5" + "L", f, Brushes.Black, new PointF((Center.X * scale - 20), (Center.Y * scale - 10)));
+                g.DrawString(Volume.ToString(CultureInfo.InvariantCulture) + " \u00b5" + "L", f, Brushes.Black, new PointF((Center.X * scale - 20), (Center.Y * scale - 10)));
             }
         }
         
@@ -69,13 +70,16 @@ namespace FluidicsSDK.Devices
             m_valve = device as ISixPortInjectionValve;
             try
             {
-                Volume = m_valve.InjectionVolume;
-                m_valve.PositionChanged += m_valve_PositionChanged;
-                m_valve.InjectionVolumeChanged += m_valve_InjectionVolumeChanged;
+                if (m_valve != null)
+                {
+                    Volume = m_valve.InjectionVolume;
+                    m_valve.PositionChanged += m_valve_PositionChanged;
+                    m_valve.InjectionVolumeChanged += m_valve_InjectionVolumeChanged;
+                }
             }
             catch (Exception)
             {
-                // MessageBox.Show("This is crap..." + ex.Message);
+                // MessageBox.Show("Null valve: " + ex.Message);
             }
         }
 
@@ -89,11 +93,13 @@ namespace FluidicsSDK.Devices
         /// Setup the devices states
         /// </summary>
         /// <returns>a dictionary of with TwoPositionState enums as the keys and lists of tuples of int, int type as the values </returns>
-        protected Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
+        private Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates()
         {
-            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>();
-            states.Add(TwoPositionState.PositionB, GenerateState(0, Ports.Count - 1));
-            states.Add(TwoPositionState.PositionA, GenerateState(1, Ports.Count));
+            var states = new Dictionary<TwoPositionState, List<Tuple<int, int>>>
+            {
+                {TwoPositionState.PositionB, GenerateState(0, Ports.Count - 1)},
+                {TwoPositionState.PositionA, GenerateState(1, Ports.Count)}
+            };
             return states;
         }
 

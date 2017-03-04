@@ -7,7 +7,7 @@ using FluidicsSDK.Graphic;
 
 namespace FluidicsPack
 {
-    public class FluidicsTee:FluidicsDevice
+    public sealed class FluidicsTee:FluidicsDevice
     {
         public FluidicsTee()
         {
@@ -29,14 +29,15 @@ namespace FluidicsPack
 
             teePolygon.AddPoint(new Point(70, 0));
             teePolygon.AddPoint(new Point(0, 0));
-            base.AddPrimitive(teePolygon);
+            AddPrimitive(teePolygon);
             foreach (var p in GeneratePortLocs())
             {
-                base.AddPort(p);
+                AddPort(p);
             }
-            var Connections = new List<Tuple<int, int>>();
-            Connections.Add(new Tuple<int,int>(0, 1));
-            Connections.Add(new Tuple<int,int>(2,1));
+            var Connections = new List<Tuple<int, int>> {
+                new Tuple<int, int>(0, 1),
+                new Tuple<int, int>(2, 1)
+            };
             m_info_controls_box.Width = 70;
             m_info_controls_box.Height = 46;
             ActivateState(Connections);
@@ -49,7 +50,7 @@ namespace FluidicsPack
             return string.Empty;
         }
 
-        protected Point[] GeneratePortLocs()
+        private Point[] GeneratePortLocs()
         {
             var points = new Point[3];
             points[0] = new Point(0 - Port.PORT_DEFAULT_RADIUS, 29/2);

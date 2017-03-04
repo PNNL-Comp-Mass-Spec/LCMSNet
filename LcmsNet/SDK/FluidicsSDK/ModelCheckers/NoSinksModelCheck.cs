@@ -42,7 +42,8 @@ namespace FluidicsSDK.ModelCheckers
         /// <summary>
         /// Determines if a sink out of the system exists from a given source.
         /// </summary>
-        /// <param name="fromPort">the port to look for sinks from</param>       
+        /// <param name="fromPort">the port to look for sinks from</param>
+        /// <param name="pathTaken"></param>
         /// <returns>true if a sink is found, false otherwise</returns>
         private static bool FindSinks(Port fromPort, out List<Connection> pathTaken)
         {
@@ -119,11 +120,7 @@ namespace FluidicsSDK.ModelCheckers
                 }
 
                 //if no sink is found, report to the notifcation system and add to the status list to be returned
-                if (StatusUpdate != null)
-                {
-                    var deviceName = p.ParentDevice.DeviceName;
-                    StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, NO_PATH_FOUND, message,  this));
-                }
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, NO_PATH_FOUND, message,  this));
                 status.Add(new ModelStatus("No Sink on Path", "No sink on on path", Category, string.Empty,string.Empty, null, p.ParentDevice.IDevice));
             }
             watch.Stop();
