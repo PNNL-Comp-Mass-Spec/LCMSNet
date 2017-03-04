@@ -119,20 +119,22 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public classValveVICIMultiPos(int numPositions)
         {
-            ///     Baud Rate   9600
-            ///     Parity      None
-            ///     Stop Bits   One
-            ///     Data Bits   8
-            ///     Handshake   None
-            m_serialPort           = new System.IO.Ports.SerialPort();
-            m_serialPort.PortName  = "COM1";
-            m_serialPort.BaudRate  = 9600;
-            m_serialPort.ReadTimeout = CONST_DEAFULT_TIMEOUT;
-            m_serialPort.StopBits  = StopBits.One;
-            m_serialPort.DataBits  = 8;
-            m_serialPort.Handshake = Handshake.None;
-            m_serialPort.Parity    = Parity.None;
-            m_serialPort.WriteTimeout = CONST_DEAFULT_TIMEOUT;
+            //     Baud Rate   9600
+            //     Parity      None
+            //     Stop Bits   One
+            //     Data Bits   8
+            //     Handshake   None
+            m_serialPort = new SerialPort
+            {
+                PortName = "COM1",
+                BaudRate = 9600,
+                ReadTimeout = CONST_DEAFULT_TIMEOUT,
+                StopBits = StopBits.One,
+                DataBits = 8,
+                Handshake = Handshake.None,
+                Parity = Parity.None,
+                WriteTimeout = CONST_DEAFULT_TIMEOUT
+            };
 
             //Set positions to unknown
             m_lastMeasuredPosition   = -1;
@@ -147,9 +149,11 @@ namespace LcmsNet.Devices.Valves
             SoftwareID                  = ' ';
             m_name                = "MPValve";
         }
+
         /// <summary>
         /// Constructor from a supplied serial port object.
         /// </summary>
+        /// <param name="numPositions"></param>
         /// <param name="port">The serial port object to use.</param>
         public classValveVICIMultiPos(int numPositions, SerialPort port)
         {
@@ -194,15 +198,13 @@ namespace LcmsNet.Devices.Valves
                 {
                     return enumDeviceStatus.Initialized;
                 }
-                else
-                {
-                    return m_status;
-                }
+
+                return m_status;
             }
             set
             {
-                if (value != m_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status Changed", this));
+                if (value != m_status)
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status Changed", this));
                 m_status = value;
             }
         }
@@ -455,7 +457,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Sets the position of the valve.
         /// </summary>
-        /// <param name="newPosition">The new position.</param>   
+        /// <param name="position">The new position.</param>   
         public enumValveErrors SetPosition(int position)
         {
             var newPosition = Convert.ToInt32(position);
@@ -539,17 +541,13 @@ namespace LcmsNet.Devices.Valves
                     //classApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
                     return enumValveErrors.ValvePositionMismatch;
                 }
-                else
-                {
-                    OnPosChanged(m_lastMeasuredPosition);
-                    //classApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
-                    return enumValveErrors.Success;
-                }
+
+                OnPosChanged(m_lastMeasuredPosition);
+                //classApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
+                return enumValveErrors.Success;
             }
-            else
-            {
-                return enumValveErrors.BadArgument;
-            }           
+
+            return enumValveErrors.BadArgument;
         }
        
         /// <summary>
@@ -594,14 +592,14 @@ namespace LcmsNet.Devices.Valves
             //Read in whatever is waiting in the buffer
             //This should look like
             //  Position is "B"
-            var tempBuffer = "";
+            string tempBuffer;
             try
             {
                 tempBuffer    = m_serialPort.ReadExisting();
                 var contains = tempBuffer.Contains("Position is =");
 
                 
-                var data = tempBuffer.Split(new string [] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
+                var data = tempBuffer.Split(new[] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
                 tempBuffer = "";
                 for (var i = data.Length - 1; i >= 0; i--)
                 {
@@ -623,15 +621,15 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
             
-            /// 
-            /// Grab the actual position from the above string
-            /// 
+            // 
+            // Grab the actual position from the above string
+            // 
             if (tempBuffer.Length > 1)
             {
                 var positions = tempBuffer.Split('=');
                 var   tempPosition = positions[positions.Length - 1];
 
-                var position = -1;
+                int position;
                 if (int.TryParse(tempPosition, out position))
                 {              
                     if (position >= 0 && position <= NumberOfPositions)
@@ -681,7 +679,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            var tempBuffer = "";
+            string tempBuffer;
             //Version info is displayed on 2 lines
             try
             {
@@ -738,7 +736,7 @@ namespace LcmsNet.Devices.Valves
             }
 
             var tempID = ' ';  //Default to blank space
-            var tempBuffer = "";
+            string tempBuffer;
 
             try
             {
@@ -762,7 +760,8 @@ namespace LcmsNet.Devices.Valves
                 //Grab the actual position from the above string
                 if (tempBuffer.Length > 1)  //Make sure we have content in the string
                 {
-                    var tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
+                    //Find the first =
+                    var tempCharIndex = tempBuffer.IndexOf("=", StringComparison.Ordinal);
                     if (tempCharIndex >= 0)  //Make sure we found a =
                     {
                         //Change the position to be the second character following the first =
@@ -823,11 +822,10 @@ namespace LcmsNet.Devices.Valves
                 return enumValveErrors.Success;
             }
 
-            else
-            {
-                return enumValveErrors.BadArgument;
-            }
+            return enumValveErrors.BadArgument;
+
         }
+
         /// <summary>
         /// Clears the hardware ID.
         /// </summary>
@@ -930,7 +928,7 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-            var tempBuffer = "";
+            string tempBuffer;
 
             try
             {
@@ -950,7 +948,8 @@ namespace LcmsNet.Devices.Valves
             //Grab the actual #positions from the above string
             if (tempBuffer.Length > 1)  //Make sure we have content in the string
             {
-                var tempCharIndex = tempBuffer.IndexOf("=");   //Find the first =
+                //Find the first =
+                var tempCharIndex = tempBuffer.IndexOf("=", StringComparison.Ordinal);
                 if (tempCharIndex >= 0)  //Make sure we found a =
                 {
                     //Change the position to be the second character following the first =
@@ -1008,11 +1007,13 @@ namespace LcmsNet.Devices.Valves
         {
             return m_name;
         }
+
+        /*
         /// <summary>
         /// Writes health information to the data file.
         /// </summary>
         /// <param name="writer"></param>        
-        /*public FinchComponentData GetData()
+        public FinchComponentData GetData()
         {
             FinchComponentData component = new FinchComponentData();
             component.Status    = Status.ToString();

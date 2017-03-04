@@ -33,10 +33,8 @@ namespace LcmsNet.Devices.BrukerStart
                 var rootElement = m_Doc.CreateElement("Acquisition");
                 m_Doc.AppendChild(rootElement);
 
-                XmlAttribute newAttrbute;
-
                 // Interface version
-                newAttrbute = m_Doc.CreateAttribute("interfaceVersion");
+                var newAttrbute = m_Doc.CreateAttribute("interfaceVersion");
                 newAttrbute.Value = "1024";
                 rootElement.Attributes.Append(newAttrbute);
 
@@ -92,7 +90,7 @@ namespace LcmsNet.Devices.BrukerStart
                 //rootElement.Attributes.Append(newAttrbute);
 
                 var memStream = new MemoryStream();
-                var xmWriter = new XmlTextWriter(memStream, System.Text.Encoding.UTF8);
+                // var xmWriter = new XmlTextWriter(memStream, System.Text.Encoding.UTF8);
 
                 m_Doc.Save(memStream);
 //              m_Doc.Save(@"D:\Temporary\BrukerXMLTest.xml");  // Debug statement
@@ -103,7 +101,7 @@ namespace LcmsNet.Devices.BrukerStart
 
                 memStreamReader.Close();
                 memStream.Close();
-                xmWriter = null;
+                // xmWriter = null;
 
                 return xmlText + Environment.NewLine;
             }   

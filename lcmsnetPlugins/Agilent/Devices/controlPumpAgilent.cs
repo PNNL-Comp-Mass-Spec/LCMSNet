@@ -20,15 +20,6 @@ namespace Agilent.Devices.Pumps
     {
         private const string CONST_PUMP_METHOD_PATH = "pumpmethods";
 
-        /// <summary>
-        /// Delegate for invoking from alternate thread than UI.
-        /// </summary>
-        /// <param name="time"></param>
-        /// <param name="pressure"></param>
-        /// <param name="flowrate"></param>
-        /// <param name="percentB"></param>
-        private delegate void DelegateDisplayMonitoringData(List<DateTime> time, List<double> pressure, List<double> flowrate, List<double> percentB);
-
         #region Members
         /// <summary>
         /// A pump object to use.
@@ -55,24 +46,33 @@ namespace Agilent.Devices.Pumps
             m_pump = device as classPumpAgilent;
 
             mform_purges = new formAgilentPumpPurge(m_pump);
-            /// 
-            /// Initialie the underlying device class'
-            /// 
-            m_pump.MethodAdded            += m_pump_MethodAdded;
-            m_pump.MethodUpdated          += m_pump_MethodUpdated;
-            m_pump.MonitoringDataReceived += m_pump_MonitoringDataReceived;
-            mcomboBox_Mode.DataSource         = System.Enum.GetValues(typeof(enumPumpAgilentModes));
+            // 
+            // Initialize the underlying device class
+            // 
+            if (m_pump != null)
+            {
+                m_pump.MethodAdded += m_pump_MethodAdded;
+                m_pump.MethodUpdated += m_pump_MethodUpdated;
+                m_pump.MonitoringDataReceived += m_pump_MonitoringDataReceived;
+                mcomboBox_Mode.DataSource = Enum.GetValues(typeof(enumPumpAgilentModes));
 
-            controlPumpAgilent.NewMethodAvailable += controlPumpAgilent_NewMethodAvailable;
-            /// 
-            /// Add to the device manager.
-            /// 
+                NewMethodAvailable += controlPumpAgilent_NewMethodAvailable;
+            }
+
+            // 
+            // Add to the device manager.
+            // 
             SetBaseDevice(m_pump);
-            
-            /// 
-            /// Add a list of available serial port names to the combo box.
-            /// 
-            mcomboBox_comPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
+
+            // 
+            // Add a list of available serial port names to the combo box.
+
+            var portNames = System.IO.Ports.SerialPort.GetPortNames();
+            foreach (var portName in portNames)
+            {
+                mcomboBox_comPort.Items.Add(portName);
+            }
+
             if (mcomboBox_comPort.Items.Count > 0)
                 mcomboBox_comPort.SelectedIndex = 0;
             if (mcomboBox_comPort.Items.Contains(m_pump.PortName))
@@ -108,15 +108,11 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Handles the event when data is received from the pumps.
         /// </summary>
-        /// <param name="time"></param>
-        /// <param name="pressure"></param>
-        /// <param name="flowrate"></param>
-        /// <param name="percentB"></param>
         void m_pump_MonitoringDataReceived(object sender, PumpDataEventArgs args)
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<PumpDataEventArgs>(mcontrol_pumpDisplay.DisplayMonitoringData), new object[] { sender, args });
+                BeginInvoke(new EventHandler<PumpDataEventArgs>(mcontrol_pumpDisplay.DisplayMonitoringData), sender, args);
             }
             else
             {
@@ -141,14 +137,14 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         void m_pump_MethodUpdated(object sender, classPumpMethodEventArgs e)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new Action<object, classPumpMethodEventArgs>(m_pump_MethodUpdated), new object[]{sender, e});
+                Invoke(new Action<object, classPumpMethodEventArgs>(m_pump_MethodUpdated), sender, e);
             }
             else if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
             {
                 mcomboBox_methods.Items.Add(e.MethodName);
-            }          
+            }
         }
         /// <summary>
         /// Handles when a pump method is added.
@@ -157,17 +153,17 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         void m_pump_MethodAdded(object sender, classPumpMethodEventArgs e)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new Action<object, classPumpMethodEventArgs>(m_pump_MethodAdded), new object[]{sender, e});
+                Invoke(new Action<object, classPumpMethodEventArgs>(m_pump_MethodAdded), sender, e);
             }
             else if (mcomboBox_methods.Items.Contains(e.MethodName) == false)
             {
                 mcomboBox_methods.Items.Add(e.MethodName);
 
-                /// 
-                /// Make sure one method is selected.
-                /// 
+                // 
+                // Make sure one method is selected.
+                // 
                 if (mcomboBox_methods.Items.Count == 1)
                     mcomboBox_methods.SelectedIndex = 0;
             }
@@ -175,14 +171,14 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Reads the pump method directory and alerts the pumps of new methods to run.
         /// </summary>
-        void ReadMethodDirectory(bool bulkLoad = false)
+        void ReadMethodDirectory()
         {
-            /// 
-            /// The reason we dont just add stuff straight into the user interface here, is to maintain the
-            /// design pattern that things propogate events to us, since we are not in charge of managing the
-            /// data.  We will catch an event from adding a method that one was added...and thus update
-            /// the user interface intrinsically.
-            /// 
+            // 
+            // The reason we don't just add stuff straight into the user interface here, is to maintain the
+            // design pattern that things propogate events to us, since we are not in charge of managing the
+            // data.  We will catch an event from adding a method that one was added...and thus update
+            // the user interface intrinsically.
+            // 
             var path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ExecutablePath), CONST_PUMP_METHOD_PATH);
             if (!System.IO.Directory.Exists(path))
             {
@@ -190,16 +186,16 @@ namespace Agilent.Devices.Pumps
             }
 
             var filenames = System.IO.Directory.GetFiles(path, "*.txt");
-            
+
 
             string selectedMethod = null;
-            if(mcomboBox_methods.Items.Count > 0)
+            if (mcomboBox_methods.Items.Count > 0)
             {
                 selectedMethod = mcomboBox_methods.SelectedItem as string;
             }
-            /// 
-            /// Clear any existing pump methods
-            /// 
+            // 
+            // Clear any existing pump methods
+            // 
             if (filenames.Length > 0)
                 m_pump.ClearMethods();
             var methods = new Dictionary<string, string>();
@@ -210,7 +206,7 @@ namespace Agilent.Devices.Pumps
                 m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(filename), method);
             }
             //m_pump.AddMethods(methods);
-            if(selectedMethod != null)
+            if (selectedMethod != null)
             {
                 // try to select the last selected method, if it has been loaded back in to the system.
                 mcomboBox_methods.SelectedIndex = mcomboBox_methods.Items.Contains(selectedMethod) ? mcomboBox_methods.Items.IndexOf(selectedMethod) : 0;
@@ -240,14 +236,14 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         public bool Emulation
         {
-          get
-          {
-              return m_pump.Emulation;
-          }
-          set
-          {
-              m_pump.Emulation = value;
-          }
+            get
+            {
+                return m_pump.Emulation;
+            }
+            set
+            {
+                m_pump.Emulation = value;
+            }
         }
 
         #endregion
@@ -270,7 +266,7 @@ namespace Agilent.Devices.Pumps
         }
         private void mbutton_GetFlowRate_Click(object sender, EventArgs e)
         {
-            mtextBox_ActualFlowRate.Text = m_pump.GetActualFlow().ToString();
+            mtextBox_ActualFlowRate.Text = m_pump.GetActualFlow().ToString("0.000");
         }
         private void mbutton_SetMixerVol_Click(object sender, EventArgs e)
         {
@@ -278,11 +274,11 @@ namespace Agilent.Devices.Pumps
         }
         private void mbutton_GetMixerVol_Click(object sender, EventArgs e)
         {
-            mtextBox_GetMixerVol.Text = m_pump.GetMixerVolume().ToString();
+            mtextBox_GetMixerVol.Text = m_pump.GetMixerVolume().ToString("0.000");
         }
         private void mbutton_GetPressure_Click(object sender, EventArgs e)
         {
-            mtextBox_Pressure.Text = m_pump.GetPressure().ToString();
+            mtextBox_Pressure.Text = m_pump.GetPressure().ToString("0.000");
         }
         private void mbutton_SetMode_Click(object sender, EventArgs e)
         {
@@ -290,13 +286,13 @@ namespace Agilent.Devices.Pumps
         }
         private void mbutton_retrieve_Click(object sender, EventArgs e)
         {
-            /// 
-            /// Get the pump method from the device
-            /// 
+            // 
+            // Get the pump method from the device
+            // 
             var method = m_pump.RetrieveMethod();
-            /// 
-            /// Allow the user to edit it.
-            /// 
+            // 
+            // Allow the user to edit it.
+            // 
             mtextbox_method.Text = method;
         }
         /// <summary>
@@ -309,23 +305,25 @@ namespace Agilent.Devices.Pumps
             if (string.IsNullOrEmpty(mtextbox_method.Text))
                 return;
 
-            var dialog   = new SaveFileDialog();
-            dialog.InitialDirectory = CONST_PUMP_METHOD_PATH;
-            dialog.FileName         = "pumpMethod";
-            dialog.DefaultExt       = ".txt";
-            if (dialog.ShowDialog() == DialogResult.OK)
+            var dialog = new SaveFileDialog
             {
-                System.IO.TextWriter writer = System.IO.File.CreateText(dialog.FileName);
-                writer.Write(mtextbox_method.Text);
-                writer.Close();
+                InitialDirectory = CONST_PUMP_METHOD_PATH,
+                FileName = "pumpMethod",
+                DefaultExt = ".txt"
+            };
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
 
-                /// 
-                /// Make sure we add it to the list of methods as well.
-                /// 
-                m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), mtextbox_method.Text);
+            System.IO.TextWriter writer = System.IO.File.CreateText(dialog.FileName);
+            writer.Write(mtextbox_method.Text);
+            writer.Close();
 
-                NewMethodAvailable?.Invoke(this, null);
-            }
+            // 
+            // Make sure we add it to the list of methods as well.
+            // 
+            m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), mtextbox_method.Text);
+
+            NewMethodAvailable?.Invoke(this, null);
         }
         /// <summary>
         /// Turns the pumps on.
@@ -352,11 +350,10 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void mbutton_start_Click(object sender, EventArgs e)
         {
-            var methodName = "";
             if (mcomboBox_methods.SelectedIndex < 0)
                 return;
 
-            methodName = mcomboBox_methods.Items[mcomboBox_methods.SelectedIndex].ToString();
+            var methodName = mcomboBox_methods.Items[mcomboBox_methods.SelectedIndex].ToString();
             m_pump.StartMethod(methodName);
         }
         /// <summary>
@@ -387,7 +384,7 @@ namespace Agilent.Devices.Pumps
             {
                 ReadMethodDirectory();
             }
-            catch(System.IO.DirectoryNotFoundException ex)
+            catch (System.IO.DirectoryNotFoundException ex)
             {
                 classApplicationLogger.LogError(0, ex.Message, ex);
             }
@@ -420,16 +417,12 @@ namespace Agilent.Devices.Pumps
 
         private void mbutton_purge_Click(object sender, EventArgs e)
         {
-
-            if (mform_purges != null)
-            {
-                mform_purges.ShowDialog();
-            }
+            mform_purges?.ShowDialog();
         }
 
         private void mcomboBox_comPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void mbutton_setPortName_Click(object sender, EventArgs e)

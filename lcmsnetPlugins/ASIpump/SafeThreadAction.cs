@@ -23,7 +23,10 @@ namespace ASIpump
                 }
 
             }
-            catch{}
+            catch
+            {
+                // ignored
+            }
         }
 
         public static Y SafeThreadGet<Y, T>(this T control, Func<T, Y> call) where T : Control
@@ -37,10 +40,12 @@ namespace ASIpump
         {
             if (ToRaise != null)
             {
-                foreach (EventHandler ev in ToRaise.GetInvocationList())
+                foreach (var invokedDelegate in ToRaise.GetInvocationList())
                 {
+                    var ev = (EventHandler)invokedDelegate;
+
                     //Take a look at the object "receiving" the event.  If it is a Control, invoke on the control.
-                    var target = ev.Target as System.Windows.Forms.Control;
+                    var target = ev.Target as Control;
                     try
                     {
                         if (target != null)
@@ -52,7 +57,10 @@ namespace ASIpump
                             ev.BeginInvoke(sender, args, null, null);
                         }
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
         }
@@ -61,10 +69,12 @@ namespace ASIpump
         {
             if (ToRaise != null)
             {
-                foreach (PropertyChangedEventHandler ev in ToRaise.GetInvocationList())
+                foreach (var invokedDelegate in ToRaise.GetInvocationList())
                 {
+                    var ev = (PropertyChangedEventHandler)invokedDelegate;
+
                     //Take a look at the object "receiving" the event.  If it is a Control, invoke on the control.
-                    var target = ev.Target as System.Windows.Forms.Control;
+                    var target = ev.Target as Control;
                     try
                     {
                         if (target != null)
@@ -76,7 +86,10 @@ namespace ASIpump
                             ev.BeginInvoke(sender, args, null, null);
                         }
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
         }
@@ -85,19 +98,21 @@ namespace ASIpump
         {
             double ret = 0;
 
-            if (values.Count() > 0)
-            {
-                //Compute the Average
-                var avg = values.Average();
+            var enumerateValues = values as double[] ?? values.ToArray();
 
-                //Perform the Sum of (value-avg)_2_2
-                var sum = values.Sum(d => Math.Pow(d - avg, 2));
+            if (enumerateValues.Length <= 0)
+                return ret;
 
-                var x2 = (sum) / (double) (values.Count()-1);
+            //Compute the Average
+            var avg = enumerateValues.Average();
 
-                //Put it all together
-                ret = Math.Sqrt(x2);
-            }
+            //Perform the Sum of (value-avg)_2_2
+            var sum = enumerateValues.Sum(d => Math.Pow(d - avg, 2));
+
+            var x2 = sum / (enumerateValues.Length - 1);
+
+            //Put it all together
+            ret = Math.Sqrt(x2);
             return ret;
         }
 
@@ -105,10 +120,11 @@ namespace ASIpump
         {
             double ret = 0;
 
-            if (values.Count() > 0)
+            var enumeratedValues = values as double[] ?? values.ToArray();
+            if (enumeratedValues.Length > 0)
             {
                 //Compute the Average
-                ret = values.Average();
+                ret = enumeratedValues.Average();
             }
             return ret;
         }

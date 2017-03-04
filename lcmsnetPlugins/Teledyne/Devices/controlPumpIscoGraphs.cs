@@ -27,7 +27,8 @@ namespace LcmsNet.Devices.Pumps
             ZedGraphControl[] mplot_PumpGraphArray;
             
             bool m_FirstPointReceived;
-            DateTime mdate_GraphStartTime = LcmsNetSDK.TimeKeeper.Instance.Now;//DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            // DateTime mdate_GraphStartTime = LcmsNetSDK.TimeKeeper.Instance.Now;//DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+
             List<DateTime>[] m_SampleTimes;
             List<double>[] m_FlowData;
             List<double>[] m_PressData;
@@ -61,7 +62,7 @@ namespace LcmsNet.Devices.Pumps
             private void InitControl()
             {
                 // Initialize array holding the graphs
-                mplot_PumpGraphArray = new ZedGraphControl[] {mplot_PumpA, mplot_PumpB, mplot_PumpC};
+                mplot_PumpGraphArray = new[] {mplot_PumpA, mplot_PumpB, mplot_PumpC};
 
                 // Initialize the graphs
                 InitPlot(ref mplot_PumpGraphArray[0], "Pump A");
@@ -69,9 +70,9 @@ namespace LcmsNet.Devices.Pumps
                 InitPlot(ref mplot_PumpGraphArray[2], "Pump C");
 
                 // Initialize pump data arrays
-                m_SampleTimes = new List<DateTime>[] { new List<DateTime>(), new List<DateTime>(), new List<DateTime>() };
-                m_FlowData = new List<double>[] { new List<double>(), new List<double>(), new List<double>() };
-                m_PressData = new List<double>[] { new List<double>(), new List<double>(), new List<double>() };
+                m_SampleTimes = new[] { new List<DateTime>(), new List<DateTime>(), new List<DateTime>() };
+                m_FlowData = new[] { new List<double>(), new List<double>(), new List<double>() };
+                m_PressData = new[] { new List<double>(), new List<double>(), new List<double>() };
             }   
             
             ///// <summary>
@@ -192,7 +193,7 @@ namespace LcmsNet.Devices.Pumps
                 if (inpGraph.InvokeRequired)
                 {
                     var d = new delegateUpdateGraphHandler(UpdatePlot);
-                    inpGraph.BeginInvoke(d, new object[] { inpGraph, time, pressure, flow });
+                    inpGraph.BeginInvoke(d, inpGraph, time, pressure, flow);
                 }
                 else UpdatePlot_Delegated(inpGraph, time, pressure, flow);
             }   

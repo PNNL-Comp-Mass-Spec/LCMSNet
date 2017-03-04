@@ -16,32 +16,37 @@ namespace LabJackU3TestApp
         {
             var myU3 = new classLabjackU3();
             myU3.Initialize();
-               
-            var cmdStr = string.Empty;
+
             PrintMenu();
             while (true)
             {
                 try
                 {
                     Console.Write("What is your command? ");
-                    var input = Console.ReadLine().Split();
-                    cmdStr = input[0];
+                    var input = Console.ReadLine();
+                    if (input == null)
+                        break;
+
+                    var tokens = input.Split();
+
+                    var cmdStr = tokens[0];
                     var channelNum = -1;
-                    if (input.Length > 1)
+                    if (tokens.Length > 1)
                     {
-                        channelNum = Convert.ToInt32(input[1]);
+                        channelNum = Convert.ToInt32(tokens[1]);
                     }
-                    double readValue = -1;
-                    if (cmdStr == "")
+                    double readValue;
+                    if (string.IsNullOrWhiteSpace(cmdStr))
                     {
                         break;
                     }
-                    else if (cmdStr == "DI")
+
+                    if (cmdStr == "DI")
                     {
 
                         Console.WriteLine("Digital read channel: " + channelNum);
                         readValue = myU3.Read((enumLabjackU3InputPorts)channelNum);
-                        Console.WriteLine("Value read: " + readValue.ToString());
+                        Console.WriteLine("Value read: " + readValue.ToString("0.00"));
                     }
                     else if (cmdStr == "DO")
                     {
@@ -59,7 +64,7 @@ namespace LabJackU3TestApp
                     {
                         Console.WriteLine("Analog Read from channel: " + channelNum);
                         readValue = myU3.Read((enumLabjackU3InputPorts)channelNum);
-                        Console.WriteLine("Value read: " + readValue.ToString());
+                        Console.WriteLine("Value read: " + readValue.ToString("0.00"));
                     }
                     else if (cmdStr == "AO")
                     {

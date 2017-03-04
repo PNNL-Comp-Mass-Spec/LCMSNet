@@ -98,7 +98,7 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return (classValveVICI2Pos)m_valve;
+                return m_valve;
             }
             set
             {
@@ -144,7 +144,7 @@ namespace LcmsNet.Devices.Valves
         {            
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<ValvePositionEventArgs<TwoPositionState>>(OnPosChanged), new object[] { sender, newPosition });
+                BeginInvoke(new EventHandler<ValvePositionEventArgs<TwoPositionState>>(OnPosChanged), sender, newPosition);
             }
             else
             {

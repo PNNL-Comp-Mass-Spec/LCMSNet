@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
 using LcmsNetDataClasses.Devices;
 
@@ -39,8 +40,12 @@ namespace LcmsNet.Devices.Pal
         public controlPal()
         {
             InitializeComponent();
-            var names = System.IO.Ports.SerialPort.GetPortNames();
-            mcombo_portNames.Items.AddRange(names);
+            var portNames = System.IO.Ports.SerialPort.GetPortNames();
+            foreach (var portName in portNames)
+            {
+                mcombo_portNames.Items.Add(portName);
+            }
+            
             mcombo_portNames.SelectedIndexChanged += mcombo_portNames_SelectedIndexChanged;
         }
 
@@ -55,15 +60,18 @@ namespace LcmsNet.Devices.Pal
         {
           
             m_Pal = device as classPal;
-           
-            m_Pal.DeviceSaveRequired += Pal_DeviceSaveRequired;
-            m_Pal.Free               += OnFree;
-            m_Pal.TrayNames          += m_Pal_PalTrayListReceived;
-            m_Pal.MethodNames        += (object sender, classAutoSampleEventArgs e) => {ProcessMethods(e.MethodList); };
+
+            if (m_Pal != null)
+            {
+                m_Pal.DeviceSaveRequired += Pal_DeviceSaveRequired;
+                m_Pal.Free               += OnFree;
+                m_Pal.TrayNames          += m_Pal_PalTrayListReceived;
+                m_Pal.MethodNames        += (sender, e) => {ProcessMethods(e.MethodList); };
      
-            mcomboBox_VialRange.DataSource      = System.Enum.GetNames(typeof(enumVialRanges));
-            mcomboBox_VialRange.SelectedItem    = m_Pal.VialRange.ToString();
-            
+                mcomboBox_VialRange.DataSource      = Enum.GetNames(typeof(enumVialRanges));
+                mcomboBox_VialRange.SelectedItem    = m_Pal.VialRange.ToString();                           
+            }
+
             SetBaseDevice(m_Pal);
         }
 
@@ -126,7 +134,8 @@ namespace LcmsNet.Devices.Pal
                         mcombo_portNames.SelectedText = m_Pal.PortName;
                     }
                     catch
-                    { 
+                    {
+                        // ignored
                     }
                     RegisterDevice(value);
                 }
@@ -179,7 +188,6 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Handles when the PAL says it has tray data.
         /// </summary>
-        /// <param name="trayList">List of detected tray names.</param>
         void m_Pal_PalTrayListReceived(object sender, classAutoSampleEventArgs args)
         {
             ProcessTrays(args.TrayList);
@@ -188,7 +196,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Converts the raw tray list string into a list of trays.
         /// </summary>
-        /// <param name="rawMethodList">The string which the PAL class returns after GetTrayList()</param>
+        /// <param name="trayList">The string which the PAL class returns after GetTrayList()</param>
         public void ProcessTrays(List<string> trayList)
         {
             /*LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(
@@ -216,28 +224,27 @@ namespace LcmsNet.Devices.Pal
         }
 
         private void mButton_RunMethod_Click(object sender, EventArgs e)
-        {         
+        {
             if (mcomboBox_tray.SelectedItem == null)
             {
                 MessageBox.Show("No tray selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            else if (mcomboBox_MethodList.SelectedItem == null)
+
+            if (mcomboBox_MethodList.SelectedItem == null)
             {
                 MessageBox.Show("No method selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            if (m_Pal.GetStatus().Contains("READY"))
+            {
+                m_Pal.LoadMethod(mcomboBox_MethodList.SelectedItem.ToString(), mcomboBox_tray.SelectedItem.ToString(), Convert.ToInt32(mnum_vial.Value), Convert.ToString(mnum_volume.Value, CultureInfo.InvariantCulture));
+                m_Pal.StartMethod(1000);
+            }
             else
             {
-                if (m_Pal.GetStatus().Contains("READY"))
-                {
-                    m_Pal.LoadMethod(mcomboBox_MethodList.SelectedItem.ToString(), mcomboBox_tray.SelectedItem.ToString(), Convert.ToInt32(mnum_vial.Value), Convert.ToString(mnum_volume.Value));
-                    m_Pal.StartMethod(1000);
-                }
-                else
-                {
-                    m_Pal.ContinueMethod(0);
-                }
+                m_Pal.ContinueMethod(0);
             }
         }
 
@@ -266,7 +273,7 @@ namespace LcmsNet.Devices.Pal
         }
         private void mcomboBox_VialRange_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            m_Pal.VialRange = (enumVialRanges)System.Enum.Parse(typeof(enumVialRanges), mcomboBox_VialRange.Text);
+            m_Pal.VialRange = (enumVialRanges)Enum.Parse(typeof(enumVialRanges), mcomboBox_VialRange.Text);
         }
 
         private void mbutton_apply_Click(object sender, EventArgs e)

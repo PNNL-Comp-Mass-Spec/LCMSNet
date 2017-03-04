@@ -82,9 +82,9 @@ namespace Newport.ESP300
         {
             try
             {
-                lblAxis1.Text = m_obj.QueryPosition(1).ToString() + units;
-                lblAxis2.Text = m_obj.QueryPosition(2).ToString() + units;
-                lblAxis3.Text = m_obj.QueryPosition(3).ToString() + units;
+                lblAxis1.Text = m_obj.QueryPosition(1).ToString("0.00") + units;
+                lblAxis2.Text = m_obj.QueryPosition(2).ToString("0.00") + units;
+                lblAxis3.Text = m_obj.QueryPosition(3).ToString("0.00") + units;
             }
             catch (Exception)
             {
@@ -114,7 +114,7 @@ namespace Newport.ESP300
         private void btnAxis1Back_MouseUp(object sender, MouseEventArgs e)
         {
             m_obj.StopMotion(1);
-            lblAxis1.Text = m_obj.QueryPosition(1).ToString() + units;
+            lblAxis1.Text = m_obj.QueryPosition(1).ToString("0.00") + units;
             lblCurrentPos.Text = positionNotDefined;
 
         }
@@ -127,7 +127,7 @@ namespace Newport.ESP300
         private void btnAxis1Fwd_MouseUp(object sender, MouseEventArgs e)
         {
             m_obj.StopMotion(1);
-            lblAxis1.Text = m_obj.QueryPosition(1).ToString() + units;
+            lblAxis1.Text = m_obj.QueryPosition(1).ToString("0.00") + units;
             lblCurrentPos.Text = positionNotDefined;
         }
 
@@ -139,7 +139,7 @@ namespace Newport.ESP300
         private void btnAxis2Back_MouseUp(object sender, MouseEventArgs e)
         {
             m_obj.StopMotion(2);
-            lblAxis2.Text = m_obj.QueryPosition(2).ToString() + units;
+            lblAxis2.Text = m_obj.QueryPosition(2).ToString("0.00") + units;
             lblCurrentPos.Text = positionNotDefined;
         }
 
@@ -151,7 +151,7 @@ namespace Newport.ESP300
         private void btnAxis2Fwd_MouseUp(object sender, MouseEventArgs e)
         {
             m_obj.StopMotion(2);
-            lblAxis2.Text = m_obj.QueryPosition(2).ToString() + units;
+            lblAxis2.Text = m_obj.QueryPosition(2).ToString("0.00") + units;
             lblCurrentPos.Text = positionNotDefined;
         }
 
@@ -163,7 +163,7 @@ namespace Newport.ESP300
         private void btnAxis3Fwd_MouseUp(object sender, MouseEventArgs e)
         {
             m_obj.StopMotion(3);
-            lblAxis3.Text = m_obj.QueryPosition(3).ToString() + units;
+            lblAxis3.Text = m_obj.QueryPosition(3).ToString("0.00") + units;
             lblCurrentPos.Text = positionNotDefined;
         }
 
@@ -176,7 +176,7 @@ namespace Newport.ESP300
         private void btnAxis3Back_MouseUp(object sender, MouseEventArgs e)
         {
             m_obj.StopMotion(3);
-            lblAxis3.Text = m_obj.QueryPosition(3).ToString() + units;
+            lblAxis3.Text = m_obj.QueryPosition(3).ToString("0.00") + units;
             lblCurrentPos.Text = positionNotDefined;
         }
         private void btnGo_Click(object sender, EventArgs e)
@@ -236,7 +236,8 @@ namespace Newport.ESP300
         private void PositionChangedHandler(object sender, EventArgs e)
         {
             var stage = sender as classNewportStage;
-            UpdatePositionLabel(stage.CurrentPos);
+            if (stage != null)
+                UpdatePositionLabel(stage.CurrentPos);
         }
 
         private void tabControl1_VisibleChanged(object sender, EventArgs e)

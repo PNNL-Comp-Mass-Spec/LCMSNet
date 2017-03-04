@@ -47,11 +47,14 @@ namespace LcmsNet.Devices.BrukerStart
         public void RegisterDevice(IDevice device)
         {
             m_BrukerStart                 = device as classBrukerStart;
-            m_BrukerStart.MethodNames    += m_BrukerStart_MethodNames;
-            m_BrukerStart.Error          += m_BrukerStart_Error;
+            if (m_BrukerStart != null)
+            {
+                m_BrukerStart.MethodNames    += m_BrukerStart_MethodNames;
+                m_BrukerStart.Error          += m_BrukerStart_Error;
             
-            mtextbox_ipAddress.Text = m_BrukerStart.IPAddress;
-            mnum_port.Value         = Convert.ToDecimal(m_BrukerStart.Port);
+                mtextbox_ipAddress.Text = m_BrukerStart.IPAddress;
+                mnum_port.Value         = Convert.ToDecimal(m_BrukerStart.Port);
+            }
 
             SetBaseDevice(m_BrukerStart);
         }
@@ -90,14 +93,17 @@ namespace LcmsNet.Devices.BrukerStart
         #endregion
 
         #region "Methods"
+
         /// <summary>
         /// Updates the status of the device.
         /// </summary>
         /// <param name="status"></param>
+        /// <param name="message"></param>
         private void SetStatus(enumDeviceStatus status, string message)
         {
             mlabel_status.Text = "Status: " + m_BrukerStart.Status + " - " + message;
         }
+        
         /// <summary>
         /// Updates the user interface.
         /// </summary>
@@ -113,7 +119,7 @@ namespace LcmsNet.Devices.BrukerStart
 
             if (InvokeRequired)
             {
-                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), new object[] { m_BrukerStart.Status, e.Error });
+                mlabel_status.BeginInvoke(new UpdateStatus(SetStatus), m_BrukerStart.Status, e.Error);
             }
             else
             {
@@ -143,17 +149,18 @@ namespace LcmsNet.Devices.BrukerStart
         #region Form Event Handlers
             private void mbutton_startAcquisition_Click(object sender, EventArgs e)
             {
-                var methodName = "";
                 if (mcomboBox_methods.SelectedIndex < 0)
                 {
                     SetStatus(m_BrukerStart.Status, "No method selected.");
                     return;
                 }
-                methodName = mcomboBox_methods.SelectedItem.ToString();
+                var methodName = mcomboBox_methods.SelectedItem.ToString();
 
-                var sample           = new classSampleData();
-                sample.DmsData.DatasetName       = mtextbox_sampleName.Text;
-                sample.InstrumentData.MethodName = methodName;
+                var sample = new classSampleData
+                {
+                    DmsData = {DatasetName = mtextbox_sampleName.Text},
+                    InstrumentData = {MethodName = methodName}
+                };
 
                 m_BrukerStart.StartAcquisition(20, sample);
             }   

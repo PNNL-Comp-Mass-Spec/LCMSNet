@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
@@ -138,9 +139,9 @@ namespace LcmsNet.Devices.ContactClosure
             }
             set
             {
-                if (value != m_status && StatusUpdate != null)
+                if (value != m_status)
                 {
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
                 }
                 m_status = value;
             }
@@ -230,21 +231,20 @@ namespace LcmsNet.Devices.ContactClosure
                 LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to create LabJack U3 object. Exception: " + ex.Message);
                 return false;
             }
-            Version = m_labjack.GetDriverVersion().ToString();
+            Version = m_labjack.GetDriverVersion().ToString(CultureInfo.InvariantCulture);
             m_labjack.GetFirmwareVersion();
 
             //If we got anything, call it good
-            if (m_labjack.FirmwareVersion.ToString().Length > 0 && m_labjack.DriverVersion.ToString().Length > 0)
+            if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 && 
+                m_labjack.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
             {
                 Status = enumDeviceStatus.Initialized;
                 return true;
             }
-            else
-            {
-                Status = enumDeviceStatus.Error;
-                errorMessage = "Could not get the firmware version or driver version information.";
-                return false;
-            }
+
+            Status = enumDeviceStatus.Error;
+            errorMessage = "Could not get the firmware version or driver version information.";
+            return false;
         }
 
         /// <summary>
@@ -262,14 +262,15 @@ namespace LcmsNet.Devices.ContactClosure
         protected virtual void OnDeviceSaveRequired()
         {
             DeviceSaveRequired?.Invoke(this, null);
-        }     
+        }
 
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
-        /// <param name="pulseLengthMS">The length of the pulse in milliseconds</param>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
+        /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>        
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double pulseLengthSeconds, enumLabjackU3OutputPorts port, double voltage)
@@ -296,7 +297,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw;
             }
 
-            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new classTimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try

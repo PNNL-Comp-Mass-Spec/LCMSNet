@@ -58,7 +58,10 @@ namespace LcmsNet.Devices.ContactClosure
                 mcomboBox_Ports.SelectedItem = m_contactClosure.Port;
             }
             mcomboBox_Ports.SelectedValueChanged   += mcomboBox_Ports_SelectedValueChanged;
-            m_contactClosure.DeviceSaveRequired += CC_DeviceSaveRequired;
+            if (m_contactClosure != null)
+            {
+                m_contactClosure.DeviceSaveRequired += CC_DeviceSaveRequired;                
+            }
             SetBaseDevice(m_contactClosure);
             m_loading = false;
         }
@@ -131,7 +134,7 @@ namespace LcmsNet.Devices.ContactClosure
         private void mcomboBox_Ports_SelectedValueChanged(object sender, EventArgs e)
         {
             if (m_loading == false)
-                m_contactClosure.Port = (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text);
+                m_contactClosure.Port = (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), mcomboBox_Ports.Text);
         }
         /// <summary>
         /// Handles sending a pulse to the Contact Closure when the user presses the button to do so.
@@ -146,7 +149,7 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 try
                 {
-                    m_contactClosure.Trigger(pulse, (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), this.mcomboBox_Ports.Text), voltage);
+                    m_contactClosure.Trigger(pulse, (enumLabjackU3OutputPorts)Enum.Parse(typeof(enumLabjackU3OutputPorts), mcomboBox_Ports.Text), voltage);
                     
                 }
                 catch (Exception ex)

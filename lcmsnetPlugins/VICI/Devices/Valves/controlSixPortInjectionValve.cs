@@ -4,7 +4,7 @@ using FluidicsSDK.Devices;
 
 namespace LcmsNet.Devices.Valves
 {
-    public partial class controlSixPortInjectionValve : controlValveVICI2Pos, IDeviceControl
+    public partial class controlSixPortInjectionValve : controlValveVICI2Pos
     {
         public controlSixPortInjectionValve()
         {
@@ -15,7 +15,8 @@ namespace LcmsNet.Devices.Valves
         {
             var injector = Device as ISixPortInjectionValve;
             var volume = Convert.ToDouble(txtInjectionVolume.Text);
-            injector.InjectionVolume = volume;
+            if (injector != null)
+                injector.InjectionVolume = volume;
         }
 
         public override void RegisterDevice(IDevice device)
@@ -23,7 +24,8 @@ namespace LcmsNet.Devices.Valves
             base.RegisterDevice(device);
 
             var injector = Device as ISixPortInjectionValve;
-            txtInjectionVolume.Text = injector.InjectionVolume.ToString();
+            if (injector != null)
+                txtInjectionVolume.Text = injector.InjectionVolume.ToString("0.000");
         }
     }
 }

@@ -11,7 +11,6 @@
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using LcmsNetDataClasses;
 using System.Collections;
 
@@ -40,7 +39,7 @@ namespace LcmsNet.SampleQueue
                 // Randomize the sequence number list
                 RandomizeSequenceList(SeqList);
                 // Reassign the sequence numbers and return
-                for (long Indx = 0; Indx < InputSampleList.Count(); Indx++)
+                for (var Indx = 0; Indx < InputSampleList.Count; Indx++)
                 {
                     InputSampleList[Convert.ToInt32(Indx)].SequenceID = m_Items[Convert.ToInt32(Indx)];
                 }
@@ -54,8 +53,8 @@ namespace LcmsNet.SampleQueue
             /// <param name="InpSeqList">List containing sequence numbers</param>
             void RandomizeSequenceList(IEnumerable InpSeqList)
             {
-                //  Code for this function adapted from section 3.19 of The Microsoft Visual Basic.Net
-                // Programmer's Cookbook, by Mattew MacDonald, published by Microsoft Press
+                // Code for this function adapted from section 3.19 of The Microsoft Visual Basic.Net
+                // Programmer's Cookbook, by Matthew MacDonald, published by Microsoft Press
                 m_Items = new List<long>();
                 var RandNumGen = new Random();
                 foreach (long SeqID in InpSeqList)
@@ -64,14 +63,13 @@ namespace LcmsNet.SampleQueue
                     var NextIndx = RandNumGen.Next(0, m_Items.Count +1);
                     m_Items.Insert(NextIndx, SeqID);
                 }
-                return;
             }   
 
             /// <summary>
             /// Implements IEnumerable's GetEnumerator method for returning a list's enumerator
             /// </summary>
             /// <returns>Enumerator</returns>
-            public System.Collections.IEnumerator GetEnumerator()
+            public IEnumerator GetEnumerator()
             {
                 return m_Items.GetEnumerator();
             }

@@ -17,11 +17,13 @@ namespace NewportTestApp
             var stage = new classNewportStage();
             stage.OpenPort();
             PrintMenu();
-            string input;
             while (true)
             {
                 Console.Write("What is your command?");
-                input = Console.ReadLine();
+                var input = Console.ReadLine();
+                if (input == null)
+                    break;
+
                 var tokens = input.Split();
                 if (tokens[0] == "fh")
                 {
@@ -82,7 +84,7 @@ namespace NewportTestApp
                 else if (tokens[0] == "qp")
                 {
                     var axis = Convert.ToInt32(tokens[1]);
-                    Console.WriteLine("Axis " + axis.ToString() + " is at position: " + stage.QueryPosition(axis).ToString());
+                    Console.WriteLine("Axis " + axis.ToString("0.00") + " is at position: " + stage.QueryPosition(axis).ToString("0.00"));
                 }
                 else if (tokens[0] == "sp")
                 {
@@ -101,7 +103,6 @@ namespace NewportTestApp
                 {
                     break;
                 }
-               
             }
         }
 

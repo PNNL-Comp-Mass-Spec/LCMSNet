@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 using Agilent.Licop;
@@ -100,11 +101,11 @@ namespace Agilent.Devices.Pumps
         /// Status of the device.
         /// </summary>
         private enumDeviceStatus m_status;
-        private const string CONST_DEFAULTPORT  = "COM1";
-        private const int CONST_DEFAULTTIMEOUT  = 6000; //milliseconds
-        private const int CONST_WRITETIMEOUT    = 10000; //milliseconds
-        private const int CONST_READTIMEOUT     = 10000; //milliseconds
-        private const int CONST_MONITORING_MINUTES         = 10;
+        private const string CONST_DEFAULTPORT = "COM1";
+        private const int CONST_DEFAULTTIMEOUT = 6000; //milliseconds
+        private const int CONST_WRITETIMEOUT = 10000; //milliseconds
+        private const int CONST_READTIMEOUT = 10000; //milliseconds
+        private const int CONST_MONITORING_MINUTES = 10;
         private const int CONST_MONITORING_SECONDS_ELAPSED = 10;
         #endregion
 
@@ -112,22 +113,22 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Notification string for flow changes
         /// </summary>
-        private const string CONST_FLOW_CHANGE      = "Flow % below set point";
+        private const string CONST_FLOW_CHANGE = "Flow % below set point";
         /// <summary>
         /// Notification string for pressure values.
         /// </summary>
-        private const string CONST_PRESSURE_VALUE       = "Pressure Value";
+        private const string CONST_PRESSURE_VALUE = "Pressure Value";
         private const string CONST_ERROR_ABOVE_PRESSURE = "Pressure Above Limit";
         private const string CONST_ERROR_BELOW_PRESSURE = "Pressure Below Limit";
-        private const string CONST_ERROR_FLOW_EXCEEDS   = "Flow Exceeds limit while pressure control";
-        private const string CONST_ERROR_FLOW_UNSTABLE  = "Column flow is unstable";
+        private const string CONST_ERROR_FLOW_EXCEEDS = "Flow Exceeds limit while pressure control";
+        private const string CONST_ERROR_FLOW_UNSTABLE = "Column flow is unstable";
         #endregion
 
         #region Error Constants
         /// <summary>
         /// The error message was not set.
         /// </summary>
-        private const string CONST_DEFAULT_ERROR    = "None";
+        private const string CONST_DEFAULT_ERROR = "None";
         private const string CONST_PUMP_ERROR = "Pump Error";
         private const string CONST_INITIALIZE_ERROR = "Failed to Initialize";
         private const string CONST_COMPOSITION_B_SET = "Failed to set composition B";
@@ -193,48 +194,47 @@ namespace Agilent.Devices.Pumps
             CreateErrorCodes();
             CreateStatusCodes();
 
-            PortName        = CONST_DEFAULTPORT;
+            PortName = CONST_DEFAULTPORT;
             if (mdict_methods == null)
             {
                 mdict_methods = new Dictionary<string, string>();
             }
-            if(mwatcher_methods == null)
+            if (mwatcher_methods == null)
             {
                 var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
                 path = Path.Combine(Path.GetDirectoryName(path), "..\\pumpmethods");
-                path = path.Substring(path.IndexOf(":") + 2); // gets rid of the file:/ tag.
+                path = path.Substring(path.IndexOf(":", StringComparison.Ordinal) + 2); // gets rid of the file:/ tag.
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
-                if (path != null)
-                {
-                    mwatcher_methods = new FileSystemWatcher(path, "*.txt");
-                    mwatcher_methods.Created += mwatcher_methods_Created;
-                    mwatcher_methods.Changed += mwatcher_methods_Changed;
-                    mwatcher_methods.EnableRaisingEvents = true;
-                }
+                mwatcher_methods = new FileSystemWatcher(path, "*.txt");
+                mwatcher_methods.Created += mwatcher_methods_Created;
+                mwatcher_methods.Changed += mwatcher_methods_Changed;
+                mwatcher_methods.EnableRaisingEvents = true;
             }
-            m_name    = "pump";
+            m_name = "pump";
 
             m_flowrates = new List<double>();
-            m_percentB  = new List<double>();
+            m_percentB = new List<double>();
             m_pressures = new List<double>();
-            m_times     = new List<DateTime>();
-            m_status    = enumDeviceStatus.NotInitialized;
+            m_times = new List<DateTime>();
+            m_status = enumDeviceStatus.NotInitialized;
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
-            TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
+            TotalMonitoringSecondElapsed = CONST_MONITORING_SECONDS_ELAPSED;
 
             if (m_notificationStrings == null)
             {
-                m_notificationStrings = new string[]{
+                m_notificationStrings = new[]{
                     CONST_FLOW_CHANGE,
                     CONST_PRESSURE_VALUE
                 };
             }
 
-            MobilePhases = new List<MobilePhase>();
-            MobilePhases.Add(new MobilePhase("A",   "This is a test"));
-            MobilePhases.Add(new MobilePhase("B",   "This is a test"));
-            MobilePhases.Add(new MobilePhase("Aux", "This is a test"));
+            MobilePhases = new List<MobilePhase>
+            {
+                new MobilePhase("A", "This is a test"),
+                new MobilePhase("B", "This is a test"),
+                new MobilePhase("Aux", "This is a test")
+            };
         }
 
         void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
@@ -293,7 +293,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets the device's status
         /// </summary>
-        public LcmsNetDataClasses.Devices.enumDeviceStatus Status
+        public enumDeviceStatus Status
         {
             get
             {
@@ -301,8 +301,8 @@ namespace Agilent.Devices.Pumps
             }
             set
             {
-                if (value != m_status && StatusUpdate != null)
-                    StatusUpdate(this, new classDeviceStatusEventArgs(value, "Status", this));
+                if (value != m_status)
+                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
                 m_status = value;
             }
         }
@@ -378,18 +378,18 @@ namespace Agilent.Devices.Pumps
         {
             get;
             set;
-        }        
+        }
         #endregion
 
         #region Pump Purging
         /// <summary>
         /// Purges the pump for the number of minutes provided.
         /// </summary>
+        /// <param name="timeout"></param>
         /// <param name="channel"></param>
         /// <param name="flow"></param>
         /// <param name="numberOfMinutes"></param>
         /// <returns></returns>
-
         [classLCMethodAttribute("Purge Channel", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool PurgePump(double timeout, enumPurgePumpChannel channel, double flow, double numberOfMinutes)
         {
@@ -399,7 +399,7 @@ namespace Agilent.Devices.Pumps
             var worked = SendCommand(command, ref reply, error);
 
             if (!worked)
-                return worked;
+                return false;
 
             var bitField = 0;
             switch (channel)
@@ -418,24 +418,24 @@ namespace Agilent.Devices.Pumps
                     break;
             }
             command = string.Format("PRGE {0}, 1, 1", bitField);
-            worked  = SendCommand(command, ref reply, error);
+            worked = SendCommand(command, ref reply, error);
             if (!worked)
-                return worked;
+                return false;
 
             return SendCommand("PURG 1", ref reply, error);
         }
         /// <summary>
         /// Aborts purging of the pumps for the given channel.
         /// </summary>
-        /// <param name="channel"></param>
+        /// <param name="timeout"></param>
         /// <returns></returns>        
         [classLCMethodAttribute("Abort Purge", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool AbortPurges(double timeout)
-        { 
-            var reply    = "";
-            var error    = "";
-            var command  = string.Format("PRGE 0, 0, 0");
-            var worked     = SendCommand(command, ref reply, error);
+        {
+            var reply = "";
+            var error = "";
+            var command = "PRGE 0, 0, 0";
+            var worked = SendCommand(command, ref reply, error);
             return worked;
         }
         #endregion
@@ -445,22 +445,21 @@ namespace Agilent.Devices.Pumps
         {
             if (m_errorCodes == null)
             {
-                var map = new Dictionary<string, string>();
-
-
-                map.Add("ER 2037", "STRT while purging");
-                map.Add("ER 2038", "STRT while fast composition change");
-                map.Add("ER 2039", "No calibration table with specified index existing");
-                map.Add("ER 2040", "Not an allowed index for a user-defined table");
-                map.Add("ER 2041", "Specified command allowed in test mode only");
-                map.Add("ER 2042", "Calibration table cannot be deleted while in use");
-                map.Add("ER 2043", "FCC not possible, no partner module connected");
-                map.Add("ER 2044", "FCC active, configuration change not allowed");
-                map.Add("ER 2045", "FCC not allowed in this mode");
-                map.Add("ER 2046", "FCC not possible, no column flow");
-                map.Add("ER 2047", "FSAC base points not specified in descending order.");
-                map.Add("ER 2048", "Attempt to specify more than 11 points in FSAC table.");
-
+                var map = new Dictionary<string, string>
+                {
+                    {"ER 2037", "STRT while purging"},
+                    {"ER 2038", "STRT while fast composition change"},
+                    {"ER 2039", "No calibration table with specified index existing"},
+                    {"ER 2040", "Not an allowed index for a user-defined table"},
+                    {"ER 2041", "Specified command allowed in test mode only"},
+                    {"ER 2042", "Calibration table cannot be deleted while in use"},
+                    {"ER 2043", "FCC not possible, no partner module connected"},
+                    {"ER 2044", "FCC active, configuration change not allowed"},
+                    {"ER 2045", "FCC not allowed in this mode"},
+                    {"ER 2046", "FCC not possible, no column flow"},
+                    {"ER 2047", "FSAC base points not specified in descending order."},
+                    {"ER 2048", "Attempt to specify more than 11 points in FSAC table."}
+                };
 
                 m_errorCodes = map;
             }
@@ -470,28 +469,30 @@ namespace Agilent.Devices.Pumps
         {
             if (m_statusCodes == null)
             {
-                var map = new Dictionary<string, string>();
-                map.Add("EV 2227", "no start allowed while purging.");
-                map.Add("EV 2228", "no start allowed while fast composition change.");
-                map.Add("EV 2229", "Column flow in limit.");
-                map.Add("EV 2230", "Column flow out of limit.");
-                map.Add("EV 2231", "Fast composition change started.");
-                map.Add("EV 2232", "Fast composition change complete.");
-                map.Add("EV 2233", "Calibration table stored. Parameter: table reference, 1..10");
-                map.Add("EV 2234", "Calibration table deleted. Parameter: table reference, 1..10");
-                map.Add("EV 2235", "Fast Composition Change failed.");
-                map.Add("EE 2066", "Column flow unstable.");
-                map.Add("EE 2067", "No EMPV connected.");
-                map.Add("EE 2068", "No flow sensor connected.");
-                map.Add("EE 2069", "EMPV initialization failed.");
-                map.Add("EE 2090", "Flow sensor not supported by pump.");
-                map.Add("ES 2116", "Pump in normal mode.            ");
-                map.Add("ES 2117", "Pump in micro mode.             ");
-                map.Add("ES 2118", "Pump in test mode.              ");
-                map.Add("ES 2119", "Purge valve on.                 ");
-                map.Add("ES 2120", "Purge valve off.                ");
-                map.Add("ES 2121", "Column flow in sensor range.    ");
-                map.Add("ES 2122", "Column flow out of sensor range.");
+                var map = new Dictionary<string, string>
+                {
+                    {"EV 2227", "no start allowed while purging."},
+                    {"EV 2228", "no start allowed while fast composition change."},
+                    {"EV 2229", "Column flow in limit."},
+                    {"EV 2230", "Column flow out of limit."},
+                    {"EV 2231", "Fast composition change started."},
+                    {"EV 2232", "Fast composition change complete."},
+                    {"EV 2233", "Calibration table stored. Parameter: table reference, 1..10"},
+                    {"EV 2234", "Calibration table deleted. Parameter: table reference, 1..10"},
+                    {"EV 2235", "Fast Composition Change failed."},
+                    {"EE 2066", "Column flow unstable."},
+                    {"EE 2067", "No EMPV connected."},
+                    {"EE 2068", "No flow sensor connected."},
+                    {"EE 2069", "EMPV initialization failed."},
+                    {"EE 2090", "Flow sensor not supported by pump."},
+                    {"ES 2116", "Pump in normal mode.            "},
+                    {"ES 2117", "Pump in micro mode.             "},
+                    {"ES 2118", "Pump in test mode.              "},
+                    {"ES 2119", "Purge valve on.                 "},
+                    {"ES 2120", "Purge valve off.                "},
+                    {"ES 2121", "Column flow in sensor range.    "},
+                    {"ES 2122", "Column flow out of sensor range."}
+                };
 
 
                 m_statusCodes = map;
@@ -506,8 +507,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void m_pumps_ErrorOccurred(object sender, Agilent.Licop.ErrorEventArgs e)
-        {            
-            var name =  e.Message;
+        {
             if (e.Message == null)
                 return;
 
@@ -572,7 +572,7 @@ namespace Agilent.Devices.Pumps
                 var data = new List<object>();
                 data.AddRange(keys);
 
-                MethodNames(this, (List<object>)data);
+                MethodNames(this, data);
             }
         }
         /// <summary>
@@ -585,13 +585,13 @@ namespace Agilent.Devices.Pumps
             {
                 return true;
             }
-            
+
             m_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
             m_pumps.ErrorOccurred += m_pumps_ErrorOccurred;
 
-            /// 
-            /// Try initial connection
-            /// 
+            // 
+            // Try initial connection
+            // 
             if (m_pumps.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
             {
                 errorMessage = "Could not connect to the Agilent Pumps.";
@@ -599,13 +599,13 @@ namespace Agilent.Devices.Pumps
                 //Could not connect
                 return false;
             }
-                        
+
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
 
 
-            /// 
-            /// Open a list channel to read time tables.
-            /// 
+            // 
+            // Open a list channel to read time tables.
+            // 
             m_listChannel = m_module.CreateChannel("LI");
             if (m_listChannel.TryOpen(ReadMode.Polling) == false)
             {
@@ -613,11 +613,11 @@ namespace Agilent.Devices.Pumps
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
                 return false;
             }
-                
-            /// 
-            /// And an EV channel.Channel for errors or state events
-            /// 
-            m_evChannel               = m_module.CreateChannel("EV");
+
+            // 
+            // And an EV channel.Channel for errors or state events
+            // 
+            m_evChannel = m_module.CreateChannel("EV");
             m_evChannel.DataReceived += m_evChannel_DataReceived;
             if (m_evChannel.TryOpen(ReadMode.Events) == false)
             {
@@ -627,9 +627,9 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
 
-            /// 
-            /// Channel for inputs
-            /// 
+            // 
+            // Channel for inputs
+            // 
             m_inChannel = m_module.CreateChannel("IN");
             if (m_inChannel.TryOpen(ReadMode.Polling) == false)
             {
@@ -639,10 +639,10 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
 
-            /// 
-            /// Monitoring for the pumps
-            /// 
-            m_monitorChannel                  = m_module.CreateChannel("MO");
+            // 
+            // Monitoring for the pumps
+            // 
+            m_monitorChannel = m_module.CreateChannel("MO");
             m_monitorChannel.DataReceived += m_monitorChannel_DataReceived;
             if (m_monitorChannel.TryOpen(ReadMode.Events) == false)
             {
@@ -663,7 +663,7 @@ namespace Agilent.Devices.Pumps
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
                 return false;
             }
-            
+
             return true;
         }
         /// <summary>
@@ -708,7 +708,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void m_evChannel_DataReceived(object sender, DataEventArgs e)
-        {            
+        {
             var data = e.AsciiData;
 
             if (data.Contains("EE 2014"))
@@ -744,7 +744,7 @@ namespace Agilent.Devices.Pumps
     CONST_ERROR_FLOW_UNSTABLE));
             }
             else
-            {                                
+            {
                 var errorMessage = data.Split(',');
                 if (m_statusCodes.ContainsKey(errorMessage[0]))
                 {
@@ -767,16 +767,15 @@ namespace Agilent.Devices.Pumps
         {
             try
             {
-                double pressure, flowrate, compositionB;
-                if (e == null || e.AsciiData == null)
+                if (e?.AsciiData == null)
                     return;
 
-                pressure = double.NaN;
-                flowrate = double.NaN;
-                compositionB = double.NaN;
-                
+                var pressure = double.NaN;
+                var flowrate = double.NaN;
+                var compositionB = double.NaN;
+
                 // Parse out the data
-                var dataArray = e.AsciiData.Split(new string[] { "ACT:FLOW" }, StringSplitOptions.RemoveEmptyEntries);
+                var dataArray = e.AsciiData.Split(new[] { "ACT:FLOW" }, StringSplitOptions.RemoveEmptyEntries);
                 if (dataArray.Length > 1)
                 {
                     var data = dataArray[1].Replace(";ACT:", ",");
@@ -790,8 +789,8 @@ namespace Agilent.Devices.Pumps
                 }
                 ProcessMonitoringData(flowrate, pressure, compositionB);
             }
-            catch(Exception)
-            {                
+            catch (Exception)
+            {
                 // Leave blank....
             }
         }
@@ -804,22 +803,22 @@ namespace Agilent.Devices.Pumps
             var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
-            if (mdouble_flowrate != 0)
+            if (Math.Abs(mdouble_flowrate) > float.Epsilon)
             {
                 var percentFlowChange = (mdouble_flowrate - flowrate) / mdouble_flowrate;
-                UpdateNotificationStatus(percentFlowChange.ToString(), CONST_FLOW_CHANGE);
+                UpdateNotificationStatus(percentFlowChange.ToString("0.00"), CONST_FLOW_CHANGE);
             }
-            UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);
-            
+            UpdateNotificationStatus(pressure.ToString("0.000"), CONST_PRESSURE_VALUE);
+
             // Update log collections.
             m_times.Add(time);
             m_pressures.Add(pressure);
             m_flowrates.Add(flowrate);
             m_percentB.Add(compositionB);
 
-            /// 
-            /// Find old data to remove -- needs to be updated (or could be) using LINQ
-            /// 
+            // 
+            // Find old data to remove -- needs to be updated (or could be) using LINQ
+            // 
             var count = m_times.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
@@ -829,7 +828,7 @@ namespace Agilent.Devices.Pumps
                 {
                     i++;
                 }
-                
+
                 if (i > 0)
                 {
                     i = Math.Min(i, m_times.Count - 1);
@@ -852,7 +851,8 @@ namespace Agilent.Devices.Pumps
             }
             catch
             {
-            }            
+                // ignored
+            }
         }
         #endregion
 
@@ -861,12 +861,12 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <returns>True on success</returns>
         public bool Shutdown()
-        {              
+        {
             if (m_emulation)
             {
                 return true;
             }
-           
+
             if (m_evChannel == null)
                 return true;
 
@@ -877,12 +877,9 @@ namespace Agilent.Devices.Pumps
             m_inChannel.Close();
 
             m_monitorChannel.DataReceived -= m_monitorChannel_DataReceived;
-            
-            // disconnect
-            if (m_pumps == null)
-                return true;
 
-            m_pumps.Disconnect();
+            // disconnect
+            m_pumps?.Disconnect();
 
             return true;
         }
@@ -918,7 +915,7 @@ namespace Agilent.Devices.Pumps
             {
                 //Couldn't send instruction
                 return false;
-            }            
+            }
             if (readChannel.TryRead(out reply, CONST_READTIMEOUT) == false)
             {
                 //Couldn't read reply
@@ -957,9 +954,10 @@ namespace Agilent.Devices.Pumps
             {
                 return;
             }
-            mdouble_flowrate    = newFlowRate;
-            var reply        = "";
-            SendCommand("FLOW " + newFlowRate.ToString(), ref reply, "Attempting to set flow rate to " + newFlowRate.ToString());
+            mdouble_flowrate = newFlowRate;
+            var reply = "";
+            SendCommand("FLOW " + newFlowRate.ToString(CultureInfo.InvariantCulture),
+                ref reply, "Attempting to set flow rate to " + newFlowRate.ToString(CultureInfo.InvariantCulture));
         }
         /// <summary>
         /// Sets the mixer volume
@@ -972,10 +970,11 @@ namespace Agilent.Devices.Pumps
             {
                 return;
             }
-            
+
             var reply = "";
             if (newVolumeuL >= 0 && newVolumeuL <= 2000)
-                SendCommand("MVOL " + newVolumeuL.ToString(), ref reply, "Attempting to set mixer volume to " + newVolumeuL.ToString());
+                SendCommand("MVOL " + newVolumeuL.ToString(CultureInfo.InvariantCulture),
+                    ref reply, "Attempting to set mixer volume to " + newVolumeuL.ToString(CultureInfo.InvariantCulture));
         }
         /// <summary>
         /// Sets the percent B concentration.
@@ -987,23 +986,25 @@ namespace Agilent.Devices.Pumps
             var reply = "";
             SendCommand("COMP " + Convert.ToInt32(percent).ToString() + ",-1,-1", ref reply, "Attempting to set percent of solvent B");
         }
+
         /// <summary>
         /// Runs the method provided by a string.
         /// </summary>
+        /// <param name="timeout"></param>
         /// <param name="method">Method to run stored on the pumps.</param>
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
         public void StartMethod(double timeout, string method)
         {
             var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-            
+
             StartMethod(method);
 
-            /// 
-            /// We see if we ran over or not...if so then return failure, otherwise let it continue.
-            /// 
+            // 
+            // We see if we ran over or not...if so then return failure, otherwise let it continue.
+            // 
             var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
 
-            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new classTimerDevice();
             timer.WaitSeconds(span.TotalSeconds);
         }
         /// <summary>
@@ -1012,33 +1013,33 @@ namespace Agilent.Devices.Pumps
         /// <param name="method">Method to run stored on the pumps.</param>
         public void StartMethod(string method)
         {
-            /// 
-            /// Make sure we have record of the method
-            /// 
+            // 
+            // Make sure we have record of the method
+            // 
             if (mdict_methods.ContainsKey(method) == false)
                 throw new Exception(string.Format("The method {0} does not exist.", method));
 
-            /// 
-            /// Then send commands to start the method
-            /// 
+            // 
+            // Then send commands to start the method
+            // 
             var methodData = mdict_methods[method];
             var reply = "";
 
-            /// 
-            /// The reason why we delete the time table, is to clear out any
-            /// existing methods that might have been downloaded to the pump.
-            /// 
-            /// For example, if a time table was loaded and has entry:
-            ///     5 mins  - 30% B
-            ///     75 mins - 40%  B
-            /// And then we want to run this timetable:
-            ///     0 mins  - 0%   B
-            ///     15 mins - 50%  B
-            ///     60 mins - 100% B
-            ///     65 mins - 0%   B
-            /// when the time table is done the pumps may resort back to the final
-            /// entries and set the %B to 40 instead of the 0 we desire.
-            /// 
+            // 
+            // The reason why we delete the time table, is to clear out any
+            // existing methods that might have been downloaded to the pump.
+            // 
+            // For example, if a time table was loaded and has entry:
+            //     5 mins  - 30% B
+            //     75 mins - 40%  B
+            // And then we want to run this timetable:
+            //     0 mins  - 0%   B
+            //     15 mins - 50%  B
+            //     60 mins - 100% B
+            //     65 mins - 0%   B
+            // when the time table is done the pumps may resort back to the final
+            // entries and set the %B to 40 instead of the 0 we desire.
+            // 
             SendCommand("AT:DEL ", ref reply, "Clearing time table.");
             SendCommand(methodData, ref reply, "Loading method.");
             SendCommand("STRT", ref reply, "Attempting to start method.");
@@ -1098,27 +1099,23 @@ namespace Agilent.Devices.Pumps
                 var percents = replies[3].Split(',');
                 return Convert.ToDouble(percents[1]);
             }
-            else
+
+            reply = "";
+            SendCommand("ACT:COMP?", ref reply, "Attmempting to query composition of solvent B.");
+            if (reply.Contains("COMP"))
             {
-                reply = "";
-                SendCommand("ACT:COMP?", ref reply, "Attmempting to query composition of solvent B.");
-                if (reply.Contains("COMP"))
-                {
-                    var replies = reply.Split(' ');
-                    if (replies.Length != 4)
-                    {
-                        HandleError("Invalid pump response to composition request", CONST_COMPOSITION_B_SET);
-                        return double.NaN;
-                    }
-                    var percents = replies[3].Split(',');
-                    return Convert.ToDouble(percents[1]);
-                }
-                else
+                var replies = reply.Split(' ');
+                if (replies.Length != 4)
                 {
                     HandleError("Invalid pump response to composition request", CONST_COMPOSITION_B_SET);
                     return double.NaN;
                 }
+                var percents = replies[3].Split(',');
+                return Convert.ToDouble(percents[1]);
             }
+
+            HandleError("Invalid pump response to composition request", CONST_COMPOSITION_B_SET);
+            return double.NaN;
         }
         /// <summary>
         /// Gets the current loaded method in the pump module.
@@ -1134,7 +1131,7 @@ namespace Agilent.Devices.Pumps
             else
             {
                 SendCommand("LIST \"TT\"", ref methodString, "Attempting to retrieve method", m_listChannel);
-            }            
+            }
             return methodString;
         }
         /// <summary>
@@ -1151,11 +1148,11 @@ namespace Agilent.Devices.Pumps
             SendCommand("FLOW?", ref reply, "Attempting to query flow rate.");
             //We expect something like:
             //reply = "RA 0000 FLOW 2.000";
-            var start = reply.IndexOf("FLOW");
+            var start = reply.IndexOf("FLOW", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
                 SendCommand("FLOW?", ref reply, "Attempting to re-query flow rate.");
-                start = reply.IndexOf("FLOW");
+                start = reply.IndexOf("FLOW", StringComparison.InvariantCultureIgnoreCase);
                 if (start == -1)
                 {
                     HandleError("Invalid pump response to flow rate request", CONST_FLOW_SET);
@@ -1186,31 +1183,27 @@ namespace Agilent.Devices.Pumps
                 {
                     HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
                     return double.NaN;
-                }                
+                }
                 return Convert.ToDouble(replies[3]);
             }
-            else
-            {
-                reply = "";
-                SendCommand("ACT:PRES?", ref reply, "Attmempting to query pressure.");
-                //expect: RA 0000 ACT:PRES 16.00
 
-                if (reply.Contains("ACT:PRES"))
-                {
-                    var replies = reply.Split(' ');
-                    if (replies.Length != 4)
-                    {
-                        HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
-                        return double.NaN;
-                    }
-                    return Convert.ToDouble(replies[3]);
-                }
-                else
+            reply = "";
+            SendCommand("ACT:PRES?", ref reply, "Attmempting to query pressure.");
+            //expect: RA 0000 ACT:PRES 16.00
+
+            if (reply.Contains("ACT:PRES"))
+            {
+                var replies = reply.Split(' ');
+                if (replies.Length != 4)
                 {
                     HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
                     return double.NaN;
                 }
+                return Convert.ToDouble(replies[3]);
             }
+
+            HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
+            return double.NaN;
         }
         /// <summary>
         /// Gets the current mixer volume.
@@ -1224,12 +1217,12 @@ namespace Agilent.Devices.Pumps
             }
             var reply = "";
             SendCommand("MVOL?", ref reply, "Attempting to query mixer volume.");
-            var start = reply.IndexOf("MVOL");
+            var start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
                 reply = "";
                 SendCommand("MVOL?", ref reply, "Attempting to query mixer volume.");
-                start = reply.IndexOf("MVOL");
+                start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
                 if (start == -1)
                 {
                     HandleError("Invalid pump response to volume request", CONST_VOLUME_SET);
@@ -1251,12 +1244,12 @@ namespace Agilent.Devices.Pumps
             }
             var reply = "";
             SendCommand("ACT:FLOW?", ref reply, "Attempting to query actual flow.");
-            var start = reply.IndexOf("ACT:FLOW");
+            var start = reply.IndexOf("ACT:FLOW", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
                 reply = "";
                 SendCommand("ACT:FLOW?", ref reply, "Attempting to query actual flow.");
-                start = reply.IndexOf("ACT:FLOW");
+                start = reply.IndexOf("ACT:FLOW", StringComparison.InvariantCultureIgnoreCase);
                 if (start == -1)
                 {
                     HandleError("Invalid pump response to flow request", CONST_FLOW_SET);
@@ -1279,7 +1272,7 @@ namespace Agilent.Devices.Pumps
             var reply = "";
             SendCommand("MODE?", ref reply, "Attempting to query mode.");
             //reply = "RA 000 MODE 1
-            var start = reply.IndexOf("MODE");
+            var start = reply.IndexOf("MODE", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
                 //TODO: Error!
@@ -1297,7 +1290,7 @@ namespace Agilent.Devices.Pumps
         protected virtual void OnDeviceSaveRequired()
         {
             DeviceSaveRequired?.Invoke(this, null);
-        }       
+        }
         #endregion
 
         #region IDevice Data Provider Methods
@@ -1336,11 +1329,10 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Writes the pump method time-table to the directory provided.
         /// </summary>
-        /// <param name="filepath"></param>
+        /// <param name="directoryPath"></param>
         /// <param name="methodName"></param>
-        /// <param name="methodData"></param>
         private void WriteMethod(string directoryPath, string methodName)
-        {            
+        {
             if (mdict_methods.ContainsKey(methodName))
             {
                 var methodData = mdict_methods[methodName];
@@ -1376,10 +1368,10 @@ namespace Agilent.Devices.Pumps
                 notifications.Add(value);
             }
             return notifications;
-          }
+        }
         public List<string> GetErrorNotificationList()
         {
-            var notifications = new List<string>() {   
+            var notifications = new List<string>() {
                                         CONST_COMPOSITION_B_SET,
                                         CONST_INITIALIZE_ERROR,
                                         CONST_PRESSURE_SET,
@@ -1392,14 +1384,14 @@ namespace Agilent.Devices.Pumps
                                         CONST_PUMP_ERROR
             };
 
-            
+
             foreach (var value in m_errorCodes.Values)
             {
                 notifications.Add(value);
             }
 
             return notifications;
-        }         
+        }
         #endregion
 
         /// <summary>
@@ -1408,9 +1400,9 @@ namespace Agilent.Devices.Pumps
         /// <returns>String name of the device.</returns>
         public override string ToString()
         {
-            return this.Name;
-        }        
-        
+            return Name;
+        }
+
         #region IFinchComponent Members
         /*
         public FinchComponentData GetData()

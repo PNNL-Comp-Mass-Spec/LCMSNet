@@ -23,7 +23,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Class that interfaces the hardware.
         /// </summary>
-        private classValveVICIMultiPos          m_valve;
+        private classValveVICIMultiPos m_valve;
         /// <summary>
         /// Event fired when the position of the valve changes.
         /// </summary>
@@ -32,20 +32,24 @@ namespace LcmsNet.Devices.Valves
 
         #region Constructors
         public controlValveVICIMultiPos()
-        {        
+        {
             InitializeComponent();
 
             //Populate the combobox
             PopulateComboBox();
-           
+
         }
         private void RegisterDevice(IDevice device)
         {
-            m_valve              = device as classValveVICIMultiPos;
-            m_valve.PosChanged += OnPosChanged;
+            m_valve = device as classValveVICIMultiPos;
+            if (m_valve != null)
+            {
+                m_valve.PosChanged += OnPosChanged;
+            }
             SetBaseDevice(m_valve);
-            
-            mpropertyGrid_Serial.SelectedObject     = m_valve.Port;
+
+            mpropertyGrid_Serial.SelectedObject = m_valve.Port;
+
             PopulateComboBox();
         }
         private void PopulateComboBox()
@@ -54,7 +58,7 @@ namespace LcmsNet.Devices.Valves
             {
                 var enums = Enum.GetValues(m_valve.GetStateType());
 
-                foreach(var o in enums)
+                foreach (var o in enums)
                 {
                     mcomboBox_Position.Items.Add(o);
                 }
@@ -69,14 +73,14 @@ namespace LcmsNet.Devices.Valves
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new EventHandler<ValvePositionEventArgs<int>>(OnPosChanged), new object[] { sender, newPosition });
+                BeginInvoke(new EventHandler<ValvePositionEventArgs<int>>(OnPosChanged), sender, newPosition);
             }
             else
             {
                 PositionChanged?.Invoke(this, new ValvePositionEventArgs<int>(newPosition.Position));
                 mtextbox_CurrentPos.Text = newPosition.Position.ToString();
             }
-        }        
+        }
         #endregion
 
         #region Properties
@@ -101,11 +105,11 @@ namespace LcmsNet.Devices.Valves
         {
             get
             {
-                return (classValveVICIMultiPos)m_valve;
+                return m_valve;
             }
             set
             {
-                
+
                 if (!DesignMode)
                 {
                     RegisterDevice(value);
@@ -155,7 +159,7 @@ namespace LcmsNet.Devices.Valves
 
         private void valvetest_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -308,18 +312,18 @@ namespace LcmsNet.Devices.Valves
                 showError("Unauthorized access when attempting to clear valve ID", ex);
             }
         }
-                
+
         private void mpropertyGrid_Serial_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             OnSaveRequired();
         }
-        
+
         #endregion
 
         private void mbutton_SetPosition_Click(object sender, EventArgs e)
         {
             if (mcomboBox_Position.SelectedItem == null)
-            {                
+            {
                 LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_USER, "A valve position selection should be made.");
                 return;
             }
@@ -342,7 +346,7 @@ namespace LcmsNet.Devices.Valves
         {
             m_valve.SetNumberOfPositions(Convert.ToInt32(mtextBox_SetNumPos.Text));
         }
-       
+
         /// <summary>
         /// Handles initializing the device.
         /// </summary>
@@ -377,5 +381,5 @@ namespace LcmsNet.Devices.Valves
             mtextbox_CurrentPos.Text = m_valve.LastMeasuredPosition.ToString();
             mtextbox_currentID.Text = m_valve.SoftwareID.ToString();
         }
-    }    
+    }
 }

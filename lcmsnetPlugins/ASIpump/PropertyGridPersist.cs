@@ -29,7 +29,7 @@ namespace ASIpump
                     notify.PropertyChanged += notify_PropertyChanged;
                 }
 
-                this.SelectedObject = mDisplayedObject;
+                SelectedObject = mDisplayedObject;
             }
         }
 
@@ -40,7 +40,7 @@ namespace ASIpump
 
         public void RefreshProperties()
         {
-            this.SelectedObject = DisplayedObject;
+            SelectedObject = DisplayedObject;
         }
     }
 }
