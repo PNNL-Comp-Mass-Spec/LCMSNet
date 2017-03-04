@@ -47,8 +47,7 @@
 //*********************************************************************************************************
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -437,32 +436,32 @@ namespace LcmsNetDataClasses
         /// Gets current values for all the properties in the class in key/value format
         /// </summary>
         /// <returns>String dictionary containing current values of all properties</returns>
-        public override StringDictionary GetPropertyValues()
+        public override Dictionary<string, string> GetPropertyValues()
         {
             //NOTE: This method must be modified if new property representing an object is added
-            var TempDict = new StringDictionary();
+            var newDictionary = new Dictionary<string, string>();
 
-            // Use reflection to get the name and value for each property and store in a string dictionary
+            // Use reflection to get the name and value for each property and store in a dictionary
             var classType = GetType();
             var properties = classType.GetProperties();
-            foreach (var tempProp in properties)
+            foreach (var property in properties)
             {
-                switch (tempProp.PropertyType.ToString())
+                switch (property.PropertyType.ToString())
                 {
                     case "LcmsNetDataClasses.classDMSData":
                         // Special case - get the DMS data for this object and add properties to string dictionary
                         var dmsDict = DmsData.GetPropertyValues();
-                        foreach (DictionaryEntry de in dmsDict)
+                        foreach (var entry in dmsDict)
                         {
-                            TempDict.Add("DMS." + de.Key, de.Value.ToString());
+                            newDictionary.Add("DMS." + entry.Key, entry.Value);
                         }
                         break;
                     case "LcmsNetDataClasses.Data.classPalData":
                         // Special case - get the PAL data for this object and add properties to string dictionary
                         var palDict = PAL.GetPropertyValues();
-                        foreach (DictionaryEntry de in palDict)
+                        foreach (var entry in palDict)
                         {
-                            TempDict.Add("PAL." + de.Key, de.Value.ToString());
+                            newDictionary.Add("PAL." + entry.Key, entry.Value);
                         }
                         break;
                     case "LcmsNetDataClasses.Configuration.classColumnData":
@@ -470,9 +469,9 @@ namespace LcmsNetDataClasses
                         {
                             // Special case - get the column data for this object and add properties to string dictionary
                             var colDict = ColumnData.GetPropertyValues();
-                            foreach (DictionaryEntry de in colDict)
+                            foreach (var entry in colDict)
                             {
-                                TempDict.Add("Col." + de.Key, de.Value.ToString());
+                                newDictionary.Add("Col." + entry.Key, entry.Value);
                             }
                         }
                         break;
@@ -481,80 +480,81 @@ namespace LcmsNetDataClasses
                         {
                             // Special case - get the experiment data for this object and add properties to string dictionary
                             var expDict = LCMethod.GetPropertyValues();
-                            foreach (DictionaryEntry de in expDict)
+                            foreach (var entry in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                TempDict.Add("exp." + de.Key, de.Value.ToString());
+                                newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
                             }
                         }
                         else
                         {
                             var method = new classLCMethod();
                             var expDict = method.GetPropertyValues();
-                            foreach (DictionaryEntry de in expDict)
+                            foreach (var entry in expDict)
                             {
                                 //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                TempDict.Add("exp." + de.Key, de.Value.ToString());
+                                newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
                             }
                         }
                         break;
                     case "LcmsNetDataClasses.classInstrumentInfo":
                         // Special case - get the experiment data for this object and add properties to string dictionary
                         var instDict = InstrumentData.GetPropertyValues();
-                        foreach (DictionaryEntry de in instDict)
+                        foreach (var entry in instDict)
                         {
-                            TempDict.Add("Ins." + de.Key, de.Value.ToString());
+                            newDictionary.Add("Ins." + entry.Key, entry.Value);
                         }
                         break;
                     default:
-                        TempDict.Add(tempProp.Name, tempProp.GetValue(this, null).ToString());
+                        newDictionary.Add(property.Name, property.GetValue(this, null).ToString());
                         break;
                 }
             }
-            //Return the string dictionary
-            return TempDict;
+            
+            return newDictionary;
         }
 
-        public override void LoadPropertyValues(StringDictionary PropValues)
+        public override void LoadPropertyValues(Dictionary<string, string> propValues)
         {
             //NOTE: This method must be modified if new property representing an object is added
-            var baseProps = new StringDictionary();
-            var dmsProps = new StringDictionary();
-            var palProps = new StringDictionary();
-            var colProps = new StringDictionary();
-            var expProps = new StringDictionary();
-            var instProps = new StringDictionary();
+            var baseProps = new Dictionary<string, string>();
+            var dmsProps = new Dictionary<string, string>();
+            var palProps = new Dictionary<string, string>();
+            var colProps = new Dictionary<string, string>();
+            var expProps = new Dictionary<string, string>();
+            var instProps = new Dictionary<string, string>();
 
             // Separate the properties into class dictionaries
-            foreach (DictionaryEntry testEntry in PropValues)
+            foreach (var property in propValues)
             {
-                var keyName = testEntry.Key.ToString();
+                var keyName = property.Key;
                 if (keyName.Length < 4)
                 {
                     // Property name is too short to be one of the properties that holds a class, so add
                     //      it to the main class dictionary
-                    baseProps.Add(keyName, testEntry.Value.ToString());
+                    baseProps.Add(keyName, property.Value);
+                    continue;
                 }
                 // Stuff string dictionaries for each property holding a class, and main class
                 switch (keyName.Substring(0, 4))
                 {
                     case "dms.":
-                        dmsProps.Add(keyName.Substring(4, keyName.Length - 4), testEntry.Value.ToString());
+                        dmsProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
                         break;
                     case "pal.":
-                        palProps.Add(keyName.Substring(4, keyName.Length - 4), testEntry.Value.ToString());
+                        palProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
                         break;
                     case "col.":
-                        colProps.Add(keyName.Substring(4, keyName.Length - 4), testEntry.Value.ToString());
+                        colProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
                         break;
                     case "exp.":
-                        expProps.Add(keyName.Substring(4, keyName.Length - 4), testEntry.Value.ToString());
+                        expProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
                         break;
                     case "ins.":
-                        instProps.Add(keyName.Substring(4, keyName.Length - 4), testEntry.Value.ToString());
+                        instProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
                         break;
                     default:
-                        baseProps.Add(keyName, testEntry.Value.ToString());
+                        baseProps.Add(keyName, property.Value);
                         break;
                 }
             }
@@ -569,6 +569,7 @@ namespace LcmsNetDataClasses
                 ColumnData = new classColumnData();
                 ColumnData.LoadPropertyValues(colProps);
             }
+
             if (expProps.Count > 0)
             {
                 LCMethod = new classLCMethod();

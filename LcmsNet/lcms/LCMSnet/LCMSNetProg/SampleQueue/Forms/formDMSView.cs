@@ -17,7 +17,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -51,8 +50,8 @@ namespace LcmsNet.SampleQueue
         // These two string dictionaries hold selected column and sort orders for the listview
         // Using string dictionaries allows me to make the event handler for the column click event common
         //   to both listviews
-        readonly StringDictionary m_ListViewColumns = new StringDictionary();
-        readonly StringDictionary m_ListViewSortOrder = new StringDictionary();
+        readonly Dictionary<string, string> m_ListViewColumns = new Dictionary<string, string>();
+        readonly Dictionary<string, string> m_ListViewSortOrder = new Dictionary<string, string>();
 
         #endregion
 

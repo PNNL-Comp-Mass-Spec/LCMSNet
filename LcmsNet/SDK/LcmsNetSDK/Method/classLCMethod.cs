@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace LcmsNetDataClasses.Method
 {
@@ -286,9 +285,9 @@ namespace LcmsNetDataClasses.Method
         /// events contained within.
         /// </summary>
         /// <returns>StringDictionary containing the name of the LC Method</returns>
-        public override StringDictionary GetPropertyValues()
+        public override Dictionary<string, string> GetPropertyValues()
         {
-            var dictionary = new StringDictionary {
+            var dictionary = new Dictionary<string, string> {
                 { CONST_NAME_METHOD_KEY, Name}
             };
 
@@ -298,13 +297,16 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Loads the name of the method and stores it.
         /// </summary>
-        /// <param name="PropValues"></param>
-        public override void LoadPropertyValues(StringDictionary PropValues)
+        /// <param name="propValues"></param>
+        public override void LoadPropertyValues(Dictionary<string, string> propValues)
         {
-            if (PropValues == null)
+            if (propValues == null)
                 return;
 
-            Name = PropValues[CONST_NAME_METHOD_KEY];
+            string nameMatch;
+            if (propValues.TryGetValue(CONST_NAME_METHOD_KEY, out nameMatch))
+                Name = nameMatch;
+
         }
 
         #endregion

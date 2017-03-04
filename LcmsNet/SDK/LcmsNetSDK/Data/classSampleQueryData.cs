@@ -10,7 +10,7 @@
 //****************/*****************************************************************************************
 
 using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Text;
 
 namespace LcmsNetDataClasses
@@ -28,7 +28,7 @@ namespace LcmsNetDataClasses
 
         #region "Class variables"
 
-        readonly StringDictionary m_QueryParams = new StringDictionary();
+        readonly Dictionary<string, string> m_QueryParams = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
         #endregion
 

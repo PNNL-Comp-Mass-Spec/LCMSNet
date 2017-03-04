@@ -29,7 +29,6 @@
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -120,7 +119,7 @@ namespace LcmsNetDmsTools
         /// <remarks>Default is 18 months; use 0 to load all data</remarks>
         public int RecentExperimentsMonthsToLoad { get; set; }
 
-        private readonly StringDictionary configuration;
+        private readonly Dictionary<string,string> configuration;
 
         #endregion
 
@@ -142,7 +141,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public classDBTools()
         {
-            configuration = new StringDictionary();
+            configuration = new Dictionary<string, string>();
             RecentDatasetsMonthsToLoad = 12;
             RecentExperimentsMonthsToLoad = 18;
             LoadConfiguration();

@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
@@ -190,7 +189,7 @@ namespace LcmsNetSQLiteTools
                 var sampleData = new classSampleData(false);
 
                 // Load the sample data object from the string dictionary
-                sampleData.LoadPropertyValues(DictionaryToStringDict(sampleProps));
+                sampleData.LoadPropertyValues(sampleProps);
 
                 // Add the sample data object to the return list
                 returnData.Add(sampleData);
@@ -349,7 +348,7 @@ namespace LcmsNetSQLiteTools
             // Create a string dictionary holding the property names and values for object,
             //      using the first object in the input list
             var firstItem = dataToCache[0];
-            var FieldNames = StringDictToDictionary(firstItem.GetPropertyValues());
+            var FieldNames = firstItem.GetPropertyValues();
 
             // Verify table exists; if not, create it; Otherwise, clear it
             if (!VerifyTableExists(tableName, connStr))
@@ -372,7 +371,7 @@ namespace LcmsNetSQLiteTools
             var cmdList = new List<string>();
             foreach (var tempItem in dataToCache)
             {
-                var itemProps = StringDictToDictionary(tempItem.GetPropertyValues());
+                var itemProps = tempItem.GetPropertyValues();
                 var sqlInsertCmd = BuildInsertPropValueCmd(itemProps, tableName);
                 cmdList.Add(sqlInsertCmd);
             }
@@ -731,26 +730,6 @@ namespace LcmsNetSQLiteTools
             return InpString.Replace("'", "''");
         }
 
-        private static StringDictionary DictionaryToStringDict(Dictionary<string, string> oldDictionary)
-        {
-            var newDictionary = new StringDictionary();
-
-            foreach (var item in oldDictionary)
-                newDictionary.Add(item.Key, item.Value);
-
-            return newDictionary;
-        }
-
-
-        private static Dictionary<string, string> StringDictToDictionary(StringDictionary oldDictionary)
-        {
-            var newDictionary = new Dictionary<string, string>(oldDictionary.Count);
-            foreach (string item in oldDictionary.Keys)
-                newDictionary.Add(item, oldDictionary[item]);
-
-            return newDictionary;
-        }
-
         /// <summary>
         /// Builds a INSERT command from the input string dictionary
         /// </summary>
@@ -915,7 +894,7 @@ namespace LcmsNetSQLiteTools
                     var userData = new classUserInfo();
 
                     // Load the user data object from the string dictionary
-                    userData.LoadPropertyValues(DictionaryToStringDict(userProps));
+                    userData.LoadPropertyValues(userProps);
 
                     // Add the user data object to the return list
                     returnData.Add(userData);
@@ -950,7 +929,7 @@ namespace LcmsNetSQLiteTools
                     var instData = new classInstrumentInfo();
 
                     // Load the instrument data object from the string dictionary
-                    instData.LoadPropertyValues(DictionaryToStringDict(instProps));
+                    instData.LoadPropertyValues(instProps);
 
                     // Add the instrument data object to the return list
                     returnData.Add(instData);
@@ -976,7 +955,7 @@ namespace LcmsNetSQLiteTools
                 {
                     var expDatum = new classExperimentData();
 
-                    expDatum.LoadPropertyValues(DictionaryToStringDict(props));
+                    expDatum.LoadPropertyValues(props);
 
                     returnData.Add(expDatum);
                 }
@@ -1013,14 +992,14 @@ namespace LcmsNetSQLiteTools
                 foreach (var props in userExpProperties)
                 {
                     var datum = new classProposalUser();
-                    datum.LoadPropertyValues(DictionaryToStringDict(props));
+                    datum.LoadPropertyValues(props);
                     users.Add(datum);
                 }
 
                 foreach (var props in referenceExpProperties)
                 {
                     var datum = new classUserIDPIDCrossReferenceEntry();
-                    datum.LoadPropertyValues(DictionaryToStringDict(props));
+                    datum.LoadPropertyValues(props);
                     crossReferenceList.Add(datum);
                 }
 
@@ -1054,7 +1033,7 @@ namespace LcmsNetSQLiteTools
                 foreach (var props in allLCColumnProperties)
                 {
                     var datum = new classLCColumn();
-                    datum.LoadPropertyValues(DictionaryToStringDict(props));
+                    datum.LoadPropertyValues(props);
                     returnData.Add(datum);
                 }
 

@@ -9,7 +9,7 @@
 //
 //*********************************************************************************************************
 
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace LcmsNetDataClasses
 {
@@ -21,9 +21,9 @@ namespace LcmsNetDataClasses
 
         #region "Methods"
 
-        StringDictionary GetPropertyValues();
+        Dictionary<string, string> GetPropertyValues();
 
-        void LoadPropertyValues(StringDictionary PropValues);
+        void LoadPropertyValues(Dictionary<string,string> propValues);
 
         #endregion
     }

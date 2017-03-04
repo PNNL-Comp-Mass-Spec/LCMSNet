@@ -9,11 +9,10 @@
 //*********************************************************************************************************
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using LcmsNetDataClasses.Configuration;
+using System.Collections.Generic;
 
 namespace LcmsNetDataClasses
 {
@@ -47,51 +46,52 @@ namespace LcmsNetDataClasses
         /// Gets current values for all the properties in the class in key/value format
         /// </summary>
         /// <returns>String dictionary containing current values of all properties</returns>
-        public virtual StringDictionary GetPropertyValues()
+        public virtual Dictionary<string, string> GetPropertyValues()
         {
-            var TempDict = new StringDictionary();
-            // Use reflection to get the name and value for each property and store in a string dictionary
+            var newDictionary = new Dictionary<string, string>();
+
+            // Use reflection to get the name and value for each property and store in a dictionary
             var classType = GetType();
             var properties = classType.GetProperties();
-            foreach (var tempProp in properties)
+            foreach (var property in properties)
             {
-                if (tempProp.PropertyType != typeof (Color))
+                if (property.PropertyType != typeof (Color))
                 {
-                    var tempObject = tempProp.GetValue(this, null);
+                    var tempObject = property.GetValue(this, null);
                     if (tempObject == null)
                     {
-                        TempDict.Add(tempProp.Name, "");
+                        newDictionary.Add(property.Name, "");
                     }
                     else
                     {
-                        TempDict.Add(tempProp.Name, tempObject.ToString());
+                        newDictionary.Add(property.Name, tempObject.ToString());
                     }
                 }
                 else
                 {
-                    var c = (Color) tempProp.GetValue(this, null);
-                    TempDict.Add(tempProp.Name, TypeDescriptor.GetConverter(c).ConvertToString(c));
+                    var c = (Color)property.GetValue(this, null);
+                    newDictionary.Add(property.Name, TypeDescriptor.GetConverter(c).ConvertToString(c));
                 }
             }
-            //Return the string dictionary
-            return TempDict;
+
+            return newDictionary;
         }
 
         /// <summary>
         /// Loads the class properties from a string dictionary
         /// </summary>
-        /// <param name="PropValues">String dictionary containing property names and values</param>
-        public virtual void LoadPropertyValues(StringDictionary PropValues)
+        /// <param name="propValues">String dictionary containing property names and values</param>
+        public virtual void LoadPropertyValues(Dictionary<string, string> propValues)
         {
             var classType = GetType();
             var properties = classType.GetProperties();
-            foreach (DictionaryEntry currentEntry in PropValues)
+            foreach (var currentEntry in propValues)
             {
-                var currentKey = currentEntry.Key.ToString();
-                var currentValue = currentEntry.Value.ToString();
+                var currentKey = currentEntry.Key;
+                var currentValue = currentEntry.Value;
                 foreach (var tempProp in properties)
                 {
-                    if (tempProp.Name.ToLower() != currentKey.ToLower())
+                    if (!string.Equals(tempProp.Name, currentKey, StringComparison.InvariantCultureIgnoreCase))
                         continue;
 
                     switch (tempProp.PropertyType.ToString())
@@ -106,7 +106,7 @@ namespace LcmsNetDataClasses
                             tempProp.SetValue(this, bool.Parse(currentValue), null);
                             break;
                         case "System.Int64":
-                            tempProp.SetValue(this, Int64.Parse(currentValue), null);
+                            tempProp.SetValue(this, long.Parse(currentValue), null);
                             break;
                         case "System.Double":
                             tempProp.SetValue(this, double.Parse(currentValue), null);
@@ -166,7 +166,7 @@ namespace LcmsNetDataClasses
                                     tempProp.PropertyType);
                             }
                             break;
-                    } // End switch
+                    }
                 }
             }
         }

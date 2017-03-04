@@ -8,7 +8,7 @@
 // Last modified 02/09/2010
 //*********************************************************************************************************
 using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace LogViewer
 {
@@ -19,7 +19,8 @@ namespace LogViewer
     {
         #region "Class variables"
 
-        readonly StringDictionary m_QueryParams = new StringDictionary();
+        readonly Dictionary<string, string> m_QueryParams = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
         #endregion
 
         #region "Properties"
@@ -72,7 +73,7 @@ namespace LogViewer
         /// </summary>
         /// <param name="dictKey">Key name</param>
         /// <returns>Key value if found, otherwise empty string</returns>
-        private String GetValueIfFound(String dictKey)
+        private string GetValueIfFound(string dictKey)
         {
             if (m_QueryParams.ContainsKey(dictKey))
             {
