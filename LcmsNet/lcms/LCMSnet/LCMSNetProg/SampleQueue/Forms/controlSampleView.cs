@@ -508,7 +508,7 @@ namespace LcmsNet.SampleQueue.Forms
                         classSampleValidatorManager.Instance.Validators)
                 {
 #if DEBUG
-                    Debug.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
+                    Console.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
 #endif
                     var sampleValidator = reference.Value;
                     errors.AddRange(sampleValidator.ValidateSamples(sample));
@@ -668,7 +668,7 @@ namespace LcmsNet.SampleQueue.Forms
                             classSampleValidatorManager.Instance.Validators)
                     {
 #if DEBUG
-                        Debug.WriteLine("Validating sample with validator: " +
+                        Console.WriteLine("Validating sample with validator: " +
                                                            reference.Metadata.Name);
 #endif
                         var sampleValidator = reference.Value;

@@ -309,7 +309,7 @@ namespace FluidicsSDK.Base
             {
                 return m_device;
             }
-            protected set
+            private set
             {
                 if (value != null)
                 {
