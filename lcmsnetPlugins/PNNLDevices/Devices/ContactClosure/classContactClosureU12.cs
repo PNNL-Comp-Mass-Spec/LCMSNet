@@ -4,11 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-// Last modified 08/17/2009
- *      BLL - 9-8-2009
- *          Added method editing attributes for the method editor to use for an event.
- *              - Method:  Trigger(int timeout)
- *
+// Updates:
+// - 9/08/2009 (BLL) Added method editing attributes for the method editor to use for an event.
+//   - Method:  Trigger(int timeout)
+//
 //********************************************************************************************************/
 
 using System;

@@ -4,46 +4,34 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-/* Last modified 01/16/2009
- *
- *      1/16/2009: Brian LaMarche
- *         - Added Name for the sample
- *         - Added some comments for the get or set accesors for private member
- *              variables.
- *         - Made the class implement the ICloneable interface for shallow
- *              copies of references.
- *         - Added the constant value region for default sample names.
- *
- *      1/19/2009: Brian LaMarche
- *          - Added Column ID, and Sequence ID
- *          - Added a property to the PAL data.
- *
- *      2/10/2009: Dave Clark
- *          - Added method for retrieving current values of all properties at once
- *
- *      2/17/2009: Dave Clark
- *          - Changed to inherit from classDataClassBase and override data prep method
- *
- *      2/20/2009: Dave Clark
- *          - Changed clone method to deep copy
- *
- *      2/27/2009: Dave Clark
- *          - Changed event attributes to non-serialized to fix deep clone bug
- *
- *      3-16-2009:  Brian LaMarche
- *          - Added the Instrument and Experiment Method Name properties.
- *
- *      3/19/2009: Dave Clark
- *          - Modified cache property storage/retrieval methods to reflect new properties added 3/16
- *
- *      4/3/2009: Dave Clark
- *          - Corrected bug in restoration of experiment data from cache
- *
- *      10/8/2009: Brian LaMarche
- *          - Added the LC Method data...not sure if the experiment data should be removed.
- *      7/16/2010: Brian LaMarche
- *          - Added a fullname option to display date and cart name appended to the DMS request name.
- * */
+// Updates:
+// - 1/16/2009: Brian LaMarche
+//    - Added Name for the sample
+//    - Added some comments for the get or set accesors for private member variables.
+//    - Made the class implement the ICloneable interface for shallow copies of references.
+//    - Added the constant value region for default sample names.
+// - 1/19/2009: Brian LaMarche
+//     - Added Column ID, and Sequence ID
+//     - Added a property to the PAL data.
+// - 2/10/2009: Dave Clark
+//     - Added method for retrieving current values of all properties at once
+// - 2/17/2009: Dave Clark
+//     - Changed to inherit from classDataClassBase and override data prep method
+// - 2/20/2009: Dave Clark
+//     - Changed clone method to deep copy
+// - 2/27/2009: Dave Clark
+//     - Changed event attributes to non-serialized to fix deep clone bug
+// - 3/16/2009:  Brian LaMarche
+//     - Added the Instrument and Experiment Method Name properties.
+// - 3/19/2009: Dave Clark
+//     - Modified cache property storage/retrieval methods to reflect new properties added 3/16
+// - 4/3/2009: Dave Clark
+//     - Corrected bug in restoration of experiment data from cache
+// - 10/8/2009: Brian LaMarche
+//     - Added the LC Method data...not sure if the experiment data should be removed.
+// - 7/16/2010: Brian LaMarche
+//     - Added a fullname option to display date and cart name appended to the DMS request name.
+//
 //*********************************************************************************************************
 
 using System;

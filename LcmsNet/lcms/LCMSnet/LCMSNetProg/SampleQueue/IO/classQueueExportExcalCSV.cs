@@ -4,7 +4,6 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 07/22/2010
 //
-// Last modified 07/22/2010
 //*********************************************************************************************************
 
 using System;
@@ -16,11 +15,11 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {
+    /// <summary>
+    /// Exports specified queue to CSV file specifically tailored to Excalibur import
+    /// </summary>
     class classQueueExportExcalCSV : ISampleQueueWriter
     {
-        //*********************************************************************************************************
-        //Exports specified queue to CSV file specifically tailored to Excalibur import
-        //**********************************************************************************************************
 
         #region "Methods"
 

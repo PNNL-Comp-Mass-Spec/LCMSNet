@@ -4,7 +4,6 @@
  * Copyright 2014 Battle Memorial Institute
  * Created 7/1/2014
  *
- * Last Modified 7/25/2014 By Christopher Walters
  ********************************************************************************************************/
 
 using System;

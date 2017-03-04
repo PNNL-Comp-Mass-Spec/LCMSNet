@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 04/14/2009
 //
-// Last modified 04/14/2009
-//                      - 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
+// Updates
+// - 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
 //*********************************************************************************************************
 
 using System;

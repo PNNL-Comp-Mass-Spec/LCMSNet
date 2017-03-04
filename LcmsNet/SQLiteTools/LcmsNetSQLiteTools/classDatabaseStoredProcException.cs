@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/28/2009
 //
-// Last modified 01/28/2009
-//                      02/19/2009 (DAC) - Renamed for use with both DMS and SQLite databases
+// Updates:
+// - 02/19/2009 (DAC) - Renamed for use with both DMS and SQLite databases
 //
 //*********************************************************************************************************
 

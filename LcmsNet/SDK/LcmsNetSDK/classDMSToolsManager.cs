@@ -3,7 +3,6 @@
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2014, Battelle Memorial Institute
 // Created 09/11/2014
-// Last Modified On: 9/25/2014 By Christopher Walters
 //*********************************************************************************************************
 
 using System;

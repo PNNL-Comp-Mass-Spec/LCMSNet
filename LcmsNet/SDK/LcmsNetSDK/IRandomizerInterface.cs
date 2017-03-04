@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/28/2009
 //
-// Last modified 01/28/2009
-//                      - 03/04/2009 (DAC) - Moved to LcmsNetDataClasses namespace
+// Updates
+// - 03/04/2009 (DAC) - Moved to LcmsNetDataClasses namespace
 //
 //*********************************************************************************************************
 

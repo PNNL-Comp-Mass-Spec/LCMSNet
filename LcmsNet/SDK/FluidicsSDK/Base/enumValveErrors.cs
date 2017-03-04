@@ -4,7 +4,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-// Last modified 08/17/2009
 //*********************************************************************************************************
 
 namespace FluidicsSDK.Base

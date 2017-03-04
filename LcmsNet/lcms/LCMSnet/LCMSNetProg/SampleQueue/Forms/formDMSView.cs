@@ -4,14 +4,14 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/08/2009
 //
-// Last modified 09/30/2014
-//                      - 02/04/2009 (DAC) - Changed to use List<classSampleData> instead of classDMSData
-//                      - 05/12/2009 (DAC) - Added handling of blocking and run order values
-//                      - 08/11/2009 (DAC) - Added batch value
-//                      - 02/18/2010 (DAC) - Added block value to sample query; restructured DMS sample query
-//                      - 12/08/2010 (DAC) - Modified form caption to reflect DMS version in use
-//                      - 09/11/2014 (CJW) - Modified to use new classDMSToolsManager
-//                      - 09/30/2014 (CJW) - bug fixes
+// Updates
+// - 02/04/2009 (DAC) - Changed to use List<classSampleData> instead of classDMSData
+// - 05/12/2009 (DAC) - Added handling of blocking and run order values
+// - 08/11/2009 (DAC) - Added batch value
+// - 02/18/2010 (DAC) - Added block value to sample query; restructured DMS sample query
+// - 12/08/2010 (DAC) - Modified form caption to reflect DMS version in use
+// - 09/11/2014 (CJW) - Modified to use new classDMSToolsManager
+// - 09/30/2014 (CJW) - bug fixes
 //*********************************************************************************************************
 
 using System;

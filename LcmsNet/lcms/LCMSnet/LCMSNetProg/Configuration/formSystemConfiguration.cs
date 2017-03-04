@@ -4,11 +4,11 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 07/23/2010
 //
-// Last modified 9/11/2014
-//                      08/20/2010 (DAC) - Modified to save config settings during program shutdown
-//                      08/31/2010 (DAC) - Changes resulting from move to LcmsNet namespace
-//                      09/01/2010 (DAC) - Modified to allow operator reload of column names
-//                      09/11/2014 (CJW) - Modified to use new classDMSToolsManager
+// Updates:
+// - 08/20/2010 (DAC) - Modified to save config settings during program shutdown
+// - 08/31/2010 (DAC) - Changes resulting from move to LcmsNet namespace
+// - 09/01/2010 (DAC) - Modified to allow operator reload of column names
+// - 09/11/2014 (CJW) - Modified to use new classDMSToolsManager
 //*********************************************************************************************************
 
 using System;

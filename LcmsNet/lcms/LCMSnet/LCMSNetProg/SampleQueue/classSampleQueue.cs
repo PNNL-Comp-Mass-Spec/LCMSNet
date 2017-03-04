@@ -4,18 +4,12 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-/* Last modified 01/16/2009
- *
- *      1/16/2009:  Brian LaMarche
- *          Added starting, cancelling queue operations with associated events.
- *
- *          2/12/2009: Dave Clark
- *              Added method for saving queue to SQLite database
- *          3/17/2009: BLL
- *              Generates unique ID's and sample ID's
- *          5/18/2010: DAC
- *                Modified for queue export to SQLite file and CSV file
- */
+// Updates:
+// - 1/16/2009 (BLL) Added starting, cancelling queue operations with associated events.
+// - 2/12/2009 (DAC) Added method for saving queue to SQLite database
+// - 3/17/2009 (BLL) Generates unique ID's and sample ID's
+// - 5/18/2010 (DAC) Modified for queue export to SQLite file and CSV file
+//
 //*********************************************************************************************************
 
 using System;

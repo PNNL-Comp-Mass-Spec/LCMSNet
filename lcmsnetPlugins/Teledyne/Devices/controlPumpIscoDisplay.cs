@@ -4,7 +4,6 @@
 // Copyright 2011, Battelle Memorial Institute
 // Created 02/25/2011
 //
-// Last modified 02/25/2011
 //*********************************************************************************************************
 using System;
 using System.Windows.Forms;
@@ -39,7 +38,9 @@ namespace LcmsNet.Devices.Pumps
 
         #region "Properties"
         // Pump flow
-        public double FlowRate { set { UpdateFlowrateDisplay(value); } }
+        public double FlowRate {
+            set { UpdateFlowrateDisplay(value); }
+        }
 
         // Pump pressure
         public double Pressure { set { UpdatePressDisplay(value); } }
@@ -58,7 +59,9 @@ namespace LcmsNet.Devices.Pumps
         public int PumpIndex => m_PumpIndx;
 
         // Operation mode
-        public enumIscoOperationMode OperationMode { set { SetOperationModeDisplays(value); } }
+        public enumIscoOperationMode OperationMode {
+            set { SetOperationModeDisplays(value); }
+        }
 
         // Max flow setpoint
         public double MaxFlowSp { get; set; } = 25D;

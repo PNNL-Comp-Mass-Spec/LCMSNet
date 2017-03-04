@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/21/2009
 //
-// Last modified 01/21/2009
-//                      - 03/10/2010 (DAC) - Added wellplate field, changed vial field to well
+// Updates:
+// - 03/10/2010 (DAC) - Added wellplate field, changed vial field to well
 //*********************************************************************************************************
 
 using System;

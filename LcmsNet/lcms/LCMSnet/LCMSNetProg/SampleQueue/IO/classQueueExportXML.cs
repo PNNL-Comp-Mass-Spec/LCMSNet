@@ -4,10 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/11/2009
 //
-// Last modified 03/11/2009
-//                      - 04/08/2009 (DAC) - Added output to logging function when export complete
-//                      - 04/09/2009 (DAC) - Added output to log file on exception
-//                      - 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
+// Updates
+// - 04/08/2009 (DAC) - Added output to logging function when export complete
+// - 04/09/2009 (DAC) - Added output to log file on exception
+// - 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
 //
 //*********************************************************************************************************
 

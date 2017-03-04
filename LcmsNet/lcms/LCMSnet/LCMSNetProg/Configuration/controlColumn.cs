@@ -4,9 +4,10 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 08/18/2010
 //
-// Last modified 08/18/2010
-//                      09/01/2010 (DAC) - Modified for autocomplete when selecting column name. Fixed bug
-//                                                  that wasn't allowing changes to be passed to column object
+// Updates:
+// - 09/01/2010 (DAC) - Modified for autocomplete when selecting column name. 
+//                      Fixed bug that wasn't allowing changes to be passed to column object
+//                                                  
 //*********************************************************************************************************
 
 using System;

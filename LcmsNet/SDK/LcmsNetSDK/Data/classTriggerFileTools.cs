@@ -4,9 +4,9 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 12/03/2009
 //
-// Last modified 12/03/2009
-//                      02/22/2011 (DAC) - Removed Run Finish UTC param to fix problem with data import in DMS
-//                      02/23/2011 (DAC) - Changed Operator output field to use settings value instead of sample value
+// Updates:
+// -  02/22/2011 (DAC) - Removed Run Finish UTC param to fix problem with data import in DMS
+// -  02/23/2011 (DAC) - Changed Operator output field to use settings value instead of sample value
 //*********************************************************************************************************
 
 using System;

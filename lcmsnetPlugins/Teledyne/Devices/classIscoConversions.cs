@@ -4,7 +4,6 @@
 // Copyright 2011, Battelle Memorial Institute
 // Created 04/19/2011
 //
-// Last modified 06/13/2014 By Christopher Walters
 //*********************************************************************************************************
 using System;
 

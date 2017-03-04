@@ -3,8 +3,6 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014, Battelle Memorial Institute
  *
- *  Last modified 06/19/2014
- *
 /*********************************************************************************************************/
 using System;
 using FluidicsSDK.Base;

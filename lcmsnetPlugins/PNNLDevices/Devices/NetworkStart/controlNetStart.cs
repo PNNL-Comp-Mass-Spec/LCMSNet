@@ -1,13 +1,13 @@
 ﻿
 //*********************************************************************************************************
-/*/ Written by Dave Clark, Brian LaMarche for the US Department of Energy
+// Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/25/2009
 //
- *      12-11-2009 - BLL - Added device status and data provider methods for examining the status in a list view
-// Last modified 12/11/2009
-/*///*********************************************************************************************************
+// Updates:
+// - 12/11/2009 (BLL) Added device status and data provider methods for examining the status in a list view
+//*********************************************************************************************************
 using System;
 using System.Collections.Generic;
 

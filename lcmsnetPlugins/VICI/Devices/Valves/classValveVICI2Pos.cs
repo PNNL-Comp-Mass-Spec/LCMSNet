@@ -4,11 +4,11 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-/* Last modified 08/17/2009
- *      BLL - 9-8-09
- *          Removed initialization from second constructor that takes a serial port.
- *          Added comments on properties missing them.  (e.g. describing Gets or sets properties)
- *          Additional cleanup in code making a new region for method editor enabled methods.
+// Updates:
+// - 9/8/2009 (BLL)
+//    - Removed initialization from second constructor that takes a serial port.
+//    - Added comments on properties missing them.  (e.g. describing Gets or sets properties)
+//    - Additional cleanup in code making a new region for method editor enabled methods.
 /*********************************************************************************************************/
 
 using System;

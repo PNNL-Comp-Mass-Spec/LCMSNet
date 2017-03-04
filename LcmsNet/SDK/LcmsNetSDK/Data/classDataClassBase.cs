@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/17/2009
 //
-// Last modified 02/17/2009
-//                      - 02/20/2009 (DAC) - Added ICache interface
+// Updates
+// - 02/20/2009 (DAC) - Added ICache interface
 //*********************************************************************************************************
 
 using System;

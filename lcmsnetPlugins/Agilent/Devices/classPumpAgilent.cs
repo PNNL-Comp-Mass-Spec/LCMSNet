@@ -4,11 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-/* Last modified 08/17/2009
- *      BLL - 9-8-09 
- *          Added unique naming to the constructor so it will display on the fluidics designer
- *
-/*********************************************************************************************************/
+// Updates:
+// - 9/8/2009 (BLL) Added unique naming to the constructor so it will display on the fluidics designer
+//
+//*********************************************************************************************************
 
 using System;
 using System.Collections.Generic;

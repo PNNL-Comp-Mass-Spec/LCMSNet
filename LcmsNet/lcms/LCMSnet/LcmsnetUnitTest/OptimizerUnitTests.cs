@@ -4,7 +4,6 @@
  * Copyright 2014 Battle Memorial Institute
  * Created 5/30/2014
  *
- * Last Modified 6/4/2014 By Christopher Walters
  *********************************************************************************************************/
 
 using System;
@@ -17,8 +16,8 @@ using NUnit.Framework;
 namespace LcmsnetUnitTest
 {
     /// <summary>
-    ///  class that tests the LCMethod Optimizer, which should ensure that all methods will run without interfering with one another, while still
-    ///  running as much concurrently as possible.
+    /// Class that tests the LCMethod Optimizer, which should ensure that all methods will run without interfering with one another,
+    /// while still running as much concurrently as possible.
     /// </summary>
     [TestFixture]
     public class OptimizerUnitTests

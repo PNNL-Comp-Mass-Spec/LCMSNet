@@ -4,7 +4,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 04/02/2009
 //
-// Last modified 04/02/2009
 //*********************************************************************************************************
 
 namespace LcmsNetDataClasses

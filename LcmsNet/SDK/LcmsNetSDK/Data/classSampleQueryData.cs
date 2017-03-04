@@ -4,10 +4,10 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 01/01/2010
 //
-// Last modified 01/01/2010
-//                      - 03/09/2010 (DAC) - Added field for wellplate name
+// Updates
+// - 03/09/2010 (DAC) - Added field for wellplate name
 //
-//****************/*****************************************************************************************
+//*********************************************************************************************************
 
 using System;
 using System.Collections.Generic;

@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/04/2009
 //
-// Last modified 02/04/2009
-//                      - 02/24/2009 (DAC) - Now inherits from classDataClassBase
+// Updates
+// - 02/24/2009 (DAC) - Now inherits from classDataClassBase
 //
 //*********************************************************************************************************
 

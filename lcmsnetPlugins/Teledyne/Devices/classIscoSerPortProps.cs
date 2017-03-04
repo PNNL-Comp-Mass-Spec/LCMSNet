@@ -5,7 +5,6 @@
 // Copyright 2011, Battelle Memorial Institute
 // Created 02/22/2011
 //
-// Last modified 02/22/2011
 //*********************************************************************************************************
 
 using System.IO.Ports;

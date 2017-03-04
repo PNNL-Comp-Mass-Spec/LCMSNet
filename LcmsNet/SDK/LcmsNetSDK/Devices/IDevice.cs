@@ -4,12 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-// Last modified 08/17/2009
-/*     BLL - 9-14-2009
- *          Added device save and load settings method to XML.
- *     BLL - 1-18-2010
- *          Added the ManualResetEvent that the device can use to synchronize with scheduling objects.
- */
+// Updates:
+// - 9/14/2009 (BLL) Added device save and load settings method to XML.
+// - 1/18/2010 (BLL) Added the ManualResetEvent that the device can use to synchronize with scheduling objects.
+//
 //*********************************************************************************************************
 
 using System;

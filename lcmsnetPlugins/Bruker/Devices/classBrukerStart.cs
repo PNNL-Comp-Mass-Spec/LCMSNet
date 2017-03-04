@@ -4,21 +4,18 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 02/19/2010
 //
-// Last modified 02/19/2010
-//                      06/29/2010 (DAC) - Added details for Bruker operation
+// Updates:
+// - 06/29/2010 (DAC) - Added details for Bruker operation
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
-
-using LcmsNetDataClasses.Devices;
-
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses;
-using System.Timers;
-using LcmsNetDataClasses.Logging;
 using System.IO;
+using System.Timers;
 using FluidicsSDK.Devices;
-
+using LcmsNetDataClasses;
+using LcmsNetDataClasses.Devices;
+using LcmsNetDataClasses.Logging;
+using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.Devices.BrukerStart
 {

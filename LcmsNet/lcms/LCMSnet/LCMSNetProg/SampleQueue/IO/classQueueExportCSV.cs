@@ -4,9 +4,9 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 05/18/2010
 //
-// Last modified 05/18/2010
-//                      08/11/2010 (DAC) - Fixed bug that caused sorting to affect main sample queue
-//                      08/12/2010 (DAC) - Remvoed sorting per operator request
+// Updates:
+// - 08/11/2010 (DAC) - Fixed bug that caused sorting to affect main sample queue
+// - 08/12/2010 (DAC) - Remvoed sorting per operator request
 //*********************************************************************************************************
 
 using System;

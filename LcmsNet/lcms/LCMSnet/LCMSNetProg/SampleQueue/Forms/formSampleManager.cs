@@ -4,12 +4,12 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/14/2009
 //
-// Last modified 9/30/2014
-//                      04/09/2009 (DAC) - Modified so Cache Ops tab isn't visible in Release mode
-//                      05/14/2010 (DAC) - Added import/export of cache to SQLite and Excel formats
-//                      08/31/2010 (DAC) - Changes resulting from moving part of config to LcmsNet namespace
-//                      09/30/2014 (CJW) - modifications to work with refactored sample validations.
-////*********************************************************************************************************
+// Updates:
+// - 04/09/2009 (DAC) - Modified so Cache Ops tab isn't visible in Release mode
+// - 05/14/2010 (DAC) - Added import/export of cache to SQLite and Excel formats
+// - 08/31/2010 (DAC) - Changes resulting from moving part of config to LcmsNet namespace
+// - 09/30/2014 (CJW) - modifications to work with refactored sample validations.
+//*********************************************************************************************************
 
 using System;
 using System.Collections.Generic;

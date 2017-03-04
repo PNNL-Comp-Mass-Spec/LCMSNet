@@ -4,9 +4,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/16/2009
 //
-// Last modified 03/16/2009
-//                      - 03/16/2009: (BLL) - Created file.
-//
 //*********************************************************************************************************
 
 using System;

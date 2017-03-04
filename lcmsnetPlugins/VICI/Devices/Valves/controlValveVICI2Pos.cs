@@ -4,7 +4,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-// Last modified 08/17/2009
 //*********************************************************************************************************
 
 using FluidicsSDK.Base;
@@ -91,6 +90,7 @@ namespace LcmsNet.Devices.Valves
         //        m_valve.Emulation = value;
         //    }
         //}
+
         /// <summary>
         /// Gets or sets the associated device.
         /// </summary>

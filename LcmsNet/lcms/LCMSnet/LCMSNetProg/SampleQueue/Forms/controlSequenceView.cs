@@ -4,14 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/07/2009
 //
-/* Last modified 01/16/2009
- *
- *      1/16/2009:  Brian LaMarche
- *      1/20/2009:  Dave Clark
- *            - Modified listview item addition to reflect data input from DMS view
- *        8/31/2010:  Dave Clark
- *                - Changes resulting from moving part of config to LcmsNet namespace
-*/
+// Updates:
+// - 1/20/2009 (DAC) Modified listview item addition to reflect data input from DMS view
+// - 8/31/2010 (DAC) Changes resulting from moving part of config to LcmsNet namespace
+//
 //*********************************************************************************************************
 
 using System;

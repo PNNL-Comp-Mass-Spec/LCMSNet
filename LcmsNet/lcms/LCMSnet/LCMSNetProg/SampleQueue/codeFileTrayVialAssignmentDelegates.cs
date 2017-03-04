@@ -4,7 +4,6 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 08/03/2010
 //
-// Last modified 08/03/2010
 //*********************************************************************************************************
 
 namespace LcmsNet.SampleQueue

@@ -4,11 +4,11 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/04/2009
 //
-// Last modified 02/04/2009
-//                      - 02/24/2009 (DAC) - Now inherits from classDataClassBase
-//                      - 03/16/2009 (BLL) - Added method names, and methods to the class so we
+// Updates
+// - 02/24/2009 (DAC) - Now inherits from classDataClassBase
+// - 03/16/2009 (BLL) - Added method names, and methods to the class so we
 //                        what methods are available for use and what method to run during an experiment.
-//                      - 03/17/2009 (BLL) - Added Serializable attribute to allow for deep copy
+// - 03/17/2009 (BLL) - Added Serializable attribute to allow for deep copy
 //
 //*********************************************************************************************************
 

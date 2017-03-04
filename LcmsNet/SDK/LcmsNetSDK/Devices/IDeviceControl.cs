@@ -4,11 +4,9 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 06/30/2009
 //
-// Last modified 06/30/2009
- *      BLL - 9-8-09
- *          Added the Name property to the list
- *      BLL - 9-14-09
- *          Added XML settings file save and load methods.
+// Updates:
+// - 9/08/09 (BLL) Added the Name property to the list
+// - 9/14/09 (BLL) Added XML settings file save and load methods.
 /*********************************************************************************************************/
 
 namespace LcmsNetDataClasses.Devices

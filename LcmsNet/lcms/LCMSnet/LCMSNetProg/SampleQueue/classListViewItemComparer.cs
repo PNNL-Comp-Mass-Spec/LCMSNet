@@ -4,7 +4,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/21/2009
 //
-// Last modified 01/22/2009
 //*********************************************************************************************************
 
 using System.Collections;

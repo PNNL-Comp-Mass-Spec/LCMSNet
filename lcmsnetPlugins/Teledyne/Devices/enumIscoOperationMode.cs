@@ -4,7 +4,6 @@
 // Copyright 2011, Battelle Memorial Institute
 // Created 03/04/2011
 //
-// Last modified 03/04/2011
 //*********************************************************************************************************
 
 namespace LcmsNet.Devices.Pumps

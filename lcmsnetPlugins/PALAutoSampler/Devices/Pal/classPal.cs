@@ -4,9 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-// Last modified 08/8/2014 by Christopher Walters
-//                      12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
-//                      12/02/2009 (DAC) - Added retrieving tray list and firing event to pass list to other objects
+// Updates:
+// - 12/01/2009 (DAC) - Modified to accomodate change of vial from string to int
+// - 12/02/2009 (DAC) - Added retrieving tray list and firing event to pass list to other objects
+// - 08/08/2014 by Christopher Walters
 //*********************************************************************************************************
 
 using System;

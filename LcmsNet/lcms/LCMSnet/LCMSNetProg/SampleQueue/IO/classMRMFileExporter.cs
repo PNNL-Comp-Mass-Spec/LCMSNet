@@ -4,10 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 04/02/2009
 //
-// Last modified 09/11/2014
-//                      - 04/08/2009 (DAC) - Added output to status screen when export completes
-//                      - 04/09/2009 (DAC) - Added exception log messages
-//                      - 09/11/2014 (CJW) - Modiifed to use new classDmsToolsManager
+// Updates
+// - 04/08/2009 (DAC) - Added output to status screen when export completes
+// - 04/09/2009 (DAC) - Added exception log messages
+// - 09/11/2014 (CJW) - Modiifed to use new classDmsToolsManager
 //*********************************************************************************************************
 
 using System;

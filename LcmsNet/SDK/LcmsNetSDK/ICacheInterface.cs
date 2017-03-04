@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 02/21/2009
 //
-// Last modified 02/21/2009
-//                       - 02/23/2009 (DAC) - Corrected bug in interface syntax
+// Updates:
+// - 02/23/2009 (DAC) - Corrected bug in interface syntax
 //
 //*********************************************************************************************************
 

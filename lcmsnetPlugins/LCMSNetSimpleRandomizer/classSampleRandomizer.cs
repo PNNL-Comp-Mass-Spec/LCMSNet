@@ -5,8 +5,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/28/2009
 //
-// Last modified 01/30/2009
-//                      - 03/04/2009 (DAC) - Added display name attribute
+// Updates
+// - 03/04/2009 (DAC) - Added display name attribute
 //
 //*********************************************************************************************************
 using System;

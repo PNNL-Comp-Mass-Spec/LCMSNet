@@ -3,7 +3,6 @@
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2013 Battle Memorial Institute
  *
- * Last Modified 12/18/2013 By Christopher Walters
  ********************************************************************************************************/
 
 using System;

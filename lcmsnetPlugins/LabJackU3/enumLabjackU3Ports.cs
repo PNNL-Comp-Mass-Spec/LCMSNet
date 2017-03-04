@@ -4,7 +4,6 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 1/7/2014
 //
-// Last modified 1/10/2014
 //*********************************************************************************************************
 
 namespace LcmsNet.Devices.ContactClosure

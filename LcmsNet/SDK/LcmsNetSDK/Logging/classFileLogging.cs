@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/30/2009
 //
-// Last modified 03/30/2009
-//     04/16/2009: BLL
+// Updates:
+// - 04/16/2009: BLL
 //         Made file logging class static so it can be used at program startup
 //         Changed file log name to include hhmmss using a flag to indicate whether the file exists.
 //     

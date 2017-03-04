@@ -4,7 +4,6 @@
 // Copyright 2014, Battelle Memorial Institute
 // Created 3/13/2014
 //
-// Last modified 04/18/2014
 //*********************************************************************************************************
 
 using System.Globalization;

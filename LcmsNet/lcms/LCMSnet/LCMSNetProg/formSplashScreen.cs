@@ -4,8 +4,8 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 03/27/2009
 //
-// Last modified 03/27/2009
-//                      - 11/20/2009 (DAC) - Changed Status property to use a delegate to avoid cross-thread problems
+// Updates
+// - 11/20/2009 (DAC) - Changed Status property to use a delegate to avoid cross-thread problems
 //*********************************************************************************************************
 
 using System.Drawing;

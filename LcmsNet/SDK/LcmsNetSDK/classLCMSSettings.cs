@@ -4,10 +4,10 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 01/13/2009
 //
-// Last modified 03/24/2014
-//                      03/24/2014 (Christopher Walters) -Added static event for when a setting is changd.
-//                      02/04/2009 (DAC) - Converted methods to static
-//                      08/31/2010 (DAC) - Changes resulting from move part of configuraton to LcmsNet namespace
+// Updates:
+// - 03/24/2014 (Christopher Walters) -Added static event for when a setting is changd.
+// - 02/04/2009 (DAC) - Converted methods to static
+// - 08/31/2010 (DAC) - Changes resulting from move part of configuraton to LcmsNet namespace
 //
 //*********************************************************************************************************
 

@@ -4,7 +4,6 @@
  * Copyright 2013 Battle Memorial Institute
  * Created 12/16/2013
  *
- * Last Modified 12/16/2013 By Christopher Walters
  ********************************************************************************************************/
 
 using FluidicsSDK.Base;

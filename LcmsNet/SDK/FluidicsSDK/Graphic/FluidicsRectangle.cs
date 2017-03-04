@@ -4,7 +4,6 @@
  * Copyright 2013 Battle Memorial Institute
  * Created 8/22/2013
  *
- * Last Modified 10/17/2013 By Christopher Walters
  ********************************************************************************************************/
 
 using System.Drawing;

@@ -4,7 +4,6 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 08/20/2010
 //
-// Last modified 08/20/2010
 //*********************************************************************************************************
 
 using System.ComponentModel;
@@ -12,12 +11,12 @@ using System.Reflection;
 
 namespace LcmsNet.Properties
 {
+    /// <summary>
+    /// Modifies framework settings behavior to prevent loss of user settings when app revision is changed.
+    /// </summary>
+    /// <remarks>Original code developed by Nathan Trimble, PNNL</remarks>
     internal sealed partial class Settings
     {
-        //*********************************************************************************************************
-        // Modifies framework settings behavior to prevent loss of user settings when app revision is changed.
-        //  Original code developed by Nathan Trimble, PNNL
-        //**********************************************************************************************************
 
         #region "Constructors"
 

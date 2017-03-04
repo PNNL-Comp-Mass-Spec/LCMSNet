@@ -4,9 +4,9 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 06/30/2009
 //
-// Last modified 06/30/2009
-//                      11/03/2009: Removed objects that perform no function.
- *                          Removed the multiport listener class.
+// Updates
+// - 11/03/2009: Removed objects that perform no function.
+//               Removed the multiport listener class.
 *********************************************************************************************************/
 
 using System;

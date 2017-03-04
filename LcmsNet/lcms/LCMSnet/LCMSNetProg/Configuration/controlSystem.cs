@@ -4,8 +4,6 @@
 // Copyright 2010, Battelle Memorial Institute
 // Created 02/23/2010
 //
-// Last modified 02/23/2010
-//                      09/01/2010 (DAC) - Reformatted for easier reading
 //*********************************************************************************************************
 
 using System;
