@@ -49,6 +49,7 @@ namespace LcmsNet.Method.Forms
             }
             catch
             {
+                // ignored
             }
             leftMouseDown = false;
             m_index = 0;
@@ -232,7 +233,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Renders the method provided.
         /// </summary>
-        /// <param name="method"></param>
+        /// <param name="methods"></param>
         public void RenderLCMethod(List<classLCMethod> methods)
         {
             m_methods.Clear();
@@ -257,15 +258,15 @@ namespace LcmsNet.Method.Forms
             renderer.ColumnNames.Add("Special");
             if (m_methods != null && m_methods.Count > 0)
             {
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Map the colors appropiately if they havent already been
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 if (m_deviceColorMappings.Count < 1)
                     RemapDevicesToColors();
 
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Find the duration of the total comparison
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 startTime = m_methods[0].Start;
                 var endTime = m_methods[m_methods.Count - 1].End;
                 foreach (var renderData in m_methods)
@@ -294,7 +295,10 @@ namespace LcmsNet.Method.Forms
             //Render scroll buttons
             if (RenderMode == enumLCMethodRenderMode.Conversation)
             {
-                buttonLocations = (renderer as classLCMethodConversationRenderer).GetButtonLocations();
+                var classLcMethodConversationRenderer = renderer as classLCMethodConversationRenderer;
+                if (classLcMethodConversationRenderer != null)
+                    buttonLocations = classLcMethodConversationRenderer.GetButtonLocations();
+
                 var upButton = buttonLocations[0];
                 var downButton = buttonLocations[1];
 

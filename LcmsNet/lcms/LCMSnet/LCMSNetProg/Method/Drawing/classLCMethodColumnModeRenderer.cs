@@ -68,7 +68,7 @@ namespace LcmsNet.Method.Drawing
         /// </summary>
         /// <param name="graphics"></param>
         /// <param name="bounds"></param>
-        /// <param name="samples"></param>
+        /// <param name="methods"></param>
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
@@ -82,10 +82,10 @@ namespace LcmsNet.Method.Drawing
             Dictionary<IDevice, Color> colorMap,
             DateTime progress)
         {
-            // //////////////////////////////////////////////////////////////////////////////////////////
-            // Calculate formatting paddings.
-            // //////////////////////////////////////////////////////////////////////////////////////////
             //
+            // Calculate formatting paddings.
+            //
+            
             // This tells us how far down from the top of the rendering area we are before we draw anything!
             //
             var offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
@@ -98,16 +98,15 @@ namespace LcmsNet.Method.Drawing
             heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, CONST_MAX_HEIGHT));
 
 
-            // //////////////////////////////////////////////////////////////////////////////////////////
+            //
             // Draw the data for the columns
-            // //////////////////////////////////////////////////////////////////////////////////////////
+            //
             for (var i = 0; i < ColumnNames.Count; i++)
             {
-                float width, height, x, top;
-                top = offset + ((heightPer + CONST_COLUMN_SPACING) * i) - CONST_COLUMN_BACKGROUND_HEIGHT_PADDING;
-                x = bounds.X;
-                width = bounds.Width;
-                height = heightPer;
+                var top = offset + ((heightPer + CONST_COLUMN_SPACING) * i) - CONST_COLUMN_BACKGROUND_HEIGHT_PADDING;
+                var x = bounds.X;
+                var width = bounds.Width;
+                var height = heightPer;
 
                 var area = new RectangleF(x, top, width, height);
                 var color = 245;
@@ -136,9 +135,9 @@ namespace LcmsNet.Method.Drawing
             var alignedEvents = new List<classLCEvent>();
             if (methods != null && methods.Count > 0)
             {
-                // //////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Find the start and end times of the samples so we can scale everything accordingly.
-                // //////////////////////////////////////////////////////////////////////////////////////////
+                //
                 DateTime methodStart;
                 TimeSpan methodDuration;
                 FindTimeExtremas(methods, out methodStart, out methodDuration);
@@ -163,16 +162,15 @@ namespace LcmsNet.Method.Drawing
                     duration,
                     alignedEvents);
 
-                // //////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Draw each method
-                // //////////////////////////////////////////////////////////////////////////////////////////
-                var columnID = 0;
+                //
                 foreach (var method in methods)
                 {
                     if (method == null)
                         continue;
 
-                    columnID = method.Column;
+                    var columnID = method.Column;
 
                     if (columnID < 0)
                     {

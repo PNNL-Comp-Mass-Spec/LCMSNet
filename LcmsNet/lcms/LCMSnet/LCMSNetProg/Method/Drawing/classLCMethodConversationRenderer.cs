@@ -76,7 +76,7 @@ namespace LcmsNet.Method.Drawing
         /// </summary>
         /// <param name="graphics"></param>
         /// <param name="bounds"></param>
-        /// <param name="samples"></param>
+        /// <param name="methods"></param>
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
@@ -90,10 +90,10 @@ namespace LcmsNet.Method.Drawing
             Dictionary<IDevice, Color> colorMap,
             DateTime progress)
         {
-            // //////////////////////////////////////////////////////////////////////////////////////////
-            // Calculate formatting paddings.
-            // //////////////////////////////////////////////////////////////////////////////////////////
             //
+            // Calculate formatting paddings.
+            //
+            
             // This tells us how far down from the top of the rendering area we are before we draw anything!
             //
             var offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
@@ -110,10 +110,8 @@ namespace LcmsNet.Method.Drawing
 
 
             // Draw the data for the columns
-            float width, height, x, top;
-            top = bounds.Top;
-            x = 0; // just to get rid of compiler complaints.
-
+            float top;
+            float x = 0;
 
             // Draw the columns
             for (var i = 0; i < ColumnNames.Count; i++)
@@ -122,8 +120,8 @@ namespace LcmsNet.Method.Drawing
                 top = bounds.Top;
 
                 x = ((widthPer + CONST_COLUMN_SPACING) * i) + timePadding;
-                width = widthPer;
-                height = bounds.Height - offset;
+                var width = widthPer;
+                var height = bounds.Height - offset;
 
                 var area = new RectangleF(x, top, width, height);
                 var color = 245;
@@ -157,9 +155,9 @@ namespace LcmsNet.Method.Drawing
             var alignedEvents = new List<classLCEvent>();
             if (methods != null && methods.Count > 0)
             {
-                // //////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Find the start and end times of the samples so we can scale everything accordingly.
-                // //////////////////////////////////////////////////////////////////////////////////////////
+                //
                 DateTime methodStart;
                 TimeSpan methodDuration;
                 FindTimeExtremas(methods, out methodStart, out methodDuration);
@@ -185,7 +183,6 @@ namespace LcmsNet.Method.Drawing
                     alignedEvents);
 
                 // Draw each method
-                var columnID = 0;
 
                 var methodMap = new Dictionary<classLCEvent, classLCMethod>();
                 foreach (var method in methods)
@@ -229,7 +226,7 @@ namespace LcmsNet.Method.Drawing
                                         if (method == null)
                                             continue;
 
-                                        columnID = method.Column;
+                                        var columnID = method.Column;
 
                                         if (columnID < 0)
                                         {

@@ -462,7 +462,8 @@ namespace LcmsNet.SampleQueue.Forms
                     return false;
                 if (!doNotValidate)
                 {
-                    Validate(); ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                    /////// This is very, very expensive...... ///////
+                    Validate(); 
                 }
                 //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
                 //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
@@ -549,8 +550,9 @@ namespace LcmsNet.SampleQueue.Forms
                         return;
                     if (!isRecursive && !(rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum))
                     {
+                        ////// This is very, very expensive...... //////
                         Validate();
-                            ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                            
                     }
                 }
 
@@ -624,7 +626,8 @@ namespace LcmsNet.SampleQueue.Forms
                         return;
                     //if (!isRecursive)
                     //{
-                    //    this.Validate(); ///////////////////////////////////////////////////////////////////////// This is very, very expensive...... /////////////////////////////////////////////////////////////////////
+                    //    /////// This is very, very expensive...... ///////
+                    //    this.Validate();
                     //}
                     //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
                     //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
@@ -725,11 +728,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (e.ColumnIndex == CONST_COLUMN_CHECKED)
             {
                 var row = mdataGrid_samples.CurrentRow;
-                if (row == null)
-                {
-                    return;
-                }
-                var checkbox = row.Cells[CONST_COLUMN_CHECKED] as DataGridViewCheckBoxCell;
+                var checkbox = row?.Cells[CONST_COLUMN_CHECKED] as DataGridViewCheckBoxCell;
                 if (checkbox == null)
                 {
                     return;
@@ -755,11 +754,7 @@ namespace LcmsNet.SampleQueue.Forms
             else if (mdataGrid_samples.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
             {
                 var row = mdataGrid_samples.CurrentRow;
-                if (row == null)
-                {
-                    return;
-                }
-                var comboBox = row.Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
+                var comboBox = row?.Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
                 if (comboBox == null)
                 {
                     return;

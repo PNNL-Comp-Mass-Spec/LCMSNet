@@ -21,9 +21,9 @@ namespace LcmsNetDataClasses.Experiment
         {
             var errors = new List<classSampleValidationError>();
 
-            ///////////////////////////////////////////////////////////////////////////////////////////// 
-            /// Validate the LC-Method
-            ///////////////////////////////////////////////////////////////////////////////////////////// 
+            
+            // Validate the LC-Method
+            
             if (sample.LCMethod == null)
             {
                 errors.Add(new classSampleValidationError("The LC-Method was not selected.", enumSampleValidationError.LCMethodNotSelected));
@@ -39,18 +39,18 @@ namespace LcmsNetDataClasses.Experiment
                 {
                     foreach (var lcEvent in sample.LCMethod.Events)
                     {
-                        ////////////////////////////////////////////////////////////////////////////////////////// 
-                        /// VALIDATE THE DEVICE!!!
-                        //////////////////////////////////////////////////////////////////////////////////////////
+                        
+                        // VALIDATE THE DEVICE!!!
+                        
                         var device = lcEvent.Device;
-                        /// 
-                        /// Make sure the device is not null and somehow snuck in
-                        /// 
+                        
+                        // Make sure the device is not null and somehow snuck in
+                        
                         if (device != null)
                         {
-                            /// 
-                            /// Make sure the device exists in the configuration correctly!
-                            /// 
+                            // 
+                            // Make sure the device exists in the configuration correctly!
+                            // 
                             if (device.GetType() == typeof(classTimerDevice))
                             {
                                 // Do nothing!
@@ -82,10 +82,10 @@ namespace LcmsNetDataClasses.Experiment
         /// <returns></returns>
         public List<classSampleData> ValidateBlocks(List<classSampleData> samples)
         {
-            /// 
-            /// First we want to bin the samples based on block number, then we want to
-            /// figure out for each block if we are scheduled to run on the same column.
-            /// 
+            // 
+            // First we want to bin the samples based on block number, then we want to
+            // figure out for each block if we are scheduled to run on the same column.
+            // 
             var tempDictionary = new Dictionary<string,List<classSampleData>>();
             foreach (var sample in samples)
             {
@@ -108,33 +108,29 @@ namespace LcmsNetDataClasses.Experiment
                 }
             }
 
-            /// 
-            /// I could probably make this one line of code...
-            /// But here we are seeing what blocks are distributed across columns.
-            /// 
             var badSamples = new List<classSampleData>();
-            /// 
-            /// Iterate over the batches
-            /// 
+            // 
+            // Iterate over the batches
+            // 
             foreach (var itemKey in tempDictionary.Keys)
             {
-                /// 
-                /// Iterate over the blocks
-                /// 
+                // 
+                // Iterate over the blocks
+                // 
                 var tempSamples   = tempDictionary[itemKey];
                 var method                = tempSamples[0].LCMethod;
                 var columnID                        = tempSamples[0].ColumnData.ID;
 
-                /// 
-                /// Find a mis match between any of the columns. By communicative property
-                /// we only need to use one of the column id values to do this and perform a
-                /// O(n) search.
-                /// 
+                // 
+                // Find a mis match between any of the columns. By communicative property
+                // we only need to use one of the column id values to do this and perform a
+                // O(n) search.
+                // 
                 for (var i = 1; i < tempSamples.Count; i++)
                 {
-                    /// 
-                    /// Make sure we also look at the sample method ... this is important.
-                    /// 
+                    // 
+                    // Make sure we also look at the sample method ... this is important.
+                    // 
                     if (tempSamples[i].ColumnData.ID != columnID || method.Name != tempSamples[i].LCMethod.Name)
                     {                        
                         badSamples.AddRange(tempSamples);

@@ -36,16 +36,16 @@ namespace LcmsNet.Method.Drawing
         /// <summary>
         /// Finds the start time and duration of the samples provided.
         /// </summary>
-        /// <param name="samples">Samples to analyze</param>
+        /// <param name="methods">Samples to analyze</param>
         /// <param name="start">Starting time.</param>
         /// <param name="duration">Duration.</param>
-        protected void FindTimeExtremas(List<classLCMethod> methods,
+        protected void FindTimeExtremas(
+            List<classLCMethod> methods,
             out DateTime start,
             out TimeSpan duration)
         {
             start = DateTime.MaxValue;
             var end = DateTime.MinValue;
-            duration = new TimeSpan(0, 0, 0, 0);
 
             foreach (var method in methods)
             {
@@ -192,7 +192,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="graphics"></param>
         /// <param name="bounds"></param>
         /// <param name="start"></param>
-        /// <param name="finish"></param>
+        /// <param name="duration"></param>
         public virtual void RenderTimeline(Graphics graphics,
             RectangleF bounds,
             DateTime start,
@@ -287,7 +287,8 @@ namespace LcmsNet.Method.Drawing
         /// <param name="graphics"></param>
         /// <param name="bounds"></param>
         /// <param name="start"></param>
-        /// <param name="finish"></param>
+        /// <param name="duration"></param>
+        /// <param name="methods"></param>
         public virtual void RenderOptimizationsOnTimeline(Graphics graphics,
             RectangleF bounds,
             DateTime start,
@@ -350,33 +351,33 @@ namespace LcmsNet.Method.Drawing
             if (bounds.Width <= 0)
                 return;
 
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             // Construct a gradient brush so that we can see the text better
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             Brush brush = new LinearGradientBrush(bounds,
                 Color.White,
                 backColor,
                 LinearGradientMode.Horizontal);
 
 
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             // Then fill the background of the event
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             graphics.FillRectangle(brush, bounds);
             brush.Dispose();
 
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             // Setup the outline data objects
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             var outlineBounds = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
             // If the lcEvent is currently executing, outline it in green, otherwise outline it in black.
             var outlineBrush = lcEvent.MethodData.Executing
                 ? new SolidBrush(Color.Green)
                 : new SolidBrush(Color.Black);
 
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             // Render the name of the device
-            // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //
             var nameFont = new Font(FontFamily.GenericSansSerif, 8.0F, FontStyle.Bold, GraphicsUnit.Point);
             Brush nameBrush = new SolidBrush(Color.Black);
             var name = lcEvent.Name;
@@ -391,9 +392,9 @@ namespace LcmsNet.Method.Drawing
 
                 var nameLength = graphics.MeasureString(name, nameFont);
 
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // See if the name is too long then we can make an ellipse type construct...
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 if (nameLength.Width > outlineBounds.Width)
                 {
                     var names = name.Split(' ');
@@ -405,9 +406,9 @@ namespace LcmsNet.Method.Drawing
                     nameLength = graphics.MeasureString(name, nameFont);
                 }
 
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Render the name of the event
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 graphics.DrawString(name,
                     nameFont,
                     nameBrush,
@@ -415,9 +416,9 @@ namespace LcmsNet.Method.Drawing
                     bounds.Y + (bounds.Height / 2.0F));
 
 
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Render the params of the event
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 if (lcEvent.Parameters.Length > 0 && lcEvent.Parameters[0] != null)
                 {
                     graphics.DrawString(lcEvent.Parameters[0].ToString(),
@@ -450,10 +451,9 @@ namespace LcmsNet.Method.Drawing
         /// </summary>
         /// <param name="graphics"></param>
         /// <param name="allBounds"></param>
-        /// <param name="events"></param>
+        /// <param name="lcEvent"></param>
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
-        /// <param name="colorMap"></param>
         public virtual void RenderLCEventError(Graphics graphics,
             RectangleF allBounds,
             classLCEvent lcEvent,
@@ -534,24 +534,24 @@ namespace LcmsNet.Method.Drawing
             //
             foreach (var lcEvent in events)
             {
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Calculate how wide the event will be
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 var eventWidth = Convert.ToSingle(lcEvent.Duration.TotalSeconds) * ppt;
 
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Define start x,y position for event block
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 var x = startPoint;
                 var y = bounds.Y;
 
                 var eventBounds = new RectangleF(x, y, eventWidth, bounds.Height);
 
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 // Find the color mapping, if it doesnt exist
                 //     then we assign a gradient gray color to it
                 // We also may want to show progress in the event...so here we only fill if it's the current event
-                // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //
                 var color = Color.LightGray;
                 if (colorMap.ContainsKey(lcEvent.Device))
                     color = colorMap[lcEvent.Device];
@@ -579,7 +579,7 @@ namespace LcmsNet.Method.Drawing
         /// </summary>
         /// <param name="graphics"></param>
         /// <param name="bounds"></param>
-        /// <param name="methods"></param>
+        /// <param name="method"></param>
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
@@ -771,7 +771,10 @@ namespace LcmsNet.Method.Drawing
         /// <param name="graphics">Object to render to.</param>
         /// <param name="bounds">Area to render in.</param>
         /// <param name="samples">Samples to render.</param>
+        /// <param name="startTime"></param>
+        /// <param name="duration"></param>
         /// <param name="colorMap">Device to color mapping.</param>
+        /// <param name="progress"></param>
         public virtual void RenderSamples(Graphics graphics,
             RectangleF bounds,
             List<classSampleData> samples,
