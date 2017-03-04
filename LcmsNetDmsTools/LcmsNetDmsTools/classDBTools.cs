@@ -854,7 +854,7 @@ namespace LcmsNetDmsTools
                 }
                 tmpDMSData.PAL.WellPlate = currRow[schedRunList.Columns["Wellplate Number"]] as string;
 
-                if ((tmpDMSData.PAL.WellPlate == null) || (tmpDMSData.PAL.WellPlate == "na"))
+                if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
                     tmpDMSData.PAL.WellPlate = "";
 
                 tmpDMSData.DmsData.CartName = currRow[schedRunList.Columns["Cart"]] as string;
