@@ -69,7 +69,7 @@ namespace FluidicsSimulator
         /// <summary>
         /// Stack to hold the completed events, lets us step backwards through simulation.
         /// </summary>
-        private readonly Stack<LcmsNetDataClasses.Method.classLCEvent> m_completedEvents;
+        private readonly Stack<classLCEvent> m_completedEvents;
 
         /// <summary>
         /// Sorted Set allows us to enumerate over simulation event lists as if they were in a priority queue.
@@ -82,8 +82,7 @@ namespace FluidicsSimulator
         /// </summary>
         private SimEventList m_runningEvents;
 
-        private LcmsNetDataClasses.Method.classLCEvent m_breakEvent;
-        private bool m_inProgress;
+        private classLCEvent m_breakEvent;
         private DateTime m_FirstStartTime;
         private DateTime m_currentStartTime;
         private TimeSpan m_elapsedTime;
@@ -104,7 +103,7 @@ namespace FluidicsSimulator
         // </summary>
         private FluidicsSimulator()
         {
-            m_completedEvents = new Stack<LcmsNetDataClasses.Method.classLCEvent>();
+            m_completedEvents = new Stack<classLCEvent>();
             m_simulationQueue = new SortedSet<SimEventList>();
             m_runningEvents = null;
             SimulationSpeed = DEFAULT_TIMER_INTERVAL;
@@ -173,22 +172,22 @@ namespace FluidicsSimulator
         /// <summary>
         /// Take an optimized list of LCMethods and prepare to simulate it
         /// </summary>
-        /// <param name="events"></param>
-        public void PrepSimulation(List<LcmsNetDataClasses.Method.classLCMethod> Methods)
+        /// <param name="methods"></param>
+        public void PrepSimulation(List<classLCMethod> methods)
         {
             ClearSimulator();
             try
             {
                 // break the list of events into several SimEventLists of events that happen "concurrently" then add
                 // them into our sortedset to get the effect of a priority queue
-                if (Methods.Count == 0)
+                if (methods.Count == 0)
                 {
                     IsReady = false;
                     return;
                 }
                 var startTime = DateTime.Now;
                 
-                m_simulationQueue = BuildEventList(Methods, startTime);
+                m_simulationQueue = BuildEventList(methods, startTime);
                 m_FirstStartTime = m_simulationQueue.Min.Time;
                 // set simulator as ready to go.
                 IsReady = true;
@@ -208,15 +207,13 @@ namespace FluidicsSimulator
                 foreach (var evt in method.Events)
                 {
                     var timeOfNextEvent = evt.Start;
-                    //grab the list that is supposed to run at that time..if there is one.
-                    var current = sequence.FirstOrDefault(x => x.Time == timeOfNextEvent);
-                    if (current == null)
-                    {
-                        //if there isn't create one.
-                        current = new SimEventList(timeOfNextEvent);
-                    }
+                    
+                    //grab the list that is supposed to run at that time; create a new one if none exists
+                    var current = sequence.FirstOrDefault(x => x.Time == timeOfNextEvent) ?? new SimEventList(timeOfNextEvent);
+                    
                     //add event to the list
                     current.Add(evt);
+
                     // since our "queue" is a SortedSet, it will ignore if we try to add the same list more than once, and as long as it shows up once, we don't care.
                     sequence.Add(current);
                     timeOfNextEvent += evt.Duration;
@@ -228,8 +225,9 @@ namespace FluidicsSimulator
 
         private void StartSimulationTimer()
         {
-            m_simulationTimer = new System.Windows.Forms.Timer();
-            m_simulationTimer.Interval = SimulationSpeed;
+            m_simulationTimer = new System.Windows.Forms.Timer {
+                Interval = SimulationSpeed
+            };
             m_simulationTimer.Tick += SimulationTimer_Elapsed;
             m_simulationTimer.Start();
         }
@@ -254,33 +252,29 @@ namespace FluidicsSimulator
             }
             // we take the next priority list of concurrent events and execute them here.
             // checking for any errors in the model, or if a breakpoint is in the list.
-            LcmsNetDataClasses.Method.classLCEvent m_currentEvent = null;
-            if (IsReady)
-            {
-                //prep an event to run
-                m_currentEvent = PrepareEventForExecution(m_currentEvent);
-                //Execute event, remove it from the running events list and add it to the completed events stack, unless it's a breakpoint
-                if (IsReady)
-                {                       
-                    CheckForBreakpointExecuteEventIfNot(m_currentEvent);
-                }
-                // if breakevent and currentevent are the same, don't bother to check for completion, since nothing has changed as we're at a breakpoint.
-                if (m_breakEvent != m_currentEvent)
-                {
-                    CheckLCMethodCompletion();
-                }
+            if (!IsReady)
+                return;
 
-            }  
+            //prep an event to run
+            var currentEvent = PrepareEventForExecution();
+
+            //Execute event, remove it from the running events list and add it to the completed events stack, unless it's a breakpoint
+            if (IsReady)
+            {                       
+                CheckForBreakpointExecuteEventIfNot(currentEvent);
+            }
+            // if breakevent and currentevent are the same, don't bother to check for completion, since nothing has changed as we're at a breakpoint.
+            if (m_breakEvent != currentEvent)
+            {
+                CheckLCMethodCompletion();
+            }
         }
 
         private void CheckLCMethodCompletion()
         {
             if (m_simulationQueue.Count == 0 && m_runningEvents == null)
             {
-                if(m_simulationTimer != null)
-                {
-                    m_simulationTimer.Stop();
-                }
+                m_simulationTimer?.Stop();
                 InProgress = false;
                 IsReady = false;
                 Thread.Sleep(500);
@@ -290,40 +284,42 @@ namespace FluidicsSimulator
             }
         }
 
-        private void CheckForBreakpointExecuteEventIfNot(LcmsNetDataClasses.Method.classLCEvent m_currentEvent)
+        private void CheckForBreakpointExecuteEventIfNot(classLCEvent currentEvent)
         {
             //if the prepared event is a breakpoint, temporarily halt operations, if however, the current event is a breakpoint AND we've already stopped
             // at this breakpoint, let it pass through and execute it.
-            if (m_currentEvent.BreakPoint && (m_breakEvent != m_currentEvent) && InProgress)
+            if (currentEvent.BreakPoint && (m_breakEvent != currentEvent) && InProgress)
             {
                 m_simulationTimer.Stop();
                 InProgress = false;
-                m_currentEvent.BreakHere();
-                m_breakEvent = m_currentEvent;
+                currentEvent.BreakHere();
+                m_breakEvent = currentEvent;
                 AtBreakPoint = true;
             }
             else
             {
                 //otherwise execute the event.
-                ExecuteEvent(m_currentEvent);
+                ExecuteEvent(currentEvent);
             }
         }
 
         /// <summary>
         /// prepare an event to be executed
         /// </summary>
-        /// <param name="m_currentEvent"></param>
         /// <returns></returns>
-        private LcmsNetDataClasses.Method.classLCEvent PrepareEventForExecution(LcmsNetDataClasses.Method.classLCEvent m_currentEvent)
+        private classLCEvent PrepareEventForExecution()
         {
+            classLCEvent currentEvent;
+
             //if we are tat a breakpoint, we want to run the event that we halted at
             if (AtBreakPoint)
             {
                 m_breakEvent.PassBreakPoint();
-                m_currentEvent = m_breakEvent;
+                currentEvent = m_breakEvent;
                 AtBreakPoint = false;
-                return m_currentEvent;
+                return currentEvent;
             }
+
             // If the current step doesnt have events, we need to pull from the simulation queue
             // and then make sure we remove it from the queue so we dont actually re-run the events again
             if (m_runningEvents == null)
@@ -346,47 +342,49 @@ namespace FluidicsSimulator
             }
 
 
+            if (m_runningEvents == null)
+                return null;
+
             // Now if we have 3 events to occur at the same time, we want to pull the first (order doesnt matter since they
             // resolve at the same time t,
             // then we update the running list, so if there are more events to execute, they will be picked up next step
             // otherwise, we set the value of the running list to null, so that the next time step t will occur.
-            m_currentEvent = m_runningEvents.OrderBy(x => x.Duration).First();
+            currentEvent = m_runningEvents.OrderBy(x => x.Duration).First();
             if (m_completedEvents.Count != 0)
             {
                 m_completedEvents.Peek().MethodData.IsDone();
             }
-            m_currentEvent.MethodData.IsCurrent();
-            m_runningEvents.Remove(m_currentEvent);
+            currentEvent.MethodData.IsCurrent();
+            m_runningEvents.Remove(currentEvent);
             
             // if we've pulled the last event from the list, set m_runningEvents to null so we grab the next list from
             // the queue on the next run through
             if (m_runningEvents.Count == 0)
             {               
-                 m_runningEvents = null;
+                m_runningEvents = null;
             }
-           
-            return m_currentEvent;
+
+            return currentEvent;
         }
 
         /// <summary>
         /// Execute the current LCEvent
         /// </summary>
-        /// <param name="m_currentEvent">the classLCEvent to execute</param>
-        private void ExecuteEvent(LcmsNetDataClasses.Method.classLCEvent m_currentEvent)
+        /// <param name="currentEvent">the classLCEvent to execute</param>
+        private void ExecuteEvent(classLCEvent currentEvent)
         {
             // if device is a builtin or virtual, just mark it as complete, don't actually try to invoke it
             // this keeps odd events from happening, such as timers from actually causing the simulator
             // to actually wait <xx> seconds before it continues to the next step.
 
-            if (m_currentEvent.Device.DeviceType != LcmsNetDataClasses.Devices.enumDeviceType.BuiltIn && m_currentEvent.Device.DeviceType != LcmsNetDataClasses.Devices.enumDeviceType.Virtual)
+            if (currentEvent.Device.DeviceType != LcmsNetDataClasses.Devices.enumDeviceType.BuiltIn && currentEvent.Device.DeviceType != LcmsNetDataClasses.Devices.enumDeviceType.Virtual)
             {
-                m_currentEvent.Method.Invoke(m_currentEvent.Device, m_currentEvent.Parameters);
+                currentEvent.Method.Invoke(currentEvent.Device, currentEvent.Parameters);
                 //CheckModel(m_currentEvent);
             }
-            m_completedEvents.Push(m_currentEvent);
-            m_elapsedTime = m_currentStartTime.Subtract(m_FirstStartTime).Add(m_currentEvent.Duration);
-            EventSimulated?.Invoke(this, new SimulatedEventArgs(m_currentEvent, m_elapsedTime));
-            m_currentEvent = null;
+            m_completedEvents.Push(currentEvent);
+            m_elapsedTime = m_currentStartTime.Subtract(m_FirstStartTime).Add(currentEvent.Duration);
+            EventSimulated?.Invoke(this, new SimulatedEventArgs(currentEvent, m_elapsedTime));
         }
 
         /// <summary>
@@ -448,8 +446,8 @@ namespace FluidicsSimulator
         /// <returns>a list of ISimulationModelChecker objects</returns>
         public List<IFluidicsModelChecker> GetModelCheckers()
         {
-            var m_checks = new List<IFluidicsModelChecker>(m_modelCheckers);
-            return m_checks;
+            var checks = new List<IFluidicsModelChecker>(m_modelCheckers);
+            return checks;
         }
 
         /// <summary>
@@ -497,16 +495,13 @@ namespace FluidicsSimulator
             {
                 if (check.IsEnabled)
                 {
-                    var statusChanges = check.CheckModel();
+                    var statusChanges = check.CheckModel().ToList();
                     foreach(var change in statusChanges)
                     {
                         change.Event = lcEvent.Name;
                         change.EventDevice = lcEvent.Device;
                     }
-                    if(statusChanges != null && ModelStatusChangeEvent != null)
-                    {
-                            ModelStatusChangeEvent(this, new ModelStatusChangeEventArgs(FilterStatusChanges(statusChanges.ToList(), CategoriesRequested)));
-                    }               
+                    ModelStatusChangeEvent?.Invoke(this, new ModelStatusChangeEventArgs(FilterStatusChanges(statusChanges.ToList(), CategoriesRequested)));
                 }
 
             }      
@@ -564,17 +559,7 @@ namespace FluidicsSimulator
         /// <summary>
         /// gets if a simulation is in progress
         /// </summary>
-        public bool InProgress
-        {
-            private set
-            {
-                m_inProgress = value;
-            }
-            get
-            {
-                return m_inProgress;
-            }
-        }
+        public bool InProgress { private set; get; }
 
         /// <summary>
         /// get or set the speed of of simulation in milliseconds
@@ -588,21 +573,8 @@ namespace FluidicsSimulator
         /// <summary>
         /// get instance of the fluidics simulator.
         /// </summary>
-        public static FluidicsSimulator GetInstance
-        {
-            private set
-            {
-                m_instance = value;
-            }
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new FluidicsSimulator();
-                }
-                return m_instance;
-            }
-        }
+        public static FluidicsSimulator GetInstance => m_instance ?? (m_instance = new FluidicsSimulator());
+
         #endregion
 
         #region Events

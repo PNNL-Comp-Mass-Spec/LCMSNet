@@ -37,10 +37,12 @@ namespace DemoPluginLibrary
             Pressure = 1;
             PercentB = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);
-            MobilePhases = new List<MobilePhase>();
-            MobilePhases.Add(new MobilePhase("DemoPhase1", "A test mobile phase"));
-            MobilePhases.Add(new MobilePhase("DemoPhase2", "A test mobile phase"));
-            
+            MobilePhases = new List<MobilePhase>
+            {
+                new MobilePhase("DemoPhase1", "A test mobile phase"),
+                new MobilePhase("DemoPhase2", "A test mobile phase")
+            };
+
         }
 
         public bool Initialize(ref string errorMessage)
@@ -80,10 +82,11 @@ namespace DemoPluginLibrary
         {
             if (MethodNames != null)
             {
-                var data = new List<object>();
-                data.Add("ExampleMethod1");
-                data.Add("ExampleMethod2");
-                data.Add("ExampleMethod3");
+                var data = new List<object> {
+                    "ExampleMethod1",
+                    "ExampleMethod2",
+                    "ExampleMethod3" };
+
                 MethodNames(this, data);
             }
         }

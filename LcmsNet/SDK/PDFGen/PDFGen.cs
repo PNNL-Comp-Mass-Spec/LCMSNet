@@ -28,18 +28,20 @@ namespace PDFGenerator
         /// <param name="sample">the sample that was run</param>
         /// <param name="numEnabledColumns">a string containing the number of columns that were enabled during the run</param>
         /// <param name="columnData">a list of classColumnData for each enabled column</param>
-        /// <param name="DevicesAndStatus">a list of 3-tuples of string containing device name, status, and error type</param>
+        /// <param name="devices">a list of 3-tuples of string containing device name, status, and error type</param>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
         public void WritePDF(string documentPath, string title, classSampleData sample, string numEnabledColumns, List<LcmsNetDataClasses.Configuration.classColumnData> columnData,
             List<IDevice> devices, Bitmap fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
             EMSL.DocumentGenerator.Core.Services.IDocumentWriter writer = new EMSL.DocumentGenerator.PDFSharp.PDFWriter();
-            var doc = new EMSL.DocumentGenerator.Core.Document();
-            doc.DocumentWriter = writer;
-            doc.FontSize = 11;
-            doc.Font = "Courier New";
-            doc.Title = title;
+            var doc = new EMSL.DocumentGenerator.Core.Document
+            {
+                DocumentWriter = writer,
+                FontSize = 11,
+                Font = "Courier New",
+                Title = title
+            };
             //enter document into model
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Dataset - " + sample.DmsData.DatasetName);
             doc.AddParagraph(CreateDatasetParagraph(sample));
@@ -122,7 +124,7 @@ namespace PDFGenerator
         /// <summary>
         /// create a formatted paragraph of device data
         /// </summary>
-        /// <param name="devAndStatus">Tuples of strings contaning device names, status, and error types</param>
+        /// <param name="devices">Tuples of strings contaning device names, status, and error types</param>
         /// <returns>a formatted string of device data</returns>
         private static string CreateDeviceString(List<IDevice> devices)
         {
@@ -258,7 +260,7 @@ namespace PDFGenerator
             string[] pv = { "Pal Vial:", sample.PAL.Well.ToString() };
             var PALVialString = FormatString(FieldWidths, pv);
 
-            string[] iv = { "Injection Volume:", sample.Volume.ToString() };
+            string[] iv = { "Injection Volume:", sample.Volume.ToString("0.00") };
             var injectionVolume = FormatString(FieldWidths, iv);
 
             string[] t = { "Dataset Type:", sample.DmsData.DatasetType };

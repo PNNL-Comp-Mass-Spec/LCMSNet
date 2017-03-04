@@ -34,10 +34,15 @@ namespace LcmsnetUnitTest
         {
             optimizer = new classLCMethodOptimizer();
 
-            methods = new List<classLCMethod>();
-            methods.Add(new classLCMethod());
-            methods.Add(new classLCMethod());
-            classLCEvent[] events = { new classLCEvent(), new classLCEvent() }; //events for the methods
+            methods = new List<classLCMethod> {
+                new classLCMethod(),
+                new classLCMethod()};
+
+            //events for the methods
+            classLCEvent[] events = {
+                new classLCEvent(),
+                new classLCEvent() };
+
             var pump = new DemoPump();
             events[0].Device = pump;
             events[1].Device = pump;
@@ -275,7 +280,6 @@ namespace LcmsnetUnitTest
         /// used for all tests, since the only difference we care about is that the start time of method 2 is different from method 1.
         /// Each individual test determines its own expected difference that ensures the optimization is correct.
         /// </summary>
-        /// <param name="methods"></param>
         /// <param name="expectedDifference"></param>
         private void CheckDifferenceInStartTimes(double expectedDifference)
         {
