@@ -82,7 +82,6 @@ namespace LogViewer
                     if (andNeeded)
                     {
                         sqlBldr.Append(" AND Date <= '" + queryData.StopTime + "'");
-                        andNeeded = true;
                     }
                     else
                     {
@@ -97,7 +96,6 @@ namespace LogViewer
                     if (andNeeded)
                     {
                         sqlBldr.Append(" AND Type LIKE '%" + queryData.Type + "%'");
-                        andNeeded = true;
                     }
                     else
                     {
@@ -112,7 +110,6 @@ namespace LogViewer
                     if (andNeeded)
                     {
                         sqlBldr.Append(" AND Sample LIKE '%" + queryData.Sample + "%'");
-                        andNeeded = true;
                     }
                     else
                     {
@@ -127,7 +124,6 @@ namespace LogViewer
                     if (andNeeded)
                     {
                         sqlBldr.Append(" AND Column LIKE '%" + queryData.Column + "%'");
-                        andNeeded = true;
                     }
                     else
                     {
@@ -142,7 +138,6 @@ namespace LogViewer
                     if (andNeeded)
                     {
                         sqlBldr.Append(" AND Device LIKE '%" + queryData.Device + "%'");
-                        andNeeded = true;
                     }
                     else
                     {
@@ -157,12 +152,10 @@ namespace LogViewer
                     if (andNeeded)
                     {
                         sqlBldr.Append(" AND Message LIKE '%" + queryData.Message + "%'");
-                        andNeeded = true;
                     }
                     else
                     {
                         sqlBldr.Append("Message LIKE '" + queryData.Message + "%'");
-                        andNeeded = true;
                     }
                 }
 

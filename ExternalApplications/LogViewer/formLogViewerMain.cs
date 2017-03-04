@@ -70,14 +70,16 @@ namespace LogViewer
                 }
 
                 // Fill a query data object from the selected fields in the screen
-                var queryData = new classLogQueryData();
-                queryData.Column = textColumn.Text;
-                queryData.Device = textDevice.Text;
-                queryData.Message = textMessage.Text;
-                queryData.Sample = textSampleName.Text;
-                queryData.StartTime = dateTimePickStart.Value.ToString("MM/dd/yyyy HH:mm:ss");
-                queryData.StopTime = dateTimePickStop.Value.ToString("MM/dd/yyyy HH:mm:ss");
-                queryData.Type = textType.Text;
+                var queryData = new classLogQueryData
+                {
+                    Column = textColumn.Text,
+                    Device = textDevice.Text,
+                    Message = textMessage.Text,
+                    Sample = textSampleName.Text,
+                    StartTime = dateTimePickStart.Value.ToString("MM/dd/yyyy HH:mm:ss"),
+                    StopTime = dateTimePickStop.Value.ToString("MM/dd/yyyy HH:mm:ss"),
+                    Type = textType.Text
+                };
 
                 DataTable logData = null;
                 try
@@ -86,7 +88,7 @@ namespace LogViewer
                 }
                 catch (Exception ex)
                 {
-                    var msg = "";
+                    string msg;
                     UnwrapExceptionMsgs(ex, out msg);
                     MessageBox.Show(msg);
                 }
@@ -111,7 +113,7 @@ namespace LogViewer
             private static void UnwrapExceptionMsgs(Exception ex, out string msg)
             {
                 msg = ex.Message;
-                if (!(ex.InnerException == null))
+                if (ex.InnerException != null)
                 {
                     string innerMsg;
                     UnwrapExceptionMsgs(ex.InnerException, out innerMsg);
@@ -128,9 +130,11 @@ namespace LogViewer
         /// <param name="e"></param>
         private void buttonLogFileSelect_Click(object sender, EventArgs e)
         {
-            var fileOpenDlg = new OpenFileDialog();
-            fileOpenDlg.Filter = "Log files (*.db3)|*.db3|All files(*.*)|*.*";
-            fileOpenDlg.FilterIndex = 0;
+            var fileOpenDlg = new OpenFileDialog
+            {
+                Filter = "Log files (*.db3)|*.db3|All files(*.*)|*.*",
+                FilterIndex = 0
+            };
             if (fileOpenDlg.ShowDialog() == DialogResult.OK)
             {
                 textLogFile.Text = fileOpenDlg.FileName;
