@@ -24,64 +24,92 @@ namespace LcmsNet.Devices.Pumps
         static classIscoStatusNotifications()
         {
             //NOTE: This method may need updating if the enums it's based on change!!!
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.InitSucceeded),
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.InitSucceeded),
                 "Initialization succeeded");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Initializing),
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Initializing),
                 "Initializing");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoControlMode), enumIscoControlMode.Local),
+            m_NotifyList.Add(GetControlModeEnumName(enumIscoControlMode.Local),
                 "Control: Local");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoControlMode), enumIscoControlMode.Remote),
+            m_NotifyList.Add(GetControlModeEnumName(enumIscoControlMode.Remote),
                 "Control: Remote");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoControlMode), enumIscoControlMode.External),
+            m_NotifyList.Add(GetControlModeEnumName(enumIscoControlMode.External),
                 "Control: External");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationMode), enumIscoOperationMode.ConstantFlow),
+            m_NotifyList.Add(GetOperationModeEnumName(enumIscoOperationMode.ConstantFlow),
                 "Operation: Constant Flow");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationMode), enumIscoOperationMode.ConstantPressure),
+            m_NotifyList.Add(GetOperationModeEnumName(enumIscoOperationMode.ConstantPressure),
                 "Operation: Constant Pressure");
 
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Stopped) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Stopped) + "A",
                 "Pump A: Stopped");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Stopped) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Stopped) + "B",
                 "Pump B: Stopped");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Stopped) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Stopped) + "C",
                 "Pump C: Stopped");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Running) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Running) + "A",
                 "Pump A: Running");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Running) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Running) + "B",
                 "Pump B: Running");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Running) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Running) + "C",
                 "Pump C: Running");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Hold) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Hold) + "A",
                 "Pump A: Hold");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Hold) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Hold) + "B",
                 "Pump B: Hold");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Hold) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Hold) + "C",
                 "Pump C: Hold");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Equilibrating) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Equilibrating) + "A",
                 "Pump A: Equilibrating");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Equilibrating) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Equilibrating) + "B",
                 "Pump B: Equilibrating");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Equilibrating) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Equilibrating) + "C",
                 "Pump C: Equilibrating");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Refilling) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Refilling) + "A",
                 "Pump A: Refilling");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Refilling) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Refilling) + "B",
                 "Pump B: Refilling");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.Refilling) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.Refilling) + "C",
                 "Pump C: Refilling");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.FlowSet) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.FlowSet) + "A",
                 "Pump A: Flow Set");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.FlowSet) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.FlowSet) + "B",
                 "Pump B: Flow Set");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.FlowSet) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.FlowSet) + "C",
                 "Pump C: Flow Set");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.PressSet) + "A",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.PressSet) + "A",
                 "Pump A: Pressure Set");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.PressSet) + "B",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.PressSet) + "B",
                 "Pump B: Pressure Set");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoOperationStatus), enumIscoOperationStatus.PressSet) + "C",
+            m_NotifyList.Add(GetOperationStatusEnumName(enumIscoOperationStatus.PressSet) + "C",
                 "Pump C: Pressure Set");
         }
+       
+        private static string GetControlModeEnumName(enumIscoControlMode controlMode)
+        {
+            var name = Enum.GetName(typeof(enumIscoControlMode), controlMode);
+            if (string.IsNullOrWhiteSpace(name))
+                return "InvalidEnum_" + (int)controlMode;
+
+            return name;
+        }
+
+        private static string GetOperationModeEnumName(enumIscoOperationMode operationMode)
+        {
+            var name = Enum.GetName(typeof(enumIscoOperationMode), operationMode);
+            if (string.IsNullOrWhiteSpace(name))
+                return "InvalidEnum_" + (int)operationMode;
+
+            return name;
+        }
+
+        private static string GetOperationStatusEnumName(enumIscoOperationStatus operationStatus)
+        {
+            var name = Enum.GetName(typeof(enumIscoOperationStatus), operationStatus);
+            if (string.IsNullOrWhiteSpace(name))
+                return "InvalidEnum_" + (int)operationStatus;
+
+            return name;
+        }
+
         #endregion
 
         #region "Methods"

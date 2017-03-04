@@ -24,45 +24,55 @@ namespace LcmsNet.Devices.Pumps
         static classIscoErrorNotifications()
         {
             //NOTE: This method may need updating if the enums it's based on change!!!
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.DeviceNotInitialized),
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.DeviceNotInitialized),
                 "Device Not Initialized");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.ComError),
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.ComError),
                 "Communication Error");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.InitializationError),
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.InitializationError),
                 "Initialization Error");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MessageParseError),
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MessageParseError),
                 "Message Parse Error");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "A",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderBottom) + "A",
                 "Pump A: Cylinder at bottom");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "B",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderBottom) + "B",
                 "Pump B: Cylinder at bottom");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderBottom) + "C",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderBottom) + "C",
                 "Pump C: Cylinder at bottom");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "A",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderEmpty) + "A",
                 "Pump A: Cylinder empty");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "B",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderEmpty) + "B",
                 "Pump B: Cylinder empty");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.CylinderEmpty) + "C",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderEmpty) + "C",
                 "Pump C: Cylinder empty");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "A",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MotorFailure) + "A",
                 "Pump A: Motor Failure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "B",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MotorFailure) + "B",
                 "Pump B: Motor Failure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.MotorFailure) + "C",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MotorFailure) + "C",
                 "Pump C: Motor Failure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "A",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.OverPressure) + "A",
                 "Pump A: Over pressure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "B",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.OverPressure) + "B",
                 "Pump B: Over pressure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.OverPressure) + "C",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.OverPressure) + "C",
                 "Pump C: Over pressure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "A",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.UnderPressure) + "A",
                 "Pump A: Under pressure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "B",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.UnderPressure) + "B",
                 "Pump B: Under pressure");
-            m_NotifyList.Add(Enum.GetName(typeof(enumIscoProblemStatus), enumIscoProblemStatus.UnderPressure) + "C",
+            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.UnderPressure) + "C",
                 "Pump C: Under pressure");
         }
+
+        private static string GetEnumName(enumIscoProblemStatus iscoProblemStatus)
+        {
+            var name = Enum.GetName(typeof(enumIscoProblemStatus), iscoProblemStatus);
+            if (string.IsNullOrWhiteSpace(name))
+                return "InvalidEnum_" + (int)iscoProblemStatus;
+
+            return name;
+        }
+
         #endregion
 
         #region "Methods"
@@ -78,7 +88,7 @@ namespace LcmsNet.Devices.Pumps
                 return m_NotifyList[key];
             }
 
-            return "";
+            return string.Empty;
         }
 
         /// <summary>
