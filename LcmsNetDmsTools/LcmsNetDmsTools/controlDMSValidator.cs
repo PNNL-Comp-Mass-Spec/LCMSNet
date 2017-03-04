@@ -51,16 +51,16 @@ namespace LcmsNetDmsTools
             mtextbox_user.Text           = m_sample.DmsData.UserList;
             mnum_requestNumber.Value     = Convert.ToDecimal(m_sample.DmsData.RequestID);
 
-            this.mcomboBox_usageType.TextChanged        += this.mtextbox_usageType_TextChanged;
-            this.mcomboBox_usageType.KeyUp              += this.KeyUpHandler;
-            this.mtextbox_proposalID.TextChanged        += this.mtextbox_proposalID_TextChanged;
-            this.mtextbox_proposalID.KeyUp              += this.KeyUpHandler;
-            this.mtextbox_user.TextChanged              += this.mtextbox_user_TextChanged;
-            this.mtextbox_user.KeyUp                    += this.KeyUpHandler;
-            this.mnum_requestNumber.ValueChanged        += this.mnum_requestNumber_ValueChanged;
-            this.mnum_requestNumber.KeyUp               += this.KeyUpHandler;
-            this.mtextBox_experimentName.TextChanged    += this.mtextBox_experimentName_TextChanged;
-            this.mtextBox_experimentName.KeyUp          += this.KeyUpHandler;
+            mcomboBox_usageType.TextChanged        += mtextbox_usageType_TextChanged;
+            mcomboBox_usageType.KeyUp              += KeyUpHandler;
+            mtextbox_proposalID.TextChanged        += mtextbox_proposalID_TextChanged;
+            mtextbox_proposalID.KeyUp              += KeyUpHandler;
+            mtextbox_user.TextChanged              += mtextbox_user_TextChanged;
+            mtextbox_user.KeyUp                    += KeyUpHandler;
+            mnum_requestNumber.ValueChanged        += mnum_requestNumber_ValueChanged;
+            mnum_requestNumber.KeyUp               += KeyUpHandler;
+            mtextBox_experimentName.TextChanged    += mtextBox_experimentName_TextChanged;
+            mtextBox_experimentName.KeyUp          += KeyUpHandler;
 
             UpdateUserInterface();
 
@@ -72,8 +72,8 @@ namespace LcmsNetDmsTools
             var c                = sender as Control;
             var isEnterType      = false;
             var modifier         = e.Modifiers;
-            ComboBox box         = null;
-            NumericUpDown updown = null;
+            ComboBox box;
+            NumericUpDown updown;
             Console.WriteLine(e.KeyCode.ToString());
 
             switch(e.KeyCode)
@@ -169,7 +169,7 @@ namespace LcmsNetDmsTools
                 mcomboBox_usageType.BackColor       = Color.LightGray;
                 mtextbox_user.Enabled               = false;
                 mtextbox_user.BackColor             = Color.LightGray;
-                mpictureBox_glyph.Image             = global::LcmsNetDmsTools.Properties.Resources.AllIsGood;
+                mpictureBox_glyph.Image             = Properties.Resources.AllIsGood;
                 
 
 
@@ -201,11 +201,11 @@ namespace LcmsNetDmsTools
                 mtextBox_experimentName.ForeColor = drawingForegroundColors[sampleOK];
                 m_isOK = m_isOK & sampleOK;
 
-                /// 
-                /// Make it look nice for the user so they can tell what is going on
-                /// Here we just pick an image to display next to the sample to draw their
-                /// attention to it.
-                /// 
+                // 
+                // Make it look nice for the user so they can tell what is going on
+                // Here we just pick an image to display next to the sample to draw their
+                // attention to it.
+                // 
                 if (m_isOK == false)
                 {
                     mpictureBox_glyph.Image = global::LcmsNetDmsTools.Properties.Resources.ButtonDeleteRed;
