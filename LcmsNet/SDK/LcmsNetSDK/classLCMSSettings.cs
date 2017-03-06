@@ -108,16 +108,95 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Retrieves specified item from string dictionary
         /// </summary>
-        /// <param name="ItemKey">Key for item to be retrieved</param>
-        /// <returns></returns>
-        public static string GetParameter(string ItemKey)
+        /// <param name="itemKey">Key for item to be retrieved</param>
+        /// <returns>The value for the setting, or an empty string if the itemKey is not defined</returns>
+        public static string GetParameter(string itemKey)
         {
-            if (m_Settings.ContainsKey(ItemKey))
-                return m_Settings[ItemKey];
+            if (m_Settings.ContainsKey(itemKey))
+                return m_Settings[itemKey];
 
             return string.Empty;
         }
 
+        /// <summary>
+        /// Retrieves specified item from string dictionary, converting it to a boolean
+        /// </summary>
+        /// <param name="itemKey">Key for item to be retrieved</param>
+        /// <param name="defaultValue">Default value</param>
+        /// <returns>
+        /// The value for the setting, or defaultValue if the itemKey 
+        /// is not defined or if it cannot be converted to a boolean
+        /// </returns>
+        /// <remarks>If the value is an integer, will return false if 0 or true if non-zero</remarks>
+        public static bool GetParameter(string itemKey, bool defaultValue)
+        {
+            if (m_Settings.ContainsKey(itemKey))
+            {
+                var valueText = m_Settings[itemKey];
+                if (valueText != null)
+                {
+                    bool value;
+                    if (bool.TryParse(valueText, out value))
+                        return value;
+
+                    int valueInt;
+                    if (int.TryParse(valueText, out valueInt))
+                    {
+                        return valueInt != 0;
+                    }
+                }
+            }
+
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// Retrieves specified item from string dictionary, converting it to an integer
+        /// </summary>
+        /// <param name="itemKey">Key for item to be retrieved</param>
+        /// <param name="defaultValue">Default value</param>
+        /// <returns>
+        /// The value for the setting, or defaultValue if the itemKey 
+        /// is not defined or if it cannot be converted to an integer
+        /// </returns>
+        public static int GetParameter(string itemKey, int defaultValue)
+        {
+            if (m_Settings.ContainsKey(itemKey))
+            {
+                var valueText = m_Settings[itemKey];
+                int value;
+                if (valueText != null && int.TryParse(valueText, out value))
+                {
+                    return value;
+                }
+            }
+
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// Retrieves specified item from string dictionary, converting it to a double
+        /// </summary>
+        /// <param name="itemKey">Key for item to be retrieved</param>
+        /// <param name="defaultValue">Default value</param>
+        /// <returns>
+        /// The value for the setting, or defaultValue if the itemKey 
+        /// is not defined or if it cannot be converted to a double
+        /// </returns>
+        public static double GetParameter(string itemKey, double defaultValue)
+        {
+            if (m_Settings.ContainsKey(itemKey))
+            {
+                var valueText = m_Settings[itemKey];
+                double value;
+                if (valueText != null && double.TryParse(valueText, out value))
+                {
+                    return value;
+                }
+            }
+
+            return defaultValue;
+        }
         #endregion
     }
 }

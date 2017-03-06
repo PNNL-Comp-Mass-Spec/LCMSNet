@@ -36,13 +36,15 @@ namespace LcmsNetDataClasses.Data
         /// <param name="sample"></param>
         public static void GenerateTriggerFile(classSampleData sample)
         {
-            /*// Exit if trigger file creation disabled
-                if (!bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATETRIGGERFILES)))
+            /*
+                var createTriggerFiles = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATETRIGGERFILES, false);
+                if (!createTriggerFiles)
                 {
                     string msg = "Generate Trigger File: Sample " + sample.DmsData.DatasetName + ", Trigger file creation disabled";
                     classApplicationLogger.LogMessage(0, msg);
                     return;
-                }*/
+                }
+            */
 
             // Create an XML document containing the trigger file's contents
             GenerateXmlDoc(sample);

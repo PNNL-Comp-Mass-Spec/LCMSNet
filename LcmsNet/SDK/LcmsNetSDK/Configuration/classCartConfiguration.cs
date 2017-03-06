@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace LcmsNetDataClasses.Configuration
@@ -105,12 +106,8 @@ namespace LcmsNetDataClasses.Configuration
         {
             get
             {
-                var volumeSetting = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME);
-                double volume;
-                if (double.TryParse(volumeSetting, out volume))
-                    return volume;
-
-                return classSampleData.CONST_MIN_SAMPLE_VOLUME;
+                var volume = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME, 0.0);
+                return Math.Max(volume, classSampleData.CONST_MIN_SAMPLE_VOLUME);
             }
             set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture)); }
         }
