@@ -162,58 +162,59 @@ namespace LcmsNetDataClasses.Data
 
             // Write trigger file to local folder
             var appPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
-            var outFilePath = Path.Combine(appPath, "TriggerFiles");
+            var localTriggerFolderPath = Path.Combine(appPath, "TriggerFiles");
             var wasLocalFileCreated = false;
 
+            var localTriggerFilePath = Path.Combine(localTriggerFolderPath, outFileName);
+
             // If local folder doen't exist, then create it
-            if (!Directory.Exists(outFilePath))
+            if (!Directory.Exists(localTriggerFolderPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(outFilePath);
+                    Directory.CreateDirectory(localTriggerFolderPath);
+
+                    // Create the trigger file on the local computer
+                    try
+                    {
+                        var outputFile = new FileStream(localTriggerFilePath, FileMode.Create, FileAccess.Write);
+                        doc.Save(outputFile);
+                        outputFile.Close();
+                        classApplicationLogger.LogMessage(0, "Local trigger file created for sample " + sampleName);
+                        wasLocalFileCreated = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        // If local write failed, log it
+                        var msg = "Error creating local trigger file for sample " + sampleName;
+                        classApplicationLogger.LogError(0, msg, ex);
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     classApplicationLogger.LogError(0, "Exception creating local trigger file folder", ex);
-                    return;
                 }
             }
 
-            var outFileNamePath = Path.Combine(outFilePath, outFileName);
-
-            // Copy the file path
             try
             {
-                var outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
-                doc.Save(outputFile);
-                outputFile.Close();
-                classApplicationLogger.LogMessage(0, "Local trigger file created for sample " + sampleName);
-                wasLocalFileCreated = true;
-            }
-            catch (Exception ex)
-            {
-                // If local write failed, log it
-                var msg = "Error creating local trigger file for sample " + sampleName;
-                classApplicationLogger.LogError(0, msg, ex);
-            }
-
-            try
-            {
-                if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
+                var copyTriggerFiles = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES, false);
+                if (copyTriggerFiles)
                 {
+                    var remoteTriggerFolderPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
+
                     // If the file was created locally...copy it
                     if (wasLocalFileCreated)
                     {
-                        outFilePath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
-                        MoveLocalFile(outFileNamePath, Path.Combine(outFilePath, outFileName));
+                        MoveLocalFile(localTriggerFilePath, Path.Combine(remoteTriggerFolderPath, outFileName));
                     }
                     else
                     {
-                        outFileNamePath = Path.Combine(outFilePath, outFileName);
-                        outFilePath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TRIGGERFILEFOLDER);
+                        var remoteTriggerFilePath = Path.Combine(remoteTriggerFolderPath, outFileName);
 
-                        // Attempt to write the trigger file to a remote server
-                        var outputFile = new FileStream(outFileNamePath, FileMode.Create, FileAccess.Write);
+                        // Attempt to write the trigger file directly to the remote server
+                        var outputFile = new FileStream(remoteTriggerFilePath, FileMode.Create, FileAccess.Write);
                         doc.Save(outputFile);
                         outputFile.Close();
                         classApplicationLogger.LogMessage(0,
@@ -229,8 +230,7 @@ namespace LcmsNetDataClasses.Data
             catch (Exception ex)
             {
                 // If remote write failed or disabled, log and try to write locally
-                var msg = "Remote trigger file copy failed or disabled, sample " + sample.DmsData.DatasetName +
-                          ". Creating file locally.";
+                var msg = "Remote trigger file copy failed or disabled, sample " + sample.DmsData.DatasetName;
                 classApplicationLogger.LogError(0, msg, ex);
             }
         }
@@ -253,6 +253,7 @@ namespace LcmsNetDataClasses.Data
                 // No files found
                 return false;
             }
+
             // At least one file found
             return true;
         }
@@ -337,7 +338,7 @@ namespace LcmsNetDataClasses.Data
                     return true;
                 }
 
-                classApplicationLogger.LogMessage(0, "Trigger file " + targetFile + " exists remotely.");
+                classApplicationLogger.LogMessage(0, "Trigger file " + targetFile + " already exists remotely; not overwriting.");
                 return true;
             }
             catch (Exception ex)
