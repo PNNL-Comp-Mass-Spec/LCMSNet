@@ -73,8 +73,12 @@ namespace LcmsNetDataClasses.Logging
         }
 
         /// <summary>
-        /// Gets or sets the message level to log.
+        /// Gets or sets the message level to log (0 is most important, 5 is least important)
         /// </summary>
+        /// <remarks>
+        /// When MessageLevel is 0, only critical errors are logged
+        /// When MessageLevel is 5, all messages are logged
+        /// </remarks>
         public static int MessageLevel
         {
             get { return m_messageLevel; }
@@ -123,9 +127,6 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="sample">Data for a sample</param>
         public static void LogError(int errorLevel, string message, Exception ex, classSampleData sample)
         {
-            /*if (errorLevel <= m_errorLevel)
-                if (Error != null)
-                    Error(errorLevel, new classErrorLoggerArgs(message, sample));*/
             classErrorLoggerArgs args;
             if (sample != null)
             {
@@ -135,10 +136,12 @@ namespace LcmsNetDataClasses.Logging
             {
                 args = new classErrorLoggerArgs(message);
             }
+
             if (ex != null)
             {
                 args.Exception = ex;
             }
+
             ThreadPool.QueueUserWorkItem(RaiseErrorEvent, new ThreadPoolStateObject(errorLevel, args));
         }
 

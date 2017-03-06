@@ -485,7 +485,6 @@ namespace LcmsNet
             }
             catch (Exception ex)
             {
-                //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                     "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
 
