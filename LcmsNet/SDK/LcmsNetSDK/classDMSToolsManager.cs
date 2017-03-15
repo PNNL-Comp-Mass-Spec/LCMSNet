@@ -42,7 +42,7 @@ namespace LcmsNetSDK
             catalog.Catalogs.Add(new AssemblyCatalog(typeof (classDMSToolsManager).Assembly));
 
             // Construct the catalog path, for example
-            // C:\Users\d3l243\AppData\Roaming\LCMSNet\dmsExtensions            
+            // C:\Users\d3l243\AppData\Roaming\LCMSNet\dmsExtensions
             var catalogPath = GetDMSExtensionsDllFolderPathForUser();
 
             try
@@ -106,7 +106,7 @@ namespace LcmsNetSDK
                             m_SelectedDMSTools = query.First().Value;
                             m_DMSMetaData = query.First().Metadata;
                             return m_SelectedDMSTools;
-                        }                                                
+                        }
                     }
 
                     // Just grab the first off the list

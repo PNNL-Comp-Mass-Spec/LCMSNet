@@ -124,7 +124,7 @@ namespace LcmsNetDataClasses
         /// <param name="itemKey">Key for item to be retrieved</param>
         /// <param name="defaultValue">Default value</param>
         /// <returns>
-        /// The value for the setting, or defaultValue if the itemKey 
+        /// The value for the setting, or defaultValue if the itemKey
         /// is not defined or if it cannot be converted to a boolean
         /// </returns>
         /// <remarks>If the value is an integer, will return false if 0 or true if non-zero</remarks>
@@ -156,7 +156,7 @@ namespace LcmsNetDataClasses
         /// <param name="itemKey">Key for item to be retrieved</param>
         /// <param name="defaultValue">Default value</param>
         /// <returns>
-        /// The value for the setting, or defaultValue if the itemKey 
+        /// The value for the setting, or defaultValue if the itemKey
         /// is not defined or if it cannot be converted to an integer
         /// </returns>
         public static int GetParameter(string itemKey, int defaultValue)
@@ -180,7 +180,7 @@ namespace LcmsNetDataClasses
         /// <param name="itemKey">Key for item to be retrieved</param>
         /// <param name="defaultValue">Default value</param>
         /// <returns>
-        /// The value for the setting, or defaultValue if the itemKey 
+        /// The value for the setting, or defaultValue if the itemKey
         /// is not defined or if it cannot be converted to a double
         /// </returns>
         public static double GetParameter(string itemKey, double defaultValue)

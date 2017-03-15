@@ -23,7 +23,7 @@ namespace FluidicsSDKUnitTests
     {
         ConnectionManager cm;
         FluidicsDeviceManager dm;
-       
+      
         [SetUp]
         public void SetUp()
         {            

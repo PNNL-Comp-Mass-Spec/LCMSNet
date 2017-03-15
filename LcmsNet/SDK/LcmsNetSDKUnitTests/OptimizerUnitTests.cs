@@ -24,7 +24,7 @@ namespace LcmsnetUnitTest
         List<classLCMethod> methods;
         classLCMethodOptimizer optimizer;
         const int SAME_REQUIRED_LC_METHOD_OFFSET = 2000; // this should be the same as CONST_REQUIRED_LC_METHOD_SPACING_SECONDS in classLCMethodOptimizer, if the tests are not passing be sure to check this.
-        
+       
         /// <summary>
         /// Setup methods and optimizer for use in tests.
         /// </summary>

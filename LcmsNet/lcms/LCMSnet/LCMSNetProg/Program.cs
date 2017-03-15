@@ -326,10 +326,10 @@ namespace LcmsNet
                     classApplicationLogger.LogMessage(-1, "Loading settings");
                     Application.DoEvents();
                     LoadSettings();
-                    
+
                     // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
                     classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
-                    
+
                     //classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
                     InitializeSystemConfigurations();
 
@@ -410,7 +410,7 @@ namespace LcmsNet
                         classApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
                     else
                         classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
-                    
+
                     CreateSQLCache();
                     classApplicationLogger.LogMessage(-1, "Loading DMS data");
                     Application.DoEvents();

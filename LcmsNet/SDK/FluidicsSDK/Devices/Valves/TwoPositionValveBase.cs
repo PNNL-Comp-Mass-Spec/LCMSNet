@@ -29,8 +29,7 @@ namespace FluidicsSDK.Devices
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> m_states;
         protected TwoPositionState m_currentState;
         #endregion
-
-        
+      
         #region Methods
         /// <summary>
         /// constructor

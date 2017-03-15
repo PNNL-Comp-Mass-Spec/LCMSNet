@@ -101,7 +101,7 @@ namespace FluidicsSDKUnitTests
             PortManager.GetPortManager.RemovePort(PortManager.GetPortManager.Ports[1]);
             PortManager.GetPortManager.RemovePort(PortManager.GetPortManager.Ports[0]);
         }
-        
+       
         /// <summary>
         /// helper for ConnectionsTwoPortsOnlyConnectOnce
         /// </summary>

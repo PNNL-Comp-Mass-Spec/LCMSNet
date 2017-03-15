@@ -102,7 +102,7 @@ namespace LogViewer
                 datagridLogContents.DataSource = bindingSource_LogData;
                 bindingSource_LogData.DataSource = logData;
                 datagridLogContents.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
-            }   
+            }
 
             /// <summary>
             /// Unwraps nested exceptions to retrieve innermost exception message
@@ -118,7 +118,7 @@ namespace LogViewer
                     UnwrapExceptionMsgs(ex.InnerException, out innerMsg);
                     msg += " Inner exception: " + innerMsg;
                 }
-            }   
+            }
         #endregion
 
         #region "Event handlers"
@@ -140,7 +140,7 @@ namespace LogViewer
                 m_SqlTools.DataFileNamePath = textLogFile.Text;
             }
 
-        }   
+        }
 
         /// <summary>
         /// Updates the display of the selected log
@@ -152,5 +152,5 @@ namespace LogViewer
             GetLogEntries();
         }
         #endregion
-    }   
+    }
 }
