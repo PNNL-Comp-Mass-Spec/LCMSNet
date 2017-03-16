@@ -68,7 +68,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="LcmsNetSdk, Version=3.4.18.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\LcmsNet\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
@@ -120,10 +120,12 @@
   <ItemGroup>
     <EmbeddedResource Include="controlDMSValidator.resx">
       <DependentUpon>controlDMSValidator.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
