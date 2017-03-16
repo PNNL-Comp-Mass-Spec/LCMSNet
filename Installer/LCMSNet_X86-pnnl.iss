@@ -40,32 +40,40 @@ Name: "{userappdata}\{#MyAppName}\SampleValidators"
 Name: "{app}\LCMethods"
 Name: "{app}\Plugins"
 Name: "{app}\cy-GB"
+Name: "{app}\x86"
+Name: "{app}\x64"
 
 [Files]
 ; Exe
-Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                                                   DestDir: "{app}";          Flags: ignoreversion
-; Internal Libraries
+Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                DestDir: "{app}";          Flags: ignoreversion
 
-; dmstools
+; DLLs are copied below inthe "DLLs" section, sourced from {#MyLib}\*
+
+; Copy SQLite.Interop.dll (both x86 and x64, even though we're likely compiling against x86)
+Source: LCMSNetProg\bin\x86\PNNLRelease\x86\*.dll;                  DestDir: "{app}\x86";      Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                  DestDir: "{app}\x64";      Flags: ignoreversion
+
+; Copy DMSTools and all DLLs to C:\Users\Username\AppData\Roaming\LCMSNet\dmsExtensions
+; Note that this includes System.Data.SQLite but not SQLite.Interop.dll (since it should not be needed there)
 Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\x86\PNNLRelease\*.dll";        DestDir: "{userappdata}\{#MyAppName}\dmsExtensions";      Flags: ignoreversion
 Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\*.config";                         DestDir: "{userappdata}\{#MyAppName}\dmsExtensions";      Flags: ignoreversion
 
-;SDK
-Source: "{#MyLib}\*"; Excludes:"FluidicsPack.dll";                                   DestDir: "{app}";          Flags: ignoreversion
-Source: "{#MyLib}\FluidicsPack.dll";                                                 DestDir:"{app}\Plugins";   Flags: ignoreversion
+;DLLs
+Source: "{#MyLib}\*"; Excludes:"FluidicsPack.dll,LcmsNetDmsTools.dll";     DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\FluidicsPack.dll";                                       DestDir: "{app}\Plugins";  Flags: ignoreversion
 
 ;Core sample validator    
-Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";                                     DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
+Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";  DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
 
 ;Plugins
-Source: "{#MyPlugins}\*";                                                                              DestDir: "{app}\Plugins\"; Flags: ignoreversion
-Source: "..\..\..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";                                          DestDir: "{sys}";          Flags: ignoreversion
+Source: "{#MyPlugins}\*";                                           DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "..\..\..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";       DestDir: "{sys}";          Flags: ignoreversion
 
 ;PAL Validator
-Source: "..\..\..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";                              DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
+Source: "..\..\..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";    DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
-Source: "..\..\..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";                                DestDir: "{app}";          Flags: ignoreversion
+Source: "..\..\..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";    DestDir: "{app}";          Flags: ignoreversion
 
 ; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 
