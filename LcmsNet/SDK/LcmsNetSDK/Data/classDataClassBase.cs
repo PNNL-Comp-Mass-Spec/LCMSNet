@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Drawing;
 using LcmsNetDataClasses.Configuration;
 using System.Collections.Generic;
+using LcmsNetDataClasses.Logging;
 
 namespace LcmsNetDataClasses
 {
@@ -55,7 +56,7 @@ namespace LcmsNetDataClasses
             var properties = classType.GetProperties();
             foreach (var property in properties)
             {
-                if (property.PropertyType != typeof (Color))
+                if (property.PropertyType != typeof(Color))
                 {
                     var tempObject = property.GetValue(this, null);
                     if (tempObject == null)
@@ -89,68 +90,95 @@ namespace LcmsNetDataClasses
             {
                 var currentKey = currentEntry.Key;
                 var currentValue = currentEntry.Value;
+
+                if (string.IsNullOrWhiteSpace(currentKey))
+                {
+                    Console.WriteLine("Ignoring empty key");
+                    continue;
+                }
+
                 foreach (var tempProp in properties)
                 {
                     if (!string.Equals(tempProp.Name, currentKey, StringComparison.InvariantCultureIgnoreCase))
                         continue;
 
-                    switch (tempProp.PropertyType.ToString())
+                    try
                     {
-                        case "System.String":
-                            tempProp.SetValue(this, currentValue, null);
-                            break;
-                        case "System.Int32":
-                            tempProp.SetValue(this, int.Parse(currentValue), null);
-                            break;
-                        case "System.Boolean":
-                            tempProp.SetValue(this, bool.Parse(currentValue), null);
-                            break;
-                        case "System.Int64":
-                            tempProp.SetValue(this, long.Parse(currentValue), null);
-                            break;
-                        case "System.Double":
-                            tempProp.SetValue(this, double.Parse(currentValue), null);
-                            break;
-                        case "System.Drawing.Color":
-                            var convertFromString = TypeDescriptor.GetConverter(typeof (Color)).ConvertFromString(currentValue);
-                            if (convertFromString != null)
-                            {
-                                var c = (Color) convertFromString;
-                                tempProp.SetValue(this, c, null);
-                            }
-                            break;
-                        case "LcmsNetDataClasses.Configuration.enumColumnStatus":
-                            var tempEnum =
-                                (enumColumnStatus) Enum.Parse(typeof (enumColumnStatus), currentValue);
-                            tempProp.SetValue(this, tempEnum, null);
-                            break;
-                        case "LcmsNetDataClasses.enumSampleRunningStatus":
-                            var tempStatus =
-                                (enumSampleRunningStatus) Enum.Parse(typeof (enumSampleRunningStatus), currentValue);
-                            tempProp.SetValue(this, tempStatus, null);
-                            break;
-                        case "System.DateTime":
-                            break;
-                        default:
-                            var tpName = tempProp.PropertyType.ToString();
-                            if (tpName.StartsWith("System.Nullable"))
-                            {
-                                if (tpName.Contains("System.Int32"))
+
+                        switch (tempProp.PropertyType.ToString())
+                        {
+                            case "System.String":
+                                tempProp.SetValue(this, currentValue, null);
+                                break;
+                            case "System.Int32":
+                                if (!string.IsNullOrWhiteSpace(currentValue))
+                                    tempProp.SetValue(this, int.Parse(currentValue), null);
+                                break;
+                            case "System.Boolean":
+                                if (!string.IsNullOrWhiteSpace(currentValue))
+                                    tempProp.SetValue(this, bool.Parse(currentValue), null);
+                                break;
+                            case "System.Int64":
+                                if (!string.IsNullOrWhiteSpace(currentValue))
+                                    tempProp.SetValue(this, long.Parse(currentValue), null);
+                                break;
+                            case "System.Double":
+                                if (!string.IsNullOrWhiteSpace(currentValue))
+                                    tempProp.SetValue(this, double.Parse(currentValue), null);
+                                break;
+                            case "System.Drawing.Color":
+                                var convertFromString = TypeDescriptor.GetConverter(typeof(Color)).ConvertFromString(currentValue);
+                                if (convertFromString != null)
                                 {
-                                    // We're dealing with nullable types here, and the default
-                                    // value for those is null, so we shouldn't have to set the
-                                    // value to null if parsing doesn't work.
-                                    int value;
-                                    var worked = int.TryParse(currentValue, out value);
-                                    if (worked)
-                                        tempProp.SetValue(this, value, null);
+                                    var c = (Color)convertFromString;
+                                    tempProp.SetValue(this, c, null);
                                 }
-                                else if (tpName.Contains("System.DateTime"))
+                                break;
+                            case "LcmsNetDataClasses.Configuration.enumColumnStatus":
+                                if (!string.IsNullOrWhiteSpace(currentValue))
                                 {
-                                    DateTime value;
-                                    var worked = DateTime.TryParse(currentValue, out value);
-                                    if (worked)
-                                        tempProp.SetValue(this, value, null);
+                                    var tempEnum =
+                                        (enumColumnStatus)Enum.Parse(typeof(enumColumnStatus), currentValue);
+                                    tempProp.SetValue(this, tempEnum, null);
+                                }
+                                break;
+                            case "LcmsNetDataClasses.enumSampleRunningStatus":
+                                if (!string.IsNullOrWhiteSpace(currentValue))
+                                {
+                                    var tempStatus =
+                                        (enumSampleRunningStatus)Enum.Parse(typeof(enumSampleRunningStatus), currentValue);
+                                    tempProp.SetValue(this, tempStatus, null);
+                                }
+                                break;
+                            case "System.DateTime":
+                                break;
+                            default:
+                                var tpName = tempProp.PropertyType.ToString();
+                                if (tpName.StartsWith("System.Nullable"))
+                                {
+                                    if (tpName.Contains("System.Int32"))
+                                    {
+                                        // We're dealing with nullable types here, and the default
+                                        // value for those is null, so we shouldn't have to set the
+                                        // value to null if parsing doesn't work.
+                                        int value;
+                                        var worked = int.TryParse(currentValue, out value);
+                                        if (worked)
+                                            tempProp.SetValue(this, value, null);
+                                    }
+                                    else if (tpName.Contains("System.DateTime"))
+                                    {
+                                        DateTime value;
+                                        var worked = DateTime.TryParse(currentValue, out value);
+                                        if (worked)
+                                            tempProp.SetValue(this, value, null);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception(
+                                            "classDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
+                                            tempProp.PropertyType);
+                                    }
                                 }
                                 else
                                 {
@@ -158,14 +186,16 @@ namespace LcmsNetDataClasses
                                         "classDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
                                         tempProp.PropertyType);
                                 }
-                            }
-                            else
-                            {
-                                throw new Exception(
-                                    "classDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
-                                    tempProp.PropertyType);
-                            }
-                            break;
+                                break;
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        var msg = "Error parsing property for key " + currentKey + ": " + tempProp + "; " + ex.Message;
+                        Console.WriteLine(msg);
+                        classApplicationLogger.LogError(0, msg);
+                        // Continue on to the next property
                     }
                 }
             }
