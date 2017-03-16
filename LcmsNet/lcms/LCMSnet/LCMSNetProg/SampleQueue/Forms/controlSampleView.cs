@@ -22,6 +22,7 @@ using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
+using LcmsNetDmsTools;
 using LcmsNetSDK;
 using LcmsNetSQLiteTools;
 
@@ -33,6 +34,8 @@ namespace LcmsNet.SampleQueue.Forms
     public partial class controlSampleView : UserControl
     {
         protected formMoveToColumnSelector m_selector;
+
+        private readonly classDMSSampleValidator mValidator;
 
         /// <summary>
         /// Edits the selected samples in the sample view.
@@ -272,6 +275,9 @@ namespace LcmsNet.SampleQueue.Forms
             try
             {
                 InitializeComponent();
+
+                mValidator = new classDMSSampleValidator();
+
                 Initialize(dmsView, sampleQueue);
             }
             catch (Exception ex)
@@ -395,7 +401,7 @@ namespace LcmsNet.SampleQueue.Forms
             mdataGrid_samples.CellEndEdit += mdataGrid_samples_CellEndEdit;
             mdataGrid_samples.DataError += mdataGrid_samples_DataError;
             mdataGrid_samples.KeyUp += mdataGrid_samples_KeyUp;
-            
+
             // Make sure to set the styles/data for a row before it is displayed
             mdataGrid_samples.RowPrePaint += RowPrePaint;
 
@@ -487,8 +493,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 else
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "DMS validator not found and DMS validation enabled. Item not queued.");
+                    // DMS sample validation is disabled
                     return false;
                 }
 

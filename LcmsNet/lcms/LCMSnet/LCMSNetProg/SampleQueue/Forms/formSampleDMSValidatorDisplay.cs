@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Data;
-using LcmsNetSDK;
+using LcmsNetDmsTools;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -29,38 +29,38 @@ namespace LcmsNet.SampleQueue.Forms
 
             m_validatorControls = new List<classDMSBaseControl>();
 
+            var validator = new classDMSSampleValidator();
+
             //
             // Create a sample validator control for each sample.
             //
             var i = 0;
             foreach (var sample in samples)
             {
-                try
+                var sampleControl =
+                    Activator.CreateInstance(
+                            validator.DMSValidatorControl, sample) as
+                        classDMSBaseControl; //new controlDMSValidator(sample);
+                if (sampleControl == null)
                 {
-                    var sampleControl =
-                        Activator.CreateInstance(
-                            classDMSToolsManager.Instance.Validator.DMSValidatorControl, sample) as
-                            classDMSBaseControl; //new controlDMSValidator(sample);
-                    if (sampleControl == null)
-                    {
-                        throw new InvalidOperationException("Sample control instantiation failed!");
-                    }
-                    sampleControl.Dock = DockStyle.Top;
-                    sampleControl.ID = i++;
-                    sampleControl.EnterPressed += sampleControl_EnterPressed;
-                    m_validatorControls.Add(sampleControl);
-                    panel1.Controls.Add(sampleControl);
+                    throw new InvalidOperationException("Sample control instantiation failed!");
+                }
+                sampleControl.Dock = DockStyle.Top;
+                sampleControl.ID = i++;
+                sampleControl.EnterPressed += sampleControl_EnterPressed;
+                m_validatorControls.Add(sampleControl);
+                panel1.Controls.Add(sampleControl);
 
-                    sampleControl.BringToFront();
-                }
-                catch (Exception ex)
-                {
-                    // We get this if the sample is null.  Just pass up the chain for now.
-                    throw ex;
-                }
+                sampleControl.BringToFront();
             }
 
             FormClosing += formSampleDMSValidatorDisplay_FormClosing;
+        }
+
+        public sealed override bool AutoScroll
+        {
+            get { return base.AutoScroll; }
+            set { base.AutoScroll = value; }
         }
 
         /// <summary>
