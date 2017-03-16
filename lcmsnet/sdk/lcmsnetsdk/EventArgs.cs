@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDmsTools
+namespace LcmsNetSDK
 {
     public delegate void MessageEventHandler(object sender, MessageEventArgs e);
     public delegate void ProgressEventHandler(object sender, ProgressEventArgs e);

@@ -75,6 +75,7 @@
     <Compile Include="Data\DmsValidatorEventArgs.cs" />
     <Compile Include="Data\IDMSValidator.cs" />
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="Experiment\classSampleValidationError.cs" />
     <Compile Include="Experiment\classSampleValidatorManager.cs" />
     <Compile Include="Configuration\classCartConfiguration.cs" />
