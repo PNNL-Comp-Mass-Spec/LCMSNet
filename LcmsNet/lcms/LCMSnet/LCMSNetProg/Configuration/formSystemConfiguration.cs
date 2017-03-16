@@ -64,36 +64,6 @@ namespace LcmsNet.Configuration
                 classCartConfiguration.MinimumVolume = Convert.ToDouble(numericUpDown1.Value);
         }
 
-        private void btnSetPdfPath_Click(object sender, EventArgs e)
-        {
-            var path = txtPdfPath.Text;
-            if (Directory.Exists(path))
-            {
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_PDFPATH, path);
-            }
-            else
-            {
-                DialogResult = MessageBox.Show("That directory does not exist, create it?", "Error",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2);
-                if (DialogResult == DialogResult.Yes)
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Unable to create directory" + path, "Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                    }
-                }
-                else
-                {
-                    txtPdfPath.SelectAll();
-                }
-            }
-        }
-
         private void comboTimeZone_SelectedValueChanged(object sender, EventArgs e)
         {
             classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, comboTimeZone.SelectedItem.ToString());
