@@ -1234,10 +1234,15 @@ namespace LcmsNetDmsTools
             {
                 writer.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                 writer.WriteLine("<catalog>");
-                writer.WriteLine("  <!--DMS Configuration Schema definition-->");
+                writer.WriteLine("  <!-- DMS Configuration Schema definition -->");
                 writer.WriteLine("  <xs:schema elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"PrismDMS\"> ");
                 writer.WriteLine("    <xs:element name=\"PrismDMSConfig\">");
                 writer.WriteLine("      <xs:complexType><xs:sequence>");
+                writer.WriteLine("          <xs:element name=\"DMSServer\" minOccurs=\"0\" maxOccurs=\"1\">");
+                writer.WriteLine("             <xs:complexType><xs:simpleContent><xs:extension base=\"xs:string\">");
+                writer.WriteLine("                  <xs:attribute name=\"dmssetting\" use=\"optional\" type=\"xs:string\"/>");
+                writer.WriteLine("             </xs:extension></xs:simpleContent></xs:complexType>");
+                writer.WriteLine("          </xs:element>");
                 writer.WriteLine("          <xs:element name=\"DMSVersion\">");
                 writer.WriteLine("             <xs:complexType><xs:simpleContent><xs:extension base=\"xs:string\">");
                 writer.WriteLine("                  <xs:attribute name=\"dmssetting\" use=\"required\" type=\"xs:string\"/>                 ");
@@ -1252,11 +1257,13 @@ namespace LcmsNetDmsTools
                 writer.WriteLine("    </xs:element>");
                 writer.WriteLine("  </xs:schema>");
                 writer.WriteLine(" ");
-                writer.WriteLine("  <!--DMS configuration-->");
+                writer.WriteLine("  <!-- DMS configuration -->");
                 writer.WriteLine("  <p:PrismDMSConfig xmlns:p=\"PrismDMS\">");
-                writer.WriteLine("    <!--DMSVersion is needed for creation of the connection string-->");
+                writer.WriteLine("    <!-- Server hosting DMS (defaults to Gigasax if missing) -->");
+                writer.WriteLine("    <p:DMSServer dmssetting=\"true\">Gigasax</p:DMSServer>");
+                writer.WriteLine("    <!-- DMSVersion is the name of the database to connect to -->");
                 writer.WriteLine("    <p:DMSVersion dmssetting=\"true\">DMS5</p:DMSVersion>");
-                writer.WriteLine("    <!--DMSPwd is the encoded DMS password-->");
+                writer.WriteLine("    <!-- DMSPwd is the encoded DMS password for SQL server user LCMSNetUser -->");
                 writer.WriteLine("    <p:DMSPwd dmssetting=\"true\">Mprptq3v</p:DMSPwd>");
                 writer.WriteLine("  </p:PrismDMSConfig>");
                 writer.WriteLine("</catalog>");
