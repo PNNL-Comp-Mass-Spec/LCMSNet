@@ -111,12 +111,11 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Stuff the return list with IDs and return
-            int fileID;
-            bool success;
             foreach (var currSampleID in SampleIDList)
             {
                 // If current sample has an MRM file associated with it, get the ID
-                success = idDict.TryGetValue(currSampleID, out fileID);
+                int fileID;
+                var success = idDict.TryGetValue(currSampleID, out fileID);
                 if (success)
                 {
                     if (!retList.Contains(fileID.ToString()))
@@ -265,21 +264,20 @@ namespace LcmsNet.SampleQueue.IO
         {
             var mrmFileNamePath = Path.Combine(FilePath, InpData.FileName);
 
-            StreamWriter fileWriter = null;
             try
             {
-                fileWriter = new StreamWriter(mrmFileNamePath, false);
-                fileWriter.Write(InpData.FileContents);
+                using (var fileWriter = new StreamWriter(mrmFileNamePath, false))
+                {
+                    fileWriter.Write(InpData.FileContents);
+
+                }
                 classApplicationLogger.LogMessage(0, "Completed writing MRM file " + mrmFileNamePath);
             }
             catch (Exception ex)
             {
                 throw new Exception("Exception writing MRM file" + mrmFileNamePath, ex);
             }
-            finally
-            {
-                fileWriter.Close();
-            }
+
         }
 
         #endregion

@@ -2197,8 +2197,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="reader"></param>
         public void LoadQueue(string path, ISampleQueueReader reader)
         {
-            List<classSampleData> waitingSamples;
-            waitingSamples = reader.ReadSamples(path);
+            var waitingSamples = reader.ReadSamples(path);
 
             //
             // We need to assign the column data information to the samples
@@ -2257,8 +2256,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="column"></param>
         public void LoadQueue(string path, ISampleQueueReader reader, classColumnData column)
         {
-            List<classSampleData> waitingSamples;
-            waitingSamples = reader.ReadSamples(path);
+            var waitingSamples = reader.ReadSamples(path);
 
             //
             // Here we need to assign the column data information to the samples

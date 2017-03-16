@@ -21,7 +21,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using LcmsNetDataClasses;
-using LcmsNetSDK;
+using LcmsNetDmsTools;
 using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue
@@ -42,13 +42,15 @@ namespace LcmsNet.SampleQueue
 
         #region "Class variables"
 
-        List<classSampleData> m_DmsRequestList;
-        string m_MatchString;
-        string m_CartName;
-        string m_CartConfigName;
+        private List<classSampleData> m_DmsRequestList;
+        private string m_MatchString;
+        private string m_CartName;
+        private string m_CartConfigName;
 
         // These two string dictionaries hold selected column and sort orders for the listview
         // Using string dictionaries allows for using a common event handler for column click events
+        private readonly Dictionary<string, string> m_ListViewColumns;
+        private readonly Dictionary<string, string> m_ListViewSortOrder;
 
         #endregion
 
@@ -194,6 +196,9 @@ namespace LcmsNet.SampleQueue
         public formDMSView()
         {
             InitializeComponent();
+
+            m_ListViewColumns = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            m_ListViewSortOrder = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             // Initialize form controls
             InitFormControls();
@@ -670,6 +675,7 @@ namespace LcmsNet.SampleQueue
                     }
                 }
             }
+
             // Call the DMS stored procedure to update the cart assignments
             bool success;
 
