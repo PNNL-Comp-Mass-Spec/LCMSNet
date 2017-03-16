@@ -42,6 +42,8 @@ namespace TestTool
                 RecentDatasetsMonthsToLoad = 12
             };
 
+            dbt.ProgressEvent += Dbt_ProgressEvent;
+
             dbt.LoadCacheFromDMS();
 
             Console.WriteLine("Data loaded");
@@ -60,5 +62,11 @@ namespace TestTool
         {
             Console.WriteLine(args.Message);
         }
+
+        private static void Dbt_ProgressEvent(object sender, LcmsNetSDK.ProgressEventArgs e)
+        {
+            Console.WriteLine(e.CurrentTask);
+        }
+
     }
 }
