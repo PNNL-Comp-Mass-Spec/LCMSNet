@@ -893,9 +893,14 @@ namespace LcmsNetDmsTools
         /// Adds data for block of MRM files to file data list
         /// </summary>
         /// <param name="FileIndxList">Comma-separated list of file indices needing data</param>
-        /// <param name="fileData">List of file names and contents</param>
-        public void GetMRMFilesFromDMS(string FileIndxList, ref List<classMRMFileData> fileData)
+        /// <param name="fileData">ist of file names and contents; new data will be appended to this list</param>
+        public void GetMRMFilesFromDMS(string FileIndxList, List<classMRMFileData> fileData)
         {
+            if (fileData == null)
+            {
+                throw new ArgumentNullException(nameof(fileData), "fileData must be initialized before calling GetMRMFilesFromDMS");
+            }
+
             DataTable dt;
             var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + FileIndxList + ")";
             var connStr = GetConnectionString();
