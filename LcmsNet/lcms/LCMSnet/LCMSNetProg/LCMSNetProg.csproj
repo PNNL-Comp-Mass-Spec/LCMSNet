@@ -977,6 +977,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>rem xcopy /Y /F /D "$(ProjectDir)..\..\..\lib\*" "$(TargetDir)"
+xcopy /Y /F /D "$(ProjectDir)..\..\..\lib\DemoPluginLibrary.dll" "$(TargetDir)"
 
 if not exist "$(TargetDir)plugins\" mkdir "$(TargetDir)plugins\"
 xcopy /Y /F /D "$(ProjectDir)..\..\..\..\pluginDLLs\*.dll" "$(TargetDir)plugins\"
