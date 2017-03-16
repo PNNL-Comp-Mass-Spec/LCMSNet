@@ -53,14 +53,11 @@ Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                DestDir: "{a
 Source: LCMSNetProg\bin\x86\PNNLRelease\x86\*.dll;                  DestDir: "{app}\x86";      Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                  DestDir: "{app}\x64";      Flags: ignoreversion
 
-; Copy DMSTools and all DLLs to C:\Users\Username\AppData\Roaming\LCMSNet\dmsExtensions
-; Note that this includes System.Data.SQLite but not SQLite.Interop.dll (since it should not be needed there)
-Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\bin\x86\PNNLRelease\*.dll";        DestDir: "{userappdata}\{#MyAppName}\dmsExtensions";      Flags: ignoreversion
-Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\*.config";                         DestDir: "{userappdata}\{#MyAppName}\dmsExtensions";      Flags: ignoreversion
+Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config"; DestDir: "{app}";      Flags: ignoreversion
 
 ;DLLs
-Source: "{#MyLib}\*"; Excludes:"FluidicsPack.dll,LcmsNetDmsTools.dll";     DestDir: "{app}";          Flags: ignoreversion
-Source: "{#MyLib}\FluidicsPack.dll";                                       DestDir: "{app}\Plugins";  Flags: ignoreversion
+Source: "{#MyLib}\*"; Excludes:"FluidicsPack.dll,nunit_random_seed.tmp,LcmsNet.exe.config";                  DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\FluidicsPack.dll";                                DestDir: "{app}\Plugins";  Flags: ignoreversion
 
 ;Core sample validator    
 Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";  DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
@@ -70,7 +67,7 @@ Source: "{#MyPlugins}\*";                                           DestDir: "{a
 Source: "..\..\..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";       DestDir: "{sys}";          Flags: ignoreversion
 
 ;PAL Validator
-Source: "..\..\..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";    DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
+Source: "..\..\..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";   DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
 Source: "..\..\..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";    DestDir: "{app}";          Flags: ignoreversion
