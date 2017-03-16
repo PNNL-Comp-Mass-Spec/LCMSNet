@@ -99,23 +99,6 @@ namespace LcmsNet.Configuration
             classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, comboTimeZone.SelectedItem.ToString());
         }
 
-        private void comboDmsTools_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var comboDmsTools = sender as ComboBox;
-            var selectedTool = comboDmsTools.Items[comboDmsTools.SelectedIndex].ToString();
-            var toolInfo = selectedTool.Split('-');
-            try
-            {
-                classDMSToolsManager.Instance.SelectTool(toolInfo[0], toolInfo[1]);
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, selectedTool);
-            }
-            catch (Exception ex)
-            {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                    "Unable to select dms tool: " + ex.Message);
-            }
-        }
-
         #region "Class variables"
 
         /// <summary>
@@ -231,22 +214,7 @@ namespace LcmsNet.Configuration
             }
 
             comboTimeZone.SelectedIndex = comboTimeZone.FindStringExact(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TIMEZONE));
-
-            //load dms tools into combobox
-            comboDmsTools.Items.AddRange(classDMSToolsManager.Instance.ListTools().ToArray());
-            try
-            {
-                comboDmsTools.SelectedIndex = comboDmsTools.Items.IndexOf(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL));
-            }
-            catch (Exception ex)
-            {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                    "SystemConfiguration: Unable to select last selected Dms tool" + ex.Message);
-                if (comboDmsTools.Items.Count > 0)
-                {
-                    comboDmsTools.SelectedIndex = 0;
-                }
-            }
+          
         }
 
         void RegisterColumn(controlColumn column)

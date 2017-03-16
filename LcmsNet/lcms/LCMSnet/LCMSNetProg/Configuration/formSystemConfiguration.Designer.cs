@@ -43,6 +43,10 @@ namespace LcmsNet.Configuration
             this.mgroupBox_cart = new System.Windows.Forms.GroupBox();
             this.mcombo_CartConfigName = new System.Windows.Forms.ComboBox();
             this.lblCartConfigName = new System.Windows.Forms.Label();
+            this.mcontrol_columnTwo = new LcmsNet.Configuration.controlColumn();
+            this.mcontrol_columnOne = new LcmsNet.Configuration.controlColumn();
+            this.mcontrol_columnFour = new LcmsNet.Configuration.controlColumn();
+            this.mcontrol_columnThree = new LcmsNet.Configuration.controlColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mbutton_acceptOperator = new System.Windows.Forms.Button();
             this.mcombo_Operator = new System.Windows.Forms.ComboBox();
@@ -60,12 +64,6 @@ namespace LcmsNet.Configuration
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label7 = new System.Windows.Forms.Label();
-            this.comboDmsTools = new System.Windows.Forms.ComboBox();
-            this.mcontrol_columnTwo = new LcmsNet.Configuration.controlColumn();
-            this.mcontrol_columnOne = new LcmsNet.Configuration.controlColumn();
-            this.mcontrol_columnFour = new LcmsNet.Configuration.controlColumn();
-            this.mcontrol_columnThree = new LcmsNet.Configuration.controlColumn();
             this.mgroupBox_instrument.SuspendLayout();
             this.mgroupBox_cart.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -165,7 +163,7 @@ namespace LcmsNet.Configuration
             // 
             // mgroupBox_instrument
             // 
-            this.mgroupBox_instrument.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.mgroupBox_instrument.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_instrument.Controls.Add(this.comboBoxAvailInstruments);
             this.mgroupBox_instrument.Controls.Add(this.mbutton_accept);
@@ -181,7 +179,7 @@ namespace LcmsNet.Configuration
             // 
             // mgroupBox_cart
             // 
-            this.mgroupBox_cart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.mgroupBox_cart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_cart.Controls.Add(this.mcombo_CartConfigName);
             this.mgroupBox_cart.Controls.Add(this.lblCartConfigName);
@@ -223,9 +221,53 @@ namespace LcmsNet.Configuration
             this.lblCartConfigName.TabIndex = 33;
             this.lblCartConfigName.Text = "Cart Configuration Name:";
             // 
+            // mcontrol_columnTwo
+            // 
+            this.mcontrol_columnTwo.ColumnData = null;
+            this.mcontrol_columnTwo.ColumnID = 2;
+            this.mcontrol_columnTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnTwo.Location = new System.Drawing.Point(567, 153);
+            this.mcontrol_columnTwo.Margin = new System.Windows.Forms.Padding(5);
+            this.mcontrol_columnTwo.Name = "mcontrol_columnTwo";
+            this.mcontrol_columnTwo.Size = new System.Drawing.Size(419, 100);
+            this.mcontrol_columnTwo.TabIndex = 12;
+            // 
+            // mcontrol_columnOne
+            // 
+            this.mcontrol_columnOne.ColumnData = null;
+            this.mcontrol_columnOne.ColumnID = 1;
+            this.mcontrol_columnOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnOne.Location = new System.Drawing.Point(9, 153);
+            this.mcontrol_columnOne.Margin = new System.Windows.Forms.Padding(5);
+            this.mcontrol_columnOne.Name = "mcontrol_columnOne";
+            this.mcontrol_columnOne.Size = new System.Drawing.Size(472, 100);
+            this.mcontrol_columnOne.TabIndex = 0;
+            // 
+            // mcontrol_columnFour
+            // 
+            this.mcontrol_columnFour.ColumnData = null;
+            this.mcontrol_columnFour.ColumnID = 4;
+            this.mcontrol_columnFour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnFour.Location = new System.Drawing.Point(565, 254);
+            this.mcontrol_columnFour.Margin = new System.Windows.Forms.Padding(5);
+            this.mcontrol_columnFour.Name = "mcontrol_columnFour";
+            this.mcontrol_columnFour.Size = new System.Drawing.Size(431, 78);
+            this.mcontrol_columnFour.TabIndex = 16;
+            // 
+            // mcontrol_columnThree
+            // 
+            this.mcontrol_columnThree.ColumnData = null;
+            this.mcontrol_columnThree.ColumnID = 3;
+            this.mcontrol_columnThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mcontrol_columnThree.Location = new System.Drawing.Point(9, 254);
+            this.mcontrol_columnThree.Margin = new System.Windows.Forms.Padding(5);
+            this.mcontrol_columnThree.Name = "mcontrol_columnThree";
+            this.mcontrol_columnThree.Size = new System.Drawing.Size(472, 85);
+            this.mcontrol_columnThree.TabIndex = 14;
+            // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.mbutton_acceptOperator);
             this.groupBox1.Controls.Add(this.mcombo_Operator);
@@ -262,7 +304,7 @@ namespace LcmsNet.Configuration
             // 
             // mgroupBox_autoUploads
             // 
-            this.mgroupBox_autoUploads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.mgroupBox_autoUploads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mgroupBox_autoUploads.Controls.Add(this.label3);
             this.mgroupBox_autoUploads.Controls.Add(this.mtextbox_triggerLocation);
@@ -287,7 +329,7 @@ namespace LcmsNet.Configuration
             // 
             // mtextbox_triggerLocation
             // 
-            this.mtextbox_triggerLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.mtextbox_triggerLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextbox_triggerLocation.Enabled = false;
             this.mtextbox_triggerLocation.Location = new System.Drawing.Point(21, 86);
@@ -298,8 +340,8 @@ namespace LcmsNet.Configuration
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -419,8 +461,6 @@ namespace LcmsNet.Configuration
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.label7);
-            this.tabPage3.Controls.Add(this.comboDmsTools);
             this.tabPage3.Controls.Add(this.mgroupBox_autoUploads);
             this.tabPage3.Location = new System.Drawing.Point(4, 34);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(4);
@@ -429,70 +469,6 @@ namespace LcmsNet.Configuration
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "DMS";
             this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(20, 204);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(107, 25);
-            this.label7.TabIndex = 41;
-            this.label7.Text = "DMS Tool:";
-            // 
-            // comboDmsTools
-            // 
-            this.comboDmsTools.FormattingEnabled = true;
-            this.comboDmsTools.Location = new System.Drawing.Point(139, 201);
-            this.comboDmsTools.Margin = new System.Windows.Forms.Padding(4);
-            this.comboDmsTools.Name = "comboDmsTools";
-            this.comboDmsTools.Size = new System.Drawing.Size(352, 33);
-            this.comboDmsTools.TabIndex = 40;
-            this.comboDmsTools.SelectedIndexChanged += new System.EventHandler(this.comboDmsTools_SelectedIndexChanged);
-            // 
-            // mcontrol_columnTwo
-            // 
-            this.mcontrol_columnTwo.ColumnData = null;
-            this.mcontrol_columnTwo.ColumnID = 2;
-            this.mcontrol_columnTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnTwo.Location = new System.Drawing.Point(567, 153);
-            this.mcontrol_columnTwo.Margin = new System.Windows.Forms.Padding(5);
-            this.mcontrol_columnTwo.Name = "mcontrol_columnTwo";
-            this.mcontrol_columnTwo.Size = new System.Drawing.Size(419, 100);
-            this.mcontrol_columnTwo.TabIndex = 12;
-            // 
-            // mcontrol_columnOne
-            // 
-            this.mcontrol_columnOne.ColumnData = null;
-            this.mcontrol_columnOne.ColumnID = 1;
-            this.mcontrol_columnOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnOne.Location = new System.Drawing.Point(9, 153);
-            this.mcontrol_columnOne.Margin = new System.Windows.Forms.Padding(5);
-            this.mcontrol_columnOne.Name = "mcontrol_columnOne";
-            this.mcontrol_columnOne.Size = new System.Drawing.Size(472, 100);
-            this.mcontrol_columnOne.TabIndex = 0;
-            // 
-            // mcontrol_columnFour
-            // 
-            this.mcontrol_columnFour.ColumnData = null;
-            this.mcontrol_columnFour.ColumnID = 4;
-            this.mcontrol_columnFour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnFour.Location = new System.Drawing.Point(565, 254);
-            this.mcontrol_columnFour.Margin = new System.Windows.Forms.Padding(5);
-            this.mcontrol_columnFour.Name = "mcontrol_columnFour";
-            this.mcontrol_columnFour.Size = new System.Drawing.Size(431, 78);
-            this.mcontrol_columnFour.TabIndex = 16;
-            // 
-            // mcontrol_columnThree
-            // 
-            this.mcontrol_columnThree.ColumnData = null;
-            this.mcontrol_columnThree.ColumnID = 3;
-            this.mcontrol_columnThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mcontrol_columnThree.Location = new System.Drawing.Point(9, 254);
-            this.mcontrol_columnThree.Margin = new System.Windows.Forms.Padding(5);
-            this.mcontrol_columnThree.Name = "mcontrol_columnThree";
-            this.mcontrol_columnThree.Size = new System.Drawing.Size(472, 85);
-            this.mcontrol_columnThree.TabIndex = 14;
             // 
             // formSystemConfiguration
             // 
@@ -521,7 +497,6 @@ namespace LcmsNet.Configuration
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -559,8 +534,6 @@ namespace LcmsNet.Configuration
           private Label lblWritePDFTo;
           private Label lblTimeZone;
           private ComboBox comboTimeZone;
-          private Label label7;
-          private ComboBox comboDmsTools;
         private ComboBox mcombo_CartConfigName;
         private Label lblCartConfigName;
     }
