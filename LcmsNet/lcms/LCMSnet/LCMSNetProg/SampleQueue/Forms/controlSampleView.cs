@@ -530,7 +530,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             //var y = mdataGrid_samples.Rows.IndexOf(row) + 1;
             var currentTask = "Initializing";
-            
+
             // Make sure we aren't at the end of the queue.
             var N = mdataGrid_samples.Rows.Count;
 
@@ -548,7 +548,7 @@ namespace LcmsNet.SampleQueue.Forms
                     {
                         ////// This is very, very expensive...... //////
                         Validate();
-                            
+
                     }
                 }
 
@@ -1746,7 +1746,7 @@ namespace LcmsNet.SampleQueue.Forms
             newSample.DmsData.RequestID = 0;
             newSample.DmsData.RunOrder = 0;
             newSample.DmsData.UsageType = "";
-            
+
             return newSample;
         }
 
@@ -2250,7 +2250,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// Updates the row at index with the data provided.
         /// </summary>
         /// <param name="index">Index to update.</param>
-        /// 
+        ///
         protected virtual void UpdateRow(int index)
         {
             var row = mdataGrid_samples.Rows[index];
@@ -2819,7 +2819,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused
-         * 
+         *
         /// <summary>
         /// Handle when the user clicks to load data from DMS.
         /// </summary>
@@ -2843,7 +2843,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused methods
-         * 
+         *
         /// <summary>
         /// Randomizes the selected samples.
         /// </summary>
@@ -2923,7 +2923,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused methods
-         * 
+         *
         private void blankToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddNewSample(false);
@@ -2961,7 +2961,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused
-         * 
+         *
         private void mbutton_redo_Click(object sender, EventArgs e)
         {
             Redo();
@@ -2985,7 +2985,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused
-         * 
+         *
         private void mbutton_moveSelectedSamplesToColumn_Click(object sender, EventArgs e)
         {
             MoveSamplesToColumn(enumColumnDataHandling.LeaveAlone);
@@ -3004,7 +3004,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused methods
-         * 
+         *
         private void resetNameToOriginalRequestNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ResetDatasetName();
@@ -3042,7 +3042,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /*
          * Unused
-         * 
+         *
         /// <summary>
         /// Handles undo-ing any operations on the sample queue.
         /// </summary>
