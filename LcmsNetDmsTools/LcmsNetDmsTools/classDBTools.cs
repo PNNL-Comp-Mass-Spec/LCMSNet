@@ -131,7 +131,11 @@ namespace LcmsNetDmsTools
 
         public void OnProgressUpdate(ProgressEventArgs e)
         {
-            ProgressEvent?.Invoke(this, e);
+            if (ProgressEvent == null)
+                Console.WriteLine(e.CurrentTask + @": " + e.PercentComplete);
+            else
+                ProgressEvent.Invoke(this, e);
+
         }
 
         #endregion
@@ -307,8 +311,6 @@ namespace LcmsNetDmsTools
         private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)
         {
             var percentComplete = currentStep / (double)stepCountTotal * 100;
-            Console.WriteLine(currentTask + @": " + percentComplete);
-
             OnProgressUpdate(new ProgressEventArgs(currentTask, percentComplete));
         }
 
