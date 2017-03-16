@@ -26,7 +26,7 @@ namespace LcmsNet.SampleQueue.IO
     /// </summary>
     class classMRMFileExporter : ISampleQueueWriter
     {
-
+        
         #region "Methods"
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace LcmsNet.SampleQueue.IO
                 return retList;
             }
 
-            if (idDict.Count() < 1)
+            if (!idDict.Any())
             {
                 // There are no requests with associated MRM files in this range
                 return retList;

@@ -43,7 +43,7 @@ namespace LcmsNet.SampleQueue.IO
         public void WriteSamples(string ExportFileNamePath, List<classSampleData> InpSamples)
         {
             // Verify there are samples to export
-            if (InpSamples.Count() < 1)
+            if (!InpSamples.Any())
             {
                 // No data to export found in list
                 throw new classDataExportException("No data to export", new Exception());
