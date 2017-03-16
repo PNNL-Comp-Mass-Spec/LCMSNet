@@ -212,6 +212,7 @@ namespace LcmsNetDmsTools
 
         public void LoadCacheFromDMS(bool loadExperiments)
         {
+            ReportProgress("Loading data from DMS (entering LoadCacheFromDMS(bool loadExperiments)", 0, 20);
             LoadCacheFromDMS(loadExperiments, LoadDatasets);
         }
 
@@ -229,13 +230,25 @@ namespace LcmsNetDmsTools
             if (loadDatasets)
                 stepCountTotal += DATASET_STEPS;
 
-            var connectionString = classSQLiteTools.ConnString;
-            var equalsIndex = connectionString.IndexOf('=');
+            ReportProgress("Loading data from DMS (determining Connection String)", 0, stepCountTotal);
 
-            if (equalsIndex > 0 && equalsIndex < connectionString.Length - 1)
-                Console.WriteLine(@"SQLite cache file path: " + connectionString.Substring(equalsIndex + 1));
+            var sqLiteConnectionString = classSQLiteTools.ConnString;
+            var equalsIndex = sqLiteConnectionString.IndexOf('=');
+            string cacheFilePath;
+
+            if (equalsIndex > 0 && equalsIndex < sqLiteConnectionString.Length - 1)
+                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString.Substring(equalsIndex + 1);
             else
-                Console.WriteLine(@"SQLite cache file path: " + connectionString);
+                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString;
+
+            var dmsConnectionString = GetConnectionString();
+
+            // Remove the password from the connection string
+            var passwordStartindex = dmsConnectionString.IndexOf(";Password", StringComparison.InvariantCultureIgnoreCase);
+            if (passwordStartindex > 0)
+                dmsConnectionString = dmsConnectionString.Substring(0, passwordStartindex);
+
+            ReportProgress("Loading data from DMS (" + dmsConnectionString + ") and storing in " + cacheFilePath, 0, stepCountTotal);
 
             ReportProgress("Loading cart names", 1, stepCountTotal);
             GetCartListFromDMS();
@@ -267,7 +280,7 @@ namespace LcmsNetDmsTools
                 var currentTask = "Loading experiments";
                 if (RecentExperimentsMonthsToLoad > 0)
                     currentTask += " created/used in the last " + RecentExperimentsMonthsToLoad + " months";
-                    
+
                 ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
 
                 GetExperimentListFromDMS();
@@ -286,7 +299,7 @@ namespace LcmsNetDmsTools
                 stepCountCompleted = stepCountCompleted + DATASET_STEPS;
             }
 
-            ReportProgress("Loading complete", stepCountTotal, stepCountTotal);
+            ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
 
         }
 
@@ -309,7 +322,7 @@ namespace LcmsNetDmsTools
 
 
             // Get a list containing all active cart configuration names
-            const string sqlCmd = 
+            const string sqlCmd =
                 "SELECT [Config Name] " +
                 "FROM V_LC_Cart_Configuration_List_Report " +
                 "WHERE State = 'Active' " +
@@ -1172,7 +1185,7 @@ namespace LcmsNetDmsTools
                             da.SelectCommand = SpCmd;
                             da.Fill(ds);
                             resultCode = (int)da.SelectCommand.Parameters["@Return"].Value;
-                        }   
+                        }
                     }
                 }
             }
