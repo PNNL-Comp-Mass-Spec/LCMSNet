@@ -409,14 +409,19 @@ namespace LcmsNet
                         classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
 
                     CreateSQLCache();
-                    classApplicationLogger.LogMessage(-1, "Loading DMS data");
+                    LogMessage(-1, "Loading DMS data");
                     Application.DoEvents();
 
                     try
                     {
                         // This step loads DMS tools from folder C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
                         // The folder will typically have file LcmsNetDmsTools.dll
-                        classDMSToolsManager.Instance.SelectedTool.LoadCacheFromDMS(false);
+                        var dmsToolsManager = classDMSToolsManager.Instance.SelectedTool;
+
+                        dmsToolsManager.ProgressEvent += DmsToolsManager_ProgressEvent;
+                        LogMessage("ProgressEvent attached");
+
+                        dmsToolsManager.LoadCacheFromDMS(false);
                     }
                     catch (Exception ex)
                     {
