@@ -840,12 +840,12 @@ namespace LcmsNetDataClasses.Devices
                     try
                     {
                         var fullPath = Path.GetFullPath(file);
-                        var ass = Assembly.LoadFile(fullPath);
+                        var asm = Assembly.LoadFile(fullPath);
                     }
                     catch (BadImageFormatException)
                     {
                         classApplicationLogger.LogMessage(0,
-                            string.Format("The dll {0} is not a .net assembly.  Skipping.", path));
+                            string.Format("The dll {0} is not a .net assembly.  Skipping.", file));
                     }
                     catch (Exception ex)
                     {
