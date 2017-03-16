@@ -44,6 +44,7 @@ using LcmsNetDataClasses.Data;
 using LcmsNetSQLiteTools;
 using System.ComponentModel.Composition;
 using System.IO;
+using LcmsNetSDK;
 
 namespace LcmsNetDmsTools
 {
