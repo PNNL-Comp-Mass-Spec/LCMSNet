@@ -14,13 +14,11 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
-using LcmsNetSDK;
 using LcmsNetSQLiteTools;
 
 namespace LcmsNet.Configuration
@@ -38,7 +36,7 @@ namespace LcmsNet.Configuration
     /// </summary>
     public partial class formSystemConfiguration : Form
     {
-        readonly bool m_isLoading;
+        private readonly bool mIsLoading;
 
         #region "Constructors"
 
@@ -47,9 +45,10 @@ namespace LcmsNet.Configuration
         /// </summary>
         public formSystemConfiguration()
         {
-            m_isLoading = true;
+            mIsLoading = true;
             InitializeComponent();
-            m_isLoading = false;
+
+            mIsLoading = false;
 
             Initialize();
         }
@@ -60,7 +59,7 @@ namespace LcmsNet.Configuration
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            if (!m_isLoading)
+            if (!mIsLoading)
                 classCartConfiguration.MinimumVolume = Convert.ToDouble(numericUpDown1.Value);
         }
 
@@ -294,9 +293,11 @@ namespace LcmsNet.Configuration
 
             // Create dummy user. User is not recognized by DMS, so that trigger files will fail and let
             //      operator know that user name was not provided
-            var tmpUser = new classUserInfo();
-            tmpUser.PayrollNum = "None";
-            tmpUser.UserName = "(None)";
+            var tmpUser = new classUserInfo
+            {
+                PayrollNum = "None",
+                UserName = "(None)"
+            };
             m_Users.Add(tmpUser.PayrollNum, tmpUser);
 
             // Add users to dictionary from user list
@@ -523,7 +524,7 @@ namespace LcmsNet.Configuration
 
         private void buttonAccept_Click(object sender, EventArgs e)
         {
-            if (!m_isLoading)
+            if (!mIsLoading)
                 classLCMSSettings.SetParameter(classLCMSSettings.PARAM_INSTNAME, comboBoxAvailInstruments.SelectedItem.ToString());
             mbutton_accept.BackColor = Color.FromName("ButtonHighlight");
         }
@@ -535,7 +536,7 @@ namespace LcmsNet.Configuration
 
         private void mbutton_acceptOperator_Click(object sender, EventArgs e)
         {
-            if (!m_isLoading)
+            if (!mIsLoading)
             {
                 var operatorName = mcombo_Operator.SelectedItem.ToString();
                 if (m_Users.ContainsKey(operatorName))
@@ -558,5 +559,6 @@ namespace LcmsNet.Configuration
         }
 
         #endregion
+        
     }
 }
