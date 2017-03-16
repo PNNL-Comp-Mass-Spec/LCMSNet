@@ -15,7 +15,7 @@
 // - 04/01/2009 (DAC) - Added file logging for exceptions
 // - 05/18/2010 (DAC) - Added error logging; Modified for queue import/export using SQLite
 // - 04/17/2013 (FCT) - Added Proposal Users list with a a cross reference list of their UID to the PIDs of proposals they've worked.
-// 
+//
 //*********************************************************************************************************
 
 using System;
@@ -334,8 +334,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="dataToCache">List of ICacheInterface objects to save properites for</param>
         /// <param name="tableName">Name of the table to save data in</param>
         /// <param name="connStr">Connection string</param>
-        private static void SavePropertiesToCache(IList<ICacheInterface> dataToCache, string tableName,
-            string connStr)
+        /// <param name="insertsIncludeFieldNames"></param>
+        private static void SavePropertiesToCache(
+            IList<ICacheInterface> dataToCache, string tableName, string connStr, bool insertsIncludeFieldNames)
         {
             var dataExists = (dataToCache.Count > 0);
 
@@ -372,7 +373,7 @@ namespace LcmsNetSQLiteTools
             foreach (var tempItem in dataToCache)
             {
                 var itemProps = tempItem.GetPropertyValues();
-                var sqlInsertCmd = BuildInsertPropValueCmd(itemProps, tableName);
+                var sqlInsertCmd = BuildInsertPropValueCmd(itemProps, tableName, insertsIncludeFieldNames);
                 cmdList.Add(sqlInsertCmd);
             }
 
@@ -397,7 +398,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="QueueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType,
+        public static void SaveQueueToCache(
+            List<classSampleData> QueueData,
+            enumTableTypes tableType,
             string connStr)
         {
             var DataInList = (QueueData.Count > 0);
@@ -418,7 +421,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentSample);
             }
-            SavePropertiesToCache(dataList, tableName, connStr);
+            SavePropertiesToCache(dataList, tableName, connStr, true);
         }
 
         /// <summary>
@@ -447,7 +450,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentUser);
             }
-            SavePropertiesToCache(dataList, tableName, ConnString);
+            SavePropertiesToCache(dataList, tableName, ConnString, false);
         }
 
         public static void SaveExperimentListToCache(List<classExperimentData> expList)
@@ -542,9 +545,9 @@ namespace LcmsNetSQLiteTools
             userCacheList.AddRange(users);
             referenceCacheList.AddRange(crossReferenceList);
 
-            SavePropertiesToCache(userCacheList, userTableName, ConnString);
+            SavePropertiesToCache(userCacheList, userTableName, ConnString, false);
 
-            SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString);
+            SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString, false);
 
             m_proposalUsers = users;
             m_pidIndexedReferenceList = pidIndexedReferenceList;
@@ -568,7 +571,7 @@ namespace LcmsNetSQLiteTools
             foreach (var datum in lcColumnList)
                 dataList.Add(datum);
 
-            SavePropertiesToCache(dataList, tableName, ConnString);
+            SavePropertiesToCache(dataList, tableName, ConnString, false);
         }
 
         /// <summary>
@@ -596,7 +599,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentInst);
             }
-            SavePropertiesToCache(dataList, tableName, ConnString);
+            SavePropertiesToCache(dataList, tableName, ConnString, false);
         }
 
         /// <summary>
@@ -735,16 +738,30 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="inpData">String dictionary containing property names and values</param>
         /// <param name="tableName">Name of table to insert values into</param>
+        /// <param name="insertsIncludeFieldNames">When true, use the key names in inpData as the field names</param>
         /// <returns>String consisting of a complete INSERT SQL statement</returns>
-        private static string BuildInsertPropValueCmd(Dictionary<string, string> inpData, string tableName)
+        /// <remarks>Set insertsIncludeFieldNames to true when the data in inpData does not match all of the columns in the target table</remarks>
+        private static string BuildInsertPropValueCmd(Dictionary<string, string> inpData, string tableName, bool insertsIncludeFieldNames)
         {
             var sb = new StringBuilder();
             sb.Append("INSERT INTO ");
-            sb.Append(tableName + " VALUES(");
+            sb.Append(tableName);
+
+            if (insertsIncludeFieldNames)
+            {
+                // Field names in SQLite are delimited by double quotes
+                var fieldNames = (from item in inpData.Keys select "\"" + item + "\"");
+                sb.Append("(");
+                sb.Append(string.Join(",", fieldNames));
+                sb.Append(")");
+            }
+
+            sb.Append(" VALUES(");
 
             // Add the property values to the string
-            var query = (from item in inpData.Keys select "'" + ScrubField(inpData[item]) + "'");
-            sb.Append(string.Join(",", query));
+            // String values in SQLite are delimited by single quotes
+            var valueData = (from item in inpData select "'" + ScrubField(item.Value) + "'");
+            sb.Append(string.Join(",", valueData));
 
             // Terminate the string and return
             sb.Append(")");
