@@ -484,10 +484,11 @@ namespace LcmsNet.Configuration
         private void mbutton_Reload_Click(object sender, EventArgs e)
         {
 
-            // Instruct the selected tool to get a fresh list of columns from DMS and store it in the cache db
+            // Get a fresh list of columns from DMS and store it in the cache db
             try
             {
-                classDMSToolsManager.Instance.SelectedTool.GetColumnListFromDMS();
+                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                dmsTools.GetColumnListFromDMS();
             }
             catch (Exception ex)
             {

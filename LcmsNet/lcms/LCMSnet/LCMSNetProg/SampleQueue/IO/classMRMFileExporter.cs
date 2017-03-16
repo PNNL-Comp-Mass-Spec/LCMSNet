@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
-using LcmsNetSDK;
+using LcmsNetDmsTools;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -94,7 +94,9 @@ namespace LcmsNet.SampleQueue.IO
             Dictionary<int, int> idDict;
             try
             {
-                idDict = classDMSToolsManager.Instance.SelectedTool.GetMRMFileListFromDMS(minRequest, maxRequest);
+                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+
+                idDict = dmsTools.GetMRMFileListFromDMS(minRequest, maxRequest);
             }
             catch (Exception ex)
             {
@@ -136,6 +138,8 @@ namespace LcmsNet.SampleQueue.IO
         {
             var retData = new List<classMRMFileData>();
 
+            var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+
             // Download the file data
             var fileCount = 1;
             var sqlStrBld = new StringBuilder();
@@ -169,7 +173,7 @@ namespace LcmsNet.SampleQueue.IO
                     // Execute the query and append the results to retData
                     try
                     {
-                        classDMSToolsManager.Instance.SelectedTool.GetMRMFilesFromDMS(sqlStrBld.ToString(), ref retData);
+                        dmsTools.GetMRMFilesFromDMS(sqlStrBld.ToString(), retData);
                     }
                     catch (Exception ex)
                     {
@@ -191,7 +195,7 @@ namespace LcmsNet.SampleQueue.IO
                 // The number of files was not a multiple of 25, so process the remainder
                 try
                 {
-                    classDMSToolsManager.Instance.SelectedTool.GetMRMFilesFromDMS(sqlStrBld.ToString(), ref retData);
+                    dmsTools.GetMRMFilesFromDMS(sqlStrBld.ToString(), retData);
                 }
                 catch (Exception ex)
                 {

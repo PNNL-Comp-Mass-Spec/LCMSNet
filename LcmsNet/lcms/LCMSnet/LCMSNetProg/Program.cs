@@ -16,6 +16,7 @@ using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
+using LcmsNetDmsTools;
 using LcmsNetSDK;
 using LcmsNetSQLiteTools;
 
@@ -414,36 +415,23 @@ namespace LcmsNet
 
                     try
                     {
-                        // This step loads DMS tools from folder C:\Users\<Username>\AppData\Roaming\LCMSNet\dmsExtensions
-                        // The folder will typically have file LcmsNetDmsTools.dll
-                        var dmsToolsManager = classDMSToolsManager.Instance.SelectedTool;
 
-                        dmsToolsManager.ProgressEvent += DmsToolsManager_ProgressEvent;
-                        LogMessage("ProgressEvent attached");
+                        var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
 
-                        dmsToolsManager.LoadCacheFromDMS(false);
+                        dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
+                        LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = false;
+
+                        dmsTools.LoadCacheFromDMS(false);
+
+                        LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = true;
+                        dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;
+
                     }
                     catch (Exception ex)
                     {
-                        var extensionsFolder = classDMSToolsManager.GetDMSExtensionsDllFolderPathForUser();
-
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                            @"Unable to load cache from DMS.  If inside PNNL, assure folder " + extensionsFolder +
-                            " exists and has the required DLLs (including LcmsNetDmsTools.dll): " + ex.Message);
-
-                        if(ex is System.Reflection.ReflectionTypeLoadException)
-                        {
-                            var typeLoadException = ex as ReflectionTypeLoadException;
-                            var loaderExceptions = typeLoadException.LoaderExceptions;
-
-                            foreach (var exDetail in loaderExceptions)
-                            {
-                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, exDetail.Message);
-                                if (exDetail.StackTrace != null)
-                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, exDetail.StackTrace);
-
-                            }
-                        }
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error caching DMS data: " + ex.Message);
+                        if (ex.StackTrace != null)
+                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Stack trace: " + ex.StackTrace);
                     }
 
                     //

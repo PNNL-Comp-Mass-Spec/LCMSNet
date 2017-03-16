@@ -207,10 +207,10 @@ namespace LcmsNet.SampleQueue
             FormClosing += formDMSView_FormClosing;
 
             // Form caption
-            var dbInUse = string.Empty;
+            string dbInUse;
             try
             {
-                if (classDMSToolsManager.Instance.SelectedTool.DMSVersion.Contains("_T3"))
+                if (LcmsNet.Configuration.clsDMSDataContainer.DBTools.DMSVersion.Contains("_T3"))
                 {
                     dbInUse = " (Using Development Database)";
                 }
@@ -219,9 +219,11 @@ namespace LcmsNet.SampleQueue
                     dbInUse = " (Using Production Database)";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                dbInUse = " (Using ?? database: " + ex.Message + ")";
             }
+
             Text = "LcmsNet V" + Application.ProductVersion + dbInUse;
 
             // Listview information
@@ -407,7 +409,8 @@ namespace LcmsNet.SampleQueue
             // Get a list of requests from DMS
             try
             {
-                tempRequestList = classDMSToolsManager.Instance.SelectedTool.GetSamplesFromDMS(queryData);
+                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                tempRequestList = dmsTools.GetSamplesFromDMS(queryData);
             }
             catch (classDatabaseConnectionStringException ex)
             {
@@ -669,9 +672,11 @@ namespace LcmsNet.SampleQueue
             }
             // Call the DMS stored procedure to update the cart assignments
             bool success;
+
+            var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
             try
             {
-                success = classDMSToolsManager.Instance.SelectedTool.UpdateDMSCartAssignment(reqIDs, m_CartName, m_CartConfigName, true);
+                success = dmsTools.UpdateDMSCartAssignment(reqIDs, m_CartName, m_CartConfigName, true);
             }
             catch (classDatabaseConnectionStringException ex)
             {
@@ -702,7 +707,7 @@ namespace LcmsNet.SampleQueue
 
             if (!success)
             {
-                MessageBox.Show(classDMSToolsManager.Instance.SelectedTool.ErrMsg, "LcmsNet",
+                MessageBox.Show(dmsTools.ErrMsg, "LcmsNet",
                     MessageBoxButtons.AbortRetryIgnore);
                 return false;
             }
