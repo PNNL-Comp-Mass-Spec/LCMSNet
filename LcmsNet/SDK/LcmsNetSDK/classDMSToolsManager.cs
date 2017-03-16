@@ -25,6 +25,7 @@ namespace LcmsNetSDK
     /// that have classes marked with attribute Export(typeof(IDmsTools)) or attribute Export(typeof(IDMSValidator))
     /// Typically classes classDBTools and classDMSSampleValidator in LcmsNetDmsTools.dll have those attributes
     /// </remarks>
+    [Obsolete("Deprecated; use direct references to classDBTools and classDMSSampleValidator")]
     public class classDMSToolsManager
     {
         private static classDMSToolsManager m_instance;
@@ -36,6 +37,9 @@ namespace LcmsNetSDK
 
         private IDmsTools m_SelectedDMSTools;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         private classDMSToolsManager()
         {
             var catalog = new AggregateCatalog();

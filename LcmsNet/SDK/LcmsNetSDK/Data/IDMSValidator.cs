@@ -2,6 +2,7 @@
 
 namespace LcmsNetDataClasses.Data
 {
+    [Obsolete("Interface deprecated. Use a direct reference to classDMSSampleValidator.cs")]
     public interface IDMSValidator
     {
         /// <summary>

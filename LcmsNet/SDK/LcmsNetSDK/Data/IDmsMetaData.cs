@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace LcmsNetDataClasses
 {
+    [Obsolete("classDMSToolsManager is deprecated")]
     public interface IDmsMetaData
     {
         string Name { get; }

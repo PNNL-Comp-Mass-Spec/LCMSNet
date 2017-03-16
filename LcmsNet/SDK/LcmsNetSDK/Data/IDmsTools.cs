@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LcmsNetSDK;
 
 namespace LcmsNetDataClasses
 {
+    [Obsolete("Interface deprecated. Use a direct reference to classDBTools.cs")]
     public interface IDmsTools
     {
         string ErrMsg { get; set; }
