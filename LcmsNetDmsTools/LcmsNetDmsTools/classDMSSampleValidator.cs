@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
+// Deprecated: using System.ComponentModel.Composition;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Data;
+// Deprecated: using LcmsNetDataClasses.Data;
 using LcmsNetDataClasses.Experiment;
 
 namespace LcmsNetDmsTools
@@ -10,11 +10,11 @@ namespace LcmsNetDmsTools
     /// <summary>
     /// Validates a sample.
     /// </summary>
-    [Export(typeof(IDMSValidator))]
-    [ExportMetadata("RelatedToolName", "PrismDMSTools")]
-    [ExportMetadata("Version", "1.0")]
-    [ExportMetadata("RequiredDMSToolVersion", "1.0")]
-    public class classDMSSampleValidator:IDMSValidator
+    // Deprecated export: [Export(typeof(IDMSValidator))]
+    // Deprecated export: [ExportMetadata("RelatedToolName", "PrismDMSTools")]
+    // Deprecated export: [ExportMetadata("Version", "1.0")]
+    // Deprecated export: [ExportMetadata("RequiredDMSToolVersion", "1.0")]
+    public class classDMSSampleValidator
     {
         /// <summary>
         /// Indicates not request number is tied to a EMSL user proposal in DMS.

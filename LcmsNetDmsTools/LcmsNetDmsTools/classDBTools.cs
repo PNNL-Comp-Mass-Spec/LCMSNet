@@ -42,7 +42,7 @@ using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Data;
 using LcmsNetSQLiteTools;
-using System.ComponentModel.Composition;
+// Deprecated: using System.ComponentModel.Composition;
 using System.IO;
 using LcmsNetSDK;
 
@@ -51,10 +51,10 @@ namespace LcmsNetDmsTools
     /// <summary>
     /// Class for interacting with DMS database
     /// </summary>
-    [Export(typeof(IDmsTools))]
-    [ExportMetadata("Name", "PrismDMSTools")]
-    [ExportMetadata("Version", "1.0")]
-    public class classDBTools : IDmsTools
+    // Deprecated export: [Export(typeof(IDmsTools))]
+    // Deprecated export: [ExportMetadata("Name", "PrismDMSTools")]
+    // Deprecated export: [ExportMetadata("Version", "1.0")]
+    public class classDBTools
     {
         #region "Class variables"
         string m_ErrMsg = "";
