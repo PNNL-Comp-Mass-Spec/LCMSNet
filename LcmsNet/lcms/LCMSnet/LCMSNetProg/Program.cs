@@ -81,13 +81,13 @@ namespace LcmsNet
         public static void LogVersionNumbers()
         {
             var information = SystemInformationReporter.BuildApplicationInformation();
-            classApplicationLogger.LogMessage(0, information);
+            LogMessage(information);
         }
 
         public static void LogMachineInformation()
         {
             var systemInformation = SystemInformationReporter.BuildSystemInformation();
-            classApplicationLogger.LogMessage(0, systemInformation);
+            LogMessage(systemInformation);
         }
 
         private static void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
@@ -236,17 +236,14 @@ namespace LcmsNet
                 //
                 // Before we do anything, let's initialize the file logging capability.
                 //
-                classApplicationLogger.Error +=
-                    classFileLogging.LogError;
-                classApplicationLogger.Message +=
-                    classFileLogging.LogMessage;
+                classApplicationLogger.Error += classFileLogging.LogError;
+                classApplicationLogger.Message += classFileLogging.LogMessage;
 
                 //
                 // Now lets initialize logging to SQLite database.
                 //
                 classApplicationLogger.Error += classDbLogger.LogError;
-                classApplicationLogger.Message +=
-                    classDbLogger.LogMessage;
+                classApplicationLogger.Message += classDbLogger.LogMessage;
 
 
                 // Note that we used icons from here for the gears on the main form window.
@@ -293,7 +290,7 @@ namespace LcmsNet
 
                     LogVersionNumbers();
                     LogMachineInformation();
-                    classApplicationLogger.LogMessage(0, "[Log]");
+                    LogMessage("[Log]");
 
                     //
                     // Display the splash screen mesasge first! make the log folder,
@@ -301,7 +298,7 @@ namespace LcmsNet
                     // through this static call.  That way we know the log folder has been
                     // created.
                     //
-                    //classApplicationLogger.LogMessage(-1, "Creating pertinent folders");
+                    //LogMessage(-1, "Creating pertinent folders");
                     Application.DoEvents();
 
                     //
@@ -323,20 +320,20 @@ namespace LcmsNet
                     //
                     // Load settings
                     //
-                    classApplicationLogger.LogMessage(-1, "Loading settings");
+                    LogMessage(-1, "Loading settings");
                     Application.DoEvents();
                     LoadSettings();
 
                     // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
                     classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
 
-                    //classApplicationLogger.LogMessage(-1, "Creating Initial System Configurations");
+                    //LogMessage(-1, "Creating Initial System Configurations");
                     InitializeSystemConfigurations();
 
                     //
                     // Create a device manager.
                     //
-                    //classApplicationLogger.LogMessage(-1, "Creating the Device Manager");
+                    //LogMessage(-1, "Creating the Device Manager");
                     Application.DoEvents();
                     var deviceManager = classDeviceManager.Manager;
                     deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
@@ -348,7 +345,7 @@ namespace LcmsNet
                     //
                     // Load the device plug-ins.
                     //
-                    classApplicationLogger.LogMessage(-1, "Loading necessary device plug-ins.");
+                    LogMessage(-1, "Loading necessary device plug-ins.");
                     var areDevicesLoaded = true;
                     try
                     {
@@ -359,7 +356,7 @@ namespace LcmsNet
                         areDevicesLoaded = false;
                         classApplicationLogger.LogError(0, "Could not load internal device plug-ins.");
                     }
-                    classApplicationLogger.LogMessage(-1, "Loading external device plug-ins.");
+                    LogMessage(-1, "Loading external device plug-ins.");
                     try
                     {
                         classDeviceManager.Manager.LoadSatelliteAssemblies(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
@@ -378,7 +375,7 @@ namespace LcmsNet
                         classApplicationLogger.LogError(-1, "Failed to load some of the device plug-ins.");
                         return;
                     }
-                    classApplicationLogger.LogMessage(-1, "Device plug-ins are loaded.");
+                    LogMessage(-1, "Device plug-ins are loaded.");
                     Application.DoEvents();
 
 #if DEBUG
@@ -392,7 +389,7 @@ namespace LcmsNet
                     //
                     // Create the method manager
                     //
-                    //classApplicationLogger.LogMessage(-1, "Creating the Method Manager");
+                    //LogMessage(-1, "Creating the Method Manager");
                     Application.DoEvents();
 
 
@@ -428,6 +425,20 @@ namespace LcmsNet
                         classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             @"Unable to load cache from DMS.  If inside PNNL, assure folder " + extensionsFolder +
                             " exists and has the required DLLs (including LcmsNetDmsTools.dll): " + ex.Message);
+
+                        if(ex is System.Reflection.ReflectionTypeLoadException)
+                        {
+                            var typeLoadException = ex as ReflectionTypeLoadException;
+                            var loaderExceptions = typeLoadException.LoaderExceptions;
+
+                            foreach (var exDetail in loaderExceptions)
+                            {
+                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, exDetail.Message);
+                                if (exDetail.StackTrace != null)
+                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, exDetail.StackTrace);
+
+                            }
+                        }
                     }
 
                     //
@@ -437,7 +448,7 @@ namespace LcmsNet
                     {
                         if (classTriggerFileTools.CheckLocalTriggerFiles())
                         {
-                            classApplicationLogger.LogMessage(-1, "Copying trigger files to DMS");
+                            LogMessage(-1, "Copying trigger files to DMS");
                             classTriggerFileTools.MoveLocalTriggerFiles();
                         }
                     }
@@ -449,7 +460,7 @@ namespace LcmsNet
                     {
                         if (classMethodFileTools.CheckLocalMethodFolders())
                         {
-                            classApplicationLogger.LogMessage(-1, "Copying method folders to DMS");
+                            LogMessage(-1, "Copying method folders to DMS");
                             classMethodFileTools.MoveLocalMethodFiles();
                         }
                     }
@@ -457,7 +468,7 @@ namespace LcmsNet
                     //
                     // Load the main application and run
                     //
-                    classApplicationLogger.LogMessage(-1, "Loading main form");
+                    LogMessage(-1, "Loading main form");
                     Application.DoEvents();
                     var main = new formMDImain();
 
@@ -498,9 +509,13 @@ namespace LcmsNet
                 // Just to make sure...let's kill the PAL at the end of the program as well.
                 //
                 KillExistingPalProcesses();
-                classFileLogging.LogMessage(0,
-                    new classMessageLoggerArgs("-----------------shutdown complete----------------------"));
+                LogMessage("-----------------shutdown complete----------------------");
             }
+        }
+
+        private static void DmsToolsManager_ProgressEvent(object sender, ProgressEventArgs e)
+        {
+            LogMessage(e.CurrentTask);
         }
 
         /// <summary>
@@ -520,6 +535,16 @@ namespace LcmsNet
             classSQLiteTools.SaveProposalUsers(new List<classProposalUser>(),
                 new List<classUserIDPIDCrossReferenceEntry>(),
                 new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>());
+        }
+
+        private static void LogMessage(string message)
+        {
+            LogMessage(0, message);
+        }
+
+        private static void LogMessage(int msgLevel, string message)
+        {
+            classFileLogging.LogMessage(msgLevel, new classMessageLoggerArgs(message));
         }
 
         #endregion
