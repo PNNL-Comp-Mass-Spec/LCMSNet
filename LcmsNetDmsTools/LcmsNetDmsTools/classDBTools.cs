@@ -97,7 +97,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        public string DMSVersion => configuration[CONST_DMS_VERSION_KEY];
+        public string DMSVersion => GetConfigSetting(CONST_DMS_VERSION_KEY, "UnknownVersion");
 
         /// <summary>
         /// Controls whether datasets are loaded when LoadCacheFromDMS() is called
@@ -121,7 +121,7 @@ namespace LcmsNetDmsTools
         /// <remarks>Default is 18 months; use 0 to load all data</remarks>
         public int RecentExperimentsMonthsToLoad { get; set; }
 
-        private readonly Dictionary<string,string> configuration;
+        private readonly Dictionary<string,string> mConfiguration;
 
         #endregion
 
@@ -143,7 +143,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public classDBTools()
         {
-            configuration = new Dictionary<string, string>();
+            mConfiguration = new Dictionary<string, string>();
             RecentDatasetsMonthsToLoad = 12;
             RecentExperimentsMonthsToLoad = 18;
             LoadConfiguration();
@@ -185,7 +185,8 @@ namespace LcmsNetDmsTools
                         if (string.Equals(reader.GetAttribute("dmssetting"), "true", StringComparison.CurrentCultureIgnoreCase))
                         {
                             var settingName = reader.Name.Remove(0, 2);
-                            configuration[settingName] = reader.ReadString();
+                            // Add/update the configuration item
+                            mConfiguration[settingName] = reader.ReadString();
                         }
                         break;
                 }
@@ -965,6 +966,21 @@ namespace LcmsNetDmsTools
         }
 
         /// <summary>
+        /// Lookup the value for the given setting
+        /// </summary>
+        /// <param name="configName">Setting name</param>
+        /// <param name="valueIfMissing">Value to return if configName is not defined in mConfiguration</param>
+        /// <returns></returns>
+        private string GetConfigSetting(string configName, string valueIfMissing)
+        {
+            if (mConfiguration.TryGetValue(configName, out var configValue))
+            {
+                return configValue;
+            }
+            return valueIfMissing;
+        }
+
+        /// <summary>
         /// Gets DMS connection string from config file
         /// </summary>
         /// <returns></returns>
@@ -976,8 +992,8 @@ namespace LcmsNetDmsTools
 
             var retStr = "Data Source=";
 
-            // Get DMS version and append to base string
-            var dmsServer = configuration[CONST_DMS_SERVER_KEY];
+            // Get the DMS Server name
+            var dmsServer = GetConfigSetting(CONST_DMS_SERVER_KEY, "Gigasax");
             if (dmsServer != null)
             {
                 retStr += dmsServer;
@@ -987,8 +1003,8 @@ namespace LcmsNetDmsTools
                 retStr += "Gigasax";
             }
 
-            // Get DMS version and append to base string
-            var dmsVersion = configuration[CONST_DMS_VERSION_KEY];
+            // Get name of the DMS database to use
+            var dmsVersion = GetConfigSetting(CONST_DMS_VERSION_KEY, "DMS5");
             if (dmsVersion != null)
             {
                 retStr += ";Initial Catalog=" + dmsVersion + ";User ID=LCMSNetUser";
@@ -1008,8 +1024,8 @@ namespace LcmsNetDmsTools
                 mConnectionStringLogged = true;
             }
 
-            // Get password and append to return string
-            var dmsPassword = configuration[CONST_DMS_PASSWORD_KEY];
+            // Get the password for user LCMSNetUser
+            var dmsPassword = GetConfigSetting(CONST_DMS_PASSWORD_KEY, "Mprptq3v");
             if (dmsPassword != null)
             {
                 retStr += ";Password=" + DecodePassword(dmsPassword);
