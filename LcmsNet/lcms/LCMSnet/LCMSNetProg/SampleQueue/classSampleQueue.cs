@@ -2194,7 +2194,7 @@ namespace LcmsNet.SampleQueue
         /// Saves the queue to the appropiate object.
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="writer"></param>
+        /// <param name="reader"></param>
         public void LoadQueue(string path, ISampleQueueReader reader)
         {
             List<classSampleData> waitingSamples;
@@ -2253,7 +2253,8 @@ namespace LcmsNet.SampleQueue
         /// Saves the queue to the appropiate object.
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="writer"></param>
+        /// <param name="reader"></param>
+        /// <param name="column"></param>
         public void LoadQueue(string path, ISampleQueueReader reader, classColumnData column)
         {
             List<classSampleData> waitingSamples;

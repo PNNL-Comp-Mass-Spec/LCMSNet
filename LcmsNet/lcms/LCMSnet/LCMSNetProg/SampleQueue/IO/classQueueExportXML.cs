@@ -38,7 +38,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <summary>
         /// Exports a queue as an XML file for use by LCMS-old
         /// </summary>
-        /// <param name="InpSamples">List<classSampleData> to be exported</param>
+        /// <param name="InpSamples">List to be exported</param>
         /// <param name="ExportFileNamePath">Full name and path of file to export</param>
         public void WriteSamples(string ExportFileNamePath, List<classSampleData> InpSamples)
         {

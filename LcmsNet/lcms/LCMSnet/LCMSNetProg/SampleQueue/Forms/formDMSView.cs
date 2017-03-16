@@ -48,10 +48,7 @@ namespace LcmsNet.SampleQueue
         string m_CartConfigName;
 
         // These two string dictionaries hold selected column and sort orders for the listview
-        // Using string dictionaries allows me to make the event handler for the column click event common
-        //   to both listviews
-        readonly Dictionary<string, string> m_ListViewColumns = new Dictionary<string, string>();
-        readonly Dictionary<string, string> m_ListViewSortOrder = new Dictionary<string, string>();
+        // Using string dictionaries allows for using a common event handler for column click events
 
         #endregion
 
@@ -227,7 +224,7 @@ namespace LcmsNet.SampleQueue
             }
             Text = "LcmsNet V" + Application.ProductVersion + dbInUse;
 
-            //Listview information
+            // Listview information
             m_ListViewColumns.Add("listviewAvailableRequests", "0");
             m_ListViewColumns.Add("listViewRequestsToRun", "0");
             m_ListViewSortOrder.Add("listviewAvailableRequests", "true");

@@ -33,7 +33,7 @@ namespace LcmsNet.SampleQueue.IO
         /// Implements base class method to export MRM files to a folder
         /// </summary>
         /// <param name="path">File path where data will be stored</param>
-        /// <param name="data">List<classSampleData> containing samples which may need MRM files</param>
+        /// <param name="data">List containing samples which may need MRM files</param>
         public void WriteSamples(string path, List<classSampleData> data)
         {
             // Get a list of sample IDs that may have associated MRM files
@@ -78,8 +78,8 @@ namespace LcmsNet.SampleQueue.IO
         /// <summary>
         /// Gets a list of MRM file IDs to download
         /// </summary>
-        /// <param name="SampleIDList">List<int> of sample ID's that may have associated MRM files</param>
-        /// <returns>List<string> of MRM file ID's representing files to download</returns>
+        /// <param name="SampleIDList">List of sample ID's that may have associated MRM files</param>
+        /// <returns>List of MRM file ID's representing files to download</returns>
         private List<string> GetMRMFileIDs(List<int> SampleIDList)
         {
             var retList = new List<string>();
@@ -130,8 +130,8 @@ namespace LcmsNet.SampleQueue.IO
         /// <summary>
         /// Gets specified MRM filea
         /// </summary>
-        /// <param name="filesToGet">Dictionary<int, string> containing IDs of files to get</param>
-        /// <returns>List<classMRMFileData> with file names and data</returns>
+        /// <param name="filesToGet">Dictionary containing IDs of files to get</param>
+        /// <returns>List with file names and data</returns>
         private List<classMRMFileData> GetMRMFileData(List<string> filesToGet)
         {
             var retData = new List<classMRMFileData>();
@@ -165,7 +165,8 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     // Add the last ID
                     sqlStrBld.Append("," + fileID);
-                    // Execute the query
+
+                    // Execute the query and append the results to retData
                     try
                     {
                         classDMSToolsManager.Instance.SelectedTool.GetMRMFilesFromDMS(sqlStrBld.ToString(), ref retData);
@@ -184,7 +185,7 @@ namespace LcmsNet.SampleQueue.IO
                 }
             } // End foreach
 
-            // Run query for any remaining files, if any
+            // Run query for any remaining files
             if (sqlStrBld.Length > 0)
             {
                 // The number of files was not a multiple of 25, so process the remainder
@@ -205,9 +206,9 @@ namespace LcmsNet.SampleQueue.IO
         /// <summary>
         /// Retrieves a list of request ID's for all samples in the input list
         /// </summary>
-        /// <param name="InpList">List<classSampleData> containing an input queue</param>
-        /// <returns>Sorted List<int> of DMS request ID's</returns>
-        private List<int> GetSampleIDList(List<classSampleData> InpList)
+        /// <param name="InpList">List containing an input queue</param>
+        /// <returns>Sorted List of DMS request ID's</returns>
+        private List<int> GetSampleIDList(IEnumerable<classSampleData> InpList)
         {
             var retList = new List<int>();
 
@@ -225,7 +226,7 @@ namespace LcmsNet.SampleQueue.IO
         ///// <summary>
         ///// Creates a dictionary containing all of the file keys for MRM files to download
         ///// </summary>
-        ///// <param name="InpList">List<classSampleData> of samples to check for file downloads</param>
+        ///// <param name="InpList">List of samples to check for file downloads</param>
         ///// <returns></returns>
         //private Dictionary<int, string> GetMRMFileIDs(List<classSampleData> InpList)
         //{

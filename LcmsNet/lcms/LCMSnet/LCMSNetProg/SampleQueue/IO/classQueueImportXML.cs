@@ -33,7 +33,7 @@ namespace LcmsNet.SampleQueue.IO
         /// Reads the XML file into a list
         /// </summary>
         /// <param name="path">Name and path of file to import</param>
-        /// <returns>List<classSampleData> containing samples read from XML file</returns>
+        /// <returns>List containing samples read from XML file</returns>
         public List<classSampleData> ReadSamples(string path)
         {
             var returnList = new List<classSampleData>();
