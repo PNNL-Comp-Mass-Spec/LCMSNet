@@ -335,10 +335,10 @@ namespace LcmsNet.Configuration
         /// </summary>
         private void LoadApplicationSettings()
         {
-            //mcheckBox_createTriggerFiles.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATETRIGGERFILES));
-            //mcheckBox_copyTriggerFiles.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES));
-            //mcheckBox_createMethodFolders.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS));
-            //mcheckBox_copyMethodFolders.Checked = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS));
+            //mcheckBox_createTriggerFiles.Checked = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATETRIGGERFILES, false));
+            //mcheckBox_copyTriggerFiles.Checked = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES, false));
+            //mcheckBox_createMethodFolders.Checked = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CREATEMETHODFOLDERS, false));
+            //mcheckBox_copyMethodFolders.Checked = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS, false));
         }
 
         /// <summary>

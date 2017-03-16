@@ -336,7 +336,7 @@ namespace LcmsNet
                     //LogMessage(-1, "Creating the Device Manager");
                     Application.DoEvents();
                     var deviceManager = classDeviceManager.Manager;
-                    deviceManager.Emulate = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED));
+                    deviceManager.Emulate = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false);
                     deviceManager.AddDevice(new classTimerDevice());
                     deviceManager.AddDevice(new classBlockDevice());
                     deviceManager.AddDevice(new classLogDevice());

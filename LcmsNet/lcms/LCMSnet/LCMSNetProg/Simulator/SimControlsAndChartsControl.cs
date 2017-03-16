@@ -294,7 +294,7 @@ namespace LcmsNet.Simulator
 
         private bool ConfirmEmulation()
         {
-            if (!Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)))
+            if (!classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false))
             {
                 return ConfirmNoEmulation();
             }

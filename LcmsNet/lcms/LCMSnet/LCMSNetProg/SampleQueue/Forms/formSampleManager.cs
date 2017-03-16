@@ -492,9 +492,9 @@ namespace LcmsNet.SampleQueue.Forms
             // So here we validate all of the samples and show the user all samples before running.
             // This way they can validate if they need to all of this information.
             //
-
-            var validateSamples = Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) &&
-                                   classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL) != string.Empty;
+            
+            var validateSamples = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
+                                  !(string.IsNullOrWhiteSpace(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL)));
             if (validateSamples)
             {
                 var dmsDisplay = new formSampleDMSValidatorDisplay(samples);

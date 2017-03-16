@@ -294,7 +294,7 @@ namespace LcmsNet
             classDeviceManager.Manager.InitialzingDevice +=
                 Manager_InitialzingDevice;
             formFailedDevicesDisplay display = null;
-            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP)))
+            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP, false))
             {
                 classApplicationLogger.LogMessage(0, "Initializing hardware.");
                 var failedDevices = classDeviceManager.Manager.InitializeDevices();
@@ -309,7 +309,7 @@ namespace LcmsNet
             }
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
-            if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED)))
+            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false))
             {
                 //add simulator button to main form and add simulator forms.
                 m_simCombined = new formSimulatorCombined();

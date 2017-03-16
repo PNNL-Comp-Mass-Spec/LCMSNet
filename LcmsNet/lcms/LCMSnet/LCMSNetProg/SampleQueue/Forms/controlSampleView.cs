@@ -463,7 +463,7 @@ namespace LcmsNet.SampleQueue.Forms
                 if (!doNotValidate)
                 {
                     /////// This is very, very expensive...... ///////
-                    Validate(); 
+                    Validate();
                 }
                 //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
                 //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
@@ -476,19 +476,10 @@ namespace LcmsNet.SampleQueue.Forms
                 }
 
                 // Validate sample.
-                IDMSValidator validator;
-                try
+
+                if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                 {
-                    validator = classDMSToolsManager.Instance.Validator;
-                }
-                catch (Exception)
-                {
-                    // no dms tools validator
-                    validator = null;
-                }
-                if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) && validator != null)
-                {
-                    var isSampleValid = validator.IsSampleValid(sample);
+                    var isSampleValid = mValidator.IsSampleValid(sample);
                     if (!isSampleValid && false)
                     {
                         return false;
@@ -640,24 +631,14 @@ namespace LcmsNet.SampleQueue.Forms
                     }
 
                     // Validate sample.
-                    IDMSValidator validator;
-                    try
+                    
+                    if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                     {
-                        validator = classDMSToolsManager.Instance.Validator;
-                    }
-                    catch (Exception)
-                    {
-                        // no dms tools validator
-                        validator = null;
-                    }
-                    if (Convert.ToBoolean(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS)) && validator != null)
-                    {
-                        var isSampleValid = validator.IsSampleValid(sample);
+                        var isSampleValid = mValidator.IsSampleValid(sample);
                     }
                     else
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                            "DMS validator not found and DMS validation enabled. Item not queued.");
+                        // DMS Sample validation is disabled
                         return;
                     }
 
@@ -682,7 +663,7 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 else
                 {
-                    // We were at the end of the rope.
+                    // All samples processed
                     return;
                 }
 
