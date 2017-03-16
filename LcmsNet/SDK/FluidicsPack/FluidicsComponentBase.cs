@@ -46,17 +46,17 @@ namespace FluidicsPack
 
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-            
+
         }
 
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-            
+
         }
 
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            
+
         }
 
         public List<string> GetStatusNotificationList()
@@ -69,11 +69,13 @@ namespace FluidicsPack
             return new List<string>();
         }
 
+#pragma warning disable 0067
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
 
         public event EventHandler<classDeviceErrorEventArgs> Error;
 
         public event EventHandler DeviceSaveRequired;
+#pragma warning restore 0067
 
         public enumDeviceErrorStatus ErrorType
         {
