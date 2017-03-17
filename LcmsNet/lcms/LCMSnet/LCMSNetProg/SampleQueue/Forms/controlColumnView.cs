@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
+using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
 
 namespace LcmsNet.SampleQueue.Forms
@@ -396,6 +397,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="name"></param>
+        /// <param name="oldName"></param>
         private void ColumnData_NameChanged(object sender, string name, string oldName)
         {
             mdataGrid_samples.Refresh();
@@ -466,6 +468,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// Adds the specified samples ot this column.
         /// </summary>
         /// <param name="samples"></param>
+        /// <param name="insertIntoUnused"></param>
         /// <returns></returns>
         protected override void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
@@ -504,6 +507,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// column by finding out how many columns are enabled in the configuration.
         /// </summary>
         /// <param name="offset">Amount to move the samples (-1 for lower sequence numbers) (1 for higher sequence numbers)</param>
+        /// <param name="moveType"></param>
         protected override void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
             var numEnabledColumns = classCartConfiguration.NumberOfEnabledColumns;

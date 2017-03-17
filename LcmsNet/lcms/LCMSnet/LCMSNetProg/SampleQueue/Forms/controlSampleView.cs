@@ -124,6 +124,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         /// <summary>
         /// Index of Request Name column
+        /// Initially shows request name, but changed to dataset name if it is updated
         /// </summary>
         protected const int CONST_COLUMN_REQUEST_NAME = 7;
 
@@ -143,7 +144,7 @@ namespace LcmsNet.SampleQueue.Forms
         protected const int CONST_COLUMN_VOLUME = 10;
 
         /// <summary>
-        /// Index of experiment method column.
+        /// Index of experiment method column (aka LC method)
         /// </summary>
         protected const int CONST_COLUMN_EXPERIMENT_METHOD = 11;
 
@@ -265,7 +266,7 @@ namespace LcmsNet.SampleQueue.Forms
         #region Constructors and Initialization
 
         /// <summary>
-        /// Default constructor.
+        /// Constructor that accepts dmsView and sampleQueue
         /// </summary>
         public controlSampleView(formDMSView dmsView, classSampleQueue sampleQueue)
         {
@@ -283,7 +284,7 @@ namespace LcmsNet.SampleQueue.Forms
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(0,
-                    "An exception occurred while trying to build the sample queue controls.  Constructor.", ex);
+                    "An exception occurred while trying to build the sample queue controls.  Constructor 1: " + ex.Message, ex);
             }
             finally
             {
@@ -311,7 +312,7 @@ namespace LcmsNet.SampleQueue.Forms
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(0,
-                    "An exception occurred while trying to build the sample queue controls.  Constructor", ex);
+                    "An exception occurred while trying to build the sample queue controls.  Constructor 2: " + ex.Message, ex);
             }
             finally
             {
@@ -636,7 +637,7 @@ namespace LcmsNet.SampleQueue.Forms
                     }
 
                     // Validate sample.
-                    
+
                     if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                     {
                         var isSampleValid = mValidator.IsSampleValid(sample);
@@ -749,7 +750,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     comboBox.Selected = true;
                     mdataGrid_samples.BeginEdit(true);
-                    ((DataGridViewComboBoxEditingControl) mdataGrid_samples.EditingControl).DroppedDown = true;
+                    ((DataGridViewComboBoxEditingControl)mdataGrid_samples.EditingControl).DroppedDown = true;
                 }
                 catch (Exception)
                 {
@@ -1665,7 +1666,7 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
-        /// Copies the sample data from one object required to make a new sample entry in the sample queue.
+        /// Copies the sample data from one object required to make a new Blank sample entry in the sample queue.
         /// </summary>
         /// <param name="sampleToCopy">Sample to copy</param>
         /// <returns>New object reference of a sample with only required data copied.</returns>
@@ -1707,8 +1708,8 @@ namespace LcmsNet.SampleQueue.Forms
                 }
             }
 
-            // Then we make sure that hey, even if the column data is null, that we want to
-            // make sure the column is pertitent to the method, since what column we run on depends
+            // Then we make sure that even if the column data is null, we want to
+            // make sure the column is pertinent to the method, since what column we run on depends
             // on what method we are trying to run.
             if (sampleToCopy.LCMethod != null)
             {
@@ -1874,7 +1875,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (newData != null)
             {
-                AddSamplesToManager(new List<classSampleData> {newData}, insertIntoUnused);
+                AddSamplesToManager(new List<classSampleData> { newData }, insertIntoUnused);
             }
         }
 
@@ -3302,13 +3303,13 @@ namespace LcmsNet.SampleQueue.Forms
                 Value = GetStatusMessageFromSampleStatus(sample),
                 ToolTipText = GetToolTipMessageFromSampleStatus(sample)
             };
-            var sequenceCell = new DataGridViewTextBoxCell {Value = sample.SequenceID.ToString()};
-            var uniqueIDCell = new DataGridViewTextBoxCell {Value = sample.UniqueID.ToString()};
+            var sequenceCell = new DataGridViewTextBoxCell { Value = sample.SequenceID.ToString() };
+            var uniqueIDCell = new DataGridViewTextBoxCell { Value = sample.UniqueID.ToString() };
             var columnIDCell = new DataGridViewTextBoxCell();
             var style = new DataGridViewCellStyle();
 
-            var requestNameCell = new DataGridViewTextBoxCell {Value = sample.DmsData.DatasetName};
-            var batchIDCell = new DataGridViewTextBoxCell {Value = sample.DmsData.Batch};
+            var requestNameCell = new DataGridViewTextBoxCell { Value = sample.DmsData.DatasetName };
+            var batchIDCell = new DataGridViewTextBoxCell { Value = sample.DmsData.Batch };
             var name = sample.DmsData.DatasetName;
 
             if (name.Contains(m_sampleQueue.UnusedSampleName))
@@ -3365,7 +3366,8 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // PAL Vial
             // -----------------------------------------------------------------------------
-            var vial = new DataGridViewTextBoxCell {
+            var vial = new DataGridViewTextBoxCell
+            {
                 Value = palData.Well
             };
 
@@ -3381,7 +3383,8 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (palData.PALTray.Replace(" ", "") != "" && palTray.Items.Contains(palData.PALTray) == false)
             {
-                var palTrayStyle = new DataGridViewCellStyle {
+                var palTrayStyle = new DataGridViewCellStyle
+                {
                     BackColor = Color.Red
                 };
                 palTray.Style = palTrayStyle;
@@ -3402,7 +3405,8 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Sample Volume
             // -----------------------------------------------------------------------------
-            var volume = new DataGridViewTextBoxCell {
+            var volume = new DataGridViewTextBoxCell
+            {
                 Value = sample.Volume
             };
 
@@ -3451,7 +3455,8 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 else
                 {
-                    sample.ColumnData = new classColumnData {
+                    sample.ColumnData = new classColumnData
+                    {
                         ID = columnID
                     };
                 }
@@ -3473,11 +3478,13 @@ namespace LcmsNet.SampleQueue.Forms
             // -----------------------------------------------------------------------------
             // Run order information and blocking factors
             // -----------------------------------------------------------------------------
-            var blockID = new DataGridViewTextBoxCell {
+            var blockID = new DataGridViewTextBoxCell
+            {
                 Value = sample.DmsData.Block
             };
 
-            var runOrder = new DataGridViewTextBoxCell {
+            var runOrder = new DataGridViewTextBoxCell
+            {
                 Value = sample.DmsData.RunOrder
             };
 
@@ -3512,7 +3519,8 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // Don't find the real sample so we don't change anything in the reference if this is a temporary operation.
             //
-            var sample = new classSampleData(isDummySample: true) {
+            var sample = new classSampleData(isDummySample: true)
+            {
                 SequenceID = Convert.ToInt32(row.Cells[CONST_COLUMN_SEQUENCE_ID].Value)
             };
 
@@ -3531,7 +3539,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             sample.UniqueID = Convert.ToInt32(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
             sample.PAL.PALTray = Convert.ToString(row.Cells[CONST_COLUMN_PAL_TRAY].Value);
-            sample.PAL.Well = (int) row.Cells[CONST_COLUMN_PAL_VIAL].Value;
+            sample.PAL.Well = (int)row.Cells[CONST_COLUMN_PAL_VIAL].Value;
             sample.Volume = Convert.ToDouble(row.Cells[CONST_COLUMN_VOLUME].Value);
 
             var methodName = Convert.ToString(row.Cells[CONST_COLUMN_EXPERIMENT_METHOD].Value);
