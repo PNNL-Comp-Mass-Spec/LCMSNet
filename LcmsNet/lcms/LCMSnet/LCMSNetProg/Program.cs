@@ -417,6 +417,7 @@ namespace LcmsNet
                     {
 
                         var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                        classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
 
                         dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
                         LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = false;
