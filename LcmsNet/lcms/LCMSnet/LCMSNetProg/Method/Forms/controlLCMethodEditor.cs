@@ -65,13 +65,9 @@ namespace LcmsNet.Method.Forms
 
             UpdateConfiguration();
 
-            mcontrol_selectedMethods.MethodAdded +=
-                mcontrol_selectedMethods_MethodAdded;
-            mcontrol_selectedMethods.MethodDeleted +=
-                mcontrol_selectedMethods_MethodDeleted;
-            mcontrol_selectedMethods.MethodUpdated +=
-                mcontrol_selectedMethods_MethodUpdated;
-
+            mcontrol_selectedMethods.MethodAdded += mcontrol_selectedMethods_MethodAdded;
+            mcontrol_selectedMethods.MethodDeleted += mcontrol_selectedMethods_MethodDeleted;
+            mcontrol_selectedMethods.MethodUpdated += mcontrol_selectedMethods_MethodUpdated;
 
             mcomboBox_previewMode.Items.Add(enumLCMethodRenderMode.Column);
             // Deprecated since not implemented
@@ -80,10 +76,12 @@ namespace LcmsNet.Method.Forms
             mcomboBox_previewMode.SelectedIndex = 0;
             mcomboBox_previewMode.SelectedIndexChanged += mcomboBox_previewMode_SelectedIndexChanged;
 
-            MethodPreviewOptions = new classMethodPreviewOptions();
-            MethodPreviewOptions.FrameDelay = CONST_DEFAULT_RENDER_WAIT_COUNT;
-            MethodPreviewOptions.Animate = false;
-            MethodPreviewOptions.AnimateDelay = CONST_DEFAULT_ANIMATION_DELAY_TIME;
+            MethodPreviewOptions = new classMethodPreviewOptions
+            {
+                FrameDelay = CONST_DEFAULT_RENDER_WAIT_COUNT,
+                Animate = false,
+                AnimateDelay = CONST_DEFAULT_ANIMATION_DELAY_TIME
+            };
             m_renderUpdateCount = 0;
 
             mcontrol_acquisitionStage.EventChanged += mcontrol_acquisitionStage_EventChanged;
@@ -382,7 +380,7 @@ namespace LcmsNet.Method.Forms
             try
             {
                 mcontrol_methodTimelineThroughput.RenderMode =
-                    (enumLCMethodRenderMode) mcomboBox_previewMode.SelectedItem;
+                    (enumLCMethodRenderMode)mcomboBox_previewMode.SelectedItem;
                 mcontrol_methodTimelineThroughput.Refresh();
             }
             catch
