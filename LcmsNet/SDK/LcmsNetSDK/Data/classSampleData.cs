@@ -505,12 +505,12 @@ namespace LcmsNetDataClasses
         public override void LoadPropertyValues(Dictionary<string, string> propValues)
         {
             //NOTE: This method must be modified if new property representing an object is added
-            var baseProps = new Dictionary<string, string>();
-            var dmsProps = new Dictionary<string, string>();
-            var palProps = new Dictionary<string, string>();
-            var colProps = new Dictionary<string, string>();
-            var expProps = new Dictionary<string, string>();
-            var instProps = new Dictionary<string, string>();
+            var baseProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            var dmsProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            var palProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            var colProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            var expProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            var instProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             // Separate the properties into class dictionaries
             foreach (var property in propValues)
@@ -524,7 +524,7 @@ namespace LcmsNetDataClasses
                     continue;
                 }
                 // Stuff string dictionaries for each property holding a class, and main class
-                switch (keyName.Substring(0, 4))
+                switch (keyName.Substring(0, 4).ToLower())
                 {
                     case "dms.":
                         dmsProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
