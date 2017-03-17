@@ -665,7 +665,7 @@ namespace LcmsNet.SampleQueue
                     if (queue.Count > 0)
                     {
                         sample = queue[queue.Count - 1].Clone() as classSampleData;
-                        if (sample.LCMethod != null && sample.LCMethod.Name != null)
+                        if (sample?.LCMethod?.Name != null)
                         {
                             if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                             {
@@ -807,7 +807,7 @@ namespace LcmsNet.SampleQueue
             foreach (var data in queue)
             {
                 var sample = data.Clone() as classSampleData;
-                if (sample.LCMethod != null && sample.LCMethod.Name != null)
+                if (sample?.LCMethod?.Name != null)
                 {
                     if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                     {

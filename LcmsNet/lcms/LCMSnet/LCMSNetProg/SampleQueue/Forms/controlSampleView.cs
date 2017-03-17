@@ -1845,6 +1845,12 @@ namespace LcmsNet.SampleQueue.Forms
                 if (data != null)
                 {
                     var actualData = m_sampleQueue.FindSample(data.UniqueID);
+                    if (actualData == null)
+                    {
+                        LogSampleIdNotFound("AddNewSample", data.UniqueID);
+                        return;
+                    }
+
                     newData = CopyRequiredSampleData(actualData);
                 }
             }
@@ -2430,6 +2436,12 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 var tempData = RowToSample(row);
                 var data = m_sampleQueue.FindSample(tempData.UniqueID);
+                if (data == null)
+                {
+                    LogSampleIdNotFound("LogSampleIdNotFound", tempData.UniqueID);
+                    return;
+                }
+
                 m_sampleQueue.UpdateSample(data);
             }
         }
@@ -3531,6 +3543,11 @@ namespace LcmsNet.SampleQueue.Forms
                 sample.LCMethod = new classLCMethod();
 
             var realSample = m_sampleQueue.FindSample(sample.UniqueID);
+            if (realSample == null)
+            {
+                LogSampleIdNotFound("RowToSample", sample.UniqueID);
+                return sample;
+            }
 
             //
             // Copy the required DMS data.
@@ -3579,8 +3596,14 @@ namespace LcmsNet.SampleQueue.Forms
                 var tempData = RowToSample(row);
                 if (tempData != null)
                 {
-                    tempData = m_sampleQueue.FindSample(tempData.UniqueID);
-                    data.Add(tempData);
+                    var foundSample = m_sampleQueue.FindSample(tempData.UniqueID);
+                    if (foundSample == null)
+                    {
+                        LogSampleIdNotFound("ConvertRowsToData", tempData.UniqueID);
+                        continue;
+                    }
+
+                    data.Add(foundSample);
                 }
             }
             return data;
