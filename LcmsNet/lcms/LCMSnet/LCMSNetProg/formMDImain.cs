@@ -732,7 +732,14 @@ namespace LcmsNet
             {
                 if (!IsDisposed)
                 {
-                    Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
+                    try
+                    {
+                        Invoke(new statusDelegate(SetStatusMessage), errorLevel, args.Message);
+                    }
+                    catch
+                    {
+                        // Ignore exceptions here
+                    }
                 }
             }
             else

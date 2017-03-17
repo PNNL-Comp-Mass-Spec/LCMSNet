@@ -315,8 +315,9 @@ namespace LcmsNet.SampleQueue.Forms
 
                 Resize += controlColumnView_Resize;
             }
-            catch
+            catch (Exception ex)
             {
+                classApplicationLogger.LogError(0, "Ignoring exception in the controlColumnView constructor: " + ex.Message);
             }
         }
 

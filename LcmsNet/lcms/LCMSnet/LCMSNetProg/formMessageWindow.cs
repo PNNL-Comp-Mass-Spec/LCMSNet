@@ -76,7 +76,16 @@ namespace LcmsNet
             if (mlistBox_messages.InvokeRequired)
             {
                 var d = new delegateInsertMessage(InsertMessage);
-                mlistBox_messages.Invoke(d, message);
+                try
+                {
+                    mlistBox_messages.Invoke(d, message);
+                }
+                catch (Exception ex)
+                {
+                    // An exception can occur if one thread is trying to post a message while the main application is closing
+                    Console.WriteLine("Ignoring exception in InsertMessage");
+                }
+
             }
             else
             {
