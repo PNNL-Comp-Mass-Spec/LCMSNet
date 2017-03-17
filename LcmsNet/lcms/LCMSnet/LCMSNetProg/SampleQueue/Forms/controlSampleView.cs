@@ -307,6 +307,7 @@ namespace LcmsNet.SampleQueue.Forms
             try
             {
                 InitializeComponent();
+                mValidator = new classDMSSampleValidator();
                 Initialize(null, null);
             }
             catch (Exception ex)
