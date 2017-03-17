@@ -1009,9 +1009,6 @@ namespace LcmsNet.Method.Forms
         /// <param name="method"></param>
         public bool SaveMethod(classLCMethod method)
         {
-            //
-            // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
-            //
             if (method == null)
                 return false;
 
@@ -1042,7 +1039,13 @@ namespace LcmsNet.Method.Forms
             {
                 var method =
                     FindMethods(Convert.ToString(mcomboBox_savedMethods.Items[mcomboBox_savedMethods.SelectedIndex]));
+
+                if (method == null)
+                    return;
+
                 SaveMethod(method);
+
+                MessageBox.Show("Saved method " + method.Name);
             }
         }
 
