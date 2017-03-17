@@ -35,7 +35,6 @@ namespace LcmsNet.Configuration
             LogDBToolsEvents = true;
             DBTools.ProgressEvent += DBTools_ProgressEvent;
 
-            // DBTools.LoadCacheFromDMS();
         }
 
         private static void DBTools_ProgressEvent(object sender, ProgressEventArgs e)
