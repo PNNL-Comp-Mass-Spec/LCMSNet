@@ -130,23 +130,25 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            mlabel_name = new Label();
-            panel2 = new Panel();
-            buttonRefresh = new Button();
-            mcheckbox_autoscroll = new CheckBox();
-            mbutton_dmsEdit = new Button();
-            mbutton_cartColumnDate = new Button();
-            mbutton_down = new Button();
-            mbutton_addBlank = new Button();
-            mbutton_up = new Button();
-            mbutton_addDMS = new Button();
-            mbutton_removeSelected = new Button();
-            mbutton_deleteUnused = new Button();
-            mbutton_fillDown = new Button();
-            mbutton_trayVial = new Button();
-            mcheckbox_cycleColumns = new CheckBox();
-            panel2.SuspendLayout();
-            SuspendLayout();
+            this.components = new System.ComponentModel.Container();
+            this.mlabel_name = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonRefresh = new System.Windows.Forms.Button();
+            this.mcheckbox_autoscroll = new System.Windows.Forms.CheckBox();
+            this.mbutton_dmsEdit = new System.Windows.Forms.Button();
+            this.mbutton_cartColumnDate = new System.Windows.Forms.Button();
+            this.mbutton_down = new System.Windows.Forms.Button();
+            this.mbutton_addBlank = new System.Windows.Forms.Button();
+            this.mbutton_up = new System.Windows.Forms.Button();
+            this.mbutton_addDMS = new System.Windows.Forms.Button();
+            this.mbutton_removeSelected = new System.Windows.Forms.Button();
+            this.mbutton_deleteUnused = new System.Windows.Forms.Button();
+            this.mbutton_fillDown = new System.Windows.Forms.Button();
+            this.mbutton_trayVial = new System.Windows.Forms.Button();
+            this.mcheckbox_cycleColumns = new System.Windows.Forms.CheckBox();
+            this.mToolTipManager = new System.Windows.Forms.ToolTip(this.components);
+            this.panel2.SuspendLayout();
+            this.SuspendLayout();
             // 
             // m_selector
             // 
@@ -472,6 +474,9 @@ namespace LcmsNet.SampleQueue.Forms
             base(dmsView, sampleQueue)
         {
             InitializeComponent();
+
+            UpdateToolTips();
+
             DisplayColumn(CONST_COLUMN_PAL_TRAY, true);
             DisplayColumn(CONST_COLUMN_PAL_VIAL, true);
             DisplayColumn(CONST_COLUMN_EXPERIMENT_METHOD, true);
@@ -490,6 +495,11 @@ namespace LcmsNet.SampleQueue.Forms
                 mbutton_addDMS.Visible = false;
                 mbutton_dmsEdit.Visible = false;
             }
+        }
+
+        private void UpdateToolTips()
+        {
+            this.mToolTipManager.SetToolTip(mbutton_cartColumnDate, "Add date, cart name, and columnID to the dataset name");
         }
 
         /// <summary>
@@ -581,6 +591,8 @@ namespace LcmsNet.SampleQueue.Forms
         private Button mbutton_dmsEdit;
         private CheckBox mcheckbox_autoscroll;
         private Button buttonRefresh;
+        private ToolTip mToolTipManager;
+        private System.ComponentModel.IContainer components;
         private bool m_movingQueueUp;
 
         private bool CanDeQueueSample(int rowID)
