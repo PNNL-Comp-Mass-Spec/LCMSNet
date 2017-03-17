@@ -155,10 +155,11 @@ namespace LcmsNet.SampleQueue.Forms
             RemoveSelectedSamples(ColumnHandling);
         }
 
-        private void mbutton_ccd_Click(object sender, EventArgs e)
-        {
-            AddDateCartnameColumnIDToDatasetName();
-        }
+        // Deprecated, unused
+        //private void mbutton_ccd_Click(object sender, EventArgs e)
+        //{
+        //    AddDateCartnameColumnIDToDatasetName();
+        //}
 
         private void mbutton_fillDown_Click(object sender, EventArgs e)
         {
@@ -210,10 +211,11 @@ namespace LcmsNet.SampleQueue.Forms
             ShowExpansion();
         }
 
-        private void mbuttonAddEndBlank_click(object sender, EventArgs e)
-        {
-            AddNewSample(false);
-        }
+        // Deprecated, unused
+        //private void mbuttonAddEndBlank_click(object sender, EventArgs e)
+        //{
+        //    AddNewSample(false);
+        //}
 
         private void mbutton_down_Click(object sender, EventArgs e)
         {
@@ -223,11 +225,6 @@ namespace LcmsNet.SampleQueue.Forms
         private void mbutton_up_Click(object sender, EventArgs e)
         {
             MoveSelectedSamples(-1, enumMoveSampleType.Column);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            AddNewSample(false);
         }
 
         private void mbutton_expand_MouseHover(object sender, EventArgs e)

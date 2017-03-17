@@ -74,7 +74,9 @@ namespace LcmsNet.Method.Forms
 
 
             mcomboBox_previewMode.Items.Add(enumLCMethodRenderMode.Column);
-            mcomboBox_previewMode.Items.Add(enumLCMethodRenderMode.Time);
+            // Deprecated since not implemented
+            // mcomboBox_previewMode.Items.Add(enumLCMethodRenderMode.Time);
+
             mcomboBox_previewMode.SelectedIndex = 0;
             mcomboBox_previewMode.SelectedIndexChanged += mcomboBox_previewMode_SelectedIndexChanged;
 
@@ -155,16 +157,17 @@ namespace LcmsNet.Method.Forms
             MethodPreviewOptions.FrameDelay = FrameDelay;
         }
 
-        private void mbutton_open_Click(object sender, EventArgs e)
-        {
-            if (mdialog_openMethod.ShowDialog() == DialogResult.OK)
-                OpenMethod(mdialog_openMethod.FileName);
-        }
+        // Deprecated since the buttons no longer exist
+        //private void mbutton_open_Click(object sender, EventArgs e)
+        //{
+        //    if (mdialog_openMethod.ShowDialog() == DialogResult.OK)
+        //        OpenMethod(mdialog_openMethod.FileName);
+        //}
 
-        private void mbutton_load_Click(object sender, EventArgs e)
-        {
-            LoadMethods();
-        }
+        //private void mbutton_load_Click(object sender, EventArgs e)
+        //{
+        //    LoadMethods();
+        //}
 
         #region Properties
 

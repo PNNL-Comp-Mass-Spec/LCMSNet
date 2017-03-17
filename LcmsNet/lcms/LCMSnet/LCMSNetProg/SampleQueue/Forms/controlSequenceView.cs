@@ -410,10 +410,11 @@ namespace LcmsNet.SampleQueue.Forms
             RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone);
         }
 
-        private void mbutton_ccd_Click(object sender, EventArgs e)
-        {
-            AddDateCartnameColumnIDToDatasetName();
-        }
+        // Deprecated, unused
+        //private void mbutton_ccd_Click(object sender, EventArgs e)
+        //{
+        //    AddDateCartnameColumnIDToDatasetName();
+        //}
 
         private void mbutton_fillDown_Click(object sender, EventArgs e)
         {
@@ -687,5 +688,6 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         #endregion
+
     }
 }
