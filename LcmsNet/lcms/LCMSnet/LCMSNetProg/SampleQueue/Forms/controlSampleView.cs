@@ -386,6 +386,7 @@ namespace LcmsNet.SampleQueue.Forms
             try
             {
                 var datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
+                mcolumn_datasetType.Items.Clear();
                 foreach (var datasetType in datasetTypes)
                 {
                     mcolumn_datasetType.Items.Add(datasetType);
