@@ -1202,98 +1202,113 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         void mdataGrid_samples_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            mdataGrid_samples.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            var row = mdataGrid_samples.Rows[e.RowIndex];
-
-            //
-            // Get the new value
-            //
-            var cellData = row.Cells[e.ColumnIndex].Value;
-
-            //
-            // Make sure the value is not null, and that the user has selected an item.
-            //
-            if (cellData == null)
+            try
             {
-                //
-                // Revert back to the old data.
-                //
-                row.Cells[e.ColumnIndex].Value = m_cellValue;
-                classApplicationLogger.LogMessage(5, "Sample View Grid Data was null.");
-                return;
-            }
-            if (cellData.ToString() == CONST_NOT_SELECTED)
-            {
-                //
-                // Revert back to the old data.
-                //
-                row.Cells[e.ColumnIndex].Value = m_cellValue;
-                return;
-            }
 
-            //
-            // Find the sample in the queue.
-            //
-            var uniqueID = Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
-            var data = m_sampleQueue.FindSample(uniqueID);
-            bool success;
+                mdataGrid_samples.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            //
-            // Update the sample data
-            //
-            switch (e.ColumnIndex)
-            {
-                case CONST_COLUMN_REQUEST_NAME:
-                    data.DmsData.DatasetName = Convert.ToString(cellData);
-                    break;
-                case CONST_COLUMN_EXPERIMENT_METHOD:
+                var row = mdataGrid_samples.Rows[e.RowIndex];
+
+                //
+                // Get the new value
+                //
+                var cellData = row.Cells[e.ColumnIndex].Value;
+
+                //
+                // Make sure the value is not null, and that the user has selected an item.
+                //
+                if (cellData == null)
+                {
                     //
-                    // Make sure that we have a valid method here.
+                    // Revert back to the old data.
                     //
-                    var name = Convert.ToString(cellData);
-                    if (classLCMethodManager.Manager.Methods.ContainsKey(name))
-                    {
-                        var tempMethod = classLCMethodManager.Manager.Methods[name];
-                        if (tempMethod.Column != data.ColumnData.ID)
+                    row.Cells[e.ColumnIndex].Value = m_cellValue;
+                    classApplicationLogger.LogMessage(5, "Sample View Grid Data was null.");
+                    return;
+                }
+                if (cellData.ToString() == CONST_NOT_SELECTED)
+                {
+                    //
+                    // Revert back to the old data.
+                    //
+                    row.Cells[e.ColumnIndex].Value = m_cellValue;
+                    return;
+                }
+
+                //
+                // Find the sample in the queue.
+                //
+                var uniqueID = Convert.ToInt64(row.Cells[CONST_COLUMN_UNIQUE_ID].Value);
+                var data = m_sampleQueue.FindSample(uniqueID);
+                if (data == null)
+                {
+                    LogSampleIdNotFound("mdataGrid_samples_CellEndEdit", uniqueID);
+                    return;
+                }
+
+                bool success;
+
+                //
+                // Update the sample data
+                //
+                switch (e.ColumnIndex)
+                {
+                    case CONST_COLUMN_REQUEST_NAME:
+                        data.DmsData.DatasetName = Convert.ToString(cellData);
+                        break;
+                    case CONST_COLUMN_EXPERIMENT_METHOD:
+                        //
+                        // Make sure that we have a valid method here.
+                        //
+                        var name = Convert.ToString(cellData);
+                        if (classLCMethodManager.Manager.Methods.ContainsKey(name))
                         {
-                            if (tempMethod.Column >= 0)
+                            var tempMethod = classLCMethodManager.Manager.Methods[name];
+                            if (tempMethod.Column != data.ColumnData.ID)
                             {
-                                data.ColumnData = classCartConfiguration.Columns[tempMethod.Column];
+                                if (tempMethod.Column >= 0)
+                                {
+                                    data.ColumnData = classCartConfiguration.Columns[tempMethod.Column];
+                                }
                             }
+                            data.LCMethod = tempMethod;
                         }
-                        data.LCMethod = tempMethod;
-                    }
-                    break;
-                case CONST_COLUMN_PAL_TRAY:
-                    data.PAL.PALTray = Convert.ToString(cellData);
-                    break;
-                case CONST_COLUMN_PAL_VIAL:
-                    int vial;
-                    success = int.TryParse(cellData.ToString(), out vial);
-                    if (success)
-                    {
-                        data.PAL.Well = Math.Max(CONST_MIN_WELLPLATE,
-                            Math.Min(vial, CONST_MAX_WELLPLATE));
-                    }
-                    break;
-                case CONST_COLUMN_VOLUME:
-                    double volume;
-                    success = double.TryParse(cellData.ToString(), out volume);
-                    if (success)
-                    {
-                        data.Volume = Math.Max(CONST_MIN_VOLUME, volume);
-                    }
-                    break;
-                case CONST_COLUMN_INSTRUMENT_METHOD:
-                    data.InstrumentData.MethodName = Convert.ToString(cellData);
-                    break;
-                case CONST_COLUMN_DATASET_TYPE:
-                    data.DmsData.DatasetType = Convert.ToString(cellData);
-                    break;
-            }
+                        break;
+                    case CONST_COLUMN_PAL_TRAY:
+                        data.PAL.PALTray = Convert.ToString(cellData);
+                        break;
+                    case CONST_COLUMN_PAL_VIAL:
+                        int vial;
+                        success = int.TryParse(cellData.ToString(), out vial);
+                        if (success)
+                        {
+                            data.PAL.Well = Math.Max(CONST_MIN_WELLPLATE,
+                                Math.Min(vial, CONST_MAX_WELLPLATE));
+                        }
+                        break;
+                    case CONST_COLUMN_VOLUME:
+                        double volume;
+                        success = double.TryParse(cellData.ToString(), out volume);
+                        if (success)
+                        {
+                            data.Volume = Math.Max(CONST_MIN_VOLUME, volume);
+                        }
+                        break;
+                    case CONST_COLUMN_INSTRUMENT_METHOD:
+                        data.InstrumentData.MethodName = Convert.ToString(cellData);
+                        break;
+                    case CONST_COLUMN_DATASET_TYPE:
+                        data.DmsData.DatasetType = Convert.ToString(cellData);
+                        break;
+                }
 
-            m_sampleQueue.UpdateSample(data);
+                m_sampleQueue.UpdateSample(data);
+
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(0, "Exception in mdataGrid_samples_CellEndEdit: " + ex.Message, ex);
+            }
         }
 
         /// <summary>
