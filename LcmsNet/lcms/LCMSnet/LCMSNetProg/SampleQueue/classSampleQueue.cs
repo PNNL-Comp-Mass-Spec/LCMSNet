@@ -1680,6 +1680,11 @@ namespace LcmsNet.SampleQueue
             {
                 var next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
 
+                if (sample.LCMethod == null)
+                {
+                    sample.LCMethod = new classLCMethod();
+                }
+
                 var containsMethod = classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name);
                 if (containsMethod)
                 {
@@ -1687,6 +1692,13 @@ namespace LcmsNet.SampleQueue
                 }
 
                 sample.LCMethod = sample.LCMethod.Clone() as classLCMethod;
+
+                if (sample.LCMethod == null)
+                {
+                    classApplicationLogger.LogError(0, "LCMethod.Clone() returned a null method in StartSamples");
+                    continue;
+                }
+
                 validSamples.Add(sample);
                 sample.LCMethod.SetStartTime(next);
                 // We need to look for Daylight Savings Time Transitions and adjust for them here.
@@ -1751,12 +1763,32 @@ namespace LcmsNet.SampleQueue
                 }
                 m_waitingQueue.Remove(realSample);
 
+                if (realSample.LCMethod == null)
+                {
+                    var requestOrDatasetName = "?";
+                    if (realSample.DmsData != null)
+                    {
+                        requestOrDatasetName = realSample.DmsData.DatasetName;
+                        if (string.IsNullOrWhiteSpace(requestOrDatasetName))
+                            requestOrDatasetName = realSample.DmsData.RequestName;
+                    }
+
+                    classApplicationLogger.LogError(0, "Method not defined for sample ID " + realSample.UniqueID + ", " + requestOrDatasetName);
+                    continue;
+                }
+
                 var containsMethod = classLCMethodManager.Manager.Methods.ContainsKey(realSample.LCMethod.Name);
                 if (containsMethod)
                 {
                     realSample.LCMethod = classLCMethodManager.Manager.Methods[realSample.LCMethod.Name];
                 }
                 realSample.LCMethod = realSample.LCMethod.Clone() as classLCMethod;
+
+                if (realSample.LCMethod == null)
+                {
+                    classApplicationLogger.LogError(0, "LCMethod.Clone() returned a null method in MoveSamplesToRunningQueue");
+                    continue;
+                }
                 validSamples.Add(realSample);
 
                 realSample.RunningStatus = enumSampleRunningStatus.WaitingToRun;

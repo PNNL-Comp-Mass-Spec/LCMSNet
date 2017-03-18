@@ -580,6 +580,11 @@ namespace LcmsNet.SampleQueue.Forms
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
                 }
                 var sample = m_sampleQueue.FindSample(neededRowId);
+                if (sample == null)
+                {
+                    LogSampleIdNotFound("HandleSampleValidationAndQueuing", neededRowId);
+                    return;
+                }
 
                 if (rowNum <= m_firstQueuedSamplePosition)
                 {
