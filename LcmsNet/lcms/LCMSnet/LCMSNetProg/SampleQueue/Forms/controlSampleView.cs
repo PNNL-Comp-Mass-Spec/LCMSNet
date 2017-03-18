@@ -278,9 +278,7 @@ namespace LcmsNet.SampleQueue.Forms
             try
             {
                 InitializeComponent();
-
                 mValidator = new classDMSSampleValidator();
-
                 Initialize(dmsView, sampleQueue);
             }
             catch (Exception ex)
@@ -1425,7 +1423,7 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
-        /// Updates the LC-Method  to the LC Separate Method Box.
+        /// Updates the LC-Method to the LC Separation Method Box.
         /// </summary>
         protected virtual void ShowLCSeparationMethods()
         {
@@ -1484,6 +1482,7 @@ namespace LcmsNet.SampleQueue.Forms
                 classSampleData.AddDateCartColumnToDatasetName(sample);
             }
             m_sampleQueue.UpdateSamples(samples);
+
         }
 
         public void ResetDatasetName()
@@ -1777,7 +1776,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void ShowDMSView()
         {
-            if (m_dmsView == null) return;
+            if (m_dmsView == null)
+                return;
 
             var result = m_dmsView.ShowDialog();
 
