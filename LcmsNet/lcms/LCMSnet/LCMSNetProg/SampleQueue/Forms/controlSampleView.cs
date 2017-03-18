@@ -1318,26 +1318,73 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         void mdataGrid_samples_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if (e.ColumnIndex == CONST_COLUMN_PAL_VIAL)
+            try
             {
+                if (e.ColumnIndex == CONST_COLUMN_PAL_VIAL)
+                {
+                }
+
+                var uniqueID = Convert.ToInt64(mdataGrid_samples.Rows[e.RowIndex].Cells[CONST_COLUMN_UNIQUE_ID].Value);
+                var data = m_sampleQueue.FindSample(uniqueID);
+                if (data == null)
+                {
+                    LogSampleIdNotFound("mdataGrid_samples_CellBeginEdit", uniqueID);
+                    return;
+                }
+
+                if (data.RunningStatus != enumSampleRunningStatus.Queued)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                mdataGrid_samples.SelectionMode = DataGridViewSelectionMode.CellSelect;
+
+                switch (e.ColumnIndex)
+                {
+                    default:
+                        m_cellValue = mdataGrid_samples.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(0, "Exception in mdataGrid_samples_CellBeginEdit: " + ex.Message, ex);
             }
 
-            var uniqueID = Convert.ToInt64(mdataGrid_samples.Rows[e.RowIndex].Cells[CONST_COLUMN_UNIQUE_ID].Value);
-            var data = m_sampleQueue.FindSample(uniqueID);
-            if (data.RunningStatus != enumSampleRunningStatus.Queued)
+        }
+
+        private void LogSampleIdNotFound(string callingMethod, long sampleId)
+        {
+            var knownSampleIDs = new List<long>();
+            foreach (var sample in m_sampleQueue.GetWaitingQueue())
             {
-                e.Cancel = true;
-                return;
+                knownSampleIDs.Add(sample.UniqueID);
             }
 
-            mdataGrid_samples.SelectionMode = DataGridViewSelectionMode.CellSelect;
-
-            switch (e.ColumnIndex)
+            foreach (var sample in m_sampleQueue.GetRunningQueue())
             {
-                default:
-                    m_cellValue = mdataGrid_samples.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    break;
+                knownSampleIDs.Add(sample.UniqueID);
             }
+
+            var sampleIdCount = knownSampleIDs.Count;
+
+            string sampleQueueDescription;
+            if (sampleIdCount == 0)
+                sampleQueueDescription = "m_sampleQueue is empty";
+            else if (sampleIdCount == 1)
+                sampleQueueDescription = "m_sampleQueue has one waiting or running item, ID " + knownSampleIDs.First();
+            else if (sampleIdCount < 10)
+                sampleQueueDescription = "Waiting and running items in m_sampleQueue are " +
+                    string.Join(", ", knownSampleIDs);
+            else
+                sampleQueueDescription = "Waiting and running items in m_sampleQueue are " +
+                    string.Join(", ", knownSampleIDs.Take(9) + " ... (" + sampleIdCount + " total items)");
+
+            var msg = callingMethod + " could not find sample ID " + sampleId + " in m_sampleQueue; " + sampleQueueDescription;
+            classApplicationLogger.LogError(0, msg);
+
         }
 
         /// <summary>
