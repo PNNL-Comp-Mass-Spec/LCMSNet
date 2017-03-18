@@ -2278,7 +2278,8 @@ namespace LcmsNet.SampleQueue.Forms
             if (validResult == enumSampleValidResult.DuplicateRequestName &&
                 !data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName))
             {
-                var styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle) {
+                var styleDuplicate = new DataGridViewCellStyle(row.DefaultCellStyle)
+                {
                     BackColor = Color.Crimson
                 };
                 row.Cells[CONST_COLUMN_REQUEST_NAME].Style = styleDuplicate;
@@ -2423,6 +2424,8 @@ namespace LcmsNet.SampleQueue.Forms
                 var rowStyle = row.DefaultCellStyle;
                 rowStyle.BackColor = Color.LightGray;
                 rowStyle.ForeColor = Color.DarkGray;
+                if (!string.Equals(row.Cells[CONST_COLUMN_REQUEST_NAME].Value, data.Sample.DmsData.RequestName))
+                    row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.Sample.DmsData.RequestName;
             }
             else
             {
@@ -2430,6 +2433,8 @@ namespace LcmsNet.SampleQueue.Forms
                 // We need to color the sample based on its status.
                 //
                 var rowStyle = GetRowStyleFromSample(data.Sample, row.DefaultCellStyle);
+                if (!string.Equals(row.Cells[CONST_COLUMN_REQUEST_NAME].Value, data.Sample.DmsData.DatasetName))
+                    row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.Sample.DmsData.DatasetName;
             }
             row.Cells[CONST_COLUMN_STATUS].ToolTipText = data.StatusToolTipText;
 
