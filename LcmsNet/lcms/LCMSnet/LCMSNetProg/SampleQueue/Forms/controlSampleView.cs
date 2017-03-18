@@ -1994,34 +1994,33 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         protected virtual bool AddSamplesToList(classSampleData sample)
         {
-            var added = true;
             if (sample == null)
             {
-                added = false;
+                return false;
             }
-            else
+
+            var found = false;
+            for (var i = 0; i < mdataGrid_samples.Rows.Count; i++)
             {
-                var found = false;
-                for (var i = 0; i < mdataGrid_samples.Rows.Count; i++)
+                var sampleNext = RowToSample(mdataGrid_samples.Rows[i]);
+                if (sample.SequenceID < sampleNext.SequenceID &&
+                    sampleNext.RunningStatus == enumSampleRunningStatus.Queued)
                 {
-                    var sampleNext = RowToSample(mdataGrid_samples.Rows[i]);
-                    if (sample.SequenceID < sampleNext.SequenceID &&
-                        sampleNext.RunningStatus == enumSampleRunningStatus.Queued)
-                    {
-                        found = true;
-                        sampleToRowTranslatorBindingSource.List.Insert(i, new SampleToRowTranslator(sample));
-                        UpdateRow(i);
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    sampleToRowTranslatorBindingSource.List.Add(new SampleToRowTranslator(sample));
-                    if (mdataGrid_samples.RowCount > 0)
-                        UpdateRow(mdataGrid_samples.RowCount - 1);
+                    found = true;
+                    sampleToRowTranslatorBindingSource.List.Insert(i, new SampleToRowTranslator(sample));
+                    UpdateRow(i);
+                    break;
                 }
             }
-            return added;
+
+            if (!found)
+            {
+                sampleToRowTranslatorBindingSource.List.Add(new SampleToRowTranslator(sample));
+                if (mdataGrid_samples.RowCount > 0)
+                    UpdateRow(mdataGrid_samples.RowCount - 1);
+            }
+
+            return true;
         }
 
         /// <summary>
