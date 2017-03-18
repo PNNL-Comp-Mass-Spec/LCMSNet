@@ -2662,15 +2662,17 @@ namespace LcmsNet.SampleQueue.Forms
             if (samples == null)
                 return;
 
+            var sampleList = samples.ToList();
+
             var dtStart = DateTime.UtcNow;
             var samplesUpdated = 0;
-            var totalSamples = samples.Count();
+            var totalSamples = sampleList.Count();
             var lastCompletedRow = 0;
             var waitTimeSeconds = 5;
 
             mdataGrid_samples.SuspendLayout();
 
-            foreach (var sample in samples)
+            foreach (var sample in sampleList)
             {
                 var rowid = FindRowIndexFromUID(sample.UniqueID);
                 if (rowid >= 0)
