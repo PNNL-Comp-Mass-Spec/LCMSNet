@@ -1884,7 +1884,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
             else
             {
-                newSample.LCMethod = null;
+                newSample.LCMethod = new classLCMethod();
             }
 
             //
