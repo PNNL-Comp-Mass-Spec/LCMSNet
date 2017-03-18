@@ -1878,17 +1878,21 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         public virtual List<classSampleData> GetSelectedSamples()
         {
-            //
-            // Get the list of selected samples
-            //
             var samples = new List<classSampleData>();
-            foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
+            try
             {
-                var data = RowToSample(row);
-                samples.Add(data);
-            }
+                foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
+                {
+                    var data = RowToSample(row);
+                    samples.Add(data);
+                }
 
-            samples.Sort(new classAscendingSampleIDComparer());
+                samples.Sort(new classAscendingSampleIDComparer());
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(0, "Error in GetSelectedSamples: " + ex.Message, ex);
+            }
 
             return samples;
         }
