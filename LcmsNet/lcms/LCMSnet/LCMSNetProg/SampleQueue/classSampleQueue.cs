@@ -683,19 +683,22 @@ namespace LcmsNet.SampleQueue
                         sample = new classSampleData();
                     }
 
+                    var sampleToAdd = sample ?? new classSampleData();
+
                     //
-                    // We make the request an "Unused sample"
+                    // Make the request an "Unused sample"
                     //
-                    sample.DmsData.RequestName = m_integrateName;
-                    sample.DmsData.DatasetName = m_integrateName;
-                    sample.DmsData.Block = 0; // It's an unused sample. so dont copy this information.
-                    sample.DmsData.Batch = 0;
-                    sample.ColumnData = col;
-                    sample.UniqueID = GenerateUniqueID();
-                    data.Add(sample);
+                    sampleToAdd.DmsData.RequestName = m_integrateName;
+                    sampleToAdd.DmsData.DatasetName = m_integrateName;
+                    sampleToAdd.DmsData.Block = 0; // It's an unused sample. so dont copy this information.
+                    sampleToAdd.DmsData.Batch = 0;
+                    sampleToAdd.ColumnData = col;
+                    sampleToAdd.UniqueID = GenerateUniqueID();
+                    data.Add(sampleToAdd);
                 }
             }
             queue.Clear();
+
             //
             // Here we reconstruct the waiting queue.  We use the column orders list (tells us
             // what column is the first one to use) to add samples in order.
