@@ -2886,16 +2886,14 @@ namespace LcmsNet.SampleQueue.Forms
 
             if (mdataGrid_samples.Rows.Count > 0)
             {
-                // Rows.Clear() cannot be used since it results in error
-                //  "Rows collection cannot be programmatically cleared
-                //   when the DataGridView control is data-bound
-                //   to anything else than an IBindingList that supports
-                //   change notification and allows deletion"
-                // mdataGrid_samples.Rows.Clear();
-
-                // Instead, use GetAllSamples then .RemoveAll
-                var existingSamples = GetAllSamples();
-                existingSamples.RemoveAll(delegate { return true; });
+                try
+                {
+                    mdataGrid_samples.Rows.Clear();
+                }
+                catch (Exception ex)
+                {
+                    classApplicationLogger.LogError(0, "Ignoring exception in SamplesAddedFromQueue: " + ex.Message);
+                }
 
             }
 
