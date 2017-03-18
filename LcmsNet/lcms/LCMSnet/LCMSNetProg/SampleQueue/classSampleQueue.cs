@@ -1676,11 +1676,10 @@ namespace LcmsNet.SampleQueue
 
             // Setup the queue to be optimized.
             var validSamples = new List<classSampleData>();
-            DateTime next;
             foreach (var sample in m_runningQueue)
             {
-                //DateTime next       = DateTime.UtcNow.Subtract(new TimeSpan(8, 0 , 0)).Add(new TimeSpan(0, 0, 10));
-                next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
+                var next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
+
                 var containsMethod = classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name);
                 if (containsMethod)
                 {
@@ -1697,8 +1696,8 @@ namespace LcmsNet.SampleQueue
                     classApplicationLogger.LogMessage(
                         classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                         "QUEUE: some samples have been moved forward 1 hour due to a Daylight Savings Transition, this will avoid odd behavior while running the queue.");
-                    next.Add(new TimeSpan(1, 0, 0));
-                    sample.LCMethod.SetStartTime(next);
+
+                    sample.LCMethod.SetStartTime(next.Add(new TimeSpan(1, 0, 0)));
                 }
             }
 
