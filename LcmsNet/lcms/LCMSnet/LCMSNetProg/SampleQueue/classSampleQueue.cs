@@ -1710,6 +1710,7 @@ namespace LcmsNet.SampleQueue
 
                 validSamples.Add(sample);
                 sample.LCMethod.SetStartTime(next);
+
                 // We need to look for Daylight Savings Time Transitions and adjust for them here.
                 if (TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(sample.LCMethod.Start,
                     sample.LCMethod.End))
@@ -1791,6 +1792,7 @@ namespace LcmsNet.SampleQueue
                 {
                     realSample.LCMethod = classLCMethodManager.Manager.Methods[realSample.LCMethod.Name];
                 }
+
                 realSample.LCMethod = realSample.LCMethod.Clone() as classLCMethod;
 
                 if (realSample.LCMethod == null)
@@ -2179,7 +2181,8 @@ namespace LcmsNet.SampleQueue
                 {
                     sample.LCMethod =
                         classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
-                    if (sample.LCMethod.Column >= 0)
+
+                    if (sample.LCMethod != null && sample.LCMethod.Column >= 0)
                     {
                         // reset the column data.
                         var column = classCartConfiguration.Columns[sample.LCMethod.Column];
@@ -2188,7 +2191,7 @@ namespace LcmsNet.SampleQueue
                 }
                 else
                 {
-                    sample.LCMethod = null;
+                    sample.LCMethod = new classLCMethod();
                 }
 
                 if (sample.UniqueID >= m_sampleIndex)
@@ -2286,12 +2289,15 @@ namespace LcmsNet.SampleQueue
             {
                 if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                 {
-                    sample.LCMethod =
-                        classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
-                    var columnID = sample.LCMethod.Column;
-                    if (columnID > 0)
+                    sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
+
+                    if (sample.LCMethod != null)
                     {
-                        sample.ColumnData = classCartConfiguration.Columns[columnID];
+                        var columnID = sample.LCMethod.Column;
+                        if (columnID > 0)
+                        {
+                            sample.ColumnData = classCartConfiguration.Columns[columnID];
+                        }
                     }
                 }
                 sample.DmsData.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
