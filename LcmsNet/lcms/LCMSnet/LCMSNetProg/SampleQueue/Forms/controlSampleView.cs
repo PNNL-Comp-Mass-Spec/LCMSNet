@@ -33,6 +33,8 @@ namespace LcmsNet.SampleQueue.Forms
     /// </summary>
     public partial class controlSampleView : UserControl
     {
+        private const int ROWID_CELL_INDEX = 7;
+
         protected formMoveToColumnSelector m_selector;
 
         private readonly classDMSSampleValidator mValidator;
@@ -1516,6 +1518,42 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
+        /// Lookup the value in column rowIdColIndex of the current row in mDataGrid_Samples, returning that as a string
+        /// </summary>
+        /// <param name="getAdjacentRow">Find the adjacent row instead of the current row; used when deleting a row</param>
+        /// <param name="currentColIndex">Output: currently selected column</param>
+        /// <param name="scrollPosition">Output: the row index of the first visible row</param>
+        /// <returns>Row Id string</returns>
+        private string GetCurrentDataGridPosition(bool getAdjacentRow, out int currentColIndex, out int scrollPosition)
+        {
+            scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
+
+            string selectedRowId;
+            var rowIndexToUse = mdataGrid_samples.CurrentRow?.Index ?? 0;
+
+            if (getAdjacentRow)
+            {
+                if (rowIndexToUse == 0)
+                    rowIndexToUse++;
+                else
+                    rowIndexToUse--;
+            }
+
+            if (mdataGrid_samples.Rows.Count > rowIndexToUse && mdataGrid_samples.Rows[rowIndexToUse].Cells.Count > ROWID_CELL_INDEX)
+            {
+                selectedRowId = mdataGrid_samples.Rows[rowIndexToUse].Cells[ROWID_CELL_INDEX].Value.ToString();
+            }
+            else
+            {
+                selectedRowId = string.Empty;
+            }
+
+            currentColIndex = mdataGrid_samples.CurrentCell?.ColumnIndex ?? 0;
+
+            return selectedRowId;
+        }
+
+        /// <summary>
         /// Moves the selected samples to another column selected through a dialog window.
         /// </summary>
         protected void MoveSamplesToColumn(enumColumnDataHandling handling)
@@ -1593,6 +1631,51 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     m_sampleQueue.UpdateSamples(samples);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Move the selection back to a saved row and cell in the data grid
+        /// </summary>
+        /// <param name="selectedRowId"></param>
+        /// <param name="currentColIndex"></param>
+        /// <param name="scrollPosition"></param>
+        private void RestoreSelectedDataGridCell(string selectedRowId, int currentColIndex, int scrollPosition)
+        {
+            var count = mdataGrid_samples.Rows.Count;
+            if (count <= 0)
+                return;
+
+            mdataGrid_samples.FirstDisplayedScrollingRowIndex = Math.Min(scrollPosition, count);
+
+            // Make sure the desired row is selected
+            if (string.IsNullOrWhiteSpace(selectedRowId))
+                return;
+
+            var cellSelected = false;
+            foreach (DataGridViewRow row in mdataGrid_samples.Rows)
+            {
+                if (row.Cells.Count > ROWID_CELL_INDEX &&
+                    row.Cells[ROWID_CELL_INDEX].Value.ToString() == selectedRowId &&
+                    row.Visible &&
+                    !cellSelected)
+                {
+                    if (mdataGrid_samples.Rows[row.Index].Cells.Count > currentColIndex && row.Cells[currentColIndex].Visible)
+                    {
+                        mdataGrid_samples.CurrentCell = row.Cells[currentColIndex];
+                        //row.Selected = true;
+                        cellSelected = true;
+                    }
+                    else if (row.Cells[ROWID_CELL_INDEX].Visible)
+                    {
+                        mdataGrid_samples.CurrentCell = row.Cells[ROWID_CELL_INDEX];
+                        //row.Selected = true;
+                        cellSelected = true;
+                    }
+
+                }
+                else if (row.Selected)
+                    row.Selected = false;
             }
         }
 
@@ -2135,21 +2218,35 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
         {
-            //
-            // Get a list of sequence ID's to remove
-            //
-            var removes = new List<long>();
-            foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
+            try
             {
-                var data = RowToSample(row);
-                removes.Add(data.UniqueID);
+                int scrollPosition;
+                int currentColIndex;
+                var selectedRowId = GetCurrentDataGridPosition(true, out currentColIndex, out scrollPosition);
+
+                //
+                // Get a list of sequence ID's to remove
+                //
+                var removes = new List<long>();
+                foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)
+                {
+                    var data = RowToSample(row);
+                    removes.Add(data.UniqueID);
+                }
+
+                //
+                // Remove all of them from the sample queue.
+                // This should update the other views as well.
+                //
+                m_sampleQueue.RemoveSample(removes, resortColumns);
+
+                RestoreSelectedDataGridCell(selectedRowId, currentColIndex, scrollPosition);
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(0, "Exception in RemoveSelectedSamples: " + ex.Message, ex);
             }
 
-            //
-            // Remove all of them from the sample queue.
-            // This should update the other views as well.
-            //
-            m_sampleQueue.RemoveSample(removes, resortColumns);
         }
 
         /// <summary>
@@ -2768,7 +2865,9 @@ namespace LcmsNet.SampleQueue.Forms
             //
             // The sample queue gives all of the samples
             //
-            var scrollPosition = Math.Max(0, mdataGrid_samples.FirstDisplayedScrollingRowIndex);
+            int scrollPosition;
+            int currentColIndex;
+            var selectedRowId = GetCurrentDataGridPosition(false, out currentColIndex, out scrollPosition);
 
             if (mdataGrid_samples.Rows.Count > 0)
             {
@@ -2789,11 +2888,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             UpdateDataView();
 
-            var count = mdataGrid_samples.Rows.Count;
-            if (count > 0)
-            {
-                mdataGrid_samples.FirstDisplayedScrollingRowIndex = Math.Min(scrollPosition, count);
-            }
+            RestoreSelectedDataGridCell(selectedRowId, currentColIndex, scrollPosition);
         }
 
         /// <summary>
