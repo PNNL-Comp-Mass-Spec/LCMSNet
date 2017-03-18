@@ -739,9 +739,12 @@ namespace LcmsNet.SampleQueue
             if (queue.Count > 0)
             {
                 long sequence = 0;
-                foreach (var sample in m_completeQueue)
+                lock (m_completeQueue)
                 {
-                    sequence = Math.Max(sample.SequenceID, sequence);
+                    foreach (var sample in m_completeQueue)
+                    {
+                        sequence = Math.Max(sample.SequenceID, sequence);
+                    }
                 }
                 foreach (var sample in m_runningQueue)
                 {
@@ -1409,7 +1412,10 @@ namespace LcmsNet.SampleQueue
             }
             else if (m_completeQueue.Count > 0)
             {
-                index = m_columnOrders.IndexOf(m_completeQueue[m_completeQueue.Count - 1].ColumnData) + 1;
+                lock (m_completeQueue)
+                {
+                    index = m_columnOrders.IndexOf(m_completeQueue[m_completeQueue.Count - 1].ColumnData) + 1;
+                }
             }
 
             foreach (var data in m_waitingQueue)
@@ -2127,34 +2133,37 @@ namespace LcmsNet.SampleQueue
 
         public void RetrieveQueueFromCache(bool buildConnectionString)
         {
-            m_completeQueue = classSQLiteTools.GetQueueFromCache(enumTableTypes.CompletedQueue);
-            foreach (var sample in m_completeQueue)
+            lock (m_completeQueue)
             {
-                sample.RunningStatus = enumSampleRunningStatus.Complete;
-                m_uniqueID.Add(sample.UniqueID);
+                m_completeQueue = classSQLiteTools.GetQueueFromCache(enumTableTypes.CompletedQueue);
 
-                if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                foreach (var sample in m_completeQueue)
                 {
-                    sample.LCMethod =
-                        classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
-                }
-                else
-                {
-                    sample.LCMethod = null;
-                }
+                    sample.RunningStatus = enumSampleRunningStatus.Complete;
+                    m_uniqueID.Add(sample.UniqueID);
 
-                if (sample.UniqueID >= m_sampleIndex)
-                    m_sampleIndex = Convert.ToInt32(sample.UniqueID + 1);
+                    if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                    {
+                        sample.LCMethod =
+                            classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
+                    }
+                    else
+                    {
+                        sample.LCMethod = null;
+                    }
 
-                if (sample.SequenceID >= m_sequenceIndex)
-                    m_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
+                    if (sample.UniqueID >= m_sampleIndex)
+                        m_sampleIndex = Convert.ToInt32(sample.UniqueID + 1);
+
+                    if (sample.SequenceID >= m_sequenceIndex)
+                        m_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
+                }
             }
 
             //
             // Loads the samples and creates unique sequence ID's and unique id's
             //
-            List<classSampleData> waitingSamples;
-            waitingSamples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);
+            var waitingSamples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);
 
             //
             // Update the Waiting Sample queue with the right LC-Methods.  This makes sure
