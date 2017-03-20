@@ -3,6 +3,7 @@
 **/packages
 **/Installers
 *.suo
+*.lnk
 pluginDLLs/*
 lcmsnetbuild.txt
 LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.xml
