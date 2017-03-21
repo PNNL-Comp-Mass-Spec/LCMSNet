@@ -382,72 +382,78 @@ namespace LcmsNetDataClasses.Devices
                 // Then finally load the values into the property.
                 foreach (var key in settings.Keys)
                 {
-                    if (propertyMap.ContainsKey(key) && propertyMap[key].CanWrite)
+                    if (!propertyMap.ContainsKey(key) || !propertyMap[key].CanWrite)
+                        continue;
+
+                    var data = settings[key];
+
+                    // Enumerations are a special breed.
+                    var propertyType = propertyMap[key].PropertyType;
+                    if (propertyType.IsEnum)
                     {
-                        var data = settings[key];
-                        // Enumerations are a special breed.
-                        var propertyType = propertyMap[key].PropertyType;
-                        if (propertyType.IsEnum)
-                        {
-                            data = Enum.Parse(propertyType, data.ToString());
-                        }
-                        else
-                        {
-                            data = Convert.ChangeType(data, propertyMap[key].PropertyType);
-                        }
-                        try
-                        {
-                            propertyMap[key].SetValue(device, data, BindingFlags.SetProperty, null, null, null);
-                        }
-                        catch (Exception ex)
-                        {
-                            exceptionsToThrow.Add(ex);
-                        }
+                        data = Enum.Parse(propertyType, data.ToString());
+                    }
+                    else
+                    {
+                        data = Convert.ChangeType(data, propertyMap[key].PropertyType);
+                    }
+
+                    try
+                    {
+                        propertyMap[key].SetValue(device, data, BindingFlags.SetProperty, null, null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptionsToThrow.Add(ex);
                     }
                 }
 
-                // Reconstruct any mobile phase data...
                 var pump = device as IPump;
-                if (pump != null)
+                if (pump == null)
                 {
-                    var phases = new Dictionary<int, MobilePhase>();
-                    pump.MobilePhases.Clear();
+                    // Add the device.
+                    AddDevice(device);
+                    continue;
+                }
 
-                    foreach (var key in settings.Keys)
+                // Reconstruct any mobile phase data
+                var phases = new Dictionary<int, MobilePhase>();
+                pump.MobilePhases.Clear();
+
+                foreach (var key in settings.Keys)
+                {
+                    var isComment = key.Contains(CONST_MOBILE_PHASE_COMMENT);
+                    var isName = key.Contains(CONST_MOBILE_PHASE_NAME);
+                    int phaseId;
+
+                    if (isComment && int.TryParse(key.Replace(CONST_MOBILE_PHASE_COMMENT, ""), out phaseId))
                     {
-                        var isComment = key.Contains(CONST_MOBILE_PHASE_COMMENT);
-                        var isName = key.Contains(CONST_MOBILE_PHASE_NAME);
-                        int phaseId;
-
-                        if (isComment && int.TryParse(key.Replace(CONST_MOBILE_PHASE_COMMENT, ""), out phaseId))
+                        if (!phases.ContainsKey(phaseId))
                         {
-                            if (!phases.ContainsKey(phaseId))
-                            {
-                                phases.Add(phaseId, new MobilePhase());
-                            }
-                            var phase = phases[phaseId];
-                            var value = settings[key];
-                            phase.Comment = value.ToString();
+                            phases.Add(phaseId, new MobilePhase());
                         }
-                        else if (isName && int.TryParse(key.Replace(CONST_MOBILE_PHASE_NAME, ""), out phaseId))
-                        {
-                            if (!phases.ContainsKey(phaseId))
-                            {
-                                phases.Add(phaseId, new MobilePhase());
-                            }
-                            var phase = phases[phaseId];
-                            var value = settings[key];
-                            phase.Name = value.ToString();
-                        }
+                        var phase = phases[phaseId];
+                        var value = settings[key];
+                        phase.Comment = value.ToString();
                     }
-
-                    foreach (var phase in phases.Values)
+                    else if (isName && int.TryParse(key.Replace(CONST_MOBILE_PHASE_NAME, ""), out phaseId))
                     {
-                        pump.MobilePhases.Add(phase);
+                        if (!phases.ContainsKey(phaseId))
+                        {
+                            phases.Add(phaseId, new MobilePhase());
+                        }
+                        var phase = phases[phaseId];
+                        var value = settings[key];
+                        phase.Name = value.ToString();
                     }
                 }
 
-                // Then add the device.
+                foreach (var phase in phases.Values)
+                {
+                    pump.MobilePhases.Add(phase);
+                }
+
+                // Add the device.
                 AddDevice(device);
             }
         }
