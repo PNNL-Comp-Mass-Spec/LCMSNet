@@ -341,9 +341,9 @@ namespace LcmsNet.Method
         /// <param name="filePath">Path of file that contains method.</param>
         /// <param name="errors"></param>
         /// <returns>Null if the path does not exist. New method object if successful.</returns>
-        public classLCMethod ReadMethod(string filePath, ref List<Exception> errors)
+        public classLCMethod ReadMethod(string filePath, List<Exception> errors)
         {
-            return ReadMethod(filePath, false, ref errors);
+            return ReadMethod(filePath, false, errors);
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace LcmsNet.Method
         /// <param name="readActuals">Flag indicating whether to read the actual event information (if it exists).</param>
         /// <param name="errors"></param>
         /// <returns>LC-Method read from the file.</returns>
-        public classLCMethod ReadMethod(string filePath, bool readActuals, ref List<Exception> errors)
+        public classLCMethod ReadMethod(string filePath, bool readActuals, List<Exception> errors)
         {
             if (File.Exists(filePath) == false)
                 return null;
@@ -379,7 +379,7 @@ namespace LcmsNet.Method
             }
             var root = document.SelectSingleNode(classLCMethodFactory.CONST_XPATH_METHOD);
 
-            return ReadEventList(root, false, ref errors);
+            return ReadEventList(root, false, errors);
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace LcmsNet.Method
         /// <param name="readActual">Flag indicating whether to read the actual data instead of the proposed data.</param>
         /// <param name="errors"></param>
         /// <returns>LC-Method containing all event information.</returns>
-        private classLCMethod ReadEventList(XmlNode root, bool readActual, ref List<Exception> errors)
+        private classLCMethod ReadEventList(XmlNode root, bool readActual, List<Exception> errors)
         {
             classLCMethod method = null;
 

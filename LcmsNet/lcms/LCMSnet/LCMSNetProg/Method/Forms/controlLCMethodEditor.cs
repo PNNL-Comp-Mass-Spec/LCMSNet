@@ -331,8 +331,7 @@ namespace LcmsNet.Method.Forms
             //
             // Construct the method
             //
-            classLCMethod method = null;
-            method = BuildMethod();
+            var method = BuildMethod();
             if (method == null)
                 return;
 
@@ -450,7 +449,7 @@ namespace LcmsNet.Method.Forms
         {
             var reader = new classLCMethodReader();
             var errors = new List<Exception>();
-            var method = reader.ReadMethod(path, ref errors);
+            var method = reader.ReadMethod(path, errors);
 
             if (method != null)
             {

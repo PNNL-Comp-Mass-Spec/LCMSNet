@@ -160,7 +160,7 @@ namespace LcmsNet.Method
             classLCMethod method = null;
             try
             {
-                method = reader.ReadMethod(filePath, ref errors);
+                method = reader.ReadMethod(filePath, errors);
             }
             catch (Exception ex)
             {
