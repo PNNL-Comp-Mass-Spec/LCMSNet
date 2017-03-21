@@ -271,6 +271,8 @@ namespace LcmsNetDataClasses.Devices
         public void LoadPersistentConfiguration(classDeviceConfiguration configuration)
         {
             var exceptionsToThrow = new List<Exception>();
+            var dllFilePath = Assembly.GetExecutingAssembly().Location;
+            var dllFolder = GetExecutingAssemblyFolderPath();
 
             for (var i = 0; i < configuration.DeviceCount; i++)
             {
@@ -282,32 +284,59 @@ namespace LcmsNetDataClasses.Devices
                 if (settings.ContainsKey(CONST_DEVICE_TYPE_PATH))
                 {
                     path = settings[CONST_DEVICE_TYPE_PATH] as string;
+                    if (!Path.IsPathRooted(path))
+                    {
+                        // Assume this is a relative path, e.g.
+                        //  Plugins\Agilent.dll
+                        path = Path.Combine(dllFolder, path);
+                    }
                 }
 
                 Type type = null;
-                if (Assembly.GetExecutingAssembly().Location != path && path != null && File.Exists(path))
+                var typeDetermined = false;
+                var deviceTypeName = GetSetting(settings, CONST_DEVICE_TYPE_TAG, "Undefined_DeviceType");
+
+                if (path != null && dllFilePath != path)
                 {
-                    // This wasn't working...
-                    //type = Assembly.LoadFrom(path).GetType(settings[CONST_DEVICE_TYPE_TAG] as string);
-                    var typeName = settings[CONST_DEVICE_TYPE_TAG] as string;
-                    foreach (var t in Assembly.LoadFrom(path).GetTypes())
+                    if (!File.Exists(path))
                     {
-                        if (t.FullName == typeName) //TODO: BLL if(t.AssemblyQualifiedName == typeName)
+                        // Plugin DLL not found
+                        // Check in the Plugins folder below the folder with the .exe
+                        var pluginFilename = Path.GetFileName(path);
+                        var alternatePath = Path.Combine(dllFolder, "Plugins", pluginFilename);
+                        if (File.Exists(alternatePath))
+                            path = alternatePath;
+                    }
+
+                    if (File.Exists(path))
+                    {
+                        foreach (var t in Assembly.LoadFrom(path).GetTypes())
                         {
-                            type = t;
-                            break;
+                            // Compare t.FullName to typeName, e.g.
+                            //  "Agilent.Properties.Resources"
+
+                            // Alternatively use t.AssemblyQualifiedName, e.g.
+                            //  "Agilent.Properties.Resources, Agilent, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                            if (t.FullName == deviceTypeName)
+                            {
+                                type = t;
+                                typeDetermined = true;
+                                break;
+                            }
                         }
                     }
                 }
-                else
+
+                if (!typeDetermined)
                 {
-                    var testType = settings[CONST_DEVICE_TYPE_TAG] as string;
-                    type = Type.GetType(testType);
+                    // DLL not loaded; see if the DeviceType refers to a class already in memory
+                    type = Type.GetType(deviceTypeName);
                 }
-                var name = settings[CONST_DEVICE_NAME_TAG] as string;
-                if (!typeof (IDevice).IsAssignableFrom(type))
+
+                if (type != null && !typeof (IDevice).IsAssignableFrom(type))
                 {
-                    exceptionsToThrow.Add(new InvalidCastException("The specified device type is invalid."));
+                    var name = GetSetting(settings, CONST_DEVICE_NAME_TAG, "Undefined_DeviceName");
+                    exceptionsToThrow.Add(new InvalidCastException("The specified DeviceType (" + deviceTypeName + ") is invalid for DeviceName " + name));
                     continue;
                 }
 
@@ -327,9 +356,11 @@ namespace LcmsNetDataClasses.Devices
                     exceptionsToThrow.Add(ex);
                     continue;
                 }
+
                 // Emulation needs to be set on devices before any other properties, otherwise it may not be seen properly on a check
                 // for emulation mode at startup/initialization.
                 device.Emulation = m_emulateDevices;
+
                 // Get all writeable properties.
                 var properties = type.GetProperties();
 
@@ -427,19 +458,39 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="configuration"></param>
         public void ExtractToPersistConfiguration(ref classDeviceConfiguration configuration)
         {
+            var dllFolder = GetExecutingAssemblyFolderPath();
+
             foreach (var device in Devices)
             {
                 if ((device.DeviceType != enumDeviceType.Component) && (device.DeviceType != enumDeviceType.Fluidics))
                 {
                     continue;
                 }
+
                 var deviceType = device.GetType();
                 var properties = deviceType.GetProperties();
 
+                // Store the device type name, e.g. Agilent.Properties.Resources
                 configuration.AddSetting(device.Name, CONST_DEVICE_TYPE_TAG, deviceType.FullName);
-                    //TODO: BLL - .AssemblyQualifiedName);
-                configuration.AddSetting(device.Name, CONST_DEVICE_TYPE_PATH, deviceType.Assembly.Location);
-                    // This should be made a relative path since we have a plugin directory. All plugins should be in that directory. Using a relative path means that if the program is installed to a different directory, the plugin will still be found properly while avoiding problems with multiple installs(Such as multiple branches on the same dev machine and swapping hardware configs.
+
+                // Store the path to the plugin DLL
+                // Using relative paths if the DLL is in the folder below the path tracked by dllFolder
+
+                var pluginPath = deviceType.Assembly.Location;
+                if (pluginPath != null && dllFolder.Length > 0)
+                {
+                    if (pluginPath.StartsWith(dllFolder, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        // Store the relative path to the plugin DLL
+                        pluginPath = pluginPath.Substring(dllFolder.Length);
+
+                        // Trim the leading slash
+                        pluginPath = pluginPath.TrimStart('\\');
+                    }
+                }
+
+                configuration.AddSetting(device.Name, CONST_DEVICE_TYPE_PATH, pluginPath);
+
                 configuration.AddSetting(device.Name, CONST_DEVICE_NAME_TAG, device.Name);
 
                 foreach (var property in properties)
@@ -470,6 +521,36 @@ namespace LcmsNetDataClasses.Devices
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Return the path to the directory with the DLL running this code
+        /// </summary>
+        /// <returns>Directory path, or an empty string if the path cannot be determined</returns>
+        private string GetExecutingAssemblyFolderPath()
+        {
+
+            var dllPath = Assembly.GetExecutingAssembly().Location;
+            if (dllPath != null)
+            {
+                var dllInfo = new FileInfo(dllPath);
+                return dllInfo.DirectoryName ?? "";
+            }
+
+            return string.Empty;
+
+        }
+
+        private string GetSetting(IDictionary<string, object> settings, string settingName, string valueIfMissing)
+        {
+            if (settings.ContainsKey(settingName))
+            {
+                var value = settings[settingName] as string;
+                return value;
+            }
+
+            return valueIfMissing;
+
         }
 
         #endregion
@@ -512,7 +593,6 @@ namespace LcmsNetDataClasses.Devices
             //
             foreach (var dev in m_devices)
             {
-                var name = dev.Name;
                 var devType = dev.GetType();
                 if (dev.Name == deviceName && devType == deviceType)
                 {
@@ -834,7 +914,7 @@ namespace LcmsNetDataClasses.Devices
                     try
                     {
                         var fullPath = Path.GetFullPath(file);
-                        var asm = Assembly.LoadFile(fullPath);
+                        Assembly.LoadFile(fullPath);
                     }
                     catch (BadImageFormatException)
                     {
