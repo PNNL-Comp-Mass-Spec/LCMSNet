@@ -195,8 +195,8 @@ namespace LcmsNet.Method.Forms
 
 
             //
-            // If we added the first guy, then we select the first item
-            // otherwise, dont select someone since the user may have
+            // If we added the first item, then we select that item
+            // Otherwise, don't select an item since the user may have
             // already selected an item.
             //
             if (mcomboBox_methods.Items.Count == 1)
@@ -325,7 +325,7 @@ namespace LcmsNet.Method.Forms
         private void MoveSelectedItemsUp()
         {
             //
-            // Dont let this happen if we dont have anything selected
+            // Don't let this happen if nothing is selected
             //
             if (mlistBox_methods.SelectedIndices.Count < 1) return;
 
@@ -392,7 +392,7 @@ namespace LcmsNet.Method.Forms
         private void MoveSelectedItemsDown()
         {
             //
-            // Dont let this happen if we dont have anything selected
+            // Don't let this happen if nothing is selected
             //
             if (mlistBox_methods.SelectedIndices.Count < 1) return;
 

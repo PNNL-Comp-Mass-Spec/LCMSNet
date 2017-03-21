@@ -474,8 +474,8 @@ namespace LcmsNet.SampleQueue.Forms
         {
             //
             // For every sample, add the column data to it, then add it into the manager.
-            // We dont add to our list first so the manager can verify the sample and
-            // make sure we dont have duplicates.
+            // We don't add to our list first so the manager can verify the sample and
+            // make sure we don't have duplicates.
             //
             foreach (var sample in samples)
                 sample.ColumnData = m_columnData;

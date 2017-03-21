@@ -31,11 +31,6 @@ namespace LcmsNet.Method.Forms
         private const int CONST_DEFAULT_RENDER_WAIT_COUNT = 5;
 
         /// <summary>
-        /// Dialog for opening a LC-Method
-        /// </summary>
-        private readonly OpenFileDialog mdialog_openMethod;
-
-        /// <summary>
         /// Render Update counts
         /// </summary>
         private int m_renderUpdateCount;
@@ -52,8 +47,11 @@ namespace LcmsNet.Method.Forms
         {
             InitializeComponent();
 
-            mdialog_openMethod = new OpenFileDialog();
-            mdialog_openMethod.Title = "Open LC-Method";
+            // Dialog for opening an LC-Method
+            var mdialogOpenMethod = new OpenFileDialog {
+                Title = "Open LC-Method"
+            };
+
             var path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
             if (!string.IsNullOrWhiteSpace(path))
             {
@@ -132,7 +130,6 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Updates the configuration data and the user interface.
         /// </summary>
-        /// <param name="configuration"></param>
         private void UpdateConfiguration()
         {
             mcontrol_acquisitionStage.UpdateConfiguration();

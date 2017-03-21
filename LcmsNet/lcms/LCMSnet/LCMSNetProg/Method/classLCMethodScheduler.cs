@@ -340,7 +340,7 @@ namespace LcmsNet.Method
                         m_sampleQueue.CancelRunningSample(samples[i], false);
 
                         //
-                        // Don't hold a reference to the sample if we dont need it.
+                        // Don't hold a reference to the sample if we don't need it.
                         //
                         samples[i] = null;
                     }
@@ -362,6 +362,8 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="message">Message to print.</param>
         /// <param name="level">Level of message</param>
+        /// <param name="ex">Exception</param>
+        /// <param name="sample">Sample</param>
         private void Print(string message, int level, Exception ex = null, classSampleData sample = null)
         {
             if (level <= VerboseLevel)
@@ -429,6 +431,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Alert listeners that an error has occurred.
         /// </summary>
+        /// <param name="sample"></param>
         /// <param name="errorMessage">Error message to report.</param>
         private void HandleError(classSampleData sample, string errorMessage)
         {
@@ -475,7 +478,7 @@ namespace LcmsNet.Method
                 // has occurred.
                 //
                 if (TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0)
-                    //(startSpan.Milliseconds >= 0)
+                //(startSpan.Milliseconds >= 0)
                 {
                     data = m_sampleQueue.NextSampleStart();
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",

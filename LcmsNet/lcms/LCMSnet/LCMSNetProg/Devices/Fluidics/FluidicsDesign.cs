@@ -152,7 +152,7 @@ namespace LcmsNet.Devices.Fluidics
         /// <summary>
         /// show error to user
         /// </summary>
-        /// <param name="message">message to show user</param>
+        /// <param name="ex">Exception</param>
         private void ShowError(Exception ex)
         {
             classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
@@ -374,7 +374,7 @@ namespace LcmsNet.Devices.Fluidics
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     // The device manager sends us an event when it removes the devices.
-                    // Since this is an event driven architecture, we dont have to worry about explicitly
+                    // Since this is an event driven architecture, we don't have to worry about explicitly
                     // clearing our glyphs.
                     m_fluidics_mod.BeginModelSuspension();
                     classDeviceManager.Manager.ShutdownDevices(true);

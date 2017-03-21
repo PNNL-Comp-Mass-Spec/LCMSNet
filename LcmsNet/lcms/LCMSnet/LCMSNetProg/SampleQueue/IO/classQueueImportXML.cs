@@ -24,7 +24,7 @@ namespace LcmsNet.SampleQueue.IO
     class classQueueImportXML : ISampleQueueReader
     {
         //*********************************************************************************************************
-        // 
+        //
         //**********************************************************************************************************
 
         #region "Methods"
@@ -95,7 +95,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <summary>
         /// Converts an individual XML node into a sampledata object
         /// </summary>
-        /// <param name="ItemNode">XML node containing data for 1 sample</param>
+        /// <param name="itemNode">XML node containing data for 1 sample</param>
         /// <returns>classSampleData object containing data from the XML node</returns>
         private classSampleData ConvertXMLNodeToSample(XmlNode ItemNode)
         {

@@ -22,8 +22,7 @@ namespace LcmsNet.Method
         /// Definition for a method that
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="deviceName"></param>
-        /// <param name="device"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         public delegate bool DelegateValidateDevice(object sender, classLCMethodDeviceArgs args);
 
@@ -73,7 +72,7 @@ namespace LcmsNet.Method
                 }
                 catch (ReflectionTypeLoadException)
                 {
-                    // Ignore...we dont need to worry about these problems.
+                    // Ignore...we don't need to worry about these problems.
                 }
             }
             return constructedParameterType;
@@ -340,6 +339,7 @@ namespace LcmsNet.Method
         /// Reads the method contained in the XML file path.
         /// </summary>
         /// <param name="filePath">Path of file that contains method.</param>
+        /// <param name="errors"></param>
         /// <returns>Null if the path does not exist. New method object if successful.</returns>
         public classLCMethod ReadMethod(string filePath, ref List<Exception> errors)
         {
@@ -351,6 +351,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="filePath">Path of the method file to read.</param>
         /// <param name="readActuals">Flag indicating whether to read the actual event information (if it exists).</param>
+        /// <param name="errors"></param>
         /// <returns>LC-Method read from the file.</returns>
         public classLCMethod ReadMethod(string filePath, bool readActuals, ref List<Exception> errors)
         {
@@ -386,6 +387,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="root">Root item in the document.</param>
         /// <param name="readActual">Flag indicating whether to read the actual data instead of the proposed data.</param>
+        /// <param name="errors"></param>
         /// <returns>LC-Method containing all event information.</returns>
         private classLCMethod ReadEventList(XmlNode root, bool readActual, ref List<Exception> errors)
         {

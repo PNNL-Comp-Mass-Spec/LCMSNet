@@ -5,8 +5,8 @@ namespace LcmsNet.SampleQueue.Forms
     public class SampleToRowTranslator
     {
         /// <summary>
-        /// Index Offset for going from a zero based array for configuration data to the user
-        /// readable column display.
+        /// Index Offset for going from a zero based array for configuration data to the
+        /// user-readable column display.
         /// </summary>
         protected const int CONST_COLUMN_INDEX_OFFSET = 1;
 
@@ -17,10 +17,10 @@ namespace LcmsNet.SampleQueue.Forms
 
         public classSampleData Sample { get; set; }
 
-        //this.mcolumn_sequenceNumber,
+        // controlSampleView.mcolumn_sequenceNumber
         public long SequenceNumber => Sample.SequenceID;
 
-        //this.mcolumn_columnNumber,
+        // controlSampleView.mcolumn_columnNumber
         public string ColumnNumber
         {
             get
@@ -34,11 +34,11 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         public string SpecialColumnNumber { get; set; }
-        
-        //this.mcolumn_uniqueID,
+
+        // controlSampleView.mcolumn_uniqueID,
         public long UniqueID => Sample.UniqueID;
 
-        //this.mcolumn_checkbox,
+        // controlSampleView.mcolumn_checkbox,
         public controlSampleView.enumCheckboxStatus Checkbox
         {
             get
@@ -52,7 +52,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        //this.mcolumn_checkbox.tag,
+        // controlSampleView.mcolumn_checkbox.tag,
         public string CheckboxTag
         {
             get
@@ -103,7 +103,7 @@ namespace LcmsNet.SampleQueue.Forms
             return status;
         }
 
-        //this.Status,
+        // controlSampleView.Status
         public string Status
         {
             get
@@ -147,7 +147,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        //this.Status.ToolTipText,
+        // controlSampleView.Status.ToolTipText
         public string StatusToolTipText
         {
             get
@@ -199,35 +199,42 @@ namespace LcmsNet.SampleQueue.Forms
                 return statusMessage;
             }
         }
-        //this.mcolumn_blockNumber,
+
+        // controlSampleView.mcolumn_blockNumber
         public int BlockNumber => Sample.DmsData.Block;
-        //this.mcolumn_runOrder,
+
+        // controlSampleView.mcolumn_runOrder
         public int RunOrder => Sample.DmsData.RunOrder;
-        //this.mcolumn_requestName,
+
+        // controlSampleView.mcolumn_requestName
         public string RequestName
         {
             get { return Sample.DmsData.RequestName; }
             set { Sample.DmsData.RequestName = value; }
         }
-        //this.mcolumn_PalTray,
+
+        // controlSampleView.mcolumn_PalTray
         public string PALTray
         {
             get { return Sample.PAL.PALTray; }
             set { Sample.PAL.PALTray = value; }
         }
-        //this.mcolumn_palVial,
+
+        // controlSampleView.mcolumn_palVial
         public int PALVial
         {
             get { return Sample.PAL.Well; }
             set { Sample.PAL.Well = value; }
         }
-        //this.mcolumn_PALVolume,
+
+        // controlSampleView.mcolumn_PALVolume
         public double PALVolume
         {
             get { return Sample.Volume; }
             set { Sample.Volume = value; }
         }
-        //this.mcolumn_LCMethod,
+
+        // controlSampleView.mcolumn_LCMethod,
         public string LCMethod
         {
             get
@@ -244,19 +251,22 @@ namespace LcmsNet.SampleQueue.Forms
                     Sample.LCMethod.Name = value;
             }
         }
-        //this.mcolumn_instrumentMethod,
+
+        // controlSampleView.mcolumn_instrumentMethod
         public string InstrumentMethod
         {
             get { return Sample.InstrumentData.MethodName; }
             set { Sample.InstrumentData.MethodName = value; }
         }
-        //this.mcolumn_datasetType,
+
+        // controlSampleView.mcolumn_datasetType
         public string DatasetType
         {
             get { return Sample.DmsData.DatasetType; }
             set { Sample.DmsData.DatasetType = value; }
         }
-        //this.mcolumn_batchID;
+
+        // controlSampleView.mcolumn_batchID
         public int BatchID => Sample.DmsData.Batch;
     }
 }

@@ -15,9 +15,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Writes the LC-Event from the specified node.
         /// </summary>
-        /// <param name="node">Node that contains the event definition</param>
-        /// <returns>An LC-Event</returns>
-        private bool WriteEventNode(XmlDocument document, XmlElement eventRoot, classLCEvent lcEvent)
+        private void WriteEventNode(XmlDocument document, XmlElement eventRoot, classLCEvent lcEvent)
         {
             var passed = true;
 
@@ -36,8 +34,9 @@ namespace LcmsNet.Method
             //
             var device = document.CreateElement(classLCMethodFactory.CONST_XPATH_DEVICE);
             device.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, lcEvent.Device.Name);
+
+            // Alternatively use .AssemblyQualifiedName;
             device.SetAttribute(classLCMethodFactory.CONST_XPATH_TYPE, lcEvent.Device.GetType().FullName);
-                //TODO: BLL AssemblyQualifiedName);
 
             //
             // Store the method name
@@ -77,7 +76,9 @@ namespace LcmsNet.Method
                 if (lcEvent.MethodAttribute.SampleParameterIndex == i)
                 {
                     sampleSpecific = true;
-                    type = typeof (classSampleData).FullName; //TODO: BLL - .AssemblyQualifiedName;
+
+                    // Alternatively use .AssemblyQualifiedName;
+                    type = typeof (classSampleData).FullName;
                     value = "";
                 }
                 else
@@ -111,6 +112,7 @@ namespace LcmsNet.Method
         /// Writes the method to the XML file path.
         /// </summary>
         /// <param name="filePath">Path of file that contains method.</param>
+        /// <param name="method"></param>
         /// <returns>Null if the path does not exist. New method object if successful.</returns>
         public bool WriteMethod(string filePath, classLCMethod method)
         {

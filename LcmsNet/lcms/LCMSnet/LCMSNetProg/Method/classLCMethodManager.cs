@@ -151,6 +151,7 @@ namespace LcmsNet.Method
         /// Loads a method from the path provided.
         /// </summary>
         /// <param name="filePath">Path to load method from</param>
+        /// <param name="errors"></param>
         private void LoadMethod(string filePath, ref List<Exception> errors)
         {
             //bool retValue = false;

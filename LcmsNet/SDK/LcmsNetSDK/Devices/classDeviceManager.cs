@@ -4,13 +4,7 @@
  * Copyright 2009, Battelle Memorial Institute
  * Created 06/19/2009
  *
- * Updates:
- *  12-12-2009: BLL
- *      Added a method, FindDevice, to search for a device given its name (key) and it's type (found via GetType()).
- *  12-10-2009: BLL
- *      Created plug-ins, and loading of a new configuration pattern.
- *
-/*********************************************************************************************************/
+ *********************************************************************************************************/
 
 using System;
 using System.Collections.Generic;
@@ -35,7 +29,7 @@ namespace LcmsNetDataClasses.Devices
         /// Writes the system health to the provider.
         /// </summary>
         public void WriteSystemHealth(string path)
-        {            
+        {
             // Retrieve the data from the aggregates
             List<FinchAggregateData> aggregates = new List<FinchAggregateData>();
             FinchAggregateData aggregate = new FinchAggregateData();
@@ -510,12 +504,12 @@ namespace LcmsNetDataClasses.Devices
         {
             IDevice device = null;
 
-            // 
+            //
             // Find the device in the list, might be better if we used a
             // dictionary instead.
-            // 
+            //
             // Then see if the device type matches as well...
-            // 
+            //
             foreach (var dev in m_devices)
             {
                 var name = dev.Name;
@@ -538,12 +532,12 @@ namespace LcmsNetDataClasses.Devices
         {
             IDevice device = null;
 
-            // 
+            //
             // Find the device in the list, might be better if we used a
             // dictionary instead.
-            // 
+            //
             // Then see if the device type matches as well...
-            // 
+            //
             foreach (var dev in m_devices)
             {
                 if (dev.Name == deviceName)
@@ -584,10 +578,10 @@ namespace LcmsNetDataClasses.Devices
         {
             var oldName = device.Name;
 
-            // 
+            //
             // If this happens, then they are trying to name the device
             // the same thing....
-            // 
+            //
             if (basename == oldName)
                 return;
 
@@ -603,21 +597,21 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>True if the device was added.  False if device was not added.</returns>
         public bool AddDevice(IDevice device)
         {
-            // 
+            //
             // No null devices allowed.
-            // 
+            //
             if (device == null)
                 return false;
 
-            // 
+            //
             // No duplicate references allowed.
-            // 
+            //
             if (m_devices.Contains(device))
                 return false;
 
-            // 
+            //
             // No duplicate names allowed.
-            // 
+            //
             if (DeviceNameExists(device.Name))
                 return false;
 
@@ -633,7 +627,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Creates a new device based on the plug-in information.
         /// </summary>
-        /// <param name="plugin">Device plug-in used to create a new device.</param>        
+        /// <param name="plugin">Device plug-in used to create a new device.</param>
         /// <param name="initialize">Indicates whether to initialize the device if added succesfully </param>
         /// <returns>True if successful, False if it fails.</returns>
         public bool AddDevice(classDevicePluginInformation plugin, bool initialize)
@@ -661,9 +655,9 @@ namespace LcmsNetDataClasses.Devices
         /// <returns>True if device was removed successfully.  False if the device could not be removed at that time.</returns>
         public bool RemoveDevice(IDevice device)
         {
-            // 
+            //
             // Make sure we have the reference
-            // 
+            //
             if (m_devices.Contains(device) == false)
                 return false;
 
@@ -692,7 +686,7 @@ namespace LcmsNetDataClasses.Devices
         #region Shutdown and Initialization
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public bool ShutdownDevices()
@@ -1010,7 +1004,7 @@ namespace LcmsNetDataClasses.Devices
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class classDeviceInitializationException : Exception
     {

@@ -252,7 +252,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Updates the user interface if a method exists and is loaded into the User interface.
         /// </summary>
-        /// <param name="?"></param>
+        /// <param name="needsAnUpdate"></param>
         private void UpdateUserInterface(bool needsAnUpdate)
         {
             if (!IgnoreUpdates)
@@ -298,7 +298,6 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Updates the configuration data and the user interface.
         /// </summary>
-        /// <param name="configuration"></param>
         public void UpdateConfiguration()
         {
             m_checkBoxToColumnDataMap.Clear();
@@ -741,7 +740,8 @@ namespace LcmsNet.Method.Forms
         /// Handles creating an unlock event when the event is locked.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="optimize"></param>
+        /// <param name="enabled"></param>
+        /// <param name="method"></param>
         void deviceEvent_Lock(object sender, bool enabled, classLCMethodData method)
         {
             if (enabled)
@@ -849,7 +849,7 @@ namespace LcmsNet.Method.Forms
             //
             var maxPos = 0;
 
-            // Dont worry about checking for the length of indices because we already did that above
+            // Don't worry about checking for the length of indices because we already did that above
             // when we checked the number of selected events being of the right size.
             //
             if (indices[0] == 0)

@@ -166,7 +166,7 @@ namespace LcmsNet.Devices
         private void RenameDevice(IDevice device, string newName)
         {
             //
-            // It's the same name so dont mess with it
+            // It's the same name so don't mess with it
             //
             if (m_selectedDevice.Name == mtextBox_NewDeviceName.Text)
                 return;
@@ -219,7 +219,8 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Adds the device to the panel for us.
         /// </summary>
-        /// <param name="controlData"></param>
+        /// <param name="device"></param>
+        /// <param name="control"></param>
         public void AddDevice(IDevice device, IDeviceControl control)
         {
             var button = new Button();
@@ -236,7 +237,6 @@ namespace LcmsNet.Devices
             m_deviceButtonPanel.Controls.Add(button);
             m_deviceToControlMap.Add(device, control);
 
-            // If the first guy to be added then we
             if (m_deviceButtonPanel.Controls.Count == 1)
             {
                 SelectDevice(device);

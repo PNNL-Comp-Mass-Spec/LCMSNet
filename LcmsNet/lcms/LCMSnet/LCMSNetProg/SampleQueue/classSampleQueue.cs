@@ -107,6 +107,11 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender">Sample Queue that made the call.</param>
         /// <param name="data">Data associated with the addition.</param>
+        /// <summary>
+        /// Delegate definition for when a sample is modified.
+        /// </summary>
+        /// <param name="sender">Sample Queue that made the call.</param>
+        /// <param name="data">Data associated with the addition.</param>
         public delegate void DelegateSamplesModifiedHandler(object sender, classSampleQueueArgs data);
 
         /// <summary>
@@ -381,7 +386,7 @@ namespace LcmsNet.SampleQueue
         public List<classColumnData> ColumnOrder => m_columnOrders;
 
         /// <summary>
-        /// Gets or sets whether to reset the column data.
+        /// Gets or sets whether to reset the column data when a queue operation is performed.
         /// </summary>
         public bool AutoColumnData
         {
@@ -390,7 +395,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Gets or sets the default sample name.
+        /// Gets or sets the default name of the sample to add when distributing across columns.
         /// </summary>
         public string DefaultSampleName
         {
@@ -524,6 +529,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Finds the sample in any of the queues based on a unique ID.
         /// </summary>
+        /// <param name="queue"></param>
         /// <param name="uniqueID">ID to search for in queue.</param>
         /// <returns>Single instance of a found sample.  Null if no sample
         /// contains the unique ID provided.</returns>
@@ -782,7 +788,8 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Pushes the new queue onto the stack for undo operations.
         /// </summary>
-        /// <param name="stack">Stack to push queue onto.</param>
+        /// <param name="backStack">Undo stack</param>
+        /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
         /// <param name="queue">Queue to push onto stack.</param>
         private void PushQueue(Stack<List<classSampleData>> backStack, Stack<List<classSampleData>> forwardStack,
             List<classSampleData> queue)
@@ -793,8 +800,8 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Pushes the queue onto the backstack and the
         /// </summary>
-        /// <param name="backStack"></param>
-        /// <param name="forwardStack"></param>
+        /// <param name="backStack">Undo stack</param>
+        /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
         /// <param name="queue"></param>
         /// <param name="clearForward"></param>
         private void PushQueue(Stack<List<classSampleData>> backStack,
@@ -838,9 +845,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Pops the queue from the stack if available
         /// </summary>
-        /// <param name="backStack">Stack to pop queue from.</param>
-        /// <param name="forwardStack">In case the user wants to "redo".  If null no forward operation will be handled.</param>
-        /// <param name="queue">Queue to push most recent operation into.</param>
+        /// <param name="backStack">Undo stack to pop queue from.</param>
         /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
         private List<classSampleData> PopQueue(Stack<List<classSampleData>> backStack)
         {
@@ -946,7 +951,7 @@ namespace LcmsNet.SampleQueue
             if (samples.Count > 0)
             {
                 //
-                // Dont need to re-sequence or notify
+                // Don't need to re-sequence or notify
                 // because queue samples does it for us.
                 //
                 QueueSamples(samples, handling);
@@ -1059,6 +1064,8 @@ namespace LcmsNet.SampleQueue
             //         This just puts samples on the queue.
             //
 
+            // Could keep track of updated samples with this:
+            // var tempQueue = new List<classSampleData>();
             if (distributeSamplesEvenlyAcrossColumns == enumColumnDataHandling.CreateUnused)
             {
                 var tempQueue = new List<classSampleData>();
@@ -1100,7 +1107,7 @@ namespace LcmsNet.SampleQueue
             {
                 //
                 // Only re-sequence and remove if we changed the queue to not waste time
-                // doing something if we dont have to.
+                // doing something if we don't have to.
                 //
                 RemoveExcessSamples(m_waitingQueue);
                 ResequenceQueuedSamples(m_waitingQueue);
@@ -1232,6 +1239,8 @@ namespace LcmsNet.SampleQueue
             // Unique ID's.  Then we remove them.
             //
             var removedSamples = new List<classSampleData>();
+            // Could keep track of removed samples with this:
+            // var removedSamples = new List<classSampleData>();
             foreach (var i in uniqueIDs)
             {
                 var data = FindSample(i);
@@ -1275,7 +1284,7 @@ namespace LcmsNet.SampleQueue
                         //
                         // Then, if some were removed we build up the distribution list and fill back into the queue
                         // allowing for the correct spacing on other columns, but inserting unused samples at the end of this column list
-                        // so we dont disturb other column Data.  We do this using the same mechanism that adding samples uses
+                        // so we don't disturb other column Data.  We do this using the same mechanism that adding samples uses
                         // but here we are not adding new samples to the queue.
                         //
                         var histogram =
@@ -1318,7 +1327,7 @@ namespace LcmsNet.SampleQueue
             //
             // Removes the samples from this list, AND! resorts the columns.
             // This is important for this method because it means that
-            // we dont care about preserving column information.
+            // we don't care about preserving column information.
             //
             if (uniqueList.Count > 0)
             {
@@ -1331,6 +1340,7 @@ namespace LcmsNet.SampleQueue
         /// Removes unused samples on the given column.
         /// </summary>
         /// <param name="column">Column to remove samples from.</param>
+        /// <param name="resortColumns"></param>
         /// <returns>True if any samples were removed.  False if not.</returns>
         public bool RemoveUnusedSamples(classColumnData column, enumColumnDataHandling resortColumns)
         {
@@ -1364,6 +1374,7 @@ namespace LcmsNet.SampleQueue
         /// Reorders the samples provided as the argument by inserting the items in the queue.  Re-orders in place.
         /// </summary>
         /// <param name="newOrders">List of samples that contain the new ordering.</param>
+        /// <param name="handling"></param>
         public void ReorderSamples(List<classSampleData> newOrders, enumColumnDataHandling handling)
         {
             if (newOrders.Count < 1)
@@ -1432,6 +1443,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Moves samples specified by the offset, swapping i with j instead of moving up and down.
         /// </summary>
+        /// <param name="queue"></param>
         /// <param name="samples">List of samples to swap.</param>
         /// <param name="baseOffset">Base offset to swap by.</param>
         /// <param name="offset">Spacing between columns.</param>
@@ -1456,7 +1468,7 @@ namespace LcmsNet.SampleQueue
                 for (var i = samples.Count - 1; i >= 0; i--)
                 {
                     //
-                    // If the first guy could not be swapped, then we dont want the other items
+                    // If the first item could not be swapped, then we don't want the other items
                     // to be swapped either.  So continue if done so.
                     //
                     if (i < samples.Count - 1 && swapped == false)
@@ -1467,7 +1479,7 @@ namespace LcmsNet.SampleQueue
 
                     //
                     // Calculate its new location to swap if the offset is one,
-                    // otherwise we dont want to swap by the last index because this would
+                    // otherwise we don't want to swap by the last index because this would
                     // move items to another column.
                     //
                     var newIndex = Math.Min(index + offset, lastIndex);
@@ -1495,7 +1507,7 @@ namespace LcmsNet.SampleQueue
                 for (var i = 0; i < samples.Count; i++)
                 {
                     //
-                    // If the first guy could not be swapped, then we dont want the other items
+                    // If the first item could not be swapped, then we don't want the other items
                     // to be swapped either.  So continue if done so.
                     //
                     if (i > 0 && swapped == false)
@@ -1506,7 +1518,7 @@ namespace LcmsNet.SampleQueue
 
                     //
                     // Calculate its new location to swap if the offset is one,
-                    // otherwise we dont want to swap by the last index because this would
+                    // otherwise we don't want to swap by the last index because this would
                     // move items to another column.
                     //
                     var newIndex = Math.Max(index + offset, lastIndex);
@@ -1625,7 +1637,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         ///
         /// </summary>
-        /// <param name="method"></param>
+        /// <param name="sample"></param>
         public void RunNext(classSampleData sample)
         {
             var i = 0;
@@ -1977,7 +1989,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Moves the sample from the running queue to the finished queue.
         /// </summary>
-        /// <param name="sample"></param>
+        /// <param name="sampleData"></param>
         public void FinishSampleRun(classSampleData sampleData)
         {
             // uhhh this sample was null
@@ -1995,7 +2007,8 @@ namespace LcmsNet.SampleQueue
             {
                 var errorMessage = string.Format("The sample {0} was not found on the running Queue.",
                     sampleData);
-                //TODO: BLL Removed because of the notification system.   throw new classSampleNotRunningException(errorMessage);
+                //TODO: BLL Removed because of the notification system.
+                // throw new classSampleNotRunningException(errorMessage);
                 return;
             }
 
@@ -2033,9 +2046,8 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Moves the waiting sample onto the running queue.
+        /// Start the next sample
         /// </summary>
-        /// <param name="sample">Sample to start</param>
         public classSampleData NextSampleStart()
         {
             classSampleData sample = null;
@@ -2209,7 +2221,7 @@ namespace LcmsNet.SampleQueue
             // in the queue samples method.  We also see if no samples were added (updated == false)
             // and completeQueue.length > 0 that we force an update.  Otherwise if no samples
             // were left in the cache on the waiting queue but were on the complete queue, then
-            // we wouldnt see the completed samples...big bug.
+            // we wouldn't see the completed samples...big bug.
             //
             var updated = QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
             if (updated == false && m_completeQueue.Count > 0)

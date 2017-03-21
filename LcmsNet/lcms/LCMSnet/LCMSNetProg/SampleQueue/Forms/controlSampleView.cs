@@ -477,7 +477,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
                 //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
 
-                // Dont let us re-run something that has been run, errored, or is currently running.
+                // Don't let us re-run something that has been run, errored, or is currently running.
                 if (sample.RunningStatus != enumSampleRunningStatus.Queued
                     && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
                 {
@@ -549,7 +549,7 @@ namespace LcmsNet.SampleQueue.Forms
                         return;
                     if (!isRecursive && !(rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum))
                     {
-                        ////// This is very, very expensive...... //////
+                        ////// This can be expensive for large queues...... //////
                         Validate();
 
                     }
@@ -875,7 +875,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected virtual bool Manager_MethodAdded(object sender, classLCMethod method)
         {
-            // make sure the method is not null...we dont like this
+            // make sure the method is not null
             if (method == null)
                 return true;
 
@@ -895,8 +895,7 @@ namespace LcmsNet.SampleQueue.Forms
             if (found == false)
             {
                 mcolumn_LCMethod.Items.Add(method.Name);
-                // If we just added a guy, then we want to
-                // make sure the samples have a method selected.
+                // If we just added a sample, we want to make sure the samples have a method selected.
                 if (mcolumn_LCMethod.Items.Count == 1)
                 {
                 }
@@ -1203,7 +1202,8 @@ namespace LcmsNet.SampleQueue.Forms
         {
             try
             {
-
+                // Re-select the entire row
+                // This is required for the "Fill Down" button to work
                 mdataGrid_samples.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
                 var row = mdataGrid_samples.Rows[e.RowIndex];
@@ -1257,7 +1257,7 @@ namespace LcmsNet.SampleQueue.Forms
                         break;
                     case CONST_COLUMN_EXPERIMENT_METHOD:
                         //
-                        // Make sure that we have a valid method here.
+                        // Make sure that we have a valid LC method here.
                         //
                         var name = Convert.ToString(cellData);
                         if (classLCMethodManager.Manager.Methods.ContainsKey(name))
@@ -1635,7 +1635,7 @@ namespace LcmsNet.SampleQueue.Forms
                     return;
 
                 //
-                // Make sure the samples can actually run, e.g. dont put a sample on column 2 already back onto column 2.
+                // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
                 // Don't put a column that has been run, at the end of the queue again.
                 //
                 var samples = new List<classSampleData>();
@@ -1787,7 +1787,7 @@ namespace LcmsNet.SampleQueue.Forms
             // form into the sample queue.  Don't add them directly to the
             // form so that the event model will update both this view
             // and any other views that we may have.  For the sequence
-            // we dont care how we add them to the form.
+            // we don't care how we add them to the form.
             //
             if (result == DialogResult.OK)
             {
@@ -2579,7 +2579,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             //
             // Strings may be blank or null indicating they are not set.
-            // If they are, then dont update the row.
+            // If they are, then don't update the row.
             //
             if (string.IsNullOrEmpty(data.PAL.PALTray) == false)
                 row.Cells[CONST_COLUMN_PAL_TRAY].Value = data.PAL.PALTray;

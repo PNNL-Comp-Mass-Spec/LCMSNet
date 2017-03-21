@@ -69,6 +69,7 @@ namespace LcmsNet.Method.Forms
             }
             catch
             {
+                // Ignore errors here
             }
 
             //
@@ -116,7 +117,8 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Renders the method provided.
         /// </summary>
-        /// <param name="method"></param>
+        /// <param name="sample"></param>
+        /// <param name="lcEvent"></param>
         public void UpdateError(classSampleData sample, classLCEvent lcEvent)
         {
             if (sample != null)
@@ -312,7 +314,7 @@ namespace LcmsNet.Method.Forms
                 }
                 catch
                 {
-                    // We dont care about the exceptions if it's drawing...we just want it to keep rendering!
+                    // We don't care about the exceptions if it's drawing...we just want it to keep rendering!
                 }
             }
             else

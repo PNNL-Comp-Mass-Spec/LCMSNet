@@ -29,7 +29,7 @@ namespace LcmsNetDmsTools
         /// Validates a sample based on DMS criteria.
         /// </summary>
         /// <param name="sample"></param>
-        /// <returns></returns>
+        /// <returns>True if valid, false if invalid</returns>
         public bool IsSampleValid(classSampleData sample)
         {
             var errors = new List<classSampleValidationError>();
@@ -60,7 +60,7 @@ namespace LcmsNetDmsTools
             return errors.Count > 0;
         }        
         /// <summary>
-        /// 
+        /// Validates EUS Proposal ID
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
@@ -80,8 +80,9 @@ namespace LcmsNetDmsTools
             }
             return true;
         }
+
         /// <summary>
-        /// 
+        /// Validate EUS Users
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
@@ -102,7 +103,7 @@ namespace LcmsNetDmsTools
             return true;
         }
         /// <summary>
-        /// 
+        /// Validate EUS Usage
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
@@ -120,7 +121,7 @@ namespace LcmsNetDmsTools
             return true;
         }
         /// <summary>
-        /// 
+        /// Validate experiment name
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>

@@ -172,7 +172,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        ///  Handle when the user wants to close the window, but dont close it just allow it to hide
+        ///  Handle when the user wants to close the window, but don't close it just allow it to hide
         ///  and the caller the ability to clean up the resources as they need.
         /// </summary>
         /// <param name="sender"></param>
@@ -809,6 +809,6 @@ namespace LcmsNet.SampleQueue
         }
 
         #endregion
-        
+
     }
 }

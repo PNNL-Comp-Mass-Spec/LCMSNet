@@ -231,11 +231,6 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="runButtonState"></param>
-        /// <param name="stopButtonState"></param>
         private void DetermineIfShouldSetButtons(classSampleQueueArgs data)
         {
             var runningCount = data.RunningSamplePosition;
@@ -275,7 +270,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Supplies the list of PAL trays to the sample queue and associated objects.
         /// </summary>
-        /// <param name="trayList">List of pal trays.</param>
         public void AutoSamplerTrayList(object sender, classAutoSampleEventArgs args)
         {
             var trays = args.TrayList;
@@ -290,7 +284,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Supplies a list of instrument methods to the sample queue and associated objects.
         /// </summary>
-        /// <param name="methods">List of instrument MS methods.</param>
         public void InstrumentMethodList(object sender, classNetworkStartEventArgs args)
         {
             var methods = args.MethodList;
@@ -460,7 +453,7 @@ namespace LcmsNet.SampleQueue.Forms
 
                 //
                 // Of course if we have an error, we just want to display and alert the user.
-                // But we dont let them continue, they must edit their queue and make it appropiate
+                // But we don't let them continue, they must edit their queue and make it appropiate
                 // before running.
                 //
                 if (errors.Count > 0)
@@ -524,7 +517,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Run windows time synchronization using w32tm.exe
         /// </summary>
-        /// <remarks>This method is unused</remarks>
         private void SynchronizeSystemClock()
         {
             var synchStart = new ProcessStartInfo();

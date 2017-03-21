@@ -30,7 +30,13 @@ namespace LcmsNet.SampleQueue
         /// Constructor that takes an array of samples that were operated upon.
         /// </summary>
         /// <param name="data">Samples of question.</param>
-        public classSampleQueueArgs(IEnumerable<classSampleData> data, int runningIndex, int running, int complete,
+        /// <param name="runningIndex"></param>
+        /// <param name="running"></param>
+        /// <param name="complete"></param>
+        /// <param name="waiting"></param>
+        public classSampleQueueArgs(
+            IEnumerable<classSampleData> data,
+            int runningIndex,
             int waiting)
         {
             marray_data = data;

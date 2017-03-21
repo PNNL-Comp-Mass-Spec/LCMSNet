@@ -110,7 +110,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Executes a method for a given column.
         /// </summary>
-        /// <param name="lcMethod">Method to execute</param>
+        /// <param name="lcEvent">Event to execute</param>
         private bool ExecuteEvent(classLCEvent lcEvent)
         {
             var flag = true;
@@ -273,7 +273,7 @@ namespace LcmsNet.Method
                     else if (!success)
                     {
                         //
-                        // Well, we had an error (exception or expected) and we dont care why, we just want to
+                        // Well, we had an error (exception or expected) and we don't care why, we just want to
                         // gracefully notify people in charge, and exit.
                         //
 
