@@ -111,6 +111,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [Obsolete("Unused")]
         void m_fluidicsDesign_Status(object sender, classDeviceStatusEventArgs e)
         {
             classApplicationLogger.LogMessage(0, e.Message);
@@ -122,6 +123,7 @@ namespace LcmsNet
         /// For updating the status message.
         /// </summary>
         /// <param name="message">Message to display.</param>
+        [Obsolete("Unused")]
         private delegate void DelegateUpdateMessage(int level, string message);
 
         #region Members

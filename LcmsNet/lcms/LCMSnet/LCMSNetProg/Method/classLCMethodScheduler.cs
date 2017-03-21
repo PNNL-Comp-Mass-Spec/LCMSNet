@@ -549,12 +549,6 @@ namespace LcmsNet.Method
                 var eventNumber = WaitHandle.WaitAny(events, CONST_THREAD_WAITTIMEOUT_MS);
 
 
-                //
-                // Temporary variables for setting up a new sample on a column thread.
-                //
-                var columnID = 0;
-                var timeElapsedOverdue = 0.0; // variable to see if a sample's event has gone past due.
-
                 switch (eventNumber)
                 {
                     //
@@ -813,7 +807,6 @@ namespace LcmsNet.Method
                 //Separation completed.
                 lock (m_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-                    var noww = TimeKeeper.Instance.Now;
 
                     String datasetName;
                     if (samples[columnID] != null && samples[columnID].DmsData != null)

@@ -17,7 +17,6 @@ namespace LcmsNet.Method
         /// </summary>
         private void WriteEventNode(XmlDocument document, XmlElement eventRoot, classLCEvent lcEvent)
         {
-            var passed = true;
 
             //
             // Set all of the event attributes
@@ -105,7 +104,7 @@ namespace LcmsNet.Method
             eventRoot.AppendChild(device);
             eventRoot.AppendChild(methodInfo);
             eventRoot.AppendChild(parameters);
-            return passed;
+
         }
 
         /// <summary>

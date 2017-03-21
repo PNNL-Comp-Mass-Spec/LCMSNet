@@ -179,7 +179,7 @@ namespace LcmsNetDataClasses.Devices
             m_devices = new List<IDevice>();
             //Manager              = this;
 
-            var bridge = new DeviceManagerBridge(this);
+            // var bridge = new DeviceManagerBridge(this);
 
             m_loadingPlugins = false;
             m_emulateDevices = true;

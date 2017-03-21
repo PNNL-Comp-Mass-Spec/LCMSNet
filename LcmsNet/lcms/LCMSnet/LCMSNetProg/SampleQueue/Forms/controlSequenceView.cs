@@ -564,37 +564,6 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region Queue Region Moving
 
-        void mpanel_queue_MouseUp(object sender, MouseEventArgs e)
-        {
-            m_movingQueueDown = false;
-            m_movingQueueUp = false;
-        }
-
-        void mpanel_queue_MouseMove(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("MOVING--rect!");
-            if (m_movingQueueDown == false && m_movingQueueUp == false)
-                return;
-
-            if (mdataGrid_samples.Rows.Count <= 0)
-                return;
-
-            var rowHeight = mdataGrid_samples.Rows[0].Height;
-            if (m_movingQueueDown)
-            {
-                //
-                // If the mouse has been clicked and moving
-                //
-                // Size newSize = new Size(mrect_queueRegion.Size.Width, mrect_queueRegion.Size.Height + 1);
-                // mrect_queueRegion.Size = newSize;
-            }
-        }
-
-        /// <summary>
-        /// Flag indicating that the user is queuing samples.
-        /// </summary>
-        private bool m_movingQueueDown;
-
         private Panel panel2;
         private CheckBox mcheckbox_cycleColumns;
         private Button mbutton_down;
@@ -611,82 +580,7 @@ namespace LcmsNet.SampleQueue.Forms
         private Button buttonRefresh;
         private ToolTip mToolTipManager;
         private System.ComponentModel.IContainer components;
-        private bool m_movingQueueUp;
-
-        private bool CanDeQueueSample(int rowID)
-        {
-            var canMove = false;
-
-            return canMove;
-        }
-
-        private bool CanQueueSample(int rowID)
-        {
-            var canMove = false;
-
-            return canMove;
-        }
-
-        void mdataGrid_samples_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
-
-        void mrect_queueRegion_MouseMove(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("MOVING--rect!");
-            if (m_movingQueueDown == false && m_movingQueueUp == false)
-                return;
-
-            if (mdataGrid_samples.Rows.Count <= 0)
-                return;
-
-            var rowHeight = mdataGrid_samples.Rows[0].Height;
-            if (m_movingQueueDown)
-            {
-                //
-                // If the mouse has been clicked and moving
-                //
-                //Size newSize = new Size(mrect_queueRegion.Size.Width, e.Y + 1);
-                // mrect_queueRegion.Size = newSize;
-            }
-        }
-
-        void mdataGrid_samples_MouseUp(object sender, MouseEventArgs e)
-        {
-        }
-
-        void mrect_queueRegion_MouseUp(object sender, MouseEventArgs e)
-        {
-        }
-
-        void mrect_queueRegion_MouseDown(object sender, MouseEventArgs e)
-        {
-            //
-            // See if we selected the queue region
-            //
-            var point = e.Location;
-            var diffYTop = Math.Abs(point.Y);
-            var diffYBottom = 0; // Math.Abs(mrect_queueRegion.Size.Height - point.Y);
-            var eps = 2;
-
-            if (diffYTop <= eps)
-            {
-                m_movingQueueUp = true;
-            }
-            else if (diffYBottom <= eps)
-            {
-                m_movingQueueDown = true;
-            }
-            else
-            {
-                //
-                // Nothing was selected
-                //
-                m_movingQueueUp = false;
-                m_movingQueueDown = false;
-            }
-        }
-
+      
         #endregion
 
     }

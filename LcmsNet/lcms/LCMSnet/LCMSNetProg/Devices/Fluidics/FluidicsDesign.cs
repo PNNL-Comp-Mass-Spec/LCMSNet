@@ -73,10 +73,6 @@ namespace LcmsNet.Devices.Fluidics
             SaveHardwareAs();
         }
 
-        private void controlDesign_Load(object sender, EventArgs e)
-        {
-        }
-
         private void FluidicsDesign_Paint(object sender, PaintEventArgs e)
         {
         }

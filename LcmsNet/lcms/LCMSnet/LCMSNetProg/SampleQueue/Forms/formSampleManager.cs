@@ -517,6 +517,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Run windows time synchronization using w32tm.exe
         /// </summary>
+        [Obsolete("Unused")]
         private void SynchronizeSystemClock()
         {
             var synchStart = new ProcessStartInfo();
@@ -544,11 +545,13 @@ namespace LcmsNet.SampleQueue.Forms
             //MessageBox.Show("Exit code: " + synch.ExitCode + " " + output + " " + error);
         }
 
+        [Obsolete("Unused")]
         private void btnMRMExport_Click(object sender, EventArgs e)
         {
             ExportMRMFiles();
         }
 
+        [Obsolete("Unused")]
         private void buttonLogViewer_Click(object sender, EventArgs e)
         {
             //LogViewer.formLogViewerMain formLogViewer = new LogViewer.formLogViewerMain();

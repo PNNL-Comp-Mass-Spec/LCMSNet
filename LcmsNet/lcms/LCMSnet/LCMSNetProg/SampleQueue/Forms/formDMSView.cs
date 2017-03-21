@@ -21,7 +21,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using LcmsNetDataClasses;
-using LcmsNetDmsTools;
 using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue
@@ -725,6 +724,7 @@ namespace LcmsNet.SampleQueue
         /// Adds a new line to the the RequestsToRun listview (overload for adding directly to listview)
         /// </summary>
         /// <param name="requestData">classDMSData object containing request data to add</param>
+        [Obsolete("Unused")]
         private void AddNewItemToRunListView(classSampleData requestData)
         {
             // Add to listview
@@ -736,6 +736,7 @@ namespace LcmsNet.SampleQueue
             newItem.SubItems.Add(requestData.DmsData.Batch.ToString());
             newItem.SubItems.Add(requestData.DmsData.Block.ToString());
             newItem.SubItems.Add(requestData.DmsData.RunOrder.ToString());
+
             // Set color if cart is assigned
             if (requestData.DmsData.CartName != "unknown")
             {

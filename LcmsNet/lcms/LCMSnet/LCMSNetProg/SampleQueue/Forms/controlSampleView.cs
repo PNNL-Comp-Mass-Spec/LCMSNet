@@ -457,6 +457,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// Determines if a queue can be pulled down or not.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Unused")]
         bool SelectionChangeValid(int rowNum, classSampleData sample, bool doNotValidate = false)
         {
             // Make sure we aren't at the end of the queue.
@@ -489,10 +490,12 @@ namespace LcmsNet.SampleQueue.Forms
                 if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                 {
                     var isSampleValid = mValidator.IsSampleValid(sample);
-                    if (!isSampleValid && false)
-                    {
-                        return false;
-                    }
+
+                    // EUS Usage for this sample is not valid; ignore for now
+                    //if (!isSampleValid)
+                    //{
+                    //    return false;
+                    //}
                 }
                 else
                 {
@@ -559,15 +562,18 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     // process: if more than 1 selected, ask user for confirmation; if confirmed, recursively call this function?
                     var isDequeue = m_lastQueuedSamplePosition - rowNum > 0;
-                    if (isDequeue) // dequeuing samples
+                    if (isDequeue)
                     {
+                        // Dequeuing samples; call this method recursively
                         HandleSampleValidationAndQueuing(rowNum + 1, true);
                     }
-                    else // queuing samples
+                    else
                     {
+                        // Queuing samples
+                        // Call this method recursively
                         HandleSampleValidationAndQueuing(rowNum - 1, true);
                     }
-                    //return;
+
                 }
 
                 currentTask = "Examine samples";
@@ -628,13 +634,6 @@ namespace LcmsNet.SampleQueue.Forms
 
                     if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
                         return;
-                    //if (!isRecursive)
-                    //{
-                    //    /////// This is very, very expensive...... ///////
-                    //    this.Validate();
-                    //}
-                    //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
-                    //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
 
                     // Dont let us re-run something that has been run, errored, or is currently running.
                     if (sample.RunningStatus != enumSampleRunningStatus.Queued
@@ -648,6 +647,11 @@ namespace LcmsNet.SampleQueue.Forms
                     if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                     {
                         var isSampleValid = mValidator.IsSampleValid(sample);
+                        //if (!isSampleValid)
+                        //{
+                        //    // EUS Usage for this sample is not valid; ignore for now
+                        //    return;
+                        //}
                     }
                     else
                     {
@@ -1907,6 +1911,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// Returns a list of all queued samples
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Unused")]
         private List<classSampleData> GetAllSamples()
         {
             var samples = new List<classSampleData>();
@@ -2605,6 +2610,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Updates all the rows for all of the listening controls.
         /// </summary>
+        [Obsolete("Unused")]
         private void RefreshRows()
         {
             foreach (DataGridViewRow row in mdataGrid_samples.SelectedRows)

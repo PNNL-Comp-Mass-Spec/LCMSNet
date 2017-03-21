@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 // Deprecated: using System.ComponentModel.Composition;
 using LcmsNetDataClasses;
 // Deprecated: using LcmsNetDataClasses.Data;
@@ -16,10 +15,7 @@ namespace LcmsNetDmsTools
     // Deprecated export: [ExportMetadata("RequiredDMSToolVersion", "1.0")]
     public class classDMSSampleValidator
     {
-        /// <summary>
-        /// Indicates not request number is tied to a EMSL user proposal in DMS.
-        /// </summary>
-        public const int CONST_EMSL_REQUEST_CHECK = 0;
+
         /// <summary>
         /// Indicates this item is tied to a EMSL user proposal that is not tied to a request in DMS.
         /// </summary>
@@ -32,7 +28,6 @@ namespace LcmsNetDmsTools
         /// <returns>True if valid, false if invalid</returns>
         public bool IsSampleValid(classSampleData sample)
         {
-            var errors = new List<classSampleValidationError>();
 
             var data = sample.DmsData;
 
@@ -57,8 +52,6 @@ namespace LcmsNetDmsTools
             {
                 return false;
             }
-            return errors.Count > 0;
-        }        
         /// <summary>
         /// Validates EUS Proposal ID
         /// </summary>

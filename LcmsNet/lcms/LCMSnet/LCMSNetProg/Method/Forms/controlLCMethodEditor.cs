@@ -245,6 +245,7 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
+        [Obsolete("Unused")]
         private classLCMethod FindMethods(string name)
         {
             classLCMethod method = null;
@@ -324,6 +325,7 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Builds the method based on the user interface input.
         /// </summary>
+        [Obsolete("Unused")]
         private void Build()
         {
             //
@@ -352,6 +354,7 @@ namespace LcmsNet.Method.Forms
         /// Loads the method into the editor.
         /// </summary>
         /// <param name="method"></param>
+        [Obsolete("Unused")]
         private void LoadMethod(classLCMethod method)
         {
             if (method != null && m_currentMethod != method)
@@ -391,16 +394,19 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [Obsolete("Unused")]
         private void mbutton_preview_Click(object sender, EventArgs e)
         {
             RenderAlignMethods();
         }
 
+        [Obsolete("Unused")]
         private void OnEditMethod()
         {
             UpdatingMethod?.Invoke(this, new classMethodEditingEventArgs(mcontrol_acquisitionStage.TextBoxNameGetText()));
         }
 
+        [Obsolete("Unused")]
         private bool IgnoreUpdates { get; set; }
 
         #endregion

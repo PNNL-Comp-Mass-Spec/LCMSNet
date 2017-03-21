@@ -546,6 +546,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="queue">Queue to search on.</param>
         /// <returns>List of samples whose request names are unused.</returns>
+        [Obsolete("Unused")]
         private List<classSampleData> FindUnusedSamples(List<classSampleData> queue)
         {
             var unusedSamples = new List<classSampleData>();
@@ -565,6 +566,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="queue">Queue to search on.</param>
         /// <param name="column">Column to search on.</param>
         /// <returns>List of samples whose request names are unused.</returns>
+        [Obsolete("Unused")]
         private List<classSampleData> FindUnusedSamples(List<classSampleData> queue, classColumnData column)
         {
             var unusedSamples = new List<classSampleData>();
@@ -1068,7 +1070,6 @@ namespace LcmsNet.SampleQueue
             // var tempQueue = new List<classSampleData>();
             if (distributeSamplesEvenlyAcrossColumns == enumColumnDataHandling.CreateUnused)
             {
-                var tempQueue = new List<classSampleData>();
                 var sampleHistogram = BuildSampleHistogram(m_waitingQueue);
                 //
                 // Add samples to their respective columns.
@@ -1085,7 +1086,7 @@ namespace LcmsNet.SampleQueue
                         added = true;
                         sample.UniqueID = GenerateUniqueID();
                         sampleHistogram[sample.ColumnData].Add(sample);
-                        tempQueue.Add(sample);
+                        // tempQueue.Add(sample);
                     }
                 }
                 DistributeSamplesAcrossColumns(sampleHistogram, m_waitingQueue);
@@ -1185,6 +1186,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
+        [Obsolete("Unused")]
         private bool RemoveSample(classSampleData sample)
         {
             var removed = false;
@@ -1696,7 +1698,10 @@ namespace LcmsNet.SampleQueue
             }
 
             // Setup the queue to be optimized.
-            var validSamples = new List<classSampleData>();
+
+            // Could keep track of the samples with this:
+            // var validSamples = new List<classSampleData>();
+
             foreach (var sample in m_runningQueue)
             {
                 var next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
@@ -1720,7 +1725,7 @@ namespace LcmsNet.SampleQueue
                     continue;
                 }
 
-                validSamples.Add(sample);
+                // validSamples.Add(sample);
                 sample.LCMethod.SetStartTime(next);
 
                 // We need to look for Daylight Savings Time Transitions and adjust for them here.
@@ -1827,7 +1832,7 @@ namespace LcmsNet.SampleQueue
                 else if (m_runningQueue.Count == 0)
                 {
                     Debug.WriteLine("Setting sample start time as it is first in running queue.");
-                    // Otherwise we are the first ones on the queue, but we dont need to do anything
+                    // Otherwise we are the first ones on the queue, but we don't need to do anything
                     // for alignment.
                     realSample.LCMethod.SetStartTime(next);
                 }

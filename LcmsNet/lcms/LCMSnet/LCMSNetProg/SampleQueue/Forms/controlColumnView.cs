@@ -24,7 +24,6 @@ namespace LcmsNet.SampleQueue.Forms
     {
         public delegate void DelegateUpdateUserInterface();
 
-        private const float CONST_COLUMN_HEADER_FONT_SIZE = 18.0F;
         formExpansion m_expand;
 
         private List<Button> m_buttons;
@@ -517,16 +516,6 @@ namespace LcmsNet.SampleQueue.Forms
             //
             offset *= numEnabledColumns;
             base.MoveSelectedSamples(offset, enumMoveSampleType.Column);
-        }
-
-        /// <summary>
-        /// Removes the samples but does not resort the columns
-        /// </summary>
-        /// <param name="resortColumns"></param>
-        protected override void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
-        {
-            // Override the resort columns flag
-            base.RemoveSelectedSamples(resortColumns);
         }
 
         /// <summary>
