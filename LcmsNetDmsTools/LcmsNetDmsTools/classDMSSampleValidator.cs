@@ -31,10 +31,10 @@ namespace LcmsNetDmsTools
 
             var data = sample.DmsData;
 
-            // If the request is zero, then we have to perform some checks
-            if (data.RequestID != CONST_EMSL_REQUEST_CHECK)
+            if (data.RequestID != 0)
             {
-                return errors.Count > 0;
+                // The request is non-zero, no need to perform additional checks
+                return true;
             }
 
             if (data.UsageType.ToUpper() == CONST_EMSL_USAGE_TYPE)
@@ -52,23 +52,28 @@ namespace LcmsNetDmsTools
             {
                 return false;
             }
+
+            // No errors; sample is valid
+            return true;
+        }
+
         /// <summary>
         /// Validates EUS Proposal ID
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
         public static bool IsEMSLProposalIDValid(classSampleData sample)
-        {            
+        {
             var data = sample.DmsData;
-            
-            if (data.RequestID == CONST_EMSL_REQUEST_CHECK)
+
+            if (data.RequestID == 0)
             {
                 if (data.UsageType.ToUpper() == CONST_EMSL_USAGE_TYPE)
                 {
                     if (string.IsNullOrEmpty(data.ProposalID.Replace(" ","")))
                     {
                      return false;
-                    }                    
+                    }
                 }
             }
             return true;
@@ -80,10 +85,10 @@ namespace LcmsNetDmsTools
         /// <param name="sample"></param>
         /// <returns></returns>
         public static bool IsEMSLUserValid(classSampleData sample)
-        {            
+        {
             var data = sample.DmsData;
-            
-            if (data.RequestID == CONST_EMSL_REQUEST_CHECK)
+
+            if (data.RequestID == 0)
             {
                 if (data.UsageType.ToUpper() == CONST_EMSL_USAGE_TYPE)
                 {
@@ -91,47 +96,49 @@ namespace LcmsNetDmsTools
                     {
                         return false;
                     }
-                }                
-            }               
+                }
+            }
             return true;
         }
+
         /// <summary>
         /// Validate EUS Usage
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
         public static bool IsEMSLUsageTypeValid(classSampleData sample)
-        {            
+        {
             var data = sample.DmsData;
-            
-            if (data.RequestID == CONST_EMSL_REQUEST_CHECK)
-            {                
+
+            if (data.RequestID == 0)
+            {
                 if (string.IsNullOrEmpty(data.UsageType.ToUpper()))
                 {
                     return false;
                 }
-            }   
+            }
             return true;
         }
+
         /// <summary>
         /// Validate experiment name
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
         public static bool IsExperimentNameValid(classSampleData sample)
-        {            
+        {
             var data = sample.DmsData;
-            
-            if (data.RequestID == CONST_EMSL_REQUEST_CHECK)
-            {                
+
+            if (data.RequestID == 0)
+            {
                 if (string.IsNullOrEmpty(data.Experiment.ToUpper()))
                 {
                     return false;
                 }
-            }   
+            }
             return true;
         }
-     
+
         public Type DMSValidatorControl => typeof(controlDMSValidator);
     }
 }
