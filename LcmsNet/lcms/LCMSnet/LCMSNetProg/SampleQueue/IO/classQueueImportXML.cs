@@ -63,10 +63,10 @@ namespace LcmsNet.SampleQueue.IO
             var nodeList = doc.SelectNodes("//QueueSettings/*");
 
             // If no nodes found, report and exit
-            if (nodeList.Count < 1)
+            if (nodeList == null || nodeList.Count < 1)
             {
-                var ErrMsg = "No data found for import in file " + path;
-                classApplicationLogger.LogMessage(0, ErrMsg);
+                var errMsg = "No sample data found for import in file " + path;
+                classApplicationLogger.LogMessage(0, errMsg);
                 return returnList;
             }
 
@@ -97,13 +97,12 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="itemNode">XML node containing data for 1 sample</param>
         /// <returns>classSampleData object containing data from the XML node</returns>
-        private classSampleData ConvertXMLNodeToSample(XmlNode ItemNode)
+        private classSampleData ConvertXMLNodeToSample(XmlNode itemNode)
         {
             var retData = new classSampleData(false);
-            string tempStr;
 
             // Description (DMS.Name)
-            tempStr = ConvertNullToString(ItemNode.SelectSingleNode("Description").InnerText);
+            var tempStr = GetNodeValue(itemNode, "Description");
             // Value is mandatory for this field, so check for it
             if (tempStr != "")
             {
@@ -116,13 +115,13 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Selection Method (PAL.Method)
-            retData.PAL.Method = ConvertNullToString(ItemNode.SelectSingleNode("Selection/Method").InnerText);
+            retData.PAL.Method = GetNodeValue(itemNode, "Selection/Method");
 
             // Tray (PAL.Tray) (aka wellplate)
-            retData.PAL.PALTray = ConvertNullToString(ItemNode.SelectSingleNode("Selection/Tray").InnerText);
+            retData.PAL.PALTray = GetNodeValue(itemNode, "Selection/Tray");
 
             // Vial (PAL.Vial) (aka well)
-            var tmpStr = ConvertNullToString(ItemNode.SelectSingleNode("Selection/Vial").InnerText);
+            var tmpStr = GetNodeValue(itemNode, "Selection/Vial");
             if (tmpStr == "")
             {
                 retData.PAL.Well = 0;
@@ -133,82 +132,83 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Volume (Volume)
-            retData.Volume = ConvertNullToDouble(ItemNode.SelectSingleNode("Selection/Volume").InnerText);
+            retData.Volume = ConvertNullToDouble(GetNodeValue(itemNode, "Selection/Volume"));
 
             // Separation Method (Experiment.ExperimentName)
-            var methodName = ConvertNullToString(ItemNode.SelectSingleNode("Separation/Method").InnerText);
-            retData.LCMethod = new classLCMethod();
-            retData.LCMethod.Name = methodName;
+            var methodName = GetNodeValue(itemNode, "Separation/Method");
+            retData.LCMethod = new classLCMethod {
+                Name = methodName
+            };
 
             // Acquisition Method (InstrumentData.MethodName)
             retData.InstrumentData.MethodName =
-                ConvertNullToString(ItemNode.SelectSingleNode("Acquisition/Method").InnerText);
+                GetNodeValue(itemNode, "Acquisition/Method");
 
             // DMS RequestNumber (DMSData.RequestID)
-            retData.DmsData.RequestID = ConvertNullToInt(ItemNode.SelectSingleNode("DMS/RequestNumber").InnerText);
+            retData.DmsData.RequestID = ConvertNullToInt(GetNodeValue(itemNode, "DMS/RequestNumber"));
 
             // DMS Comment (DMSData.Comment)
-            retData.DmsData.Comment = ConvertNullToString(ItemNode.SelectSingleNode("DMS/Comment").InnerText);
+            retData.DmsData.Comment = GetNodeValue(itemNode, "DMS/Comment");
 
             // DMS DatasetType (DMSData.DatasetType)
-            retData.DmsData.DatasetType = ConvertNullToString(ItemNode.SelectSingleNode("DMS/DatasetType").InnerText);
+            retData.DmsData.DatasetType = GetNodeValue(itemNode, "DMS/DatasetType");
 
             // DMS Experiment (DMSData.Experiment)
-            retData.DmsData.Experiment = ConvertNullToString(ItemNode.SelectSingleNode("DMS/Experiment").InnerText);
+            retData.DmsData.Experiment = GetNodeValue(itemNode, "DMS/Experiment");
 
             // DMS EMSLProposalID (DMSData.ProposalID)
-            retData.DmsData.ProposalID = ConvertNullToString(ItemNode.SelectSingleNode("DMS/EMSLProposalID").InnerText);
+            retData.DmsData.ProposalID = GetNodeValue(itemNode, "DMS/EMSLProposalID");
 
             // DMS EMSLUsageType (DMSData.UsageType)
-            retData.DmsData.UsageType = ConvertNullToString(ItemNode.SelectSingleNode("DMS/EMSLUsageType").InnerText);
+            retData.DmsData.UsageType = GetNodeValue(itemNode, "DMS/EMSLUsageType");
 
             // DMS EMSLUser (DMSData.UserList)
-            retData.DmsData.UserList = ConvertNullToString(ItemNode.SelectSingleNode("DMS/EMSLUser").InnerText);
+            retData.DmsData.UserList = GetNodeValue(itemNode, "DMS/EMSLUser");
 
             // It's all in, so return
             return retData;
         }
 
         /// <summary>
-        /// Utility method to convert a null or empty string value in the XML file to a string
-        /// </summary>
-        /// <param name="InpVal">String from XML parser</param>
-        /// <returns>If input string is empty or null, returns empty string. Otherwise returns input string</returns>
-        private string ConvertNullToString(string InpVal)
-        {
-            if (string.IsNullOrEmpty(InpVal))
-            {
-                return string.Empty;
-            }
-            return InpVal;
-        }
-
-        /// <summary>
         /// Utility method to convert a null or empty string value in the XML file to an int
         /// </summary>
-        /// <param name="InpVal">String from XML parser</param>
+        /// <param name="value">String from XML parser</param>
         /// <returns>If input string is empty or null, returns 0. Otherwise returns input string converted to int</returns>
-        private int ConvertNullToInt(string InpVal)
+        private int ConvertNullToInt(string value)
         {
-            if (string.IsNullOrEmpty(InpVal))
+            if (string.IsNullOrEmpty(value))
             {
                 return 0;
             }
-            return int.Parse(InpVal);
+
+            return int.TryParse(value, out int number) ? number : 0;
         }
 
         /// <summary>
         /// Utility method to convert a null or empty string value in the XML file to a double
         /// </summary>
-        /// <param name="InpVal">String from XML parser</param>
+        /// <param name="value">String from XML parser</param>
         /// <returns>If input string is empty or null, returns 0.0. Otherwise returns input string converted to double</returns>
-        private double ConvertNullToDouble(string InpVal)
+        private double ConvertNullToDouble(string value)
         {
-            if (string.IsNullOrEmpty(InpVal))
+            if (string.IsNullOrEmpty(value))
             {
-                return 0.0;
+                return 0;
             }
-            return double.Parse(InpVal);
+            return double.TryParse(value, out double number) ? number : 0;
+        }
+
+        private string GetNodeValue(XmlNode itemNode, string nodeName)
+        {
+            var valueNode = itemNode.SelectSingleNode(nodeName);
+
+            var value = valueNode?.InnerText;
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+            }
+            return value;
         }
 
         #endregion
