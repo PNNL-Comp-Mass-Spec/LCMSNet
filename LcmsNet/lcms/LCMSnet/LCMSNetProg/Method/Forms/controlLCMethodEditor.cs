@@ -55,7 +55,7 @@ namespace LcmsNet.Method.Forms
             var path = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH);
             if (!string.IsNullOrWhiteSpace(path))
             {
-                mdialog_openMethod.InitialDirectory = Path.Combine(path,
+                mdialogOpenMethod.InitialDirectory = Path.Combine(path,
                     classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             }
             m_currentMethod = new classLCMethod();

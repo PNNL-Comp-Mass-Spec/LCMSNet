@@ -185,16 +185,6 @@ namespace LcmsNet.SampleQueue
         private readonly List<long> m_uniqueID;
 
         /// <summary>
-        /// Flag indicating whether to re-set the column data when a queue operation is performed.
-        /// </summary>
-        private bool m_resetColumns;
-
-        /// <summary>
-        /// Default name of the sample to add when distributing across columns.
-        /// </summary>
-        private string m_defaultSampleName;
-
-        /// <summary>
         /// Stack of waiting queues for undo operations.
         /// </summary>
         private readonly Stack<List<classSampleData>> m_undoBackWaitingQueue;
@@ -284,9 +274,9 @@ namespace LcmsNet.SampleQueue
             m_runningQueue = new List<classSampleData>();
             m_uniqueID = new List<long>();
 
-            m_defaultSampleName = CONST_DEFAULT_SAMPLENAME;
+            DefaultSampleName = CONST_DEFAULT_SAMPLENAME;
             m_integrateName = CONST_DEFAULT_INTEGRATE_SAMPLENAME;
-            m_resetColumns = true;
+            AutoColumnData = true;
             m_sampleIndex = 1;
             m_sampleWaitingEvent = new AutoResetEvent(false);
             m_columnOrders = new List<classColumnData>();
@@ -388,20 +378,12 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets or sets whether to reset the column data when a queue operation is performed.
         /// </summary>
-        public bool AutoColumnData
-        {
-            get { return m_resetColumns; }
-            set { m_resetColumns = value; }
-        }
+        public bool AutoColumnData { get; set; }
 
         /// <summary>
         /// Gets or sets the default name of the sample to add when distributing across columns.
         /// </summary>
-        public string DefaultSampleName
-        {
-            get { return m_defaultSampleName; }
-            set { m_defaultSampleName = value; }
-        }
+        public string DefaultSampleName { get; set; }
 
         /// <summary>
         /// Gets or sets the running sample index of samples that have been

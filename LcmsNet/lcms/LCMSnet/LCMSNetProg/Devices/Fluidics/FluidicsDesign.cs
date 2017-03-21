@@ -93,7 +93,6 @@ namespace LcmsNet.Devices.Fluidics
         private const string CONST_DEFAULT_CONFIG_FILEPATH = "HardwareConfig.ini";
 
         private bool m_locked;
-        private readonly ModelCheckReportViewer m_reporter;
 
         #endregion
 
@@ -109,9 +108,11 @@ namespace LcmsNet.Devices.Fluidics
                 Manager_DeviceRemoved;
             classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
             m_fluidics_mod = classFluidicsModerator.Moderator;
-            m_reporter = new ModelCheckReportViewer(m_fluidics_mod);
-            m_reporter.Dock = DockStyle.Fill;
-            tabControl1.TabPages["tabPageModelStatus"].Controls.Add(m_reporter);
+            var reporter = new ModelCheckReportViewer(m_fluidics_mod) {
+                Dock = DockStyle.Fill
+            };
+
+            tabControl1.TabPages["tabPageModelStatus"].Controls.Add(reporter);
             tabControl1.Selecting += tabControl1_Selecting;
             m_fluidics_mod.ScaleWorldView(1);
             m_fluidics_mod.ModelChanged += FluidicsModelChanged;

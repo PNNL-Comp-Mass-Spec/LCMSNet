@@ -10,11 +10,6 @@ namespace LcmsNet.SampleQueue
     {
         #region Members
 
-        /// <summary>
-        /// Array of samples that have been operated on.
-        /// </summary>
-        private readonly IEnumerable<classSampleData> marray_data;
-
         #endregion
 
         /// <summary>
@@ -23,7 +18,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="data">Samples of question.</param>
         public classSampleQueueArgs(IEnumerable<classSampleData> data)
         {
-            marray_data = data;
+            Samples = data;
         }
 
         /// <summary>
@@ -37,9 +32,11 @@ namespace LcmsNet.SampleQueue
         public classSampleQueueArgs(
             IEnumerable<classSampleData> data,
             int runningIndex,
+            int running,
+            int complete,
             int waiting)
         {
-            marray_data = data;
+            Samples = data;
             RunningSamplePosition = runningIndex;
 
             WaitingQueueTotal = waiting;
@@ -55,7 +52,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets the samples that had an action performed on them.
         /// </summary>
-        public IEnumerable<classSampleData> Samples => marray_data;
+        public IEnumerable<classSampleData> Samples { get; }
 
         /// <summary>
         ///

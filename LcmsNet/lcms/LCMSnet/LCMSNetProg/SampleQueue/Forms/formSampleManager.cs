@@ -520,28 +520,35 @@ namespace LcmsNet.SampleQueue.Forms
         [Obsolete("Unused")]
         private void SynchronizeSystemClock()
         {
-            var synchStart = new ProcessStartInfo();
-            synchStart.FileName = @"w32tm.exe";
-            synchStart.Arguments = @"/resync";
-            synchStart.UseShellExecute = false;
-            synchStart.CreateNoWindow = true;
-            synchStart.RedirectStandardOutput = true;
-            synchStart.RedirectStandardError = true;
-            var synch = Process.Start(synchStart);
-            synch.WaitForExit(TIME_SYNCH_WAIT_TIME_MILLISECONDS);
+            var syncStart = new ProcessStartInfo
+            {
+                FileName = @"w32tm.exe",
+                Arguments = @"/resync",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            var sync = Process.Start(syncStart);
+            if (sync == null)
+                return;
+
+            sync.WaitForExit(TIME_SYNCH_WAIT_TIME_MILLISECONDS);
             var output = string.Empty;
             var error = string.Empty;
             try
             {
-                output = synch.StandardOutput.ReadToEnd();
-                error = synch.StandardError.ReadToEnd();
+                output = sync.StandardOutput.ReadToEnd();
+                error = sync.StandardError.ReadToEnd();
             }
             catch (Exception)
             {
                 // Ignore errors here
             }
+
             classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                "Synched System Clock " + synch.ExitCode + " " + output + " " + error);
+                                              "Synched System Clock " + sync.ExitCode + " " + output + " " + error);
             //MessageBox.Show("Exit code: " + synch.ExitCode + " " + output + " " + error);
         }
 
