@@ -685,6 +685,7 @@ namespace LcmsNet.SampleQueue.Forms
                         var sampleValidator = reference.Value;
                         errors.AddRange(sampleValidator.ValidateSamples(sample));
                     }
+
                     if (errors.Count > 0)
                     {
                         //TODO: Add notifications to what was wrong with the samples.
@@ -723,13 +724,47 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        void InvalidateGridView(object sender, DataGridViewCellEventArgs e)
+        private bool ValidateSampleRowReadyToRun(int rowToCheck)
         {
-            InvalidateGridView();
+            if (rowToCheck < 1)
+            {
+                // Invalid row; return true for safety
+                return true;
+            }
+
+            var rowIdToCheck = Convert.ToInt32(mdataGrid_samples.Rows[rowToCheck - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
+            var sampleToCheck = m_sampleQueue.FindSample(rowIdToCheck);
+            var isValid = true;
+
+            if (sampleToCheck != null)
+            {
+                if (string.IsNullOrWhiteSpace(sampleToCheck.PAL.PALTray) || sampleToCheck.PAL.PALTray == CONST_NOT_SELECTED)
+                {
+                    // PAL tray not defined
+                    isValid = false;
+                }
+
+                if (string.IsNullOrWhiteSpace(sampleToCheck.LCMethod.Name) || sampleToCheck.LCMethod.Name == CONST_NOT_SELECTED)
+                {
+                    // LC Method not defined
+                    isValid = false;
+                }
+
+            }
+
+            return isValid;
         }
 
-        protected void InvalidateGridView()
+        void InvalidateGridView(object sender, DataGridViewCellEventArgs e)
         {
+            InvalidateGridView(false);
+        }
+
+        protected void InvalidateGridView(bool resetBindingSourceBindings)
+        {
+            if (resetBindingSourceBindings)
+                sampleToRowTranslatorBindingSource.ResetBindings(false);
+
             mdataGrid_samples.ResetBindings();
             mdataGrid_samples.Invalidate();
         }
@@ -744,6 +779,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     return;
                 }
+
                 //enumCheckboxStatus gridEditState =
                 //    GetCheckboxStatusFromCheckbox(checkbox, checkbox.EditedFormattedValue); // use checkbox.EditedFormattedValue
 

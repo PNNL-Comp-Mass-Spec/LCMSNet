@@ -470,7 +470,7 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mbutton_refresh_Click(object sender, EventArgs e)
         {
-            InvalidateGridView();
+            InvalidateGridView(true);
         }
 
 
