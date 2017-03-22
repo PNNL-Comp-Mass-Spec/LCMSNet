@@ -132,21 +132,21 @@ namespace LcmsNet.SampleQueue.Forms
         {
             this.components = new System.ComponentModel.Container();
             this.mlabel_name = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.buttonRefresh = new System.Windows.Forms.Button();
-            this.mcheckbox_autoscroll = new System.Windows.Forms.CheckBox();
-            this.mbutton_dmsEdit = new System.Windows.Forms.Button();
-            this.mbutton_cartColumnDate = new System.Windows.Forms.Button();
-            this.mbutton_down = new System.Windows.Forms.Button();
-            this.mbutton_addBlank = new System.Windows.Forms.Button();
-            this.mbutton_up = new System.Windows.Forms.Button();
-            this.mbutton_addDMS = new System.Windows.Forms.Button();
-            this.mbutton_removeSelected = new System.Windows.Forms.Button();
-            this.mbutton_deleteUnused = new System.Windows.Forms.Button();
-            this.mbutton_fillDown = new System.Windows.Forms.Button();
-            this.mbutton_trayVial = new System.Windows.Forms.Button();
-            this.mcheckbox_cycleColumns = new System.Windows.Forms.CheckBox();
             this.mToolTipManager = new System.Windows.Forms.ToolTip(this.components);
+            this.mcheckbox_cycleColumns = new System.Windows.Forms.CheckBox();
+            this.mbutton_trayVial = new System.Windows.Forms.Button();
+            this.mbutton_fillDown = new System.Windows.Forms.Button();
+            this.mbutton_deleteUnused = new System.Windows.Forms.Button();
+            this.mbutton_removeSelected = new System.Windows.Forms.Button();
+            this.mbutton_addDMS = new System.Windows.Forms.Button();
+            this.mbutton_up = new System.Windows.Forms.Button();
+            this.mbutton_addBlank = new System.Windows.Forms.Button();
+            this.mbutton_down = new System.Windows.Forms.Button();
+            this.mbutton_cartColumnDate = new System.Windows.Forms.Button();
+            this.mbutton_dmsEdit = new System.Windows.Forms.Button();
+            this.mcheckbox_autoscroll = new System.Windows.Forms.CheckBox();
+            this.buttonRefresh = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -164,6 +164,198 @@ namespace LcmsNet.SampleQueue.Forms
             this.mlabel_name.Name = "mlabel_name";
             this.mlabel_name.Size = new System.Drawing.Size(0, 13);
             this.mlabel_name.TabIndex = 0;
+            // 
+            // mcheckbox_cycleColumns
+            // 
+            this.mcheckbox_cycleColumns.Location = new System.Drawing.Point(52, 95);
+            this.mcheckbox_cycleColumns.Margin = new System.Windows.Forms.Padding(4);
+            this.mcheckbox_cycleColumns.Name = "mcheckbox_cycleColumns";
+            this.mcheckbox_cycleColumns.Size = new System.Drawing.Size(145, 22);
+            this.mcheckbox_cycleColumns.TabIndex = 35;
+            this.mcheckbox_cycleColumns.Text = "Cycle Columns";
+            this.mcheckbox_cycleColumns.UseVisualStyleBackColor = true;
+            this.mcheckbox_cycleColumns.CheckedChanged += new System.EventHandler(this.mcheckbox_cycleColumns_CheckedChanged);
+            // 
+            // mbutton_trayVial
+            // 
+            this.mbutton_trayVial.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_trayVial.Image = global::LcmsNet.Properties.Resources.testTube;
+            this.mbutton_trayVial.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_trayVial.Location = new System.Drawing.Point(495, 6);
+            this.mbutton_trayVial.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_trayVial.Name = "mbutton_trayVial";
+            this.mbutton_trayVial.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_trayVial.TabIndex = 39;
+            this.mbutton_trayVial.Text = "Tray Vial";
+            this.mbutton_trayVial.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_trayVial.UseVisualStyleBackColor = true;
+            this.mbutton_trayVial.Click += new System.EventHandler(this.mbutton_trayVial_Click);
+            // 
+            // mbutton_fillDown
+            // 
+            this.mbutton_fillDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_fillDown.Image = global::LcmsNet.Properties.Resources.Filldown;
+            this.mbutton_fillDown.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_fillDown.Location = new System.Drawing.Point(407, 6);
+            this.mbutton_fillDown.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_fillDown.Name = "mbutton_fillDown";
+            this.mbutton_fillDown.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_fillDown.TabIndex = 39;
+            this.mbutton_fillDown.Text = "Fill Down";
+            this.mbutton_fillDown.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_fillDown.UseVisualStyleBackColor = true;
+            this.mbutton_fillDown.Click += new System.EventHandler(this.mbutton_fillDown_Click);
+            // 
+            // mbutton_deleteUnused
+            // 
+            this.mbutton_deleteUnused.BackColor = System.Drawing.Color.Transparent;
+            this.mbutton_deleteUnused.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_deleteUnused.ForeColor = System.Drawing.Color.Black;
+            this.mbutton_deleteUnused.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
+            this.mbutton_deleteUnused.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_deleteUnused.Location = new System.Drawing.Point(231, 6);
+            this.mbutton_deleteUnused.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_deleteUnused.Name = "mbutton_deleteUnused";
+            this.mbutton_deleteUnused.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_deleteUnused.TabIndex = 33;
+            this.mbutton_deleteUnused.Text = "Unused";
+            this.mbutton_deleteUnused.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_deleteUnused.UseVisualStyleBackColor = false;
+            this.mbutton_deleteUnused.Click += new System.EventHandler(this.mbutton_deleteUnused_Click);
+            // 
+            // mbutton_removeSelected
+            // 
+            this.mbutton_removeSelected.BackColor = System.Drawing.Color.Transparent;
+            this.mbutton_removeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_removeSelected.ForeColor = System.Drawing.Color.Black;
+            this.mbutton_removeSelected.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
+            this.mbutton_removeSelected.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_removeSelected.Location = new System.Drawing.Point(319, 6);
+            this.mbutton_removeSelected.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_removeSelected.Name = "mbutton_removeSelected";
+            this.mbutton_removeSelected.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_removeSelected.TabIndex = 32;
+            this.mbutton_removeSelected.Text = "Selected";
+            this.mbutton_removeSelected.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_removeSelected.UseVisualStyleBackColor = false;
+            this.mbutton_removeSelected.Click += new System.EventHandler(this.mbutton_removeSelected_Click);
+            // 
+            // mbutton_addDMS
+            // 
+            this.mbutton_addDMS.Image = global::LcmsNet.Properties.Resources.AddDMS;
+            this.mbutton_addDMS.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_addDMS.Location = new System.Drawing.Point(140, 6);
+            this.mbutton_addDMS.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_addDMS.Name = "mbutton_addDMS";
+            this.mbutton_addDMS.Size = new System.Drawing.Size(80, 81);
+            this.mbutton_addDMS.TabIndex = 34;
+            this.mbutton_addDMS.Text = "DMS";
+            this.mbutton_addDMS.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_addDMS.UseVisualStyleBackColor = true;
+            this.mbutton_addDMS.Click += new System.EventHandler(this.mbutton_addDMS_Click);
+            // 
+            // mbutton_up
+            // 
+            this.mbutton_up.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mbutton_up.Image = global::LcmsNet.Properties.Resources.Button_Up_16;
+            this.mbutton_up.Location = new System.Drawing.Point(856, 4);
+            this.mbutton_up.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_up.Name = "mbutton_up";
+            this.mbutton_up.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_up.TabIndex = 30;
+            this.mbutton_up.UseVisualStyleBackColor = true;
+            this.mbutton_up.Click += new System.EventHandler(this.mbutton_up_Click);
+            // 
+            // mbutton_addBlank
+            // 
+            this.mbutton_addBlank.BackColor = System.Drawing.Color.Transparent;
+            this.mbutton_addBlank.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_addBlank.ForeColor = System.Drawing.Color.Black;
+            this.mbutton_addBlank.Image = global::LcmsNet.Properties.Resources.add;
+            this.mbutton_addBlank.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_addBlank.Location = new System.Drawing.Point(52, 6);
+            this.mbutton_addBlank.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_addBlank.Name = "mbutton_addBlank";
+            this.mbutton_addBlank.Size = new System.Drawing.Size(80, 81);
+            this.mbutton_addBlank.TabIndex = 31;
+            this.mbutton_addBlank.Text = "Blank";
+            this.mbutton_addBlank.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_addBlank.UseVisualStyleBackColor = false;
+            this.mbutton_addBlank.Click += new System.EventHandler(this.mbutton_addBlank_Click);
+            // 
+            // mbutton_down
+            // 
+            this.mbutton_down.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mbutton_down.Image = global::LcmsNet.Properties.Resources.Button_Down_16;
+            this.mbutton_down.Location = new System.Drawing.Point(944, 5);
+            this.mbutton_down.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_down.Name = "mbutton_down";
+            this.mbutton_down.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_down.TabIndex = 31;
+            this.mbutton_down.UseVisualStyleBackColor = true;
+            this.mbutton_down.Click += new System.EventHandler(this.mbutton_down_Click);
+            // 
+            // mbutton_cartColumnDate
+            // 
+            this.mbutton_cartColumnDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_cartColumnDate.Image = global::LcmsNet.Properties.Resources.CartColumnName;
+            this.mbutton_cartColumnDate.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_cartColumnDate.Location = new System.Drawing.Point(583, 6);
+            this.mbutton_cartColumnDate.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_cartColumnDate.Name = "mbutton_cartColumnDate";
+            this.mbutton_cartColumnDate.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_cartColumnDate.TabIndex = 40;
+            this.mbutton_cartColumnDate.Text = "Cart, Col, Date";
+            this.mbutton_cartColumnDate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_cartColumnDate.UseVisualStyleBackColor = true;
+            this.mbutton_cartColumnDate.Click += new System.EventHandler(this.mbutton_cartColumnDate_Click);
+            // 
+            // mbutton_dmsEdit
+            // 
+            this.mbutton_dmsEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_dmsEdit.Image = global::LcmsNet.Properties.Resources.DMSEdit;
+            this.mbutton_dmsEdit.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.mbutton_dmsEdit.Location = new System.Drawing.Point(671, 6);
+            this.mbutton_dmsEdit.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_dmsEdit.Name = "mbutton_dmsEdit";
+            this.mbutton_dmsEdit.Size = new System.Drawing.Size(80, 118);
+            this.mbutton_dmsEdit.TabIndex = 41;
+            this.mbutton_dmsEdit.Text = "DMS Edit";
+            this.mbutton_dmsEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mbutton_dmsEdit.UseVisualStyleBackColor = true;
+            this.mbutton_dmsEdit.Click += new System.EventHandler(this.mbutton_dmsEdit_Click);
+            // 
+            // mcheckbox_autoscroll
+            // 
+            this.mcheckbox_autoscroll.AutoSize = true;
+            this.mcheckbox_autoscroll.Checked = true;
+            this.mcheckbox_autoscroll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mcheckbox_autoscroll.Location = new System.Drawing.Point(759, 96);
+            this.mcheckbox_autoscroll.Margin = new System.Windows.Forms.Padding(4);
+            this.mcheckbox_autoscroll.Name = "mcheckbox_autoscroll";
+            this.mcheckbox_autoscroll.Size = new System.Drawing.Size(97, 21);
+            this.mcheckbox_autoscroll.TabIndex = 42;
+            this.mcheckbox_autoscroll.Text = "Auto-scroll";
+            this.mcheckbox_autoscroll.UseVisualStyleBackColor = true;
+            this.mcheckbox_autoscroll.CheckedChanged += new System.EventHandler(this.mcheckbox_autoscroll_CheckedChanged);
+            // 
+            // buttonRefresh
+            // 
+            this.buttonRefresh.BackColor = System.Drawing.Color.Transparent;
+            this.buttonRefresh.CausesValidation = false;
+            this.buttonRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRefresh.ForeColor = System.Drawing.Color.Black;
+            this.buttonRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonRefresh.Location = new System.Drawing.Point(759, 7);
+            this.buttonRefresh.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(80, 81);
+            this.buttonRefresh.TabIndex = 43;
+            this.buttonRefresh.Text = "Refresh\r\nList";
+            this.buttonRefresh.UseVisualStyleBackColor = false;
+            this.buttonRefresh.Click += new System.EventHandler(this.mbutton_refresh_Click);
             // 
             // panel2
             // 
@@ -184,200 +376,8 @@ namespace LcmsNet.SampleQueue.Forms
             this.panel2.Location = new System.Drawing.Point(5, 708);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1145, 128);
+            this.panel2.Size = new System.Drawing.Size(1031, 128);
             this.panel2.TabIndex = 20;
-            // 
-            // buttonRefresh
-            // 
-            this.buttonRefresh.BackColor = System.Drawing.Color.Transparent;
-            this.buttonRefresh.CausesValidation = false;
-            this.buttonRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRefresh.ForeColor = System.Drawing.Color.Black;
-            this.buttonRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonRefresh.Location = new System.Drawing.Point(759, 7);
-            this.buttonRefresh.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonRefresh.Name = "buttonRefresh";
-            this.buttonRefresh.Size = new System.Drawing.Size(80, 81);
-            this.buttonRefresh.TabIndex = 43;
-            this.buttonRefresh.Text = "Refresh\r\nList";
-            this.buttonRefresh.UseVisualStyleBackColor = false;
-            this.buttonRefresh.Click += new System.EventHandler(this.mbutton_refresh_Click);
-            // 
-            // mcheckbox_autoscroll
-            // 
-            this.mcheckbox_autoscroll.AutoSize = true;
-            this.mcheckbox_autoscroll.Checked = true;
-            this.mcheckbox_autoscroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.mcheckbox_autoscroll.Location = new System.Drawing.Point(759, 96);
-            this.mcheckbox_autoscroll.Margin = new System.Windows.Forms.Padding(4);
-            this.mcheckbox_autoscroll.Name = "mcheckbox_autoscroll";
-            this.mcheckbox_autoscroll.Size = new System.Drawing.Size(97, 21);
-            this.mcheckbox_autoscroll.TabIndex = 42;
-            this.mcheckbox_autoscroll.Text = "Auto-scroll";
-            this.mcheckbox_autoscroll.UseVisualStyleBackColor = true;
-            this.mcheckbox_autoscroll.CheckedChanged += new System.EventHandler(this.mcheckbox_autoscroll_CheckedChanged);
-            // 
-            // mbutton_dmsEdit
-            // 
-            this.mbutton_dmsEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_dmsEdit.Image = global::LcmsNet.Properties.Resources.DMSEdit;
-            this.mbutton_dmsEdit.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_dmsEdit.Location = new System.Drawing.Point(671, 6);
-            this.mbutton_dmsEdit.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_dmsEdit.Name = "mbutton_dmsEdit";
-            this.mbutton_dmsEdit.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_dmsEdit.TabIndex = 41;
-            this.mbutton_dmsEdit.Text = "DMS Edit";
-            this.mbutton_dmsEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_dmsEdit.UseVisualStyleBackColor = true;
-            this.mbutton_dmsEdit.Click += new System.EventHandler(this.mbutton_dmsEdit_Click);
-            // 
-            // mbutton_cartColumnDate
-            // 
-            this.mbutton_cartColumnDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_cartColumnDate.Image = global::LcmsNet.Properties.Resources.CartColumnName;
-            this.mbutton_cartColumnDate.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_cartColumnDate.Location = new System.Drawing.Point(583, 6);
-            this.mbutton_cartColumnDate.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_cartColumnDate.Name = "mbutton_cartColumnDate";
-            this.mbutton_cartColumnDate.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_cartColumnDate.TabIndex = 40;
-            this.mbutton_cartColumnDate.Text = "Cart, Col, Date";
-            this.mbutton_cartColumnDate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_cartColumnDate.UseVisualStyleBackColor = true;
-            this.mbutton_cartColumnDate.Click += new System.EventHandler(this.mbutton_cartColumnDate_Click);
-            // 
-            // mbutton_down
-            // 
-            this.mbutton_down.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.mbutton_down.Image = global::LcmsNet.Properties.Resources.Button_Down_16;
-            this.mbutton_down.Location = new System.Drawing.Point(1058, 5);
-            this.mbutton_down.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_down.Name = "mbutton_down";
-            this.mbutton_down.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_down.TabIndex = 31;
-            this.mbutton_down.UseVisualStyleBackColor = true;
-            this.mbutton_down.Click += new System.EventHandler(this.mbutton_down_Click);
-            // 
-            // mbutton_addBlank
-            // 
-            this.mbutton_addBlank.BackColor = System.Drawing.Color.Transparent;
-            this.mbutton_addBlank.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_addBlank.ForeColor = System.Drawing.Color.Black;
-            this.mbutton_addBlank.Image = global::LcmsNet.Properties.Resources.add;
-            this.mbutton_addBlank.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_addBlank.Location = new System.Drawing.Point(52, 6);
-            this.mbutton_addBlank.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_addBlank.Name = "mbutton_addBlank";
-            this.mbutton_addBlank.Size = new System.Drawing.Size(80, 81);
-            this.mbutton_addBlank.TabIndex = 31;
-            this.mbutton_addBlank.Text = "Blank";
-            this.mbutton_addBlank.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_addBlank.UseVisualStyleBackColor = false;
-            this.mbutton_addBlank.Click += new System.EventHandler(this.mbutton_addBlank_Click);
-            // 
-            // mbutton_up
-            // 
-            this.mbutton_up.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.mbutton_up.Image = global::LcmsNet.Properties.Resources.Button_Up_16;
-            this.mbutton_up.Location = new System.Drawing.Point(970, 4);
-            this.mbutton_up.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_up.Name = "mbutton_up";
-            this.mbutton_up.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_up.TabIndex = 30;
-            this.mbutton_up.UseVisualStyleBackColor = true;
-            this.mbutton_up.Click += new System.EventHandler(this.mbutton_up_Click);
-            // 
-            // mbutton_addDMS
-            // 
-            this.mbutton_addDMS.Image = global::LcmsNet.Properties.Resources.AddDMS;
-            this.mbutton_addDMS.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_addDMS.Location = new System.Drawing.Point(140, 6);
-            this.mbutton_addDMS.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_addDMS.Name = "mbutton_addDMS";
-            this.mbutton_addDMS.Size = new System.Drawing.Size(80, 81);
-            this.mbutton_addDMS.TabIndex = 34;
-            this.mbutton_addDMS.Text = "DMS";
-            this.mbutton_addDMS.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_addDMS.UseVisualStyleBackColor = true;
-            this.mbutton_addDMS.Click += new System.EventHandler(this.mbutton_addDMS_Click);
-            // 
-            // mbutton_removeSelected
-            // 
-            this.mbutton_removeSelected.BackColor = System.Drawing.Color.Transparent;
-            this.mbutton_removeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_removeSelected.ForeColor = System.Drawing.Color.Black;
-            this.mbutton_removeSelected.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
-            this.mbutton_removeSelected.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_removeSelected.Location = new System.Drawing.Point(319, 6);
-            this.mbutton_removeSelected.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_removeSelected.Name = "mbutton_removeSelected";
-            this.mbutton_removeSelected.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_removeSelected.TabIndex = 32;
-            this.mbutton_removeSelected.Text = "Selected";
-            this.mbutton_removeSelected.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_removeSelected.UseVisualStyleBackColor = false;
-            this.mbutton_removeSelected.Click += new System.EventHandler(this.mbutton_removeSelected_Click);
-            // 
-            // mbutton_deleteUnused
-            // 
-            this.mbutton_deleteUnused.BackColor = System.Drawing.Color.Transparent;
-            this.mbutton_deleteUnused.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_deleteUnused.ForeColor = System.Drawing.Color.Black;
-            this.mbutton_deleteUnused.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
-            this.mbutton_deleteUnused.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_deleteUnused.Location = new System.Drawing.Point(231, 6);
-            this.mbutton_deleteUnused.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_deleteUnused.Name = "mbutton_deleteUnused";
-            this.mbutton_deleteUnused.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_deleteUnused.TabIndex = 33;
-            this.mbutton_deleteUnused.Text = "Unused";
-            this.mbutton_deleteUnused.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_deleteUnused.UseVisualStyleBackColor = false;
-            this.mbutton_deleteUnused.Click += new System.EventHandler(this.mbutton_deleteUnused_Click);
-            // 
-            // mbutton_fillDown
-            // 
-            this.mbutton_fillDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_fillDown.Image = global::LcmsNet.Properties.Resources.Filldown;
-            this.mbutton_fillDown.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_fillDown.Location = new System.Drawing.Point(407, 6);
-            this.mbutton_fillDown.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_fillDown.Name = "mbutton_fillDown";
-            this.mbutton_fillDown.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_fillDown.TabIndex = 39;
-            this.mbutton_fillDown.Text = "Fill Down";
-            this.mbutton_fillDown.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_fillDown.UseVisualStyleBackColor = true;
-            this.mbutton_fillDown.Click += new System.EventHandler(this.mbutton_fillDown_Click);
-            // 
-            // mbutton_trayVial
-            // 
-            this.mbutton_trayVial.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mbutton_trayVial.Image = global::LcmsNet.Properties.Resources.testTube;
-            this.mbutton_trayVial.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_trayVial.Location = new System.Drawing.Point(495, 6);
-            this.mbutton_trayVial.Margin = new System.Windows.Forms.Padding(4);
-            this.mbutton_trayVial.Name = "mbutton_trayVial";
-            this.mbutton_trayVial.Size = new System.Drawing.Size(80, 118);
-            this.mbutton_trayVial.TabIndex = 39;
-            this.mbutton_trayVial.Text = "Tray Vial";
-            this.mbutton_trayVial.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.mbutton_trayVial.UseVisualStyleBackColor = true;
-            this.mbutton_trayVial.Click += new System.EventHandler(this.mbutton_trayVial_Click);
-            // 
-            // mcheckbox_cycleColumns
-            // 
-            this.mcheckbox_cycleColumns.Location = new System.Drawing.Point(52, 95);
-            this.mcheckbox_cycleColumns.Margin = new System.Windows.Forms.Padding(4);
-            this.mcheckbox_cycleColumns.Name = "mcheckbox_cycleColumns";
-            this.mcheckbox_cycleColumns.Size = new System.Drawing.Size(145, 22);
-            this.mcheckbox_cycleColumns.TabIndex = 35;
-            this.mcheckbox_cycleColumns.Text = "Cycle Columns";
-            this.mcheckbox_cycleColumns.UseVisualStyleBackColor = true;
-            this.mcheckbox_cycleColumns.CheckedChanged += new System.EventHandler(this.mcheckbox_cycleColumns_CheckedChanged);
             // 
             // controlSequenceView
             // 
@@ -386,7 +386,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "controlSequenceView";
             this.Padding = new System.Windows.Forms.Padding(5);
-            this.Size = new System.Drawing.Size(1155, 841);
+            this.Size = new System.Drawing.Size(1041, 841);
             this.Controls.SetChildIndex(this.panel2, 0);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -563,22 +563,21 @@ namespace LcmsNet.SampleQueue.Forms
         #endregion
 
         #region Queue Region Moving
-
-        private Panel panel2;
+        private ToolTip mToolTipManager;
         private CheckBox mcheckbox_cycleColumns;
-        private Button mbutton_down;
-        private Button mbutton_addBlank;
-        private Button mbutton_up;
-        private Button mbutton_addDMS;
-        private Button mbutton_removeSelected;
-        private Button mbutton_deleteUnused;
-        private Button mbutton_fillDown;
         private Button mbutton_trayVial;
+        private Button mbutton_fillDown;
+        private Button mbutton_deleteUnused;
+        private Button mbutton_removeSelected;
+        private Button mbutton_addDMS;
+        private Button mbutton_up;
+        private Button mbutton_addBlank;
+        private Button mbutton_down;
         private Button mbutton_cartColumnDate;
         private Button mbutton_dmsEdit;
         private CheckBox mcheckbox_autoscroll;
         private Button buttonRefresh;
-        private ToolTip mToolTipManager;
+        private Panel panel2;
         private System.ComponentModel.IContainer components;
       
         #endregion
