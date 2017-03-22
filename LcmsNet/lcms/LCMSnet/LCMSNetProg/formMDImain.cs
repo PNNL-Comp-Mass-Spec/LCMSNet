@@ -452,14 +452,19 @@ namespace LcmsNet
 
                         //m_sampleQueue.StopRunningQueue();
                         m_scheduler.Stop();
-                        var stupidSample = new classSampleData();
-                        stupidSample.DmsData.DatasetName = string.Format("NotificationAction--{0}", e.Method.Name);
+                        var dummySample = new classSampleData {
+                            DmsData = {
+                                DatasetName = string.Format("NotificationAction--{0}", e.Method.Name)
+                            }
+                        };
+
                         if (columnID >= 0)
                         {
-                            stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
+                            dummySample.ColumnData = classCartConfiguration.Columns[columnID];
                         }
-                        stupidSample.LCMethod = e.Method;
-                        m_sampleQueue.RunNext(stupidSample);
+
+                        dummySample.LCMethod = e.Method;
+                        m_sampleQueue.RunNext(dummySample);
 
 
                         classApplicationLogger.LogError(0,
