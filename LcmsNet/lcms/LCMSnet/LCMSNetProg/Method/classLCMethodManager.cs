@@ -74,10 +74,7 @@ namespace LcmsNet.Method
         /// <returns>True if the method was added.  False if the method already existed.</returns>
         public bool AddMethod(classLCMethod method)
         {
-            if (method == null)
-                return false;
-
-            if (method.Name == null)
+            if (method?.Name == null)
                 return false;
 
             if (m_methods.ContainsKey(method.Name) == false)
@@ -112,7 +109,7 @@ namespace LcmsNet.Method
             // Don't remove anything unless the method
             // name and method are not null.
             //
-            if (method == null || method.Name == null)
+            if (method?.Name == null)
                 return false;
 
             //
@@ -157,7 +154,7 @@ namespace LcmsNet.Method
             //bool retValue = false;
 
             var reader = new classLCMethodReader();
-            classLCMethod method = null;
+            classLCMethod method;
             try
             {
                 method = reader.ReadMethod(filePath, errors);

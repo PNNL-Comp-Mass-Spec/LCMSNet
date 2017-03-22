@@ -202,7 +202,7 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
 
-            var result = m_expand.ShowDialog();
+            m_expand.ShowDialog();
             m_expand.Hide();
         }
 
@@ -260,8 +260,9 @@ namespace LcmsNet.SampleQueue.Forms
 
             InitializeComponent();
             mdataGrid_samples.DataBindingComplete += (sender, args) => DisplayColumn(CONST_COLUMN_CHECKED, false);
-            m_columnData = new classColumnData();
-            m_columnData.ID = -1;
+            m_columnData = new classColumnData {
+                ID = -1
+            };
 
             DisplayColumn(CONST_COLUMN_CHECKED, false);
             DisplayColumn(CONST_COLUMN_STATUS, false);
@@ -292,8 +293,9 @@ namespace LcmsNet.SampleQueue.Forms
 
             try
             {
-                m_columnData = new classColumnData();
-                m_columnData.ID = -1;
+                m_columnData = new classColumnData {
+                    ID = -1
+                };
 
                 DisplayColumn(CONST_COLUMN_CHECKED, false);
                 DisplayColumn(CONST_COLUMN_STATUS, false);
@@ -334,10 +336,8 @@ namespace LcmsNet.SampleQueue.Forms
             var leftmost = Width - mbutton_expand.Width - CONST_BUTTON_PADDING;
             var padding = CONST_BUTTON_PADDING;
             var left = padding;
-            for (var i = 0; i < m_buttons.Count; i++)
+            foreach (var button in m_buttons)
             {
-                var button = m_buttons[i];
-
                 var widthLeft = left + width + CONST_BUTTON_PADDING;
 
                 if (widthLeft >= leftmost)

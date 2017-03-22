@@ -113,14 +113,14 @@ namespace LcmsNet.Method
         /// <param name="lcEvent">Event to execute</param>
         private bool ExecuteEvent(classLCEvent lcEvent)
         {
-            var flag = true;
             lcEvent.Device.AbortEvent = m_abortEvent;
             try
             {
                 var returnValue = lcEvent.Method.Invoke(lcEvent.Device, lcEvent.Parameters);
-                if (returnValue != null && returnValue.GetType() == typeof (bool))
-                    flag = (bool) returnValue;
-                return flag;
+                if (returnValue is bool)
+                    return (bool) returnValue;
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -133,11 +133,15 @@ namespace LcmsNet.Method
         {
             //Initialization
             m_abortEvent.Reset();
+
             var args = e.Argument as classColumnArgs;
-            m_sampleData = args.Sample;
+            if (args != null)
+                m_sampleData = args.Sample;
+
             var method = m_sampleData.LCMethod;
             var methodEvents = m_sampleData.LCMethod.Events;
             Exception ex = null;
+
             //We return the columnId as the "result" so the scheduler callback can determine which column events
             // are coming from.
             e.Result = m_columnId;
@@ -147,26 +151,29 @@ namespace LcmsNet.Method
                 // Main operation
                 for (var eventNumber = 0; eventNumber < methodEvents.Count; eventNumber++)
                 {
-                    classLCEvent actualEvent;
                     var start = TimeKeeper.Instance.Now;
                     var finished = TimeKeeper.Instance.Now;
+
                     // before every event, check to see if we need to cancel operations
                     if (mthread_worker.CancellationPending)
                     {
                         e.Cancel = true;
                         break;
                     }
+
                     //here we report progress, by notifying at the start of every new event.
                     var totalTimeInTicks = Convert.ToDecimal(method.End.Ticks);
                     var elapsedTimeInTicks = TimeKeeper.Instance.Now.Ticks - method.Start.Ticks;
                     var percentComplete =
-                        (int)
-                        Math.Round((elapsedTimeInTicks / totalTimeInTicks) * 100, MidpointRounding.AwayFromZero);
+                        (int)Math.Round(elapsedTimeInTicks / totalTimeInTicks * 100, MidpointRounding.AwayFromZero);
+
                     //We send percentage(of time) complete and state of the column, currently consisting
                     //of columnID, event number, and end time of the next event to the event handler
-                    var state = new List<object>();
-                    state.Add(m_columnId);
-                    state.Add(eventNumber);
+                    var state = new List<object> {
+                        m_columnId,
+                        eventNumber
+                    };
+
                     if (eventNumber <= methodEvents.Count - 1)
                     {
                         state.Add(methodEvents[eventNumber].End);
@@ -177,8 +184,9 @@ namespace LcmsNet.Method
                     }
                     mthread_worker.ReportProgress(percentComplete, state);
                     method.CurrentEventNumber = eventNumber;
+
                     // Used for statistics
-                    actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
+                    var actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
                     actualEvent.Start = start;
                     actualEvent.Duration = new TimeSpan(0, 0, 0);
                     method.ActualEvents.Add(actualEvent);
@@ -241,7 +249,7 @@ namespace LcmsNet.Method
                         actualEvent.HadError = false;
                         //
                         // Here we'll wait enough time so that
-                        // we dont run the next event before its scheduled start.  This is flow control.
+                        // we don't run the next event before its scheduled start.  This is flow control.
                         //
                         var timer = new classTimerDevice();
                         var span = next.Subtract(TimeKeeper.Instance.Now);
@@ -270,7 +278,7 @@ namespace LcmsNet.Method
                         }
                         finished = TimeKeeper.Instance.Now;
                     }
-                    else if (!success)
+                    else
                     {
                         //
                         // Well, we had an error (exception or expected) and we don't care why, we just want to
@@ -297,6 +305,7 @@ namespace LcmsNet.Method
             {
                 throw new classColumnException(m_columnId, columnEx);
             }
+
             //We may have finished the method, but if we were told to cancel between the time
             //we started the last event and now, we still have to die. Otherwise, we could cause
             //null reference exceptions in the scheduler due to how we have to handle the cancellation

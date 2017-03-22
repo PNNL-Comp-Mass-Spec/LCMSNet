@@ -130,12 +130,18 @@ namespace LcmsNet.Devices.Fluidics
         void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
             var page = sender as TabControl;
+            if (page == null)
+                return;
+
             var fd = page.Controls.Find("controlFluidicsControlDesigner", true);
-            if (fd != null && e.TabPage == fd[0].Parent)
+            if (fd.Length == 0)
+                return;
+
+            if (e.TabPage == fd[0].Parent)
             {
                 fd[0].Visible = true;
             }
-            else if (fd != null && e.TabPage != fd[0].Parent)
+            else if (e.TabPage != fd[0].Parent)
             {
                 fd[0].Visible = false;
             }
@@ -208,9 +214,9 @@ namespace LcmsNet.Devices.Fluidics
         /// </summary>
         public void SaveConfiguration(string path)
         {
-            var configuration = new classDeviceConfiguration();
-            configuration.CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-
+            var configuration = new classDeviceConfiguration {
+                CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME)
+            };
 
             classDeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);
             var connectionIds = new List<long>();
@@ -239,9 +245,7 @@ namespace LcmsNet.Devices.Fluidics
             var writer = new classINIDeviceConfigurationWriter();
             writer.WriteConfiguration(path, configuration);
 
-            classApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.",
-                path,
-                CONST_DEFAULT_CONFIG_FILEPATH));
+            classApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.", path));
         }
 
         /// <summary>
@@ -324,8 +328,9 @@ namespace LcmsNet.Devices.Fluidics
         private void AddDeviceToDeviceManager()
         {
             var controller = new DeviceAddController();
-            var addForm = new formDeviceAddForm();
-            addForm.Icon = Icon;
+            var addForm = new formDeviceAddForm {
+                Icon = Icon
+            };
 
             var availablePlugins = controller.GetAvailablePlugins();
             addForm.AddPluginInformation(availablePlugins);
@@ -333,19 +338,23 @@ namespace LcmsNet.Devices.Fluidics
 
 
             var result = addForm.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                var plugins = addForm.GetSelectedPlugins();
-                var failedDevices = controller.AddDevices(plugins, addForm.InitializeOnAdd);
+            if (result != DialogResult.OK)
+                return;
 
-                if (failedDevices != null && failedDevices.Count > 0)
-                {
-                    var display = new formFailedDevicesDisplay(failedDevices);
-                    display.StartPosition = FormStartPosition.CenterScreen;
-                    display.Icon = ParentForm.Icon;
-                    display.ShowDialog();
-                }
-            }
+            var plugins = addForm.GetSelectedPlugins();
+            var failedDevices = controller.AddDevices(plugins, addForm.InitializeOnAdd);
+
+            if (failedDevices == null || failedDevices.Count <= 0)
+                return;
+
+            var display = new formFailedDevicesDisplay(failedDevices)
+            {
+                StartPosition = FormStartPosition.CenterScreen
+            };
+
+            if (ParentForm != null) display.Icon = ParentForm.Icon;
+
+            display.ShowDialog();
         }
 
         /// <summary>
@@ -459,9 +468,13 @@ namespace LcmsNet.Devices.Fluidics
             var failedDevices = classDeviceManager.Manager.InitializeDevices(reinitialize);
             if (failedDevices != null && failedDevices.Count > 0)
             {
-                var display = new formFailedDevicesDisplay(failedDevices);
-                display.StartPosition = FormStartPosition.CenterParent;
-                display.Icon = ParentForm.Icon;
+                var display = new formFailedDevicesDisplay(failedDevices) {
+                    StartPosition = FormStartPosition.CenterParent
+                };
+
+                if (ParentForm != null)
+                    display.Icon = ParentForm.Icon;
+
                 display.ShowDialog();
             }
         }

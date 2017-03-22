@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
@@ -22,12 +23,13 @@ namespace LcmsNet.Method
             // Set all of the event attributes
             //
             eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_NAME, lcEvent.Name);
-            eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_START, lcEvent.Start.ToString());
+            eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_START, lcEvent.Start.ToString(CultureInfo.InvariantCulture));
             eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_HOLD_TIME, lcEvent.HoldTime.ToString());
             eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_DURATION, lcEvent.Duration.ToString());
             eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_HAS_DISCREET_STATES,
                 lcEvent.HasDiscreteStates.ToString());
             eventRoot.SetAttribute(classLCMethodFactory.CONST_XPATH_OPTIMIZE_WITH, lcEvent.OptimizeWith.ToString());
+
             //
             // Store the device data
             //
@@ -83,7 +85,12 @@ namespace LcmsNet.Method
                 else
                 {
                     value = Convert.ToString(parameter);
-                    type = parameter.GetType().FullName; //.AssemblyQualifiedName;//TODO: BLL - .AssemblyQualifiedName;
+
+                    // Alternatively use .AssemblyQualifiedName;
+                    if (parameter != null)
+                        type = parameter.GetType().FullName;
+                    else
+                        type = "";
                 }
 
                 parameterInfo.SetAttribute(classLCMethodFactory.CONST_IS_EVENT_INDETERMINANT,

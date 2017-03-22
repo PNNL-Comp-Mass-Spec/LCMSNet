@@ -14,7 +14,6 @@ namespace LcmsNet.Method.Forms
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="samples"></param>
         public formThroughputPreview()
         {
             InitializeComponent();
@@ -63,15 +62,15 @@ namespace LcmsNet.Method.Forms
             var methods = new List<classLCMethod>();
             foreach (var sample in samples)
             {
-                if (sample != null && sample.LCMethod != null)
-                {
-                    //
-                    // Clone this, so we dont have multiple copies competing for the same times,
-                    // methods, etc.
-                    //
-                    sample.LCMethod = sample.LCMethod.Clone() as classLCMethod;
-                    methods.Add(sample.LCMethod);
-                }
+                if (sample?.LCMethod == null)
+                    continue;
+
+                //
+                // Clone this, so we don't have multiple copies competing for the same times,
+                // methods, etc.
+                //
+                sample.LCMethod = sample.LCMethod.Clone() as classLCMethod;
+                methods.Add(sample.LCMethod);
             }
 
             if (methods.Count > 0)

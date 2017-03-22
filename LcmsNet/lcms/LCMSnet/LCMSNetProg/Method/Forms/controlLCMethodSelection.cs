@@ -281,14 +281,11 @@ namespace LcmsNet.Method.Forms
         /// </summary>
         private void AddMethodToList()
         {
-            if (mcomboBox_methods.SelectedItem != null)
+            var method = (string)mcomboBox_methods.SelectedItem;
+            if (method != null)
             {
-                var method = (string) mcomboBox_methods.SelectedItem;
-                if (method != null)
-                {
-                    mlistBox_methods.Items.Add(method);
-                    MethodAdded?.Invoke(this);
-                }
+                mlistBox_methods.Items.Add(method);
+                MethodAdded?.Invoke(this);
             }
         }
 
@@ -302,7 +299,7 @@ namespace LcmsNet.Method.Forms
             //
             // Make sure we have some selected objects.
             //
-            if (mlistBox_methods.SelectedItems != null && mlistBox_methods.SelectedItems.Count > 0)
+            if (mlistBox_methods.SelectedItems.Count > 0)
             {
                 //
                 // Remove the objects

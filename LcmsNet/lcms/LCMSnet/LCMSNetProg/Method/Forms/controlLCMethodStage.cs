@@ -243,7 +243,7 @@ namespace LcmsNet.Method.Forms
             }
             else
             {
-                UpdateUserInterface(found);
+                UpdateUserInterface(false);
                 OnEventChanged();
                 OnEditMethod();
             }
@@ -257,7 +257,7 @@ namespace LcmsNet.Method.Forms
         {
             if (!IgnoreUpdates)
             {
-                mbutton_build.Enabled = (!needsAnUpdate);
+                mbutton_build.Enabled = !needsAnUpdate;
                 mbutton_buildUpdate.Enabled = needsAnUpdate;
             }
         }
@@ -387,8 +387,7 @@ namespace LcmsNet.Method.Forms
             //
             // Construct the method
             //
-            classLCMethod method = null;
-            method = BuildMethod();
+            var method = BuildMethod();
             if (method == null)
                 return;
 
@@ -488,7 +487,6 @@ namespace LcmsNet.Method.Forms
 
         private bool MethodExists()
         {
-            var found = false;
             if (!string.IsNullOrEmpty(mtextBox_methodName.Text))
             {
                 var text = mtextBox_methodName.Text;
@@ -497,17 +495,12 @@ namespace LcmsNet.Method.Forms
                 {
                     if (o.ToString().Equals(text))
                     {
-                        found = true;
-                        break;
+                        return true;
                     }
                 }
             }
-            else
-            {
-                found = false;
-            }
 
-            return found;
+            return false;
         }
 
         /// <summary>
@@ -572,9 +565,8 @@ namespace LcmsNet.Method.Forms
             // This way they will show up in the order to be executed at the top
             //
             var tabIndex = mpanel_stage.TabIndex + events.Count + 1;
-            for (var i = 0; i < events.Count; i++)
+            foreach (var lcEvent in events)
             {
-                var lcEvent = events[i];
                 lcEvent.TabIndex = tabIndex--;
                 lcEvent.BringToFront();
                 mpanel_stage.Controls.Add(lcEvent);
@@ -634,15 +626,12 @@ namespace LcmsNet.Method.Forms
             deviceEvent.EventChanged += deviceEvent_EventChanged;
 
             var eventData = "";
-            if (deviceEvent.SelectedMethod != null)
+            if (deviceEvent.SelectedMethod?.MethodAttribute != null)
             {
-                if (deviceEvent.SelectedMethod.MethodAttribute != null)
-                {
-                    eventData = string.Format("{0} - {1}",
-                        deviceEvent.SelectedMethod.Device.Name,
-                        deviceEvent.SelectedMethod.MethodAttribute.Name,
-                        deviceEvent.SelectedMethod.Parameters);
-                }
+                eventData = string.Format("{0} - {1}",
+                                          deviceEvent.SelectedMethod.Device.Name,
+                                          deviceEvent.SelectedMethod.MethodAttribute.Name,
+                                          deviceEvent.SelectedMethod.Parameters);
             }
             classApplicationLogger.LogMessage(0, "Control event added - " + eventData);
             m_events.Add(deviceEvent);
@@ -697,11 +686,11 @@ namespace LcmsNet.Method.Forms
                         name,
                         lcEvent.MethodAttribute.DataProvider);
                 }
+
                 var data = new classLCMethodData(lcEvent.Device,
-                    lcEvent.Method,
-                    lcEvent.MethodAttribute,
-                    parameters);
-                data.OptimizeWith = lcEvent.OptimizeWith;
+                                                 lcEvent.Method,
+                                                 lcEvent.MethodAttribute,
+                                                 parameters) {OptimizeWith = lcEvent.OptimizeWith};
                 //
                 // Construct an event.  We send false as locked because its not a locking event.
                 //
@@ -744,12 +733,12 @@ namespace LcmsNet.Method.Forms
         /// <param name="method"></param>
         void deviceEvent_Lock(object sender, bool enabled, classLCMethodData method)
         {
-            if (enabled)
-            {
-                var senderEvent = sender as controlLCMethodEvent;
-                var newEvent = new controlLCMethodEvent(method, true);
-                AddNewEvent(newEvent);
-            }
+            if (!enabled)
+                return;
+
+            var senderEvent = sender as controlLCMethodEvent;
+            var newEvent = new controlLCMethodEvent(method, true);
+            AddNewEvent(newEvent);
         }
 
         /// <summary>
@@ -776,14 +765,12 @@ namespace LcmsNet.Method.Forms
             //
             // Remove the events from the list
             //
-            var indexOfLastDeleted = 0;
             foreach (var deviceEvent in listEvents)
             {
-                indexOfLastDeleted = m_events.IndexOf(deviceEvent);
+                var indexOfLastDeleted = m_events.IndexOf(deviceEvent);
                 var data = deviceEvent.SelectedMethod;
 
                 var device = deviceEvent.Device;
-                var type = device.GetType();
 
                 var parameter = data.Parameters;
 
@@ -791,22 +778,21 @@ namespace LcmsNet.Method.Forms
                 {
                     var combo = parameter.Controls[i] as controlParameterComboBox;
 
-                    if (combo != null)
-                    {
-                        var key = parameter.DataProviderNames[i];
+                    if (combo == null)
+                        continue;
 
-                        if (key != null)
-                        {
-                            try
-                            {
-                                device.UnRegisterDataProvider(key, combo.FillData);
-                            }
-                            catch (Exception ex)
-                            {
-                                classApplicationLogger.LogError(0,
-                                    "There was an error when removing the device event. " + ex.Message, ex);
-                            }
-                        }
+                    var key = parameter.DataProviderNames[i];
+
+                    if (key == null)
+                        continue;
+
+                    try
+                    {
+                        device.UnRegisterDataProvider(key, combo.FillData);
+                    }
+                    catch (Exception ex)
+                    {
+                        classApplicationLogger.LogError(0, "There was an error when removing the device event. " + ex.Message, ex);
                     }
                 }
                 for (var i = indexOfLastDeleted; i < m_events.Count; i++)

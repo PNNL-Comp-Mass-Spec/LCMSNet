@@ -63,7 +63,8 @@ namespace LcmsNet.Method
                     var types = ass.GetTypes();
                     foreach (var assType in types)
                     {
-                        if (assType.FullName == name) //TODO: BLL if (assType.AssemblyQualifiedName == name)
+                        // Alternatively use .AssemblyQualifiedName;
+                        if (assType.FullName == name)
                         {
                             constructedParameterType = assType;
                             return constructedParameterType;
@@ -88,13 +89,14 @@ namespace LcmsNet.Method
             var lcEvent = new classLCEvent();
 
             // Read the name
-            var nameAttribute = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
-            lcEvent.Name = nameAttribute.Value;
-
-            XmlNode value = null;
+            if (node.Attributes != null)
+            {
+                var nameAttribute = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
+                lcEvent.Name = nameAttribute.Value;
+            }
 
             // Construct flags
-            value = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_OPTIMIZE_WITH);
+            var value = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_OPTIMIZE_WITH);
             lcEvent.OptimizeWith = Convert.ToBoolean(value.Value);
             value = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_HAS_DISCREET_STATES);
             lcEvent.HasDiscreteStates = Convert.ToBoolean(value.Value);
@@ -266,7 +268,6 @@ namespace LcmsNet.Method
             value = node.SelectSingleNode(classLCMethodFactory.CONST_XPATH_METHOD_INFO);
             attribute = value.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
             var methodName = attribute.Value;
-            MethodInfo[] methods = null;
             MethodInfo method = null;
             try
             {
@@ -275,7 +276,7 @@ namespace LcmsNet.Method
                 // have to see if the parameters match of the methods
                 // that have the name provided.
                 //
-                methods = devicetype.GetMethods();
+                var methods = devicetype.GetMethods();
                 foreach (var info in methods)
                 {
                     var parameterInfo = info.GetParameters();
@@ -330,7 +331,7 @@ namespace LcmsNet.Method
             catch (Exception exOld)
             {
                 var ex = new Exception("Could not read the LC-method event for device " + deviceName, exOld);
-                throw exOld;
+                throw ex;
             }
             return lcEvent;
         }
@@ -396,13 +397,13 @@ namespace LcmsNet.Method
             //
             // Get the name of the lc-method
             //
-            XmlNode nameAttribute = null;
 
             try
             {
-                nameAttribute = root.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
-                method = new classLCMethod();
-                method.Name = nameAttribute.Value;
+                var nameAttribute = root.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
+                method = new classLCMethod {
+                    Name = nameAttribute.Value
+                };
 
                 nameAttribute = root.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_IS_SPECIAL);
                 if (nameAttribute != null)
@@ -448,10 +449,14 @@ namespace LcmsNet.Method
                 if (eventListNode == null || eventListNode.Count < 1)
                     return null;
             }
+
+            if (eventListNode == null)
+                return method;
+
             var i = 0;
             foreach (XmlNode node in eventListNode)
             {
-                i = i + 1;
+                i++;
                 try
                 {
                     var lcEvent = ReadEventNode(node);
@@ -461,8 +466,8 @@ namespace LcmsNet.Method
                 {
                     var error =
                         string.Format("The Device \"{0}\" was missing from the hardware manager at event {1}.",
-                            ex.DeviceName,
-                            i);
+                                      ex.DeviceName,
+                                      i);
                     var newException = new Exception(error, ex);
                     classApplicationLogger.LogError(1, error, ex);
                     errors.Add(newException);

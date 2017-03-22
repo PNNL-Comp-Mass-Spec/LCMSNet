@@ -61,10 +61,8 @@ namespace LcmsNet.Method.Forms
                     //
                     // Register device additions and deletions so that we remap color information for display.
                     //
-                    classDeviceManager.Manager.DeviceAdded +=
-                        Manager_DeviceAdded;
-                    classDeviceManager.Manager.DeviceRemoved +=
-                        Manager_DeviceRemoved;
+                    classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+                    classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
                 }
             }
             catch
@@ -226,7 +224,7 @@ namespace LcmsNet.Method.Forms
                         minTime = now;
                     }
 
-                    var span = default(TimeSpan);
+                    TimeSpan span;
                     //
                     // Now we see how long to render for...if rendering all events then we are
                     // using the time between the start time until the last event

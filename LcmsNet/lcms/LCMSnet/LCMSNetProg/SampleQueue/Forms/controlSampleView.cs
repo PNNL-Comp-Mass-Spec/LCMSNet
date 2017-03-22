@@ -550,6 +550,7 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     if (rowNum < 0 || rowNum > mdataGrid_samples.Rows.Count)
                         return;
+
                     if (!isRecursive && !(rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum))
                     {
                         ////// This can be expensive for large queues...... //////
@@ -586,10 +587,11 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
                 }
+
                 var sample = m_sampleQueue.FindSample(neededRowId);
                 if (sample == null)
                 {
-                    LogSampleIdNotFound("HandleSampleValidationAndQueuing", neededRowId);
+                    LogSampleIdNotFound("HandleSampleValidationAndQueuing (m_sampleQueue.FindSample)", neededRowId);
                     return;
                 }
 
@@ -600,6 +602,7 @@ namespace LcmsNet.SampleQueue.Forms
                         //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
                         m_sampleQueue.DequeueSampleFromRunningQueue(sample);
                     }
+
                     if (!isRecursive)
                     {
                         m_lastQueuedSamplePosition = Math.Max(0, rowNum);
@@ -607,6 +610,7 @@ namespace LcmsNet.SampleQueue.Forms
                     }
                     return;
                 }
+
                 if (m_lastQueuedSamplePosition > rowNum)
                 {
                     //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
@@ -617,6 +621,7 @@ namespace LcmsNet.SampleQueue.Forms
                         m_lastQueuedSamplePosition = rowNum;
                         m_sampleContainer.Refresh();
                     }
+
                     //m_sampleContainer.Refresh();
                     return;
                 }
@@ -628,14 +633,24 @@ namespace LcmsNet.SampleQueue.Forms
                 //{
                 //    return;
                 //}
+
                 if (rowNum <= N)
                 {
-                    var currentSample = rowNum;
+                    var currentSampleNum = rowNum;
 
-                    if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
+                    if (currentSampleNum < 1 || currentSampleNum > mdataGrid_samples.Rows.Count)
                         return;
 
-                    // Dont let us re-run something that has been run, errored, or is currently running.
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                    if (sample == null)
+                    {
+                        LogSampleIdNotFound("HandleSampleValidationAndQueuing (rowNum <= N); this code should theoretically never be reached", neededRowId);
+
+                        // Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
+                        sample = RowToSample(mdataGrid_samples.Rows[currentSampleNum - 1]);
+                    }
+
+                    // Don't let us re-run something that has been run, errored, or is currently running.
                     if (sample.RunningStatus != enumSampleRunningStatus.Queued
                         && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
                     {
@@ -661,9 +676,7 @@ namespace LcmsNet.SampleQueue.Forms
 
                     // Validate other parts of the sample.
                     var errors = new List<classSampleValidationError>();
-                    foreach (
-                        var reference in
-                            classSampleValidatorManager.Instance.Validators)
+                    foreach (var reference in classSampleValidatorManager.Instance.Validators)
                     {
 #if DEBUG
                         Console.WriteLine("Validating sample with validator: " +
@@ -733,24 +746,34 @@ namespace LcmsNet.SampleQueue.Forms
                 }
                 //enumCheckboxStatus gridEditState =
                 //    GetCheckboxStatusFromCheckbox(checkbox, checkbox.EditedFormattedValue); // use checkbox.EditedFormattedValue
+
                 var gridSavedState = GetCheckboxStatusFromCheckbox(checkbox, checkbox.Value);
                 if (gridSavedState != enumCheckboxStatus.Disabled)
                 {
-                    if (gridSavedState == enumCheckboxStatus.Unchecked /*&& gridState == enumCheckboxStatus.Checked*/)
+                    if (gridSavedState == enumCheckboxStatus.Unchecked)
                     {
+                        // gridState is enumCheckboxStatus.Checked
+                        // Adding samples to the waiting queue
                         HandleSampleValidationAndQueuing(mdataGrid_samples.Rows.IndexOf(row) + 1, false);
                     }
-                    else if (gridSavedState == enumCheckboxStatus.Checked /*&& gridState == enumCheckboxStatus.Unchecked*/)
+                    else if (gridSavedState == enumCheckboxStatus.Checked)
                     {
+                        // gridState is enumCheckboxStatus.Unchecked
+                        // Removing samples from the waiting queue
                         HandleSampleValidationAndQueuing(mdataGrid_samples.Rows.IndexOf(row), false);
                     }
                     // Other conditions: no change (disabled cannot be unset, and no change for state to same state
                 }
+                return;
             }
+
             //else if (e.ColumnIndex == CONST_COLUMN_PAL_TRAY || e.ColumnIndex == CONST_COLUMN_INSTRUMENT_METHOD ||
             //         e.ColumnIndex == CONST_COLUMN_INSTRUMENT_METHOD || e.ColumnIndex == CONST_COLUMN_DATASET_TYPE)
-            else if (mdataGrid_samples.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
+            if (mdataGrid_samples.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
             {
+                // Drop down box clicked
+                // Auto-expand it
+
                 var row = mdataGrid_samples.CurrentRow;
                 var comboBox = row?.Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
                 if (comboBox == null)
@@ -1655,10 +1678,13 @@ namespace LcmsNet.SampleQueue.Forms
                 // Get the list of unique id's from the samples and
                 // change the column to put the samples on.
                 //
-                var ids = new List<long>();
+
+                // Could keep track of updated IDs with
+                // var ids = new List<long>();
+
                 foreach (var sample in samples)
                 {
-                    ids.Add(sample.UniqueID);
+                    // ids.Add(sample.UniqueID);
                     sample.ColumnData = classCartConfiguration.Columns[column];
                 }
 
@@ -2449,20 +2475,30 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 throw new Exception("The column data cannot be null.");
             }
+
+            if (data.Sample != null && data.Sample.LCMethod == null)
+            {
+                data.Sample.LCMethod = new classLCMethod();
+            }
+
             if (data.Sample?.LCMethod != null && data.Sample.LCMethod.IsSpecialMethod)
             {
                 data.SpecialColumnNumber = "S";
             }
             else
             {
-                data.Sample.ColumnData = classCartConfiguration.Columns[data.Sample.ColumnData.ID];
-                style.BackColor = data.Sample.ColumnData.Color;
+                // Define the background color for the LC Column
+                if (data.Sample != null)
+                {
+                    data.Sample.ColumnData = classCartConfiguration.Columns[data.Sample.ColumnData.ID];
+                    style.BackColor = data.Sample.ColumnData.Color;
+                }
             }
 
             // Make sure selected rows column colors don't change for running and waiting to run
             // but only for queued, or completed (including error) sample status.
-            if (data.Sample.RunningStatus == enumSampleRunningStatus.Running ||
-                data.Sample.RunningStatus == enumSampleRunningStatus.WaitingToRun)
+            if (data.Sample != null && (data.Sample.RunningStatus == enumSampleRunningStatus.Running ||
+                                        data.Sample.RunningStatus == enumSampleRunningStatus.WaitingToRun))
             {
                 style.SelectionBackColor = style.BackColor;
                 style.SelectionForeColor = style.ForeColor;
@@ -2470,27 +2506,31 @@ namespace LcmsNet.SampleQueue.Forms
 
             row.Cells[CONST_COLUMN_CHECKED].Tag = data.CheckboxTag;
 
-            //
-            // If the name of the sample is the un-used, it means that the Sample Queue has backfilled the
-            // samples to help the user normalize samples on columns.
-            //
-            var name = data.Sample.DmsData.DatasetName;
-            if (name.Contains(m_sampleQueue.UnusedSampleName))
-            {
-                var rowStyle = row.DefaultCellStyle;
-                rowStyle.BackColor = Color.LightGray;
-                rowStyle.ForeColor = Color.DarkGray;
-                if (!string.Equals(row.Cells[CONST_COLUMN_REQUEST_NAME].Value, data.Sample.DmsData.RequestName))
-                    row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.Sample.DmsData.RequestName;
-            }
-            else
+            if (data.Sample != null)
             {
                 //
-                // We need to color the sample based on its status.
+                // If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
+                // samples to help the user normalize samples on columns.
                 //
-                var rowStyle = GetRowStyleFromSample(data.Sample, row.DefaultCellStyle);
-                if (!string.Equals(row.Cells[CONST_COLUMN_REQUEST_NAME].Value, data.Sample.DmsData.DatasetName))
-                    row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.Sample.DmsData.DatasetName;
+                var name = data.Sample.DmsData.DatasetName;
+                if (name.Contains(m_sampleQueue.UnusedSampleName))
+                {
+                    var rowStyle = row.DefaultCellStyle;
+                    rowStyle.BackColor = Color.LightGray;
+                    rowStyle.ForeColor = Color.DarkGray;
+                    if (!string.Equals(row.Cells[CONST_COLUMN_REQUEST_NAME].Value, data.Sample.DmsData.RequestName))
+                        row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.Sample.DmsData.RequestName;
+                }
+                else
+                {
+                    //
+                    // We need to color the sample based on its status.
+                    //
+                    var rowStyle = GetRowStyleFromSample(data.Sample, row.DefaultCellStyle);
+                    if (!string.IsNullOrWhiteSpace(data.Sample.DmsData.DatasetName) &&
+                        (string)row.Cells[CONST_COLUMN_REQUEST_NAME].Value != data.Sample.DmsData.DatasetName)
+                        row.Cells[CONST_COLUMN_REQUEST_NAME].Value = data.Sample.DmsData.DatasetName;
+                }
             }
             row.Cells[CONST_COLUMN_STATUS].ToolTipText = data.StatusToolTipText;
 
@@ -2728,7 +2768,7 @@ namespace LcmsNet.SampleQueue.Forms
 
             var dtStart = DateTime.UtcNow;
             var samplesUpdated = 0;
-            var totalSamples = sampleList.Count();
+            var totalSamples = sampleList.Count;
             var lastCompletedRow = 0;
             var waitTimeSeconds = 5;
 
@@ -3330,22 +3370,20 @@ namespace LcmsNet.SampleQueue.Forms
 
         protected enumCheckboxStatus GetCheckboxStatusFromCheckbox(DataGridViewCheckBoxCell checkbox, object chkboxValue)
         {
-            var status = enumCheckboxStatus.Unchecked;
-            if (checkbox != null)
+            if (checkbox == null)
+                return enumCheckboxStatus.Unchecked;
+
+            if (checkbox.Tag != null && checkbox.Tag.ToString() == "Disabled")
             {
-                if (checkbox.Tag != null && checkbox.Tag.ToString() == "Disabled")
-                {
-                    status = enumCheckboxStatus.Disabled;
-                }
-                else
-                {
-                    if (chkboxValue is enumCheckboxStatus)
-                    {
-                        status = (enumCheckboxStatus)chkboxValue;
-                    }
-                }
+                return enumCheckboxStatus.Disabled;
             }
-            return status;
+
+            if (chkboxValue is enumCheckboxStatus)
+            {
+                return (enumCheckboxStatus)chkboxValue;
+            }
+
+            return enumCheckboxStatus.Unchecked;
         }
 
         /// <summary>

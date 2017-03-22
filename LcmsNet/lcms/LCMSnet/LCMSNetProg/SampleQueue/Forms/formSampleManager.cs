@@ -152,15 +152,18 @@ namespace LcmsNet.SampleQueue.Forms
                 mcontrol_sequenceView.AutoSamplerTrays.Add("defaultTray0" + i);
             }
 
-            mdialog_exportQueue = new SaveFileDialog();
-            mdialog_exportQueue.Title = "Export Queue";
-            mdialog_exportQueue.Filter =
-                "LCMSNet Queue (*.que)|LCMS VB6 XML File(*.xml)|*.xml|*.que|CSV File (*.csv)|*.csv";
-            mdialog_exportQueue.FileName = "queue.que";
+            mdialog_exportQueue = new SaveFileDialog
+            {
+                Title = "Export Queue",
+                Filter = "LCMSNet Queue (*.que)|LCMS VB6 XML File(*.xml)|*.xml|*.que|CSV File (*.csv)|*.csv",
+                FileName = "queue.que"
+            };
 
-            mdialog_importQueue = new OpenFileDialog();
-            mdialog_importQueue.Title = "Load Queue";
-            mdialog_importQueue.Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml";
+            mdialog_importQueue = new OpenFileDialog
+            {
+                Title = "Load Queue",
+                Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml"
+            };
 
             mdialog_exportMRMFiles = new FolderBrowserDialog();
             Text = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
@@ -168,38 +171,33 @@ namespace LcmsNet.SampleQueue.Forms
 
         public void PreviewAvailable(object sender, SampleProgressPreviewArgs e)
         {
-            if (e != null)
+            if (e?.PreviewImage == null)
+                return;
+
+            var width = mpicture_preview.Width;
+            var height = mpicture_preview.Height;
+
+            if (width <= 0)
+                return;
+
+            if (height <= 0)
+                return;
+            mpicture_preview.Image?.Dispose();
+
+            try
             {
-                if (e.PreviewImage != null)
+                Image x = new Bitmap(width, height);
+                using (var g = Graphics.FromImage(x))
                 {
-                    var width = mpicture_preview.Width;
-                    var height = mpicture_preview.Height;
-
-                    if (width <= 0)
-                        return;
-
-                    if (height <= 0)
-                        return;
-                    if (mpicture_preview.Image != null)
-                    {
-                        mpicture_preview.Image.Dispose();
-                    }
-
-                    try
-                    {
-                        Image x = new Bitmap(width, height);
-                        using (var g = Graphics.FromImage(x))
-                        {
-                            g.DrawImage(e.PreviewImage, 0, 0, width, height);
-                            mpicture_preview.Image = x;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    e.Dispose();
+                    g.DrawImage(e.PreviewImage, 0, 0, width, height);
+                    mpicture_preview.Image = x;
                 }
             }
+            catch (Exception)
+            {
+                // Ignore exceptions here
+            }
+            e.Dispose();
         }
 
         private delegate void DelegateToggleButtons(classSampleQueueArgs args);

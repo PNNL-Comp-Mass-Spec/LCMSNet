@@ -224,16 +224,20 @@ namespace LcmsNet
             }
 
 
-            m_systemConfiguration = new formSystemConfiguration();
-            m_systemConfiguration.ColumnNames = classSQLiteTools.GetColumnList(false);
-            m_systemConfiguration.Users = classSQLiteTools.GetUserList(false);
+            m_systemConfiguration = new formSystemConfiguration
+            {
+                ColumnNames = classSQLiteTools.GetColumnList(false),
+                Users = classSQLiteTools.GetUserList(false)
+            };
             m_systemConfiguration.ColumnNameChanged += m_systemConfiguration_ColumnNameChanged;
             classSQLiteTools.GetSepTypeList(false);
 
             // Fludics Design display
-            m_fluidicsDesign = new FluidicsDesign();
-            m_fluidicsDesign.Icon = Icon;
-            m_fluidicsDesign.Dock = DockStyle.Fill;
+            m_fluidicsDesign = new FluidicsDesign
+            {
+                Icon = Icon,
+                Dock = DockStyle.Fill
+            };
 
             // Notification System
             m_notifications = new formNotificationSystem(classDeviceManager.Manager);
@@ -262,8 +266,7 @@ namespace LcmsNet
 
 
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
-            m_scheduler = new classLCMethodScheduler(m_sampleQueue);
-            m_scheduler.Logger = m_logger;
+            m_scheduler = new classLCMethodScheduler(m_sampleQueue) {Logger = m_logger};
             m_scheduler.SchedulerError += Scheduler_Error;
             m_scheduler.SampleProgress += Scheduler_SampleProgress;
             m_scheduler.Initialize();
@@ -304,9 +307,11 @@ namespace LcmsNet
                 {
                     failedDeviceFlag = true;
                     failedCount = failedDevices.Count;
-                    display = new formFailedDevicesDisplay(failedDevices);
-                    display.StartPosition = FormStartPosition.CenterParent;
-                    display.Icon = Icon;
+                    display = new formFailedDevicesDisplay(failedDevices)
+                    {
+                        StartPosition = FormStartPosition.CenterParent,
+                        Icon = Icon
+                    };
                 }
             }
 
@@ -337,9 +342,11 @@ namespace LcmsNet
 
             if (userMethodErrors.Count > 0)
             {
-                var failedMethods = new formFailedMethodLoadDisplay(userMethodErrors);
-                failedMethods.Icon = Icon;
-                failedMethods.StartPosition = FormStartPosition.CenterScreen;
+                var failedMethods = new formFailedMethodLoadDisplay(userMethodErrors)
+                {
+                    Icon = Icon,
+                    StartPosition = FormStartPosition.CenterScreen
+                };
                 failedMethods.ShowDialog();
             }
 
@@ -388,12 +395,8 @@ namespace LcmsNet
                 classApplicationLogger.LogMessage(0, "System Ready.");
             }
 
-            if (display != null)
-            {
-                display.ShowDialog();
-            }
-            m_sampleProgress.PreviewAvailable +=
-                m_sampleManager.PreviewAvailable;
+            display?.ShowDialog();
+            m_sampleProgress.PreviewAvailable += m_sampleManager.PreviewAvailable;
             m_notifications.LoadNotificationFile();
         }
 
@@ -617,13 +620,15 @@ namespace LcmsNet
             if (type.IsAssignableFrom(typeof (IAutoSampler)))
             {
                 var sampler = device as IAutoSampler;
-                sampler.TrayNames -= m_sampleManager.AutoSamplerTrayList;
+                if (sampler != null)
+                    sampler.TrayNames -= m_sampleManager.AutoSamplerTrayList;
             }
 
             if (type.IsAssignableFrom(typeof (INetworkStart)))
             {
                 var network = device as INetworkStart;
-                network.MethodNames -= m_sampleManager.InstrumentMethodList;
+                if (network != null)
+                    network.MethodNames -= m_sampleManager.InstrumentMethodList;
             }
         }
 
@@ -770,13 +775,12 @@ namespace LcmsNet
         /// <summary>
         /// Updates the status windows and log files with messages.
         /// </summary>
-        /// <param name="sample"></param>
         void UpdateSampleProgress(object sender, classSampleProgressEventArgs args)
         {
             var message = "";
             var sample = args.Sample;
             classLCEvent lcEvent = null;
-            classLCMethod lcMethod = null;
+            classLCMethod lcMethod;
             var isError = false;
 
             //
@@ -816,7 +820,7 @@ namespace LcmsNet
                     break;
                 case enumSampleProgress.Complete:
                     var configImage = m_fluidicsDesign.GetImage();
-                    var docPath = string.Empty;
+                    string docPath;
                     if (sample == null)
                     {
                         break;

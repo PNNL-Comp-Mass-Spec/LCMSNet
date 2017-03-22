@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;
@@ -63,10 +64,16 @@ namespace LcmsNet.SampleQueue
         private long GenerateUniqueID()
         {
             // Get the largest unique ID in the set.
-            var count = m_uniqueID.Count;
             long uniqueID = 1;
-            if (count > 0)
-                uniqueID = m_uniqueID[count - 1] + 1;
+            if (m_uniqueID.Count > 0)
+            {
+                uniqueID = m_uniqueID.Last() + 1;
+
+                var maxID = m_uniqueID.Max();
+                if (uniqueID <= maxID)
+                    uniqueID = maxID + 1;
+            }
+
             m_uniqueID.Add(uniqueID);
             return uniqueID;
         }
@@ -610,9 +617,8 @@ namespace LcmsNet.SampleQueue
             //
             // Calculate the Histogram
             //
-            for (var i = 0; i < queue.Count; i++)
+            foreach (var data in queue)
             {
-                var data = queue[i];
                 var col = data.ColumnData;
                 if (sampleHistogram.ContainsKey(col))
                 {
@@ -680,7 +686,7 @@ namespace LcmsNet.SampleQueue
                     //
                     sampleToAdd.DmsData.RequestName = m_integrateName;
                     sampleToAdd.DmsData.DatasetName = m_integrateName;
-                    sampleToAdd.DmsData.Block = 0; // It's an unused sample. so dont copy this information.
+                    sampleToAdd.DmsData.Block = 0; // It's an unused sample, so don't copy this information.
                     sampleToAdd.DmsData.Batch = 0;
                     sampleToAdd.ColumnData = col;
                     sampleToAdd.UniqueID = GenerateUniqueID();
@@ -778,7 +784,7 @@ namespace LcmsNet.SampleQueue
         private void PushQueue(Stack<List<classSampleData>> backStack, Stack<List<classSampleData>> forwardStack,
             List<classSampleData> queue)
         {
-            PushQueue(backStack, forwardStack, queue, true);
+            PushQueue(backStack, forwardStack, queue, clearForward:true);
         }
 
         /// <summary>
@@ -797,8 +803,8 @@ namespace LcmsNet.SampleQueue
             // If the user wants us to clear the forward stack then we will,
             // otherwise we ignore it.
             //
-            if (clearForward && forwardStack != null)
-                forwardStack.Clear();
+            if (clearForward)
+                forwardStack?.Clear();
 
 
             var pushQueue = new List<classSampleData>();
@@ -833,14 +839,11 @@ namespace LcmsNet.SampleQueue
         /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
         private List<classSampleData> PopQueue(Stack<List<classSampleData>> backStack)
         {
-            List<classSampleData> newQueue = null;
-
-
             if (backStack.Count < 1)
-                return newQueue;
+                return null;
 
             IsDirty = true;
-            newQueue = backStack.Pop();
+            var newQueue = backStack.Pop();
 
             return newQueue;
         }
@@ -1222,7 +1225,7 @@ namespace LcmsNet.SampleQueue
             // First we figure out what samples we need to remove based on their
             // Unique ID's.  Then we remove them.
             //
-            var removedSamples = new List<classSampleData>();
+
             // Could keep track of removed samples with this:
             // var removedSamples = new List<classSampleData>();
             foreach (var i in uniqueIDs)
@@ -1241,7 +1244,7 @@ namespace LcmsNet.SampleQueue
                     if (m_waitingQueue.Contains(data))
                     {
                         m_waitingQueue.Remove(data);
-                        removedSamples.Add(data);
+                        // removedSamples.Add(data);
                         removed = true;
                     }
                 }
@@ -1821,12 +1824,12 @@ namespace LcmsNet.SampleQueue
                 m_runningQueue.Add(realSample);
             }
 
-            SamplesWaitingToRun?.Invoke(this,
-    new classSampleQueueArgs(validSamples,
-        m_nextAvailableSample,
-        m_runningQueue.Count,
-        m_completeQueue.Count,
-        m_waitingQueue.Count));
+            var args = new classSampleQueueArgs(validSamples, m_nextAvailableSample,
+                                                m_runningQueue.Count,
+                                                m_completeQueue.Count,
+                                                m_waitingQueue.Count);
+
+            SamplesWaitingToRun?.Invoke(this, args);
         }
 
         /// <summary>
@@ -1873,12 +1876,13 @@ namespace LcmsNet.SampleQueue
                 validSamples.Add(realSample);
             }
 
-            SamplesWaitingToRun?.Invoke(this,
-    new classSampleQueueArgs(validSamples,
-        m_nextAvailableSample,
-        m_runningQueue.Count,
-        m_completeQueue.Count,
-        m_waitingQueue.Count));
+            var args = new classSampleQueueArgs(validSamples,
+                                                m_nextAvailableSample,
+                                                m_runningQueue.Count,
+                                                m_completeQueue.Count,
+                                                m_waitingQueue.Count);
+
+            SamplesWaitingToRun?.Invoke(this, args);
         }
 
         /// <summary>
@@ -1966,10 +1970,9 @@ namespace LcmsNet.SampleQueue
                 m_completeQueue.Count,
                 m_waitingQueue.Count);
             m_startedSamples = false;
-            if (SamplesUpdated != null)
-            {
-                SamplesStopped(this, args);
-            }
+
+            SamplesStopped?.Invoke(this, args);
+
             SamplesWaitingToRun?.Invoke(this, args);
         }
 
@@ -1986,6 +1989,7 @@ namespace LcmsNet.SampleQueue
                 //throw new NullReferenceException("The sample that is said done was not an actual sample");
                 return;
             }
+
             //
             // Find the sample provided to complete.
             //
@@ -2059,6 +2063,7 @@ namespace LcmsNet.SampleQueue
                 m_runningQueue.Count,
                 m_completeQueue.Count,
                 m_waitingQueue.Count);
+
             SamplesWaitingToRun?.Invoke(this, args);
             return sample;
         }

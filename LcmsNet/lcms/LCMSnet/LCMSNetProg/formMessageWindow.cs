@@ -83,7 +83,7 @@ namespace LcmsNet
                 catch (Exception ex)
                 {
                     // An exception can occur if one thread is trying to post a message while the main application is closing
-                    Console.WriteLine("Ignoring exception in InsertMessage");
+                    Console.WriteLine("Ignoring exception in InsertMessage: " + ex.Message);
                 }
 
             }

@@ -223,11 +223,14 @@ namespace LcmsNet.Devices
         /// <param name="control"></param>
         public void AddDevice(IDevice device, IDeviceControl control)
         {
-            var button = new Button();
-            button.Text = device.Name;
-            button.Dock = DockStyle.Top;
-            button.FlatStyle = FlatStyle.Flat;
-            button.Margin = new Padding(5);
+            var button = new Button
+            {
+                Text = device.Name,
+                Dock = DockStyle.Top,
+                FlatStyle = FlatStyle.Flat,
+                Margin = new Padding(5)
+            };
+
             button.Size = new Size(button.Width, CONST_BUTTON_HEIGHT);
             button.Font = new Font(button.Font.FontFamily, 12, FontStyle.Bold);
             button.Click += button_Click;
