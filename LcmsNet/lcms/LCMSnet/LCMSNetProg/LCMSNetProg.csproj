@@ -74,6 +74,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\PDFGen.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
@@ -86,6 +88,7 @@
     </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -97,6 +100,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\classSystemData.cs" />
@@ -406,6 +412,9 @@
     </Compile>
     <Compile Include="SampleQueue\enumListViewComparerMode.cs" />
     <Compile Include="SampleQueue\enumMoveType.cs" />
+    <Compile Include="SampleQueue\Forms\controlSequenceView2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SampleQueue\Forms\controlTray.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -442,11 +451,23 @@
     <Compile Include="SampleQueue\Forms\controlColumnView.Designer.cs">
       <DependentUpon>controlColumnView.cs</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Forms\controlColumnView2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SampleQueue\Forms\controlColumnView2.Designer.cs">
+      <DependentUpon>controlColumnView2.cs</DependentUpon>
+    </Compile>
     <Compile Include="SampleQueue\Forms\controlSampleView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SampleQueue\Forms\controlSampleView.Designer.cs">
       <DependentUpon>controlSampleView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SampleQueue\Forms\controlSampleView2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SampleQueue\Forms\controlSampleView2.Designer.cs">
+      <DependentUpon>controlSampleView2.cs</DependentUpon>
     </Compile>
     <Compile Include="SampleQueue\Forms\controlSequenceView.cs">
       <SubType>UserControl</SubType>
@@ -487,6 +508,12 @@
     <Compile Include="SampleQueue\Forms\formSampleManager.Designer.cs">
       <DependentUpon>formSampleManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Forms\formSampleManager2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SampleQueue\Forms\formSampleManager2.Designer.cs">
+      <DependentUpon>formSampleManager2.cs</DependentUpon>
+    </Compile>
     <Compile Include="SampleQueue\Forms\formSampleRandomizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -516,6 +543,13 @@
     <Compile Include="SampleQueue\IO\classQueueExportXML.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportSQLite.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
+    <Compile Include="WPFControls\ViewModels\sampleViewModel.cs" />
+    <Compile Include="WPFControls\Views\columnView.xaml.cs">
+      <DependentUpon>columnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFControls\Views\sampleView.xaml.cs">
+      <DependentUpon>sampleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Simulator\formChartPopoutWindow.cs">
       <SubType>Form</SubType>
@@ -728,6 +762,10 @@
       <DependentUpon>controlSequenceView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SampleQueue\Forms\controlSequenceView2.resx">
+      <DependentUpon>controlSequenceView2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\controlTray.resx">
       <DependentUpon>controlTray.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -748,8 +786,16 @@
       <DependentUpon>controlColumnView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SampleQueue\Forms\controlColumnView2.resx">
+      <DependentUpon>controlColumnView2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\controlSampleView.resx">
       <DependentUpon>controlSampleView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SampleQueue\Forms\controlSampleView2.resx">
+      <DependentUpon>controlSampleView2.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\formDMSView.cy-GB.resx">
@@ -775,6 +821,12 @@
     <EmbeddedResource Include="SampleQueue\Forms\formSampleDMSValidatorDisplay.resx">
       <DependentUpon>formSampleDMSValidatorDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager.resx">
+      <DependentUpon>formSampleManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager2.resx">
+      <DependentUpon>formSampleManager2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\formSampleQueueOptions.resx">
       <DependentUpon>formSampleQueueOptions.cs</DependentUpon>
@@ -970,6 +1022,16 @@
       <Project>{b164f88d-3799-46b9-8926-20b40707b2e4}</Project>
       <Name>SQLiteTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="WPFControls\Views\columnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPFControls\Views\sampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
