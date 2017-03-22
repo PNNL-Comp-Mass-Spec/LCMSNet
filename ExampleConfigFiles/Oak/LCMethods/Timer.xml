@@ -1,0 +1,18 @@
+<LCMethod name="Timer" IsSpecial="False" AllowPostOverlap="False" AllowPreOverlap="False" Column="0">
+  <LCEvent name="Wait N Seconds" StartTime="1/29/2017 9:57:56 PM" HoldTime="00:00:00" Duration="01:41:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Timer" type="LcmsNetDataClasses.Devices.classTimerDevice" />
+    <MethodInfo name="WaitSeconds" />
+    <Parameters>
+      <Parameter name="seconds" Indeterminant="False" type="System.Double" value="6060" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Trigger Port" StartTime="1/29/2017 11:38:56 PM" HoldTime="00:00:00" Duration="00:00:10" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Contact Closure" type="LcmsNet.Devices.ContactClosure.classContactClosureU12" />
+    <MethodInfo name="Trigger" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="10" IsSampleSpecific="False" />
+      <Parameter name="port" Indeterminant="False" type="LcmsNet.Devices.ContactClosure.enumLabjackU12OutputPorts" value="AO1" IsSampleSpecific="False" />
+      <Parameter name="pulseLengthSeconds" Indeterminant="False" type="System.Double" value="5" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+</LCMethod>

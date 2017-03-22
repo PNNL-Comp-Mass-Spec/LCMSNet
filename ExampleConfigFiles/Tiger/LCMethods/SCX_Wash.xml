@@ -1,0 +1,92 @@
+<LCMethod name="SCX_Wash" IsSpecial="False" AllowPostOverlap="False" AllowPreOverlap="False" Column="0">
+  <LCEvent name="Set Position" StartTime="10/24/2016 12:52:21 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vcs1" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="10/24/2016 12:52:22 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vcs2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="10/24/2016 12:52:23 PM" HoldTime="00:00:00" Duration="00:00:10" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_1" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="10" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="Wash" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="10/24/2016 12:52:33 PM" HoldTime="00:00:00" Duration="00:00:10" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="10" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="Wash" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="10/24/2016 12:52:43 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vinj" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="10/24/2016 12:52:44 PM" HoldTime="00:00:00" Duration="00:05:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="LoadMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="300" IsSampleSpecific="False" />
+      <Parameter name="sample" Indeterminant="False" type="LcmsNetDataClasses.classSampleData" value="" IsSampleSpecific="True" />
+      <Parameter name="methodName" Indeterminant="False" type="System.String" value="Single_Injection_Valve" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="10/24/2016 12:57:44 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vinj" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Continue Method" StartTime="10/24/2016 12:57:45 PM" HoldTime="00:00:00" Duration="00:20:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="ContinueMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="1200" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="10/24/2016 1:17:45 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vinj" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="10/24/2016 1:17:46 PM" HoldTime="00:00:00" Duration="00:40:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Cap Pump" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="2400" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="SCX-Wash" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="10/24/2016 1:57:46 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Cap Pump" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="10/24/2016 1:57:47 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_1" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="10/24/2016 1:57:48 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+</LCMethod>

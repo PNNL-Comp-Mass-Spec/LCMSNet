@@ -1,0 +1,131 @@
+<LCMethod name="NoUP_100min_IMER_500nLmin" IsSpecial="False" AllowPostOverlap="False" AllowPreOverlap="False" Column="0">
+  <LCEvent name="Set Flow Rate" StartTime="12/8/2016 3:49:45 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_1" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="SetFlowRate" />
+    <Parameters>
+      <Parameter name="newFlowRate" Indeterminant="False" type="System.Double" value="0.5" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 3:49:46 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="1" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 3:49:47 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 3:49:48 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="4" type="LcmsNet.Devices.Valves.classValveVICI2pos4port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="12/8/2016 3:49:49 PM" HoldTime="00:00:00" Duration="00:02:45" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="LoadMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="165" IsSampleSpecific="False" />
+      <Parameter name="sample" Indeterminant="False" type="LcmsNetDataClasses.classSampleData" value="" IsSampleSpecific="True" />
+      <Parameter name="methodName" Indeterminant="False" type="System.String" value="Load_Loop" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 3:52:34 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="1" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Continue Method" StartTime="12/8/2016 3:52:35 PM" HoldTime="00:00:00" Duration="01:00:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="ContinueMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="3600" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 4:52:35 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="4" type="LcmsNet.Devices.Valves.classValveVICI2pos4port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Wait N Seconds" StartTime="12/8/2016 4:52:36 PM" HoldTime="00:00:00" Duration="00:05:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Timer" type="LcmsNetDataClasses.Devices.classTimerDevice" />
+    <MethodInfo name="WaitSeconds" />
+    <Parameters>
+      <Parameter name="seconds" Indeterminant="False" type="System.Double" value="300" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 4:57:36 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Trigger Port" StartTime="12/8/2016 4:57:37 PM" HoldTime="00:00:00" Duration="00:00:10" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Contact Closure" type="LcmsNet.Devices.ContactClosure.classContactClosureU12" />
+    <MethodInfo name="Trigger" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="10" IsSampleSpecific="False" />
+      <Parameter name="port" Indeterminant="False" type="LcmsNet.Devices.ContactClosure.enumLabjackU12OutputPorts" value="AO1" IsSampleSpecific="False" />
+      <Parameter name="pulseLengthSeconds" Indeterminant="False" type="System.Double" value="5" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 4:57:47 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="1" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="12/8/2016 4:57:48 PM" HoldTime="00:00:00" Duration="00:02:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="LoadMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="120" IsSampleSpecific="False" />
+      <Parameter name="sample" Indeterminant="False" type="LcmsNetDataClasses.classSampleData" value="" IsSampleSpecific="True" />
+      <Parameter name="methodName" Indeterminant="False" type="System.String" value="Aspirate52_Rinse" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="12/8/2016 4:59:48 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="1" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Continue Method" StartTime="12/8/2016 4:59:49 PM" HoldTime="00:00:00" Duration="00:07:50" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="ContinueMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="470" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Trigger Port" StartTime="12/8/2016 5:07:39 PM" HoldTime="00:00:00" Duration="01:40:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Contact Closure" type="LcmsNet.Devices.ContactClosure.classContactClosureU12" />
+    <MethodInfo name="Trigger" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="6000" IsSampleSpecific="False" />
+      <Parameter name="port" Indeterminant="False" type="LcmsNet.Devices.ContactClosure.enumLabjackU12OutputPorts" value="D0" IsSampleSpecific="False" />
+      <Parameter name="pulseLengthSeconds" Indeterminant="False" type="System.Double" value="5" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Trigger Port" StartTime="12/8/2016 6:47:39 PM" HoldTime="00:00:00" Duration="01:00:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Contact Closure" type="LcmsNet.Devices.ContactClosure.classContactClosureU12" />
+    <MethodInfo name="Trigger" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="3600" IsSampleSpecific="False" />
+      <Parameter name="port" Indeterminant="False" type="LcmsNet.Devices.ContactClosure.enumLabjackU12OutputPorts" value="AO1" IsSampleSpecific="False" />
+      <Parameter name="pulseLengthSeconds" Indeterminant="False" type="System.Double" value="5" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+</LCMethod>

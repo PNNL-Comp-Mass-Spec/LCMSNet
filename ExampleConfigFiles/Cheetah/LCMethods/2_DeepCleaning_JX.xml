@@ -1,0 +1,126 @@
+<LCMethod name="2_DeepCleaning_JX" IsSpecial="False" AllowPostOverlap="True" AllowPreOverlap="True" Column="1">
+  <LCEvent name="Set Position" StartTime="1/16/2016 4:34:52 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vinj2" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="1/16/2016 4:34:53 PM" HoldTime="00:00:00" Duration="00:05:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="LoadMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="300" IsSampleSpecific="False" />
+      <Parameter name="sample" Indeterminant="False" type="LcmsNetDataClasses.classSampleData" value="" IsSampleSpecific="True" />
+      <Parameter name="methodName" Indeterminant="False" type="System.String" value="2" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 4:39:53 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vspe2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 4:39:54 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vinj2" type="LcmsNet.Devices.Valves.classValveVICISixPortInjection" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Continue Method" StartTime="1/16/2016 4:39:55 PM" HoldTime="00:00:00" Duration="00:10:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="pal" type="LcmsNet.Devices.Pal.classPal" />
+    <MethodInfo name="ContinueMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="600" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 4:49:55 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vspe2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 4:49:56 PM" HoldTime="00:00:00" Duration="00:00:06" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vse" type="LcmsNet.Devices.Valves.classValveVICIMultipos9Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="position" Indeterminant="False" type="FluidicsSDK.Base.EightPositionState" value="P3" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="1/16/2016 4:50:02 PM" HoldTime="00:00:00" Duration="00:10:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="600" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="DeepCleaning" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="1/16/2016 5:00:02 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 5:00:03 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vspe2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="1/16/2016 5:00:04 PM" HoldTime="00:00:00" Duration="00:10:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="600" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="DeepCleaning" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="1/16/2016 5:10:04 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 5:10:05 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vspe2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionB" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="1/16/2016 5:10:06 PM" HoldTime="00:00:00" Duration="00:10:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="600" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="DeepCleaning" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="1/16/2016 5:20:06 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+  <LCEvent name="Set Position" StartTime="1/16/2016 5:20:07 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="True" OptimizeWith="False">
+    <Device name="Vspe2" type="LcmsNet.Devices.Valves.classValveVICI2Pos6Port" />
+    <MethodInfo name="SetPosition" />
+    <Parameters>
+      <Parameter name="newPosition" Indeterminant="False" type="FluidicsSDK.Base.TwoPositionState" value="PositionA" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Start Method" StartTime="1/16/2016 5:20:08 PM" HoldTime="00:00:00" Duration="00:10:00" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StartMethod" />
+    <Parameters>
+      <Parameter name="timeout" Indeterminant="False" type="System.Double" value="600" IsSampleSpecific="False" />
+      <Parameter name="method" Indeterminant="False" type="System.String" value="DeepCleaning" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+  <LCEvent name="Stop Method" StartTime="1/16/2016 5:30:08 PM" HoldTime="00:00:00" Duration="00:00:01" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Nano_2" type="Agilent.Devices.Pumps.classPumpAgilent" />
+    <MethodInfo name="StopMethod" />
+    <Parameters />
+  </LCEvent>
+</LCMethod>

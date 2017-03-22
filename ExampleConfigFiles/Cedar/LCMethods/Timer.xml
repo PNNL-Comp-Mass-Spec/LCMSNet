@@ -1,0 +1,9 @@
+<LCMethod name="Timer" IsSpecial="False" AllowPostOverlap="False" AllowPreOverlap="False" Column="0">
+  <LCEvent name="Wait N Seconds" StartTime="10/16/2014 1:49:08 PM" HoldTime="00:00:00" Duration="00:00:30" HasDiscreetStates="False" OptimizeWith="False">
+    <Device name="Timer" type="LcmsNetDataClasses.Devices.classTimerDevice" />
+    <MethodInfo name="WaitSeconds" />
+    <Parameters>
+      <Parameter name="seconds" Indeterminant="False" type="System.Double" value="30" IsSampleSpecific="False" />
+    </Parameters>
+  </LCEvent>
+</LCMethod>
