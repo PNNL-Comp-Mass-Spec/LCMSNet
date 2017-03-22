@@ -847,7 +847,7 @@ namespace LcmsNet.SampleQueue.Forms
         protected virtual bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
             if (method == null)
-                return true;
+                return false;
 
             foreach (var o in mcolumn_LCMethod.Items)
             {
@@ -940,7 +940,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             // make sure the method is not null
             if (method == null)
-                return true;
+                return false;
 
             // Find the method if name exists
             var found = false;
