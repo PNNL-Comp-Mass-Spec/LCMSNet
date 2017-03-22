@@ -159,7 +159,7 @@ namespace LcmsNetDataClasses
         {
             var cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
             var columnName = "";
-            
+
             if (!string.IsNullOrEmpty(sample.ColumnData?.Name))
             {
                 columnName = sample.ColumnData.Name;
@@ -230,7 +230,7 @@ namespace LcmsNetDataClasses
             {
                 return DmsData.ToString();
             }
-            return base.ToString();            
+            return base.ToString();
         }
 
         #region "Members"
@@ -498,7 +498,7 @@ namespace LcmsNetDataClasses
                         break;
                 }
             }
-            
+
             return newDictionary;
         }
 
