@@ -2736,6 +2736,12 @@ namespace LcmsNet.SampleQueue.Forms
         private delegate void DelegateUpdateRows(IEnumerable<classSampleData> samples);
 
         /// <summary>
+        /// Delegate defining how to add samples from another thread
+        /// </summary>
+        /// <param name="samples"></param>
+        private delegate void DelegateSampleAdded(IEnumerable<classSampleData> samples, bool replaceExistingRows);
+
+        /// <summary>
         /// Handles when a sample is queued for running but no open slot exists.
         /// </summary>
         /// <param name="sender"></param>
@@ -2964,22 +2970,23 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void m_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data)
+        /// <param name="replaceExistingRows"></param>
+        protected virtual void m_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data, bool replaceExistingRows)
         {
             if (data?.Samples == null)
                 return;
 
             if (InvokeRequired)
             {
-                BeginInvoke(new DelegateUpdateRows(SamplesAddedFromQueue), data.Samples);
+                BeginInvoke(new DelegateSampleAdded(SamplesAddedFromQueue), data.Samples, replaceExistingRows);
             }
             else
             {
-                SamplesAddedFromQueue(data.Samples);
+                SamplesAddedFromQueue(data.Samples, replaceExistingRows);
             }
         }
 
-        protected virtual void SamplesAddedFromQueue(IEnumerable<classSampleData> samples)
+        protected virtual void SamplesAddedFromQueue(IEnumerable<classSampleData> samples, bool replaceExistingRows)
         {
             //
             // The sample queue gives all of the samples
@@ -2988,7 +2995,7 @@ namespace LcmsNet.SampleQueue.Forms
             int currentColIndex;
             var selectedRowId = GetCurrentDataGridPosition(false, out currentColIndex, out scrollPosition);
 
-            if (mdataGrid_samples.Rows.Count > 0)
+            if (replaceExistingRows && mdataGrid_samples.Rows.Count > 0)
             {
                 try
                 {

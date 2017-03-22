@@ -114,6 +114,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender">Sample Queue that made the call.</param>
         /// <param name="data">Data associated with the addition.</param>
+        public delegate void DelegateSamplesAddedHandler(object sender, classSampleQueueArgs data, bool replaceExistingRows);
+
         /// <summary>
         /// Delegate definition for when a sample is modified.
         /// </summary>
@@ -141,6 +143,8 @@ namespace LcmsNet.SampleQueue
         /// Name used when distributed samples across columns.
         /// </summary>
         private const string CONST_DEFAULT_INTEGRATE_SAMPLENAME = "(unused)";
+
+        private const bool REPLACE_EXISTING_ROWS = true;
 
         #endregion
 
@@ -220,7 +224,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Fired when a sample is added to a queue.
         /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesAdded;
+        public event DelegateSamplesAddedHandler SamplesAdded;
 
         /// <summary>
         /// Fired when a sample is cancelled.
@@ -276,6 +280,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public classSampleQueue()
         {
+
             m_completeQueue = new List<classSampleData>();
             m_waitingQueue = new List<classSampleData>();
             m_runningQueue = new List<classSampleData>();
@@ -614,6 +619,7 @@ namespace LcmsNet.SampleQueue
             {
                 sampleHistogram.Add(col, new List<classSampleData>());
             }
+
             //
             // Calculate the Histogram
             //
@@ -871,7 +877,7 @@ namespace LcmsNet.SampleQueue
                 m_waitingQueue = queue;
                 //ResetColumnData();
 
-                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
         }
 
@@ -896,7 +902,7 @@ namespace LcmsNet.SampleQueue
                 m_waitingQueue = queue;
                 //ResetColumnData();
 
-                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
         }
 
@@ -955,7 +961,7 @@ namespace LcmsNet.SampleQueue
                     ResetColumnData();
                 }
 
-                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
         }
 
@@ -1010,7 +1016,7 @@ namespace LcmsNet.SampleQueue
                 // Always re-sequence, and notify
                 //
                 ResequenceQueuedSamples(m_waitingQueue);
-                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
         }
 
@@ -1101,7 +1107,7 @@ namespace LcmsNet.SampleQueue
                 if (SamplesAdded != null)
                 {
                     var args = new classSampleQueueArgs(GetAllSamples());
-                    SamplesAdded(this, args);
+                    SamplesAdded?.Invoke(this, args, REPLACE_EXISTING_ROWS);
                 }
             }
             return added;
@@ -1115,7 +1121,7 @@ namespace LcmsNet.SampleQueue
             if (SamplesAdded != null)
             {
                 var args = new classSampleQueueArgs(GetAllSamples());
-                SamplesAdded(this, args);
+                SamplesAdded?.Invoke(this, args, false);
             }
         }
 
@@ -1127,7 +1133,7 @@ namespace LcmsNet.SampleQueue
             if (SamplesAdded != null)
             {
                 var args = new classSampleQueueArgs(GetWaitingQueue());
-                SamplesAdded(this, args);
+                SamplesAdded?.Invoke(this, args, false);
             }
         }
 
@@ -1603,9 +1609,9 @@ namespace LcmsNet.SampleQueue
             //
             // Alert listening objects.
             //
-            if (updated && SamplesUpdated != null)
+            if (updated)
             {
-                SamplesUpdated(this, new classSampleQueueArgs(m_waitingQueue));
+                SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
         }
 
@@ -2221,7 +2227,7 @@ namespace LcmsNet.SampleQueue
                 if (SamplesAdded != null)
                 {
                     var args = new classSampleQueueArgs(GetAllSamples());
-                    SamplesAdded(this, args);
+                    SamplesAdded?.Invoke(this, args, true);
                 }
             }
         }
