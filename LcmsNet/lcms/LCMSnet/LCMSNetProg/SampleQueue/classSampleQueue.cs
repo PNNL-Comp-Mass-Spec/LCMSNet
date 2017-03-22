@@ -1031,7 +1031,7 @@ namespace LcmsNet.SampleQueue
         public void MoveQueuedSamples(List<classSampleData> samples, int baseOffset, int offset,
             enumMoveSampleType moveType)
         {
-            SwapQueuedSamplesColumn(m_waitingQueue, samples, baseOffset, offset, enumColumnDataHandling.LeaveAlone);
+            SwapQueuedSamplesColumn(m_waitingQueue, samples, baseOffset, offset);
         }
 
         /// <summary>
@@ -1443,8 +1443,7 @@ namespace LcmsNet.SampleQueue
         private void SwapQueuedSamplesColumn(List<classSampleData> queue,
             List<classSampleData> samples,
             int baseOffset,
-            int offset,
-            enumColumnDataHandling handling)
+            int offset)
         {
             if (samples.Count < 1)
                 return;
