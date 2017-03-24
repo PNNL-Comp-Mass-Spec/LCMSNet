@@ -6,26 +6,93 @@
     xmlns:local="clr-namespace:LcmsNet"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="300"
-    d:DesignWidth="300"
+    d:DesignWidth="600"
     mc:Ignorable="d">
     <Grid>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=Samples}">
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=Samples}" CanUserResizeRows="False" CanUserSortColumns="False">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn x:Name="Queued_Checkbox" Header="Checkbox" />
-
-                <DataGridTextColumn x:Name="Status" Header="Status" />
-
-                <DataGridTextColumn x:Name="SequenceNumber" Header="Seq #" />
-
-                <DataGridTextColumn x:Name="ColumnNumber" Header="Col #" />
-                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" />
-                <DataGridComboBoxColumn Header="PAL Tray" />
-                <DataGridTextColumn Header="PAL Vial" />
-                <DataGridTextColumn Header="Volume" />
-                <DataGridComboBoxColumn Header="LC Method" />
-                <DataGridComboBoxColumn Header="Dataset Type" />
+                <!-- <DataGridCheckBoxColumn x:Name="Queued_Checkbox" Header="X" MinWidth="25" Binding="{Binding IsChecked}" IsReadOnly="{Binding CheckboxDisabled}" /> -->
+                <DataGridTemplateColumn Header="X" MinWidth="25">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox x:Name="Queued_Checkbox" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="Status" Header="Status" Width="54" Binding="{Binding Status}" IsReadOnly="True" >
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" >
+                            <Setter Property="ToolTip" Value="{Binding StatusToolTipText}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="SequenceNumber" Header="Seq #" Width="51" MinWidth="10" Binding="{Binding SequenceNumber}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="ColumnNumber" Header="Col #" Width="46" Binding="{Binding ColumnNumber}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" >
+                            <Setter Property="Background" Value="{Binding ColumnNumberBgColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding ColumnNumberBgColor}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" Width="*" Binding="{Binding RequestName}" />
+                <!-- <DataGridComboBoxColumn Header="PAL Tray" Width="66" MinWidth="10" SelectedValueBinding="{Binding PALTray, Mode=TwoWay}" ItemsSource="{Binding PalTrayComboBoxOptions}" /> -->
+                <DataGridTemplateColumn Header="PAL Tray" Width="66" MinWidth="10">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="PAL Vial" Width="50" Binding="{Binding PALVial}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Volume" Width="50" Binding="{Binding PALVolume}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <!-- <DataGridComboBoxColumn Header="LC Method" Width="74" SelectedValueBinding="{Binding LCMethodStr, Mode=TwoWay}" ItemsSource="{Binding LcMethodComboBoxOptionsStr}" /> -->
+                <!-- <DataGridTemplateColumn Header="LC Method" Width="74">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="LCMethodStrSelect" SelectedItem="{Binding LCMethodStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcMethodComboBoxOptionsStr}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn> -->
+                <DataGridTemplateColumn Header="LC Method" Width="74">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!-- <DataGridComboBoxColumn Header="Dataset Type" Width="89" SelectedValueBinding="{Binding DatasetType, Mode=TwoWay}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" /> -->
+                <DataGridTemplateColumn Header="Dataset Type" Width="89">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
-
         </DataGrid>
     </Grid>
 </UserControl>

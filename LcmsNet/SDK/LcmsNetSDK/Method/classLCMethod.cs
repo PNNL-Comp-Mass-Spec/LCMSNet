@@ -7,7 +7,7 @@ namespace LcmsNetDataClasses.Method
     /// A method is a collection of LC-Events that define physical actions used to pipeline the control in an experiment.
     /// </summary>
     [Serializable]
-    public class classLCMethod : classDataClassBase, ICloneable
+    public class classLCMethod : classDataClassBase, ICloneable, IEquatable<classLCMethod>
     {
         /// <summary>
         /// Sample method key name.
@@ -310,5 +310,25 @@ namespace LcmsNetDataClasses.Method
         }
 
         #endregion
+
+        public bool Equals(classLCMethod other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(Name, other.Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((classLCMethod) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Name != null ? Name.GetHashCode() : 0);
+        }
     }
 }

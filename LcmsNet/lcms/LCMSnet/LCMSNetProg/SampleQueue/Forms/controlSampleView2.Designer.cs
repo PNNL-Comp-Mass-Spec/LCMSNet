@@ -66,8 +66,8 @@ namespace LcmsNet.SampleQueue.Forms
             this.dataGridViewComboBoxColumn4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewComboBoxColumn5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.m_sampleContainer = new System.Windows.Forms.Panel();
-            this.mdataGrid_samples = new System.Windows.Forms.Integration.ElementHost();
-            this.sampleView1 = new LcmsNet.sampleView();
+            this.WpfControlHost = new System.Windows.Forms.Integration.ElementHost();
+            this.mdataGrid_samples = new LcmsNet.sampleView();
             this.sampleToRowTranslatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mcontextMenu_options.SuspendLayout();
             this.m_sampleContainer.SuspendLayout();
@@ -96,84 +96,84 @@ namespace LcmsNet.SampleQueue.Forms
             this.toolStripSeparator4,
             this.randomizeToolStripMenuItem});
             this.mcontextMenu_options.Name = "mcontextMenu_options";
-            this.mcontextMenu_options.Size = new System.Drawing.Size(304, 346);
+            this.mcontextMenu_options.Size = new System.Drawing.Size(254, 346);
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Image = global::LcmsNet.Properties.Resources.undo_16;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.undoToolStripMenuItem.Text = "Undo";
             // 
             // redoToolStripMenuItem
             // 
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.redoToolStripMenuItem.Text = "Redo";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(300, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(250, 6);
             // 
             // addBlankToolStripMenuItem
             // 
             this.addBlankToolStripMenuItem.Image = global::LcmsNet.Properties.Resources.add;
             this.addBlankToolStripMenuItem.Name = "addBlankToolStripMenuItem";
-            this.addBlankToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.addBlankToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.addBlankToolStripMenuItem.Text = "Add Blank";
             // 
             // insertBlankIntoUnusedToolStripMenuItem
             // 
             this.insertBlankIntoUnusedToolStripMenuItem.Name = "insertBlankIntoUnusedToolStripMenuItem";
-            this.insertBlankIntoUnusedToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.insertBlankIntoUnusedToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.insertBlankIntoUnusedToolStripMenuItem.Text = "Insert Blank Into Unused";
             // 
             // importFromDMSToolStripMenuItem
             // 
             this.importFromDMSToolStripMenuItem.Name = "importFromDMSToolStripMenuItem";
-            this.importFromDMSToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.importFromDMSToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.importFromDMSToolStripMenuItem.Text = "Import from DMS";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(300, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(250, 6);
             // 
             // addDateCartNameColumnIDToolStripMenuItem
             // 
             this.addDateCartNameColumnIDToolStripMenuItem.Name = "addDateCartNameColumnIDToolStripMenuItem";
-            this.addDateCartNameColumnIDToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.addDateCartNameColumnIDToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.addDateCartNameColumnIDToolStripMenuItem.Text = "Add Date, Cart Name, Column ID";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(300, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(250, 6);
             // 
             // deleteSelectedToolStripMenuItem
             // 
             this.deleteSelectedToolStripMenuItem.Image = global::LcmsNet.Properties.Resources.Button_Delete_16;
             this.deleteSelectedToolStripMenuItem.Name = "deleteSelectedToolStripMenuItem";
-            this.deleteSelectedToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.deleteSelectedToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.deleteSelectedToolStripMenuItem.Text = "Delete Selected";
             // 
             // deleteUnusedToolStripMenuItem
             // 
             this.deleteUnusedToolStripMenuItem.Name = "deleteUnusedToolStripMenuItem";
-            this.deleteUnusedToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.deleteUnusedToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.deleteUnusedToolStripMenuItem.Text = "Delete Unused";
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.clearToolStripMenuItem.Text = "Clear";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(300, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(250, 6);
             // 
             // showToolStripMenuItem
             // 
@@ -188,78 +188,78 @@ namespace LcmsNet.SampleQueue.Forms
             this.blockToolStripMenuItem,
             this.runOrderToolStripMenuItem});
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.showToolStripMenuItem.Text = "Show";
             // 
             // pALTrayToolStripMenuItem
             // 
             this.pALTrayToolStripMenuItem.Name = "pALTrayToolStripMenuItem";
-            this.pALTrayToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.pALTrayToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.pALTrayToolStripMenuItem.Text = "PAL Tray";
             // 
             // pALVialToolStripMenuItem
             // 
             this.pALVialToolStripMenuItem.Name = "pALVialToolStripMenuItem";
-            this.pALVialToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.pALVialToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.pALVialToolStripMenuItem.Text = "PAL Vial";
             // 
             // volumeToolStripMenuItem
             // 
             this.volumeToolStripMenuItem.Name = "volumeToolStripMenuItem";
-            this.volumeToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.volumeToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.volumeToolStripMenuItem.Text = "Volume";
             // 
             // lCMethodToolStripMenuItem
             // 
             this.lCMethodToolStripMenuItem.Name = "lCMethodToolStripMenuItem";
-            this.lCMethodToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.lCMethodToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.lCMethodToolStripMenuItem.Text = "LC Method";
             // 
             // instrumentMethodToolStripMenuItem
             // 
             this.instrumentMethodToolStripMenuItem.Name = "instrumentMethodToolStripMenuItem";
-            this.instrumentMethodToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.instrumentMethodToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.instrumentMethodToolStripMenuItem.Text = "Instrument Method";
             // 
             // datasetTypeToolStripMenuItem
             // 
             this.datasetTypeToolStripMenuItem.Name = "datasetTypeToolStripMenuItem";
-            this.datasetTypeToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.datasetTypeToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.datasetTypeToolStripMenuItem.Text = "Dataset Type";
             // 
             // batchIDToolStripMenuItem
             // 
             this.batchIDToolStripMenuItem.Name = "batchIDToolStripMenuItem";
-            this.batchIDToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.batchIDToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.batchIDToolStripMenuItem.Text = "Batch ID";
             // 
             // blockToolStripMenuItem
             // 
             this.blockToolStripMenuItem.Name = "blockToolStripMenuItem";
-            this.blockToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.blockToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.blockToolStripMenuItem.Text = "Block";
             // 
             // runOrderToolStripMenuItem
             // 
             this.runOrderToolStripMenuItem.Name = "runOrderToolStripMenuItem";
-            this.runOrderToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.runOrderToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.runOrderToolStripMenuItem.Text = "Run Order";
             // 
             // previewThroughputToolStripMenuItem
             // 
             this.previewThroughputToolStripMenuItem.Name = "previewThroughputToolStripMenuItem";
-            this.previewThroughputToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.previewThroughputToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.previewThroughputToolStripMenuItem.Text = "Preview Throughput";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(300, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(250, 6);
             // 
             // randomizeToolStripMenuItem
             // 
             this.randomizeToolStripMenuItem.Name = "randomizeToolStripMenuItem";
-            this.randomizeToolStripMenuItem.Size = new System.Drawing.Size(303, 26);
+            this.randomizeToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.randomizeToolStripMenuItem.Text = "Randomize";
             // 
             // dataGridViewComboBoxColumn1
@@ -308,23 +308,25 @@ namespace LcmsNet.SampleQueue.Forms
             // m_sampleContainer
             // 
             this.m_sampleContainer.AutoSize = true;
-            this.m_sampleContainer.Controls.Add(this.mdataGrid_samples);
+            this.m_sampleContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.m_sampleContainer.Controls.Add(this.WpfControlHost);
             this.m_sampleContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_sampleContainer.Location = new System.Drawing.Point(4, 4);
-            this.m_sampleContainer.Margin = new System.Windows.Forms.Padding(4);
+            this.m_sampleContainer.Location = new System.Drawing.Point(3, 3);
             this.m_sampleContainer.Name = "m_sampleContainer";
-            this.m_sampleContainer.Size = new System.Drawing.Size(1235, 806);
+            this.m_sampleContainer.Size = new System.Drawing.Size(2161, 988);
             this.m_sampleContainer.TabIndex = 19;
             // 
-            // mdataGrid_samples
+            // WpfControlHost
             // 
-            this.mdataGrid_samples.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mdataGrid_samples.Location = new System.Drawing.Point(0, 0);
-            this.mdataGrid_samples.Name = "mdataGrid_samples";
-            this.mdataGrid_samples.Size = new System.Drawing.Size(1235, 806);
-            this.mdataGrid_samples.TabIndex = 0;
-            this.mdataGrid_samples.Text = "elementHost1";
-            this.mdataGrid_samples.Child = this.sampleView1;
+            this.WpfControlHost.AutoSize = true;
+            this.WpfControlHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WpfControlHost.Location = new System.Drawing.Point(0, 0);
+            this.WpfControlHost.Margin = new System.Windows.Forms.Padding(2);
+            this.WpfControlHost.Name = "WpfControlHost";
+            this.WpfControlHost.Size = new System.Drawing.Size(2161, 988);
+            this.WpfControlHost.TabIndex = 0;
+            this.WpfControlHost.Text = "WPFControlHost";
+            this.WpfControlHost.Child = this.mdataGrid_samples;
             // 
             // sampleToRowTranslatorBindingSource
             // 
@@ -332,16 +334,18 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // controlSampleView2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.m_sampleContainer);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "controlSampleView2";
-            this.Padding = new System.Windows.Forms.Padding(4);
-            this.Size = new System.Drawing.Size(1243, 814);
+            this.Padding = new System.Windows.Forms.Padding(3);
+            this.Size = new System.Drawing.Size(2167, 994);
             this.mcontextMenu_options.ResumeLayout(false);
             this.m_sampleContainer.ResumeLayout(false);
+            this.m_sampleContainer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sampleToRowTranslatorBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -384,7 +388,7 @@ namespace LcmsNet.SampleQueue.Forms
         private ToolStripMenuItem addDateCartNameColumnIDToolStripMenuItem;
         private Panel m_sampleContainer;
         private BindingSource sampleToRowTranslatorBindingSource;
-        private System.Windows.Forms.Integration.ElementHost mdataGrid_samples;
-        private sampleView sampleView1;
+        private System.Windows.Forms.Integration.ElementHost WpfControlHost;
+        private sampleView mdataGrid_samples;
     }
 }

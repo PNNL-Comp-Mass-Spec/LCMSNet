@@ -9,11 +9,14 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using LcmsNet.WPFControls.ViewModels;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
+using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -22,6 +25,8 @@ namespace LcmsNet.SampleQueue.Forms
     /// </summary>
     public sealed partial class controlColumnView2 : UserControl
     {
+        public ReactiveList<sampleViewModel> Samples => ControlSampleView.Samples;//.Where(x => x.Sample.ColumnData.ID == m_columnData.ID).ToList();
+
         public delegate void DelegateUpdateUserInterface();
 
         formExpansion m_expand;
@@ -34,6 +39,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// Data object reference to synchronize column data with.
         /// </summary>
         private classColumnData m_columnData;
+
+        public controlSampleView2 ControlSampleView { get; private set; }
 
         #endregion
 
@@ -89,24 +96,70 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
+        #region Sample Queue Override Event Methods
+
+        /// <summary>
+        /// Handles when a sample is updated....updating the ones that need to be
+        /// then deleting the ones...WTF?
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="data"></param>
+        protected void SamplesUpdated(object sender, classSampleQueueArgs data)
+        {
+            //if (InvokeRequired == true)
+            {
+                //
+                // Update the samples
+                //
+                // ToDo: ControlSampleView.SamplesUpdated(sender, data);
+
+                //
+                // Then delete the rows that are not part of this column.
+                //
+                foreach (var sample in data.Samples)
+                {
+                    //
+                    // Remove if it it does not belong to this column,
+                    //
+                    // ToDo: if (sample.ColumnData.ID != m_columnData.ID)
+                    // ToDo: {
+                    // ToDo:     ControlSampleView.RemoveSamplesFromList(sample);
+                    // ToDo: }
+                    // ToDo: //
+                    // ToDo: // Otherwise add it if it does not exist.
+                    // ToDo: //
+                    // ToDo: else
+                    // ToDo: {
+                    // ToDo:     var index = ControlSampleView.FindRowIndexFromUID(sample.UniqueID);
+                    // ToDo:     if (index < 0)
+                    // ToDo:     {
+                    // ToDo:         ControlSampleView.AddSamplesToList(sample);
+                    // ToDo:     }
+                    // ToDo: }
+                }
+            }
+        }
+
+        #endregion
+
         private void mbutton_addBlank_Click(object sender, EventArgs e)
         {
-            // ToDo: AddNewSample(true);
+            // ToDo: ControlSampleView.AddNewSample(true);
         }
 
         private void mbutton_addDMS_Click(object sender, EventArgs e)
         {
-            // ToDo: ShowDMSView();
+            // ToDo: ControlSampleView.ShowDMSView();
         }
 
         private void mbutton_removeUnused_Click(object sender, EventArgs e)
         {
-            // ToDo: RemoveUnusedSamples(enumColumnDataHandling.CreateUnused);
+            // ToDo: ControlSampleView.RemoveUnusedSamples(enumColumnDataHandling.CreateUnused);
         }
 
         private void mbutton_removeSelected_Click(object sender, EventArgs e)
         {
-            // ToDo: RemoveSelectedSamples(ColumnHandling);
+            // ToDo: ControlSampleView.RemoveSelectedSamples(ColumnHandling);
         }
 
         // Deprecated, unused
@@ -117,22 +170,22 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mbutton_fillDown_Click(object sender, EventArgs e)
         {
-            // ToDo: FillDown();
+            // ToDo: ControlSampleView.FillDown();
         }
 
         private void mbutton_trayVial_Click(object sender, EventArgs e)
         {
-            // ToDo: EditTrayAndVial();
+            // ToDo: ControlSampleView.EditTrayAndVial();
         }
 
         private void mbutton_randomize_Click(object sender, EventArgs e)
         {
-            // ToDo: RandomizeSelectedSamples();
+            // ToDo: ControlSampleView.RandomizeSelectedSamples();
         }
 
         private void mbutton_moveColumns_Click(object sender, EventArgs e)
         {
-            // ToDo: MoveSamplesToColumn(enumColumnDataHandling.CreateUnused);
+            // ToDo: ControlSampleView.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused);
         }
 
         private void ShowExpansion()
@@ -173,12 +226,12 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mbutton_down_Click(object sender, EventArgs e)
         {
-            // ToDo: MoveSelectedSamples(1, enumMoveSampleType.Column);
+            // ToDo: ControlSampleView.MoveSelectedSamples(1, enumMoveSampleType.Column);
         }
 
         private void mbutton_up_Click(object sender, EventArgs e)
         {
-            // ToDo: MoveSelectedSamples(-1, enumMoveSampleType.Column);
+            // ToDo: ControlSampleView.MoveSelectedSamples(-1, enumMoveSampleType.Column);
         }
 
         private void mbutton_expand_MouseHover(object sender, EventArgs e)
@@ -188,17 +241,17 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mbutton_addBlankAppend_Click(object sender, EventArgs e)
         {
-            // ToDo: AddNewSample(false);
+            // ToDo: ControlSampleView.AddNewSample(false);
         }
 
         private void mbutton_dmsEdit_Click(object sender, EventArgs e)
         {
-            // ToDo: EditDMSData();
+            // ToDo: ControlSampleView.EditDMSData();
         }
 
         private void mbutton_cartColumnDate_Click(object sender, EventArgs e)
         {
-            // ToDo: AddDateCartnameColumnIDToDatasetName();
+            ControlSampleView.AddDateCartnameColumnIDToDatasetName();
         }
 
         #region Constructors
@@ -210,6 +263,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            ControlSampleView = new controlSampleView2(dmsView, sampleQueue);
 
             InitializeComponent();
             // ToDo: mdataGrid_samples.DataBindingComplete += (sender, args) => DisplayColumn(CONST_COLUMN_CHECKED, false);
@@ -241,6 +295,8 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         public controlColumnView2()
         {
+            ControlSampleView = new controlSampleView2();
+
             InitializeComponent();
             // ToDo: mdataGrid_samples.DataBindingComplete += (sender, args) => DisplayColumn(CONST_COLUMN_CHECKED, false);
 

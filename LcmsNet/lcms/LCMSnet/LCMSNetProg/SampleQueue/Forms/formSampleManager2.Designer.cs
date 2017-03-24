@@ -117,15 +117,20 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mcontrol_sequenceView
             // 
+            //ToDo: this.mcontrol_sequenceView.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.AutoSamplerMethods")));
+            //ToDo: this.mcontrol_sequenceView.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.AutoSamplerTrays")));
             this.mcontrol_sequenceView.BackColor = System.Drawing.Color.White;
+            //ToDo: this.mcontrol_sequenceView.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.Resort;
             this.mcontrol_sequenceView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcontrol_sequenceView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            //ToDo: this.mcontrol_sequenceView.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.InstrumentMethods")));
             this.mcontrol_sequenceView.Location = new System.Drawing.Point(4, 4);
             this.mcontrol_sequenceView.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.mcontrol_sequenceView.Name = "mcontrol_sequenceView";
             this.mcontrol_sequenceView.Padding = new System.Windows.Forms.Padding(4);
             this.mcontrol_sequenceView.Size = new System.Drawing.Size(1528, 809);
             this.mcontrol_sequenceView.TabIndex = 2;
+            this.mcontrol_sequenceView.Load += new System.EventHandler(this.mcontrol_sequenceView_Load);
             // 
             // mtabPage_columnView
             // 
@@ -181,9 +186,13 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mcontrol_column1
             // 
+            //this.mcontrol_column1.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column1.AutoSamplerMethods")));
+            //this.mcontrol_column1.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column1.AutoSamplerTrays")));
             this.mcontrol_column1.BackColor = System.Drawing.Color.White;
             this.mcontrol_column1.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column1.Column")));
+            //this.mcontrol_column1.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
             this.mcontrol_column1.Dock = System.Windows.Forms.DockStyle.Fill;
+            //this.mcontrol_column1.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column1.InstrumentMethods")));
             this.mcontrol_column1.Location = new System.Drawing.Point(0, 0);
             this.mcontrol_column1.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.mcontrol_column1.Name = "mcontrol_column1";
@@ -193,10 +202,13 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mcontrol_column2
             // 
+            //this.mcontrol_column2.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column2.AutoSamplerMethods")));
+            //this.mcontrol_column2.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column2.AutoSamplerTrays")));
             this.mcontrol_column2.BackColor = System.Drawing.Color.White;
             this.mcontrol_column2.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column2.Column")));
+            //this.mcontrol_column2.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
             this.mcontrol_column2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mcontrol_column2.Enabled = false;
+            //this.mcontrol_column2.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column2.InstrumentMethods")));
             this.mcontrol_column2.Location = new System.Drawing.Point(0, 0);
             this.mcontrol_column2.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.mcontrol_column2.Name = "mcontrol_column2";
@@ -226,10 +238,13 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mcontrol_column3
             // 
+            //this.mcontrol_column3.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column3.AutoSamplerMethods")));
+            //this.mcontrol_column3.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column3.AutoSamplerTrays")));
             this.mcontrol_column3.BackColor = System.Drawing.Color.White;
             this.mcontrol_column3.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column3.Column")));
+            //this.mcontrol_column3.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
             this.mcontrol_column3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mcontrol_column3.Enabled = false;
+            //this.mcontrol_column3.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column3.InstrumentMethods")));
             this.mcontrol_column3.Location = new System.Drawing.Point(0, 0);
             this.mcontrol_column3.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.mcontrol_column3.Name = "mcontrol_column3";
@@ -239,10 +254,13 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // mcontrol_column4
             // 
+            //this.mcontrol_column4.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column4.AutoSamplerMethods")));
+            //this.mcontrol_column4.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column4.AutoSamplerTrays")));
             this.mcontrol_column4.BackColor = System.Drawing.Color.White;
             this.mcontrol_column4.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column4.Column")));
+            //this.mcontrol_column4.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
             this.mcontrol_column4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mcontrol_column4.Enabled = false;
+            //this.mcontrol_column4.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column4.InstrumentMethods")));
             this.mcontrol_column4.Location = new System.Drawing.Point(0, 0);
             this.mcontrol_column4.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.mcontrol_column4.Name = "mcontrol_column4";
@@ -286,6 +304,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.importQueueLcmsNetToolStripMenuItem.Name = "importQueueLcmsNetToolStripMenuItem";
             this.importQueueLcmsNetToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
             this.importQueueLcmsNetToolStripMenuItem.Text = "Open";
+            this.importQueueLcmsNetToolStripMenuItem.Click += new System.EventHandler(this.ImportQueue);
             // 
             // toolStripSeparator3
             // 
@@ -301,6 +320,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
             this.saveToolStripMenuItem1.Size = new System.Drawing.Size(135, 26);
             this.saveToolStripMenuItem1.Text = "Save";
+            this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -309,6 +329,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
             this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -336,18 +357,21 @@ namespace LcmsNet.SampleQueue.Forms
             this.queueToXMLToolStripMenuItem.Name = "queueToXMLToolStripMenuItem";
             this.queueToXMLToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
             this.queueToXMLToolStripMenuItem.Text = "to LCMS VB6 (XML)";
+            this.queueToXMLToolStripMenuItem.Click += new System.EventHandler(this.queueToXMLToolStripMenuItem_Click);
             // 
             // toCSVToolStripMenuItem
             // 
             this.toCSVToolStripMenuItem.Name = "toCSVToolStripMenuItem";
             this.toCSVToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
             this.toCSVToolStripMenuItem.Text = "to CSV";
+            this.toCSVToolStripMenuItem.Click += new System.EventHandler(this.queueAsCSVToolStripMenuItem_Click);
             // 
             // queueToExcaliburToolStripMenuItem
             // 
             this.queueToExcaliburToolStripMenuItem.Name = "queueToExcaliburToolStripMenuItem";
             this.queueToExcaliburToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
             this.queueToExcaliburToolStripMenuItem.Text = "to XCalibur";
+            this.queueToExcaliburToolStripMenuItem.Click += new System.EventHandler(this.queueAsCSVToolStripMenuItem_Click_1);
             // 
             // toolStripSeparator4
             // 
@@ -359,6 +383,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.tToolStripMenuItem.Name = "tToolStripMenuItem";
             this.tToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
             this.tToolStripMenuItem.Text = "MRM Files";
+            this.tToolStripMenuItem.Click += new System.EventHandler(this.exportMRMFilesToolStripMenuItem_Click);
             // 
             // groupBox1
             // 
@@ -404,6 +429,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_stop.Text = "Stop";
             this.mbutton_stop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_stop.UseVisualStyleBackColor = false;
+            this.mbutton_stop.Click += new System.EventHandler(this.mbutton_stop_Click);
             // 
             // mbutton_run
             // 
@@ -420,6 +446,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_run.Text = "Run";
             this.mbutton_run.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mbutton_run.UseVisualStyleBackColor = false;
+            this.mbutton_run.Click += new System.EventHandler(this.mbutton_run_Click);
             // 
             // mbutton_undo
             // 
@@ -436,6 +463,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_undo.Text = "Undo";
             this.mbutton_undo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_undo.UseVisualStyleBackColor = false;
+            this.mbutton_undo.Click += new System.EventHandler(this.mbutton_undo_Click);
             // 
             // mbutton_redo
             // 
@@ -452,6 +480,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_redo.Text = "redo";
             this.mbutton_redo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.mbutton_redo.UseVisualStyleBackColor = false;
+            this.mbutton_redo.Click += new System.EventHandler(this.mbutton_redo_Click);
             // 
             // formSampleManager2
             // 
@@ -496,31 +525,31 @@ namespace LcmsNet.SampleQueue.Forms
         private TabPage mtabPage_sequenceView;
         private TabPage mtabPage_columnView;
         private controlSequenceView2 mcontrol_sequenceView;
-          private MenuStrip mmenuStrip;
-          private ToolStripMenuItem fileToolStripMenuItem;
-                 private ToolStripMenuItem importQueueLcmsNetToolStripMenuItem;
-                      private ToolStripMenuItem exportToolStripMenuItem;
-                      private ToolStripMenuItem tToolStripMenuItem;
-                      private ToolStripSeparator toolStripSeparator4;
-                      private ToolStripMenuItem queueToXMLToolStripMenuItem;
-                      private ToolStripSeparator toolStripSeparator3;
-                      private ToolStripMenuItem saveAsToolStripMenuItem;
-                      private ToolStripMenuItem queueToExcaliburToolStripMenuItem;
-                      private ToolStripSeparator toolStripSeparator1;
-                      private ToolStripMenuItem toCSVToolStripMenuItem;
-                      private ToolStripMenuItem saveToolStripMenuItem1;
-                      private GroupBox groupBox1;
-                      private Button mbutton_undo;
-                      private Button mbutton_redo;
-                      private Button mbutton_stop;
-                      private Button mbutton_run;
-                      private SplitContainer splitContainer1;
-                      private controlColumnView2 mcontrol_column3;
-                      private controlColumnView2 mcontrol_column4;
-                      private SplitContainer splitContainer2;
-                      private controlColumnView2 mcontrol_column1;
-                      private controlColumnView2 mcontrol_column2;
-                      private SplitContainer splitContainer3;
-                      private PictureBox mpicture_preview;
+        private MenuStrip mmenuStrip;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem importQueueLcmsNetToolStripMenuItem;
+        private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem tToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem queueToXMLToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem saveAsToolStripMenuItem;
+        private ToolStripMenuItem queueToExcaliburToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem toCSVToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem1;
+        private GroupBox groupBox1;
+        private Button mbutton_undo;
+        private Button mbutton_redo;
+        private Button mbutton_stop;
+        private Button mbutton_run;
+        private SplitContainer splitContainer1;
+        private controlColumnView2 mcontrol_column3;
+        private controlColumnView2 mcontrol_column4;
+        private SplitContainer splitContainer2;
+        private controlColumnView2 mcontrol_column1;
+        private controlColumnView2 mcontrol_column2;
+        private SplitContainer splitContainer3;
+        private PictureBox mpicture_preview;
     }
 }

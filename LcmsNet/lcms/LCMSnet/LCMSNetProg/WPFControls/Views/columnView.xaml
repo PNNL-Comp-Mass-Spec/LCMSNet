@@ -11,9 +11,29 @@
     <Grid>
         <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=Samples}">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="SequenceNumber" Header="Seq" />
-                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" />
-                <DataGridComboBoxColumn Header="LC Method" />
+                <DataGridTextColumn x:Name="SequenceNumber" Header="Seq" Width="51" MinWidth="10" Binding="{Binding SequenceNumber}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" Width="*" Binding="{Binding RequestName}" />
+                <!-- <DataGridComboBoxColumn Header="LC Method" Width="74" SelectedValueBinding="{Binding LCMethodStr, Mode=TwoWay}" DisplayMemberPath="{Binding LcMethodComboBoxOptionsStr}" /> -->
+                <!-- <DataGridTemplateColumn Header="LC Method" Width="74">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="LCMethodStrSelect" SelectedItem="{Binding LCMethodStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcMethodComboBoxOptionsStr}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn> -->
+                <DataGridTemplateColumn Header="LC Method" Width="74">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
 
         </DataGrid>
