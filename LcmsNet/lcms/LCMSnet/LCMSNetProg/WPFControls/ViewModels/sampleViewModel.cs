@@ -183,12 +183,21 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        public bool CheckboxDisabled
+        public bool CheckboxEnabled
         {
             get
             {
                 var state = GetCheckboxStatusFromSampleStatus();
-                return state == controlSampleView.enumCheckboxStatus.Disabled;
+                return state != controlSampleView.enumCheckboxStatus.Disabled;
+            }
+        }
+
+        public bool EditAllowed
+        {
+            get
+            {
+                var state = GetCheckboxStatusFromSampleStatus();
+                return state == controlSampleView.enumCheckboxStatus.Unchecked;
             }
         }
 

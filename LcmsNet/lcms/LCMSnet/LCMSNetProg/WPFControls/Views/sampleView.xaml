@@ -10,12 +10,26 @@
     mc:Ignorable="d">
     <Grid>
         <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=Samples}" CanUserResizeRows="False" CanUserSortColumns="False">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell" >
+                    <Setter Property="Background" Value="{Binding RowBackColor}" />
+                    <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
+                    <Setter Property="Foreground" Value="{Binding RowForeColor}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
+                            <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <!-- <DataGridCheckBoxColumn x:Name="Queued_Checkbox" Header="X" MinWidth="25" Binding="{Binding IsChecked}" IsReadOnly="{Binding CheckboxDisabled}" /> -->
                 <DataGridTemplateColumn Header="X" MinWidth="25">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox x:Name="Queued_Checkbox" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox x:Name="Queued_Checkbox" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CheckboxEnabled}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -23,6 +37,16 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" >
                             <Setter Property="ToolTip" Value="{Binding StatusToolTipText}" />
+                            <Setter Property="Background" Value="{Binding RowBackColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
+                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -46,12 +70,28 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" Width="*" Binding="{Binding RequestName}" />
+                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" Width="*" Binding="{Binding RequestName}" >
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" >
+                            <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
+                            <Setter Property="Background" Value="{Binding RowBackColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
+                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <!-- <DataGridComboBoxColumn Header="PAL Tray" Width="66" MinWidth="10" SelectedValueBinding="{Binding PALTray, Mode=TwoWay}" ItemsSource="{Binding PalTrayComboBoxOptions}" /> -->
                 <DataGridTemplateColumn Header="PAL Tray" Width="66" MinWidth="10">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" />
+                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -61,6 +101,21 @@
                             <Setter Property="HorizontalAlignment" Value="Right" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" >
+                            <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
+                            <Setter Property="Background" Value="{Binding RowBackColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
+                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Volume" Width="50" Binding="{Binding PALVolume}" >
                     <DataGridTextColumn.ElementStyle>
@@ -68,6 +123,21 @@
                             <Setter Property="HorizontalAlignment" Value="Right" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" >
+                            <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
+                            <Setter Property="Background" Value="{Binding RowBackColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
+                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
+                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <!-- <DataGridComboBoxColumn Header="LC Method" Width="74" SelectedValueBinding="{Binding LCMethodStr, Mode=TwoWay}" ItemsSource="{Binding LcMethodComboBoxOptionsStr}" /> -->
                 <!-- <DataGridTemplateColumn Header="LC Method" Width="74">
@@ -80,7 +150,7 @@
                 <DataGridTemplateColumn Header="LC Method" Width="74">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" />
+                            <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -88,7 +158,7 @@
                 <DataGridTemplateColumn Header="Dataset Type" Width="89">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" />
+                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
