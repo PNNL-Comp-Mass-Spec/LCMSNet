@@ -43,14 +43,6 @@ namespace LcmsNet.SampleQueue.Forms
             this.mtabControl_sampleViews = new System.Windows.Forms.TabControl();
             this.mtabPage_sequenceView = new System.Windows.Forms.TabPage();
             this.mcontrol_sequenceView = new LcmsNet.SampleQueue.Forms.controlSequenceView2();
-            this.mtabPage_columnView = new System.Windows.Forms.TabPage();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.mcontrol_column1 = new LcmsNet.SampleQueue.Forms.controlColumnView2();
-            this.mcontrol_column2 = new LcmsNet.SampleQueue.Forms.controlColumnView2();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.mcontrol_column3 = new LcmsNet.SampleQueue.Forms.controlColumnView2();
-            this.mcontrol_column4 = new LcmsNet.SampleQueue.Forms.controlColumnView2();
             this.mmenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importQueueLcmsNetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,19 +64,6 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_redo = new System.Windows.Forms.Button();
             this.mtabControl_sampleViews.SuspendLayout();
             this.mtabPage_sequenceView.SuspendLayout();
-            this.mtabPage_columnView.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
             this.mmenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpicture_preview)).BeginInit();
@@ -93,24 +72,21 @@ namespace LcmsNet.SampleQueue.Forms
             // mtabControl_sampleViews
             // 
             this.mtabControl_sampleViews.Controls.Add(this.mtabPage_sequenceView);
-            this.mtabControl_sampleViews.Controls.Add(this.mtabPage_columnView);
             this.mtabControl_sampleViews.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mtabControl_sampleViews.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mtabControl_sampleViews.Location = new System.Drawing.Point(0, 0);
-            this.mtabControl_sampleViews.Margin = new System.Windows.Forms.Padding(4);
             this.mtabControl_sampleViews.Name = "mtabControl_sampleViews";
             this.mtabControl_sampleViews.SelectedIndex = 0;
-            this.mtabControl_sampleViews.Size = new System.Drawing.Size(1544, 847);
+            this.mtabControl_sampleViews.Size = new System.Drawing.Size(1158, 688);
             this.mtabControl_sampleViews.TabIndex = 1;
             // 
             // mtabPage_sequenceView
             // 
             this.mtabPage_sequenceView.Controls.Add(this.mcontrol_sequenceView);
-            this.mtabPage_sequenceView.Location = new System.Drawing.Point(4, 26);
-            this.mtabPage_sequenceView.Margin = new System.Windows.Forms.Padding(4);
+            this.mtabPage_sequenceView.Location = new System.Drawing.Point(4, 22);
             this.mtabPage_sequenceView.Name = "mtabPage_sequenceView";
-            this.mtabPage_sequenceView.Padding = new System.Windows.Forms.Padding(4);
-            this.mtabPage_sequenceView.Size = new System.Drawing.Size(1536, 817);
+            this.mtabPage_sequenceView.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.mtabPage_sequenceView.Size = new System.Drawing.Size(1150, 662);
             this.mtabPage_sequenceView.TabIndex = 0;
             this.mtabPage_sequenceView.Text = "Sequence View";
             this.mtabPage_sequenceView.UseVisualStyleBackColor = true;
@@ -124,149 +100,13 @@ namespace LcmsNet.SampleQueue.Forms
             this.mcontrol_sequenceView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcontrol_sequenceView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             //ToDo: this.mcontrol_sequenceView.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.InstrumentMethods")));
-            this.mcontrol_sequenceView.Location = new System.Drawing.Point(4, 4);
-            this.mcontrol_sequenceView.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.mcontrol_sequenceView.Location = new System.Drawing.Point(3, 3);
+            this.mcontrol_sequenceView.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.mcontrol_sequenceView.Name = "mcontrol_sequenceView";
-            this.mcontrol_sequenceView.Padding = new System.Windows.Forms.Padding(4);
-            this.mcontrol_sequenceView.Size = new System.Drawing.Size(1528, 809);
+            this.mcontrol_sequenceView.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.mcontrol_sequenceView.Size = new System.Drawing.Size(1144, 656);
             this.mcontrol_sequenceView.TabIndex = 2;
             this.mcontrol_sequenceView.Load += new System.EventHandler(this.mcontrol_sequenceView_Load);
-            // 
-            // mtabPage_columnView
-            // 
-            this.mtabPage_columnView.Controls.Add(this.splitContainer3);
-            this.mtabPage_columnView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mtabPage_columnView.Location = new System.Drawing.Point(4, 26);
-            this.mtabPage_columnView.Margin = new System.Windows.Forms.Padding(4);
-            this.mtabPage_columnView.Name = "mtabPage_columnView";
-            this.mtabPage_columnView.Padding = new System.Windows.Forms.Padding(4);
-            this.mtabPage_columnView.Size = new System.Drawing.Size(1536, 817);
-            this.mtabPage_columnView.TabIndex = 1;
-            this.mtabPage_columnView.Text = "Column View";
-            this.mtabPage_columnView.UseVisualStyleBackColor = true;
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(4, 4);
-            this.splitContainer3.Margin = new System.Windows.Forms.Padding(4);
-            this.splitContainer3.Name = "splitContainer3";
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.splitContainer2);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer3.Size = new System.Drawing.Size(1528, 809);
-            this.splitContainer3.SplitterDistance = 758;
-            this.splitContainer3.SplitterWidth = 5;
-            this.splitContainer3.TabIndex = 9;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.BackColor = System.Drawing.Color.Silver;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4);
-            this.splitContainer2.Name = "splitContainer2";
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.mcontrol_column1);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.mcontrol_column2);
-            this.splitContainer2.Size = new System.Drawing.Size(758, 809);
-            this.splitContainer2.SplitterDistance = 374;
-            this.splitContainer2.SplitterWidth = 5;
-            this.splitContainer2.TabIndex = 8;
-            // 
-            // mcontrol_column1
-            // 
-            //this.mcontrol_column1.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column1.AutoSamplerMethods")));
-            //this.mcontrol_column1.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column1.AutoSamplerTrays")));
-            this.mcontrol_column1.BackColor = System.Drawing.Color.White;
-            this.mcontrol_column1.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column1.Column")));
-            //this.mcontrol_column1.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
-            this.mcontrol_column1.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.mcontrol_column1.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column1.InstrumentMethods")));
-            this.mcontrol_column1.Location = new System.Drawing.Point(0, 0);
-            this.mcontrol_column1.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.mcontrol_column1.Name = "mcontrol_column1";
-            this.mcontrol_column1.Padding = new System.Windows.Forms.Padding(4);
-            this.mcontrol_column1.Size = new System.Drawing.Size(374, 809);
-            this.mcontrol_column1.TabIndex = 1;
-            // 
-            // mcontrol_column2
-            // 
-            //this.mcontrol_column2.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column2.AutoSamplerMethods")));
-            //this.mcontrol_column2.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column2.AutoSamplerTrays")));
-            this.mcontrol_column2.BackColor = System.Drawing.Color.White;
-            this.mcontrol_column2.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column2.Column")));
-            //this.mcontrol_column2.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
-            this.mcontrol_column2.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.mcontrol_column2.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column2.InstrumentMethods")));
-            this.mcontrol_column2.Location = new System.Drawing.Point(0, 0);
-            this.mcontrol_column2.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.mcontrol_column2.Name = "mcontrol_column2";
-            this.mcontrol_column2.Padding = new System.Windows.Forms.Padding(4);
-            this.mcontrol_column2.Size = new System.Drawing.Size(379, 809);
-            this.mcontrol_column2.TabIndex = 2;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.BackColor = System.Drawing.Color.Silver;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.mcontrol_column3);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.mcontrol_column4);
-            this.splitContainer1.Size = new System.Drawing.Size(765, 809);
-            this.splitContainer1.SplitterDistance = 367;
-            this.splitContainer1.SplitterWidth = 5;
-            this.splitContainer1.TabIndex = 7;
-            // 
-            // mcontrol_column3
-            // 
-            //this.mcontrol_column3.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column3.AutoSamplerMethods")));
-            //this.mcontrol_column3.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column3.AutoSamplerTrays")));
-            this.mcontrol_column3.BackColor = System.Drawing.Color.White;
-            this.mcontrol_column3.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column3.Column")));
-            //this.mcontrol_column3.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
-            this.mcontrol_column3.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.mcontrol_column3.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column3.InstrumentMethods")));
-            this.mcontrol_column3.Location = new System.Drawing.Point(0, 0);
-            this.mcontrol_column3.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.mcontrol_column3.Name = "mcontrol_column3";
-            this.mcontrol_column3.Padding = new System.Windows.Forms.Padding(4);
-            this.mcontrol_column3.Size = new System.Drawing.Size(367, 809);
-            this.mcontrol_column3.TabIndex = 5;
-            // 
-            // mcontrol_column4
-            // 
-            //this.mcontrol_column4.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column4.AutoSamplerMethods")));
-            //this.mcontrol_column4.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column4.AutoSamplerTrays")));
-            this.mcontrol_column4.BackColor = System.Drawing.Color.White;
-            this.mcontrol_column4.Column = ((LcmsNetDataClasses.Configuration.classColumnData)(resources.GetObject("mcontrol_column4.Column")));
-            //this.mcontrol_column4.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.CreateUnused;
-            this.mcontrol_column4.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.mcontrol_column4.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_column4.InstrumentMethods")));
-            this.mcontrol_column4.Location = new System.Drawing.Point(0, 0);
-            this.mcontrol_column4.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.mcontrol_column4.Name = "mcontrol_column4";
-            this.mcontrol_column4.Padding = new System.Windows.Forms.Padding(4);
-            this.mcontrol_column4.Size = new System.Drawing.Size(393, 809);
-            this.mcontrol_column4.TabIndex = 2;
             // 
             // mmenuStrip
             // 
@@ -276,8 +116,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.mmenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mmenuStrip.MdiWindowListItem = this.fileToolStripMenuItem;
             this.mmenuStrip.Name = "mmenuStrip";
-            this.mmenuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.mmenuStrip.Size = new System.Drawing.Size(1544, 30);
+            this.mmenuStrip.Size = new System.Drawing.Size(1158, 24);
             this.mmenuStrip.TabIndex = 4;
             this.mmenuStrip.Text = "menuStrip1";
             this.mmenuStrip.Visible = false;
@@ -294,7 +133,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.fileToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
             this.fileToolStripMenuItem.MergeIndex = 0;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // importQueueLcmsNetToolStripMenuItem
@@ -302,7 +141,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.importQueueLcmsNetToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.importQueueLcmsNetToolStripMenuItem.MergeIndex = 0;
             this.importQueueLcmsNetToolStripMenuItem.Name = "importQueueLcmsNetToolStripMenuItem";
-            this.importQueueLcmsNetToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.importQueueLcmsNetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.importQueueLcmsNetToolStripMenuItem.Text = "Open";
             this.importQueueLcmsNetToolStripMenuItem.Click += new System.EventHandler(this.ImportQueue);
             // 
@@ -311,14 +150,14 @@ namespace LcmsNet.SampleQueue.Forms
             this.toolStripSeparator3.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.toolStripSeparator3.MergeIndex = 1;
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(132, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(111, 6);
             // 
             // saveToolStripMenuItem1
             // 
             this.saveToolStripMenuItem1.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.saveToolStripMenuItem1.MergeIndex = 2;
             this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(135, 26);
+            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
             this.saveToolStripMenuItem1.Text = "Save";
             this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -327,7 +166,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.saveAsToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.saveAsToolStripMenuItem.MergeIndex = 3;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -336,7 +175,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.toolStripSeparator1.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.toolStripSeparator1.MergeIndex = 4;
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
             // 
             // exportToolStripMenuItem
             // 
@@ -349,39 +188,39 @@ namespace LcmsNet.SampleQueue.Forms
             this.exportToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.exportToolStripMenuItem.MergeIndex = 5;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.exportToolStripMenuItem.Text = "Export";
             // 
             // queueToXMLToolStripMenuItem
             // 
             this.queueToXMLToolStripMenuItem.Name = "queueToXMLToolStripMenuItem";
-            this.queueToXMLToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
+            this.queueToXMLToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.queueToXMLToolStripMenuItem.Text = "to LCMS VB6 (XML)";
             this.queueToXMLToolStripMenuItem.Click += new System.EventHandler(this.queueToXMLToolStripMenuItem_Click);
             // 
             // toCSVToolStripMenuItem
             // 
             this.toCSVToolStripMenuItem.Name = "toCSVToolStripMenuItem";
-            this.toCSVToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
+            this.toCSVToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.toCSVToolStripMenuItem.Text = "to CSV";
             this.toCSVToolStripMenuItem.Click += new System.EventHandler(this.queueAsCSVToolStripMenuItem_Click);
             // 
             // queueToExcaliburToolStripMenuItem
             // 
             this.queueToExcaliburToolStripMenuItem.Name = "queueToExcaliburToolStripMenuItem";
-            this.queueToExcaliburToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
+            this.queueToExcaliburToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.queueToExcaliburToolStripMenuItem.Text = "to XCalibur";
             this.queueToExcaliburToolStripMenuItem.Click += new System.EventHandler(this.queueAsCSVToolStripMenuItem_Click_1);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(209, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(174, 6);
             // 
             // tToolStripMenuItem
             // 
             this.tToolStripMenuItem.Name = "tToolStripMenuItem";
-            this.tToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
+            this.tToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.tToolStripMenuItem.Text = "MRM Files";
             this.tToolStripMenuItem.Click += new System.EventHandler(this.exportMRMFilesToolStripMenuItem_Click);
             // 
@@ -394,11 +233,9 @@ namespace LcmsNet.SampleQueue.Forms
             this.groupBox1.Controls.Add(this.mbutton_undo);
             this.groupBox1.Controls.Add(this.mbutton_redo);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 847);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(0, 688);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(1544, 112);
+            this.groupBox1.Size = new System.Drawing.Size(1158, 91);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             // 
@@ -407,10 +244,9 @@ namespace LcmsNet.SampleQueue.Forms
             this.mpicture_preview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.mpicture_preview.Location = new System.Drawing.Point(280, 15);
-            this.mpicture_preview.Margin = new System.Windows.Forms.Padding(4);
+            this.mpicture_preview.Location = new System.Drawing.Point(210, 12);
             this.mpicture_preview.Name = "mpicture_preview";
-            this.mpicture_preview.Size = new System.Drawing.Size(933, 90);
+            this.mpicture_preview.Size = new System.Drawing.Size(700, 73);
             this.mpicture_preview.TabIndex = 23;
             this.mpicture_preview.TabStop = false;
             // 
@@ -421,10 +257,9 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_stop.Enabled = false;
             this.mbutton_stop.Image = global::LcmsNet.Properties.Resources.notOK;
             this.mbutton_stop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.mbutton_stop.Location = new System.Drawing.Point(1379, 23);
-            this.mbutton_stop.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_stop.Location = new System.Drawing.Point(1034, 19);
             this.mbutton_stop.Name = "mbutton_stop";
-            this.mbutton_stop.Size = new System.Drawing.Size(149, 81);
+            this.mbutton_stop.Size = new System.Drawing.Size(112, 66);
             this.mbutton_stop.TabIndex = 18;
             this.mbutton_stop.Text = "Stop";
             this.mbutton_stop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -438,10 +273,9 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_run.Enabled = false;
             this.mbutton_run.Image = global::LcmsNet.Properties.Resources.ok;
             this.mbutton_run.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.mbutton_run.Location = new System.Drawing.Point(1221, 23);
-            this.mbutton_run.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_run.Location = new System.Drawing.Point(916, 19);
             this.mbutton_run.Name = "mbutton_run";
-            this.mbutton_run.Size = new System.Drawing.Size(149, 81);
+            this.mbutton_run.Size = new System.Drawing.Size(112, 66);
             this.mbutton_run.TabIndex = 17;
             this.mbutton_run.Text = "Run";
             this.mbutton_run.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -455,10 +289,9 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_undo.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_undo.Image = global::LcmsNet.Properties.Resources.undo_16;
             this.mbutton_undo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_undo.Location = new System.Drawing.Point(8, 23);
-            this.mbutton_undo.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_undo.Location = new System.Drawing.Point(6, 19);
             this.mbutton_undo.Name = "mbutton_undo";
-            this.mbutton_undo.Size = new System.Drawing.Size(111, 81);
+            this.mbutton_undo.Size = new System.Drawing.Size(83, 66);
             this.mbutton_undo.TabIndex = 15;
             this.mbutton_undo.Text = "Undo";
             this.mbutton_undo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -472,10 +305,9 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_redo.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_redo.Image = global::LcmsNet.Properties.Resources.redo_16;
             this.mbutton_redo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.mbutton_redo.Location = new System.Drawing.Point(127, 23);
-            this.mbutton_redo.Margin = new System.Windows.Forms.Padding(4);
+            this.mbutton_redo.Location = new System.Drawing.Point(95, 19);
             this.mbutton_redo.Name = "mbutton_redo";
-            this.mbutton_redo.Size = new System.Drawing.Size(111, 81);
+            this.mbutton_redo.Size = new System.Drawing.Size(83, 66);
             this.mbutton_redo.TabIndex = 16;
             this.mbutton_redo.Text = "redo";
             this.mbutton_redo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -484,32 +316,18 @@ namespace LcmsNet.SampleQueue.Forms
             // 
             // formSampleManager2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1544, 959);
+            this.ClientSize = new System.Drawing.Size(1158, 779);
             this.Controls.Add(this.mtabControl_sampleViews);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mmenuStrip);
             this.MainMenuStrip = this.mmenuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "formSampleManager2";
             this.Text = "Sample Queue";
             this.mtabControl_sampleViews.ResumeLayout(false);
             this.mtabPage_sequenceView.ResumeLayout(false);
-            this.mtabPage_columnView.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
             this.mmenuStrip.ResumeLayout(false);
             this.mmenuStrip.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -523,7 +341,6 @@ namespace LcmsNet.SampleQueue.Forms
 
         private TabControl mtabControl_sampleViews;
         private TabPage mtabPage_sequenceView;
-        private TabPage mtabPage_columnView;
         private controlSequenceView2 mcontrol_sequenceView;
         private MenuStrip mmenuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
@@ -543,13 +360,6 @@ namespace LcmsNet.SampleQueue.Forms
         private Button mbutton_redo;
         private Button mbutton_stop;
         private Button mbutton_run;
-        private SplitContainer splitContainer1;
-        private controlColumnView2 mcontrol_column3;
-        private controlColumnView2 mcontrol_column4;
-        private SplitContainer splitContainer2;
-        private controlColumnView2 mcontrol_column1;
-        private controlColumnView2 mcontrol_column2;
-        private SplitContainer splitContainer3;
         private PictureBox mpicture_preview;
     }
 }

@@ -112,32 +112,12 @@ namespace LcmsNet.SampleQueue.Forms
             //
             mcontrol_sequenceView.ControlSampleView.DMSView = m_dmsView;
             mcontrol_sequenceView.ControlSampleView.SampleQueue = m_sampleQueue;
-            mcontrol_column1.ControlSampleView.DMSView = m_dmsView;
-            mcontrol_column2.ControlSampleView.DMSView = m_dmsView;
-            mcontrol_column3.ControlSampleView.DMSView = m_dmsView;
-            mcontrol_column4.ControlSampleView.DMSView = m_dmsView;
-            mcontrol_column1.ControlSampleView.SampleQueue = m_sampleQueue;
-            mcontrol_column2.ControlSampleView.SampleQueue = m_sampleQueue;
-            mcontrol_column3.ControlSampleView.SampleQueue = m_sampleQueue;
-            mcontrol_column4.ControlSampleView.SampleQueue = m_sampleQueue;
-            mcontrol_column1.Column = classCartConfiguration.Columns[0];
-            mcontrol_column2.Column = classCartConfiguration.Columns[1];
-            mcontrol_column3.Column = classCartConfiguration.Columns[2];
-            mcontrol_column4.Column = classCartConfiguration.Columns[3];
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
             {
-                mcontrol_column1.ControlSampleView.AutoSamplerMethods.Add("method" + i);
-                mcontrol_column2.ControlSampleView.AutoSamplerMethods.Add("method" + i);
-                mcontrol_column3.ControlSampleView.AutoSamplerMethods.Add("method" + i);
-                mcontrol_column4.ControlSampleView.AutoSamplerMethods.Add("method" + i);
                 mcontrol_sequenceView.ControlSampleView.AutoSamplerMethods.Add("method" + i);
 
-                mcontrol_column1.ControlSampleView.AutoSamplerTrays.Add("defaultTray0" + i);
-                mcontrol_column2.ControlSampleView.AutoSamplerTrays.Add("defaultTray0" + i);
-                mcontrol_column3.ControlSampleView.AutoSamplerTrays.Add("defaultTray0" + i);
-                mcontrol_column4.ControlSampleView.AutoSamplerTrays.Add("defaultTray0" + i);
                 mcontrol_sequenceView.ControlSampleView.AutoSamplerTrays.Add("defaultTray0" + i);
             }
 

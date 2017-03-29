@@ -471,12 +471,6 @@
     <Compile Include="SampleQueue\Forms\controlColumnView.Designer.cs">
       <DependentUpon>controlColumnView.cs</DependentUpon>
     </Compile>
-    <Compile Include="SampleQueue\Forms\controlColumnView2.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlColumnView2.Designer.cs">
-      <DependentUpon>controlColumnView2.cs</DependentUpon>
-    </Compile>
     <Compile Include="SampleQueue\Forms\controlSampleView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -564,9 +558,6 @@
     <Compile Include="SampleQueue\IO\classQueueImportSQLite.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
     <Compile Include="WPFControls\ViewModels\sampleViewModel.cs" />
-    <Compile Include="WPFControls\Views\columnView.xaml.cs">
-      <DependentUpon>columnView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WPFControls\Views\sampleView.xaml.cs">
       <DependentUpon>sampleView.xaml</DependentUpon>
     </Compile>
@@ -806,10 +797,6 @@
       <DependentUpon>controlColumnView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlColumnView2.resx">
-      <DependentUpon>controlColumnView2.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\controlSampleView.resx">
       <DependentUpon>controlSampleView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1044,10 +1031,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="WPFControls\Views\columnView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="WPFControls\Views\sampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
