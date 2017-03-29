@@ -40,8 +40,6 @@ namespace LcmsNet.SampleQueue.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formSampleManager2));
-            this.mtabControl_sampleViews = new System.Windows.Forms.TabControl();
-            this.mtabPage_sequenceView = new System.Windows.Forms.TabPage();
             this.mcontrol_sequenceView = new LcmsNet.SampleQueue.Forms.controlSequenceView2();
             this.mmenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,49 +60,26 @@ namespace LcmsNet.SampleQueue.Forms
             this.mbutton_run = new System.Windows.Forms.Button();
             this.mbutton_undo = new System.Windows.Forms.Button();
             this.mbutton_redo = new System.Windows.Forms.Button();
-            this.mtabControl_sampleViews.SuspendLayout();
-            this.mtabPage_sequenceView.SuspendLayout();
             this.mmenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpicture_preview)).BeginInit();
             this.SuspendLayout();
             // 
-            // mtabControl_sampleViews
-            // 
-            this.mtabControl_sampleViews.Controls.Add(this.mtabPage_sequenceView);
-            this.mtabControl_sampleViews.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mtabControl_sampleViews.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mtabControl_sampleViews.Location = new System.Drawing.Point(0, 0);
-            this.mtabControl_sampleViews.Name = "mtabControl_sampleViews";
-            this.mtabControl_sampleViews.SelectedIndex = 0;
-            this.mtabControl_sampleViews.Size = new System.Drawing.Size(1158, 688);
-            this.mtabControl_sampleViews.TabIndex = 1;
-            // 
-            // mtabPage_sequenceView
-            // 
-            this.mtabPage_sequenceView.Controls.Add(this.mcontrol_sequenceView);
-            this.mtabPage_sequenceView.Location = new System.Drawing.Point(4, 22);
-            this.mtabPage_sequenceView.Name = "mtabPage_sequenceView";
-            this.mtabPage_sequenceView.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.mtabPage_sequenceView.Size = new System.Drawing.Size(1150, 662);
-            this.mtabPage_sequenceView.TabIndex = 0;
-            this.mtabPage_sequenceView.Text = "Sequence View";
-            this.mtabPage_sequenceView.UseVisualStyleBackColor = true;
-            // 
             // mcontrol_sequenceView
             // 
             //ToDo: this.mcontrol_sequenceView.AutoSamplerMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.AutoSamplerMethods")));
             //ToDo: this.mcontrol_sequenceView.AutoSamplerTrays = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.AutoSamplerTrays")));
+            this.mcontrol_sequenceView.AutoSize = true;
             this.mcontrol_sequenceView.BackColor = System.Drawing.Color.White;
             //ToDo: this.mcontrol_sequenceView.ColumnHandling = LcmsNet.SampleQueue.enumColumnDataHandling.Resort;
             this.mcontrol_sequenceView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcontrol_sequenceView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             //ToDo: this.mcontrol_sequenceView.InstrumentMethods = ((System.Collections.Generic.List<string>)(resources.GetObject("mcontrol_sequenceView.InstrumentMethods")));
-            this.mcontrol_sequenceView.Location = new System.Drawing.Point(3, 3);
-            this.mcontrol_sequenceView.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.mcontrol_sequenceView.Location = new System.Drawing.Point(0, 0);
+            this.mcontrol_sequenceView.Margin = new System.Windows.Forms.Padding(5);
             this.mcontrol_sequenceView.Name = "mcontrol_sequenceView";
-            this.mcontrol_sequenceView.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.mcontrol_sequenceView.Size = new System.Drawing.Size(1144, 656);
+            this.mcontrol_sequenceView.Padding = new System.Windows.Forms.Padding(3);
+            this.mcontrol_sequenceView.Size = new System.Drawing.Size(1158, 688);
             this.mcontrol_sequenceView.TabIndex = 2;
             this.mcontrol_sequenceView.Load += new System.EventHandler(this.mcontrol_sequenceView_Load);
             // 
@@ -116,6 +91,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.mmenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mmenuStrip.MdiWindowListItem = this.fileToolStripMenuItem;
             this.mmenuStrip.Name = "mmenuStrip";
+            this.mmenuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
             this.mmenuStrip.Size = new System.Drawing.Size(1158, 24);
             this.mmenuStrip.TabIndex = 4;
             this.mmenuStrip.Text = "menuStrip1";
@@ -134,7 +110,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.fileToolStripMenuItem.MergeIndex = 0;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Text = "&File";
             // 
             // importQueueLcmsNetToolStripMenuItem
             // 
@@ -320,14 +296,12 @@ namespace LcmsNet.SampleQueue.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1158, 779);
-            this.Controls.Add(this.mtabControl_sampleViews);
+            this.Controls.Add(this.mcontrol_sequenceView);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mmenuStrip);
             this.MainMenuStrip = this.mmenuStrip;
             this.Name = "formSampleManager2";
             this.Text = "Sample Queue";
-            this.mtabControl_sampleViews.ResumeLayout(false);
-            this.mtabPage_sequenceView.ResumeLayout(false);
             this.mmenuStrip.ResumeLayout(false);
             this.mmenuStrip.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -338,9 +312,6 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         #endregion
-
-        private TabControl mtabControl_sampleViews;
-        private TabPage mtabPage_sequenceView;
         private controlSequenceView2 mcontrol_sequenceView;
         private MenuStrip mmenuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
