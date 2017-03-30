@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
@@ -319,7 +320,6 @@ namespace LcmsNet.SampleQueue.Forms
                 classApplicationLogger.LogError(0,
                     "An exception occurred while trying to build the sample queue controls.  Constructor 2: " + ex.Message, ex);
             }
-           
         }
 
         /// <summary>
@@ -398,35 +398,11 @@ namespace LcmsNet.SampleQueue.Forms
                 classApplicationLogger.LogError(1, "The sample queue could not load the dataset type list.", ex);
             }
 
-            //
-            // Events to make sure the editing is done correctly.
-            //
-            // Old: mdataGrid_samples.CellBeginEdit += mdataGrid_samples_CellBeginEdit;
-            // Old: mdataGrid_samples.CellEndEdit += mdataGrid_samples_CellEndEdit;
-            // Old: mdataGrid_samples.DataError += mdataGrid_samples_DataError;
-            // Old: mdataGrid_samples.KeyUp += mdataGrid_samples_KeyUp;
-
-            // Make sure to set the styles/data for a row before it is displayed
-            // Old: mdataGrid_samples.RowPrePaint += RowPrePaint;
-
-            // WinForms: DisplayColumn(CONST_COLUMN_COLUMN_ID, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_DATASET_TYPE, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_BLOCK, false);
-            // WinForms: DisplayColumn(CONST_COLUMN_RUN_ORDER, false);
-            // WinForms: DisplayColumn(CONST_COLUMN_EXPERIMENT_METHOD, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_INSTRUMENT_METHOD, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_PAL_TRAY, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_PAL_VIAL, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_VOLUME, true);
-            // WinForms: DisplayColumn(CONST_COLUMN_BATCH_ID, false);
-            // WinForms: DisplayColumn(CONST_COLUMN_UNIQUE_ID, false);
-
-            // Old: mdataGrid_samples.CellFormatting += mdataGrid_samples_CellFormatting;
-            // Old: mdataGrid_samples.BringToFront();
             m_sampleContainer.BringToFront();
             PerformLayout();
 
-            Samples = new ReactiveList<sampleViewModel>();
+            Samples = new ReactiveList<sampleViewModel>() {ChangeTrackingEnabled = true};
+            Samples.ItemChanged.Where(x => x.PropertyName == "IsChecked").Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
             mdataGrid_samples.DataContext = this;
         }
 
@@ -457,279 +433,123 @@ namespace LcmsNet.SampleQueue.Forms
 
         #region Queue handling
 
-        /// <summary>
-        /// Determines if a queue can be pulled down or not.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Unused")]
-        bool SelectionChangeValid(int rowNum, classSampleData sample, bool doNotValidate = false)
-        {
-            // Make sure we aren't at the end of the queue.
-            // Old: var N = mdataGrid_samples.Rows.Count;
-            var N = Samples.Count;
-            if (rowNum <= N/* * m_sampleItemSize*/)
-            {
-                var currentSample =
-                    /*Convert.ToInt32(Math.Round(Convert.ToDouble(y) / Convert.ToDouble(m_sampleItemSize))) +
-                    mdataGrid_samples.FirstDisplayedScrollingRowIndex*/ rowNum;
-
-                // Old: if (currentSample < 1 || currentSample > mdataGrid_samples.Rows.Count)
-                if (currentSample < 1 || currentSample > Samples.Count)
-                    return false;
-                if (!doNotValidate)
-                {
-                    /////// This is very, very expensive...... ///////
-                    Validate();
-                }
-                //Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
-                //classSampleData sample = RowToSample(mdataGrid_samples.Rows[currentSample - 1]);
-
-                // Don't let us re-run something that has been run, errored, or is currently running.
-                if (sample.RunningStatus != enumSampleRunningStatus.Queued
-                    && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
-                {
-                    return false;
-                }
-
-                // Validate sample.
-
-                if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
-                {
-                    var isSampleValid = mValidator.IsSampleValid(sample);
-
-                    // EUS Usage for this sample is not valid; ignore for now
-                    //if (!isSampleValid)
-                    //{
-                    //    return false;
-                    //}
-                }
-                else
-                {
-                    // DMS sample validation is disabled
-                    return false;
-                }
-
-                // Validate other parts of the sample.
-                var errors = new List<classSampleValidationError>();
-                foreach (
-                    var reference in
-                        classSampleValidatorManager.Instance.Validators)
-                {
-#if DEBUG
-                    Console.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
-#endif
-                    var sampleValidator = reference.Value;
-                    errors.AddRange(sampleValidator.ValidateSamples(sample));
-                }
-                if (errors.Count > 0)
-                {
-                    //TODO: Add notifications to what was wrong with the samples.
-                    return false;
-                }
-
-                return true;
-            }
-            // We were at the end of the rope.
-            return false;
-        }
+        private bool currentlyProcessingQueueChange = false;
 
         /// <summary>
         /// Handles validation of samples and queue operations.
         /// </summary>
-        /// <param name="rowNum"></param>
-        /// <param name="isRecursive"></param>
-        private void HandleSampleValidationAndQueuing(int rowNum, bool isRecursive)
+        /// <param name="changedSample"></param>
+        private void HandleSampleValidationAndQueuing(sampleViewModel changedSample)
         {
-            //var y = mdataGrid_samples.Rows.IndexOf(row) + 1;
-            var currentTask = "Initializing";
-
-            // Make sure we aren't at the end of the queue.
-            // Old: var N = mdataGrid_samples.Rows.Count;
-            var N = Samples.Count;
-
-            try
+            lock (this)
             {
-                currentTask = "Determine number of selected items";
-                // Old: var offset = mdataGrid_samples.FirstDisplayedScrollingRowIndex;
-                var offset = 1;
-
-                // Find the number of items that are selected.
-                if (rowNum <= N)
+                if (currentlyProcessingQueueChange)
                 {
-                    // Old: if (rowNum < 0 || rowNum > mdataGrid_samples.Rows.Count)
-                    if (rowNum < 0 || rowNum > Samples.Count)
-                        return;
-
-                    if (!isRecursive && !(rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum))
-                    {
-                        ////// This can be expensive for large queues...... //////
-                        Validate();
-
-                    }
-                }
-
-                if (Math.Abs(m_lastQueuedSamplePosition - rowNum) > 1)
-                {
-                    // process: if more than 1 selected, ask user for confirmation; if confirmed, recursively call this function?
-                    var isDequeue = m_lastQueuedSamplePosition - rowNum > 0;
-                    if (isDequeue)
-                    {
-                        // Dequeuing samples; call this method recursively
-                        HandleSampleValidationAndQueuing(rowNum + 1, true);
-                    }
-                    else
-                    {
-                        // Queuing samples
-                        // Call this method recursively
-                        HandleSampleValidationAndQueuing(rowNum - 1, true);
-                    }
-
-                }
-
-                currentTask = "Examine samples";
-                int neededRowId = 0;
-                if (rowNum <= m_firstQueuedSamplePosition || m_lastQueuedSamplePosition > rowNum)
-                {
-                    // Old: neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum].Cells[CONST_COLUMN_UNIQUE_ID].Value);
-                }
-                else
-                {
-                    // Old: neededRowId = Convert.ToInt32(mdataGrid_samples.Rows[rowNum - 1].Cells[CONST_COLUMN_UNIQUE_ID].Value);
-                }
-
-                var sample = m_sampleQueue.FindSample(neededRowId);
-                if (sample == null)
-                {
-                    LogSampleIdNotFound("HandleSampleValidationAndQueuing (m_sampleQueue.FindSample)", neededRowId);
                     return;
                 }
+                currentlyProcessingQueueChange = true;
+            }
 
-                if (rowNum <= m_firstQueuedSamplePosition)
+            using (Samples.SuppressChangeNotifications())
+            {
+                var currentTask = "Initializing";
+
+                try
                 {
-                    if (rowNum < m_lastQueuedSamplePosition && rowNum >= m_firstQueuedSamplePosition)
+                    currentTask = "Determine number of selected items";
+                    currentTask = "Examine samples";
+
+                    if (changedSample.IsChecked)
                     {
-                        //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
-                        m_sampleQueue.DequeueSampleFromRunningQueue(sample);
-                    }
+                        // Queue samples
+                        foreach (var sample in Samples)
+                        {
+                            // bypass samples already in running queue
+                            if (sample.Sample.IsSetToRunOrHasRun)
+                            {
+                                continue;
+                            }
+                            // Validate sample and add it to the run queue
 
-                    if (!isRecursive)
-                    {
-                        m_lastQueuedSamplePosition = Math.Max(0, rowNum);
-                        m_sampleContainer.Refresh();
-                    }
-                    return;
-                }
+                            // Validate sample.
 
-                if (m_lastQueuedSamplePosition > rowNum)
-                {
-                    //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples]);
-                    m_sampleQueue.DequeueSampleFromRunningQueue(sample);
+                            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
+                            {
+                                var isSampleValid = mValidator.IsSampleValid(sample.Sample);
+                                if (!isSampleValid)
+                                {
+                                    // EUS Usage for this sample is not valid; ignore for now
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                // DMS Sample validation is disabled
+                                return;
+                            }
 
-                    if (!isRecursive)
-                    {
-                        m_lastQueuedSamplePosition = rowNum;
-                        m_sampleContainer.Refresh();
-                    }
-
-                    //m_sampleContainer.Refresh();
-                    return;
-                }
-
-                currentTask = "Call to CanPullDownQueueBar";
-                //bool canPullDown = SelectionChangeValid(y/* - m_columnSize*/, tsample, isRecursive);
-                //
-                //if (!canPullDown)
-                //{
-                //    return;
-                //}
-
-                if (rowNum <= N)
-                {
-                    var currentSampleNum = rowNum;
-
-                    // Old: if (currentSampleNum < 1 || currentSampleNum > mdataGrid_samples.Rows.Count)
-                    // Old:     return;
-
-                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                    if (sample == null)
-                    {
-                        LogSampleIdNotFound("HandleSampleValidationAndQueuing (rowNum <= N); this code should theoretically never be reached", neededRowId);
-
-                        // Validation call ensures that any changes to datagridview have been commited, and that valid values exist in all rows.
-                        // Old: sample = RowToSample(mdataGrid_samples.Rows[currentSampleNum - 1]);
-                    }
-
-                    // Don't let us re-run something that has been run, errored, or is currently running.
-                    if (sample.RunningStatus != enumSampleRunningStatus.Queued
-                        && sample.RunningStatus != enumSampleRunningStatus.WaitingToRun)
-                    {
-                        return;
-                    }
-
-                    // Validate sample.
-
-                    if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
-                    {
-                        var isSampleValid = mValidator.IsSampleValid(sample);
-                        //if (!isSampleValid)
-                        //{
-                        //    // EUS Usage for this sample is not valid; ignore for now
-                        //    return;
-                        //}
-                    }
-                    else
-                    {
-                        // DMS Sample validation is disabled
-                        return;
-                    }
-
-                    // Validate other parts of the sample.
-                    var errors = new List<classSampleValidationError>();
-                    foreach (var reference in classSampleValidatorManager.Instance.Validators)
-                    {
+                            // Validate other parts of the sample.
+                            var errors = new List<classSampleValidationError>();
+                            foreach (var reference in classSampleValidatorManager.Instance.Validators)
+                            {
 #if DEBUG
-                        Console.WriteLine("Validating sample with validator: " +
-                                                           reference.Metadata.Name);
+                                Console.WriteLine("Validating sample with validator: " +
+                                                  reference.Metadata.Name);
 #endif
-                        var sampleValidator = reference.Value;
-                        errors.AddRange(sampleValidator.ValidateSamples(sample));
-                    }
+                                var sampleValidator = reference.Value;
+                                errors.AddRange(sampleValidator.ValidateSamples(sample.Sample));
+                            }
 
-                    if (errors.Count > 0)
+                            if (errors.Count > 0)
+                            {
+                                //TODO: Add notifications to what was wrong with the samples.
+                                return;
+                            }
+
+                            // Add to run queue
+                            m_sampleQueue.MoveSamplesToRunningQueue(sample.Sample);
+
+                            if (sample.Equals(changedSample))
+                            {
+                                //Stop validating and queuing samples
+                                break;
+                            }
+
+                        }
+                    }
+                    else
                     {
-                        //TODO: Add notifications to what was wrong with the samples.
-                        return;
+                        // Dequeue samples - iterate in reverse
+                        foreach (var sample in Samples.Reverse())
+                        {
+                            // bypass samples not set to run
+                            if (!sample.Sample.IsSetToRunOrHasRun)
+                            {
+                                continue;
+                            }
+                            // Remove sample from run queue
+                            m_sampleQueue.DequeueSampleFromRunningQueue(sample.Sample);
+
+                            if (sample.Equals(changedSample))
+                            {
+                                // Stop removing sample from run queue
+                                break;
+                            }
+                        }
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    // All samples processed
-                    return;
-                }
-
-                currentTask =
-                    "Handle queueing the samples by first tracking the current sample index, then seeing if it changed from last to current";
-
-                // Handle queueing the samples by first tracking the current sample index, then
-                // seeing if it changed from last to current.
-                if (m_lastQueuedSamplePosition < rowNum)
-                {
-                    //classSampleData sample = RowToSample(mdataGrid_samples.Rows[totalSamples - 1]);
-                    m_sampleQueue.MoveSamplesToRunningQueue(sample);
-                }
-
-                if (!isRecursive)
-                {
-                    m_lastQueuedSamplePosition = rowNum;
-                    m_sampleContainer.Refresh();
+                    classApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueueing, task " + currentTask, ex);
+                    MessageBox.Show(
+                        @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
-            catch (Exception ex)
+
+            lock (this)
             {
-                classApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueueing, task " + currentTask, ex);
-                MessageBox.Show(
-                    @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                currentlyProcessingQueueChange = false;
             }
         }
 
@@ -764,20 +584,6 @@ namespace LcmsNet.SampleQueue.Forms
 
             return isValid;
         }
-
-        /*void InvalidateGridView(object sender, DataGridViewCellEventArgs e)
-        {
-            InvalidateGridView(false);
-        }
-
-        protected void InvalidateGridView(bool resetBindingSourceBindings)
-        {
-            if (resetBindingSourceBindings)
-                sampleToRowTranslatorBindingSource.ResetBindings(false);
-
-            // Old: mdataGrid_samples.ResetBindings();
-            // Old: mdataGrid_samples.Invalidate();
-        }*/
 
         /*void DataGridViewCellContentClicked(object sender, DataGridViewCellEventArgs e)
         {
@@ -838,11 +644,6 @@ namespace LcmsNet.SampleQueue.Forms
             // Old:         mdataGrid_samples.CancelEdit();
             // Old:     }
             // Old: }
-        }*/
-
-        /*void RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
-        {
-            UpdateRow(e.RowIndex);
         }*/
 
         #endregion

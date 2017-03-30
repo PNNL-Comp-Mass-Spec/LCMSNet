@@ -15,7 +15,7 @@ using LcmsNetSQLiteTools;
 
 namespace LcmsNet.WPFControls.ViewModels
 {
-    public class sampleViewModel : ReactiveObject
+    public class sampleViewModel : ReactiveObject, IEquatable<sampleViewModel>
     {
         /// <summary>
         /// Index Offset for going from a zero based array for configuration data to the
@@ -58,6 +58,37 @@ namespace LcmsNet.WPFControls.ViewModels
         public sampleViewModel(classSampleData sample)
         {
             Sample = sample;
+            isChecked = Sample.IsSetToRunOrHasRun;
+
+            this.WhenAnyValue(x => x.Sample.ColumnData).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(ColumnNumber));
+                this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
+            });
+            //this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).ToProperty(this, x => x.IsChecked);
+            this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
+            this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(Status));
+                this.RaisePropertyChanged(nameof(StatusToolTipText));
+                //this.RaisePropertyChanged(nameof(IsChecked));
+                this.RaisePropertyChanged(nameof(CheckboxEnabled));
+                SetRowColors();
+            });
+            this.WhenAnyValue(x => x.Sample.PAL).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(PALTray));
+                this.RaisePropertyChanged(nameof(PALVial));
+            });
+            this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(PALTray));
+                this.RaisePropertyChanged(nameof(PALVial));
+            });
+            this.WhenAnyValue(x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(PALVolume)));
+            this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x => this.RaisePropertyChanged(nameof(DatasetType)));
+
+
         }
 
         public ReactiveList<string> LcMethodComboBoxOptionsStr => LcMethodOptionsStr;
@@ -164,41 +195,26 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        public bool IsChecked
-        {
-            get { return Checkbox == controlSampleView.enumCheckboxStatus.Checked; } 
-            set { }
-        }
+        private bool isChecked;
 
-        public controlSampleView.enumCheckboxStatus Checkbox
+        public bool IsChecked
         {
             get
             {
-                var state = GetCheckboxStatusFromSampleStatus();
-                if (state == controlSampleView.enumCheckboxStatus.Disabled)
-                {
-                    return controlSampleView.enumCheckboxStatus.Checked;
-                }
-                return state;
+                //isChecked = Sample.IsSetToRunOrHasRun;
+                return isChecked;
             }
+            set { this.RaiseAndSetIfChanged(ref isChecked, value); }
         }
 
         public bool CheckboxEnabled
         {
-            get
-            {
-                var state = GetCheckboxStatusFromSampleStatus();
-                return state != controlSampleView.enumCheckboxStatus.Disabled;
-            }
+            get { return Sample.HasNotRun; }
         }
 
         public bool EditAllowed
         {
-            get
-            {
-                var state = GetCheckboxStatusFromSampleStatus();
-                return state == controlSampleView.enumCheckboxStatus.Unchecked;
-            }
+            get { return !Sample.IsSetToRunOrHasRun; }
         }
 
         public string SpecialColumnNumber { get; set; }
@@ -225,43 +241,6 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         public long SequenceNumber => Sample.SequenceID;
-
-        /// <summary>
-        /// Returns the status message pertaining to a given samples running status.
-        /// </summary>
-        /// <returns>String representing the status of the running state.</returns>
-        protected controlSampleView.enumCheckboxStatus GetCheckboxStatusFromSampleStatus()
-        {
-            var status = controlSampleView.enumCheckboxStatus.Disabled;
-            switch (Sample.RunningStatus)
-            {
-                case enumSampleRunningStatus.Complete:
-                    status = controlSampleView.enumCheckboxStatus.Disabled;
-                    break;
-                case enumSampleRunningStatus.Error:
-                    status = controlSampleView.enumCheckboxStatus.Unchecked;
-                    break;
-                case enumSampleRunningStatus.Stopped:
-                    status = controlSampleView.enumCheckboxStatus.Unchecked;
-                    break;
-                case enumSampleRunningStatus.Queued:
-                    status = controlSampleView.enumCheckboxStatus.Unchecked;
-                    break;
-                case enumSampleRunningStatus.Running:
-                    status = controlSampleView.enumCheckboxStatus.Disabled;
-                    break;
-                case enumSampleRunningStatus.WaitingToRun:
-                    status = controlSampleView.enumCheckboxStatus.Checked;
-                    break;
-                default:
-                    //
-                    // Should never get here
-                    //
-                    break;
-            }
-
-            return status;
-        }
 
         public string Status
         {
@@ -472,6 +451,8 @@ namespace LcmsNet.WPFControls.ViewModels
                 //}
                 if (!Sample.LCMethod.Equals(value))
                 {
+                    Sample.LCMethod = value;
+
                     if (value.Column != Sample.ColumnData.ID)
                     {
                         if (value.Column >= 0)
@@ -480,23 +461,8 @@ namespace LcmsNet.WPFControls.ViewModels
                         }
                     }
 
-                    Sample.LCMethod = value;
                     this.RaisePropertyChanged(nameof(ColumnNumber));
                     this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
-                    this.RaisePropertyChanged();
-                }
-            }
-        }
-
-        // controlSampleView.mcolumn_instrumentMethod
-        public string InstrumentMethod
-        {
-            get { return Sample.InstrumentData.MethodName; }
-            set
-            {
-                if (Sample.InstrumentData.MethodName != value)
-                {
-                    Sample.InstrumentData.MethodName = value;
                     this.RaisePropertyChanged();
                 }
             }
@@ -518,5 +484,25 @@ namespace LcmsNet.WPFControls.ViewModels
 
         // controlSampleView.mcolumn_batchID
         public int BatchID => Sample.DmsData.Batch;
+
+        public bool Equals(sampleViewModel other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(Sample, other.Sample);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((sampleViewModel) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Sample != null ? Sample.GetHashCode() : 0);
+        }
     }
 }

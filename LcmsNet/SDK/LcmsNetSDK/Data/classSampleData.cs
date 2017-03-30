@@ -36,7 +36,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using LcmsNetDataClasses.Configuration;
@@ -86,7 +88,7 @@ namespace LcmsNetDataClasses
     /// Class to hold data for one sample (instrument run)
     /// </summary>
     [Serializable]
-    public class classSampleData : classDataClassBase, ICloneable
+    public class classSampleData : classDataClassBase, ICloneable, INotifyPropertyChanged, IEquatable<classSampleData>
     {
         #region Delegate Definitions
 
@@ -280,6 +282,11 @@ namespace LcmsNetDataClasses
         /// </summary>
         private string m_Operator = "";
 
+        /// <summary>
+        /// Status of the sample running on a column thread or waiting in a queue.
+        /// </summary>
+        private enumSampleRunningStatus m_runningStatus;
+
         #endregion
 
         #region "Properties"
@@ -293,7 +300,35 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Gets or sets the status of the sample running on a column thread or waiting in a queue.
         /// </summary>
-        public enumSampleRunningStatus RunningStatus { get; set; }
+        public enumSampleRunningStatus RunningStatus
+        {
+            get { return m_runningStatus; }
+            set
+            {
+                // Set it if it changed, and only raise the other propertyChanged notifications if it changed
+                if (RaiseAndSetIfChangedRetBool(ref m_runningStatus, value))
+                {
+                    OnPropertyChanged(nameof(HasNotRun));
+                    OnPropertyChanged(nameof(IsSetToRunOrHasRun));
+                }
+            }
+        }
+
+        /// <summary>
+        /// True when changing the Running status manually is enabled
+        /// </summary>
+        public bool HasNotRun
+        {
+            get { return !(RunningStatus == enumSampleRunningStatus.Complete || RunningStatus == enumSampleRunningStatus.Running); }
+        }
+
+        /// <summary>
+        /// True when the sample has been set to run or has run
+        /// </summary>
+        public bool IsSetToRunOrHasRun
+        {
+            get { return RunningStatus == enumSampleRunningStatus.WaitingToRun || !HasNotRun; }
+        }
 
         /// <summary>
         /// Gets or sets the instrument object data.
@@ -310,7 +345,16 @@ namespace LcmsNetDataClasses
         public classLCMethod LCMethod
         {
             get { return m_method; }
-            set { m_method = value; }
+            set
+            {
+                if (RaiseAndSetIfChangedRetBool(ref m_method, value) && m_method != null && m_method.Column != ColumnData.ID)
+                {
+                    if (m_method.Column >= 0)
+                    {
+                        ColumnData = classCartConfiguration.Columns[m_method.Column];
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -319,7 +363,7 @@ namespace LcmsNetDataClasses
         public classDMSData DmsData
         {
             get { return m_DmsData; }
-            set { m_DmsData = value; }
+            set { RaiseAndSetIfChanged(ref m_DmsData, value); }
         }
 
         /// <summary>
@@ -328,7 +372,7 @@ namespace LcmsNetDataClasses
         public long SequenceID
         {
             get { return m_sequenceNumber; }
-            set { m_sequenceNumber = value; }
+            set { RaiseAndSetIfChanged(ref m_sequenceNumber, value); }
         }
 
         /// <summary>
@@ -337,7 +381,7 @@ namespace LcmsNetDataClasses
         public classPalData PAL
         {
             get { return m_palData; }
-            set { m_palData = value; }
+            set { RaiseAndSetIfChanged(ref m_palData, value); }
         }
 
         /// <summary>
@@ -346,7 +390,7 @@ namespace LcmsNetDataClasses
         public double Volume
         {
             get { return m_volume; }
-            set { m_volume = value; }
+            set { RaiseAndSetIfChanged(ref m_volume, value); }
         }
 
         /// <summary>
@@ -357,18 +401,19 @@ namespace LcmsNetDataClasses
             get { return m_columnData; }
             set
             {
-                if (m_columnData != null && m_columnData != value)
+                if (m_columnData != value)
                 {
-                    m_columnData.NameChanged -= m_columnData_NameChanged;
-                }
+                    if (m_columnData != null)
+                    {
+                        m_columnData.NameChanged -= m_columnData_NameChanged;
+                    }
+                    m_columnData = value;
+                    if (m_columnData != null)
+                    {
+                        m_columnData.NameChanged += m_columnData_NameChanged;
+                    }
 
-                var sameData = (m_columnData == value);
-
-                m_columnData = value;
-
-                if (m_columnData != null && !sameData)
-                {
-                    m_columnData.NameChanged += m_columnData_NameChanged;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -563,6 +608,82 @@ namespace LcmsNetDataClasses
                 LCMethod = new classLCMethod();
                 LCMethod.LoadPropertyValues(expProps);
             }
+        }
+
+        #endregion
+
+        #region "INotifyPropertyChanged implementation"
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected TRet RaiseAndSetIfChanged<TRet>(
+            ref TRet backingField,
+            TRet newValue,
+            [CallerMemberName] string propertyName = null)
+        {
+            if (propertyName == null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
+            if (EqualityComparer<TRet>.Default.Equals(backingField, newValue))
+            {
+                return newValue;
+            }
+
+            backingField = newValue;
+            OnPropertyChanged(propertyName);
+            return newValue;
+        }
+
+        protected bool RaiseAndSetIfChangedRetBool<TRet>(
+            ref TRet backingField,
+            TRet newValue,
+            [CallerMemberName] string propertyName = null)
+        {
+            if (propertyName == null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
+            if (EqualityComparer<TRet>.Default.Equals(backingField, newValue))
+            {
+                return false;
+            }
+
+            backingField = newValue;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        #endregion
+
+        #region "IEquatable Implementation"
+
+        public bool Equals(classSampleData other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return m_uniqueID == other.m_uniqueID;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((classSampleData) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return m_uniqueID.GetHashCode();
         }
 
         #endregion
