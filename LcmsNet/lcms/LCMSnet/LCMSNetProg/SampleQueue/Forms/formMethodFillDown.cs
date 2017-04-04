@@ -337,11 +337,14 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void UpdateMethod(classLCMethod method)
         {
-            string oldName = null;
             var contains = m_methods.ContainsKey(method);
             if (contains)
             {
-                m_methodNameMap.Remove(oldName);
+                var oldName = m_methods[method];
+                if (m_methodNameMap.ContainsKey(oldName))
+                {
+                    m_methodNameMap.Remove(oldName);
+                }
                 m_methodNameMap.Add(method.Name, method);
 
                 comboLcMethodCol1.Items.Remove(oldName);
