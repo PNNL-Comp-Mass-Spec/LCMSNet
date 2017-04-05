@@ -142,7 +142,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Name used when distributed samples across columns.
         /// </summary>
-        private const string CONST_DEFAULT_INTEGRATE_SAMPLENAME = "(unused)";
+        public const string CONST_DEFAULT_INTEGRATE_SAMPLENAME = "(unused)";
 
         private const bool REPLACE_EXISTING_ROWS = true;
 

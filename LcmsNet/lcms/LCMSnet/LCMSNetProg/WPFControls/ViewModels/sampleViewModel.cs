@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNet.Method;
+using LcmsNet.SampleQueue;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
@@ -144,8 +145,14 @@ namespace LcmsNet.WPFControls.ViewModels
             set { this.RaiseAndSetIfChanged(ref requestNameBackColor, value); }
         }
 
+        /// <summary>
+        /// Sets the row colors based on the sample data
+        /// </summary>
         private void SetRowColors()
         {
+            // We need to color the sample based on its status.
+            // Make sure selected rows column colors don't change for running and waiting to run
+            // but only for queued, or completed (including error) sample status.
             switch (Sample.RunningStatus)
             {
                 case enumSampleRunningStatus.Running:
@@ -213,6 +220,15 @@ namespace LcmsNet.WPFControls.ViewModels
                 RowForeColor = Brushes.LightGray;
             }
 
+            // If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
+            // samples to help the user normalize samples on columns.
+            if (Sample.DmsData.DatasetName.Contains(classSampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
+            {
+                RowBackColor = Brushes.LightGray;
+                RowForeColor = Brushes.DarkGray;
+            }
+
+            // Specially color any rows with duplicate request names
             if (Sample.IsDuplicateRequestName)
             {
                 RequestNameBackColor = Brushes.Crimson;
@@ -266,6 +282,8 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             get
             {
+                // Define the background color for the LC Column
+                // Convert from WinForms color to WPF brush
                 var color = Sample.ColumnData.Color;
                 return new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
             }

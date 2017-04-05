@@ -50,7 +50,8 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="SequenceNumber" Header="Seq #" Width="51" MinWidth="10" Binding="{Binding SequenceNumber}" IsReadOnly="True" >
+                <!-- Set the number format to always show 4 digits, with leading zeros -->
+                <DataGridTextColumn x:Name="SequenceNumber" Header="Seq #" Width="51" MinWidth="10" Binding="{Binding SequenceNumber, StringFormat={}{0:0000}}" IsReadOnly="True" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock" >
                             <Setter Property="HorizontalAlignment" Value="Right" />
