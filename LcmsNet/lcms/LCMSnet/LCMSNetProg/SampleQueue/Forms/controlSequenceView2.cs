@@ -29,6 +29,48 @@ namespace LcmsNet.SampleQueue.Forms
 
         #endregion
 
+        #region Column Events
+
+        /// <summary>
+        /// Handles when a property about a column changes and rebuilds the column ordering list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="previousStatus"></param>
+        /// <param name="newStatus"></param>
+        void column_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
+        {
+            //
+            // Make sure we have at least one column that is enabled
+            //
+            var enabled = false;
+            foreach (var column in classCartConfiguration.Columns)
+            {
+                if (column.Status != enumColumnStatus.Disabled)
+                {
+                    enabled = true;
+                    break;
+                }
+            }
+
+            //
+            // If at least one column is not enabled, then we disable the sample queue
+            //
+            if (enabled == false)
+            {
+                Enabled = false;
+                BackColor = Color.LightGray;
+            }
+            else
+            {
+                Enabled = true;
+                BackColor = Color.White;
+            }
+
+            ControlSampleView.SampleQueue.UpdateAllSamples();
+        }
+
+        #endregion
+
         /// <summary>
         /// Windows Forms Designer.
         /// </summary>
@@ -405,17 +447,9 @@ namespace LcmsNet.SampleQueue.Forms
 
             UpdateToolTips();
 
-            /*
-             * DisplayColumn(CONST_COLUMN_PAL_TRAY, true);
-            DisplayColumn(CONST_COLUMN_PAL_VIAL, true);
-            DisplayColumn(CONST_COLUMN_EXPERIMENT_METHOD, true);
-            DisplayColumn(CONST_COLUMN_INSTRUMENT_METHOD, false);
-            */
-            // ToDo: EnableQueueing(true);
-
             foreach (var column in classCartConfiguration.Columns)
             {
-                // ToDo: column.StatusChanged += column_StatusChanged;
+                column.StatusChanged += column_StatusChanged;
             }
 
             panel2.SendToBack();
@@ -438,18 +472,12 @@ namespace LcmsNet.SampleQueue.Forms
         public controlSequenceView2()
         {
             InitializeComponent();
-            // ToDo: DisplayColumn(CONST_COLUMN_PAL_TRAY, true);
-            // ToDo: DisplayColumn(CONST_COLUMN_PAL_VIAL, true);
-            // ToDo: DisplayColumn(CONST_COLUMN_EXPERIMENT_METHOD, true);
-            // ToDo: DisplayColumn(CONST_COLUMN_INSTRUMENT_METHOD, false);
-
-            // ToDo: EnableQueueing(true);
 
             if (classCartConfiguration.Columns != null)
             {
                 foreach (var column in classCartConfiguration.Columns)
                 {
-                    // ToDo: column.StatusChanged += column_StatusChanged;
+                    column.StatusChanged += column_StatusChanged;
                 }
             }
 
