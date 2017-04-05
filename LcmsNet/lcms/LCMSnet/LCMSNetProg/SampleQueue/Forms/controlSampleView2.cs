@@ -1673,6 +1673,10 @@ namespace LcmsNet.SampleQueue.Forms
         internal void InvalidateSampleView()
         {
             mdataGrid_samples.InvalidateVisual();
+            foreach (var sample in Samples)
+            {
+                sample.SetRowColors();
+            }
         }
 
         #endregion

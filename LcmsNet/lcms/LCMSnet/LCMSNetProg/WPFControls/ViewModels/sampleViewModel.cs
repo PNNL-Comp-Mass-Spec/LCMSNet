@@ -148,7 +148,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Sets the row colors based on the sample data
         /// </summary>
-        private void SetRowColors()
+        public void SetRowColors()
         {
             // We need to color the sample based on its status.
             // Make sure selected rows column colors don't change for running and waiting to run
