@@ -2001,8 +2001,8 @@ namespace LcmsNet.SampleQueue.Forms
             }
             else
             {
-                // This sample is no longer a duplicate, so we need to hit everything
-                foreach (var sample in Samples)
+                // This sample is no longer a duplicate, so we need to hit everything that was flagged as a duplicate name
+                foreach (var sample in Samples.Where(x => x.IsDuplicateRequestName))
                 {
                     if (sample.Sample.Equals(data))
                     {
