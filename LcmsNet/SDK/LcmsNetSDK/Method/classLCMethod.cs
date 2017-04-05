@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace LcmsNetDataClasses.Method
 {
@@ -34,6 +35,17 @@ namespace LcmsNetDataClasses.Method
             IsSpecialMethod = false;
             HasNonDeterministicStart = false;
             RelativeMethod = null;
+        }
+
+        /// <summary>
+        /// Function called when deserializing to avoid have Events or ActualEvents return null, since deserialization does not use the constructor
+        /// </summary>
+        /// <param name="context"></param>
+        [OnDeserializing]
+        private void InitializedNonSerialized(StreamingContext context)
+        {
+            m_events = new List<classLCEvent>();
+            m_actualEvents = new List<classLCEvent>();
         }
 
         #region Members

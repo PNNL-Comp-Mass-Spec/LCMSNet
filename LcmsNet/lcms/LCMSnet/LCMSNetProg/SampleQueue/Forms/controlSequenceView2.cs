@@ -314,42 +314,42 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void mbutton_addBlank_Click(object sender, EventArgs e)
         {
-            // ToDo: AddNewSample(false);
+            ControlSampleView.AddNewSample(false);
         }
 
         private void mbutton_addDMS_Click(object sender, EventArgs e)
         {
-            // ToDo: ShowDMSView();
+            ControlSampleView.ShowDMSView();
         }
 
         private void mbutton_removeSelected_Click(object sender, EventArgs e)
         {
-            // ToDo:  RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone);
+            ControlSampleView.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone);
         }
 
         private void mbutton_fillDown_Click(object sender, EventArgs e)
         {
-            // ToDo: FillDown();
+            ControlSampleView.FillDown();
         }
 
         private void mbutton_trayVial_Click(object sender, EventArgs e)
         {
-            // ToDo: EditTrayAndVial();
+            ControlSampleView.EditTrayAndVial();
         }
 
         private void mbutton_randomize_Click(object sender, EventArgs e)
         {
-            // ToDo: RandomizeSelectedSamples();
+            ControlSampleView.RandomizeSelectedSamples();
         }
 
         private void mbutton_down_Click(object sender, EventArgs e)
         {
-            // ToDo: MoveSelectedSamples(1, enumMoveSampleType.Sequence);
+            ControlSampleView.MoveSelectedSamples(1, enumMoveSampleType.Sequence);
         }
 
         private void mbutton_up_Click(object sender, EventArgs e)
         {
-            // ToDo: MoveSelectedSamples(-1, enumMoveSampleType.Sequence);
+            ControlSampleView.MoveSelectedSamples(-1, enumMoveSampleType.Sequence);
         }
 
         private void mcheckbox_cycleColumns_CheckedChanged(object sender, EventArgs e)
@@ -359,35 +359,35 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 handling = enumColumnDataHandling.Resort;
             }
-            // ToDo: ColumnHandling = handling;
+            ControlSampleView.ColumnHandling = handling;
 
-            // ToDo: IterateThroughColumns = mcheckbox_cycleColumns.Checked;
+            ControlSampleView.IterateThroughColumns = mcheckbox_cycleColumns.Checked;
         }
 
         private void mcheckbox_autoscroll_CheckedChanged(object sender, EventArgs e)
         {
-            // ToDo: m_autoscroll = mcheckbox_autoscroll.Checked;
+            ControlSampleView.m_autoscroll = mcheckbox_autoscroll.Checked;
         }
 
         private void mbutton_deleteUnused_Click(object sender, EventArgs e)
         {
-            // ToDo: RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone);
+            ControlSampleView.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone);
         }
 
         private void mbutton_cartColumnDate_Click(object sender, EventArgs e)
         {
-            // ToDo: AddDateCartnameColumnIDToDatasetName();
+            ControlSampleView.AddDateCartnameColumnIDToDatasetName();
         }
 
         private void mbutton_refresh_Click(object sender, EventArgs e)
         {
-            // ToDo: InvalidateGridView(true);
+            ControlSampleView.InvalidateSampleView();
         }
 
 
         private void mbutton_dmsEdit_Click(object sender, EventArgs e)
         {
-            // ToDo: EditDMSData();
+            ControlSampleView.EditDMSData();
         }
 
         private void m_selector_Load(object sender, EventArgs e)
@@ -399,7 +399,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Constructor.
         /// </summary>
-        public controlSequenceView2(formDMSView dmsView, classSampleQueue sampleQueue)           
+        public controlSequenceView2(formDMSView dmsView, classSampleQueue sampleQueue)
         {
             InitializeComponent();
 
@@ -502,7 +502,11 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void controlSequenceView2_Load(object sender, EventArgs e)
         {
+        }
 
+        public void RestoreUserUIState()
+        {
+            ControlSampleView.RestoreUserUIState();
         }
     }
 }

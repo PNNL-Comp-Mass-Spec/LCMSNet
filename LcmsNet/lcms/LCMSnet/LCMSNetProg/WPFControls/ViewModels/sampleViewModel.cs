@@ -60,6 +60,7 @@ namespace LcmsNet.WPFControls.ViewModels
             Sample = sample;
             isChecked = Sample.IsSetToRunOrHasRun;
 
+            this.WhenAnyValue(x => x.Sample.SequenceID).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceNumber)));
             this.WhenAnyValue(x => x.Sample.ColumnData).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(ColumnNumber));
@@ -82,13 +83,17 @@ namespace LcmsNet.WPFControls.ViewModels
             });
             this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x =>
             {
-                this.RaisePropertyChanged(nameof(PALTray));
-                this.RaisePropertyChanged(nameof(PALVial));
+                this.RaisePropertyChanged(nameof(LCMethod));
+                this.RaisePropertyChanged(nameof(ColumnNumber));
+                this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
             this.WhenAnyValue(x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(PALVolume)));
             this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x => this.RaisePropertyChanged(nameof(DatasetType)));
-
-
+            this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x =>
+            {
+                this.SetRowColors();
+                this.RaisePropertyChanged(nameof(IsDuplicateRequestName));
+            });
         }
 
         public ReactiveList<string> LcMethodComboBoxOptionsStr => LcMethodOptionsStr;
@@ -124,6 +129,20 @@ namespace LcmsNet.WPFControls.ViewModels
         private SolidColorBrush rowForeColor;
         private SolidColorBrush rowSelectionBackColor;
         private SolidColorBrush rowSelectionForeColor;
+        private SolidColorBrush requestNameBackColor = null;
+
+        public SolidColorBrush RequestNameBackColor
+        {
+            get
+            {
+                if (requestNameBackColor == null)
+                {
+                    return RowBackColor;
+                }
+                return requestNameBackColor;
+            }
+            set { this.RaiseAndSetIfChanged(ref requestNameBackColor, value); }
+        }
 
         private void SetRowColors()
         {
@@ -193,9 +212,21 @@ namespace LcmsNet.WPFControls.ViewModels
                     (byte)Math.Max(0, RowBackColor.Color.B - 128)));
                 RowForeColor = Brushes.LightGray;
             }
+
+            if (Sample.IsDuplicateRequestName)
+            {
+                RequestNameBackColor = Brushes.Crimson;
+                RequestNameToolTipText = "Duplicate Request Name Found!";
+            }
+            else
+            {
+                RequestNameBackColor = null;
+                RequestNameToolTipText = null;
+            }
         }
 
         private bool isChecked;
+        private string requestNameToolTipText = "";
 
         public bool IsChecked
         {
@@ -354,9 +385,21 @@ namespace LcmsNet.WPFControls.ViewModels
                 if (Sample.DmsData.RequestName != value)
                 {
                     Sample.DmsData.RequestName = value;
+                    Sample.DmsData.DatasetName = value;
                     this.RaisePropertyChanged();
                 }
             }
+        }
+
+        public bool IsDuplicateRequestName
+        {
+            get { return Sample.IsDuplicateRequestName; }
+        }
+
+        public string RequestNameToolTipText
+        {
+            get { return requestNameToolTipText; }
+            set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
         }
 
         // controlSampleView.mcolumn_PalTray

@@ -649,5 +649,10 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         #endregion
+
+        public void RestoreUserUIState()
+        {
+            mcontrol_sequenceView.RestoreUserUIState();
+        }
     }
 }

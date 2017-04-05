@@ -398,6 +398,18 @@ namespace LcmsNet
             display?.ShowDialog();
             m_sampleProgress.PreviewAvailable += m_sampleManager.PreviewAvailable;
             m_notifications.LoadNotificationFile();
+
+            // Following is a hack to fix the File menu when first displaying the window; issue first appeared when removing the tab control from the Queue view.
+            this.Shown += (sender, args) =>
+            {
+                ShowMethodEditor();
+                var timer = new System.Threading.Timer(FixStartupFileMenu, this, 50, System.Threading.Timeout.Infinite);
+            };
+        }
+
+        void FixStartupFileMenu(object state)
+        {
+            this.BeginInvoke(new Action(ShowSampleQueue));
         }
 
         void m_systemConfiguration_ColumnNameChanged(object sender, EventArgs e)
@@ -976,6 +988,7 @@ namespace LcmsNet
         {
             m_sampleManager.Show();
             m_sampleManager.BringToFront();
+            m_sampleManager.RestoreUserUIState();
         }
 
         /// <summary>

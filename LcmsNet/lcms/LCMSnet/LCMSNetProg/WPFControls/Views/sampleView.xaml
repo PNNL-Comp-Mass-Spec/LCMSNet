@@ -9,7 +9,7 @@
     d:DesignWidth="600"
     mc:Ignorable="d">
     <Grid>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=Samples}" CanUserResizeRows="False" CanUserSortColumns="False">
+        <DataGrid AutoGenerateColumns="False" Name="SampleGrid" ItemsSource="{Binding Path=Samples}" CanUserResizeRows="False" CanUserSortColumns="False">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" >
                     <Setter Property="Background" Value="{Binding RowBackColor}" />
@@ -74,8 +74,9 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" >
                             <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
-                            <Setter Property="Background" Value="{Binding RowBackColor}" />
-                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
+                            <Setter Property="ToolTip" Value="{Binding RequestNameToolTipText}" />
+                            <Setter Property="Background" Value="{Binding RequestNameBackColor}" />
+                            <Setter Property="BorderBrush" Value="{Binding RequestNameBackColor}" />
                             <Setter Property="Foreground" Value="{Binding RowForeColor}" />
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">

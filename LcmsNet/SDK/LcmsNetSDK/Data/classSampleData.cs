@@ -84,6 +84,9 @@ namespace LcmsNetDataClasses
         Error
     }
 
+    [AttributeUsage(AttributeTargets.Property)]
+    public class NotStoredPropertyAttribute : Attribute { }
+
     /// <summary>
     /// Class to hold data for one sample (instrument run)
     /// </summary>
@@ -142,7 +145,7 @@ namespace LcmsNetDataClasses
         /// Makes a deep copy of this object
         /// </summary>
         /// <returns>Deep copy of object</returns>
-        public object Clone()
+        public object Clone() // TODO: do a normal clone, not the serialize/deserialize oddness
         {
             //Create a formatter and a memory stream
             IFormatter formatter = new BinaryFormatter();
@@ -285,7 +288,12 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Status of the sample running on a column thread or waiting in a queue.
         /// </summary>
-        private enumSampleRunningStatus m_runningStatus;
+        private enumSampleRunningStatus m_RunningStatus;
+
+        /// <summary>
+        /// If the sample's request name is a duplicate
+        /// </summary>
+        private bool m_IsDuplicateRequestName = false;
 
         #endregion
 
@@ -302,11 +310,11 @@ namespace LcmsNetDataClasses
         /// </summary>
         public enumSampleRunningStatus RunningStatus
         {
-            get { return m_runningStatus; }
+            get { return m_RunningStatus; }
             set
             {
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
-                if (RaiseAndSetIfChangedRetBool(ref m_runningStatus, value))
+                if (RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value))
                 {
                     OnPropertyChanged(nameof(HasNotRun));
                     OnPropertyChanged(nameof(IsSetToRunOrHasRun));
@@ -315,8 +323,19 @@ namespace LcmsNetDataClasses
         }
 
         /// <summary>
+        /// Gets or sets if the sample's request name is a duplicate
+        /// </summary>
+        [NotStoredProperty]
+        public bool IsDuplicateRequestName
+        {
+            get { return m_IsDuplicateRequestName; }
+            set { RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value); }
+        }
+
+        /// <summary>
         /// True when changing the Running status manually is enabled
         /// </summary>
+        [NotStoredProperty]
         public bool HasNotRun
         {
             get { return !(RunningStatus == enumSampleRunningStatus.Complete || RunningStatus == enumSampleRunningStatus.Running); }
@@ -325,6 +344,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// True when the sample has been set to run or has run
         /// </summary>
+        [NotStoredProperty]
         public bool IsSetToRunOrHasRun
         {
             get { return RunningStatus == enumSampleRunningStatus.WaitingToRun || !HasNotRun; }
@@ -479,6 +499,11 @@ namespace LcmsNetDataClasses
             var properties = classType.GetProperties();
             foreach (var property in properties)
             {
+                // Ignore flagged properties
+                if (Attribute.IsDefined(property, typeof(NotStoredPropertyAttribute)))
+                {
+                    continue;
+                }
                 switch (property.PropertyType.ToString())
                 {
                     case "LcmsNetDataClasses.classDMSData":
