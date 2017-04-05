@@ -32,7 +32,6 @@ namespace LcmsNet.SampleQueue.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mcontextMenu_options = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,18 +59,11 @@ namespace LcmsNet.SampleQueue.Forms
             this.previewThroughputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.randomizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewComboBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewComboBoxColumn3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewComboBoxColumn4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewComboBoxColumn5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.m_sampleContainer = new System.Windows.Forms.Panel();
             this.WpfControlHost = new System.Windows.Forms.Integration.ElementHost();
             this.mdataGrid_samples = new LcmsNet.sampleView();
-            this.sampleToRowTranslatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mcontextMenu_options.SuspendLayout();
             this.m_sampleContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sampleToRowTranslatorBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // mcontextMenu_options
@@ -262,49 +254,6 @@ namespace LcmsNet.SampleQueue.Forms
             this.randomizeToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.randomizeToolStripMenuItem.Text = "Randomize";
             // 
-            // dataGridViewComboBoxColumn1
-            // 
-            this.dataGridViewComboBoxColumn1.HeaderText = "PAL Method";
-            this.dataGridViewComboBoxColumn1.MaxDropDownItems = 100;
-            this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
-            this.dataGridViewComboBoxColumn1.Width = 73;
-            // 
-            // dataGridViewComboBoxColumn2
-            // 
-            this.dataGridViewComboBoxColumn2.HeaderText = "PAL Tray";
-            this.dataGridViewComboBoxColumn2.MaxDropDownItems = 100;
-            this.dataGridViewComboBoxColumn2.Name = "dataGridViewComboBoxColumn2";
-            this.dataGridViewComboBoxColumn2.Width = 72;
-            // 
-            // dataGridViewComboBoxColumn3
-            // 
-            this.dataGridViewComboBoxColumn3.HeaderText = "LC Method";
-            this.dataGridViewComboBoxColumn3.MaxDropDownItems = 100;
-            this.dataGridViewComboBoxColumn3.Name = "dataGridViewComboBoxColumn3";
-            this.dataGridViewComboBoxColumn3.Width = 72;
-            // 
-            // dataGridViewComboBoxColumn4
-            // 
-            this.dataGridViewComboBoxColumn4.HeaderText = "Instrument Method";
-            this.dataGridViewComboBoxColumn4.MaxDropDownItems = 100;
-            this.dataGridViewComboBoxColumn4.Name = "dataGridViewComboBoxColumn4";
-            this.dataGridViewComboBoxColumn4.Width = 73;
-            // 
-            // dataGridViewComboBoxColumn5
-            // 
-            this.dataGridViewComboBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.MediumBlue;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
-            this.dataGridViewComboBoxColumn5.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewComboBoxColumn5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.dataGridViewComboBoxColumn5.HeaderText = "Dataset Type";
-            this.dataGridViewComboBoxColumn5.Items.AddRange(new object[] {
-            "Test"});
-            this.dataGridViewComboBoxColumn5.MaxDropDownItems = 100;
-            this.dataGridViewComboBoxColumn5.Name = "dataGridViewComboBoxColumn5";
-            this.dataGridViewComboBoxColumn5.Sorted = true;
-            this.dataGridViewComboBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
             // m_sampleContainer
             // 
             this.m_sampleContainer.AutoSize = true;
@@ -325,12 +274,11 @@ namespace LcmsNet.SampleQueue.Forms
             this.WpfControlHost.Name = "WpfControlHost";
             this.WpfControlHost.Size = new System.Drawing.Size(2161, 988);
             this.WpfControlHost.TabIndex = 0;
+            this.WpfControlHost.TabStop = false;
             this.WpfControlHost.Text = "WPFControlHost";
             this.WpfControlHost.Child = this.mdataGrid_samples;
-            // 
-            // sampleToRowTranslatorBindingSource
-            // 
-            this.sampleToRowTranslatorBindingSource.DataSource = typeof(LcmsNet.SampleQueue.Forms.SampleToRowTranslator);
+            this.mdataGrid_samples.TabIndex = 0;
+            this.mdataGrid_samples.IsTabStop = true;
             // 
             // controlSampleView2
             // 
@@ -346,7 +294,6 @@ namespace LcmsNet.SampleQueue.Forms
             this.mcontextMenu_options.ResumeLayout(false);
             this.m_sampleContainer.ResumeLayout(false);
             this.m_sampleContainer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sampleToRowTranslatorBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -357,11 +304,6 @@ namespace LcmsNet.SampleQueue.Forms
         private ContextMenuStrip mcontextMenu_options;
         private ToolStripMenuItem randomizeToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
-        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
-        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
-        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn3;
-        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn4;
-        private DataGridViewComboBoxColumn dataGridViewComboBoxColumn5;
         private ToolStripMenuItem showToolStripMenuItem;
         private ToolStripMenuItem pALTrayToolStripMenuItem;
         private ToolStripMenuItem pALVialToolStripMenuItem;
@@ -387,7 +329,6 @@ namespace LcmsNet.SampleQueue.Forms
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem addDateCartNameColumnIDToolStripMenuItem;
         private Panel m_sampleContainer;
-        private BindingSource sampleToRowTranslatorBindingSource;
         private System.Windows.Forms.Integration.ElementHost WpfControlHost;
         private sampleView mdataGrid_samples;
     }
