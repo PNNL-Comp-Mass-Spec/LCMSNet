@@ -1290,6 +1290,16 @@ namespace LcmsNet.SampleQueue.Forms
             if (newData != null)
             {
                 AddSamplesToManager(new List<classSampleData> { newData }, insertIntoUnused);
+
+                foreach (var sample in Samples.Reverse())
+                {
+                    if (sample.Sample.DmsData.RequestName.Equals(newData.DmsData.RequestName))
+                    {
+                        mdataGrid_samples.SampleGrid.ScrollIntoView(sample);
+                        mdataGrid_samples.SelectedSample = sample;
+                        break;
+                    }
+                }
             }
         }
 
