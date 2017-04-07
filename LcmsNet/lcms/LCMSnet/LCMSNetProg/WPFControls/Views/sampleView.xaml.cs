@@ -50,6 +50,13 @@ namespace LcmsNet
         public sampleViewModel SelectedSample
         {
             get { return this.SampleGrid.SelectedItem as sampleViewModel; }
+            set
+            {
+                if (value != null)
+                {
+                    this.SampleGrid.SelectedItem = value;
+                }
+            }
         }
 
         public IEnumerable<sampleViewModel> SelectedSamples

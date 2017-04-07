@@ -819,6 +819,10 @@ namespace LcmsNet.SampleQueue.Forms
                 classSampleData.AddDateCartColumnToDatasetName(sample);
             }
             m_sampleQueue.UpdateSamples(samples);
+            if (samples.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            }
         }
 
         public void ResetDatasetName()
@@ -839,6 +843,10 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             m_sampleQueue.UpdateSamples(samples);
+            if (samples.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            }
         }
 
         internal virtual void EditTrayAndVial()
@@ -868,6 +876,10 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 samples = m_trayVial.SampleList;
                 m_sampleQueue.UpdateSamples(samples);
+            }
+            if (samples.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
             }
         }
 
@@ -907,6 +919,10 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 var newSamples = m_filldown.GetModifiedSampleList();
                 m_sampleQueue.UpdateSamples(newSamples);
+            }
+            if (samples.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
             }
         }
 
@@ -990,6 +1006,10 @@ namespace LcmsNet.SampleQueue.Forms
                 if (samples.Count > 0)
                 {
                     m_sampleQueue.UpdateSamples(samples);
+                }
+                if (samples.Count == 1)
+                {
+                    mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
                 }
             }
         }
@@ -1189,6 +1209,10 @@ namespace LcmsNet.SampleQueue.Forms
             samples.RemoveAll(
                 data => data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName));
             PreviewSampleThroughput(samples);
+            if (samples.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            }
         }
 
         /// <summary>
@@ -1347,6 +1371,10 @@ namespace LcmsNet.SampleQueue.Forms
             // Move in the sample queue
             //
             m_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
+            if (data.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(data.First()));
+            }
         }
 
         /// <summary>
@@ -1416,6 +1444,10 @@ namespace LcmsNet.SampleQueue.Forms
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "No samples selected for randomization.");
             }
+            if (samplesToRandomize.Count == 1)
+            {
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samplesToRandomize.First()));
+            }
         }
 
         /// <summary>
@@ -1439,9 +1471,34 @@ namespace LcmsNet.SampleQueue.Forms
                 // Get a list of sequence ID's to remove
                 //
                 var removes = new List<long>();
+                var samplesToRemove = mdataGrid_samples.SelectedSamples.OrderBy(x => x.SequenceNumber).ToList();
                 foreach (var sample in mdataGrid_samples.SelectedSamples)
                 {
                     removes.Add(sample.Sample.UniqueID);
+                }
+                // Select the sample just before or the first sample following the sample(s) deleted
+                sampleViewModel sampleToSelect = null;
+                if (samplesToRemove.Count > 0)
+                {
+                    var foundToDelete = false;
+                    foreach (var sample in Samples)
+                    {
+                        if (samplesToRemove.Contains(sample))
+                        {
+                            foundToDelete = true;
+                            if (sampleToSelect != null)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+
+                        sampleToSelect = sample;
+                        if (foundToDelete)
+                        {
+                            break;
+                        }
+                    }
                 }
 
                 //
@@ -1451,6 +1508,10 @@ namespace LcmsNet.SampleQueue.Forms
                 m_sampleQueue.RemoveSample(removes, resortColumns);
 
                 mdataGrid_samples.SetScrollOffset(scrollOffset);
+                if (sampleToSelect != null)
+                {
+                    mdataGrid_samples.SelectedSample = sampleToSelect;
+                }
             }
             catch (Exception ex)
             {
@@ -1519,86 +1580,6 @@ namespace LcmsNet.SampleQueue.Forms
             {
                 duplicateRequestNameProcessingLimiter = false;
             }
-        }
-
-        /// <summary>
-        /// Retrieves the style for the row based on sample input data.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="defaultStyle"></param>
-        /// <returns></returns>
-        protected virtual DataGridViewCellStyle GetRowStyleFromSample(classSampleData data,
-            DataGridViewCellStyle defaultStyle)
-        {
-            var rowStyle = defaultStyle;
-            switch (data.RunningStatus)
-            {
-                case enumSampleRunningStatus.Running:
-                    rowStyle.BackColor = Color.Lime;
-                    rowStyle.ForeColor = Color.Black;
-                    rowStyle.SelectionBackColor = rowStyle.BackColor;
-                    rowStyle.SelectionForeColor = rowStyle.ForeColor;
-                    break;
-                case enumSampleRunningStatus.WaitingToRun:
-                    rowStyle.ForeColor = Color.Black;
-                    rowStyle.BackColor = Color.Yellow;
-                    rowStyle.SelectionBackColor = rowStyle.BackColor;
-                    rowStyle.SelectionForeColor = rowStyle.ForeColor;
-                    break;
-                case enumSampleRunningStatus.Error:
-                    if (data.DmsData.Block > 0)
-                    {
-                        rowStyle.BackColor = Color.Orange;
-                        rowStyle.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        rowStyle.BackColor = Color.DarkRed;
-                        rowStyle.ForeColor = Color.White;
-                    }
-                    rowStyle.SelectionForeColor = Color.White;
-                    rowStyle.SelectionBackColor = Color.Navy;
-                    break;
-                case enumSampleRunningStatus.Stopped:
-                    if (data.DmsData.Block > 0)
-                    {
-                        rowStyle.BackColor = Color.SeaGreen;
-                        rowStyle.ForeColor = Color.White;
-                    }
-                    else
-                    {
-                        rowStyle.BackColor = Color.Tomato;
-                        rowStyle.ForeColor = Color.Black;
-                    }
-                    rowStyle.SelectionForeColor = Color.White;
-                    rowStyle.SelectionBackColor = Color.Navy;
-                    break;
-                case enumSampleRunningStatus.Complete:
-                    rowStyle.BackColor = Color.DarkGreen;
-                    rowStyle.ForeColor = Color.White;
-                    rowStyle.SelectionForeColor = Color.White;
-                    rowStyle.SelectionBackColor = Color.Navy;
-                    break;
-                case enumSampleRunningStatus.Queued:
-                    goto default;
-                default:
-                    rowStyle.BackColor = Color.White;
-                    rowStyle.ForeColor = Color.Black;
-                    rowStyle.SelectionForeColor = Color.White;
-                    rowStyle.SelectionBackColor = Color.Navy;
-                    break;
-            }
-
-            var status = data.ColumnData.Status;
-            if (status == enumColumnStatus.Disabled)
-            {
-                rowStyle.BackColor = Color.FromArgb(Math.Max(0, rowStyle.BackColor.R - 128),
-                    Math.Max(0, rowStyle.BackColor.G - 128),
-                    Math.Max(0, rowStyle.BackColor.B - 128));
-                rowStyle.ForeColor = Color.LightGray;
-            }
-
-            return rowStyle;
         }
 
         /// <summary>

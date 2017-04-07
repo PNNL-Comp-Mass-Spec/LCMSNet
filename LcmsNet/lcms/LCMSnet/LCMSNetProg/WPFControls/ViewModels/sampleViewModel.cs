@@ -274,7 +274,9 @@ namespace LcmsNet.WPFControls.ViewModels
 
         private string requestNameToolTipText = "";
 
-        // controlSampleView.Status.ToolTipText
+        /// <summary>
+        /// Tool tip text displaying status details
+        /// </summary>
         public string StatusToolTipText
         {
             get
@@ -327,6 +329,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
+        /// <summary>
+        /// Tool tip text displaying details about a request name error (usually for duplicate request names)
+        /// </summary>
         public string RequestNameToolTipText
         {
             get { return requestNameToolTipText; }
@@ -419,7 +424,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_blockNumber
+        /// <summary>
+        /// Sample block number
+        /// </summary>
         public int BlockNumber
         {
             get { return Sample.DmsData.Block; }
@@ -433,7 +440,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_runOrder
+        /// <summary>
+        /// Sample run order
+        /// </summary>
         public int RunOrder
         {
             get { return Sample.DmsData.RunOrder; }
@@ -447,7 +456,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_requestName
+        /// <summary>
+        /// Sample request name
+        /// </summary>
         public string RequestName
         {
             get { return Sample.DmsData.RequestName; }
@@ -467,7 +478,9 @@ namespace LcmsNet.WPFControls.ViewModels
             get { return Sample.IsDuplicateRequestName; }
         }
 
-        // controlSampleView.mcolumn_PalTray
+        /// <summary>
+        /// Sample PAL Tray
+        /// </summary>
         public string PALTray
         {
             get { return Sample.PAL.PALTray; }
@@ -481,7 +494,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_palVial
+        /// <summary>
+        /// Sample PAL Vial/Well
+        /// </summary>
         public int PALVial
         {
             get { return Sample.PAL.Well; }
@@ -498,7 +513,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_PALVolume
+        /// <summary>
+        /// Sample volume
+        /// </summary>
         public double PALVolume
         {
             get { return Sample.Volume; }
@@ -515,7 +532,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_LCMethod,
+        /// <summary>
+        /// Sample LC Method
+        /// </summary>
         public classLCMethod LCMethod
         {
             get
@@ -549,6 +568,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sample Instrument Method
+        /// </summary>
         public string InstrumentMethod
         {
             get { return Sample.InstrumentData.MethodName; }
@@ -566,7 +588,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_datasetType
+        /// <summary>
+        /// Sample Dataset Type
+        /// </summary>
         public string DatasetType
         {
             get { return Sample.DmsData.DatasetType; }
@@ -580,7 +604,9 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        // controlSampleView.mcolumn_batchID
+        /// <summary>
+        /// Sample Batch ID
+        /// </summary>
         public int BatchID
         {
             get { return Sample.DmsData.Batch; }
