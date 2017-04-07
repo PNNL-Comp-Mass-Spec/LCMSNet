@@ -456,16 +456,6 @@ namespace LcmsNet.SampleQueue.Forms
             if (method == null)
                 return false;
 
-            foreach (var o in sampleViewModel.LcMethodOptionsStr)
-            {
-                var name = Convert.ToString(o);
-                if (name == method.Name)
-                {
-                    sampleViewModel.LcMethodOptionsStr.Remove(method.Name);
-                    break;
-                }
-            }
-
             foreach (var o in sampleViewModel.LcMethodOptions)
             {
                 if (o.Equals(method))
@@ -484,19 +474,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected void RemoveMethodName(string methodName)
         {
-            string nFound = null;
-            foreach (var o in sampleViewModel.LcMethodOptionsStr)
-            {
-                var name = o.ToString();
-                if (methodName == name)
-                {
-                    nFound = o;
-                }
-            }
-            if (nFound != null)
-            {
-                sampleViewModel.LcMethodOptionsStr.Remove(nFound);
-            }
             classLCMethod oFound = null;
             foreach (var o in sampleViewModel.LcMethodOptions)
             {
@@ -519,14 +496,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <returns></returns>
         protected bool ContainsMethod(string methodName)
         {
-            foreach (var o in sampleViewModel.LcMethodOptionsStr)
-            {
-                var name = o.ToString();
-                if (methodName == name)
-                {
-                    return true;
-                }
-            }
             foreach (var o in sampleViewModel.LcMethodOptions)
             {
                 var name = o.ToString();
@@ -581,33 +550,6 @@ namespace LcmsNet.SampleQueue.Forms
 
             // Find the method if name exists
             var found = false;
-            foreach (var o in sampleViewModel.LcMethodOptionsStr)
-            {
-                var name = Convert.ToString(o);
-                if (name == method.Name)
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            // Update or add the method
-            if (found == false)
-            {
-                sampleViewModel.LcMethodOptionsStr.Add(method.Name);
-                // If we just added a sample, we want to make sure the samples have a method selected.
-                if (sampleViewModel.LcMethodOptionsStr.Count == 1)
-                {
-                }
-            }
-            else
-            {
-                // Here we update the method that was in the list, with the new one that was added/updated
-                var indexOf = sampleViewModel.LcMethodOptionsStr.IndexOf(method.Name);
-                if (indexOf >= 0)
-                    sampleViewModel.LcMethodOptionsStr[indexOf] = method.Name;
-            }
-            found = false;
             foreach (var o in sampleViewModel.LcMethodOptions)
             {
                 var name = o.ToString();
@@ -837,7 +779,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         protected virtual void ShowLCSeparationMethods()
         {
-            sampleViewModel.LcMethodOptionsStr.Clear();
             sampleViewModel.LcMethodOptions.Clear();
 
             foreach (var method in classLCMethodManager.Manager.Methods.Values)
@@ -852,7 +793,6 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="method"></param>
         protected virtual void AddLCMethod(classLCMethod method)
         {
-            sampleViewModel.LcMethodOptionsStr.Add(method.Name);
             sampleViewModel.LcMethodOptions.Add(method);
         }
 

@@ -141,14 +141,6 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <!-- <DataGridComboBoxColumn Header="LC Method" Width="74" SelectedValueBinding="{Binding LCMethodStr, Mode=TwoWay}" ItemsSource="{Binding LcMethodComboBoxOptionsStr}" /> -->
-                <!-- <DataGridTemplateColumn Header="LC Method" Width="74">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox x:Name="LCMethodStrSelect" SelectedItem="{Binding LCMethodStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcMethodComboBoxOptionsStr}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn> -->
                 <DataGridTemplateColumn Header="LC Method" Width="74">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -156,7 +148,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!-- <DataGridComboBoxColumn Header="Dataset Type" Width="89" SelectedValueBinding="{Binding DatasetType, Mode=TwoWay}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" /> -->
                 <DataGridTemplateColumn Header="Dataset Type" Width="89">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

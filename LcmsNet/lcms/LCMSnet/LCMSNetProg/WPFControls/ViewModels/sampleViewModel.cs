@@ -18,23 +18,29 @@ namespace LcmsNet.WPFControls.ViewModels
 {
     public class sampleViewModel : ReactiveObject, IEquatable<sampleViewModel>
     {
+        #region Constants
+
         /// <summary>
         /// Index Offset for going from a zero based array for configuration data to the
         /// user-readable column display.
         /// </summary>
         protected const int CONST_COLUMN_INDEX_OFFSET = 1;
 
-        public static ReactiveList<string> LcMethodOptionsStr { get; private set; }
+        #endregion
+
+        #region Static data
+
         public static ReactiveList<classLCMethod> LcMethodOptions { get; private set; }
+        public static ReactiveList<string> InstrumentMethodOptions { get; private set; }
         public static ReactiveList<string> DatasetTypeOptions { get; private set; }
         public static ReactiveList<string> PalTrayOptions { get; private set; }
 
         static sampleViewModel()
         {
-            LcMethodOptionsStr = new ReactiveList<string>();
             LcMethodOptions = new ReactiveList<classLCMethod>();
             DatasetTypeOptions = new ReactiveList<string>();
             PalTrayOptions = new ReactiveList<string>();
+            InstrumentMethodOptions = new ReactiveList<string>();
 
             //
             // Add the dataset type items to the data grid
@@ -54,6 +60,8 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
+        #endregion
+
         public classSampleData Sample { get; private set; }
 
         public sampleViewModel(classSampleData sample)
@@ -67,7 +75,6 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
-            //this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).ToProperty(this, x => x.IsChecked);
             this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
             this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
             {
@@ -89,7 +96,14 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
             this.WhenAnyValue(x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(PALVolume)));
-            this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x => this.RaisePropertyChanged(nameof(DatasetType)));
+            this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(DatasetType));
+                this.RaisePropertyChanged(nameof(BatchID));
+                this.RaisePropertyChanged(nameof(RunOrder));
+                this.RaisePropertyChanged(nameof(BlockNumber));
+            });
+            this.WhenAnyValue(x => x.Sample.InstrumentData).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
             this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x =>
             {
                 this.SetRowColors();
@@ -97,10 +111,18 @@ namespace LcmsNet.WPFControls.ViewModels
             });
         }
 
-        public ReactiveList<string> LcMethodComboBoxOptionsStr => LcMethodOptionsStr;
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => LcMethodOptions;
         public ReactiveList<string> DatasetTypeComboBoxOptions => DatasetTypeOptions;
         public ReactiveList<string> PalTrayComboBoxOptions => PalTrayOptions;
+        public ReactiveList<string> InstrumentMethodComboBoxOptions => InstrumentMethodOptions;
+
+        #region Row and cell colors
+
+        private SolidColorBrush rowBackColor;
+        private SolidColorBrush rowForeColor;
+        private SolidColorBrush rowSelectionBackColor;
+        private SolidColorBrush rowSelectionForeColor;
+        private SolidColorBrush requestNameBackColor = null;
 
         public SolidColorBrush RowBackColor
         {
@@ -125,12 +147,6 @@ namespace LcmsNet.WPFControls.ViewModels
             get { return rowSelectionForeColor; }
             set { this.RaiseAndSetIfChanged(ref rowSelectionForeColor, value); }
         }
-
-        private SolidColorBrush rowBackColor;
-        private SolidColorBrush rowForeColor;
-        private SolidColorBrush rowSelectionBackColor;
-        private SolidColorBrush rowSelectionForeColor;
-        private SolidColorBrush requestNameBackColor = null;
 
         public SolidColorBrush RequestNameBackColor
         {
@@ -241,43 +257,6 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        private bool isChecked;
-        private string requestNameToolTipText = "";
-
-        public bool IsChecked
-        {
-            get
-            {
-                //isChecked = Sample.IsSetToRunOrHasRun;
-                return isChecked;
-            }
-            set { this.RaiseAndSetIfChanged(ref isChecked, value); }
-        }
-
-        public bool CheckboxEnabled
-        {
-            get { return Sample.HasNotRun; }
-        }
-
-        public bool EditAllowed
-        {
-            get { return !Sample.IsSetToRunOrHasRun; }
-        }
-
-        public string SpecialColumnNumber { get; set; }
-
-        public string ColumnNumber
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(SpecialColumnNumber))
-                {
-                    return SpecialColumnNumber;
-                }
-                return (Sample.ColumnData.ID + CONST_COLUMN_INDEX_OFFSET).ToString();
-            }
-        }
-
         public SolidColorBrush ColumnNumberBgColor
         {
             get
@@ -289,51 +268,11 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        public long SequenceNumber => Sample.SequenceID;
+        #endregion
 
-        public string Status
-        {
-            get
-            {
-                var statusMessage = "";
-                SetRowColors();
-                switch (Sample.RunningStatus)
-                {
-                    case enumSampleRunningStatus.Complete:
-                        statusMessage = "Complete";
-                        break;
-                    case enumSampleRunningStatus.Error:
-                        if (Sample.DmsData.Block > 0)
-                        {
-                            statusMessage = "Block Error";
-                        }
-                        else
-                        {
-                            statusMessage = "Error";
-                        }
-                        break;
-                    case enumSampleRunningStatus.Stopped:
-                        statusMessage = "Stopped";
-                        break;
-                    case enumSampleRunningStatus.Queued:
-                        statusMessage = "Queued";
-                        break;
-                    case enumSampleRunningStatus.Running:
-                        statusMessage = "Running";
-                        break;
-                    case enumSampleRunningStatus.WaitingToRun:
-                        statusMessage = "Waiting";
-                        break;
-                    default:
-                        //
-                        // Should never get here
-                        //
-                        break;
-                }
+        #region ToolTips
 
-                return statusMessage;
-            }
-        }
+        private string requestNameToolTipText = "";
 
         // controlSampleView.Status.ToolTipText
         public string StatusToolTipText
@@ -388,11 +327,125 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
+        public string RequestNameToolTipText
+        {
+            get { return requestNameToolTipText; }
+            set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
+        }
+
+        #endregion
+
+        #region Column data
+
+        private bool isChecked;
+
+        public bool IsChecked
+        {
+            get
+            {
+                //isChecked = Sample.IsSetToRunOrHasRun;
+                return isChecked;
+            }
+            set { this.RaiseAndSetIfChanged(ref isChecked, value); }
+        }
+
+        public bool CheckboxEnabled
+        {
+            get { return Sample.HasNotRun; }
+        }
+
+        public bool EditAllowed
+        {
+            get { return !Sample.IsSetToRunOrHasRun; }
+        }
+
+        public string SpecialColumnNumber { get; set; }
+
+        public string ColumnNumber
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(SpecialColumnNumber))
+                {
+                    return SpecialColumnNumber;
+                }
+                return (Sample.ColumnData.ID + CONST_COLUMN_INDEX_OFFSET).ToString();
+            }
+        }
+
+        public long SequenceNumber => Sample.SequenceID;
+
+        public string Status
+        {
+            get
+            {
+                var statusMessage = "";
+                SetRowColors();
+                switch (Sample.RunningStatus)
+                {
+                    case enumSampleRunningStatus.Complete:
+                        statusMessage = "Complete";
+                        break;
+                    case enumSampleRunningStatus.Error:
+                        if (Sample.DmsData.Block > 0)
+                        {
+                            statusMessage = "Block Error";
+                        }
+                        else
+                        {
+                            statusMessage = "Error";
+                        }
+                        break;
+                    case enumSampleRunningStatus.Stopped:
+                        statusMessage = "Stopped";
+                        break;
+                    case enumSampleRunningStatus.Queued:
+                        statusMessage = "Queued";
+                        break;
+                    case enumSampleRunningStatus.Running:
+                        statusMessage = "Running";
+                        break;
+                    case enumSampleRunningStatus.WaitingToRun:
+                        statusMessage = "Waiting";
+                        break;
+                    default:
+                        //
+                        // Should never get here
+                        //
+                        break;
+                }
+
+                return statusMessage;
+            }
+        }
+
         // controlSampleView.mcolumn_blockNumber
-        public int BlockNumber => Sample.DmsData.Block;
+        public int BlockNumber
+        {
+            get { return Sample.DmsData.Block; }
+            set
+            {
+                if (Sample.DmsData.Block != value)
+                {
+                    Sample.DmsData.Block = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
 
         // controlSampleView.mcolumn_runOrder
-        public int RunOrder => Sample.DmsData.RunOrder;
+        public int RunOrder
+        {
+            get { return Sample.DmsData.RunOrder; }
+            set
+            {
+                if (Sample.DmsData.RunOrder != value)
+                {
+                    Sample.DmsData.RunOrder = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
 
         // controlSampleView.mcolumn_requestName
         public string RequestName
@@ -412,12 +465,6 @@ namespace LcmsNet.WPFControls.ViewModels
         public bool IsDuplicateRequestName
         {
             get { return Sample.IsDuplicateRequestName; }
-        }
-
-        public string RequestNameToolTipText
-        {
-            get { return requestNameToolTipText; }
-            set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
         }
 
         // controlSampleView.mcolumn_PalTray
@@ -469,33 +516,6 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         // controlSampleView.mcolumn_LCMethod,
-        //public string LCMethodStr
-        //{
-        //    get
-        //    {
-        //        if (Sample.LCMethod != null)
-        //        {
-        //            return Sample.LCMethod.Name;
-        //        }
-        //        return string.Empty;
-        //    }
-        //    set
-        //    {
-        //        //if (value.Equals(controlSampleView.CONST_NOT_SELECTED))
-        //        //{
-        //        //    // Don't change anything, just revert to the previous value
-        //        //    this.RaisePropertyChanged();
-        //        //    return;
-        //        //}
-        //        if (Sample.LCMethod != null && Sample.LCMethod.Name != value)
-        //        {
-        //            Sample.LCMethod.Name = value;
-        //            this.RaisePropertyChanged();
-        //        }
-        //    }
-        //}
-
-        // controlSampleView.mcolumn_LCMethod,
         public classLCMethod LCMethod
         {
             get
@@ -529,6 +549,23 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
+        public string InstrumentMethod
+        {
+            get { return Sample.InstrumentData.MethodName; }
+            set
+            {
+                if (Sample.InstrumentData == null)
+                {
+                    Sample.InstrumentData = new classInstrumentInfo();
+                }
+                if (!object.Equals(Sample.InstrumentData.MethodName, value))
+                {
+                    Sample.InstrumentData.MethodName = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
         // controlSampleView.mcolumn_datasetType
         public string DatasetType
         {
@@ -544,7 +581,22 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         // controlSampleView.mcolumn_batchID
-        public int BatchID => Sample.DmsData.Batch;
+        public int BatchID
+        {
+            get { return Sample.DmsData.Batch; }
+            set
+            {
+                if (Sample.DmsData.Batch != value)
+                {
+                    Sample.DmsData.Batch = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Equality
 
         public bool Equals(sampleViewModel other)
         {
@@ -565,5 +617,7 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             return (Sample != null ? Sample.GetHashCode() : 0);
         }
+
+        #endregion
     }
 }

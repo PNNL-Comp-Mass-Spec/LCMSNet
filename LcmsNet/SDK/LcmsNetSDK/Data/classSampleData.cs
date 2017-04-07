@@ -356,7 +356,7 @@ namespace LcmsNetDataClasses
         public classInstrumentInfo InstrumentData
         {
             get { return m_instrumentData; }
-            set { m_instrumentData = value; }
+            set { RaiseAndSetIfChanged(ref m_instrumentData, value); }
         }
 
         /// <summary>

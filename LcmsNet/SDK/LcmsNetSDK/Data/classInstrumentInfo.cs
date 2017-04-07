@@ -19,9 +19,9 @@ namespace LcmsNetDataClasses
     /// <summary>
     /// Class to hold data about the instrument connected to the LC cart
     /// </summary>
-    /// 
+    ///
     [Serializable]
-    public class classInstrumentInfo : classDataClassBase
+    public class classInstrumentInfo : classDataClassBase, IEquatable<classInstrumentInfo>
     {
 
         #region "Properties"
@@ -70,12 +70,31 @@ namespace LcmsNetDataClasses
                 return DMSName;
 
             if (!string.IsNullOrWhiteSpace(CommonName))
-                return CommonName;            
+                return CommonName;
 
             return "Undefined instrument";
         }
 
         #endregion
 
+        public bool Equals(classInstrumentInfo other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(DMSName, other.DMSName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((classInstrumentInfo) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (DMSName != null ? DMSName.GetHashCode() : 0);
+        }
     }
 }
