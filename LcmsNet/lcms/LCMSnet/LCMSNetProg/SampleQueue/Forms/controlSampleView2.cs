@@ -1596,7 +1596,7 @@ namespace LcmsNet.SampleQueue.Forms
             mdataGrid_samples.InvalidateVisual();
             foreach (var sample in Samples)
             {
-                sample.SetRowColors();
+                sample.RefreshAllValues();
             }
         }
 

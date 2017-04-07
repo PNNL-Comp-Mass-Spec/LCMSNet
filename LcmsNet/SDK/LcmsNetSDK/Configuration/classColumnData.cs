@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Configuration
 {
@@ -7,7 +10,7 @@ namespace LcmsNetDataClasses.Configuration
     /// Class that manages all of the information about a given column
     /// </summary>
     [Serializable]
-    public class classColumnData : classDataClassBase
+    public class classColumnData : classDataClassBase, INotifyPropertyChangedExt
     {
         #region Constructors
 
@@ -129,10 +132,10 @@ namespace LcmsNetDataClasses.Configuration
             get { return m_status; }
             set
             {
-                // 
+                //
                 // If the status has changed,
                 // let someone know.
-                // 
+                //
                 if (value != m_status)
                 {
                     var previousStatus = m_status;
@@ -149,7 +152,7 @@ namespace LcmsNetDataClasses.Configuration
         public int ID
         {
             get { return m_columnIndex; }
-            set { m_columnIndex = value; }
+            set { this.RaiseAndSetIfChanged(ref m_columnIndex, value); }
         }
 
         /// <summary>
@@ -196,5 +199,13 @@ namespace LcmsNetDataClasses.Configuration
         }
 
         #endregion
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

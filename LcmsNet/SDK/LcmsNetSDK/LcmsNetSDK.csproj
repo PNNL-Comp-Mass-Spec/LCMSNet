@@ -199,6 +199,7 @@
     </Compile>
     <Compile Include="SystemInformationReporter.cs" />
     <Compile Include="System\INotifier.cs" />
+    <Compile Include="INotifyPropertyChangedExtensions.cs" />
     <Compile Include="System\TimeKeeper.cs" />
   </ItemGroup>
   <ItemGroup>

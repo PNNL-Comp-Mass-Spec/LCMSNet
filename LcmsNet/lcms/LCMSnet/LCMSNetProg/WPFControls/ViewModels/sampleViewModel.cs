@@ -4,6 +4,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
@@ -75,6 +76,8 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
+            this.WhenAnyValue(x => x.Sample.ColumnData.ID).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
+
             this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
             this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
             {
@@ -84,31 +87,50 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(CheckboxEnabled));
                 SetRowColors();
             });
+
             this.WhenAnyValue(x => x.Sample.PAL).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(PALTray));
                 this.RaisePropertyChanged(nameof(PALVial));
             });
+            this.WhenAnyValue(x => x.Sample.PAL.PALTray).Subscribe(x => this.RaisePropertyChanged(nameof(PALTray)));
+            this.WhenAnyValue(x => x.Sample.PAL.Well).Subscribe(x => this.RaisePropertyChanged(nameof(PALVial)));
+
             this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(LCMethod));
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
+
             this.WhenAnyValue(x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(PALVolume)));
+
             this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(DatasetType));
+                this.RaisePropertyChanged(nameof(RequestName));
                 this.RaisePropertyChanged(nameof(BatchID));
                 this.RaisePropertyChanged(nameof(RunOrder));
                 this.RaisePropertyChanged(nameof(BlockNumber));
             });
+            this.WhenAnyValue(x => x.Sample.DmsData.DatasetName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.RequestName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.DatasetType).Subscribe(x => this.RaisePropertyChanged(nameof(DatasetType)));
+            this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(BlockNumber)));
+            this.WhenAnyValue(x => x.Sample.DmsData.RunOrder).Subscribe(x => this.RaisePropertyChanged(nameof(RunOrder)));
+            this.WhenAnyValue(x => x.Sample.DmsData.Batch).Subscribe(x => this.RaisePropertyChanged(nameof(BatchID)));
+
             this.WhenAnyValue(x => x.Sample.InstrumentData).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
+            this.WhenAnyValue(x => x.Sample.InstrumentData.MethodName).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
+
             this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x =>
             {
                 this.SetRowColors();
                 this.RaisePropertyChanged(nameof(IsDuplicateRequestName));
             });
+
+
+
         }
 
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => LcMethodOptions;
@@ -342,6 +364,15 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #region Column data
 
+        public void RefreshAllValues()
+        {
+            this.SetRowColors();
+            foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                this.RaisePropertyChanged(prop.Name);
+            }
+        }
+
         private bool isChecked;
 
         public bool IsChecked
@@ -461,7 +492,14 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         public string RequestName
         {
-            get { return Sample.DmsData.RequestName; }
+            get
+            {
+                if (Sample.DmsData.DatasetName.Contains(classSampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
+                {
+                    return Sample.DmsData.RequestName;
+                }
+                return Sample.DmsData.DatasetName;
+            }
             set
             {
                 if (Sample.DmsData.RequestName != value)

@@ -9,11 +9,14 @@
 //*********************************************************************************************************
 
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Data
 {
     [Serializable]
-    public class classPalData : classDataClassBase, ICloneable
+    public class classPalData : classDataClassBase, ICloneable, INotifyPropertyChangedExt
     {
         #region "Constructors"
 
@@ -95,7 +98,7 @@ namespace LcmsNetDataClasses.Data
         public int Well
         {
             get { return m_Well; }
-            set { m_Well = value; }
+            set { this.RaiseAndSetIfChanged(ref m_Well, value); }
         }
 
         /// <summary>
@@ -104,7 +107,7 @@ namespace LcmsNetDataClasses.Data
         public string PALTray
         {
             get { return m_PalTray; }
-            set { m_PalTray = value; }
+            set { this.RaiseAndSetIfChanged(ref m_PalTray, value); }
         }
 
         /// <summary>
@@ -139,5 +142,13 @@ namespace LcmsNetDataClasses.Data
         //      return vialNumber.ToString();
         //  }
         //  #endregion
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

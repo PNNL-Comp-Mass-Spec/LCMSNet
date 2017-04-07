@@ -13,6 +13,9 @@
 //*********************************************************************************************************
 
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses
 {
@@ -21,8 +24,9 @@ namespace LcmsNetDataClasses
     /// </summary>
     ///
     [Serializable]
-    public class classInstrumentInfo : classDataClassBase, IEquatable<classInstrumentInfo>
+    public class classInstrumentInfo : classDataClassBase, IEquatable<classInstrumentInfo>, INotifyPropertyChangedExt
     {
+        private string methodName;
 
         #region "Properties"
 
@@ -40,7 +44,11 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Gets or sets the name of the method used to capture data from this instrument
         /// </summary>
-        public string MethodName { get; set; }
+        public string MethodName
+        {
+            get { return methodName; }
+            set { this.RaiseAndSetIfChanged(ref methodName, value); }
+        }
 
         /// <summary>
         /// Gets or sets the instrument status
@@ -76,6 +84,14 @@ namespace LcmsNetDataClasses
         }
 
         #endregion
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public bool Equals(classInstrumentInfo other)
         {

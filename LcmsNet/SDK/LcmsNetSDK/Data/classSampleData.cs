@@ -91,7 +91,7 @@ namespace LcmsNetDataClasses
     /// Class to hold data for one sample (instrument run)
     /// </summary>
     [Serializable]
-    public class classSampleData : classDataClassBase, ICloneable, INotifyPropertyChanged, IEquatable<classSampleData>
+    public class classSampleData : classDataClassBase, ICloneable, INotifyPropertyChangedExt, IEquatable<classSampleData>
     {
         #region Delegate Definitions
 
@@ -314,7 +314,7 @@ namespace LcmsNetDataClasses
             set
             {
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
-                if (RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value))
                 {
                     OnPropertyChanged(nameof(HasNotRun));
                     OnPropertyChanged(nameof(IsSetToRunOrHasRun));
@@ -329,7 +329,7 @@ namespace LcmsNetDataClasses
         public bool IsDuplicateRequestName
         {
             get { return m_IsDuplicateRequestName; }
-            set { RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value); }
+            set { this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value); }
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace LcmsNetDataClasses
         public classInstrumentInfo InstrumentData
         {
             get { return m_instrumentData; }
-            set { RaiseAndSetIfChanged(ref m_instrumentData, value); }
+            set { this.RaiseAndSetIfChanged(ref m_instrumentData, value); }
         }
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace LcmsNetDataClasses
             get { return m_method; }
             set
             {
-                if (RaiseAndSetIfChangedRetBool(ref m_method, value) && m_method != null && m_method.Column != ColumnData.ID)
+                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value) && m_method != null && m_method.Column != ColumnData.ID)
                 {
                     if (m_method.Column >= 0)
                     {
@@ -383,7 +383,7 @@ namespace LcmsNetDataClasses
         public classDMSData DmsData
         {
             get { return m_DmsData; }
-            set { RaiseAndSetIfChanged(ref m_DmsData, value); }
+            set { this.RaiseAndSetIfChanged(ref m_DmsData, value); }
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace LcmsNetDataClasses
         public long SequenceID
         {
             get { return m_sequenceNumber; }
-            set { RaiseAndSetIfChanged(ref m_sequenceNumber, value); }
+            set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value); }
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace LcmsNetDataClasses
         public classPalData PAL
         {
             get { return m_palData; }
-            set { RaiseAndSetIfChanged(ref m_palData, value); }
+            set { this.RaiseAndSetIfChanged(ref m_palData, value); }
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace LcmsNetDataClasses
         public double Volume
         {
             get { return m_volume; }
-            set { RaiseAndSetIfChanged(ref m_volume, value); }
+            set { this.RaiseAndSetIfChanged(ref m_volume, value); }
         }
 
         /// <summary>
@@ -642,49 +642,9 @@ namespace LcmsNetDataClasses
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected TRet RaiseAndSetIfChanged<TRet>(
-            ref TRet backingField,
-            TRet newValue,
-            [CallerMemberName] string propertyName = null)
-        {
-            if (propertyName == null)
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-
-            if (EqualityComparer<TRet>.Default.Equals(backingField, newValue))
-            {
-                return newValue;
-            }
-
-            backingField = newValue;
-            OnPropertyChanged(propertyName);
-            return newValue;
-        }
-
-        protected bool RaiseAndSetIfChangedRetBool<TRet>(
-            ref TRet backingField,
-            TRet newValue,
-            [CallerMemberName] string propertyName = null)
-        {
-            if (propertyName == null)
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-
-            if (EqualityComparer<TRet>.Default.Equals(backingField, newValue))
-            {
-                return false;
-            }
-
-            backingField = newValue;
-            OnPropertyChanged(propertyName);
-            return true;
         }
 
         #endregion
