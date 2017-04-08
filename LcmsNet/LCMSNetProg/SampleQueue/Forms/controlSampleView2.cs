@@ -1314,11 +1314,11 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             Samples.Add(new sampleViewModel(sample));
-            Samples.Sort((x,y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
+            Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
             UpdateRow(sample);
 
             return true;
-    }
+        }
 
         /// <summary>
         /// Adds samples to the list but optimizes layout and updates for rendering controls.
@@ -1480,7 +1480,7 @@ namespace LcmsNet.SampleQueue.Forms
                 //
                 var removes = new List<long>();
                 var samplesToRemove = mdataGrid_samples.SelectedSamples.OrderBy(x => x.SequenceNumber).ToList();
-                foreach (var sample in mdataGrid_samples.SelectedSamples)
+                foreach (var sample in samplesToRemove)
                 {
                     removes.Add(sample.Sample.UniqueID);
                 }
