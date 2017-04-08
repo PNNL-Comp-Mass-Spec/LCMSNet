@@ -13,3 +13,6 @@ LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.dll
 LcmsNet/lib/*.dll
 LcmsNet/lib/SQLite_Zips
 !LcmsNet/lib/ZedGraph.dll
+**/.vs/
+*.DotSettings
+*.user
