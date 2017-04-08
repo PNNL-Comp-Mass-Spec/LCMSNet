@@ -81,6 +81,9 @@ namespace LcmsNet.SampleQueue.Forms
             // Then update the sample queue...
             //
             m_sampleQueue.UpdateSamples(samples);
+
+            // Re-select the first sample
+            mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         #region Constants
@@ -819,10 +822,9 @@ namespace LcmsNet.SampleQueue.Forms
                 classSampleData.AddDateCartColumnToDatasetName(sample);
             }
             m_sampleQueue.UpdateSamples(samples);
-            if (samples.Count == 1)
-            {
-                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-            }
+
+            // Re-select the first sample
+            mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         public void ResetDatasetName()
@@ -843,10 +845,9 @@ namespace LcmsNet.SampleQueue.Forms
             }
 
             m_sampleQueue.UpdateSamples(samples);
-            if (samples.Count == 1)
-            {
-                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-            }
+
+            // Re-select the first sample
+            mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         internal virtual void EditTrayAndVial()
@@ -877,10 +878,9 @@ namespace LcmsNet.SampleQueue.Forms
                 samples = m_trayVial.SampleList;
                 m_sampleQueue.UpdateSamples(samples);
             }
-            if (samples.Count == 1)
-            {
-                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-            }
+
+            // Re-select the first sample
+            mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
@@ -920,10 +920,9 @@ namespace LcmsNet.SampleQueue.Forms
                 var newSamples = m_filldown.GetModifiedSampleList();
                 m_sampleQueue.UpdateSamples(newSamples);
             }
-            if (samples.Count == 1)
-            {
-                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-            }
+
+            // Re-select the first sample
+            mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
@@ -1007,10 +1006,9 @@ namespace LcmsNet.SampleQueue.Forms
                 {
                     m_sampleQueue.UpdateSamples(samples);
                 }
-                if (samples.Count == 1)
-                {
-                    mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-                }
+
+                // Re-select the first sample
+                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
             }
         }
 
@@ -1206,11 +1204,11 @@ namespace LcmsNet.SampleQueue.Forms
         public void PreviewSelectedThroughput()
         {
             var samples = GetSelectedSamples();
-            samples.RemoveAll(
-                data => data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName));
+            samples.RemoveAll(data => data.DmsData.DatasetName.Contains(m_sampleQueue.UnusedSampleName));
             PreviewSampleThroughput(samples);
-            if (samples.Count == 1)
+            if (samples.Count > 0)
             {
+                // Re-select the first sample
                 mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
             }
         }
@@ -1381,10 +1379,9 @@ namespace LcmsNet.SampleQueue.Forms
             // Move in the sample queue
             //
             m_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
-            if (data.Count == 1)
-            {
-                mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(data.First()));
-            }
+
+            // Re-select the first sample
+            mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(data.First()));
         }
 
         /// <summary>
@@ -1454,8 +1451,9 @@ namespace LcmsNet.SampleQueue.Forms
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "No samples selected for randomization.");
             }
-            if (samplesToRandomize.Count == 1)
+            if (samplesToRandomize.Count > 0)
             {
+                // Re-select the first sample
                 mdataGrid_samples.SelectedSample = Samples.First(x => x.Sample.Equals(samplesToRandomize.First()));
             }
         }
