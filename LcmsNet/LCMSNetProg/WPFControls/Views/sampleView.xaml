@@ -9,7 +9,15 @@
     d:DesignWidth="600"
     mc:Ignorable="d">
     <Grid>
-        <DataGrid AutoGenerateColumns="False" Name="SampleGrid" ItemsSource="{Binding Path=Samples}" CanUserResizeRows="False" CanUserSortColumns="False">
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key ="BoolToVis" />
+        </Grid.Resources>
+        <!-- The following is a dummy element to allow control over column visibility via the parent datacontext. -->
+        <FrameworkElement x:Name="BaseDC" />
+        <DataGrid AutoGenerateColumns="False" Name="SampleGrid" ItemsSource="{Binding Path=Samples}" CanUserResizeRows="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" SelectionMode="Extended">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding DataContext.RemoveSelectedCommand, Source={x:Reference BaseDC}}" />
+            </DataGrid.InputBindings>
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" >
                     <Setter Property="Background" Value="{Binding RowBackColor}" />
@@ -25,7 +33,6 @@
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <!-- <DataGridCheckBoxColumn x:Name="Queued_Checkbox" Header="X" MinWidth="25" Binding="{Binding IsChecked}" IsReadOnly="{Binding CheckboxDisabled}" /> -->
                 <DataGridTemplateColumn Header="X" MinWidth="25">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -71,6 +78,20 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn x:Name="Block" Header="Block" Width="46" Binding="{Binding BlockNumber}" IsReadOnly="True" Visibility="{Binding DataContext.BlockColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="RunOrder" Header="Run Order" Width="46" Binding="{Binding RunOrder}" IsReadOnly="True" Visibility="{Binding DataContext.RunOrderColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" Width="*" Binding="{Binding RequestName}" >
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" >
@@ -90,14 +111,14 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <!-- <DataGridComboBoxColumn Header="PAL Tray" Width="66" MinWidth="10" SelectedValueBinding="{Binding PALTray, Mode=TwoWay}" ItemsSource="{Binding PalTrayComboBoxOptions}" /> -->
-                <DataGridTemplateColumn Header="PAL Tray" Width="66" MinWidth="10">
+                <DataGridTemplateColumn Header="PAL Tray" Width="66" MinWidth="10" Visibility="{Binding DataContext.PalTrayColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="PAL Vial" Width="50" Binding="{Binding PALVial}" >
+                <DataGridTextColumn Header="PAL Vial" Width="50" Binding="{Binding PALVial}" Visibility="{Binding DataContext.PalVialColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock" >
                             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -119,7 +140,7 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Volume" Width="50" Binding="{Binding PALVolume}" >
+                <DataGridTextColumn Header="Volume" Width="50" Binding="{Binding PALVolume}" Visibility="{Binding DataContext.VolumeColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock" >
                             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -141,20 +162,34 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="LC Method" Width="74">
+                <DataGridTemplateColumn Header="LC Method" Width="74" Visibility="{Binding DataContext.LcMethodColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Dataset Type" Width="89">
+                <DataGridTemplateColumn Header="Instrument Method" Width="74" Visibility="{Binding DataContext.InstrumentMethodColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="InstrumentMethodSelect" SelectedItem="{Binding InstrumentMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Dataset Type" Width="89" Visibility="{Binding DataContext.DatasetTypeColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="BatchID" Header="Batch ID" Width="46" Binding="{Binding BatchID}" IsReadOnly="True" Visibility="{Binding DataContext.BatchIdColumnVisible, Source={x:Reference BaseDC}, Converter={StaticResource BoolToVis}}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

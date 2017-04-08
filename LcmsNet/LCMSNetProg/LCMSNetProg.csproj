@@ -537,6 +537,12 @@
     <Compile Include="SampleQueue\Forms\formSampleManager2.Designer.cs">
       <DependentUpon>formSampleManager2.cs</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Forms\formSampleManager3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SampleQueue\Forms\formSampleManager3.Designer.cs">
+      <DependentUpon>formSampleManager3.cs</DependentUpon>
+    </Compile>
     <Compile Include="SampleQueue\Forms\formSampleRandomizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -566,7 +572,11 @@
     <Compile Include="SampleQueue\IO\classQueueExportXML.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportSQLite.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
+    <Compile Include="WPFControls\ViewModels\SampleControlViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\sampleViewModel.cs" />
+    <Compile Include="WPFControls\Views\SampleControlView.xaml.cs">
+      <DependentUpon>SampleControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPFControls\Views\sampleView.xaml.cs">
       <DependentUpon>sampleView.xaml</DependentUpon>
     </Compile>
@@ -844,6 +854,9 @@
     <EmbeddedResource Include="SampleQueue\Forms\formSampleManager2.resx">
       <DependentUpon>formSampleManager2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager3.resx">
+      <DependentUpon>formSampleManager3.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\formSampleQueueOptions.resx">
       <DependentUpon>formSampleQueueOptions.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -901,6 +914,60 @@
     <Content Include="LCMSLogo3.ico" />
     <Content Include="lib\16\accepted_16.png" />
     <Content Include="lib\16\Button Delete_16.png" />
+    <Resource Include="WPFControls\Image\About.png" />
+    <Resource Include="WPFControls\Image\Add.png" />
+    <Resource Include="WPFControls\Image\AddAppendBlank.png" />
+    <Resource Include="WPFControls\Image\AddAppendDMS.png" />
+    <Resource Include="WPFControls\Image\AddDMS.png" />
+    <Resource Include="WPFControls\Image\AllIsGood.png" />
+    <Resource Include="WPFControls\Image\Append.png" />
+    <Resource Include="WPFControls\Image\breakpoint.png" />
+    <Resource Include="WPFControls\Image\breakpointDisabled.png" />
+    <Resource Include="WPFControls\Image\Build.png" />
+    <Resource Include="WPFControls\Image\BuildUpdate.png" />
+    <Resource Include="WPFControls\Image\ButtonDeleteRed.png" />
+    <Resource Include="WPFControls\Image\Button_Delete_16.png" />
+    <Resource Include="WPFControls\Image\Button_Down_16.png" />
+    <Resource Include="WPFControls\Image\Button_Up_16.png" />
+    <Resource Include="WPFControls\Image\Cart.png" />
+    <Resource Include="WPFControls\Image\CartColumnName.png" />
+    <Resource Include="WPFControls\Image\Column.png" />
+    <Resource Include="WPFControls\Image\Cycle_16_Yellow.png" />
+    <Resource Include="WPFControls\Image\dashboard.png" />
+    <Resource Include="WPFControls\Image\DMSEdit.png" />
+    <Resource Include="WPFControls\Image\Errors.png" />
+    <Resource Include="WPFControls\Image\Expand.png" />
+    <Resource Include="WPFControls\Image\Export.png" />
+    <Resource Include="WPFControls\Image\Filldown.png" />
+    <Resource Include="WPFControls\Image\FillDownAll.png" />
+    <Resource Include="WPFControls\Image\gears.png" />
+    <Resource Include="WPFControls\Image\highlighter.png" />
+    <Resource Include="WPFControls\Image\InsertUnused.png" />
+    <Resource Include="WPFControls\Image\LCMSLogo2.ico" />
+    <Resource Include="WPFControls\Image\LCMSNet.png" />
+    <Resource Include="WPFControls\Image\lock.png" />
+    <Resource Include="WPFControls\Image\MethodEditor.png" />
+    <Resource Include="WPFControls\Image\notify.png" />
+    <Resource Include="WPFControls\Image\notOK.png" />
+    <Resource Include="WPFControls\Image\ok.png" />
+    <Resource Include="WPFControls\Image\Open.png" />
+    <Resource Include="WPFControls\Image\progress.png" />
+    <Resource Include="WPFControls\Image\Pumps.png" />
+    <Resource Include="WPFControls\Image\pumps2.png" />
+    <Resource Include="WPFControls\Image\Randomize.png" />
+    <Resource Include="WPFControls\Image\redo_16.png" />
+    <Resource Include="WPFControls\Image\Save.png" />
+    <Resource Include="WPFControls\Image\SaveUpdate.png" />
+    <Resource Include="WPFControls\Image\SaveWithIndicator.png" />
+    <Resource Include="WPFControls\Image\Search.png" />
+    <Resource Include="WPFControls\Image\start2.png" />
+    <Resource Include="WPFControls\Image\StatusMessages.png" />
+    <Resource Include="WPFControls\Image\StatusMessagesError.png" />
+    <Resource Include="WPFControls\Image\testTube.png" />
+    <Resource Include="WPFControls\Image\undo_16.png" />
+    <Resource Include="WPFControls\Image\unlock.png" />
+    <Resource Include="WPFControls\Image\vialReal.png" />
+    <Resource Include="WPFControls\Image\water.png" />
     <None Include="Resources\water.png" />
     <None Include="lib\16\button delete_161.png" />
     <Content Include="lib\16\Button Down_16.png" />
@@ -1040,6 +1107,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="WPFControls\Views\SampleControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPFControls\Views\sampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

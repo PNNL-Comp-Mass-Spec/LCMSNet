@@ -139,7 +139,7 @@ namespace LcmsNet
         /// Form that manages views of the sample queue class for handling sample
         /// ordering and running.
         /// </summary>
-        private formSampleManager2 m_sampleManager;
+        private formSampleManager3 m_sampleManager;
 
         /// <summary>
         /// Object that manages operation of the samples.
@@ -247,7 +247,7 @@ namespace LcmsNet
 
             // Construct the sample queue object that holds and manages sample data ordering
             m_sampleQueue = new classSampleQueue();
-            m_sampleManager = new formSampleManager2(m_sampleQueue);
+            m_sampleManager = new formSampleManager3(m_sampleQueue);
 
             classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
