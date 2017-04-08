@@ -5,17 +5,17 @@ VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{07984DDF-DE3A-4AAB-8E48-A6F4ACC2C598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCMSNetProg", "LCMSNetProg\LCMSNetProg.csproj", "{51F59458-D3D7-41D6-8E09-19A12AD54B7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCMSNetProg", "LcmsNet\LCMSNetProg\LCMSNetProg.csproj", "{51F59458-D3D7-41D6-8E09-19A12AD54B7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B239796B-C651-4BFD-8AFD-C889FB71D59F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsnetUnitTest", "LcmsnetUnitTest\LcmsnetUnitTest.csproj", "{08F2C18B-27E7-4DD4-A47F-760E52C2D552}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsnetUnitTest", "LcmsNet\LcmsnetUnitTest\LcmsnetUnitTest.csproj", "{08F2C18B-27E7-4DD4-A47F-760E52C2D552}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoFiles", "DemoFiles", "{E21C9EE4-EDD6-46EE-9463-216933A81959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDK", "..\..\SDK\LcmsNetSDK\LcmsNetSDK.csproj", "{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDK", "LcmsNet\SDK\LcmsNetSDK\LcmsNetSDK.csproj", "{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteTools", "..\..\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools.csproj", "{B164F88D-3799-46B9-8926-20B40707B2E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteTools", "LcmsNet\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools.csproj", "{B164F88D-3799-46B9-8926-20B40707B2E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

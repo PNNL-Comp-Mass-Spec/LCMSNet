@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetDmsTools", "LcmsNetDmsTools\LcmsNetDmsTools.csproj", "{F3EB0B04-7562-4B7D-871C-579C2C8A2045}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetDmsTools", "LcmsNetDmsTools\LcmsNetDmsTools\LcmsNetDmsTools.csproj", "{F3EB0B04-7562-4B7D-871C-579C2C8A2045}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTool", "TestTool\TestTool.csproj", "{BEBD0826-4489-4E26-8456-240AF4C30E8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTool", "LcmsNetDmsTools\TestTool\TestTool.csproj", "{BEBD0826-4489-4E26-8456-240AF4C30E8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteTools", "..\LcmsNet\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools.csproj", "{B164F88D-3799-46B9-8926-20B40707B2E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteTools", "LcmsNet\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools.csproj", "{B164F88D-3799-46B9-8926-20B40707B2E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
