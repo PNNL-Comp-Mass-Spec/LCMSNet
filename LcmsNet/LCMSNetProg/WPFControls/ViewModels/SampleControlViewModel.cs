@@ -1798,24 +1798,6 @@ namespace LcmsNet.WPFControls.ViewModels
             UpdateValidCell(sample);
         }
 
-        protected void InvalidateSampleView()
-        {
-            SampleView.InvalidateVisual();
-            foreach (var sample in Samples)
-            {
-                sample.RefreshAllValues();
-            }
-        }
-
-        protected async Task InvalidateSampleViewAsync()
-        {
-            SampleView.InvalidateVisual();
-            foreach (var sample in Samples)
-            {
-                await Task.Run(() => sample.RefreshAllValues());
-            }
-        }
-
         #endregion
 
         #region Queue Manager Event Handlers
@@ -1875,7 +1857,6 @@ namespace LcmsNet.WPFControls.ViewModels
         protected virtual void SamplesStopped(object sender, classSampleQueueArgs data)
         {
             SamplesUpdated(sender, data);
-            InvalidateSampleView();
         }
 
         /// <summary>
@@ -2244,7 +2225,6 @@ namespace LcmsNet.WPFControls.ViewModels
         public ReactiveCommand MoveUpCommand { get; private set; }
         public ReactiveCommand DeleteUnusedCommand { get; private set; }
         public ReactiveCommand CartColumnDateCommand { get; private set; }
-        public ReactiveCommand RefreshListCommand { get; private set; }
         public ReactiveCommand DmsEditCommand { get; private set; }
         public ReactiveCommand UndoCommand { get; private set; }
         public ReactiveCommand RedoCommand { get; private set; }
@@ -2264,7 +2244,6 @@ namespace LcmsNet.WPFControls.ViewModels
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName());
-            RefreshListCommand = ReactiveCommand.CreateFromTask(() => this.InvalidateSampleViewAsync());
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData());
             UndoCommand = ReactiveCommand.Create(() => this.Redo());
             RedoCommand = ReactiveCommand.Create(() => this.Undo());

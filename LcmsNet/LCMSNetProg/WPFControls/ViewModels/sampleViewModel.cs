@@ -379,15 +379,6 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #region Column data
 
-        public void RefreshAllValues()
-        {
-            this.SetRowColors();
-            foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                this.RaisePropertyChanged(prop.Name);
-            }
-        }
-
         private bool isChecked;
 
         public bool IsChecked
