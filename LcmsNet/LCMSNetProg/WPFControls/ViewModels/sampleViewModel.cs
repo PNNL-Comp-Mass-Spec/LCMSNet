@@ -27,6 +27,21 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         protected const int CONST_COLUMN_INDEX_OFFSET = 1;
 
+        /// <summary>
+        /// Minimum wellplate number.
+        /// </summary>
+        public const int CONST_MIN_WELLPLATE = 1;
+
+        /// <summary>
+        /// Maximum wellplate number.
+        /// </summary>
+        public const int CONST_MAX_WELLPLATE = 1250;
+
+        /// <summary>
+        /// Minimum volume that can be injected.
+        /// </summary>
+        public const int CONST_MIN_VOLUME = 0;
+
         #endregion
 
         #region Static data
@@ -542,7 +557,7 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 if (Sample.PAL.Well != value)
                 {
-                    if (controlSampleView2.CONST_MIN_WELLPLATE <= value && value <= controlSampleView2.CONST_MAX_WELLPLATE)
+                    if (CONST_MIN_WELLPLATE <= value && value <= CONST_MAX_WELLPLATE)
                     {
                         Sample.PAL.Well = value;
                     }
@@ -561,7 +576,7 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 if (!Sample.Volume.Equals(value))
                 {
-                    if (value >= controlSampleView2.CONST_MIN_VOLUME)
+                    if (value >= CONST_MIN_VOLUME)
                     {
                         Sample.Volume = value;
                     }
