@@ -102,8 +102,7 @@
             "Broken",
             "Cap_Dev",
             "Maintenance",
-            "User",
-            "User_Unknown"});
+            "User"});
             this.mcomboBox_usageType.Location = new System.Drawing.Point(290, 0);
             this.mcomboBox_usageType.Name = "mcomboBox_usageType";
             this.mcomboBox_usageType.Size = new System.Drawing.Size(88, 21);
