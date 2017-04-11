@@ -413,7 +413,25 @@ namespace LcmsNet.WPFControls.ViewModels
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.RequestName))).Subscribe(x => UpdateValidCell(x.Sender.Sample));
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsDuplicateRequestName))).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
             // TODO: Check for side effects
-            Samples.ItemChanged.Subscribe(x => m_sampleQueue.UpdateSample(x.Sender.Sample));
+            // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
+            Samples.ItemChanged.Where(x =>
+            {
+                var prop = x.PropertyName;
+                var obj = x.Sender;
+                return prop.Equals(nameof(obj.RequestName)) ||
+                       prop.Equals(nameof(obj.BatchID)) ||
+                       prop.Equals(nameof(obj.BlockNumber)) ||
+                       prop.Equals(nameof(obj.ColumnNumber)) ||
+                       prop.Equals(nameof(obj.DatasetType)) ||
+                       prop.Equals(nameof(obj.InstrumentMethod)) ||
+                       prop.Equals(nameof(obj.LCMethod)) ||
+                       prop.Equals(nameof(obj.PALTray)) ||
+                       prop.Equals(nameof(obj.PALVial)) ||
+                       prop.Equals(nameof(obj.PALVolume)) ||
+                       prop.Equals(nameof(obj.RunOrder)) ||
+                       prop.Equals(nameof(obj.SequenceNumber));
+            }).Throttle(TimeSpan.FromSeconds(.25))
+            .Subscribe(x => m_sampleQueue.UpdateSample(x.Sender.Sample));
         }
 
         #endregion
@@ -711,7 +729,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         protected virtual void Undo()
         {
-            m_sampleQueue.Undo();
+            using (Samples.SuppressChangeNotifications())
+            {
+                m_sampleQueue.Undo();
+            }
         }
 
         /// <summary>
@@ -719,7 +740,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         protected virtual void Redo()
         {
-            m_sampleQueue.Redo();
+            using (Samples.SuppressChangeNotifications())
+            {
+                m_sampleQueue.Redo();
+            }
         }
 
         /// <summary>
@@ -729,13 +753,16 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="insertIntoUnused"></param>
         protected virtual void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
-            if (insertIntoUnused == false)
+            using (Samples.SuppressChangeNotifications())
             {
-                m_sampleQueue.QueueSamples(samples, ColumnHandling);
-            }
-            else
-            {
-                m_sampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
+                if (insertIntoUnused == false)
+                {
+                    m_sampleQueue.QueueSamples(samples, ColumnHandling);
+                }
+                else
+                {
+                    m_sampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
+                }
             }
         }
 
@@ -935,11 +962,14 @@ namespace LcmsNet.WPFControls.ViewModels
             if (samples.Count < 1)
                 return;
 
-            foreach (var sample in samples)
+            using (Samples.SuppressChangeNotifications())
             {
-                classSampleData.AddDateCartColumnToDatasetName(sample);
+                foreach (var sample in samples)
+                {
+                    classSampleData.AddDateCartColumnToDatasetName(sample);
+                }
+                m_sampleQueue.UpdateSamples(samples);
             }
-            m_sampleQueue.UpdateSamples(samples);
 
             // Re-select the first sample
             SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -957,12 +987,15 @@ namespace LcmsNet.WPFControls.ViewModels
             if (samples.Count < 1)
                 return;
 
-            foreach (var sample in samples)
+            using (Samples.SuppressChangeNotifications())
             {
-                classSampleData.ResetDatasetNameToRequestName(sample);
-            }
+                foreach (var sample in samples)
+                {
+                    classSampleData.ResetDatasetNameToRequestName(sample);
+                }
 
-            m_sampleQueue.UpdateSamples(samples);
+                m_sampleQueue.UpdateSamples(samples);
+            }
 
             // Re-select the first sample
             SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -993,8 +1026,11 @@ namespace LcmsNet.WPFControls.ViewModels
             m_trayVial.LoadSampleList(m_autosamplerTrays, samples);
             if (m_trayVial.ShowDialog() == DialogResult.OK)
             {
-                samples = m_trayVial.SampleList;
-                m_sampleQueue.UpdateSamples(samples);
+                using (Samples.SuppressChangeNotifications())
+                {
+                    samples = m_trayVial.SampleList;
+                    m_sampleQueue.UpdateSamples(samples);
+                }
             }
 
             // Re-select the first sample
@@ -1035,8 +1071,11 @@ namespace LcmsNet.WPFControls.ViewModels
                 //
                 // Then update the sample queue...
                 //
-                var newSamples = m_filldown.GetModifiedSampleList();
-                m_sampleQueue.UpdateSamples(newSamples);
+                using (Samples.SuppressChangeNotifications())
+                {
+                    var newSamples = m_filldown.GetModifiedSampleList();
+                    m_sampleQueue.UpdateSamples(newSamples);
+                }
             }
 
             // Re-select the first sample
@@ -1075,54 +1114,57 @@ namespace LcmsNet.WPFControls.ViewModels
                     }
                 }
 
-                //
-                // Get the list of unique id's from the samples and
-                // change the column to put the samples on.
-                //
-
-                // Could keep track of updated IDs with
-                // var ids = new List<long>();
-
-                foreach (var sample in samples)
+                using (Samples.SuppressChangeNotifications())
                 {
-                    // ids.Add(sample.UniqueID);
-                    sample.ColumnData = classCartConfiguration.Columns[column];
-                }
+                    //
+                    // Get the list of unique id's from the samples and
+                    // change the column to put the samples on.
+                    //
 
-                //
-                // Then remove them from the queue
-                //
+                    // Could keep track of updated IDs with
+                    // var ids = new List<long>();
 
-                //enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
-                //if (m_selector.InsertIntoUnused)
-                //{
-                //    backFill = enumColumnDataHandling.LeaveAlone;
-                //}
+                    foreach (var sample in samples)
+                    {
+                        // ids.Add(sample.UniqueID);
+                        sample.ColumnData = classCartConfiguration.Columns[column];
+                    }
 
-                //m_sampleQueue.RemoveSample(ids, backFill);
+                    //
+                    // Then remove them from the queue
+                    //
 
-                ////
-                //// Then re-queue the samples.
-                ////
-                //try
-                //{
-                //    if (m_selector.InsertIntoUnused)
-                //    {
-                //        m_sampleQueue.InsertIntoUnusedSamples(samples, handling);
-                //    }
-                //    else
-                //    {
-                //        m_sampleQueue.UpdateSamples(
-                //        m_sampleQueue.QueueSamples(samples, handling);
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
-                //}
-                if (samples.Count > 0)
-                {
-                    m_sampleQueue.UpdateSamples(samples);
+                    //enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
+                    //if (m_selector.InsertIntoUnused)
+                    //{
+                    //    backFill = enumColumnDataHandling.LeaveAlone;
+                    //}
+
+                    //m_sampleQueue.RemoveSample(ids, backFill);
+
+                    ////
+                    //// Then re-queue the samples.
+                    ////
+                    //try
+                    //{
+                    //    if (m_selector.InsertIntoUnused)
+                    //    {
+                    //        m_sampleQueue.InsertIntoUnusedSamples(samples, handling);
+                    //    }
+                    //    else
+                    //    {
+                    //        m_sampleQueue.UpdateSamples(
+                    //        m_sampleQueue.QueueSamples(samples, handling);
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
+                    //}
+                    if (samples.Count > 0)
+                    {
+                        m_sampleQueue.UpdateSamples(samples);
+                    }
                 }
 
                 // Re-select the first sample
@@ -1138,7 +1180,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="newColor"></param>
         void column_ColorChanged(object sender, Color previousColor, Color newColor)
         {
-            m_sampleQueue.UpdateAllSamples();
+            using (Samples.SuppressChangeNotifications())
+            {
+                m_sampleQueue.UpdateAllSamples();
+            }
         }
 
         /// <summary>
@@ -1149,7 +1194,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="oldName"></param>
         void column_NameChanged(object sender, string name, string oldName)
         {
-            m_sampleQueue.UpdateWaitingSamples();
+            using (Samples.SuppressChangeNotifications())
+            {
+                m_sampleQueue.UpdateWaitingSamples();
+            }
         }
 
         /// <summary>
@@ -1158,7 +1206,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <returns></returns>
         protected virtual bool HasUnusedSamples()
         {
-            return m_sampleQueue.HasUnusedSamples();
+            using (Samples.SuppressChangeNotifications())
+            {
+                return m_sampleQueue.HasUnusedSamples();
+            }
         }
 
         /// <summary>
@@ -1405,7 +1456,10 @@ namespace LcmsNet.WPFControls.ViewModels
 
             if (newData != null)
             {
-                AddSamplesToManager(new List<classSampleData> { newData }, insertIntoUnused);
+                using (Samples.SuppressChangeNotifications())
+                {
+                    AddSamplesToManager(new List<classSampleData> {newData}, insertIntoUnused);
+                }
 
                 foreach (var sample in Samples.Reverse())
                 {
@@ -1430,12 +1484,15 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 return false;
             }
+            using (Samples.SuppressChangeNotifications())
+            {
 
-            Samples.Add(new sampleViewModel(sample));
-            Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
-            UpdateRow(sample);
+                Samples.Add(new sampleViewModel(sample));
+                Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
+                UpdateRow(sample);
 
-            return true;
+                return true;
+            }
         }
 
         /// <summary>
@@ -1445,11 +1502,14 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         protected virtual bool AddSamplesToList(IEnumerable<classSampleData> samples)
         {
-            foreach (var data in samples)
+            using (Samples.SuppressChangeNotifications())
             {
-                AddSamplesToList(data);
+                foreach (var data in samples)
+                {
+                    AddSamplesToList(data);
+                }
+                return true;
             }
-            return true;
         }
 
         /// <summary>
@@ -1457,11 +1517,14 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         protected virtual void ClearAllSamples()
         {
-            //
-            // Remove all of them from the sample queue.
-            // This should update the other views as well.
-            //
-            m_sampleQueue.RemoveSample(Samples.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
+            using (Samples.SuppressChangeNotifications())
+            {
+                //
+                // Remove all of them from the sample queue.
+                // This should update the other views as well.
+                //
+                m_sampleQueue.RemoveSample(Samples.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
+            }
         }
 
         /// <summary>
@@ -1481,22 +1544,24 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
-            data.RemoveAll(
-                sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
+            data.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (data.Count < 1)
                 return;
 
-            //
-            // We have to make sure the data is sorted by sequence
-            // number in order for the sample queue movement to work
-            //
-            data.Sort(new classSequenceComparer());
+            using (Samples.SuppressChangeNotifications())
+            {
+                //
+                // We have to make sure the data is sorted by sequence
+                // number in order for the sample queue movement to work
+                //
+                data.Sort(new classSequenceComparer());
 
-            //
-            // Move in the sample queue
-            //
-            m_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
+                //
+                // Move in the sample queue
+                //
+                m_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
+            }
 
             // Re-select the first sample
             SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(data.First()));
@@ -1555,8 +1620,11 @@ namespace LcmsNet.WPFControls.ViewModels
                 }
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    var newSamples = form.OutputSampleList;
-                    m_sampleQueue.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
+                    using (Samples.SuppressChangeNotifications())
+                    {
+                        var newSamples = form.OutputSampleList;
+                        m_sampleQueue.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
+                    }
                 }
             }
             else if (samplesToRandomize.Count == 1)
@@ -1581,7 +1649,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         protected virtual void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            m_sampleQueue.RemoveUnusedSamples(resortColumns);
+            using (Samples.SuppressChangeNotifications())
+            {
+                m_sampleQueue.RemoveUnusedSamples(resortColumns);
+            }
         }
 
         /// <summary>
@@ -1627,11 +1698,14 @@ namespace LcmsNet.WPFControls.ViewModels
                     }
                 }
 
-                //
-                // Remove all of them from the sample queue.
-                // This should update the other views as well.
-                //
-                m_sampleQueue.RemoveSample(removes, resortColumns);
+                using (Samples.SuppressChangeNotifications())
+                {
+                    //
+                    // Remove all of them from the sample queue.
+                    // This should update the other views as well.
+                    //
+                    m_sampleQueue.RemoveSample(removes, resortColumns);
+                }
 
                 SampleView.SetScrollOffset(scrollOffset);
                 if (sampleToSelect != null)
@@ -1966,8 +2040,11 @@ namespace LcmsNet.WPFControls.ViewModels
             // But track the position of the scroll bar to be nice to the user.
             var scrollPosition = SampleView.GetCurrentScrollOffset();
 
-            Samples.Clear();
-            AddSamplesToList(data.Samples);
+            using (Samples.SuppressChangeNotifications())
+            {
+                Samples.Clear();
+                AddSamplesToList(data.Samples);
+            }
 
             if (Samples.Count > 0)
             {
@@ -2043,19 +2120,22 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             var scrollOffset = SampleView.GetCurrentScrollOffset();
 
-            if (replaceExistingRows && Samples.Count > 0)
+            using (Samples.SuppressChangeNotifications())
             {
-                try
+                if (replaceExistingRows && Samples.Count > 0)
                 {
-                    Samples.Clear();
+                    try
+                    {
+                        Samples.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        classApplicationLogger.LogError(0, "Ignoring exception in SamplesAddedFromQueue: " + ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    classApplicationLogger.LogError(0, "Ignoring exception in SamplesAddedFromQueue: " + ex.Message);
-                }
-            }
 
-            AddSamplesToList(samples);
+                AddSamplesToList(samples);
+            }
 
             SampleView.SetScrollOffset(scrollOffset);
         }
@@ -2068,8 +2148,11 @@ namespace LcmsNet.WPFControls.ViewModels
         void m_sampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
         {
             var scrollPosition = SampleView.GetCurrentScrollOffset();
-            Samples.Clear();
-            AddSamplesToList(data.Samples);
+            using (Samples.SuppressChangeNotifications())
+            {
+                Samples.Clear();
+                AddSamplesToList(data.Samples);
+            }
             if (Samples.Count > 0)
             {
                 SampleView.SetScrollOffset(scrollPosition);
@@ -2244,8 +2327,8 @@ namespace LcmsNet.WPFControls.ViewModels
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName());
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData());
-            UndoCommand = ReactiveCommand.Create(() => this.Redo());
-            RedoCommand = ReactiveCommand.Create(() => this.Undo());
+            UndoCommand = ReactiveCommand.Create(() => this.Undo());
+            RedoCommand = ReactiveCommand.Create(() => this.Redo());
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput());
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
         }
