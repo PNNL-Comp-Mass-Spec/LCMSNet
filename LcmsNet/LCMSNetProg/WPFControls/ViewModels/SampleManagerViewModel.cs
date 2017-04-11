@@ -1,24 +1,27 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using LcmsNet.Method.Forms;
+using LcmsNet.SampleQueue;
+using LcmsNet.SampleQueue.Forms;
 using LcmsNet.SampleQueue.IO;
-using LcmsNet.WPFControls.ViewModels;
 using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Logging;
-//using LcmsNet.Devices.NetworkStart;
+using ReactiveUI;
 
-
-namespace LcmsNet.SampleQueue.Forms
+namespace LcmsNet.WPFControls.ViewModels
 {
-    public partial class formSampleManager3 : Form
+    public class SampleManagerViewModel : ReactiveObject
     {
         #region "Events"
 
@@ -63,7 +66,13 @@ namespace LcmsNet.SampleQueue.Forms
 
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
-        public SampleControlViewModel SampleControlViewModel { get; private set; }
+        private SampleControlViewModel sampleControlViewModel;
+
+        public SampleControlViewModel SampleControlViewModel
+        {
+            get { return sampleControlViewModel; }
+            private set { this.RaiseAndSetIfChanged(ref sampleControlViewModel, value); }
+        }
 
         #endregion
 
@@ -73,21 +82,16 @@ namespace LcmsNet.SampleQueue.Forms
         /// Default constructor that takes cart configuration data.
         /// </summary>
         /// <param name="queue">Sample queue to provide interface to.</param>
-        public formSampleManager3(classSampleQueue queue)
+        public SampleManagerViewModel(classSampleQueue queue)
         {
-            //
-            // Initializes the windows form objects
-            //
-            InitializeComponent();
             Initialize(queue);
         }
 
         /// <summary>
         /// Default constructor for constructor.
         /// </summary>
-        public formSampleManager3()
+        public SampleManagerViewModel()
         {
-            InitializeComponent();
         }
 
         #endregion
@@ -103,6 +107,7 @@ namespace LcmsNet.SampleQueue.Forms
             m_dmsView = new formDMSView();
             m_sampleQueue = queue;
             mdialog_importQueue = new OpenFileDialog();
+            SetupCommands();
 
             if (m_sampleQueue != null)
             {
@@ -114,11 +119,8 @@ namespace LcmsNet.SampleQueue.Forms
             // Load up the data to the appropiate sub-controls.
             //
             SampleControlViewModel = new SampleControlViewModel(m_dmsView, m_sampleQueue);
-            mcontrol_sequenceView.DataContext = this;
-            SampleControlViewModel.UIDispatcher = this.mcontrol_sequenceView.Dispatcher;
-            SampleControlViewModel.SampleView = this.mcontrol_sequenceView.SampleView;
-            // TODO: SampleControlViewModel.DMSView = m_dmsView;
-            // TODO: SampleControlViewModel.SampleQueue = m_sampleQueue;
+            SampleControlViewModel.UIDispatcher = this.UIDispatcher;
+            // TODO: SampleControlViewModel.SampleView = this.mcontrol_sequenceView.SampleView;
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
@@ -142,7 +144,8 @@ namespace LcmsNet.SampleQueue.Forms
             };
 
             mdialog_exportMRMFiles = new FolderBrowserDialog();
-            Text = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
+            // TODO: // This is the text that is appended to the application title bar
+            TitleBarTextAddition = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
         }
 
         public void PreviewAvailable(object sender, SampleProgressPreviewArgs e)
@@ -150,24 +153,9 @@ namespace LcmsNet.SampleQueue.Forms
             if (e?.PreviewImage == null)
                 return;
 
-            var width = mpicture_preview.Width;
-            var height = mpicture_preview.Height;
-
-            if (width <= 0)
-                return;
-
-            if (height <= 0)
-                return;
-            mpicture_preview.Image?.Dispose();
-
             try
             {
-                Image x = new Bitmap(width, height);
-                using (var g = Graphics.FromImage(x))
-                {
-                    g.DrawImage(e.PreviewImage, 0, 0, width, height);
-                    mpicture_preview.Image = x;
-                }
+                SequencePreview = e.PreviewImage.ToBitmapImage();
             }
             catch (Exception)
             {
@@ -176,7 +164,51 @@ namespace LcmsNet.SampleQueue.Forms
             e.Dispose();
         }
 
+        private BitmapImage sequencePreview;
+
+        public BitmapImage SequencePreview
+        {
+            get { return sequencePreview; }
+            set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
+        }
+
         private delegate void DelegateToggleButtons(classSampleQueueArgs args);
+
+        private bool isRunButtonEnabled;
+        private bool isStopButtonEnabled;
+        private SolidColorBrush runButtonBackColor;
+        private SolidColorBrush stopButtonBackColor;
+        private string titleBarTextAddition = "";
+
+        public bool IsRunButtonEnabled
+        {
+            get { return isRunButtonEnabled; }
+            set { this.RaiseAndSetIfChanged(ref isRunButtonEnabled, value); }
+        }
+
+        public bool IsStopButtonEnabled
+        {
+            get { return isStopButtonEnabled; }
+            set { this.RaiseAndSetIfChanged(ref isStopButtonEnabled, value); }
+        }
+
+        public SolidColorBrush RunButtonBackColor
+        {
+            get { return runButtonBackColor; }
+            set { this.RaiseAndSetIfChanged(ref runButtonBackColor, value); }
+        }
+
+        public SolidColorBrush StopButtonBackColor
+        {
+            get { return stopButtonBackColor; }
+            set { this.RaiseAndSetIfChanged(ref stopButtonBackColor, value); }
+        }
+
+        public string TitleBarTextAddition
+        {
+            get { return titleBarTextAddition; }
+            set { this.RaiseAndSetIfChanged(ref titleBarTextAddition, value); }
+        }
 
         /// <summary>
         ///
@@ -185,23 +217,23 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="stopButtonState"></param>
         void ToggleRunButton(bool runButtonState, bool stopButtonState)
         {
-            mbutton_run.Enabled = runButtonState;
+            IsRunButtonEnabled = runButtonState;
             if (runButtonState)
             {
-                mbutton_run.BackColor = Color.LimeGreen;
+                RunButtonBackColor = Brushes.LimeGreen;
             }
             else
             {
-                mbutton_run.BackColor = Color.White;
+                RunButtonBackColor = Brushes.White;
             }
-            mbutton_stop.Enabled = stopButtonState;
+            IsStopButtonEnabled = stopButtonState;
             if (stopButtonState)
             {
-                mbutton_stop.BackColor = Color.Tomato;
+                StopButtonBackColor = Brushes.Tomato;
             }
             else
             {
-                mbutton_stop.BackColor = Color.White;
+                StopButtonBackColor = Brushes.White;
             }
         }
 
@@ -229,11 +261,11 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        internal void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
-            if (InvokeRequired)
+            if (!UIDispatcher.CheckAccess())
             {
-                BeginInvoke(new DelegateToggleButtons(DetermineIfShouldSetButtons), data);
+                UIDispatcher.BeginInvoke(new SampleManagerViewModel.DelegateToggleButtons(DetermineIfShouldSetButtons), data);
             }
             else
             {
@@ -308,7 +340,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ImportQueue(object sender, EventArgs e)
+        internal void ImportQueue(object sender, EventArgs e)
         {
             if (mdialog_importQueue.ShowDialog() == DialogResult.OK)
             {
@@ -344,7 +376,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void exportMRMFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void exportMRMFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExportMRMFiles();
         }
@@ -352,16 +384,14 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Stops the sample run.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mbutton_stop_Click(object sender, EventArgs e)
+        private void StopQueue()
         {
             //
             // This tells anyone else using the samples to STOP!
             // For the scheduler this would tell him to stop first
             // so that he can move the samples appropiately.
             //
-            Stop?.Invoke(this, e);
+            Stop?.Invoke(this, new EventArgs());
 
             //
             // Moves the samples from the running queue back onto the
@@ -374,9 +404,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <summary>
         /// Example of running a sequence for testing.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mbutton_run_Click(object sender, EventArgs e)
+        private void RunQueue()
         {
             if (m_sampleQueue.IsRunning)
             {
@@ -389,7 +417,7 @@ namespace LcmsNet.SampleQueue.Forms
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             //
             samples.RemoveAll(
-                delegate(classSampleData data) { return data.RunningStatus != enumSampleRunningStatus.WaitingToRun; });
+                delegate (classSampleData data) { return data.RunningStatus != enumSampleRunningStatus.WaitingToRun; });
 
             if (samples.Count < 1)
                 return;
@@ -481,62 +509,11 @@ namespace LcmsNet.SampleQueue.Forms
         }
 
         /// <summary>
-        /// Run windows time synchronization using w32tm.exe
-        /// </summary>
-        [Obsolete("Unused")]
-        private void SynchronizeSystemClock()
-        {
-            var syncStart = new ProcessStartInfo
-            {
-                FileName = @"w32tm.exe",
-                Arguments = @"/resync",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-
-            var sync = Process.Start(syncStart);
-            if (sync == null)
-                return;
-
-            sync.WaitForExit(TIME_SYNCH_WAIT_TIME_MILLISECONDS);
-            var output = string.Empty;
-            var error = string.Empty;
-            try
-            {
-                output = sync.StandardOutput.ReadToEnd();
-                error = sync.StandardError.ReadToEnd();
-            }
-            catch (Exception)
-            {
-                // Ignore errors here
-            }
-
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                                              "Synched System Clock " + sync.ExitCode + " " + output + " " + error);
-            //MessageBox.Show("Exit code: " + synch.ExitCode + " " + output + " " + error);
-        }
-
-        [Obsolete("Unused")]
-        private void btnMRMExport_Click(object sender, EventArgs e)
-        {
-            ExportMRMFiles();
-        }
-
-        [Obsolete("Unused")]
-        private void buttonLogViewer_Click(object sender, EventArgs e)
-        {
-            //LogViewer.formLogViewerMain formLogViewer = new LogViewer.formLogViewerMain();
-            //formLogViewer.Show();
-        }
-
-        /// <summary>
         /// Caches the queue to the default.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -556,7 +533,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mdialog_exportQueue.Title = "Save Queue As";
             mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".xml", ".que");
@@ -566,7 +543,8 @@ namespace LcmsNet.SampleQueue.Forms
             if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
             {
                 m_sampleQueue.CacheQueue(mdialog_exportQueue.FileName);
-                Text = "Sample Queue - " + mdialog_exportQueue.FileName;
+                // TODO: // This is the text that is appended to the application title bar
+                TitleBarTextAddition = "Sample Queue - " + mdialog_exportQueue.FileName;
                 classApplicationLogger.LogMessage(0,
                     "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
                     "\" and is now the default queue.");
@@ -578,7 +556,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void queueToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void queueToXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mdialog_exportQueue.Title = "Export Queue to XML for LCMS VB6";
             mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".que", ".xml");
@@ -596,7 +574,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void queueAsCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        internal void queueAsCSVToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mdialog_exportQueue.Title = "Export Queue to CSV";
             mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".xml", ".csv");
@@ -615,7 +593,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void queueAsCSVToolStripMenuItem_Click_1(object sender, EventArgs e)
+        internal void queueAsCSVToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             mdialog_exportQueue.Title = "Export Queue to XCalibur";
             mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".xml", ".csv");
@@ -629,21 +607,22 @@ namespace LcmsNet.SampleQueue.Forms
             }
         }
 
-        private void mbutton_undo_Click(object sender, EventArgs e)
-        {
-            m_sampleQueue.Undo();
-        }
-
-        private void mbutton_redo_Click(object sender, EventArgs e)
-        {
-            m_sampleQueue.Redo();
-        }
-
-        private void mcontrol_sequenceView_Load(object sender, EventArgs e)
-        {
-        }
-
         #endregion
+
+        private Dispatcher uiDispatcher;
+
+        public Dispatcher UIDispatcher
+        {
+            get
+            {
+                return uiDispatcher;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref uiDispatcher, value);
+                SampleControlViewModel.UIDispatcher = value;
+            }
+        }
 
         public void RestoreUserUIState()
         {
@@ -652,7 +631,39 @@ namespace LcmsNet.SampleQueue.Forms
 
         private void FixScrollPosition(object obj)
         {
-            this.BeginInvoke(new Action(SampleControlViewModel.RestoreUserUIState));
+            if (!UIDispatcher.CheckAccess())
+            {
+                UIDispatcher.BeginInvoke(new Action(SampleControlViewModel.RestoreUserUIState));
+            }
+            else
+            {
+                SampleControlViewModel.RestoreUserUIState();
+            }
+        }
+
+        public ReactiveCommand UndoCommand { get; private set; }
+        public ReactiveCommand RedoCommand { get; private set; }
+        public ReactiveCommand RunQueueCommand { get; private set; }
+        public ReactiveCommand StopQueueCommand { get; private set; }
+
+        private void SetupCommands()
+        {
+            UndoCommand = ReactiveCommand.Create(() =>
+            {
+                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
+                {
+                    this.m_sampleQueue.Undo();
+                }
+            });
+            RedoCommand = ReactiveCommand.Create(() =>
+            {
+                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
+                {
+                    this.m_sampleQueue.Redo();
+                }
+            });
+            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue());
+            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue());
         }
     }
 }

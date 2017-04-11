@@ -2,27 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LcmsNet.WPFControls.ViewModels;
-using LcmsNetDataClasses;
 
-namespace LcmsNet
+namespace LcmsNet.WPFControls.Views
 {
     /// <summary>
     /// Interaction logic for sampleView.xaml
     /// </summary>
-    public partial class sampleView : UserControl
+    public partial class SampleView : UserControl
     {
-        public sampleView()
+        public SampleView()
         {
             InitializeComponent();
         }
@@ -47,9 +39,9 @@ namespace LcmsNet
             SetScrollOffset(Math.Max(counter - 3, 0));
         }
 
-        public sampleViewModel SelectedSample
+        public SampleViewModel SelectedSample
         {
-            get { return this.SampleGrid.SelectedItem as sampleViewModel; }
+            get { return this.SampleGrid.SelectedItem as SampleViewModel; }
             set
             {
                 if (value != null)
@@ -59,13 +51,13 @@ namespace LcmsNet
             }
         }
 
-        public IEnumerable<sampleViewModel> SelectedSamples
+        public IEnumerable<SampleViewModel> SelectedSamples
         {
             get
             {
                 foreach (var item in this.SampleGrid.SelectedItems)
                 {
-                    yield return item as sampleViewModel;
+                    yield return item as SampleViewModel;
                 }
             }
         }

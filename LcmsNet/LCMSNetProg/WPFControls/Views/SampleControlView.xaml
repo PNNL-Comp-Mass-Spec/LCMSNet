@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lcmsNet="clr-namespace:LcmsNet"
+             xmlns:views="clr-namespace:LcmsNet.WPFControls.Views"
              x:Class="LcmsNet.WPFControls.Views.SampleControlView"
              mc:Ignorable="d"
              d:DesignHeight="640" d:DesignWidth="800">
@@ -63,8 +64,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="128"/>
         </Grid.RowDefinitions>
-            <lcmsNet:sampleView Grid.Row="0" x:Name="SampleView" />
-            <Grid Grid.Row="1">
+        <views:SampleView Grid.Row="0" x:Name="SampleView" />
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80*"/>
                 <RowDefinition Height="40*"/>

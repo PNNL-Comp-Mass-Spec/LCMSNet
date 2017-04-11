@@ -17,7 +17,7 @@ using LcmsNetSQLiteTools;
 
 namespace LcmsNet.WPFControls.ViewModels
 {
-    public class sampleViewModel : ReactiveObject, IEquatable<sampleViewModel>
+    public class SampleViewModel : ReactiveObject, IEquatable<SampleViewModel>
     {
         #region Constants
 
@@ -51,7 +51,7 @@ namespace LcmsNet.WPFControls.ViewModels
         public static ReactiveList<string> DatasetTypeOptions { get; private set; }
         public static ReactiveList<string> PalTrayOptions { get; private set; }
 
-        static sampleViewModel()
+        static SampleViewModel()
         {
             LcMethodOptions = new ReactiveList<classLCMethod>();
             DatasetTypeOptions = new ReactiveList<string>();
@@ -80,7 +80,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
         public classSampleData Sample { get; private set; }
 
-        public sampleViewModel(classSampleData sample)
+        public SampleViewModel(classSampleData sample)
         {
             Sample = sample;
             isChecked = Sample.IsSetToRunOrHasRun;
@@ -668,7 +668,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #region Equality
 
-        public bool Equals(sampleViewModel other)
+        public bool Equals(SampleViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -680,7 +680,7 @@ namespace LcmsNet.WPFControls.ViewModels
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((sampleViewModel) obj);
+            return Equals((SampleViewModel) obj);
         }
 
         public override int GetHashCode()

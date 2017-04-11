@@ -28,16 +28,16 @@ namespace LcmsNet.WPFControls.ViewModels
 {
     public class SampleControlViewModel : ReactiveObject
     {
-        public ReactiveList<sampleViewModel> Samples { get; private set; }
+        public ReactiveList<SampleViewModel> Samples { get; private set; }
 
-        protected formMoveToColumnSelector m_selector;
+        private formMoveToColumnSelector m_selector;
 
         private readonly classDMSSampleValidator mValidator;
 
         /// <summary>
         /// Edits the selected samples in the sample view.
         /// </summary>
-        protected virtual void EditDMSData()
+        private void EditDMSData()
         {
             var samples = GetSelectedSamples();
 
@@ -149,21 +149,6 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         public const string CONST_NOT_SELECTED = "(Select)";
 
-        /// <summary>
-        /// Minimum wellplate number.
-        /// </summary>
-        public const int CONST_MIN_WELLPLATE = 1;
-
-        /// <summary>
-        /// Maximum wellplate number.
-        /// </summary>
-        public const int CONST_MAX_WELLPLATE = 1250;
-
-        /// <summary>
-        /// Minimum volume that can be injected.
-        /// </summary>
-        public const int CONST_MIN_VOLUME = 0;
-
         #endregion
 
         #region Members
@@ -171,61 +156,42 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Form that provides user interface to retrieve samples from DMS.
         /// </summary>
-        protected formDMSView m_dmsView;
+        private formDMSView m_dmsView;
 
         /// <summary>
         /// Object that manages the list of all samples.
         /// </summary>
-        protected classSampleQueue m_sampleQueue;
-
-        /// <summary>
-        /// Alternating back colors to enhance user visual feedback.
-        /// </summary>
-        private Color[] m_colors;
-
-        /// <summary>
-        /// Default sample name when a new sample is added.
-        /// </summary>
-        //protected string m_defaultSampleName;
-        /// <summary>
-        /// Starting index of listview items that can be edited.
-        /// </summary>
-        protected int m_editableIndex;
-
-        /// <summary>
-        /// Value of the cell before edits.
-        /// </summary>
-        protected object m_cellValue;
+        private classSampleQueue m_sampleQueue;
 
         /// <summary>
         /// Names of the methods available on the PAL
         /// </summary>
-        protected List<string> m_autoSamplerMethods;
+        private List<string> m_autoSamplerMethods;
 
         /// <summary>
         /// Names of the trays available on the PAL
         /// </summary>
-        protected List<string> m_autosamplerTrays;
+        private List<string> m_autosamplerTrays;
 
         /// <summary>
         /// Names of the instrument methods available on the MS.
         /// </summary>
-        protected List<string> m_instrumentMethods;
+        private List<string> m_instrumentMethods;
 
         /// <summary>
         /// Flag that turns off the coloring when a PAL item (method, tray) was not downloadable from the PAL.
         /// </summary>
-        protected bool m_ignoreMissingPALValues;
+        private bool m_ignoreMissingPALValues;
 
         /// <summary>
         /// Fill down form for updating lots of samples at once.
         /// </summary>
-        protected formMethodFillDown m_filldown;
+        private formMethodFillDown m_filldown;
 
         /// <summary>
         /// Tray and vial assignment form.
         /// </summary>
-        protected formTrayVialAssignment m_trayVial;
+        private formTrayVialAssignment m_trayVial;
 
         private bool dmsAvailable = false;
         private bool cycleColumns = false;
@@ -370,10 +336,10 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // Background colors
             //
-            m_colors = new Color[2];
-            m_colors[0] = Color.White;
-            m_colors[1] = Color.Gainsboro;
-            m_editableIndex = 0;
+            // TODO: Alternating back colors to enhance user visual feedback.
+            // TODO: m_colors = new Color[2];
+            // TODO: m_colors[0] = Color.White;
+            // TODO: m_colors[1] = Color.Gainsboro;
 
             //
             // Fill-down form for batch sample editing And Tray Vial assignmenet
@@ -408,7 +374,7 @@ namespace LcmsNet.WPFControls.ViewModels
             ShowInstrumentMethods();
             ShowLCSeparationMethods();
 
-            Samples = new ReactiveList<sampleViewModel>() { ChangeTrackingEnabled = true };
+            Samples = new ReactiveList<SampleViewModel>() { ChangeTrackingEnabled = true };
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsChecked))).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.RequestName))).Subscribe(x => UpdateValidCell(x.Sender.Sample));
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsDuplicateRequestName))).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
@@ -444,7 +410,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Handles validation of samples and queue operations.
         /// </summary>
         /// <param name="changedSample"></param>
-        private void HandleSampleValidationAndQueuing(sampleViewModel changedSample)
+        private void HandleSampleValidationAndQueuing(SampleViewModel changedSample)
         {
             lock (this)
             {
@@ -591,16 +557,16 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        protected virtual bool Manager_MethodRemoved(object sender, classLCMethod method)
+        private bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
             if (method == null)
                 return false;
 
-            foreach (var o in sampleViewModel.LcMethodOptions)
+            foreach (var o in SampleViewModel.LcMethodOptions)
             {
                 if (o.Equals(method))
                 {
-                    sampleViewModel.LcMethodOptions.Remove(method);
+                    SampleViewModel.LcMethodOptions.Remove(method);
                     break;
                 }
             }
@@ -612,10 +578,10 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="methodName"></param>
         /// <returns></returns>
-        protected void RemoveMethodName(string methodName)
+        private void RemoveMethodName(string methodName)
         {
             classLCMethod oFound = null;
-            foreach (var o in sampleViewModel.LcMethodOptions)
+            foreach (var o in SampleViewModel.LcMethodOptions)
             {
                 var name = o.ToString();
                 if (methodName == name)
@@ -625,7 +591,7 @@ namespace LcmsNet.WPFControls.ViewModels
             }
             if (oFound != null)
             {
-                sampleViewModel.LcMethodOptions.Remove(oFound);
+                SampleViewModel.LcMethodOptions.Remove(oFound);
             }
         }
 
@@ -634,9 +600,9 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="methodName"></param>
         /// <returns></returns>
-        protected bool ContainsMethod(string methodName)
+        private bool ContainsMethod(string methodName)
         {
-            foreach (var o in sampleViewModel.LcMethodOptions)
+            foreach (var o in SampleViewModel.LcMethodOptions)
             {
                 var name = o.ToString();
                 if (methodName == name)
@@ -653,7 +619,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        protected virtual bool Manager_MethodUpdated(object sender, classLCMethod method)
+        private bool Manager_MethodUpdated(object sender, classLCMethod method)
         {
             var samples = m_sampleQueue.GetWaitingQueue();
             var updateSamples = new List<classSampleData>();
@@ -682,7 +648,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        protected virtual bool Manager_MethodAdded(object sender, classLCMethod method)
+        private bool Manager_MethodAdded(object sender, classLCMethod method)
         {
             // make sure the method is not null
             if (method == null)
@@ -690,7 +656,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
             // Find the method if name exists
             var found = false;
-            foreach (var o in sampleViewModel.LcMethodOptions)
+            foreach (var o in SampleViewModel.LcMethodOptions)
             {
                 var name = o.ToString();
                 if (name == method.Name)
@@ -703,18 +669,18 @@ namespace LcmsNet.WPFControls.ViewModels
             // Update or add the method
             if (found == false)
             {
-                sampleViewModel.LcMethodOptions.Add(method);
+                SampleViewModel.LcMethodOptions.Add(method);
                 // If we just added a sample, we want to make sure the samples have a method selected.
-                if (sampleViewModel.LcMethodOptions.Count == 1)
+                if (SampleViewModel.LcMethodOptions.Count == 1)
                 {
                 }
             }
             else
             {
                 // Here we update the method that was in the list, with the new one that was added/updated
-                var indexOf = sampleViewModel.LcMethodOptions.IndexOf(method);
+                var indexOf = SampleViewModel.LcMethodOptions.IndexOf(method);
                 if (indexOf >= 0)
-                    sampleViewModel.LcMethodOptions[indexOf] = method;
+                    SampleViewModel.LcMethodOptions[indexOf] = method;
             }
 
             return true;
@@ -727,7 +693,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Undoes the last operation on the queue.
         /// </summary>
-        protected virtual void Undo()
+        private void Undo()
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -738,7 +704,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Undoes the last operation on the queue.
         /// </summary>
-        protected virtual void Redo()
+        private void Redo()
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -751,7 +717,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="samples">List of samples to add to the manager.</param>
         /// <param name="insertIntoUnused"></param>
-        protected virtual void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
+        private void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -809,7 +775,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Gets or sets whether when adding samples,
         /// the column data should cycle through, (e.g. 1,2,3,4,1,2)
         /// </summary>
-        protected virtual bool IterateThroughColumns { get; set; }
+        private bool IterateThroughColumns { get; set; }
 
         /// <summary>
         /// Gets or sets a list of pal method names.
@@ -890,7 +856,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Updates the PAL Method Column Combo Box
         /// </summary>
-        protected virtual void ShowAutoSamplerMethods()
+        private void ShowAutoSamplerMethods()
         {
             //mcolumn_PalMethod.Items.Clear();
             //mcolumn_PalMethod.Items.Add(CONST_NOT_SELECTED);
@@ -899,35 +865,35 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Updates the PAL Tray Column Combo Box.
         /// </summary>
-        protected virtual void ShowAutoSamplerTrays()
+        private void ShowAutoSamplerTrays()
         {
-            sampleViewModel.PalTrayOptions.Clear();
+            SampleViewModel.PalTrayOptions.Clear();
 
             foreach (var tray in m_autosamplerTrays)
             {
-                sampleViewModel.PalTrayOptions.Add(tray);
+                SampleViewModel.PalTrayOptions.Add(tray);
             }
         }
 
         /// <summary>
         /// Updates the Instrument Method Column Combo Box.
         /// </summary>
-        protected virtual void ShowInstrumentMethods()
+        private void ShowInstrumentMethods()
         {
-            sampleViewModel.InstrumentMethodOptions.Clear();
+            SampleViewModel.InstrumentMethodOptions.Clear();
 
             foreach (var tray in m_instrumentMethods)
             {
-                sampleViewModel.InstrumentMethodOptions.Add(tray);
+                SampleViewModel.InstrumentMethodOptions.Add(tray);
             }
         }
 
         /// <summary>
         /// Updates the LC-Method to the LC Separation Method Box.
         /// </summary>
-        protected virtual void ShowLCSeparationMethods()
+        private void ShowLCSeparationMethods()
         {
-            sampleViewModel.LcMethodOptions.Clear();
+            SampleViewModel.LcMethodOptions.Clear();
 
             foreach (var method in classLCMethodManager.Manager.Methods.Values)
             {
@@ -939,9 +905,9 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Adds the method to the user interface.
         /// </summary>
         /// <param name="method"></param>
-        protected virtual void AddLCMethod(classLCMethod method)
+        private void AddLCMethod(classLCMethod method)
         {
-            sampleViewModel.LcMethodOptions.Add(method);
+            SampleViewModel.LcMethodOptions.Add(method);
         }
 
         #endregion
@@ -1001,7 +967,7 @@ namespace LcmsNet.WPFControls.ViewModels
             SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
-        protected virtual void EditTrayAndVial()
+        private void EditTrayAndVial()
         {
             var samples = GetSelectedSamples();
             //
@@ -1040,7 +1006,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Performs fill down methods for sample data.
         /// </summary>
-        protected virtual void FillDown()
+        private void FillDown()
         {
             //
             // Get the list of selected samples
@@ -1085,7 +1051,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Moves the selected samples to another column selected through a dialog window.
         /// </summary>
-        protected void MoveSamplesToColumn(enumColumnDataHandling handling)
+        private void MoveSamplesToColumn(enumColumnDataHandling handling)
         {
             m_selector.StartPosition = FormStartPosition.CenterParent;
             // TODO: if (DesignMode)
@@ -1204,7 +1170,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Returns whether the sample queue has an unused samples.
         /// </summary>
         /// <returns></returns>
-        protected virtual bool HasUnusedSamples()
+        private bool HasUnusedSamples()
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -1215,7 +1181,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Displays the DMS View Dialog Window.
         /// </summary>
-        protected virtual void ShowDMSView()
+        private void ShowDMSView()
         {
             if (m_dmsView == null)
                 return;
@@ -1262,7 +1228,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sampleToCopy">Sample to copy</param>
         /// <returns>New object reference of a sample with only required data copied.</returns>
-        protected virtual classSampleData CopyRequiredSampleData(classSampleData sampleToCopy)
+        private classSampleData CopyRequiredSampleData(classSampleData sampleToCopy)
         {
             var newSample = new classSampleData(false)
             {
@@ -1414,7 +1380,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        protected virtual void AddNewSample(bool insertIntoUnused)
+        private void AddNewSample(bool insertIntoUnused)
         {
             classSampleData newData = null;
 
@@ -1478,7 +1444,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sample">Sample to display in the list view.</param>
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
-        protected virtual bool AddSamplesToList(classSampleData sample)
+        private bool AddSamplesToList(classSampleData sample)
         {
             if (sample == null)
             {
@@ -1487,7 +1453,7 @@ namespace LcmsNet.WPFControls.ViewModels
             using (Samples.SuppressChangeNotifications())
             {
 
-                Samples.Add(new sampleViewModel(sample));
+                Samples.Add(new SampleViewModel(sample));
                 Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
                 UpdateRow(sample);
 
@@ -1500,7 +1466,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="samples">Sample to display in the list view.</param>
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
-        protected virtual bool AddSamplesToList(IEnumerable<classSampleData> samples)
+        private bool AddSamplesToList(IEnumerable<classSampleData> samples)
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -1515,7 +1481,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Clear all of the samples (deleting them from the queue as well).
         /// </summary>
-        protected virtual void ClearAllSamples()
+        private void ClearAllSamples()
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -1528,16 +1494,9 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         /// <summary>
-        /// Inserts samples into unused sample positions.
-        /// </summary>
-        protected virtual void InsertIntoUnused()
-        {
-        }
-
-        /// <summary>
         /// Moves all the selected samples an offset of their original sequence id.
         /// </summary>
-        protected virtual void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        private void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
             var data = SampleView.SelectedSamples.Select(x => x.Sample).ToList();
 
@@ -1560,7 +1519,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 //
                 // Move in the sample queue
                 //
-                m_sampleQueue.MoveQueuedSamples(data, m_editableIndex, offset, moveType);
+                m_sampleQueue.MoveQueuedSamples(data, 0, offset, moveType);
             }
 
             // Re-select the first sample
@@ -1570,7 +1529,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Randomizes the selected samples for the sample queue.
         /// </summary>
-        protected void RandomizeSelectedSamples()
+        private void RandomizeSelectedSamples()
         {
             var samplesToRandomize = new List<classSampleData>();
             //
@@ -1647,7 +1606,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Removes the unused samples in the columns.
         /// </summary>
-        protected virtual void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
+        private void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -1658,7 +1617,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Removes the selected samples from the list view.
         /// </summary>
-        protected virtual void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
+        private void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
         {
             try
             {
@@ -1674,7 +1633,7 @@ namespace LcmsNet.WPFControls.ViewModels
                     removes.Add(sample.Sample.UniqueID);
                 }
                 // Select the sample just before or the first sample following the sample(s) deleted
-                sampleViewModel sampleToSelect = null;
+                SampleViewModel sampleToSelect = null;
                 if (samplesToRemove.Count > 0)
                 {
                     var foundToDelete = false;
@@ -1723,7 +1682,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Updates the provided row by determining if the sample data class is valid or not.
         /// </summary>
         /// <param name="data"></param>
-        protected virtual void UpdateValidCell(classSampleData data)
+        private void UpdateValidCell(classSampleData data)
         {
             //
             // Color duplicates or invalid cells with certain colors!
@@ -1786,7 +1745,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Updates the row at index with the data provided.
         /// </summary>
         /// <param name="sample">Index to update.</param>
-        protected virtual void UpdateRow(classSampleData sample)
+        private void UpdateRow(classSampleData sample)
         {
             UpdateValidCell(sample);
         }
@@ -1796,9 +1755,9 @@ namespace LcmsNet.WPFControls.ViewModels
         #region Queue Manager Event Handlers
 
         public Dispatcher UIDispatcher { get; set; }
-        private sampleView _sampleView;
+        private Views.SampleView _sampleView;
 
-        public sampleView SampleView
+        public Views.SampleView SampleView
         {
             get
             {
@@ -1820,7 +1779,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender">Queue manager that is updated.</param>
         /// <param name="data">Data arguments that contain the updated sample information.</param>
-        protected virtual void m_sampleQueue_SamplesUpdated(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SamplesUpdated(object sender, classSampleQueueArgs data)
         {
             if (!UIDispatcher.CheckAccess())
             {
@@ -1837,7 +1796,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void SamplesUpdated(object sender, classSampleQueueArgs data)
+        private void SamplesUpdated(object sender, classSampleQueueArgs data)
         {
             UpdateRows(data.Samples);
         }
@@ -1847,7 +1806,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void SamplesStopped(object sender, classSampleQueueArgs data)
+        private void SamplesStopped(object sender, classSampleQueueArgs data)
         {
             SamplesUpdated(sender, data);
         }
@@ -1857,7 +1816,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void m_sampleQueue_SamplesStopped(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SamplesStopped(object sender, classSampleQueueArgs data)
         {
             if (!UIDispatcher.CheckAccess())
             {
@@ -1905,7 +1864,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Updates the rows for the given samples.
         /// </summary>
         /// <param name="samples">Samples to update view of.</param>
-        protected virtual void UpdateRows(IEnumerable<classSampleData> samples)
+        private void UpdateRows(IEnumerable<classSampleData> samples)
         {
             foreach (var sample in samples)
             {
@@ -1934,7 +1893,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void m_sampleQueue_SampleStarted(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SampleStarted(object sender, classSampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1954,7 +1913,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void m_sampleQueue_SampleRemoved(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SampleRemoved(object sender, classSampleQueueArgs data)
         {
             // Start fresh and add the samples from the queue to the list.
             // But track the position of the scroll bar to be nice to the user.
@@ -1977,7 +1936,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void m_sampleQueue_SampleFinished(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SampleFinished(object sender, classSampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1997,7 +1956,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        protected virtual void m_sampleQueue_SampleCancelled(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SampleCancelled(object sender, classSampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -2018,7 +1977,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="sender"></param>
         /// <param name="data"></param>
         /// <param name="replaceExistingRows"></param>
-        protected virtual void m_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data, bool replaceExistingRows)
+        private void m_sampleQueue_SampleAdded(object sender, classSampleQueueArgs data, bool replaceExistingRows)
         {
             if (data?.Samples == null)
                 return;
@@ -2033,7 +1992,7 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        protected virtual void SamplesAddedFromQueue(IEnumerable<classSampleData> samples, bool replaceExistingRows)
+        private void SamplesAddedFromQueue(IEnumerable<classSampleData> samples, bool replaceExistingRows)
         {
             //
             // The sample queue gives all of the samples

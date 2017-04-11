@@ -522,11 +522,11 @@
     <Compile Include="SampleQueue\Forms\formSampleManager.Designer.cs">
       <DependentUpon>formSampleManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleManager3.cs">
+    <Compile Include="SampleQueue\Forms\formSampleManager2.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleManager3.Designer.cs">
-      <DependentUpon>formSampleManager3.cs</DependentUpon>
+    <Compile Include="SampleQueue\Forms\formSampleManager2.Designer.cs">
+      <DependentUpon>formSampleManager2.cs</DependentUpon>
     </Compile>
     <Compile Include="SampleQueue\Forms\formSampleRandomizer.cs">
       <SubType>Form</SubType>
@@ -557,13 +557,18 @@
     <Compile Include="SampleQueue\IO\classQueueExportXML.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportSQLite.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
+    <Compile Include="WPFControls\ImageUtils.cs" />
     <Compile Include="WPFControls\ViewModels\SampleControlViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\sampleViewModel.cs" />
+    <Compile Include="WPFControls\ViewModels\SampleManagerViewModel.cs" />
+    <Compile Include="WPFControls\ViewModels\SampleViewModel.cs" />
     <Compile Include="WPFControls\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\sampleView.xaml.cs">
-      <DependentUpon>sampleView.xaml</DependentUpon>
+    <Compile Include="WPFControls\Views\SampleManagerView.xaml.cs">
+      <DependentUpon>SampleManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFControls\Views\SampleView.xaml.cs">
+      <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Simulator\formChartPopoutWindow.cs">
@@ -828,8 +833,8 @@
     <EmbeddedResource Include="SampleQueue\Forms\formSampleManager.resx">
       <DependentUpon>formSampleManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager3.resx">
-      <DependentUpon>formSampleManager3.cs</DependentUpon>
+    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager2.resx">
+      <DependentUpon>formSampleManager2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SampleQueue\Forms\formSampleQueueOptions.resx">
       <DependentUpon>formSampleQueueOptions.cs</DependentUpon>
@@ -1085,7 +1090,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\sampleView.xaml">
+    <Page Include="WPFControls\Views\SampleManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPFControls\Views\SampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

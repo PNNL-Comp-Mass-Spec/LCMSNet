@@ -139,7 +139,7 @@ namespace LcmsNet
         /// Form that manages views of the sample queue class for handling sample
         /// ordering and running.
         /// </summary>
-        private formSampleManager3 m_sampleManager;
+        private formSampleManager2 m_sampleManager;
 
         /// <summary>
         /// Object that manages operation of the samples.
@@ -247,7 +247,7 @@ namespace LcmsNet
 
             // Construct the sample queue object that holds and manages sample data ordering
             m_sampleQueue = new classSampleQueue();
-            m_sampleManager = new formSampleManager3(m_sampleQueue);
+            m_sampleManager = new formSampleManager2(m_sampleQueue);
 
             classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
@@ -287,7 +287,7 @@ namespace LcmsNet
             // Method Editor
             m_methodEditor = new formMethodEditor();
             m_sampleProgress = new formColumnSampleProgress();
-            m_sampleManager.Stop += m_sampleManager_Stop;
+            m_sampleManager.SampleManagerViewModel.Stop += m_sampleManager_Stop;
 
 
             // Get the most recently used separation type
@@ -398,18 +398,6 @@ namespace LcmsNet
             display?.ShowDialog();
             m_sampleProgress.PreviewAvailable += m_sampleManager.PreviewAvailable;
             m_notifications.LoadNotificationFile();
-
-            // Following is a hack to fix the File menu when first displaying the window; issue first appeared when removing the tab control from the Queue view.
-            this.Shown += (sender, args) =>
-            {
-                ShowMethodEditor();
-                var timer = new System.Threading.Timer(FixStartupFileMenu, this, 50, System.Threading.Timeout.Infinite);
-            };
-        }
-
-        void FixStartupFileMenu(object state)
-        {
-            this.BeginInvoke(new Action(ShowSampleQueue));
         }
 
         void m_systemConfiguration_ColumnNameChanged(object sender, EventArgs e)
