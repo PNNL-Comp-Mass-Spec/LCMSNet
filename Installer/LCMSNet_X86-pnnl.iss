@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
                                                            
 #define MyAppVerName "4.3.1"
-#define MySource "..\LcmsNet\lcms\LCMSnet\"
-#define MyLib    "..\..\lib"
-#define MyPlugins "..\..\..\PluginDlls"
+#define MySource "..\LcmsNet\"
+#define MyLib    "lib"
+#define MyPlugins "..\PluginDlls"
 #define MyAppName "LCMSNet"
 #define MyAppVis  "PNNL"
 #define MyAppPublisher "Battelle"
@@ -21,7 +21,7 @@ AppVerName={#MyAppVerName}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputDir=..\..\..\Installer\Installers\{#MyDateTime}
+OutputDir=..\Installer\Installers\{#MyDateTime}
 OutputBaseFilename={#MyAppName}_{#MyAppVis}_{#MyAppVerName}_{#MyDateTime}
 SourceDir={#MySource}
 Compression=lzma
@@ -33,7 +33,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
-[Dirs]        
+[Dirs]
 Name: "{userappdata}\{#MyAppName}\Log"
 Name: "{userappdata}\{#MyAppName}\dmsExtensions"
 Name: "{userappdata}\{#MyAppName}\SampleValidators"
@@ -47,37 +47,37 @@ Name: "{app}\x64"
 ; Exe
 Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                DestDir: "{app}";          Flags: ignoreversion
 
-; DLLs are copied below inthe "DLLs" section, sourced from {#MyLib}\*
+; DLLs are copied below in the "DLLs" section, sourced from {#MyLib}\*
 
 ; Copy SQLite.Interop.dll (both x86 and x64, even though we're likely compiling against x86)
 Source: LCMSNetProg\bin\x86\PNNLRelease\x86\*.dll;                  DestDir: "{app}\x86";      Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                  DestDir: "{app}\x64";      Flags: ignoreversion
 
-Source: "..\..\..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config"; DestDir: "{app}";      Flags: ignoreversion
+Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";       DestDir: "{app}";      Flags: ignoreversion
 
 ;DLLs
 Source: "{#MyLib}\*"; Excludes:"FluidicsPack.dll,nunit_random_seed.tmp,LcmsNet.exe.config";                  DestDir: "{app}";          Flags: ignoreversion
 Source: "{#MyLib}\FluidicsPack.dll";                                DestDir: "{app}\Plugins";  Flags: ignoreversion
 
 ;Core sample validator    
-Source: "..\..\SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";  DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
+Source: "SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";        DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
 
 ;Plugins
 Source: "{#MyPlugins}\*";                                           DestDir: "{app}\Plugins\"; Flags: ignoreversion
-Source: "..\..\..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";       DestDir: "{sys}";          Flags: ignoreversion
+Source: "..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";             DestDir: "{sys}";          Flags: ignoreversion
 
 ;PAL Validator
-Source: "..\..\..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";   DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
+Source: "..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";         DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
-Source: "..\..\..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";    DestDir: "{app}";          Flags: ignoreversion
+Source: "..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";          DestDir: "{app}";          Flags: ignoreversion
 
 ; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 
 ; config.default! If you want to make changes to the deployed defaults, change the 
 ; Settings.settings file, compile, and then copy LcmsNet.exe.config into the proper 
 ; directory and rename it LcmsNet.exe.config.default before running this script! 
-Source: "..\..\..\Installer\LcmsNet.exe.config.default";                               DestName: "LcmsNet.exe.config";    DestDir: "{app}";          Flags: ignoreversion
+Source: "..\Installer\LcmsNet.exe.config.default";                               DestName: "LcmsNet.exe.config";    DestDir: "{app}";          Flags: ignoreversion
 ; END SETTINGS FILE---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
