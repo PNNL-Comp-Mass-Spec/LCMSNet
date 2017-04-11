@@ -887,13 +887,12 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         protected virtual void ShowInstrumentMethods()
         {
-            //sampleViewModel.DatasetTypeOptions.Clear();
-            ////sampleViewModel.DatasetTypeOptions.Add(CONST_NOT_SELECTED);
-            //
-            //foreach (var tray in m_instrumentMethods)
-            //{
-            //    sampleViewModel.DatasetTypeOptions.Add(tray);
-            //}
+            sampleViewModel.InstrumentMethodOptions.Clear();
+
+            foreach (var tray in m_instrumentMethods)
+            {
+                sampleViewModel.InstrumentMethodOptions.Add(tray);
+            }
         }
 
         /// <summary>

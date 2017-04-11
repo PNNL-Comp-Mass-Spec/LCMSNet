@@ -39,7 +39,7 @@
                 <MenuItem Header="Delete Unused" Command="{Binding DeleteUnusedCommand}" />
                 <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" />
                 <Separator />
-                <MenuItem Header="Show">
+                <MenuItem Header="Show Columns...">
                     <MenuItem.ItemsSource>
                         <CompositeCollection>
                             <MenuItem Header="PAL Tray" IsChecked="{Binding PalTrayColumnVisible}" IsCheckable="True" />

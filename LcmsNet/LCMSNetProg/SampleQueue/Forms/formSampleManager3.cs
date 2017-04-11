@@ -248,13 +248,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             var trays = args.TrayList;
 
-            //ToDo:
-            /*mcontrol_sequenceView.AutoSamplerTrays = trays;
-            mcontrol_column1.AutoSamplerTrays = trays;
-            mcontrol_column2.AutoSamplerTrays = trays;
-            mcontrol_column3.AutoSamplerTrays = trays;
-            mcontrol_column4.AutoSamplerTrays = trays;
-            */
+            SampleControlViewModel.AutoSamplerTrays = trays;
         }
 
         /// <summary>
@@ -264,13 +258,7 @@ namespace LcmsNet.SampleQueue.Forms
         {
             var methods = args.MethodList;
 
-            //ToDo:
-            /*mcontrol_sequenceView.InstrumentMethods = methods;
-            mcontrol_column1.InstrumentMethods = methods;
-            mcontrol_column2.InstrumentMethods = methods;
-            mcontrol_column3.InstrumentMethods = methods;
-            mcontrol_column4.InstrumentMethods = methods;
-            */
+            SampleControlViewModel.InstrumentMethods = methods;
         }
 
         #endregion

@@ -471,21 +471,15 @@ namespace LcmsNet.SampleQueue
             //
             lock (m_waitingQueue)
             {
-                foreach (var data in m_waitingQueue)
-                    if (data.DmsData.DatasetName == sampleName)
-                        samples.Add(data);
+                samples.AddRange(m_waitingQueue.Where(x => x.DmsData.DatasetName.Equals(sampleName)));
             }
             lock (m_runningQueue)
             {
-                foreach (var data in m_runningQueue)
-                    if (data.DmsData.DatasetName == sampleName)
-                        samples.Add(data);
+                samples.AddRange(m_runningQueue.Where(x => x.DmsData.DatasetName.Equals(sampleName)));
             }
             lock (m_completeQueue)
             {
-                foreach (var data in m_completeQueue)
-                    if (data.DmsData.DatasetName == sampleName)
-                        samples.Add(data);
+                samples.AddRange(m_completeQueue.Where(x => x.DmsData.DatasetName.Equals(sampleName)));
             }
 
             return samples;
