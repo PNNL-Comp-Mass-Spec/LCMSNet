@@ -295,9 +295,17 @@ namespace LcmsNet.WPFControls.ViewModels
 
         void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
-            if (e.SettingName == "DMSTool" && e.SettingValue != string.Empty)
+            if (e.SettingName.Equals(classLCMSSettings.PARAM_DMSTOOL) && e.SettingValue != string.Empty)
             {
                 DMSAvailable = true;
+            }
+            if (e.SettingName.Equals(classLCMSSettings.PARAM_CARTCONFIGNAME))
+            {
+                foreach (var sample in Samples)
+                {
+                    var data = sample.Sample.DmsData;
+                    data.CartConfigName = e.SettingValue;
+                }
             }
         }
 
@@ -432,6 +440,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
                     if (changedSample.IsChecked)
                     {
+                        var foundError = false;
                         // Queue samples
                         foreach (var sample in Samples)
                         {
@@ -443,14 +452,18 @@ namespace LcmsNet.WPFControls.ViewModels
                             // Validate sample and add it to the run queue
 
                             // Validate sample.
-
                             if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                             {
-                                var isSampleValid = mValidator.IsSampleValid(sample.Sample);
-                                if (!isSampleValid)
+                                var sampleValidErrors = mValidator.IsSampleValidDetailed(sample.Sample);
+
+                                if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
                                 {
-                                    // EUS Usage for this sample is not valid; ignore for now
-                                    return;
+                                    sample.Sample.SampleErrors = mValidator.CreateErrorListFromErrors(sampleValidErrors);
+                                    foundError = true;
+                                }
+                                else
+                                {
+                                    sample.Sample.SampleErrors = null;
                                 }
                             }
                             else
@@ -459,33 +472,42 @@ namespace LcmsNet.WPFControls.ViewModels
                                 return;
                             }
 
-                            // Validate other parts of the sample.
-                            var errors = new List<classSampleValidationError>();
-                            foreach (var reference in classSampleValidatorManager.Instance.Validators)
+                            if (string.IsNullOrEmpty(sample.Sample.SampleErrors))
                             {
+                                // Validate other parts of the sample.
+                                var errors = new List<classSampleValidationError>();
+                                foreach (var reference in classSampleValidatorManager.Instance.Validators)
+                                {
 #if DEBUG
-                                Console.WriteLine("Validating sample with validator: " +
-                                                  reference.Metadata.Name);
+                                    Console.WriteLine("Validating sample with validator: " +
+                                                      reference.Metadata.Name);
 #endif
-                                var sampleValidator = reference.Value;
-                                errors.AddRange(sampleValidator.ValidateSamples(sample.Sample));
+                                    var sampleValidator = reference.Value;
+                                    errors.AddRange(sampleValidator.ValidateSamples(sample.Sample));
+                                }
+
+                                if (errors.Count > 0)
+                                {
+                                    //TODO: Add notifications to what was wrong with the samples.
+                                    foundError = true;
+                                }
                             }
 
-                            if (errors.Count > 0)
+                            if (!foundError)
                             {
-                                //TODO: Add notifications to what was wrong with the samples.
-                                return;
+                                // Add to run queue
+                                m_sampleQueue.MoveSamplesToRunningQueue(sample.Sample);
                             }
-
-                            // Add to run queue
-                            m_sampleQueue.MoveSamplesToRunningQueue(sample.Sample);
 
                             if (sample.Equals(changedSample))
                             {
+                                if (foundError)
+                                {
+                                    sample.IsChecked = false;
+                                }
                                 //Stop validating and queuing samples
                                 break;
                             }
-
                         }
                     }
                     else
@@ -1149,6 +1171,13 @@ namespace LcmsNet.WPFControls.ViewModels
             using (Samples.SuppressChangeNotifications())
             {
                 m_sampleQueue.UpdateAllSamples();
+
+                // The following is necessary due to how samples are stored and read from a database
+                // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
+                foreach (var s in Samples)
+                {
+                    s.Sample.ColumnData = classCartConfiguration.Columns[s.Sample.ColumnData.ID];
+                }
             }
         }
 
@@ -1163,6 +1192,13 @@ namespace LcmsNet.WPFControls.ViewModels
             using (Samples.SuppressChangeNotifications())
             {
                 m_sampleQueue.UpdateWaitingSamples();
+
+                // The following is necessary due to how samples are stored and read from a database
+                // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
+                foreach (var s in Samples)
+                {
+                    s.Sample.ColumnData = classCartConfiguration.Columns[s.Sample.ColumnData.ID];
+                }
             }
         }
 
@@ -1450,15 +1486,16 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 return false;
             }
-            using (Samples.SuppressChangeNotifications())
+            if (!Samples.Any(x => x.Sample.Equals(sample)))
             {
-
-                Samples.Add(new SampleViewModel(sample));
-                Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
-                UpdateRow(sample);
-
-                return true;
+                using (Samples.SuppressChangeNotifications())
+                {
+                    Samples.Add(new SampleViewModel(sample));
+                    Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
+                    UpdateRow(sample);
+                }
             }
+            return true;
         }
 
         /// <summary>

@@ -295,9 +295,18 @@ namespace LcmsNetDataClasses
         /// </summary>
         private bool m_IsDuplicateRequestName = false;
 
+        private string m_SampleErrors = null;
+
         #endregion
 
         #region "Properties"
+
+        [NotStoredProperty]
+        public string SampleErrors
+        {
+            get { return m_SampleErrors; }
+            set { this.RaiseAndSetIfChanged(ref m_SampleErrors, value); }
+        }
 
         /// <summary>
         /// Whether this is possibly a dummy sample, and a real sample needs to be looked up before we perform any operations

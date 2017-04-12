@@ -172,11 +172,9 @@ namespace LcmsNetDataClasses.Configuration
             get { return m_name; }
             set
             {
-                if (value != m_name)
+                var oldName = m_name;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
                 {
-                    var oldName = m_name;
-
-                    m_name = value;
                     NameChanged?.Invoke(this, m_name, oldName);
                 }
             }
@@ -190,11 +188,11 @@ namespace LcmsNetDataClasses.Configuration
             get { return m_columnColor; }
             set
             {
-                if (m_columnColor != value)
+                var oldColor = m_columnColor;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_columnColor, value))
                 {
-                    ColorChanged?.Invoke(this, m_columnColor, value);
+                    ColorChanged?.Invoke(this, oldColor, m_columnColor);
                 }
-                m_columnColor = value;
             }
         }
 

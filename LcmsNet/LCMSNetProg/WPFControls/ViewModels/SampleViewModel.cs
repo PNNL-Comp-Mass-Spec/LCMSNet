@@ -92,6 +92,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
             this.WhenAnyValue(x => x.Sample.ColumnData.ID).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
+            this.WhenAnyValue(x => x.Sample.ColumnData.Color).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumberBgColor)));
 
             this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
             this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
@@ -144,8 +145,11 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(IsDuplicateRequestName));
             });
 
-
-
+            this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(SampleErrors));
+                this.SetRowColors();
+            });
         }
 
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => LcMethodOptions;
@@ -281,6 +285,12 @@ namespace LcmsNet.WPFControls.ViewModels
                 RowForeColor = Brushes.DarkGray;
             }
 
+            if (!string.IsNullOrEmpty(SampleErrors))
+            {
+                RowBackColor = Brushes.DeepPink;
+                RowForeColor = Brushes.Black;
+            }
+
             // Specially color any rows with duplicate request names
             if (Sample.IsDuplicateRequestName)
             {
@@ -308,6 +318,11 @@ namespace LcmsNet.WPFControls.ViewModels
         #endregion
 
         #region ToolTips
+
+        public string SampleErrors
+        {
+            get { return Sample.SampleErrors; }
+        }
 
         private string requestNameToolTipText = "";
 

@@ -17,6 +17,11 @@
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding DataContext.RemoveSelectedCommand, Source={x:Reference BaseDC}}" />
             </DataGrid.InputBindings>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="ToolTip" Value="{Binding SampleErrors}" />
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" >
                     <Setter Property="Background" Value="{Binding RowBackColor}" />

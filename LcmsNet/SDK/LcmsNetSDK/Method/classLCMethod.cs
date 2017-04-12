@@ -327,7 +327,7 @@ namespace LcmsNetDataClasses.Method
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return string.Equals(Name, other.Name);
+            return string.Equals(Name, other.Name) && Column == other.Column && IsSpecialMethod == other.IsSpecialMethod;
         }
 
         public override bool Equals(object obj)
@@ -340,7 +340,13 @@ namespace LcmsNetDataClasses.Method
 
         public override int GetHashCode()
         {
-            return (Name != null ? Name.GetHashCode() : 0);
+            unchecked
+            {
+                var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Column;
+                hashCode = (hashCode * 397) ^ IsSpecialMethod.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }
