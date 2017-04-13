@@ -323,13 +323,23 @@ namespace LcmsNetDmsTools
             List<string> tmpCartConfigNames;
             var connStr = GetConnectionString();
 
-
             // Get a list containing all active cart configuration names
+            // TODO: get the cart name and store it in the cache as well, and use it for filtering.
+            //  SELECT Cart_Config_ID,
+            //         Cart_Config_Name,
+            //         Cart_Name,
+            //         Description,
+            //         Autosampler,
+            //         Pumps,
+            //         Dataset_Usage_Count,
+            //         Dataset_Usage_Last_Year,
+            //         Cart_Config_State
+            //    FROM V_LC_Cart_Config_Export
             const string sqlCmd =
-                "SELECT [Config Name] " +
-                "FROM V_LC_Cart_Configuration_List_Report " +
-                "WHERE State = 'Active' " +
-                "ORDER BY [Config Name]";
+                "SELECT Cart_Config_Name " +
+                "FROM V_LC_Cart_Config_Export " +
+                "WHERE Cart_Config_State = 'Active' " +
+                "ORDER BY Cart_Config_Name";
 
             try
             {

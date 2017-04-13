@@ -45,6 +45,7 @@ namespace LcmsNet.WPFControls.ViewModels
         public static ReactiveList<string> DatasetTypeOptions { get; private set; }
         public static ReactiveList<string> CartConfigOptions { get; private set; }
         public static ReactiveList<string> PalTrayOptions { get; private set; }
+        private static string cartConfigOptionsError = null;
 
         static SampleViewModel()
         {
@@ -69,12 +70,25 @@ namespace LcmsNet.WPFControls.ViewModels
             // Get the list of cart configuration names from DMS
             try
             {
+                var totalConfigCount = classSQLiteTools.GetCartConfigNameList(false).Count;
                 var cartName = classCartConfiguration.CartName;
                 var cartConfigList = classSQLiteTools.GetCartConfigNameList(cartName, false);
                 if (cartConfigList.Count > 0)
                 {
                     CartConfigOptions.Clear();
                     CartConfigOptions.AddRange(cartConfigList);
+                }
+                else
+                {
+                    if (totalConfigCount > 0)
+                    {
+                        cartConfigOptionsError = "No cart configurations found that match the supplied cart name: \"" + cartName + "\".\n" +
+                                                 "Fix: close, fix the cart name, and restart.";
+                    }
+                    else
+                    {
+                        cartConfigOptionsError = "No cart configurations found. Can this computer communicate with DMS? Fix and restart LCMSNet";
+                    }
                 }
             }
             catch (classDatabaseConnectionStringException ex)
@@ -182,6 +196,7 @@ namespace LcmsNet.WPFControls.ViewModels
         public ReactiveList<string> PalTrayComboBoxOptions => PalTrayOptions;
         public ReactiveList<string> InstrumentMethodComboBoxOptions => InstrumentMethodOptions;
         public ReactiveList<string> CartConfigComboBoxOptions => CartConfigOptions;
+        public string CartConfigError => cartConfigOptionsError;
 
         #region Row and cell colors
 

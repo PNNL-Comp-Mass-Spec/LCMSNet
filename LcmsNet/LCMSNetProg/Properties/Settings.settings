@@ -96,7 +96,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="CartName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">(none)</Value>
+      <Value Profile="(Default)">No_Cart</Value>
     </Setting>
     <Setting Name="ErrorPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\proto-5\BionetXfer\LCMSNetErrorReports</Value>

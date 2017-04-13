@@ -48,9 +48,9 @@ namespace LcmsNet.Configuration
             mIsLoading = true;
             InitializeComponent();
 
-            mIsLoading = false;
-
             Initialize();
+
+            mIsLoading = false;
         }
 
         #endregion
@@ -286,7 +286,7 @@ namespace LcmsNet.Configuration
         /// Sets the cart configuration name in use
         /// </summary>
         /// <param name="cartConfigName">Cart configuration name</param>
-        public void SetCartConfigName(string cartConfigName)
+        private void SetCartConfigName(string cartConfigName)
         {
             var indx = mcombo_CartConfigName.FindString(cartConfigName, -1);
             if (indx == -1 && mcombo_CartConfigName.Items.Count > 0)
@@ -303,7 +303,7 @@ namespace LcmsNet.Configuration
         /// Sets the separation type
         /// </summary>
         /// <param name="separationType">New separation type</param>
-        public void SetSeparationType(string separationType)
+        private void SetSeparationType(string separationType)
         {
             var indx = mcombo_SepType.FindString(separationType, -1);
             if (indx == -1 && mcombo_SepType.Items.Count > 0)
@@ -426,30 +426,33 @@ namespace LcmsNet.Configuration
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
 
-            // If a valid list was received, update the display
-            if (cartConfigNameList == null)
+            if (!mIsLoading)
             {
-                // No new cart config names were obtained
-                classApplicationLogger.LogError(0, "Cart config name list null when refreshing list");
-                MessageBox.Show(@"List not updated. Cart config name list from DMS is null");
-                return;
-            }
+                // If a valid list was received, update the display
+                if (cartConfigNameList == null)
+                {
+                    // No new cart config names were obtained
+                    classApplicationLogger.LogError(0, "Cart config name list null when refreshing list");
+                    MessageBox.Show(@"List not updated. Cart config name list from DMS is null");
+                    return;
+                }
 
-            if (cartConfigNameList.Count < 1)
-            {
-                if (fullCount < 1)
+                if (cartConfigNameList.Count < 1)
                 {
-                    // No names found in list
-                    classApplicationLogger.LogError(0, "No cart config names found when refreshing list");
-                    MessageBox.Show(@"List not updated. No cart config names were found.");
+                    if (fullCount < 1)
+                    {
+                        // No names found in list
+                        classApplicationLogger.LogError(0, "No cart config names found when refreshing list");
+                        MessageBox.Show(@"List not updated. No cart config names were found.");
+                    }
+                    else
+                    {
+                        // No names in list after cart name filter
+                        classApplicationLogger.LogError(0, "No cart config names found when refreshing list - none match the cart name");
+                        MessageBox.Show(@"List not updated. No cart config names were found - none match the cart name.");
+                    }
+                    return;
                 }
-                else
-                {
-                    // No names in list after cart name filter
-                    classApplicationLogger.LogError(0, "No cart config names found when refreshing list - none match the cart name");
-                    MessageBox.Show(@"List not updated. No cart config names were found - none match the cart name.");
-                }
-                return;
             }
 
             mcombo_CartConfigName.Items.Clear();
@@ -461,8 +464,11 @@ namespace LcmsNet.Configuration
                 }
             }
 
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
-                "Cart config name lists updated");
+            if (!mIsLoading)
+            {
+                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                    "Cart config name lists updated");
+            }
         }
 
         private void UpdateColumnNameLists()
@@ -478,20 +484,23 @@ namespace LcmsNet.Configuration
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
 
-            // If a valid list was received, update the display
-            if (columnList == null)
+            if (!mIsLoading)
             {
-                // No new column list obtained
-                classApplicationLogger.LogError(0, "Column name list null when refreshing list");
-                MessageBox.Show("List not updated. Column name list from DMS is null");
-                return;
-            }
-            if (columnList.Count < 1)
-            {
-                // No names found in list
-                classApplicationLogger.LogError(0, "No column names found when refreshing list");
-                MessageBox.Show("List not updated. No column names found.");
-                return;
+                // If a valid list was received, update the display
+                if (columnList == null)
+                {
+                    // No new column list obtained
+                    classApplicationLogger.LogError(0, "Column name list null when refreshing list");
+                    MessageBox.Show("List not updated. Column name list from DMS is null");
+                    return;
+                }
+                if (columnList.Count < 1)
+                {
+                    // No names found in list
+                    classApplicationLogger.LogError(0, "No column names found when refreshing list");
+                    MessageBox.Show("List not updated. No column names found.");
+                    return;
+                }
             }
 
             // Everything was OK, so update the list
@@ -500,8 +509,12 @@ namespace LcmsNet.Configuration
             mcontrol_columnThree.ColumnNames = columnList;
             mcontrol_columnFour.ColumnNames = columnList;
 
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
-                "Column name lists updated");
+
+            if (!mIsLoading)
+            {
+                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                    "Column name lists updated");
+            }
         }
 
         private void buttonAccept_Click(object sender, EventArgs e)
