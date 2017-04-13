@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace LcmsNet.WPFControls.Views
@@ -11,6 +12,11 @@ namespace LcmsNet.WPFControls.Views
         public SampleControlView()
         {
             InitializeComponent();
+        }
+
+        private void ButtonSelectAll_OnClick(object sender, RoutedEventArgs e)
+        {
+            SampleView.SampleGrid.SelectAll();
         }
     }
 }
