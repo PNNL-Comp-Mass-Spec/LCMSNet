@@ -203,6 +203,10 @@ namespace LcmsNet.WPFControls.ViewModels
             set { this.RaiseAndSetIfChanged(ref dmsAvailable, value); }
         }
 
+        /// <summary>
+        /// Gets or sets whether when adding samples,
+        /// the column data should cycle through, (e.g. 1,2,3,4,1,2)
+        /// </summary>
         public bool CycleColumns
         {
             get { return cycleColumns; }
@@ -259,6 +263,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// but also no functionality unless the sample queue and dms form is supplied.
         /// Calling this constructor is only for the windows form designer.
         /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
         public SampleControlViewModel()
         {
             if (classCartConfiguration.Columns != null)
@@ -325,8 +330,6 @@ namespace LcmsNet.WPFControls.ViewModels
                         handling = enumColumnDataHandling.Resort;
                     }
                     ColumnHandling = handling;
-
-                    IterateThroughColumns = CycleColumns;
                 });
             SetupCommands();
 
@@ -792,12 +795,6 @@ namespace LcmsNet.WPFControls.ViewModels
                 IsViewEnabled = (value != null);
             }
         }
-
-        /// <summary>
-        /// Gets or sets whether when adding samples,
-        /// the column data should cycle through, (e.g. 1,2,3,4,1,2)
-        /// </summary>
-        private bool IterateThroughColumns { get; set; }
 
         /// <summary>
         /// Gets or sets a list of pal method names.

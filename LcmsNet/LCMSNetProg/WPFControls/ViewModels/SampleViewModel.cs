@@ -117,6 +117,10 @@ namespace LcmsNet.WPFControls.ViewModels
 
         public classSampleData Sample { get; private set; }
 
+        [Obsolete("For WPF Design time use only.", true)]
+        public SampleViewModel()
+        { }
+
         public SampleViewModel(classSampleData sample)
         {
             Sample = sample;

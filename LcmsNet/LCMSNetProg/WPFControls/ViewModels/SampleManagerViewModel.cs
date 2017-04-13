@@ -90,6 +90,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Default constructor for constructor.
         /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
         public SampleManagerViewModel()
         {
         }
