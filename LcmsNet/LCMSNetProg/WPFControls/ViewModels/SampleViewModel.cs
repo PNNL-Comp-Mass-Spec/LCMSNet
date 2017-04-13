@@ -1,14 +1,8 @@
-﻿using LcmsNet.SampleQueue.Forms;
-using LcmsNetDataClasses;
+﻿using LcmsNetDataClasses;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNet.Method;
 using LcmsNet.SampleQueue;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
@@ -49,6 +43,7 @@ namespace LcmsNet.WPFControls.ViewModels
         public static ReactiveList<classLCMethod> LcMethodOptions { get; private set; }
         public static ReactiveList<string> InstrumentMethodOptions { get; private set; }
         public static ReactiveList<string> DatasetTypeOptions { get; private set; }
+        public static ReactiveList<string> CartConfigOptions { get; private set; }
         public static ReactiveList<string> PalTrayOptions { get; private set; }
 
         static SampleViewModel()
@@ -57,22 +52,50 @@ namespace LcmsNet.WPFControls.ViewModels
             DatasetTypeOptions = new ReactiveList<string>();
             PalTrayOptions = new ReactiveList<string>();
             InstrumentMethodOptions = new ReactiveList<string>();
+            CartConfigOptions = new ReactiveList<string>();
 
-            //
             // Add the dataset type items to the data grid
-            //
             try
             {
                 var datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
                 DatasetTypeOptions.Clear();
-                foreach (var datasetType in datasetTypes)
-                {
-                    DatasetTypeOptions.Add(datasetType);
-                }
+                DatasetTypeOptions.AddRange(datasetTypes);
             }
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(1, "The sample queue could not load the dataset type list.", ex);
+            }
+
+            // Get the list of cart configuration names from DMS
+            try
+            {
+                var cartName = classCartConfiguration.CartName;
+                var cartConfigList = classSQLiteTools.GetCartConfigNameList(cartName, false);
+                if (cartConfigList.Count > 0)
+                {
+                    CartConfigOptions.Clear();
+                    CartConfigOptions.AddRange(cartConfigList);
+                }
+            }
+            catch (classDatabaseConnectionStringException ex)
+            {
+                // The SQLite connection string wasn't found
+                var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
+                             "Please close LcmsNet program and correct the configuration file";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                return;
+            }
+            catch (classDatabaseDataException ex)
+            {
+                // There was a problem getting the list of LC carts from the cache db
+                var innerException = string.Empty;
+                if (ex.InnerException != null)
+                    innerException = ex.InnerException.Message;
+                var errMsg = "Exception getting LC cart config name list from DMS: " + innerException + "\r\n" +
+                             "As a workaround, you may manually type the cart config name when needed.\r\n" +
+                             "You may retry retrieving the cart list later, if desired.";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                return;
             }
         }
 
@@ -128,6 +151,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 this.RaisePropertyChanged(nameof(BatchID));
                 this.RaisePropertyChanged(nameof(RunOrder));
                 this.RaisePropertyChanged(nameof(BlockNumber));
+                this.RaisePropertyChanged(nameof(CartConfig));
             });
             this.WhenAnyValue(x => x.Sample.DmsData.DatasetName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.DmsData.RequestName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
@@ -135,6 +159,7 @@ namespace LcmsNet.WPFControls.ViewModels
             this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(BlockNumber)));
             this.WhenAnyValue(x => x.Sample.DmsData.RunOrder).Subscribe(x => this.RaisePropertyChanged(nameof(RunOrder)));
             this.WhenAnyValue(x => x.Sample.DmsData.Batch).Subscribe(x => this.RaisePropertyChanged(nameof(BatchID)));
+            this.WhenAnyValue(x => x.Sample.DmsData.CartConfigName).Subscribe(x => this.RaisePropertyChanged(nameof(CartConfig)));
 
             this.WhenAnyValue(x => x.Sample.InstrumentData).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
             this.WhenAnyValue(x => x.Sample.InstrumentData.MethodName).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
@@ -156,6 +181,7 @@ namespace LcmsNet.WPFControls.ViewModels
         public ReactiveList<string> DatasetTypeComboBoxOptions => DatasetTypeOptions;
         public ReactiveList<string> PalTrayComboBoxOptions => PalTrayOptions;
         public ReactiveList<string> InstrumentMethodComboBoxOptions => InstrumentMethodOptions;
+        public ReactiveList<string> CartConfigComboBoxOptions => CartConfigOptions;
 
         #region Row and cell colors
 
@@ -674,6 +700,22 @@ namespace LcmsNet.WPFControls.ViewModels
                 if (Sample.DmsData.Batch != value)
                 {
                     Sample.DmsData.Batch = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sample Dataset Type
+        /// </summary>
+        public string CartConfig
+        {
+            get { return Sample.DmsData.CartConfigName; }
+            set
+            {
+                if (Sample.DmsData.CartConfigName != value)
+                {
+                    Sample.DmsData.CartConfigName = value;
                     this.RaisePropertyChanged();
                 }
             }

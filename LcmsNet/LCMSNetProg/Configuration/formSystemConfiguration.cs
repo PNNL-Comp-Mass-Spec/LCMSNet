@@ -71,81 +71,9 @@ namespace LcmsNet.Configuration
         #region "Class variables"
 
         /// <summary>
-        /// List of cart configuration names
-        /// </summary>
-        private List<string> m_CartConfigNames;
-
-        /// <summary>
-        /// List of available separation types
-        /// </summary>
-        private List<string> m_SeparationTypes;
-
-        /// <summary>
         /// List of users
         /// </summary>
         private Dictionary<string, classUserInfo> m_Users;
-
-        #endregion
-
-        #region "Properties"
-
-        /// <summary>
-        /// Cart configuration names
-        /// </summary>
-        public List<string> CartConfigNames
-        {
-            set
-            {
-                m_CartConfigNames = value;
-                mcombo_CartConfigName.Items.Clear();
-                foreach (var cartConfigName in m_CartConfigNames)
-                {
-                    mcombo_CartConfigName.Items.Add(cartConfigName);
-                }
-            }
-        }
-        /// <summary>
-        /// Sets the list of column names.
-        /// </summary>
-        public List<string> ColumnNames
-        {
-            set
-            {
-                mcontrol_columnOne.ColumnNames = value;
-                mcontrol_columnTwo.ColumnNames = value;
-                mcontrol_columnThree.ColumnNames = value;
-                mcontrol_columnFour.ColumnNames = value;
-            }
-        }
-
-        /// <summary>
-        /// Separation types
-        /// </summary>
-        public List<string> SeparationTypes
-        {
-            set
-            {
-                m_SeparationTypes = value;
-                mcombo_SepType.Items.Clear();
-                foreach (var sepType in m_SeparationTypes)
-                {
-                    mcombo_SepType.Items.Add(sepType);
-                }
-            }
-        }
-
-        /// <summary>
-        /// User list
-        /// </summary>
-        public List<classUserInfo> Users
-        {
-            set { LoadUserCombo(value); }
-        }
-
-        public string PdfPath
-        {
-            set { txtPdfPath.Text = value; }
-        }
 
         #endregion
 
@@ -169,7 +97,7 @@ namespace LcmsNet.Configuration
             RegisterColumn(mcontrol_columnFour);
 
             // Cart name
-            mlabel_Cart.Text = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+            mlabel_Cart.Text = classCartConfiguration.CartName;
 
             LoadInstrumentInformation();
             LoadApplicationSettings();
@@ -183,7 +111,10 @@ namespace LcmsNet.Configuration
             }
 
             comboTimeZone.SelectedIndex = comboTimeZone.FindStringExact(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TIMEZONE));
-          
+
+            LoadUserCombo(classSQLiteTools.GetUserList(false));
+
+            ReloadData();
         }
 
         void RegisterColumn(controlColumn column)
@@ -289,7 +220,10 @@ namespace LcmsNet.Configuration
             {
                 m_Users = new Dictionary<string, classUserInfo>();
             }
-            else m_Users.Clear();
+            else
+            {
+                m_Users.Clear();
+            }
 
             // Create dummy user. User is not recognized by DMS, so that trigger files will fail and let
             //      operator know that user name was not provided
@@ -422,7 +356,11 @@ namespace LcmsNet.Configuration
 
         private void mbutton_Reload_Click(object sender, EventArgs e)
         {
+            ReloadData();
+        }
 
+        private void ReloadData()
+        {
             // Get a fresh list of columns from DMS and store it in the cache db
             try
             {
@@ -434,18 +372,54 @@ namespace LcmsNet.Configuration
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
 
-            UpdateCartConfigNames();
+            LoadSeparationTypes();
 
+            UpdateCartConfigNames();
             UpdateColumnNameLists();
+
+            RestoreCurrentSelections();
+        }
+
+        private void RestoreCurrentSelections()
+        {
+            var cartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
+            if (!string.IsNullOrWhiteSpace(cartConfigName))
+            {
+                SetCartConfigName(cartConfigName);
+            }
+
+            var separationType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE);
+            if (string.IsNullOrWhiteSpace(separationType))
+            {
+                SetSeparationType("none");
+            }
+            else
+            {
+                SetSeparationType(separationType);
+            }
+        }
+
+        private void LoadSeparationTypes()
+        {
+            var separationTypes = classSQLiteTools.GetSepTypeList(false);
+
+            mcombo_SepType.Items.Clear();
+            foreach (var sepType in separationTypes)
+            {
+                mcombo_SepType.Items.Add(sepType);
+            }
         }
 
         private void UpdateCartConfigNames()
         {
             List<string> cartConfigNameList = null;
+            var fullCount = 0;
             try
             {
                 // Get the new cart config names from the cache db
                 cartConfigNameList = classSQLiteTools.GetCartConfigNameList(true);
+                fullCount = cartConfigNameList.Count;
+                cartConfigNameList = classSQLiteTools.GetCartConfigNameList(classCartConfiguration.CartName, false);
             }
             catch (classDatabaseDataException ex)
             {
@@ -457,15 +431,24 @@ namespace LcmsNet.Configuration
             {
                 // No new cart config names were obtained
                 classApplicationLogger.LogError(0, "Cart config name list null when refreshing list");
-                MessageBox.Show("List not updated. Cart config name list from DMS is null");
+                MessageBox.Show(@"List not updated. Cart config name list from DMS is null");
                 return;
             }
 
             if (cartConfigNameList.Count < 1)
             {
-                // No names found in list
-                classApplicationLogger.LogError(0, "No cart config names found when refreshing list");
-                MessageBox.Show("List not updated. No cart config names were found.");
+                if (fullCount < 1)
+                {
+                    // No names found in list
+                    classApplicationLogger.LogError(0, "No cart config names found when refreshing list");
+                    MessageBox.Show(@"List not updated. No cart config names were found.");
+                }
+                else
+                {
+                    // No names in list after cart name filter
+                    classApplicationLogger.LogError(0, "No cart config names found when refreshing list - none match the cart name");
+                    MessageBox.Show(@"List not updated. No cart config names were found - none match the cart name.");
+                }
                 return;
             }
 
@@ -484,7 +467,6 @@ namespace LcmsNet.Configuration
 
         private void UpdateColumnNameLists()
         {
-
             List<string> columnList = null;
             try
             {
@@ -559,6 +541,6 @@ namespace LcmsNet.Configuration
         }
 
         #endregion
-        
+
     }
 }

@@ -836,6 +836,15 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Get the cart config name list for a specific cart
+        /// </summary>
+        /// <returns>List containing cart config names</returns>
+        public static List<string> GetCartConfigNameList(string cartName, bool force)
+        {
+            return GetCartConfigNameList(force).Where(x => x.StartsWith(cartName)).ToList();
+        }
+
+        /// <summary>
         /// Wrapper around generic retrieval method specifically for LC column lists
         /// </summary>
         /// <returns>List containing cart names</returns>

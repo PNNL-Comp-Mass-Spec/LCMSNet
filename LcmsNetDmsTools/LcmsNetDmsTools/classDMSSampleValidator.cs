@@ -193,7 +193,7 @@ namespace LcmsNetDmsTools
                 {
                     errorDetails.Append('\n');
                 }
-                errorDetails.Append("LC Cart Config is not set. Set LC Cart Config. (Config page)");
+                errorDetails.Append("LC Cart Config is not set. Set LC Cart Config.");
             }
 
             return errorDetails.ToString();

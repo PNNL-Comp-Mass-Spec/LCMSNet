@@ -52,6 +52,7 @@ namespace LcmsNetDataClasses
         private string requestName;
         private string datasetName;
         private string datasetType;
+        private string cartConfigName;
         private int block;
         private int runOrder;
         private int batch;
@@ -135,7 +136,11 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Name of cart configuration used for sample run
         /// </summary>
-        public string CartConfigName { get; set; }
+        public string CartConfigName
+        {
+            get { return cartConfigName; }
+            set { this.RaiseAndSetIfChanged(ref cartConfigName, value); }
+        }
 
         /// <summary>
         /// Comment field

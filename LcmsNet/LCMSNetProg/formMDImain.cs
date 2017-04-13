@@ -224,11 +224,7 @@ namespace LcmsNet
             }
 
 
-            m_systemConfiguration = new formSystemConfiguration
-            {
-                ColumnNames = classSQLiteTools.GetColumnList(false),
-                Users = classSQLiteTools.GetUserList(false)
-            };
+            m_systemConfiguration = new formSystemConfiguration();
             m_systemConfiguration.ColumnNameChanged += m_systemConfiguration_ColumnNameChanged;
             classSQLiteTools.GetSepTypeList(false);
 
@@ -936,27 +932,7 @@ namespace LcmsNet
         /// </summary>
         private void ShowCartConfiguration()
         {
-            var cartConfigNames = classSQLiteTools.GetCartConfigNameList(false);
-            m_systemConfiguration.CartConfigNames = cartConfigNames;
-
-            var separationTypes = classSQLiteTools.GetSepTypeList(false);
-            m_systemConfiguration.SeparationTypes = separationTypes;
-
-            var cartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
-            if (!string.IsNullOrWhiteSpace(cartConfigName))
-            {
-                m_systemConfiguration.SetCartConfigName(cartConfigName);
-            }
-
-            var separationType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE);
-            if (string.IsNullOrWhiteSpace(separationType))
-            {
-                m_systemConfiguration.SetSeparationType("none");
-            }
-            else
-            {
-                m_systemConfiguration.SetSeparationType(separationType);
-            }
+            m_systemConfiguration.Show();
             m_systemConfiguration.BringToFront();
         }
 

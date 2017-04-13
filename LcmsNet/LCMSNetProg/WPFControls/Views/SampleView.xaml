@@ -194,6 +194,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Cart Config" MinWidth="40" Visibility="{Binding DataContext.CartConfigColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding CartConfig, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
