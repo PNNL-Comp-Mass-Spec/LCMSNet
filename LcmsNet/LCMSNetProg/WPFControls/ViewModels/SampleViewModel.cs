@@ -49,6 +49,13 @@ namespace LcmsNet.WPFControls.ViewModels
 
         static SampleViewModel()
         {
+#if DEBUG
+            // Avoid exceptions caused from not being able to access program settings
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                return;
+            }
+#endif
             LcMethodOptions = new ReactiveList<classLCMethod>();
             DatasetTypeOptions = new ReactiveList<string>();
             PalTrayOptions = new ReactiveList<string>();
