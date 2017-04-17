@@ -107,7 +107,7 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// The minimum sample volume for this system.
         /// </summary>
-        public const double CONST_MIN_SAMPLE_VOLUME = 5;
+        public const double CONST_MIN_SAMPLE_VOLUME = 0.1;
 
         #region Constructors
 
@@ -165,7 +165,7 @@ namespace LcmsNetDataClasses
             var cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
             var columnName = "";
 
-            if (!string.IsNullOrEmpty(sample.ColumnData?.Name))
+            if (!String.IsNullOrEmpty(sample.ColumnData?.Name))
             {
                 columnName = sample.ColumnData.Name;
             }
@@ -196,9 +196,9 @@ namespace LcmsNetDataClasses
                 "Nov",
                 "Dec"
             };
-            var dateName = string.Format("{0}{1}{2}", now.Day, months[now.Month - 1], now.Year - 2000);
+            var dateName = String.Format("{0}{1}{2}", now.Day, months[now.Month - 1], now.Year - 2000);
             var cartColumn = BuildCartColumnName(sample);
-            var name = string.Format("_{0}_{1}", dateName, cartColumn);
+            var name = String.Format("_{0}_{1}", dateName, cartColumn);
 
             var containsInfoAlready = oldName.Contains(cartColumn);
             if (!containsInfoAlready)
@@ -220,7 +220,7 @@ namespace LcmsNetDataClasses
         {
             var datasetName = sample.DmsData.DatasetName;
             var outFileName =
-                string.Format("{0}_{1}_{2}{3}",
+                String.Format("{0}_{1}_{2}{3}",
                     classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME),
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
                     sample.LCMethod.Start.ToString("MM.dd.yyyy_hh.mm.ss"),
@@ -419,7 +419,16 @@ namespace LcmsNetDataClasses
         public double Volume
         {
             get { return m_volume; }
-            set { this.RaiseAndSetIfChanged(ref m_volume, value); }
+            set
+            {
+                if (value < classCartConfiguration.MinimumVolume)
+                {
+                    // Report property changed to force UI refresh
+                    this.OnPropertyChanged();
+                    return;
+                }
+                this.RaiseAndSetIfChanged(ref m_volume, value);
+            }
         }
 
         /// <summary>

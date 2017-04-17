@@ -64,6 +64,16 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public const int CONST_DEFAULT_VIAL_NUMBER = 0;
 
+        /// <summary>
+        /// Minimum wellplate number.
+        /// </summary>
+        public const int CONST_MIN_WELLPLATE = 1;
+
+        /// <summary>
+        /// Maximum wellplate number.
+        /// </summary>
+        public const int CONST_MAX_WELLPLATE = 1250;
+
         #endregion
 
         #region "Class variables"
@@ -98,7 +108,16 @@ namespace LcmsNetDataClasses.Data
         public int Well
         {
             get { return m_Well; }
-            set { this.RaiseAndSetIfChanged(ref m_Well, value); }
+            set
+            {
+                if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
+                {
+                    // Say it changed, to force UI to refresh to the unchanged value
+                    this.OnPropertyChanged();
+                    return;
+                }
+                this.RaiseAndSetIfChanged(ref m_Well, value);
+            }
         }
 
         /// <summary>

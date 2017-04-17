@@ -388,7 +388,7 @@ namespace LcmsNet.WPFControls.ViewModels
             Samples = new ReactiveList<SampleViewModel>() { ChangeTrackingEnabled = true };
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsChecked))).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.RequestName))).Subscribe(x => UpdateValidCell(x.Sender.Sample));
-            Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsDuplicateRequestName))).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
+            Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.IsDuplicateRequestName))).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
             Samples.ItemChanged.Where(x =>
@@ -396,17 +396,15 @@ namespace LcmsNet.WPFControls.ViewModels
                 var prop = x.PropertyName;
                 var obj = x.Sender;
                 return prop.Equals(nameof(obj.RequestName)) ||
-                       prop.Equals(nameof(obj.BatchID)) ||
-                       prop.Equals(nameof(obj.BlockNumber)) ||
+                       prop.Equals(nameof(obj.Sample.DmsData.Batch)) ||
+                       prop.Equals(nameof(obj.Sample.DmsData.Block)) ||
                        prop.Equals(nameof(obj.ColumnNumber)) ||
-                       prop.Equals(nameof(obj.DatasetType)) ||
+                       prop.Equals(nameof(obj.Sample.DmsData.DatasetType)) ||
                        prop.Equals(nameof(obj.InstrumentMethod)) ||
-                       prop.Equals(nameof(obj.LCMethod)) ||
-                       prop.Equals(nameof(obj.PALTray)) ||
-                       prop.Equals(nameof(obj.PALVial)) ||
-                       prop.Equals(nameof(obj.PALVolume)) ||
-                       prop.Equals(nameof(obj.RunOrder)) ||
-                       prop.Equals(nameof(obj.SequenceNumber));
+                       prop.Equals(nameof(obj.Sample.LCMethod)) ||
+                       prop.Equals(nameof(obj.Sample.PAL.PALTray)) ||
+                       prop.Equals(nameof(obj.Sample.DmsData.RunOrder)) ||
+                       prop.Equals(nameof(obj.Sample.SequenceID));
             }).Throttle(TimeSpan.FromSeconds(.25))
             .Subscribe(x => m_sampleQueue.UpdateSample(x.Sender.Sample));
         }
@@ -1488,7 +1486,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 using (Samples.SuppressChangeNotifications())
                 {
                     Samples.Add(new SampleViewModel(sample));
-                    Samples.Sort((x, y) => x.SequenceNumber.CompareTo(y.SequenceNumber));
+                    Samples.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
                     UpdateRow(sample);
                 }
             }
@@ -1661,7 +1659,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 // Get a list of sequence ID's to remove
                 //
                 var removes = new List<long>();
-                var samplesToRemove = SampleView.SelectedSamples.OrderBy(x => x.SequenceNumber).ToList();
+                var samplesToRemove = SampleView.SelectedSamples.OrderBy(x => x.Sample.SequenceID).ToList();
                 foreach (var sample in samplesToRemove)
                 {
                     removes.Add(sample.Sample.UniqueID);
@@ -1760,7 +1758,7 @@ namespace LcmsNet.WPFControls.ViewModels
             else
             {
                 // This sample is no longer a duplicate, so we need to hit everything that was flagged as a duplicate name
-                foreach (var sample in Samples.Where(x => x.IsDuplicateRequestName))
+                foreach (var sample in Samples.Where(x => x.Sample.IsDuplicateRequestName))
                 {
                     if (sample.Sample.Equals(data))
                     {
@@ -1909,7 +1907,7 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 var lastCompletedRow = 0;
 
-                var lastCompletedSample = Samples.Where(x => !x.CheckboxEnabled).DefaultIfEmpty(null).Last();
+                var lastCompletedSample = Samples.Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
                 if (lastCompletedSample != null)
                 {
                     lastCompletedRow = Samples.IndexOf(lastCompletedSample);

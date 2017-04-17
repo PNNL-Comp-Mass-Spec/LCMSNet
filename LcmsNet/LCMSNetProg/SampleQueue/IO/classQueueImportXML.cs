@@ -141,8 +141,7 @@ namespace LcmsNet.SampleQueue.IO
             };
 
             // Acquisition Method (InstrumentData.MethodName)
-            retData.InstrumentData.MethodName =
-                GetNodeValue(itemNode, "Acquisition/Method");
+            retData.InstrumentData.MethodName = GetNodeValue(itemNode, "Acquisition/Method");
 
             // DMS RequestNumber (DMSData.RequestID)
             retData.DmsData.RequestID = ConvertNullToInt(GetNodeValue(itemNode, "DMS/RequestNumber"));
