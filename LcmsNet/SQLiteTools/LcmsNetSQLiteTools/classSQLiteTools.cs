@@ -841,7 +841,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(string cartName, bool force)
         {
-            return GetCartConfigNameList(force).Where(x => x.StartsWith(cartName)).ToList();
+            return GetCartConfigNameList(force).Where(x => x.StartsWith(cartName, StringComparison.OrdinalIgnoreCase) || x.StartsWith("unknown", StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         /// <summary>
