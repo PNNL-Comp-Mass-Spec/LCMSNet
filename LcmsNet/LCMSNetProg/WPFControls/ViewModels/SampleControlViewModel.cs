@@ -398,12 +398,13 @@ namespace LcmsNet.WPFControls.ViewModels
                 return prop.Equals(nameof(obj.RequestName)) ||
                        prop.Equals(nameof(obj.Sample.DmsData.Batch)) ||
                        prop.Equals(nameof(obj.Sample.DmsData.Block)) ||
-                       prop.Equals(nameof(obj.ColumnNumber)) ||
+                       prop.Equals(nameof(obj.Sample.DmsData.RunOrder)) ||
+                       prop.Equals(nameof(obj.Sample.DmsData.CartConfigName)) ||
                        prop.Equals(nameof(obj.Sample.DmsData.DatasetType)) ||
+                       prop.Equals(nameof(obj.ColumnNumber)) ||
                        prop.Equals(nameof(obj.InstrumentMethod)) ||
                        prop.Equals(nameof(obj.Sample.LCMethod)) ||
                        prop.Equals(nameof(obj.Sample.PAL.PALTray)) ||
-                       prop.Equals(nameof(obj.Sample.DmsData.RunOrder)) ||
                        prop.Equals(nameof(obj.Sample.SequenceID));
             }).Throttle(TimeSpan.FromSeconds(.25))
             .Subscribe(x => m_sampleQueue.UpdateSample(x.Sender.Sample));

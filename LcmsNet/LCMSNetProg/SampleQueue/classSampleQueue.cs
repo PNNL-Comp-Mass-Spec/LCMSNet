@@ -198,11 +198,17 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Stack of waiting queues for undo operations.
         /// </summary>
+        /// <remarks>
+        /// The item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
+        /// </remarks>
         private readonly Stack<List<classSampleData>> m_undoBackWaitingQueue;
 
         /// <summary>
         /// Stack of samples for redo operations
         /// </summary>
+        /// <remarks>
+        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
+        /// </remarks>
         private readonly Stack<List<classSampleData>> m_undoForwardWaitingQueue;
 
         /// <summary>
@@ -781,6 +787,11 @@ namespace LcmsNet.SampleQueue
         /// <param name="backStack">Undo stack</param>
         /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
         /// <param name="queue">Queue to push onto stack.</param>
+        /// <remarks>
+        /// The undo/redo stacks are handled as follows:
+        /// Undo stack: the item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
+        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
+        /// </remarks>
         private void PushQueue(Stack<List<classSampleData>> backStack, Stack<List<classSampleData>> forwardStack,
             List<classSampleData> queue)
         {
@@ -794,6 +805,11 @@ namespace LcmsNet.SampleQueue
         /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
         /// <param name="queue"></param>
         /// <param name="clearForward"></param>
+        /// <remarks>
+        /// The undo/redo stacks are handled as follows:
+        /// Undo stack: the item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
+        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
+        /// </remarks>
         private void PushQueue(Stack<List<classSampleData>> backStack,
             Stack<List<classSampleData>> forwardStack,
             List<classSampleData> queue,
@@ -805,7 +821,6 @@ namespace LcmsNet.SampleQueue
             //
             if (clearForward)
                 forwardStack?.Clear();
-
 
             var pushQueue = new List<classSampleData>();
             foreach (var data in queue)
@@ -849,14 +864,30 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
+        /// Pops the queue from the stack if available
+        /// </summary>
+        /// <param name="backStack">Undo stack to pop queue from.</param>
+        /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
+        private List<classSampleData> PeekQueue(Stack<List<classSampleData>> backStack)
+        {
+            if (backStack.Count < 1)
+                return null;
+
+            IsDirty = true;
+            var newQueue = backStack.Peek();
+
+            return newQueue;
+        }
+
+        /// <summary>
         /// Undoes the most recent operation on the queue.
         /// </summary>
         public void Undo()
         {
-            //
-            // Pop the next item
-            //
-            var queue = PopQueue(m_undoBackWaitingQueue);
+            // Pop the first item on the queue, which is usually identical to the displayed data
+            var cqueue = PopQueue(m_undoBackWaitingQueue);
+            // Get the item on top of the undo queue
+            var queue = PeekQueue(m_undoBackWaitingQueue);
 
             // Then if popping
             if (queue != null && queue.Count > 0)
@@ -911,7 +942,6 @@ namespace LcmsNet.SampleQueue
         /// <param name="handling"></param>
         public void InsertIntoUnusedSamples(List<classSampleData> samples, enumColumnDataHandling handling)
         {
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
             //
             // Overwrite all of the samples that are unused first.
             //
@@ -957,6 +987,8 @@ namespace LcmsNet.SampleQueue
 
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
         }
 
         /// <summary>
@@ -970,8 +1002,6 @@ namespace LcmsNet.SampleQueue
             classColumnData column,
             enumColumnDataHandling handling)
         {
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
-
             //
             // Overwrite all of the samples that are unused first.
             //
@@ -1012,6 +1042,8 @@ namespace LcmsNet.SampleQueue
                 ResequenceQueuedSamples(m_waitingQueue);
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
         }
 
         /// <summary>
@@ -1038,8 +1070,6 @@ namespace LcmsNet.SampleQueue
             enumColumnDataHandling distributeSamplesEvenlyAcrossColumns)
         {
             var added = false;
-
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
 
             //
             // Here we add to the waiting queue.
@@ -1104,6 +1134,9 @@ namespace LcmsNet.SampleQueue
                     SamplesAdded?.Invoke(this, args, REPLACE_EXISTING_ROWS);
                 }
             }
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+
             return added;
         }
 
@@ -1219,8 +1252,6 @@ namespace LcmsNet.SampleQueue
             //
             var removed = RemoveSample(m_completeQueue, uniqueIDs);
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
-
             //
             // First we figure out what samples we need to remove based on their
             // Unique ID's.  Then we remove them.
@@ -1287,6 +1318,9 @@ namespace LcmsNet.SampleQueue
 
                 SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+
             return removed;
         }
 
@@ -1297,8 +1331,6 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if any samples were removed.  False if not.</returns>
         public bool RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
-
             //
             // Find the unique id's of all the samples that are unused.
             //
@@ -1311,6 +1343,7 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
+            var ret = false;
             //
             // Removes the samples from this list, AND! resorts the columns.
             // This is important for this method because it means that
@@ -1318,9 +1351,12 @@ namespace LcmsNet.SampleQueue
             //
             if (uniqueList.Count > 0)
             {
-                return RemoveSample(uniqueList, resortColumns);
+                ret = RemoveSample(uniqueList, resortColumns);
             }
-            return false;
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+
+            return ret;
         }
 
         /// <summary>
@@ -1331,8 +1367,6 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if any samples were removed.  False if not.</returns>
         public bool RemoveUnusedSamples(classColumnData column, enumColumnDataHandling resortColumns)
         {
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
-
             //
             // Find the unique id's of all the samples that are unused.
             //
@@ -1345,6 +1379,7 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
+            var ret = false;
             //
             // Removes the samples from this list, AND DOES NOT! Resort the columns.
             // This is important for this method because it means that
@@ -1352,9 +1387,12 @@ namespace LcmsNet.SampleQueue
             //
             if (uniqueList.Count > 0)
             {
-                return RemoveSample(uniqueList, resortColumns);
+                ret = RemoveSample(uniqueList, resortColumns);
             }
-            return false;
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+
+            return ret;
         }
 
         /// <summary>
@@ -1369,8 +1407,6 @@ namespace LcmsNet.SampleQueue
 
             if (m_waitingQueue.Count < 1)
                 return;
-
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
 
             var baseOffset = m_waitingQueue[0].SequenceID;
             foreach (var sample in newOrders)
@@ -1389,6 +1425,8 @@ namespace LcmsNet.SampleQueue
 
             //TODO: Re-order by only sending the ones that changed.
             SamplesReordered?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
         }
 
         /// <summary>
@@ -1552,8 +1590,6 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         public void UpdateSample(classSampleData data)
         {
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
-
             //
             // Find the sample
             //
@@ -1570,6 +1606,8 @@ namespace LcmsNet.SampleQueue
                 //
                 SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
         }
 
         /// <summary>
@@ -1578,8 +1616,6 @@ namespace LcmsNet.SampleQueue
         /// <param name="samples"></param>
         public void UpdateSamples(List<classSampleData> samples)
         {
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
-
             var updated = false;
             foreach (var sample in samples)
             {
@@ -1606,6 +1642,8 @@ namespace LcmsNet.SampleQueue
             {
                 SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
+
+            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
         }
 
         #endregion
