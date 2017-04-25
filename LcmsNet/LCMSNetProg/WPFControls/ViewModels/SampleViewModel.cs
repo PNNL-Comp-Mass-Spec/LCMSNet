@@ -151,6 +151,17 @@ namespace LcmsNet.WPFControls.ViewModels
             this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x => this.SetRowColors());
 
             this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x => this.SetRowColors());
+
+            // Extras to trigger the collection monitor when nested properties change
+            this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.RunOrder).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.Batch).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.CartConfigName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.PAL.PALTray).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.PAL.Well).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.SequenceID).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            //this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
         }
 
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => LcMethodOptions;
