@@ -33,6 +33,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" IsEnabled="False" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -40,20 +41,26 @@
             <!-- Borders to show gridlines.... -->
             <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
             <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <!--
             <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            -->
             <Border Grid.Column="3" Grid.Row="0" Grid.RowSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
             <Border Grid.Column="4" Grid.Row="0" Grid.RowSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
-            <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" BorderBrush="DarkGray" BorderThickness="0.3"/>
-            <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" BorderBrush="DarkGray" BorderThickness="0.3"/>
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" BorderBrush="DarkGray" BorderThickness="0.3"/>
-            <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="5" BorderBrush="DarkGray" BorderThickness="0.3"/>
-            <Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="5" BorderBrush="DarkGray" BorderThickness="0.3"/>
-            <Border Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="5" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="5" Grid.Row="0" Grid.RowSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
+            <Border Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="6" BorderBrush="DarkGray" BorderThickness="0.3"/>
 
             <Label Grid.Column="1" Grid.Row="0" Margin="3,0">LC Method</Label>
+            <!--
             <Label Grid.Column="2" Grid.Row="0" Margin="3,0">Instrument Acquisition Method</Label>
+            -->
             <Label Grid.Column="3" Grid.Row="0" Margin="3,0">Volume</Label>
             <Label Grid.Column="4" Grid.Row="0" Margin="3,0">Dataset Type</Label>
+            <Label Grid.Column="5" Grid.Row="0" Margin="3,0">Cart Config Name</Label>
             <CheckBox Grid.Column="0" Grid.Row="1" Margin="3" IsChecked="{Binding ApplyGroup1}" Width="55" TabIndex="2">Apply</CheckBox>
             <CheckBox Grid.Column="0" Grid.Row="2" Margin="3" IsChecked="{Binding ApplyGroup2}" Width="55" TabIndex="8">Apply</CheckBox>
             <CheckBox Grid.Column="0" Grid.Row="3" Margin="3" IsChecked="{Binding ApplyGroup3}" Width="55" TabIndex="14">Apply</CheckBox>
@@ -62,10 +69,12 @@
             <ComboBox Grid.Column="1" Grid.Row="2" Margin="3" SelectedItem="{Binding LCMethodGroup2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup2}" Width="280" TabIndex="9" />
             <ComboBox Grid.Column="1" Grid.Row="3" Margin="3" SelectedItem="{Binding LCMethodGroup3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup3}" Width="280" TabIndex="15" />
             <ComboBox Grid.Column="1" Grid.Row="4" Margin="3" SelectedItem="{Binding LCMethodGroup4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup4}" Width="280" TabIndex="21" />
+            <!--
             <ComboBox Grid.Column="2" Grid.Row="1" Margin="3" SelectedItem="{Binding InstrumentMethodGroup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup1}" Width="225" TabIndex="4" />
             <ComboBox Grid.Column="2" Grid.Row="2" Margin="3" SelectedItem="{Binding InstrumentMethodGroup2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup2}" Width="225" TabIndex="10" />
             <ComboBox Grid.Column="2" Grid.Row="3" Margin="3" SelectedItem="{Binding InstrumentMethodGroup3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup3}" Width="225" TabIndex="16" />
             <ComboBox Grid.Column="2" Grid.Row="4" Margin="3" SelectedItem="{Binding InstrumentMethodGroup4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding ApplyGroup4}" Width="225" TabIndex="22" />
+            -->
             <xctk:DoubleUpDown Grid.Column="3" Grid.Row="1" Margin="3" Value="{Binding VolumeGroup1}" Minimum="{Binding VolumeMinimum}" Increment="0.1" DefaultValue="7" FormatString="F1" AllowTextInput="True" ClipValueToMinMax="True" IsEnabled="{Binding ApplyGroup1}" Width="60" TabIndex="5" />
             <xctk:DoubleUpDown Grid.Column="3" Grid.Row="2" Margin="3" Value="{Binding VolumeGroup2}" Minimum="{Binding VolumeMinimum}" Increment="0.1" DefaultValue="7" FormatString="F1" AllowTextInput="True" ClipValueToMinMax="True" IsEnabled="{Binding ApplyGroup2}" Width="60" TabIndex="11" />
             <xctk:DoubleUpDown Grid.Column="3" Grid.Row="3" Margin="3" Value="{Binding VolumeGroup3}" Minimum="{Binding VolumeMinimum}" Increment="0.1" DefaultValue="7" FormatString="F1" AllowTextInput="True" ClipValueToMinMax="True" IsEnabled="{Binding ApplyGroup3}" Width="60" TabIndex="17" />
@@ -74,6 +83,10 @@
             <ComboBox Grid.Column="4" Grid.Row="2" Margin="3" SelectedItem="{Binding DatasetTypeGroup2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup2}" Width="175" TabIndex="12" />
             <ComboBox Grid.Column="4" Grid.Row="3" Margin="3" SelectedItem="{Binding DatasetTypeGroup3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup3}" Width="175" TabIndex="18" />
             <ComboBox Grid.Column="4" Grid.Row="4" Margin="3" SelectedItem="{Binding DatasetTypeGroup4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup4}" Width="175" TabIndex="24" />
+            <ComboBox Grid.Column="5" Grid.Row="1" Margin="3" SelectedItem="{Binding CartConfigGroup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup1}" Width="225" TabIndex="4" />
+            <ComboBox Grid.Column="5" Grid.Row="2" Margin="3" SelectedItem="{Binding CartConfigGroup2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup2}" Width="225" TabIndex="10" />
+            <ComboBox Grid.Column="5" Grid.Row="3" Margin="3" SelectedItem="{Binding CartConfigGroup3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup3}" Width="225" TabIndex="16" />
+            <ComboBox Grid.Column="5" Grid.Row="4" Margin="3" SelectedItem="{Binding CartConfigGroup4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup4}" Width="225" TabIndex="22" />
             <Button Grid.Column="1" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyLCMethodCommand}" TabIndex="26" >
                 <Grid>
                     <Grid.RowDefinitions>
@@ -84,6 +97,7 @@
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
+            <!--
             <Button Grid.Column="2" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyInstrumentMethodCommand}" TabIndex="27" >
                 <Grid>
                     <Grid.RowDefinitions>
@@ -94,6 +108,7 @@
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
+            -->
             <Button Grid.Column="3" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyVolumeCommand}" TabIndex="28" >
                 <Grid>
                     <Grid.RowDefinitions>
@@ -105,6 +120,16 @@
                 </Grid>
             </Button>
             <Button Grid.Column="4" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyDatasetTypeCommand}" TabIndex="29" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" MinHeight="15" />
+                    </Grid.RowDefinitions>
+                    <Image Source="/WPFControls/Image/FillDown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
+                </Grid>
+            </Button>
+            <Button Grid.Column="5" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyCartConfigCommand}" TabIndex="30" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />

@@ -33,6 +33,10 @@ namespace LcmsNet.WPFControls.ViewModels
         private string datasetTypeGroup2;
         private string datasetTypeGroup3;
         private string datasetTypeGroup4;
+        private string cartConfigGroup1;
+        private string cartConfigGroup2;
+        private string cartConfigGroup3;
+        private string cartConfigGroup4;
 
         #endregion
 
@@ -158,11 +162,37 @@ namespace LcmsNet.WPFControls.ViewModels
             set { this.RaiseAndSetIfChanged(ref datasetTypeGroup4, value); }
         }
 
+        public string CartConfigGroup1
+        {
+            get { return cartConfigGroup1; }
+            set { this.RaiseAndSetIfChanged(ref cartConfigGroup1, value); }
+        }
+
+        public string CartConfigGroup2
+        {
+            get { return cartConfigGroup2; }
+            set { this.RaiseAndSetIfChanged(ref cartConfigGroup2, value); }
+        }
+
+        public string CartConfigGroup3
+        {
+            get { return cartConfigGroup3; }
+            set { this.RaiseAndSetIfChanged(ref cartConfigGroup3, value); }
+        }
+
+        public string CartConfigGroup4
+        {
+            get { return cartConfigGroup4; }
+            set { this.RaiseAndSetIfChanged(ref cartConfigGroup4, value); }
+        }
+
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions { get; private set; }
 
         public ReactiveList<string> InstrumentMethodComboBoxOptions { get; private set; }
 
         public ReactiveList<string> DatasetTypeComboBoxOptions { get; private set; }
+
+        public ReactiveList<string> CartConfigComboBoxOptions { get; private set; }
 
         public double VolumeMinimum
         {
@@ -177,6 +207,7 @@ namespace LcmsNet.WPFControls.ViewModels
         public ReactiveCommand ApplyInstrumentMethodCommand { get; private set; }
         public ReactiveCommand ApplyVolumeCommand { get; private set; }
         public ReactiveCommand ApplyDatasetTypeCommand { get; private set; }
+        public ReactiveCommand ApplyCartConfigCommand { get; private set; }
         public ReactiveCommand ApplyAllCommand { get; private set; }
         public ReactiveCommand CloseWindowCommand { get; private set; }
 
@@ -186,6 +217,7 @@ namespace LcmsNet.WPFControls.ViewModels
             ApplyInstrumentMethodCommand = ReactiveCommand.Create(() => this.InstrumentMethodFillDown());
             ApplyVolumeCommand = ReactiveCommand.Create(() => this.VolumeFillDown());
             ApplyDatasetTypeCommand = ReactiveCommand.Create(() => this.DatasetTypeFillDown());
+            ApplyCartConfigCommand = ReactiveCommand.Create(() => this.CartConfigFillDown());
             ApplyAllCommand = ReactiveCommand.Create(() => this.ApplyAllFillDown());
             CloseWindowCommand = ReactiveCommand.Create(() => this.CloseWindow());
         }
@@ -210,6 +242,7 @@ namespace LcmsNet.WPFControls.ViewModels
             LcMethodComboBoxOptions = SampleViewModel.LcMethodOptions;
             InstrumentMethodComboBoxOptions = SampleViewModel.InstrumentMethodOptions;
             DatasetTypeComboBoxOptions = SampleViewModel.DatasetTypeOptions;
+            CartConfigComboBoxOptions = SampleViewModel.CartConfigOptions;
 
             SetupCommands();
 
@@ -296,14 +329,38 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
+        private void EnsureCartConfigComboBoxValues()
+        {
+            if (CartConfigComboBoxOptions.Count > 0)
+            {
+                if (string.IsNullOrWhiteSpace(CartConfigGroup1))
+                {
+                    CartConfigGroup1 = CartConfigComboBoxOptions[0];
+                }
+                if (string.IsNullOrWhiteSpace(CartConfigGroup2))
+                {
+                    CartConfigGroup2 = CartConfigComboBoxOptions[0];
+                }
+                if (string.IsNullOrWhiteSpace(CartConfigGroup3))
+                {
+                    CartConfigGroup3 = CartConfigComboBoxOptions[0];
+                }
+                if (string.IsNullOrWhiteSpace(CartConfigGroup4))
+                {
+                    CartConfigGroup4 = CartConfigComboBoxOptions[0];
+                }
+            }
+        }
+
         /// <summary>
         /// Make sure a selected value will be shown for each combobox. Can be used for defaults and error checking (doesn't replace set values)
         /// </summary>
         public void EnsureItemsAreSelected()
         {
             EnsureLCMethodComboBoxValues();
-            EnsureInstrumentMethodComboBoxValues();
+            //EnsureInstrumentMethodComboBoxValues(); // commented out in the view
             EnsureDatasetTypeComboBoxValues();
+            EnsureCartConfigComboBoxValues();
         }
 
         /// <summary>
@@ -401,33 +458,33 @@ namespace LcmsNet.WPFControls.ViewModels
         private void VolumeFillDown()
         {
             EnsureItemsAreSelected();
-            var methods = new List<double>();
+            var volumes = new List<double>();
             if (ApplyGroup1)
             {
-                methods.Add(VolumeGroup1);
+                volumes.Add(VolumeGroup1);
             }
             if (ApplyGroup2)
             {
-                methods.Add(VolumeGroup2);
+                volumes.Add(VolumeGroup2);
             }
             if (ApplyGroup3)
             {
-                methods.Add(VolumeGroup3);
+                volumes.Add(VolumeGroup3);
             }
             if (ApplyGroup4)
             {
-                methods.Add(VolumeGroup4);
+                volumes.Add(VolumeGroup4);
             }
-            if (methods.Count < 1)
+            if (volumes.Count < 1)
                 return;
 
             var i = 0;
             foreach (var sample in Samples)
             {
-                sample.Volume = methods[i];
+                sample.Volume = volumes[i];
                 i++;
                 // mod?
-                if (i >= methods.Count)
+                if (i >= volumes.Count)
                     i = 0;
             }
         }
@@ -438,33 +495,70 @@ namespace LcmsNet.WPFControls.ViewModels
         private void DatasetTypeFillDown()
         {
             EnsureItemsAreSelected();
-            var methods = new List<string>();
+            var datasetTypes = new List<string>();
             if (ApplyGroup1)
             {
-                methods.Add(DatasetTypeGroup1);
+                datasetTypes.Add(DatasetTypeGroup1);
             }
             if (ApplyGroup2)
             {
-                methods.Add(DatasetTypeGroup2);
+                datasetTypes.Add(DatasetTypeGroup2);
             }
             if (ApplyGroup3)
             {
-                methods.Add(DatasetTypeGroup3);
+                datasetTypes.Add(DatasetTypeGroup3);
             }
             if (ApplyGroup4)
             {
-                methods.Add(DatasetTypeGroup4);
+                datasetTypes.Add(DatasetTypeGroup4);
             }
-            if (methods.Count < 1)
+            if (datasetTypes.Count < 1)
                 return;
 
             var i = 0;
             foreach (var sample in Samples)
             {
-                sample.DmsData.DatasetType = methods[i];
+                sample.DmsData.DatasetType = datasetTypes[i];
                 i++;
                 // mod?
-                if (i >= methods.Count)
+                if (i >= datasetTypes.Count)
+                    i = 0;
+            }
+        }
+
+        /// <summary>
+        /// Fill down the dataset type
+        /// </summary>
+        private void CartConfigFillDown()
+        {
+            EnsureItemsAreSelected();
+            var cartConfigs = new List<string>();
+            if (ApplyGroup1)
+            {
+                cartConfigs.Add(CartConfigGroup1);
+            }
+            if (ApplyGroup2)
+            {
+                cartConfigs.Add(CartConfigGroup2);
+            }
+            if (ApplyGroup3)
+            {
+                cartConfigs.Add(CartConfigGroup3);
+            }
+            if (ApplyGroup4)
+            {
+                cartConfigs.Add(CartConfigGroup4);
+            }
+            if (cartConfigs.Count < 1)
+                return;
+
+            var i = 0;
+            foreach (var sample in Samples)
+            {
+                sample.DmsData.CartConfigName = cartConfigs[i];
+                i++;
+                // mod?
+                if (i >= cartConfigs.Count)
                     i = 0;
             }
         }
@@ -475,11 +569,12 @@ namespace LcmsNet.WPFControls.ViewModels
         private void ApplyAllFillDown()
         {
             // This is lazy programming....
-            InstrumentMethodFillDown();
+            //InstrumentMethodFillDown(); // commented out in the view.
             EnsureItemsAreSelected();
             LCMethodFillDown();
             VolumeFillDown();
             DatasetTypeFillDown();
+            CartConfigFillDown();
         }
 
         private void CloseWindow()
