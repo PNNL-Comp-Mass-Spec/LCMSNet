@@ -249,7 +249,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
             try
             {
-                mValidator = new classDMSSampleValidator(SampleViewModel.CartConfigOptions);
+                mValidator = new classDMSSampleValidator(SampleQueueComboBoxOptions.CartConfigOptions);
                 Initialize(dmsView, sampleQueue);
             }
             catch (Exception ex)
@@ -587,11 +587,11 @@ namespace LcmsNet.WPFControls.ViewModels
             if (method == null)
                 return false;
 
-            foreach (var o in SampleViewModel.LcMethodOptions)
+            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
             {
                 if (o.Equals(method))
                 {
-                    SampleViewModel.LcMethodOptions.Remove(method);
+                    SampleQueueComboBoxOptions.LcMethodOptions.Remove(method);
                     break;
                 }
             }
@@ -606,7 +606,7 @@ namespace LcmsNet.WPFControls.ViewModels
         private void RemoveMethodName(string methodName)
         {
             classLCMethod oFound = null;
-            foreach (var o in SampleViewModel.LcMethodOptions)
+            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
             {
                 var name = o.ToString();
                 if (methodName == name)
@@ -616,7 +616,7 @@ namespace LcmsNet.WPFControls.ViewModels
             }
             if (oFound != null)
             {
-                SampleViewModel.LcMethodOptions.Remove(oFound);
+                SampleQueueComboBoxOptions.LcMethodOptions.Remove(oFound);
             }
         }
 
@@ -627,7 +627,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <returns></returns>
         private bool ContainsMethod(string methodName)
         {
-            foreach (var o in SampleViewModel.LcMethodOptions)
+            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
             {
                 var name = o.ToString();
                 if (methodName == name)
@@ -681,7 +681,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
             // Find the method if name exists
             var found = false;
-            foreach (var o in SampleViewModel.LcMethodOptions)
+            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
             {
                 var name = o.ToString();
                 if (name == method.Name)
@@ -694,18 +694,18 @@ namespace LcmsNet.WPFControls.ViewModels
             // Update or add the method
             if (found == false)
             {
-                SampleViewModel.LcMethodOptions.Add(method);
+                SampleQueueComboBoxOptions.LcMethodOptions.Add(method);
                 // If we just added a sample, we want to make sure the samples have a method selected.
-                if (SampleViewModel.LcMethodOptions.Count == 1)
+                if (SampleQueueComboBoxOptions.LcMethodOptions.Count == 1)
                 {
                 }
             }
             else
             {
                 // Here we update the method that was in the list, with the new one that was added/updated
-                var indexOf = SampleViewModel.LcMethodOptions.IndexOf(method);
+                var indexOf = SampleQueueComboBoxOptions.LcMethodOptions.IndexOf(method);
                 if (indexOf >= 0)
-                    SampleViewModel.LcMethodOptions[indexOf] = method;
+                    SampleQueueComboBoxOptions.LcMethodOptions[indexOf] = method;
             }
 
             return true;
@@ -886,11 +886,11 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         private void ShowAutoSamplerTrays()
         {
-            SampleViewModel.PalTrayOptions.Clear();
+            SampleQueueComboBoxOptions.PalTrayOptions.Clear();
 
             foreach (var tray in m_autosamplerTrays)
             {
-                SampleViewModel.PalTrayOptions.Add(tray);
+                SampleQueueComboBoxOptions.PalTrayOptions.Add(tray);
             }
         }
 
@@ -899,11 +899,11 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         private void ShowInstrumentMethods()
         {
-            SampleViewModel.InstrumentMethodOptions.Clear();
+            SampleQueueComboBoxOptions.InstrumentMethodOptions.Clear();
 
             foreach (var tray in m_instrumentMethods)
             {
-                SampleViewModel.InstrumentMethodOptions.Add(tray);
+                SampleQueueComboBoxOptions.InstrumentMethodOptions.Add(tray);
             }
         }
 
@@ -912,7 +912,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         private void ShowLCSeparationMethods()
         {
-            SampleViewModel.LcMethodOptions.Clear();
+            SampleQueueComboBoxOptions.LcMethodOptions.Clear();
 
             foreach (var method in classLCMethodManager.Manager.Methods.Values)
             {
@@ -926,7 +926,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="method"></param>
         private void AddLCMethod(classLCMethod method)
         {
-            SampleViewModel.LcMethodOptions.Add(method);
+            SampleQueueComboBoxOptions.LcMethodOptions.Add(method);
         }
 
         #endregion

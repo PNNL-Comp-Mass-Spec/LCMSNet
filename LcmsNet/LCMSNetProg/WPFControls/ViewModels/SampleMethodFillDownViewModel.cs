@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using LcmsNet.SampleQueue;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Method;
@@ -186,13 +187,12 @@ namespace LcmsNet.WPFControls.ViewModels
             set { this.RaiseAndSetIfChanged(ref cartConfigGroup4, value); }
         }
 
-        public ReactiveList<classLCMethod> LcMethodComboBoxOptions { get; private set; }
-
-        public ReactiveList<string> InstrumentMethodComboBoxOptions { get; private set; }
-
-        public ReactiveList<string> DatasetTypeComboBoxOptions { get; private set; }
-
-        public ReactiveList<string> CartConfigComboBoxOptions { get; private set; }
+        // Local "wrappers" around the static class options, for data binding purposes
+        public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
+        public ReactiveList<string> InstrumentMethodComboBoxOptions => SampleQueueComboBoxOptions.InstrumentMethodOptions;
+        public ReactiveList<string> DatasetTypeComboBoxOptions => SampleQueueComboBoxOptions.DatasetTypeOptions;
+        public ReactiveList<string> CartConfigComboBoxOptions => SampleQueueComboBoxOptions.CartConfigOptions;
+        public string CartConfigError => SampleQueueComboBoxOptions.CartConfigOptionsError;
 
         public double VolumeMinimum
         {
@@ -239,10 +239,6 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 return;
             }
-            LcMethodComboBoxOptions = SampleViewModel.LcMethodOptions;
-            InstrumentMethodComboBoxOptions = SampleViewModel.InstrumentMethodOptions;
-            DatasetTypeComboBoxOptions = SampleViewModel.DatasetTypeOptions;
-            CartConfigComboBoxOptions = SampleViewModel.CartConfigOptions;
 
             SetupCommands();
 
