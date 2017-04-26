@@ -249,7 +249,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
             try
             {
-                mValidator = new classDMSSampleValidator();
+                mValidator = new classDMSSampleValidator(SampleViewModel.CartConfigOptions);
                 Initialize(dmsView, sampleQueue);
             }
             catch (Exception ex)

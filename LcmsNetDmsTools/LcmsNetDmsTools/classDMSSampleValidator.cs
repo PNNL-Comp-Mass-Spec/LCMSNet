@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 // Deprecated: using System.ComponentModel.Composition;
 using LcmsNetDataClasses;
@@ -39,6 +40,11 @@ namespace LcmsNetDmsTools
         /// LC Cart Config is not set
         /// </summary>
         LCCartConfigNotSet = 16,
+
+        /// <summary>
+        /// LC Cart Config is not set
+        /// </summary>
+        LCCartConfigNotValidForCart = 32,
     }
 
     /// <summary>
@@ -50,6 +56,16 @@ namespace LcmsNetDmsTools
     // Deprecated export: [ExportMetadata("RequiredDMSToolVersion", "1.0")]
     public class classDMSSampleValidator
     {
+        public List<string> CartConfigNamesValidForCart = new List<string>();
+
+        public classDMSSampleValidator()
+        {
+        }
+
+        public classDMSSampleValidator(IEnumerable<string> cartConfigNamesValidForCart)
+        {
+            CartConfigNamesValidForCart.AddRange(cartConfigNamesValidForCart);
+        }
 
         /// <summary>
         /// Indicates this item is tied to a EMSL user proposal that is not tied to a request in DMS.
@@ -93,6 +109,10 @@ namespace LcmsNetDmsTools
                 return false;
             }
             if (string.IsNullOrWhiteSpace(data.CartConfigName))
+            {
+                return false;
+            }
+            if (!CartConfigNamesValidForCart.Contains(data.CartConfigName))
             {
                 return false;
             }
@@ -141,6 +161,11 @@ namespace LcmsNetDmsTools
             if (string.IsNullOrWhiteSpace(data.CartConfigName))
             {
                 errors |= DMSSampleValidatorErrors.LCCartConfigNotSet;
+            }
+            else if (!CartConfigNamesValidForCart.Contains(data.CartConfigName))
+            {
+                // Don't want to add this error if the LCCartConfig is not set at all
+                errors |= DMSSampleValidatorErrors.LCCartConfigNotValidForCart;
             }
 
             // No errors; sample is valid
@@ -194,6 +219,14 @@ namespace LcmsNetDmsTools
                     errorDetails.Append('\n');
                 }
                 errorDetails.Append("LC Cart Config is not set. Set LC Cart Config.");
+            }
+            if (errors.HasFlag(DMSSampleValidatorErrors.LCCartConfigNotValidForCart))
+            {
+                if (errorDetails.Length > 0)
+                {
+                    errorDetails.Append('\n');
+                }
+                errorDetails.Append("LC Cart Config is not valid for this cart. Change LC Cart Config.");
             }
 
             return errorDetails.ToString();
