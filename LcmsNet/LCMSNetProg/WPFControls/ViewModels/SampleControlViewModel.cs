@@ -1493,6 +1493,10 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 using (Samples.SuppressChangeNotifications())
                 {
+                    if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
+                    {
+                        sample.DmsData.CartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
+                    }
                     Samples.Add(new SampleViewModel(sample));
                     Samples.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
                     UpdateRow(sample);
