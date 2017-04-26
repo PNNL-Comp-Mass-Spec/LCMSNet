@@ -12,6 +12,7 @@ using LcmsNet.Method;
 using LcmsNet.Method.Forms;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.Forms;
+using LcmsNet.WPFControls.Views;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Data;
@@ -186,7 +187,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Fill down form for updating lots of samples at once.
         /// </summary>
-        private formMethodFillDown m_filldown;
+        private SampleMethodFillDownViewModel fillDownViewModel;
 
         /// <summary>
         /// Tray and vial assignment form.
@@ -355,7 +356,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // Fill-down form for batch sample editing And Tray Vial assignmenet
             //
-            m_filldown = new formMethodFillDown(classLCMethodManager.Manager, new List<string>());
+            fillDownViewModel = new SampleMethodFillDownViewModel();
             m_trayVial = new formTrayVialAssignment();
 
             // Old: mdataGrid_samples.ContextMenuStrip = mcontextMenu_options;
@@ -1044,23 +1045,29 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // Create a new fill down form.
             //
+            // TODO: This is the icon shown in the top left of the window
             // TODO: if (ParentForm != null)
             // TODO:     m_filldown.Icon = ParentForm.Icon;
 
-            m_filldown.InitForm(samples);
+            fillDownViewModel.Samples = samples;
+            fillDownViewModel.EnsureItemsAreSelected();
+            var dialog = new SampleMethodFillDownView();
+            dialog.DataContext = fillDownViewModel;
 
-            m_filldown.StartPosition = FormStartPosition.CenterScreen;
-            if (m_filldown.ShowDialog() == DialogResult.OK)
-            {
-                //
-                // Then update the sample queue...
-                //
-                using (Samples.SuppressChangeNotifications())
-                {
-                    var newSamples = m_filldown.GetModifiedSampleList();
-                    m_sampleQueue.UpdateSamples(newSamples);
-                }
-            }
+            dialog.Show();
+
+            //fillDownViewModel.StartPosition = FormStartPosition.CenterScreen;
+            //if (fillDownViewModel.ShowDialog() == DialogResult.OK)
+            //{
+            //    //
+            //    // Then update the sample queue...
+            //    //
+            //    using (Samples.SuppressChangeNotifications())
+            //    {
+            //        var newSamples = fillDownViewModel.GetModifiedSampleList();
+            //        m_sampleQueue.UpdateSamples(newSamples);
+            //    }
+            //}
 
             // Re-select the first sample
             SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));

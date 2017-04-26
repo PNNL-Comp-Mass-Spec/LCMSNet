@@ -133,6 +133,12 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\classSystemData.cs" />
@@ -561,12 +567,16 @@
     <Compile Include="WPFControls\ImageUtils.cs" />
     <Compile Include="WPFControls\ViewModels\SampleControlViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleManagerViewModel.cs" />
+    <Compile Include="WPFControls\ViewModels\SampleMethodFillDownViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleViewModel.cs" />
     <Compile Include="WPFControls\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPFControls\Views\SampleManagerView.xaml.cs">
       <DependentUpon>SampleManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFControls\Views\SampleMethodFillDownWindow.xaml.cs">
+      <DependentUpon>SampleMethodFillDownWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPFControls\Views\SampleView.xaml.cs">
       <DependentUpon>SampleView.xaml</DependentUpon>
@@ -1088,6 +1098,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPFControls\Views\SampleManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPFControls\Views\SampleMethodFillDownWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
