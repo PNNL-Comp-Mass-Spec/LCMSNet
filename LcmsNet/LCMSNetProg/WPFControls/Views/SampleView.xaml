@@ -15,7 +15,15 @@
         </Grid.Resources>
         <!-- The following is a dummy element to allow control over column visibility via the parent datacontext. -->
         <FrameworkElement x:Name="BaseDC" />
-        <DataGrid AutoGenerateColumns="False" x:Name="SampleGrid" ItemsSource="{Binding Samples}" CanUserResizeRows="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" SelectionMode="Extended" RowHeaderWidth="20" ColumnWidth="SizeToCells" d:DataContext="{d:DesignInstance {x:Type viewModels:SampleViewModel}, IsDesignTimeCreatable=True}" FrozenColumnCount="5">
+        <DataGrid AutoGenerateColumns="False" x:Name="SampleGrid"
+                  d:DataContext="{d:DesignInstance {x:Type viewModels:SampleViewModel}, IsDesignTimeCreatable=True}"
+                  ItemsSource="{Binding Samples}"
+                  CanUserResizeRows="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserAddRows="False"
+                  SelectionMode="Extended"
+                  SelectedItem="{Binding SelectedSample, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectionChanged="SampleGrid_OnSelectionChanged"
+                  RowHeaderWidth="20" ColumnWidth="SizeToCells"
+                  FrozenColumnCount="5">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding DataContext.RemoveSelectedCommand, Source={x:Reference BaseDC}}" />
             </DataGrid.InputBindings>

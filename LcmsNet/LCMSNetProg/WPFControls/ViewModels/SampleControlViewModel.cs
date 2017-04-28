@@ -35,6 +35,16 @@ namespace LcmsNet.WPFControls.ViewModels
 
         private readonly classDMSSampleValidator mValidator;
 
+        private SampleViewModel selectedSample;
+
+        public SampleViewModel SelectedSample
+        {
+            get { return selectedSample; }
+            set { this.RaiseAndSetIfChanged(ref selectedSample, value); }
+        }
+
+        public ReactiveList<SampleViewModel> SelectedSamples { get; private set; }
+
         /// <summary>
         /// Edits the selected samples in the sample view.
         /// </summary>
@@ -76,7 +86,7 @@ namespace LcmsNet.WPFControls.ViewModels
             m_sampleQueue.UpdateSamples(samples);
 
             // Re-select the first sample
-            SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
@@ -344,6 +354,8 @@ namespace LcmsNet.WPFControls.ViewModels
 
             DMSView = dmsView;
             SampleQueue = sampleQueue;
+
+            SelectedSamples = new ReactiveList<SampleViewModel>();
 
             //
             // Background colors
@@ -957,7 +969,7 @@ namespace LcmsNet.WPFControls.ViewModels
             }
 
             // Re-select the first sample
-            SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         public void ResetDatasetName()
@@ -983,7 +995,7 @@ namespace LcmsNet.WPFControls.ViewModels
             }
 
             // Re-select the first sample
-            SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         private void EditTrayAndVial()
@@ -1013,13 +1025,14 @@ namespace LcmsNet.WPFControls.ViewModels
             {
                 using (Samples.SuppressChangeNotifications())
                 {
+                    // TODO: Is this copy/update still needed?
                     samples = m_trayVial.SampleList;
                     m_sampleQueue.UpdateSamples(samples);
                 }
             }
 
             // Re-select the first sample
-            SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
@@ -1070,7 +1083,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //}
 
             // Re-select the first sample
-            SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
@@ -1159,7 +1172,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 }
 
                 // Re-select the first sample
-                SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
+                SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
             }
         }
 
@@ -1357,7 +1370,7 @@ namespace LcmsNet.WPFControls.ViewModels
             var samples = new List<classSampleData>();
             try
             {
-                foreach (var sample in SampleView.SelectedSamples)
+                foreach (var sample in SelectedSamples)
                 {
                     samples.Add(sample.Sample);
                 }
@@ -1383,7 +1396,7 @@ namespace LcmsNet.WPFControls.ViewModels
             if (samples.Count > 0)
             {
                 // Re-select the first sample
-                SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+                SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
             }
         }
 
@@ -1470,8 +1483,8 @@ namespace LcmsNet.WPFControls.ViewModels
                 {
                     if (sample.Sample.DmsData.RequestName.Equals(newData.DmsData.RequestName))
                     {
-                        SampleView.SampleGrid.ScrollIntoView(sample);
-                        SampleView.SelectedSample = sample;
+                        ScrollIntoView(sample);
+                        SelectedSample = sample;
                         break;
                     }
                 }
@@ -1542,7 +1555,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         private void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
-            var data = SampleView.SelectedSamples.Select(x => x.Sample).ToList();
+            var data = SelectedSamples.Select(x => x.Sample).ToList();
 
             //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
@@ -1567,7 +1580,7 @@ namespace LcmsNet.WPFControls.ViewModels
             }
 
             // Re-select the first sample
-            SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(data.First()));
+            SelectedSample = Samples.First(x => x.Sample.Equals(data.First()));
         }
 
         /// <summary>
@@ -1579,7 +1592,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // Get all the data references that we want to randomize.
             //
-            foreach (var row in SampleView.SelectedSamples)
+            foreach (var row in SelectedSamples)
             {
                 var data = row.Sample;
                 if (data != null && data.RunningStatus == enumSampleRunningStatus.Queued)
@@ -1643,7 +1656,7 @@ namespace LcmsNet.WPFControls.ViewModels
             if (samplesToRandomize.Count > 0)
             {
                 // Re-select the first sample
-                SampleView.SelectedSample = Samples.First(x => x.Sample.Equals(samplesToRandomize.First()));
+                SelectedSample = Samples.First(x => x.Sample.Equals(samplesToRandomize.First()));
             }
         }
 
@@ -1665,17 +1678,17 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             try
             {
-                var scrollOffset = SampleView.GetCurrentScrollOffset();
 
                 //
                 // Get a list of sequence ID's to remove
                 //
                 var removes = new List<long>();
-                var samplesToRemove = SampleView.SelectedSamples.OrderBy(x => x.Sample.SequenceID).ToList();
+                var samplesToRemove = SelectedSamples.OrderBy(x => x.Sample.SequenceID).ToList();
                 foreach (var sample in samplesToRemove)
                 {
                     removes.Add(sample.Sample.UniqueID);
                 }
+
                 // Select the sample just before or the first sample following the sample(s) deleted
                 SampleViewModel sampleToSelect = null;
                 if (samplesToRemove.Count > 0)
@@ -1710,10 +1723,10 @@ namespace LcmsNet.WPFControls.ViewModels
                     m_sampleQueue.RemoveSample(removes, resortColumns);
                 }
 
-                SampleView.SetScrollOffset(scrollOffset);
                 if (sampleToSelect != null)
                 {
-                    SampleView.SelectedSample = sampleToSelect;
+                    ScrollIntoView(sampleToSelect);
+                    SelectedSample = sampleToSelect;
                 }
             }
             catch (Exception ex)
@@ -1799,23 +1812,6 @@ namespace LcmsNet.WPFControls.ViewModels
         #region Queue Manager Event Handlers
 
         public Dispatcher UIDispatcher { get; set; }
-        private Views.SampleView _sampleView;
-
-        public Views.SampleView SampleView
-        {
-            get
-            {
-                return _sampleView;
-            }
-            set
-            {
-                _sampleView = value;
-                if (_sampleView != null)
-                {
-                    _sampleView.DataContext = this;
-                }
-            }
-        }
 
         /// <summary>
         /// Handles when a sample is updated somewhere and the user interface needs to be updated
@@ -1917,17 +1913,12 @@ namespace LcmsNet.WPFControls.ViewModels
 
             if (AutoScroll)
             {
-                var lastCompletedRow = 0;
-
                 var lastCompletedSample = Samples.Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
                 if (lastCompletedSample != null)
                 {
-                    lastCompletedRow = Samples.IndexOf(lastCompletedSample);
-                }
-
-                if (lastCompletedRow > 3)
-                {
-                    SampleView.SetScrollOffset(lastCompletedRow - 3);
+                    var pos = Samples.IndexOf(lastCompletedSample);
+                    var scrollTo = Math.Min(pos + 4, Samples.Count - 1);
+                    ScrollIntoView(Samples[scrollTo]);
                 }
             }
         }
@@ -1961,7 +1952,7 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             // Start fresh and add the samples from the queue to the list.
             // But track the position of the scroll bar to be nice to the user.
-            var scrollPosition = SampleView.GetCurrentScrollOffset();
+            var backup = Samples.ToList();
 
             using (Samples.SuppressChangeNotifications())
             {
@@ -1971,7 +1962,16 @@ namespace LcmsNet.WPFControls.ViewModels
 
             if (Samples.Count > 0)
             {
-                SampleView.SetScrollOffset(scrollPosition);
+                SampleViewModel sampleToScroll = Samples.First();
+                for (var i = 0; i < backup.Count; i++)
+                {
+                    if (i >= Samples.Count || !backup[i].Equals(Samples[i]))
+                    {
+                        sampleToScroll = Samples[i - 1];
+                        break;
+                    }
+                }
+                ScrollIntoView(sampleToScroll);
             }
         }
 
@@ -2041,7 +2041,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // The sample queue gives all of the samples
             //
-            var scrollOffset = SampleView.GetCurrentScrollOffset();
+            var sampleList = samples.ToList();
 
             using (Samples.SuppressChangeNotifications())
             {
@@ -2057,10 +2057,13 @@ namespace LcmsNet.WPFControls.ViewModels
                     }
                 }
 
-                AddSamplesToList(samples);
+                AddSamplesToList(sampleList);
             }
 
-            SampleView.SetScrollOffset(scrollOffset);
+            if (Samples.Count > 0 && sampleList.Count > 0)
+            {
+                ScrollIntoView(Samples.Last(x => x.Sample.Equals(sampleList.Last())));
+            }
         }
 
         /// <summary>
@@ -2070,15 +2073,14 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="data"></param>
         void m_sampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
         {
-            var scrollPosition = SampleView.GetCurrentScrollOffset();
             using (Samples.SuppressChangeNotifications())
             {
                 Samples.Clear();
                 AddSamplesToList(data.Samples);
             }
-            if (Samples.Count > 0)
+            if (Samples.Count > 0 && data.Samples.Any())
             {
-                SampleView.SetScrollOffset(scrollPosition);
+                ScrollIntoView(Samples.Last(x => x.Sample.Equals(data.Samples.Last())));
             }
         }
 
@@ -2214,7 +2216,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
         public void RestoreUserUIState()
         {
-            SampleView.FixScrollPosition();
+            ScrollIntoView(SelectedSample);
         }
 
         #region ReactiveCommands
@@ -2257,5 +2259,22 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<SampleScrollChangeEventArgs> ScrollUpdateEvent;
+
+        private void ScrollIntoView(SampleViewModel sampleToShow)
+        {
+            ScrollUpdateEvent?.Invoke(this, new SampleScrollChangeEventArgs(sampleToShow));
+        }
+
+        public class SampleScrollChangeEventArgs : EventArgs
+        {
+            public SampleViewModel SampleToShow { get; private set; }
+
+            public SampleScrollChangeEventArgs(SampleViewModel sampleToShow)
+            {
+                SampleToShow = sampleToShow;
+            }
+        }
     }
 }

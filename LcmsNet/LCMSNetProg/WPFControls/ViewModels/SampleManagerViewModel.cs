@@ -121,7 +121,6 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             SampleControlViewModel = new SampleControlViewModel(m_dmsView, m_sampleQueue);
             SampleControlViewModel.UIDispatcher = this.UIDispatcher;
-            // TODO: SampleControlViewModel.SampleView = this.mcontrol_sequenceView.SampleView;
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
