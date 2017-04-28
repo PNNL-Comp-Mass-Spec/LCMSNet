@@ -22,8 +22,7 @@ using LcmsNetDataClasses.Method;
 using LcmsNetDmsTools;
 using LcmsNetSDK;
 using ReactiveUI;
-using Color = System.Drawing.Color;
-using MessageBox = System.Windows.Forms.MessageBox;
+using MessageBox = System.Windows.MessageBox;
 
 namespace LcmsNet.WPFControls.ViewModels
 {
@@ -551,7 +550,7 @@ namespace LcmsNet.WPFControls.ViewModels
                     classApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueueing, task " + currentTask, ex);
                     MessageBox.Show(
                         @"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }
 
@@ -1182,7 +1181,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="sender"></param>
         /// <param name="previousColor"></param>
         /// <param name="newColor"></param>
-        void column_ColorChanged(object sender, Color previousColor, Color newColor)
+        void column_ColorChanged(object sender, System.Drawing.Color previousColor, System.Drawing.Color newColor)
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -2198,10 +2197,10 @@ namespace LcmsNet.WPFControls.ViewModels
             var result =
                 MessageBox.Show(
                     @"You are about to clear your queued samples.  Select Ok to clear, or Cancel to have no change.",
-                    @"Clear Queue Confirmation", MessageBoxButtons.OKCancel);
+                    @"Clear Queue Confirmation", MessageBoxButton.OKCancel);
 
             classApplicationLogger.LogMessage(3, "The user clicked to clear the samples");
-            if (result == DialogResult.OK)
+            if (result == MessageBoxResult.OK)
             {
                 classApplicationLogger.LogMessage(3, "The user clicked to ok to clear the samples");
                 ClearAllSamples();
