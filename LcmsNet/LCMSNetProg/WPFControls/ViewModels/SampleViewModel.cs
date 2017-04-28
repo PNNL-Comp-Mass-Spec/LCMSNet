@@ -69,16 +69,11 @@ namespace LcmsNet.WPFControls.ViewModels
             this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x => this.SetRowColors());
 
             // Extras to trigger the collection monitor when nested properties change
-            this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.RunOrder).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.Batch).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.CartConfigName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.DatasetType).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.PAL.PALTray).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.PAL.Well).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.SequenceID).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            //this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.Block, x => x.Sample.DmsData.RunOrder, x => x.Sample.DmsData.Batch,
+                    x => x.Sample.DmsData.CartConfigName, x => x.Sample.DmsData.DatasetType, x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
+                .Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethod)));
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
