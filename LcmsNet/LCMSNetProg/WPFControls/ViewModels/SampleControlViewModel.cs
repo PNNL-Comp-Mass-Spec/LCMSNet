@@ -2093,6 +2093,7 @@ namespace LcmsNet.WPFControls.ViewModels
         private bool lcMethodColumnVisible = true;
         private bool instrumentMethodColumnVisible = false;
         private bool datasetTypeColumnVisible = true;
+        private bool cartConfigColumnVisible = true;
         private bool batchIdColumnVisible = false;
         private bool blockColumnVisible = false;
         private bool runOrderColumnVisible = false;
@@ -2131,6 +2132,12 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             get { return datasetTypeColumnVisible; }
             set { this.RaiseAndSetIfChanged(ref datasetTypeColumnVisible, value); }
+        }
+
+        public bool CartConfigColumnVisible
+        {
+            get { return cartConfigColumnVisible; }
+            set { this.RaiseAndSetIfChanged(ref cartConfigColumnVisible, value); }
         }
 
         public bool BatchIdColumnVisible
