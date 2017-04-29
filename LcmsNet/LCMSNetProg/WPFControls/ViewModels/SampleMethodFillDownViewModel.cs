@@ -455,21 +455,22 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             EnsureItemsAreSelected();
             var volumes = new List<double>();
+            // Do a round to 2 decimal places
             if (ApplyGroup1)
             {
-                volumes.Add(VolumeGroup1);
+                volumes.Add(Math.Round(VolumeGroup1, 2));
             }
             if (ApplyGroup2)
             {
-                volumes.Add(VolumeGroup2);
+                volumes.Add(Math.Round(VolumeGroup2, 2));
             }
             if (ApplyGroup3)
             {
-                volumes.Add(VolumeGroup3);
+                volumes.Add(Math.Round(VolumeGroup3, 2));
             }
             if (ApplyGroup4)
             {
-                volumes.Add(VolumeGroup4);
+                volumes.Add(Math.Round(VolumeGroup4, 2));
             }
             if (volumes.Count < 1)
                 return;

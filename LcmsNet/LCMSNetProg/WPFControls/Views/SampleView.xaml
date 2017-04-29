@@ -124,7 +124,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="PAL Tray" MaxWidth="66" Width="Auto" MinWidth="40" Visibility="{Binding DataContext.PalTrayColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
+                <DataGridTemplateColumn Header="PAL Tray" Width="Auto" MinWidth="40" Visibility="{Binding DataContext.PalTrayColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding Sample.PAL.PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />

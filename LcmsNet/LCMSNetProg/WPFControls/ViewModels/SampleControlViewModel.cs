@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using System.Windows.Threading;
 using LcmsNet.Method;
@@ -1065,8 +1066,10 @@ namespace LcmsNet.WPFControls.ViewModels
             fillDownViewModel.EnsureItemsAreSelected();
             var dialog = new SampleMethodFillDownView();
             dialog.DataContext = fillDownViewModel;
+            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+            ElementHost.EnableModelessKeyboardInterop(dialog);
 
-            dialog.Show();
+            dialog.ShowDialog();
 
             //fillDownViewModel.StartPosition = FormStartPosition.CenterScreen;
             //if (fillDownViewModel.ShowDialog() == DialogResult.OK)
