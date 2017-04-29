@@ -92,7 +92,7 @@
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Blank</TextBlock>
                 </Grid>
             </Button>
-            <Button Grid.Column="1" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding DMSAvailable}" Command="{Binding AddDMSCommand}" TabIndex="32" >
+            <Button Grid.Column="1" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding AddDMSCommand}" TabIndex="32" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -155,7 +155,7 @@
                     <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Cart, Col, Date</TextBlock>
                 </Grid>
             </Button>
-            <Button Grid.Column="7" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding DMSAvailable}" Command="{Binding DmsEditCommand}" TabIndex="41">
+            <Button Grid.Column="7" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding DmsEditCommand}" TabIndex="41">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />

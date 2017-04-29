@@ -67,11 +67,18 @@ namespace LcmsNet.WPFControls.ViewModels
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
         private SampleControlViewModel sampleControlViewModel;
+        private SampleDataManager sampleDataManager;
 
         public SampleControlViewModel SampleControlViewModel
         {
             get { return sampleControlViewModel; }
             private set { this.RaiseAndSetIfChanged(ref sampleControlViewModel, value); }
+        }
+
+        public SampleDataManager SampleDataManager
+        {
+            get { return sampleDataManager; }
+            private set { this.RaiseAndSetIfChanged(ref sampleDataManager, value); }
         }
 
         #endregion
@@ -119,15 +126,14 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             // Load up the data to the appropiate sub-controls.
             //
-            SampleControlViewModel = new SampleControlViewModel(m_dmsView, m_sampleQueue);
-            SampleControlViewModel.UIDispatcher = this.UIDispatcher;
+            SampleDataManager = new SampleDataManager(m_sampleQueue);
+            SampleControlViewModel = new SampleControlViewModel(m_dmsView, SampleDataManager);
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
             {
-                SampleControlViewModel.AutoSamplerMethods.Add("method" + i);
-
-                SampleControlViewModel.AutoSamplerTrays.Add("defaultTray0" + i);
+                SampleDataManager.AutoSamplerMethods.Add("method" + i);
+                SampleDataManager.AutoSamplerTrays.Add("defaultTray0" + i);
             }
 
             mdialog_exportQueue = new SaveFileDialog
@@ -280,7 +286,7 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             var trays = args.TrayList;
 
-            SampleControlViewModel.AutoSamplerTrays = trays;
+            SampleDataManager.AutoSamplerTrays = trays;
         }
 
         /// <summary>
@@ -290,7 +296,7 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             var methods = args.MethodList;
 
-            SampleControlViewModel.InstrumentMethods = methods;
+            SampleDataManager.InstrumentMethods = methods;
         }
 
         #endregion
@@ -620,7 +626,6 @@ namespace LcmsNet.WPFControls.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref uiDispatcher, value);
-                SampleControlViewModel.UIDispatcher = value;
             }
         }
 
