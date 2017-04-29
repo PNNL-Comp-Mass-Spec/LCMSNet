@@ -67,12 +67,19 @@ namespace LcmsNet.WPFControls.ViewModels
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
         private SampleControlViewModel sampleControlViewModel;
+        private SampleColumnControlViewModel sampleColumnControlViewModel;
         private SampleDataManager sampleDataManager;
 
         public SampleControlViewModel SampleControlViewModel
         {
             get { return sampleControlViewModel; }
             private set { this.RaiseAndSetIfChanged(ref sampleControlViewModel, value); }
+        }
+
+        public SampleColumnControlViewModel SampleColumnControlViewModel
+        {
+            get { return sampleColumnControlViewModel; }
+            private set { this.RaiseAndSetIfChanged(ref sampleColumnControlViewModel, value); }
         }
 
         public SampleDataManager SampleDataManager
@@ -128,6 +135,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             SampleDataManager = new SampleDataManager(m_sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(m_dmsView, SampleDataManager);
+            SampleColumnControlViewModel = new SampleColumnControlViewModel(m_dmsView, SampleDataManager);
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
