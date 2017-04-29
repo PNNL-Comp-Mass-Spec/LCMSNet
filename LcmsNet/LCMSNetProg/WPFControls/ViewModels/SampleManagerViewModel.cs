@@ -269,14 +269,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="data"></param>
         internal void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
-            if (!UIDispatcher.CheckAccess())
-            {
-                UIDispatcher.BeginInvoke(new SampleManagerViewModel.DelegateToggleButtons(DetermineIfShouldSetButtons), data);
-            }
-            else
-            {
-                DetermineIfShouldSetButtons(data);
-            }
+            DetermineIfShouldSetButtons(data);
         }
 
         /// <summary>
@@ -615,20 +608,6 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #endregion
 
-        private Dispatcher uiDispatcher;
-
-        public Dispatcher UIDispatcher
-        {
-            get
-            {
-                return uiDispatcher;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref uiDispatcher, value);
-            }
-        }
-
         public void RestoreUserUIState()
         {
             var timer = new System.Threading.Timer(FixScrollPosition, this, 50, System.Threading.Timeout.Infinite);
@@ -636,14 +615,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
         private void FixScrollPosition(object obj)
         {
-            if (!UIDispatcher.CheckAccess())
-            {
-                UIDispatcher.BeginInvoke(new Action(SampleControlViewModel.RestoreUserUIState));
-            }
-            else
-            {
-                SampleControlViewModel.RestoreUserUIState();
-            }
+            SampleControlViewModel.RestoreUserUIState();
         }
 
         public ReactiveCommand UndoCommand { get; private set; }

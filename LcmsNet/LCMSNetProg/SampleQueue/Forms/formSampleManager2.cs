@@ -66,7 +66,6 @@ namespace LcmsNet.SampleQueue.Forms
             //
             SampleManagerViewModel = new SampleManagerViewModel(queue);
             sampleManagerView.DataContext = SampleManagerViewModel;
-            SampleManagerViewModel.UIDispatcher = this.sampleManagerView.Dispatcher;
 
             Text = SampleManagerViewModel.TitleBarTextAddition;
         }

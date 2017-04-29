@@ -40,7 +40,11 @@ namespace LcmsNet.WPFControls.Views
 
         private void SampleControlViewModel_OnScrollUpdateEvent(object sender, SampleControlViewModel.SampleScrollChangeEventArgs sampleScrollChangeEventArgs)
         {
-            this.SampleGrid.ScrollIntoView(sampleScrollChangeEventArgs.SampleToShow);
+            if (sampleScrollChangeEventArgs.SampleToShow == null)
+            {
+                return;
+            }
+            this.Dispatcher.Invoke(() => this.SampleGrid.ScrollIntoView(sampleScrollChangeEventArgs.SampleToShow));
         }
 
         /// <summary>
