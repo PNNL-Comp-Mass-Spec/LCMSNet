@@ -330,7 +330,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             fillDownViewModel.Samples = samples;
             fillDownViewModel.EnsureItemsAreSelected();
-            var dialog = new SampleMethodFillDownView();
+            var dialog = new SampleMethodFillDownWindow();
             dialog.DataContext = fillDownViewModel;
             // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
             ElementHost.EnableModelessKeyboardInterop(dialog);

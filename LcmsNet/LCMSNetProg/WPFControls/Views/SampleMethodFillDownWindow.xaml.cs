@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace LcmsNet.WPFControls.Views
 {
     /// <summary>
-    /// Interaction logic for SampleMethodFillDownView.xaml
+    /// Interaction logic for SampleMethodFillDownWindow.xaml
     /// </summary>
-    public partial class SampleMethodFillDownView : Window
+    public partial class SampleMethodFillDownWindow : Window
     {
-        public SampleMethodFillDownView()
+        public SampleMethodFillDownWindow()
         {
             InitializeComponent();
         }
