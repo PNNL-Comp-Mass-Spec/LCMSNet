@@ -136,13 +136,11 @@ namespace LcmsNetDataClasses.Configuration
                 // If the status has changed,
                 // let someone know.
                 //
-                if (value != m_status)
+                var previousStatus = m_status;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_status, value))
                 {
-                    var previousStatus = m_status;
-                    m_status = value;
                     StatusChanged?.Invoke(this, previousStatus, m_status);
                 }
-                m_status = value;
             }
         }
 

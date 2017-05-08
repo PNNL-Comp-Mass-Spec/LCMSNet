@@ -28,10 +28,5 @@ namespace LcmsNet.WPFControls.Views
                 Background = Brushes.White;
             }
         }
-
-        private void ButtonSelectAll_OnClick(object sender, RoutedEventArgs e)
-        {
-            SampleView.SampleGrid.SelectAll();
-        }
     }
 }

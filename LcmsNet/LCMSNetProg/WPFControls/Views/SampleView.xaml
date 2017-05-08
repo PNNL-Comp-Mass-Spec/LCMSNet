@@ -23,7 +23,7 @@
                   SelectedItem="{Binding SelectedSample, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionChanged="SampleGrid_OnSelectionChanged"
                   RowHeaderWidth="20" ColumnWidth="SizeToCells"
-                  FrozenColumnCount="5">
+                  FrozenColumnCount="{Binding NumFrozenColumns, Mode=OneTime}">
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding DataContext.RemoveSelectedCommand, Source={x:Reference BaseDC}}" />
             </DataGrid.InputBindings>
@@ -47,14 +47,14 @@
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="X" MinWidth="25" MaxWidth="30">
+                <DataGridTemplateColumn Header="X" MinWidth="25" MaxWidth="30" Visibility="{Binding DataContext.CheckboxColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox x:Name="Queued_Checkbox" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Sample.HasNotRun}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="Status" Header="Status" MinWidth="54" MaxWidth="60" Binding="{Binding Status}" IsReadOnly="True" >
+                <DataGridTextColumn x:Name="Status" Header="Status" MinWidth="54" MaxWidth="60" Binding="{Binding Status}" IsReadOnly="True" Visibility="{Binding DataContext.StatusColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}" >
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}" >
                             <Setter Property="ToolTip" Value="{Binding StatusToolTipText}" />
@@ -79,7 +79,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="ColumnNumber" Header="Col #" MaxWidth="40" Width="Auto" MinWidth="20" Binding="{Binding ColumnNumber}" IsReadOnly="True" >
+                <DataGridTextColumn x:Name="ColumnNumber" Header="Col #" MaxWidth="40" Width="Auto" MinWidth="20" Binding="{Binding ColumnNumber}" IsReadOnly="True" Visibility="{Binding DataContext.ColumnIdColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}" >
                             <Setter Property="HorizontalAlignment" Value="Center" />

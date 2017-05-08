@@ -567,16 +567,17 @@
     <Compile Include="SampleQueue\SampleDataManager.cs" />
     <Compile Include="SampleQueue\SampleQueueComboBoxOptions.cs" />
     <Compile Include="WPFControls\ImageUtils.cs" />
+    <Compile Include="WPFControls\ViewModels\MoveToColumnSelectorViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleColumnControlViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleControlViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleManagerViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleMethodFillDownViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleViewModel.cs" />
+    <Compile Include="WPFControls\Views\MoveToColumnSelectorWindow.xaml.cs">
+      <DependentUpon>MoveToColumnSelectorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPFControls\Views\SampleColumnControlView.xaml.cs">
       <DependentUpon>SampleColumnControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPFControls\Views\SampleColumnView.xaml.cs">
-      <DependentUpon>SampleColumnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPFControls\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
@@ -1102,11 +1103,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="WPFControls\Views\SampleColumnControlView.xaml">
+    <Page Include="WPFControls\Views\MoveToColumnSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\SampleColumnView.xaml">
+    <Page Include="WPFControls\Views\SampleColumnControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

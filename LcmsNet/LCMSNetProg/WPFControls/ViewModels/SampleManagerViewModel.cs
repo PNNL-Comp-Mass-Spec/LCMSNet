@@ -14,6 +14,7 @@ using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.Forms;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Logging;
@@ -135,7 +136,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             SampleDataManager = new SampleDataManager(m_sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(m_dmsView, SampleDataManager);
-            SampleColumnControlViewModel = new SampleColumnControlViewModel(m_dmsView, SampleDataManager);
+            SampleColumnControlViewModel = new SampleColumnControlViewModel(m_dmsView, SampleDataManager) {Column = classCartConfiguration.Columns[0]};
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)

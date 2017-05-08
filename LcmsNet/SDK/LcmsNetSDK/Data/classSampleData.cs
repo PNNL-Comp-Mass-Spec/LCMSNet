@@ -127,7 +127,7 @@ namespace LcmsNetDataClasses
             m_sequenceNumber = -1;
 
             m_palData = new classPalData();
-            m_columnData = new classColumnData();
+            ColumnData = new classColumnData();
             m_instrumentData = new classInstrumentInfo();
             m_method = null;
             Volume = CONST_MIN_SAMPLE_VOLUME;
@@ -439,19 +439,17 @@ namespace LcmsNetDataClasses
             get { return m_columnData; }
             set
             {
-                if (m_columnData != value)
+                var oldColumn = m_columnData;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_columnData, value))
                 {
-                    if (m_columnData != null)
+                    if (oldColumn != null)
                     {
-                        m_columnData.NameChanged -= m_columnData_NameChanged;
+                        oldColumn.NameChanged -= m_columnData_NameChanged;
                     }
-                    m_columnData = value;
                     if (m_columnData != null)
                     {
                         m_columnData.NameChanged += m_columnData_NameChanged;
                     }
-
-                    OnPropertyChanged();
                 }
             }
         }

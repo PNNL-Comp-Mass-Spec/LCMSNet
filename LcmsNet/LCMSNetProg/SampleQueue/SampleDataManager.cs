@@ -898,6 +898,15 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
+        /// Returns whether the sample queue has an unused samples.
+        /// </summary>
+        /// <returns></returns>
+        public bool HasUnusedSamples(classColumnData column)
+        {
+            return SampleQueue.HasUnusedSamples(column);
+        }
+
+        /// <summary>
         /// Copies the sample data from one object required to make a new Blank sample entry in the sample queue.
         /// </summary>
         /// <param name="sampleToCopy">Sample to copy</param>
@@ -1135,6 +1144,17 @@ namespace LcmsNet.SampleQueue
             using (Samples.SuppressChangeNotifications())
             {
                 SampleQueue.RemoveUnusedSamples(resortColumns);
+            }
+        }
+
+        /// <summary>
+        /// Removes the unused samples in the columns.
+        /// </summary>
+        public void RemoveUnusedSamples(classColumnData column, enumColumnDataHandling resortColumns)
+        {
+            using (Samples.SuppressChangeNotifications())
+            {
+                SampleQueue.RemoveUnusedSamples(column, resortColumns);
             }
         }
 

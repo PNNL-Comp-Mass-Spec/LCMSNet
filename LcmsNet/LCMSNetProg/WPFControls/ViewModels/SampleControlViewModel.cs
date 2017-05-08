@@ -23,8 +23,6 @@ namespace LcmsNet.WPFControls.ViewModels
     {
         public virtual ReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
 
-        private formMoveToColumnSelector m_selector;
-
         private SampleViewModel selectedSample;
 
         public SampleViewModel SelectedSample
@@ -110,13 +108,13 @@ namespace LcmsNet.WPFControls.ViewModels
         public bool IsViewEnabled
         {
             get { return isViewEnabled; }
-            private set { this.RaiseAndSetIfChanged(ref isViewEnabled, value); }
+            protected set { this.RaiseAndSetIfChanged(ref isViewEnabled, value); }
         }
 
         public SolidColorBrush BackColor
         {
             get { return backColor; }
-            private set { this.RaiseAndSetIfChanged(ref backColor, value); }
+            protected set { this.RaiseAndSetIfChanged(ref backColor, value); }
         }
 
         #endregion
@@ -195,7 +193,6 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <param name="dmsView"></param>
         private void Initialize(formDMSView dmsView)
         {
-            m_selector = new formMoveToColumnSelector();
             DMSView = dmsView;
 
             SelectedSamples = new ReactiveList<SampleViewModel>();
@@ -224,7 +221,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// </summary>
         /// <param name="samples">List of samples to add to the manager.</param>
         /// <param name="insertIntoUnused"></param>
-        private void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
+        protected virtual void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
             SampleDataManager.AddSamplesToManager(samples, insertIntoUnused);
         }
@@ -342,96 +339,6 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         /// <summary>
-        /// Moves the selected samples to another column selected through a dialog window.
-        /// </summary>
-        private void MoveSamplesToColumn(enumColumnDataHandling handling)
-        {
-            m_selector.StartPosition = FormStartPosition.CenterParent;
-            // TODO: if (DesignMode)
-            // TODO:     return;
-
-            if (m_selector.ShowDialog() == DialogResult.OK &&
-                m_selector.SelectedColumn != formMoveToColumnSelector.CONST_NO_COLUMN_SELECTED)
-            {
-                var column = m_selector.SelectedColumn;
-                var selectedSamples = GetSelectedSamples();
-
-
-                if (selectedSamples.Count < 1)
-                    return;
-
-                //
-                // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
-                // Don't put a column that has been run, at the end of the queue again.
-                //
-                var samples = new List<classSampleData>();
-                foreach (var sample in selectedSamples)
-                {
-                    if (sample.RunningStatus == enumSampleRunningStatus.Queued && column != sample.ColumnData.ID)
-                    {
-                        samples.Add(sample);
-                    }
-                }
-
-                using (Samples.SuppressChangeNotifications())
-                {
-                    //
-                    // Get the list of unique id's from the samples and
-                    // change the column to put the samples on.
-                    //
-
-                    // Could keep track of updated IDs with
-                    // var ids = new List<long>();
-
-                    foreach (var sample in samples)
-                    {
-                        // ids.Add(sample.UniqueID);
-                        sample.ColumnData = classCartConfiguration.Columns[column];
-                    }
-
-                    //
-                    // Then remove them from the queue
-                    //
-
-                    //enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
-                    //if (m_selector.InsertIntoUnused)
-                    //{
-                    //    backFill = enumColumnDataHandling.LeaveAlone;
-                    //}
-
-                    //m_sampleQueue.RemoveSample(ids, backFill);
-
-                    ////
-                    //// Then re-queue the samples.
-                    ////
-                    //try
-                    //{
-                    //    if (m_selector.InsertIntoUnused)
-                    //    {
-                    //        m_sampleQueue.InsertIntoUnusedSamples(samples, handling);
-                    //    }
-                    //    else
-                    //    {
-                    //        m_sampleQueue.UpdateSamples(
-                    //        m_sampleQueue.QueueSamples(samples, handling);
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
-                    //}
-                    if (samples.Count > 0)
-                    {
-                        SampleDataManager.SampleQueue.UpdateSamples(samples);
-                    }
-                }
-
-                // Re-select the first sample
-                SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
-            }
-        }
-
-        /// <summary>
         /// Displays the DMS View Dialog Window.
         /// </summary>
         private void ShowDMSView()
@@ -454,7 +361,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 m_dmsView.ClearForm();
 
                 var insertToUnused = false;
-                if (SampleDataManager.HasUnusedSamples())
+                if (HasUnusedSamples())
                 {
                     //
                     // Ask the user what to do with these samples?
@@ -464,7 +371,6 @@ namespace LcmsNet.WPFControls.ViewModels
 
                     insertToUnused = (insertResult == DialogResult.Yes);
                 }
-
 
                 AddSamplesToManager(samples, insertToUnused);
 
@@ -537,7 +443,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        private void AddNewSample(bool insertIntoUnused)
+        protected virtual void AddNewSample(bool insertIntoUnused)
         {
             var newData = SampleDataManager.AddNewSample(insertIntoUnused);
 
@@ -556,9 +462,26 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         /// <summary>
+        /// Handles removing unused samples from the sample queue.
+        /// </summary>
+        protected virtual void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
+        {
+            SampleDataManager.RemoveUnusedSamples(resortColumns);
+        }
+
+        /// <summary>
+        /// Returns whether the sample queue has any unused samples.
+        /// </summary>
+        /// <returns>True if an unused sample exists.</returns>
+        protected virtual bool HasUnusedSamples()
+        {
+            return SampleDataManager.HasUnusedSamples();
+        }
+
+        /// <summary>
         /// Moves all the selected samples an offset of their original sequence id.
         /// </summary>
-        private void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        protected virtual void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
         {
             var data = SelectedSamples.Select(x => x.Sample).ToList();
 
@@ -726,6 +649,9 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #region Column visibility
 
+        private bool checkboxColumnVisible = true;
+        private bool statusColumnVisible = true;
+        private bool columnIdColumnVisible = true;
         private bool palTrayColumnVisible = true;
         private bool palVialColumnVisible = true;
         private bool volumeColumnVisible = true;
@@ -736,6 +662,33 @@ namespace LcmsNet.WPFControls.ViewModels
         private bool batchIdColumnVisible = false;
         private bool blockColumnVisible = false;
         private bool runOrderColumnVisible = false;
+
+        /// <summary>
+        /// Number of columns on the left of the DataGrid that cannot be scrolled; columns in this group cannot be hidden
+        /// Set to 0 to disable column freezing
+        /// </summary>
+        public virtual int NumFrozenColumns
+        {
+            get { return 5; }
+        }
+
+        public bool CheckboxColumnVisible
+        {
+            get { return checkboxColumnVisible; }
+            set { this.RaiseAndSetIfChanged(ref checkboxColumnVisible, value); }
+        }
+
+        public bool StatusColumnVisible
+        {
+            get { return statusColumnVisible; }
+            set { this.RaiseAndSetIfChanged(ref statusColumnVisible, value); }
+        }
+
+        public bool ColumnIdColumnVisible
+        {
+            get { return columnIdColumnVisible; }
+            set { this.RaiseAndSetIfChanged(ref columnIdColumnVisible, value); }
+        }
 
         public bool PalTrayColumnVisible
         {
@@ -846,25 +799,27 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #region ReactiveCommands
 
-        public ReactiveCommand AddBlankCommand { get; private set; }
-        public ReactiveCommand AddBlankToUnusedCommand { get; private set; }
-        public ReactiveCommand AddDMSCommand { get; private set; }
-        public ReactiveCommand RemoveSelectedCommand { get; private set; }
-        public ReactiveCommand FillDownCommand { get; private set; }
-        public ReactiveCommand TrayVialCommand { get; private set; }
-        public ReactiveCommand RandomizeCommand { get; private set; }
-        public ReactiveCommand MoveDownCommand { get; private set; }
-        public ReactiveCommand MoveUpCommand { get; private set; }
-        public ReactiveCommand DeleteUnusedCommand { get; private set; }
-        public ReactiveCommand CartColumnDateCommand { get; private set; }
-        public ReactiveCommand DmsEditCommand { get; private set; }
-        public ReactiveCommand UndoCommand { get; private set; }
-        public ReactiveCommand RedoCommand { get; private set; }
-        public ReactiveCommand PreviewThroughputCommand { get; private set; }
-        public ReactiveCommand ClearAllSamplesCommand { get; private set; }
+        public ReactiveCommand AddBlankCommand { get; protected set; }
+        public ReactiveCommand AddBlankToUnusedCommand { get; protected set; }
+        public ReactiveCommand AddDMSCommand { get; protected set; }
+        public ReactiveCommand RemoveSelectedCommand { get; protected set; }
+        public ReactiveCommand FillDownCommand { get; protected set; }
+        public ReactiveCommand TrayVialCommand { get; protected set; }
+        public ReactiveCommand RandomizeCommand { get; protected set; }
+        public ReactiveCommand MoveDownCommand { get; protected set; }
+        public ReactiveCommand MoveUpCommand { get; protected set; }
+        public ReactiveCommand DeleteUnusedCommand { get; protected set; }
+        public ReactiveCommand CartColumnDateCommand { get; protected set; }
+        public ReactiveCommand DmsEditCommand { get; protected set; }
+        public ReactiveCommand UndoCommand { get; protected set; }
+        public ReactiveCommand RedoCommand { get; protected set; }
+        public ReactiveCommand PreviewThroughputCommand { get; protected set; }
+        public ReactiveCommand ClearAllSamplesCommand { get; protected set; }
 
-        private void SetupCommands()
+        protected virtual void SetupCommands()
         {
+            // Protected to allow inheriting class to override some of these commands, as needed
+
             AddBlankCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
             AddBlankToUnusedCommand = ReactiveCommand.Create(() => this.AddNewSample(true));
             AddDMSCommand = ReactiveCommand.Create(() => this.ShowDMSView());
@@ -874,7 +829,7 @@ namespace LcmsNet.WPFControls.ViewModels
             RandomizeCommand = ReactiveCommand.Create(() => this.RandomizeSelectedSamples());
             MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence));
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence));
-            DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
+            DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName());
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData());
             UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo());
