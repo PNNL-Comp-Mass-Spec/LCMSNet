@@ -29,6 +29,9 @@
             <TabItem Header="Column View">
                 <views:ColumnManagerView x:Name="ColumnManagerView" DataContext="{Binding ColumnManagerViewModel}" />
             </TabItem>
+            <TabItem Header="Method View">
+                <views:MethodManagerView x:Name="MethodManagerView" DataContext="{Binding MethodManagerViewModel}" />
+            </TabItem>
         </TabControl>
         <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" />
         <Button Grid.Column="0" Grid.Row="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding UndoCommand}" TabIndex="15" >

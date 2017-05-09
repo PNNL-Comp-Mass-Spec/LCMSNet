@@ -568,10 +568,13 @@
     <Compile Include="SampleQueue\SampleQueueComboBoxOptions.cs" />
     <Compile Include="WPFControls\ImageUtils.cs" />
     <Compile Include="WPFControls\ViewModels\ColumnManagerViewModel.cs" />
+    <Compile Include="WPFControls\ViewModels\MethodManagerViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\MoveToColumnSelectorViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\ColumnControlViewModel.cs" />
+    <Compile Include="WPFControls\ViewModels\MoveToMethodSelectorViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleControlViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleManagerViewModel.cs" />
+    <Compile Include="WPFControls\ViewModels\MethodControlViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleMethodFillDownViewModel.cs" />
     <Compile Include="WPFControls\ViewModels\SampleViewModel.cs" />
     <Compile Include="WPFControls\Views\ColumnManagerView.xaml.cs">
@@ -583,11 +586,17 @@
     <Compile Include="WPFControls\Views\ColumnControlView.xaml.cs">
       <DependentUpon>ColumnControlView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPFControls\Views\MoveToMethodSelectorWindow.xaml.cs">
+      <DependentUpon>MoveToMethodSelectorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPFControls\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPFControls\Views\SampleManagerView.xaml.cs">
       <DependentUpon>SampleManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFControls\Views\MethodControlView.xaml.cs">
+      <DependentUpon>MethodControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPFControls\Views\SampleMethodFillDownWindow.xaml.cs">
       <DependentUpon>SampleMethodFillDownWindow.xaml</DependentUpon>
@@ -651,6 +660,9 @@
       <DependentUpon>SimControlsAndChartsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Simulator\TackEventArgs.cs" />
+    <Compile Include="WPFControls\Views\MethodManagerView.xaml.cs">
+      <DependentUpon>MethodManagerView.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Configuration\controlColumn.resx">
       <DependentUpon>controlColumn.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1119,6 +1131,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WPFControls\Views\MoveToMethodSelectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPFControls\Views\SampleControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1127,11 +1143,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WPFControls\Views\MethodControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPFControls\Views\SampleMethodFillDownWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPFControls\Views\SampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPFControls\Views\MethodManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

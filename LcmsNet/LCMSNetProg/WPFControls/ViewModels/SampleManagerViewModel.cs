@@ -69,6 +69,7 @@ namespace LcmsNet.WPFControls.ViewModels
 
         private SampleControlViewModel sampleControlViewModel;
         private ColumnManagerViewModel columnManagerViewModel;
+        private MethodManagerViewModel methodManagerViewModel;
         private SampleDataManager sampleDataManager;
 
         public SampleControlViewModel SampleControlViewModel
@@ -81,6 +82,12 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             get { return columnManagerViewModel; }
             private set { this.RaiseAndSetIfChanged(ref columnManagerViewModel, value); }
+        }
+
+        public MethodManagerViewModel MethodManagerViewModel
+        {
+            get { return methodManagerViewModel; }
+            private set { this.RaiseAndSetIfChanged(ref methodManagerViewModel, value); }
         }
 
         public SampleDataManager SampleDataManager
@@ -137,6 +144,7 @@ namespace LcmsNet.WPFControls.ViewModels
             SampleDataManager = new SampleDataManager(m_sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(m_dmsView, SampleDataManager);
             ColumnManagerViewModel = new ColumnManagerViewModel(m_dmsView, SampleDataManager);
+            MethodManagerViewModel = new MethodManagerViewModel(m_dmsView, SampleDataManager);
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
