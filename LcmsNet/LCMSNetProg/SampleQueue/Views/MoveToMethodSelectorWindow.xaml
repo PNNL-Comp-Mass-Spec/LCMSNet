@@ -8,6 +8,7 @@
         d:DataContext="{d:DesignInstance {x:Type viewModels:MoveToMethodSelectorViewModel}, IsDesignTimeCreatable=True}"
         d:DesignHeight="200" d:DesignWidth="400"
         Width="450" Height="200"
+        Title="Select Method"
         WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>

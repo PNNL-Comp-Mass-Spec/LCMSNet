@@ -8,6 +8,7 @@
         d:DataContext="{d:DesignInstance {x:Type viewModels:MoveToColumnSelectorViewModel}, IsDesignTimeCreatable=True}"
         d:DesignHeight="200" d:DesignWidth="400"
         Width="450" Height="240"
+        Title="Select Column"
         WindowStartupLocation="CenterOwner">
     <Grid Margin="10">
         <Grid.RowDefinitions>
