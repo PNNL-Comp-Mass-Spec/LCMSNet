@@ -33,9 +33,9 @@ namespace LcmsNet.WPFControls.ViewModels
         public string ColumnHeader => this.columnHeader?.Value ?? string.Empty;
 
         /// <summary>
-        /// Default constructor for the sample view control that takes no arguments
-        /// but also no functionality unless the sample queue and dms form is supplied.
-        /// Calling this constructor is only for the windows form designer.
+        /// Default constructor for the column view control that takes no arguments
+        /// but also no functionality unless the sample data manager and dms form is supplied.
+        /// Calling this constructor is only for the windows ui designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnControlViewModel() : base()
@@ -56,10 +56,11 @@ namespace LcmsNet.WPFControls.ViewModels
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
             Column = new classColumnData() {ID = -1, Name = "DevColumn"};
+            CommandsVisible = false;
         }
 
         /// <summary>
-        /// Constructor that accepts dmsView and sampleQueue
+        /// Constructor that accepts dmsView and sampleDataManager
         /// </summary>
         public ColumnControlViewModel(formDMSView dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
         {

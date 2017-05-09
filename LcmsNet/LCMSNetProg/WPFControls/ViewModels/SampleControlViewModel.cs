@@ -163,7 +163,7 @@ namespace LcmsNet.WPFControls.ViewModels
         #region Constructors and Initialization
 
         /// <summary>
-        /// Constructor that accepts dmsView and sampleQueue
+        /// Constructor that accepts dmsView and sampleDataManager
         /// </summary>
         public SampleControlViewModel(formDMSView dmsView, SampleDataManager sampleDataManager)
         {
@@ -177,8 +177,8 @@ namespace LcmsNet.WPFControls.ViewModels
 
         /// <summary>
         /// Default constructor for the sample view control that takes no arguments
-        /// but also no functionality unless the sample queue and dms form is supplied.
-        /// Calling this constructor is only for the windows form designer.
+        /// but also no functionality unless the sample data manager and dms form is supplied.
+        /// Calling this constructor is only for the windows ui designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
         public SampleControlViewModel()
@@ -335,7 +335,11 @@ namespace LcmsNet.WPFControls.ViewModels
             dialog.ShowDialog();
 
             // Re-select the first sample
-            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
+            var firstValid = Samples.Select(x => x.Sample).Intersect(samples).FirstOrDefault();
+            if (firstValid != null)
+            {
+                SelectedSample = Samples.First(x => x.Sample.Equals(firstValid));
+            }
         }
 
         /// <summary>
