@@ -567,41 +567,41 @@
     <Compile Include="SampleQueue\SampleDataManager.cs" />
     <Compile Include="SampleQueue\SampleQueueComboBoxOptions.cs" />
     <Compile Include="WPFControls\ImageUtils.cs" />
-    <Compile Include="WPFControls\ViewModels\ColumnManagerViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\MethodManagerViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\MoveToColumnSelectorViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\ColumnControlViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\MoveToMethodSelectorViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\SampleControlViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\SampleManagerViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\MethodControlViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\SampleMethodFillDownViewModel.cs" />
-    <Compile Include="WPFControls\ViewModels\SampleViewModel.cs" />
-    <Compile Include="WPFControls\Views\ColumnManagerView.xaml.cs">
+    <Compile Include="SampleQueue\ViewModels\ColumnManagerViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\MethodManagerViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\MoveToColumnSelectorViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\ColumnControlViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\MoveToMethodSelectorViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\SampleControlViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\SampleManagerViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\MethodControlViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\SampleMethodFillDownViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\SampleViewModel.cs" />
+    <Compile Include="SampleQueue\Views\ColumnManagerView.xaml.cs">
       <DependentUpon>ColumnManagerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\MoveToColumnSelectorWindow.xaml.cs">
+    <Compile Include="SampleQueue\Views\MoveToColumnSelectorWindow.xaml.cs">
       <DependentUpon>MoveToColumnSelectorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\ColumnControlView.xaml.cs">
+    <Compile Include="SampleQueue\Views\ColumnControlView.xaml.cs">
       <DependentUpon>ColumnControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\MoveToMethodSelectorWindow.xaml.cs">
+    <Compile Include="SampleQueue\Views\MoveToMethodSelectorWindow.xaml.cs">
       <DependentUpon>MoveToMethodSelectorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\SampleControlView.xaml.cs">
+    <Compile Include="SampleQueue\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\SampleManagerView.xaml.cs">
+    <Compile Include="SampleQueue\Views\SampleManagerView.xaml.cs">
       <DependentUpon>SampleManagerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\MethodControlView.xaml.cs">
+    <Compile Include="SampleQueue\Views\MethodControlView.xaml.cs">
       <DependentUpon>MethodControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\SampleMethodFillDownWindow.xaml.cs">
+    <Compile Include="SampleQueue\Views\SampleMethodFillDownWindow.xaml.cs">
       <DependentUpon>SampleMethodFillDownWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFControls\Views\SampleView.xaml.cs">
+    <Compile Include="SampleQueue\Views\SampleView.xaml.cs">
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
@@ -660,7 +660,7 @@
       <DependentUpon>SimControlsAndChartsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Simulator\TackEventArgs.cs" />
-    <Compile Include="WPFControls\Views\MethodManagerView.xaml.cs">
+    <Compile Include="SampleQueue\Views\MethodManagerView.xaml.cs">
       <DependentUpon>MethodManagerView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Configuration\controlColumn.resx">
@@ -1119,43 +1119,43 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="WPFControls\Views\ColumnManagerView.xaml">
+    <Page Include="SampleQueue\Views\ColumnManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\MoveToColumnSelectorWindow.xaml">
+    <Page Include="SampleQueue\Views\MoveToColumnSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\ColumnControlView.xaml">
+    <Page Include="SampleQueue\Views\ColumnControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\MoveToMethodSelectorWindow.xaml">
+    <Page Include="SampleQueue\Views\MoveToMethodSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\SampleControlView.xaml">
+    <Page Include="SampleQueue\Views\SampleControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\SampleManagerView.xaml">
+    <Page Include="SampleQueue\Views\SampleManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\MethodControlView.xaml">
+    <Page Include="SampleQueue\Views\MethodControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\SampleMethodFillDownWindow.xaml">
+    <Page Include="SampleQueue\Views\SampleMethodFillDownWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\SampleView.xaml">
+    <Page Include="SampleQueue\Views\SampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPFControls\Views\MethodManagerView.xaml">
+    <Page Include="SampleQueue\Views\MethodManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

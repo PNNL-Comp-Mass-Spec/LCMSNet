@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using LcmsNet.Method.Forms;
 using LcmsNet.SampleQueue.IO;
-using LcmsNet.WPFControls.ViewModels;
+using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using LcmsNet.Method;
-using LcmsNet.WPFControls.ViewModels;
+using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Data;

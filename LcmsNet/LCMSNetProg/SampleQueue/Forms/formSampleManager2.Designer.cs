@@ -8,6 +8,7 @@
 
 using System.ComponentModel;
 using System.Windows.Forms;
+using LcmsNet.SampleQueue.Views;
 
 namespace LcmsNet.SampleQueue.Forms
 {
@@ -53,7 +54,7 @@ namespace LcmsNet.SampleQueue.Forms
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WpfControlHost = new System.Windows.Forms.Integration.ElementHost();
-            this.sampleManagerView = new LcmsNet.WPFControls.Views.SampleManagerView();
+            this.sampleManagerView = new SampleManagerView();
             this.mmenuStrip.SuspendLayout();
             this.SuspendLayout();
             //
@@ -219,6 +220,6 @@ namespace LcmsNet.SampleQueue.Forms
         private ToolStripMenuItem toCSVToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem1;
         private System.Windows.Forms.Integration.ElementHost WpfControlHost;
-        private WPFControls.Views.SampleManagerView sampleManagerView;
+        private SampleManagerView sampleManagerView;
     }
 }
