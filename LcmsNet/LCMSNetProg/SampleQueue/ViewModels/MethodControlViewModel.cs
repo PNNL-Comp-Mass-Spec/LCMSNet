@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetDataClasses;
+using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Method;
 using ReactiveUI;
 
@@ -115,6 +116,14 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 normalColor = BackColor;
                 BackColor = Brushes.DodgerBlue;
+                if (SelectedLCMethod != null && SelectedLCMethod.Column >= 0 && SelectedLCMethod.Column < classCartConfiguration.Columns.Count)
+                {
+                    var columnColor = classCartConfiguration.Columns[SelectedLCMethod.Column].Color;
+                    if (columnColor != System.Drawing.Color.Empty && columnColor != System.Drawing.Color.Transparent)
+                    {
+                        BackColor = new SolidColorBrush(Color.FromArgb(columnColor.A, columnColor.R, columnColor.G, columnColor.B));
+                    }
+                }
             }
             else if (normalColor != null)
             {
