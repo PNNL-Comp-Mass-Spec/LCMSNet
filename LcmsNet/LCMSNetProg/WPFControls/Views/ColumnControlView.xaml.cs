@@ -18,9 +18,9 @@ namespace LcmsNet.WPFControls.Views
     /// <summary>
     /// Interaction logic for SampleColumnControl.xaml
     /// </summary>
-    public partial class SampleColumnControlView : UserControl
+    public partial class ColumnControlView : UserControl
     {
-        public SampleColumnControlView()
+        public ColumnControlView()
         {
             InitializeComponent();
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))

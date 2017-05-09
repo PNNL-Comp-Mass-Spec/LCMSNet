@@ -27,7 +27,7 @@
                 <views:SampleControlView x:Name="SampleControlView" />
             </TabItem>
             <TabItem Header="Column View">
-                <views:SampleColumnControlView x:Name="SampleColumnControlView" />
+                <views:ColumnControlView x:Name="ColumnControlView" />
             </TabItem>
         </TabControl>
         <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" />

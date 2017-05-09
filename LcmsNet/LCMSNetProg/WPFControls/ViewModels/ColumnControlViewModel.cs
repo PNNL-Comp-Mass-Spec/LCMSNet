@@ -19,7 +19,7 @@ using ReactiveUI;
 
 namespace LcmsNet.WPFControls.ViewModels
 {
-    public class SampleColumnControlViewModel : SampleControlViewModel
+    public class ColumnControlViewModel : SampleControlViewModel
     {
         public override ReactiveList<SampleViewModel> Samples => FilteredSamples;
 
@@ -38,7 +38,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// Calling this constructor is only for the windows form designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public SampleColumnControlViewModel() : base()
+        public ColumnControlViewModel() : base()
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;
@@ -61,7 +61,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Constructor that accepts dmsView and sampleQueue
         /// </summary>
-        public SampleColumnControlViewModel(formDMSView dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
+        public ColumnControlViewModel(formDMSView dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             BindingOperations.EnableCollectionSynchronization(FilteredSamples, this);
