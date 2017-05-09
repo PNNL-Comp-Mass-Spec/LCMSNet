@@ -17,7 +17,7 @@ using LcmsNet.WPFControls.ViewModels;
 namespace LcmsNet.WPFControls.Views
 {
     /// <summary>
-    /// Interaction logic for SampleColumnControl.xaml
+    /// Interaction logic for ColumnControlView.xaml
     /// </summary>
     public partial class ColumnControlView : UserControl
     {

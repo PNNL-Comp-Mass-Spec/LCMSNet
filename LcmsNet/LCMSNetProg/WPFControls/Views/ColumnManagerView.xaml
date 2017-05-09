@@ -37,7 +37,7 @@
         </Border>
         <Border Grid.Row="0" Grid.Column="3" DataContext="{Binding Column4ViewModel}" BorderBrush="{Binding BackColor}" BorderThickness="3,0,3,0" Margin="0.3,0" PreviewMouseDown="Border_OnPreviewMouseDown">
             <local:ColumnControlView x:Name="Column4View" Visibility="{Binding ColumnEnabled, Converter={StaticResource BoolToVis}}" IsVisibleChanged="Column_OnIsVisibleChanged" Background="{Binding BackColor}" />
-            </Border>
+        </Border>
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" x:Name="CommandsGrid" DataContext="{Binding FocusedColumn}" Background="{Binding BackColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80*" MaxWidth="80"/>

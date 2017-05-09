@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LcmsNet.SampleQueue;
 using LcmsNetDataClasses.Configuration;
 using ReactiveUI;
@@ -19,10 +15,10 @@ namespace LcmsNet.WPFControls.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnManagerViewModel()
         {
-            Column1ViewModel = new ColumnControlViewModel();
-            Column2ViewModel = new ColumnControlViewModel();
-            Column3ViewModel = new ColumnControlViewModel();
-            Column4ViewModel = new ColumnControlViewModel();
+            Column1ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
+            Column2ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
+            Column3ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
+            Column4ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
         }
 
         public ColumnManagerViewModel(formDMSView dmsView, SampleDataManager sampleDataManager)
@@ -31,11 +27,6 @@ namespace LcmsNet.WPFControls.ViewModels
             Column2ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[1], CommandsVisible = false };
             Column3ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[2], CommandsVisible = false };
             Column4ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[3], CommandsVisible = false };
-
-            this.WhenAnyValue(x => x.Column1ViewModel.Column.Status).Subscribe(x => Column1Visibility = x != enumColumnStatus.Disabled);
-            this.WhenAnyValue(x => x.Column2ViewModel.Column.Status).Subscribe(x => Column2Visibility = x != enumColumnStatus.Disabled);
-            this.WhenAnyValue(x => x.Column3ViewModel.Column.Status).Subscribe(x => Column3Visibility = x != enumColumnStatus.Disabled);
-            this.WhenAnyValue(x => x.Column4ViewModel.Column.Status).Subscribe(x => Column4Visibility = x != enumColumnStatus.Disabled);
 
             this.WhenAnyValue(x => x.Column1ViewModel, x => x.Column1ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedColumn = x.Item2 ? x.Item1 : this.FocusedColumn);
             this.WhenAnyValue(x => x.Column2ViewModel, x => x.Column2ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedColumn = x.Item2 ? x.Item1 : this.FocusedColumn);
@@ -49,10 +40,6 @@ namespace LcmsNet.WPFControls.ViewModels
         private ColumnControlViewModel column2ViewModel;
         private ColumnControlViewModel column3ViewModel;
         private ColumnControlViewModel column4ViewModel;
-        private bool column1Visibility = true;
-        private bool column2Visibility = true;
-        private bool column3Visibility = true;
-        private bool column4Visibility = true;
         private ColumnControlViewModel focusedColumn;
 
         public ColumnControlViewModel Column1ViewModel
@@ -77,30 +64,6 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             get { return column4ViewModel; }
             set { this.RaiseAndSetIfChanged(ref column4ViewModel, value); }
-        }
-
-        public bool Column1Visibility
-        {
-            get { return column1Visibility; }
-            set { this.RaiseAndSetIfChanged(ref column1Visibility, value); }
-        }
-
-        public bool Column2Visibility
-        {
-            get { return column2Visibility; }
-            set { this.RaiseAndSetIfChanged(ref column2Visibility, value); }
-        }
-
-        public bool Column3Visibility
-        {
-            get { return column3Visibility; }
-            set { this.RaiseAndSetIfChanged(ref column3Visibility, value); }
-        }
-
-        public bool Column4Visibility
-        {
-            get { return column4Visibility; }
-            set { this.RaiseAndSetIfChanged(ref column4Visibility, value); }
         }
 
         public ColumnControlViewModel FocusedColumn

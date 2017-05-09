@@ -50,7 +50,6 @@ namespace LcmsNet.WPFControls.ViewModels
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
             Column = new classColumnData() {ID = -2, Name = "DevColumn"};
-            CommandsVisible = false;
         }
 
         /// <summary>
