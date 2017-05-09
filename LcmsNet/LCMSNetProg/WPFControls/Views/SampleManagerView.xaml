@@ -27,7 +27,7 @@
                 <views:SampleControlView x:Name="SampleControlView" />
             </TabItem>
             <TabItem Header="Column View">
-                <views:ColumnControlView x:Name="ColumnControlView" />
+                <views:ColumnManagerView x:Name="ColumnManagerView" DataContext="{Binding ColumnManagerViewModel}" />
             </TabItem>
         </TabControl>
         <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" />

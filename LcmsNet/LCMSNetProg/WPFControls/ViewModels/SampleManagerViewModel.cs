@@ -68,7 +68,7 @@ namespace LcmsNet.WPFControls.ViewModels
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
         private SampleControlViewModel sampleControlViewModel;
-        private ColumnControlViewModel columnControlViewModel;
+        private ColumnManagerViewModel columnManagerViewModel;
         private SampleDataManager sampleDataManager;
 
         public SampleControlViewModel SampleControlViewModel
@@ -77,10 +77,10 @@ namespace LcmsNet.WPFControls.ViewModels
             private set { this.RaiseAndSetIfChanged(ref sampleControlViewModel, value); }
         }
 
-        public ColumnControlViewModel ColumnControlViewModel
+        public ColumnManagerViewModel ColumnManagerViewModel
         {
-            get { return columnControlViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref columnControlViewModel, value); }
+            get { return columnManagerViewModel; }
+            private set { this.RaiseAndSetIfChanged(ref columnManagerViewModel, value); }
         }
 
         public SampleDataManager SampleDataManager
@@ -103,7 +103,7 @@ namespace LcmsNet.WPFControls.ViewModels
         }
 
         /// <summary>
-        /// Default constructor for constructor.
+        /// Default constructor for design time use.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
         public SampleManagerViewModel()
@@ -136,7 +136,7 @@ namespace LcmsNet.WPFControls.ViewModels
             //
             SampleDataManager = new SampleDataManager(m_sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(m_dmsView, SampleDataManager);
-            ColumnControlViewModel = new ColumnControlViewModel(m_dmsView, SampleDataManager) {Column = classCartConfiguration.Columns[0]};
+            ColumnManagerViewModel = new ColumnManagerViewModel(m_dmsView, SampleDataManager);
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)

@@ -447,7 +447,7 @@ namespace LcmsNet.WPFControls.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        protected virtual void AddNewSample(bool insertIntoUnused)
+        protected virtual classSampleData AddNewSample(bool insertIntoUnused)
         {
             var newData = SampleDataManager.AddNewSample(insertIntoUnused);
 
@@ -463,6 +463,8 @@ namespace LcmsNet.WPFControls.ViewModels
                     }
                 }
             }
+
+            return newData;
         }
 
         /// <summary>
@@ -639,7 +641,8 @@ namespace LcmsNet.WPFControls.ViewModels
         {
             if (AutoScroll)
             {
-                var lastCompletedSample = Samples.Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
+                // Create a list copy first to try to avoid collection modified exceptions...
+                var lastCompletedSample = Samples.ToList().Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
                 if (lastCompletedSample != null)
                 {
                     var pos = Samples.IndexOf(lastCompletedSample);

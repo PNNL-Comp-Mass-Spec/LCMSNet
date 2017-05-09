@@ -2,18 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Media;
-using System.Windows.Threading;
 using LcmsNet.SampleQueue;
-using LcmsNet.SampleQueue.Forms;
 using LcmsNet.WPFControls.Views;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
 using ReactiveUI;
 
@@ -99,6 +93,46 @@ namespace LcmsNet.WPFControls.ViewModels
             };
 
             SetupCommands();
+
+            this.WhenAnyValue(x => x.ContainsKeyboardFocus).Subscribe(x => this.SetBackground());
+            this.WhenAnyValue(x => x.Column.Status).Subscribe(x => ColumnEnabled = x != enumColumnStatus.Disabled);
+        }
+
+        private bool containsKeyboardFocus = false;
+        private bool commandsVisible = true;
+        private bool columnEnabled = true;
+        private SolidColorBrush normalColor = null;
+
+        public bool ContainsKeyboardFocus
+        {
+            get { return containsKeyboardFocus; }
+            set { this.RaiseAndSetIfChanged(ref containsKeyboardFocus, value); }
+        }
+
+        public bool CommandsVisible
+        {
+            get { return commandsVisible; }
+            set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
+        }
+
+        public bool ColumnEnabled
+        {
+            get { return columnEnabled; }
+            set { this.RaiseAndSetIfChanged(ref columnEnabled, value); }
+        }
+
+        private void SetBackground()
+        {
+            if (ContainsKeyboardFocus)
+            {
+                normalColor = BackColor;
+                BackColor = Brushes.DodgerBlue;
+            }
+            else if (normalColor != null)
+            {
+                //BackColor = SystemColors.WindowBrush;
+                BackColor = normalColor;
+            }
         }
 
         /// <summary>
@@ -124,98 +158,6 @@ namespace LcmsNet.WPFControls.ViewModels
             }
         }
 
-        formExpansion m_expand;
-
-        private List<Button> m_buttons;
-
-        /// <summary>
-        /// Moves the selected samples to another column selected through a dialog window.
-        /// </summary>
-        protected void MoveSamplesToColumn(enumColumnDataHandling handling)
-        {
-            var selector = new MoveToColumnSelectorViewModel();
-            var selectorWindow = new MoveToColumnSelectorWindow() {DataContext = selector};
-
-            var result = selectorWindow.ShowDialog();
-
-            if (result.HasValue && result.Value &&
-                selector.SelectedColumn != MoveToColumnSelectorViewModel.CONST_NO_COLUMN_SELECTED)
-            {
-                var column = selector.SelectedColumn;
-                var selectedSamples = GetSelectedSamples();
-
-                if (selectedSamples.Count < 1)
-                    return;
-
-                //
-                // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
-                // Don't put a column that has been run, at the end of the queue again.
-                //
-                var samples = new List<classSampleData>();
-                foreach (var sample in selectedSamples)
-                {
-                    if (sample.RunningStatus == enumSampleRunningStatus.Queued && column != sample.ColumnData.ID)
-                    {
-                        samples.Add(sample);
-                    }
-                }
-
-                using (Samples.SuppressChangeNotifications())
-                {
-                    //
-                    // Get the list of unique id's from the samples and
-                    // change the column to put the samples on.
-                    //
-
-                    // Could keep track of updated IDs with
-                    // var ids = new List<long>();
-
-                    foreach (var sample in samples)
-                    {
-                        // ids.Add(sample.UniqueID);
-                        sample.ColumnData = classCartConfiguration.Columns[column];
-                    }
-
-                    // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.
-                    /*
-                    // Then remove them from the queue
-                    enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
-                    if (selector.InsertIntoUnused)
-                    {
-                        backFill = enumColumnDataHandling.LeaveAlone;
-                    }
-
-                    SampleDataManager.SampleQueue.RemoveSample(ids, backFill);
-
-                    // Then re-queue the samples.
-                    try
-                    {
-                        if (selector.InsertIntoUnused)
-                        {
-                            SampleDataManager.SampleQueue.InsertIntoUnusedSamples(samples, handling);
-                        }
-                        else
-                        {
-                            //SampleDataManager.UpdateSamples(
-                            SampleDataManager.SampleQueue.QueueSamples(samples, handling);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
-                    }
-                    if (samples.Count > 0)
-                    {
-                        SampleDataManager.SampleQueue.UpdateSamples(samples);
-                    }
-                    */
-                }
-
-                // Re-select the first sample
-                SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
-            }
-        }
-
         #region Members
 
         /// <summary>
@@ -238,6 +180,8 @@ namespace LcmsNet.WPFControls.ViewModels
 
         #endregion
 
+        #region Commands
+
         public ReactiveCommand AddBlankAppendCommand { get; protected set; }
         public ReactiveCommand MoveToColumnCommand { get; protected set; }
 
@@ -250,114 +194,6 @@ namespace LcmsNet.WPFControls.ViewModels
             MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Column));
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Column));
             MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused));
-        }
-
-        private void ShowExpansion()
-        {
-            //TODO: var buttonScreen = PointToScreen(mbutton_expand.Location);
-            //TODO: var controlScreen = PointToScreen(mpanel_control.Location);
-            //TODO: m_expand.StartPosition = FormStartPosition.Manual;
-            //TODO: m_expand.Location = new Point(buttonScreen.X, controlScreen.Y + mbutton_expand.Top);
-            //TODO: m_expand.Refresh();
-            //TODO: m_expand.UpdateButtons(m_expansionList);
-            //TODO: m_expand.Height = mpanel_control.Height;
-            //TODO: var width = Screen.PrimaryScreen.WorkingArea.Width;
-            //TODO:
-            //TODO: var expandWidth = m_expand.Left + m_expand.Width;
-            //TODO:
-            //TODO: if (expandWidth > width)
-            //TODO: {
-            //TODO:     var p = m_expand.Location;
-            //TODO:     p.X = width - m_expand.Width;
-            //TODO:     m_expand.Location = p;
-            //TODO: }
-            //TODO:
-            //TODO:
-            //TODO: m_expand.ShowDialog();
-            //TODO: m_expand.Hide();
-        }
-
-        private void mbutton_expand_Click(object sender, EventArgs e)
-        {
-            ShowExpansion();
-        }
-
-        private void mbutton_expand_MouseHover(object sender, EventArgs e)
-        {
-            ShowExpansion();
-        }
-
-        #region Constructors
-
-        private const int CONST_BUTTON_PADDING = 2;
-        private List<Button> m_expansionList;
-
-        void controlColumnView_Resize(object sender, EventArgs e)
-        {
-            UpdateExpandButtonList();
-        }
-
-        private void UpdateExpandButtonList()
-        {
-            // Ideas:
-            // Use an expander panel (test this)
-            // Abstract the buttons out, always show the same set but have them operate on the last selected/focused view model...
-
-            //TODO: m_expansionList.Clear();
-            //TODO:
-            //TODO: var width = 60;
-            //TODO: var leftmost = Width - mbutton_expand.Width - CONST_BUTTON_PADDING;
-            //TODO: var padding = CONST_BUTTON_PADDING;
-            //TODO: var left = padding;
-            //TODO: foreach (var button in m_buttons)
-            //TODO: {
-            //TODO:     var widthLeft = left + width + CONST_BUTTON_PADDING;
-            //TODO:
-            //TODO:     if (widthLeft >= leftmost)
-            //TODO:     {
-            //TODO:         button.Width = width;
-            //TODO:         m_expansionList.Add(button);
-            //TODO:         if (mpanel_control.Controls.Contains(button))
-            //TODO:         {
-            //TODO:             mpanel_control.Controls.Remove(button);
-            //TODO:         }
-            //TODO:     }
-            //TODO:     else
-            //TODO:     {
-            //TODO:         if (!mpanel_control.Controls.Contains(button))
-            //TODO:         {
-            //TODO:             mpanel_control.Controls.Add(button);
-            //TODO:         }
-            //TODO:         button.Top = mbutton_expand.Top;
-            //TODO:         button.Height = mbutton_expand.Height;
-            //TODO:         button.Left = left;
-            //TODO:         button.Width = width;
-            //TODO:     }
-            //TODO:     left += (width + padding);
-            //TODO: }
-            //TODO: PerformLayout();
-        }
-
-        private void InitializeButtons()
-        {
-            m_expand = new formExpansion();
-            m_buttons = new List<Button>();
-            m_expansionList = new List<Button>();
-            //TODO: m_buttons.Add(mbutton_addBlank);
-            //TODO: m_buttons.Add(mbutton_addBlankAppend);
-            //TODO: m_buttons.Add(mbutton_addDMS);
-            //TODO: m_buttons.Add(mbutton_removeSelected);
-            //TODO: m_buttons.Add(mbutton_deleteUnused);
-            //TODO: m_buttons.Add(mbutton_up);
-            //TODO: m_buttons.Add(mbutton_down);
-            //TODO: m_buttons.Add(mbutton_moveColumns);
-            //TODO: m_buttons.Add(mbutton_fillDown);
-            //TODO: m_buttons.Add(mbutton_trayVial);
-            //TODO: m_buttons.Add(mbutton_randomize);
-            //TODO: m_buttons.Add(mbutton_cartColumnDate);
-            //TODO: m_buttons.Add(mbutton_dmsEdit);
-
-            UpdateExpandButtonList();
         }
 
         #endregion
@@ -387,6 +223,29 @@ namespace LcmsNet.WPFControls.ViewModels
         #endregion
 
         #region Sample Queue Management Interface Methods
+
+        /// <summary>
+        /// Adds a new sample to the list view.
+        /// </summary>
+        protected override classSampleData AddNewSample(bool insertIntoUnused)
+        {
+            var newData = base.AddNewSample(insertIntoUnused);
+
+            if (newData != null && !newData.ColumnData.Equals(this.Column))
+            {
+                if (FilteredSamples.Count > 0)
+                {
+                    newData.LCMethod = FilteredSamples.ToList().Last().Sample.LCMethod;
+                }
+                else
+                {
+                    newData.LCMethod = null;
+                }
+                newData.ColumnData = this.Column;
+            }
+
+            return newData;
+        }
 
         /// <summary>
         /// Adds the specified samples ot this column.
@@ -439,6 +298,106 @@ namespace LcmsNet.WPFControls.ViewModels
         protected override bool HasUnusedSamples()
         {
             return SampleDataManager.HasUnusedSamples(Column);
+        }
+
+        /// <summary>
+        /// Moves the selected samples to another column selected through a dialog window.
+        /// </summary>
+        protected void MoveSamplesToColumn(enumColumnDataHandling handling)
+        {
+            var selector = new MoveToColumnSelectorViewModel();
+            var selectorWindow = new MoveToColumnSelectorWindow() { DataContext = selector };
+
+            var result = selectorWindow.ShowDialog();
+
+            if (result.HasValue && result.Value &&
+                selector.SelectedColumn != MoveToColumnSelectorViewModel.CONST_NO_COLUMN_SELECTED)
+            {
+                var column = selector.SelectedColumn;
+                var selectedSamples = GetSelectedSamples();
+
+                if (selectedSamples.Count < 1)
+                    return;
+
+                //
+                // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
+                // Don't put a column that has been run, at the end of the queue again.
+                //
+                var samples = new List<classSampleData>();
+                foreach (var sample in selectedSamples)
+                {
+                    if (sample.RunningStatus == enumSampleRunningStatus.Queued && column != sample.ColumnData.ID)
+                    {
+                        samples.Add(sample);
+                    }
+                }
+
+                // Find the first valid LC Method that uses the specified column?
+                classLCMethod method = null;
+                foreach (var lcMethod in SampleQueueComboBoxOptions.LcMethodOptions)
+                {
+                    if (lcMethod.Column == column)
+                    {
+                        method = lcMethod;
+                        break;
+                    }
+                }
+
+                using (Samples.SuppressChangeNotifications())
+                {
+                    //
+                    // Get the list of unique id's from the samples and
+                    // change the column to put the samples on.
+                    //
+
+                    // Could keep track of updated IDs with
+                    // var ids = new List<long>();
+
+                    foreach (var sample in samples)
+                    {
+                        // ids.Add(sample.UniqueID);
+                        sample.LCMethod = method;
+                        sample.ColumnData = classCartConfiguration.Columns[column];
+                    }
+
+                    // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.
+                    /*
+                    // Then remove them from the queue
+                    enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
+                    if (selector.InsertIntoUnused)
+                    {
+                        backFill = enumColumnDataHandling.LeaveAlone;
+                    }
+
+                    SampleDataManager.SampleQueue.RemoveSample(ids, backFill);
+
+                    // Then re-queue the samples.
+                    try
+                    {
+                        if (selector.InsertIntoUnused)
+                        {
+                            SampleDataManager.SampleQueue.InsertIntoUnusedSamples(samples, handling);
+                        }
+                        else
+                        {
+                            //SampleDataManager.UpdateSamples(
+                            SampleDataManager.SampleQueue.QueueSamples(samples, handling);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
+                    }
+                    if (samples.Count > 0)
+                    {
+                        SampleDataManager.SampleQueue.UpdateSamples(samples);
+                    }
+                    */
+                }
+
+                // Re-select the first sample
+                SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
+            }
         }
 
         #endregion
