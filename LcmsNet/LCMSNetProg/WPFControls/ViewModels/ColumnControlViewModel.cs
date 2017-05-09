@@ -52,10 +52,10 @@ namespace LcmsNet.WPFControls.ViewModels
             VolumeColumnVisible = false;
 
             this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
-                .Select(x => $"Column: (# {x.Item1.ID}) {x.Item1.Name}")
+                .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
-            Column = new classColumnData() {ID = -1, Name = "DevColumn"};
+            Column = new classColumnData() {ID = -2, Name = "DevColumn"};
             CommandsVisible = false;
         }
 
@@ -75,7 +75,7 @@ namespace LcmsNet.WPFControls.ViewModels
                 .Subscribe(x => ResetFilteredSamples());
 
             this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
-                .Select(x => $"Column: (# {x.Item1.ID}) {x.Item1.Name}")
+                .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
             this.WhenAnyValue(x => x.Column.Status).Subscribe(x => this.SetColumnStatus());
