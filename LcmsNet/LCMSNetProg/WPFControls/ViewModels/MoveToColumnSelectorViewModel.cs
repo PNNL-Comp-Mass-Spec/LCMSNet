@@ -56,10 +56,10 @@ namespace LcmsNet.WPFControls.ViewModels
 
         private void SetupCommands()
         {
-            Column1Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 1));
-            Column2Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 2));
-            Column3Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 3));
-            Column4Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 4));
+            Column1Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 0));
+            Column2Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 1));
+            Column3Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 2));
+            Column4Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 3));
             CancelCommand = ReactiveCommand.Create(new Action(() => CloseCleanup()));
         }
 
