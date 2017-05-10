@@ -566,6 +566,14 @@
     <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
     <Compile Include="SampleQueue\SampleDataManager.cs" />
     <Compile Include="SampleQueue\SampleQueueComboBoxOptions.cs" />
+    <Compile Include="SampleQueue\ViewModels\DMSDownloadDataViewModel.cs" />
+    <Compile Include="SampleQueue\ViewModels\DMSDownloadViewModel.cs" />
+    <Compile Include="SampleQueue\Views\DMSDownloadDataGridView.xaml.cs">
+      <DependentUpon>DMSDownloadDataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleQueue\Views\DMSDownloadWindow.xaml.cs">
+      <DependentUpon>DMSDownloadWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPFControls\ImageUtils.cs" />
     <Compile Include="SampleQueue\ViewModels\ColumnManagerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\MethodManagerViewModel.cs" />
@@ -1120,6 +1128,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="SampleQueue\Views\ColumnManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleQueue\Views\DMSDownloadDataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleQueue\Views\DMSDownloadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

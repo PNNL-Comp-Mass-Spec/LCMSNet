@@ -55,7 +55,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Constructor that accepts dmsView and sampleQueue
         /// </summary>
-        public MethodControlViewModel(formDMSView dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
+        public MethodControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             BindingOperations.EnableCollectionSynchronization(FilteredSamples, this);

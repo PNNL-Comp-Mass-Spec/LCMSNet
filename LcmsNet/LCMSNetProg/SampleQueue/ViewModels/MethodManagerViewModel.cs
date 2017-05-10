@@ -23,7 +23,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             Method8ViewModel = new MethodControlViewModel() { CommandsVisible = false };
         }
 
-        public MethodManagerViewModel(formDMSView dmsView, SampleDataManager sampleDataManager)
+        public MethodManagerViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
             Method1ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
             Method2ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };

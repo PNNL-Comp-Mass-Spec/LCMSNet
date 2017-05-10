@@ -130,7 +130,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Form that provides user interface to retrieve samples from DMS.
         /// </summary>
-        private formDMSView m_dmsView;
+        private DMSDownloadViewModel m_dmsView;
 
         /// <summary>
         /// Fill down form for updating lots of samples at once.
@@ -162,7 +162,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Constructor that accepts dmsView and sampleDataManager
         /// </summary>
-        public SampleControlViewModel(formDMSView dmsView, SampleDataManager sampleDataManager)
+        public SampleControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
             SampleDataManager = sampleDataManager;
             SampleDataManager.WhenAnyValue(x => x.HasData, x => x.HasValidColumns).Subscribe(x => SetEnabledDisabled());
@@ -188,7 +188,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Performs initialization for the constructors.
         /// </summary>
         /// <param name="dmsView"></param>
-        private void Initialize(formDMSView dmsView)
+        private void Initialize(DMSDownloadViewModel dmsView)
         {
             DMSView = dmsView;
 
@@ -230,7 +230,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Gets or sets the DMS View form.
         /// </summary>
-        public virtual formDMSView DMSView
+        public virtual DMSDownloadViewModel DMSView
         {
             get { return m_dmsView; }
             set { m_dmsView = value; }
@@ -347,7 +347,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (m_dmsView == null)
                 return;
 
-            var result = m_dmsView.ShowDialog();
+            var dmsWindow = new DMSDownloadWindow() { DataContext = m_dmsView };
+            var result = dmsWindow.ShowDialog();
 
             //
             // If the user clicks ok , then add the samples from the
@@ -356,7 +357,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // and any other views that we may have.  For the sequence
             // we don't care how we add them to the form.
             //
-            if (result == DialogResult.OK)
+            if (result.HasValue && result.Value)
             {
                 var samples = m_dmsView.GetNewSamplesDMSView();
                 m_dmsView.ClearForm();

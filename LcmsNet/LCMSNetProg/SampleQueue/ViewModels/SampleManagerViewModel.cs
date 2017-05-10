@@ -37,7 +37,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Reference to the DMS View.
         /// </summary>
-        private formDMSView m_dmsView;
+        private DMSDownloadViewModel m_dmsView;
 
         /// <summary>
         /// Manages adding the samples to the queue.
@@ -121,7 +121,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="queue"></param>
         private void Initialize(classSampleQueue queue)
         {
-            m_dmsView = new formDMSView();
+            m_dmsView = new DMSDownloadViewModel();
             m_sampleQueue = queue;
             mdialog_importQueue = new OpenFileDialog();
             SetupCommands();

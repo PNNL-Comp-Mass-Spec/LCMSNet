@@ -20,7 +20,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             Column4ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
         }
 
-        public ColumnManagerViewModel(formDMSView dmsView, SampleDataManager sampleDataManager)
+        public ColumnManagerViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
             Column1ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[0], CommandsVisible = false };
             Column2ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[1], CommandsVisible = false };
