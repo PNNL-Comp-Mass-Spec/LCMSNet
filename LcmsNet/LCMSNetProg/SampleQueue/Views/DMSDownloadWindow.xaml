@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:DMSDownloadViewModel}, IsDesignTimeCreatable=True}"
