@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
@@ -327,7 +326,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var dialog = new SampleMethodFillDownWindow();
             dialog.DataContext = fillDownViewModel;
             // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            ElementHost.EnableModelessKeyboardInterop(dialog);
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dialog);
 
             dialog.ShowDialog();
 
@@ -348,6 +347,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
 
             var dmsWindow = new DMSDownloadWindow() { DataContext = m_dmsView };
+            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsWindow);
             var result = dmsWindow.ShowDialog();
 
             //
