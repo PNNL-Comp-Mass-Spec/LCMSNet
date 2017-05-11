@@ -574,6 +574,9 @@
     <Compile Include="SampleQueue\Views\DMSDownloadWindow.xaml.cs">
       <DependentUpon>DMSDownloadWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Views\InsertOntoUnusedWindow.xaml.cs">
+      <DependentUpon>InsertOntoUnusedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPFControls\ImageUtils.cs" />
     <Compile Include="SampleQueue\ViewModels\ColumnManagerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\MethodManagerViewModel.cs" />
@@ -1136,6 +1139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SampleQueue\Views\DMSDownloadWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleQueue\Views\InsertOntoUnusedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -369,10 +369,10 @@ namespace LcmsNet.SampleQueue.ViewModels
                     //
                     // Ask the user what to do with these samples?
                     //
-                    var dialog = new formInsertOntoUnusedDialog();
+                    var dialog = new InsertOntoUnusedWindow();
                     var insertResult = dialog.ShowDialog();
 
-                    insertToUnused = (insertResult == DialogResult.Yes);
+                    insertToUnused = insertResult.HasValue && insertResult.Value;
                 }
 
                 AddSamplesToManager(samples, insertToUnused);
