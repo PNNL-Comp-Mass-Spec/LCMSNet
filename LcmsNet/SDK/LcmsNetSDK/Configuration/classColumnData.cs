@@ -10,7 +10,7 @@ namespace LcmsNetDataClasses.Configuration
     /// Class that manages all of the information about a given column
     /// </summary>
     [Serializable]
-    public class classColumnData : classDataClassBase, INotifyPropertyChangedExt
+    public class classColumnData : classDataClassBase, INotifyPropertyChangedExt, IEquatable<classColumnData>
     {
         #region Constructors
 
@@ -202,6 +202,29 @@ namespace LcmsNetDataClasses.Configuration
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool Equals(classColumnData other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return m_columnIndex == other.m_columnIndex && m_systemIndex == other.m_systemIndex;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((classColumnData) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (m_columnIndex * 397) ^ m_systemIndex;
+            }
         }
     }
 }
