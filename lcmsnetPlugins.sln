@@ -1,55 +1,55 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilent", "Agilent\Agilent.csproj", "{D6DAC36B-61D0-406A-AB13-F34C9EDF0D65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilent", "lcmsnetPlugins\Agilent\Agilent.csproj", "{D6DAC36B-61D0-406A-AB13-F34C9EDF0D65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASIpump", "ASIpump\ASIpump.csproj", "{6682884C-B3DB-49D3-8445-B2D681FAC9AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASIpump", "lcmsnetPlugins\ASIpump\ASIpump.csproj", "{6682884C-B3DB-49D3-8445-B2D681FAC9AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84D0064E-F123-4B9D-8530-945A4833BCD3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{910C58F0-264B-417C-8192-6E857AAA85DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bruker", "Bruker\Bruker.csproj", "{A1833DD8-8445-45A5-ADAA-7F874886DCD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bruker", "lcmsnetPlugins\Bruker\Bruker.csproj", "{A1833DD8-8445-45A5-ADAA-7F874886DCD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eksigent", "Eksigent\Eksigent.csproj", "{96BA0FF2-5C3C-4A64-A494-452D45FE0B3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eksigent", "lcmsnetPlugins\Eksigent\Eksigent.csproj", "{96BA0FF2-5C3C-4A64-A494-452D45FE0B3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDEX", "IDEX\IDEX.csproj", "{4C87CD14-37F7-4E6F-AA7A-6398698C4AAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDEX", "lcmsnetPlugins\IDEX\IDEX.csproj", "{4C87CD14-37F7-4E6F-AA7A-6398698C4AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJack", "LabJack\LabJack.csproj", "{4E97009E-F375-426B-8108-DEE8575C8D67}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJack", "lcmsnetPlugins\LabJack\LabJack.csproj", "{4E97009E-F375-426B-8108-DEE8575C8D67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJackU3", "LabJackU3\LabJackU3.csproj", "{90551821-B121-4C22-BA8D-116E1502D6CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJackU3", "lcmsnetPlugins\LabJackU3\LabJackU3.csproj", "{90551821-B121-4C22-BA8D-116E1502D6CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetDummyRandomizer", "LcmsNetDummyRandomizer\LcmsNetDummyRandomizer.csproj", "{1CE62A77-40A1-418D-B143-C7C6935BD17A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetDummyRandomizer", "lcmsnetPlugins\LcmsNetDummyRandomizer\LcmsNetDummyRandomizer.csproj", "{1CE62A77-40A1-418D-B143-C7C6935BD17A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCMSNetSimpleRandomizer", "LCMSNetSimpleRandomizer\LCMSNetSimpleRandomizer.csproj", "{ACB66D29-7329-405B-8D04-C24FF0DBAEED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCMSNetSimpleRandomizer", "lcmsnetPlugins\LCMSNetSimpleRandomizer\LCMSNetSimpleRandomizer.csproj", "{ACB66D29-7329-405B-8D04-C24FF0DBAEED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newport", "NewportESP300\Newport.csproj", "{301C4DAC-24B7-4032-88BF-3BFB13B9DEFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newport", "lcmsnetPlugins\NewportESP300\Newport.csproj", "{301C4DAC-24B7-4032-88BF-3BFB13B9DEFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PALAutoSampler", "PALAutoSampler\PALAutoSampler.csproj", "{A68203D4-AF87-44F6-A2F6-9A34FE308789}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PALAutoSampler", "lcmsnetPlugins\PALAutoSampler\PALAutoSampler.csproj", "{A68203D4-AF87-44F6-A2F6-9A34FE308789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNNLDevices", "PNNLDevices\PNNLDevices.csproj", "{16B43514-F328-4401-B5B6-D14F9FF51516}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNNLDevices", "lcmsnetPlugins\PNNLDevices\PNNLDevices.csproj", "{16B43514-F328-4401-B5B6-D14F9FF51516}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FailureInjector", "PNNLNotificationDriver\FailureInjector.csproj", "{A9ED704A-295B-4BAD-8B6A-9A07BEC1A315}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FailureInjector", "lcmsnetPlugins\PNNLNotificationDriver\FailureInjector.csproj", "{A9ED704A-295B-4BAD-8B6A-9A07BEC1A315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teledyne", "Teledyne\Teledyne.csproj", "{44F85A93-8010-44CE-8655-21DDAEC72AC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teledyne", "lcmsnetPlugins\Teledyne\Teledyne.csproj", "{44F85A93-8010-44CE-8655-21DDAEC72AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VICI", "VICI\VICI.csproj", "{EDF39882-C0AF-424B-9096-6F1384A5FD71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VICI", "lcmsnetPlugins\VICI\VICI.csproj", "{EDF39882-C0AF-424B-9096-6F1384A5FD71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waters", "Waters\Waters.csproj", "{D1B720EA-C625-401E-9881-CAF05F02044F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waters", "lcmsnetPlugins\Waters\Waters.csproj", "{D1B720EA-C625-401E-9881-CAF05F02044F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASIpumpTest", "ASIpumpTest\ASIpumpTest.csproj", "{4ADABB87-0B2D-4972-AA3D-8EBF772FFDD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASIpumpTest", "lcmsnetPlugins\ASIpumpTest\ASIpumpTest.csproj", "{4ADABB87-0B2D-4972-AA3D-8EBF772FFDD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJackU3TestApp", "LabJackU3TestApp\LabJackU3TestApp.csproj", "{81761693-59ED-42AC-B879-5D1594EFA7B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJackU3TestApp", "lcmsnetPlugins\LabJackU3TestApp\LabJackU3TestApp.csproj", "{81761693-59ED-42AC-B879-5D1594EFA7B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewportTestApp", "NewportTestApp\NewportTestApp.csproj", "{27977D25-FA44-4809-9FC4-9F8B306E973F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewportTestApp", "lcmsnetPlugins\NewportTestApp\NewportTestApp.csproj", "{27977D25-FA44-4809-9FC4-9F8B306E973F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmpsBoxPlugin", "AmpsBox\AmpsBoxPlugin.csproj", "{0688424B-5CA9-46E4-9D36-42E9652CD1AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmpsBoxPlugin", "lcmsnetPlugins\AmpsBox\AmpsBoxPlugin.csproj", "{0688424B-5CA9-46E4-9D36-42E9652CD1AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASUTGen", "ASUTGen\ASUTGen.csproj", "{02E87DA8-7DD5-46BA-9344-B98408E2CF43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASUTGen", "lcmsnetPlugins\ASUTGen\ASUTGen.csproj", "{02E87DA8-7DD5-46BA-9344-B98408E2CF43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PalValidator", "PalValidator\PalValidator.csproj", "{4F2EEDA1-5398-4009-B268-1A5996FB7B90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PalValidator", "lcmsnetPlugins\PalValidator\PalValidator.csproj", "{4F2EEDA1-5398-4009-B268-1A5996FB7B90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
