@@ -16,3 +16,4 @@ LcmsNet/lib/SQLite_Zips
 **/.vs/
 *.DotSettings
 *.user
+Installer/Output/
