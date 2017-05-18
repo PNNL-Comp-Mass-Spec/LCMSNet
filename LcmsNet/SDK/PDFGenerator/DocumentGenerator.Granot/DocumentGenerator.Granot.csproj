@@ -52,7 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EMSL.DocumentGenerator.Core">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
+      <HintPath>..\..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
     </Reference>
     <Reference Include="PdfFileWriter">
       <HintPath>..\Libraries\PDF File Writer\PdfFileWriter.dll</HintPath>

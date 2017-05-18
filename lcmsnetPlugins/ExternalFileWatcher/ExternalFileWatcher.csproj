@@ -104,6 +104,6 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)..\..\lib\Plugins\LCMSNet"</PostBuildEvent>
+xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)lib\Plugins\LCMSNet"</PostBuildEvent>
   </PropertyGroup>
 </Project>

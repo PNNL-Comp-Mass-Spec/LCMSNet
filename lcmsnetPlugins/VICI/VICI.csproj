@@ -57,10 +57,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluidicsSDK">
-      <HintPath>..\..\LcmsNet\lib\FluidicsSDK.dll</HintPath>
+      <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\LcmsNet\lib\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -145,6 +145,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)..\pluginDLLs\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)LCMSNet\LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

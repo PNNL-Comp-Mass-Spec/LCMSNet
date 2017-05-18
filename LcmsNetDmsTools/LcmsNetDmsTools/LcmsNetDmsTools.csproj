@@ -78,11 +78,11 @@
   <ItemGroup>
     <Reference Include="LcmsNetSdk, Version=3.4.18.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LcmsNet\lib\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSQLiteTools, Version=3.1.5690.21972, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LcmsNet\lib\LcmsNetSQLiteTools.dll</HintPath>
+      <HintPath>..\..\lib\LcmsNetSQLiteTools.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -144,7 +144,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(ProjectDir)..\..\LcmsNet\lib\"
+    <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"

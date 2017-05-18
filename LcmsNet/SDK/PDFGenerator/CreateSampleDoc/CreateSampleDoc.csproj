@@ -53,13 +53,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EMSL.DocumentGenerator.Core">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
+      <HintPath>..\..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
     </Reference>
     <Reference Include="EMSL.DocumentGenerator.Granot">
       <HintPath>..\DocumentGenerator.Granot\bin\x86\Debug\EMSL.DocumentGenerator.Granot.dll</HintPath>
     </Reference>
     <Reference Include="EMSL.DocumentGenerator.PDFSharp">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
+      <HintPath>..\..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\LcmsNet\lib\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

@@ -49,11 +49,11 @@
   <ItemGroup>
     <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
+      <HintPath>..\..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -92,7 +92,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)..\lib"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

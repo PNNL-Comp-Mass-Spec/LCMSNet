@@ -62,7 +62,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
-      <HintPath>..\..\lib\ZedGraph.dll</HintPath>
+      <HintPath>..\..\..\lib\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -259,8 +259,9 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(ProjectDir)..\..\lib\"
-xcopy /y /F /D "$(TargetPath)" "$(ProjectDir)..\..\..\pluginDLLs\"
+    <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
+xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)LCMSNet\LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
 
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"

@@ -55,7 +55,7 @@
   <ItemGroup>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -108,8 +108,8 @@
     <PostBuildEvent>if $(ConfigurationName) == PNNLRelease goto :release else goto :end
 
 :release
-xcopy /Y /F /D "$(TargetDir)*.dll" "$(ProjectDir)..\..\lib\"
-xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(ProjectDir)..\..\lib"
+xcopy /Y /F /D "$(TargetDir)*.dll" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(SolutionDir)lib"
 
 :end
 
