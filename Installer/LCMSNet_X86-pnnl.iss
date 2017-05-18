@@ -3,7 +3,7 @@
                                                            
 #define MyAppVerName "4.3.1"
 #define MySource "..\LcmsNet\"
-#define MyLib    "lib"
+#define MyLib    "..\lib"
 #define MyPlugins "..\PluginDlls"
 #define MyAppName "LCMSNet"
 #define MyAppVis  "PNNL"
