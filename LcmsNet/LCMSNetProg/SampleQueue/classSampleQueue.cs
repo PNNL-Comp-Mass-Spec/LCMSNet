@@ -14,8 +14,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;
@@ -53,7 +55,7 @@ namespace LcmsNet.SampleQueue
     /// <summary>
     /// Class that manages the order, updating, addition, and deletion of samples.
     /// </summary>
-    public class classSampleQueue
+    public class classSampleQueue : INotifyPropertyChangedExt
     {
         #region Utility Methods
 
@@ -222,6 +224,9 @@ namespace LcmsNet.SampleQueue
         /// If true, and samples finish or are cancelled (i.e. errors) then the flag will reset to false.
         /// </summary>
         private bool m_startedSamples;
+
+        private bool canUndo = false;
+        private bool canRedo = false;
 
         #endregion
 
@@ -417,6 +422,26 @@ namespace LcmsNet.SampleQueue
         /// Gets the threading event when a sample is queued.
         /// </summary>
         public AutoResetEvent SampleQueuedEvent => m_sampleWaitingEvent;
+
+        /// <summary>
+        /// If there are queues in the undo queue
+        /// </summary>
+        /// <returns></returns>
+        public bool CanUndo
+        {
+            get { return canUndo; }
+            private set { this.RaiseAndSetIfChanged(ref canUndo, value); }
+        }
+
+        /// <summary>
+        /// If there are queues in the redo queue
+        /// </summary>
+        /// <returns></returns>
+        public bool CanRedo
+        {
+            get { return canRedo; }
+            private set { this.RaiseAndSetIfChanged(ref canRedo, value); }
+        }
 
         #endregion
 
@@ -843,6 +868,8 @@ namespace LcmsNet.SampleQueue
             }
             backStack.Push(pushQueue);
             IsDirty = true;
+
+            SetCanUndoRedo();
         }
 
         public bool IsDirty { get; set; }
@@ -879,6 +906,12 @@ namespace LcmsNet.SampleQueue
             return newQueue;
         }
 
+        private void SetCanUndoRedo()
+        {
+            CanUndo = m_undoBackWaitingQueue.Count > 0;
+            CanRedo = m_undoForwardWaitingQueue.Count > 0;
+        }
+
         /// <summary>
         /// Undoes the most recent operation on the queue.
         /// </summary>
@@ -904,6 +937,8 @@ namespace LcmsNet.SampleQueue
 
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
+
+            SetCanUndoRedo();
         }
 
         /// <summary>
@@ -929,6 +964,8 @@ namespace LcmsNet.SampleQueue
 
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
+
+            SetCanUndoRedo();
         }
 
         #endregion
@@ -2375,5 +2412,13 @@ namespace LcmsNet.SampleQueue
         }
 
         #endregion
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

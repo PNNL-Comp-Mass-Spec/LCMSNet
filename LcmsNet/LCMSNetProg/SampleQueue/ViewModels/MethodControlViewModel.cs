@@ -165,10 +165,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             base.SetupCommands();
             AddBlankCommand = ReactiveCommand.Create(() => this.AddNewSample(true));
             AddBlankAppendCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
-            RemoveSelectedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence));
-            MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToMethod(enumColumnDataHandling.LeaveAlone));
+            RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
+            //DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(Column, enumColumnDataHandling.LeaveAlone));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToMethod(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
         }
 
         #endregion

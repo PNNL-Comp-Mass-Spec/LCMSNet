@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -142,6 +143,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private formTrayVialAssignment m_trayVial;
 
         private bool autoScroll = true;
+        private ObservableAsPropertyHelper<bool> itemsSelected;
 
         /// <summary>
         /// If autoscroll during sequence run is enabled
@@ -151,6 +153,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             get { return autoScroll; }
             set { this.RaiseAndSetIfChanged(ref autoScroll, value); }
         }
+
+        public bool ItemsSelected => this.itemsSelected?.Value ?? false;
 
         public SampleDataManager SampleDataManager { get; private set; }
 
@@ -206,6 +210,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             //
             fillDownViewModel = new SampleMethodFillDownViewModel();
             m_trayVial = new formTrayVialAssignment();
+
+            this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
         }
 
         #endregion
@@ -579,7 +585,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Removes the selected samples from the list view.
         /// </summary>
-        private void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
+        protected void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
         {
             try
             {
@@ -829,18 +835,18 @@ namespace LcmsNet.SampleQueue.ViewModels
             AddBlankCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
             AddBlankToUnusedCommand = ReactiveCommand.Create(() => this.AddNewSample(true));
             AddDMSCommand = ReactiveCommand.Create(() => this.ShowDMSView());
-            RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone));
-            FillDownCommand = ReactiveCommand.Create(() => this.FillDown());
-            TrayVialCommand = ReactiveCommand.Create(() => this.EditTrayAndVial());
-            RandomizeCommand = ReactiveCommand.Create(() => this.RandomizeSelectedSamples());
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence));
+            RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
+            FillDownCommand = ReactiveCommand.Create(() => this.FillDown(), this.WhenAnyValue(x => x.ItemsSelected));
+            TrayVialCommand = ReactiveCommand.Create(() => this.EditTrayAndVial(), this.WhenAnyValue(x => x.ItemsSelected));
+            RandomizeCommand = ReactiveCommand.Create(() => this.RandomizeSelectedSamples(), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
-            CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName());
-            DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData());
-            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo());
-            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo());
-            PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput());
+            CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
+            DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData(), this.WhenAnyValue(x => x.ItemsSelected));
+            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.SampleQueue.CanUndo));
+            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.SampleQueue.CanRedo));
+            PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
         }
 
