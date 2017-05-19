@@ -908,7 +908,7 @@ namespace LcmsNet.SampleQueue
 
         private void SetCanUndoRedo()
         {
-            CanUndo = m_undoBackWaitingQueue.Count > 0;
+            CanUndo = m_undoBackWaitingQueue.Count > 1;
             CanRedo = m_undoForwardWaitingQueue.Count > 0;
         }
 

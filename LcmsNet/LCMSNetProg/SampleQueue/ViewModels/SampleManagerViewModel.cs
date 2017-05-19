@@ -642,14 +642,14 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     this.m_sampleQueue.Undo();
                 }
-            }, this.WhenAnyValue(x => x.SampleDataManager.SampleQueue.CanUndo));
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
             RedoCommand = ReactiveCommand.Create(() =>
             {
                 using (SampleControlViewModel.Samples.SuppressChangeNotifications())
                 {
                     this.m_sampleQueue.Redo();
                 }
-            }, this.WhenAnyValue(x => x.SampleDataManager.SampleQueue.CanRedo));
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
             RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue());
             StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue());
         }

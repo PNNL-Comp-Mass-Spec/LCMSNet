@@ -323,10 +323,18 @@ namespace LcmsNetDataClasses
             set
             {
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
+                var oldHasNotRun = HasNotRun;
+                var oldIsSetToRun = IsSetToRunOrHasRun;
                 if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value))
                 {
-                    OnPropertyChanged(nameof(HasNotRun));
-                    OnPropertyChanged(nameof(IsSetToRunOrHasRun));
+                    if (oldHasNotRun != HasNotRun)
+                    {
+                        OnPropertyChanged(nameof(HasNotRun));
+                    }
+                    if (oldIsSetToRun != IsSetToRunOrHasRun)
+                    {
+                        OnPropertyChanged(nameof(IsSetToRunOrHasRun));
+                    }
                 }
             }
         }

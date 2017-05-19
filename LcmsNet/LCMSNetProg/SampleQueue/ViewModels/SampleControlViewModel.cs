@@ -68,7 +68,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             //
             // Then update the sample queue...
             //
-            SampleDataManager.SampleQueue.UpdateSamples(samples);
+            SampleDataManager.UpdateSamples(samples);
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -169,7 +169,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             SampleDataManager = sampleDataManager;
             SampleDataManager.WhenAnyValue(x => x.HasData, x => x.HasValidColumns).Subscribe(x => SetEnabledDisabled());
-            SampleDataManager.SampleQueue.SamplesUpdated += SamplesUpdated;
+            SampleDataManager.Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.HasNotRun)))
+                .Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
+            this.WhenAnyValue(x => x.SampleDataManager.Samples).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
 
             Initialize(dmsView);
             SetupCommands();
@@ -296,7 +298,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     // TODO: Is this copy/update still needed?
                     samples = m_trayVial.SampleList;
-                    SampleDataManager.SampleQueue.UpdateSamples(samples);
+                    SampleDataManager.UpdateSamples(samples);
                 }
             }
 
@@ -421,7 +423,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public void PreviewSelectedThroughput()
         {
             var samples = GetSelectedSamples();
-            samples.RemoveAll(data => data.DmsData.DatasetName.Contains(SampleDataManager.SampleQueue.UnusedSampleName));
+            samples.RemoveAll(data => data.DmsData.DatasetName.Contains(SampleDataManager.UnusedSampleName));
             if (samples.Count > 0)
             {
                 //
@@ -561,7 +563,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     using (Samples.SuppressChangeNotifications())
                     {
                         var newSamples = form.OutputSampleList;
-                        SampleDataManager.SampleQueue.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
+                        SampleDataManager.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
                     }
                 }
             }
@@ -630,30 +632,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(0, "Exception in RemoveSelectedSamples: " + ex.Message, ex);
-            }
-        }
-
-        #endregion
-
-        #region Queue Manager Event Handlers
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SamplesUpdated(object sender, classSampleQueueArgs data)
-        {
-            if (AutoScroll)
-            {
-                // Create a list copy first to try to avoid collection modified exceptions...
-                var lastCompletedSample = Samples.ToList().Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
-                if (lastCompletedSample != null)
-                {
-                    var pos = Samples.IndexOf(lastCompletedSample);
-                    var scrollTo = Math.Min(pos + 4, Samples.Count - 1);
-                    ScrollIntoView(Samples[scrollTo]);
-                }
             }
         }
 
@@ -844,13 +822,28 @@ namespace LcmsNet.SampleQueue.ViewModels
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData(), this.WhenAnyValue(x => x.ItemsSelected));
-            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.SampleQueue.CanUndo));
-            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.SampleQueue.CanRedo));
+            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
+            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
         }
 
         #endregion
+
+        private void PerformAutoScroll()
+        {
+            if (AutoScroll)
+            {
+                // Create a list copy first to try to avoid collection modified exceptions...
+                var lastCompletedSample = Samples.ToList().Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
+                if (lastCompletedSample != null)
+                {
+                    var pos = Samples.IndexOf(lastCompletedSample);
+                    var scrollTo = Math.Min(pos + 4, Samples.Count - 1);
+                    ScrollIntoView(Samples[scrollTo]);
+                }
+            }
+        }
 
         public event EventHandler<SampleScrollChangeEventArgs> ScrollUpdateEvent;
 

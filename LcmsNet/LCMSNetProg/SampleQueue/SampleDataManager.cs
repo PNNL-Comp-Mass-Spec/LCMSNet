@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.ViewModels;
@@ -285,6 +286,9 @@ namespace LcmsNet.SampleQueue
                        prop.Equals(nameof(obj.Sample.SequenceID));
             }).Throttle(TimeSpan.FromSeconds(.25))
             .Subscribe(x => this.SampleQueue.UpdateSample(x.Sender.Sample));
+
+            this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(SynchronizationContext.Current).ToProperty(this, x => x.CanUndo, out canUndo);
+            this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(SynchronizationContext.Current).ToProperty(this, x => x.CanRedo, out canRedo);
         }
 
         #endregion
@@ -639,7 +643,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets or sets the sample queue that handles all queue management at a low level.
         /// </summary>
-        public virtual classSampleQueue SampleQueue
+        private classSampleQueue SampleQueue
         {
             get { return sampleQueue; }
             set
@@ -668,7 +672,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets or sets a list of pal method names.
         /// </summary>
-        public virtual List<string> AutoSamplerMethods
+        public List<string> AutoSamplerMethods
         {
             get { return autoSamplerMethods; }
             set
@@ -681,7 +685,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets or sets a list of pal tray names.
         /// </summary>
-        public virtual List<string> AutoSamplerTrays
+        public List<string> AutoSamplerTrays
         {
             get { return autosamplerTrays; }
             set
@@ -695,7 +699,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets or sets a list of instrument method names stored on the MS instrument.
         /// </summary>
-        public virtual List<string> InstrumentMethods
+        public List<string> InstrumentMethods
         {
             get { return instrumentMethods; }
             set
@@ -704,6 +708,18 @@ namespace LcmsNet.SampleQueue
                 ShowInstrumentMethods();
             }
         }
+
+        private ObservableAsPropertyHelper<bool> canUndo;
+        private ObservableAsPropertyHelper<bool> canRedo;
+
+        public bool CanUndo => canUndo?.Value ?? false;
+
+        public bool CanRedo => canRedo?.Value ?? false;
+
+        /// <summary>
+        /// Gets the name of the un-used sample.
+        /// </summary>
+        public string UnusedSampleName => SampleQueue.UnusedSampleName;
 
         #endregion
 
@@ -801,6 +817,26 @@ namespace LcmsNet.SampleQueue
         #endregion
 
         #region Utility Methods
+
+
+        /// <summary>
+        /// Updates the sample with new data and alerts all listening objects.
+        /// </summary>
+        /// <param name="samples"></param>
+        public void UpdateSamples(List<classSampleData> samples)
+        {
+            SampleQueue.UpdateSamples(samples);
+        }
+
+        /// <summary>
+        /// Reorders the samples provided as the argument by inserting the items in the queue.  Re-orders in place.
+        /// </summary>
+        /// <param name="newOrders">List of samples that contain the new ordering.</param>
+        /// <param name="handling"></param>
+        public void ReorderSamples(List<classSampleData> newOrders, enumColumnDataHandling handling)
+        {
+            SampleQueue.ReorderSamples(newOrders, handling);
+        }
 
         public void AddDateCartnameColumnIDToDatasetName(List<classSampleData> samples)
         {
