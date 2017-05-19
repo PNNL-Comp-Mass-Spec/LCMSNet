@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using LcmsNetDataClasses;
@@ -52,7 +50,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public string WindowTitle
         {
             get { return windowTitle; }
-            set { this.RaiseAndSetIfChanged(ref windowTitle, value); }
+            private set { this.RaiseAndSetIfChanged(ref windowTitle, value); }
         }
 
         public string RequestName
@@ -121,7 +119,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveList<string> LcCartComboBoxOptions
         {
             get { return lcCartComboBoxOptions; }
-            set { this.RaiseAndSetIfChanged(ref lcCartComboBoxOptions, value); }
+            private set { this.RaiseAndSetIfChanged(ref lcCartComboBoxOptions, value); }
         }
 
         public string CartConfigName
@@ -133,31 +131,31 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveList<string> LcCartConfigComboBoxOptions
         {
             get { return lcCartConfigComboBoxOptions; }
-            set { this.RaiseAndSetIfChanged(ref lcCartConfigComboBoxOptions, value); }
+            private set { this.RaiseAndSetIfChanged(ref lcCartConfigComboBoxOptions, value); }
         }
 
         public DMSDownloadDataViewModel AvailableRequestData
         {
             get { return availableRequestData; }
-            set { this.RaiseAndSetIfChanged(ref availableRequestData, value); }
+            private set { this.RaiseAndSetIfChanged(ref availableRequestData, value); }
         }
 
         public bool LoadingData
         {
             get { return loadingData; }
-            set { this.RaiseAndSetIfChanged(ref loadingData, value); }
+            private set { this.RaiseAndSetIfChanged(ref loadingData, value); }
         }
 
         public string RequestsFoundString
         {
             get { return requestsFoundString; }
-            set { this.RaiseAndSetIfChanged(ref requestsFoundString, value); }
+            private set { this.RaiseAndSetIfChanged(ref requestsFoundString, value); }
         }
 
         public DMSDownloadDataViewModel SelectedRequestData
         {
             get { return selectedRequestData; }
-            set { this.RaiseAndSetIfChanged(ref selectedRequestData, value); }
+            private set { this.RaiseAndSetIfChanged(ref selectedRequestData, value); }
         }
 
         #endregion

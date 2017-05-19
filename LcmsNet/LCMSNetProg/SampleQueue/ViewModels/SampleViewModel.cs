@@ -91,25 +91,25 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SolidColorBrush RowBackColor
         {
             get { return rowBackColor; }
-            set { this.RaiseAndSetIfChanged(ref rowBackColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref rowBackColor, value); }
         }
 
         public SolidColorBrush RowForeColor
         {
             get { return rowForeColor; }
-            set { this.RaiseAndSetIfChanged(ref rowForeColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref rowForeColor, value); }
         }
 
         public SolidColorBrush RowSelectionBackColor
         {
             get { return rowSelectionBackColor; }
-            set { this.RaiseAndSetIfChanged(ref rowSelectionBackColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref rowSelectionBackColor, value); }
         }
 
         public SolidColorBrush RowSelectionForeColor
         {
             get { return rowSelectionForeColor; }
-            set { this.RaiseAndSetIfChanged(ref rowSelectionForeColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref rowSelectionForeColor, value); }
         }
 
         public SolidColorBrush RequestNameBackColor
@@ -122,7 +122,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
                 return requestNameBackColor;
             }
-            set { this.RaiseAndSetIfChanged(ref requestNameBackColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref requestNameBackColor, value); }
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public string RequestNameToolTipText
         {
             get { return requestNameToolTipText; }
-            set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
+            private set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
         }
 
         #endregion
@@ -316,11 +316,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool IsChecked
         {
-            get
-            {
-                //isChecked = Sample.IsSetToRunOrHasRun;
-                return isChecked;
-            }
+            get { return isChecked; }
             set { this.RaiseAndSetIfChanged(ref isChecked, value); }
         }
 

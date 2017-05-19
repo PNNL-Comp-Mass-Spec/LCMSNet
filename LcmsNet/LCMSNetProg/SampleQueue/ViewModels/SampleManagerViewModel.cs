@@ -186,7 +186,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public BitmapImage SequencePreview
         {
             get { return sequencePreview; }
-            set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
+            private set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
         }
 
         private delegate void DelegateToggleButtons(classSampleQueueArgs args);
@@ -200,31 +200,31 @@ namespace LcmsNet.SampleQueue.ViewModels
         public bool IsRunButtonEnabled
         {
             get { return isRunButtonEnabled; }
-            set { this.RaiseAndSetIfChanged(ref isRunButtonEnabled, value); }
+            private set { this.RaiseAndSetIfChanged(ref isRunButtonEnabled, value); }
         }
 
         public bool IsStopButtonEnabled
         {
             get { return isStopButtonEnabled; }
-            set { this.RaiseAndSetIfChanged(ref isStopButtonEnabled, value); }
+            private set { this.RaiseAndSetIfChanged(ref isStopButtonEnabled, value); }
         }
 
         public SolidColorBrush RunButtonBackColor
         {
             get { return runButtonBackColor; }
-            set { this.RaiseAndSetIfChanged(ref runButtonBackColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref runButtonBackColor, value); }
         }
 
         public SolidColorBrush StopButtonBackColor
         {
             get { return stopButtonBackColor; }
-            set { this.RaiseAndSetIfChanged(ref stopButtonBackColor, value); }
+            private set { this.RaiseAndSetIfChanged(ref stopButtonBackColor, value); }
         }
 
         public string TitleBarTextAddition
         {
             get { return titleBarTextAddition; }
-            set { this.RaiseAndSetIfChanged(ref titleBarTextAddition, value); }
+            private set { this.RaiseAndSetIfChanged(ref titleBarTextAddition, value); }
         }
 
         /// <summary>
@@ -650,8 +650,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                     this.m_sampleQueue.Redo();
                 }
             }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
-            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue());
-            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue());
+            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled));
+            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled));
         }
     }
 }

@@ -13,26 +13,26 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public MethodManagerViewModel()
         {
-            Method1ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method2ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method3ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method4ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method5ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method6ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method7ViewModel = new MethodControlViewModel() { CommandsVisible = false };
-            Method8ViewModel = new MethodControlViewModel() { CommandsVisible = false };
+            Method1ViewModel = new MethodControlViewModel(false);
+            Method2ViewModel = new MethodControlViewModel(false);
+            Method3ViewModel = new MethodControlViewModel(false);
+            Method4ViewModel = new MethodControlViewModel(false);
+            Method5ViewModel = new MethodControlViewModel(false);
+            Method6ViewModel = new MethodControlViewModel(false);
+            Method7ViewModel = new MethodControlViewModel(false);
+            Method8ViewModel = new MethodControlViewModel(false);
         }
 
         public MethodManagerViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
-            Method1ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method2ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method3ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method4ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method5ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method6ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method7ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
-            Method8ViewModel = new MethodControlViewModel(dmsView, sampleDataManager) { CommandsVisible = false };
+            Method1ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method2ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method3ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method4ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method5ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method6ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method7ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
+            Method8ViewModel = new MethodControlViewModel(dmsView, sampleDataManager, false);
 
             this.WhenAnyValue(x => x.Method1ViewModel, x => x.Method1ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedMethod = x.Item2 ? x.Item1 : this.FocusedMethod);
             this.WhenAnyValue(x => x.Method2ViewModel, x => x.Method2ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedMethod = x.Item2 ? x.Item1 : this.FocusedMethod);
@@ -66,55 +66,55 @@ namespace LcmsNet.SampleQueue.ViewModels
         public MethodControlViewModel Method1ViewModel
         {
             get { return method1ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method1ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method1ViewModel, value); }
         }
 
         public MethodControlViewModel Method2ViewModel
         {
             get { return method2ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method2ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method2ViewModel, value); }
         }
 
         public MethodControlViewModel Method3ViewModel
         {
             get { return method3ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method3ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method3ViewModel, value); }
         }
 
         public MethodControlViewModel Method4ViewModel
         {
             get { return method4ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method4ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method4ViewModel, value); }
         }
 
         public MethodControlViewModel Method5ViewModel
         {
             get { return method5ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method5ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method5ViewModel, value); }
         }
 
         public MethodControlViewModel Method6ViewModel
         {
             get { return method6ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method6ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method6ViewModel, value); }
         }
 
         public MethodControlViewModel Method7ViewModel
         {
             get { return method7ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method7ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method7ViewModel, value); }
         }
 
         public MethodControlViewModel Method8ViewModel
         {
             get { return method8ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref method8ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref method8ViewModel, value); }
         }
 
         public MethodControlViewModel FocusedMethod
         {
             get { return focusedMethod; }
-            set { this.RaiseAndSetIfChanged(ref focusedMethod, value); }
+            private set { this.RaiseAndSetIfChanged(ref focusedMethod, value); }
         }
 
         public int MethodsVisible

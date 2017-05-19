@@ -114,7 +114,7 @@ namespace LcmsNet.SampleQueue
         public bool DMSAvailable
         {
             get { return dmsAvailable; }
-            set { this.RaiseAndSetIfChanged(ref dmsAvailable, value); }
+            private set { this.RaiseAndSetIfChanged(ref dmsAvailable, value); }
         }
 
         /// <summary>

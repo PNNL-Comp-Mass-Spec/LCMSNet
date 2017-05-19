@@ -35,7 +35,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows form designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public MethodControlViewModel() : base()
+        public MethodControlViewModel(bool commandsAreVisible = true) : base()
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;
@@ -50,12 +50,14 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             IsViewEnabled = true;
             BackColor = Brushes.White;
+
+            CommandsVisible = commandsAreVisible;
         }
 
         /// <summary>
         /// Constructor that accepts dmsView and sampleQueue
         /// </summary>
-        public MethodControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
+        public MethodControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             BindingOperations.EnableCollectionSynchronization(FilteredSamples, this);
@@ -85,6 +87,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             IsViewEnabled = true;
             BackColor = Brushes.White;
+
+            CommandsVisible = commandsAreVisible;
         }
 
         private bool containsKeyboardFocus = false;
@@ -101,7 +105,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public bool CommandsVisible
         {
             get { return commandsVisible; }
-            set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
+            private set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
         }
 
         public bool MethodVisible

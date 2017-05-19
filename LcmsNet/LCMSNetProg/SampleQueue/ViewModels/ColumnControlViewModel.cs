@@ -31,7 +31,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows ui designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public ColumnControlViewModel() : base()
+        public ColumnControlViewModel(bool commandsAreVisible = true) : base()
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;
@@ -49,12 +49,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
             Column = new classColumnData() {ID = -2, Name = "DevColumn"};
+            CommandsVisible = commandsAreVisible;
         }
 
         /// <summary>
         /// Constructor that accepts dmsView and sampleDataManager
         /// </summary>
-        public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager) : base(dmsView, sampleDataManager)
+        public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, classColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
             FilteredSamples = new ReactiveList<SampleViewModel>();
             BindingOperations.EnableCollectionSynchronization(FilteredSamples, this);
@@ -94,6 +95,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             this.WhenAnyValue(x => x.ContainsKeyboardFocus).Subscribe(x => this.SetBackground());
             this.WhenAnyValue(x => x.Column.Status).Subscribe(x => ColumnEnabled = x != enumColumnStatus.Disabled);
+
+            Column = columnData;
+            CommandsVisible = commandsAreVisible;
         }
 
         private bool containsKeyboardFocus = false;
@@ -110,13 +114,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         public bool CommandsVisible
         {
             get { return commandsVisible; }
-            set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
+            private set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
         }
 
         public bool ColumnEnabled
         {
             get { return columnEnabled; }
-            set { this.RaiseAndSetIfChanged(ref columnEnabled, value); }
+            private set { this.RaiseAndSetIfChanged(ref columnEnabled, value); }
         }
 
         private void SetBackground()
@@ -178,7 +182,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public classColumnData Column
         {
             get { return m_columnData; }
-            set { this.RaiseAndSetIfChanged(ref m_columnData, value); }
+            private set { this.RaiseAndSetIfChanged(ref m_columnData, value); }
         }
 
         #endregion

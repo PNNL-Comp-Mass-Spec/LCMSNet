@@ -25,9 +25,9 @@ namespace LcmsNet.SampleQueue.Views
 
         private void UIElement_OnIsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is FrameworkElement fe && fe.DataContext is ColumnControlViewModel sccvm)
+            if (sender is FrameworkElement fe && fe.DataContext is ColumnControlViewModel ccvm)
             {
-                sccvm.ContainsKeyboardFocus = this.IsKeyboardFocusWithin;
+                ccvm.ContainsKeyboardFocus = this.IsKeyboardFocusWithin;
             }
         }
 

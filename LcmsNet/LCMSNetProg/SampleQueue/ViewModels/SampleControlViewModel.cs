@@ -240,7 +240,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public virtual DMSDownloadViewModel DMSView
         {
             get { return m_dmsView; }
-            set { m_dmsView = value; }
+            private set { m_dmsView = value; }
         }
 
         #endregion

@@ -14,18 +14,18 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnManagerViewModel()
         {
-            Column1ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
-            Column2ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
-            Column3ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
-            Column4ViewModel = new ColumnControlViewModel() { CommandsVisible = false };
+            Column1ViewModel = new ColumnControlViewModel(false);
+            Column2ViewModel = new ColumnControlViewModel(false);
+            Column3ViewModel = new ColumnControlViewModel(false);
+            Column4ViewModel = new ColumnControlViewModel(false);
         }
 
         public ColumnManagerViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
-            Column1ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[0], CommandsVisible = false };
-            Column2ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[1], CommandsVisible = false };
-            Column3ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[2], CommandsVisible = false };
-            Column4ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager) { Column = classCartConfiguration.Columns[3], CommandsVisible = false };
+            Column1ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[0], false);
+            Column2ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[1], false);
+            Column3ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[2], false);
+            Column4ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[3], false);
 
             this.WhenAnyValue(x => x.Column1ViewModel, x => x.Column1ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedColumn = x.Item2 ? x.Item1 : this.FocusedColumn);
             this.WhenAnyValue(x => x.Column2ViewModel, x => x.Column2ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedColumn = x.Item2 ? x.Item1 : this.FocusedColumn);
@@ -44,31 +44,31 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ColumnControlViewModel Column1ViewModel
         {
             get { return column1ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column1ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref column1ViewModel, value); }
         }
 
         public ColumnControlViewModel Column2ViewModel
         {
             get { return column2ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column2ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref column2ViewModel, value); }
         }
 
         public ColumnControlViewModel Column3ViewModel
         {
             get { return column3ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column3ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref column3ViewModel, value); }
         }
 
         public ColumnControlViewModel Column4ViewModel
         {
             get { return column4ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column4ViewModel, value); }
+            private set { this.RaiseAndSetIfChanged(ref column4ViewModel, value); }
         }
 
         public ColumnControlViewModel FocusedColumn
         {
             get { return focusedColumn; }
-            set { this.RaiseAndSetIfChanged(ref focusedColumn, value); }
+            private set { this.RaiseAndSetIfChanged(ref focusedColumn, value); }
         }
 
         public void ClearFocused()
