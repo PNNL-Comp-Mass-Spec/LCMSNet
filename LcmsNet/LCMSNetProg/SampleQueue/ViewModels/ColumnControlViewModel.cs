@@ -14,9 +14,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class ColumnControlViewModel : SampleControlViewModel
     {
-        public override ReactiveList<SampleViewModel> Samples => FilteredSamples;
+        public override IReadOnlyReactiveList<SampleViewModel> Samples => FilteredSamples;
 
-        public ReactiveList<SampleViewModel> FilteredSamples { get; private set; }
+        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples { get; private set; }
 
         // Local "wrapper" around the static class options, for data binding purposes
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
@@ -57,23 +57,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, classColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            FilteredSamples = new ReactiveList<SampleViewModel>();
-            BindingOperations.EnableCollectionSynchronization(FilteredSamples, this);
-            ResetFilteredSamples();
-
-            this.WhenAnyValue(x => x.Column).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => ResetFilteredSamples());
-
-            SampleDataManager.Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.LCMethod)))
-                .Throttle(TimeSpan.FromSeconds(0.25))
-                .Subscribe(x => ResetFilteredSamples());
+            FilteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.Equals(x.Sample.ColumnData));
 
             this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
             this.WhenAnyValue(x => x.Column.Status).Subscribe(x => this.SetColumnStatus());
-
-            SampleDataManager.Samples.Changed.Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => ResetFilteredSamples());
 
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
@@ -149,20 +139,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public override int NumFrozenColumns
         {
             get { return 0; }
-        }
-
-        private void ResetFilteredSamples()
-        {
-            using (FilteredSamples.SuppressChangeNotifications())
-            {
-                FilteredSamples.Clear();
-                if (Column == null)
-                {
-                    FilteredSamples.AddRange(SampleDataManager.Samples);
-                    return;
-                }
-                FilteredSamples.AddRange(SampleDataManager.Samples.Where(x => Column.Equals(x.Sample.ColumnData)));
-            }
         }
 
         #region Members

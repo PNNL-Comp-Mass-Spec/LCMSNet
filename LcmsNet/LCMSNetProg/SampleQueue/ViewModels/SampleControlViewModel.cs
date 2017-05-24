@@ -18,7 +18,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleControlViewModel : ReactiveObject
     {
-        public virtual ReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
+        public virtual IReadOnlyReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
 
         private SampleViewModel selectedSample;
 
@@ -835,10 +835,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (AutoScroll)
             {
                 // Create a list copy first to try to avoid collection modified exceptions...
-                var lastCompletedSample = Samples.ToList().Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
+                var samples = Samples.ToList();
+                var lastCompletedSample = samples.Where(x => !x.Sample.HasNotRun).DefaultIfEmpty(null).Last();
                 if (lastCompletedSample != null)
                 {
-                    var pos = Samples.IndexOf(lastCompletedSample);
+                    var pos = samples.IndexOf(lastCompletedSample);
                     var scrollTo = Math.Min(pos + 4, Samples.Count - 1);
                     ScrollIntoView(Samples[scrollTo]);
                 }

@@ -14,9 +14,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class MethodControlViewModel : SampleControlViewModel
     {
-        public override ReactiveList<SampleViewModel> Samples => FilteredSamples;
+        public override IReadOnlyReactiveList<SampleViewModel> Samples => FilteredSamples;
 
-        public ReactiveList<SampleViewModel> FilteredSamples { get; private set; }
+        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples { get; private set; }
 
         // Local "wrapper" around the static class options, for data binding purposes
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
@@ -59,17 +59,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public MethodControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            FilteredSamples = new ReactiveList<SampleViewModel>();
-            BindingOperations.EnableCollectionSynchronization(FilteredSamples, this);
-            ResetFilteredSamples();
-
-            this.WhenAnyValue(x => x.SelectedLCMethod).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => ResetFilteredSamples());
-
-            SampleDataManager.Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.LCMethod)))
-                .Throttle(TimeSpan.FromSeconds(0.25))
-                .Subscribe(x => ResetFilteredSamples());
-
-            SampleDataManager.Samples.Changed.Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => ResetFilteredSamples());
+            // Using signalReset to force an update when the selected LC Method changes
+            FilteredSamples =
+                SampleDataManager.Samples.CreateDerivedCollection(x => x, x => SelectedLCMethod == null || SelectedLCMethod.Equals(x.Sample.LCMethod),
+                    signalReset: this.WhenAnyValue(x => x.SelectedLCMethod));
 
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
@@ -143,20 +136,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public override int NumFrozenColumns
         {
             get { return 0; }
-        }
-
-        private void ResetFilteredSamples()
-        {
-            using (FilteredSamples.SuppressChangeNotifications())
-            {
-                FilteredSamples.Clear();
-                if (SelectedLCMethod == null)
-                {
-                    FilteredSamples.AddRange(SampleDataManager.Samples);
-                    return;
-                }
-                FilteredSamples.AddRange(SampleDataManager.Samples.Where(x => SelectedLCMethod.Equals(x.Sample.LCMethod)));
-            }
         }
 
         #region Commands
