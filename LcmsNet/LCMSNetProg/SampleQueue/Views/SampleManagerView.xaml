@@ -40,7 +40,7 @@
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <Image Source="/WPFControls/Image/undo_16.png" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="0" />
+                <Image Source="/Images/undo_16.png" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="0" />
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Row="1">Undo</TextBlock>
             </Grid>
         </Button>
@@ -50,7 +50,7 @@
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <Image Source="/WPFControls/Image/redo_16.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" />
+                <Image Source="/Images/redo_16.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" />
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Row="1">Redo</TextBlock>
             </Grid>
         </Button>
@@ -61,7 +61,7 @@
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <Image Source="/WPFControls/Image/ok.png" Stretch="Uniform" Grid.Column="0" />
+                <Image Source="/Images/ok.png" Stretch="Uniform" Grid.Column="0" />
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Column="1">Run</TextBlock>
             </Grid>
         </Button>
@@ -71,7 +71,7 @@
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <Image Source="/WPFControls/Image/notOK.png" Stretch="Uniform" Grid.Column="0" />
+                <Image Source="/Images/notOK.png" Stretch="Uniform" Grid.Column="0" />
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Column="1">Stop</TextBlock>
             </Grid>
         </Button>

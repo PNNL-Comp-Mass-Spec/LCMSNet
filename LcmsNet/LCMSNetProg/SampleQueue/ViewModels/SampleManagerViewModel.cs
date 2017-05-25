@@ -7,7 +7,6 @@ using System.Windows.Media.Imaging;
 using LcmsNet.Method.Forms;
 using LcmsNet.SampleQueue.Forms;
 using LcmsNet.SampleQueue.IO;
-using LcmsNet.WPFControls;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Experiment;
