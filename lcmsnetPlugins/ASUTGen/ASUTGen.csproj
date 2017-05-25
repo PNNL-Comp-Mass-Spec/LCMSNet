@@ -160,6 +160,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>REM copy $(TargetPath) "$(SolutionDir)LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"</PostBuildEvent>
+    <PostBuildEvent>REM copy $(TargetPath) "$(SolutionDir)pluginDLLs"</PostBuildEvent>
   </PropertyGroup>
 </Project>

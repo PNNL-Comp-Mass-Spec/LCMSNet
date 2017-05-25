@@ -88,9 +88,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(ProjectDir)*.dll" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)LCMSNet\LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
-xcopy /y /f /d "$(ProjectDir)*.dll" "$(SolutionDir)LCMSNet\LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"</PostBuildEvent>
+xcopy /y /f /d "$(ProjectDir)*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

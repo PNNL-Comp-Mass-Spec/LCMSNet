@@ -1167,8 +1167,8 @@
     <PostBuildEvent>rem xcopy /Y /F /D "$(SolutionDir)lib\*" "$(TargetDir)"
 xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
 
-if not exist "$(TargetDir)plugins\" mkdir "$(TargetDir)plugins\"
-xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.dll" "$(TargetDir)plugins\"
+if not exist "$(TargetDir)Plugins\" mkdir "$(TargetDir)Plugins\"
+xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.dll" "$(TargetDir)Plugins\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"

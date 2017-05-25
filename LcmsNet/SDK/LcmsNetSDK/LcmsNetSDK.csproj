@@ -260,8 +260,6 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)LCMSNet\LCMSNetProg\bin\$(PlatformName)\$(ConfigurationName)\Plugins\"
-
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
