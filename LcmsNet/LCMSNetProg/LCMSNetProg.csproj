@@ -199,6 +199,16 @@
     <Compile Include="IO\classXMLDeviceNotiferConfigurationWriter.cs" />
     <Compile Include="IO\classXMLDeviceNotifierConfigurationReader.cs" />
     <Compile Include="IO\FileUtilities.cs" />
+    <Compile Include="Logging\formMessageWindow2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Logging\formMessageWindow2.Designer.cs">
+      <DependentUpon>formMessageWindow2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logging\ViewModels\MessagesViewModel.cs" />
+    <Compile Include="Logging\Views\MessagesView.xaml.cs">
+      <DependentUpon>MessagesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Method\classColumnArgs.cs" />
     <Compile Include="Method\classColumnException.cs" />
     <Compile Include="Method\Drawing\classLCMethodConversationRenderer.cs" />
@@ -723,6 +733,9 @@
     <EmbeddedResource Include="frmEmulationDialog.resx">
       <DependentUpon>frmEmulationDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Logging\formMessageWindow2.resx">
+      <DependentUpon>formMessageWindow2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Method\Forms\controlBreakpoint.resx">
       <DependentUpon>controlBreakpoint.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1114,6 +1127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Configuration\Views\SystemConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Logging\Views\MessagesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

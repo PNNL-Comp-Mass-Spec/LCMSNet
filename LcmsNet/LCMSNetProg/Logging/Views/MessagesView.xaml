@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="LcmsNet.Logging.Views.MessagesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Logging.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="640" d:DesignWidth="1024"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:MessagesViewModel}, IsDesignTimeCreatable=True}">
+    <TabControl Margin="5" SelectedIndex="1" TabStripPlacement="Left" >
+        <TabItem Header="Messages">
+            <TabItem.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/MethodEditor.png" MaxHeight="32" />
+                        <Label Content="Messages" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+                    </StackPanel>
+                </DataTemplate>
+            </TabItem.HeaderTemplate>
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Bottom" Margin="5" Height="32" Content="Clear Messages" Command="{Binding ClearMessagesCommand}" />
+                <ListBox Margin="5" ItemsSource="{Binding MessageList}" />
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="Errors">
+            <TabItem.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/Errors.png" MaxHeight="32" />
+                        <Label Content="Errors" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+                    </StackPanel>
+                </DataTemplate>
+            </TabItem.HeaderTemplate>
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Bottom" Margin="5" Height="32" Content="Clear Error Notification" Command="{Binding AcknowledgeErrorsCommand}" />
+                <TextBox Margin="5" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" Text="{Binding ErrorMessages, Mode=OneWay}" />
+            </DockPanel>
+        </TabItem>
+    </TabControl>
+</UserControl>

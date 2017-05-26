@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using LcmsNet.Configuration;
 using LcmsNet.Devices.Fluidics;
 using LcmsNet.IO;
+using LcmsNet.Logging;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
 using LcmsNet.Notification;
@@ -154,7 +155,7 @@ namespace LcmsNet
         /// <summary>
         /// Form that displays the messages from the different parts of the program.
         /// </summary>
-        private formMessageWindow m_messages;
+        private formMessageWindow2 m_messages;
 
         /// <summary>
         /// Method editor form to construct new LC separations.
@@ -270,15 +271,13 @@ namespace LcmsNet
             //
             // Logging and messaging
             //
-            m_messages = new formMessageWindow();
+            m_messages = new formMessageWindow2();
             m_messages.ErrorCleared += m_messages_ErrorCleared;
             m_messages.ErrorPresent += m_messages_ErrorPresent;
             classApplicationLogger.Error += m_messages.ShowErrors;
             classApplicationLogger.Error += classApplicationLogger_Error;
-            classApplicationLogger.Message +=
-                m_messages.ShowMessage;
-            classApplicationLogger.Message +=
-                classApplicationLogger_Message;
+            classApplicationLogger.Message += m_messages.ShowMessage;
+            classApplicationLogger.Message += classApplicationLogger_Message;
 
             // Method Editor
             m_methodEditor = new formMethodEditor();
@@ -720,7 +719,17 @@ namespace LcmsNet
             {
                 if (InvokeRequired)
                 {
-                    Invoke(new statusDelegate(SetStatusMessage), messageLevel, args.Message);
+                    if (!IsDisposed)
+                    {
+                        try
+                        {
+                            Invoke(new statusDelegate(SetStatusMessage), messageLevel, args.Message);
+                        }
+                        catch
+                        {
+                            // Ignore exceptions here
+                        }
+                    }
                 }
                 else
                 {
