@@ -149,7 +149,7 @@ namespace LcmsNet
         /// <summary>
         /// Form that displays the configuration of the columns.
         /// </summary>
-        private formSystemConfiguration m_systemConfiguration;
+        private formSystemConfiguration2 m_systemConfiguration;
 
         /// <summary>
         /// Form that displays the messages from the different parts of the program.
@@ -224,7 +224,7 @@ namespace LcmsNet
             }
 
 
-            m_systemConfiguration = new formSystemConfiguration();
+            m_systemConfiguration = new formSystemConfiguration2();
             m_systemConfiguration.ColumnNameChanged += m_systemConfiguration_ColumnNameChanged;
             classSQLiteTools.GetSepTypeList(false);
 

@@ -19,7 +19,7 @@ namespace LcmsNetDataClasses.Configuration
         /// </summary>
         public classColumnData()
         {
-            m_name = "";
+            m_name = "NOTSET";
             m_columnIndex = 0;
             m_systemIndex = 0;
             m_status = enumColumnStatus.Idle;
@@ -190,8 +190,16 @@ namespace LcmsNetDataClasses.Configuration
                 if (this.RaiseAndSetIfChangedRetBool(ref m_columnColor, value))
                 {
                     ColorChanged?.Invoke(this, oldColor, m_columnColor);
+                    OnPropertyChanged(nameof(ColorWpf));
                 }
             }
+        }
+
+        [NotStoredProperty]
+        public System.Windows.Media.Color ColorWpf
+        {
+            get { return System.Windows.Media.Color.FromArgb(Color.A, Color.R, Color.G, Color.B); }
+            set { Color = Color.FromArgb(value.A, value.R, value.G, value.B); }
         }
 
         #endregion
