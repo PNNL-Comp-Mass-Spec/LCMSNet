@@ -10,6 +10,11 @@ namespace LcmsNetDataClasses.Configuration
     /// </summary>
     public static class classCartConfiguration
     {
+        static classCartConfiguration()
+        {
+            Columns = new List<classColumnData>();
+        }
+
         /// <summary>
         /// Gets the number of enabled columns.
         /// </summary>
