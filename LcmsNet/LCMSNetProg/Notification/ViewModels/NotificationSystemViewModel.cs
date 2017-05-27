@@ -983,7 +983,7 @@ namespace LcmsNet.Notification.ViewModels
         }
 
         /// <summary>
-        /// Clears the actions for all notificaiton settings.
+        /// Clears the actions for all notification settings.
         /// </summary>
         private void IgnoreAll()
         {
