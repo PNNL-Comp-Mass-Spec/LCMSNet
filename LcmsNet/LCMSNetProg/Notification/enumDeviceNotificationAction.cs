@@ -53,6 +53,7 @@ namespace LcmsNet.Notification
             Item = new ListViewItem {
                 Text = name
             };
+            Name = name;
         }
 
         #region Properties
@@ -61,6 +62,11 @@ namespace LcmsNet.Notification
         /// Gets the listview item associated with the listview item.
         /// </summary>
         public ListViewItem Item { get; private set; }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets or sets map that strings a notification to an action.

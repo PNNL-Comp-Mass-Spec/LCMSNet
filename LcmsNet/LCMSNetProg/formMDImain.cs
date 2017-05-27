@@ -170,7 +170,7 @@ namespace LcmsNet
         /// <summary>
         /// Notifications form.
         /// </summary>
-        private formNotificationSystem m_notifications;
+        private formNotificationSystem2 m_notifications;
 
         /// <summary>
         /// About box.
@@ -237,9 +237,8 @@ namespace LcmsNet
             };
 
             // Notification System
-            m_notifications = new formNotificationSystem(classDeviceManager.Manager);
-            m_notifications.ActionRequired +=
-                m_notifications_ActionRequired;
+            m_notifications = new formNotificationSystem2(classDeviceManager.Manager);
+            m_notifications.ActionRequired += m_notifications_ActionRequired;
 
 
             // Construct the sample queue object that holds and manages sample data ordering
