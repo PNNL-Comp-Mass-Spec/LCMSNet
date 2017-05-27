@@ -40,8 +40,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         private string batchId = string.Empty;
         private string block = string.Empty;
         private bool unassignedRequestsOnly;
-        private ReactiveList<string> lcCartComboBoxOptions = new ReactiveList<string>();
-        private ReactiveList<string> lcCartConfigComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> lcCartComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> lcCartConfigComboBoxOptions = new ReactiveList<string>();
         private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel();
         private bool loadingData;
         private string requestsFoundString = string.Empty;
@@ -116,11 +116,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref cartName, value); }
         }
 
-        public ReactiveList<string> LcCartComboBoxOptions
-        {
-            get { return lcCartComboBoxOptions; }
-            private set { this.RaiseAndSetIfChanged(ref lcCartComboBoxOptions, value); }
-        }
+        public ReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
 
         public string CartConfigName
         {
@@ -128,11 +124,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref cartConfigName, value); }
         }
 
-        public ReactiveList<string> LcCartConfigComboBoxOptions
-        {
-            get { return lcCartConfigComboBoxOptions; }
-            private set { this.RaiseAndSetIfChanged(ref lcCartConfigComboBoxOptions, value); }
-        }
+        public ReactiveList<string> LcCartConfigComboBoxOptions => lcCartConfigComboBoxOptions;
 
         public DMSDownloadDataViewModel AvailableRequestData
         {

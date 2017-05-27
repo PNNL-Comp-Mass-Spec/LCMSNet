@@ -17,7 +17,6 @@ namespace LcmsNet.Logging.ViewModels
             ErrorLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
             lockMessageList = new object();
             lockErrorList = new object();
-            MessageList = new ReactiveList<string>();
             ErrorMessages = "";
             BindingOperations.EnableCollectionSynchronization(MessageList, lockMessageList);
             SetupCommands();
@@ -148,6 +147,7 @@ namespace LcmsNet.Logging.ViewModels
         private readonly object lockErrorList;
 
         private string errorMessages = "";
+        private readonly ReactiveList<string> messageList = new ReactiveList<string>();
 
         #endregion
 
@@ -177,7 +177,7 @@ namespace LcmsNet.Logging.ViewModels
             private set { this.RaiseAndSetIfChanged(ref errorMessages, value); }
         }
 
-        public ReactiveList<string> MessageList { get; private set; }
+        public ReactiveList<string> MessageList => messageList;
 
         #endregion
     }

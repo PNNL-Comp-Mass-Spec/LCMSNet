@@ -23,28 +23,17 @@ namespace LcmsNet.Notification.ViewModels
     public class NotificationSystemViewModel : ReactiveObject
     {
         /// <summary>
-        /// Default constructor for the column config view control that takes no arguments
+        /// Default constructor for the notification system view control that takes no arguments
         /// Calling this constructor is only for the IDE designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
         public NotificationSystemViewModel()
         {
-            DevicesList = new ReactiveList<string>();
-            EventsList = new ReactiveList<string>();
-            AssignedEventsList = new ReactiveList<string>();
-            ActionsComboBoxOptions = new ReactiveList<enumDeviceNotificationAction>();
-            MethodsComboBoxOptions = new ReactiveList<classLCMethod>();
         }
 
         public NotificationSystemViewModel(classDeviceManager manager)
         {
             Disable();
-
-            DevicesList = new ReactiveList<string>();
-            EventsList = new ReactiveList<string>();
-            AssignedEventsList = new ReactiveList<string>();
-            ActionsComboBoxOptions = new ReactiveList<enumDeviceNotificationAction>();
-            MethodsComboBoxOptions = new ReactiveList<classLCMethod>();
 
             deviceEventTable = new Dictionary<INotifier, classNotificationLinker>();
             itemToDeviceMap = new Dictionary<string, INotifier>();
@@ -228,6 +217,11 @@ namespace LcmsNet.Notification.ViewModels
         private double numberConditionMinimum = 0;
         private double numberConditionMaximum = 0;
         private classLCMethod selectedLCMethod;
+        private readonly ReactiveList<string> devicesList = new ReactiveList<string>();
+        private readonly ReactiveList<string> eventsList = new ReactiveList<string>();
+        private readonly ReactiveList<string> assignedEventsList = new ReactiveList<string>();
+        private readonly ReactiveList<enumDeviceNotificationAction> actionsComboBoxOptions = new ReactiveList<enumDeviceNotificationAction>();
+        private readonly ReactiveList<classLCMethod> methodsComboBoxOptions = new ReactiveList<classLCMethod>();
 
         #endregion
 
@@ -362,11 +356,11 @@ namespace LcmsNet.Notification.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
         }
 
-        public ReactiveList<string> DevicesList { get; private set; }
-        public ReactiveList<string> EventsList { get; private set; }
-        public ReactiveList<string> AssignedEventsList { get; private set; }
-        public ReactiveList<enumDeviceNotificationAction> ActionsComboBoxOptions { get; private set; }
-        public ReactiveList<classLCMethod> MethodsComboBoxOptions { get; private set; }
+        public ReactiveList<string> DevicesList => devicesList;
+        public ReactiveList<string> EventsList => eventsList;
+        public ReactiveList<string> AssignedEventsList => assignedEventsList;
+        public ReactiveList<enumDeviceNotificationAction> ActionsComboBoxOptions => actionsComboBoxOptions;
+        public ReactiveList<classLCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         #endregion
 

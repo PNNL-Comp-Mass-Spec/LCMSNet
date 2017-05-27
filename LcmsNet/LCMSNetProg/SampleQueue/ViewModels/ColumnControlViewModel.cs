@@ -16,7 +16,9 @@ namespace LcmsNet.SampleQueue.ViewModels
     {
         public override IReadOnlyReactiveList<SampleViewModel> Samples => FilteredSamples;
 
-        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples { get; private set; }
+        private readonly IReadOnlyReactiveList<SampleViewModel> filteredSamples;
+
+        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
@@ -33,7 +35,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnControlViewModel(bool commandsAreVisible = true) : base()
         {
-            FilteredSamples = new ReactiveList<SampleViewModel>();
+            filteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
             ColumnIdColumnVisible = false;
@@ -57,7 +59,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, classColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            FilteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.Equals(x.Sample.ColumnData));
+            filteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.Equals(x.Sample.ColumnData));
 
             this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")

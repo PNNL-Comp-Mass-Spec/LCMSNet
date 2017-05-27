@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNetDataClasses;
@@ -15,8 +13,7 @@ namespace LcmsNet.Configuration.ViewModels
 {
     #region "Namespace delegates"
 
-    internal delegate void DelegateUpdateStatus(
-        object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus);
+    internal delegate void DelegateUpdateStatus(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus);
 
     #endregion
 
@@ -67,6 +64,12 @@ namespace LcmsNet.Configuration.ViewModels
         private ColumnConfigViewModel column4ViewModel;
         private bool instrumentNameNotSaved;
         private bool operatorNotSaved;
+        private readonly ReactiveList<string> timeZoneComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> instrumentComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> cartConfigComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> separationTypeComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> operatorsComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> columnNameComboBoxOptions = new ReactiveList<string>();
 
         #endregion
 
@@ -193,12 +196,12 @@ namespace LcmsNet.Configuration.ViewModels
             private set { this.RaiseAndSetIfChanged(ref operatorNotSaved, value); }
         }
 
-        public ReactiveList<string> TimeZoneComboBoxOptions { get; private set; }
-        public ReactiveList<string> InstrumentComboBoxOptions { get; private set; }
-        public ReactiveList<string> CartConfigComboBoxOptions { get; private set; }
-        public ReactiveList<string> SeparationTypeComboBoxOptions { get; private set; }
-        public ReactiveList<string> OperatorsComboBoxOptions { get; private set; }
-        public ReactiveList<string> ColumnNameComboBoxOptions { get; private set; }
+        public ReactiveList<string> TimeZoneComboBoxOptions => timeZoneComboBoxOptions;
+        public ReactiveList<string> InstrumentComboBoxOptions => instrumentComboBoxOptions;
+        public ReactiveList<string> CartConfigComboBoxOptions => cartConfigComboBoxOptions;
+        public ReactiveList<string> SeparationTypeComboBoxOptions => separationTypeComboBoxOptions;
+        public ReactiveList<string> OperatorsComboBoxOptions => operatorsComboBoxOptions;
+        public ReactiveList<string> ColumnNameComboBoxOptions => columnNameComboBoxOptions;
 
         #endregion
 
@@ -224,13 +227,6 @@ namespace LcmsNet.Configuration.ViewModels
         /// </summary>
         private void Initialize()
         {
-            TimeZoneComboBoxOptions = new ReactiveList<string>();
-            InstrumentComboBoxOptions = new ReactiveList<string>();
-            CartConfigComboBoxOptions = new ReactiveList<string>();
-            SeparationTypeComboBoxOptions = new ReactiveList<string>();
-            OperatorsComboBoxOptions = new ReactiveList<string>();
-            ColumnNameComboBoxOptions = new ReactiveList<string>();
-
 #if DEBUG
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))

@@ -13,10 +13,6 @@ namespace LcmsNet.SampleQueue.Views
         public MethodControlView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Background = Brushes.White;
-            }
             if (!CommandsGrid.IsVisible)
             {
                 GridButtonRow.Height = new GridLength(0);

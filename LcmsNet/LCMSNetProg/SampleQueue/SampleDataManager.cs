@@ -22,7 +22,9 @@ namespace LcmsNet.SampleQueue
     /// </summary>
     public class SampleDataManager : ReactiveObject
     {
-        public ReactiveList<SampleViewModel> Samples { get; private set; }
+        private readonly ReactiveList<SampleViewModel> samplesList = new ReactiveList<SampleViewModel>() { ChangeTrackingEnabled = true };
+
+        public ReactiveList<SampleViewModel> Samples => samplesList;
 
         private readonly classDMSSampleValidator mValidator;
 
@@ -263,7 +265,6 @@ namespace LcmsNet.SampleQueue
             ShowInstrumentMethods();
             ShowLCSeparationMethods();
 
-            Samples = new ReactiveList<SampleViewModel>() { ChangeTrackingEnabled = true };
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsChecked))).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.RequestName))).Subscribe(x => CheckForDuplicates(x.Sender.Sample));
             Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.IsDuplicateRequestName))).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));

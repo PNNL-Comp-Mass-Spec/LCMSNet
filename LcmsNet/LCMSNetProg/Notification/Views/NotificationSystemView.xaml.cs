@@ -24,10 +24,6 @@ namespace LcmsNet.Notification.Views
         public NotificationSystemView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Background = Brushes.White;
-            }
         }
     }
 }

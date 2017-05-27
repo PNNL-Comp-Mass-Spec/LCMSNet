@@ -5,21 +5,12 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class DMSDownloadDataViewModel : ReactiveObject
     {
-        private ReactiveList<classSampleData> data;
-        private ReactiveList<classSampleData> selectedData;
+        private readonly ReactiveList<classSampleData> data = new ReactiveList<classSampleData>();
+        private readonly ReactiveList<classSampleData> selectedData = new ReactiveList<classSampleData>();
         private classSampleData selectedItem;
 
-        public ReactiveList<classSampleData> Data
-        {
-            get { return data; }
-            private set { this.RaiseAndSetIfChanged(ref data, value); }
-        }
-
-        public ReactiveList<classSampleData> SelectedData
-        {
-            get { return selectedData; }
-            private set { this.RaiseAndSetIfChanged(ref selectedData, value); }
-        }
+        public ReactiveList<classSampleData> Data => data;
+        public ReactiveList<classSampleData> SelectedData => selectedData;
 
         public classSampleData SelectedItem
         {
@@ -29,8 +20,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public DMSDownloadDataViewModel()
         {
-            Data = new ReactiveList<classSampleData>();
-            SelectedData = new ReactiveList<classSampleData>();
         }
     }
 }

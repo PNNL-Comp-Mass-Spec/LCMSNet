@@ -16,22 +16,23 @@ namespace LcmsNet.SampleQueue
     {
         #region Static data
 
-        public static ReactiveList<classLCMethod> LcMethodOptions { get; private set; }
-        public static ReactiveList<string> InstrumentMethodOptions { get; private set; }
-        public static ReactiveList<string> DatasetTypeOptions { get; private set; }
-        public static ReactiveList<string> CartConfigOptions { get; private set; }
-        public static ReactiveList<string> PalTrayOptions { get; private set; }
+        private static readonly ReactiveList<classLCMethod> lcMethodOptions = new ReactiveList<classLCMethod>();
+        private static readonly ReactiveList<string> instrumentMethodOptions = new ReactiveList<string>();
+        private static readonly ReactiveList<string> datasetTypeOptions = new ReactiveList<string>();
+        private static readonly ReactiveList<string> cartConfigOptions = new ReactiveList<string>();
+        private static readonly ReactiveList<string> palTrayOptions = new ReactiveList<string>();
+
+        public static ReactiveList<classLCMethod> LcMethodOptions => lcMethodOptions;
+        public static ReactiveList<string> InstrumentMethodOptions => instrumentMethodOptions;
+        public static ReactiveList<string> DatasetTypeOptions => datasetTypeOptions;
+        public static ReactiveList<string> CartConfigOptions => cartConfigOptions;
+        public static ReactiveList<string> PalTrayOptions => palTrayOptions;
 
         // If null, no error retrieving the cart config names from the database; otherwise, the error that occurred
         public static string CartConfigOptionsError { get; private set; }
 
         static SampleQueueComboBoxOptions()
         {
-            LcMethodOptions = new ReactiveList<classLCMethod>();
-            DatasetTypeOptions = new ReactiveList<string>();
-            PalTrayOptions = new ReactiveList<string>();
-            InstrumentMethodOptions = new ReactiveList<string>();
-            CartConfigOptions = new ReactiveList<string>();
             CartConfigOptionsError = null;
 
 #if DEBUG

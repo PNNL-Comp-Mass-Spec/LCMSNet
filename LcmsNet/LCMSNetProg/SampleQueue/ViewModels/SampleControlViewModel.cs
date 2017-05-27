@@ -21,6 +21,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public virtual IReadOnlyReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
 
         private SampleViewModel selectedSample;
+        private readonly ReactiveList<SampleViewModel> selectedSamples = new ReactiveList<SampleViewModel>();
 
         public SampleViewModel SelectedSample
         {
@@ -28,7 +29,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedSample, value); }
         }
 
-        public ReactiveList<SampleViewModel> SelectedSamples { get; private set; }
+        public ReactiveList<SampleViewModel> SelectedSamples => selectedSamples;
 
         /// <summary>
         /// Edits the selected samples in the sample view.
@@ -196,8 +197,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void Initialize(DMSDownloadViewModel dmsView)
         {
             DMSView = dmsView;
-
-            SelectedSamples = new ReactiveList<SampleViewModel>();
 
             //
             // Background colors

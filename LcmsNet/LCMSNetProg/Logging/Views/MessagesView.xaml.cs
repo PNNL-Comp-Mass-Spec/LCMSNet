@@ -23,10 +23,6 @@ namespace LcmsNet.Logging.Views
         public MessagesView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Background = Brushes.White;
-            }
         }
     }
 }

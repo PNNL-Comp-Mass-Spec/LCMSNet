@@ -23,10 +23,6 @@ namespace LcmsNet.Configuration.Views
         public ColumnConfigView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Background = Brushes.White;
-            }
         }
     }
 }

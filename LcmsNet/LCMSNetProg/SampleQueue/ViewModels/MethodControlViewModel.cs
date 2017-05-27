@@ -16,7 +16,9 @@ namespace LcmsNet.SampleQueue.ViewModels
     {
         public override IReadOnlyReactiveList<SampleViewModel> Samples => FilteredSamples;
 
-        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples { get; private set; }
+        private readonly IReadOnlyReactiveList<SampleViewModel> filteredSamples;
+
+        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
         public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
@@ -37,7 +39,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public MethodControlViewModel(bool commandsAreVisible = true) : base()
         {
-            FilteredSamples = new ReactiveList<SampleViewModel>();
+            filteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
             ColumnIdColumnVisible = false;
@@ -60,7 +62,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public MethodControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
             // Using signalReset to force an update when the selected LC Method changes
-            FilteredSamples =
+            filteredSamples =
                 SampleDataManager.Samples.CreateDerivedCollection(x => x, x => SelectedLCMethod == null || SelectedLCMethod.Equals(x.Sample.LCMethod),
                     signalReset: this.WhenAnyValue(x => x.SelectedLCMethod));
 

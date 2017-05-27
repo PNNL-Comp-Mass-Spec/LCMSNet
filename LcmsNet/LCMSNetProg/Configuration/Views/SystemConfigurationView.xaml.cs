@@ -23,10 +23,6 @@ namespace LcmsNet.Configuration.Views
         public SystemConfigurationView()
         {
             InitializeComponent();
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Background = Brushes.White;
-            }
         }
     }
 }
