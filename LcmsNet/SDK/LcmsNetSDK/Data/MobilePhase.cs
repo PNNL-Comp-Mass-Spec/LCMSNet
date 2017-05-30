@@ -1,6 +1,9 @@
-﻿namespace LcmsNetSDK.Data
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace LcmsNetSDK.Data
 {
-    public class MobilePhase
+    public class MobilePhase : INotifyPropertyChangedExt
     {
         public MobilePhase()
         {
@@ -12,7 +15,26 @@
             Comment = comment;
         }
 
-        public string Name { get; set; }
-        public string Comment { get; set; }
+        private string name;
+        private string comment;
+
+        public string Name
+        {
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
+        }
+
+        public string Comment
+        {
+            get { return comment; }
+            set { this.RaiseAndSetIfChanged(ref comment, value); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

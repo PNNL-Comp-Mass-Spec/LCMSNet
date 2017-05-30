@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using LcmsNet.Configuration;
 using LcmsNet.Devices.Fluidics;
+using LcmsNet.Devices.Pumps;
 using LcmsNet.IO;
 using LcmsNet.Logging;
 using LcmsNet.Method;
@@ -180,7 +181,7 @@ namespace LcmsNet
         /// <summary>
         /// Display form for the pumps.
         /// </summary>
-        private formPumpDisplays m_displays;
+        private formPumpDisplays2 pumpDisplays;
 
         /// <summary>
         /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
@@ -251,11 +252,11 @@ namespace LcmsNet
             classDeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
 
             // Displays the pump data.
-            m_displays = new formPumpDisplays();
-            m_displays.Tack += m_displays_Tack;
-            m_displays.UnTack += m_displays_UnTack;
-            m_displays.Icon = Icon;
-            m_displays.IsTacked = true;
+            pumpDisplays = new formPumpDisplays2();
+            pumpDisplays.Tack += m_displays_Tack;
+            pumpDisplays.UnTack += m_displays_UnTack;
+            pumpDisplays.Icon = Icon;
+            pumpDisplays.IsTacked = true;
 
             classApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
             m_fluidicsDesign.LoadConfiguration();
@@ -351,7 +352,7 @@ namespace LcmsNet
                 SoftwareDevelopers = Program.SOFTWARE_DEVELOPERS
             };
 
-            AddForm(m_displays);
+            AddForm(pumpDisplays);
             AddForm(m_about);
             AddForm(m_messages);
             AddForm(m_notifications);
@@ -1078,20 +1079,20 @@ namespace LcmsNet
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            m_displays.BringToFront();
-            m_displays.Show();
+            pumpDisplays.BringToFront();
+            pumpDisplays.Show();
         }
 
         void m_displays_UnTack(object sender, EventArgs e)
         {
-            m_displays.MdiParent = null;
-            m_displays.WindowState = FormWindowState.Normal;
+            pumpDisplays.MdiParent = null;
+            pumpDisplays.WindowState = FormWindowState.Normal;
         }
 
         void m_displays_Tack(object sender, EventArgs e)
         {
-            m_displays.MdiParent = this;
-            m_displays.WindowState = FormWindowState.Maximized;
+            pumpDisplays.MdiParent = this;
+            pumpDisplays.WindowState = FormWindowState.Maximized;
         }
 
         private void toolButton_notificationSystem_Click(object sender, EventArgs e)
@@ -1109,7 +1110,7 @@ namespace LcmsNet
             forms.AddRange(new Form[]
             {
                 m_about,
-                m_displays,
+                pumpDisplays,
                 m_messages,
                 m_methodEditor,
                 m_notifications,

@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="LcmsNet.Devices.Pumps.Views.PumpDisplaysView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Devices.Pumps.ViewModels"
+             xmlns:views="clr-namespace:LcmsNet.Devices.Pumps.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="530" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:PumpDisplaysViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
+            <TabItem Header="Pump Status">
+                <!-- The normal way is the following, but we want to add them to a grid with gridsplitters, and that isn't so easy. Using code-behind instead.
+                <ItemsControl ItemsSource="{Binding PumpMonitorDisplays}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid x:Name="PumpStatusGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:PumpDisplayView DataContext="{Binding BindsDirectlyToSource=True}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl> -->
+                <Grid x:Name="PumpStatusGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Mobile Phases">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="37" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14" Foreground="DarkRed" Content="{Binding PumpName}" />
+                    <Button Grid.Row="1" Grid.Column="0" MaxHeight="32" Margin="3" Command="{Binding MoveLeftCommand}" >
+                        <Image Source="/Images/next-32-2.png" MaxHeight="32" Margin="-3" />
+                    </Button>
+                    <Button Grid.Row="1" Grid.Column="2" MaxHeight="32" Margin="3" Command="{Binding MoveRightCommand}" >
+                        <Image Source="/Images/next-32.png" MaxHeight="32" Margin="-3" />
+                    </Button>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="3">
+                        <GroupBox Margin="5" Header="{Binding PumpName}" Foreground="DarkRed">
+                            <ItemsControl ItemsSource="{Binding MobilePhases}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:MobilePhaseEditorView DataContext="{Binding BindsDirectlyToSource=True}" Margin="0,0,0,15" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Command="{Binding ChangeTackCommand}" Content="{Binding TackType}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
