@@ -119,6 +119,7 @@ namespace LcmsNet.Method.ViewModels
                     drawContext.Close();
                     var rtb = new RenderTargetBitmap(800, 200, 96, 96, PixelFormats.Pbgra32);
                     rtb.Render(drawVisual);
+                    rtb.Freeze();
 
                     PreviewAvailable(this, new SampleProgressPreviewArgs(rtb.ToImage(), rtb.ToBitmapImage()));
                 }
