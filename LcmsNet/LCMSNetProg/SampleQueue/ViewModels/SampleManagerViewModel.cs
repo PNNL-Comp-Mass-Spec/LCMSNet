@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -89,6 +90,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set { this.RaiseAndSetIfChanged(ref sampleDataManager, value); }
         }
 
+        private SynchronizationContext synchronizationContext;
+
         #endregion
 
         #region "Constructors"
@@ -100,6 +103,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SampleManagerViewModel(classSampleQueue queue)
         {
             Initialize(queue);
+            synchronizationContext = SynchronizationContext.Current;
         }
 
         /// <summary>
@@ -127,8 +131,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (m_sampleQueue != null)
             {
-                m_sampleQueue.SamplesWaitingToRun +=
-                    m_sampleQueue_SamplesWaitingToRun;
+                m_sampleQueue.SamplesWaitingToRun += m_sampleQueue_SamplesWaitingToRun;
             }
 
             //
@@ -279,7 +282,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="data"></param>
         internal void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
-            DetermineIfShouldSetButtons(data);
+            synchronizationContext.Post(d => DetermineIfShouldSetButtons(data), sender);
+            //DetermineIfShouldSetButtons(data);
         }
 
         /// <summary>
