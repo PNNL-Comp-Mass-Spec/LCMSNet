@@ -228,8 +228,10 @@ namespace LcmsNet
         [STAThread]
         static void Main()
         {
+#if !DEBUG
             try
             {
+#endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
@@ -476,9 +478,12 @@ namespace LcmsNet
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;
 
+#if !DEBUG
                     try
                     {
+#endif
                         Application.Run(main);
+#if !DEBUG
                     }
                     catch (Exception ex)
                     {
@@ -486,7 +491,9 @@ namespace LcmsNet
                             "Program Failed!", ex);
                         throw;
                     }
+#endif
                 }
+#if !DEBUG
             }
             catch (Exception ex)
             {
@@ -505,6 +512,9 @@ namespace LcmsNet
                 KillExistingPalProcesses();
                 LogMessage("-----------------shutdown complete----------------------");
             }
+#else
+            KillExistingPalProcesses();
+#endif
         }
 
         private static void DmsToolsManager_ProgressEvent(object sender, ProgressEventArgs e)
