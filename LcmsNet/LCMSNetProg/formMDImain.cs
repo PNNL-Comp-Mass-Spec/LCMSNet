@@ -166,7 +166,7 @@ namespace LcmsNet
         /// <summary>
         /// Displays progress of samples along each column.
         /// </summary>
-        private formColumnSampleProgress m_sampleProgress;
+        private formColumnSampleProgress2 m_sampleProgress;
 
         /// <summary>
         /// Notifications form.
@@ -281,7 +281,7 @@ namespace LcmsNet
 
             // Method Editor
             m_methodEditor = new formMethodEditor();
-            m_sampleProgress = new formColumnSampleProgress();
+            m_sampleProgress = new formColumnSampleProgress2();
             m_sampleManager.SampleManagerViewModel.Stop += m_sampleManager_Stop;
 
 

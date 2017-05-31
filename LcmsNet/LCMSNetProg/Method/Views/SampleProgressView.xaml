@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="LcmsNet.Method.Views.SampleProgressView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:views="clr-namespace:LcmsNet.Method.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="460" d:DesignWidth="748"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:SampleProgressViewModel}, IsDesignTimeCreatable=True}"
+             DataContextChanged="SampleProgressView_OnDataContextChanged">
+    <views:DrawingVisualHost x:Name="DrawingContainer" SizeChanged="DrawingContainer_OnSizeChanged" />
+</UserControl>

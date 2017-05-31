@@ -232,6 +232,9 @@
     <Compile Include="Method\classColumnArgs.cs" />
     <Compile Include="Method\classColumnException.cs" />
     <Compile Include="Method\Drawing\classLCMethodConversationRenderer.cs" />
+    <Compile Include="Method\Drawing\LCMethodColumnModeRenderer.cs" />
+    <Compile Include="Method\Drawing\LCMethodConversationRenderer.cs" />
+    <Compile Include="Method\Drawing\LCMethodRenderer.cs" />
     <Compile Include="Method\Drawing\LCRendererFactory.cs" />
     <Compile Include="Method\enumLCMethodRenderMode.cs" />
     <Compile Include="Method\Forms\controlBreakpoint.cs">
@@ -246,6 +249,12 @@
     <Compile Include="Method\Forms\controlParameterNumericUpDown.Designer.cs">
       <DependentUpon>controlParameterNumericUpDown.cs</DependentUpon>
     </Compile>
+    <Compile Include="Method\Forms\formColumnSampleProgress2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Method\Forms\formColumnSampleProgress2.Designer.cs">
+      <DependentUpon>formColumnSampleProgress2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Method\Forms\formConvertToSeconds.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -257,6 +266,15 @@
     </Compile>
     <Compile Include="Method\Forms\formFailedMethodLoadDisplay.Designer.cs">
       <DependentUpon>formFailedMethodLoadDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
+    <Compile Include="Method\ViewModels\SampleProgressViewModel.cs" />
+    <Compile Include="Method\Views\ColumnSampleProgressView.xaml.cs">
+      <DependentUpon>ColumnSampleProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\DrawingVisualHost.cs" />
+    <Compile Include="Method\Views\SampleProgressView.xaml.cs">
+      <DependentUpon>SampleProgressView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelCheckReport.cs">
       <SubType>UserControl</SubType>
@@ -801,6 +819,9 @@
       <DependentUpon>controlSampleProgress.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Method\Forms\formColumnSampleProgress2.resx">
+      <DependentUpon>formColumnSampleProgress2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Method\Forms\formConvertToSeconds.resx">
       <DependentUpon>formConvertToSeconds.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1186,6 +1207,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Logging\Views\MessagesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\ColumnSampleProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\SampleProgressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
