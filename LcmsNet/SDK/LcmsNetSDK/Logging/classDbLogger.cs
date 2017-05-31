@@ -25,7 +25,7 @@ namespace LcmsNetDataClasses.Logging
     /// </summary>
     public static class classDbLogger
     {
-        
+
         #region "Constants"
 
         private const string INSERT_CMD_BASE = "INSERT INTO T_LogData('Date','Type','Level','Sample',"
@@ -78,7 +78,7 @@ namespace LcmsNetDataClasses.Logging
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',");
                 var eventIndx = args.Sample.LCMethod.CurrentEventNumber;
-                if (eventIndx < 0 || eventIndx > args.Sample.LCMethod.Events.Count)
+                if (eventIndx < 0 || eventIndx >= args.Sample.LCMethod.Events.Count)
                 {
                     sqlCmdBlder.Append("'',");
                 }
