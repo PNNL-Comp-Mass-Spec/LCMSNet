@@ -56,6 +56,12 @@ namespace LcmsNetDataClasses
             var properties = classType.GetProperties();
             foreach (var property in properties)
             {
+                // Ignore flagged properties
+                if (Attribute.IsDefined(property, typeof(NotStoredPropertyAttribute)))
+                {
+                    continue;
+                }
+
                 if (property.PropertyType != typeof(Color))
                 {
                     var tempObject = property.GetValue(this, null);
@@ -101,6 +107,12 @@ namespace LcmsNetDataClasses
                 {
                     if (!string.Equals(tempProp.Name, currentKey, StringComparison.InvariantCultureIgnoreCase))
                         continue;
+
+                    // Ignore flagged properties
+                    if (Attribute.IsDefined(tempProp, typeof(NotStoredPropertyAttribute)))
+                    {
+                        continue;
+                    }
 
                     try
                     {
