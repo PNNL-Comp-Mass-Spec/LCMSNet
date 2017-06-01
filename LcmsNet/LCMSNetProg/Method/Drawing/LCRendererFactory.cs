@@ -15,5 +15,19 @@
             }
             return renderer;
         }
+
+        public static LCMethodRenderer GetRendererWpf(enumLCMethodRenderMode mode)
+        {
+            LCMethodRenderer renderer = null;
+            if (mode == enumLCMethodRenderMode.Column)
+            {
+                renderer = new LCMethodColumnModeRenderer();
+            }
+            else if (mode == enumLCMethodRenderMode.Conversation)
+            {
+                renderer = new LCMethodConversationRenderer();
+            }
+            return renderer;
+        }
     }
 }

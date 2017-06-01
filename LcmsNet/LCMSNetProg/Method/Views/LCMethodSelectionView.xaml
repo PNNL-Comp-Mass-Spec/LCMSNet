@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="LcmsNet.Method.Views.LCMethodSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodSelectionViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0" LastChildFill="True">
+            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" KeyUp="ComboBox_OnKeyUp" />
+            <ListBox Margin="3" SelectionMode="Extended" SelectionChanged="MethodList_OnSelectionChanged" ItemsSource="{Binding ListSelectedLCMethods}" />
+        </DockPanel>
+        <StackPanel Grid.Column="1" Width="60" Margin="3">
+            <Button Margin="3" Command="{Binding AddCommand}" >
+                <Image Source="/Images/Add.png" MaxHeight="16" Margin="3"/>
+            </Button>
+            <Button Margin="3" Command="{Binding MoveUpCommand}" >
+                <Image Source="/Images/Button_Up_16.png" MaxHeight="16" Margin="3"/>
+            </Button>
+            <Button Margin="3" Command="{Binding MoveDownCommand}" >
+                <Image Source="/Images/Button_Down_16.png" MaxHeight="16" Margin="3"/>
+            </Button>
+            <Button Margin="3" Command="{Binding RemoveCommand}" >
+                <Image Source="/Images/Button_Delete_16.png" MaxHeight="16" Margin="3"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

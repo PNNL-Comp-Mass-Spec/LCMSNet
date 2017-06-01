@@ -369,13 +369,11 @@ namespace LcmsNet.Method.Drawing
 
             graphics.PushClip(new RectangleGeometry(eventBounds));
 
-            var segments = new[]
+            var figure = new PathFigure(new Point(startPoint, y + triHeight), new[]
             {
                 new LineSegment(new Point(startPoint + triWidth, y), true),
                 new LineSegment(new Point(startPoint - triWidth, y), true),
-            };
-
-            var figure = new PathFigure(new Point(startPoint, y + triHeight), segments, true);
+            }, true);
             var geometry = new PathGeometry(new [] { figure });
 
             // Black Outline

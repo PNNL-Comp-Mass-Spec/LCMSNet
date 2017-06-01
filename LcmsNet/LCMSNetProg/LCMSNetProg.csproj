@@ -267,12 +267,50 @@
     <Compile Include="Method\Forms\formFailedMethodLoadDisplay.Designer.cs">
       <DependentUpon>formFailedMethodLoadDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Method\Forms\FormMethodEditor2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Method\Forms\FormMethodEditor2.Designer.cs">
+      <DependentUpon>FormMethodEditor2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Method\ViewModels\BreakpointViewModel.cs" />
     <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
+    <Compile Include="Method\ViewModels\ConvertToolViewModel.cs" />
+    <Compile Include="Method\ViewModels\EventParameterViewModel.cs" />
+    <Compile Include="Method\ViewModels\LCMethodEditorViewModel.cs" />
+    <Compile Include="Method\ViewModels\LCMethodEventViewModel.cs" />
+    <Compile Include="Method\ViewModels\LCMethodSelectionViewModel.cs" />
+    <Compile Include="Method\ViewModels\LCMethodStageViewModel.cs" />
+    <Compile Include="Method\ViewModels\LCMethodTimelineViewModel.cs" />
     <Compile Include="Method\ViewModels\SampleProgressViewModel.cs" />
+    <Compile Include="Method\Views\BreakpointView.xaml.cs">
+      <DependentUpon>BreakpointView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Method\Views\ColumnSampleProgressView.xaml.cs">
       <DependentUpon>ColumnSampleProgressView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Method\Views\ConvertToolWindow.xaml.cs">
+      <DependentUpon>ConvertToolWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Method\Views\DrawingVisualHost.cs" />
+    <Compile Include="Method\Views\EventParameterView.xaml.cs">
+      <DependentUpon>EventParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\LCMethodEditorView.xaml.cs">
+      <DependentUpon>LCMethodEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\LCMethodEventView.xaml.cs">
+      <DependentUpon>LCMethodEventView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\LCMethodSelectionView.xaml.cs">
+      <DependentUpon>LCMethodSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\LCMethodStageView.xaml.cs">
+      <DependentUpon>LCMethodStageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\LCMethodTimelineView.xaml.cs">
+      <DependentUpon>LCMethodTimelineView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Method\Views\SampleProgressView.xaml.cs">
       <DependentUpon>SampleProgressView.xaml</DependentUpon>
     </Compile>
@@ -838,6 +876,9 @@
       <DependentUpon>formColumnSampleProgress.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Method\Forms\FormMethodEditor2.resx">
+      <DependentUpon>FormMethodEditor2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Method\Forms\formMethodPreviewOptions.resx">
       <DependentUpon>formMethodPreviewOptions.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1214,11 +1255,43 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Method\Views\ConvertToolWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\EventParameterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Method\Views\SampleProgressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Notification\Views\NotificationSystemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\BreakpointView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\LCMethodEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\LCMethodEventView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\LCMethodSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\LCMethodStageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\LCMethodTimelineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1286,7 +1359,7 @@
       <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="reactiveui">
-      <Version>7.3.0</Version>
+      <Version>7.4.0</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.99</Version>

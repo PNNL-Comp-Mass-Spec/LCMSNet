@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="LcmsNet.Method.Views.EventParameterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="40" d:DesignWidth="100"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:EventParameterViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="{Binding ParameterLabel}" />
+        <ComboBox Grid.Column="1" Margin="3" SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboBoxOptions}" Visibility="{Binding ShowComboBox, Converter={StaticResource BoolToVis}}" />
+        <TextBox Grid.Column="1" Margin="3" MinWidth="100" Text="{Binding TextValue}" Visibility="{Binding ShowTextBox, Converter={StaticResource BoolToVis}}" />
+        <xctk:DoubleUpDown Grid.Column="1" Margin="3" Width="100" Increment="{Binding Increment}" Minimum="{Binding NumberMinimum}" Maximum="{Binding NumberMaximum}" Value="{Binding NumberValue}" FormatString="{Binding NumberFormat}" Visibility="{Binding ShowNumericUpDown, Converter={StaticResource BoolToVis}}" />
+        <Button Grid.Column="2" Margin="3" Width="32" x:Name="ConversionButton" Content=".." Click="ConversionButton_OnClick" Visibility="{Binding ShowNumericUpDown, Converter={StaticResource BoolToVis}}" />
+    </Grid>
+</UserControl>

@@ -161,7 +161,7 @@ namespace LcmsNet
         /// <summary>
         /// Method editor form to construct new LC separations.
         /// </summary>
-        private formMethodEditor m_methodEditor;
+        private formMethodEditor2 methodEditor;
 
         /// <summary>
         /// Displays progress of samples along each column.
@@ -280,7 +280,7 @@ namespace LcmsNet
             classApplicationLogger.Message += classApplicationLogger_Message;
 
             // Method Editor
-            m_methodEditor = new formMethodEditor();
+            methodEditor = new formMethodEditor2();
             m_sampleProgress = new formColumnSampleProgress2();
             m_sampleManager.SampleManagerViewModel.Stop += m_sampleManager_Stop;
 
@@ -356,7 +356,7 @@ namespace LcmsNet
             AddForm(m_about);
             AddForm(m_messages);
             AddForm(m_notifications);
-            AddForm(m_methodEditor);
+            AddForm(methodEditor);
             AddForm(m_sampleProgress);
             AddForm(m_systemConfiguration);
             AddForm(m_sampleManager);
@@ -969,8 +969,8 @@ namespace LcmsNet
         /// </summary>
         private void ShowMethodEditor()
         {
-            m_methodEditor.Show();
-            m_methodEditor.BringToFront();
+            methodEditor.Show();
+            methodEditor.BringToFront();
         }
 
         /// <summary>
@@ -1112,7 +1112,7 @@ namespace LcmsNet
                 m_about,
                 pumpDisplays,
                 m_messages,
-                m_methodEditor,
+                methodEditor,
                 m_notifications,
                 m_sampleProgress,
                 m_sampleManager
