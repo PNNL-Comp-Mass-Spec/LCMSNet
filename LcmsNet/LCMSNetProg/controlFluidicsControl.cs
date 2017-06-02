@@ -298,7 +298,7 @@ namespace LcmsNet
 
         public void UpdateImage()
         {
-            if ((ParentForm.MdiParent == null || ParentForm.MdiParent.ActiveMdiChild == ParentForm) &&
+            if ((ParentForm?.MdiParent == null || ParentForm.MdiParent.ActiveMdiChild == ParentForm) &&
                 Visible)
             {
                 Debug.WriteLine("Updating Image");
