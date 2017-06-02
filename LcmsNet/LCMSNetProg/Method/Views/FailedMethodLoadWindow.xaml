@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
         mc:Ignorable="d"
-        Title="FailedMethodLoadWindow" Height="529" Width="800"
+        Title="Method Load Issues" Height="529" Width="800"
         d:DataContext="{d:DesignInstance {x:Type viewModels:FailedMethodLoadViewModel}, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterScreen">
     <Grid>
