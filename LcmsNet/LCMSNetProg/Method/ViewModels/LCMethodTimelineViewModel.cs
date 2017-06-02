@@ -178,16 +178,6 @@ namespace LcmsNet.Method.ViewModels
         #region Rendering and Render Invoking
 
         /// <summary>
-        /// Causes the timeline renderings to be re-drawn.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void controlLCMethodTimeline_Resize(object sender, EventArgs e)
-        {
-            Refresh();
-        }
-
-        /// <summary>
         /// Renders the method provided.
         /// </summary>
         /// <param name="method"></param>

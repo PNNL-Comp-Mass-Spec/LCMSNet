@@ -27,7 +27,7 @@ namespace LcmsNet.Method.Views
             InitializeComponent();
         }
 
-        private void SampleProgressView_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void TimelineView_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.DataContext is LCMethodTimelineViewModel lcmtvm)
             {

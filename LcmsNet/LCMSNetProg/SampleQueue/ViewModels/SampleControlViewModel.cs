@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using LcmsNet.Method;
 using LcmsNet.Method.Forms;
+using LcmsNet.Method.ViewModels;
+using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Forms;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetDataClasses;
@@ -66,9 +68,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     "Unable to edit dmsdata:" + ex.Message, ex);
             }
 
-            //
             // Then update the sample queue...
-            //
             SampleDataManager.UpdateSamples(samples);
 
             // Re-select the first sample
@@ -198,17 +198,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             DMSView = dmsView;
 
-            //
             // Background colors
-            //
             // TODO: Alternating back colors to enhance user visual feedback.
             // TODO: m_colors = new Color[2];
             // TODO: m_colors[0] = Color.White;
             // TODO: m_colors[1] = Color.Gainsboro;
 
-            //
             // Fill-down form for batch sample editing And Tray Vial assignmenet
-            //
             fillDownViewModel = new SampleMethodFillDownViewModel();
             m_trayVial = new formTrayVialAssignment();
 
@@ -271,9 +267,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void EditTrayAndVial()
         {
             var samples = GetSelectedSamples();
-            //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            //
             samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
@@ -310,14 +304,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void FillDown()
         {
-            //
             // Get the list of selected samples
-            //
             var samples = GetSelectedSamples();
 
-            //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            //
             samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
@@ -325,9 +315,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
             }
 
-            //
             // Create a new fill down form.
-            //
             fillDownViewModel.Samples = samples;
             fillDownViewModel.EnsureItemsAreSelected();
             var dialog = new SampleMethodFillDownWindow();
@@ -358,13 +346,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsWindow);
             var result = dmsWindow.ShowDialog();
 
-            //
             // If the user clicks ok , then add the samples from the
             // form into the sample queue.  Don't add them directly to the
             // form so that the event model will update both this view
             // and any other views that we may have.  For the sequence
             // we don't care how we add them to the form.
-            //
             if (result.HasValue && result.Value)
             {
                 var samples = m_dmsView.GetNewSamplesDMSView();
@@ -373,9 +359,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var insertToUnused = false;
                 if (HasUnusedSamples())
                 {
-                    //
                     // Ask the user what to do with these samples?
-                    //
                     var dialog = new InsertOntoUnusedWindow();
                     var insertResult = dialog.ShowDialog();
 
@@ -384,10 +368,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 AddSamplesToManager(samples, insertToUnused);
 
-                //
                 // Don't add directly to the user interface in case the
                 // sample manager class has something to say about one of the samples
-                //
                 classApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
             }
         }
@@ -425,11 +407,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             samples.RemoveAll(data => data.DmsData.DatasetName.Contains(SampleDataManager.UnusedSampleName));
             if (samples.Count > 0)
             {
-                //
                 // Validate the samples, and make sure we want to run these.
-                //
-                var preview = new formThroughputPreview();
-                preview.Show();
+                var previewView = new ThroughputPreviewWindow();
+                var previewVm = new ThroughputPreviewViewModel();
+                previewView.DataContext = previewVm;
 
                 foreach (var data in samples)
                 {
@@ -437,9 +418,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)));
                 }
 
-                preview.ShowAlignmentForSamples(samples);
-                preview.Visible = false;
-                preview.ShowDialog();
+                previewVm.ShowAlignmentForSamples(samples);
+                previewView.ShowDialog();
 
                 // Re-select the first sample
                 SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -512,9 +492,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void RandomizeSelectedSamples()
         {
             var samplesToRandomize = new List<classSampleData>();
-            //
             // Get all the data references that we want to randomize.
-            //
             foreach (var row in SelectedSamples)
             {
                 var data = row.Sample;
@@ -525,21 +503,17 @@ namespace LcmsNet.SampleQueue.ViewModels
                     {
                         if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                         {
-                            //
                             // Because sample clones are deep copies, we cannot trust that
                             // every object in the sample is serializable...so...we are stuck
                             // making sure we re-hash the method using the name which
                             // is copied during the serialization.
-                            //
                             sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
                         }
                     }
                     samplesToRandomize.Add(sample);
                 }
             }
-            //
             // If we have something selected then randomize them.
-            //
             if (samplesToRandomize.Count > 1)
             {
                 formSampleRandomizer form;
@@ -590,9 +564,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             try
             {
-                //
                 // Get a list of sequence ID's to remove
-                //
                 var samplesToRemove = SelectedSamples.OrderBy(x => x.Sample.SequenceID).ToList();
 
                 // Select the sample just before or the first sample following the sample(s) deleted

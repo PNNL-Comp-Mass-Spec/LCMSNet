@@ -8,6 +8,6 @@
              mc:Ignorable="d"
              d:DesignHeight="341" d:DesignWidth="611"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodTimelineViewModel}, IsDesignTimeCreatable=True}"
-             DataContextChanged="SampleProgressView_OnDataContextChanged">
+             DataContextChanged="TimelineView_OnDataContextChanged">
     <views:DrawingVisualHost x:Name="DrawingContainer" SizeChanged="DrawingContainer_OnSizeChanged" MouseDown="DrawingContainer_OnMouseDown" MouseUp="DrawingContainer_OnMouseUp" MouseMove="DrawingContainer_OnMouseMove" />
 </UserControl>

@@ -277,12 +277,14 @@
     <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
     <Compile Include="Method\ViewModels\ConvertToolViewModel.cs" />
     <Compile Include="Method\ViewModels\EventParameterViewModel.cs" />
+    <Compile Include="Method\ViewModels\FailedMethodLoadViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodEditorViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodEventViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodSelectionViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodStageViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodTimelineViewModel.cs" />
     <Compile Include="Method\ViewModels\SampleProgressViewModel.cs" />
+    <Compile Include="Method\ViewModels\ThroughputPreviewViewModel.cs" />
     <Compile Include="Method\Views\BreakpointView.xaml.cs">
       <DependentUpon>BreakpointView.xaml</DependentUpon>
     </Compile>
@@ -295,6 +297,9 @@
     <Compile Include="Method\Views\DrawingVisualHost.cs" />
     <Compile Include="Method\Views\EventParameterView.xaml.cs">
       <DependentUpon>EventParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\FailedMethodLoadWindow.xaml.cs">
+      <DependentUpon>FailedMethodLoadWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Method\Views\LCMethodEditorView.xaml.cs">
       <DependentUpon>LCMethodEditorView.xaml</DependentUpon>
@@ -313,6 +318,9 @@
     </Compile>
     <Compile Include="Method\Views\SampleProgressView.xaml.cs">
       <DependentUpon>SampleProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\ThroughputPreviewWindow.xaml.cs">
+      <DependentUpon>ThroughputPreviewWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelCheckReport.cs">
       <SubType>UserControl</SubType>
@@ -1263,7 +1271,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Method\Views\FailedMethodLoadWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Method\Views\SampleProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\ThroughputPreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
