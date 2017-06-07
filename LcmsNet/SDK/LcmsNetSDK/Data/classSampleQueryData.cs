@@ -22,7 +22,7 @@ namespace LcmsNetDataClasses
     {
         #region "Constants"
 
-        readonly string CMD_BASE = "SELECT * FROM V_Scheduled_Run_Export WHERE ";
+        readonly string CMD_BASE = "SELECT * FROM V_Scheduled_Run_Export";
 
         #endregion
 
@@ -106,11 +106,38 @@ namespace LcmsNetDataClasses
         #region "Methods"
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public classSampleQueryData()
+        {
+            // Define a minimum request ID by default, but do not define a maximum
+            MinRequestNum = "0";
+        }
+
+        /// <summary>
+        /// If a specified filter is defined, append the appropriate SQL to the query builder
+        /// </summary>
+        /// <param name="queryBldr"></param>
+        /// <param name="sqlFilter"></param>
+        /// <param name="filterName"></param>
+        private void AddQueryFilter(StringBuilder queryBldr, string sqlFilter, string filterName)
+        {
+            var filterValue = GetValueIfFound(filterName);
+            if (string.IsNullOrWhiteSpace(filterValue))
+                return;
+
+            if (queryBldr.Length > 0)
+                queryBldr.Append(" AND ");
+
+            queryBldr.Append(string.Format(sqlFilter, filterValue));
+        }
+
+        /// <summary>
         /// Tests for existence of spcified key in dictionary
         /// </summary>
         /// <param name="dictKey">Key name</param>
         /// <returns>Key value if found, otherwise empty string</returns>
-        private String GetValueIfFound(String dictKey)
+        private string GetValueIfFound(string dictKey)
         {
             if (m_QueryParams.ContainsKey(dictKey))
             {
@@ -119,48 +146,39 @@ namespace LcmsNetDataClasses
             return string.Empty;
         }
 
+        /// <summary>
+        /// Build the query string for retrieving data from V_Scheduled_Run_Export
+        /// </summary>
+        /// <returns></returns>
         public string BuildSqlString()
         {
-            var queryBldr = new StringBuilder(CMD_BASE);
+            var queryBldr = new StringBuilder();
 
-            // Add min/max request numbers
-            queryBldr.Append("Request >= '" + m_QueryParams["minrequestnum"] + "'");
-            queryBldr.Append(" AND Request <= '" + m_QueryParams["maxrequestnum"] + "'");
+            // Note that minimum request ID is auto-defined as 0 in the constructor
+            // Add it now only if the calling class changed it from 0
+            if (MinRequestNum != "0")
+                AddQueryFilter(queryBldr, "Request >= {0}", "MinRequestNum");
 
-            // Add request name, if applicable
-            if (m_QueryParams["requestname"].Length > 0)
+            // Add additional filters if they are defined
+            AddQueryFilter(queryBldr, "Request <= {0}", "MaxRequestNum");
+
+            AddQueryFilter(queryBldr, "Name LIKE '%{0}%'", "RequestName");
+            AddQueryFilter(queryBldr, "Cart LIKE '%{0}%'", "Cart");
+
+            AddQueryFilter(queryBldr, "Batch = {0}", "BatchID");
+            AddQueryFilter(queryBldr, "Block = {0}", "Block");
+
+            AddQueryFilter(queryBldr, "[Wellplate Number] LIKE '%{0}%'", "Wellplate");
+
+            if (queryBldr.Length == 0)
             {
-                queryBldr.Append(" AND Name LIKE '%" + m_QueryParams["requestname"] + "%'");
+                // No filters, just order the results
+                return CMD_BASE + " ORDER BY Name";
             }
 
-            // Add cart, if applicable
-            if (m_QueryParams["cart"].Length > 0)
-            {
-                queryBldr.Append(" AND Cart LIKE '%" + m_QueryParams["cart"] + "%'");
-            }
+            // Filters are defined
+            return CMD_BASE + " WHERE " + queryBldr + " ORDER BY Name";
 
-            // Add batch ID, if applicable
-            if (m_QueryParams["batchid"].Length > 0)
-            {
-                queryBldr.Append(" AND Batch='" + m_QueryParams["batchid"] + "'");
-            }
-
-            // Add block, if applicable
-            if (m_QueryParams["block"].Length > 0)
-            {
-                queryBldr.Append(" AND Block='" + m_QueryParams["block"] + "'");
-            }
-
-            // Addwellplate, if applicable
-            if (m_QueryParams["wellplate"].Length > 0)
-            {
-                queryBldr.Append(" AND [Wellplate Number] LIKE '%" + m_QueryParams["wellplate"] + "%'");
-            }
-
-            // Add Order clause
-            queryBldr.Append(" ORDER BY Name");
-
-            return queryBldr.ToString();
         }
 
         //public bool OneParamHasValue()
@@ -171,7 +189,7 @@ namespace LcmsNetDataClasses
         //      { return true; }
         //   }
         //   return false;
-        //} 
+        //}
 
         public override string ToString()
         {
