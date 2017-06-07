@@ -136,14 +136,14 @@ namespace LcmsNetSDK
             {
                 return true;
             }
-            
+
             // If the method starts after the fall dst transition and occurs on the DAY of that transition...
             if (method.Start.Subtract(dstTransitionFall).Milliseconds >= 0 &&
                 method.Start.Date == dstTransitionFall.Date)
             {
                 return true;
             }
-            
+
             // method does not start after a dst transition.
             return false;
         }
@@ -165,10 +165,10 @@ namespace LcmsNetSDK
             }
 
             var startOfWeek = transition.Week * 7 - 6;
-            
-            // What day of the week does the month start on? 
+
+            // What day of the week does the month start on?
             var firstDayOfWeek = (int) localCalendar.GetDayOfWeek(new DateTime(year, transition.Month, 1));
-            
+
             // Determine how much start date has to be adjusted
             int transitionDay;
             var changeDayOfWeek = (int) transition.DayOfWeek;
@@ -191,8 +191,9 @@ namespace LcmsNetSDK
         #region Properties
 
         /// <summary>
-        /// get current time as defined by the currently selected timezone
+        /// Get current time as defined by the currently selected timezone
         /// </summary>
+        /// <remarks>The time will be adjusted for daylight savings, as appropriate</remarks>
         public DateTime Now => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, m_current_timezone);
 
         public TimeZoneInfo TimeZone

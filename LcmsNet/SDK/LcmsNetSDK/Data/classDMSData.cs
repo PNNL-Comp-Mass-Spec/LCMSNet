@@ -86,7 +86,7 @@ namespace LcmsNetDataClasses
         }
 
         /// <summary>
-        /// Gets or sets the name of the sample after editing the request name.
+        /// Gets or sets the name of the dataset after editing the request name.
         /// </summary>
         public string DatasetName
         {

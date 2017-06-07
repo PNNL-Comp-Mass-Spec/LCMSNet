@@ -88,7 +88,7 @@ namespace LcmsNetDataClasses
     public class NotStoredPropertyAttribute : Attribute { }
 
     /// <summary>
-    /// Class to hold data for one sample (instrument run)
+    /// Class to hold data for one sample (more specifically, one instrument dataset)
     /// </summary>
     [Serializable]
     public class classSampleData : classDataClassBase, ICloneable, INotifyPropertyChangedExt, IEquatable<classSampleData>
