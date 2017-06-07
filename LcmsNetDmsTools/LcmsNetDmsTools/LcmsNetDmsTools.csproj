@@ -114,6 +114,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)\*.pdb" "$(SolutionDir)lib\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
