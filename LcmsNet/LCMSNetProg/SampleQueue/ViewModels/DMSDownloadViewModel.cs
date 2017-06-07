@@ -401,7 +401,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             queryData.BatchID = BatchId;
             queryData.Block = Block;
             queryData.Wellplate = Wellplate;
-            queryData.UnassignedOnly = UnassignedRequestsOnly;
 
             // Blank listview and display wait message
             LoadingData = true;
@@ -517,7 +516,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             try
             {
                 var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
-                tempRequestList = dmsTools.GetSamplesFromDMS(queryData);
+                tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData);
             }
             catch (classDatabaseConnectionStringException ex)
             {

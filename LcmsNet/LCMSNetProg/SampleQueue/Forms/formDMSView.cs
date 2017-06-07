@@ -401,7 +401,6 @@ namespace LcmsNet.SampleQueue
             queryData.BatchID = textBatchID.Text;
             queryData.Block = textBlock.Text;
             queryData.Wellplate = textWellplate.Text;
-            queryData.UnassignedOnly = checkBoxUnAssignedOnly.Checked;
 
             // Blank listview and display wait message
             labelPleaseWait.Visible = true;
@@ -414,7 +413,7 @@ namespace LcmsNet.SampleQueue
             try
             {
                 var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
-                tempRequestList = dmsTools.GetSamplesFromDMS(queryData);
+                tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData);
             }
             catch (classDatabaseConnectionStringException ex)
             {
