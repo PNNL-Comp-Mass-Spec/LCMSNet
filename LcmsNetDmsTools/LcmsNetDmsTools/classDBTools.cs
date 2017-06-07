@@ -830,13 +830,25 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
+        /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
+        [Obsolete("This method has a misleading name; use GetRequestedRunsFromDMS instead")]
         public List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData)
+        {
+            return GetRequestedRunsFromDMS(queryData);
+        }
+
+        /// <summary>
+        /// Gets a list of samples (essentially requested runs) from DMS
+        /// </summary>
+        /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
+        public List<classSampleData> GetRequestedRunsFromDMS(classSampleQueryData queryData)
         {
             var tmpReturnVal = new List<classSampleData>(); // Temp list for holding samples
             var connStr = GetConnectionString();
 
             DataTable schedRunList;
-            // Get a data table containing run requests
+
+            // Retrieve run requests from V_Scheduled_Run_Export, filtering based on settings in queryData
             var sqlCmd = queryData.BuildSqlString();
 
             try
