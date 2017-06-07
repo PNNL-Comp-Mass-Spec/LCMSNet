@@ -28,54 +28,77 @@ namespace LcmsNetDataClasses
 
         #region "Class variables"
 
-        readonly Dictionary<string, string> m_QueryParams = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        /// <summary>
+        /// Dictionary of filters to apply when finding requested runs
+        /// </summary>
+        /// <remarks>Keys are RequestName, MinRequestNum, MaxRequestNum, BatchID, Block, Cart, or Wellplate</remarks>
+        readonly Dictionary<string, string> m_QueryParams = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         #endregion
 
         #region "Properties"
 
+        /// <summary>
+        /// Requested run name
+        /// </summary>
         public string RequestName
         {
-            get { return GetValueIfFound("requestname"); }
-            set { m_QueryParams["requestname"] = value; }
+            get => GetValueIfFound("RequestName");
+            set => m_QueryParams["RequestName"] = value;
         }
 
+        /// <summary>
+        /// Minimum request ID (integer)
+        /// </summary>
         public string MinRequestNum
         {
-            get { return GetValueIfFound("minrequestnum"); }
-            set { m_QueryParams["minrequestnum"] = value; }
+            get => GetValueIfFound("MinRequestNum");
+            set => m_QueryParams["MinRequestNum"] = value;
         }
 
+        /// <summary>
+        /// Maximum request ID (integer)
+        /// </summary>
         public string MaxRequestNum
         {
-            get { return GetValueIfFound("maxrequestnum"); }
-            set { m_QueryParams["maxrequestnum"] = value; }
+            get => GetValueIfFound("MaxRequestNum");
+            set => m_QueryParams["MaxRequestNum"] = value;
         }
 
+        /// <summary>
+        /// Batch ID to use
+        /// </summary>
         public string BatchID
         {
-            get { return GetValueIfFound("batchid"); }
-            set { m_QueryParams["batchid"] = value; }
+            get => GetValueIfFound("BatchID");
+            set => m_QueryParams["BatchID"] = value;
         }
 
+        /// <summary>
+        /// Block to use
+        /// </summary>
         public string Block
         {
-            get { return GetValueIfFound("block"); }
-            set { m_QueryParams["block"] = value; }
+            get => GetValueIfFound("Block");
+            set => m_QueryParams["Block"] = value;
         }
 
+        /// <summary>
+        /// Cart name (supports partial match)
+        /// </summary>
         public string Cart
         {
-            get { return GetValueIfFound("cart"); }
-            set { m_QueryParams["cart"] = value; }
+            get => GetValueIfFound("Cart");
+            set => m_QueryParams["Cart"] = value;
         }
 
         public string Wellplate
         {
-            get { return GetValueIfFound("wellplate"); }
-            set { m_QueryParams["wellplate"] = value; }
+            get => GetValueIfFound("Wellplate");
+            set => m_QueryParams["Wellplate"] = value;
         }
 
+        [Obsolete("This property is unused")]
         public bool UnassignedOnly { get; set; }
 
         #endregion
