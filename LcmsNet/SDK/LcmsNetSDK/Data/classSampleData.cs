@@ -180,25 +180,11 @@ namespace LcmsNetDataClasses
         public static void AddDateCartColumnToDatasetName(classSampleData sample)
         {
             var oldName = sample.DmsData.DatasetName;
-            var now = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)); ;
-            var months = new[]
-            {
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec"
-            };
-            var dateName = String.Format("{0}{1}{2}", now.Day, months[now.Month - 1], now.Year - 2000);
+            var now = TimeKeeper.Instance.Now;
+            var dateName = now.ToString("ddMMMyy");
+
             var cartColumn = BuildCartColumnName(sample);
-            var name = String.Format("_{0}_{1}", dateName, cartColumn);
+            var name = string.Format("_{0}_{1}", dateName, cartColumn);
 
             var containsInfoAlready = oldName.Contains(cartColumn);
             if (!containsInfoAlready)
@@ -220,7 +206,7 @@ namespace LcmsNetDataClasses
         {
             var datasetName = sample.DmsData.DatasetName;
             var outFileName =
-                String.Format("{0}_{1}_{2}{3}",
+                string.Format("{0}_{1}_{2}{3}",
                     classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME),
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
                     sample.LCMethod.Start.ToString("MM.dd.yyyy_hh.mm.ss"),
