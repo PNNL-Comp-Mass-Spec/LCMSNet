@@ -1,0 +1,55 @@
+﻿<Window x:Class="LcmsNet.SampleQueue.Views.TrayVialAssignmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
+        xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
+        mc:Ignorable="d"
+        Title="TrayVialAssignmentWindow" Height="532" Width="936"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:TrayVialAssignmentViewModel}, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl>
+            <TabItem Header="{Binding TrayUnassigned.SampleCount}" HeaderStringFormat="Unassigned ({0})">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <views:TrayVialView Grid.Row="0" DataContext="{Binding TrayUnassigned}" />
+                    <StackPanel Grid.Row="1" Margin="3" Orientation="Horizontal">
+                        <RadioButton Margin="3" GroupName="ShowUnassignedOrAll" Content="Show All" />
+                        <RadioButton Margin="10,3,3,3" GroupName="ShowUnassignedOrAll" Content="UnassignedOnly" IsChecked="{Binding TrayUnassigned.ShowUnassigned}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Tray1.SampleCount}" HeaderStringFormat="Tray 1 ({0})">
+                <views:TrayVialView DataContext="{Binding Tray1}" />
+            </TabItem>
+            <TabItem Header="{Binding Tray2.SampleCount}" HeaderStringFormat="Tray 2 ({0})">
+                <views:TrayVialView DataContext="{Binding Tray2}" />
+            </TabItem>
+            <TabItem Header="{Binding Tray3.SampleCount}" HeaderStringFormat="Tray 3 ({0})">
+                <views:TrayVialView DataContext="{Binding Tray3}" />
+            </TabItem>
+            <TabItem Header="{Binding Tray4.SampleCount}" HeaderStringFormat="Tray 4 ({0})">
+                <views:TrayVialView DataContext="{Binding Tray4}" />
+            </TabItem>
+            <TabItem Header="{Binding Tray5.SampleCount}" HeaderStringFormat="Tray 5 ({0})">
+                <views:TrayVialView DataContext="{Binding Tray5}" />
+            </TabItem>
+            <TabItem Header="{Binding Tray6.SampleCount}" HeaderStringFormat="Tray 6 ({0})">
+                <views:TrayVialView DataContext="{Binding Tray6}" />
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Margin="3" Height="30" Width="80" Content="Cancel" Click="Cancel_OnClick" />
+            <Button Margin="3" Height="30" Width="80" Content="Apply" Click="Ok_OnClick" ClickMode="Release" Command="{Binding ApplyChangesCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

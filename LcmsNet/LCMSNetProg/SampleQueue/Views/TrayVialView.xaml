@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="LcmsNet.SampleQueue.Views.TrayVialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="375" d:DesignWidth="775"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:TrayVialViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Row="0" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="True" CanUserResizeColumns="True" RowHeaderWidth="20" SelectionMode="Extended" SelectionChanged="DataGrid_OnSelectionChanged" ItemsSource="{Binding FilteredSamples}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Sample" IsReadOnly="True" Binding="{Binding Sample.DmsData.DatasetName}" />
+                <DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{Binding Sample.SequenceID}" />
+                <DataGridTextColumn Header="Column #" IsReadOnly="True" Binding="{Binding ColumnId}" />
+                <DataGridTextColumn Header="Tray" IsReadOnly="True" Binding="{Binding Tray}" />
+                <DataGridTextColumn Header="Vial" IsReadOnly="True" Binding="{Binding Vial}" />
+                <DataGridTextColumn Header="Batch" IsReadOnly="True" Binding="{Binding Sample.DmsData.Batch}" />
+                <DataGridTextColumn Header="Block" IsReadOnly="True" Binding="{Binding Sample.DmsData.Block}" />
+                <DataGridTextColumn Header="Run Order (DMS)" IsReadOnly="True" Binding="{Binding Sample.DmsData.RunOrder}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Row="1" Grid.Column="0" Margin="3" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Margin="3" Width="150" Content="Assign All Selected To Vial" Command="{Binding AssignSelectedToVialCommand}" />
+            <xctk:IntegerUpDown DockPanel.Dock="Left" Margin="3" Width="80" Minimum="1" Maximum="10000" Value="{Binding AssignVial}" />
+            <xctk:IntegerUpDown DockPanel.Dock="Right" Margin="3" Width="80" Minimum="1" Maximum="10000" Value="{Binding MaxVials}" />
+            <Label DockPanel.Dock="Right" Margin="3,3,0,3" Content="Max Vials"/>
+            <Button DockPanel.Dock="Right" Margin="3" Width="150" Content="Auto Assign Vials" Command="{Binding AutoAssignVialsCommand}" />
+        </DockPanel>
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="3" BorderThickness="1" BorderBrush="Black">
+            <StackPanel Margin="5,5">
+                <Label Content="Move To:" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 1" Command="{Binding MoveToTray1Command}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 2" Command="{Binding MoveToTray2Command}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 3" Command="{Binding MoveToTray3Command}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 4" Command="{Binding MoveToTray4Command}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 5" Command="{Binding MoveToTray5Command}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 6" Command="{Binding MoveToTray6Command}" />
+                <Button Margin="3" Height="30" Width="70" Content="No Assign" Command="{Binding MoveToUnassignedCommand}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using LcmsNetDataClasses;
+using ReactiveUI;
+
+namespace LcmsNet.SampleQueue.ViewModels
+{
+    public class SampleDMSValidatorDisplayViewModel : ReactiveObject
+    {
+        private readonly ReactiveList<SampleDMSValidationViewModel> samples = new ReactiveList<SampleDMSValidationViewModel>();
+
+        public ReactiveList<SampleDMSValidationViewModel> Samples => samples;
+
+        /// <summary>
+        /// Calling this constructor is only for the windows WPF designer.
+        /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
+        public SampleDMSValidatorDisplayViewModel()
+        {
+            Samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   UsageType = "Cap_Dev", UserList = "(none1)", Experiment = "TestExp1", ProposalID = "5" } }, true, false, false, true, true, true));
+            Samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  UsageType = "Cap_Dev", UserList = "(none2)", Experiment = "TestExp2", ProposalID = "6" } }, false, true, true, false, false, true));
+            Samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, UsageType = "Cap_Dev", UserList = "(none3)", Experiment = "TestExp3", ProposalID = "7" } }, true, true, false, true, true, false));
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="samples">Sample validation.</param>
+        public SampleDMSValidatorDisplayViewModel(List<classSampleData> samples)
+        {
+            // Create a sample validator control for each sample.
+            var i = 0;
+            foreach (var sample in samples)
+            {
+                // TODO: OLD: sampleControl.EnterPressed += sampleControl_EnterPressed;
+                Samples.Add(new SampleDMSValidationViewModel(sample) { ID = i++ });
+            }
+        }
+
+        /// <summary>
+        /// Gets the flag if the samples are valid or not.
+        /// </summary>
+        public bool AreSamplesValid => CheckSamples();
+
+        // TODO: OLD: /// <summary>
+        // TODO: OLD: /// Moves the focus to the next control.
+        // TODO: OLD: /// </summary>
+        // TODO: OLD: /// <param name="sender"></param>
+        // TODO: OLD: /// <param name="e"></param>
+        // TODO: OLD: void sampleControl_EnterPressed(object sender, DMSValidatorEventArgs e)
+        // TODO: OLD: {
+        // TODO: OLD:     var validator = sender as classDMSBaseControl;
+        // TODO: OLD:     if (validator != null)
+        // TODO: OLD:     {
+        // TODO: OLD:         var id = validator.ID;
+        // TODO: OLD:
+        // TODO: OLD:         if (id == 0 && e.Modifiers == Keys.Shift)
+        // TODO: OLD:         {
+        // TODO: OLD:             return;
+        // TODO: OLD:         }
+        // TODO: OLD:
+        // TODO: OLD:         if (id >= m_validatorControls.Count - 1 && e.Modifiers != Keys.Shift)
+        // TODO: OLD:         {
+        // TODO: OLD:             return;
+        // TODO: OLD:         }
+        // TODO: OLD:
+        // TODO: OLD:         if (e.Modifiers == Keys.Shift)
+        // TODO: OLD:         {
+        // TODO: OLD:             m_validatorControls[id - 1].SetFocusOn(e);
+        // TODO: OLD:         }
+        // TODO: OLD:         else
+        // TODO: OLD:         {
+        // TODO: OLD:             m_validatorControls[id + 1].SetFocusOn(e);
+        // TODO: OLD:         }
+        // TODO: OLD:     }
+        // TODO: OLD: }
+
+        /// <summary>
+        /// Checks the sample controls to see if they are valid or not.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckSamples()
+        {
+            foreach (var validator in Samples)
+            {
+                if (validator.IsSampleValid == false)
+                    return false;
+            }
+            return true;
+        }
+    }
+}

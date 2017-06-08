@@ -49,10 +49,15 @@ namespace LcmsNetDataClasses
 
         #region Property Backing Variables
 
+        private int requestId;
         private string requestName;
         private string datasetName;
         private string datasetType;
         private string cartConfigName;
+        private string usageType;
+        private string proposalId;
+        private string userList;
+        private string experiment;
         private int block;
         private int runOrder;
         private int batch;
@@ -97,12 +102,20 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// Numeric ID of request in DMS
         /// </summary>
-        public int RequestID { get; set; }
+        public int RequestID
+        {
+            get { return requestId; }
+            set { this.RaiseAndSetIfChanged(ref requestId, value); }
+        }
 
         /// <summary>
         /// Experiment name
         /// </summary>
-        public string Experiment { get; set; }
+        public string Experiment
+        {
+            get { return experiment; }
+            set { this.RaiseAndSetIfChanged(ref experiment, value); }
+        }
 
         /// <summary>
         /// Dataset type (ie, HMS-MSn, HMS, etc)
@@ -116,17 +129,29 @@ namespace LcmsNetDataClasses
         /// <summary>
         /// EMSL usage type
         /// </summary>
-        public string UsageType { get; set; }
+        public string UsageType
+        {
+            get { return usageType; }
+            set { this.RaiseAndSetIfChanged(ref usageType, value); }
+        }
 
         /// <summary>
         /// EUS sser proposal ID
         /// </summary>
-        public string ProposalID { get; set; }
+        public string ProposalID
+        {
+            get { return proposalId; }
+            set { this.RaiseAndSetIfChanged(ref proposalId, value); }
+        }
 
         /// <summary>
         /// EUS user list
         /// </summary>
-        public string UserList { get; set; }
+        public string UserList
+        {
+            get { return userList; }
+            set { this.RaiseAndSetIfChanged(ref userList, value); }
+        }
 
         /// <summary>
         /// Name of cart used for sample run

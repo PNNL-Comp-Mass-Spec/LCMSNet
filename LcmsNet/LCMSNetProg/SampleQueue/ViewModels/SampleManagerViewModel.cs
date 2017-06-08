@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using System.Windows.Forms;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNet.Method.Forms;
-using LcmsNet.SampleQueue.Forms;
 using LcmsNet.SampleQueue.IO;
+using LcmsNet.SampleQueue.Views;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Logging;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -37,27 +39,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Reference to the DMS View.
         /// </summary>
-        private DMSDownloadViewModel m_dmsView;
+        private DMSDownloadViewModel dmsView;
+
+        private string lastSavedFileName = "queue.que";
 
         /// <summary>
         /// Manages adding the samples to the queue.
         /// </summary>
-        private classSampleQueue m_sampleQueue;
-
-        /// <summary>
-        /// Dialog for exporting samples to a file.
-        /// </summary>
-        private SaveFileDialog mdialog_exportQueue;
-
-        /// <summary>
-        /// Dialog for importing samples from a LCMS Queue file.
-        /// </summary>
-        private OpenFileDialog mdialog_importQueue;
-
-        /// <summary>
-        /// Dialog for export of MRM files
-        /// </summary>
-        private FolderBrowserDialog mdialog_exportMRMFiles;
+        private classSampleQueue sampleQueue;
 
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
@@ -124,23 +113,22 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="queue"></param>
         private void Initialize(classSampleQueue queue)
         {
-            m_dmsView = new DMSDownloadViewModel();
-            m_sampleQueue = queue;
-            mdialog_importQueue = new OpenFileDialog();
+            dmsView = new DMSDownloadViewModel();
+            sampleQueue = queue;
             SetupCommands();
 
-            if (m_sampleQueue != null)
+            if (sampleQueue != null)
             {
-                m_sampleQueue.SamplesWaitingToRun += m_sampleQueue_SamplesWaitingToRun;
+                sampleQueue.SamplesWaitingToRun += m_sampleQueue_SamplesWaitingToRun;
             }
 
             //
             // Load up the data to the appropiate sub-controls.
             //
-            SampleDataManager = new SampleDataManager(m_sampleQueue);
-            SampleControlViewModel = new SampleControlViewModel(m_dmsView, SampleDataManager);
-            ColumnManagerViewModel = new ColumnManagerViewModel(m_dmsView, SampleDataManager);
-            MethodManagerViewModel = new MethodManagerViewModel(m_dmsView, SampleDataManager);
+            SampleDataManager = new SampleDataManager(sampleQueue);
+            SampleControlViewModel = new SampleControlViewModel(dmsView, SampleDataManager);
+            ColumnManagerViewModel = new ColumnManagerViewModel(dmsView, SampleDataManager);
+            MethodManagerViewModel = new MethodManagerViewModel(dmsView, SampleDataManager);
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)
@@ -149,20 +137,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 SampleDataManager.AutoSamplerTrays.Add("defaultTray0" + i);
             }
 
-            mdialog_exportQueue = new SaveFileDialog
-            {
-                Title = "Export Queue",
-                Filter = "LCMSNet Queue (*.que)|LCMS VB6 XML File(*.xml)|*.xml|*.que|CSV File (*.csv)|*.csv",
-                FileName = "queue.que"
-            };
-
-            mdialog_importQueue = new OpenFileDialog
-            {
-                Title = "Load Queue",
-                Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml"
-            };
-
-            mdialog_exportMRMFiles = new FolderBrowserDialog();
             // TODO: // This is the text that is appended to the application title bar
             TitleBarTextAddition = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
         }
@@ -322,7 +296,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             try
             {
-                m_sampleQueue.SaveQueue(name, writer, true);
+                sampleQueue.SaveQueue(name, writer, true);
                 classApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
             }
             catch (Exception ex)
@@ -336,11 +310,16 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void ExportMRMFiles()
         {
-            if (mdialog_exportMRMFiles.ShowDialog() == DialogResult.OK)
+            var folderDialog = new CommonOpenFileDialog()
             {
-                var mrmFilePath = mdialog_exportMRMFiles.SelectedPath;
+                IsFolderPicker = true,
+            };
+
+            if (folderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                var mrmFilePath = folderDialog.FileName;
                 var mrmWriter = new classMRMFileExporter();
-                m_sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
+                sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
             }
         }
 
@@ -355,10 +334,16 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="e"></param>
         internal void ImportQueue(object sender, EventArgs e)
         {
-            if (mdialog_importQueue.ShowDialog() == DialogResult.OK)
+            var fileDialog = new OpenFileDialog
+            {
+                Title = "Load Queue",
+                Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml"
+            };
+            var result = fileDialog.ShowDialog();
+            if (result.HasValue && result.Value)
             {
                 ISampleQueueReader reader = null;
-                var extension = Path.GetExtension(mdialog_importQueue.FileName);
+                var extension = Path.GetExtension(fileDialog.FileName);
 
                 switch (extension)
                 {
@@ -372,14 +357,12 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 try
                 {
-                    m_sampleQueue.LoadQueue(mdialog_importQueue.FileName, reader);
-                    classApplicationLogger.LogMessage(0,
-                        string.Format("The queue was successfully imported from {0}.", mdialog_importQueue.FileName));
+                    sampleQueue.LoadQueue(fileDialog.FileName, reader);
+                    classApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0,
-                        string.Format("Could not load the queue {0}", mdialog_importQueue.FileName), ex);
+                    classApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
                 }
             }
         }
@@ -410,7 +393,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Moves the samples from the running queue back onto the
             // waiting queue.
             //
-            m_sampleQueue.StopRunningQueue();
+            sampleQueue.StopRunningQueue();
             ToggleRunButton(true, false);
         }
 
@@ -419,23 +402,20 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void RunQueue()
         {
-            if (m_sampleQueue.IsRunning)
+            if (sampleQueue.IsRunning)
             {
                 classApplicationLogger.LogMessage(0, "Samples are already running.");
                 return;
             }
-            var samples = m_sampleQueue.GetRunningQueue();
+            var samples = sampleQueue.GetRunningQueue();
 
-            //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            //
             samples.RemoveAll(
                 delegate (classSampleData data) { return data.RunningStatus != enumSampleRunningStatus.WaitingToRun; });
 
             if (samples.Count < 1)
                 return;
 
-            //
             // Make sure the samples pass the minimum QA/QC checks before running!
             //
             // These checks include seeing if the sample has a valid method.
@@ -443,7 +423,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             //
             // Later we will add to make sure none of the devices have an error that has
             // been thrown on them.
-            //
             var errors = new Dictionary<classSampleData, List<classSampleValidationError>>();
 
             foreach (var reference in classSampleValidatorManager.Instance.Validators)
@@ -458,66 +437,70 @@ namespace LcmsNet.SampleQueue.ViewModels
                     }
                 }
 
-                //
                 // Of course if we have an error, we just want to display and alert the user.
                 // But we don't let them continue, they must edit their queue and make it appropiate
                 // before running.
-                //
                 if (errors.Count > 0)
                 {
-                    var display = new formSampleValidatorErrorDisplay(errors);
+                    var displayVm = new SampleValidatorErrorDisplayViewModel(errors);
+                    var display = new SampleValidatorErrorDisplayWindow() { DataContext = displayVm };
+                    // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(display);
                     display.ShowDialog();
                     return;
                 }
 
-                //
                 // Then we also want to check for running blocks on the wrong column.
-                //
-
                 var badBlocks = validator.ValidateBlocks(samples);
                 if (badBlocks.Count > 0)
                 {
                     //TODO: Add a notification.
-                    var display = new formSampleBadBlockDisplay(badBlocks);
+                    var displayVm = new SampleBadBlockDisplayViewModel(badBlocks);
+                    var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm };
+                    // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(display);
                     var result = display.ShowDialog();
-                    if (result != DialogResult.OK)
+                    if (!result.HasValue || !result.Value)
                     {
                         return;
                     }
                 }
             }
 
-            //
             // Then for trigger file checks, we want the sample data for DMS to be complete.
             // So here we validate all of the samples and show the user all samples before running.
             // This way they can validate if they need to all of this information.
-            //
             var validateSamples = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
                                   !(string.IsNullOrWhiteSpace(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL)));
             if (validateSamples)
             {
-                var dmsDisplay = new formSampleDMSValidatorDisplay(samples);
+                var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
+                var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
+                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsDisplay);
+
+                var dmsResult = dmsDisplay.ShowDialog();
 
                 // We don't care what the result is..
-                if (dmsDisplay.ShowDialog() == DialogResult.Cancel)
+                if (!dmsResult.HasValue || !dmsResult.Value)
                     return;
 
                 // If samples are not valid...then what?
-                if (!dmsDisplay.AreSamplesValid)
+                if (!dmsDisplayVm.AreSamplesValid)
                 {
                     var result =
                         MessageBox.Show(
                             "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.  Do you wish to continue?",
                             "DMS Sample Validation",
-                            MessageBoxButtons.YesNo);
+                            MessageBoxButton.YesNo);
 
-                    if (result == DialogResult.No)
+                    if (result == MessageBoxResult.No)
                         return;
                 }
-                m_sampleQueue.UpdateSamples(samples);
+                sampleQueue.UpdateSamples(samples);
             }
             //SynchronizeSystemClock();
-            m_sampleQueue.StartSamples();
+            sampleQueue.StartSamples();
             ToggleRunButton(false, true);
         }
 
@@ -530,7 +513,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             try
             {
-                m_sampleQueue.CacheQueue(false);
+                sampleQueue.CacheQueue(false);
                 classApplicationLogger.LogMessage(0,
                     "Queue saved \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "\".");
             }
@@ -548,16 +531,20 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="e"></param>
         internal void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mdialog_exportQueue.Title = "Save Queue As";
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".xml", ".que");
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".csv", ".que");
-            mdialog_exportQueue.Filter = "LCMSNet Queue (*.que)|*.que";
-
-            if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
+            var saveDialog = new SaveFileDialog
             {
-                m_sampleQueue.CacheQueue(mdialog_exportQueue.FileName);
+                Title = "Save Queue As",
+                FileName = lastSavedFileName.Replace(".xml", ".que").Replace(".csv", ".que"),
+                Filter = "LCMSNet Queue (*.que)|*.que"
+            };
+
+            var result = saveDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                lastSavedFileName = saveDialog.FileName;
+                sampleQueue.CacheQueue(lastSavedFileName);
                 // TODO: // This is the text that is appended to the application title bar
-                TitleBarTextAddition = "Sample Queue - " + mdialog_exportQueue.FileName;
+                TitleBarTextAddition = "Sample Queue - " + saveDialog.FileName;
                 classApplicationLogger.LogMessage(0,
                     "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
                     "\" and is now the default queue.");
@@ -571,14 +558,19 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="e"></param>
         internal void queueToXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mdialog_exportQueue.Title = "Export Queue to XML for LCMS VB6";
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".que", ".xml");
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".csv", ".xml");
-            mdialog_exportQueue.Filter = "LCMS VB6 XML (*.xml)|*.xml";
-            if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
+            var saveDialog = new SaveFileDialog
             {
+                Title = "Export Queue to XML for LCMS VB6",
+                FileName = lastSavedFileName.Replace(".que", ".xml").Replace(".csv", ".xml"),
+                Filter = "LCMS VB6 XML (*.xml)|*.xml"
+            };
+
+            var result = saveDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                lastSavedFileName = saveDialog.FileName;
                 ISampleQueueWriter writer = new classQueueExportXML();
-                ExportQueue(mdialog_exportQueue.FileName, writer);
+                ExportQueue(saveDialog.FileName, writer);
             }
         }
 
@@ -589,15 +581,19 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="e"></param>
         internal void queueAsCSVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mdialog_exportQueue.Title = "Export Queue to CSV";
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".xml", ".csv");
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".que", ".csv");
-            mdialog_exportQueue.Filter = "Comma Separated (*.csv)|*.csv";
-
-            if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
+            var saveDialog = new SaveFileDialog
             {
+                Title = "Export Queue to CSV",
+                FileName = lastSavedFileName.Replace(".xml", ".csv").Replace(".que", ".csv"),
+                Filter = "Comma Separated (*.csv)|*.csv"
+            };
+
+            var result = saveDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                lastSavedFileName = saveDialog.FileName;
                 ISampleQueueWriter writer = new classQueueExportCSV();
-                ExportQueue(mdialog_exportQueue.FileName, writer);
+                ExportQueue(saveDialog.FileName, writer);
             }
         }
 
@@ -608,15 +604,19 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="e"></param>
         internal void queueAsCSVToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            mdialog_exportQueue.Title = "Export Queue to XCalibur";
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".xml", ".csv");
-            mdialog_exportQueue.FileName = mdialog_exportQueue.FileName.Replace(".que", ".csv");
-            mdialog_exportQueue.Filter = "Comma Separated (*.csv)|*.csv";
-
-            if (mdialog_exportQueue.ShowDialog() == DialogResult.OK)
+            var saveDialog = new SaveFileDialog
             {
+                Title = "Export Queue to XCalibur",
+                FileName = lastSavedFileName.Replace(".xml", ".csv").Replace(".que", ".csv"),
+                Filter = "Comma Separated (*.csv)|*.csv"
+            };
+
+            var result = saveDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                lastSavedFileName = saveDialog.FileName;
                 ISampleQueueWriter writer = new classQueueExportExcalCSV();
-                ExportQueue(mdialog_exportQueue.FileName, writer);
+                ExportQueue(saveDialog.FileName, writer);
             }
         }
 
@@ -643,14 +643,14 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 using (SampleControlViewModel.Samples.SuppressChangeNotifications())
                 {
-                    this.m_sampleQueue.Undo();
+                    this.sampleQueue.Undo();
                 }
             }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
             RedoCommand = ReactiveCommand.Create(() =>
             {
                 using (SampleControlViewModel.Samples.SuppressChangeNotifications())
                 {
-                    this.m_sampleQueue.Redo();
+                    this.sampleQueue.Redo();
                 }
             }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
             RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled));

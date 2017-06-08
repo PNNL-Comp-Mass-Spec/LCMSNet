@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 using LcmsNet.Method;
-using LcmsNet.Method.Forms;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
-using LcmsNet.SampleQueue.Forms;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
@@ -49,14 +46,19 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             try
             {
-                var dmsDisplay = new formSampleDMSValidatorDisplay(samples);
+                var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
+                var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
+                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsDisplay);
+
+                var result = dmsDisplay.ShowDialog();
                 // We don't care what the result is..
-                if (dmsDisplay.ShowDialog() == DialogResult.Cancel)
+                if (!result.HasValue || !result.Value)
                 {
                     return;
                 }
                 // If samples are not valid...then what?
-                if (!dmsDisplay.AreSamplesValid)
+                if (!dmsDisplayVm.AreSamplesValid)
                 {
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                         "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
@@ -131,17 +133,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Form that provides user interface to retrieve samples from DMS.
         /// </summary>
-        private DMSDownloadViewModel m_dmsView;
-
-        /// <summary>
-        /// Fill down form for updating lots of samples at once.
-        /// </summary>
-        private SampleMethodFillDownViewModel fillDownViewModel;
-
-        /// <summary>
-        /// Tray and vial assignment form.
-        /// </summary>
-        private formTrayVialAssignment m_trayVial;
+        private DMSDownloadViewModel dmsView;
 
         private bool autoScroll = true;
         private ObservableAsPropertyHelper<bool> itemsSelected;
@@ -204,10 +196,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             // TODO: m_colors[0] = Color.White;
             // TODO: m_colors[1] = Color.Gainsboro;
 
-            // Fill-down form for batch sample editing And Tray Vial assignmenet
-            fillDownViewModel = new SampleMethodFillDownViewModel();
-            m_trayVial = new formTrayVialAssignment();
-
             this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
         }
 
@@ -234,8 +222,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public virtual DMSDownloadViewModel DMSView
         {
-            get { return m_dmsView; }
-            private set { m_dmsView = value; }
+            get { return dmsView; }
+            private set { dmsView = value; }
         }
 
         #endregion
@@ -281,19 +269,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
             }
 
-            // TODO: if (ParentForm != null)
-            // TODO:     m_trayVial.Icon = ParentForm.Icon;
+            var trayVial = new TrayVialAssignmentViewModel(SampleDataManager.AutoSamplerTrays, samples);
+            var trayVialWindow = new TrayVialAssignmentWindow() { DataContext = trayVial };
+            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(trayVialWindow);
 
-            m_trayVial.LoadSampleList(SampleDataManager.AutoSamplerTrays, samples);
-            if (m_trayVial.ShowDialog() == DialogResult.OK)
-            {
-                using (Samples.SuppressChangeNotifications())
-                {
-                    // TODO: Is this copy/update still needed?
-                    samples = m_trayVial.SampleList;
-                    SampleDataManager.UpdateSamples(samples);
-                }
-            }
+            // We don't care about the dialog result here - everything that matters is handled in the viewModel
+            trayVialWindow.ShowDialog();
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -316,6 +298,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // Create a new fill down form.
+            var fillDownViewModel = new SampleMethodFillDownViewModel();
             fillDownViewModel.Samples = samples;
             fillDownViewModel.EnsureItemsAreSelected();
             var dialog = new SampleMethodFillDownWindow();
@@ -338,10 +321,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void ShowDMSView()
         {
-            if (m_dmsView == null)
+            if (dmsView == null)
                 return;
 
-            var dmsWindow = new DMSDownloadWindow() { DataContext = m_dmsView };
+            var dmsWindow = new DMSDownloadWindow() { DataContext = dmsView };
             // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsWindow);
             var result = dmsWindow.ShowDialog();
@@ -353,8 +336,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             // we don't care how we add them to the form.
             if (result.HasValue && result.Value)
             {
-                var samples = m_dmsView.GetNewSamplesDMSView();
-                m_dmsView.ClearForm();
+                var samples = dmsView.GetNewSamplesDMSView();
+                dmsView.ClearForm();
 
                 var insertToUnused = false;
                 if (HasUnusedSamples())
@@ -516,26 +499,25 @@ namespace LcmsNet.SampleQueue.ViewModels
             // If we have something selected then randomize them.
             if (samplesToRandomize.Count > 1)
             {
-                formSampleRandomizer form;
+                SampleRandomizerViewModel randomizerVm;
                 try
                 {
-                    form = new formSampleRandomizer(samplesToRandomize)
-                    {
-                        StartPosition = FormStartPosition.CenterParent
-                    };
-                    // TODO: if (ParentForm != null)
-                    // TODO:     form.Icon = ParentForm.Icon;
+                    randomizerVm = new SampleRandomizerViewModel(samplesToRandomize);
                 }
                 catch
                 {
                     classApplicationLogger.LogError(0, "No randomization plug-ins exist.");
                     return;
                 }
-                if (form.ShowDialog() == DialogResult.OK)
+                var randomizer = new SampleRandomizerWindow() { DataContext = randomizerVm };
+                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
+                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(randomizer);
+                var result = randomizer.ShowDialog();
+                if (result.HasValue && result.Value)
                 {
                     using (Samples.SuppressChangeNotifications())
                     {
-                        var newSamples = form.OutputSampleList;
+                        var newSamples = randomizerVm.OutputSampleList.ToList();
                         SampleDataManager.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
                     }
                 }
@@ -803,7 +785,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private void PerformAutoScroll()
         {
-            if (AutoScroll)
+            if (AutoScroll && Samples != null)
             {
                 // Create a list copy first to try to avoid collection modified exceptions...
                 var samples = Samples.ToList();
