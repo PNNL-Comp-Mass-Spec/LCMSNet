@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace LcmsNetDataClasses.Method
@@ -52,12 +53,12 @@ namespace LcmsNetDataClasses.Method
 
         /// <summary>
         /// Start time of the method
-        /// </summary>        
+        /// </summary>
         [NonSerialized] private DateTime mtime_start;
 
         /// <summary>
         /// Duration of the method.
-        /// </summary>        
+        /// </summary>
         [NonSerialized] private TimeSpan mspan_duration;
 
         /// <summary>
@@ -156,7 +157,7 @@ namespace LcmsNetDataClasses.Method
 
         /// <summary>
         /// Gets or sets the index of the column that this method is associated with.
-        /// </summary>              
+        /// </summary>
         public int Column { get; set; }
 
         /// <summary>
@@ -185,17 +186,17 @@ namespace LcmsNetDataClasses.Method
         /// <param name="directoryPath">Path of directory to write data to.</param>
         public void WritePerformanceData(string directoryPath)
         {
-            // 
+            //
             // For each event, we tell the device to write the required used data.
-            // 
+            //
             foreach (var lcEvent in m_events)
             {
-                // 
+                //
                 // Only write this if we have performance data for this method....
                 // meaning that it has something we need to know or save for later
                 // to reproduce performance information to understand when the
                 // cart misbehaves.
-                // 
+                //
                 if (lcEvent.MethodAttribute.HasPerformanceData)
                 {
                     lcEvent.Device.WritePerformanceData(directoryPath, lcEvent.MethodAttribute.Name, lcEvent.Parameters);
@@ -209,17 +210,17 @@ namespace LcmsNetDataClasses.Method
         /// <param name="start">Time to start the method.</param>
         public void SetStartTime(DateTime start)
         {
-            // 
+            //
             // Update the start time and cascade the calculation so that
             // the event times are all updated allowing us to calculate
             // the duration and end time of the entire method.
-            // 
+            //
             mtime_start = start;
             UpdateEventTimes();
 
-            // 
+            //
             // Calculate the duration of the method.
-            // 
+            //
             if (Events.Count <= 0)
             {
                 mspan_duration = new TimeSpan(0, 0, 0, 0, 0);
@@ -237,10 +238,10 @@ namespace LcmsNetDataClasses.Method
         private void UpdateEventTimes()
         {
             var adjustedStart = mtime_start;
-            // 
+            //
             // Iterate through each event (ultimately) and
             // adjust the start times of the event based on the time span provided.
-            // 
+            //
             foreach (var controlEvent in Events)
             {
                 controlEvent.Start = adjustedStart;
@@ -327,7 +328,10 @@ namespace LcmsNetDataClasses.Method
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return string.Equals(Name, other.Name) && Column == other.Column && IsSpecialMethod == other.IsSpecialMethod;
+            return HasNonDeterministicStart == other.HasNonDeterministicStart &&
+                   string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) && Column == other.Column &&
+                   IsSpecialMethod == other.IsSpecialMethod && AllowPreOverlap == other.AllowPreOverlap && AllowPostOverlap == other.AllowPostOverlap &&
+                   Events.Distinct().Aggregate(0, (x,y) => x.GetHashCode() ^ y.GetHashCode()) == other.Events.Distinct().Aggregate(0, (x, y) => x.GetHashCode() ^ y.GetHashCode());
         }
 
         public override bool Equals(object obj)
@@ -342,9 +346,13 @@ namespace LcmsNetDataClasses.Method
         {
             unchecked
             {
-                var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                var hashCode = HasNonDeterministicStart.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Name) : 0);
                 hashCode = (hashCode * 397) ^ Column;
                 hashCode = (hashCode * 397) ^ IsSpecialMethod.GetHashCode();
+                hashCode = (hashCode * 397) ^ AllowPreOverlap.GetHashCode();
+                hashCode = (hashCode * 397) ^ AllowPostOverlap.GetHashCode();
+                hashCode = (hashCode * 397) ^ Events.Distinct().Aggregate(0, (x, y) => x.GetHashCode() ^ y.GetHashCode());
                 return hashCode;
             }
         }

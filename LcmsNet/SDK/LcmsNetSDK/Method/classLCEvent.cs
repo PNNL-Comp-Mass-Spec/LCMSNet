@@ -32,9 +32,9 @@ namespace LcmsNetDataClasses.Method
     /// <summary>
     /// An atomic object operation used by stages in a method.
     /// </summary>
-    /// 
+    ///
     [Serializable]
-    public class classLCEvent : ICloneable
+    public class classLCEvent : ICloneable, IEquatable<classLCEvent>
     {
         #region Members
 
@@ -111,8 +111,8 @@ namespace LcmsNetDataClasses.Method
 
         /// <summary>
         /// Gets or sets the duration for this action.
-        /// 
-        /// Throws: 
+        ///
+        /// Throws:
         ///     classInvalidDurationException (value lt 0)
         /// </summary>
         public TimeSpan Duration
@@ -208,5 +208,47 @@ namespace LcmsNetDataClasses.Method
         }
 
         #endregion
+
+        public bool Equals(classLCEvent other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(RelativeMethod, other.RelativeMethod) && IsIndeterminant == other.IsIndeterminant &&
+                   Equals(MethodAttribute, other.MethodAttribute) && Equals(MethodData, other.MethodData) && Equals(Device, other.Device) &&
+                   HasDiscreteStates == other.HasDiscreteStates && HoldTime.Equals(other.HoldTime) && Equals(Method, other.Method) &&
+                   string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) && OptimizeWith == other.OptimizeWith &&
+                   Equals(Parameters, other.Parameters) && Equals(ParameterNames, other.ParameterNames) && Start.Equals(other.Start) &&
+                   HadError == other.HadError;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((classLCEvent) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (RelativeMethod != null ? RelativeMethod.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ IsIndeterminant.GetHashCode();
+                hashCode = (hashCode * 397) ^ (MethodAttribute != null ? MethodAttribute.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (MethodData != null ? MethodData.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Device != null ? Device.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ HasDiscreteStates.GetHashCode();
+                hashCode = (hashCode * 397) ^ HoldTime.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Method != null ? Method.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Name) : 0);
+                hashCode = (hashCode * 397) ^ OptimizeWith.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Parameters != null ? Parameters.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ParameterNames != null ? ParameterNames.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Start.GetHashCode();
+                hashCode = (hashCode * 397) ^ HadError.GetHashCode();
+                return hashCode;
+            }
+        }
     }
 }
