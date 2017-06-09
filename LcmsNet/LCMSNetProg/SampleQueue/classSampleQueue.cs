@@ -1776,7 +1776,7 @@ namespace LcmsNet.SampleQueue
                     sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
                 }
 
-                sample.LCMethod = sample.LCMethod.Clone() as classLCMethod;
+                sample.CloneLCMethod();
 
                 if (sample.LCMethod == null)
                 {
@@ -1869,7 +1869,7 @@ namespace LcmsNet.SampleQueue
                     realSample.LCMethod = classLCMethodManager.Manager.Methods[realSample.LCMethod.Name];
                 }
 
-                realSample.LCMethod = realSample.LCMethod.Clone() as classLCMethod;
+                realSample.CloneLCMethod();
 
                 if (realSample.LCMethod == null)
                 {
@@ -1945,7 +1945,7 @@ namespace LcmsNet.SampleQueue
                 m_runningQueue.Remove(realSample);
                 m_waitingQueue.Insert(0, realSample);
 
-                realSample.LCMethod = realSample.LCMethod.Clone() as classLCMethod;
+                realSample.CloneLCMethod();
                 realSample.RunningStatus = enumSampleRunningStatus.Queued;
                 validSamples.Add(realSample);
             }
@@ -2227,8 +2227,9 @@ namespace LcmsNet.SampleQueue
 
                     if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                     {
-                        sample.LCMethod =
-                            classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
+                        var name = sample.LCMethod.Name;
+                        sample.LCMethod = null; // Wipe it out
+                        sample.LCMethod = classLCMethodManager.Manager.Methods[name].Clone() as classLCMethod;
                     }
                     else
                     {
@@ -2257,8 +2258,9 @@ namespace LcmsNet.SampleQueue
             {
                 if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                 {
-                    sample.LCMethod =
-                        classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
+                    var name = sample.LCMethod.Name;
+                    sample.LCMethod = null; // Wipe it out
+                    sample.LCMethod = classLCMethodManager.Manager.Methods[name].Clone() as classLCMethod;
 
                     if (sample.LCMethod != null && sample.LCMethod.Column >= 0)
                     {
@@ -2367,7 +2369,9 @@ namespace LcmsNet.SampleQueue
             {
                 if (sample.LCMethod != null && classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                 {
-                    sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name].Clone() as classLCMethod;
+                    var name = sample.LCMethod.Name;
+                    sample.LCMethod = null; // Wipe it out
+                    sample.LCMethod = classLCMethodManager.Manager.Methods[name].Clone() as classLCMethod;
 
                     if (sample.LCMethod != null)
                     {

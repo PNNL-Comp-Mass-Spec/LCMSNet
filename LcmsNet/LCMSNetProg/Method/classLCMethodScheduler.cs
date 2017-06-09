@@ -508,6 +508,7 @@ namespace LcmsNet.Method
                     if (samples[sampleColumnID] == null)
                         samples[sampleColumnID] = new classSampleData();
 
+                    samples[sampleColumnID].LCMethod = null; // Wipe it out first
                     samples[sampleColumnID].LCMethod = data.LCMethod.Clone() as classLCMethod;
 
                     m_columnWorkers[sampleColumnID].RunWorkerAsync(new classColumnArgs(data));

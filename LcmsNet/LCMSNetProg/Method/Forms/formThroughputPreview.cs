@@ -69,7 +69,7 @@ namespace LcmsNet.Method.Forms
                 // Clone this, so we don't have multiple copies competing for the same times,
                 // methods, etc.
                 //
-                sample.LCMethod = sample.LCMethod.Clone() as classLCMethod;
+                sample.CloneLCMethod();
                 methods.Add(sample.LCMethod);
             }
 

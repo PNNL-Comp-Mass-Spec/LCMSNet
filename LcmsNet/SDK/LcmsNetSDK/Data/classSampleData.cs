@@ -448,6 +448,13 @@ namespace LcmsNetDataClasses
             }
         }
 
+        public void CloneLCMethod()
+        {
+            var method = this.LCMethod;
+            this.m_method = null; // Avoid firing the change notifications twice, by setting just the backing variable to null...
+            this.LCMethod = method.Clone() as classLCMethod;
+        }
+
         void m_columnData_NameChanged(object sender, string name, string oldName)
         {
             if (DmsData == null || oldName == "")
