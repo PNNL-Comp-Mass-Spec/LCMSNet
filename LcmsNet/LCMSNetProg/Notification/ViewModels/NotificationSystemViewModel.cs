@@ -16,11 +16,10 @@ using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
 using LcmsNetSDK.Notifications;
 using ReactiveUI;
-using MessageBox = System.Windows.MessageBox;
 
 namespace LcmsNet.Notification.ViewModels
 {
-    public class NotificationSystemViewModel : ReactiveObject
+    public class NotificationSystemViewModel : ReactiveObject, IDisposable
     {
         /// <summary>
         /// Default constructor for the notification system view control that takes no arguments
@@ -61,14 +60,14 @@ namespace LcmsNet.Notification.ViewModels
             {
                 foreach (var device in devices)
                 {
-                    manager_DeviceAdded(this, device);
+                    Manager_DeviceAdded(this, device);
                 }
             }
 
             // Synch the device manager.
-            manager.DeviceRenamed += manager_DeviceRenamed;
-            manager.DeviceRemoved += manager_DeviceRemoved;
-            manager.DeviceAdded += manager_DeviceAdded;
+            manager.DeviceRenamed += Manager_DeviceRenamed;
+            manager.DeviceRemoved += Manager_DeviceRemoved;
+            manager.DeviceAdded += Manager_DeviceAdded;
 
             var model = classFluidicsModerator.Moderator;
             model.ModelCheckAdded += Model_ModelCheckAdded;
@@ -99,9 +98,11 @@ namespace LcmsNet.Notification.ViewModels
             classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
             classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
 
-            taskbarIcon = new TaskbarIcon();
-            taskbarIcon.Icon = Resources.LCMSLogo2;
-            taskbarIcon.ToolTipText = "LCMSNet";
+            taskbarIcon = new TaskbarIcon
+            {
+                Icon = Resources.LCMSLogo2,
+                ToolTipText = "LCMSNet"
+            };
 
             remoteStatusLogTimer = new Timer(WriteLogData, this, Timeout.Infinite, Timeout.Infinite);
             ResetRemoteLoggingInterval();
@@ -120,22 +121,17 @@ namespace LcmsNet.Notification.ViewModels
             SetupCommands();
         }
 
-        ~NotificationSystemViewModel()
-        {
-            taskbarIcon.Dispose();
-        }
-
-        void Model_ModelCheckAdded(object sender, ModelCheckControllerEventArgs e)
+        private void Model_ModelCheckAdded(object sender, ModelCheckControllerEventArgs e)
         {
             AddNotifier(e.ModelChecker);
         }
 
-        void Manager_Added(object sender, NotifierChangedEventArgs e)
+        private void Manager_Added(object sender, NotifierChangedEventArgs e)
         {
             AddNotifier(e.Notifier);
         }
 
-        void Manager_Removed(object sender, NotifierChangedEventArgs e)
+        private void Manager_Removed(object sender, NotifierChangedEventArgs e)
         {
             RemoveNotifier(e.Notifier);
         }
@@ -192,9 +188,9 @@ namespace LcmsNet.Notification.ViewModels
         /// <summary>
         /// For displaying a notification icon in the Windows notification bar
         /// </summary>
-        private TaskbarIcon taskbarIcon;
+        private readonly TaskbarIcon taskbarIcon;
 
-        private Timer remoteStatusLogTimer;
+        private readonly Timer remoteStatusLogTimer;
 
         private bool ignoreEvents;
         private bool settingsDisabled = false;
@@ -428,7 +424,7 @@ namespace LcmsNet.Notification.ViewModels
 
         #region Method Manager Events
 
-        bool Manager_MethodUpdated(object sender, classLCMethod method)
+        private bool Manager_MethodUpdated(object sender, classLCMethod method)
         {
             if (MethodsComboBoxOptions.Contains(method))
             {
@@ -438,7 +434,7 @@ namespace LcmsNet.Notification.ViewModels
             return true;
         }
 
-        bool Manager_MethodRemoved(object sender, classLCMethod method)
+        private bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
             if (MethodsComboBoxOptions.Contains(method))
             {
@@ -447,7 +443,7 @@ namespace LcmsNet.Notification.ViewModels
             return true;
         }
 
-        bool Manager_MethodAdded(object sender, classLCMethod method)
+        private bool Manager_MethodAdded(object sender, classLCMethod method)
         {
             if (!MethodsComboBoxOptions.Contains(method))
             {
@@ -465,7 +461,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void manager_DeviceRenamed(object sender, IDevice device)
+        private void Manager_DeviceRenamed(object sender, IDevice device)
         {
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
@@ -478,7 +474,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void manager_DeviceAdded(object sender, IDevice device)
+        private void Manager_DeviceAdded(object sender, IDevice device)
         {
             if (device == null)
                 return;
@@ -492,8 +488,8 @@ namespace LcmsNet.Notification.ViewModels
 
         private void AddNotifier(INotifier device)
         {
-            device.Error += device_Error;
-            device.StatusUpdate += device_StatusUpdate;
+            device.Error += Device_Error;
+            device.StatusUpdate += Device_StatusUpdate;
 
             var linker = new classNotificationLinker(device.Name);
             var errors = device.GetErrorNotificationList();
@@ -521,12 +517,12 @@ namespace LcmsNet.Notification.ViewModels
             DevicesList.Add(linker.Name);
         }
 
-        void RemoveNotifier(INotifier device)
+        private void RemoveNotifier(INotifier device)
         {
             if (device == null || ((IDevice)device).DeviceType == enumDeviceType.Fluidics)
                 return;
 
-            device.StatusUpdate -= device_StatusUpdate;
+            device.StatusUpdate -= Device_StatusUpdate;
 
             var linker = deviceEventTable[device];
             DevicesList.Remove(linker.Name);
@@ -550,7 +546,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void manager_DeviceRemoved(object sender, IDevice device)
+        private void Manager_DeviceRemoved(object sender, IDevice device)
         {
             RemoveNotifier(device);
         }
@@ -564,7 +560,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="message"></param>
         /// <param name="setting"></param>
-        void HandleEvents(string message, NotificationSetting setting)
+        private void HandleEvents(string message, NotificationSetting setting)
         {
             if (IgnoreEvents)
                 return;
@@ -602,7 +598,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void device_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+        private void Device_StatusUpdate(object sender, classDeviceStatusEventArgs e)
         {
             if (e?.Notifier == null)
                 return;
@@ -637,7 +633,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void device_Error(object sender, classDeviceErrorEventArgs e)
+        private void Device_Error(object sender, classDeviceErrorEventArgs e)
         {
             if (e?.Device == null)
                 return;
@@ -1023,5 +1019,19 @@ namespace LcmsNet.Notification.ViewModels
         }
 
         #endregion
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                taskbarIcon?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

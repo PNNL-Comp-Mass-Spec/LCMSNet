@@ -19,6 +19,7 @@ namespace LcmsNet.Notification.Forms
             if (disposing && (components != null))
             {
                 components.Dispose();
+                notificationSystemViewModel.Dispose();
             }
             base.Dispose(disposing);
         }
