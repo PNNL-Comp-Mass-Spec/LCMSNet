@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 using LcmsNetSQLiteTools;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 
 namespace LcmsNet.Configuration.ViewModels
@@ -207,15 +209,17 @@ namespace LcmsNet.Configuration.ViewModels
 
         #region Commands
 
-        public ReactiveCommand SetInstrumentCommand { get; private set; }
-        public ReactiveCommand SetOperatorCommand { get; private set; }
-        public ReactiveCommand ReloadCartDataCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetInstrumentCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetOperatorCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; private set; }
 
         private void SetupCommands()
         {
             SetInstrumentCommand = ReactiveCommand.Create(() => this.SaveInstrument());
             SetOperatorCommand = ReactiveCommand.Create(() => this.SaveOperator());
             ReloadCartDataCommand = ReactiveCommand.Create(() => this.ReloadData());
+            BrowsePdfPathCommand = ReactiveCommand.Create(() => this.BrowsePdfPath());
         }
 
         #endregion
@@ -279,6 +283,25 @@ namespace LcmsNet.Configuration.ViewModels
             InstrumentNameNotSaved = false;
 
             SetupCommands();
+        }
+
+        private void BrowsePdfPath()
+        {
+            var dialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                InitialDirectory = PdfPath,
+                Multiselect = false,
+                EnsurePathExists = true,
+            };
+
+            var result = dialog.ShowDialog();
+
+            if (result == CommonFileDialogResult.Ok)
+            {
+                PdfPath = dialog.FileName;
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_PDFPATH, PdfPath);
+            }
         }
 
         void RegisterColumn(ColumnConfigViewModel column)

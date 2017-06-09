@@ -67,6 +67,7 @@
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Write PDF to:" />
                     <TextBox Width="428" Text="{Binding PdfPath}" IsReadOnly="True" />
+                    <Button Margin="5,0" Content="Browse" Command="{Binding BrowsePdfPathCommand}" />
                 </StackPanel>
             </StackPanel>
         </TabItem>
