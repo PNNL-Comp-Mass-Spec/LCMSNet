@@ -1,0 +1,52 @@
+﻿<Window x:Class="LcmsNet.Devices.Views.DeviceAddWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:devices="clr-namespace:LcmsNetDataClasses.Devices;assembly=LcmsNetSdk"
+        xmlns:viewModels="clr-namespace:LcmsNet.Devices.ViewModels"
+        mc:Ignorable="d"
+        Title="Add Devices" Height="550" Width="630"
+        WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:DeviceAddViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TreeView Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Margin="3" ItemsSource="{Binding AvailablePlugins}" MouseDoubleClick="TreeViewAvailable_OnMouseDoubleClick" KeyUp="TreeViewAvailable_OnKeyUp" SelectedItemChanged="TreeView_OnSelectedItemChanged">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Plugins}">
+                    <TextBlock Text="{Binding Category}" />
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <DataTemplate DataType="{x:Type devices:classDevicePluginInformation}">
+                            <TextBlock Text="{Binding DeviceAttribute.Name}" />
+                        </DataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" Margin="3" KeyUp="ListboxDevices_OnKeyUp" ItemsSource="{Binding AddedPlugins}" SelectedItem="{Binding SelectedPlugin}" DisplayMemberPath="DisplayName" SelectionChanged="ListboxDevices_OnSelectionChanged" />
+        <Button Grid.Row="1" Grid.Column="1" Height="33" Width="48" Margin="3" Command="{Binding AddCommand}" Content="&gt;&gt;" />
+        <Button Grid.Row="2" Grid.Column="1" Height="33" Width="48" Margin="3" Command="{Binding RemoveCommand}" Content="&lt;&lt;" />
+        <CheckBox Grid.Row="4" Grid.Column="2" Margin="3" FontSize="16" IsChecked="{Binding InitializeOnAdd}" Content="Initialize On Add" />
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Height="33" Width="90" Margin="3" IsCancel="True" Content="Cancel" Click="Cancel_OnClick" />
+            <Button Height="33" Width="90" Margin="3" IsDefault="True" Content="OK" Click="Ok_OnClick" />
+        </StackPanel>
+    </Grid>
+</Window>

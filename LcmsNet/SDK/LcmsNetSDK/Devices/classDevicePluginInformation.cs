@@ -18,6 +18,11 @@ namespace LcmsNetDataClasses.Devices
             DeviceAttribute = attribute;
         }
 
+        public string DisplayName
+        {
+            get { return this.ToString(); }
+        }
+
         /// <summary>
         /// Returns the name of the device.
         /// </summary>

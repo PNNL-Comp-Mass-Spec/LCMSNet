@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="LcmsNet.Devices.Views.ModelCheckReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Devices.ViewModels"
+             xmlns:views="clr-namespace:LcmsNet.Devices.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="304" d:DesignWidth="456"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:ModelCheckReportsViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <ItemsControl>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:ModelCheckReportView DataContext="{Binding BindsDirectlyToSource=True}" Margin="3" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Button Grid.Row="1" Grid.Column="1" Margin="3" Width="75" Content="Clear" Command="{Binding ClearCommand}" />
+    </Grid>
+</UserControl>

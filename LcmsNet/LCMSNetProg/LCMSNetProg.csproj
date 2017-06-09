@@ -209,6 +209,22 @@
     <Compile Include="Devices\Pumps\Views\PumpDisplayView.xaml.cs">
       <DependentUpon>PumpDisplayView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Devices\ViewModels\DeviceAddViewModel.cs" />
+    <Compile Include="Devices\ViewModels\FailedDevicesViewModel.cs" />
+    <Compile Include="Devices\ViewModels\ModelCheckReportsViewModel.cs" />
+    <Compile Include="Devices\ViewModels\ModelCheckReportViewModel.cs" />
+    <Compile Include="Devices\Views\DeviceAddWindow.xaml.cs">
+      <DependentUpon>DeviceAddWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Views\FailedDevicesWindow.xaml.cs">
+      <DependentUpon>FailedDevicesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Views\ModelCheckReportsView.xaml.cs">
+      <DependentUpon>ModelCheckReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Views\ModelCheckReportView.xaml.cs">
+      <DependentUpon>ModelCheckReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="frmEmulationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1278,6 +1294,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Devices\Pumps\Views\PumpDisplayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Views\DeviceAddWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Views\FailedDevicesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Views\ModelCheckReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Views\ModelCheckReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

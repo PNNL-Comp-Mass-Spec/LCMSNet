@@ -1,0 +1,26 @@
+﻿<Window x:Class="LcmsNet.Devices.Views.FailedDevicesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:LcmsNet.Devices.ViewModels"
+        mc:Ignorable="d"
+        Title="Device Initialization Failures" Height="529" Width="811"
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:FailedDevicesViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Content="These devices failed to initialize properly." />
+        <DataGrid Grid.Row="1" Margin="3" AutoGenerateColumns="False" RowHeaderWidth="0" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" ColumnWidth="SizeToHeader" ItemsSource="{Binding DeviceErrorList}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Device Name" Binding="{Binding DeviceName}" />
+                <DataGridTextColumn Header="Error" Width="Auto" Binding="{Binding Error}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="2" Margin="3" Width="66" Height="30" Content="OK" IsDefault="True" IsCancel="True" Click="Ok_OnClick" />
+    </Grid>
+</Window>
