@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using LcmsNet.Notification;
 using LcmsNet.SampleQueue;
@@ -487,7 +488,11 @@ namespace LcmsNet.Method
                     //
 
                     if (data.LCMethod.Events.Count > 0)
-                        sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
+                    {
+                        // Original code that relies on events firing properly
+                        //sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
+                        sampleEndTime[sampleColumnID] = data.LCMethod.Events.Last().End;
+                    }
                     else
 #if DEBUG
                         sampleEndTime[sampleColumnID] = TimeKeeper.Instance.Now.AddSeconds(5);
