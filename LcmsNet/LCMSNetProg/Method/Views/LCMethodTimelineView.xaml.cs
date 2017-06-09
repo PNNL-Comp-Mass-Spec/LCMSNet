@@ -87,21 +87,18 @@ namespace LcmsNet.Method.Views
         private bool unmoved = false;
         private Point oldMouseLoc = new Point(0, 0);
 
-        private void DrawingContainer_OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void DrawingContainer_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                leftMouseDown = true;
-                oldMouseLoc = e.GetPosition(DrawingContainer);
-                unmoved = true;
-            }
+            leftMouseDown = true;
+            oldMouseLoc = e.GetPosition(DrawingContainer);
+            unmoved = true;
         }
 
-        private void DrawingContainer_OnMouseUp(object sender, MouseButtonEventArgs e)
+        private void DrawingContainer_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left && lcMethodTimelineDataContext.RenderMode == enumLCMethodRenderMode.Conversation)
+            leftMouseDown = false;
+            if (lcMethodTimelineDataContext.RenderMode == enumLCMethodRenderMode.Conversation)
             {
-                leftMouseDown = false;
                 lcMethodTimelineDataContext.MouseUpUpdates(e.GetPosition(DrawingContainer), ref unmoved);
             }
         }

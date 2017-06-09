@@ -9,5 +9,5 @@
              d:DesignHeight="341" d:DesignWidth="611"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodTimelineViewModel}, IsDesignTimeCreatable=True}"
              DataContextChanged="TimelineView_OnDataContextChanged">
-    <views:DrawingVisualHost x:Name="DrawingContainer" SizeChanged="DrawingContainer_OnSizeChanged" MouseDown="DrawingContainer_OnMouseDown" MouseUp="DrawingContainer_OnMouseUp" MouseMove="DrawingContainer_OnMouseMove" />
+    <views:DrawingVisualHost x:Name="DrawingContainer" SizeChanged="DrawingContainer_OnSizeChanged" MouseLeftButtonDown="DrawingContainer_OnMouseLeftButtonDown" MouseLeftButtonUp="DrawingContainer_OnMouseLeftButtonUp" MouseMove="DrawingContainer_OnMouseMove" />
 </UserControl>
