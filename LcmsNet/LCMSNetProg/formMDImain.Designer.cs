@@ -22,6 +22,13 @@ namespace LcmsNet
                 Shutdown();
                 components.Dispose();
             }
+            if (disposing)
+            {
+                foreach (var item in disposables)
+                {
+                    item.Dispose();
+                }
+            }
             base.Dispose(disposing);
         }
 

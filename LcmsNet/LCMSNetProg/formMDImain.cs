@@ -130,6 +130,8 @@ namespace LcmsNet
 
         #region Members
 
+        private readonly List<IDisposable> disposables = new List<IDisposable>();
+
         private FluidicsDesign m_fluidicsDesign;
 
         /// <summary>
@@ -688,6 +690,7 @@ namespace LcmsNet
             form.ControlBox = false;
             form.WindowState = FormWindowState.Maximized;
             form.Show();
+            disposables.Add(form);
         }
 
         public void SetStatusMessage(int level, string message)
