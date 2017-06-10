@@ -80,7 +80,7 @@ namespace LcmsNet.Method.Views
             drawContext.Pop();
             lcMethodTimelineDataContext.RenderGraphics(drawContext, new Rect(new Point(0, 0), DrawingContainer.RenderSize));
             drawContext.Close();
-            DrawingContainer.AddDrawingVisual(drawingVisual);
+            DrawingContainer.AddDrawingVisual(drawingVisual, true);
         }
 
         private bool leftMouseDown = false;

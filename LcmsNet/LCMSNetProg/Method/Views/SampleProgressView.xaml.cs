@@ -71,7 +71,7 @@ namespace LcmsNet.Method.Views
             drawContext.Pop();
             sampleProgressDataContext.RenderGraph(drawContext, new Rect(new Point(0, 0), DrawingContainer.RenderSize));
             drawContext.Close();
-            DrawingContainer.AddDrawingVisual(drawingVisual);
+            DrawingContainer.AddDrawingVisual(drawingVisual, true);
         }
     }
 }

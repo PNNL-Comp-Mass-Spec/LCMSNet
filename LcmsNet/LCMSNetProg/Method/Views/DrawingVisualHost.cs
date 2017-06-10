@@ -14,9 +14,24 @@ namespace LcmsNet.Method.Views
             _children = new VisualCollection(this);
         }
 
-        public void AddDrawingVisual(DrawingVisual visual)
+        /// <summary>
+        /// Add a drawing visual to the collection
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <param name="clearFirst">Clear the existing drawing visuals first (recommended)</param>
+        public void AddDrawingVisual(DrawingVisual visual, bool clearFirst)
         {
+            if (clearFirst)
+            {
+                _children.Clear();
+            }
+
             _children.Add(visual);
+        }
+
+        public void ClearContent()
+        {
+            _children.Clear();
         }
 
         // Provide a required override for the VisualChildrenCount property.
