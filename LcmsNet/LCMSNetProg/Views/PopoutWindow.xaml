@@ -27,12 +27,13 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding DataContext.Child, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}" />
-                            <Button Margin="3" Height="23" Width="32"
+                            <Button Margin="3" Height="23" Width="Auto"
                                     Grid.Row="{Binding ButtonGridRow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}"
                                     Grid.Column="{Binding ButtonGridColumn, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}"
                                     HorizontalAlignment="{Binding HorizontalButtonAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}"
                                     VerticalAlignment="{Binding VerticalButtonAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}"
-                                    Command="{Binding DataContext.TackUnTackCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}" />
+                                    Command="{Binding DataContext.TackUnTackCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}"
+                                    Content="{Binding DataContext.TackType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutWindow}}}" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>

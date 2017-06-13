@@ -26,12 +26,13 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Grid.Row="1" Grid.Column="1" Margin="3" />
-                            <Button Margin="3" Height="23" Width="32"
+                            <Button Margin="3" Height="23" Width="Auto"
                                     Grid.Row="{Binding ButtonGridRow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
                                     Grid.Column="{Binding ButtonGridColumn, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
                                     HorizontalAlignment="{Binding HorizontalButtonAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
                                     VerticalAlignment="{Binding VerticalButtonAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
-                                    Command="{Binding DataContext.TackUnTackCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}" />
+                                    Command="{Binding DataContext.TackUnTackCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
+                                    Content="{Binding DataContext.TackType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>

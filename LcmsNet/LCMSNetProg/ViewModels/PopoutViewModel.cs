@@ -44,7 +44,16 @@ namespace LcmsNet.ViewModels
         public bool Tacked
         {
             get { return tacked; }
-            set { this.RaiseAndSetIfChanged(ref tacked, value); }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref tacked, value);
+                this.RaisePropertyChanged(nameof(TackType));
+            }
+        }
+
+        public string TackType
+        {
+            get { return Tacked ? "Untack" : "Tack"; }
         }
 
         //public event EventHandler<TackEventArgs> Tack;
