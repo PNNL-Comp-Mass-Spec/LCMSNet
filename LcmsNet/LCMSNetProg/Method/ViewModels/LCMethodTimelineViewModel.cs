@@ -219,7 +219,10 @@ namespace LcmsNet.Method.ViewModels
             var duration = new TimeSpan(0, 30, 0);
             foreach (var column in classCartConfiguration.Columns)
             {
-                renderer.ColumnNames.Add(column.Name);
+                if (column.Status != enumColumnStatus.Disabled)
+                {
+                    renderer.ColumnNames.Add(column.Name);
+                }
             }
             renderer.ColumnNames.Add("Special");
             if (methods != null && methods.Count > 0)
