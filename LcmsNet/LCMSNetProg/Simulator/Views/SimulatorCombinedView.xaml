@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="LcmsNet.Simulator.Views.SimulatorCombinedView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
+             xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
+             xmlns:genericViews="clr-namespace:LcmsNet.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="555" d:DesignWidth="973"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:SimulatorCombinedViewModel}, IsDesignTimeCreatable=True}"
+             DataContextChanged="SimulatorCombinedView_OnDataContextChanged">
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ConfigColumn" Width="1*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition x:Name="ControlsColumn" Width="2.2*" />
+        </Grid.ColumnDefinitions>
+        <genericViews:PopoutView Grid.Column="0" DataContext="{Binding ConfigPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+            <views:SimConfigurationView DataContext="{Binding Child}" />
+        </genericViews:PopoutView>
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" x:Name="Splitter" />
+        <genericViews:PopoutView Grid.Column="2" DataContext="{Binding ControlsPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+            <views:SimulatorControlsAndChartsView DataContext="{Binding Child}" />
+        </genericViews:PopoutView>
+    </Grid>
+</UserControl>
+
+
+

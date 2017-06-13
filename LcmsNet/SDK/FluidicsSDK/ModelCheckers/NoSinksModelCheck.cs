@@ -6,11 +6,13 @@
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FluidicsSDK.Base;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -79,23 +81,28 @@ namespace FluidicsSDK.ModelCheckers
             return false;
         }
 
+        private string name;
+        private bool isEnabled;
+        private ModelStatusCategory category;
+
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public bool IsEnabled
         {
-            get;
-            set;
+            get { return isEnabled; }
+            set { this.RaiseAndSetIfChanged(ref isEnabled, value); }
         }
 
         public ModelStatusCategory Category
         {
-            get;
-            set;
+            get { return category; }
+            set { this.RaiseAndSetIfChanged(ref category, value); }
         }
+
         public IEnumerable<ModelStatus> CheckModel()
         {
             const string message = "No fluidics path found from source {0} to a sink";
@@ -105,7 +112,7 @@ namespace FluidicsSDK.ModelCheckers
             //for each port in the device, see if it leads to a sink, if and only if, that port has not been previously tested and that port is a source.
             var sources = Managers.PortManager.GetPortManager.Ports.FindAll(x => x.Source);
             foreach (var p in sources)
-            {                
+            {
                 List<Connection> pathTaken;
                 var sinkFound = FindSinks(p, out pathTaken);
 
@@ -137,5 +144,11 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

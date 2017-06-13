@@ -195,9 +195,7 @@ namespace LcmsNet
         /// </summary>
         private readonly IPDF m_pdfGen = new PDFGen();
 
-        private formSimulatorCombined m_simCombined;
-        private formSimConfiguration m_simConfig;
-        private formSimulatorControlsAndCharts m_simControlsAndCharts;
+        private formSimulatorCombined2 m_simCombined;
 
         #endregion
 
@@ -316,13 +314,8 @@ namespace LcmsNet
             if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false))
             {
                 //add simulator button to main form and add simulator forms.
-                m_simCombined = new formSimulatorCombined();
-                m_simCombined.Tack += m_simCombined_Tack;
-                m_simConfig = new formSimConfiguration();
-                m_simControlsAndCharts = new formSimulatorControlsAndCharts();
+                m_simCombined = new formSimulatorCombined2();
                 AddForm(m_simCombined);
-                AddForm(m_simConfig);
-                AddForm(m_simControlsAndCharts);
             }
             else
             {
@@ -519,73 +512,6 @@ namespace LcmsNet
         void Manager_DevicesInitialized(object sender, EventArgs e)
         {
             classApplicationLogger.LogMessage(0, "Device initialization complete.");
-        }
-
-        void m_simCombined_Tack(object sender, TackEventArgs e)
-        {
-            if (sender == SimControlsAndChartsControl.GetInstance)
-            {
-                //controls and charts untacked
-                if (!e.Tacked && SimConfigControl.GetInstance.Tacked)
-                {
-                    //show config in main window
-                    m_simConfig.MdiParent = this;
-                    m_simConfig.Hide();
-                    m_simConfig.BringToFront();
-                    m_simConfig.Show();
-                    m_simControlsAndCharts.Show();
-                }
-                // charts and controls is tacked and config is already tacked.
-                else if (e.Tacked && SimConfigControl.GetInstance.Tacked)
-                {
-                    m_simControlsAndCharts.MdiParent = this;
-                    m_simCombined.Hide();
-                    m_simCombined.Show();
-                    m_simCombined.BringToFront();
-                }
-                //config was untacked, and untack of controls and charts requested
-                else if (!e.Tacked && !SimConfigControl.GetInstance.Tacked)
-                {
-                    //tack config to main window
-                    SimConfigControl.GetInstance.TackOnRequest();
-                    m_simConfig.MdiParent = this;
-                    m_simConfig.Hide();
-                    m_simConfig.Show();
-                    m_simControlsAndCharts.Show();
-                    m_simConfig.BringToFront();
-                }
-            }
-            else if (sender == SimConfigControl.GetInstance)
-            {
-                // config is untacked and charts and controls is already tacked
-                if (!e.Tacked && SimControlsAndChartsControl.GetInstance.Tacked)
-                {
-                    //show charts and controls in main window
-                    m_simControlsAndCharts.MdiParent = this;
-                    m_simControlsAndCharts.Hide();
-                    m_simControlsAndCharts.BringToFront();
-                    m_simControlsAndCharts.Show();
-                    m_simConfig.Show();
-                }
-                // config is tacked and charts and controls is already tacked
-                else if (e.Tacked && SimControlsAndChartsControl.GetInstance.Tacked)
-                {
-                    m_simConfig.MdiParent = this;
-                    m_simCombined.Show();
-                    m_simCombined.BringToFront();
-                }
-                // config is untacked and charts and controls is already untacked
-                else if (!e.Tacked && !SimControlsAndChartsControl.GetInstance.Tacked)
-                {
-                    // tack carts and controls to main window and show it
-                    SimControlsAndChartsControl.GetInstance.TackOnRequest();
-                    m_simControlsAndCharts.MdiParent = this;
-                    m_simControlsAndCharts.Hide();
-                    m_simControlsAndCharts.Show();
-                    m_simConfig.Show();
-                    m_simControlsAndCharts.BringToFront();
-                }
-            }
         }
 
         #endregion
@@ -987,21 +913,21 @@ namespace LcmsNet
 
         private void ShowSimulator()
         {
-            if (SimControlsAndChartsControl.GetInstance.Tacked && !SimConfigControl.GetInstance.Tacked)
-            {
-                m_simControlsAndCharts.BringToFront();
-                m_simControlsAndCharts.Show();
-            }
-            else if (!SimControlsAndChartsControl.GetInstance.Tacked && SimConfigControl.GetInstance.Tacked)
-            {
-                m_simConfig.BringToFront();
-                m_simConfig.Show();
-            }
-            else
-            {
+            //if (SimControlsAndChartsControl.GetInstance.Tacked && !SimConfigControl.GetInstance.Tacked)
+            //{
+            //    m_simControlsAndCharts.BringToFront();
+            //    m_simControlsAndCharts.Show();
+            //}
+            //else if (!SimControlsAndChartsControl.GetInstance.Tacked && SimConfigControl.GetInstance.Tacked)
+            //{
+            //    m_simConfig.BringToFront();
+            //    m_simConfig.Show();
+            //}
+            //else
+            //{
                 m_simCombined.Show();
                 m_simCombined.BringToFront();
-            }
+            //}
         }
 
         #endregion

@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="LcmsNet.Views.PopoutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.ViewModels"
+             xmlns:views="clr-namespace:LcmsNet.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="500"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:PopoutViewModel}, IsDesignTimeCreatable=True}"
+             DataContextChanged="PopoutView_OnDataContextChanged">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type views:PopoutView}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type views:PopoutView}" >
+                        <Grid Background="{Binding Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}" DataContext="{Binding DataContext.Child, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Grid.Row="1" Grid.Column="1" Margin="3" />
+                            <Button Margin="3" Height="23" Width="32"
+                                    Grid.Row="{Binding ButtonGridRow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
+                                    Grid.Column="{Binding ButtonGridColumn, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
+                                    HorizontalAlignment="{Binding HorizontalButtonAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
+                                    VerticalAlignment="{Binding VerticalButtonAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}"
+                                    Command="{Binding DataContext.TackUnTackCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:PopoutView}}}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+</UserControl>

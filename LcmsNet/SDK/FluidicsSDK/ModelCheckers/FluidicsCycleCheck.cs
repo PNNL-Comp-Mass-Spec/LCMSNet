@@ -6,12 +6,14 @@
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
 using System.Drawing;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -28,24 +30,27 @@ namespace FluidicsSDK.ModelCheckers
             m_notifications = new List<string> { cycle };
         }
 
+        private string name;
+        private bool isEnabled;
+        private ModelStatusCategory category;
+
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public bool IsEnabled
         {
-            get;
-            set;
+            get { return isEnabled; }
+            set { this.RaiseAndSetIfChanged(ref isEnabled, value); }
         }
 
         public ModelStatusCategory Category
         {
-            get;
-            set;
+            get { return category; }
+            set { this.RaiseAndSetIfChanged(ref category, value); }
         }
-
 
         public IEnumerable<ModelStatus> CheckModel()
         {
@@ -83,7 +88,7 @@ namespace FluidicsSDK.ModelCheckers
             visitedPorts.Add(startingSource);
             // check where every connection from the starting source goes
             foreach(var conn in startingSource.Connections)
-            {                
+            {
                 var otherEnd = conn.FindOppositeEndOfConnection(startingSource);
                 if (PrevConnection == null || conn.ID != PrevConnection.ID) // if conn.ID is the same as PrevConnection.ID, ignore it, since that's the connection we just traveled, and we don't want to go backwards as this would be detected as a cycle, when in reality it is not.
                 {
@@ -91,7 +96,7 @@ namespace FluidicsSDK.ModelCheckers
                     // If at any point we find a port we've already been to, there is a cycle in the graph,
                     // or in other words, we have connections that lead in a "circular" path back to a place we've already been
                     if (visitedPorts.Contains(otherEnd))
-                    {                        
+                    {
                         // cycleFound = true;
                         return true;
                     }
@@ -100,8 +105,8 @@ namespace FluidicsSDK.ModelCheckers
                     if (cycleFound) {
                         return true;
                     }
-                }                
-            }        
+                }
+            }
             // cycleFound is false
             return false;
         }
@@ -123,6 +128,13 @@ namespace FluidicsSDK.ModelCheckers
         {
             add { }
             remove { }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

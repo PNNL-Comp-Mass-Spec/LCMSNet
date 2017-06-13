@@ -757,6 +757,12 @@
     <Compile Include="Simulator\formSimulatorCombined.Designer.cs">
       <DependentUpon>formSimulatorCombined.cs</DependentUpon>
     </Compile>
+    <Compile Include="Simulator\formSimulatorCombined2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Simulator\formSimulatorCombined2.Designer.cs">
+      <DependentUpon>formSimulatorCombined2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Simulator\formSimulatorControlsAndCharts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -796,6 +802,29 @@
     <Compile Include="Simulator\TackEventArgs.cs" />
     <Compile Include="SampleQueue\Views\MethodManagerView.xaml.cs">
       <DependentUpon>MethodManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\ViewModels\ChartViewModel.cs" />
+    <Compile Include="Simulator\ViewModels\ModelCheckListViewModel.cs" />
+    <Compile Include="Simulator\ViewModels\SimConfigurationViewModel.cs" />
+    <Compile Include="Simulator\ViewModels\SimulatorCombinedViewModel.cs" />
+    <Compile Include="Simulator\ViewModels\SimulatorControlsAndChartsViewModel.cs" />
+    <Compile Include="Simulator\Views\ChartView.xaml.cs">
+      <DependentUpon>ChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\Views\EmulationConfirmDialog.xaml.cs">
+      <DependentUpon>EmulationConfirmDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\Views\ModelCheckListView.xaml.cs">
+      <DependentUpon>ModelCheckListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\Views\SimConfigurationView.xaml.cs">
+      <DependentUpon>SimConfigurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\Views\SimulatorCombinedView.xaml.cs">
+      <DependentUpon>SimulatorCombinedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Simulator\Views\SimulatorControlsAndChartsView.xaml.cs">
+      <DependentUpon>SimulatorControlsAndChartsView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Configuration\controlColumn.resx">
       <DependentUpon>controlColumn.cs</DependentUpon>
@@ -1042,6 +1071,9 @@
     <EmbeddedResource Include="Simulator\formSimulatorCombined.resx">
       <DependentUpon>formSimulatorCombined.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Simulator\formSimulatorCombined2.resx">
+      <DependentUpon>formSimulatorCombined2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Simulator\formSimulatorControlsAndCharts.resx">
       <DependentUpon>formSimulatorControlsAndCharts.cs</DependentUpon>
     </EmbeddedResource>
@@ -1057,6 +1089,13 @@
     <EmbeddedResource Include="Simulator\SimControlsAndChartsControl.resx">
       <DependentUpon>SimControlsAndChartsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="ViewModels\PopoutViewModel.cs" />
+    <Compile Include="Views\PopoutView.xaml.cs">
+      <DependentUpon>PopoutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopoutWindow.xaml.cs">
+      <DependentUpon>PopoutWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -1067,7 +1106,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Resources\AllIsGood.png" />
-    <None Include="Simulator\SimulatorClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="lib\16\sampleQueue_16.png" />
@@ -1077,6 +1115,11 @@
     <Resource Include="Images\next-32-2.png" />
     <Resource Include="Images\next-32.png" />
     <Resource Include="Images\test-tube-32.png" />
+    <Resource Include="Images\SimPause.png" />
+    <Resource Include="Images\SimPlay.png" />
+    <Resource Include="Images\SimReset.png" />
+    <Resource Include="Images\SimStep.png" />
+    <Resource Include="Images\SimStop.png" />
     <Content Include="LCMSLogo3.ico" />
     <Content Include="lib\16\accepted_16.png" />
     <Content Include="lib\16\Button Delete_16.png" />
@@ -1442,6 +1485,38 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SampleQueue\Views\TrayVialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Simulator\Views\ChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Simulator\Views\EmulationConfirmDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Simulator\Views\ModelCheckListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Simulator\Views\SimConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Simulator\Views\SimulatorCombinedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Simulator\Views\SimulatorControlsAndChartsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopoutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopoutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

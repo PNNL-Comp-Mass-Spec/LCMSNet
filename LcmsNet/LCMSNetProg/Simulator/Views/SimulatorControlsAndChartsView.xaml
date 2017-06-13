@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="LcmsNet.Simulator.Views.SimulatorControlsAndChartsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
+             xmlns:methodViews="clr-namespace:LcmsNet.Method.Views"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="528" d:DesignWidth="830"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:SimulatorControlsAndChartsViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
+            <TabItem Header="Method">
+                <views:ChartView DataContext="{Binding ChartsVm}" />
+            </TabItem>
+            <TabItem Header="Simulator Settings">
+                <GroupBox Header="Settings">
+                    <StackPanel>
+                        <StackPanel Margin="5,15" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Delay between event simulation (ms)" VerticalAlignment="Top" />
+                            <xctk:IntegerUpDown Width="60" VerticalAlignment="Top" Minimum="10" Maximum="30000" Value="{Binding SimDelayMs}" />
+                        </StackPanel>
+                        <views:ModelCheckListView Margin="3" DataContext="{Binding CheckList}" />
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
+        <TabControl Grid.Row="2" Margin="3">
+            <TabItem Header="Methods">
+                <methodViews:LCMethodStageView DataContext="{Binding MethodStageVm}" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

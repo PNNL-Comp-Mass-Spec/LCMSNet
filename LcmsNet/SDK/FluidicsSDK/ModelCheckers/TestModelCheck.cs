@@ -2,10 +2,12 @@
  * Written by Christopher Walters for U.S. Department of Energy
  * Pacific Northwest National Laboratory, Richland, WA
  * Copyright 2014 Battle Memorial Institute
- 
+
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using LcmsNetDataClasses;
 using LcmsNetSDK;
 
@@ -22,22 +24,26 @@ namespace FluidicsSDK.ModelCheckers
             Category = ModelStatusCategory.Error;
         }
 
+        private string name;
+        private bool isEnabled;
+        private ModelStatusCategory category;
+
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public bool IsEnabled
         {
-            get;
-            set;
+            get { return isEnabled; }
+            set { this.RaiseAndSetIfChanged(ref isEnabled, value); }
         }
 
         public ModelStatusCategory Category
         {
-            get;
-            set;
+            get { return category; }
+            set { this.RaiseAndSetIfChanged(ref category, value); }
         }
 
         IEnumerable<ModelStatus> IFluidicsModelChecker.CheckModel()
@@ -69,6 +75,13 @@ namespace FluidicsSDK.ModelCheckers
         {
             add { }
             remove { }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

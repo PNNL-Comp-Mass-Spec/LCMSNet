@@ -6,12 +6,14 @@
  *********************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
 using System.Drawing;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -26,23 +28,26 @@ namespace FluidicsSDK.ModelCheckers
             m_notifications = new List<string> { notification };
         }
 
+        private string name;
+        private bool isEnabled;
+        private ModelStatusCategory category;
 
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public bool IsEnabled
         {
-            get;
-            set;
+            get { return isEnabled; }
+            set { this.RaiseAndSetIfChanged(ref isEnabled, value); }
         }
 
         public ModelStatusCategory Category
         {
-            get;
-            set;
+            get { return category; }
+            set { this.RaiseAndSetIfChanged(ref category, value); }
         }
 
         public IEnumerable<ModelStatus> CheckModel()
@@ -68,7 +73,7 @@ namespace FluidicsSDK.ModelCheckers
                         const string message = "Multiple Sources";
                         StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, this));
                     }
-                    status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null, 
+                    status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null,
                         TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture), null, source.ParentDevice.IDevice));
                 }
             }
@@ -115,7 +120,7 @@ namespace FluidicsSDK.ModelCheckers
                     if (otherSourceFound) {
                         //short circuit out, we've found another source on the same path.
                         return true;
-                    } 
+                    }
                 }
             }
             return false;
@@ -137,6 +142,13 @@ namespace FluidicsSDK.ModelCheckers
         {
             add { }
             remove { }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

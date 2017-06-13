@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="LcmsNet.Simulator.Views.ChartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
+             xmlns:methodViews="clr-namespace:LcmsNet.Method.Views"
+             xmlns:devicesViews="clr-namespace:LcmsNet.Devices.Views"
+             xmlns:views="clr-namespace:LcmsNet.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="253" d:DesignWidth="815"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:ChartViewModel}, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <TabItem Header="Gantt" DataContext="{Binding GanttChartTimelinePopoutVm}" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False">
+                    <methodViews:LCMethodTimelineView DataContext="{Binding Child}" />
+                </views:PopoutView>
+            </TabItem>
+            <TabItem Header="Conversation" DataContext="{Binding ConversationChartTimelinePopoutVm}" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False">
+                    <methodViews:LCMethodTimelineView DataContext="{Binding Child}" />
+                </views:PopoutView>
+            </TabItem>
+            <TabItem Header="Errors" DataContext="{Binding ReporterPopoutVm}" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="True" PreferVerticalBorder="False">
+                    <devicesViews:ModelCheckReportsView DataContext="{Binding Child}" />
+                </views:PopoutView>
+            </TabItem>
+        </TabControl>
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Simulator Controls">
+            <StackPanel Margin="3" Orientation="Horizontal">
+                <Button Margin="3" Command="{Binding ResetCommand}">
+                    <Image Source="/Images/SimReset.png" Margin="3,0" MaxHeight="24" />
+                </Button>
+                <Button Margin="3" Command="{Binding StepCommand}">
+                    <Image Source="/Images/SimStep.png" Margin="3,0" MaxHeight="24" />
+                </Button>
+                <Button Margin="3" Command="{Binding PlayCommand}">
+                    <Image Source="/Images/SimPlay.png" Margin="3,0" MaxHeight="24" />
+                </Button>
+                <Button Margin="3" Command="{Binding PauseCommand}">
+                    <Image Source="/Images/SimPause.png" Margin="3,0" MaxHeight="24" />
+                </Button>
+                <Button Margin="3" Command="{Binding StopCommand}">
+                    <Image Source="/Images/SimStop.png" Margin="3,0" MaxHeight="24" />
+                </Button>
+            </StackPanel>
+        </GroupBox>
+        <methodViews:LCMethodSelectionView Grid.Row="1" Grid.Column="1" DataContext="{Binding SelectedMethods}" />
+    </Grid>
+</UserControl>
