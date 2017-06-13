@@ -69,6 +69,8 @@ namespace LcmsNet.Devices.Pumps.Views
                         ShowsPreview = false,
                         Width = 5,
                         VerticalAlignment = VerticalAlignment.Stretch,
+                        ResizeBehavior = GridResizeBehavior.PreviousAndNext,
+                        ResizeDirection = GridResizeDirection.Columns,
                     };
 
                     PumpStatusGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });

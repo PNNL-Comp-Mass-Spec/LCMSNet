@@ -21,7 +21,7 @@
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <views:LCMethodTimelineView Grid.Row="0" Grid.Column="0" DataContext="{Binding MethodTimelineThroughput}" />
-        <GridSplitter Grid.Row="0" Grid.Column="1" ShowsPreview="False" Width="5" VerticalAlignment="Stretch" />
+        <GridSplitter Grid.Row="0" Grid.Column="1" ShowsPreview="False" Width="5" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" />
         <TabControl Grid.Row="0" Grid.Column="2">
             <TabItem Header="Method Preview">
                 <Grid>
@@ -60,7 +60,7 @@
                 </GroupBox>
             </TabItem>
         </TabControl>
-        <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
         <views:LCMethodStageView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding AcquisitionStage}" />
     </Grid>
 </UserControl>

@@ -26,7 +26,7 @@
             <Label DockPanel.Dock="Right" Content="Display (minutes : seconds : milliseconds):" />
         </DockPanel>
         <views:SampleProgressView Grid.Row="1" DataContext="{Binding SampleProgress}" />
-        <GridSplitter Grid.Row="2" Height="5" ShowsPreview="False" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="2" Height="5" ShowsPreview="False" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

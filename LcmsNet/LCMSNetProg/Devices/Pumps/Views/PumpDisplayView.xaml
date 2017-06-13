@@ -19,9 +19,9 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" HorizontalAlignment="Center" Content="{Binding PumpName}" />
         <oxy:PlotView Grid.Row="1" Model="{Binding DataPressureMonitorPlot}" />
-        <GridSplitter Grid.Row="2" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="2" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
         <oxy:PlotView Grid.Row="3" Model="{Binding DataFlowMonitorPlot}" />
-        <GridSplitter Grid.Row="4" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="4" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
         <oxy:PlotView Grid.Row="5" Model="{Binding DataBMonitorPlot}" />
     </Grid>
 </UserControl>
