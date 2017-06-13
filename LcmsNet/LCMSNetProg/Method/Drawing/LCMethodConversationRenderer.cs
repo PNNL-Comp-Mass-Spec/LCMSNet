@@ -112,10 +112,20 @@ namespace LcmsNet.Method.Drawing
                 RenderColumnName(graphics, string.Format("Column {0}: {1}", i + 1, ColumnNames[i]), x, ref top);
             }
             top = bounds.Top + offset;
-            var scrollUpButtonLocation = new Rect((int)(x + widthPer) + 5, 0, (int)(bounds.Width - (x + widthPer)), (int)offset);
-            var scrollDownButtonLocation = new Rect((int)(x + widthPer) + 5, (int)(bounds.Height - offset - 5), (int)(bounds.Width - (x + widthPer)), (int)offset);
-            buttonLocations[0] = scrollUpButtonLocation;
-            buttonLocations[1] = scrollDownButtonLocation;
+
+            if (bounds.Width - (x + widthPer) > 5)
+            {
+                buttonLocations[0] = new Rect((x + widthPer) + 5, 0, (bounds.Width - (x + widthPer)), offset);
+                buttonLocations[1] = new Rect((x + widthPer) + 5, (bounds.Height - offset - 5), (bounds.Width - (x + widthPer)), offset);
+            }
+            else
+            {
+                var negOffset = Math.Abs(bounds.Width - (x + widthPer)) + 5;
+
+                buttonLocations[0] = new Rect((x + widthPer) + 5 - negOffset, 0, (bounds.Width - (x + widthPer)) + negOffset, offset);
+                buttonLocations[1] = new Rect((x + widthPer) + 5 - negOffset, (bounds.Height - offset - 5), (bounds.Width - (x + widthPer)) + negOffset, offset);
+            }
+
             var alignedEvents = new List<classLCEvent>();
             if (methods != null && methods.Count > 0)
             {

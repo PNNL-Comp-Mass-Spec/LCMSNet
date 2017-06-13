@@ -244,7 +244,10 @@ namespace LcmsNet.Method.ViewModels
                 renderer.StartEventIndex = StartEventIndex;
             }
 
-            bounds.Width -= 10;
+            if (bounds.Width > 0)
+            {
+                bounds.Width -= 10;
+            }
             bounds.X += 5;
 
             renderer.RenderLCMethod(e, bounds, methods, startTime, duration, deviceColorMappings, DateTime.MaxValue);

@@ -73,6 +73,10 @@ namespace LcmsNet.Method.Views
 
         private void RefreshVisualInternal()
         {
+            if (this.DataContext == null)
+            {
+                return;
+            }
             var drawingVisual = new DrawingVisual();
             var drawContext = drawingVisual.RenderOpen();
             drawContext.PushOpacity(100);
