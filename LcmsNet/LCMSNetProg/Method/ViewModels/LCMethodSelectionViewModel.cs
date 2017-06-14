@@ -28,7 +28,7 @@ namespace LcmsNet.Method.ViewModels
             }
             BindingOperations.EnableCollectionSynchronization(ListSelectedLCMethods, listSelectedLcMethodsLock);
             BindingOperations.EnableCollectionSynchronization(MethodsComboBoxOptions, methodsComboBoxOptionsLock);
-            BindingOperations.EnableCollectionSynchronization(SelectedLCMethodNames, selectedLcMethodNamesLock);
+            BindingOperations.EnableCollectionSynchronization(SelectedListLCMethods, selectedLcMethodNamesLock);
 
             SetupCommands();
         }
@@ -40,24 +40,7 @@ namespace LcmsNet.Method.ViewModels
         {
             get
             {
-                var methods = new List<classLCMethod>();
-                foreach (var methodName in ListSelectedLCMethods)
-                {
-                    if (string.IsNullOrWhiteSpace(methodName))
-                    {
-                        continue;
-                    }
-                    // Make sure we have a valid method
-                    if (classLCMethodManager.Manager.Methods.ContainsKey(methodName))
-                    {
-                        var method = classLCMethodManager.Manager.Methods[methodName];
-                        var cloned = method.Clone() as classLCMethod;
-
-                        if (cloned != null)
-                            methods.Add(cloned);
-                    }
-                }
-                return methods;
+                return ListSelectedLCMethods.Select(x => x.Clone() as classLCMethod).ToList();
             }
         }
 
@@ -65,12 +48,12 @@ namespace LcmsNet.Method.ViewModels
         private readonly object methodsComboBoxOptionsLock = new object();
         private readonly object selectedLcMethodNamesLock = new object();
 
-        private string selectedLCMethod = "";
-        private readonly ReactiveList<string> listSelectedLcMethods = new ReactiveList<string>();
-        private readonly ReactiveList<string> methodsComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> selectedLcMethodNames = new ReactiveList<string>();
+        private classLCMethod selectedLCMethod = null;
+        private readonly ReactiveList<classLCMethod> listSelectedLcMethods = new ReactiveList<classLCMethod>();
+        private readonly ReactiveList<classLCMethod> methodsComboBoxOptions = new ReactiveList<classLCMethod>();
+        private readonly ReactiveList<classLCMethod> selectedListLcMethods = new ReactiveList<classLCMethod>();
 
-        public string SelectedLCMethod
+        public classLCMethod SelectedLCMethod
         {
             get { return selectedLCMethod; }
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
@@ -79,13 +62,13 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// LC Methods currently selected for display
         /// </summary>
-        public ReactiveList<string> ListSelectedLCMethods => listSelectedLcMethods;
-        public ReactiveList<string> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public ReactiveList<classLCMethod> ListSelectedLCMethods => listSelectedLcMethods;
+        public ReactiveList<classLCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         /// <summary>
         /// LC Methods currently selected in the listbox for manipulation
         /// </summary>
-        public ReactiveList<string> SelectedLCMethodNames => selectedLcMethodNames;
+        public ReactiveList<classLCMethod> SelectedListLCMethods => selectedListLcMethods;
 
         #region Events and Delegates
 
@@ -120,16 +103,16 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to remove.</param>
         /// <returns>True always, that the method was removed.</returns>
-        bool Manager_MethodRemoved(object sender, classLCMethod method)
+        private bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
             // Finds and removes the method in the listbox
-            foreach (var removeMethod in ListSelectedLCMethods.Where(lcMethod => lcMethod.Equals(method.Name)).ToList())
+            foreach (var removeMethod in ListSelectedLCMethods.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
             {
                 ListSelectedLCMethods.Remove(removeMethod);
             }
 
             // Finds and removes the method in the listbox
-            foreach (var removeMethod in MethodsComboBoxOptions.Where(lcMethod => lcMethod.Equals(method.Name)).ToList())
+            foreach (var removeMethod in MethodsComboBoxOptions.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
             {
                 MethodsComboBoxOptions.Remove(removeMethod);
             }
@@ -147,7 +130,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to add.</param>
         /// <returns>True if a method was added, false if the method was null.</returns>
-        bool Manager_MethodAdded(object sender, classLCMethod method)
+        private bool Manager_MethodAdded(object sender, classLCMethod method)
         {
             if (method == null)
                 return false;
@@ -156,21 +139,23 @@ namespace LcmsNet.Method.ViewModels
             // OR add the method if it does not exist.
 
             // If the method was not found in the combobox then add it to the combobox.
-            if (!MethodsComboBoxOptions.Any(lcMethod => lcMethod.Equals(method.Name)))
+            if (!MethodsComboBoxOptions.Any(lcMethod => lcMethod.Equals(method)))
             {
-                MethodsComboBoxOptions.Add(method.Name);
+                MethodsComboBoxOptions.Add(method);
             }
 
             // Update the list box with the right methods now, and make sure that we alert listeners.
-            var foundMethods = ListSelectedLCMethods.Where(lcMethod => lcMethod.Equals(method.Name)).ToList();
-
             // If the method exists, then we need to make sure here that we update the list box
-            if (foundMethods.Count > 0)
+            if (ListSelectedLCMethods.Any(lcMethod => lcMethod.Name.Equals(method.Name)))
             {
-                foreach (var foundMethod in foundMethods)
+                for (var i = 0; i < ListSelectedLCMethods.Count; i++)
                 {
-                    var indexOf = ListSelectedLCMethods.IndexOf(foundMethod);
-                    ListSelectedLCMethods[indexOf] = method.Name;
+                    if (ListSelectedLCMethods[i].Name.Equals(method.Name))
+                    {
+                        var diff = ListSelectedLCMethods[i].CurrentEventNumber;
+                        ListSelectedLCMethods[i] = method.Clone() as classLCMethod;
+                        ListSelectedLCMethods[i].CurrentEventNumber = diff;
+                    }
                 }
 
                 MethodUpdated?.Invoke(this);
@@ -190,9 +175,12 @@ namespace LcmsNet.Method.ViewModels
         private void AddMethodToList()
         {
             var method = SelectedLCMethod;
-            if (method != null && !ListSelectedLCMethods.Contains(SelectedLCMethod))
+            if (method != null)
             {
-                ListSelectedLCMethods.Add(method);
+                var addMethod = method.Clone() as classLCMethod;
+                // need something likely to be unique.
+                addMethod.CurrentEventNumber = (int)(DateTime.Now.Ticks + ListSelectedLCMethods.Count);
+                ListSelectedLCMethods.Add(addMethod);
                 MethodAdded?.Invoke(this);
             }
         }
@@ -203,10 +191,10 @@ namespace LcmsNet.Method.ViewModels
         private void RemoveSelectedMethods()
         {
             // Make sure we have some selected objects.
-            if (SelectedLCMethodNames.Count > 0)
+            if (SelectedListLCMethods.Count > 0)
             {
                 // Remove the objects
-                foreach (var method in SelectedLCMethodNames.ToList())
+                foreach (var method in SelectedListLCMethods.ToList())
                 {
                     ListSelectedLCMethods.Remove(method);
                 }
@@ -222,10 +210,7 @@ namespace LcmsNet.Method.ViewModels
         private void MoveSelectedItemsUp()
         {
             // Don't let this happen if nothing is selected
-            if (SelectedLCMethodNames.Count < 1) return;
-
-            // Hold on to what items were moved
-            var indices = new string[SelectedLCMethodNames.Count];
+            if (SelectedListLCMethods.Count < 1) return;
 
             // Otherwise, we'll sort this out using an array to locally copy the
             // items, then clear and readd them in the suited array as they are ordered.
@@ -236,7 +221,7 @@ namespace LcmsNet.Method.ViewModels
             for (var i = 0; i < names.Count; i++)
             {
                 var current = names[i];
-                if (SelectedLCMethodNames.Contains(names[i]))
+                if (SelectedListLCMethods.Any(x => x.Name.Equals(names[i].Name) && x.CurrentEventNumber == names[i].CurrentEventNumber))
                 {
                     // Calculate the new index
                     var newPos = Math.Max(i - 1, top);
@@ -259,10 +244,6 @@ namespace LcmsNet.Method.ViewModels
                 ListSelectedLCMethods.AddRange(names);
             }
 
-            // TODO: Can do?: // Reselect any objects that were previously based on their new indices
-            // TODO: Can do?: foreach (var i in indices)
-            // TODO: Can do?:     mlistBox_methods.SetSelected(i, true);
-
             // Alerts listening objects that the order of the methods has changed.
             MethodUpdated?.Invoke(this);
         }
@@ -273,10 +254,7 @@ namespace LcmsNet.Method.ViewModels
         private void MoveSelectedItemsDown()
         {
             // Don't let this happen if nothing is selected
-            if (SelectedLCMethodNames.Count < 1) return;
-
-            // Hold on to what items were moved
-            var indices = new string[SelectedLCMethodNames.Count];
+            if (SelectedListLCMethods.Count < 1) return;
 
             // Otherwise, we'll sort this out using an array to locally copy the
             // items, then clear and readd them in the suited array as they are ordered.
@@ -287,7 +265,7 @@ namespace LcmsNet.Method.ViewModels
             for (var i = names.Count - 1; i >= 0; i--)
             {
                 var current = names[i];
-                if (SelectedLCMethodNames.Contains(names[i]))
+                if (SelectedListLCMethods.Any(x => x.Name.Equals(names[i].Name) && x.CurrentEventNumber == names[i].CurrentEventNumber))
                 {
                     // Calculate the new index
                     var newPos = Math.Min(i + 1, top);
@@ -310,10 +288,6 @@ namespace LcmsNet.Method.ViewModels
                 ListSelectedLCMethods.AddRange(names);
             }
 
-            //TODO: Can do?: // Reselect any objects that were previously based on their new indices
-            //TODO: Can do?: foreach (var i in indices)
-            //TODO: Can do?:     mlistBox_methods.SetSelected(i, true);
-
             // Alerts listening objects that the order of the methods has changed.
             MethodUpdated?.Invoke(this);
         }
@@ -328,9 +302,9 @@ namespace LcmsNet.Method.ViewModels
         private void SetupCommands()
         {
             AddCommand = ReactiveCommand.Create(() => AddMethodToList(), this.WhenAnyValue(x => x.SelectedLCMethod, x => x.ListSelectedLCMethods.Count).Select(x => !this.ListSelectedLCMethods.Contains(SelectedLCMethod)));
-            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedMethods(), this.WhenAnyValue(x => x.SelectedLCMethodNames.Count).Select(x => x > 0));
-            MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedItemsUp(), this.WhenAnyValue(x => x.SelectedLCMethodNames.Count).Select(x => x > 0));
-            MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedItemsDown(), this.WhenAnyValue(x => x.SelectedLCMethodNames.Count).Select(x => x > 0));
+            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedMethods(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
+            MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedItemsUp(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
+            MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedItemsDown(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.SampleQueue.ViewModels;
+using LcmsNetDataClasses.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.Views
@@ -48,19 +49,19 @@ namespace LcmsNet.Method.Views
                 return;
             }
 
-            using (dc.SelectedLCMethodNames.SuppressChangeNotifications())
+            using (dc.SelectedListLCMethods.SuppressChangeNotifications())
             {
-                dc.SelectedLCMethodNames.Clear();
+                dc.SelectedListLCMethods.Clear();
                 if (selector.SelectedItems.Count == 0)
                 {
                     return;
                 }
                 if (selector.SelectedItems.Count == 1)
                 {
-                    dc.SelectedLCMethodNames.Add((string)selector.SelectedItems[0]);
+                    dc.SelectedListLCMethods.Add((classLCMethod)selector.SelectedItems[0]);
                     return;
                 }
-                dc.SelectedLCMethodNames.AddRange(selector.SelectedItems.Cast<string>());
+                dc.SelectedListLCMethods.AddRange(selector.SelectedItems.Cast<classLCMethod>());
             }
         }
 

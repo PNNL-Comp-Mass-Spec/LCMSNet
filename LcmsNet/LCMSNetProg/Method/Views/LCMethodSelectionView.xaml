@@ -13,8 +13,8 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0" LastChildFill="True">
-            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" KeyUp="ComboBox_OnKeyUp" />
-            <ListBox Margin="3" SelectionMode="Extended" SelectionChanged="MethodList_OnSelectionChanged" ItemsSource="{Binding ListSelectedLCMethods}" />
+            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" KeyUp="ComboBox_OnKeyUp" />
+            <ListBox Margin="3" SelectionMode="Extended" SelectionChanged="MethodList_OnSelectionChanged" ItemsSource="{Binding ListSelectedLCMethods}" DisplayMemberPath="Name" />
         </DockPanel>
         <StackPanel Grid.Column="1" Width="60" Margin="3">
             <Button Margin="3" Command="{Binding AddCommand}" >
