@@ -14,30 +14,18 @@ namespace LcmsNet.ViewModels
         {
         }
 
-        public PopoutViewModel(ReactiveObject child, string title)
+        public PopoutViewModel(ReactiveObject child)
         {
             this.child = child;
-            this.title = title;
             TackUnTackCommand = ReactiveCommand.Create(() => Tacked = !Tacked);
             //this.WhenAnyValue(x => x.Tacked).Subscribe(x => Tack?.Invoke(this, new TackEventArgs(x)));
-        }
-
-        public PopoutViewModel(ReactiveObject child, string title, int windowWidth, int windowHeight) : this(child, title)
-        {
-            this.windowWidth = windowWidth;
-            this.windowHeight = windowHeight;
         }
 
         private readonly ReactiveObject child;
         private readonly string title;
         private bool tacked = true;
-        private int windowWidth = 477;
-        private int windowHeight = 356;
 
         public ReactiveObject Child => child;
-        public string Title => title;
-        public int WindowWidth => windowWidth;
-        public int WindowHeight => windowHeight;
 
         public ReactiveCommand<Unit, bool> TackUnTackCommand { get; private set; }
 

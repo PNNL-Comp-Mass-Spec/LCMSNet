@@ -37,9 +37,9 @@ namespace LcmsNet.Simulator.ViewModels
             conversationChartTimelineVm = new LCMethodTimelineViewModel();
             conversationChartTimelineVm.RenderMode = enumLCMethodRenderMode.Conversation;
 
-            reporterPopoutVm = new PopoutViewModel(reporter, "Errors");
-            ganttChartTimelinePopoutVm = new PopoutViewModel(ganttChartTimelineVm, "Gantt");
-            conversationChartTimelinePopoutVm = new PopoutViewModel(conversationChartTimelineVm, "Conversation");
+            reporterPopoutVm = new PopoutViewModel(reporter);
+            ganttChartTimelinePopoutVm = new PopoutViewModel(ganttChartTimelineVm);
+            conversationChartTimelinePopoutVm = new PopoutViewModel(conversationChartTimelineVm);
         }
 
         private DateTime startTime;
@@ -228,22 +228,7 @@ namespace LcmsNet.Simulator.ViewModels
             RenderThroughput(methodsToRun);
             simInstance.PrepSimulation(methodsToRun);
         }
-/*
-        private void UntackChart()
-        {
-            // if there are tabs to the tab control, a chart must exist, popout the one that's currently visible to the user
-            if (tabControlCharts.TabCount > 0)
-            {
-                //grab the first chart from the list
-                var untackThisControl = tabControlCharts.SelectedTab.Controls.OfType<UserControl>().First();
-                var popout = new formChartPopoutWindow(untackThisControl, tabControlCharts);
-                popout.Text = tabControlCharts.SelectedTab.Text;
-                tabControlCharts.SelectedTab.Controls.Remove(untackThisControl);
-                tabControlCharts.Controls.Remove(tabControlCharts.SelectedTab);
-                popout.Show();
-            }
-        }
-        */
+
         private bool ConfirmNoEmulation()
         {
             var runSimulation = true;
@@ -289,7 +274,6 @@ namespace LcmsNet.Simulator.ViewModels
             PlayCommand = ReactiveCommand.Create(() => this.Play());
             StepCommand = ReactiveCommand.Create(() => this.Step());
             StopCommand = ReactiveCommand.Create(() => this.Stop());
-            //UntackChartCommand = ReactiveCommand.Create(() => this.UntackChart());
         }
     }
 }

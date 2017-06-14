@@ -43,6 +43,18 @@ namespace LcmsNet.Views
         public static readonly DependencyProperty PreferVerticalBorderProperty =
             DependencyProperty.Register("PreferVerticalBorder", typeof(bool), typeof(PopoutView), new PropertyMetadata(false, UpdatePositioning));
 
+        // Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register("Title", typeof(string), typeof(PopoutView), new PropertyMetadata(""));
+
+        // Using a DependencyProperty as the backing store for WindowWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WindowWidthProperty =
+            DependencyProperty.Register("WindowWidth", typeof(double), typeof(PopoutView), new PropertyMetadata(500.0));
+
+        // Using a DependencyProperty as the backing store for WindowHeight.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WindowHeightProperty =
+            DependencyProperty.Register("WindowHeight", typeof(double), typeof(PopoutView), new PropertyMetadata(400.0));
+
         /// <summary>
         /// Horizontal positioning of the popout button
         /// </summary>
@@ -95,6 +107,33 @@ namespace LcmsNet.Views
         {
             get { return (bool)GetValue(PreferVerticalBorderProperty); }
             set { SetValue(PreferVerticalBorderProperty, value); }
+        }
+
+        /// <summary>
+        /// Title to be used when displaying the window - used for databinding
+        /// </summary>
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
+        /// <summary>
+        /// Default width of the popped-out window
+        /// </summary>
+        public double WindowWidth
+        {
+            get { return (double)GetValue(WindowWidthProperty); }
+            set { SetValue(WindowWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Default height of the popped-out window
+        /// </summary>
+        public double WindowHeight
+        {
+            get { return (double)GetValue(WindowHeightProperty); }
+            set { SetValue(WindowHeightProperty, value); }
         }
 
         private static void UpdatePositioning(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -186,13 +225,14 @@ namespace LcmsNet.Views
                 // TODO: Doesn't work with WinForms base:     existing.Activate();
                 // TODO: Doesn't work with WinForms base:     return;
                 // TODO: Doesn't work with WinForms base: }
-                var popoutWindow = new PopoutWindow() { DataContext = pvm };
+                popoutWindow = new PopoutWindow() { DataContext = pvm };
                 // move the content to the new window
                 var child = this.Content;
                 this.Content = null;
                 popoutWindow.Content = child;
-                popoutWindow.Width = pvm.WindowWidth;
-                popoutWindow.Height = pvm.WindowHeight;
+                popoutWindow.Width = this.WindowWidth;
+                popoutWindow.Height = this.WindowHeight;
+                popoutWindow.Title = this.Title;
                 popoutWindow.HorizontalButtonAlignment = this.HorizontalButtonAlignment;
                 popoutWindow.VerticalButtonAlignment = this.VerticalButtonAlignment;
                 popoutWindow.OverlayButton = this.OverlayButton;
@@ -204,8 +244,16 @@ namespace LcmsNet.Views
                     var obj = popoutWindow.Content;
                     popoutWindow.Content = null;
                     this.Content = obj;
+                    popoutWindow = null;
                 };
             }
+        }
+
+        private PopoutWindow popoutWindow = null;
+
+        public void TryActivateWindow()
+        {
+            popoutWindow?.Activate();
         }
     }
 }

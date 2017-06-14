@@ -24,17 +24,17 @@
         </Grid.ColumnDefinitions>
         <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
             <TabItem Header="Gantt" DataContext="{Binding GanttChartTimelinePopoutVm}" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
-                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False">
+                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="Gantt">
                     <methodViews:LCMethodTimelineView DataContext="{Binding Child}" />
                 </views:PopoutView>
             </TabItem>
             <TabItem Header="Conversation" DataContext="{Binding ConversationChartTimelinePopoutVm}" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
-                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False">
+                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="Conversation">
                     <methodViews:LCMethodTimelineView DataContext="{Binding Child}" />
                 </views:PopoutView>
             </TabItem>
             <TabItem Header="Errors" DataContext="{Binding ReporterPopoutVm}" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
-                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="True" PreferVerticalBorder="False">
+                <views:PopoutView HorizontalButtonAlignment="Left" VerticalButtonAlignment="Bottom" OverlayButton="True" PreferVerticalBorder="False" Title="Errors">
                     <devicesViews:ModelCheckReportsView DataContext="{Binding Child}" />
                 </views:PopoutView>
             </TabItem>

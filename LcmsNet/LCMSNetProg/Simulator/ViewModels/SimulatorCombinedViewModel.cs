@@ -10,8 +10,8 @@ namespace LcmsNet.Simulator.ViewModels
         {
             controls = SimulatorControlsAndChartsViewModel.GetInstance;
             config = SimConfigurationViewModel.GetInstance;
-            configPopoutVm = new PopoutViewModel(config, "LcmsNet Fluidics Configuration", 772, 450);
-            controlsPopoutVm = new PopoutViewModel(controls, "LcmsNet Simulator Controls and Charts", 772, 450);
+            configPopoutVm = new PopoutViewModel(config);
+            controlsPopoutVm = new PopoutViewModel(controls);
 
             this.WhenAnyValue(x => x.ConfigPopoutVm.Child, x => x.ConfigPopoutVm.Tacked).Subscribe(x => TackChangeRules(x.Item1, x.Item2));
             this.WhenAnyValue(x => x.ControlsPopoutVm.Child, x => x.ControlsPopoutVm.Tacked).Subscribe(x => TackChangeRules(x.Item1, x.Item2));
