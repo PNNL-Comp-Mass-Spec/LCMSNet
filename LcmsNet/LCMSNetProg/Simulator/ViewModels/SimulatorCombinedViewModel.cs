@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNet.ViewModels;
+using LcmsNetCommonControls.ViewModels;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels

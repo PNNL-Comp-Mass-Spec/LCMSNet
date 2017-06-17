@@ -6,7 +6,7 @@
              xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
              xmlns:methodViews="clr-namespace:LcmsNet.Method.Views"
              xmlns:devicesViews="clr-namespace:LcmsNet.Devices.Views"
-             xmlns:views="clr-namespace:LcmsNet.Views"
+             xmlns:views="clr-namespace:LcmsNetCommonControls.Views;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="253" d:DesignWidth="815"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ChartViewModel}, IsDesignTimeCreatable=True}">

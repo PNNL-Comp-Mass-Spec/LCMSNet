@@ -2,10 +2,10 @@
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using LcmsNet.ViewModels;
+using LcmsNetCommonControls.ViewModels;
 using ReactiveUI;
 
-namespace LcmsNet.Views
+namespace LcmsNetCommonControls.Views
 {
     /// <summary>
     /// Interaction logic for PopoutView.xaml

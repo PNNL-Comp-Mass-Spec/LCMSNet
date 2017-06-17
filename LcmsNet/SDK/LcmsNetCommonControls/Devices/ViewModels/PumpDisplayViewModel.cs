@@ -6,7 +6,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using ReactiveUI;
 
-namespace LcmsNet.Devices.Pumps.ViewModels
+namespace LcmsNetCommonControls.Devices.ViewModels
 {
     public class PumpDisplayViewModel : ReactiveObject
     {
@@ -119,7 +119,6 @@ namespace LcmsNet.Devices.Pumps.ViewModels
                 AxislineColor = OxyColors.DarkGreen,
             });
         }
-
 
         /// <summary>
         /// Displays the monitoring data.

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LcmsNet.Devices.Pumps.ViewModels;
+using LcmsNetCommonControls.Devices.Views;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.Pumps.Views

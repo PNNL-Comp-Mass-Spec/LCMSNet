@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
              xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
-             xmlns:genericViews="clr-namespace:LcmsNet.Views"
+             xmlns:commonViews="clr-namespace:LcmsNetCommonControls.Views;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="555" d:DesignWidth="973"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SimulatorCombinedViewModel}, IsDesignTimeCreatable=True}"
@@ -19,15 +19,12 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition x:Name="ControlsColumn" Width="2.2*" />
         </Grid.ColumnDefinitions>
-        <genericViews:PopoutView Grid.Column="0" DataContext="{Binding ConfigPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Fluidics Configuration" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+        <commonViews:PopoutView Grid.Column="0" DataContext="{Binding ConfigPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Fluidics Configuration" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
             <views:SimConfigurationView DataContext="{Binding Child}" />
-        </genericViews:PopoutView>
+        </commonViews:PopoutView>
         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" x:Name="Splitter" />
-        <genericViews:PopoutView Grid.Column="2" DataContext="{Binding ControlsPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Simulator Controls and Charts" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
+        <commonViews:PopoutView Grid.Column="2" DataContext="{Binding ControlsPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Simulator Controls and Charts" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
             <views:SimulatorControlsAndChartsView DataContext="{Binding Child}" />
-        </genericViews:PopoutView>
+        </commonViews:PopoutView>
     </Grid>
 </UserControl>
-
-
-

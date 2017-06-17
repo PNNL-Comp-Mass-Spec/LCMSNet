@@ -2,7 +2,7 @@
 using System.Reactive;
 using ReactiveUI;
 
-namespace LcmsNet.ViewModels
+namespace LcmsNetCommonControls.ViewModels
 {
     public class PopoutViewModel : ReactiveObject
     {
@@ -22,7 +22,6 @@ namespace LcmsNet.ViewModels
         }
 
         private readonly ReactiveObject child;
-        private readonly string title;
         private bool tacked = true;
 
         public ReactiveObject Child => child;

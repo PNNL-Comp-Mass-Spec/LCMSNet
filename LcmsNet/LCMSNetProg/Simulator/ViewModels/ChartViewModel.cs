@@ -8,7 +8,7 @@ using LcmsNet.Devices.ViewModels;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Simulator.Views;
-using LcmsNet.ViewModels;
+using LcmsNetCommonControls.ViewModels;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;

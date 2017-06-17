@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using LcmsNetCommonControls.Devices.ViewModels;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Devices.Pumps;
 using LcmsNetSDK.Data;

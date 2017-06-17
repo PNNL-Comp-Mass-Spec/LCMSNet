@@ -23,12 +23,12 @@ namespace LcmsNet
             }
         }
 
-        public static Image ToImage(this BitmapImage img)
+        public static Bitmap ToImage(this BitmapImage img)
         {
             return new Bitmap(img.StreamSource);
         }
 
-        public static Image ToImage(this BitmapSource img)
+        public static Bitmap ToImage(this BitmapSource img)
         {
             //convert image format
             var src = new FormatConvertedBitmap();

@@ -196,7 +196,6 @@
       <DependentUpon>formPumpDisplays2.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Pumps\ViewModels\PumpDisplaysViewModel.cs" />
-    <Compile Include="Devices\Pumps\ViewModels\PumpDisplayViewModel.cs" />
     <Compile Include="Devices\Pumps\Views\MobilePhaseEditorView.xaml.cs">
       <DependentUpon>MobilePhaseEditorView.xaml</DependentUpon>
     </Compile>
@@ -205,9 +204,6 @@
     </Compile>
     <Compile Include="Devices\Pumps\Views\PumpDisplaysWindow.xaml.cs">
       <DependentUpon>PumpDisplaysWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Pumps\Views\PumpDisplayView.xaml.cs">
-      <DependentUpon>PumpDisplayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\ViewModels\DeviceAddViewModel.cs" />
     <Compile Include="Devices\ViewModels\FailedDevicesViewModel.cs" />
@@ -1089,13 +1085,6 @@
     <EmbeddedResource Include="Simulator\SimControlsAndChartsControl.resx">
       <DependentUpon>SimControlsAndChartsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="ViewModels\PopoutViewModel.cs" />
-    <Compile Include="Views\PopoutView.xaml.cs">
-      <DependentUpon>PopoutView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PopoutWindow.xaml.cs">
-      <DependentUpon>PopoutWindow.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -1306,6 +1295,10 @@
     <Folder Include="Devices\Plugins\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj">
+      <Project>{176aacc9-480e-4425-ba4b-40bb7b8a2e04}</Project>
+      <Name>LcmsNetCommonControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SDK\LcmsNetSDK\LcmsNetSDK.csproj">
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
       <Name>LcmsNetSDK</Name>
@@ -1333,10 +1326,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Devices\Pumps\Views\PumpDisplaysWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Devices\Pumps\Views\PumpDisplayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1509,14 +1498,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Simulator\Views\SimulatorControlsAndChartsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PopoutView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PopoutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
