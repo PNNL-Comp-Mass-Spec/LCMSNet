@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="DemoPluginLibrary.DemoClosureAdvancedControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DemoPluginLibrary"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="73" d:DesignWidth="417"
+             d:DataContext="{d:DesignInstance {x:Type local:DemoClosureAdvancedControlViewModel}, IsDesignTimeCreatable=True}">
+    <StackPanel Orientation="Horizontal">
+        <TextBlock Margin="5" VerticalAlignment="Center" Text="Pulse Length (seconds):" />
+        <xctk:IntegerUpDown Margin="5" VerticalAlignment="Center" Width="58" Minimum="1" Maximum="1000000000" Value="{Binding PulseLength}" />
+        <TextBlock Margin="5" VerticalAlignment="Center" Text="Voltage:" />
+        <xctk:DoubleUpDown Margin="5" VerticalAlignment="Center" Width="58" Minimum="1" Maximum="1000000000" Increment="1" FormatString="F1" Value="{Binding Voltage}" />
+        <Button Margin="5" VerticalAlignment="Center" Width="75" Content="Send" Command="{Binding SendCommand}" />
+    </StackPanel>
+</UserControl>
