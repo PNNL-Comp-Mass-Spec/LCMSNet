@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -73,6 +74,8 @@
     <Compile Include="Data\DmsValidatorEventArgs.cs" />
     <Compile Include="Data\IDMSValidator.cs" />
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
+    <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
+    <Compile Include="Devices\IDeviceControlWpf.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Experiment\classSampleValidationError.cs" />
     <Compile Include="Experiment\classSampleValidatorManager.cs" />
