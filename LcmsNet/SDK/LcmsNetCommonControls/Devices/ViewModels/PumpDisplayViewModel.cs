@@ -72,51 +72,66 @@ namespace LcmsNetCommonControls.Devices.ViewModels
             DataPressureMonitorPlot = new PlotModel()
             {
                 Title = "Pressure (bar)",
+                TitleFontSize = 10,
             };
             DataPressureMonitorPlot.Axes.Add(new DateTimeAxis()
             {
                 Title = "Time",
-                Position = AxisPosition.Bottom
+                TitleFontSize = 10,
+                Position = AxisPosition.Bottom,
+                FontSize = 10,
             });
             DataPressureMonitorPlot.Axes.Add(new LinearAxis()
             {
                 Title = "Pressure (bar)",
+                TitleFontSize = 10,
                 Position = AxisPosition.Left,
                 AxislineColor = OxyColors.Red,
+                FontSize = 10,
             });
 
             // Flow rate
             DataFlowMonitorPlot = new PlotModel()
             {
                 Title = "Flow Rate",
+                TitleFontSize = 10,
             };
             DataFlowMonitorPlot.Axes.Add(new DateTimeAxis()
             {
                 Title = "Time",
-                Position = AxisPosition.Bottom
+                TitleFontSize = 10,
+                Position = AxisPosition.Bottom,
+                FontSize = 10,
             });
             DataFlowMonitorPlot.Axes.Add(new LinearAxis()
             {
                 Title = "Flow Rate",
+                TitleFontSize = 10,
                 Position = AxisPosition.Left,
                 AxislineColor = OxyColors.DarkGreen,
+                FontSize = 10,
             });
 
             // Percent B
             DataBMonitorPlot = new PlotModel()
             {
                 Title = "Composition",
+                TitleFontSize = 10,
             };
             DataBMonitorPlot.Axes.Add(new DateTimeAxis()
             {
                 Title = "Time",
-                Position = AxisPosition.Bottom
+                TitleFontSize = 10,
+                Position = AxisPosition.Bottom,
+                FontSize = 10,
             });
             DataBMonitorPlot.Axes.Add(new LinearAxis()
             {
                 Title = "Composition (%B)",
+                TitleFontSize = 10,
                 Position = AxisPosition.Left,
                 AxislineColor = OxyColors.DarkGreen,
+                FontSize = 10,
             });
         }
 
@@ -137,7 +152,8 @@ namespace LcmsNetCommonControls.Devices.ViewModels
                 MarkerType = MarkerType.Circle,
                 Color = OxyColors.Red,
                 ItemsSource = data,
-                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData) item).Time), ((PlotData) item).Pressure),
+                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Pressure),
+                RenderInLegend = false,
             };
 
             var flowSeries = new LineSeries()
@@ -147,6 +163,7 @@ namespace LcmsNetCommonControls.Devices.ViewModels
                 Color = OxyColors.DarkGreen,
                 ItemsSource = data,
                 Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData) item).Time), ((PlotData) item).Flow),
+                RenderInLegend = false,
             };
 
             var percentBSeries = new LineSeries()
@@ -156,6 +173,7 @@ namespace LcmsNetCommonControls.Devices.ViewModels
                 Color = OxyColors.Blue,
                 ItemsSource = data,
                 Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData) item).Time), ((PlotData) item).PercentB),
+                RenderInLegend = false,
             };
 
             DataPressureMonitorPlot.Series.Clear();
