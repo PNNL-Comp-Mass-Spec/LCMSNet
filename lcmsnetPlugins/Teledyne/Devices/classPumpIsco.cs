@@ -7,6 +7,7 @@
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO.Ports;
 using System.Xml;
@@ -14,6 +15,7 @@ using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
 using System.Threading;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Pumps
 {
@@ -1687,7 +1689,7 @@ namespace LcmsNet.Devices.Pumps
                     w.Flush();
                     w.Close();
                 }
-            }   
+            }
 #endif
         #endregion
 
@@ -2143,7 +2145,7 @@ namespace LcmsNet.Devices.Pumps
         {
             // Split the message
             var unitsArray = inpMsg.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            
+
             // Verify correct number of arguments, for the 100D length should be 2,
             // for 65D the length should be 3, but we still only care about the first 2.
             if (unitsArray.Length != 2 && unitsArray.Length != 3)
@@ -2200,9 +2202,8 @@ namespace LcmsNet.Devices.Pumps
             get { return m_Name; }
             set
             {
-                if (value != null && value != m_Name)
+                if (value != null && this.RaiseAndSetIfChangedRetBool(ref m_Name, value))
                 {
-                    m_Name = value;
                     DeviceSaveRequired?.Invoke(this, null);
                 }
             }
@@ -2452,7 +2453,7 @@ namespace LcmsNet.Devices.Pumps
             port.Units          = "";
             port.Value          = this.PortName.ToString();
             component.Signals.Add(port);
-            
+
             return component;
         }*/
 
@@ -2479,6 +2480,12 @@ namespace LcmsNet.Devices.Pumps
         public double GetMixerVolume()
         {
             return 0.0;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

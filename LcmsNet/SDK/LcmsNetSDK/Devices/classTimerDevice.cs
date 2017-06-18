@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+
 //using LcmsNet.Devices;
 
 namespace LcmsNetDataClasses.Devices
@@ -84,7 +87,7 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Waits for N milliseconds.
         /// </summary>
-        /// <param name="seconds">Total number of milliseconds to wait.</param> 
+        /// <param name="seconds">Total number of milliseconds to wait.</param>
         [classLCMethod("Wait N Seconds", enumMethodOperationTime.Parameter, "", -1, false)]
         // Note, the timeout is converted by the optimizer.
         public void WaitSeconds(double seconds)
@@ -104,7 +107,7 @@ namespace LcmsNetDataClasses.Devices
 
         /// <summary>
         /// Waits for N milliseconds blocking.
-        /// </summary>          
+        /// </summary>
         /// <param name="milliSeconds">Total number of milliseconds to wait.</param>
         /// <param name="resetEvent">Event to wait on</param>
         public void WaitMilliseconds(int milliSeconds, ManualResetEvent resetEvent)
@@ -127,7 +130,7 @@ namespace LcmsNetDataClasses.Devices
         public string Name
         {
             get { return m_name; }
-            set { m_name = value; }
+            set { this.RaiseAndSetIfChanged(ref m_name, value); }
         }
 
         /// <summary>
@@ -148,9 +151,9 @@ namespace LcmsNetDataClasses.Devices
         /// <returns></returns>
         public bool Initialize(ref string errorMessage)
         {
-            // 
+            //
             // No initialization required.
-            // 
+            //
 
             return true;
         }
@@ -216,5 +219,11 @@ namespace LcmsNetDataClasses.Devices
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -5,9 +5,9 @@ using LcmsNetDataClasses.Devices;
 namespace LcmsNetSDK.Notifications
 {
     /// <summary>
-    /// Inteface used to notify the sysetm when something bad has happened (or status)
+    /// Inteface used to notify the system when something bad has happened (or status)
     /// </summary>
-    public interface INotifier
+    public interface INotifier : INotifyPropertyChangedExt
     {
         string Name { get; set; }
 

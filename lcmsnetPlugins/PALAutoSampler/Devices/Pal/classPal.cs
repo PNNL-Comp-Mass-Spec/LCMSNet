@@ -12,11 +12,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using FluidicsSDK.Devices;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Pal
 {
@@ -198,14 +200,13 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                m_name = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
         /// <summary>
@@ -570,9 +571,9 @@ namespace LcmsNet.Devices.Pal
         public string ListMethods()
         {
             var methods = "";
-            // 
+            //
             // Find the methods from the device (or emulated one)
-            // 
+            //
             if (m_emulation == false)
             {
                 var error = m_PALDrvr.GetMethodNames(ref methods);
@@ -582,10 +583,10 @@ namespace LcmsNet.Devices.Pal
             {
                 methods = "Example;Dance;Headstand;Self-Destruct";
             }
-            // 
+            //
             // Now to update the user interface, get the method names
             // and send them to any listeners.
-            // 
+            //
             if (methods != null)
             {
                 var methodNames = methods.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -643,9 +644,9 @@ namespace LcmsNet.Devices.Pal
                 trays = "emuTray01;emuTray02;emuTray03;emuTray04;emuTray05;emuTray06";
             }
 
-            // 
+            //
             // Do the parsing for us !
-            // 
+            //
             var trayList = new List<string>();
             if (!string.IsNullOrEmpty(trays))
             {
@@ -701,9 +702,9 @@ namespace LcmsNet.Devices.Pal
             OnDeviceSaveRequired();
             OnFree();
         }
-        /// 
+        ///
         /// Loads the method
-        /// 
+        ///
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool LoadMethod(double timeout, classSampleData sample, string methodName)
         {
@@ -712,14 +713,14 @@ namespace LcmsNet.Devices.Pal
                 return true;
             }
 
-            // 
+            //
             // We let start method run
-            // 
+            //
             var start = LcmsNetSDK.TimeKeeper.Instance.Now;
 
-            // 
+            //
             // Load the method...
-            // 
+            //
             sample.PAL.Method = methodName;
             LoadMethod(sample.PAL.Method,
                         sample.PAL.PALTray,
@@ -728,9 +729,9 @@ namespace LcmsNet.Devices.Pal
 
             StartMethod(timeout);
 
-            // 
+            //
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
-            // 
+            //
             var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
             if (timeout > span.TotalSeconds)
                 ContinueMethod(timeout - span.TotalSeconds);
@@ -782,9 +783,9 @@ namespace LcmsNet.Devices.Pal
             var errorMessage = "";
             var error = m_PALDrvr.StartMethod(m_method, ref tempArgs, ref errorMessage);
 
-            // 
+            //
             // Check for an error!
-            // 
+            //
             var status = "";
             if (error == 1)
             {
@@ -853,7 +854,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Pauses the currently running method.
         /// </summary>
-        /// 
+        ///
         [classLCMethodAttribute("Pause Method", .5, "", -1, false)]
         public void PauseMethod()
         {
@@ -868,7 +869,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Resumes the method.
         /// </summary>
-        /// 
+        ///
         [classLCMethodAttribute("Resume Method", 500, "", -1, false)]
         public void ResumeMethod()
         {
@@ -1080,5 +1081,11 @@ namespace LcmsNet.Devices.Pal
             return component;
         }*/
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -9,6 +9,7 @@
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Timers;
 using FluidicsSDK.Devices;
@@ -16,6 +17,7 @@ using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.BrukerStart
 {
@@ -200,14 +202,13 @@ namespace LcmsNet.Devices.BrukerStart
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_Name;
-            }
+            get { return m_Name; }
             set
             {
-                m_Name = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_Name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
 
@@ -525,7 +526,7 @@ new classDeviceErrorEventArgs(msg,
 
         /// <summary>
         /// Stops data acquisition
-        /// </summary>            
+        /// </summary>
         [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopAcquisition(double timeout)
         {
@@ -701,7 +702,7 @@ new classDeviceErrorEventArgs(msg,
                 mobject_CmdTimeoutTimer.Enabled = false;
                 return true;
             }
-            
+
             // There was a problem
             mobject_CmdTimeoutTimer.Enabled = false;
             return false;
@@ -978,7 +979,7 @@ new classDeviceErrorEventArgs(msg,
 
         #region IDevice Members
         /*public FinchComponentData GetData()
-        {                               
+        {
             FinchComponentData component    = new FinchComponentData();
             component.Status                = Status.ToString();
             component.Name                  = Name;
@@ -998,7 +999,7 @@ new classDeviceErrorEventArgs(msg,
             port.Units          = "";
             port.Value          = this.Port.ToString();
             component.Signals.Add(port);
-            
+
             return component;
         }*/
 
@@ -1011,5 +1012,11 @@ new classDeviceErrorEventArgs(msg,
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

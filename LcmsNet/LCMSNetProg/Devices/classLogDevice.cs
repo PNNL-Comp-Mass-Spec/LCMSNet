@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices
 {
@@ -130,7 +132,7 @@ namespace LcmsNet.Devices
         public string Name
         {
             get { return m_name; }
-            set { m_name = value; }
+            set { this.RaiseAndSetIfChanged(ref m_name, value); }
         }
 
         /// <summary>
@@ -212,5 +214,11 @@ namespace LcmsNet.Devices
         public enumDeviceType DeviceType => enumDeviceType.BuiltIn;
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

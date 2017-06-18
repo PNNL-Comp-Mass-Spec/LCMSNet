@@ -217,6 +217,8 @@ namespace LcmsNet.Method
         /// </summary>
         private readonly List<object> m_threadLocks;
 
+        private string name;
+
         #endregion
 
         #region Events
@@ -701,7 +703,11 @@ namespace LcmsNet.Method
             return new List<string>();
         }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
+        }
 
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
 
@@ -861,5 +867,11 @@ namespace LcmsNet.Method
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

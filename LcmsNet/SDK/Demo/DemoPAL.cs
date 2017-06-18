@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using LcmsNetDataClasses;
+using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
@@ -131,10 +133,11 @@ namespace DemoPluginLibrary
             set;
         }
 
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public string Version
@@ -161,5 +164,10 @@ namespace DemoPluginLibrary
             set;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

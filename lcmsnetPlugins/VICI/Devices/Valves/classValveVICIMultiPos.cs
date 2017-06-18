@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Valves
 {
@@ -213,14 +215,13 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                m_name = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
         /// <summary>
@@ -229,7 +230,7 @@ namespace LcmsNet.Devices.Valves
         public SerialPort Port => m_serialPort;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("PortName")]
         public string PortName
@@ -244,7 +245,7 @@ namespace LcmsNet.Devices.Valves
             }
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("ReadTimeout")]
         public int ReadTimeout
@@ -259,7 +260,7 @@ namespace LcmsNet.Devices.Valves
             }
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("WriteTimeout")]
         public int WriteTimeout
@@ -284,7 +285,7 @@ namespace LcmsNet.Devices.Valves
         public int LastSentPosition => m_lastSentPosition;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("NumberOfPositions")]
         public int NumberOfPositions
@@ -457,7 +458,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Sets the position of the valve.
         /// </summary>
-        /// <param name="position">The new position.</param>   
+        /// <param name="position">The new position.</param>
         public enumValveErrors SetPosition(int position)
         {
             var newPosition = Convert.ToInt32(position);
@@ -512,7 +513,7 @@ namespace LcmsNet.Devices.Valves
                 var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, m_rotationDelayTimems);
                 if (waited)
                     return enumValveErrors.BadArgument;
-                
+
                 //System.Threading.Thread.Sleep(m_rotationDelayTimems);
 
                 //Doublecheck that the position change was correctly executed
@@ -549,7 +550,7 @@ namespace LcmsNet.Devices.Valves
 
             return enumValveErrors.BadArgument;
         }
-       
+
         /// <summary>
         /// Gets the current position of the valve.
         /// </summary>
@@ -598,7 +599,7 @@ namespace LcmsNet.Devices.Valves
                 tempBuffer    = m_serialPort.ReadExisting();
                 var contains = tempBuffer.Contains("Position is =");
 
-                
+
                 var data = tempBuffer.Split(new[] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
                 tempBuffer = "";
                 for (var i = data.Length - 1; i >= 0; i--)
@@ -620,10 +621,10 @@ namespace LcmsNet.Devices.Valves
             {
                 throw new ValveExceptionUnauthorizedAccess();
             }
-            
-            // 
+
+            //
             // Grab the actual position from the above string
-            // 
+            //
             if (tempBuffer.Length > 1)
             {
                 var positions = tempBuffer.Split('=');
@@ -631,13 +632,13 @@ namespace LcmsNet.Devices.Valves
 
                 int position;
                 if (int.TryParse(tempPosition, out position))
-                {              
+                {
                     if (position >= 0 && position <= NumberOfPositions)
                     {
                         m_lastMeasuredPosition = position;
                         return position;
                     }
-                }                                 
+                }
             }
             m_lastMeasuredPosition = -1;
             return -1;
@@ -998,7 +999,7 @@ namespace LcmsNet.Devices.Valves
           return new List<string>() { "Valve Position" };
         }
         #endregion
-        
+
         /// <summary>
         /// Returns the name of the device.
         /// </summary>
@@ -1012,7 +1013,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Writes health information to the data file.
         /// </summary>
-        /// <param name="writer"></param>        
+        /// <param name="writer"></param>
         public FinchComponentData GetData()
         {
             FinchComponentData component = new FinchComponentData();
@@ -1020,7 +1021,7 @@ namespace LcmsNet.Devices.Valves
             component.Name      = Name;
             component.Type      = "Multi-Position Valve";
             component.LastUpdate = DateTime.Now;
-            
+
             FinchScalarSignal measurementSentPosition = new FinchScalarSignal();
             measurementSentPosition.Name        = "Set Position";
             measurementSentPosition.Type        = FinchDataType.Integer;
@@ -1044,5 +1045,11 @@ namespace LcmsNet.Devices.Valves
 
             return component;
         }*/
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

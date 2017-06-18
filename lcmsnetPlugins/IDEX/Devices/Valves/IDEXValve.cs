@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace ASUTGen.Devices.Valves
 {
@@ -25,11 +27,14 @@ namespace ASUTGen.Devices.Valves
         }
 
         #region IDevice Members
+
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
+
         public string Version
         {
             get;
@@ -76,15 +81,15 @@ namespace ASUTGen.Devices.Valves
         }
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-            
+
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-         
+
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            
+
         }
         public classMonitoringComponent GetHealthData()
         {
@@ -97,7 +102,7 @@ namespace ASUTGen.Devices.Valves
         public List<string> GetErrorNotificationList()
         {
             return new List<string>() { "Inject Failure", "Method Failure" };
-        }        
+        }
         #endregion
 
         /// <summary>
@@ -107,7 +112,7 @@ namespace ASUTGen.Devices.Valves
         [classLCMethodAttribute("Change Position", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool ChangePosition(double timeout, int position)
         {
-            
+
             return true;
         }
         [classLCMethodAttribute("Home Valve", enumMethodOperationTime.Parameter, "", -1, false)]
@@ -119,6 +124,12 @@ namespace ASUTGen.Devices.Valves
         public override string ToString()
         {
             return Name;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

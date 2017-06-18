@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
+using LcmsNetSDK;
 
 namespace FluidicsPack
 {
@@ -10,10 +12,11 @@ namespace FluidicsPack
 
         #region IDevice Members
 
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public string Version
@@ -92,5 +95,10 @@ namespace FluidicsPack
         }
         #endregion
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

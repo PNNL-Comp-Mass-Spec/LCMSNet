@@ -9,6 +9,7 @@ using LcmsNetDataClasses.Method;
 using LcmsNetSDK.Data;
 
 using System.ComponentModel;
+using LcmsNetSDK;
 
 namespace ASIpump
 {
@@ -69,7 +70,7 @@ namespace ASIpump
         [DisplayName("Final Iso Time")]
         [classPersistenceAttribute("FinalIsoTime")]
         public double FinalIsoTime { get; set; }
-       
+
         // calculated values
 
         [Category("Calculated Values")]
@@ -132,7 +133,7 @@ namespace ASIpump
 
         #endregion
 
-        
+
 
         public void AsiPump_MessageStreamed(string msg)
         {
@@ -160,7 +161,7 @@ namespace ASIpump
         public event EventHandler<EventArgs> MethodUpdated;
         /// <summary>
         /// Fired when monitoring data is received from the instrument.
-        /// </summary>        
+        /// </summary>
         public event EventHandler<PumpDataEventArgs> MonitoringDataReceived;
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
@@ -227,7 +228,12 @@ namespace ASIpump
         /// <summary>
         /// Gets or sets the device's name
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
+        }
+        private string name;
 
         /// <summary>
         /// Gets or sets the device's version
@@ -268,8 +274,8 @@ namespace ASIpump
 
 
         #region Methods
-        
-        
+
+
         /// <summary>
         /// Initializes the device.
         /// </summary>
@@ -314,7 +320,7 @@ namespace ASIpump
 
             Send(MotorAddress + intData.ToString());
         }
-         
+
 
 
 
@@ -330,7 +336,7 @@ namespace ASIpump
         /// </summary>
         private void HandleError(string message, string type, Exception ex)
         {
-            
+
         }
 
         public void Escape()
@@ -349,11 +355,11 @@ namespace ASIpump
         /// <returns>True on success</returns>
         public bool Shutdown()
         {
-            
+
             Escape();
             return true;
         }
-       
+
         #endregion
 
 
@@ -375,7 +381,7 @@ namespace ASIpump
         public string RetrieveMethod()
         {
             var methodString = "";
-            
+
             return methodString;
         }
         /// <summary>
@@ -419,7 +425,7 @@ namespace ASIpump
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-            
+
         }
         #endregion
 
@@ -483,14 +489,14 @@ namespace ASIpump
         /// <param name="parameters">Parameters used to create the performance data.</param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
-            
+
         }
         public List<string> GetStatusNotificationList()
         {
             var notifications = new List<string>() { "Status"
                                                             };
 
-            
+
             return notifications;
         }
         public List<string> GetErrorNotificationList()
@@ -523,11 +529,11 @@ namespace ASIpump
 
             //Some method starting private function StartMethod(methodName);
         }
-        
+
         [classLCMethodAttribute("Turn On", 1, false, "", -1, false)]
         public void TurnOn()
         {
-            
+
         }
 
         #region IFinchComponent Members
@@ -535,7 +541,7 @@ namespace ASIpump
         /*public FinchComponentData GetData()
         {
             FinchComponentData component = new FinchComponentData();
-            
+
 
             return component;
         }*/
@@ -553,5 +559,10 @@ namespace ASIpump
 
         #endregion
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

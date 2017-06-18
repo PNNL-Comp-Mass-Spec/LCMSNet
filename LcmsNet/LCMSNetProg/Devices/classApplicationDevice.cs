@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetDataClasses;
@@ -70,7 +71,7 @@ namespace LcmsNet.Devices
             }
 
             sampleData.LCMethod.ActualEnd = TimeKeeper.Instance.Now;
-            
+
             try
             {
                 classTriggerFileTools.GenerateTriggerFile(sampleData);
@@ -100,6 +101,8 @@ namespace LcmsNet.Devices
         /// </summary>
         private enumDeviceStatus m_status;
 
+        private string name;
+
         #endregion
 
         /*public Finch.Data.FinchComponentData GetData()
@@ -122,7 +125,11 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Name of this device.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
+        }
 
         /// <summary>
         /// Version of this device.
@@ -182,5 +189,10 @@ namespace LcmsNet.Devices
 
         #endregion
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

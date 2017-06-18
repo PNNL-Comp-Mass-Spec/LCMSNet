@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
@@ -62,7 +64,7 @@ namespace DemoPluginLibrary
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="portName">The port to send the voltage on</param>
-        /// <param name="voltage">The voltage to set</param>        
+        /// <param name="voltage">The voltage to set</param>
         [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool Trigger(int pulseLengthSeconds, string portName, double voltage)
         {
@@ -100,10 +102,11 @@ namespace DemoPluginLibrary
             set;
         }
 
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public string Version
@@ -134,6 +137,12 @@ namespace DemoPluginLibrary
         public string GetClosureType()
         {
             return "DemoClosure";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

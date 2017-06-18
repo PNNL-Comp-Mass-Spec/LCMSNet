@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices
 {
@@ -62,6 +64,8 @@ namespace LcmsNet.Devices
         /// </summary>
         private enumDeviceStatus m_status;
 
+        private string name;
+
         #endregion
 
         #region IDevice Members
@@ -79,7 +83,11 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Name of this device.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
+        }
 
         /// <summary>
         /// Version of this device.
@@ -200,5 +208,11 @@ namespace LcmsNet.Devices
         public enumDeviceType DeviceType => enumDeviceType.BuiltIn;
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

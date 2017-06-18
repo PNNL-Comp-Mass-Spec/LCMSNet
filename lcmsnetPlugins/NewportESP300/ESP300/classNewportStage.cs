@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
 
 namespace Newport.ESP300
 {
@@ -32,7 +34,7 @@ namespace Newport.ESP300
         private const char CONST_CMD_TERMINATOR = '\r';
         private const int CONST_MAX_AXES = 3;
         #endregion
-      
+
         #region ESP300SERIALPORTCONFIGURATION
         // ESP300 RS232C configuration is fixed, these constants define its configuration so we can interface with it and are as specified by page 3-4 of the ESP300 manual
         private const int CONST_BAUDRATE = 19200;
@@ -72,7 +74,7 @@ namespace Newport.ESP300
             else
             {
                 Port = port;
-            }            
+            }
             NumAxes = numAxes;
             m_SpeedNormal = new double[NumAxes];
             m_positions = new Dictionary<string, classStagePosition>();
@@ -174,7 +176,7 @@ namespace Newport.ESP300
             {
                 try
                 {
-                
+
                     MoveToPosition(i, Convert.ToSingle(m_positions[positionName][i - 1]));
                 }
                 catch (Exception ex)
@@ -206,7 +208,7 @@ namespace Newport.ESP300
         {
             var cmd = new StringBuilder();
             cmd.Append(axis + "TP" + CONST_CMD_TERMINATOR);
-            
+
             if (!Emulation)
             {
                 if (ValidateAxis(axis))
@@ -337,7 +339,7 @@ namespace Newport.ESP300
                 WriteCommand(cmd.ToString());
             }
         }
-         
+
         /// <summary>
         /// Determine if an axis is finished moving
         /// </summary>
@@ -374,7 +376,7 @@ namespace Newport.ESP300
                     {
                         LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0, "Unexpected response when checking motion completion");
                         Error(this, new classDeviceErrorEventArgs("Unexpected response", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-                    }                    
+                    }
                 }
             }
             return false;
@@ -418,7 +420,7 @@ namespace Newport.ESP300
                 return true;
             }
 
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, 
+            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                 "Attempt to modify invalid axis detected");
             return false;
         }
@@ -438,7 +440,7 @@ namespace Newport.ESP300
                 var cmd = new StringBuilder();
                 cmd.Append(axis.ToString() + "OR4" + CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
-            }          
+            }
         }
 
         /// <summary>
@@ -467,7 +469,7 @@ namespace Newport.ESP300
             {
                 ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
                 Error?.Invoke(this, new classDeviceErrorEventArgs("Error writing data to stage on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-            }  
+            }
             try
             {
                 response = Port.ReadLine();
@@ -488,7 +490,7 @@ namespace Newport.ESP300
             {
                 ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
                 Error?.Invoke(this, new classDeviceErrorEventArgs("Error converting response token on error check", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
-            }           
+            }
         }
 
         public string GetErrors()
@@ -645,19 +647,11 @@ namespace Newport.ESP300
 
         #region Properties
 
-
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
-            set
-            {
-                m_name = value;
-            }
+            get { return m_name; }
+            set { this.RaiseAndSetIfChanged(ref m_name, value); }
         }
-
         public bool Emulation
         {
             get;
@@ -672,7 +666,7 @@ namespace Newport.ESP300
 
         /// <summary>
         /// Gets or Sets the serial communications port associated with this ESP300.
-        /// </summary>        
+        /// </summary>
         public SerialPort Port
         {
             get
@@ -685,7 +679,7 @@ namespace Newport.ESP300
             }
         }
 
-      
+
         public string Version
         {
             get;
@@ -811,7 +805,7 @@ namespace Newport.ESP300
                     throw new ESP300Exception("Invalid Port Handshake");
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -990,5 +984,11 @@ namespace Newport.ESP300
         public event EventHandler PositionChanged;
         public DelegateDeviceHasData PosNames;
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

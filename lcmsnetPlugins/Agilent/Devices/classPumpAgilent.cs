@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 
@@ -20,6 +21,7 @@ using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 
 namespace Agilent.Devices.Pumps
@@ -148,7 +150,7 @@ namespace Agilent.Devices.Pumps
         public event EventHandler<classPumpMethodEventArgs> MethodUpdated;
         /// <summary>
         /// Fired when monitoring data is received from the instrument.
-        /// </summary>        
+        /// </summary>
         public event EventHandler<PumpDataEventArgs> MonitoringDataReceived;
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
@@ -324,14 +326,13 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                m_name = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
         /// <summary>
@@ -427,7 +428,7 @@ namespace Agilent.Devices.Pumps
         /// Aborts purging of the pumps for the given channel.
         /// </summary>
         /// <param name="timeout"></param>
-        /// <returns></returns>        
+        /// <returns></returns>
         [classLCMethodAttribute("Abort Purge", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool AbortPurges(double timeout)
         {
@@ -588,9 +589,9 @@ namespace Agilent.Devices.Pumps
             m_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
             m_pumps.ErrorOccurred += m_pumps_ErrorOccurred;
 
-            // 
+            //
             // Try initial connection
-            // 
+            //
             if (m_pumps.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
             {
                 errorMessage = "Could not connect to the Agilent Pumps.";
@@ -602,9 +603,9 @@ namespace Agilent.Devices.Pumps
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
 
 
-            // 
+            //
             // Open a list channel to read time tables.
-            // 
+            //
             m_listChannel = m_module.CreateChannel("LI");
             if (m_listChannel.TryOpen(ReadMode.Polling) == false)
             {
@@ -613,9 +614,9 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
 
-            // 
+            //
             // And an EV channel.Channel for errors or state events
-            // 
+            //
             m_evChannel = m_module.CreateChannel("EV");
             m_evChannel.DataReceived += m_evChannel_DataReceived;
             if (m_evChannel.TryOpen(ReadMode.Events) == false)
@@ -626,9 +627,9 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
 
-            // 
+            //
             // Channel for inputs
-            // 
+            //
             m_inChannel = m_module.CreateChannel("IN");
             if (m_inChannel.TryOpen(ReadMode.Polling) == false)
             {
@@ -638,9 +639,9 @@ namespace Agilent.Devices.Pumps
                 return false;
             }
 
-            // 
+            //
             // Monitoring for the pumps
-            // 
+            //
             m_monitorChannel = m_module.CreateChannel("MO");
             m_monitorChannel.DataReceived += m_monitorChannel_DataReceived;
             if (m_monitorChannel.TryOpen(ReadMode.Events) == false)
@@ -815,9 +816,9 @@ namespace Agilent.Devices.Pumps
             m_flowrates.Add(flowrate);
             m_percentB.Add(compositionB);
 
-            // 
+            //
             // Find old data to remove -- needs to be updated (or could be) using LINQ
-            // 
+            //
             var count = m_times.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
@@ -894,7 +895,7 @@ namespace Agilent.Devices.Pumps
             return SendCommand(command, ref reply, errorstring, m_inChannel);
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="command"></param>
         /// <param name="reply"></param>
@@ -945,7 +946,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the flow rate.
         /// </summary>
         /// <param name="newFlowRate">The new flow rate.</param>
-        /// 
+        ///
         [classLCMethodAttribute("Set Flow Rate", 1, "", -1, false)]
         public void SetFlowRate(double newFlowRate)
         {
@@ -961,7 +962,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Sets the mixer volume
         /// </summary>
-        /// <param name="newVolumeuL">The new mixer volume, in uL</param>        
+        /// <param name="newVolumeuL">The new mixer volume, in uL</param>
         [classLCMethodAttribute("Set Mixer Volume", 1, "", -1, false)]
         public void SetMixerVolume(double newVolumeuL)
         {
@@ -998,9 +999,9 @@ namespace Agilent.Devices.Pumps
 
             StartMethod(method);
 
-            // 
+            //
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
-            // 
+            //
             var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
 
             var timer = new classTimerDevice();
@@ -1012,22 +1013,22 @@ namespace Agilent.Devices.Pumps
         /// <param name="method">Method to run stored on the pumps.</param>
         public void StartMethod(string method)
         {
-            // 
+            //
             // Make sure we have record of the method
-            // 
+            //
             if (mdict_methods.ContainsKey(method) == false)
                 throw new Exception(string.Format("The method {0} does not exist.", method));
 
-            // 
+            //
             // Then send commands to start the method
-            // 
+            //
             var methodData = mdict_methods[method];
             var reply = "";
 
-            // 
+            //
             // The reason why we delete the time table, is to clear out any
             // existing methods that might have been downloaded to the pump.
-            // 
+            //
             // For example, if a time table was loaded and has entry:
             //     5 mins  - 30% B
             //     75 mins - 40%  B
@@ -1038,7 +1039,7 @@ namespace Agilent.Devices.Pumps
             //     65 mins - 0%   B
             // when the time table is done the pumps may resort back to the final
             // entries and set the %B to 40 instead of the 0 we desire.
-            // 
+            //
             SendCommand("AT:DEL ", ref reply, "Clearing time table.");
             SendCommand(methodData, ref reply, "Loading method.");
             SendCommand("STRT", ref reply, "Attempting to start method.");
@@ -1411,7 +1412,7 @@ namespace Agilent.Devices.Pumps
             component.Name      = Name;
             component.Type      = "Pump";
             component.LastUpdate = DateTime.Now;
-             
+
             FinchScalarSignal port    = new FinchScalarSignal();
             port.Name   = "Port";
             port.Type   = FinchDataType.String;
@@ -1427,7 +1428,7 @@ namespace Agilent.Devices.Pumps
             plotPressure.SetX<DateTime>(m_times);
             plotPressure.SetY<double>(m_pressures);
             component.Signals.Add(plotPressure);
-            
+
             FinchDataTuple percentBPlot = new FinchDataTuple();
             percentBPlot.XUnits     = "DateTime";
             percentBPlot.YUnits     = "%B";
@@ -1437,7 +1438,7 @@ namespace Agilent.Devices.Pumps
             percentBPlot.SetX<DateTime>(m_times);
             percentBPlot.SetY<double>(m_percentB);
             component.Signals.Add(percentBPlot);
-                        
+
             FinchDataTuple flowratePlot = new FinchDataTuple();
             flowratePlot.XUnits     = "DateTime";
             flowratePlot.YUnits     = "ul/min";
@@ -1463,5 +1464,11 @@ namespace Agilent.Devices.Pumps
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -13,11 +13,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Ports;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Valves
 {
@@ -124,10 +126,10 @@ namespace LcmsNet.Devices.Valves
             m_lastMeasuredPosition   = TwoPositionState.Unknown;
             m_lastSentPosition       = TwoPositionState.Unknown;
 
-            // 
+            //
             // Set ID to a space (i.e. nonexistant)
             // NOTE: Spaces are ignored by the controller in sent commands
-            // 
+            //
             m_valveID                = ' ';
             m_versionInfo            = "";
 
@@ -197,14 +199,13 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                 m_name = value;
-                 OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
         /// <summary>
@@ -213,7 +214,7 @@ namespace LcmsNet.Devices.Valves
         public SerialPort Port => m_serialPort;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("PortName")]
         public string PortName
@@ -229,7 +230,7 @@ namespace LcmsNet.Devices.Valves
             }
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("ReadTimeout")]
         public int ReadTimeout
@@ -245,7 +246,7 @@ namespace LcmsNet.Devices.Valves
             }
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [classPersistenceAttribute("WriteTimeout")]
         public int WriteTimeout
@@ -335,7 +336,7 @@ namespace LcmsNet.Devices.Valves
             {
                 if (Error != null)
                 {
-                    
+
                 }
                 throw new ValveExceptionUnauthorizedAccess();
             }
@@ -384,12 +385,12 @@ namespace LcmsNet.Devices.Valves
                 return false;
             }
             catch (ValveExceptionReadTimeout ex)
-            {               
+            {
                 errorMessage = "Reading the hardware ID timed out. " + ex.Message;
                 return false;
             }
             catch (ValveExceptionWriteTimeout ex)
-            {               
+            {
                 errorMessage = "Sending a command to get the hardware ID timed out. " + ex.Message;
                 return false;
             }
@@ -779,7 +780,7 @@ namespace LcmsNet.Devices.Valves
 //                    return enumValveErrors.UnauthorizedAccess;
 //                }
 //            }
-           
+
 //            string cmd = null;
 //            if (newPosition == TwoPositionState.PositionA)
 //            {
@@ -798,7 +799,7 @@ namespace LcmsNet.Devices.Valves
 //            }
 
 //            try
-//            {               
+//            {
 //                m_serialPort.WriteLine(cmd);
 //            }
 //            catch (TimeoutException)
@@ -886,7 +887,7 @@ namespace LcmsNet.Devices.Valves
             {
                 throw new ArgumentOutOfRangeException("Invalid Position to set" + newPosition.ToCustomString());
             }
-            
+
             m_serialPort.WriteLine(cmd);
 
             //Wait 145ms for valve to actually switch before proceeding
@@ -970,10 +971,13 @@ namespace LcmsNet.Devices.Valves
         #endregion
 
         #region IDevice Data Provider Methods
-   
+
         #endregion
 
-       
-    
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

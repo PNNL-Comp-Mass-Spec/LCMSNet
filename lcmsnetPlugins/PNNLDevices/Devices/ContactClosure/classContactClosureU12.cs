@@ -12,10 +12,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.ContactClosure
 {
@@ -138,7 +140,7 @@ namespace LcmsNet.Devices.ContactClosure
                 return m_emulation;
             }
             set
-            {                
+            {
                 m_emulation = value;
             }
         }
@@ -163,23 +165,22 @@ namespace LcmsNet.Devices.ContactClosure
 
         /// <summary>
         /// Gets or sets the name of the device in the fluidics designer.
-        /// </summary>       
+        /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                m_name = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
 
         /// <summary>
         /// Gets or sets the version of the Labjack/dll
-        /// </summary>        
+        /// </summary>
         public string Version
         {
             get
@@ -233,7 +234,7 @@ namespace LcmsNet.Devices.ContactClosure
             m_labjack.GetFirmwareVersion();
 
             //If we got anything, call it good
-            if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 && 
+            if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
                 m_labjack.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
             {
                 return true;
@@ -248,7 +249,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         /// <returns>True on success</returns>
         public bool Shutdown()
-        {            
+        {
             return true;
         }
 
@@ -338,7 +339,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        /// <param name="voltage">The voltage to set</param>        
+        /// <param name="voltage">The voltage to set</param>
         [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, double voltage)
         {
@@ -350,7 +351,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        /// <param name="voltage">The voltage to set</param>        
+        /// <param name="voltage">The voltage to set</param>
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)
         {
@@ -373,7 +374,7 @@ namespace LcmsNet.Devices.ContactClosure
                 }
             }
             catch (classLabjackU12Exception ex)
-            {                
+            {
                 throw ex;
             }
 
@@ -474,8 +475,14 @@ namespace LcmsNet.Devices.ContactClosure
             port.Units          = "";
             port.Value          = this.Port.ToString();
             component.Signals.Add(port);
-            
+
             return component;
-        } */               
+        } */
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

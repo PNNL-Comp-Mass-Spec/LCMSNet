@@ -7,15 +7,17 @@
  ********************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 
 namespace DemoPluginLibrary
 {
-    //TODO: Add a custom user control for this guy....maybe?                                 
+    //TODO: Add a custom user control for this guy....maybe?
     [classDeviceControlAttribute(null,
                                  "Demo Pump",
                                  "Demo")]
@@ -25,6 +27,7 @@ namespace DemoPluginLibrary
         double m_flowrate;
         double m_pressure;
         double m_percentB;
+        private string name;
         #endregion
 
         #region Methods
@@ -106,12 +109,12 @@ namespace DemoPluginLibrary
         }
 
         public event DelegateDeviceHasData MethodNames;
-     
+
         [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             return true;
-        }  
+        }
 
         [classLCMethodAttribute("Stop Method", 1.0, "", -1, false)]
         public bool StopMethod()
@@ -161,8 +164,8 @@ namespace DemoPluginLibrary
 
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public string Version
@@ -216,7 +219,7 @@ namespace DemoPluginLibrary
         /// <summary>
         /// property representing the current flowrate of fluid through the pump
         /// </summary>
-        public double Flowrate { 
+        public double Flowrate {
             get
             {
                 return m_flowrate;
@@ -260,7 +263,7 @@ namespace DemoPluginLibrary
         /// Property representing the PercentB for the pump.
         /// </summary>
         public double PercentB
-        { 
+        {
             get
             {
                 return m_percentB;
@@ -270,15 +273,21 @@ namespace DemoPluginLibrary
                 m_percentB = value;
                 PercentBChanged?.Invoke(this, new PumpEventArgs<double>(PercentB));
             }
-        }     
+        }
         /// <summary>
         /// Gets or sets the list of mobile phases associated with the pump.
         /// </summary>
         public List<MobilePhase> MobilePhases
-        { 
+        {
             get;
             set;
         }
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

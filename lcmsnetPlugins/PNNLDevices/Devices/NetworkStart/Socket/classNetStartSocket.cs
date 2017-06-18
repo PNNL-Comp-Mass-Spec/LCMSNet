@@ -2,20 +2,20 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Collections.Generic;
-
-
+using System.ComponentModel;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
+using LcmsNetSDK;
 
 namespace LcmsNet.Devices.NetworkStart.Socket
 {
-    /// <summary> 
+    /// <summary>
     /// Network Start using old command packing messaging for communication with mass spectrometer.
     /// </summary>
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [classDeviceControlAttribute(typeof(controlNetStart),
-                                 
+
                                  "Network Start",
                                  "Detectors")
     ]
@@ -247,10 +247,10 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                     HandleError("Could not retrieve the methods from the instrument.", ex);
                 }
             }
-            
-            // 
+
+            //
             // Alert listeners that we have new methods!
-            // 
+            //
             if (MethodNames != null)
             {
                 var methodObjects = new List<object>();
@@ -345,15 +345,15 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         {
             if (Emulation)
             {
-                // 
+                //
                 // Emulate starting an acquisition
-                // 
+                //
                 return true;
             }
 
             var arguments   = new List<classNetStartArgument>();
             var receivedMessage    = new classNetStartMessage();
-            
+
             var success = false;
 
             if (sample == null)
@@ -380,9 +380,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
                     outputString = streamReader.ReadLine();     //RECEIVED
 
-                    // 
+                    //
                     // Now see if the system is ready
-                    // 
+                    //
                     SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQREADY", arguments);
                     outputString = streamReader.ReadLine();     //READY
 
@@ -391,19 +391,19 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
                         //
                         // Tell the system to prepare for acquisition
-                        // 
+                        //
                         SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
                         outputString = streamReader.ReadLine();     // Read off auto-response
 
-                        // 
+                        //
                         // Then ask if it is prepared...this should be in some kind of loop
-                        // 
+                        //
                         {
                             SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
 
-                            // 
+                            //
                             // Check to see if it is prepared...
-                            // 
+                            //
                             outputString = streamReader.ReadLine();     // Read off response for PREPARED
                             var preparedMessage = UnpackMessage(outputString);
                             if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
@@ -448,9 +448,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
             if (Emulation)
             {
-                // 
+                //
                 // Emulate stopping an acquisition
-                // 
+                //
                 return true;
             }
 
@@ -485,14 +485,13 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                m_name = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
         /// <summary>
@@ -670,9 +669,9 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         public enumDeviceType DeviceType => enumDeviceType.Component;
 
         #endregion
-        
+
         /*/// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public FinchComponentData GetData()
@@ -710,8 +709,14 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             port.Units          = "";
             port.Value          = this.Port.ToString();
             component.Signals.Add(port);
-            
+
             return component;
-        }*/        
+        }*/
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

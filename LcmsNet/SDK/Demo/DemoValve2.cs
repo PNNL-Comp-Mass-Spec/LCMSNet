@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    //TODO: Add a custom user control for this guy....maybe?                                 
+    //TODO: Add a custom user control for this guy....maybe?
     [classDeviceControlAttribute(typeof(DemoValve2AdvancedControl),
                                     "Demo Valve - Multipostion",
                                     "Demo")]
@@ -111,10 +113,11 @@ namespace DemoPluginLibrary
             set;
         }
 
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public string Version
@@ -144,5 +147,11 @@ namespace DemoPluginLibrary
         public int Position { get; set; }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

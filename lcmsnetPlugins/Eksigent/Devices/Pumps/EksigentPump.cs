@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
@@ -8,6 +9,7 @@ using EksigentNanoLC;
 using System.IO;
 using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 
 namespace Eksigent.Devices.Pumps
@@ -192,14 +194,13 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         public string Name
         {
-            get
-            {
-                return m_name;
-            }
+            get { return m_name; }
             set
             {
-                m_name = value;
-                DeviceSaveRequired?.Invoke(this, null);
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                {
+                    DeviceSaveRequired?.Invoke(this, null);
+                }
             }
         }
         /// <summary>
@@ -658,7 +659,7 @@ namespace Eksigent.Devices.Pumps
             //  m_percentB.Add(compositionB);
 
             // Find old data to remove -- needs to be updated (or could be) using LINQ
-            // 
+            //
             var count = m_times.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
@@ -926,6 +927,12 @@ namespace Eksigent.Devices.Pumps
                 // DO NOTHING
                 m_mobilePhases = value;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

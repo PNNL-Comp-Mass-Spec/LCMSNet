@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using LcmsNetSDK;
 
 namespace DemoPluginLibrary
-{                                 
+{
     [classDeviceControlAttribute(typeof(DemoValveAdvancedControl),
                                  "Demo Valve - Two Position",
                                  "Demo")]
@@ -66,7 +68,7 @@ namespace DemoPluginLibrary
 
         [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]
         public void SetPosition(TwoPositionState position)
-        {            
+        {
             if ((int)position < 0 || (int)position > 1)
             {
                 throw new Exception("The position is invalid.");
@@ -108,10 +110,11 @@ namespace DemoPluginLibrary
             set;
         }
 
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
         public string Version
@@ -141,5 +144,11 @@ namespace DemoPluginLibrary
         public int Position { get; set; }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

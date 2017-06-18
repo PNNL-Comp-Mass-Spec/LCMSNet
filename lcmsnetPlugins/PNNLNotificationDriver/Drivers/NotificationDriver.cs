@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
 
 namespace FailureInjector.Drivers
 {
@@ -26,11 +28,14 @@ namespace FailureInjector.Drivers
         }
 
         #region IDevice Members
+
+        private string name;
         public string Name
         {
-            get;
-            set;
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
         }
+
         public string Version
         {
             get;
@@ -92,15 +97,15 @@ namespace FailureInjector.Drivers
         }
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-            
+
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-         
+
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            
+
         }
         public classMonitoringComponent GetHealthData()
         {
@@ -113,7 +118,7 @@ namespace FailureInjector.Drivers
         public List<string> GetErrorNotificationList()
         {
             return new List<string>() { "Inject Failure", "Method Failure" };
-        }        
+        }
         #endregion
 
         /// <summary>
@@ -159,7 +164,7 @@ namespace FailureInjector.Drivers
         /// <summary>
         /// Injects a failure into the system.
         /// </summary>
-        /// <returns></returns>        
+        /// <returns></returns>
         public bool InjectFailure()
         {
             if (this.Error != null)
@@ -204,7 +209,7 @@ namespace FailureInjector.Drivers
         /// <summary>
         /// Injects a failure into the system.
         /// </summary>
-        /// <returns></returns>        
+        /// <returns></returns>
         public bool InjectStatus()
         {
             if (this.StatusUpdate != null)
@@ -222,6 +227,12 @@ namespace FailureInjector.Drivers
         public override string ToString()
         {
             return Name;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
