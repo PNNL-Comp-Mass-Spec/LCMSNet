@@ -55,17 +55,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FluidicsColumnGlyphWpf.cs" />
     <Compile Include="FluidicsColumnControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -74,25 +80,51 @@
     </Compile>
     <Compile Include="FluidicsColumnGlyph.cs" />
     <Compile Include="FluidicsColumn.cs" />
+    <Compile Include="FluidicsColumnControlView.xaml.cs">
+      <DependentUpon>FluidicsColumnControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FluidicsColumnControlViewModel.cs" />
     <Compile Include="FluidicsComponentBase.cs" />
     <Compile Include="FluidicsSprayNeedle.cs" />
+    <Compile Include="FluidicsSprayNeedleWpf.cs" />
     <Compile Include="FluidicsTee.cs" />
     <Compile Include="FluidicsUnion.cs" />
+    <Compile Include="FluidicsUnionWpf.cs" />
     <Compile Include="FluidicsWasteComponent.cs" />
+    <Compile Include="FluidicsTeeWpf.cs" />
+    <Compile Include="FluidicsWasteComponentWpf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SprayNeedle.cs" />
+    <Compile Include="SprayNeedleWpf.cs" />
     <Compile Include="Tee.cs" />
+    <Compile Include="TeeWpf.cs" />
     <Compile Include="Union.cs" />
+    <Compile Include="UnionWpf.cs" />
     <Compile Include="WasteComponent.cs" />
+    <Compile Include="WasteComponentWpf.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FluidicsColumnControl.resx">
       <DependentUpon>FluidicsColumnControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="FluidicsColumnControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit">
+      <Version>3.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib"</PostBuildEvent>
+    <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
+powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+
+xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
