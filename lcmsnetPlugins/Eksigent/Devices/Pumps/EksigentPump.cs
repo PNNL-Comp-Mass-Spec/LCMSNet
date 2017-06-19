@@ -837,9 +837,17 @@ namespace Eksigent.Devices.Pumps
                                             0,
                                             owner);
         }
+        public void ShowDirectControl(int channelNumber)
+        {
+            m_hardware.ShowDirectControlMenu(Convert.ToByte(channelNumber), 0);
+        }
         public void ShowAdvancedSettings(int owner)
         {
             m_hardware.ShowAdvancedSettings(0, owner);
+        }
+        public void ShowAdvancedSettings()
+        {
+            m_hardware.ShowAdvancedSettings(0);
         }
         public void ShowAlertsMenu()
         {
@@ -851,6 +859,10 @@ namespace Eksigent.Devices.Pumps
                                             0,
                                             owner);
         }
+        public void ShowDiagnosticsMenu(int channelNumber)
+        {
+            m_hardware.ShowDiagnosticsMenu(Convert.ToByte(channelNumber), 0);
+        }
         public void ShowInstrumentConfigMenu()
         {
             m_hardware.ShowInstrumentConfigMenu();
@@ -859,11 +871,19 @@ namespace Eksigent.Devices.Pumps
         {
             m_hardware.ShowMainWindow(0, owner);
         }
+        public void ShowMainWindow()
+        {
+            m_hardware.ShowMainWindow(0);
+        }
         public void ShowMobilePhaseMenu(int channelNumber, int owner)
         {
             m_hardware.ShowMobilePhaseMenu(Convert.ToByte(channelNumber),
                                             0,
                                             owner);
+        }
+        public void ShowMobilePhaseMenu(int channelNumber)
+        {
+            m_hardware.ShowMobilePhaseMenu(Convert.ToByte(channelNumber), 0);
         }
         #endregion
 

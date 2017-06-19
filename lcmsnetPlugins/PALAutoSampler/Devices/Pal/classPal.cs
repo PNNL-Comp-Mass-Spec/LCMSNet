@@ -268,20 +268,16 @@ namespace LcmsNet.Devices.Pal
                 OnDeviceSaveRequired();
             }
         }
+
         /// <summary>
         /// The range of valid vial numbers
         /// </summary>
         public enumVialRanges VialRange
         {
-            get
-            {
-                return m_vialRange;
-            }
-            set
-            {
-                m_vialRange = value;
-            }
+            get { return m_vialRange; }
+            set { this.RaiseAndSetIfChanged(ref m_vialRange, value); }
         }
+
         /// <summary>
         /// Gets or sets the vial for the PAL to use.
         /// </summary>

@@ -40,12 +40,15 @@
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -54,6 +57,8 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drivers\controlNotificationDriver.cs">
@@ -63,6 +68,10 @@
       <DependentUpon>controlNotificationDriver.cs</DependentUpon>
     </Compile>
     <Compile Include="Drivers\NotificationDriver.cs" />
+    <Compile Include="Drivers\NotificationDriverView.xaml.cs">
+      <DependentUpon>NotificationDriverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drivers\NotificationDriverViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +79,17 @@
       <DependentUpon>controlNotificationDriver.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="reactiveui">
+      <Version>7.4.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Drivers\NotificationDriverView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
