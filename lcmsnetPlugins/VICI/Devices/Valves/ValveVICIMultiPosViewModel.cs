@@ -111,7 +111,7 @@ namespace LcmsNet.Devices.Valves
             }
             set
             {
-                if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                if (!IsInDesignMode)
                 {
                     RegisterDevice(value);
 
@@ -301,7 +301,7 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         protected override void InitializeDevice()
         {
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (IsInDesignMode)
                 return;
 
             ComPort = m_valve.Port;

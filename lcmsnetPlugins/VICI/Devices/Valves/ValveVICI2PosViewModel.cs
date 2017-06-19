@@ -92,7 +92,7 @@ namespace LcmsNet.Devices.Valves
             }
             set
             {
-                if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                if (!IsInDesignMode)
                 {
                     //m_valve = (classValveVICI2Pos)value;
                     RegisterDevice(value);
@@ -364,7 +364,7 @@ namespace LcmsNet.Devices.Valves
 
         protected override void InitializeDevice()
         {
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (IsInDesignMode)
                 return;
 
             try

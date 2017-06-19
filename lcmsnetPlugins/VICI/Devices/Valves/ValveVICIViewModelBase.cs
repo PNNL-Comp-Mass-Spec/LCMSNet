@@ -19,6 +19,7 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public ValveVICIViewModelBase()
         {
+            IsInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
             using (ValveIdComboBoxOptions.SuppressChangeNotifications())
             {
@@ -37,6 +38,8 @@ namespace LcmsNet.Devices.Valves
         #region Members
 
         //public ValveEventListener m_valveEventListener;
+
+        protected readonly bool IsInDesignMode = false;
 
         private readonly ReactiveUI.ReactiveList<char> valveIdComboBoxOptions = new ReactiveUI.ReactiveList<char>();
         private char selectedValveId = ' ';
