@@ -5,12 +5,13 @@ using System.Windows.Forms;
 using System.ComponentModel;
 
 using System.Diagnostics;
-
+using System.Runtime.CompilerServices;
 using LcmsNetDataClasses.Devices;
+using LcmsNetSDK;
 
 namespace ASIpump
 {
-    public class SerialDevice
+    public class SerialDevice : INotifyPropertyChangedExt
     {
         public delegate void MessageReplyDelegate(string sentStr, string replyStr);
 
@@ -53,11 +54,17 @@ namespace ASIpump
             set { mSendDelimeter = value; }
         }
 
+        private double timeout = 1;
+
         [Description("Timeout")]
         [Category("Serial")]
         [DisplayName("Timeout")]
         [classPersistenceAttribute("Timeout")]
-        public double Timeout { get; set; }
+        public double Timeout
+        {
+            get { return timeout; }
+            set { this.RaiseAndSetIfChanged(ref timeout, value); }
+        }
 
         [Description("Port Name")]
         [Category("Serial")]
@@ -86,6 +93,7 @@ namespace ASIpump
                         }
                         catch { }
                     }
+                    OnPropertyChanged();
                 }
             }
         }
@@ -97,17 +105,25 @@ namespace ASIpump
         public Handshake Handshake
         {
             get { return mPort.Handshake; }
-            set { mPort.Handshake = value; }
+            set
+            {
+                mPort.Handshake = value;
+                OnPropertyChanged();
+            }
         }
 
         [Description("DTR Enabled")]
         [Category("Serial")]
-        [DisplayName("DTR Enambled")]
+        [DisplayName("DTR Enabled")]
         [classPersistenceAttribute("")]
         public bool DtrEnable
         {
             get { return mPort.DtrEnable; }
-            set { mPort.DtrEnable = value; }
+            set
+            {
+                mPort.DtrEnable = value;
+                OnPropertyChanged();
+            }
         }
 
         [Description("RTS Enabled")]
@@ -117,7 +133,11 @@ namespace ASIpump
         public bool RtsEnable
         {
             get { return mPort.RtsEnable; }
-            set { mPort.RtsEnable = value; }
+            set
+            {
+                mPort.RtsEnable = value;
+                OnPropertyChanged();
+            }
         }
 
         [Description("Baud Rate")]
@@ -132,6 +152,7 @@ namespace ASIpump
                 if (value == 0)
                     value = 9600;
                 mPort.BaudRate = value;
+                OnPropertyChanged();
             }
         }
 
@@ -147,6 +168,7 @@ namespace ASIpump
                 if (value == 0)
                     value = 8;
                 mPort.DataBits = value;
+                OnPropertyChanged();
             }
         }
 
@@ -162,6 +184,7 @@ namespace ASIpump
                 if (value == StopBits.None)
                     value = StopBits.One;
                 mPort.StopBits = value;
+                OnPropertyChanged();
             }
         }
 
@@ -172,7 +195,11 @@ namespace ASIpump
         public Parity Parity
         {
             get { return mPort.Parity; }
-            set { mPort.Parity = value; }
+            set
+            {
+                mPort.Parity = value;
+                OnPropertyChanged();
+            }
         }
 
         public override string ToString()
@@ -277,5 +304,10 @@ namespace ASIpump
             ParseConcatStr();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

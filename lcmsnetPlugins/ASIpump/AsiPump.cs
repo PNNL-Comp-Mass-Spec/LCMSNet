@@ -33,43 +33,110 @@ namespace ASIpump
         public double minFlowRate = .12;
         public int StepLimit = 740000;
         public double MaxVolume = 48.05;
+        private double totalFlow;
+        private double startPercentA;
+        private double startPercentB;
+        private double gradientTime;
+        private double initialIsoTime;
+        private double finalIsoTime;
+
 
         // entered values
         [Description("Total flow in uL/minute")]
         [Category("Program Parameters")]
         [DisplayName("Total Flow")]
         [classPersistenceAttribute("TotalFlow")]
-        public double TotalFlow { get; set; }
+        public double TotalFlow
+        {
+            get { return totalFlow; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref totalFlow, value))
+                {
+                    RefreshCalculatedValues();
+                }
+            }
+        }
 
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % A")]
         [classPersistenceAttribute("StartPercentA")]
-        public double StartPercentA { get; set; }
+        public double StartPercentA
+        {
+            get { return startPercentA; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref startPercentA, value))
+                {
+                    RefreshCalculatedValues();
+                }
+            }
+        }
 
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % B")]
         [classPersistenceAttribute("StartPercentB")]
-        public double StartPercentB { get; set; }
+        public double StartPercentB
+        {
+            get { return startPercentB; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref startPercentB, value))
+                {
+                    RefreshCalculatedValues();
+                }
+            }
+        }
 
         [Description("Gradient Time (seconds)")]
         [Category("Program Parameters")]
         [DisplayName("Gradient Time")]
         [classPersistenceAttribute("GradientTime")]
-        public double GradientTime { get; set; }
+        public double GradientTime
+        {
+            get { return gradientTime; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref gradientTime, value))
+                {
+                    RefreshCalculatedValues();
+                }
+            }
+        }
 
         [Description("Initial Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Initial Iso Time")]
         [classPersistenceAttribute("InitialIsoTime")]
-        public double InitialIsoTime { get; set; }
+        public double InitialIsoTime
+        {
+            get { return initialIsoTime; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref initialIsoTime, value))
+                {
+                    RefreshCalculatedValues();
+                }
+            }
+        }
 
         [Description("Final Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Final Iso Time")]
         [classPersistenceAttribute("FinalIsoTime")]
-        public double FinalIsoTime { get; set; }
+        public double FinalIsoTime
+        {
+            get { return finalIsoTime; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref finalIsoTime, value))
+                {
+                    RefreshCalculatedValues();
+                }
+            }
+        }
 
         // calculated values
 
@@ -90,10 +157,21 @@ namespace ASIpump
         public double PlateauTime => (1.0 / (NumPlateaus / GradientTime));
 
         [Category("Calculated Values")]
-        public double FullPlateuTime => (PlateauTime * 1000.0)-7.0;
+        public double FullPlateauTime => (PlateauTime * 1000.0)-7.0;
 
         [Category("Calculated Values")]
-        public double PartialPlateuTime => (1000.0 * (NumPlateaus - (int)NumPlateaus) * PlateauTime);
+        public double PartialPlateauTime => (1000.0 * (NumPlateaus - (int)NumPlateaus) * PlateauTime);
+
+        private void RefreshCalculatedValues()
+        {
+            OnPropertyChanged(nameof(TotalVolumePumpB));
+            OnPropertyChanged(nameof(NumPlateaus));
+            OnPropertyChanged(nameof(StartSpeedA));
+            OnPropertyChanged(nameof(StartSpeedB));
+            OnPropertyChanged(nameof(PlateauTime));
+            OnPropertyChanged(nameof(FullPlateauTime));
+            OnPropertyChanged(nameof(PartialPlateauTime));
+        }
 
         #endregion
 
@@ -142,8 +220,8 @@ namespace ASIpump
 
             if (msg.Contains(PromptStartRateA)) SendData(StartSpeedA);
             if (msg.Contains(PromptRateB)) SendData(StartSpeedB);
-            if (msg.Contains(PromptFullPlateuTime)) SendData(FullPlateuTime);
-            if (msg.Contains(PromptPartialPlateuTime)) SendData(PartialPlateuTime);
+            if (msg.Contains(PromptFullPlateuTime)) SendData(FullPlateauTime);
+            if (msg.Contains(PromptPartialPlateuTime)) SendData(PartialPlateauTime);
             if (msg.Contains(PromptInitialIsoTime)) SendData(InitialIsoTime);
             if (msg.Contains(PromptFinalIsoTime)) SendData(FinalIsoTime);
 
@@ -558,11 +636,5 @@ namespace ASIpump
         }
 
         #endregion
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
