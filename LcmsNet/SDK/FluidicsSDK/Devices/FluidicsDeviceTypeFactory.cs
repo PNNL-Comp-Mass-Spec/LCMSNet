@@ -148,6 +148,14 @@ namespace FluidicsSDK.Devices
                     else
                     {
                         // Only test to see if the device type is a fluidicsdevice.
+                        if (fluidicsDeviceType.BaseType != null && !(fluidicsDeviceType.BaseType == typeof(FluidicsDevice)))
+                        {
+                            throw new InvalidCustomFluidicsDeviceException(
+                                string.Format("Could not create a fluidics device for {0}.", fluidicsDeviceType));
+                        }
+                        var wpfTypeName = $"{fluidicsDeviceType.Namespace}.{fluidicsDeviceType.Name}Wpf";
+                        fluidicsDeviceType = fluidicsDeviceType.Assembly.GetType(wpfTypeName, true);
+                        // Only test to see if the device type is a fluidicsdevice.
                         if (fluidicsDeviceType.BaseType != null && !(fluidicsDeviceType.BaseType == typeof(FluidicsDeviceWpf)))
                         {
                             throw new InvalidCustomFluidicsDeviceException(
