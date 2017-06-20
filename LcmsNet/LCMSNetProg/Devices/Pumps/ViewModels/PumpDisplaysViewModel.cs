@@ -34,8 +34,8 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 #endif
             pumps = new List<IPump>();
             pumpMonitorDictionary = new Dictionary<IPump, PumpDisplayViewModel>();
-            DeviceManagerBridge.DeviceAdded += Manager_DeviceAdded;
-            DeviceManagerBridge.DeviceRemoved += Manager_DeviceRemoved;
+            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             CurrentPump = 0;
             SetupCommands();
         }

@@ -171,7 +171,7 @@ namespace LcmsNet.Devices
             if (m_selectedDevice.Name == mtextBox_NewDeviceName.Text)
                 return;
 
-            DeviceManagerBridge.RenameDevice(device, newName);
+            classDeviceManager.Manager.RenameDevice(device, newName);
 
             // Update the user interface with the new name
             var button = m_deviceToButtonMap[device];

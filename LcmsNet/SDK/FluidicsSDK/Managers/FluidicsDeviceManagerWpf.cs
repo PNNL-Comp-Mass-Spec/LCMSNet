@@ -78,7 +78,6 @@ namespace FluidicsSDK.Managers
                 {
                     deviceRemoved = true;
                     deviceToRemove = fluidicsDevice;
-
                 }
             }
             if (!deviceRemoved)

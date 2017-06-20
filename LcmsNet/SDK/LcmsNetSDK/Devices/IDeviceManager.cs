@@ -1,4 +1,6 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿using System;
+
+namespace LcmsNetDataClasses.Devices
 {
     /// <summary>
     /// Delegate definition when a device is added or removed.
@@ -20,6 +22,7 @@
     /// <summary>
     /// Class for bridging the device manager to the user defined controls
     /// </summary>
+    [Obsolete("Use classDeviceManager.Manager instead", true)]
     public class DeviceManagerBridge
     {
         private static IDeviceManager m_manager;

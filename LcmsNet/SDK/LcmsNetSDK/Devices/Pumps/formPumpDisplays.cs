@@ -31,8 +31,8 @@ namespace LcmsNetDataClasses.Devices.Pumps
             m_mobilePhases = new Dictionary<IPump, GroupBox>();
             m_pumps = new List<IPump>();
             m_controlList = new Dictionary<IPump, controlPumpDisplay>();
-            DeviceManagerBridge.DeviceAdded += Manager_DeviceAdded;
-            DeviceManagerBridge.DeviceRemoved += Manager_DeviceRemoved;
+            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             FormClosing += formPumpDisplays_FormClosing;
             Resize += formPumpDisplays_Resize;
             m_pointer = 0;
