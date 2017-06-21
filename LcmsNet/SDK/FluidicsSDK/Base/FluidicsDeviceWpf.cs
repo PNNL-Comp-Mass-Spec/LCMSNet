@@ -218,12 +218,12 @@ namespace FluidicsSDK.Base
                 var prim = m_actionPrims[0];
                 //left triangle padding(so it doesn't draw over the state string
                 var padding = 3;
-                var relativeMove = new Vector(stateLocation.X - (int)(prim.Size.Width * scale + padding + (prim.Loc.X * scale)), stateLocation.Y - (int)(prim.Loc.Y * scale));
+                var relativeMove = new Vector(stateLocation.X - (prim.Size.Width * scale + padding + (prim.Loc.X * scale)), stateLocation.Y - (prim.Loc.Y * scale));
                 prim.Loc = Point.Add(prim.Loc, relativeMove);
                 prim.Render(g, alpha, scale, false, false);
                 prim = m_actionPrims[1];
 
-                relativeMove = new Vector(stateLocation.X + (int)stateText.Width - (int)(prim.Loc.X * scale), stateLocation.Y - (int)(prim.Loc.Y * scale));
+                relativeMove = new Vector(stateLocation.X + stateText.Width - (prim.Loc.X * scale) + padding, stateLocation.Y - (prim.Loc.Y * scale));
                 prim.Loc = Point.Add(prim.Loc, relativeMove);
                 prim.Render(g, alpha, scale, false, false);
             }
