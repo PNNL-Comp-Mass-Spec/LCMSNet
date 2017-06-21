@@ -669,14 +669,8 @@ namespace Newport.ESP300
         /// </summary>
         public SerialPort Port
         {
-            get
-            {
-                return m_port;
-            }
-            set
-            {
-                m_port = value;
-            }
+            get { return m_port; }
+            set { this.RaiseAndSetIfChanged(ref m_port, value); }
         }
 
 
