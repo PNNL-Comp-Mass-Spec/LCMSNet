@@ -40,6 +40,8 @@ namespace LcmsNet.Simulator.ViewModels
             reporterPopoutVm = new PopoutViewModel(reporter);
             ganttChartTimelinePopoutVm = new PopoutViewModel(ganttChartTimelineVm);
             conversationChartTimelinePopoutVm = new PopoutViewModel(conversationChartTimelineVm);
+
+            SetupCommands();
         }
 
         private DateTime startTime;
@@ -59,8 +61,6 @@ namespace LcmsNet.Simulator.ViewModels
         public PopoutViewModel ReporterPopoutVm => reporterPopoutVm;
         public PopoutViewModel GanttChartTimelinePopoutVm => ganttChartTimelinePopoutVm;
         public PopoutViewModel ConversationChartTimelinePopoutVm => conversationChartTimelinePopoutVm;
-
-        public event EventHandler<TackEventArgs> Tack;
 
         /// <summary>
         /// Aligns then renders the methods selected from the user interface.
@@ -265,7 +265,6 @@ namespace LcmsNet.Simulator.ViewModels
         public ReactiveCommand<Unit, Unit> PlayCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> StepCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> StopCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> UntackChartCommand { get; private set; }
 
         private void SetupCommands()
         {
