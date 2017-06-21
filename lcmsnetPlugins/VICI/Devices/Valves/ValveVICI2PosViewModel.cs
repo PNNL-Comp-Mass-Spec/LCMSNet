@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive;
-using System.Windows;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
@@ -129,11 +128,6 @@ namespace LcmsNet.Devices.Valves
         public override UserControl GetDefaultView()
         {
             return new ValveVICI2PosView();
-        }
-
-        public virtual void Valve_DeviceSaveRequired(object sender, EventArgs e)
-        {
-            OnSaveRequired();
         }
 
         /// <summary>

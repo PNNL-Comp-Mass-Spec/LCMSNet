@@ -8,7 +8,8 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance {x:Type viewModels:PopoutViewModel}, IsDesignTimeCreatable=True}"
-             DataContextChanged="PopoutView_OnDataContextChanged">
+             DataContextChanged="PopoutView_OnDataContextChanged"
+             MinHeight="30" MinWidth="60">
     <UserControl.Resources>
         <Style TargetType="{x:Type views:PopoutView}">
             <Setter Property="Template">

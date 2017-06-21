@@ -101,7 +101,7 @@ namespace ASIpump
         [Description("Handshake")]
         [Category("Serial")]
         [DisplayName("Handshake")]
-        [classPersistenceAttribute("")]
+        [classPersistenceAttribute("Handshake")]
         public Handshake Handshake
         {
             get { return mPort.Handshake; }
@@ -115,7 +115,7 @@ namespace ASIpump
         [Description("DTR Enabled")]
         [Category("Serial")]
         [DisplayName("DTR Enabled")]
-        [classPersistenceAttribute("")]
+        [classPersistenceAttribute("DTREnable")]
         public bool DtrEnable
         {
             get { return mPort.DtrEnable; }
@@ -129,7 +129,7 @@ namespace ASIpump
         [Description("RTS Enabled")]
         [Category("Serial")]
         [DisplayName("RTS Enabled")]
-        [classPersistenceAttribute("")]
+        [classPersistenceAttribute("RTSEnable")]
         public bool RtsEnable
         {
             get { return mPort.RtsEnable; }

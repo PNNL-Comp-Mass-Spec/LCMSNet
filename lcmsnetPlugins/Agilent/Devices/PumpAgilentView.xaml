@@ -5,18 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Agilent.Devices.Pumps"
              xmlns:commonViews="clr-namespace:LcmsNetCommonControls.Views;assembly=LcmsNetCommonControls"
-             xmlns:commonDeviceViews="clr-namespace:LcmsNetCommonControls.Devices.Views;assembly=LcmsNetCommonControls"
+             xmlns:pumpViews="clr-namespace:LcmsNetCommonControls.Devices.Pumps;assembly=LcmsNetCommonControls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="577" d:DesignWidth="822"
-             d:DataContext="{d:DesignInstance {x:Type local:PumpAgilentViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:PumpAgilentViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="425" MinWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="422*" />
+            <ColumnDefinition Width="422*" MinWidth="400" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="400*" />
         </Grid.ColumnDefinitions>
-        <TabControl Grid.Column="0">
+        <TabControl Grid.Column="0" MinWidth="400">
             <TabItem Header="Pump Controls">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -183,7 +184,7 @@
         </TabControl>
         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" />
         <commonViews:PopoutView Grid.Column="2" Grid.RowSpan="6" VerticalButtonAlignment="Top" HorizontalButtonAlignment="Right" OverlayButton="True" DataContext="{Binding PumpPopoutVm}" WindowHeight="577" WindowWidth="400" Title="{Binding Child.PumpName}">
-            <commonDeviceViews:PumpDisplayView DataContext="{Binding Child}" />
+            <pumpViews:PumpDisplayView DataContext="{Binding Child}" />
         </commonViews:PopoutView>
     </Grid>
 </UserControl>

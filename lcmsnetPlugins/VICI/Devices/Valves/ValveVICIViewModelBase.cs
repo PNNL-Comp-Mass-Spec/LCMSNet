@@ -25,6 +25,7 @@ namespace LcmsNet.Devices.Valves
             {
                 ValveIdComboBoxOptions.AddRange(new [] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ' });
             }
+            ValveControlTabSelected = true; // Default selected tab
 
             SetupCommands();
 

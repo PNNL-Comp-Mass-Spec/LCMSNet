@@ -8,7 +8,8 @@
              xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="574" d:DesignWidth="889"
-             d:DataContext="{d:DesignInstance {x:Type local:NewportStageViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:NewportStageViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="275" MinWidth="660">
     <TabControl>
         <TabItem Header="Controls" IsSelected="{Binding ControlsTabSelected}">
             <Grid>

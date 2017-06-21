@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="365" d:DesignWidth="262"
-             d:DataContext="{d:DesignInstance {x:Type local:NetStartViewModelDummy}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:NetStartViewModelDummy}, IsDesignTimeCreatable=True}"
+             MinHeight="190" MinWidth="225">
     <TabControl>
         <TabItem Header="Control">
             <Grid>

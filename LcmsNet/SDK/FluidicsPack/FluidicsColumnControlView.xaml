@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="218" d:DesignWidth="390"
-             d:DataContext="{d:DesignInstance {x:Type local:FluidicsColumnControlViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:FluidicsColumnControlViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="90" MinWidth="215">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

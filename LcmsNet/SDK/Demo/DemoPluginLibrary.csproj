@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DemoClosureAdvanceControlViewModel.cs" />
     <Compile Include="DemoClosureAdvancedControlView.xaml.cs">
       <DependentUpon>DemoClosureAdvancedControlView.xaml</DependentUpon>
     </Compile>

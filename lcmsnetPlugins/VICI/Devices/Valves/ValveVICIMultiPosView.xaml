@@ -7,13 +7,14 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
-             d:DataContext="{d:DesignInstance {x:Type local:ValveVICIMultiPosViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:ValveVICIMultiPosViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="300" MinWidth="250">
     <TabControl>
         <TabItem Header="Valve Control" IsSelected="{Binding ValveControlTabSelected}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="7*" />
+                    <RowDefinition Height="Auto" MinHeight="89" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

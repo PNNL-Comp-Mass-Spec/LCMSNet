@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="174" d:DesignWidth="305"
-             d:DataContext="{d:DesignInstance {x:Type local:ContactClosureViewModelDummy}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:ContactClosureViewModelDummy}, IsDesignTimeCreatable=True}"
+             MinHeight="65" MinWidth="250">
     <GroupBox Margin="3">
         <Grid Margin="3">
             <Grid.RowDefinitions>

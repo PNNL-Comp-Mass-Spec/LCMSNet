@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Windows.Controls;
-using LcmsNetCommonControls.Devices.ViewModels;
+using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetCommonControls.ViewModels;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Devices.Pumps;

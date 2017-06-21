@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="102" d:DesignWidth="384"
-             d:DataContext="{d:DesignInstance {x:Type local:PumpIscoDisplayViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:PumpIscoDisplayViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="100" MinWidth="280">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

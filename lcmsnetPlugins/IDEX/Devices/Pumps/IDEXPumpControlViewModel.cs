@@ -23,9 +23,10 @@ namespace ASUTGen.Devices.Pumps
         }
 
         #region IDeviceControl Members
-
+#pragma warning disable 67
         public event DelegateNameChanged NameChanged;
         public event DelegateSaveRequired SaveRequired;
+#pragma warning restore 67
 
         public bool Running { get; set; }
 

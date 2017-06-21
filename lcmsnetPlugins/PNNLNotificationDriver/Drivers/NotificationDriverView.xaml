@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:FailureInjector.Drivers"
              mc:Ignorable="d"
              d:DesignHeight="225" d:DesignWidth="262"
-             d:DataContext="{d:DesignInstance {x:Type local:NotificationDriverViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:NotificationDriverViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="70" MinWidth="180">
     <Grid>
         <Button Width="172" Height="58" Content="Inject Failure" Command="{Binding InjectFailureCommand}" />
     </Grid>

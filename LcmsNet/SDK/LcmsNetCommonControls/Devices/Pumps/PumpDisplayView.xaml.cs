@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace LcmsNetCommonControls.Devices.Views
+namespace LcmsNetCommonControls.Devices.Pumps
 {
     /// <summary>
     /// Interaction logic for PumpDisplayView.xaml

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:ASUTGen.Devices.Valves"
              mc:Ignorable="d"
              d:DesignHeight="172" d:DesignWidth="241"
-             d:DataContext="{d:DesignInstance {x:Type local:IDEXValveControlViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:IDEXValveControlViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="172" MinWidth="241">
     <Grid Margin="30,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

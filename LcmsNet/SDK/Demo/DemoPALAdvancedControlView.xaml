@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="174" d:DesignWidth="436"
-             d:DataContext="{d:DesignInstance {x:Type local:DemoPALAdvancedControlViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:DemoPALAdvancedControlViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="30" MinWidth="415">
     <StackPanel Orientation="Horizontal">
         <TextBlock Margin="5" VerticalAlignment="Center" Text="Method:" />
         <ComboBox Margin="5" Width="121" VerticalAlignment="Center" ItemsSource="{Binding MethodsComboBoxOptions}" SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:DemoPluginLibrary"
              mc:Ignorable="d"
              d:DesignHeight="91" d:DesignWidth="208"
-             d:DataContext="{d:DesignInstance {x:Type local:DemoPALAdvancedControlViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:DemoPALAdvancedControlViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="85" MinWidth="190">
     <Grid Margin="10,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

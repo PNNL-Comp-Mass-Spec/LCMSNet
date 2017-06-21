@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="73" d:DesignWidth="417"
-             d:DataContext="{d:DesignInstance {x:Type local:DemoClosureAdvancedControlViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:DemoClosureAdvancedControlViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="30" MinWidth="410">
     <StackPanel Orientation="Horizontal">
         <TextBlock Margin="5" VerticalAlignment="Center" Text="Pulse Length (seconds):" />
         <xctk:IntegerUpDown Margin="5" VerticalAlignment="Center" Width="58" Minimum="1" Maximum="1000000000" Value="{Binding PulseLength}" />

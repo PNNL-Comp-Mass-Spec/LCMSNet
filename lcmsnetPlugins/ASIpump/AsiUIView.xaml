@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="296" d:DesignWidth="651"
-             d:DataContext="{d:DesignInstance {x:Type local:AsiUIViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:AsiUIViewModel}, IsDesignTimeCreatable=True}"
+             MinWidth="325" MinHeight="200">
     <GroupBox Header="ASI 576">
         <Grid>
             <Grid.RowDefinitions>
@@ -15,7 +16,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="274*" />
+                <ColumnDefinition Width="274*" MinWidth="150" />
                 <ColumnDefinition Width="371*" />
             </Grid.ColumnDefinitions>
             <xctk:PropertyGrid ShowTitle="False" ShowSearchBox="False" SelectedObject="{Binding Pump}" />

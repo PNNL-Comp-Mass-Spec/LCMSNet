@@ -35,9 +35,10 @@ namespace ASUTGen.Devices.Valves
         public ReactiveCommand<Unit, Unit> InjectStatusCommand { get; private set; }
 
         #region IDeviceControl Members
-
+#pragma warning disable 67
         public event DelegateNameChanged NameChanged;
         public event DelegateSaveRequired SaveRequired;
+#pragma warning restore 67
 
         public bool Running { get; set; }
 

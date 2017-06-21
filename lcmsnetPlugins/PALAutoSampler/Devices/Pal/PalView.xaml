@@ -7,7 +7,8 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="367" d:DesignWidth="303"
-             d:DataContext="{d:DesignInstance {x:Type local:PalViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type local:PalViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="275" MinWidth="240">
     <TabControl>
         <TabItem Header="Methods/Status">
             <Grid>

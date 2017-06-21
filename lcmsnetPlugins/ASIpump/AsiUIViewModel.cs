@@ -12,8 +12,10 @@ namespace ASIpump
             SetupCommands();
         }
 
+#pragma warning disable 67
         public event DelegateSaveRequired SaveRequired;
         public event DelegateNameChanged NameChanged;
+#pragma warning restore 67
 
         private AsiPump pump;
         private string name = "";

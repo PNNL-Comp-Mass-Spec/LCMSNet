@@ -6,7 +6,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using ReactiveUI;
 
-namespace LcmsNetCommonControls.Devices.ViewModels
+namespace LcmsNetCommonControls.Devices.Pumps
 {
     /// <summary>
     /// View Model for displaying a plot with pump monitoring data
@@ -92,6 +92,7 @@ namespace LcmsNetCommonControls.Devices.ViewModels
                 TitleFontSize = 10,
                 Position = AxisPosition.Bottom,
                 FontSize = 10,
+                AxisTickToLabelDistance = 0,
             });
             DataPressureMonitorPlot.Axes.Add(new LinearAxis()
             {
@@ -114,6 +115,7 @@ namespace LcmsNetCommonControls.Devices.ViewModels
                 TitleFontSize = 10,
                 Position = AxisPosition.Bottom,
                 FontSize = 10,
+                AxisTickToLabelDistance = 0,
             });
             DataFlowMonitorPlot.Axes.Add(new LinearAxis()
             {
@@ -136,6 +138,7 @@ namespace LcmsNetCommonControls.Devices.ViewModels
                 TitleFontSize = 10,
                 Position = AxisPosition.Bottom,
                 FontSize = 10,
+                AxisTickToLabelDistance = 0,
             });
             DataBMonitorPlot.Axes.Add(new LinearAxis()
             {
