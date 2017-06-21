@@ -1,0 +1,56 @@
+﻿using System.Windows.Controls;
+using LcmsNetDataClasses.Devices;
+using ReactiveUI;
+
+namespace ASUTGen.Devices.Pumps
+{
+    public class IDEXPumpControlViewModel : ReactiveObject, IDeviceControlWpf
+    {
+        public IDEXPumpControlViewModel()
+        {
+        }
+
+        /// <summary>
+        /// Notification driver object.
+        /// </summary>
+        private IDEXPump m_valve;
+
+        private string name;
+
+        public void RegisterDevice(IDevice device)
+        {
+            m_valve = device as IDEXPump;
+        }
+
+        #region IDeviceControl Members
+
+        public event DelegateNameChanged NameChanged;
+        public event DelegateSaveRequired SaveRequired;
+
+        public bool Running { get; set; }
+
+        public IDevice Device
+        {
+            get { return m_valve; }
+            set { RegisterDevice(value); }
+        }
+
+        public string Name
+        {
+            get { return name; }
+            set { this.RaiseAndSetIfChanged(ref name, value); }
+        }
+
+        public UserControl GetDefaultView()
+        {
+            return new IDEXPumpControlView();
+        }
+
+        public void ShowProps()
+        {
+
+        }
+
+        #endregion
+    }
+}

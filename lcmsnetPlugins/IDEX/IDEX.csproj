@@ -73,12 +73,15 @@
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -87,6 +90,8 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\Pumps\IDEXPump.cs" />
@@ -96,6 +101,10 @@
     <Compile Include="Devices\Pumps\IDEXPumpControl.Designer.cs">
       <DependentUpon>IDEXPumpControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Pumps\IDEXPumpControlView.xaml.cs">
+      <DependentUpon>IDEXPumpControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Pumps\IDEXPumpControlViewModel.cs" />
     <Compile Include="Devices\Valves\IDEXValve.cs" />
     <Compile Include="Devices\Valves\IDEXValveControl.cs">
       <SubType>UserControl</SubType>
@@ -103,6 +112,10 @@
     <Compile Include="Devices\Valves\IDEXValveControl.Designer.cs">
       <DependentUpon>IDEXValveControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Valves\IDEXValveControlView.xaml.cs">
+      <DependentUpon>IDEXValveControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Valves\IDEXValveControlViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +128,21 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="reactiveui">
+      <Version>7.4.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Devices\Pumps\IDEXPumpControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Valves\IDEXValveControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -124,6 +152,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
