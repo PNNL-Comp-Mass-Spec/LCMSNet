@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace LcmsNet.Devices.Valves
 {
@@ -26,40 +27,11 @@ namespace LcmsNet.Devices.Valves
             InitializeComponent();
         }
 
-        public SerialPort SerialPortBinding
-        {
-            get { return (SerialPort)GetValue(SerialPortBindingProperty); }
-            set { SetValue(SerialPortBindingProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for SerialPortBinding.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SerialPortBindingProperty =
-            DependencyProperty.Register("SerialPortBinding", typeof(SerialPort), typeof(ValveVICI2PosView), new PropertyMetadata(null, PropertyChangedCallback));
-
-        private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            if (!(dependencyObject is ValveVICI2PosView v))
-            {
-                return;
-            }
-            v.WinFormsPropertyGrid.SelectedObject = dependencyPropertyChangedEventArgs.NewValue;
-        }
-
-        private void PropertyGrid_OnPropertyValueChanged(object s, System.Windows.Forms.PropertyValueChangedEventArgs e)
+        private void PropertyGrid_OnPropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
         {
             if (this.DataContext is ValveVICI2PosViewModel v)
             {
                 v.OnSaveRequired();
-            }
-        }
-
-        private void ValveVICI2PosView_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is ValveVICIViewModelBase vm)
-            {
-                var binding = new Binding("ComPort");
-                binding.Source = e.NewValue;
-                this.SetBinding(SerialPortBindingProperty, binding);
             }
         }
     }

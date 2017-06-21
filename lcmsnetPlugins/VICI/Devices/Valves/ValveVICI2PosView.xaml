@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNet.Devices.Valves"
-             xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
-             d:DataContext="{d:DesignInstance {x:Type local:ValveVICI2PosViewModel}, IsDesignTimeCreatable=True}"
-             DataContextChanged="ValveVICI2PosView_OnDataContextChanged">
+             d:DataContext="{d:DesignInstance {x:Type local:ValveVICI2PosViewModel}, IsDesignTimeCreatable=True}">
     <TabControl>
         <TabItem Header="Valve Control" IsSelected="{Binding ValveControlTabSelected}">
             <Grid>
@@ -59,13 +58,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <!-- I wanted to use this, but apparently it will be much more difficult...
-                xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                <xctk:PropertyGrid ShowTitle="False" ShowSearchBox="False" />
-                -->
-                <WindowsFormsHost>
-                    <forms:PropertyGrid Dock="Fill" x:Name="WinFormsPropertyGrid" PropertyValueChanged="PropertyGrid_OnPropertyValueChanged" />
-                </WindowsFormsHost>
+                <xctk:PropertyGrid Grid.Row="0" Margin="3" ShowTitle="False" ShowSearchBox="False" SelectedObject="{Binding ComPort}" PropertyValueChanged="PropertyGrid_OnPropertyValueChanged" />
                 <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Left" Content="Open Port" Command="{Binding OpenPortCommand}" />
                 <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Center" Content="Close Port" Command="{Binding ClosePortCommand}" />
                 <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Right" Content="Initialize" Command="{Binding InitializeDeviceCommand}" />
