@@ -7,6 +7,9 @@ namespace LcmsNetCommonControls.Devices.Views
     /// </summary>
     public partial class PumpDisplayView : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PumpDisplayView()
         {
             InitializeComponent();

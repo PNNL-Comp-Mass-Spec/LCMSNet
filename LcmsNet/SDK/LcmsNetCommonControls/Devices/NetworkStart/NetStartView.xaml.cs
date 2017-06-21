@@ -20,6 +20,9 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
     /// </summary>
     public partial class NetStartView : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public NetStartView()
         {
             InitializeComponent();

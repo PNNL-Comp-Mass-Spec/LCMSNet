@@ -37,23 +37,47 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
 
         #region Properties
 
+        /// <summary>
+        /// The Port options to show in the ComboBox
+        /// </summary>
         public ReactiveUI.ReactiveList<T> OutputPortComboBoxOptions => outputPortComboBoxOptions;
+
+        /// <summary>
+        /// The minimum voltage allowed for the contact closure
+        /// </summary>
         public abstract double MinimumVoltage { get; }
+
+        /// <summary>
+        /// The maximum voltage allowed by the contact closure
+        /// </summary>
         public abstract double MaximumVoltage { get; }
+
+        /// <summary>
+        /// The minimum pulse length allowed by the contact closure
+        /// </summary>
         public abstract int MinimumPulseLength { get; }
 
+        /// <summary>
+        /// The pulse length to run
+        /// </summary>
         public int PulseLength
         {
             get { return pulseLength; }
             set { this.RaiseAndSetIfChanged(ref pulseLength, value); }
         }
 
+        /// <summary>
+        /// The voltage of the pulse
+        /// </summary>
         public double Voltage
         {
             get { return voltage; }
             set { this.RaiseAndSetIfChanged(ref voltage, value); }
         }
 
+        /// <summary>
+        /// Command to trigger a pulse
+        /// </summary>
         public ReactiveUI.ReactiveCommand<Unit, Unit> SendPulseCommand { get; private set; }
 
         /// <summary>
@@ -65,12 +89,19 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
             set { this.RaiseAndSetIfChanged(ref selectedPort, value); }
         }
 
+        /// <summary>
+        /// The device this view model is associated with
+        /// </summary>
         public abstract IDevice Device { get; set; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Get the Default view for this view model
+        /// </summary>
+        /// <returns></returns>
         public virtual UserControl GetDefaultView()
         {
             return new ContactClosureView();

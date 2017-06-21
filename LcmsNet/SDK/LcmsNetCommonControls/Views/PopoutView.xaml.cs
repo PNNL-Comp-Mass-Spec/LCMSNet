@@ -12,6 +12,9 @@ namespace LcmsNetCommonControls.Views
     /// </summary>
     public partial class PopoutView : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PopoutView()
         {
             InitializeComponent();
@@ -19,39 +22,57 @@ namespace LcmsNetCommonControls.Views
 
         #region Button Positioning
 
-        // Using a DependencyProperty as the backing store for HorizontalButtonAlignment.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button horizontal position dependency property
+        /// </summary>
         public static readonly DependencyProperty HorizontalButtonAlignmentProperty =
             DependencyProperty.Register("HorizontalButtonAlignment", typeof(HorizontalAlignment), typeof(PopoutView), new PropertyMetadata(HorizontalAlignment.Left, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for VerticalButtonAlignment.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button vertical position dependency property
+        /// </summary>
         public static readonly DependencyProperty VerticalButtonAlignmentProperty =
             DependencyProperty.Register("VerticalButtonAlignment", typeof(VerticalAlignment), typeof(PopoutView), new PropertyMetadata(VerticalAlignment.Bottom, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for OverlayButton.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button position overlay dependency property
+        /// </summary>
         public static readonly DependencyProperty OverlayButtonProperty =
             DependencyProperty.Register("OverlayButton", typeof(bool), typeof(PopoutView), new PropertyMetadata(false, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for ButtonGridRow.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button grid row dependency property
+        /// </summary>
         public static readonly DependencyProperty ButtonGridRowProperty =
             DependencyProperty.Register("ButtonGridRow", typeof(int), typeof(PopoutView), new PropertyMetadata(2));
 
-        // Using a DependencyProperty as the backing store for ButtonGridColumn.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button grid column dependency property
+        /// </summary>
         public static readonly DependencyProperty ButtonGridColumnProperty =
             DependencyProperty.Register("ButtonGridColumn", typeof(int), typeof(PopoutView), new PropertyMetadata(1));
 
-        // Using a DependencyProperty as the backing store for PreferVerticalBorder.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button border preference dependency property
+        /// </summary>
         public static readonly DependencyProperty PreferVerticalBorderProperty =
             DependencyProperty.Register("PreferVerticalBorder", typeof(bool), typeof(PopoutView), new PropertyMetadata(false, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Popout window title dependency property
+        /// </summary>
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(PopoutView), new PropertyMetadata(""));
 
-        // Using a DependencyProperty as the backing store for WindowWidth.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Popout window width dependency property
+        /// </summary>
         public static readonly DependencyProperty WindowWidthProperty =
             DependencyProperty.Register("WindowWidth", typeof(double), typeof(PopoutView), new PropertyMetadata(500.0));
 
-        // Using a DependencyProperty as the backing store for WindowHeight.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Popout window height dependency property
+        /// </summary>
         public static readonly DependencyProperty WindowHeightProperty =
             DependencyProperty.Register("WindowHeight", typeof(double), typeof(PopoutView), new PropertyMetadata(400.0));
 
@@ -251,6 +272,9 @@ namespace LcmsNetCommonControls.Views
 
         private PopoutWindow popoutWindow = null;
 
+        /// <summary>
+        /// Try to activate the popped-out window
+        /// </summary>
         public void TryActivateWindow()
         {
             popoutWindow?.Activate();

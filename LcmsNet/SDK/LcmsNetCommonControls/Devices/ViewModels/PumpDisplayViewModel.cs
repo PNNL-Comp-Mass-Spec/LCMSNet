@@ -8,6 +8,9 @@ using ReactiveUI;
 
 namespace LcmsNetCommonControls.Devices.ViewModels
 {
+    /// <summary>
+    /// View Model for displaying a plot with pump monitoring data
+    /// </summary>
     public class PumpDisplayViewModel : ReactiveObject
     {
         /// <summary>
@@ -20,42 +23,51 @@ namespace LcmsNetCommonControls.Devices.ViewModels
             InitializePlots();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Pump name</param>
         public PumpDisplayViewModel(string name)
         {
             InitializePlots();
             PumpName = name;
         }
 
-        public bool Tacked { get; set; }
-
-        /// <summary>
-        /// Gets the width for the tack icon.
-        /// </summary>
-        public int TackWidth => 36;
-
         private string pumpName = "TestPump";
         private PlotModel dataPressureMonitorPlot;
         private PlotModel dataFlowMonitorPlot;
         private PlotModel dataBMonitorPlot;
 
+        /// <summary>
+        /// Name of the pump
+        /// </summary>
         public string PumpName
         {
             get { return pumpName; }
             private set { this.RaiseAndSetIfChanged(ref pumpName, value); }
         }
 
+        /// <summary>
+        /// The Data Pressure Plot
+        /// </summary>
         public PlotModel DataPressureMonitorPlot
         {
             get { return dataPressureMonitorPlot; }
             private set { this.RaiseAndSetIfChanged(ref dataPressureMonitorPlot, value); }
         }
 
+        /// <summary>
+        /// The Data Flow Plot
+        /// </summary>
         public PlotModel DataFlowMonitorPlot
         {
             get { return dataFlowMonitorPlot; }
             private set { this.RaiseAndSetIfChanged(ref dataFlowMonitorPlot, value); }
         }
 
+        /// <summary>
+        /// The Percent B Plot
+        /// </summary>
         public PlotModel DataBMonitorPlot
         {
             get { return dataBMonitorPlot; }
@@ -185,18 +197,47 @@ namespace LcmsNetCommonControls.Devices.ViewModels
             DataBMonitorPlot.Series.Add(percentBSeries);
         }
 
+        /// <summary>
+        /// Set the pump name
+        /// </summary>
+        /// <param name="name"></param>
         public void SetPumpName(string name)
         {
             PumpName = name;
         }
 
+        /// <summary>
+        /// Class to hold information for plotting
+        /// </summary>
         public class PlotData
         {
+            /// <summary>
+            /// The timestamp
+            /// </summary>
             public DateTime Time { get; private set; }
+
+            /// <summary>
+            /// Pressure
+            /// </summary>
             public double Pressure { get; private set; }
+
+            /// <summary>
+            /// Flow
+            /// </summary>
             public double Flow { get; private set; }
+
+            /// <summary>
+            /// Percent B
+            /// </summary>
             public double PercentB { get; private set; }
 
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="time"></param>
+            /// <param name="pressure"></param>
+            /// <param name="flow"></param>
+            /// <param name="percentB"></param>
             public PlotData(DateTime time, double pressure, double flow, double percentB)
             {
                 Time = time;

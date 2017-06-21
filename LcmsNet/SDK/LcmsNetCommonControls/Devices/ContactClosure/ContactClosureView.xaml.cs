@@ -20,6 +20,9 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
     /// </summary>
     public partial class ContactClosureView : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ContactClosureView()
         {
             InitializeComponent();

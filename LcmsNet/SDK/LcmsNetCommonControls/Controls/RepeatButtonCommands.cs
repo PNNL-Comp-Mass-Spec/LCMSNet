@@ -5,6 +5,9 @@ using System.Windows.Input;
 
 namespace LcmsNetCommonControls.Controls
 {
+    /// <summary>
+    /// A repeat button for WPF that can fire a secondary command on release
+    /// </summary>
     public class RepeatButtonCommands : RepeatButton
     {
         static RepeatButtonCommands()
@@ -13,6 +16,9 @@ namespace LcmsNetCommonControls.Controls
             ClickModeProperty.OverrideMetadata(typeof(RepeatButtonCommands), new FrameworkPropertyMetadata(ClickMode.Press));
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RepeatButtonCommands() : base()
         {
         }
@@ -44,18 +50,28 @@ namespace LcmsNetCommonControls.Controls
             set { SetValue(ReleaseCommandTargetProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// ReleaseCommand Dependency Property
+        /// </summary>
         public static readonly DependencyProperty ReleaseCommandProperty =
             DependencyProperty.Register("ReleaseCommand", typeof(ICommand), typeof(RepeatButtonCommands), new PropertyMetadata((ICommand)null));
 
-        // Using a DependencyProperty as the backing store for ReleaseCommandParameter.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// ReleaseCommandParameter Dependency Property
+        /// </summary>
         public static readonly DependencyProperty ReleaseCommandParameterProperty =
             DependencyProperty.Register("ReleaseCommandParameter", typeof(object), typeof(RepeatButtonCommands), new PropertyMetadata(null));
 
-        // Using a DependencyProperty as the backing store for ReleaseCommandTarget.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// ReleaseCommandTarget Dependency Property
+        /// </summary>
         public static readonly DependencyProperty ReleaseCommandTargetProperty =
             DependencyProperty.Register("ReleaseCommandTarget", typeof(IInputElement), typeof(RepeatButtonCommands), new PropertyMetadata((IInputElement)null));
 
+        /// <summary>
+        /// Actions to perform on left mouse button up
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonUp(e);
@@ -68,6 +84,10 @@ namespace LcmsNetCommonControls.Controls
             }
         }
 
+        /// <summary>
+        /// Actions to perform on key up
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);

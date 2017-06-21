@@ -11,6 +11,9 @@ namespace LcmsNetCommonControls.Views
     /// </summary>
     public partial class PopoutWindow : Window
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PopoutWindow()
         {
             InitializeComponent();
@@ -18,27 +21,39 @@ namespace LcmsNetCommonControls.Views
 
         #region Button Positioning
 
-        // Using a DependencyProperty as the backing store for HorizontalButtonAlignment.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button horizontal position dependency property
+        /// </summary>
         public static readonly DependencyProperty HorizontalButtonAlignmentProperty =
             DependencyProperty.Register("HorizontalButtonAlignment", typeof(HorizontalAlignment), typeof(PopoutWindow), new PropertyMetadata(HorizontalAlignment.Left, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for VerticalButtonAlignment.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button vertical position dependency property
+        /// </summary>
         public static readonly DependencyProperty VerticalButtonAlignmentProperty =
             DependencyProperty.Register("VerticalButtonAlignment", typeof(VerticalAlignment), typeof(PopoutWindow), new PropertyMetadata(VerticalAlignment.Bottom, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for OverlayButton.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button position overlay dependency property
+        /// </summary>
         public static readonly DependencyProperty OverlayButtonProperty =
             DependencyProperty.Register("OverlayButton", typeof(bool), typeof(PopoutWindow), new PropertyMetadata(false, UpdatePositioning));
 
-        // Using a DependencyProperty as the backing store for ButtonGridRow.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button grid row dependency property
+        /// </summary>
         public static readonly DependencyProperty ButtonGridRowProperty =
             DependencyProperty.Register("ButtonGridRow", typeof(int), typeof(PopoutWindow), new PropertyMetadata(2));
 
-        // Using a DependencyProperty as the backing store for ButtonGridColumn.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button grid column dependency property
+        /// </summary>
         public static readonly DependencyProperty ButtonGridColumnProperty =
             DependencyProperty.Register("ButtonGridColumn", typeof(int), typeof(PopoutWindow), new PropertyMetadata(1));
 
-        // Using a DependencyProperty as the backing store for PreferVerticalBorder.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Button border preference dependency property
+        /// </summary>
         public static readonly DependencyProperty PreferVerticalBorderProperty =
             DependencyProperty.Register("PreferVerticalBorder", typeof(bool), typeof(PopoutWindow), new PropertyMetadata(false, UpdatePositioning));
 
