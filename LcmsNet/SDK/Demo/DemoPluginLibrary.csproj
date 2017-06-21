@@ -161,7 +161,11 @@
 powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 
 xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs"
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)lib"</PostBuildEvent>
+xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)lib"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)pluginDLLs"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)lib"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)lib"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

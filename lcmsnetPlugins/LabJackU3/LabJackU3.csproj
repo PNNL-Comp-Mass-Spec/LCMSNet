@@ -97,6 +97,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(ProjectDir)*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

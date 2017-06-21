@@ -110,7 +110,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+    <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
+powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+
+xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

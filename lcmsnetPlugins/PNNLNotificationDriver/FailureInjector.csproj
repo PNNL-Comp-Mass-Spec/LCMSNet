@@ -100,8 +100,9 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
+    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

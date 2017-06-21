@@ -106,6 +106,8 @@
 
 :release
 xcopy /Y /F /D "$(TargetDir)*.dll" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)*.pdb" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
 xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(SolutionDir)lib"
 
 :end
