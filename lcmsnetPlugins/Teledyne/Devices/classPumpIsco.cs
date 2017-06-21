@@ -221,6 +221,9 @@ namespace LcmsNet.Devices.Pumps
         {
             m_Name = "Isco Pump";
 
+            // Set the default number of pumps as the max
+            m_PumpCount = CONST_MAX_PUMPS;
+
             models = new enumISCOModel[CONST_MAX_PUMPS];
 
             //m_Name = classDeviceManager.Manager.CreateUniqueDeviceName(m_Name);
