@@ -67,6 +67,7 @@
     <Compile Include="Views\PopoutWindow.xaml.cs">
       <DependentUpon>PopoutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RepeatButtonCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
