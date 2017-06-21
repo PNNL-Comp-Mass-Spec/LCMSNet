@@ -265,7 +265,7 @@ namespace LcmsNetDataClasses.Devices
         #region Configuration Extraction and Loading
 
         /// <summary>
-        /// Loads a devcie
+        /// Loads a device
         /// </summary>
         /// <param name="configuration">Configuration</param>
         public void LoadPersistentConfiguration(classDeviceConfiguration configuration)

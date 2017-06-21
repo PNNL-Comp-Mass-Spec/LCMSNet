@@ -47,7 +47,7 @@ namespace LcmsNetDataClasses.Devices
 
         protected virtual void UpdateStatusDisplay(string message)
         {
-            //TODO: Add back
+            DeviceStatus = "Status: " + message;
         }
 
         #region Events
@@ -90,7 +90,17 @@ namespace LcmsNetDataClasses.Devices
             set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
+        /// <summary>
+        /// Status of device, updated using UpdateStatusDisplay
+        /// </summary>
+        public string DeviceStatus
+        {
+            get { return deviceStatus; }
+            private set { this.RaiseAndSetIfChanged(ref deviceStatus, value); }
+        }
+
         private string name = "";
+        private string deviceStatus = "";
 
         #endregion
 
