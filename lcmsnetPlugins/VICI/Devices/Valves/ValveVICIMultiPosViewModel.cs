@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using FluidicsSDK.Devices;
 using LcmsNetDataClasses.Devices;
@@ -40,9 +39,9 @@ namespace LcmsNet.Devices.Valves
         {
             if (m_valve != null)
             {
-                using (ValvePositionComboBoxOptions.SuppressChangeNotifications())
+                using (valvePositionComboBoxOptions.SuppressChangeNotifications())
                 {
-                    ValvePositionComboBoxOptions.AddRange(Enum.GetValues(m_valve.GetStateType()).Cast<object>().Select(x => x.ToString()));
+                    valvePositionComboBoxOptions.AddRange(Enum.GetValues(m_valve.GetStateType()).Cast<object>().Select(x => x.ToString()));
                 }
             }
         }
@@ -77,7 +76,7 @@ namespace LcmsNet.Devices.Valves
 
         #region Properties
 
-        public ReactiveUI.ReactiveList<string> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
 
         public string SelectedValvePosition
         {

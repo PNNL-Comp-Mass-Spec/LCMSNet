@@ -30,8 +30,12 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
 
         private int pulseLength;
         private double voltage;
-        private readonly ReactiveUI.ReactiveList<T> outputPortComboBoxOptions;
         private T selectedPort;
+
+        /// <summary>
+        /// OutputPortComboBoxOptions backing field
+        /// </summary>
+        protected readonly ReactiveUI.ReactiveList<T> outputPortComboBoxOptions;
 
         #endregion
 
@@ -40,7 +44,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// <summary>
         /// The Port options to show in the ComboBox
         /// </summary>
-        public ReactiveUI.ReactiveList<T> OutputPortComboBoxOptions => outputPortComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<T> OutputPortComboBoxOptions => outputPortComboBoxOptions;
 
         /// <summary>
         /// The minimum voltage allowed for the contact closure

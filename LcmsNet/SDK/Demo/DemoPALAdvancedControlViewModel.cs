@@ -41,7 +41,7 @@ namespace DemoPluginLibrary
         private string selectedMethod = "";
         private double timeout = 0;
 
-        public ReactiveUI.ReactiveList<string> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         public string SelectedMethod
         {

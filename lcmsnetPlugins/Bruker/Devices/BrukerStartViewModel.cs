@@ -117,10 +117,10 @@ namespace LcmsNet.Devices.BrukerStart
         {
             var methodNames = new List<string>(data.Select(x => x.ToString()));
 
-            using (MethodComboBoxOptions.SuppressChangeNotifications())
+            using (methodComboBoxOptions.SuppressChangeNotifications())
             {
-                MethodComboBoxOptions.Clear();
-                MethodComboBoxOptions.AddRange(methodNames);
+                methodComboBoxOptions.Clear();
+                methodComboBoxOptions.AddRange(methodNames);
             }
 
             InstrumentMethodListReceived?.Invoke(methodNames);

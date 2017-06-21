@@ -26,7 +26,11 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
 
         #region Members
 
-        private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
+        /// <summary>
+        /// MethodComboBoxOptions backing field
+        /// </summary>
+        protected readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
+
         private string selectedMethod = "";
         private string sampleName = "";
         private string status = "";
@@ -40,7 +44,7 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// <summary>
         /// The methods to show in the ComboBox
         /// </summary>
-        public ReactiveUI.ReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
 
         /// <summary>
         /// The currently selected method

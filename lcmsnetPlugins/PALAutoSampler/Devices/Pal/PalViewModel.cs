@@ -88,10 +88,10 @@ namespace LcmsNet.Devices.Pal
 
         #region Properties
 
-        public ReactiveUI.ReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
-        public ReactiveUI.ReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
-        public ReactiveUI.ReactiveList<enumVialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
-        public ReactiveUI.ReactiveList<string> PortNamesComboBoxOptions => portNamesComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<enumVialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> PortNamesComboBoxOptions => portNamesComboBoxOptions;
 
         public string SelectedMethod
         {
@@ -251,10 +251,10 @@ namespace LcmsNet.Devices.Pal
             //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PAL ADVANCED CONTROL PROCESS METHODS:" + rawMethodList.Count);
             if (rawMethodList != null)
             {
-                using (MethodComboBoxOptions.SuppressChangeNotifications())
+                using (methodComboBoxOptions.SuppressChangeNotifications())
                 {
-                    MethodComboBoxOptions.Clear();
-                    MethodComboBoxOptions.AddRange(rawMethodList);
+                    methodComboBoxOptions.Clear();
+                    methodComboBoxOptions.AddRange(rawMethodList);
                 }
             }
         }
@@ -278,10 +278,10 @@ namespace LcmsNet.Devices.Pal
                                                                "ADVANCED CONTROL PROCESS TRAYS:" + trayList.Count);*/
             if (trayList != null)
             {
-                using (TrayComboBoxOptions.SuppressChangeNotifications())
+                using (trayComboBoxOptions.SuppressChangeNotifications())
                 {
-                    TrayComboBoxOptions.Clear();
-                    TrayComboBoxOptions.AddRange(trayList);
+                    trayComboBoxOptions.Clear();
+                    trayComboBoxOptions.AddRange(trayList);
                 }
             }
         }

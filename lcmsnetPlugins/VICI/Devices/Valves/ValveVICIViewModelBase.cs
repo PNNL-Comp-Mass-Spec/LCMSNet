@@ -21,9 +21,9 @@ namespace LcmsNet.Devices.Valves
         {
             IsInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            using (ValveIdComboBoxOptions.SuppressChangeNotifications())
+            using (valveIdComboBoxOptions.SuppressChangeNotifications())
             {
-                ValveIdComboBoxOptions.AddRange(new [] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ' });
+                valveIdComboBoxOptions.AddRange(new [] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ' });
             }
             ValveControlTabSelected = true; // Default selected tab
 
@@ -54,7 +54,7 @@ namespace LcmsNet.Devices.Valves
 
         #region Properties
 
-        public ReactiveUI.ReactiveList<char> ValveIdComboBoxOptions => valveIdComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<char> ValveIdComboBoxOptions => valveIdComboBoxOptions;
 
         public char SelectedValveId
         {

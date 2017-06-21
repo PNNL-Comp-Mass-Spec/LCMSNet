@@ -36,7 +36,7 @@ namespace Newport.ESP300
 
         #region Properties
 
-        public ReactiveUI.ReactiveList<string> PositionsList => positionsList;
+        public ReactiveUI.IReadOnlyReactiveList<string> PositionsList => positionsList;
 
         public string Axis1MotorStatus
         {
@@ -379,10 +379,10 @@ namespace Newport.ESP300
 
         private void UpdatePositionListBox()
         {
-            using (PositionsList.SuppressChangeNotifications())
+            using (positionsList.SuppressChangeNotifications())
             {
-                PositionsList.Clear();
-                PositionsList.AddRange(NewportStage.Positions.Keys);
+                positionsList.Clear();
+                positionsList.AddRange(NewportStage.Positions.Keys);
             }
         }
 

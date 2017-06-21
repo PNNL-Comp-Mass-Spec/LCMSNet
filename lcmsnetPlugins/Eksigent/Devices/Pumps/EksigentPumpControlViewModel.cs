@@ -24,9 +24,9 @@ namespace Eksigent.Devices.Pumps
                 m_pump.Error += m_pump_Error;
                 m_pump.StatusUpdate += m_pump_StatusUpdate;
                 m_pump.RequiresOCXInitialization += m_pump_RequiresOCXInitialization;
-                m_pump.PumpStatus += m_pump_PumpStatus;
-                m_pump.MethodNames += m_pump_MethodNames;
-                m_pump.ChannelNumbers += m_pump_ChannelNumbers;
+                m_pump.PumpStatus += Pump_PumpStatus;
+                m_pump.MethodNames += Pump_MethodNames;
+                m_pump.ChannelNumbers += Pump_ChannelNumbers;
             }
             SetBaseDevice(device);
         }
@@ -70,7 +70,7 @@ namespace Eksigent.Devices.Pumps
         private int channelNumber = 1;
         private string statusText = "Unknown";
 
-        public ReactiveUI.ReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
 
         public string SelectedMethod
         {
@@ -135,7 +135,7 @@ namespace Eksigent.Devices.Pumps
         /// Handles the channel numbers.
         /// </summary>
         /// <param name="totalChannels"></param>
-        private void m_pump_ChannelNumbers(int totalChannels)
+        private void Pump_ChannelNumbers(int totalChannels)
         {
             if (ChannelNumber > totalChannels)
             {
@@ -156,7 +156,7 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_pump_PumpStatus(object sender, classDeviceStatusEventArgs e)
+        private void Pump_PumpStatus(object sender, classDeviceStatusEventArgs e)
         {
             UpdateStatusLabelText(sender, e);
         }
@@ -166,12 +166,12 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void m_pump_MethodNames(object sender, List<object> data)
+        private void Pump_MethodNames(object sender, List<object> data)
         {
-            using (MethodComboBoxOptions.SuppressChangeNotifications())
+            using (methodComboBoxOptions.SuppressChangeNotifications())
             {
-                MethodComboBoxOptions.Clear();
-                MethodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
+                methodComboBoxOptions.Clear();
+                methodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
             }
         }
 

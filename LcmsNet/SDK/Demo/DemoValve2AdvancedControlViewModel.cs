@@ -46,7 +46,7 @@ namespace DemoPluginLibrary
         private EightPositionState selectedPosition;
         private string state = "";
 
-        public ReactiveUI.ReactiveList<EightPositionState> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<EightPositionState> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
 
         public EightPositionState SelectedPosition
         {
