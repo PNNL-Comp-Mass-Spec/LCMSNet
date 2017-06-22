@@ -10,9 +10,9 @@
              d:DataContext="{d:DesignInstance {x:Type viewModels:SimConfigurationViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2.5*" />
-            <RowDefinition Height="0.5*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="73" />
         </Grid.RowDefinitions>
         <fluidicsViews:FluidicsControlView Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding FluidicsControlVm}" />
         <TextBlock Grid.Row="1" Margin="3" Foreground="Maroon" FontSize="35" Text="{Binding Elapsed}" />

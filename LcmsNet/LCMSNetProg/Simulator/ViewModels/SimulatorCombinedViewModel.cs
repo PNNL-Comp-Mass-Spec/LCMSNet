@@ -21,11 +21,18 @@ namespace LcmsNet.Simulator.ViewModels
         private readonly SimulatorControlsAndChartsViewModel controls;
         private readonly PopoutViewModel configPopoutVm;
         private readonly PopoutViewModel controlsPopoutVm;
+        private bool bothTacked = true;
 
         public SimConfigurationViewModel ConfigVm => config;
         public SimulatorControlsAndChartsViewModel ControlsVm => controls;
         public PopoutViewModel ConfigPopoutVm => configPopoutVm;
         public PopoutViewModel ControlsPopoutVm => controlsPopoutVm;
+
+        public bool BothTacked
+        {
+            get { return bothTacked; }
+            set { this.RaiseAndSetIfChanged(ref bothTacked, value); }
+        }
 
         private void TackChangeRules(object sender, bool newTackState)
         {
@@ -38,6 +45,7 @@ namespace LcmsNet.Simulator.ViewModels
             {
                 ConfigPopoutVm.Tacked = true;
             }
+            BothTacked = ConfigPopoutVm.Tacked && ControlsPopoutVm.Tacked;
         }
     }
 }
