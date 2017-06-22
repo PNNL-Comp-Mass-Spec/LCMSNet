@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading;
@@ -41,12 +42,14 @@ namespace Agilent.Devices.Pumps
                 m_pump.MethodAdded += Pump_MethodAdded;
                 m_pump.MethodUpdated += Pump_MethodUpdated;
                 m_pump.MonitoringDataReceived += Pump_MonitoringDataReceived;
+                m_pump.PropertyChanged += PumpOnPropertyChanged;
                 using (modeComboBoxOptions.SuppressChangeNotifications())
                 {
                     modeComboBoxOptions.Clear();
                     modeComboBoxOptions.AddRange(Enum.GetValues(typeof(enumPumpAgilentModes)).Cast<enumPumpAgilentModes>());
                 }
 
+                PumpDisplay.SetPumpName(m_pump.Name);
                 NewMethodAvailable += PumpAgilent_NewMethodAvailable;
             }
 
@@ -80,6 +83,14 @@ namespace Agilent.Devices.Pumps
             }
 
             InitializePlots();
+        }
+
+        private void PumpOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(m_pump.Name))
+            {
+                PumpDisplay.SetPumpName(m_pump.Name);
+            }
         }
 
         #endregion

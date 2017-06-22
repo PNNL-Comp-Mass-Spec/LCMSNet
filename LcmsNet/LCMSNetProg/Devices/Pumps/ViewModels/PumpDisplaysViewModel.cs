@@ -40,7 +40,6 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             SetupCommands();
         }
 
-
         private int currentPump;
         private string pumpName = "";
         private string tackType = "Untack";
@@ -141,7 +140,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceRemoved(object sender, IDevice device)
+        private void Manager_DeviceRemoved(object sender, IDevice device)
         {
             // Is this a pump?
             var pump = device as IPump;
@@ -167,7 +166,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         /// Checks to update the name of the device.
         /// </summary>
         /// <param name="sender"></param>
-        void pump_DeviceSaveRequired(object sender, EventArgs e)
+        private void pump_DeviceSaveRequired(object sender, EventArgs e)
         {
             var pump = sender as IPump;
             if (pump == null)
@@ -184,7 +183,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceAdded(object sender, IDevice device)
+        private void Manager_DeviceAdded(object sender, IDevice device)
         {
             // Make sure the device is a pump.
             var pump = device as IPump;
@@ -198,7 +197,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             // Hook into the pumps display calls
             var display = new PumpDisplayViewModel(pump.Name);
 
-            pump.MonitoringDataReceived += DisplayPumpData;
+            pump.MonitoringDataReceived += display.DisplayMonitoringData;
             pump.DeviceSaveRequired += pump_DeviceSaveRequired;
 
             // Make sure we reference this pump
@@ -218,14 +217,6 @@ namespace LcmsNet.Devices.Pumps.ViewModels
                     MobilePhases.AddRange(pump.MobilePhases);
                 }
             }
-        }
-
-        /// <summary>
-        /// Updates the appropriate control
-        /// </summary>
-        void DisplayPumpData(object sender, PumpDataEventArgs e)
-        {
-            pumpMonitorDictionary[e.Pump].DisplayMonitoringData(sender, e);
         }
 
         #endregion

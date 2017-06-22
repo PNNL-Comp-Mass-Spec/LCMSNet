@@ -35,7 +35,7 @@ namespace LcmsNet.Devices.Pumps.Views
         {
             if (this.DataContext is PumpDisplaysViewModel pdvm)
             {
-                pdvm.WhenAnyValue(x => x.PumpMonitorDisplays.CountChanged).Subscribe(x => this.UpdatePumpStatusGrid());
+                pdvm.WhenAnyValue(x => x.PumpMonitorDisplays.Count).Subscribe(x => this.UpdatePumpStatusGrid());
             }
         }
 
@@ -43,10 +43,10 @@ namespace LcmsNet.Devices.Pumps.Views
 
         private void UpdatePumpStatusGrid()
         {
-            PumpStatusGrid.ColumnDefinitions.Clear();
-            PumpStatusGrid.Children.Clear();
             if (this.DataContext is PumpDisplaysViewModel pdvm)
             {
+                PumpStatusGrid.ColumnDefinitions.Clear();
+                PumpStatusGrid.Children.Clear();
                 var previousList = pumpDisplayViews;
                 pumpDisplayViews = new Dictionary<string, PumpDisplayView>();
 

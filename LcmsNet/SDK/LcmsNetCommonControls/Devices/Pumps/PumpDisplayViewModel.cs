@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using LcmsNetDataClasses.Devices.Pumps;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -37,6 +36,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
         private PlotModel dataPressureMonitorPlot;
         private PlotModel dataFlowMonitorPlot;
         private PlotModel dataBMonitorPlot;
+        private readonly ReactiveList<PlotData> plotDataList = new ReactiveList<PlotData>();
 
         /// <summary>
         /// Name of the pump
@@ -148,25 +148,13 @@ namespace LcmsNetCommonControls.Devices.Pumps
                 AxislineColor = OxyColors.DarkGreen,
                 FontSize = 10,
             });
-        }
-
-        /// <summary>
-        /// Displays the monitoring data.
-        /// </summary>
-        public void DisplayMonitoringData(object sender, PumpDataEventArgs args)
-        {
-            var data = new List<PlotData>(args.Time.Count);
-            for (var i = 0; i < args.Time.Count; i++)
-            {
-                data.Add(new PlotData(args.Time[i], args.Pressure[i], args.Flowrate[i], args.PercentB[i]));
-            }
 
             var pressureSeries = new LineSeries()
             {
                 Title = "Pressure (psi)",
                 MarkerType = MarkerType.Circle,
                 Color = OxyColors.Red,
-                ItemsSource = data,
+                ItemsSource = plotDataList,
                 Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Pressure),
                 RenderInLegend = false,
             };
@@ -176,8 +164,8 @@ namespace LcmsNetCommonControls.Devices.Pumps
                 Title = "FlowRate",
                 MarkerType = MarkerType.Triangle,
                 Color = OxyColors.DarkGreen,
-                ItemsSource = data,
-                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData) item).Time), ((PlotData) item).Flow),
+                ItemsSource = plotDataList,
+                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Flow),
                 RenderInLegend = false,
             };
 
@@ -186,18 +174,33 @@ namespace LcmsNetCommonControls.Devices.Pumps
                 Title = "% B",
                 MarkerType = MarkerType.Square,
                 Color = OxyColors.Blue,
-                ItemsSource = data,
-                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData) item).Time), ((PlotData) item).PercentB),
+                ItemsSource = plotDataList,
+                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).PercentB),
                 RenderInLegend = false,
             };
-
-            DataPressureMonitorPlot.Series.Clear();
-            DataFlowMonitorPlot.Series.Clear();
-            DataBMonitorPlot.Series.Clear();
 
             DataPressureMonitorPlot.Series.Add(pressureSeries);
             DataFlowMonitorPlot.Series.Add(flowSeries);
             DataBMonitorPlot.Series.Add(percentBSeries);
+        }
+
+        /// <summary>
+        /// Displays the monitoring data.
+        /// </summary>
+        public void DisplayMonitoringData(object sender, PumpDataEventArgs args)
+        {
+            using (plotDataList.SuppressChangeNotifications())
+            {
+                plotDataList.Clear();
+                for (var i = 0; i < args.Time.Count; i++)
+                {
+                    plotDataList.Add(new PlotData(args.Time[i], args.Pressure[i], args.Flowrate[i], args.PercentB[i]));
+                }
+            }
+
+            DataPressureMonitorPlot.InvalidatePlot(true);
+            DataFlowMonitorPlot.InvalidatePlot(true);
+            DataBMonitorPlot.InvalidatePlot(true);
         }
 
         /// <summary>
