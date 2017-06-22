@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LcmsNet.Simulator.Views
+namespace LcmsNet.Devices.Views
 {
     /// <summary>
-    /// Interaction logic for SimConfigurationView.xaml
+    /// Interaction logic for AdvancedDeviceControlPanelView.xaml
     /// </summary>
-    public partial class SimConfigurationView : UserControl
+    public partial class AdvancedDeviceControlPanelView : UserControl
     {
-        public SimConfigurationView()
+        public AdvancedDeviceControlPanelView()
         {
             InitializeComponent();
         }

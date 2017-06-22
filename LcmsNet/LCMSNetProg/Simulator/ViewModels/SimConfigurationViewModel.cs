@@ -2,6 +2,7 @@
 using FluidicsSDK;
 using FluidicsSDK.ModelCheckers;
 using FluidicsSimulator;
+using LcmsNet.Devices.Fluidics.ViewModels;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels
@@ -23,7 +24,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// <param name="anything">really, anything; only there to differentiate from the public no-parameter constructor</param>
         private SimConfigurationViewModel(object anything)
         {
-            mod = classFluidicsModerator.Moderator;
+            mod = FluidicsModeratorWpf.Moderator;
             mod.ModelChanged += ModelChangedHandler;
             Elapsed = "+00:00:00";
 
@@ -50,8 +51,11 @@ namespace LcmsNet.Simulator.ViewModels
 
         //private FluidicsControlViewModel fluidicsControlVm;
         private static SimConfigurationViewModel instance;
-        private readonly classFluidicsModerator mod;
+        private readonly FluidicsModeratorWpf mod;
+        private readonly FluidicsControlViewModel fluidicsControlVm = new FluidicsControlViewModel();
         private string elapsed;
+
+        public FluidicsControlViewModel FluidicsControlVm => fluidicsControlVm;
 
         public static SimConfigurationViewModel GetInstance
         {

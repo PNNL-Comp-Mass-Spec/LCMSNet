@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LcmsNet.Simulator.Views
+namespace LcmsNet.Devices.Fluidics.Views
 {
     /// <summary>
-    /// Interaction logic for SimConfigurationView.xaml
+    /// Interaction logic for FluidicsDesignView.xaml
     /// </summary>
-    public partial class SimConfigurationView : UserControl
+    public partial class FluidicsDesignView : UserControl
     {
-        public SimConfigurationView()
+        public FluidicsDesignView()
         {
             InitializeComponent();
         }

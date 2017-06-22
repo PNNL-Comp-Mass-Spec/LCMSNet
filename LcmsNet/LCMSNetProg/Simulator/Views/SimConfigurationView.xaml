@@ -4,20 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
-             xmlns:lcmsNet="clr-namespace:LcmsNet"
+             xmlns:fluidicsViews="clr-namespace:LcmsNet.Devices.Fluidics.Views"
              mc:Ignorable="d"
              d:DesignHeight="419" d:DesignWidth="707"
-             d:DataContext="{d:DesignInstance {x:Type viewModels:SimConfigurationViewModel}, IsDesignTimeCreatable=True}"
-             DataContextChanged="SimConfigurationView_OnDataContextChanged">
+             d:DataContext="{d:DesignInstance {x:Type viewModels:SimConfigurationViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2.5*" />
             <RowDefinition Height="0.5*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <WindowsFormsHost Grid.Row="0" Grid.RowSpan="3">
-            <lcmsNet:controlFluidicsControl Dock="Fill" x:Name="CtlFluidicControl" />
-        </WindowsFormsHost>
+        <fluidicsViews:FluidicsControlView Grid.Row="0" Grid.RowSpan="3" DataContext="{Binding FluidicsControlVm}" />
         <TextBlock Grid.Row="1" Margin="3" Foreground="Maroon" FontSize="35" Text="{Binding Elapsed}" />
     </Grid>
 </UserControl>

@@ -182,12 +182,30 @@
     <Compile Include="Devices\DefaultUserDevice.Designer.cs">
       <DependentUpon>DefaultUserDevice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\DefaultUserDeviceView.xaml.cs">
+      <DependentUpon>DefaultUserDeviceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\DefaultUserDeviceViewModel.cs" />
     <Compile Include="Devices\DeviceAddController.cs" />
     <Compile Include="Devices\Fluidics\FluidicsDesign.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Devices\Fluidics\FluidicsDesign.Designer.cs">
       <DependentUpon>FluidicsDesign.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Fluidics\FluidicsDesign2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Devices\Fluidics\FluidicsDesign2.Designer.cs">
+      <DependentUpon>FluidicsDesign2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Fluidics\ViewModels\FluidicsControlViewModel.cs" />
+    <Compile Include="Devices\Fluidics\ViewModels\FluidicsDesignViewModel.cs" />
+    <Compile Include="Devices\Fluidics\Views\FluidicsControlView.xaml.cs">
+      <DependentUpon>FluidicsControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Fluidics\Views\FluidicsDesignView.xaml.cs">
+      <DependentUpon>FluidicsDesignView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\Pumps\formPumpDisplays2.cs">
       <SubType>Form</SubType>
@@ -205,10 +223,18 @@
     <Compile Include="Devices\Pumps\Views\PumpDisplaysWindow.xaml.cs">
       <DependentUpon>PumpDisplaysWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Devices\ViewModels\AdvancedDeviceControlPanelViewModel.cs" />
+    <Compile Include="Devices\ViewModels\AdvancedDeviceGroupControlViewModel.cs" />
     <Compile Include="Devices\ViewModels\DeviceAddViewModel.cs" />
     <Compile Include="Devices\ViewModels\FailedDevicesViewModel.cs" />
     <Compile Include="Devices\ViewModels\ModelCheckReportsViewModel.cs" />
     <Compile Include="Devices\ViewModels\ModelCheckReportViewModel.cs" />
+    <Compile Include="Devices\Views\AdvancedDeviceControlPanelView.xaml.cs">
+      <DependentUpon>AdvancedDeviceControlPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Views\AdvancedDeviceGroupControlView.xaml.cs">
+      <DependentUpon>AdvancedDeviceGroupControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Views\DeviceAddWindow.xaml.cs">
       <DependentUpon>DeviceAddWindow.xaml</DependentUpon>
     </Compile>
@@ -221,6 +247,7 @@
     <Compile Include="Devices\Views\ModelCheckReportView.xaml.cs">
       <DependentUpon>ModelCheckReportView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Views\SizeLimitedContentControl.cs" />
     <Compile Include="frmEmulationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -863,6 +890,9 @@
     <EmbeddedResource Include="Devices\Fluidics\FluidicsDesign.resx">
       <DependentUpon>FluidicsDesign.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Fluidics\FluidicsDesign2.resx">
+      <DependentUpon>FluidicsDesign2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Devices\formDeviceManager.resx">
       <DependentUpon>formDeviceManager.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1317,6 +1347,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Devices\DefaultUserDeviceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Fluidics\Views\FluidicsControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Fluidics\Views\FluidicsDesignView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Devices\Pumps\Views\MobilePhaseEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1326,6 +1368,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Devices\Pumps\Views\PumpDisplaysWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Views\AdvancedDeviceControlPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Views\AdvancedDeviceGroupControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1536,6 +1586,7 @@ xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
 
 if not exist "$(TargetDir)Plugins\" mkdir "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.dll" "$(TargetDir)Plugins\"
+xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.pdb" "$(TargetDir)Plugins\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"

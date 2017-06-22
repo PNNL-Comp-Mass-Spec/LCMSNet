@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="LcmsNet.Devices.Fluidics.Views.FluidicsControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Devices.Fluidics.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:views="clr-namespace:LcmsNet.Method.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="428" d:DesignWidth="700"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:FluidicsControlViewModel}, IsDesignTimeCreatable=True}"
+             DataContextChanged="FluidicsControlView_OnDataContextChanged">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" x:Name="ScrollViewer" SizeChanged="DrawingContainer_OnSizeChanged" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <views:DrawingVisualHost x:Name="DrawingContainer" VerticalAlignment="Top" HorizontalAlignment="Left" MouseLeftButtonDown="DrawingContainer_OnMouseDown" MouseLeftButtonUp="DrawingContainer_OnMouseUp" MouseMove="DrawingContainer_OnMouseMove" KeyDown="DrawingContainer_OnKeyDown" KeyUp="DrawingContainer_OnKeyUp" />
+        </ScrollViewer>
+        <DockPanel Grid.Row="1" LastChildFill="False">
+            <GroupBox Header="Zoom" DockPanel.Dock="Left" MinWidth="175">
+                <Grid Margin="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <xctk:IntegerUpDown Grid.Column="0" Margin="3" Width="35" MaxHeight="25" ShowButtonSpinner="False" Minimum="{Binding ZoomMin}" Maximum="{Binding ZoomMax}" Value="{Binding ZoomPercent}" />
+                    <TextBlock Grid.Column="1" Margin="0,0,8,0" VerticalAlignment="Center" Text="%" />
+                    <Slider Grid.Column="2" MinWidth="100" VerticalAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="{Binding ZoomMin}" Maximum="{Binding ZoomMax}" Value="{Binding ZoomPercent}" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Transparency" DockPanel.Dock="Right" MinWidth="250">
+                <Grid Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Connection" />
+                    <Slider Grid.Row="1" Grid.Column="0" Margin="3,0" MinWidth="70" VerticalAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="255" Value="{Binding ConnectionTransparency}" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Port" />
+                    <Slider Grid.Row="1" Grid.Column="1" Margin="3,0" MinWidth="70" VerticalAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="255" Value="{Binding PortTransparency}" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Device" />
+                    <Slider Grid.Row="1" Grid.Column="2" Margin="3,0" MinWidth="70" VerticalAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="255" Value="{Binding DeviceTransparency}" />
+                </Grid>
+            </GroupBox>
+        </DockPanel>
+    </Grid>
+</UserControl>

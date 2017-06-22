@@ -69,7 +69,7 @@ namespace LcmsNet.Notification.ViewModels
             manager.DeviceRemoved += Manager_DeviceRemoved;
             manager.DeviceAdded += Manager_DeviceAdded;
 
-            var model = classFluidicsModerator.Moderator;
+            var model = FluidicsModeratorWpf.Moderator;
             model.ModelCheckAdded += Model_ModelCheckAdded;
             foreach (var modelCheck in model.GetModelCheckers())
             {

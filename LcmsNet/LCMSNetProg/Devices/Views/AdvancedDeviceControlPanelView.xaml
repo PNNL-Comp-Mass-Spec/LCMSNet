@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="LcmsNet.Devices.Views.AdvancedDeviceControlPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:LcmsNet.Devices.ViewModels"
+             xmlns:views="clr-namespace:LcmsNet.Devices.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="846" d:DesignWidth="708"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:AdvancedDeviceControlPanelViewModel}, IsDesignTimeCreatable=True}">
+    <TabControl ItemsSource="{Binding DeviceGroups}">
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <TabControl.ContentTemplate>
+            <DataTemplate DataType="{x:Type viewModels:AdvancedDeviceControlPanelViewModel+DeviceGroup}">
+                <views:AdvancedDeviceGroupControlView DataContext="{Binding Content}" />
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+    </TabControl>
+</UserControl>

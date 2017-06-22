@@ -132,7 +132,7 @@ namespace LcmsNet
 
         private readonly List<IDisposable> disposables = new List<IDisposable>();
 
-        private FluidicsDesign m_fluidicsDesign;
+        private FluidicsDesign2 m_fluidicsDesign;
 
         /// <summary>
         /// Method Scheduler and execution engine.
@@ -231,7 +231,7 @@ namespace LcmsNet
             classSQLiteTools.GetSepTypeList(false);
 
             // Fludics Design display
-            m_fluidicsDesign = new FluidicsDesign
+            m_fluidicsDesign = new FluidicsDesign2
             {
                 Icon = Icon,
                 Dock = DockStyle.Fill

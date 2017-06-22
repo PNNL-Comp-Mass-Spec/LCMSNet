@@ -31,7 +31,7 @@ namespace LcmsNet.Simulator.ViewModels
             selectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
             selectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
-            reporter = new ModelCheckReportsViewModel(classFluidicsModerator.Moderator);
+            reporter = new ModelCheckReportsViewModel(FluidicsModeratorWpf.Moderator);
             ganttChartTimelineVm = new LCMethodTimelineViewModel();
             ganttChartTimelineVm.RenderMode = enumLCMethodRenderMode.Column;
             conversationChartTimelineVm = new LCMethodTimelineViewModel();
