@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:LcmsNetCommonControls.ViewModels"
         xmlns:views="clr-namespace:LcmsNetCommonControls.Views"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="500" Width="500"
+        Title="Popout Window" Height="500" Width="500"
         d:DataContext="{d:DesignInstance {x:Type viewModels:PopoutViewModel}, IsDesignTimeCreatable=True}"
         DataContextChanged="PopoutWindow_OnDataContextChanged"
         Closed="PopoutWindow_OnClosed"
