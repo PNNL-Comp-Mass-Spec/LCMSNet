@@ -17,6 +17,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using LcmsNetSDK;
 
 namespace LcmsNetDataClasses
@@ -27,6 +28,21 @@ namespace LcmsNetDataClasses
     [Serializable]
     public class classDMSData : classDataClassBase, INotifyPropertyChangedExt
     {
+        /// <summary>
+        /// The matching string to ensure only valid characters exist in a dataset name
+        /// </summary>
+        public const string ValidDatasetNameRegexString = @"^[a-zA-Z0-9_\-]+$";
+
+        /// <summary>
+        /// The list of characters allowed in a dataset name
+        /// </summary>
+        public const string ValidDatasetNameCharacters = @"Valid characters are: 'A-Z', 'a-z', '0-9', '-', '_' (no spaces)";
+
+        /// <summary>
+        /// Regex to use to test if a dataset name only contains valid characters
+        /// </summary>
+        public static readonly Regex NameValidationRegex = new Regex(ValidDatasetNameRegexString, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         public classDMSData()
         {
             Batch = -1;
@@ -227,6 +243,17 @@ namespace LcmsNetDataClasses
                 return "Request " + RequestName;
 
             return "RequestID " + RequestID;
+        }
+
+        public bool DatasetNameCharactersValid()
+        {
+            var name = DatasetName;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = RequestName;
+            }
+
+            return NameValidationRegex.IsMatch(name);
         }
 
         #endregion

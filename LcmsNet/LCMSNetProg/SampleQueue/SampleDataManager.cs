@@ -333,6 +333,14 @@ namespace LcmsNet.SampleQueue
                             {
                                 continue;
                             }
+
+                            sample.Sample.SampleErrors = string.Empty;
+                            if (!sample.Sample.DmsData.DatasetNameCharactersValid())
+                            {
+                                sample.Sample.SampleErrors += "Request name contains invalid characters!\n" +
+                                                              classDMSData.ValidDatasetNameCharacters + "\n";
+                                foundError = true;
+                            }
                             // Validate sample and add it to the run queue
 
                             // Validate sample.
@@ -342,7 +350,7 @@ namespace LcmsNet.SampleQueue
 
                                 if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
                                 {
-                                    sample.Sample.SampleErrors = mValidator.CreateErrorListFromErrors(sampleValidErrors);
+                                    sample.Sample.SampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
                                     foundError = true;
                                 }
                                 else

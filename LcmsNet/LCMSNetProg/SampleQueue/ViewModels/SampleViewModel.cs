@@ -54,8 +54,16 @@ namespace LcmsNet.SampleQueue.ViewModels
             });
 
             this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.DatasetName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.RequestName).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+            this.WhenAnyValue(x => x.Sample.DmsData.DatasetName).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(RequestName));
+                this.SetRowColors();
+            });
+            this.WhenAnyValue(x => x.Sample.DmsData.RequestName).Subscribe(x =>
+            {
+                this.RaisePropertyChanged(nameof(RequestName));
+                this.SetRowColors();
+            });
 
             this.WhenAnyValue(x => x.Sample.InstrumentData).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
             this.WhenAnyValue(x => x.Sample.InstrumentData.MethodName).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
@@ -219,6 +227,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 RequestNameBackColor = Brushes.Crimson;
                 RequestNameToolTipText = "Duplicate Request Name Found!";
+            }
+            else if (!Sample.DmsData.DatasetNameCharactersValid())
+            {
+                RequestNameBackColor = Brushes.Crimson;
+                RequestNameToolTipText = "Request name contains invalid characters!\n" + classDMSData.ValidDatasetNameCharacters;
             }
             else
             {
