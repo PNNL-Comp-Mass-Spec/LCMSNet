@@ -101,11 +101,11 @@
             </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <commonViews:PopoutView Grid.Column="0" DataContext="{Binding ConfigPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Fluidics Configuration" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
-            <views:SimConfigurationView DataContext="{Binding Child}" />
+            <views:SimConfigurationView />
         </commonViews:PopoutView>
         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Visibility="{Binding BothTacked, Converter={StaticResource BoolToVis}}" />
         <commonViews:PopoutView Grid.Column="2" DataContext="{Binding ControlsPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Simulator Controls and Charts" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
-            <views:SimulatorControlsAndChartsView DataContext="{Binding Child}" />
+            <views:SimulatorControlsAndChartsView />
         </commonViews:PopoutView>
     </Grid>
 </UserControl>

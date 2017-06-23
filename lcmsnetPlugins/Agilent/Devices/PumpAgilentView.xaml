@@ -184,7 +184,7 @@
         </TabControl>
         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" />
         <commonViews:PopoutView Grid.Column="2" Grid.RowSpan="6" VerticalButtonAlignment="Top" HorizontalButtonAlignment="Right" OverlayButton="True" DataContext="{Binding PumpPopoutVm}" WindowHeight="577" WindowWidth="400" Title="{Binding Child.PumpName}">
-            <pumpViews:PumpDisplayView DataContext="{Binding Child}" />
+            <pumpViews:PumpDisplayView />
         </commonViews:PopoutView>
     </Grid>
 </UserControl>

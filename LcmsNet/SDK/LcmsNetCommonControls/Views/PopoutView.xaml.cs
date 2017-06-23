@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using LcmsNetCommonControls.ViewModels;
 using ReactiveUI;
 
@@ -18,6 +19,16 @@ namespace LcmsNetCommonControls.Views
         public PopoutView()
         {
             InitializeComponent();
+            this.WhenAnyValue(x => x.Content).Subscribe(x => this.SetContentDataContext());
+        }
+
+        private void SetContentDataContext()
+        {
+            if (this.Content is FrameworkElement fe)
+            {
+                var binding = new Binding("Child");
+                fe.SetBinding(DataContextProperty, binding);
+            }
         }
 
         #region Button Positioning
