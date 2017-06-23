@@ -13,6 +13,7 @@ using LcmsNetDataClasses.Experiment;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
 using LcmsNetDmsTools;
+using LcmsNetSQLiteTools;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue
@@ -43,7 +44,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="sender"></param>
         /// <param name="previousStatus"></param>
         /// <param name="newStatus"></param>
-        void column_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
+        private void column_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
         {
             // Make sure we have at least one column that is enabled
             var enabled = false;
@@ -150,7 +151,7 @@ namespace LcmsNet.SampleQueue
 
             try
             {
-                mValidator = new classDMSSampleValidator(SampleQueueComboBoxOptions.CartConfigOptions);
+                mValidator = new classDMSSampleValidator(CartConfigOptions);
                 Initialize(sampleQueue);
             }
             catch (Exception ex)
@@ -195,7 +196,7 @@ namespace LcmsNet.SampleQueue
             }
         }
 
-        void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
+        private void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
             if (e.SettingName.Equals(classLCMSSettings.PARAM_DMSTOOL) && e.SettingValue != string.Empty)
             {
@@ -462,18 +463,7 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         private bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
-            if (method == null)
-                return false;
-
-            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
-            {
-                if (o.Equals(method))
-                {
-                    SampleQueueComboBoxOptions.LcMethodOptions.Remove(method);
-                    break;
-                }
-            }
-            return true;
+            return RemoveMethod(method);
         }
 
         /// <summary>
@@ -483,19 +473,7 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         private void RemoveMethodName(string methodName)
         {
-            classLCMethod oFound = null;
-            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
-            {
-                var name = o.ToString();
-                if (methodName == name)
-                {
-                    oFound = o;
-                }
-            }
-            if (oFound != null)
-            {
-                SampleQueueComboBoxOptions.LcMethodOptions.Remove(oFound);
-            }
+            RemoveMethodByName(methodName);
         }
 
         /// <summary>
@@ -505,10 +483,9 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         private bool ContainsMethod(string methodName)
         {
-            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
+            foreach (var o in LcMethodOptions)
             {
-                var name = o.ToString();
-                if (methodName == name)
+                if (methodName == o.Name)
                 {
                     return true;
                 }
@@ -553,40 +530,7 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         private bool Manager_MethodAdded(object sender, classLCMethod method)
         {
-            // make sure the method is not null
-            if (method == null)
-                return false;
-
-            // Find the method if name exists
-            var found = false;
-            foreach (var o in SampleQueueComboBoxOptions.LcMethodOptions)
-            {
-                var name = o.ToString();
-                if (name == method.Name)
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            // Update or add the method
-            if (found == false)
-            {
-                SampleQueueComboBoxOptions.LcMethodOptions.Add(method);
-                // If we just added a sample, we want to make sure the samples have a method selected.
-                if (SampleQueueComboBoxOptions.LcMethodOptions.Count == 1)
-                {
-                }
-            }
-            else
-            {
-                // Here we update the method that was in the list, with the new one that was added/updated
-                var indexOf = SampleQueueComboBoxOptions.LcMethodOptions.IndexOf(method);
-                if (indexOf >= 0)
-                    SampleQueueComboBoxOptions.LcMethodOptions[indexOf] = method;
-            }
-
-            return true;
+            return AddOrUpdateLCMethod(method);
         }
 
         #endregion
@@ -770,12 +714,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void ShowAutoSamplerTrays()
         {
-            SampleQueueComboBoxOptions.PalTrayOptions.Clear();
-
-            foreach (var tray in autosamplerTrays)
-            {
-                SampleQueueComboBoxOptions.PalTrayOptions.Add(tray);
-            }
+            SetPalTrays(autosamplerTrays);
         }
 
         /// <summary>
@@ -783,12 +722,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void ShowInstrumentMethods()
         {
-            SampleQueueComboBoxOptions.InstrumentMethodOptions.Clear();
-
-            foreach (var tray in instrumentMethods)
-            {
-                SampleQueueComboBoxOptions.InstrumentMethodOptions.Add(tray);
-            }
+            SetInstrumentMethods(instrumentMethods);
         }
 
         /// <summary>
@@ -796,21 +730,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void ShowLCSeparationMethods()
         {
-            SampleQueueComboBoxOptions.LcMethodOptions.Clear();
-
-            foreach (var method in classLCMethodManager.Manager.Methods.Values)
-            {
-                AddLCMethod(method);
-            }
-        }
-
-        /// <summary>
-        /// Adds the method to the user interface.
-        /// </summary>
-        /// <param name="method"></param>
-        private void AddLCMethod(classLCMethod method)
-        {
-            SampleQueueComboBoxOptions.LcMethodOptions.Add(method);
+            SetLCMethods(classLCMethodManager.Manager.Methods.Values);
         }
 
         #endregion
@@ -1334,7 +1254,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void SampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1472,7 +1392,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        void SampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
         {
             using (Samples.SuppressChangeNotifications())
             {
@@ -1493,6 +1413,194 @@ namespace LcmsNet.SampleQueue
         /// Gets or sets how to handle samples being deleted from columns
         /// </summary>
         public enumColumnDataHandling ColumnHandling { get; set; }
+
+        #endregion
+
+        #region Static data - ComboBoxOptions
+
+        private static readonly ReactiveList<classLCMethod> lcMethodOptions = new ReactiveList<classLCMethod>();
+        private static readonly ReactiveList<string> instrumentMethodOptions = new ReactiveList<string>();
+        private static readonly ReactiveList<string> datasetTypeOptions = new ReactiveList<string>();
+        private static readonly ReactiveList<string> cartConfigOptions = new ReactiveList<string>();
+        private static readonly ReactiveList<string> palTrayOptions = new ReactiveList<string>();
+
+        public static IReadOnlyReactiveList<classLCMethod> LcMethodOptions => lcMethodOptions;
+        public static IReadOnlyReactiveList<string> InstrumentMethodOptions => instrumentMethodOptions;
+        public static IReadOnlyReactiveList<string> DatasetTypeOptions => datasetTypeOptions;
+        public static IReadOnlyReactiveList<string> CartConfigOptions => cartConfigOptions;
+        public static IReadOnlyReactiveList<string> PalTrayOptions => palTrayOptions;
+
+        // If null, no error retrieving the cart config names from the database; otherwise, the error that occurred
+        public static string CartConfigOptionsError { get; private set; }
+
+        static SampleDataManager()
+        {
+            CartConfigOptionsError = null;
+
+#if DEBUG
+            // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                CartConfigOptionsError = "Values not read, because we are running in Visual Studio's Design Mode";
+                return;
+            }
+#endif
+
+            // Add the dataset type items to the data grid
+            try
+            {
+                var datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
+                datasetTypeOptions.Clear();
+                datasetTypeOptions.AddRange(datasetTypes);
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(1, "The sample queue could not load the dataset type list.", ex);
+            }
+
+            // Get the list of cart configuration names from DMS
+            try
+            {
+                var totalConfigCount = classSQLiteTools.GetCartConfigNameList(false).Count;
+                var cartName = classCartConfiguration.CartName;
+                var cartConfigList = classSQLiteTools.GetCartConfigNameList(cartName, false);
+                if (cartConfigList.Count > 0)
+                {
+                    cartConfigOptions.Clear();
+                    cartConfigOptions.AddRange(cartConfigList);
+                }
+                else
+                {
+                    if (totalConfigCount > 0)
+                    {
+                        CartConfigOptionsError = "No cart configurations found that match the supplied cart name: \"" + cartName + "\".\n" +
+                                                 "Fix: close, fix the cart name, and restart.";
+                    }
+                    else
+                    {
+                        CartConfigOptionsError = "No cart configurations found. Can this computer communicate with DMS? Fix and restart LCMSNet";
+                    }
+                }
+            }
+            catch (classDatabaseConnectionStringException ex)
+            {
+                // The SQLite connection string wasn't found
+                var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
+                             "Please close LcmsNet program and correct the configuration file";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                return;
+            }
+            catch (classDatabaseDataException ex)
+            {
+                // There was a problem getting the list of LC carts from the cache db
+                var innerException = string.Empty;
+                if (ex.InnerException != null)
+                    innerException = ex.InnerException.Message;
+                var errMsg = "Exception getting LC cart config name list from DMS: " + innerException + "\r\n" +
+                             "As a workaround, you may manually type the cart config name when needed.\r\n" +
+                             "You may retry retrieving the cart list later, if desired.";
+                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                return;
+            }
+        }
+
+        private static void SetPalTrays(IEnumerable<string> trays)
+        {
+            using (palTrayOptions.SuppressChangeNotifications())
+            {
+                palTrayOptions.Clear();
+                palTrayOptions.AddRange(trays);
+            }
+        }
+
+        private static void SetInstrumentMethods(IEnumerable<string> instrumentMethods)
+        {
+            using (instrumentMethodOptions.SuppressChangeNotifications())
+            {
+                instrumentMethodOptions.Clear();
+                instrumentMethodOptions.AddRange(instrumentMethods);
+            }
+        }
+
+        private static void SetLCMethods(IEnumerable<classLCMethod> lcMethods)
+        {
+            using (lcMethodOptions.SuppressChangeNotifications())
+            {
+                lcMethodOptions.Clear();
+                lcMethodOptions.AddRange(lcMethods);
+            }
+        }
+
+        private static bool AddOrUpdateLCMethod(classLCMethod method)
+        {
+            // make sure the method is not null
+            if (method == null)
+                return false;
+
+            // Find the method if name exists
+            var found = false;
+            foreach (var o in lcMethodOptions)
+            {
+                var name = o.ToString();
+                if (name == method.Name)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            // Update or add the method
+            if (found == false)
+            {
+                lcMethodOptions.Add(method);
+                // If we just added a sample, we want to make sure the samples have a method selected.
+                if (lcMethodOptions.Count == 1)
+                {
+                }
+            }
+            else
+            {
+                // Here we update the method that was in the list, with the new one that was added/updated
+                var indexOf = lcMethodOptions.IndexOf(method);
+                if (indexOf >= 0)
+                    lcMethodOptions[indexOf] = method;
+            }
+
+            return true;
+        }
+
+        private static bool RemoveMethod(classLCMethod method)
+        {
+            if (method == null)
+                return false;
+
+            foreach (var o in lcMethodOptions)
+            {
+                if (o.Equals(method))
+                {
+                    lcMethodOptions.Remove(o);
+                    break;
+                }
+            }
+            return true;
+        }
+
+        private static void RemoveMethodByName(string methodName)
+        {
+            classLCMethod oFound = null;
+            foreach (var o in LcMethodOptions)
+            {
+                var name = o.ToString();
+                if (methodName == name)
+                {
+                    oFound = o;
+                }
+            }
+            if (oFound != null)
+            {
+                lcMethodOptions.Remove(oFound);
+            }
+        }
 
         #endregion
     }

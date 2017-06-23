@@ -20,7 +20,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
-        public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
+        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
 
         private readonly ObservableAsPropertyHelper<string> columnHeader;
 
@@ -313,7 +313,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 // Find the first valid LC Method that uses the specified column?
                 classLCMethod method = null;
-                foreach (var lcMethod in SampleQueueComboBoxOptions.LcMethodOptions)
+                foreach (var lcMethod in SampleDataManager.LcMethodOptions)
                 {
                     if (lcMethod.Column == column)
                     {

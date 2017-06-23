@@ -6,7 +6,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class MoveToMethodSelectorViewModel : ReactiveObject
     {
-        public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
+        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
 
         /// <summary>
         /// Default constructor.

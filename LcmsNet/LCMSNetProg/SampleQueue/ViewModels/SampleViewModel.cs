@@ -81,12 +81,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
-        public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
-        public ReactiveList<string> DatasetTypeComboBoxOptions => SampleQueueComboBoxOptions.DatasetTypeOptions;
-        public ReactiveList<string> PalTrayComboBoxOptions => SampleQueueComboBoxOptions.PalTrayOptions;
-        public ReactiveList<string> InstrumentMethodComboBoxOptions => SampleQueueComboBoxOptions.InstrumentMethodOptions;
-        public ReactiveList<string> CartConfigComboBoxOptions => SampleQueueComboBoxOptions.CartConfigOptions;
-        public string CartConfigError => SampleQueueComboBoxOptions.CartConfigOptionsError;
+        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
+        public IReadOnlyReactiveList<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
+        public IReadOnlyReactiveList<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
+        public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
+        public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
         #region Row and cell colors
 

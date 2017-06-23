@@ -19,7 +19,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
-        public ReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleQueueComboBoxOptions.LcMethodOptions;
+        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
 
         private classLCMethod selectedLCMethod;
 
