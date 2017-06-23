@@ -158,8 +158,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)lib"
-xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)lib"
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib"
+xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib"
 xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)lib"
 </PostBuildEvent>
   </PropertyGroup>
