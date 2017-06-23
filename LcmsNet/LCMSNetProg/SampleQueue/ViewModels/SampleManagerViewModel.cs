@@ -122,9 +122,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 sampleQueue.SamplesWaitingToRun += m_sampleQueue_SamplesWaitingToRun;
             }
 
-            //
             // Load up the data to the appropiate sub-controls.
-            //
             SampleDataManager = new SampleDataManager(sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(dmsView, SampleDataManager);
             ColumnManagerViewModel = new ColumnManagerViewModel(dmsView, SampleDataManager);
@@ -382,17 +380,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void StopQueue()
         {
-            //
             // This tells anyone else using the samples to STOP!
             // For the scheduler this would tell him to stop first
             // so that he can move the samples appropiately.
-            //
             Stop?.Invoke(this, new EventArgs());
 
-            //
             // Moves the samples from the running queue back onto the
             // waiting queue.
-            //
             sampleQueue.StopRunningQueue();
             ToggleRunButton(true, false);
         }
@@ -417,10 +411,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
 
             // Make sure the samples pass the minimum QA/QC checks before running!
-            //
             // These checks include seeing if the sample has a valid method.
             // Seeing if the sample's method has all of the devices present in the method.
-            //
             // Later we will add to make sure none of the devices have an error that has
             // been thrown on them.
             var errors = new Dictionary<classSampleData, List<classSampleValidationError>>();

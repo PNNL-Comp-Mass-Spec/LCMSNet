@@ -302,9 +302,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         statusMessage = "The sample is scheduled to run and waiting.";
                         break;
                     default:
-                        //
                         // Should never get here
-                        //
                         break;
                 }
 
@@ -386,9 +384,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         statusMessage = "Waiting";
                         break;
                     default:
-                        //
                         // Should never get here
-                        //
                         break;
                 }
 

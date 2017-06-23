@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Windows.Data;
 using System.Windows.Media;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetDataClasses;
@@ -191,9 +190,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void SetColumnStatus()
         {
-            //
             // Status updates
-            //
             if (m_columnData.Status == enumColumnStatus.Disabled)
             {
                 IsViewEnabled = false;
@@ -241,11 +238,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <returns></returns>
         protected override void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
-            //
             // For every sample, add the column data to it, then add it into the manager.
             // We don't add to our list first so the manager can verify the sample and
             // make sure we don't have duplicates.
-            //
             foreach (var sample in samples)
                 sample.ColumnData = m_columnData;
 
@@ -262,9 +257,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var numEnabledColumns = classCartConfiguration.NumberOfEnabledColumns;
 
-            //
             // We are moving the sample by N in the queue to offset for the enabled / disabled columns.
-            //
             offset *= numEnabledColumns;
             base.MoveSelectedSamples(offset, enumMoveSampleType.Column);
         }
@@ -307,10 +300,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 if (selectedSamples.Count < 1)
                     return;
 
-                //
                 // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
                 // Don't put a column that has been run, at the end of the queue again.
-                //
                 var samples = new List<classSampleData>();
                 foreach (var sample in selectedSamples)
                 {
@@ -333,10 +324,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 using (Samples.SuppressChangeNotifications())
                 {
-                    //
                     // Get the list of unique id's from the samples and
                     // change the column to put the samples on.
-                    //
 
                     // Could keep track of updated IDs with
                     // var ids = new List<long>();

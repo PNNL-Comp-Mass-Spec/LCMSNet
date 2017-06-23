@@ -38,10 +38,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public List<classLCMethod> SelectedMethods
         {
-            get
-            {
-                return ListSelectedLCMethods.Select(x => x.Clone() as classLCMethod).ToList();
-            }
+            get { return ListSelectedLCMethods.Select(x => x.Clone() as classLCMethod).ToList(); }
         }
 
         private readonly object listSelectedLcMethodsLock = new object();

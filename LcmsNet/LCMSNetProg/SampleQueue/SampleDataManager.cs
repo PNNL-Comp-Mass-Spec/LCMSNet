@@ -45,9 +45,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="newStatus"></param>
         void column_StatusChanged(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus)
         {
-            //
             // Make sure we have at least one column that is enabled
-            //
             var enabled = false;
             foreach (var column in classCartConfiguration.Columns)
             {
@@ -58,9 +56,7 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
-            //
             // If at least one column is not enabled, then we disable the sample queue
-            //
             HasValidColumns = enabled;
 
             SampleQueue.UpdateAllSamples();
@@ -240,16 +236,12 @@ namespace LcmsNet.SampleQueue
 
             SampleQueue = sampleQueue;
 
-            //
             // Lists that hold information to be used by the sample queue combo boxes.
-            //
             autoSamplerMethods = new List<string>();
             autosamplerTrays = new List<string>();
             instrumentMethods = new List<string>();
 
-            //
             // Hook into the method manager so we can update list boxes when methods change...
-            //
             if (classLCMethodManager.Manager != null)
             {
                 classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
@@ -257,9 +249,7 @@ namespace LcmsNet.SampleQueue
                 classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
             }
 
-            //
             // Update Method Combo Boxes
-            //
             ShowAutoSamplerMethods();
             ShowAutoSamplerTrays();
             ShowInstrumentMethods();
@@ -827,7 +817,6 @@ namespace LcmsNet.SampleQueue
 
         #region Utility Methods
 
-
         /// <summary>
         /// Updates the sample with new data and alerts all listening objects.
         /// </summary>
@@ -852,9 +841,7 @@ namespace LcmsNet.SampleQueue
             if (samples.Count < 1)
                 return;
 
-            //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            //
             samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
@@ -872,9 +859,7 @@ namespace LcmsNet.SampleQueue
 
         public void ResetDatasetName(List<classSampleData> samples)
         {
-            //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            //
             samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (samples.Count < 1)
@@ -1021,9 +1006,7 @@ namespace LcmsNet.SampleQueue
                 newSample.LCMethod = new classLCMethod();
             }
 
-            //
             // Clear out any DMS information from the blank
-            //
             newSample.DmsData.Batch = 0;
             newSample.DmsData.Block = 0;
             newSample.DmsData.Comment = "Blank";
@@ -1048,9 +1031,7 @@ namespace LcmsNet.SampleQueue
         {
             classSampleData newData = null;
 
-            //
             // If we have a sample, get the previous sample data.
-            //
             if (Samples.Count > 0)
             {
                 var data = Samples.Last().Sample;
@@ -1068,9 +1049,7 @@ namespace LcmsNet.SampleQueue
             }
             else
             {
-                //
                 // Otherwise, add a new sample.
-                //
                 newData = new classSampleData(false)
                 {
                     DmsData =
@@ -1145,10 +1124,8 @@ namespace LcmsNet.SampleQueue
         {
             using (Samples.SuppressChangeNotifications())
             {
-                //
                 // Remove all of them from the sample queue.
                 // This should update the other views as well.
-                //
                 SampleQueue.RemoveSample(Samples.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
             }
         }
@@ -1158,9 +1135,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void MoveSamples(List<classSampleData> data, int offset, enumMoveSampleType moveType)
         {
-            //
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            //
             data.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
 
             if (data.Count < 1)
@@ -1168,15 +1143,11 @@ namespace LcmsNet.SampleQueue
 
             using (Samples.SuppressChangeNotifications())
             {
-                //
                 // We have to make sure the data is sorted by sequence
                 // number in order for the sample queue movement to work
-                //
                 data.Sort(new classSequenceComparer());
 
-                //
                 // Move in the sample queue
-                //
                 SampleQueue.MoveQueuedSamples(data, 0, offset, moveType);
             }
         }
@@ -1210,9 +1181,7 @@ namespace LcmsNet.SampleQueue
         {
             try
             {
-                //
                 // Get a list of sequence ID's to remove
-                //
                 var removes = new List<long>();
                 var samplesToRemove = samples.OrderBy(x => x.Sample.SequenceID).ToList();
                 foreach (var sample in samplesToRemove)
@@ -1222,10 +1191,8 @@ namespace LcmsNet.SampleQueue
 
                 using (Samples.SuppressChangeNotifications())
                 {
-                    //
                     // Remove all of them from the sample queue.
                     // This should update the other views as well.
-                    //
                     SampleQueue.RemoveSample(removes, resortColumns);
                 }
             }
@@ -1241,9 +1208,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         private void CheckForDuplicates(classSampleData data)
         {
-            //
             // Color duplicates or invalid cells with certain colors!
-            //
             var validResult = SampleQueue.IsSampleDataValid(data);
             if (validResult == enumSampleValidResult.DuplicateRequestName &&
                 !data.DmsData.DatasetName.Contains(SampleQueue.UnusedSampleName))
@@ -1476,9 +1441,7 @@ namespace LcmsNet.SampleQueue
 
         private void SamplesAddedFromQueue(IEnumerable<classSampleData> samples, bool replaceExistingRows)
         {
-            //
             // The sample queue gives all of the samples
-            //
             var sampleList = samples.ToList();
 
             using (Samples.SuppressChangeNotifications())

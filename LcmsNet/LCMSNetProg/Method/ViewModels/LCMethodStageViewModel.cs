@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
 using ReactiveUI;
-using MessageBox = System.Windows.MessageBox;
 
 namespace LcmsNet.Method.ViewModels
 {
@@ -583,7 +582,7 @@ namespace LcmsNet.Method.ViewModels
                 {
                     var parameter = lcEvent.Parameters[i];
                     var name = lcEvent.ParameterNames[i];
-                    Control control = null;
+                    System.Windows.Forms.Control control = null;
 
                     if (lcEvent.MethodAttribute.DataProviderIndex == i)
                     {
