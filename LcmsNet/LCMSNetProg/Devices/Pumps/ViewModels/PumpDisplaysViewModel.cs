@@ -23,12 +23,12 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
-                MobilePhases.Add(new MobilePhase("test1", "comment"));
-                MobilePhases.Add(new MobilePhase("test2", "comment"));
-                MobilePhases.Add(new MobilePhase("test3", "comment"));
-                MobilePhases.Add(new MobilePhase("test4", "comment"));
-                PumpMonitorDisplays.Add(new PumpDisplayViewModel("test1"));
-                PumpMonitorDisplays.Add(new PumpDisplayViewModel("test2"));
+                mobilePhases.Add(new MobilePhase("test1", "comment"));
+                mobilePhases.Add(new MobilePhase("test2", "comment"));
+                mobilePhases.Add(new MobilePhase("test3", "comment"));
+                mobilePhases.Add(new MobilePhase("test4", "comment"));
+                pumpMonitorDisplays.Add(new PumpDisplayViewModel("test1"));
+                pumpMonitorDisplays.Add(new PumpDisplayViewModel("test2"));
                 pumpName = "TestPump";
             }
 #endif
@@ -65,9 +65,9 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             set { this.RaiseAndSetIfChanged(ref tackType, value); }
         }
 
-        public ReactiveList<MobilePhase> MobilePhases => mobilePhases;
+        public IReadOnlyReactiveList<MobilePhase> MobilePhases => mobilePhases;
 
-        public ReactiveList<PumpDisplayViewModel> PumpMonitorDisplays => pumpMonitorDisplays;
+        public IReadOnlyReactiveList<PumpDisplayViewModel> PumpMonitorDisplays => pumpMonitorDisplays;
 
         /// <summary>
         /// Gets or sets whether the window is tacked.
@@ -121,12 +121,12 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         {
             var pump = pumps[CurrentPump];
 
-            using (MobilePhases.SuppressChangeNotifications())
+            using (mobilePhases.SuppressChangeNotifications())
             {
-                MobilePhases.Clear();
+                mobilePhases.Clear();
                 if (pump.MobilePhases != null)
                 {
-                    MobilePhases.AddRange(pump.MobilePhases);
+                    mobilePhases.AddRange(pump.MobilePhases);
                 }
             }
 
@@ -153,7 +153,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
             // If it's a pump and we have it we are safe to remove it from the list of controls
             // and the mapping dictionary.
-            PumpMonitorDisplays.Remove(pumpMonitorDictionary[pump]);
+            pumpMonitorDisplays.Remove(pumpMonitorDictionary[pump]);
             pumpMonitorDictionary.Remove(pump);
 
             if (pumps.Contains(pump))
@@ -202,7 +202,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
             // Make sure we reference this pump
             pumpMonitorDictionary.Add(pump, display);
-            PumpMonitorDisplays.Add(display);
+            pumpMonitorDisplays.Add(display);
 
             if (pump.MobilePhases != null)
             {
@@ -211,10 +211,10 @@ namespace LcmsNet.Devices.Pumps.ViewModels
                 CurrentPump = pumps.Count - 1;
                 UpdateLabel();
 
-                using (MobilePhases.SuppressChangeNotifications())
+                using (mobilePhases.SuppressChangeNotifications())
                 {
-                    MobilePhases.Clear();
-                    MobilePhases.AddRange(pump.MobilePhases);
+                    mobilePhases.Clear();
+                    mobilePhases.AddRange(pump.MobilePhases);
                 }
             }
         }

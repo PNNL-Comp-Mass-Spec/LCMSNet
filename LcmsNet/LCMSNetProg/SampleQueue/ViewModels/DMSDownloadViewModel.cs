@@ -116,7 +116,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref cartName, value); }
         }
 
-        public ReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
+        public IReadOnlyReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
 
         public string CartConfigName
         {
@@ -124,7 +124,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref cartConfigName, value); }
         }
 
-        public ReactiveList<string> LcCartConfigComboBoxOptions => lcCartConfigComboBoxOptions;
+        public IReadOnlyReactiveList<string> LcCartConfigComboBoxOptions => lcCartConfigComboBoxOptions;
 
         public DMSDownloadDataViewModel AvailableRequestData
         {
@@ -275,7 +275,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             List<string> cartList;
 
-            LcCartComboBoxOptions.Clear();
+            lcCartComboBoxOptions.Clear();
 
             // Get the list of carts from DMS
             try
@@ -305,9 +305,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (cartList.Any())
             {
-                using (LcCartComboBoxOptions.SuppressChangeNotifications())
+                using (lcCartComboBoxOptions.SuppressChangeNotifications())
                 {
-                    LcCartComboBoxOptions.AddRange(cartList);
+                    lcCartComboBoxOptions.AddRange(cartList);
                 }
             }
         }
@@ -319,7 +319,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             List<string> cartConfigList;
 
-            LcCartConfigComboBoxOptions.Clear();
+            lcCartConfigComboBoxOptions.Clear();
 
             // Get the list of cart configuration names from DMS
             try
@@ -351,7 +351,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 using (LcCartConfigComboBoxOptions.SuppressChangeNotifications())
                 {
-                    LcCartConfigComboBoxOptions.AddRange(cartConfigList);
+                    lcCartConfigComboBoxOptions.AddRange(cartConfigList);
                 }
             }
         }

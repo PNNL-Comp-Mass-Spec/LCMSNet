@@ -198,12 +198,12 @@ namespace LcmsNet.Configuration.ViewModels
             private set { this.RaiseAndSetIfChanged(ref operatorNotSaved, value); }
         }
 
-        public ReactiveList<string> TimeZoneComboBoxOptions => timeZoneComboBoxOptions;
-        public ReactiveList<string> InstrumentComboBoxOptions => instrumentComboBoxOptions;
-        public ReactiveList<string> CartConfigComboBoxOptions => cartConfigComboBoxOptions;
-        public ReactiveList<string> SeparationTypeComboBoxOptions => separationTypeComboBoxOptions;
-        public ReactiveList<string> OperatorsComboBoxOptions => operatorsComboBoxOptions;
-        public ReactiveList<string> ColumnNameComboBoxOptions => columnNameComboBoxOptions;
+        public IReadOnlyReactiveList<string> TimeZoneComboBoxOptions => timeZoneComboBoxOptions;
+        public IReadOnlyReactiveList<string> InstrumentComboBoxOptions => instrumentComboBoxOptions;
+        public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => cartConfigComboBoxOptions;
+        public IReadOnlyReactiveList<string> SeparationTypeComboBoxOptions => separationTypeComboBoxOptions;
+        public IReadOnlyReactiveList<string> OperatorsComboBoxOptions => operatorsComboBoxOptions;
+        public IReadOnlyReactiveList<string> ColumnNameComboBoxOptions => columnNameComboBoxOptions;
 
         #endregion
 
@@ -267,9 +267,9 @@ namespace LcmsNet.Configuration.ViewModels
             MinVolume = classCartConfiguration.MinimumVolume;
 
             //load time zones into combobox
-            using (TimeZoneComboBoxOptions.SuppressChangeNotifications())
+            using (timeZoneComboBoxOptions.SuppressChangeNotifications())
             {
-                TimeZoneComboBoxOptions.AddRange(TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id));
+                timeZoneComboBoxOptions.AddRange(TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id));
             }
             TimeZone = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TIMEZONE);
 
@@ -331,10 +331,10 @@ namespace LcmsNet.Configuration.ViewModels
                 return;
             }
 
-            using (InstrumentComboBoxOptions.SuppressChangeNotifications())
+            using (instrumentComboBoxOptions.SuppressChangeNotifications())
             {
-                InstrumentComboBoxOptions.Clear();
-                InstrumentComboBoxOptions.AddRange(instList.Select(x => x.DMSName));
+                instrumentComboBoxOptions.Clear();
+                instrumentComboBoxOptions.AddRange(instList.Select(x => x.DMSName));
             }
 
             // Determine if presently specified instrument name is in list. If it is, display it.
@@ -392,10 +392,10 @@ namespace LcmsNet.Configuration.ViewModels
             }
 
             // Now add user list to combo box
-            using (OperatorsComboBoxOptions.SuppressChangeNotifications())
+            using (operatorsComboBoxOptions.SuppressChangeNotifications())
             {
-                OperatorsComboBoxOptions.Clear();
-                OperatorsComboBoxOptions.AddRange(dmsUserList.Select(x => x.Key));
+                operatorsComboBoxOptions.Clear();
+                operatorsComboBoxOptions.AddRange(dmsUserList.Select(x => x.Key));
             }
 
             // Determine if presently specified operator name is in list. If it is, display it.
@@ -496,10 +496,10 @@ namespace LcmsNet.Configuration.ViewModels
         {
             var separationTypes = classSQLiteTools.GetSepTypeList(false);
 
-            using (SeparationTypeComboBoxOptions.SuppressChangeNotifications())
+            using (separationTypeComboBoxOptions.SuppressChangeNotifications())
             {
-                SeparationTypeComboBoxOptions.Clear();
-                SeparationTypeComboBoxOptions.AddRange(separationTypes);
+                separationTypeComboBoxOptions.Clear();
+                separationTypeComboBoxOptions.AddRange(separationTypes);
             }
         }
 
@@ -548,10 +548,10 @@ namespace LcmsNet.Configuration.ViewModels
                 }
             }
 
-            using (CartConfigComboBoxOptions.SuppressChangeNotifications())
+            using (cartConfigComboBoxOptions.SuppressChangeNotifications())
             {
-                CartConfigComboBoxOptions.Clear();
-                CartConfigComboBoxOptions.AddRange(cartConfigNameList);
+                cartConfigComboBoxOptions.Clear();
+                cartConfigComboBoxOptions.AddRange(cartConfigNameList);
             }
 
             if (!mIsLoading)
@@ -594,10 +594,10 @@ namespace LcmsNet.Configuration.ViewModels
             }
 
             // Everything was OK, so update the list
-            using (ColumnNameComboBoxOptions.SuppressChangeNotifications())
+            using (columnNameComboBoxOptions.SuppressChangeNotifications())
             {
-                ColumnNameComboBoxOptions.Clear();
-                ColumnNameComboBoxOptions.AddRange(columnList);
+                columnNameComboBoxOptions.Clear();
+                columnNameComboBoxOptions.AddRange(columnList);
             }
 
             if (!mIsLoading)

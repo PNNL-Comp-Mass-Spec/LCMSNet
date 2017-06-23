@@ -25,7 +25,7 @@ namespace LcmsNet.SampleQueue
     {
         private readonly ReactiveList<SampleViewModel> samplesList = new ReactiveList<SampleViewModel>() { ChangeTrackingEnabled = true };
 
-        public ReactiveList<SampleViewModel> Samples => samplesList;
+        public IReadOnlyReactiveList<SampleViewModel> Samples => samplesList;
 
         private readonly classDMSSampleValidator mValidator;
 
@@ -204,7 +204,7 @@ namespace LcmsNet.SampleQueue
             }
             if (e.SettingName.Equals(classLCMSSettings.PARAM_CARTCONFIGNAME))
             {
-                foreach (var sample in Samples)
+                foreach (var sample in samplesList)
                 {
                     var data = sample.Sample.DmsData;
                     data.CartConfigName = e.SettingValue;
@@ -304,7 +304,7 @@ namespace LcmsNet.SampleQueue
                 currentlyProcessingQueueChange = true;
             }
 
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 var currentTask = "Initializing";
 
@@ -317,7 +317,7 @@ namespace LcmsNet.SampleQueue
                     {
                         var foundError = false;
                         // Queue samples
-                        foreach (var sample in Samples)
+                        foreach (var sample in samplesList)
                         {
                             // bypass samples already in running queue
                             if (sample.Sample.IsSetToRunOrHasRun)
@@ -396,7 +396,7 @@ namespace LcmsNet.SampleQueue
                     else
                     {
                         // Dequeue samples - iterate in reverse
-                        foreach (var sample in Samples.Reverse())
+                        foreach (var sample in samplesList.Reverse())
                         {
                             // bypass samples not set to run
                             if (!sample.Sample.IsSetToRunOrHasRun)
@@ -542,7 +542,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Undo()
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 SampleQueue.Undo();
             }
@@ -553,7 +553,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Redo()
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 SampleQueue.Redo();
             }
@@ -566,7 +566,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="insertIntoUnused"></param>
         public void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 if (insertIntoUnused == false)
                 {
@@ -767,7 +767,7 @@ namespace LcmsNet.SampleQueue
             if (samples.Count < 1)
                 return;
 
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 foreach (var sample in samples)
                 {
@@ -785,7 +785,7 @@ namespace LcmsNet.SampleQueue
             if (samples.Count < 1)
                 return;
 
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 foreach (var sample in samples)
                 {
@@ -804,13 +804,13 @@ namespace LcmsNet.SampleQueue
         /// <param name="newColor"></param>
         private void column_ColorChanged(object sender, System.Drawing.Color previousColor, System.Drawing.Color newColor)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 SampleQueue.UpdateAllSamples();
 
                 // The following is necessary due to how samples are stored and read from a database
                 // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
-                foreach (var s in Samples)
+                foreach (var s in samplesList)
                 {
                     s.Sample.ColumnData = classCartConfiguration.Columns[s.Sample.ColumnData.ID];
                 }
@@ -825,13 +825,13 @@ namespace LcmsNet.SampleQueue
         /// <param name="oldName"></param>
         private void column_NameChanged(object sender, string name, string oldName)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 SampleQueue.UpdateWaitingSamples();
 
                 // The following is necessary due to how samples are stored and read from a database
                 // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
-                foreach (var s in Samples)
+                foreach (var s in samplesList)
                 {
                     s.Sample.ColumnData = classCartConfiguration.Columns[s.Sample.ColumnData.ID];
                 }
@@ -952,9 +952,9 @@ namespace LcmsNet.SampleQueue
             classSampleData newData = null;
 
             // If we have a sample, get the previous sample data.
-            if (Samples.Count > 0)
+            if (samplesList.Count > 0)
             {
-                var data = Samples.Last().Sample;
+                var data = samplesList.Last().Sample;
                 if (data != null)
                 {
                     var actualData = SampleQueue.FindSample(data.UniqueID);
@@ -985,7 +985,7 @@ namespace LcmsNet.SampleQueue
 
             if (newData != null)
             {
-                using (Samples.SuppressChangeNotifications())
+                using (samplesList.SuppressChangeNotifications())
                 {
                     AddSamplesToManager(new List<classSampleData> { newData }, insertIntoUnused);
                 }
@@ -1004,16 +1004,16 @@ namespace LcmsNet.SampleQueue
             {
                 return false;
             }
-            if (!Samples.Any(x => x.Sample.Equals(sample)))
+            if (!samplesList.Any(x => x.Sample.Equals(sample)))
             {
-                using (Samples.SuppressChangeNotifications())
+                using (samplesList.SuppressChangeNotifications())
                 {
                     if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
                     {
                         sample.DmsData.CartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
                     }
-                    Samples.Add(new SampleViewModel(sample));
-                    Samples.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
+                    samplesList.Add(new SampleViewModel(sample));
+                    samplesList.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
                     UpdateRow(sample);
                 }
             }
@@ -1027,7 +1027,7 @@ namespace LcmsNet.SampleQueue
         /// <returns>True if addition was a success, or false if adding sample failed.</returns>
         public bool AddSamplesToList(IEnumerable<classSampleData> samples)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 foreach (var data in samples)
                 {
@@ -1042,11 +1042,11 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void ClearAllSamples()
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 // Remove all of them from the sample queue.
                 // This should update the other views as well.
-                SampleQueue.RemoveSample(Samples.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
+                SampleQueue.RemoveSample(samplesList.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
             }
         }
 
@@ -1061,7 +1061,7 @@ namespace LcmsNet.SampleQueue
             if (data.Count < 1)
                 return;
 
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 // We have to make sure the data is sorted by sequence
                 // number in order for the sample queue movement to work
@@ -1077,7 +1077,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 SampleQueue.RemoveUnusedSamples(resortColumns);
             }
@@ -1088,7 +1088,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void RemoveUnusedSamples(classColumnData column, enumColumnDataHandling resortColumns)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
                 SampleQueue.RemoveUnusedSamples(column, resortColumns);
             }
@@ -1109,7 +1109,7 @@ namespace LcmsNet.SampleQueue
                     removes.Add(sample.Sample.UniqueID);
                 }
 
-                using (Samples.SuppressChangeNotifications())
+                using (samplesList.SuppressChangeNotifications())
                 {
                     // Remove all of them from the sample queue.
                     // This should update the other views as well.
@@ -1156,7 +1156,7 @@ namespace LcmsNet.SampleQueue
             if (data.IsDuplicateRequestName)
             {
                 // We only need to look for duplicates matching this one's requestname
-                foreach (var sample in Samples.Where(x => x.RequestName.Equals(data.DmsData.RequestName)))
+                foreach (var sample in samplesList.Where(x => x.RequestName.Equals(data.DmsData.RequestName)))
                 {
                     if (sample.Sample.Equals(data))
                     {
@@ -1168,7 +1168,7 @@ namespace LcmsNet.SampleQueue
             else
             {
                 // This sample is no longer a duplicate, so we need to hit everything that was flagged as a duplicate name
-                foreach (var sample in Samples.Where(x => x.Sample.IsDuplicateRequestName))
+                foreach (var sample in samplesList.Where(x => x.Sample.IsDuplicateRequestName))
                 {
                     if (sample.Sample.Equals(data))
                     {
@@ -1287,7 +1287,7 @@ namespace LcmsNet.SampleQueue
             UpdateRows(data.Samples);
         }
 
-        ///// <summary>
+        /// <summary>
         /// Handle when a sample is removed.
         /// </summary>
         /// <param name="sender"></param>
@@ -1296,22 +1296,22 @@ namespace LcmsNet.SampleQueue
         {
             // Start fresh and add the samples from the queue to the list.
             // But track the position of the scroll bar to be nice to the user.
-            // TODO: var backup = Samples.ToList();
+            // TODO: var backup = samplesList.ToList();
 
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
-                Samples.Clear();
+                samplesList.Clear();
                 AddSamplesToList(data.Samples);
             }
 
-            // TODO: if (Samples.Count > 0)
+            // TODO: if (samplesList.Count > 0)
             // TODO: {
-            // TODO:     SampleViewModel sampleToScroll = Samples.First();
+            // TODO:     SampleViewModel sampleToScroll = samplesList.First();
             // TODO:     for (var i = 0; i < backup.Count; i++)
             // TODO:     {
-            // TODO:         if (i >= Samples.Count || !backup[i].Equals(Samples[i]))
+            // TODO:         if (i >= samplesList.Count || !backup[i].Equals(samplesList[i]))
             // TODO:         {
-            // TODO:             sampleToScroll = Samples[i - 1];
+            // TODO:             sampleToScroll = samplesList[i - 1];
             // TODO:             break;
             // TODO:         }
             // TODO:     }
@@ -1364,13 +1364,13 @@ namespace LcmsNet.SampleQueue
             // The sample queue gives all of the samples
             var sampleList = samples.ToList();
 
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
-                if (replaceExistingRows && Samples.Count > 0)
+                if (replaceExistingRows && samplesList.Count > 0)
                 {
                     try
                     {
-                        Samples.Clear();
+                        samplesList.Clear();
                     }
                     catch (Exception ex)
                     {
@@ -1381,9 +1381,9 @@ namespace LcmsNet.SampleQueue
                 AddSamplesToList(sampleList);
             }
 
-            // TODO: if (Samples.Count > 0 && sampleList.Count > 0)
+            // TODO: if (samplesList.Count > 0 && sampleList.Count > 0)
             // TODO: {
-            // TODO:     ScrollIntoView(Samples.Last(x => x.Sample.Equals(sampleList.Last())));
+            // TODO:     ScrollIntoView(samplesList.Last(x => x.Sample.Equals(sampleList.Last())));
             // TODO: }
         }
 
@@ -1394,14 +1394,14 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         private void SampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
         {
-            using (Samples.SuppressChangeNotifications())
+            using (samplesList.SuppressChangeNotifications())
             {
-                Samples.Clear();
+                samplesList.Clear();
                 AddSamplesToList(data.Samples);
             }
-            // TODO: if (Samples.Count > 0 && data.Samples.Any())
+            // TODO: if (samplesList.Count > 0 && data.Samples.Any())
             // TODO: {
-            // TODO:     ScrollIntoView(Samples.Last(x => x.Sample.Equals(data.Samples.Last())));
+            // TODO:     ScrollIntoView(samplesList.Last(x => x.Sample.Equals(data.Samples.Last())));
             // TODO: }
         }
 

@@ -28,7 +28,7 @@ namespace LcmsNet.Configuration.ViewModels
             Initialize();
         }
 
-        public ColumnConfigViewModel(classColumnData column, ReactiveList<string> columnNames)
+        public ColumnConfigViewModel(classColumnData column, IReadOnlyReactiveList<string> columnNames)
         {
             columnData = column;
             columnNamesComboBoxOptions = columnNames;
@@ -73,7 +73,7 @@ namespace LcmsNet.Configuration.ViewModels
         private classColumnData columnData;
 
         private ObservableAsPropertyHelper<int> columnId;
-        private readonly ReactiveList<string> columnNamesComboBoxOptions;
+        private readonly IReadOnlyReactiveList<string> columnNamesComboBoxOptions;
 
         #endregion
 
@@ -114,7 +114,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// <summary>
         /// Sets the list of column names.
         /// </summary>
-        public ReactiveList<string> ColumnNamesComboBoxOptions => columnNamesComboBoxOptions;
+        public IReadOnlyReactiveList<string> ColumnNamesComboBoxOptions => columnNamesComboBoxOptions;
 
         #endregion
 

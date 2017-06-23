@@ -54,20 +54,21 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Class variables"
 
-        private readonly ReactiveList<classSampleData> inputSampleList = new ReactiveList<classSampleData>();
+        private readonly IReadOnlyReactiveList<classSampleData> inputSampleList = new ReactiveList<classSampleData>();
         private readonly ReactiveList<classSampleData> outputSampleList = new ReactiveList<classSampleData>();
         private Dictionary<string, Type> randomizersDict = new Dictionary<string, Type>();
         private readonly ReactiveList<string> randomizerNameList = new ReactiveList<string>();
         private string currentStatus = "Ready.";
         private string selectedRandomizer = "";
         private bool randomizationPerformed = false;
+
         #endregion
 
         #region "Properties"
 
-        public ReactiveList<classSampleData> InputSampleList => inputSampleList;
-        public ReactiveList<classSampleData> OutputSampleList => outputSampleList;
-        public ReactiveList<string> RandomizerNameList => randomizerNameList;
+        public IReadOnlyReactiveList<classSampleData> InputSampleList => inputSampleList;
+        public IReadOnlyReactiveList<classSampleData> OutputSampleList => outputSampleList;
+        public IReadOnlyReactiveList<string> RandomizerNameList => randomizerNameList;
 
         public string CurrentStatus
         {
@@ -123,12 +124,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             var randomizer = randomizerObject as IRandomizerInterface;
             var randomized = randomizer.RandomizeSamples(InputSampleList.ToList());
 
-            using (OutputSampleList.SuppressChangeNotifications())
+            using (outputSampleList.SuppressChangeNotifications())
             {
-                OutputSampleList.AddRange(randomized);
+                outputSampleList.AddRange(randomized);
             }
 
-                CurrentStatus = "Randomization Complete.";
+            CurrentStatus = "Randomization Complete.";
 
             RandomizationPerformed = true;
         }

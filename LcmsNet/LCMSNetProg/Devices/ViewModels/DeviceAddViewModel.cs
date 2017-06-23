@@ -26,8 +26,8 @@ namespace LcmsNet.Devices.ViewModels
                 devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Pump3", "Pumps")));
                 AddPluginInformation(devices);
                 SelectedPlugin = devices[3];
-                AddedPlugins.Add(devices[2]);
-                AddedPlugins.Add(devices[7]);
+                addedPlugins.Add(devices[2]);
+                addedPlugins.Add(devices[7]);
                 SelectedPlugins.Add(devices[2]);
             }
             SetupCommands();
@@ -48,8 +48,8 @@ namespace LcmsNet.Devices.ViewModels
             set { this.RaiseAndSetIfChanged(ref initializeOnAdd, value); }
         }
 
-        public ReactiveList<classDevicePluginInformation> AddedPlugins => addedPlugins;
-        public ReactiveList<PluginCategoryData> AvailablePlugins => availablePlugins;
+        public IReadOnlyReactiveList<classDevicePluginInformation> AddedPlugins => addedPlugins;
+        public IReadOnlyReactiveList<PluginCategoryData> AvailablePlugins => availablePlugins;
         public ReactiveList<classDevicePluginInformation> SelectedPlugins => selectedPlugins;
 
         public classDevicePluginInformation SelectedPlugin
@@ -74,16 +74,16 @@ namespace LcmsNet.Devices.ViewModels
                 mapping[plugin.DeviceAttribute.Category].Plugins.Add(plugin);
             }
 
-            using (AvailablePlugins.SuppressChangeNotifications())
+            using (availablePlugins.SuppressChangeNotifications())
             {
-                AvailablePlugins.Clear();
-                AvailablePlugins.AddRange(mapping.Values);
+                availablePlugins.Clear();
+                availablePlugins.AddRange(mapping.Values);
             }
         }
 
         public List<classDevicePluginInformation> GetSelectedPlugins()
         {
-            return AddedPlugins.ToList();
+            return addedPlugins.ToList();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace LcmsNet.Devices.ViewModels
         {
             if (SelectedPlugin != null)
             {
-                AddedPlugins.Add(SelectedPlugin);
+                addedPlugins.Add(SelectedPlugin);
             }
         }
 
@@ -102,9 +102,9 @@ namespace LcmsNet.Devices.ViewModels
             if (SelectedPlugins.Count > 0)
             {
                 using (SelectedPlugins.SuppressChangeNotifications())
-                using (AddedPlugins.SuppressChangeNotifications())
+                using (addedPlugins.SuppressChangeNotifications())
                 {
-                    AddedPlugins.RemoveAll(SelectedPlugins);
+                    addedPlugins.RemoveAll(SelectedPlugins);
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace LcmsNet.Devices.ViewModels
 
         private void SetupCommands()
         {
-            AddCommand = ReactiveCommand.Create(() => AddSelectedNode(), this.WhenAnyValue(x => x.SelectedPlugin, x => x.AddedPlugins).Select(x => x.Item1 != null && !Enumerable.Any<classDevicePluginInformation>(x.Item2, y => y.DisplayName.Equals(x.Item1.DisplayName))));
+            AddCommand = ReactiveCommand.Create(() => AddSelectedNode(), this.WhenAnyValue(x => x.SelectedPlugin, x => x.addedPlugins).Select(x => x.Item1 != null && !x.Item2.Any(y => y.DisplayName.Equals(x.Item1.DisplayName))));
             RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedItems(), this.WhenAnyValue(x => x.SelectedPlugins.Count).Select(x => x > 0));
         }
     }

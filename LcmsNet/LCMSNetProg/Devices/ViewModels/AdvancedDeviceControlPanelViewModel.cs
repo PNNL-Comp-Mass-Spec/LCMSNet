@@ -51,7 +51,7 @@ namespace LcmsNet.Devices.ViewModels
 
         private readonly ReactiveList<DeviceGroup> deviceGroups = new ReactiveList<DeviceGroup>();
 
-        public ReactiveList<DeviceGroup> DeviceGroups => deviceGroups;
+        public IReadOnlyReactiveList<DeviceGroup> DeviceGroups => deviceGroups;
 
         private readonly Dictionary<AdvancedDeviceGroupControlViewModel, DeviceGroup> m_controlToPageMap;
 
@@ -82,9 +82,9 @@ namespace LcmsNet.Devices.ViewModels
                 if (control.IsDeviceGroupEmpty)
                 {
                     var page = m_controlToPageMap[control];
-                    if (DeviceGroups.Contains(page))
+                    if (deviceGroups.Contains(page))
                     {
-                        DeviceGroups.Remove(page);
+                        deviceGroups.Remove(page);
                     }
                     if (m_nameToControlMap.ContainsKey(page.Name))
                     {
@@ -163,7 +163,7 @@ namespace LcmsNet.Devices.ViewModels
                 var page = new DeviceGroup(groupName);
                 m_nameToControlMap.Add(groupName, page.Content);
                 m_controlToPageMap.Add(page.Content, page);
-                DeviceGroups.Add(page);
+                deviceGroups.Add(page);
             }
             control = m_nameToControlMap[groupName];
             m_deviceToControlMap.Add(device, control);

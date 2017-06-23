@@ -161,9 +161,9 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        public ReactiveList<string> SavedMethodsComboBoxOptions => savedMethodsComboBoxOptions;
-        public ReactiveList<string> ColumnComboBoxOptions => columnComboBoxOptions;
-        public ReactiveList<LCMethodEventViewModel> LCMethodEvents => lcMethodEvents;
+        public IReadOnlyReactiveList<string> SavedMethodsComboBoxOptions => savedMethodsComboBoxOptions;
+        public IReadOnlyReactiveList<string> ColumnComboBoxOptions => columnComboBoxOptions;
+        public IReadOnlyReactiveList<LCMethodEventViewModel> LCMethodEvents => lcMethodEvents;
 
         #endregion
 
@@ -214,12 +214,12 @@ namespace LcmsNet.Method.ViewModels
 
         public void ComboBoxSavedItemsRemoveItem(string name)
         {
-            SavedMethodsComboBoxOptions.Remove(name);
+            savedMethodsComboBoxOptions.Remove(name);
         }
 
         public void ComboBoxSavedItemsAddItem(string name)
         {
-            SavedMethodsComboBoxOptions.Add(name);
+            savedMethodsComboBoxOptions.Add(name);
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace LcmsNet.Method.ViewModels
         public void UpdateConfiguration()
         {
             checkBoxToColumnDataMap.Clear();
-            ColumnComboBoxOptions.Clear();
+            columnComboBoxOptions.Clear();
 
             if (classCartConfiguration.Columns == null)
                 return;
@@ -355,9 +355,9 @@ namespace LcmsNet.Method.ViewModels
             {
                 var id = (column.ID + 1).ToString();
                 checkBoxToColumnDataMap.Add(id, column);
-                ColumnComboBoxOptions.Add(id);
+                columnComboBoxOptions.Add(id);
             }
-            ColumnComboBoxOptions.Add("Special/All");
+            columnComboBoxOptions.Add("Special/All");
         }
 
         public bool IsColumnSelected()
@@ -510,10 +510,10 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void RenderEventList()
         {
-            using (LCMethodEvents.SuppressChangeNotifications())
+            using (lcMethodEvents.SuppressChangeNotifications())
             {
-                LCMethodEvents.Clear();
-                LCMethodEvents.AddRange(eventsList);
+                lcMethodEvents.Clear();
+                lcMethodEvents.AddRange(eventsList);
             }
         }
 
@@ -705,7 +705,7 @@ namespace LcmsNet.Method.ViewModels
                 {
                     eventsList[i].UpdateEventNum(eventsList.IndexOf(eventsList[i]));
                 }
-                LCMethodEvents.Remove(deviceEvent);
+                lcMethodEvents.Remove(deviceEvent);
                 eventsList.Remove(deviceEvent);
                 classApplicationLogger.LogMessage(0, string.Format("A control event for the device {0} was  removed from method {1}.", deviceEvent.SelectedDevice.Name, data.Method.Name));
             }

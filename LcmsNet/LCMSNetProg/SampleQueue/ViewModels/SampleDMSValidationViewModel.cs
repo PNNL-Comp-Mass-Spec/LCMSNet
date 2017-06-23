@@ -79,7 +79,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public int ID { get; set; }
 
-        public ReactiveList<string> UsageTypeComboBoxOptions => usageTypeComboBoxOptions;
+        public IReadOnlyReactiveList<string> UsageTypeComboBoxOptions => usageTypeComboBoxOptions;
         public classSampleData Sample => sample;
 
         public bool CanChangeEmslData

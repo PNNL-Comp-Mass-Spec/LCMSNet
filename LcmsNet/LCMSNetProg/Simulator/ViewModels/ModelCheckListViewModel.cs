@@ -38,9 +38,9 @@ namespace LcmsNet.Simulator.ViewModels
 
         private void InitData()
         {
-            using (StatusCategoryComboBoxOptions.SuppressChangeNotifications())
+            using (statusCategoryComboBoxOptions.SuppressChangeNotifications())
             {
-                StatusCategoryComboBoxOptions.AddRange(Enum.GetValues(typeof(ModelStatusCategory)).Cast<ModelStatusCategory>());
+                statusCategoryComboBoxOptions.AddRange(Enum.GetValues(typeof(ModelStatusCategory)).Cast<ModelStatusCategory>());
             }
 
             Checkers.ChangeTrackingEnabled = true;
@@ -71,8 +71,8 @@ namespace LcmsNet.Simulator.ViewModels
             set { this.RaiseAndSetIfChanged(ref enableAll, value); }
         }
 
-        public ReactiveList<IFluidicsModelChecker> Checkers => checkers;
-        public ReactiveList<ModelStatusCategory> StatusCategoryComboBoxOptions => statusCategoryComboBoxOptions;
+        public IReadOnlyReactiveList<IFluidicsModelChecker> Checkers => checkers;
+        public IReadOnlyReactiveList<ModelStatusCategory> StatusCategoryComboBoxOptions => statusCategoryComboBoxOptions;
 
         private void EnableAllChanged()
         {
@@ -134,7 +134,7 @@ namespace LcmsNet.Simulator.ViewModels
             {
                 using (checkers.SuppressChangeNotifications())
                 {
-                    Checkers.RemoveAll(Checkers.ToList().Where(x => x.Name.Equals(check.Name)));
+                    checkers.RemoveAll(Checkers.ToList().Where(x => x.Name.Equals(check.Name)));
                 }
             }
         }

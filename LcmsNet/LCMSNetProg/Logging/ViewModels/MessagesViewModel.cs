@@ -68,7 +68,7 @@ namespace LcmsNet.Logging.ViewModels
         {
             lock (lockMessageList)
             {
-                MessageList.Insert(0, message);
+                messageList.Insert(0, message);
             }
         }
 
@@ -112,9 +112,9 @@ namespace LcmsNet.Logging.ViewModels
 
         private void ClearMessages()
         {
-            using (MessageList.SuppressChangeNotifications())
+            using (messageList.SuppressChangeNotifications())
             {
-                MessageList.Clear();
+                messageList.Clear();
             }
         }
 
@@ -177,7 +177,7 @@ namespace LcmsNet.Logging.ViewModels
             private set { this.RaiseAndSetIfChanged(ref errorMessages, value); }
         }
 
-        public ReactiveList<string> MessageList => messageList;
+        public IReadOnlyReactiveList<string> MessageList => messageList;
 
         #endregion
     }

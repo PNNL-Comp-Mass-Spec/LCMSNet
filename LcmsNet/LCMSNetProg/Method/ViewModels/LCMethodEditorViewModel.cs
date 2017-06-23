@@ -60,7 +60,7 @@ namespace LcmsNet.Method.ViewModels
             SelectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
             SelectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
-            PreviewModeComboBoxOptions.Add(enumLCMethodRenderMode.Column);
+            previewModeComboBoxOptions.Add(enumLCMethodRenderMode.Column);
 
             MethodPreviewOptions = new classMethodPreviewOptions
             {
@@ -122,7 +122,7 @@ namespace LcmsNet.Method.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedMethods, value); }
         }
 
-        public ReactiveList<enumLCMethodRenderMode> PreviewModeComboBoxOptions => previewModeComboBoxOptions;
+        public IReadOnlyReactiveList<enumLCMethodRenderMode> PreviewModeComboBoxOptions => previewModeComboBoxOptions;
 
         #endregion
 

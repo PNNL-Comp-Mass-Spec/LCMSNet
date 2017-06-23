@@ -9,7 +9,7 @@ namespace LcmsNet.SampleQueue.ViewModels
     {
         private readonly ReactiveList<SampleDMSValidationViewModel> samples = new ReactiveList<SampleDMSValidationViewModel>();
 
-        public ReactiveList<SampleDMSValidationViewModel> Samples => samples;
+        public IReadOnlyReactiveList<SampleDMSValidationViewModel> Samples => samples;
 
         /// <summary>
         /// Calling this constructor is only for the windows WPF designer.
@@ -17,23 +17,23 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public SampleDMSValidatorDisplayViewModel()
         {
-            Samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   UsageType = "Cap_Dev", UserList = "(none1)", Experiment = "TestExp1", ProposalID = "5" } }, true, false, false, true, true, true));
-            Samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  UsageType = "Cap_Dev", UserList = "(none2)", Experiment = "TestExp2", ProposalID = "6" } }, false, true, true, false, false, true));
-            Samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, UsageType = "Cap_Dev", UserList = "(none3)", Experiment = "TestExp3", ProposalID = "7" } }, true, true, false, true, true, false));
+            samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   UsageType = "Cap_Dev", UserList = "(none1)", Experiment = "TestExp1", ProposalID = "5" } }, true, false, false, true, true, true));
+            samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  UsageType = "Cap_Dev", UserList = "(none2)", Experiment = "TestExp2", ProposalID = "6" } }, false, true, true, false, false, true));
+            samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, UsageType = "Cap_Dev", UserList = "(none3)", Experiment = "TestExp3", ProposalID = "7" } }, true, true, false, true, true, false));
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="samples">Sample validation.</param>
-        public SampleDMSValidatorDisplayViewModel(List<classSampleData> samples)
+        /// <param name="samplesList">Sample validation.</param>
+        public SampleDMSValidatorDisplayViewModel(List<classSampleData> samplesList)
         {
             // Create a sample validator control for each sample.
             var i = 0;
-            foreach (var sample in samples)
+            foreach (var sample in samplesList)
             {
                 // TODO: OLD: sampleControl.EnterPressed += sampleControl_EnterPressed;
-                Samples.Add(new SampleDMSValidationViewModel(sample) { ID = i++ });
+                samples.Add(new SampleDMSValidationViewModel(sample) { ID = i++ });
             }
         }
 

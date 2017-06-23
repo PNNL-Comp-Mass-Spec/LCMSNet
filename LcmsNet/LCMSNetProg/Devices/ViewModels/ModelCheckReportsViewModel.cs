@@ -21,18 +21,18 @@ namespace LcmsNet.Devices.ViewModels
         public ModelCheckReportsViewModel(IModelCheckController cntrlr)
         {
             cntrlr.ModelStatusChangeEvent += StatusChangeHandler;
-            ClearCommand = ReactiveCommand.Create(() => Reports.Clear(), this.WhenAnyValue(x => x.Reports.Count).Select(x => x > 0));
+            ClearCommand = ReactiveCommand.Create(() => reports.Clear(), this.WhenAnyValue(x => x.reports.Count).Select(x => x > 0));
         }
 
         private readonly ReactiveList<ModelCheckReportViewModel> reports = new ReactiveList<ModelCheckReportViewModel>();
 
-        public ReactiveList<ModelCheckReportViewModel> Reports => reports;
+        public IReadOnlyReactiveList<ModelCheckReportViewModel> Reports => reports;
 
         private void StatusChangeHandler(object sender, ModelStatusChangeEventArgs e)
         {
-            using (Reports.SuppressChangeNotifications())
+            using (reports.SuppressChangeNotifications())
             {
-                Reports.AddRange(e.StatusList.Select(x => new ModelCheckReportViewModel(x)));
+                reports.AddRange(e.StatusList.Select(x => new ModelCheckReportViewModel(x)));
             }
         }
 

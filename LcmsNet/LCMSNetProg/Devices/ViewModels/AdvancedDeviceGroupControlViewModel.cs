@@ -86,7 +86,7 @@ namespace LcmsNet.Devices.ViewModels
         private readonly ReactiveList<DeviceControlData> deviceControls = new ReactiveList<DeviceControlData>();
         private DeviceControlData selectedDevice = null;
 
-        public ReactiveList<DeviceControlData> DeviceControls => deviceControls;
+        public IReadOnlyReactiveList<DeviceControlData> DeviceControls => deviceControls;
 
         /// <summary>
         /// Selected device
@@ -100,7 +100,7 @@ namespace LcmsNet.Devices.ViewModels
         /// <summary>
         /// Determines if there are any devices in this group.
         /// </summary>
-        public bool IsDeviceGroupEmpty => DeviceControls.Count < 1;
+        public bool IsDeviceGroupEmpty => deviceControls.Count < 1;
 
         public Color SelectedColor { get; set; }
 
@@ -186,7 +186,7 @@ namespace LcmsNet.Devices.ViewModels
         public void AddDevice(IDevice device, IDeviceControlWpf control)
         {
             var deviceControl = new DeviceControlData(device, control);
-            DeviceControls.Add(deviceControl);
+            deviceControls.Add(deviceControl);
 
             deviceToControlMap.Add(device, control);
         }

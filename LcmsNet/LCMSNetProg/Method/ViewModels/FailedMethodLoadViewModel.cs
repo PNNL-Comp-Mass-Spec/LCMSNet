@@ -20,9 +20,9 @@ namespace LcmsNet.Method.ViewModels
         public FailedMethodLoadViewModel()
         {
             var testErrors = new string[] {"Error 1", "Error 2", "Error 3"};
-            ErrorList.Add(new ErrorListing("File 1", testErrors));
-            ErrorList.Add(new ErrorListing("File 2", testErrors));
-            ErrorList.Add(new ErrorListing("File 3", testErrors));
+            errorList.Add(new ErrorListing("File 1", testErrors));
+            errorList.Add(new ErrorListing("File 2", testErrors));
+            errorList.Add(new ErrorListing("File 3", testErrors));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace LcmsNet.Method.ViewModels
 
         private readonly ReactiveList<ErrorListing> errorList = new ReactiveList<ErrorListing>();
 
-        public ReactiveList<ErrorListing> ErrorList => errorList;
+        public IReadOnlyReactiveList<ErrorListing> ErrorList => errorList;
 
         /// <summary>
         /// Updates the listview with the error device messages.
@@ -44,10 +44,10 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="errors"></param>
         public void UpdateList(Dictionary<string, List<Exception>> errors)
         {
-            ErrorList.Clear();
+            errorList.Clear();
             foreach (var file in errors)
             {
-                ErrorList.Add(new ErrorListing(Path.GetFileNameWithoutExtension(file.Key), file.Value.Select(x => x.Message)));
+                errorList.Add(new ErrorListing(Path.GetFileNameWithoutExtension(file.Key), file.Value.Select(x => x.Message)));
             }
         }
     }

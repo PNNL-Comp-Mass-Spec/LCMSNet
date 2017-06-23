@@ -32,7 +32,7 @@ namespace LcmsNet.Devices.ViewModels
 
         private readonly ReactiveList<DeviceErrorData> deviceErrorList = new ReactiveList<DeviceErrorData>();
 
-        public ReactiveList<DeviceErrorData> DeviceErrorList => deviceErrorList;
+        public IReadOnlyReactiveList<DeviceErrorData> DeviceErrorList => deviceErrorList;
 
         /// <summary>
         /// Updates the listview with the error device messages.
@@ -40,10 +40,10 @@ namespace LcmsNet.Devices.ViewModels
         /// <param name="deviceErrors"></param>
         public void UpdateDeviceList(List<classDeviceErrorEventArgs> deviceErrors)
         {
-            using (DeviceErrorList.SuppressChangeNotifications())
+            using (deviceErrorList.SuppressChangeNotifications())
             {
-                DeviceErrorList.Clear();
-                DeviceErrorList.AddRange(deviceErrors.Select(x => new DeviceErrorData(x.Device.Name, x.Error + " " + x.Exception?.Message)));
+                deviceErrorList.Clear();
+                deviceErrorList.AddRange(deviceErrors.Select(x => new DeviceErrorData(x.Device.Name, x.Error + " " + x.Exception?.Message)));
             }
         }
     }

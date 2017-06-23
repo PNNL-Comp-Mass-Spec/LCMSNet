@@ -59,8 +59,8 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// LC Methods currently selected for display
         /// </summary>
-        public ReactiveList<classLCMethod> ListSelectedLCMethods => listSelectedLcMethods;
-        public ReactiveList<classLCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public IReadOnlyReactiveList<classLCMethod> ListSelectedLCMethods => listSelectedLcMethods;
+        public IReadOnlyReactiveList<classLCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         /// <summary>
         /// LC Methods currently selected in the listbox for manipulation
@@ -103,20 +103,20 @@ namespace LcmsNet.Method.ViewModels
         private bool Manager_MethodRemoved(object sender, classLCMethod method)
         {
             // Finds and removes the method in the listbox
-            foreach (var removeMethod in ListSelectedLCMethods.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
+            foreach (var removeMethod in listSelectedLcMethods.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
             {
-                ListSelectedLCMethods.Remove(removeMethod);
+                listSelectedLcMethods.Remove(removeMethod);
             }
 
             // Finds and removes the method in the listbox
-            foreach (var removeMethod in MethodsComboBoxOptions.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
+            foreach (var removeMethod in methodsComboBoxOptions.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
             {
-                MethodsComboBoxOptions.Remove(removeMethod);
+                methodsComboBoxOptions.Remove(removeMethod);
             }
 
             // For the users benefit, lets make sure the last item added is displayed in the list
-            if (MethodsComboBoxOptions.Count > 0)
-                SelectedLCMethod = MethodsComboBoxOptions.First();
+            if (methodsComboBoxOptions.Count > 0)
+                SelectedLCMethod = methodsComboBoxOptions.First();
 
             return true;
         }
@@ -136,22 +136,22 @@ namespace LcmsNet.Method.ViewModels
             // OR add the method if it does not exist.
 
             // If the method was not found in the combobox then add it to the combobox.
-            if (!MethodsComboBoxOptions.Any(lcMethod => lcMethod.Equals(method)))
+            if (!methodsComboBoxOptions.Any(lcMethod => lcMethod.Equals(method)))
             {
-                MethodsComboBoxOptions.Add(method);
+                methodsComboBoxOptions.Add(method);
             }
 
             // Update the list box with the right methods now, and make sure that we alert listeners.
             // If the method exists, then we need to make sure here that we update the list box
-            if (ListSelectedLCMethods.Any(lcMethod => lcMethod.Name.Equals(method.Name)))
+            if (listSelectedLcMethods.Any(lcMethod => lcMethod.Name.Equals(method.Name)))
             {
-                for (var i = 0; i < ListSelectedLCMethods.Count; i++)
+                for (var i = 0; i < listSelectedLcMethods.Count; i++)
                 {
-                    if (ListSelectedLCMethods[i].Name.Equals(method.Name))
+                    if (listSelectedLcMethods[i].Name.Equals(method.Name))
                     {
-                        var diff = ListSelectedLCMethods[i].CurrentEventNumber;
-                        ListSelectedLCMethods[i] = method.Clone() as classLCMethod;
-                        ListSelectedLCMethods[i].CurrentEventNumber = diff;
+                        var diff = listSelectedLcMethods[i].CurrentEventNumber;
+                        listSelectedLcMethods[i] = method.Clone() as classLCMethod;
+                        listSelectedLcMethods[i].CurrentEventNumber = diff;
                     }
                 }
 
@@ -176,8 +176,8 @@ namespace LcmsNet.Method.ViewModels
             {
                 var addMethod = method.Clone() as classLCMethod;
                 // need something likely to be unique.
-                addMethod.CurrentEventNumber = (int)(DateTime.Now.Ticks + ListSelectedLCMethods.Count);
-                ListSelectedLCMethods.Add(addMethod);
+                addMethod.CurrentEventNumber = (int)(DateTime.Now.Ticks + listSelectedLcMethods.Count);
+                listSelectedLcMethods.Add(addMethod);
                 MethodAdded?.Invoke(this);
             }
         }
@@ -193,7 +193,7 @@ namespace LcmsNet.Method.ViewModels
                 // Remove the objects
                 foreach (var method in SelectedListLCMethods.ToList())
                 {
-                    ListSelectedLCMethods.Remove(method);
+                    listSelectedLcMethods.Remove(method);
                 }
 
                 // Signal anyone who needs to know the objects were removed.
@@ -235,10 +235,10 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            using (ListSelectedLCMethods.SuppressChangeNotifications())
+            using (listSelectedLcMethods.SuppressChangeNotifications())
             {
-                ListSelectedLCMethods.Clear();
-                ListSelectedLCMethods.AddRange(names);
+                listSelectedLcMethods.Clear();
+                listSelectedLcMethods.AddRange(names);
             }
 
             // Alerts listening objects that the order of the methods has changed.
@@ -255,10 +255,10 @@ namespace LcmsNet.Method.ViewModels
 
             // Otherwise, we'll sort this out using an array to locally copy the
             // items, then clear and readd them in the suited array as they are ordered.
-            var names = ListSelectedLCMethods.ToList();
+            var names = listSelectedLcMethods.ToList();
 
             // The top will be the highest index the guy can move to.
-            var top = ListSelectedLCMethods.Count - 1;
+            var top = listSelectedLcMethods.Count - 1;
             for (var i = names.Count - 1; i >= 0; i--)
             {
                 var current = names[i];
@@ -279,10 +279,10 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            using (ListSelectedLCMethods.SuppressChangeNotifications())
+            using (listSelectedLcMethods.SuppressChangeNotifications())
             {
-                ListSelectedLCMethods.Clear();
-                ListSelectedLCMethods.AddRange(names);
+                listSelectedLcMethods.Clear();
+                listSelectedLcMethods.AddRange(names);
             }
 
             // Alerts listening objects that the order of the methods has changed.
@@ -298,7 +298,7 @@ namespace LcmsNet.Method.ViewModels
 
         private void SetupCommands()
         {
-            AddCommand = ReactiveCommand.Create(() => AddMethodToList(), this.WhenAnyValue(x => x.SelectedLCMethod, x => x.ListSelectedLCMethods.Count).Select(x => !this.ListSelectedLCMethods.Contains(SelectedLCMethod)));
+            AddCommand = ReactiveCommand.Create(() => AddMethodToList(), this.WhenAnyValue(x => x.SelectedLCMethod, x => x.listSelectedLcMethods.Count).Select(x => !this.listSelectedLcMethods.Contains(SelectedLCMethod)));
             RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedMethods(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
             MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedItemsUp(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
             MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedItemsDown(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));

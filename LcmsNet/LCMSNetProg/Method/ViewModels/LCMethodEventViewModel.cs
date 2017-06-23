@@ -83,7 +83,7 @@ namespace LcmsNet.Method.ViewModels
             {
                 // Create a dummy classLCMethodData
                 var tempObj = new classLCMethodData(null, null, new classLCMethodAttribute("Unlock", 0.0, "", 0, false), null);
-                MethodsComboBoxOptions.Add(tempObj);
+                methodsComboBoxOptions.Add(tempObj);
                 SelectedLCMethod = tempObj;
             }
             else
@@ -93,7 +93,7 @@ namespace LcmsNet.Method.ViewModels
                 // for every lcevent then we need to set the method data for this object
                 // with the method we previously selected. This way we preserve the parameter values etc.
                 var index = FindMethodIndex(methodData);
-                MethodsComboBoxOptions[index] = methodData;
+                methodsComboBoxOptions[index] = methodData;
                 SelectedLCMethod = methodData;
 
                 LoadMethodParameters(methodData);
@@ -258,9 +258,9 @@ namespace LcmsNet.Method.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
         }
 
-        public ReactiveList<IDevice> DevicesComboBoxOptions => devicesComboBoxOptions;
-        public ReactiveList<classLCMethodData> MethodsComboBoxOptions => methodsComboBoxOptions;
-        public ReactiveList<EventParameterViewModel> EventParameterList => eventParameterList;
+        public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => devicesComboBoxOptions;
+        public IReadOnlyReactiveList<classLCMethodData> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public IReadOnlyReactiveList<EventParameterViewModel> EventParameterList => eventParameterList;
 
         public bool DevicesComboBoxEnabled
         {
@@ -362,10 +362,10 @@ namespace LcmsNet.Method.ViewModels
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
 
-            if (DevicesComboBoxOptions.Contains(device))
+            if (devicesComboBoxOptions.Contains(device))
             {
-                var index = DevicesComboBoxOptions.IndexOf(device);
-                DevicesComboBoxOptions[index] = device;
+                var index = devicesComboBoxOptions.IndexOf(device);
+                devicesComboBoxOptions[index] = device;
             }
         }
 
@@ -379,13 +379,13 @@ namespace LcmsNet.Method.ViewModels
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
 
-            if (DevicesComboBoxOptions.Contains(device))
-                DevicesComboBoxOptions.Remove(device);
+            if (devicesComboBoxOptions.Contains(device))
+                devicesComboBoxOptions.Remove(device);
 
             if (deviceMappings.ContainsKey(device))
                 deviceMappings.Remove(device);
 
-            if (DevicesComboBoxOptions.Count < 1)
+            if (devicesComboBoxOptions.Count < 1)
                 DevicesComboBoxEnabled = false;
         }
 
@@ -403,14 +403,14 @@ namespace LcmsNet.Method.ViewModels
                 return;
 
 
-            if (DevicesComboBoxOptions.Count < 1)
+            if (devicesComboBoxOptions.Count < 1)
             {
                 DevicesComboBoxEnabled = true;
                 isFirstDevice = true;
             }
 
-            if (DevicesComboBoxOptions.Contains(device) == false)
-                DevicesComboBoxOptions.Add(device);
+            if (devicesComboBoxOptions.Contains(device) == false)
+                devicesComboBoxOptions.Add(device);
 
             if (deviceMappings.ContainsKey(device) == false)
             {
@@ -421,9 +421,9 @@ namespace LcmsNet.Method.ViewModels
             // Make sure we select a device
             if (isFirstDevice)
             {
-                if (DevicesComboBoxOptions.Count > 0)
+                if (devicesComboBoxOptions.Count > 0)
                 {
-                    SelectedDevice = DevicesComboBoxOptions[0];
+                    SelectedDevice = devicesComboBoxOptions[0];
                 }
                 UpdateSelectedDevice();
             }
@@ -461,16 +461,16 @@ namespace LcmsNet.Method.ViewModels
             }
             // Add the method information into the combo-box as deemed by the device.
             var methods = deviceMappings[device];
-            using (MethodsComboBoxOptions.SuppressChangeNotifications())
+            using (methodsComboBoxOptions.SuppressChangeNotifications())
             {
                 // Clear out the combo-box
-                MethodsComboBoxOptions.Clear();
-                MethodsComboBoxOptions.AddRange(methods);
+                methodsComboBoxOptions.Clear();
+                methodsComboBoxOptions.AddRange(methods);
             }
 
-            if (MethodsComboBoxOptions.Count > 0)
+            if (methodsComboBoxOptions.Count > 0)
             {
-                SelectedLCMethod = MethodsComboBoxOptions[0];
+                SelectedLCMethod = methodsComboBoxOptions[0];
                 UpdateSelectedMethod();
             }
         }
@@ -488,7 +488,7 @@ namespace LcmsNet.Method.ViewModels
             // Clear out the combo-box
             try
             {
-                foreach (var vm in EventParameterList)
+                foreach (var vm in eventParameterList)
                 {
                     vm.EventChanged -= param_EventChanged;
                 }
@@ -496,9 +496,9 @@ namespace LcmsNet.Method.ViewModels
             catch
             {
             }
-            using (EventParameterList.SuppressChangeNotifications())
+            using (eventParameterList.SuppressChangeNotifications())
             {
-                EventParameterList.Clear();
+                eventParameterList.Clear();
             }
             //mpanel_parameters.ColumnStyles.Clear();
 
@@ -534,7 +534,7 @@ namespace LcmsNet.Method.ViewModels
                     vm.ParameterLabel = name;
 
                     // Add the control itself
-                    EventParameterList.Add(vm);
+                    eventParameterList.Add(vm);
 
                     vm.ParameterValue = parameters.Values[j];
                     vm.EventChanged += param_EventChanged;
@@ -620,12 +620,12 @@ namespace LcmsNet.Method.ViewModels
 
                 var methodPairs = ReflectDevice(device);
                 deviceMappings.Add(device, methodPairs);
-                DevicesComboBoxOptions.Add(device);
+                devicesComboBoxOptions.Add(device);
             }
 
-            if (DevicesComboBoxOptions.Count > 0)
+            if (devicesComboBoxOptions.Count > 0)
             {
-                SelectedDevice = DevicesComboBoxOptions[0];
+                SelectedDevice = devicesComboBoxOptions[0];
                 UpdateSelectedDevice();
             }
             else

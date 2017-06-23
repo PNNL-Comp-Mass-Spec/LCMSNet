@@ -24,7 +24,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // TODO: OLD: InitControl();
         }
 
-        public TrayVialViewModel(int trayNumber, ReactiveList<TrayVialSampleViewModel> sampleList)
+        public TrayVialViewModel(int trayNumber, IReadOnlyReactiveList<TrayVialSampleViewModel> sampleList)
         {
             TrayNumber = trayNumber;
             if (TrayNumber <= 0)
