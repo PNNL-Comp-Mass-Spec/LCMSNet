@@ -1,0 +1,21 @@
+﻿<Window x:Class="LcmsNet.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:LcmsNet"
+        Width="710" Height="479"
+        WindowStartupLocation="CenterOwner"
+        Title="About">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="2.3*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Image Grid.Row="1" Source="/Images/LCMSNet.png" />
+        <Label x:Name="CopyrightLabel" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Copyright Battelle Memorial Institue, 2017" FontFamily="Calibri" FontSize="20" />
+        <TextBlock x:Name="Developers" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Developers: Populated at runtime" FontFamily="Calibri" FontSize="20" TextWrapping="Wrap" />
+        <Label x:Name="VersionLabel"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Version: Populated at runtime" FontFamily="Calibri" FontSize="26" />
+    </Grid>
+</Window>
