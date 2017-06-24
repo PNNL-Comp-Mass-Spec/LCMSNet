@@ -247,7 +247,7 @@ namespace LcmsNetCommonControls.Views
                 // TODO: Doesn't work with WinForms base: PopoutWindow existing = null;
                 // TODO: Doesn't work with WinForms base: foreach (var window in Application.Current.Windows)
                 // TODO: Doesn't work with WinForms base: {
-                // TODO: Doesn't work with WinForms base:     if (window is PopoutWindow pw && pw.Title.Equals(pvm.Title))
+                // TODO: Doesn't work with WinForms base:     if (window is PopoutWindow pw && pw.Title.Equals(this.Title))
                 // TODO: Doesn't work with WinForms base:     {
                 // TODO: Doesn't work with WinForms base:         existing = pw;
                 // TODO: Doesn't work with WinForms base:     }
