@@ -2229,7 +2229,9 @@ namespace LcmsNet.SampleQueue
                     {
                         var name = sample.LCMethod.Name;
                         sample.LCMethod = null; // Wipe it out
-                        sample.LCMethod = classLCMethodManager.Manager.Methods[name].Clone() as classLCMethod;
+                        // Don't use a clone here, this assigned method will be replaced before it is ever used
+                        // We need reference equality for the UI view
+                        sample.LCMethod = classLCMethodManager.Manager.Methods[name];
                     }
                     else
                     {
@@ -2260,7 +2262,9 @@ namespace LcmsNet.SampleQueue
                 {
                     var name = sample.LCMethod.Name;
                     sample.LCMethod = null; // Wipe it out
-                    sample.LCMethod = classLCMethodManager.Manager.Methods[name].Clone() as classLCMethod;
+                    // Don't use a clone here, this assigned method will be replaced before it is ever used
+                    // We need reference equality for the UI view
+                    sample.LCMethod = classLCMethodManager.Manager.Methods[name];
 
                     if (sample.LCMethod != null && sample.LCMethod.Column >= 0)
                     {
@@ -2371,7 +2375,9 @@ namespace LcmsNet.SampleQueue
                 {
                     var name = sample.LCMethod.Name;
                     sample.LCMethod = null; // Wipe it out
-                    sample.LCMethod = classLCMethodManager.Manager.Methods[name].Clone() as classLCMethod;
+                    // Don't use a clone here, this assigned method will be replaced before it is ever used
+                    // We need reference equality for the UI view
+                    sample.LCMethod = classLCMethodManager.Manager.Methods[name];
 
                     if (sample.LCMethod != null)
                     {
