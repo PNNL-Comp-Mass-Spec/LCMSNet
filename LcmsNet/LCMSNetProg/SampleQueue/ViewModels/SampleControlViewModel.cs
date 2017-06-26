@@ -775,8 +775,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData(), this.WhenAnyValue(x => x.ItemsSelected));
-            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
-            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
+            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
+            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
         }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using LcmsNet.Method.Forms;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetDataClasses;
@@ -139,25 +139,17 @@ namespace LcmsNet.SampleQueue.ViewModels
             TitleBarTextAddition = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
         }
 
-        public void PreviewAvailable(object sender, SampleProgressPreviewArgs e)
+        public void PreviewAvailable(object sender, Method.ViewModels.SampleProgressPreviewArgs e)
         {
             if (e?.PreviewImage == null)
                 return;
 
-            try
-            {
-                SequencePreview = e.PreviewImage.ToBitmapImage();
-            }
-            catch (Exception)
-            {
-                // Ignore exceptions here
-            }
-            e.Dispose();
+            SequencePreview = e.PreviewImage;
         }
 
-        private BitmapImage sequencePreview;
+        private BitmapSource sequencePreview;
 
-        public BitmapImage SequencePreview
+        public BitmapSource SequencePreview
         {
             get { return sequencePreview; }
             private set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
@@ -615,16 +607,16 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     this.sampleQueue.Undo();
                 }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
             RedoCommand = ReactiveCommand.Create(() =>
             {
                 using (SampleControlViewModel.Samples.SuppressChangeNotifications())
                 {
                     this.sampleQueue.Redo();
                 }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
-            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled));
-            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled));
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
+            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
+            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }
     }
 }

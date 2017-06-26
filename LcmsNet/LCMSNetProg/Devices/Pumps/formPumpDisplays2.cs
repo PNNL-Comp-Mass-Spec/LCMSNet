@@ -13,9 +13,6 @@ namespace LcmsNet.Devices.Pumps
             InitializeComponent();
             pumpDisplaysViewModel = new PumpDisplaysViewModel();
             pumpDisplaysView.DataContext = pumpDisplaysViewModel;
-
-            pumpDisplaysViewModel.Tack += mbutton_expand_Click;
-            pumpDisplaysViewModel.UnTack += mbutton_expand_Click;
         }
 
         /// <summary>
@@ -25,18 +22,5 @@ namespace LcmsNet.Devices.Pumps
 
         public event EventHandler Tack;
         public event EventHandler UnTack;
-
-        private void mbutton_expand_Click(object sender, EventArgs e)
-        {
-            IsTacked = (IsTacked == false);
-            if (IsTacked)
-            {
-                Tack?.Invoke(this, e);
-            }
-            else
-            {
-                UnTack?.Invoke(this, e);
-            }
-        }
     }
 }

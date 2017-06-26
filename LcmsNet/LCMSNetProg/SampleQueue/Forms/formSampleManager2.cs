@@ -72,7 +72,8 @@ namespace LcmsNet.SampleQueue.Forms
 
         public void PreviewAvailable(object sender, SampleProgressPreviewArgs e)
         {
-            SampleManagerViewModel.PreviewAvailable(sender, e);
+            SampleManagerViewModel.PreviewAvailable(sender, new Method.ViewModels.SampleProgressPreviewArgs(e.PreviewImage.ToBitmapImage()));
+            e.Dispose();
         }
 
         /// <summary>

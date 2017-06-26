@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetDataClasses;
@@ -135,6 +135,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public SampleDataManager(classSampleQueue sampleQueue)
         {
+            BindingOperations.EnableCollectionSynchronization(samplesList, new object());
             foreach (var column in classCartConfiguration.Columns)
             {
                 column.StatusChanged += column_StatusChanged;
@@ -279,8 +280,8 @@ namespace LcmsNet.SampleQueue
             }).Throttle(TimeSpan.FromSeconds(.25))
             .Subscribe(x => this.SampleQueue.UpdateSample(x.Sender.Sample));
 
-            this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(SynchronizationContext.Current).ToProperty(this, x => x.CanUndo, out canUndo);
-            this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(SynchronizationContext.Current).ToProperty(this, x => x.CanRedo, out canRedo);
+            this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo, out canUndo);
+            this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo, out canRedo);
         }
 
         #endregion

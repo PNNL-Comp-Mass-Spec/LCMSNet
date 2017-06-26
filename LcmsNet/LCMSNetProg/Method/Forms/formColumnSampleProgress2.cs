@@ -43,8 +43,7 @@ namespace LcmsNet.Method.Forms
 
         private void PreviewAvailableHandler(object sender, ViewModels.SampleProgressPreviewArgs args)
         {
-            PreviewAvailable?.Invoke(sender, new SampleProgressPreviewArgs((Image)args.PreviewImage.Clone()));
-            args.Dispose();
+            PreviewAvailable?.Invoke(sender, new SampleProgressPreviewArgs(args.PreviewImage.ToImage()));
         }
     }
 }

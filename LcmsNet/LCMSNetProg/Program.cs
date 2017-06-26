@@ -466,7 +466,13 @@ namespace LcmsNet
                     //
                     LogMessage(-1, "Loading main form");
                     Application.DoEvents();
+#if !WPFTest
                     var main = new formMDImain();
+#else
+                    var main = new MainWindow();
+                    var mainViewModel = new MainWindowViewModel();
+                    main.DataContext = mainViewModel;
+#endif
 
                     // Assure that the splash screen has been visible for at least 3 seconds
                     while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
@@ -482,7 +488,11 @@ namespace LcmsNet
                     try
                     {
 #endif
+#if !WPFTest
                         Application.Run(main);
+#else
+                        main.ShowDialog();
+#endif
 #if !DEBUG
                     }
                     catch (Exception ex)
@@ -490,6 +500,14 @@ namespace LcmsNet
                         classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             "Program Failed!", ex);
                         throw;
+                    }
+                    finally
+                    {
+#endif
+#if WPFTest
+                        mainViewModel.Dispose();
+#endif
+#if !DEBUG
                     }
 #endif
                 }

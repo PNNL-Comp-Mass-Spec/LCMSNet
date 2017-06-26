@@ -121,7 +121,7 @@ namespace LcmsNet.Method.ViewModels
                     rtb.Render(drawVisual);
                     rtb.Freeze();
 
-                    PreviewAvailable(this, new SampleProgressPreviewArgs(rtb.ToImage(), rtb.ToBitmapImage()));
+                    PreviewAvailable(this, new SampleProgressPreviewArgs(rtb));
                 }
                 catch
                 {
@@ -131,51 +131,19 @@ namespace LcmsNet.Method.ViewModels
         }
     }
 
-    public class SampleProgressPreviewArgs : EventArgs, IDisposable
+    public class SampleProgressPreviewArgs : EventArgs
     {
         public bool disposed;
 
-        public SampleProgressPreviewArgs(Image image)
+        public SampleProgressPreviewArgs(BitmapSource image)
         {
             disposed = false;
             PreviewImage = image;
         }
 
-        public SampleProgressPreviewArgs(Image image, BitmapImage bmpImage)
-        {
-            disposed = false;
-            PreviewImage = image;
-            PreviewImageWpf = bmpImage;
-        }
-
         /// <summary>
         /// Gets the preview image for the sample progress
         /// </summary>
-        public Image PreviewImage { get; private set; }
-
-        /// <summary>
-        /// Gets the preview image for the sample progress
-        /// </summary>
-        public BitmapImage PreviewImageWpf { get; private set; }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposeOthers)
-        {
-            if (disposed)
-            {
-                return;
-            }
-            if (disposeOthers)
-            {
-                PreviewImage.Dispose();
-                PreviewImage = null;
-            }
-            disposed = true;
-        }
+        public BitmapSource PreviewImage { get; private set; }
     }
 }

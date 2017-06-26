@@ -13,8 +13,6 @@ namespace LcmsNet.Devices.Pumps.ViewModels
     {
         private readonly List<IPump> pumps;
 
-        //TODO: WPF form of "Tack"/"UnTack": private PumpDisplaysWindow pumpDisplaysWindow = null;
-
         readonly Dictionary<IPump, PumpDisplayViewModel> pumpMonitorDictionary;
 
         public PumpDisplaysViewModel()
@@ -42,7 +40,6 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
         private int currentPump;
         private string pumpName = "";
-        private string tackType = "Untack";
 
         private readonly ReactiveList<MobilePhase> mobilePhases = new ReactiveList<MobilePhase>();
         private readonly ReactiveList<PumpDisplayViewModel> pumpMonitorDisplays = new ReactiveList<PumpDisplayViewModel>();
@@ -59,44 +56,9 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             set { this.RaiseAndSetIfChanged(ref pumpName, value); }
         }
 
-        public string TackType
-        {
-            get { return tackType; }
-            set { this.RaiseAndSetIfChanged(ref tackType, value); }
-        }
-
         public IReadOnlyReactiveList<MobilePhase> MobilePhases => mobilePhases;
 
         public IReadOnlyReactiveList<PumpDisplayViewModel> PumpMonitorDisplays => pumpMonitorDisplays;
-
-        /// <summary>
-        /// Gets or sets whether the window is tacked.
-        /// </summary>
-        public bool IsTacked { get; set; }
-
-        public event EventHandler Tack;
-        public event EventHandler UnTack;
-
-        private void ChangeWindowTack()
-        {
-            IsTacked = (IsTacked == false);
-            if (IsTacked)
-            {
-                Tack?.Invoke(this, new EventArgs());
-
-                //TODO: WPF form of "UnTack": pumpDisplaysWindow = new PumpDisplaysWindow();
-                //TODO: WPF form of "UnTack": pumpDisplaysWindow.DataContext = this;
-                //TODO: WPF form of "UnTack": pumpDisplaysWindow.Show();
-                TackType = "Tack";
-            }
-            else
-            {
-                UnTack?.Invoke(this, new EventArgs());
-
-                //TODO: WPF form of "Tack": pumpDisplaysWindow?.Close();
-                TackType = "Untack";
-            }
-        }
 
         private void MoveLeft()
         {
@@ -223,13 +185,11 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
         public ReactiveCommand MoveLeftCommand { get; private set; }
         public ReactiveCommand MoveRightCommand { get; private set; }
-        public ReactiveCommand ChangeTackCommand { get; private set; }
 
         private void SetupCommands()
         {
             MoveLeftCommand = ReactiveCommand.Create(() => this.MoveLeft(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x - 1 && x - 1 < pumps.Count));
             MoveRightCommand = ReactiveCommand.Create(() => this.MoveRight(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x + 1 && x + 1 < pumps.Count));
-            ChangeTackCommand = ReactiveCommand.Create(() => this.ChangeWindowTack());
         }
     }
 }
