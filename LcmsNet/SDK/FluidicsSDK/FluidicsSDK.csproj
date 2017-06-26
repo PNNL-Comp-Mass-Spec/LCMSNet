@@ -89,6 +89,7 @@
     <Compile Include="Devices\Valves\ISixteenPortValve.cs" />
     <Compile Include="Devices\Valves\ISolidPhaseExtractor.cs" />
     <Compile Include="Devices\Valves\ITenPortValve.cs" />
+    <Compile Include="Devices\Valves\ITwoPositionValve.cs" />
     <Compile Include="Devices\Valves\MultiPositionValveBase.cs" />
     <Compile Include="Devices\Valves\MultiPositionValveWpf.cs" />
     <Compile Include="Devices\Valves\NinePortValve.cs" />

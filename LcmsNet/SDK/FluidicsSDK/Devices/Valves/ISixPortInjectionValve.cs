@@ -1,16 +1,11 @@
 ﻿using System;
-using FluidicsSDK.Base;
+using FluidicsSDK.Devices.Valves;
 
 namespace FluidicsSDK.Devices
 {
-    public interface ISixPortInjectionValve : IFluidicsDevice
+    public interface ISixPortInjectionValve : ITwoPositionValve
     {
-        event EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
         event EventHandler InjectionVolumeChanged;
-        int GetPosition();
-        
         double InjectionVolume { get; set; }
-
-        void SetPosition(TwoPositionState s);
     }
 }

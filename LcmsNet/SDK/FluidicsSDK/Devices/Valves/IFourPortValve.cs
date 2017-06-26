@@ -1,15 +1,11 @@
-﻿using System;
-using FluidicsSDK.Base;
+﻿using FluidicsSDK.Devices.Valves;
 
 namespace FluidicsSDK.Devices
 {
     /// <summary>
     /// Interface to control a valve
     /// </summary>
-    public interface IFourPortValve : IFluidicsDevice
-    {        
-        event           EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
-        int             GetPosition();
-        void SetPosition(TwoPositionState s);
+    public interface IFourPortValve : ITwoPositionValve
+    {
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using FluidicsSDK.Base;
+﻿using FluidicsSDK.Devices.Valves;
 
 namespace FluidicsSDK.Devices
 {
-    public interface ITenPortValve : IFluidicsDevice
+    public interface ITenPortValve : ITwoPositionValve
     {
-        event EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
-        int GetPosition();
-        void SetPosition(TwoPositionState s);
     }
 }

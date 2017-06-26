@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
 using System.Windows.Controls;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
 
@@ -7,7 +8,8 @@ namespace DemoPluginLibrary
 {
     public class DemoValveAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
     {
-        private DemoValve valve;
+        private ITwoPositionValve valveControls;
+        private IDevice valve;
 
         public DemoValveAdvancedControlViewModel()
         {
@@ -18,17 +20,17 @@ namespace DemoPluginLibrary
 
         private void SetStateA()
         {
-            valve.SetPosition(FluidicsSDK.Base.TwoPositionState.PositionA);
+            valveControls.SetPosition(FluidicsSDK.Base.TwoPositionState.PositionA);
         }
 
         private void SetStateB()
         {
-            valve.SetPosition(FluidicsSDK.Base.TwoPositionState.PositionB);
+            valveControls.SetPosition(FluidicsSDK.Base.TwoPositionState.PositionB);
         }
 
         private void Refresh()
         {
-            State = ((FluidicsSDK.Base.TwoPositionState)valve.GetPosition()).ToString();
+            State = ((FluidicsSDK.Base.TwoPositionState)valveControls.GetPosition()).ToString();
         }
 
         public void RegisterDevice(IDevice device)
@@ -43,13 +45,11 @@ namespace DemoPluginLibrary
 
         public IDevice Device
         {
-            get
-            {
-                return valve;
-            }
+            get { return valve; }
             set
             {
-                valve = value as DemoValve;
+                valve = value;
+                valveControls = value as ITwoPositionValve;
                 SetBaseDevice(value);
             }
         }
