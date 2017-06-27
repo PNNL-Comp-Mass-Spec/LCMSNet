@@ -12,7 +12,7 @@
     <AssemblyName>LcmsNet</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>LcmsNet.Program</StartupObject>
+    <StartupObject>LcmsNet.App</StartupObject>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ApplicationIcon>LCMSLogo3.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -855,6 +855,9 @@
     <Compile Include="Simulator\Views\SimulatorControlsAndChartsView.xaml.cs">
       <DependentUpon>SimulatorControlsAndChartsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Configuration\controlColumn.resx">
       <DependentUpon>controlColumn.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1567,6 +1570,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">
