@@ -44,7 +44,7 @@ namespace LcmsNet
         /// <summary>
         /// Reference to splash screen window.
         /// </summary>
-        private static formSplashScreen m_splashScreen;
+        private static DynamicSplashScreenWindow splashScreen;
 
         #endregion
 
@@ -73,7 +73,7 @@ namespace LcmsNet
             if (!string.IsNullOrWhiteSpace(emulation))
             {
                 var isEmulated = Convert.ToBoolean(emulation);
-                m_splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
+                splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
             }
         }
 
@@ -169,7 +169,7 @@ namespace LcmsNet
         {
             if (messageLevel < 1)
             {
-                m_splashScreen.Status = args.Message;
+                splashScreen.Status = args.Message;
             }
         }
 
@@ -271,24 +271,23 @@ namespace LcmsNet
                     GC.KeepAlive(mutex);
 
                     //
-                    // Synch to the logger so we can display any messages coming back from the
-                    // rest of the program and interface.
-                    //
-                    classApplicationLogger.Message +=
-                        classApplicationLogger_Message;
-
-                    //
                     // Show the splash screen
                     //
-                    m_splashScreen = new formSplashScreen
+                    splashScreen = new DynamicSplashScreenWindow()
                     {
                         SoftwareCopyright = SOFTWARE_COPYRIGHT,
                         SoftwareDevelopers = SOFTWARE_DEVELOPERS
                     };
 
+                    //
+                    // Synch to the logger so we can display any messages coming back from the
+                    // rest of the program and interface.
+                    //
+                    classApplicationLogger.Message += classApplicationLogger_Message;
+
                     var splashLoadTime = DateTime.UtcNow;
 
-                    m_splashScreen.Show();
+                    splashScreen.Show();
                     Application.DoEvents();
 
                     LogVersionNumbers();
@@ -480,7 +479,7 @@ namespace LcmsNet
                         Thread.Sleep(250);
                     }
 
-                    m_splashScreen.Hide();
+                    splashScreen.Close();
 
                     classApplicationLogger.Message -= classApplicationLogger_Message;
 
