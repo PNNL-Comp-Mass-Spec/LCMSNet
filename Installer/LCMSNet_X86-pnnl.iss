@@ -47,6 +47,8 @@ Name: "{app}\x64"
 Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                DestDir: "{app}";          Flags: ignoreversion
 
 ; Nuget DLLs
+Source: LCMSNetProg\bin\x86\PNNLRelease\HardCodet.Wpf.*.dll;        DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\Microsoft.WindowsAPICodePack*.dll;        DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\System.Reactive*.dll;       DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\Reactive*.dll;              DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\Splat*.dll;                 DestDir: "{app}";          Flags: ignoreversion
