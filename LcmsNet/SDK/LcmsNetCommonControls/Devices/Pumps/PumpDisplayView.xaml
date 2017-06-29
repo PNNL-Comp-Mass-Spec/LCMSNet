@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="931" d:DesignWidth="682"
              d:DataContext="{d:DesignInstance {x:Type local:PumpDisplayViewModel}, IsDesignTimeCreatable=True}">
-    <!-- Wrapping the plots in a disabled ScrollViewer to work around a bug in OxyPlot
+    <!-- HACK: Wrapping the plots in a disabled ScrollViewer to work around a bug in OxyPlot
          (OxyPlot stores a reference to the closest parent ScrollViewer, which breaks any use of
          PopoutView where the PopoutView is contained at some point inside a ScrollViewer) -->
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
@@ -24,7 +24,7 @@
         <Label Grid.Row="0" HorizontalAlignment="Center" Content="{Binding PumpName}" />
         <oxy:PlotView Grid.Row="1" Model="{Binding DataPressureMonitorPlot}" Margin="-10,-5,0,-10" />
         <oxy:PlotView Grid.Row="3" Model="{Binding DataFlowMonitorPlot}" Margin="-10,-5,0,-10" />
-        <!-- Can't use the same bounds as the first 2, because the the top left or bottom right corner needs to be visible within the disabled ScrollViewer -->
+        <!-- HACK: Can't use the same bounds as the first 2, because the the top left or bottom right corner needs to be visible within the disabled ScrollViewer (oxyplot bug) -->
         <oxy:PlotView Grid.Row="5" Model="{Binding DataBMonitorPlot}" Margin="-10,-5,0,0" /> <!-- Margin="-10,-5,0,-10" />-->
         <GridSplitter Grid.Row="2" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" Background="DarkGray" />
         <GridSplitter Grid.Row="4" ShowsPreview="False" Height="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" Background="DarkGray" />
