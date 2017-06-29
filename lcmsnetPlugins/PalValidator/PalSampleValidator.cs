@@ -21,10 +21,10 @@ namespace PALAutoSampler.Validator
         public List<classSampleValidationError> ValidateSamples(LcmsNetDataClasses.classSampleData sample)
         {
             var errors = new List<classSampleValidationError>();
-            
-            // 
+
+            //
             // We've validated the method, and the devices... Now we need to validate the PAL settings.
-            // 
+            //
             if (string.IsNullOrEmpty(sample.PAL.Method))
                 errors.Add(new classSampleValidationError("The PAL Method is not set.", enumSampleValidationError.PalMethodNotSpecified));
 
@@ -42,16 +42,16 @@ namespace PALAutoSampler.Validator
                 errors.Add(new classSampleValidationError("The dataset name is not correct.", enumSampleValidationError.DatasetNameError));
             }
 
-            // 
+            //
             // Make sure the volume is set.
-            // 
+            //
             if (sample.Volume < classCartConfiguration.MinimumVolume)
             {
                 errors.Add(new classSampleValidationError("The Sample Volume is lower than the instrument can handle.", enumSampleValidationError.InjectionVolumeOutOfRange));
             }
 
             //TODO: Fix this to validate what kind of tray/vial setup is being used.
-            if (sample.PAL.Well <= classPalData.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 96)
+            if (sample.PAL.Well <= classPalData.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 1536)
                 errors.Add(new classSampleValidationError("The PAL Well/Vial is not set.", enumSampleValidationError.PalVialNotSpecified));
 
                 return errors;
