@@ -252,7 +252,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        internal void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
         {
             synchronizationContext.Post(d => DetermineIfShouldSetButtons(data), sender);
             //DetermineIfShouldSetButtons(data);
@@ -306,7 +306,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports the MRM Files
         /// </summary>
-        private void ExportMRMFiles()
+        public void ExportMRMFiles()
         {
             var folderDialog = new CommonOpenFileDialog()
             {
@@ -328,9 +328,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Imports the queue into LCMS.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void ImportQueue(object sender, EventArgs e)
+        public void ImportQueue()
         {
             var fileDialog = new OpenFileDialog
             {
@@ -363,16 +361,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                     classApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Exports any MRM files associated with the waiting queue
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void exportMRMFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportMRMFiles();
         }
 
         /// <summary>
@@ -499,9 +487,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Caches the queue to the default.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        public void SaveQueue()
         {
             try
             {
@@ -519,9 +505,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Saves the sample queue to another file.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        public void SaveQueueAs()
         {
             var saveDialog = new SaveFileDialog
             {
@@ -546,9 +530,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports the queue to LCMS Version XML
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void queueToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        public void ExportQueueToXML()
         {
             var saveDialog = new SaveFileDialog
             {
@@ -569,9 +551,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports queue to CSV.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void queueAsCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        public void ExportQueueToCsv()
         {
             var saveDialog = new SaveFileDialog
             {
@@ -592,9 +572,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports the sample queue to Xcalibur
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void queueAsCSVToolStripMenuItem_Click_1(object sender, EventArgs e)
+        public void ExportQueueToXcalibur()
         {
             var saveDialog = new SaveFileDialog
             {

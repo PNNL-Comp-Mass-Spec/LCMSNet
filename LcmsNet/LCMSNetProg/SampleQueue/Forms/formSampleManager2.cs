@@ -102,7 +102,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void ImportQueue(object sender, EventArgs e)
         {
-            SampleManagerViewModel.ImportQueue(sender, e);
+            SampleManagerViewModel.ImportQueue();
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void exportMRMFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SampleManagerViewModel.exportMRMFilesToolStripMenuItem_Click(sender, e);
+            SampleManagerViewModel.ExportMRMFiles();
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SampleManagerViewModel.saveToolStripMenuItem_Click(sender, e);
+            SampleManagerViewModel.SaveQueue();
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SampleManagerViewModel.saveAsToolStripMenuItem_Click(sender, e);
+            SampleManagerViewModel.SaveQueueAs();
             Text = SampleManagerViewModel.TitleBarTextAddition;
         }
 
@@ -143,7 +143,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void queueToXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SampleManagerViewModel.queueToXMLToolStripMenuItem_Click(sender, e);
+            SampleManagerViewModel.ExportQueueToXML();
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void queueAsCSVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SampleManagerViewModel.queueAsCSVToolStripMenuItem_Click(sender, e);
+            SampleManagerViewModel.ExportQueueToCsv();
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace LcmsNet.SampleQueue.Forms
         /// <param name="e"></param>
         private void queueAsCSVToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            SampleManagerViewModel.queueAsCSVToolStripMenuItem_Click_1(sender, e);
+            SampleManagerViewModel.ExportQueueToXcalibur();
         }
 
         #endregion
