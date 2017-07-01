@@ -298,6 +298,7 @@ namespace LcmsNetDataClasses
         /// Whether this is possibly a dummy sample, and a real sample needs to be looked up before we perform any operations
         /// Default value is true; exists to prevent excessive lookups of the real sample.
         /// </summary>
+        [NotStoredProperty]
         public bool IsDummySample { get; private set; }
 
         /// <summary>
