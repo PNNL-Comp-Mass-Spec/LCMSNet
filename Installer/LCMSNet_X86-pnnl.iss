@@ -53,7 +53,6 @@ Source: LCMSNetProg\bin\x86\PNNLRelease\System.Reactive*.dll;       DestDir: "{a
 Source: LCMSNetProg\bin\x86\PNNLRelease\Reactive*.dll;              DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\Splat*.dll;                 DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\Xceed.Wpf*.dll;             DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\PNNLRelease\Interop.Shell32*.dll;       DestDir: "{app}";          Flags: ignoreversion
 
 ; DLLs are copied below in the "DLLs" section, sourced from {#MyLib}\*
 

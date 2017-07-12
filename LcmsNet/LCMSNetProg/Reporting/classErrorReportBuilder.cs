@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Threading;
+using System.IO.Compression;
 using System.Windows.Forms;
 using LcmsNet.Method;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
-using Shell32;
 
 namespace LcmsNet.Reporting
 {
@@ -220,35 +219,7 @@ namespace LcmsNet.Reporting
 
         private void CreateZip(string sourcePath, string zipPath)
         {
-            //Create an empty zip file
-            var emptyzip = new byte[]
-            {
-                80, 75, 5, 6, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-            };
-
-            var fs = File.Create(zipPath);
-            fs.Write(emptyzip, 0, emptyzip.Length);
-            fs.Flush();
-            fs.Close();
-            fs = null;
-
-            //Copy a folder and its contents into the newly created zip file
-            var sc = new ShellClass();
-            var sourceFolder = sc.NameSpace(Path.GetFullPath(sourcePath));
-            var destFolder = sc.NameSpace(Path.GetFullPath(zipPath));
-            var items = sourceFolder.Items();
-            destFolder.CopyHere(items, 20);
-
-            //Ziping a file using the Windows Shell API
-            //creates another thread where the zipping is executed.
-            //This means that it is possible that this console app
-            //would end before the zipping thread
-            //starts to execute which would cause the zip to never
-            //occur and you will end up with just
-            //an empty zip file. So wait a second and give
-            //the zipping thread time to get started
-            Thread.Sleep(2000);
+            ZipFile.CreateFromDirectory(sourcePath, zipPath);
         }
 
         #endregion
