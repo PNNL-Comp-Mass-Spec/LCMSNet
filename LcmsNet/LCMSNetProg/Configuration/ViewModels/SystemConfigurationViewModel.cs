@@ -13,12 +13,6 @@ using ReactiveUI;
 
 namespace LcmsNet.Configuration.ViewModels
 {
-    #region "Namespace delegates"
-
-    internal delegate void DelegateUpdateStatus(object sender, enumColumnStatus previousStatus, enumColumnStatus newStatus);
-
-    #endregion
-
     /// <summary>
     /// Displays application and cart configurations.
     /// </summary>

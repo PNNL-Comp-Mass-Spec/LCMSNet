@@ -29,13 +29,6 @@ namespace LcmsNet.SampleQueue
 
         private readonly classDMSSampleValidator mValidator;
 
-        /// <summary>
-        /// Delegate defining when status updates are available in batches.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="messages"></param>
-        public delegate void DelegateStatusUpdates(object sender, List<string> messages);
-
         #region Column Events
 
         /// <summary>
@@ -1237,18 +1230,6 @@ namespace LcmsNet.SampleQueue
         {
             SamplesStopped(sender, data);
         }
-
-        /// <summary>
-        /// Delegate defining how to update samples from another thread.
-        /// </summary>
-        /// <param name="samples"></param>
-        private delegate void DelegateUpdateRows(IEnumerable<classSampleData> samples);
-
-        /// <summary>
-        /// Delegate defining how to add samples from another thread
-        /// </summary>
-        /// <param name="samples"></param>
-        private delegate void DelegateSampleAdded(IEnumerable<classSampleData> samples, bool replaceExistingRows);
 
         /// <summary>
         /// Handles when a sample is queued for running but no open slot exists.

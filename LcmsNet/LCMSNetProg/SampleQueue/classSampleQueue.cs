@@ -125,13 +125,6 @@ namespace LcmsNet.SampleQueue
         /// <param name="data">Data associated with the addition.</param>
         public delegate void DelegateSamplesModifiedHandler(object sender, classSampleQueueArgs data);
 
-        /// <summary>
-        /// Definition for when a sample is started.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        public delegate void DelegateSampleStarted(object sender, classSampleQueueArgs data);
-
         #endregion
 
         #region Constants

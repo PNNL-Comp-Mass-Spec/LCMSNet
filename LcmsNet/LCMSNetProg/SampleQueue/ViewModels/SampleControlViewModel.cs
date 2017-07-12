@@ -80,13 +80,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
-        /// <summary>
-        /// Delegate defining when status updates are available in batches.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="messages"></param>
-        public delegate void DelegateStatusUpdates(object sender, List<string> messages);
-
         #region Manipulation Enablement
 
         /// <summary>

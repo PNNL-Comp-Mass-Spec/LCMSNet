@@ -19,15 +19,6 @@ namespace LcmsNet.Method.ViewModels
     public class LCMethodStageViewModel : ReactiveObject
     {
         /// <summary>
-        /// Mode used to preview the method throughput.
-        /// </summary>
-        public enum enumLCMethodRenderMode
-        {
-            Column,
-            Time
-        }
-
-        /// <summary>
         /// Constant defining where the LC-Methods are stored.
         /// </summary>
         private const string CONST_METHOD_FOLDER_PATH = "LCMethods";

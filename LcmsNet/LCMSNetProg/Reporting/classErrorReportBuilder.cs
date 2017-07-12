@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
-using System.Windows.Forms;
 using LcmsNet.Method;
 using LcmsNetDataClasses.Logging;
 using LcmsNetDataClasses.Method;
@@ -31,68 +29,6 @@ namespace LcmsNet.Reporting
         /// Gets or sets the path of the directory where errors are created.
         /// </summary>
         public string BasePath { get; set; }
-
-        /// <summary>
-        /// Creates a report zip file for error reporting.
-        /// </summary>
-        /// <param name="errorForm"></param>
-        /// <param name="methods"></param>
-        /// <param name="logPath"></param>
-        public string CreateReport(List<Form> errorForms,
-            List<classLCMethod> methods,
-            string logPath,
-            string hardwarePath)
-        {
-            var now = DateTime.Now;
-            var newPath = string.Format("report_{0:0000}{1:00}{2:00}_{3:00}{4:00}{5:00}", now.Year,
-                now.Day,
-                now.Month,
-                now.Hour,
-                now.Minute,
-                now.Second);
-
-            var didCreate = CreateAppropiatePaths(BasePath, newPath);
-            if (!didCreate)
-            {
-                return null;
-            }
-
-            newPath = Path.Combine(BasePath, newPath);
-            CreateScreenShots(newPath, errorForms);
-            SaveMethods(newPath, methods);
-
-            try
-            {
-                File.Copy(logPath, Path.Combine(newPath, Path.GetFileName(logPath)));
-            }
-            catch (Exception ex)
-            {
-                classApplicationLogger.LogError(0, "Could not copy the current log file.", ex);
-            }
-
-            try
-            {
-                File.Copy(hardwarePath, Path.Combine(newPath, Path.GetFileName(hardwarePath)));
-            }
-            catch (Exception ex)
-            {
-                classApplicationLogger.LogError(0, "Could not copy the current hardware configuration file.", ex);
-            }
-
-            var zipPath = newPath + ".zip";
-            try
-            {
-                CreateZip(newPath, zipPath);
-                Directory.Delete(newPath, true);
-            }
-            catch (Exception ex)
-            {
-                zipPath = null;
-                classApplicationLogger.LogError(0, "Could not create the error report zip file.", ex);
-            }
-
-            return zipPath;
-        }
 
         /// <summary>
         /// Creates a report zip file for error reporting.
@@ -185,47 +121,6 @@ namespace LcmsNet.Reporting
         }
 
         #region
-
-        /// <summary>
-        /// Creates an image from a form as a screenshot.
-        /// </summary>
-        /// <param name="form"></param>
-        /// <returns></returns>
-        private System.Drawing.Image CreateImage(Form form)
-        {
-            var image = new Bitmap(form.Width, form.Height);
-            using (var graphics = form.CreateGraphics())
-            {
-                form.DrawToBitmap(image, new Rectangle(0, 0, form.Width, form.Height));
-            }
-            return image;
-        }
-
-        /// <summary>
-        /// Creates a screenshot for all of the provided forms.
-        /// </summary>
-        /// <param name="forms"></param>
-        /// <param name="path"></param>
-        private void CreateScreenShots(string path, List<Form> forms)
-        {
-            try
-            {
-                foreach (var form in forms)
-                {
-                    var name = form.Name;
-                    var imagePath = Path.Combine(path, name + ".png");
-
-                    using (var image = CreateImage(form))
-                    {
-                        image.Save(imagePath);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                classApplicationLogger.LogError(0, "Could not create form screenshots.", ex);
-            }
-        }
 
         /// <summary>
         /// Creates an image from a control as a screenshot.

@@ -211,7 +211,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="bounds"></param>
         public void RenderGraphics(DrawingContext e, Rect bounds)
         {
-            var renderer = LCRendererFactory.GetRendererWpf(RenderMode);
+            var renderer = LCRendererFactory.GetRenderer(RenderMode);
             if (renderer == null)
                 return;
 

@@ -155,8 +155,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
         }
 
-        private delegate void DelegateToggleButtons(classSampleQueueArgs args);
-
         private bool isRunButtonEnabled;
         private bool isStopButtonEnabled;
         private SolidColorBrush runButtonBackColor;
