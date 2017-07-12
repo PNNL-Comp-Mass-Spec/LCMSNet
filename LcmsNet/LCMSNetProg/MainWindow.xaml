@@ -71,7 +71,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <sampleQueueViews:SampleManagerView DataContext="{Binding SampleManager}" />
+                <sampleQueueViews:SampleManagerView DataContext="{Binding SampleManagerVm}" />
             </TabItem>
             <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDesignTab">
                 <TabItem.HeaderTemplate>
@@ -82,7 +82,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <views:FluidicsDesignView DataContext="{Binding FluidicsDesign}" />
+                <views:FluidicsDesignView DataContext="{Binding FluidicsDesignVm}" />
             </TabItem>
             <TabItem ToolTip="Simulate" Visibility="{Binding CanSimulate, Converter={StaticResource BoolToVis}}">
                 <TabItem.HeaderTemplate>
@@ -104,7 +104,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <methodViews:ColumnSampleProgressView DataContext="{Binding SampleProgress}"/>
+                <methodViews:ColumnSampleProgressView DataContext="{Binding SampleProgressVm}" />
             </TabItem>
             <TabItem ToolTip="Methods">
                 <TabItem.HeaderTemplate>
@@ -115,7 +115,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <methodViews:LCMethodEditorView DataContext="{Binding MethodEditor}" />
+                <methodViews:LCMethodEditorView DataContext="{Binding MethodEditorVm}" />
             </TabItem>
             <TabItem ToolTip="Pumps" x:Name="PumpTab">
                 <TabItem.HeaderTemplate>
@@ -139,7 +139,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <notificationViews:NotificationSystemView DataContext="{Binding NotificationSystem}" />
+                <notificationViews:NotificationSystemView DataContext="{Binding NotificationSystemVm}" />
             </TabItem>
             <TabItem ToolTip="Messages">
                 <TabItem.HeaderTemplate>
@@ -156,7 +156,7 @@
                         </Grid>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <loggingViews:MessagesView DataContext="{Binding MessageWindow}" />
+                <loggingViews:MessagesView DataContext="{Binding MessagesVm}" />
             </TabItem>
             <TabItem ToolTip="Config">
                 <TabItem.HeaderTemplate>

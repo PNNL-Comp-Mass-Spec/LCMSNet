@@ -74,13 +74,13 @@ namespace LcmsNet
         {
             ShowAboutCommand = ReactiveCommand.Create(() => this.ShowAboutWindow());
             ReportErrorCommand = ReactiveCommand.Create(() => this.ReportError());
-            OpenQueueCommand = ReactiveCommand.Create(() => SampleManager.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
-            SaveQueueCommand = ReactiveCommand.Create(() => SampleManager.SaveQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
-            SaveQueueAsCommand = ReactiveCommand.Create(() => SampleManager.SaveQueueAs(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToXmlCommand = ReactiveCommand.Create(() => SampleManager.ExportQueueToXML(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManager.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManager.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToMRMCommand = ReactiveCommand.Create(() => SampleManager.ExportMRMFiles(), this.WhenAnyValue(x => x.QueueTabSelected));
+            OpenQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
+            SaveQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
+            SaveQueueAsCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueueAs(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToXmlCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXML(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToMRMCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportMRMFiles(), this.WhenAnyValue(x => x.QueueTabSelected));
         }
 
         #endregion
@@ -162,15 +162,13 @@ namespace LcmsNet
         /// ViewModel that manages views of the sample queue class for handling sample
         /// ordering and running.
         /// </summary>
-        public SampleManagerViewModel SampleManager
+        public SampleManagerViewModel SampleManagerVm
         {
             get { return sampleManager; }
             private set { this.RaiseAndSetIfChanged(ref sampleManager, value); }
         }
 
-        public Icon LcmsNetWinFormsIcon => Resources.LCMSLogo2;
-
-        public FluidicsDesignViewModel FluidicsDesign
+        public FluidicsDesignViewModel FluidicsDesignVm
         {
             get { return fluidicsDesign; }
             private set { this.RaiseAndSetIfChanged(ref fluidicsDesign, value); }
@@ -182,13 +180,13 @@ namespace LcmsNet
             private set { this.RaiseAndSetIfChanged(ref simCombined, value); }
         }
 
-        public ColumnSampleProgressViewModel SampleProgress
+        public ColumnSampleProgressViewModel SampleProgressVm
         {
             get { return sampleProgress; }
             private set { this.RaiseAndSetIfChanged(ref sampleProgress, value); }
         }
 
-        public LCMethodEditorViewModel MethodEditor
+        public LCMethodEditorViewModel MethodEditorVm
         {
             get { return methodEditor; }
             private set { this.RaiseAndSetIfChanged(ref methodEditor, value); }
@@ -200,19 +198,19 @@ namespace LcmsNet
             private set { this.RaiseAndSetIfChanged(ref pumpDisplaysPopoutVm, value); }
         }
 
-        public PumpDisplaysViewModel PumpDisplays
+        public PumpDisplaysViewModel PumpDisplaysVm
         {
             get { return pumpDisplays; }
             private set { this.RaiseAndSetIfChanged(ref pumpDisplays, value); }
         }
 
-        public NotificationSystemViewModel NotificationSystem
+        public NotificationSystemViewModel NotificationSystemVm
         {
             get { return notifications; }
             private set { this.RaiseAndSetIfChanged(ref notifications, value); }
         }
 
-        public MessagesViewModel MessageWindow
+        public MessagesViewModel MessagesVm
         {
             get { return messages; }
             private set { this.RaiseAndSetIfChanged(ref messages, value); }
@@ -363,16 +361,16 @@ namespace LcmsNet
             classSQLiteTools.GetSepTypeList(false);
 
             // Fludics Design display
-            FluidicsDesign = new FluidicsDesignViewModel();
+            FluidicsDesignVm = new FluidicsDesignViewModel();
 
             // Notification System
-            NotificationSystem = new NotificationSystemViewModel(classDeviceManager.Manager);
-            NotificationSystem.ActionRequired += m_notifications_ActionRequired;
+            NotificationSystemVm = new NotificationSystemViewModel(classDeviceManager.Manager);
+            NotificationSystemVm.ActionRequired += m_notifications_ActionRequired;
 
 
             // Construct the sample queue object that holds and manages sample data ordering
             m_sampleQueue = new classSampleQueue();
-            SampleManager = new SampleManagerViewModel(m_sampleQueue);
+            SampleManagerVm = new SampleManagerViewModel(m_sampleQueue);
 
             classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
@@ -380,11 +378,11 @@ namespace LcmsNet
             classDeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
 
             // Displays the pump data.
-            PumpDisplays = new PumpDisplaysViewModel();
-            PumpDisplaysPopoutVm = new PopoutViewModel(PumpDisplays);
+            PumpDisplaysVm = new PumpDisplaysViewModel();
+            PumpDisplaysPopoutVm = new PopoutViewModel(PumpDisplaysVm);
 
             classApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
-            FluidicsDesign.LoadConfiguration();
+            FluidicsDesignVm.LoadConfiguration();
 
 
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
@@ -396,18 +394,18 @@ namespace LcmsNet
             //
             // Logging and messaging
             //
-            MessageWindow = new MessagesViewModel();
-            MessageWindow.ErrorCleared += Messages_ErrorCleared;
-            MessageWindow.ErrorPresent += Messages_ErrorPresent;
-            classApplicationLogger.Error += MessageWindow.ShowErrors;
+            MessagesVm = new MessagesViewModel();
+            MessagesVm.ErrorCleared += Messages_ErrorCleared;
+            MessagesVm.ErrorPresent += Messages_ErrorPresent;
+            classApplicationLogger.Error += MessagesVm.ShowErrors;
             classApplicationLogger.Error += classApplicationLogger_Error;
-            classApplicationLogger.Message += MessageWindow.ShowMessage;
+            classApplicationLogger.Message += MessagesVm.ShowMessage;
             classApplicationLogger.Message += classApplicationLogger_Message;
 
             // Method Editor
-            MethodEditor = new LCMethodEditorViewModel();
-            SampleProgress = new ColumnSampleProgressViewModel();
-            SampleManager.Stop += SampleManager_Stop;
+            MethodEditorVm = new LCMethodEditorViewModel();
+            SampleProgressVm = new ColumnSampleProgressViewModel();
+            SampleManagerVm.Stop += SampleManager_Stop;
 
 
             // Get the most recently used separation type
@@ -497,8 +495,8 @@ namespace LcmsNet
             }
 
             display?.ShowDialog();
-            SampleProgress.PreviewAvailable += SampleManager.PreviewAvailable;
-            NotificationSystem.LoadNotificationFile();
+            SampleProgressVm.PreviewAvailable += SampleManagerVm.PreviewAvailable;
+            NotificationSystemVm.LoadNotificationFile();
         }
 
         #endregion
@@ -632,13 +630,13 @@ namespace LcmsNet
             var sampler = device as IAutoSampler;
             if (sampler != null)
             {
-                sampler.TrayNames += SampleManager.AutoSamplerTrayList;
+                sampler.TrayNames += SampleManagerVm.AutoSamplerTrayList;
             }
 
             var network = device as INetworkStart;
             if (network != null)
             {
-                network.MethodNames += SampleManager.InstrumentMethodList;
+                network.MethodNames += SampleManagerVm.InstrumentMethodList;
             }
         }
 
@@ -653,14 +651,14 @@ namespace LcmsNet
             {
                 var sampler = device as IAutoSampler;
                 if (sampler != null)
-                    sampler.TrayNames -= SampleManager.AutoSamplerTrayList;
+                    sampler.TrayNames -= SampleManagerVm.AutoSamplerTrayList;
             }
 
             if (type.IsAssignableFrom(typeof(INetworkStart)))
             {
                 var network = device as INetworkStart;
                 if (network != null)
-                    network.MethodNames -= SampleManager.InstrumentMethodList;
+                    network.MethodNames -= SampleManagerVm.InstrumentMethodList;
             }
         }
 
@@ -724,8 +722,6 @@ namespace LcmsNet
         }
 
         #endregion
-
-        public delegate void statusDelegate(int messageLevel, string message);
 
         /// <summary>
         /// Handles displaying a message when an object notifies LCMS at level 0.
@@ -799,7 +795,7 @@ namespace LcmsNet
                     {
                         lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     }
-                    SampleProgress.UpdateError(sample, lcEvent);
+                    SampleProgressVm.UpdateError(sample, lcEvent);
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message,
                         null, args.Sample);
                     isError = true;
@@ -808,15 +804,15 @@ namespace LcmsNet
                     lcMethod = sample.LCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Empty;
-                    SampleProgress.UpdateError(sample, lcEvent);
+                    SampleProgressVm.UpdateError(sample, lcEvent);
                     isError = true;
                     break;
                 case enumSampleProgress.Complete:
-                    if (FluidicsDesign == null)
+                    if (FluidicsDesignVm == null)
                     {
                         break;
                     }
-                    var configImage = FluidicsDesign.GetImage();
+                    var configImage = FluidicsDesignVm.GetImage();
                     string docPath;
                     if (sample == null)
                     {
@@ -877,7 +873,7 @@ namespace LcmsNet
             // Update visual progress. -- Errors are already updated above.
             if (!isError && sample != null)
             {
-                SampleProgress.UpdateSample(sample);
+                SampleProgressVm.UpdateSample(sample);
             }
         }
 
