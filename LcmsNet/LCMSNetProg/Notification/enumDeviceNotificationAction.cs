@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace LcmsNet.Notification
 {
@@ -50,23 +49,15 @@ namespace LcmsNet.Notification
         public classNotificationLinker(string name)
         {
             EventMap = new Dictionary<string, NotificationSetting>();
-            Item = new ListViewItem {
-                Text = name
-            };
             Name = name;
         }
 
         #region Properties
 
         /// <summary>
-        /// Gets the listview item associated with the listview item.
-        /// </summary>
-        public ListViewItem Item { get; private set; }
-
-        /// <summary>
         /// Gets the name.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets map that strings a notification to an action.

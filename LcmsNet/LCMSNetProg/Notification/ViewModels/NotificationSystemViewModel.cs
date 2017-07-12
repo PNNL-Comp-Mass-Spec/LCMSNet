@@ -466,7 +466,7 @@ namespace LcmsNet.Notification.ViewModels
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
             var linker = deviceEventTable[device];
-            linker.Item.Text = device.Name;
+            linker.Name = device.Name;
         }
 
         /// <summary>

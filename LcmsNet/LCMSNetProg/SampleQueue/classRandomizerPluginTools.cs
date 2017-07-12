@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 using LcmsNetDataClasses;
 
 namespace LcmsNet.SampleQueue
@@ -27,7 +26,7 @@ namespace LcmsNet.SampleQueue
             var RetDict = new Dictionary<string, Type>();
 
             // Get list of DLL's in plugin folder
-            var fi = new FileInfo(Application.ExecutablePath);
+            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             var pluginFolder = Path.Combine(fi.DirectoryName, classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PLUGINFOLDER));
             var dllFiles = Directory.GetFiles(pluginFolder, "*.dll");
             if (dllFiles.GetLength(0) == 0)

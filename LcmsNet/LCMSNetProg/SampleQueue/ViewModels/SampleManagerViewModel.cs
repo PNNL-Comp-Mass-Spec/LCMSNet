@@ -414,8 +414,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     var displayVm = new SampleValidatorErrorDisplayViewModel(errors);
                     var display = new SampleValidatorErrorDisplayWindow() { DataContext = displayVm };
-                    // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(display);
                     display.ShowDialog();
                     return;
                 }
@@ -427,8 +425,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                     //TODO: Add a notification.
                     var displayVm = new SampleBadBlockDisplayViewModel(badBlocks);
                     var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm };
-                    // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(display);
                     var result = display.ShowDialog();
                     if (!result.HasValue || !result.Value)
                     {
@@ -446,8 +442,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
                 var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsDisplay);
 
                 var dmsResult = dmsDisplay.ShowDialog();
 

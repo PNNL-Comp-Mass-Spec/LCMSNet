@@ -98,11 +98,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutWindow.xaml.cs">
@@ -186,18 +184,6 @@
     <Compile Include="Method\Drawing\LCMethodRenderer.cs" />
     <Compile Include="Method\Drawing\LCRendererFactory.cs" />
     <Compile Include="Method\enumLCMethodRenderMode.cs" />
-    <Compile Include="Method\Forms\controlParameterNumericUpDown.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlParameterNumericUpDown.Designer.cs">
-      <DependentUpon>controlParameterNumericUpDown.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formConvertToSeconds.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formConvertToSeconds.Designer.cs">
-      <DependentUpon>formConvertToSeconds.cs</DependentUpon>
-    </Compile>
     <Compile Include="Method\ViewModels\BreakpointViewModel.cs" />
     <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
     <Compile Include="Method\ViewModels\ConvertToolViewModel.cs" />
@@ -416,14 +402,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Method\Forms\controlParameterNumericUpDown.resx">
-      <DependentUpon>controlParameterNumericUpDown.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formConvertToSeconds.resx">
-      <DependentUpon>formConvertToSeconds.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>

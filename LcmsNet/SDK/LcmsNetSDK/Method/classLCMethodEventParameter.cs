@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace LcmsNet.Method
 {
@@ -14,7 +13,7 @@ namespace LcmsNet.Method
         public classLCMethodEventParameter()
         {
             Values = new List<object>();
-            Controls = new List<Control>();
+            Controls = new List<ILCEventParameter>();
             Names = new List<string>();
             DataProviderNames = new List<string>();
         }
@@ -32,7 +31,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets the list of controls to edit the values.
         /// </summary>
-        public List<Control> Controls { get; }
+        public List<ILCEventParameter> Controls { get; }
 
         /// <summary>
         /// List of data provider names.
@@ -46,12 +45,10 @@ namespace LcmsNet.Method
         /// <param name="editControl">Edit control to use.</param>
         /// <param name="name"></param>
         /// <param name="dataProviderName">Name of the data provider to use.</param>
-        public void AddParameter(object parameter, Control editControl, string name, string dataProviderName)
+        public void AddParameter(object parameter, ILCEventParameter editControl, string name, string dataProviderName)
         {
-            // 
             // We use the private set.
             // Private so that the lists are only gauranteed to be synchronized.
-            // 
             Values.Add(parameter);
             Controls.Add(editControl);
             Names.Add(name);

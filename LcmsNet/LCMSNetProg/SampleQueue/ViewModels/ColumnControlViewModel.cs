@@ -286,8 +286,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var selector = new MoveToColumnSelectorViewModel();
             var selectorWindow = new MoveToColumnSelectorWindow() { DataContext = selector };
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(selectorWindow);
 
             var result = selectorWindow.ShowDialog();
 

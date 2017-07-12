@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
@@ -26,7 +28,6 @@ namespace LcmsNet.Method.ViewModels
             ParameterType = type;
             NumberMinimum = 0.0;
             NumberMaximum = 10000000000.0;
-            WinFormsParameter = null;
         }
 
         private string parameterLabel = "";
@@ -37,11 +38,6 @@ namespace LcmsNet.Method.ViewModels
         public bool ShowTextBox { get { return ParameterType == ParameterTypeEnum.Text; } }
 
         public event EventHandler EventChanged;
-
-        /// <summary>
-        /// Reference to the WinForms parameter to properly update the values everywhere else
-        /// </summary>
-        public ILCEventParameter WinFormsParameter { get; set; }
 
         public string ParameterLabel
         {
@@ -94,10 +90,6 @@ namespace LcmsNet.Method.ViewModels
         private void OnEventChanged()
         {
             EventChanged?.Invoke(this, null);
-            if (WinFormsParameter != null)
-            {
-                WinFormsParameter.ParameterValue = ParameterValue;
-            }
         }
 
         #region ComboBox settings
@@ -119,7 +111,32 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        public ReactiveList<object> ComboBoxOptions => comboBoxOptions;
+        public IReadOnlyReactiveList<object> ComboBoxOptions => comboBoxOptions;
+
+        /// <summary>
+        /// Event method to storing objects in the list view.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="data"></param>
+        public void FillData(object sender, List<object> data)
+        {
+            comboBoxOptions.Clear();
+            if (data == null || data.Count < 1)
+                return;
+
+            if (data.Count > 0)
+            {
+                using (comboBoxOptions.SuppressChangeNotifications())
+                {
+                    comboBoxOptions.AddRange(data);
+                }
+
+                if (SelectedOption != null && !comboBoxOptions.Contains(SelectedOption))
+                {
+                    SelectedOption = comboBoxOptions.FirstOrDefault();
+                }
+            }
+        }
 
         #endregion
 

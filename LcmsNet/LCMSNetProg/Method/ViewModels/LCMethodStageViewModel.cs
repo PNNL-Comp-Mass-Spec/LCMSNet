@@ -573,12 +573,12 @@ namespace LcmsNet.Method.ViewModels
                 {
                     var parameter = lcEvent.Parameters[i];
                     var name = lcEvent.ParameterNames[i];
-                    System.Windows.Forms.Control control = null;
+                    ILCEventParameter control = null;
 
                     if (lcEvent.MethodAttribute.DataProviderIndex == i)
                     {
                         // Figure out what index to adjust the data provider for.
-                        var combo = new controlParameterComboBox();
+                        var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum);
 
                         // Register the event to automatically get new data when the data provider has new stuff.
                         lcEvent.Device.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider, combo.FillData);
@@ -588,7 +588,7 @@ namespace LcmsNet.Method.ViewModels
                     {
                         if (parameter != null)
                         {
-                            control = LCMethodEventViewModel.GetControlFromType(parameter.GetType());
+                            control = LCMethodEventViewModel.GetEventParametersFromType(parameter.GetType());
                         }
                     }
 
@@ -673,7 +673,7 @@ namespace LcmsNet.Method.ViewModels
 
                 for (var i = 0; i < parameter.Names.Count; i++)
                 {
-                    var combo = parameter.Controls[i] as controlParameterComboBox;
+                    var combo = parameter.Controls[i] as EventParameterViewModel;
 
                     if (combo == null)
                         continue;

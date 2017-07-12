@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Media;
-using LcmsNet.Method.Forms;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 using ReactiveUI;
@@ -529,8 +527,7 @@ namespace LcmsNet.Method.ViewModels
                     var control = parameters.Controls[j];
 
                     // Construct the description for the parameter
-                    var vm = GetEventParameterFromControl(control);
-                    vm.WinFormsParameter = (ILCEventParameter)control;
+                    var vm = control as EventParameterViewModel;
                     vm.ParameterLabel = name;
 
                     // Add the control itself
@@ -671,7 +668,7 @@ namespace LcmsNet.Method.ViewModels
                             var i = 0;
                             foreach (var paramInfo in info)
                             {
-                                Control control = null;
+                                ILCEventParameter control = null;
                                 object value = null;
 
                                 // If the method editor has to use sample data then
@@ -684,20 +681,20 @@ namespace LcmsNet.Method.ViewModels
                                 else if (string.IsNullOrEmpty(attr.DataProvider) == false && i == attr.DataProviderIndex)
                                 {
                                     // Figure out what index to adjust the data provider for.
-                                    var combo = new controlParameterComboBox();
+                                    var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum);
 
                                     // Register the event to automatically get new data when the data provider has new stuff.
                                     device.RegisterDataProvider(attr.DataProvider, combo.FillData);
                                     control = combo;
                                     // Set the data if we have it, otherwise, cross your fingers batman!
-                                    if (combo.Items.Count > 0)
-                                        value = combo.Items[0];
+                                    if (combo.ComboBoxOptions.Count > 0)
+                                        value = combo.ComboBoxOptions[0];
                                     parameters.AddParameter(value, control, paramInfo.Name, attr.DataProvider);
                                 }
                                 else
                                 {
                                     // Get a control to display
-                                    control = GetControlFromType(paramInfo.ParameterType);
+                                    control = GetEventParametersFromType(paramInfo.ParameterType);
 
                                     // We need to get a default value, so just ask the
                                     // type for it.
@@ -737,76 +734,6 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static Control GetControlFromType(Type t)
-        {
-            Control control = null;
-
-            if (t.IsEnum)
-            {
-                // Grab the enumeration values for the parameter
-                var aenums = Enum.GetValues(t);
-                var enums = new object[aenums.Length];
-                aenums.CopyTo(enums, 0);
-
-                // Add the parameters to the combo box before we do anything.
-                var box = new controlParameterComboBox();
-                box.DropDownStyle = ComboBoxStyle.DropDownList;
-                box.Items.AddRange(enums);
-                box.SelectedIndex = 0;
-                control = box;
-            }
-            else if (classParameterTypeFactory.IsNumeric(t))
-            {
-                control = new controlParameterNumericUpDown();
-            }
-            else if (typeof(string) == t)
-            {
-                control = new controlParameterTextBox();
-            }
-
-            return control;
-        }
-
-        /// <summary>
-        /// Given a parameter type, figure out what kind of control is associated with it.
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        public static EventParameterViewModel GetEventParameterFromControl(Control c)
-        {
-            EventParameterViewModel control = null;
-
-            if (c is controlParameterComboBox cpcb)
-            {
-                // Add the parameters to the combo box before we do anything.
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum);
-                using (control.ComboBoxOptions.SuppressChangeNotifications())
-                {
-                    // Grab the enumeration values for the parameter
-                    control.ComboBoxOptions.AddRange(cpcb.Items.Cast<object>());
-                }
-                control.SelectedOption = cpcb.SelectedItem;
-            }
-            else if (c is controlParameterNumericUpDown cpnud)
-            {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Numeric);
-                control.NumberValue = Convert.ToDouble(cpnud.ParameterValue);
-                control.DecimalPlaces = cpnud.DecimalPlaces;
-            }
-            else if (c is controlParameterTextBox cptb)
-            {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Text);
-                control.TextValue = cptb.ParameterValue.ToString();
-            }
-
-            return control;
-        }
-
-        /// <summary>
-        /// Given a parameter type, figure out what kind of control is associated with it.
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
         public static EventParameterViewModel GetEventParametersFromType(Type t)
         {
             EventParameterViewModel control = null;
@@ -818,8 +745,9 @@ namespace LcmsNet.Method.ViewModels
                 using (control.ComboBoxOptions.SuppressChangeNotifications())
                 {
                     // Grab the enumeration values for the parameter
-                    control.ComboBoxOptions.AddRange(Enum.GetValues(t).Cast<object>());
+                    control.FillData(null, Enum.GetValues(t).Cast<object>().ToList());
                 }
+                control.SelectedOption = control.ComboBoxOptions.FirstOrDefault();
             }
             else if (classParameterTypeFactory.IsNumeric(t))
             {

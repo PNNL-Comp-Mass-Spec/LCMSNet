@@ -51,8 +51,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
                 var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsDisplay);
 
                 var result = dmsDisplay.ShowDialog();
                 // We don't care what the result is..
@@ -267,8 +265,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             var trayVial = new TrayVialAssignmentViewModel(SampleDataManager.AutoSamplerTrays, samples);
             var trayVialWindow = new TrayVialAssignmentWindow() { DataContext = trayVial };
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(trayVialWindow);
 
             // We don't care about the dialog result here - everything that matters is handled in the viewModel
             trayVialWindow.ShowDialog();
@@ -299,8 +295,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             fillDownViewModel.EnsureItemsAreSelected();
             var dialog = new SampleMethodFillDownWindow();
             dialog.DataContext = fillDownViewModel;
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dialog);
 
             dialog.ShowDialog();
 
@@ -321,8 +315,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
 
             var dmsWindow = new DMSDownloadWindow() { DataContext = dmsView };
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsWindow);
             var result = dmsWindow.ShowDialog();
 
             // If the user clicks ok , then add the samples from the
@@ -506,8 +498,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                     return;
                 }
                 var randomizer = new SampleRandomizerWindow() { DataContext = randomizerVm };
-                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(randomizer);
                 var result = randomizer.ShowDialog();
                 if (result.HasValue && result.Value)
                 {
