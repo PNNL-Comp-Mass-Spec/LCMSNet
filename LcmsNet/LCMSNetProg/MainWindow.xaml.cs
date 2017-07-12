@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using LcmsNet.Devices.Pumps.Views;
+using LcmsNetCommonControls.Views;
 
 namespace LcmsNet
 {
@@ -43,7 +46,7 @@ namespace LcmsNet
         {
             if (e.Source is TabControl)
             {
-                if (PumpTab.IsSelected)
+                if (PumpsTab.IsSelected)
                 {
                     PumpPopout.TryActivateWindow();
                 }
@@ -63,6 +66,79 @@ namespace LcmsNet
             {
                 e.Cancel = true;
             }
+        }
+
+        private void ReportError_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!(this.DataContext is MainWindowViewModel mwvm))
+            {
+                return;
+            }
+
+            // Force all tabs to render first, if they haven't already
+            var currentTab = MainTabControl.SelectedItem;
+            QueueTab.ForceLoad();
+            FluidicsDesignTab.ForceLoad();
+            ProgressTab.ForceLoad();
+            MethodsTab.ForceLoad();
+            PumpsTab.ForceLoad();
+            NotificationsTab.ForceLoad();
+            MessagesTab.ForceLoad();
+            ConfigTab.ForceLoad();
+
+            MainTabControl.SelectedItem = currentTab;
+
+            var controls = new List<ContentControl>();
+            if (PumpPopout.Content is PumpDisplaysView pdv)
+            {
+                controls.Add(pdv);
+            }
+            else if (Application.Current != null)
+            {
+                PopoutWindow existing = null;
+                foreach (var window in Application.Current.Windows)
+                {
+                    if (window is PopoutWindow pw && pw.Title.Equals(PumpPopout.Title))
+                    {
+                        existing = pw;
+                    }
+                }
+                if (existing != null && existing.Content is PumpDisplaysView pdv2)
+                {
+                    controls.Add(pdv2);
+                }
+            }
+            controls.Add(MessagesPage);
+            controls.Add(MethodEditorPage);
+            controls.Add(NotificationsPage);
+            controls.Add(SampleProgressPage);
+            controls.Add(SampleManagerPage);
+
+            mwvm.ReportErrorCommand.Execute(controls.ToArray()).Subscribe();
+        }
+    }
+
+    public static class ExtensionMethods
+    {
+        private static Action EmptyDelegate = delegate () { };
+
+        /// <summary>
+        /// Forces the UIElement to render
+        /// </summary>
+        /// <param name="uiElement"></param>
+        public static void Refresh(this UIElement uiElement)
+        {
+            uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+        }
+
+        /// <summary>
+        /// Sets tab selection to true, and forces it to render.
+        /// </summary>
+        /// <param name="tab"></param>
+        public static void ForceLoad(this TabItem tab)
+        {
+            tab.IsSelected = true;
+            tab.Refresh();
         }
     }
 }

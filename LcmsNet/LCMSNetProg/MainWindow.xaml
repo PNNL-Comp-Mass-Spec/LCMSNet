@@ -49,7 +49,7 @@
                 <MenuItem Header="E_xit" Click="MenuItemExit_OnClick" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="Report _Error" Command="{Binding ReportErrorCommand}" >
+                <MenuItem Header="Report _Error" Click="ReportError_OnClick" >
                     <MenuItem.Icon>
                         <Image Source="/Images/Append.png" MaxHeight="22" />
                     </MenuItem.Icon>
@@ -61,8 +61,8 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <TabControl Grid.Row="1" SelectionChanged="TabControl_OnSelectionChanged">
-            <TabItem ToolTip="Queue" IsSelected="{Binding QueueTabSelected, Mode=OneWayToSource}">
+        <TabControl Grid.Row="1" SelectionChanged="TabControl_OnSelectionChanged" x:Name="MainTabControl">
+            <TabItem ToolTip="Queue" IsSelected="{Binding QueueTabSelected, Mode=OneWayToSource}" x:Name="QueueTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -71,7 +71,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <sampleQueueViews:SampleManagerView DataContext="{Binding SampleManagerVm}" />
+                <sampleQueueViews:SampleManagerView DataContext="{Binding SampleManagerVm}" x:Name="SampleManagerPage" />
             </TabItem>
             <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDesignTab">
                 <TabItem.HeaderTemplate>
@@ -82,7 +82,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <views:FluidicsDesignView DataContext="{Binding FluidicsDesignVm}" />
+                <views:FluidicsDesignView DataContext="{Binding FluidicsDesignVm}" x:Name="FluidicsDesignPage" />
             </TabItem>
             <TabItem ToolTip="Simulate" Visibility="{Binding CanSimulate, Converter={StaticResource BoolToVis}}">
                 <TabItem.HeaderTemplate>
@@ -95,7 +95,7 @@
                 </TabItem.HeaderTemplate>
                 <simulatorViews:SimulatorCombinedView DataContext="{Binding SimulatorVm}" />
             </TabItem>
-            <TabItem ToolTip="Progress">
+            <TabItem ToolTip="Progress" x:Name="ProgressTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -104,9 +104,9 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <methodViews:ColumnSampleProgressView DataContext="{Binding SampleProgressVm}" />
+                <methodViews:ColumnSampleProgressView DataContext="{Binding SampleProgressVm}" x:Name="SampleProgressPage" />
             </TabItem>
-            <TabItem ToolTip="Methods">
+            <TabItem ToolTip="Methods" x:Name="MethodsTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -115,9 +115,9 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <methodViews:LCMethodEditorView DataContext="{Binding MethodEditorVm}" />
+                <methodViews:LCMethodEditorView DataContext="{Binding MethodEditorVm}" x:Name="MethodEditorPage" />
             </TabItem>
-            <TabItem ToolTip="Pumps" x:Name="PumpTab">
+            <TabItem ToolTip="Pumps" x:Name="PumpsTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -130,7 +130,7 @@
                     <pumpViews:PumpDisplaysView DataContext="{Binding Child}" />
                 </genericViews:PopoutView>
             </TabItem>
-            <TabItem ToolTip="Notifications">
+            <TabItem ToolTip="Notifications" x:Name="NotificationsTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -139,9 +139,9 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <notificationViews:NotificationSystemView DataContext="{Binding NotificationSystemVm}" />
+                <notificationViews:NotificationSystemView DataContext="{Binding NotificationSystemVm}" x:Name="NotificationsPage" />
             </TabItem>
-            <TabItem ToolTip="Messages">
+            <TabItem ToolTip="Messages" x:Name="MessagesTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <Grid Height="Auto">
@@ -156,9 +156,9 @@
                         </Grid>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <loggingViews:MessagesView DataContext="{Binding MessagesVm}" />
+                <loggingViews:MessagesView DataContext="{Binding MessagesVm}" x:Name="MessagesPage" />
             </TabItem>
-            <TabItem ToolTip="Config">
+            <TabItem ToolTip="Config" x:Name="ConfigTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -167,7 +167,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <configViews:SystemConfigurationView DataContext="{Binding SystemConfiguration}" />
+                <configViews:SystemConfigurationView DataContext="{Binding SystemConfiguration}" x:Name="SystemConfigPage" />
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2">

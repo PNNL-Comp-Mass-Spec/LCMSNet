@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Reactive;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using LcmsNet.Configuration.ViewModels;
 using LcmsNet.Devices.Fluidics.ViewModels;
 using LcmsNet.Devices.Pumps.ViewModels;
@@ -18,8 +18,7 @@ using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.Notification;
 using LcmsNet.Notification.ViewModels;
-using LcmsNet.Properties;
-using LcmsNet.Reporting.Forms;
+using LcmsNet.Reporting;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.ViewModels;
@@ -61,7 +60,7 @@ namespace LcmsNet
         #region Commands
 
         public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ReportErrorCommand { get; private set; }
+        public ReactiveCommand<ContentControl[], Unit> ReportErrorCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SaveQueueCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SaveQueueAsCommand { get; private set; }
@@ -73,7 +72,7 @@ namespace LcmsNet
         private void SetupCommands()
         {
             ShowAboutCommand = ReactiveCommand.Create(() => this.ShowAboutWindow());
-            ReportErrorCommand = ReactiveCommand.Create(() => this.ReportError());
+            ReportErrorCommand = ReactiveCommand.Create<ContentControl[]>(param => this.ReportError(param));
             OpenQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueAsCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueueAs(), this.WhenAnyValue(x => x.QueueTabSelected));
@@ -901,30 +900,25 @@ namespace LcmsNet
 
         #endregion
 
-        #region Form Event Handlers
+        #region Error Reporting
 
-        private void ReportError()
+        private void ReportError(ContentControl[] controls)
         {
             var manager = classLCMethodManager.Manager;
             var logPath = classFileLogging.LogPath;
-            var forms = new List<System.Windows.Forms.Form>();
 
-            forms.AddRange(new System.Windows.Forms.Form[]
-            {
-                //m_about,
-                //pumpDisplays,
-                //messages,
-                //m_methodEditor,
-                //m_notifications,
-                //sampleProgress,
-                //m_sampleManager
-            });
+            var controlList = new List<ContentControl>();
+            var about = new AboutWindow();
+            // Open it to make it render, then close it when done.
+            about.Show();
+            controlList.Add(about);
+            controlList.AddRange(controls);
 
-            // TODO: Recreate the meaningful stuff in a WPF/MVVM-friendly fashion
-            using (var report = new formCreateErrorReport(manager, logPath, forms))
-            {
-                report.ShowDialog();
-            }
+            var reportVm = new CreateErrorReportViewModel(manager, logPath, controlList);
+            var reportWindow = new CreateErrorReportWindow() {DataContext = reportVm};
+
+            reportWindow.ShowDialog();
+            about.Close();
         }
 
         #endregion

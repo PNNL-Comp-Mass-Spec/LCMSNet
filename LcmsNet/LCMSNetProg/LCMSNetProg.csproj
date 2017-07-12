@@ -547,6 +547,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Reporting\classErrorReportBuilder.cs" />
+    <Compile Include="Reporting\CreateErrorReportViewModel.cs" />
+    <Compile Include="Reporting\CreateErrorReportWindow.xaml.cs">
+      <DependentUpon>CreateErrorReportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reporting\Forms\formCreateErrorReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1458,6 +1462,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Method\Views\LCMethodTimelineView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reporting\CreateErrorReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
