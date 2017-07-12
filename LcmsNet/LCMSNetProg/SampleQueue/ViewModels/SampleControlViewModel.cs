@@ -15,6 +15,9 @@ using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
 {
+    /// <summary>
+    /// Class that displays sample data as a sequence.
+    /// </summary>
     public class SampleControlViewModel : ReactiveObject
     {
         public virtual IReadOnlyReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;

@@ -174,8 +174,8 @@ namespace LcmsNet
                         string.Format(
                             "LCMS could not create missing folder {0} required for operation.  Please run application with higher priveleges.  {1}",
                             localPath, ex.Message);
-                    System.Windows.Forms.MessageBox.Show(errorMessage);
-                    System.Windows.Forms.Application.Exit();
+                    MessageBox.Show(errorMessage);
+                    Shutdown();
                 }
             }
         }
@@ -282,7 +282,7 @@ namespace LcmsNet
             {
                 if (!mutex.WaitOne(0, false))
                 {
-                    System.Windows.Forms.MessageBox.Show("A copy of LcmsNet is already running.");
+                    MessageBox.Show("A copy of LcmsNet is already running.");
                     classApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
                     return;
                 }
@@ -485,13 +485,9 @@ namespace LcmsNet
                 //
                 LogMessage(-1, "Loading main form");
                 System.Windows.Forms.Application.DoEvents();
-#if !WPFTest
-                    var main = new formMDImain();
-#else
                 var main = new MainWindow();
                 var mainViewModel = new MainWindowViewModel();
                 main.DataContext = mainViewModel;
-#endif
 
                 // Assure that the splash screen has been visible for at least 3 seconds
                 while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
@@ -504,30 +500,24 @@ namespace LcmsNet
                 classApplicationLogger.Message -= classApplicationLogger_Message;
 
 #if !DEBUG
-                    try
-                    {
+                try
+                {
 #endif
-#if !WPFTest
-                        Application.Run(main);
-#else
-                main.ShowDialog();
-#endif
+                    main.ShowDialog();
 #if !DEBUG
-                    }
-                    catch (Exception ex)
-                    {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                            "Program Failed!", ex);
-                        throw;
-                    }
-                    finally
-                    {
+                }
+                catch (Exception ex)
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        "Program Failed!", ex);
+                    throw;
+                }
+                finally
+                {
 #endif
-#if WPFTest
-                mainViewModel.Dispose();
-#endif
+                    mainViewModel.Dispose();
 #if !DEBUG
-                    }
+                }
 #endif
             }
 #if !DEBUG

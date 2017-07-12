@@ -64,6 +64,10 @@ namespace LcmsNet.Method.Views
 
         private void RefreshVisualInternal()
         {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
             var drawingVisual = new DrawingVisual();
             var drawContext = drawingVisual.RenderOpen();
             drawContext.PushOpacity(100);
