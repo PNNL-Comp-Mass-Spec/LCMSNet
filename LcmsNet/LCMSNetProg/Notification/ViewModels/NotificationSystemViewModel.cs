@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using FluidicsSDK;
-using Hardcodet.Wpf.TaskbarNotification;
 using LcmsNet.Devices;
 using LcmsNet.Method;
 using LcmsNet.Properties;
@@ -19,7 +18,7 @@ using ReactiveUI;
 
 namespace LcmsNet.Notification.ViewModels
 {
-    public class NotificationSystemViewModel : ReactiveObject, IDisposable
+    public class NotificationSystemViewModel : ReactiveObject
     {
         /// <summary>
         /// Default constructor for the notification system view control that takes no arguments
@@ -97,12 +96,6 @@ namespace LcmsNet.Notification.ViewModels
             classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
             classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
             classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
-
-            taskbarIcon = new TaskbarIcon
-            {
-                Icon = Resources.LCMSLogo2,
-                ToolTipText = "LCMSNet"
-            };
 
             remoteStatusLogTimer = new Timer(WriteLogData, this, Timeout.Infinite, Timeout.Infinite);
             ResetRemoteLoggingInterval();
@@ -184,11 +177,6 @@ namespace LcmsNet.Notification.ViewModels
         /// Current device being set.
         /// </summary>
         private INotifier currentDevice;
-
-        /// <summary>
-        /// For displaying a notification icon in the Windows notification bar
-        /// </summary>
-        private readonly TaskbarIcon taskbarIcon;
 
         private readonly Timer remoteStatusLogTimer;
 
@@ -650,10 +638,8 @@ namespace LcmsNet.Notification.ViewModels
 
                 HandleEvents(e.Error, setting);
 
-                taskbarIcon.ShowBalloonTip("LCMSNet", "LCMSNet requries your attention.", BalloonIcon.Error);
-
-                // automatically close after 10 seconds
-                var timer = new Timer(CloseBalloonTip, this, 10000, Timeout.Infinite);
+                // automatically stop after 10 seconds
+                TaskBarManipulation.Instance.BlinkTaskbar(10000);
             }
             catch (KeyNotFoundException ex)
             {
@@ -663,11 +649,6 @@ namespace LcmsNet.Notification.ViewModels
             {
                 classApplicationLogger.LogError(0, "Could not execute status update.", ex);
             }
-        }
-
-        private void CloseBalloonTip(object sender)
-        {
-            taskbarIcon.CloseBalloon();
         }
 
         #endregion
@@ -1019,19 +1000,5 @@ namespace LcmsNet.Notification.ViewModels
         }
 
         #endregion
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                taskbarIcon?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 }

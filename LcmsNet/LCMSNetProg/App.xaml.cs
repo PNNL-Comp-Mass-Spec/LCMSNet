@@ -427,6 +427,7 @@ namespace LcmsNet
                     // Load the main application and run
                     LogMessage(-1, "Loading main window");
                     var main = new MainWindow();
+                    this.MainWindow = main;
                     var mainViewModel = new MainWindowViewModel();
                     main.DataContext = mainViewModel;
 

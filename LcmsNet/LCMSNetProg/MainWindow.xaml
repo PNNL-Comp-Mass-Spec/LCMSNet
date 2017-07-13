@@ -22,6 +22,9 @@
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
         Icon="/Images/LCMSLogo2.ico">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="TaskBarInfo" />
+    </Window.TaskbarItemInfo>
     <Grid>
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key ="BoolToVis" />

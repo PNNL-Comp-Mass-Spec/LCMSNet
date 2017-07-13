@@ -925,7 +925,6 @@ namespace LcmsNet
 
         public void Dispose()
         {
-            notifications?.Dispose();
         }
     }
 }
