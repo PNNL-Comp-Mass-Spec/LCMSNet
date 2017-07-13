@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="WARNING!" Height="300" Width="549"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Images/Warning.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

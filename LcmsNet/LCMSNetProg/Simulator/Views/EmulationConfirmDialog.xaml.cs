@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +23,6 @@ namespace LcmsNet.Simulator.Views
         public EmulationConfirmDialog()
         {
             InitializeComponent();
-            Icon = SystemIcons.Warning.ToBitmap().ToBitmapImage();
         }
 
         public MessageBoxResult Result { get; private set; }

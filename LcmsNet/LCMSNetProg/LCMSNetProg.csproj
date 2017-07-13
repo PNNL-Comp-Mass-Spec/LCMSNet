@@ -432,6 +432,7 @@
     <Resource Include="Images\SimReset.png" />
     <Resource Include="Images\SimStep.png" />
     <Resource Include="Images\SimStop.png" />
+    <Resource Include="Images\Warning.ico" />
     <Content Include="LCMSLogo3.ico" />
     <Content Include="lib\16\accepted_16.png" />
     <Content Include="lib\16\Button Delete_16.png" />
