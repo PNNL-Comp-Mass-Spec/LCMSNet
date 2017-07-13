@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using LcmsNet.Devices;
 using LcmsNet.Method;
@@ -37,6 +38,44 @@ namespace LcmsNet
             //mainWindow.DataContext = mainWindowVm;
             //mainWindow.Show();
             MainLoad();
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+        }
+
+        /// <summary>
+        /// Event handler that is triggered on application shutdown.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ApplicationExit(object sender, ExitEventArgs e)
+        {
+            ShutdownCleanup();
+        }
+
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            if (args.ExceptionObject is Exception ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                    "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
+
+                MessageBox.Show("Shutting down due to unhandled error: " + ex.Message + " \nFor additional information, see the log files at " +
+                                classDbLogger.LogFolderPath + "\\");
+            }
+
+            ShutdownCleanup();
+        }
+
+        private void ShutdownCleanup()
+        {
+            mainVm?.Dispose();
+
+            // Just to make sure...let's kill the PAL at the end of the program as well.
+            KillExistingPalProcesses();
+            LogMessage("-----------------shutdown complete----------------------");
+
+            singleInstanceMutex?.ReleaseMutex();
+            singleInstanceMutex?.Dispose();
         }
 
         #region "Constants"
@@ -56,6 +95,14 @@ namespace LcmsNet
         /// Reference to splash screen window.
         /// </summary>
         private DynamicSplashScreenWindow splashScreen;
+
+        private ManualResetEvent resetSplashCreated;
+        private Thread splashThread;
+
+        private MainWindow main = null;
+        private MainWindowViewModel mainVm = null;
+
+        private Mutex singleInstanceMutex = null;
 
         #endregion
 
@@ -232,253 +279,241 @@ namespace LcmsNet
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        private void MainLoad()
+        private async void MainLoad()
         {
-#if !DEBUG
+            var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
+
+            // Before we do anything, let's initialize the file logging capability.
+            classApplicationLogger.Error += classFileLogging.LogError;
+            classApplicationLogger.Message += classFileLogging.LogMessage;
+
+            // Now lets initialize logging to SQLite database.
+            classApplicationLogger.Error += classDbLogger.LogError;
+            classApplicationLogger.Message += classDbLogger.LogMessage;
+
+            // Note that we used icons from here for the gears on the main form window.
+            //     http://labs.chemist2dio.com/free-vector-gears.php/
+            //
+            // Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
+            //      no instance of the application is running. Otherwise, we exit.
+            // Code adapated from K. Scott Allen's OdeToCode.com at
+            //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
+            singleInstanceMutex = new Mutex(false, mutexName);
+            if (!singleInstanceMutex.WaitOne(0, false))
+            {
+                MessageBox.Show("A copy of LcmsNet is already running.");
+                classApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
+                return;
+            }
+
+            KillExistingPalProcesses();
+            GC.KeepAlive(singleInstanceMutex);
+
+            // Synch to the logger so we can display any messages coming back from the rest of the program and interface.
+            classApplicationLogger.Message += classApplicationLogger_Message;
+
+            // Show the splash screen
+            resetSplashCreated = new ManualResetEvent(false);
+
+            // Run it on a different thread.
+            splashThread = new Thread(ShowSplashScreen);
+            splashThread.SetApartmentState(ApartmentState.STA);
+            splashThread.IsBackground = true;
+            splashThread.Name = "SplashScreen";
+            splashThread.Start();
+
+            // Block until the splash screen is displayed
+            resetSplashCreated.WaitOne();
+
+            var splashLoadTime = DateTime.UtcNow;
+
+            var loadSuccessful = await LoadEverything();
+            if (!loadSuccessful)
+            {
+                return;
+            }
+
+            // Load the main application and run
+            LogMessage(-1, "Loading main window");
+            main = new MainWindow();
+            this.MainWindow = main;
+            mainVm = new MainWindowViewModel();
+            main.DataContext = mainVm;
+            main.ShowActivated = true;
+
+            // Assure that the splash screen has been visible for at least 3 seconds
+            while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
+            {
+                await Task.Delay(250);
+            }
+
+            splashScreen.LoadComplete();
+
+            classApplicationLogger.Message -= classApplicationLogger_Message;
+
+            main.Show();
+            main.Activate();
+        }
+
+        private void ShowSplashScreen()
+        {
+            splashScreen = new DynamicSplashScreenWindow()
+            {
+                SoftwareCopyright = SOFTWARE_COPYRIGHT,
+                SoftwareDevelopers = SOFTWARE_DEVELOPERS
+            };
+            splashScreen.Show();
+
+            // set the reset, to allow startup to continue
+            resetSplashCreated.Set();
+            System.Windows.Threading.Dispatcher.Run();
+        }
+
+        private async Task<bool> LoadEverything()
+        {
+            LogVersionNumbers();
+            LogMachineInformation();
+            LogMessage("[Log]");
+
+            // Display the splash screen mesasge first! make the log folder,
+            // after that we will route messages through the logger instead of
+            // through this static call.  That way we know the log folder has been
+            // created.
+            //LogMessage(-1, "Creating pertinent folders");
+
+            // Make sure we can log/error report locally before we do anything!
             try
             {
-#endif
-                var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
+                CreatePath(classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+                CreatePath(classDeviceManager.CONST_PUMP_METHOD_PATH);
+                CreatePath(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                classApplicationLogger.LogError(0, "Could not create necessary directories.", ex);
+                MessageBox.Show("The application does not have the required privileges to run.  Please run as administrator.");
+                return false;
+            }
 
-                // Before we do anything, let's initialize the file logging capability.
-                classApplicationLogger.Error += classFileLogging.LogError;
-                classApplicationLogger.Message += classFileLogging.LogMessage;
+            // Load settings
+            LogMessage(-1, "Loading settings");
+            LoadSettings();
 
-                // Now lets initialize logging to SQLite database.
-                classApplicationLogger.Error += classDbLogger.LogError;
-                classApplicationLogger.Message += classDbLogger.LogMessage;
+            // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
+            classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
 
+            //LogMessage(-1, "Creating Initial System Configurations");
+            InitializeSystemConfigurations();
 
-                // Note that we used icons from here for the gears on the main form window.
-                //     http://labs.chemist2dio.com/free-vector-gears.php/
-                //
-                // Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
-                //      no instance of the application is running. Otherwise, we exit.
-                // Code adapated from K. Scott Allen's OdeToCode.com at
-                //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
-                using (var mutex = new Mutex(false, mutexName))
-                {
-                    if (!mutex.WaitOne(0, false))
-                    {
-                        MessageBox.Show("A copy of LcmsNet is already running.");
-                        classApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
-                        return;
-                    }
+            // Create a device manager.
+            //LogMessage(-1, "Creating the Device Manager");
+            var deviceManager = classDeviceManager.Manager;
+            deviceManager.Emulate = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false);
+            deviceManager.AddDevice(new classTimerDevice());
+            deviceManager.AddDevice(new classBlockDevice());
+            deviceManager.AddDevice(new classLogDevice());
+            deviceManager.AddDevice(new classApplicationDevice());
 
-                    KillExistingPalProcesses();
-                    GC.KeepAlive(mutex);
-
-                    // Show the splash screen
-                    splashScreen = new DynamicSplashScreenWindow()
-                    {
-                        SoftwareCopyright = SOFTWARE_COPYRIGHT,
-                        SoftwareDevelopers = SOFTWARE_DEVELOPERS
-                    };
-
-                    // Synch to the logger so we can display any messages coming back from the rest of the program and interface.
-                    classApplicationLogger.Message += classApplicationLogger_Message;
-
-                    var splashLoadTime = DateTime.UtcNow;
-
-                    splashScreen.Show();
-
-                    LogVersionNumbers();
-                    LogMachineInformation();
-                    LogMessage("[Log]");
-
-                    // Display the splash screen mesasge first! make the log folder,
-                    // after that we will route messages through the logger instead of
-                    // through this static call.  That way we know the log folder has been
-                    // created.
-                    //LogMessage(-1, "Creating pertinent folders");
-
-                    // Make sure we can log/error report locally before we do anything!
-                    try
-                    {
-                        CreatePath(classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-                        CreatePath(classDeviceManager.CONST_PUMP_METHOD_PATH);
-                        CreatePath(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
-                    }
-                    catch (UnauthorizedAccessException ex)
-                    {
-                        classApplicationLogger.LogError(0, "Could not create necessary directories.", ex);
-                        MessageBox.Show("The application does not have the required privileges to run.  Please run as administrator.");
-                        return;
-                    }
-
-                    // Load settings
-                    LogMessage(-1, "Loading settings");
-                    LoadSettings();
-
-                    // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
-                    classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
-
-                    //LogMessage(-1, "Creating Initial System Configurations");
-                    InitializeSystemConfigurations();
-
-                    // Create a device manager.
-                    //LogMessage(-1, "Creating the Device Manager");
-                    var deviceManager = classDeviceManager.Manager;
-                    deviceManager.Emulate = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false);
-                    deviceManager.AddDevice(new classTimerDevice());
-                    deviceManager.AddDevice(new classBlockDevice());
-                    deviceManager.AddDevice(new classLogDevice());
-                    deviceManager.AddDevice(new classApplicationDevice());
-
-                    // Load the device plug-ins.
-                    LogMessage(-1, "Loading necessary device plug-ins.");
-                    var areDevicesLoaded = true;
-                    try
-                    {
-                        classDeviceManager.Manager.LoadPlugins(Assembly.GetExecutingAssembly(), true);
-                    }
-                    catch
-                    {
-                        areDevicesLoaded = false;
-                        classApplicationLogger.LogError(0, "Could not load internal device plug-ins.");
-                    }
-                    LogMessage(-1, "Loading external device plug-ins.");
-                    try
-                    {
-                        classDeviceManager.Manager.LoadSatelliteAssemblies(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
-                        classDeviceManager.Manager.LoadPlugins(classDeviceManager.CONST_DEVICE_PLUGIN_PATH, "*.dll", true);
-                    }
-                    catch
-                    {
-                        areDevicesLoaded = false;
-                        classApplicationLogger.LogError(0, "Could not load external device plug-ins.");
-                    }
-                    //TODO: Whoops! not all of the device plug-in loading should kill this effort.  If one set loaded,
-                    // that may be ok.
-                    if (!areDevicesLoaded)
-                    {
-                        classApplicationLogger.LogError(-1, "Failed to load some of the device plug-ins.");
-                        return;
-                    }
-                    LogMessage(-1, "Device plug-ins are loaded.");
+            // Load the device plug-ins.
+            LogMessage(-1, "Loading necessary device plug-ins.");
+            var areDevicesLoaded = true;
+            try
+            {
+                classDeviceManager.Manager.LoadPlugins(Assembly.GetExecutingAssembly(), true);
+            }
+            catch
+            {
+                areDevicesLoaded = false;
+                classApplicationLogger.LogError(0, "Could not load internal device plug-ins.");
+            }
+            LogMessage(-1, "Loading external device plug-ins.");
+            try
+            {
+                classDeviceManager.Manager.LoadSatelliteAssemblies(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
+                classDeviceManager.Manager.LoadPlugins(classDeviceManager.CONST_DEVICE_PLUGIN_PATH, "*.dll", true);
+            }
+            catch
+            {
+                areDevicesLoaded = false;
+                classApplicationLogger.LogError(0, "Could not load external device plug-ins.");
+            }
+            //TODO: Whoops! not all of the device plug-in loading should kill this effort.  If one set loaded,
+            // that may be ok.
+            if (!areDevicesLoaded)
+            {
+                classApplicationLogger.LogError(-1, "Failed to load some of the device plug-ins.");
+                return false;
+            }
+            LogMessage(-1, "Device plug-ins are loaded.");
 
 #if DEBUG
-                    // Create a device we can use for testing errors with.
-                    IDevice dev = new classErrorDevice();
-                    deviceManager.AddDevice(dev);
+            // Create a device we can use for testing errors with.
+            IDevice dev = new classErrorDevice();
+            deviceManager.AddDevice(dev);
 #endif
 
-                    // Create the method manager
-                    //LogMessage(-1, "Creating the Method Manager");
+            // Create the method manager
+            //LogMessage(-1, "Creating the Method Manager");
 
-                    // Set the logging levels
-                    var logLevelErrors = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGERRORLEVEL);
-                    if (!string.IsNullOrWhiteSpace(logLevelErrors))
-                        classApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
-                    else
-                        classApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
+            // Set the logging levels
+            var logLevelErrors = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGERRORLEVEL);
+            if (!string.IsNullOrWhiteSpace(logLevelErrors))
+                classApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
+            else
+                classApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
 
-                    var logLevelMessages = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGMSGLEVEL);
-                    if (!string.IsNullOrWhiteSpace(logLevelMessages))
-                        classApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
-                    else
-                        classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
+            var logLevelMessages = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGMSGLEVEL);
+            if (!string.IsNullOrWhiteSpace(logLevelMessages))
+                classApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
+            else
+                classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
 
-                    CreateSQLCache();
-                    LogMessage(-1, "Loading DMS data");
+            CreateSQLCache();
+            LogMessage(-1, "Loading DMS data");
 
-                    try
-                    {
+            try
+            {
 
-                        var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
-                        classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
+                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
 
-                        dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
-                        LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = false;
+                dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
+                LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = false;
 
-                        dmsTools.LoadCacheFromDMS(false);
+                dmsTools.LoadCacheFromDMS(false);
 
-                        LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = true;
-                        dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;
+                LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = true;
+                dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;
 
-                    }
-                    catch (Exception ex)
-                    {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error caching DMS data: " + ex.Message);
-                        if (ex.StackTrace != null)
-                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Stack trace: " + ex.StackTrace);
-                    }
-
-                    // Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
-                    if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
-                    {
-                        if (classTriggerFileTools.CheckLocalTriggerFiles())
-                        {
-                            LogMessage(-1, "Copying trigger files to DMS");
-                            classTriggerFileTools.MoveLocalTriggerFiles();
-                        }
-                    }
-
-                    // Check to see if any method folders need to be copied to the transfer server, and copy if necessary
-                    if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
-                    {
-                        if (classMethodFileTools.CheckLocalMethodFolders())
-                        {
-                            LogMessage(-1, "Copying method folders to DMS");
-                            classMethodFileTools.MoveLocalMethodFiles();
-                        }
-                    }
-
-                    // Load the main application and run
-                    LogMessage(-1, "Loading main window");
-                    var main = new MainWindow();
-                    this.MainWindow = main;
-                    var mainViewModel = new MainWindowViewModel();
-                    main.DataContext = mainViewModel;
-
-                    // Assure that the splash screen has been visible for at least 3 seconds
-                    while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
-                    {
-                        Thread.Sleep(250);
-                    }
-
-                    splashScreen.Close();
-
-                    classApplicationLogger.Message -= classApplicationLogger_Message;
-
-#if !DEBUG
-                    try
-                    {
-#endif
-                        main.ShowDialog();
-#if !DEBUG
-                    }
-                    catch (Exception ex)
-                    {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                            "Program Failed!", ex);
-                        throw;
-                    }
-                    finally
-                    {
-#endif
-                        mainViewModel.Dispose();
-#if !DEBUG
-                    }
-#endif
-                }
-#if !DEBUG
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error caching DMS data: " + ex.Message);
+                if (ex.StackTrace != null)
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Stack trace: " + ex.StackTrace);
+            }
 
-                MessageBox.Show("Shutting down due to unhandled error: " + ex.Message + " \nFor additional information, see the log files at " + classDbLogger.LogFolderPath + "\\");
-            }
-            finally
+            // Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
+            if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
             {
-                // Just to make sure...let's kill the PAL at the end of the program as well.
-                KillExistingPalProcesses();
-                LogMessage("-----------------shutdown complete----------------------");
+                if (classTriggerFileTools.CheckLocalTriggerFiles())
+                {
+                    LogMessage(-1, "Copying trigger files to DMS");
+                    classTriggerFileTools.MoveLocalTriggerFiles();
+                }
             }
-#else
-            KillExistingPalProcesses();
-#endif
+
+            // Check to see if any method folders need to be copied to the transfer server, and copy if necessary
+            if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
+            {
+                if (classMethodFileTools.CheckLocalMethodFolders())
+                {
+                    LogMessage(-1, "Copying method folders to DMS");
+                    classMethodFileTools.MoveLocalMethodFiles();
+                }
+            }
+
+            return true;
         }
 
         private void DmsToolsManager_ProgressEvent(object sender, ProgressEventArgs e)

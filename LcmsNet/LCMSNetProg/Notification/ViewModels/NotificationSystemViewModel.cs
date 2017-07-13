@@ -639,6 +639,7 @@ namespace LcmsNet.Notification.ViewModels
                 HandleEvents(e.Error, setting);
 
                 // automatically stop after 10 seconds
+                // TODO: Should probably blink or highlight the notifications tab until it is selected.
                 TaskBarManipulation.Instance.BlinkTaskbar(10000);
             }
             catch (KeyNotFoundException ex)

@@ -21,30 +21,42 @@ namespace LcmsNet
         /// </summary>
         public string Status
         {
-            set { Dispatcher.Invoke(() => StatusText.Text = value, DispatcherPriority.Send);}
+            set { Dispatcher.Invoke(() => StatusText.Text = value);}
         }
 
         public string SoftwareCopyright
         {
-            set { Dispatcher.Invoke(() => Copyright.Text = value, DispatcherPriority.Normal); }
+            set { Dispatcher.Invoke(() => Copyright.Text = value); }
         }
 
         public string SoftwareDevelopers
         {
-            set { Dispatcher.Invoke(() => Developers.Text = value, DispatcherPriority.Normal); }
+            set { Dispatcher.Invoke(() => Developers.Text = value); }
         }
 
         public void SetEmulatedLabelVisibility(string cartName, bool visible)
         {
-            if (visible)
+            if (Dispatcher == null || Dispatcher.CheckAccess())
             {
-                Cart.Foreground = Brushes.Red;
-                Cart.Text = cartName + "\n [EMULATED] ";
+                if (visible)
+                {
+                    Cart.Foreground = Brushes.Red;
+                    Cart.Text = cartName + "\n [EMULATED] ";
+                }
+                else
+                {
+                    Cart.Text = cartName;
+                }
             }
             else
             {
-                Cart.Text = cartName;
+                Dispatcher.Invoke(() => SetEmulatedLabelVisibility(cartName, visible));
             }
+        }
+
+        public void LoadComplete()
+        {
+            Dispatcher.InvokeShutdown();
         }
     }
 }
