@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Windows.Media.Imaging;
 using NUnit.Framework;
-using System.Drawing;
-using Core = EMSL.DocumentGenerator.Core;
 
-
-namespace EMSL.DocumentGenerator.Core.Tests
+namespace DocumentGeneratorTests
 {
     [TestFixture]
     class ModelTests
@@ -22,14 +17,14 @@ namespace EMSL.DocumentGenerator.Core.Tests
         [Test]
         public void TestFromImage()
         {
-            Bitmap test = new Bitmap(picturePath);
-            Core.Model.ImageContent testContent = new Core.Model.ImageContent(test);
+            var test = new BitmapImage(new Uri(picturePath));
+            EMSL.DocumentGenerator.Core.Model.ImageContent testContent = new EMSL.DocumentGenerator.Core.Model.ImageContent(test);
         }
 
         [Test]
         public void TestLoadFromFile()
         {
-            Core.Model.ImageContent testContent = new Core.Model.ImageContent(picturePath);
-        } 
+            EMSL.DocumentGenerator.Core.Model.ImageContent testContent = new EMSL.DocumentGenerator.Core.Model.ImageContent(picturePath);
+        }
     }
 }

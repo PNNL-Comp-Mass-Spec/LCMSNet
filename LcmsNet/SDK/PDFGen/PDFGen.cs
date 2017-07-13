@@ -12,7 +12,8 @@ using System.Text;
 using LcmsNetSDK;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
-using System.Drawing;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PDFGenerator
 {
@@ -30,7 +31,7 @@ namespace PDFGenerator
         /// <param name="devices">a list of 3-tuples of string containing device name, status, and error type</param>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
         public void WritePDF(string documentPath, string title, classSampleData sample, string numEnabledColumns, List<LcmsNetDataClasses.Configuration.classColumnData> columnData,
-            List<IDevice> devices, Bitmap fluidicsImage)
+            List<IDevice> devices, BitmapSource fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
             EMSL.DocumentGenerator.Core.Services.IDocumentWriter writer = new EMSL.DocumentGenerator.PDFSharp.PDFWriter();
@@ -48,11 +49,11 @@ namespace PDFGenerator
             int[] FieldWidths = {-20, -20};
             string[] cartData = { "Cart-Name:", sample.DmsData.CartName };
             var cartConfigString = FormatString(FieldWidths, cartData);
-            
+
             string[] configData = { "Enabled-Columns:", numEnabledColumns };
             cartConfigString += FormatString(FieldWidths, configData);
             doc.AddParagraph(cartConfigString);
-            
+
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Columns");
             var columnDataString = CreateColumnString(columnData);
             doc.AddParagraph(columnDataString);
@@ -70,11 +71,11 @@ namespace PDFGenerator
             var mobilePhases = new StringBuilder();
             int[] fieldWidths = { -5, -15, -13, -15, -8, -15 };
             foreach(var pump in pumps)
-            {                           
+            {
                 if (pump.MobilePhases.Count > 0)
-                {                                      
+                {
                     foreach (var phase in pump.MobilePhases)
-                    {                        
+                    {
                         string[] mobilePhaseData = {"Pump:", pump.Name, "Mobile Phase:", phase.Name, "Comment:", phase.Comment };
                         mobilePhases.Append(FormatString(fieldWidths, mobilePhaseData));
                     }
@@ -83,7 +84,7 @@ namespace PDFGenerator
                 {
                     string[] mobilePhaseData = {"Pump:", pump.Name, "Mobile Phase:", "None", "Comment:", "None"};
                     mobilePhases.Append(FormatString(fieldWidths, mobilePhaseData));
-                }                
+                }
             }
             doc.AddParagraph(mobilePhases.ToString());
 
@@ -110,14 +111,13 @@ namespace PDFGenerator
             var rfluidicsImage = ScaleImage(fluidicsImage);
             var imageC = new EMSL.DocumentGenerator.Core.Model.ImageContent(rfluidicsImage);
             doc.AddImage(imageC);
-            
+
             //error section
             //doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Errors");
             //doc.AddParagraph("Error Info");
 
             //write the document to file
             doc.WriteDocument(documentPath);
-            rfluidicsImage.Dispose();
         }
 
         /// <summary>
@@ -144,23 +144,21 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
         /// <returns>a rescaled bitmap</returns>
-        private static Bitmap ScaleImage(Bitmap fluidicsImage)
+        private static BitmapSource ScaleImage(BitmapSource fluidicsImage)
         {
             // create bitmap image of fluidics design, rescale it, and add it to the document model
             // image no wider than an 8" page with 0.5" margins---aka 7" and no taller than 5"
             // while maintaining aspect ratio
-            var maxWidth = (7 * fluidicsImage.HorizontalResolution);
-            var maxHeight = (5 * fluidicsImage.VerticalResolution);
-            float scale = 1;
+            var maxWidth = (7 * fluidicsImage.DpiX);
+            var maxHeight = (5 * fluidicsImage.DpiY);
+            double scale = 1;
             if (maxWidth < fluidicsImage.Width || maxHeight < fluidicsImage.Height)
             {
                 //the smaller of the two ratios will produce an image in correct aspect ratio, with an acceptable size
                 scale = Math.Min(maxWidth / fluidicsImage.Width, maxHeight / fluidicsImage.Height);
             }
 
-            var rfluidicsImage = resizeBitmap(fluidicsImage, (int)(fluidicsImage.Width * scale), (int)(fluidicsImage.Height * scale));
-            fluidicsImage.Dispose();
-            return rfluidicsImage;
+            return new TransformedBitmap(fluidicsImage, new ScaleTransform(scale, scale));
         }
 
         /// <summary>
@@ -212,7 +210,7 @@ namespace PDFGenerator
         /// <returns>a formatted string of column data</returns>
         private static string CreateColumnString(List<LcmsNetDataClasses.Configuration.classColumnData> columnData)
         {
-            //Column data, we want to be able to determine other column names and status..but this would only happen at the *end* of the run, perhaps not so useful?  
+            //Column data, we want to be able to determine other column names and status..but this would only happen at the *end* of the run, perhaps not so useful?
             int[] FieldWidths = { -20, -20};
             string[] colData = {"Column Name", "Status"};
             var columnDataString = FormatString(FieldWidths, colData);
@@ -270,10 +268,10 @@ namespace PDFGenerator
 
             string[] bl = { "Block:", sample.DmsData.Block.ToString() };
             var block = FormatString(FieldWidths, bl);
-            
+
             string[] ro = {"Run Order:", sample.DmsData.RunOrder.ToString()};
             var runOrder = FormatString(FieldWidths, ro);
-            
+
             string[] co = {"Comment:", sample.DmsData.Comment};
             var comment = FormatString(FieldWidths, co);
 
@@ -300,33 +298,13 @@ namespace PDFGenerator
                 // create format string of {<count>, <fieldwidth>}, ex {0, 20} for the first element in data and a field width of 20 characters
                 stringFormatter.Append("{" + count.ToString() + "," + fieldWidth.ToString() + "}");
                 count++;
-            }           
+            }
             stringFormatter.Append(Environment.NewLine);
             // use stringFormatter to place all elements of data into proper format
             formattedString += string.Format(stringFormatter.ToString(), data);
             return formattedString;
         }
 
-        /// <summary>
-        /// resize a bitmap to fit on an 8.5 x 11 page, at a max of 5 x 7
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        private static Bitmap resizeBitmap(Bitmap bmp, int width, int height)
-        {
-            var resizedBmp = new Bitmap(width, height);
-            resizedBmp.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
-            using (var g = Graphics.FromImage(resizedBmp))
-            {
-                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                g.DrawImage(bmp, 0, 0, resizedBmp.Width, resizedBmp.Height);
-            }
-            return resizedBmp;
-        }
         #endregion
     }
 }

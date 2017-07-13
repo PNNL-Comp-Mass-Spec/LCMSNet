@@ -172,7 +172,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         ///  save the current fluidics design as a bitmap
         /// </summary>
         /// <returns>the image of the current fluidics design</returns>
-        public System.Drawing.Bitmap GetImage()
+        public BitmapSource GetImage()
         {
             var r = fluidicsMod.GetBoundingBox();
             var bounds = new Rect(0, 0, r.Width + 150, r.Height + 150);
@@ -189,7 +189,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             var rtb = new RenderTargetBitmap(800, 200, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(drawVisual);
             rtb.Freeze();
-            return rtb.ToImage();
+            return rtb;
         }
 
         public List<Tuple<string, string, string>> ListDevicesAndStatus()

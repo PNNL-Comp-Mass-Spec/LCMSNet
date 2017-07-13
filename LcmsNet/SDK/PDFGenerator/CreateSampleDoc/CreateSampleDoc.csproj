@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CreateSampleDoc</RootNamespace>
     <AssemblyName>CreateSampleDoc</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -29,38 +30,31 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup>
     <StartupObject>CreateSampleDoc.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EMSL.DocumentGenerator.Core">
-      <HintPath>..\..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="EMSL.DocumentGenerator.Granot">
-      <HintPath>..\DocumentGenerator.Granot\bin\x86\Debug\EMSL.DocumentGenerator.Granot.dll</HintPath>
-    </Reference>
-    <Reference Include="EMSL.DocumentGenerator.PDFSharp">
-      <HintPath>..\..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
-    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -95,6 +89,23 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DocumentGenerator.Core\DocumentGenerator.Core.csproj">
+      <Project>{64dd92bd-eb3f-4912-aeff-cf25c4ce4ba9}</Project>
+      <Name>DocumentGenerator.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DocumentGenerator.Granot\DocumentGenerator.Granot.csproj">
+      <Project>{27f7f86d-68a8-4bd2-887d-152833ebf067}</Project>
+      <Name>DocumentGenerator.Granot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DocumentGenerator.PDFSharp\DocumentGenerator.PDFSharp.csproj">
+      <Project>{65f4e13e-7eec-4a72-a47b-1355f2f33c70}</Project>
+      <Name>DocumentGenerator.PDFSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
