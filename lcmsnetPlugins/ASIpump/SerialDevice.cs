@@ -1,7 +1,6 @@
 using System;
 using System.IO.Ports;
 using System.Threading;
-using System.Windows.Forms;
 using System.ComponentModel;
 
 using System.Diagnostics;
@@ -268,7 +267,6 @@ namespace ASIpump
             while (mReplyStr == null && timeoutWatch.Elapsed.Seconds < Timeout)
             {
                 Thread.Sleep(10);
-                Application.DoEvents();
             }
 
             return mReplyStr;

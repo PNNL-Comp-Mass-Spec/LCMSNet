@@ -14,7 +14,7 @@ using LcmsNetSDK;
 namespace ASIpump
 {
 
-    [classDeviceControlAttribute(typeof(AsiUI),
+    [classDeviceControlAttribute(typeof(AsiUIViewModel),
                                  "ASi Pump",
                                  "Syringe Pumps")]
     public class AsiPump : SerialDevice, IDevice, IPump, IFluidicsPump

@@ -58,9 +58,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,26 +71,14 @@
   <ItemGroup>
     <Compile Include="ESP300\classStagePosition.cs" />
     <Compile Include="ESP300\classNewportStage.cs" />
-    <Compile Include="ESP300\controlNewportStage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ESP300\controlNewportStage.Designer.cs">
-      <DependentUpon>controlNewportStage.cs</DependentUpon>
-    </Compile>
     <Compile Include="ESP300\enumCoordinates.cs" />
     <Compile Include="ESP300\ESP300Exception.cs" />
     <Compile Include="ESP300\FluidicsStage.cs" />
-    <Compile Include="ESP300\FluidicsStageWpf.cs" />
     <Compile Include="ESP300\NewportStageView.xaml.cs">
       <DependentUpon>NewportStageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ESP300\NewportStageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ESP300\controlNewportStage.resx">
-      <DependentUpon>controlNewportStage.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">

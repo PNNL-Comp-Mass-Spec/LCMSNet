@@ -68,13 +68,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        public event EventHandler<DMSValidatorEventArgs> EnterPressed;
-
-        public virtual void OnEnterPressed(object sender, DMSValidatorEventArgs e)
-        {
-            EnterPressed?.Invoke(sender, e);
-        }
-
         #region Properties
 
         public int ID { get; set; }

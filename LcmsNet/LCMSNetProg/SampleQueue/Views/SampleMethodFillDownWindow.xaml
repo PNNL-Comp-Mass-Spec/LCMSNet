@@ -104,7 +104,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/WPFControls/Images/FillDown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="/Images/FillDown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>

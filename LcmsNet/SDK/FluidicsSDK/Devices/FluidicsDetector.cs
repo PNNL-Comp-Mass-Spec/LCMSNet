@@ -1,18 +1,11 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 12/16/2013
- *
- ********************************************************************************************************/
-
+﻿using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
-using System.Drawing;
 
 namespace FluidicsSDK.Devices
 {
-    public sealed class FluidicsDetector:FluidicsDevice
+    public sealed class FluidicsDetector : FluidicsDevice
     {
         private const int WIDTH = 100;
         private const int HEIGHT = 50;
@@ -20,7 +13,7 @@ namespace FluidicsSDK.Devices
 
         public FluidicsDetector()
         {
-            var myRectangle = new FluidicsRectangle(new Point(0,0), m_size, Color.Black, Brushes.White);
+            var myRectangle = new FluidicsRectangle(new Point(0, 0), m_size, Colors.Black, Brushes.White);
             AddPrimitive(myRectangle);
             m_deviceName = "Detector";
         }
@@ -59,7 +52,6 @@ namespace FluidicsSDK.Devices
                 //do nothing
             }
         }
-
 
         // property for type of closure (bruker, network start, etc)
         public string ClosureType

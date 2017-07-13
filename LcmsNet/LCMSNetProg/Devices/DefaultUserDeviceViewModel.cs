@@ -8,7 +8,7 @@ using LcmsNetDataClasses.Devices;
 
 namespace LcmsNet.Devices
 {
-    public class DefaultUserDeviceViewModel : IDeviceControlWpf
+    public class DefaultUserDeviceViewModel : IDeviceControl
     {
         public DefaultUserDeviceViewModel()
         {

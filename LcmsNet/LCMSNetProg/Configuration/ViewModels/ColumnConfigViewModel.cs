@@ -20,7 +20,7 @@ namespace LcmsNet.Configuration.ViewModels
             columnData = new classColumnData
             {
                 ID = 0,
-                ColorWpf = Colors.Red
+                Color = Colors.Red
             };
 
             columnNamesComboBoxOptions = new ReactiveList<string>(new string[] {"NOTSET"});

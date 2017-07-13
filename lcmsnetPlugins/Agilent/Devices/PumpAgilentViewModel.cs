@@ -15,7 +15,7 @@ using Microsoft.Win32;
 
 namespace Agilent.Devices.Pumps
 {
-    public class PumpAgilentViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class PumpAgilentViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private const string CONST_PUMP_METHOD_PATH = "pumpmethods";
 

@@ -9,7 +9,7 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
     /// <summary>
     /// Control for detector triggered by network start signal (presently just a stub)
     /// </summary>
-    public abstract class NetStartViewModelBase : BaseDeviceControlViewModel, IDeviceControlWpf
+    public abstract class NetStartViewModelBase : BaseDeviceControlViewModel, IDeviceControl
     {
         #region "Constructors"
 

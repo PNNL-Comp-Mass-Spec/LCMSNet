@@ -11,7 +11,7 @@ using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Pal
 {
-    public class PalViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class PalViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         #region Constructors
 

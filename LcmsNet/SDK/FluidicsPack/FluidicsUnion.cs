@@ -1,16 +1,9 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 1/3/2013
- *
- ********************************************************************************************************/
-
-using System.Linq;
+﻿using System.Linq;
+using System.Windows;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
 using FluidicsSDK.Managers;
-using System.Drawing;
+using System.Windows.Media;
 using LcmsNetDataClasses.Devices;
 
 namespace FluidicsPack
@@ -30,10 +23,10 @@ namespace FluidicsPack
             var rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
             //main rectangle
-            AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Colors.Black, Brushes.White);
 
             //left most rectangle
-            AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Colors.Black, Brushes.White);
 
             // bottom left parallelogram + connecting line
             var leftPara = new FluidicsPolygon();
@@ -50,7 +43,6 @@ namespace FluidicsPack
 
             AddPrimitive(leftPara);
 
-
             //bottom middle trapezoid
             var botmid = new FluidicsPolygon();
             botmid.AddPoint(new Point(mainStartPoint.X, mainStartPoint.Y + MAIN_RECT_HEIGHT));
@@ -63,7 +55,6 @@ namespace FluidicsPack
             botmid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH, mainStartPoint.Y + MAIN_RECT_HEIGHT));
             AddPrimitive(botmid);
 
-
             // bottom right parallelogram + connecting line
             var botRt = new FluidicsPolygon();
             botRt.AddPoint(new Point(rightMostStartPoint.X, rightMostStartPoint.Y + MAIN_RECT_HEIGHT));
@@ -75,10 +66,8 @@ namespace FluidicsPack
             AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
             AddPrimitive(botRt);
 
-
-
             // rightmost rectangle
-            AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Colors.Black, Brushes.White);
 
             // upper left parallelogram + connecting line
             var upLft = new FluidicsPolygon();
@@ -104,7 +93,6 @@ namespace FluidicsPack
             upMid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 5, mainStartPoint.Y - 10));
             upMid.AddPoint(new Point(mainStartPoint.X + MAIN_RECT_WIDTH, mainStartPoint.Y));
             AddPrimitive(upMid);
-
 
             // upper right parallelogram + connecting line
             var upRt = new FluidicsPolygon();
@@ -157,6 +145,7 @@ namespace FluidicsPack
         {
             return string.Empty;
         }
+
         #endregion
 
         #region Properties

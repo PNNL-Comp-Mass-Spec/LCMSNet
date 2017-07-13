@@ -15,7 +15,7 @@ namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(controlValveVICIMultiPos),
+    [classDeviceControlAttribute(typeof(ValveVICIMultiPosViewModel),
                                  "Sixteen-Port",
                                  "Valves Multi-Position")
     ]

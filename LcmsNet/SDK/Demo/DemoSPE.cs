@@ -16,7 +16,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    [classDeviceControlAttribute(typeof(DemoValveAdvancedControl),
+    [classDeviceControlAttribute(typeof(DemoValveAdvancedControlViewModel),
                                  "Demo SPE",
                                  "Demo")]
     public class DemoSPE : IDevice, ISolidPhaseExtractor

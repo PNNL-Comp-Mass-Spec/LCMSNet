@@ -30,7 +30,7 @@ namespace Agilent.Devices.Pumps
     /// Interface to Agilent Pumps for running the solution of a gradient.
     /// </summary>
     [Serializable]
-    [classDeviceControlAttribute(typeof(controlPumpAgilent),
+    [classDeviceControlAttribute(typeof(PumpAgilentViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
     public class classPumpAgilent : IDevice, IPump, IFluidicsPump

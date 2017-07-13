@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace ASIpump
 {
-    public class AsiUIViewModel : ReactiveObject, IDeviceControlWpf
+    public class AsiUIViewModel : ReactiveObject, IDeviceControl
     {
         public AsiUIViewModel()
         {

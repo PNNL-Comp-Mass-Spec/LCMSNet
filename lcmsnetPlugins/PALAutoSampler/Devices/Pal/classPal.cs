@@ -27,7 +27,7 @@ namespace LcmsNet.Devices.Pal
     /// </summary>
     [Serializable]
 
-    [classDeviceControlAttribute(typeof(controlPal),
+    [classDeviceControlAttribute(typeof(PalViewModel),
                                  "PAL Autosampler",
                                  "Auto-Samplers")]
     public class classPal : IDevice, IAutoSampler, IFluidicsSampler
@@ -486,7 +486,6 @@ namespace LcmsNet.Devices.Pal
                 while (end.Subtract(start).TotalMilliseconds < CONST_WAITTIMEOUT)
                 {
                     System.Threading.Thread.Sleep(StatusPollDelay);
-                    System.Windows.Forms.Application.DoEvents();
                     end = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
                 }
 

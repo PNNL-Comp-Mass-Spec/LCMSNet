@@ -11,7 +11,7 @@ using LcmsNetSDK;
 namespace Newport.ESP300
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(controlNewportStage),
+    [classDeviceControlAttribute(typeof(NewportStageViewModel),
                                  typeof(FluidicsStage),
                                  "Newport Stage",
                                  "Stages")

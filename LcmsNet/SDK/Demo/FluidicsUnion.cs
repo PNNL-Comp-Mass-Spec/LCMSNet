@@ -1,15 +1,8 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 1/3/2013
- *
- ********************************************************************************************************/
-
-using System.Linq;
+﻿using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
-using System.Drawing;
 using LcmsNetDataClasses.Devices;
 
 namespace DemoPluginLibrary
@@ -29,17 +22,17 @@ namespace DemoPluginLibrary
             var rightMostStartPoint = new Point(MAIN_RECT_WIDTH + 5, 0);
 
             //main rectangle
-            AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Color.Black,  Brushes.White);
+            AddRectangle(mainStartPoint, new Size(MAIN_RECT_WIDTH, MAIN_RECT_HEIGHT), Colors.Black, Brushes.White);
 
             //left most rectangle
-            AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black,  Brushes.White);
+            AddRectangle(leftMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Colors.Black, Brushes.White);
 
             // bottom left parallelogram + connecting line
             AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X, leftMostStartPoint.Y + MAIN_RECT_HEIGHT), new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
             AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT),
                 new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
             AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10),
-                 new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
+                new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
             AddPrimitive(new FluidicsLine(new Point(leftMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 3, leftMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
 
             //bottom middle trapezoid
@@ -54,12 +47,11 @@ namespace DemoPluginLibrary
             AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT),
                 new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
             AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10),
-                 new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
+                new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10)));
             AddPrimitive(new FluidicsLine(new Point(rightMostStartPoint.X - 3, rightMostStartPoint.Y + MAIN_RECT_HEIGHT + 10), new Point(mainStartPoint.X + MAIN_RECT_WIDTH - 3, mainStartPoint.Y + MAIN_RECT_HEIGHT + 5)));
 
-
             // rightmost rectangle
-            AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Color.Black, Brushes.White);
+            AddRectangle(rightMostStartPoint, new Size(MAIN_RECT_WIDTH / 3, MAIN_RECT_HEIGHT), Colors.Black, Brushes.White);
 
             // upper left parallelogram + connecting line
             AddPrimitive(new FluidicsLine(leftMostStartPoint, new Point(leftMostStartPoint.X + 3, leftMostStartPoint.Y - 10)));
@@ -83,7 +75,6 @@ namespace DemoPluginLibrary
 
             AddPort(new Point(leftMostStartPoint.X - 12, leftMostStartPoint.Y + MAIN_RECT_HEIGHT / 2));
             AddPort(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 12, rightMostStartPoint.Y + MAIN_RECT_HEIGHT / 2));
-
         }
 
         public override bool Contains(Point location)

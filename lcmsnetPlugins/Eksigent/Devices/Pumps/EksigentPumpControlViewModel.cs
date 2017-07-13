@@ -9,7 +9,7 @@ using LcmsNetSDK;
 
 namespace Eksigent.Devices.Pumps
 {
-    public class EksigentPumpControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class EksigentPumpControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         public EksigentPumpControlViewModel()
         {

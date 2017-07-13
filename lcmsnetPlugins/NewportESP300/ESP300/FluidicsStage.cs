@@ -1,5 +1,6 @@
-﻿using FluidicsSDK.Base;
-using System.Drawing;
+﻿using System.Windows;
+using System.Windows.Media;
+using FluidicsSDK.Base;
 using LcmsNetDataClasses.Devices;
 
 namespace Newport.ESP300
@@ -13,12 +14,11 @@ namespace Newport.ESP300
 
         public FluidicsStage()
         {
-            AddRectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT), Color.Black, new SolidBrush(Color.White), true, null);
+            AddRectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT), Colors.Black, Brushes.White, true, null);
             AddPort(new Point(STAGE_WIDTH + 14, STAGE_HEIGHT / 2));
             AddPort(new Point(Loc.X - 14, Loc.Y + STAGE_HEIGHT / 2));
-            m_info_controls_box = new Rectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT));
+            m_info_controls_box = new Rect(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT));
         }
-
 
         public override int CurrentState
         {
@@ -32,9 +32,9 @@ namespace Newport.ESP300
             }
         }
 
-        protected override Rectangle UpdateControlBoxLocation()
+        protected override Rect UpdateControlBoxLocation()
         {
-            return new Rectangle(Loc.X, Loc.Y, STAGE_WIDTH, STAGE_HEIGHT);
+            return new Rect(Loc.X, Loc.Y, STAGE_WIDTH, STAGE_HEIGHT);
         }
 
         public override string StateString()
@@ -56,6 +56,5 @@ namespace Newport.ESP300
         {
             m_obj = device as classNewportStage;
         }
-
     }
 }

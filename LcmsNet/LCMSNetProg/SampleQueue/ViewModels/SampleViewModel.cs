@@ -245,9 +245,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             get
             {
                 // Define the background color for the LC Column
-                // Convert from WinForms color to WPF brush
-                var color = Sample.ColumnData.Color;
-                return new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+                return new SolidColorBrush(Sample.ColumnData.Color);
             }
         }
 

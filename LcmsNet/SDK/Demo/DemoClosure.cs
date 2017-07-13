@@ -8,7 +8,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-     [classDeviceControlAttribute(typeof(DemoClosureAdvanceControl),
+     [classDeviceControlAttribute(typeof(DemoClosureAdvancedControlViewModel),
                                  "Demo Closure",
                                  "Demo")]
 

@@ -110,36 +110,11 @@ namespace LcmsNet.Devices.ViewModels
                 var monitorAttribute = o as classDeviceControlAttribute;
                 if (monitorAttribute != null)
                 {
-                    IDeviceControlWpf control = null;
-                    Type t = null;
+                    IDeviceControl control = null;
                     if (monitorAttribute.ControlType != null)
                     {
-                        t = monitorAttribute.ControlType;
-                        var ns = t.Namespace;
-                        var n = t.Name.Replace("control", "") + "ViewModel";
-                        var fullname = ns + "." + n;
-                        try
-                        {
-                            var t2 = t.Assembly.GetType(fullname, true);
-                            var obj = Activator.CreateInstance(t2);
-                            control = obj as IDeviceControlWpf;
-                        }
-                        catch (Exception)
-                        {
-                            // Silent failure is acceptable, but do report it to the error output
-                            System.Diagnostics.Debug.WriteLine("Error: Could not find WPF version of control \"{0}\"; looked for \"{1}\", in assembly \"{2}\"", t.FullName, fullname, t.Assembly.FullName);
-                        }
+                        control = Activator.CreateInstance(monitorAttribute.ControlType) as IDeviceControl;
                     }
-                    if (t != null && control == null)
-                    {
-                        //control = Activator.CreateInstance(monitorAttribute.ControlType) as IDeviceControlWpf;
-                        var obj = Activator.CreateInstance(monitorAttribute.ControlType);
-                        control = obj as IDeviceControlWpf;
-                    }
-                    // TODO: FIX: if (monitorAttribute.ControlType != null)
-                    // TODO: FIX: {
-                    // TODO: FIX:     control = Activator.CreateInstance(monitorAttribute.ControlType) as IDeviceControlWpf;
-                    // TODO: FIX: }
 
                     AddDeviceControl(monitorAttribute.Category, device, control);
                     break;
@@ -153,7 +128,7 @@ namespace LcmsNet.Devices.ViewModels
         /// <param name="groupName"></param>
         /// <param name="device"></param>
         /// <param name="deviceControl"></param>
-        private void AddDeviceControl(string groupName, IDevice device, IDeviceControlWpf deviceControl)
+        private void AddDeviceControl(string groupName, IDevice device, IDeviceControl deviceControl)
         {
             // Make sure group control exists exists.
             AdvancedDeviceGroupControlViewModel control = null;

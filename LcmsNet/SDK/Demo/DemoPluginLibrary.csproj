@@ -35,8 +35,6 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,7 +45,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoClosureAdvanceControlViewModel.cs" />
     <Compile Include="DemoClosureAdvancedControlView.xaml.cs">
       <DependentUpon>DemoClosureAdvancedControlView.xaml</DependentUpon>
     </Compile>
@@ -65,26 +62,11 @@
     </Compile>
     <Compile Include="DemoValveAdvancedControlViewModel.cs" />
     <Compile Include="FluidicsSprayNeedle.cs" />
-    <Compile Include="FluidicsSprayNeedleWpf.cs" />
     <Compile Include="FluidicsTee.cs" />
-    <Compile Include="FluidicsTeeWpf.cs" />
     <Compile Include="FluidicsUnion.cs" />
-    <Compile Include="FluidicsUnionWpf.cs" />
     <Compile Include="PluginTemplate\PluginTemplate.cs" />
     <Compile Include="DemoClosure.cs" />
-    <Compile Include="DemoClosureAdvanceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoClosureAdvanceControl.Designer.cs">
-      <DependentUpon>DemoClosureAdvanceControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="DemoPAL.cs" />
-    <Compile Include="DemoPALAdvancedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoPALAdvancedControl.Designer.cs">
-      <DependentUpon>DemoPALAdvancedControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="DemoPump.cs" />
     <Compile Include="DemoSPE.cs" />
     <Compile Include="DemoSprayNeedle.cs" />
@@ -93,32 +75,6 @@
     <Compile Include="DemoValve.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DemoValve2.cs" />
-    <Compile Include="DemoValve2AdvancedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoValve2AdvancedControl.Designer.cs">
-      <DependentUpon>DemoValve2AdvancedControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DemoValveAdvancedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoValveAdvancedControl.Designer.cs">
-      <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DemoClosureAdvanceControl.resx">
-      <DependentUpon>DemoClosureAdvanceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DemoPALAdvancedControl.resx">
-      <DependentUpon>DemoPALAdvancedControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DemoValve2AdvancedControl.resx">
-      <DependentUpon>DemoValve2AdvancedControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DemoValveAdvancedControl.resx">
-      <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">

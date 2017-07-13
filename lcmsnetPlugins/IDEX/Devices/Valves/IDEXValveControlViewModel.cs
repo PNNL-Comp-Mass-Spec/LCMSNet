@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace ASUTGen.Devices.Valves
 {
-    public class IDEXValveControlViewModel : ReactiveObject, IDeviceControlWpf
+    public class IDEXValveControlViewModel : ReactiveObject, IDeviceControl
     {
         public IDEXValveControlViewModel()
         {

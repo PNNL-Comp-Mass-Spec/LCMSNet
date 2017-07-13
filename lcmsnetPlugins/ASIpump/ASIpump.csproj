@@ -76,8 +76,6 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -89,30 +87,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsiPump.cs" />
-    <Compile Include="AsiUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AsiUI.Designer.cs">
-      <DependentUpon>AsiUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="AsiUIView.xaml.cs">
       <DependentUpon>AsiUIView.xaml</DependentUpon>
     </Compile>
     <Compile Include="AsiUIViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyGridPersist.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PropertyGridPersist.designer.cs">
-      <DependentUpon>PropertyGridPersist.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SafeThreadAction.cs" />
     <Compile Include="SerialDevice.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="AsiUI.resx">
-      <DependentUpon>AsiUI.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">

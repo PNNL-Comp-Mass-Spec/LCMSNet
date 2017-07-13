@@ -14,7 +14,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
     /// Network Start using old command packing messaging for communication with mass spectrometer.
     /// </summary>
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(controlNetStart),
+    [classDeviceControlAttribute(typeof(NetStartViewModel),
 
                                  "Network Start",
                                  "Detectors")

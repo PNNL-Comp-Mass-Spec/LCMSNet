@@ -52,8 +52,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -69,18 +67,6 @@
   <ItemGroup>
     <Compile Include="Devices\ContactClosure\classContactClosureU12.cs" />
     <Compile Include="Devices\ContactClosure\ContactClosureU12ViewModel.cs" />
-    <Compile Include="Devices\ContactClosure\controlContactClosureU12.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\ContactClosure\controlContactClosureU12.designer.cs">
-      <DependentUpon>controlContactClosureU12.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\NetworkStart\controlNetStart.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\NetworkStart\controlNetStart.Designer.cs">
-      <DependentUpon>controlNetStart.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\NetworkStart\NetStartViewModel.cs" />
     <Compile Include="Devices\NetworkStart\Socket\classNetStartArgument.cs" />
     <Compile Include="Devices\NetworkStart\Socket\classNetStartMessage.cs" />
@@ -99,13 +85,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Devices\ContactClosure\controlContactClosureU12.resx">
-      <DependentUpon>controlContactClosureU12.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\NetworkStart\controlNetStart.resx">
-      <DependentUpon>controlNetStart.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -11,9 +11,9 @@ using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
-using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -66,7 +66,7 @@ namespace FluidicsSDK.ModelCheckers
                     // Multiple sources found on a path, color path red.
                     foreach(var connection in pathTaken)
                     {
-                        connection.Color = Color.Red;
+                        connection.Color = Colors.Red;
                     }
                     if (StatusUpdate != null)
                     {

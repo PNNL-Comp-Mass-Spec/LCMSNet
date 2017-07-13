@@ -59,15 +59,5 @@ namespace Eksigent {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap deviceGlyph {
-            get {
-                object obj = ResourceManager.GetObject("deviceGlyph", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

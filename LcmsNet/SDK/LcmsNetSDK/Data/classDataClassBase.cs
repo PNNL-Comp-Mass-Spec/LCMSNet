@@ -10,9 +10,9 @@
 
 using System;
 using System.ComponentModel;
-using System.Drawing;
 using LcmsNetDataClasses.Configuration;
 using System.Collections.Generic;
+using System.Windows.Media;
 using LcmsNetDataClasses.Logging;
 
 namespace LcmsNetDataClasses
@@ -138,7 +138,7 @@ namespace LcmsNetDataClasses
                                 if (!string.IsNullOrWhiteSpace(currentValue))
                                     tempProp.SetValue(this, double.Parse(currentValue), null);
                                 break;
-                            case "System.Drawing.Color":
+                            case "System.Windows.Media.Color":
                                 var convertFromString = TypeDescriptor.GetConverter(typeof(Color)).ConvertFromString(currentValue);
                                 if (convertFromString != null)
                                 {

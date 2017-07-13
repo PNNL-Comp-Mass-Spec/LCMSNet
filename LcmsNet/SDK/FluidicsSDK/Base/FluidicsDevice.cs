@@ -1,17 +1,12 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 8/16/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Graphic;
-using System.Drawing;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Managers;
+using LcmsNetDataClasses.Devices;
 
 namespace FluidicsSDK.Base
 {
@@ -36,11 +31,11 @@ namespace FluidicsSDK.Base
         //list of primitives that are associated with actions..aka controls.
         protected List<GraphicsPrimitive> m_actionPrims;
         //box to be drawn around controls and info strings, also determines positioning of said controls and strings
-        protected Rectangle m_info_controls_box;
+        protected Rect m_info_controls_box;
         #endregion
-        
+
         #region Methods
-            
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -50,7 +45,7 @@ namespace FluidicsSDK.Base
             m_actionPrims = new List<GraphicsPrimitive>();
             m_portList = new List<Port>();
             m_loc = new Point(0, 0);
-            m_info_controls_box = new Rectangle(0, 0 , 100, 100);
+            m_info_controls_box = new Rect(0, 0, 100, 100);
             m_actions = new Dictionary<GraphicsPrimitive, Action>();
             Selected = false;
             Source = false;
@@ -58,10 +53,9 @@ namespace FluidicsSDK.Base
         }
 
         ~FluidicsDevice()
-        {          
+        {
             m_portList.Clear();
             m_deviceName = string.Empty;
-            m_loc = Point.Empty;
             m_lcmsDevice = null;
             m_primitives.Clear();
         }
@@ -149,12 +143,12 @@ namespace FluidicsSDK.Base
         /// <param name="state">a list of tuples, each tuple represents a single internal connection</param>
         public virtual void ActivateState(List<Tuple<int, int>> state)
         {
-            classFluidicsModerator.Moderator.BeginModelSuspension();
+            FluidicsModerator.Moderator.BeginModelSuspension();
             //TODO: change device state here
             //remove internal connections
             foreach (var p in Ports)
             {
-                
+
                 foreach (var c in p.Connections)
                 {
                     if (c.InternalConnectionOf == this)
@@ -169,16 +163,16 @@ namespace FluidicsSDK.Base
             {
                 ConnectionManager.GetConnectionManager.Connect(m_portList[t.Item1], m_portList[t.Item2], this);
             }
-            classFluidicsModerator.Moderator.EndModelSuspension(true);
+            FluidicsModerator.Moderator.EndModelSuspension(true);
         }
 
         /// <summary>
         /// Render device to screen
         /// </summary>
-        /// <param name="g">Graphics object to draw with/on</param>
+        /// <param name="g">DrawingContext object to draw with/on</param>
         /// <param name="alpha"></param>
-        /// <param name="scale">scale device by this amount on screen</param>         
-        public virtual void Render(Graphics g, int alpha, float scale = 1)
+        /// <param name="scale">scale device by this amount on screen</param>
+        public virtual void Render(DrawingContext g, byte alpha, float scale = 1)
         {
             foreach (var primitive in m_primitives)
             {
@@ -201,46 +195,37 @@ namespace FluidicsSDK.Base
         /// <param name="g"></param>
         /// <param name="alpha"></param>
         /// <param name="scale"></param>
-        protected virtual void DrawControls(Graphics g, int alpha, float scale)
+        protected virtual void DrawControls(DrawingContext g, byte alpha, float scale)
         {
-            var realColor = Color.FromArgb(alpha, Color.Black.R, Color.Black.G, Color.Black.B);
-
-            using (new Pen(realColor))
-            using(IDisposable b = new SolidBrush(realColor))
+            var br = new SolidColorBrush(Color.FromArgb(alpha, Colors.Black.R, Colors.Black.G, Colors.Black.B));
+            //determine font size, used to scale font with graphics primitives
+            var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
+            var nameFont = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+            // draw name to screen
+            var name = DeviceName;
+            var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, (11.0F * stringScale) * (96.0 / 72.0), br);
+            m_info_controls_box = UpdateControlBoxLocation();
+            //place the name at the top middle of the box
+            var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Width, scale);
+            g.DrawText(deviceNameText, nameLocation);
+            //place the state below the name, centered as well
+            var stateText = new FormattedText(StateString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, (11.0F * stringScale) * (96.0 / 72.0), br);
+            var stateLocation = CreateStringLocation((int)(nameLocation.Y + deviceNameText.Height), stateText.Width, scale);
+            g.DrawText(stateText, stateLocation);
+            // default implementation, expecting only two controls. if a better implementation is needed...override it.
+            if (m_actionPrims.Count == 2)
             {
-                var br = (SolidBrush)b;
-                //determine font size, used to scale font with graphics primitives
-                var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
-                using(var stringFont = new Font("Calibri", 11 + stringScale))
-                {
-                    // draw name to screen
-                    var name = DeviceName;
-                    var nameSize = g.MeasureString(name, stringFont);
-                   
-                    m_info_controls_box = UpdateControlBoxLocation();
-                    //place the name at the top middle of the box
-                    var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Width, scale);
-                    g.DrawString(name, stringFont, br, nameLocation);
-                    //place the state below the name, centered as well
-                    var stateSize = g.MeasureString(StateString(), stringFont);
-                    var stateLocation = CreateStringLocation((int)(nameLocation.Y + nameSize.Height), stateSize.Width, scale);
-                    g.DrawString(StateString(), stringFont, br, stateLocation);
-                    // default implementation, expecting only two controls. if a better implementation is needed...override it.
-                    if (m_actionPrims.Count == 2)
-                    {
-                        var prim = m_actionPrims[0];
-                        //left triangle padding(so it doesn't draw over the state string
-                        var padding = 3;
-                        var relativeMove = new Size(stateLocation.X - (int)(prim.Size.Width * scale + padding + (prim.Loc.X * scale)), stateLocation.Y - (int)(prim.Loc.Y * scale));
-                        prim.Loc = Point.Add(prim.Loc, relativeMove);
-                        prim.Render(g, alpha, scale, false, false);
-                        prim = m_actionPrims[1];
+                var prim = m_actionPrims[0];
+                //left triangle padding(so it doesn't draw over the state string
+                var padding = 3;
+                var relativeMove = new Vector(stateLocation.X - (prim.Size.Width * scale + padding + (prim.Loc.X * scale)), stateLocation.Y - (prim.Loc.Y * scale));
+                prim.Loc = Point.Add(prim.Loc, relativeMove);
+                prim.Render(g, alpha, scale, false, false);
+                prim = m_actionPrims[1];
 
-                        relativeMove = new Size(stateLocation.X + (int)stateSize.Width - (int)(prim.Loc.X * scale), stateLocation.Y - (int)(prim.Loc.Y * scale));
-                        prim.Loc = Point.Add(prim.Loc, relativeMove);
-                        prim.Render(g, alpha, scale, false, false);
-                    }
-                }
+                relativeMove = new Vector(stateLocation.X + stateText.Width - (prim.Loc.X * scale) + padding, stateLocation.Y - (prim.Loc.Y * scale));
+                prim.Loc = Point.Add(prim.Loc, relativeMove);
+                prim.Render(g, alpha, scale, false, false);
             }
         }
 
@@ -248,14 +233,13 @@ namespace FluidicsSDK.Base
         /// update the location of the control box.
         /// </summary>
         /// <returns></returns>
-        protected virtual Rectangle UpdateControlBoxLocation()
+        protected virtual Rect UpdateControlBoxLocation()
         {
             var top = m_primitives.Max(x => x.Loc.Y + x.Size.Height);
             var xa = m_primitives.Min(j => j.Loc.X);
-            return new Rectangle(xa, top, m_info_controls_box.Width, m_info_controls_box.Height);
+            return new Rect(xa, top, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 
-        
         /// <summary>
         /// create location of a string to be drawn in the control box.
         /// </summary>
@@ -263,11 +247,10 @@ namespace FluidicsSDK.Base
         /// <param name="stringWidth"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        protected virtual Point CreateStringLocation(int y, float stringWidth, float scale)
-        {            
-
+        protected virtual Point CreateStringLocation(int y, double stringWidth, float scale)
+        {
             return new Point((int)((m_info_controls_box.X * scale + (m_info_controls_box.Size.Width * scale / 2)) - (stringWidth / 2)),
-                    (int)(y + 2));
+                (int)(y + 2));
         }
 
         /// <summary>
@@ -333,32 +316,24 @@ namespace FluidicsSDK.Base
         /// <param name="fillBrush">a Color representing the color the circle should be filled with(used if Brushtype is not Solid)</param>
         /// <param name="fill">a boolean defining if the circle should be filled or not</param>
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
-        protected virtual void AddCircle(Point loc, int radius, Color color, Brush fillBrush, bool fill=true, Action action = null)
+        protected virtual void AddCircle(Point loc, int radius, Color color, Brush fillBrush, bool fill = true, Action action = null)
         {
-            var circle = new FluidicsCircle(loc, Color.Black, fillBrush, radius)
-            {
-                Color = color,
-                Fill = fill
-            };
+            var circle = new FluidicsCircle(loc, color, fillBrush, radius);
             AddPrimitive(circle, action);
         }
 
         /// <summary>
         /// Add a rectangle to the devices list of Graphics Primitives
         /// </summary>
-        /// <param name="loc">a System.Drawing.Point representing the location the device should be drawn on screen</param>
-        /// <param name="size">a System.Drawing.SizeF representing the size of the primitive</param>
-        /// <param name="color">a System.Drawing.Color representing the primary draw color(pen color) of the primitive</param>
-        /// <param name="fillBrush">a System.Drawing.Color representing the color to fill the primitive with(only used when fill=true)</param>
+        /// <param name="loc">a Point representing the location the device should be drawn on screen</param>
+        /// <param name="size">a Size representing the size of the primitive</param>
+        /// <param name="color">a Color representing the primary draw color(pen color) of the primitive</param>
+        /// <param name="fillBrush">a Brush representing the color to fill the primitive with(only used when fill=true)</param>
         /// <param name="fill">boolean that determines if the primitive is filled or not</param>
         /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
-        protected virtual void AddRectangle(Point loc, Size size, Color color,  Brush fillBrush, bool fill=true, Action action = null)
+        protected virtual void AddRectangle(Point loc, Size size, Color color, Brush fillBrush, bool fill = true, Action action = null)
         {
-            var rect = new FluidicsRectangle(loc, size, Color.Black, fillBrush)
-            {
-                Color = color,
-                Fill = fill
-            };
+            var rect = new FluidicsRectangle(loc, size, color, fillBrush);
             AddPrimitive(rect, action);
         }
 
@@ -376,21 +351,16 @@ namespace FluidicsSDK.Base
         /// Add a port to the device
         /// </summary>
         protected virtual void AddPort(Port port)
-        {            
+        {
             m_portList.Add(port);
         }
 
         /// <summary>
         /// transforms the way the device looks in some way, such as rotation or translation(IE movement across screen)
         /// </summary>
-        /// <param name="translateRelativeValues">a System.Drawing.Point describing the relative x and y movement values from the devices current position.</param>
+        /// <param name="translateRelativeValues">a Point describing the relative x and y movement values from the devices current position.</param>
         public virtual void MoveBy(Point translateRelativeValues)
         {
-
-            /*scaling code*/
-
-            /*rotation code*/
-              
             /*  translation*/
             var oldLoc = m_primitives[PRIMARY_PRIMITIVE].Loc;
             var moveTo = new Point(oldLoc.X + translateRelativeValues.X, oldLoc.Y + translateRelativeValues.Y);
@@ -409,24 +379,23 @@ namespace FluidicsSDK.Base
                 prim.MoveBy(translateRelativeValues);
             }
             DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
+        }
 
-        }             
-            
         /// <summary>
         ///  all fluidics devices should be able to determine if they contain a specified point within their bounds
         /// </summary>
-        /// <param name="location">a System.Drawing.Point specifying the location to be checkeda against</param>
+        /// <param name="location">a Point specifying the location to be checkeda against</param>
         /// <returns>a bool determing if the device contains that location</returns>
         public virtual bool Contains(Point location)
         {
             var inDevice = false;
             foreach (var prim in m_primitives)
-            {                
+            {
                 if (prim.Contains(location, MaxVariance))
                 {
                     inDevice = true;
                     break;
-                }                
+                }
             }
             return inDevice;
         }
@@ -460,18 +429,18 @@ namespace FluidicsSDK.Base
                 var oldLoc = m_loc;
                 m_loc = value;
                 //m_info_controls_box.Location = new Point(value.X, value.Y + (int)Size.Height + 5);
-                DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs(oldLoc));
+                DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs(new Point(oldLoc.X, oldLoc.Y)));
             }
         }
-            
+
         /// <summary>
         /// Property for determining the size of the device on screen
         /// </summary>
-        public virtual SizeF Size
+        public virtual Size Size
         {
             get
             {
-                var s = new SizeF
+                var s = new Size
                 {
                     Width = m_primitives[PRIMARY_PRIMITIVE].Size.Width,
                     Height = m_primitives[PRIMARY_PRIMITIVE].Size.Height
@@ -480,7 +449,7 @@ namespace FluidicsSDK.Base
                 return s;
             }
         }
-         
+
         /// <summary>
         /// Gets or sets the determining color of the device
         /// </summary>
@@ -495,7 +464,7 @@ namespace FluidicsSDK.Base
                 foreach (var prim in m_primitives)
                 {
                     prim.Color = value;
-                } 
+                }
             }
         }
 
@@ -519,7 +488,7 @@ namespace FluidicsSDK.Base
                 m_lcmsDevice = value;
             }
         }
-            
+
         /// <summary>
         /// property for determining the color the device is hilighted by
         /// </summary>
@@ -548,9 +517,9 @@ namespace FluidicsSDK.Base
 
         /// <summary>
         /// stateless devices should return -1
-        /// </summary> 
-        /// 
-        public abstract int CurrentState {get; set;}
+        /// </summary>
+        ///
+        public abstract int CurrentState { get; set; }
 
         public bool Source
         {
@@ -570,5 +539,5 @@ namespace FluidicsSDK.Base
         //event for when device changes
         public virtual event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
         #endregion
-    }   
+    }
 }

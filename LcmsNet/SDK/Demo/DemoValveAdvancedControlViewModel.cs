@@ -6,7 +6,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    public class DemoValveAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class DemoValveAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private ITwoPositionValve valveControls;
         private IDevice valve;

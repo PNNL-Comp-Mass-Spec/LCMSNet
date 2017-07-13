@@ -24,7 +24,7 @@ namespace LcmsNet.Devices.Pumps
     /// </summary>
     [Serializable]
 
-    [classDeviceControlAttribute(typeof(controlPumpIsco), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
+    [classDeviceControlAttribute(typeof(PumpIscoViewModel), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
     public class classPumpIsco : IDevice
     {
         #region "Constants"

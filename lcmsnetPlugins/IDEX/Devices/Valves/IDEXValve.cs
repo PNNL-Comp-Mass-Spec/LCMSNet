@@ -7,7 +7,7 @@ using LcmsNetSDK;
 
 namespace ASUTGen.Devices.Valves
 {
-    /*[classDeviceControlAttribute(typeof(IDEXValveControl),
+    /*[classDeviceControlAttribute(typeof(IDEXValveControlViewModel),
                                  typeof(IDEXValveGlyph),
                                  "IDEX Valve",
                                  "Valves")

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Windows.Media;
 using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Configuration
@@ -100,12 +101,34 @@ namespace LcmsNetDataClasses.Configuration
         /// <summary>
         /// Color of the column.
         /// </summary>
+        [field: NonSerialized]
         private Color m_columnColor;
+
+        /// <summary>
+        /// Handles serialization of the column color.
+        /// </summary>
+        private string colorString;
 
         /// <summary>
         /// Flag indicating if this is the first column to run.
         /// </summary>
         private bool m_first;
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            m_columnColor = Colors.Transparent;
+            if (ColorConverter.ConvertFromString(colorString) is Color c)
+            {
+                m_columnColor = c;
+            }
+        }
+
+        [OnSerializing]
+        private void OnSerialize(StreamingContext context)
+        {
+            colorString = TypeDescriptor.GetConverter(typeof(Color)).ConvertToString(m_columnColor);
+        }
 
         #endregion
 
@@ -190,16 +213,8 @@ namespace LcmsNetDataClasses.Configuration
                 if (this.RaiseAndSetIfChangedRetBool(ref m_columnColor, value))
                 {
                     ColorChanged?.Invoke(this, oldColor, m_columnColor);
-                    OnPropertyChanged(nameof(ColorWpf));
                 }
             }
-        }
-
-        [NotStoredProperty]
-        public System.Windows.Media.Color ColorWpf
-        {
-            get { return System.Windows.Media.Color.FromArgb(Color.A, Color.R, Color.G, Color.B); }
-            set { Color = Color.FromArgb(value.A, value.R, value.G, value.B); }
         }
 
         #endregion

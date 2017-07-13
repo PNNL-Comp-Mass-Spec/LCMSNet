@@ -8,7 +8,7 @@ using LcmsNetSDK;
 
 namespace FailureInjector.Drivers
 {
-    /*[classDeviceControlAttribute(typeof(controlNotificationDriver),
+    /*[classDeviceControlAttribute(typeof(NotificationDriverViewModel),
                                  typeof(controlNotificationDriverGlyph),
                                  "Failure Injector",
                                  "Testing")

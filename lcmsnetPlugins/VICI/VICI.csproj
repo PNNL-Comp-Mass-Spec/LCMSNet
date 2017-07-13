@@ -68,8 +68,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -94,24 +92,6 @@
     <Compile Include="Devices\Valves\classValveVICIMultipos11Port.cs" />
     <Compile Include="Devices\Valves\classValveVICISixPortInjection.cs" />
     <Compile Include="Devices\Valves\classValveVICISPE.cs" />
-    <Compile Include="Devices\Valves\controlSixPortInjectionValve.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\controlSixPortInjectionValve.Designer.cs">
-      <DependentUpon>controlSixPortInjectionValve.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICI2Pos.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICI2Pos.Designer.cs">
-      <DependentUpon>controlValveVICI2Pos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICIMultiPos.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICIMultiPos.designer.cs">
-      <DependentUpon>controlValveVICIMultiPos.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\Valves\enumValvePosition2Pos.cs" />
     <Compile Include="Devices\Valves\SixPortInjectionValveView.xaml.cs">
       <DependentUpon>SixPortInjectionValveView.xaml</DependentUpon>
@@ -134,17 +114,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Devices\Valves\controlSixPortInjectionValve.resx">
-      <DependentUpon>controlSixPortInjectionValve.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Valves\controlValveVICI2Pos.resx">
-      <DependentUpon>controlValveVICI2Pos.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Valves\controlValveVICIMultiPos.resx">
-      <DependentUpon>controlValveVICIMultiPos.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

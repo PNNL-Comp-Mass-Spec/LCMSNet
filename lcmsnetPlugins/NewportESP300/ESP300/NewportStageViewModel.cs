@@ -7,7 +7,7 @@ using LcmsNetSDK;
 
 namespace Newport.ESP300
 {
-    public class NewportStageViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class NewportStageViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         public NewportStageViewModel()
         {

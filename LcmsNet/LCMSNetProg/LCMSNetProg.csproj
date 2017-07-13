@@ -97,7 +97,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -317,7 +316,6 @@
     <Compile Include="SampleQueue\Views\InsertOntoUnusedWindow.xaml.cs">
       <DependentUpon>InsertOntoUnusedWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageUtils.cs" />
     <Compile Include="SampleQueue\ViewModels\ColumnManagerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\MethodManagerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\MoveToColumnSelectorViewModel.cs" />

@@ -18,7 +18,7 @@ namespace Eksigent.Devices.Pumps
     /// <summary>
     /// Software interface to the Eksigent pumps.
     /// </summary>
-    [classDeviceControlAttribute(typeof(EksigentPumpControl),
+    [classDeviceControlAttribute(typeof(EksigentPumpControlViewModel),
                                  null,
                                  "Eksigent Pump",
                                  "Pumps")

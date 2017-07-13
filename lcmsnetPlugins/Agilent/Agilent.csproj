@@ -77,7 +77,6 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -89,9 +88,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="ZedGraph">
-      <HintPath>..\..\lib\ZedGraph.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\AgilentPumpPurgeWindow.xaml.cs">
@@ -100,20 +96,8 @@
     <Compile Include="Devices\AgilentPumpPurgeViewModel.cs" />
     <Compile Include="Devices\classPumpAgilent.cs" />
     <Compile Include="Devices\classPumpMethodEventArgs.cs" />
-    <Compile Include="Devices\controlPumpAgilent.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlPumpAgilent.designer.cs">
-      <DependentUpon>controlPumpAgilent.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\enumPumpAgilentModes.cs" />
     <Compile Include="Devices\enumPurgePumpChannel.cs" />
-    <Compile Include="Devices\formAgilentPumpPurge.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\formAgilentPumpPurge.designer.cs">
-      <DependentUpon>formAgilentPumpPurge.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\PumpAgilentView.xaml.cs">
       <DependentUpon>PumpAgilentView.xaml</DependentUpon>
     </Compile>
@@ -126,14 +110,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Devices\controlPumpAgilent.resx">
-      <DependentUpon>controlPumpAgilent.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\formAgilentPumpPurge.resx">
-      <DependentUpon>formAgilentPumpPurge.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

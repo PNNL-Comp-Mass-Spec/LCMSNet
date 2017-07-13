@@ -68,8 +68,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -81,9 +79,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="ZedGraph">
-      <HintPath>..\..\lib\ZedGraph.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\classIscoConversions.cs" />
@@ -93,28 +88,10 @@
     <Compile Include="Devices\classIscoStatusNotifications.cs" />
     <Compile Include="Devices\classPumpIsco.cs" />
     <Compile Include="Devices\classPumpIscoData.cs" />
-    <Compile Include="Devices\classPumpIscoDisplayArray.cs" />
     <Compile Include="Devices\classPumpIscoGlyph.cs" />
-    <Compile Include="Devices\classPumpIscoGlyphWpf.cs" />
     <Compile Include="Devices\classPumpIscoRangeData.cs" />
     <Compile Include="Devices\classPumpIscoSetpointLimits.cs" />
     <Compile Include="Devices\codeFilePumpIscoDelegates.cs" />
-    <Compile Include="Devices\controlPumpIsco.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlPumpIsco.designer.cs">
-      <DependentUpon>controlPumpIsco.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoDisplay.designer.cs">
-      <DependentUpon>controlPumpIscoDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoGraphs.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoGraphs.Designer.cs" />
     <Compile Include="Devices\enumIscoControlMode.cs" />
     <Compile Include="Devices\enumIscoFlowUnits.cs" />
     <Compile Include="Devices\enumISCOModel.cs" />
@@ -140,17 +117,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Devices\controlPumpIsco.resx">
-      <DependentUpon>controlPumpIsco.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\controlPumpIscoDisplay.resx">
-      <DependentUpon>controlPumpIscoDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\controlPumpIscoGraphs.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -5,7 +5,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    public class DemoClosureAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class DemoClosureAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private DemoClosure closure;
 

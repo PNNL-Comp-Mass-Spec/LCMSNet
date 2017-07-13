@@ -14,7 +14,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
     {
         public FluidicsControlViewModel()
         {
-            fluidicsModerator = FluidicsModeratorWpf.Moderator;
+            fluidicsModerator = FluidicsModerator.Moderator;
             ZoomPercent = 100;
             PortTransparency = 255;
             DeviceTransparency = 255;
@@ -41,7 +41,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         private static bool staticDevicesLocked;
         private bool dragAndDrop;
-        private readonly FluidicsModeratorWpf fluidicsModerator;
+        private readonly FluidicsModerator fluidicsModerator;
         private bool mouseMoving;
 
         private Point newMouseLocation;

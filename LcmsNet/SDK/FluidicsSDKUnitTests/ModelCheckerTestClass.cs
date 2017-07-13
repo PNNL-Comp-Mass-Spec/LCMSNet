@@ -9,9 +9,9 @@
 using System.Linq;
 using FluidicsSDK.Managers;
 using FluidicsSDK.ModelCheckers;
-using FluidicsSDK;
 using NUnit.Framework;
 using DemoPluginLibrary;
+using FluidicsSDK.Devices;
 
 namespace FluidicsSDKUnitTests
 {
@@ -23,10 +23,10 @@ namespace FluidicsSDKUnitTests
     {
         ConnectionManager cm;
         FluidicsDeviceManager dm;
-      
+
         [SetUp]
         public void SetUp()
-        {            
+        {
             if(cm == null)
             {
                 cm = ConnectionManager.GetConnectionManager;
@@ -99,7 +99,7 @@ namespace FluidicsSDKUnitTests
             var status = multipleSourceCheck.CheckModel().ToList();
             Assert.IsEmpty(status); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
-        
+
         /// <summary>
         /// Tests that the Fluidics Cycle check is working.
         /// </summary>

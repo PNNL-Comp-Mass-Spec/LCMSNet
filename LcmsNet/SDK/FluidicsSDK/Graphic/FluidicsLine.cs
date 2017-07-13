@@ -1,16 +1,10 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 9/5/2013
- *
- ********************************************************************************************************/
-using System;
-using System.Drawing;
+﻿using System;
+using System.Windows;
+using System.Windows.Media;
 
 namespace FluidicsSDK.Graphic
 {
-    public class FluidicsLine:GraphicsPrimitive
+    public class FluidicsLine : GraphicsPrimitive
     {
         #region Members
         // origination of line
@@ -19,14 +13,14 @@ namespace FluidicsSDK.Graphic
         private Point m_term;
 
         #endregion
-        
+
         #region Methods
 
         /// <summary>
         /// class constructor
         /// </summary>
-        /// <param name="from">a System.Drawing.Point representing where the line starts</param>
-        /// <param name="to">a System.Drawing.point representing where the line ends</param>
+        /// <param name="from">a Point representing where the line starts</param>
+        /// <param name="to">a point representing where the line ends</param>
         public FluidicsLine(Point from, Point to)
         {
             m_orig = from;
@@ -36,12 +30,12 @@ namespace FluidicsSDK.Graphic
         /// <summary>
         /// Render the line to the screen
         /// </summary>
-        /// <param name="g">a System.Drawing Graphics object</param>
+        /// <param name="g">a DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the line with</param>
         /// <param name="scale">a float determining how much to scale the line by</param>
         /// <param name="selected">bool determining if the line is drawn hilighted or not</param>
         /// <param name="error"></param>
-        public override void Render(Graphics g, int alpha, float scale, bool selected, bool error)
+        public override void Render(DrawingContext g, byte alpha, float scale, bool selected, bool error)
         {
             Color = Color.FromArgb(alpha, Color.R, Color.G, Color.B);
             Highlight = Color.FromArgb(alpha, Highlight.R, Highlight.G, Highlight.B);
@@ -52,7 +46,7 @@ namespace FluidicsSDK.Graphic
             {
                 drawingPen = Highlighter;
             }
-            else if(error)
+            else if (error)
             {
                 drawingPen = ErrorPen;
             }
@@ -65,17 +59,17 @@ namespace FluidicsSDK.Graphic
 
         public override bool Contains(Point location, int max_variance)
         {
-             //basic linear algebra, check that the crossproduct is between -MAX_PIXEL_VARIANCE and MAX_PIXEL_VARIANCE, this way users don't
+            //basic linear algebra, check that the crossproduct is between -MAX_PIXEL_VARIANCE and MAX_PIXEL_VARIANCE, this way users don't
             //have to click 100% precisely on pixels, that the dot product is > 0, and that the dot product is less than the squared distance
             //between point1 and point2. if the user click meets these critera, they've clicked on the connection. Also, modify the values by the scale
             //to ensure they can select while scaled.
-            float crossProduct = ((location.Y - Origin.Y) * (Term.X - Origin.X)) - ((location.X - Origin.X) * (Term.Y - Origin.Y));
-            float dotProduct = ((location.X - Origin.X) * (Term.X - Origin.X)) + ((location.Y - Origin.Y) * (Term.Y - Origin.Y));
+            double crossProduct = ((location.Y - Origin.Y) * (Term.X - Origin.X)) - ((location.X - Origin.X) * (Term.Y - Origin.Y));
+            double dotProduct = ((location.X - Origin.X) * (Term.X - Origin.X)) + ((location.Y - Origin.Y) * (Term.Y - Origin.Y));
             var squaredLength = Math.Pow((Term.X - Origin.X), 2) + Math.Pow((Term.Y - Origin.Y), 2);
             if ((-max_variance) <= crossProduct && crossProduct <= (max_variance) && dotProduct > 0 && dotProduct < squaredLength)
             {
                 return true;
-            }          
+            }
             return false;
         }
 
@@ -115,7 +109,7 @@ namespace FluidicsSDK.Graphic
                 return m_orig;
             }
             set
-            {                
+            {
                 m_orig = value;
             }
 

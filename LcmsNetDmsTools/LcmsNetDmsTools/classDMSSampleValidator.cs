@@ -332,7 +332,5 @@ namespace LcmsNetDmsTools
             }
             return true;
         }
-
-        public Type DMSValidatorControl => typeof(controlDMSValidator);
     }
 }

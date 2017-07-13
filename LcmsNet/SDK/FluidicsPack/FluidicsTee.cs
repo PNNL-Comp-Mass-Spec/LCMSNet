@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Windows;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
 
 namespace FluidicsPack
 {
-    public sealed class FluidicsTee:FluidicsDevice
+    public sealed class FluidicsTee : FluidicsDevice
     {
         public FluidicsTee()
         {
             var teePolygon = new FluidicsPolygon();
-            teePolygon.AddPoint(new Point(0,0));
+            teePolygon.AddPoint(new Point(0, 0));
             teePolygon.AddPoint(new Point(0, 29));
 
             teePolygon.AddPoint(new Point(0, 28));
@@ -53,9 +53,9 @@ namespace FluidicsPack
         private Point[] GeneratePortLocs()
         {
             var points = new Point[3];
-            points[0] = new Point(0 - Port.PORT_DEFAULT_RADIUS, 29/2);
-            points[1] = new Point( (10 + 58)/ 2, 46 + Port.PORT_DEFAULT_RADIUS);
-            points[2] = new Point(70 + Port.PORT_DEFAULT_RADIUS, (27 + 0) /2);
+            points[0] = new Point(0 - Port.PORT_DEFAULT_RADIUS, 29 / 2);
+            points[1] = new Point((10 + 58) / 2, 46 + Port.PORT_DEFAULT_RADIUS);
+            points[2] = new Point(70 + Port.PORT_DEFAULT_RADIUS, (27 + 0) / 2);
             return points;
         }
 
@@ -86,7 +86,6 @@ namespace FluidicsPack
             // do nothing
         }
 
-
         public override void Select(Point mouse_location)
         {
             if (Contains(mouse_location))
@@ -101,12 +100,12 @@ namespace FluidicsPack
             return m_primitives[0].Contains(location, 5);
         }
 
-        protected override Rectangle UpdateControlBoxLocation()
+        protected override Rect UpdateControlBoxLocation()
         {
             var padding = 5;
             var left = m_primitives.Min(x => x.Loc.X);
             var top = m_primitives.Min(x => x.Loc.Y);
-            return new Rectangle(left, top + padding, m_info_controls_box.Width, m_info_controls_box.Height);
+            return new Rect(left, top + padding, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 
         /// <summary>
@@ -116,11 +115,10 @@ namespace FluidicsPack
         /// <param name="stringWidth"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        protected override Point CreateStringLocation(int y, float stringWidth, float scale)
+        protected override Point CreateStringLocation(int y, double stringWidth, float scale)
         {
-
             return new Point((int)((m_info_controls_box.X * scale + (m_info_controls_box.Size.Width * scale / 2)) - (stringWidth / 2)),
-                    (int)(y + 2));
+                (int)(y + 2));
         }
         //event for when device changes
         public override event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;

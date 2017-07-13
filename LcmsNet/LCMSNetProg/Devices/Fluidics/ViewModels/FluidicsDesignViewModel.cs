@@ -25,7 +25,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
-            fluidicsMod = FluidicsModeratorWpf.Moderator;
+            fluidicsMod = FluidicsModerator.Moderator;
             FluidicsControlVm = new FluidicsControlViewModel();
             RefreshEvent += FluidicsControlVm.RefreshHandler;
             Reporter = new ModelCheckReportsViewModel(fluidicsMod);
@@ -57,7 +57,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         #region Members
 
         // fluidics moderator, controls access to fluidics managers and provides interface for working with them
-        private readonly FluidicsModeratorWpf fluidicsMod;
+        private readonly FluidicsModerator fluidicsMod;
 
         /// <summary>
         /// Filter for file dialogs.

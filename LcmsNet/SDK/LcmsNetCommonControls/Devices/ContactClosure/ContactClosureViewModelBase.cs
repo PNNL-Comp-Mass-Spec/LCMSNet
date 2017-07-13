@@ -11,7 +11,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
     /// Base view model for a contact closure
     /// </summary>
     /// <typeparam name="T">Enum, with the output port options</typeparam>
-    public abstract class ContactClosureViewModelBase<T> : BaseDeviceControlViewModel, IDeviceControlWpf where T : struct
+    public abstract class ContactClosureViewModelBase<T> : BaseDeviceControlViewModel, IDeviceControl where T : struct
     {
         #region Constructors
 

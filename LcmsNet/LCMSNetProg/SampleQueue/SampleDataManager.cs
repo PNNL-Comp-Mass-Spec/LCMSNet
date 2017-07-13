@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetDataClasses;
@@ -796,7 +797,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="sender"></param>
         /// <param name="previousColor"></param>
         /// <param name="newColor"></param>
-        private void column_ColorChanged(object sender, System.Drawing.Color previousColor, System.Drawing.Color newColor)
+        private void column_ColorChanged(object sender, Color previousColor, Color newColor)
         {
             using (samplesList.SuppressChangeNotifications())
             {

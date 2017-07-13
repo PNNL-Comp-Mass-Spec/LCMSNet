@@ -229,10 +229,10 @@ namespace LcmsNet.Configuration.ViewModels
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Column1ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 1, ColorWpf = Colors.Red }, ColumnNameComboBoxOptions);
-                Column2ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 2, ColorWpf = Colors.Yellow }, ColumnNameComboBoxOptions);
-                Column3ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 3, ColorWpf = Colors.Green }, ColumnNameComboBoxOptions);
-                Column4ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 4, ColorWpf = Colors.Orange }, ColumnNameComboBoxOptions);
+                Column1ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 1, Color = Colors.Red }, ColumnNameComboBoxOptions);
+                Column2ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 2, Color = Colors.Yellow }, ColumnNameComboBoxOptions);
+                Column3ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 3, Color = Colors.Green }, ColumnNameComboBoxOptions);
+                Column4ViewModel = new ColumnConfigViewModel(new classColumnData() { ID = 4, Color = Colors.Orange }, ColumnNameComboBoxOptions);
 
                 return;
             }

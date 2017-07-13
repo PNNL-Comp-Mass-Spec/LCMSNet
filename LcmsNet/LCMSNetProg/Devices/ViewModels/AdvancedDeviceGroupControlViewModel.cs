@@ -16,7 +16,7 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         public AdvancedDeviceGroupControlViewModel()
         {
-            deviceToControlMap = new Dictionary<IDevice, IDeviceControlWpf>();
+            deviceToControlMap = new Dictionary<IDevice, IDeviceControl>();
             deviceToWrapperMap = new Dictionary<IDevice, DeviceControlData>();
 
             SelectedDevice = null;
@@ -35,7 +35,7 @@ namespace LcmsNet.Devices.ViewModels
             private string nameEdit = "";
 
             public IDevice Device { get; private set; }
-            public IDeviceControlWpf ViewModel { get; private set; }
+            public IDeviceControl ViewModel { get; private set; }
 
             public System.Windows.Controls.UserControl View
             {
@@ -66,7 +66,7 @@ namespace LcmsNet.Devices.ViewModels
                 set { this.RaiseAndSetIfChanged(ref nameEdit, value); }
             }
 
-            public DeviceControlData(IDevice device, IDeviceControlWpf viewModel)
+            public DeviceControlData(IDevice device, IDeviceControl viewModel)
             {
                 Device = device;
                 ViewModel = viewModel;
@@ -81,7 +81,7 @@ namespace LcmsNet.Devices.ViewModels
             }
         }
 
-        private readonly Dictionary<IDevice, IDeviceControlWpf> deviceToControlMap;
+        private readonly Dictionary<IDevice, IDeviceControl> deviceToControlMap;
         private readonly Dictionary<IDevice, DeviceControlData> deviceToWrapperMap;
         private readonly ReactiveList<DeviceControlData> deviceControls = new ReactiveList<DeviceControlData>();
         private DeviceControlData selectedDevice = null;
@@ -183,7 +183,7 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         /// <param name="device"></param>
         /// <param name="control"></param>
-        public void AddDevice(IDevice device, IDeviceControlWpf control)
+        public void AddDevice(IDevice device, IDeviceControl control)
         {
             var deviceControl = new DeviceControlData(device, control);
             deviceControls.Add(deviceControl);

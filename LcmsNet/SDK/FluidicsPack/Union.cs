@@ -1,11 +1,4 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 1/3/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using LcmsNetDataClasses.Devices;
@@ -13,17 +6,17 @@ using LcmsNetSDK;
 
 namespace FluidicsPack
 {
-     [classDeviceControlAttribute(null,
-                                  typeof(FluidicsUnion),
-                                 "Union",
-                                 "Fluidics Components")]
-    public class Union:IDevice
+    [classDeviceControlAttribute(null,
+        typeof(FluidicsUnion),
+        "Union",
+        "Fluidics Components")]
+    public class Union : IDevice
     {
         #region Methods
-         public Union()
-         {
-             Name = "Union";
-         }
+        public Union()
+        {
+            Name = "Union";
+        }
 
         public bool Initialize(ref string errorMessage)
         {

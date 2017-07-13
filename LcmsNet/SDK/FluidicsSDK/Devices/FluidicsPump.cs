@@ -1,40 +1,35 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 8/22/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Drawing;
-using LcmsNetDataClasses.Devices;
-using FluidicsSDK.Devices;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
+using LcmsNetDataClasses.Devices;
 
-namespace FluidicsSDK
+namespace FluidicsSDK.Devices
 {
-    public sealed class FluidicsPump: FluidicsDevice
+    public sealed class FluidicsPump : FluidicsDevice
     {
-
         #region members
-            /// <summary>
-            /// defines minimum distance from the primary primitive of the pump for others to be drawn
-            /// </summary>
-            const int MIN_DIST_FROM_EDGE = 12;
-            /// <summary>
-            /// defines the length of the pump rectangle primitive
-            /// </summary>
-            const int LENGTH = 100;
-            /// <summary>
-            /// defines the width of the pump rectangle primitive
-            /// </summary>
-            const int WIDTH = 50;
-            const int MAX_PIXEL_VARIANCE = 5;
 
-            IFluidicsPump m_pump;
+        /// <summary>
+        /// defines minimum distance from the primary primitive of the pump for others to be drawn
+        /// </summary>
+        const int MIN_DIST_FROM_EDGE = 12;
+
+        /// <summary>
+        /// defines the length of the pump rectangle primitive
+        /// </summary>
+        const int LENGTH = 100;
+
+        /// <summary>
+        /// defines the width of the pump rectangle primitive
+        /// </summary>
+        const int WIDTH = 50;
+
+        const int MAX_PIXEL_VARIANCE = 5;
+
+        IFluidicsPump m_pump;
 
         #endregion
 
@@ -44,13 +39,13 @@ namespace FluidicsSDK
         {
             // do nothing. we have no state.
         }
-        
+
         /// <summary>
         /// base class constructor
         /// </summary>
         public FluidicsPump()
         {
-            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
             var portLoc = GeneratePortLoc();
             AddPort(portLoc);
             var states = SetupStates();
@@ -67,7 +62,7 @@ namespace FluidicsSDK
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public FluidicsPump(Point loc)
         {
-            AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(loc, new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
             var portLoc = GeneratePortLoc();
             AddPort(portLoc);
         }
@@ -75,11 +70,11 @@ namespace FluidicsSDK
         /// <summary>
         /// generate the locations of the ports associated with the pump, used at creation or when the device is moved around the screen
         /// </summary>
-        /// <returns>a list of System.Drawing.Point objects, one for each port</returns>
+        /// <returns>a list of Point objects, one for each port</returns>
         private Point GeneratePortLoc()
-        {           
+        {
             //create port1 to left side of pump
-            return new Point(Loc.X + (int)(Size.Width/2), Loc.Y - MIN_DIST_FROM_EDGE);
+            return new Point(Loc.X + (int) (Size.Width / 2), Loc.Y - MIN_DIST_FROM_EDGE);
         }
 
         /// <summary>
@@ -92,7 +87,7 @@ namespace FluidicsSDK
             // pump only has no states, it is a source
             return states;
         }
- 
+
         protected override void SetDevice(IDevice device)
         {
             m_pump = device as IFluidicsPump;
@@ -114,9 +109,8 @@ namespace FluidicsSDK
             MessageBox.Show(string.Format("Flowrate changed to: {0}", e.Value));
         }
 
-
         public void SetPostion(TwoPositionState state)
-        {          
+        {
         }
 
         public override string StateString()
@@ -133,6 +127,7 @@ namespace FluidicsSDK
             stateString.Append(Environment.NewLine);
             return stateString.ToString();
         }
+
         #endregion
 
         #region Properties
@@ -149,7 +144,7 @@ namespace FluidicsSDK
                 //do nothing
             }
         }
-        #endregion
 
+        #endregion
     }
 }

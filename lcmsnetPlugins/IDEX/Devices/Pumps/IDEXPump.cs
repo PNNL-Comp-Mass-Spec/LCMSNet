@@ -7,7 +7,7 @@ using LcmsNetSDK;
 
 namespace ASUTGen.Devices.Pumps
 {
-    /*[classDeviceControlAttribute(typeof(IDEXPumpControl),
+    /*[classDeviceControlAttribute(typeof(IDEXPumpControlViewModel),
                                  typeof(IDEXPumpGlyph),
                                  "IDEX Pump",
                                  "Pumps")

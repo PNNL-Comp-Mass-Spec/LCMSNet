@@ -9,7 +9,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    [classDeviceControlAttribute(typeof(DemoValveAdvancedControl),
+    [classDeviceControlAttribute(typeof(DemoValveAdvancedControlViewModel),
                                  "Demo Valve - Two Position",
                                  "Demo")]
     public class DemoValve : IDevice, IFourPortValve

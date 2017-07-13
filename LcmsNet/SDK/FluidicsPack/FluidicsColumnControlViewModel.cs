@@ -5,7 +5,7 @@ using LcmsNetSDK;
 
 namespace FluidicsPack
 {
-    public class FluidicsColumnControlViewModel : INotifyPropertyChangedExt, IDeviceControlWpf
+    public class FluidicsColumnControlViewModel : INotifyPropertyChangedExt, IDeviceControl
     {
         private FluidicsColumn column;
 

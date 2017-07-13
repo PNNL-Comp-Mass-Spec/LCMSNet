@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using LcmsNet.Devices;
 using LcmsNet.Method;
 using LcmsNet.Properties;
@@ -239,7 +240,7 @@ namespace LcmsNet
                 ID = 0,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME0),
                 Status = enumColumnStatus.Idle,
-                Color = System.Drawing.Color.Tomato,
+                Color = Colors.Tomato,
                 First = true
             };
 
@@ -248,7 +249,7 @@ namespace LcmsNet
                 ID = 1,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME1),
                 Status = enumColumnStatus.Idle,
-                Color = System.Drawing.Color.Lime
+                Color = Colors.Lime
             };
 
             var columnThree = new classColumnData
@@ -256,7 +257,7 @@ namespace LcmsNet
                 ID = 2,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME2),
                 Status = enumColumnStatus.Idle,
-                Color = System.Drawing.Color.LightSteelBlue
+                Color = Colors.LightSteelBlue
             };
 
             var columnFour = new classColumnData
@@ -264,7 +265,7 @@ namespace LcmsNet
                 ID = 3,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME3),
                 Status = enumColumnStatus.Idle,
-                Color = System.Drawing.Color.LightSalmon
+                Color = Colors.LightSalmon
             };
 
             classCartConfiguration.Columns = new List<classColumnData> {

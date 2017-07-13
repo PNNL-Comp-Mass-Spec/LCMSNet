@@ -12,7 +12,7 @@ namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(controlValveVICI2Pos),
+    [classDeviceControlAttribute(typeof(ValveVICI2PosViewModel),
                                  "Six-port SPE",
                                  "Valves Two-Position")
     ]

@@ -10,7 +10,7 @@ using LcmsNetSDK;
 namespace LcmsNet.Devices.ContactClosure
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(controlContactClosureU3),
+    [classDeviceControlAttribute(typeof(ContactClosureU3ViewModel),
                                  "Contact Closure U3",
                                  "Contact Closures")
     ]

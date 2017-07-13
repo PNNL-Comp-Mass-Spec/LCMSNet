@@ -22,7 +22,7 @@ using LcmsNetSDK;
 namespace LcmsNet.Devices.ContactClosure
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(controlContactClosureU12),
+    [classDeviceControlAttribute(typeof(ContactClosureU12ViewModel),
                                  "Contact Closure U12",
                                  "Contact Closures")
     ]

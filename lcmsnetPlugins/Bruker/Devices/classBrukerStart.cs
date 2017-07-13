@@ -26,7 +26,7 @@ namespace LcmsNet.Devices.BrukerStart
     /// </summary>
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(controlBrukerStart), "Bruker", "Detectors")]
+    [classDeviceControlAttribute(typeof(BrukerStartViewModel), "Bruker", "Detectors")]
     public class classBrukerStart : IDevice, IFluidicsClosure
     {
         #region "Constants"

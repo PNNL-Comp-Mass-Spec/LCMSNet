@@ -3,7 +3,7 @@
 namespace FluidicsPack
 {
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(FluidicsColumnControl),
+    [classDeviceControlAttribute(typeof(FluidicsColumnControlViewModel),
                                  typeof(FluidicsColumnGlyph),
                                  "Column",
                                  "Fluidics Components")
@@ -17,6 +17,6 @@ namespace FluidicsPack
 
         public double InnerDiameter     { get; set; }
         public double Length            { get; set; }
-        public string PackingMaterial   { get; set; }        
+        public string PackingMaterial   { get; set; }
     }
 }

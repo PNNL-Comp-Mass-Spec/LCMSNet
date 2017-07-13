@@ -12,7 +12,7 @@ using System.IO.Ports;
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(controlValveVICI2Pos),
+    [classDeviceControlAttribute(typeof(ValveVICI2PosViewModel),
                                  "Ten-Port",
                                  "Valves Two-Position")
     ]

@@ -59,25 +59,5 @@ namespace LcmsNetDmsTools.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap AllIsGood {
-            get {
-                object obj = ResourceManager.GetObject("AllIsGood", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ButtonDeleteRed {
-            get {
-                object obj = ResourceManager.GetObject("ButtonDeleteRed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

@@ -10,7 +10,7 @@ using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Valves
 {
-    public abstract class ValveVICIViewModelBase : BaseDeviceControlViewModel, IDeviceControlWpf
+    public abstract class ValveVICIViewModelBase : BaseDeviceControlViewModel, IDeviceControl
     {
         #region Constructors
 

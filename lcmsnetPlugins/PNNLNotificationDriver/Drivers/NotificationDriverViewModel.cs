@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace FailureInjector.Drivers
 {
-    public class NotificationDriverViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class NotificationDriverViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         /// <summary>
         /// Notification driver object.

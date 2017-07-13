@@ -8,7 +8,7 @@ using LcmsNetSDK;
 
 namespace LcmsNet.Devices.Pumps
 {
-    public class PumpIscoViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class PumpIscoViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         #region "Constructors"
 

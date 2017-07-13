@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Windows;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
 
 namespace DemoPluginLibrary
 {
-    public sealed class FluidicsTee:FluidicsDevice
+    public sealed class FluidicsTee : FluidicsDevice
     {
         readonly Dictionary<string, FluidicsLine> m_primLines;
         public FluidicsTee()
@@ -15,7 +15,7 @@ namespace DemoPluginLibrary
             m_primLines = new Dictionary<string, FluidicsLine>();
 
             //left line going down
-            var newLine = new FluidicsLine(new Point(0,0), new Point(0,29));
+            var newLine = new FluidicsLine(new Point(0, 0), new Point(0, 29));
             AddPrimitive(newLine);
             m_primLines["left"] = newLine;
 
@@ -35,12 +35,12 @@ namespace DemoPluginLibrary
             m_primLines["rightAngled"] = newLine;
 
             // right line going up
-            newLine = new FluidicsLine(new Point(70,27), new Point(70,0));
+            newLine = new FluidicsLine(new Point(70, 27), new Point(70, 0));
             AddPrimitive(newLine);
             m_primLines["right"] = newLine;
 
             //top line going from right line to left line
-            newLine = new FluidicsLine(new Point(70,0), new Point(0,0));
+            newLine = new FluidicsLine(new Point(70, 0), new Point(0, 0));
             AddPrimitive(newLine);
             m_primLines["top"] = newLine;
 
@@ -67,13 +67,13 @@ namespace DemoPluginLibrary
             var points = new Point[3];
             var orig = m_primLines["left"].Origin;
             var term = m_primLines["left"].Term;
-            points[0] = new Point(orig.X - Port.PORT_DEFAULT_RADIUS, (orig.Y + term.Y)/2);
+            points[0] = new Point(orig.X - Port.PORT_DEFAULT_RADIUS, (orig.Y + term.Y) / 2);
             orig = m_primLines["bottom"].Origin;
             term = m_primLines["bottom"].Term;
             points[1] = new Point((orig.X + term.X) / 2, orig.Y + Port.PORT_DEFAULT_RADIUS);
             orig = m_primLines["right"].Origin;
             term = m_primLines["right"].Term;
-            points[2] = new Point(orig.X + Port.PORT_DEFAULT_RADIUS, (orig.Y + term.Y) /2);
+            points[2] = new Point(orig.X + Port.PORT_DEFAULT_RADIUS, (orig.Y + term.Y) / 2);
             return points;
         }
 
@@ -105,13 +105,11 @@ namespace DemoPluginLibrary
             // do nothing
         }
 
-
         public override void Select(Point mouse_location)
         {
             if (Contains(mouse_location))
                 Selected = true;
             DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
-
         }
 
         public override bool Contains(Point location)
@@ -120,17 +118,17 @@ namespace DemoPluginLibrary
             var miny = m_primitives.Min(x => x.Loc.Y);
             var maxx = m_primitives.Max(x => x.Loc.X);
             var maxy = m_primitives.Max(x => x.Loc.Y);
-            var rect = new Rectangle(minx, miny, maxx - minx, maxy - miny);
+            var rect = new Rect(minx, miny, maxx - minx, maxy - miny);
             return rect.Contains(location);
         }
 
-        protected override Rectangle UpdateControlBoxLocation()
+        protected override Rect UpdateControlBoxLocation()
         {
             var padding = 10;
             var left = m_primitives.Min(x => x.Loc.X);
             var maxyDevice = m_primitives.Max(x => x.Loc.Y);
             var maxyPorts = m_portList.Max(x => x.Loc.Y + x.Radius);
-            return new Rectangle(left, (maxyDevice < maxyPorts ? maxyPorts : maxyDevice) + padding, m_info_controls_box.Width, m_info_controls_box.Height);
+            return new Rect(left, (maxyDevice < maxyPorts ? maxyPorts : maxyDevice) + padding, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 
         //event for when device changes

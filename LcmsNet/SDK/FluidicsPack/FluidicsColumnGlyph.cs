@@ -1,14 +1,15 @@
 ﻿using System;
-using LcmsNetDataClasses.Devices;
-using FluidicsSDK.Devices;
-using FluidicsSDK.Managers;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
-using System.Drawing;
+using FluidicsSDK.Devices;
 using FluidicsSDK.Graphic;
+using FluidicsSDK.Managers;
+using LcmsNetDataClasses.Devices;
 
 namespace FluidicsPack
 {
-
     public sealed class FluidicsColumnGlyph : FluidicsDevice, IFluidicsDevice
     {
         public event EventHandler DeviceSaveRequired
@@ -23,10 +24,7 @@ namespace FluidicsPack
         {
             var newsize = new Size(20, 200);
 
-            GraphicsPrimitive primitive = new FluidicsRectangle(new Point(0, 0),
-                                                                newsize,
-                                                                Color.Black,
-                                                                 Brushes.White);
+            GraphicsPrimitive primitive = new FluidicsRectangle(new Point(0, 0), newsize, Colors.Black, Brushes.White);
 
             AddPrimitive(primitive);
 
@@ -50,8 +48,6 @@ namespace FluidicsPack
             c.Transparent = true;
             m_info_controls_box.Width = 20;
             m_info_controls_box.Height = 200;
-
-
         }
 
         protected override void SetDevice(IDevice device)
@@ -78,50 +74,41 @@ namespace FluidicsPack
             return points;
         }
 
-
         /// <summary>
         /// draw controls to screen override of base fluidicsdevice method
         /// </summary>
         /// <param name="g"></param>
         /// <param name="alpha"></param>
         /// <param name="scale"></param>
-        protected override void DrawControls(Graphics g, int alpha, float scale)
+        protected override void DrawControls(DrawingContext g, byte alpha, float scale)
         {
-            var realColor = Color.FromArgb(alpha, Color.Black.R, Color.Black.G, Color.Black.B);
+            var realColor = Color.FromArgb(alpha, Colors.Black.R, Colors.Black.G, Colors.Black.B);
 
-            using (new Pen(realColor))
-            using (IDisposable b = new SolidBrush(realColor))
-            {
-                var br = (SolidBrush)b;
-                //determine font size, used to scale font with graphics primitives
-                var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
-                using (var stringFont = new Font("Calibri", 11 + stringScale))
-                {
-                    // draw name to screen
-                    var name = DeviceName;
+            var br = new SolidColorBrush(realColor);
+            //determine font size, used to scale font with graphics primitives
+            var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
 
-                    m_info_controls_box = UpdateControlBoxLocation();
-
-                    //place the name at the top middle of the box
-                    var sf = new StringFormat(StringFormatFlags.DirectionVertical);
-                    var nameSize = g.MeasureString(name, stringFont);
-
-                    var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), nameSize.Height, scale);
-                    g.DrawString(name, stringFont, br, nameLocation, sf);
-                }
-            }
+            var nameFont = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+            // draw name to screen
+            var name = DeviceName;
+            var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, (11.0F * stringScale) * (96.0 / 72.0), br);
+            m_info_controls_box = UpdateControlBoxLocation();
+            //place the name at the top middle of the box
+            var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Height, scale);
+            g.PushTransform(new RotateTransform(90));
+            g.DrawText(deviceNameText, nameLocation);
+            g.Pop();
         }
-
 
         /// <summary>
         /// update the location of the control box.
         /// </summary>
         /// <returns></returns>
-        protected override Rectangle UpdateControlBoxLocation()
+        protected override Rect UpdateControlBoxLocation()
         {
             var top = Ports[0].Center.Y + Ports[0].Radius;
             var x = Ports[0].Center.X;
-            return new Rectangle(x, top, m_info_controls_box.Width, m_info_controls_box.Height);
+            return new Rect(x, top, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 
         /// <summary>
@@ -131,11 +118,11 @@ namespace FluidicsPack
         /// <param name="stringHeight"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        protected override Point CreateStringLocation(int y, float stringHeight, float scale)
+        protected override Point CreateStringLocation(int y, double stringHeight, float scale)
         {
             // The height is actually our "width" here, since we are drawing the string vertically.
             return new Point((int)((m_info_controls_box.X * scale) - stringHeight / 2),
-                    (int)(y + 10));
+                (int)(y + 10));
         }
 
         public override string StateString()

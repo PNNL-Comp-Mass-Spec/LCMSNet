@@ -28,7 +28,7 @@ namespace LcmsNet.Simulator.ViewModels
         {
             simInstance = FluidicsSimulator.FluidicsSimulator.GetInstance;
 
-            checkList = new ModelCheckListViewModel(FluidicsModeratorWpf.Moderator, FluidicsModeratorWpf.Moderator.GetModelCheckers());
+            checkList = new ModelCheckListViewModel(FluidicsModerator.Moderator, FluidicsModerator.Moderator.GetModelCheckers());
 
             chartsVm = new ChartViewModel();
             methodStageVm = new LCMethodStageViewModel();

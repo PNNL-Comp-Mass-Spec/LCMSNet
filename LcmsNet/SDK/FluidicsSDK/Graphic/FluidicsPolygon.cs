@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 
 namespace FluidicsSDK.Graphic
 {
-    public class FluidicsPolygon:GraphicsPrimitive
+    public class FluidicsPolygon : GraphicsPrimitive
     {
-
         #region members
         private List<Point> vertices;
-        Rectangle BoundingBox;
+        Rect BoundingBox;
         private float m_scale;
         #endregion
 
@@ -19,7 +19,7 @@ namespace FluidicsSDK.Graphic
         public FluidicsPolygon()
         {
             vertices = new List<Point>();
-            BoundingBox = new Rectangle(0, 0, 0, 0);
+            BoundingBox = new Rect(0, 0, 0, 0);
             m_scale = 1;
         }
 
@@ -38,7 +38,7 @@ namespace FluidicsSDK.Graphic
             var maxY = vertices.Max(x => x.Y);
             var start = new Point(minX, minY);
             var sz = new Size(maxX - minX, maxY - minY);
-            BoundingBox = new Rectangle(start, sz);
+            BoundingBox = new Rect(start, sz);
         }
 
         public void AddPoint(Point p)
@@ -60,14 +60,12 @@ namespace FluidicsSDK.Graphic
             UpdateBoundingBox();
         }
 
-        public override void Render(Graphics g, int alpha, float scale, bool selected, bool error)
+        public override void Render(DrawingContext g, byte alpha, float scale, bool selected, bool error)
         {
-
             // alter the color of the circle to be proper alpha, EXCEPT for error which should always be solid.
             m_scale = scale;
             Color = Color.FromArgb(alpha, Color.R, Color.G, Color.B);
             Highlight = Color.FromArgb(alpha, Highlight.R, Highlight.G, Highlight.B);
-            //Color fillColor = Color.FromArgb(alpha, base.FillColor.R, base.FillColor.G, base.FillColor.B);
             Pen drawingPen;
             var scaledVertices = new Point[vertices.Count];
             for (var i = 0; i < vertices.Count; i++)
@@ -88,26 +86,31 @@ namespace FluidicsSDK.Graphic
             {
                 drawingPen = Pen;
             }
+            Brush brush = null;
             if (Fill)
             {
-                g.FillPolygon(FillBrush, scaledVertices.ToArray());
-
+                brush = FillBrush;
             }
-            g.DrawPolygon(drawingPen, scaledVertices.ToArray());
-            //g.ResetTransform();
 
+            var figure = new PathFigure(scaledVertices[0], scaledVertices.Skip(1).Select(x => new LineSegment(x, true)), true);
+            var geometry = new PathGeometry(new[] { figure });
+
+            g.DrawGeometry(brush, drawingPen, geometry);
         }
 
-        public override void Render(Graphics g, int alpha, float scale, Point moveby, bool highlight, bool error)
+        public override void Render(DrawingContext g, byte alpha, float scale, Point moveby, bool highlight, bool error)
         {
-            g.ScaleTransform(scale / 2, scale / 2);
-            g.TranslateTransform(scale / 2, scale / 2);
+            var transforms = new TransformGroup();
+            transforms.Children.Add(new ScaleTransform(scale / 2, scale / 2));
+            transforms.Children.Add(new TranslateTransform(scale / 2, scale / 2));
+            g.PushTransform(transforms);
             Render(g, alpha, scale, highlight, error);
+            g.Pop();
         }
 
         private Point scalePoint(Point p)
         {
-            return new Point((int)(p.X* m_scale), (int)(p.Y * m_scale));
+            return new Point((int)(p.X * m_scale), (int)(p.Y * m_scale));
         }
 
         public override void MoveBy(Point relativeValues)
@@ -134,14 +137,14 @@ namespace FluidicsSDK.Graphic
 
         public List<Point> Points
         {
-          get
-          {
+            get
+            {
                 return vertices;
-          }
-          set
-          {
-              vertices = value;
-          }
+            }
+            set
+            {
+                vertices = value;
+            }
         }
 
 

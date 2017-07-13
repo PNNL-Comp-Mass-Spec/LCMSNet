@@ -79,8 +79,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -95,38 +93,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\Pumps\IDEXPump.cs" />
-    <Compile Include="Devices\Pumps\IDEXPumpControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Pumps\IDEXPumpControl.Designer.cs">
-      <DependentUpon>IDEXPumpControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\Pumps\IDEXPumpControlView.xaml.cs">
       <DependentUpon>IDEXPumpControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\Pumps\IDEXPumpControlViewModel.cs" />
     <Compile Include="Devices\Valves\IDEXValve.cs" />
-    <Compile Include="Devices\Valves\IDEXValveControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\IDEXValveControl.Designer.cs">
-      <DependentUpon>IDEXValveControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\Valves\IDEXValveControlView.xaml.cs">
       <DependentUpon>IDEXValveControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\Valves\IDEXValveControlViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Devices\Pumps\IDEXPumpControl.resx">
-      <DependentUpon>IDEXPumpControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Valves\IDEXValveControl.resx">
-      <DependentUpon>IDEXValveControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="reactiveui">

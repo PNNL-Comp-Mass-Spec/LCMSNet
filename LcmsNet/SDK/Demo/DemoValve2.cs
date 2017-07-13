@@ -10,7 +10,7 @@ using LcmsNetSDK;
 namespace DemoPluginLibrary
 {
     //TODO: Add a custom user control for this guy....maybe?
-    [classDeviceControlAttribute(typeof(DemoValve2AdvancedControl),
+    [classDeviceControlAttribute(typeof(DemoValve2AdvancedControlViewModel),
                                     "Demo Valve - Multipostion",
                                     "Demo")]
     public class DemoValve2 : IDevice, INinePortValve

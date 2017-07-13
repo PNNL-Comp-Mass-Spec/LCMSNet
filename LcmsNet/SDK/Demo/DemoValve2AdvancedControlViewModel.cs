@@ -8,7 +8,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    public class DemoValve2AdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class DemoValve2AdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private DemoValve2 valve;
 

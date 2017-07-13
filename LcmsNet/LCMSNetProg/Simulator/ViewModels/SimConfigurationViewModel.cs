@@ -24,7 +24,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// <param name="anything">really, anything; only there to differentiate from the public no-parameter constructor</param>
         private SimConfigurationViewModel(object anything)
         {
-            mod = FluidicsModeratorWpf.Moderator;
+            mod = FluidicsModerator.Moderator;
             mod.ModelChanged += ModelChangedHandler;
             Elapsed = "+00:00:00";
 
@@ -51,7 +51,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         //private FluidicsControlViewModel fluidicsControlVm;
         private static SimConfigurationViewModel instance;
-        private readonly FluidicsModeratorWpf mod;
+        private readonly FluidicsModerator mod;
         private readonly FluidicsControlViewModel fluidicsControlVm = new FluidicsControlViewModel();
         private string elapsed;
 

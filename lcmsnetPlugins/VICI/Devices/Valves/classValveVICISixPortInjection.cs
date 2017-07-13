@@ -13,7 +13,7 @@ namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(controlSixPortInjectionValve),
+    [classDeviceControlAttribute(typeof(SixPortInjectionValveViewModel),
                                  "Six-port Injection",
                                  "Valves Two-Position")
     ]
@@ -33,7 +33,7 @@ namespace LcmsNet.Devices.Valves
         {
             m_volume = 0;
         }
-        
+
         public double GetVolume()
         {
             return m_volume;
@@ -54,7 +54,7 @@ namespace LcmsNet.Devices.Valves
 
                 InjectionVolumeChanged?.Invoke(this, new EventArgs());
             }
-        }   
+        }
 
         public event EventHandler InjectionVolumeChanged;
     }

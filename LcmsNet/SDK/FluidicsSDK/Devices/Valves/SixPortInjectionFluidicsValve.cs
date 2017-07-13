@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluidicsSDK.Base;
-using System.Drawing;
 using System.Globalization;
-using FluidicsSDK.Managers;
+using System.Windows;
+using System.Windows.Media;
+using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
+using FluidicsSDK.Managers;
 using LcmsNetDataClasses.Devices;
 
-namespace FluidicsSDK.Devices
+namespace FluidicsSDK.Devices.Valves
 {
     public sealed class SixPortInjectionFluidicsValve : TwoPositionValve
     {
@@ -23,41 +24,28 @@ namespace FluidicsSDK.Devices
             var stateControlSize = new Size(15, 15);
             var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 2), Center.Y - (stateControlSize.Height / 2));
             var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height / 2));
-            var stateControlRectangle = new Rectangle(stateControl1Loc, stateControlSize);
-            var stateControlRectangle2 = new Rectangle(stateControl2Loc, stateControlSize);
+            var stateControlRectangle = new Rect(stateControl1Loc, stateControlSize);
+            var stateControlRectangle2 = new Rect(stateControl2Loc, stateControlSize);
             //add left control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
             //add top "injection port"
-            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width/4, Loc.Y - 30), new Size((int)Size.Width/2, 10), Color.Black,  Brushes.White));
-            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) -5), Loc.Y - 20), new Size(10, 20), Color.Black,  Brushes.White));
+            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width / 4, Loc.Y - 30), new Size((int)Size.Width / 2, 10), Colors.Black, Brushes.White));
+            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) - 5), Loc.Y - 20), new Size(10, 20), Colors.Black, Brushes.White));
             // add injection loop
             AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
-            AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50,30), Color.Black, Brushes.White, true, 1));
+            AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Colors.Black, Brushes.White, true, 1));
         }
 
-
-        public override void Render(Graphics g, int alpha, float scale = 1)
+        public override void Render(DrawingContext g, byte alpha, float scale = 1)
         {
             base.Render(g, alpha, scale);
             var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
-            using(var f = new Font("Calibri", 11 + stringScale))
-            {
-                g.DrawString(Volume.ToString(CultureInfo.InvariantCulture) + " \u00b5" + "L", f, Brushes.Black, new PointF((Center.X * scale - 20), (Center.Y * scale - 10)));
-            }
-        }
-        
-        public override Point Loc
-        {
-            get
-            {
-                return base.Loc;
-            }
-            protected set
-            {
-                base.Loc = value;
-            }
+
+            var font = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+            var volumeText = new FormattedText(Volume.ToString(CultureInfo.InvariantCulture) + " \u00b5" + "L", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, (11.0F * stringScale) * (96.0 / 72.0), Brushes.Black);
+            g.DrawText(volumeText, new Point((Center.X * scale - 20), (Center.Y * scale - 10)));
         }
 
         private void SetValvePosition(TwoPositionState pos)
@@ -103,12 +91,11 @@ namespace FluidicsSDK.Devices
             return states;
         }
 
-
         void m_valve_PositionChanged(object sender, ValvePositionEventArgs<TwoPositionState> e)
         {
             ActivateState((int)e.Position);
         }
-        
+
         /// <summary>
         /// Take a list of tuples and use it to create the internal connections
         /// of the device.
@@ -116,11 +103,10 @@ namespace FluidicsSDK.Devices
         /// <param name="state">a list of tuples, each tuple represents a single internal connection</param>
         public override void ActivateState(List<Tuple<int, int>> state)
         {
-            classFluidicsModerator.Moderator.BeginModelSuspension();
+            FluidicsModerator.Moderator.BeginModelSuspension();
             //remove internal connections
             foreach (var p in Ports)
             {
-
                 foreach (var c in p.Connections)
                 {
                     if (c.InternalConnectionOf == this)
@@ -137,9 +123,9 @@ namespace FluidicsSDK.Devices
             }
             // add injection loop connection.
             ConnectionManager.GetConnectionManager.Connect(m_portList[2], m_portList[5], this);
-            var injectionLoopConnection =ConnectionManager.GetConnectionManager.FindConnection(m_portList[2], m_portList[5]);
+            var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[2], m_portList[5]);
             injectionLoopConnection.Transparent = true;
-            classFluidicsModerator.Moderator.EndModelSuspension(true);
+            FluidicsModerator.Moderator.EndModelSuspension(true);
         }
 
         protected override void ClearDevice(IDevice device)

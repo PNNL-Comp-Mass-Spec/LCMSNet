@@ -10,7 +10,7 @@ using LcmsNetSDK;
 namespace DemoPluginLibrary
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(DemoPALAdvancedControl),
+    [classDeviceControlAttribute(typeof(DemoPALAdvancedControlViewModel),
                                  "DemoPAL",
                                  "Demo")
     ]

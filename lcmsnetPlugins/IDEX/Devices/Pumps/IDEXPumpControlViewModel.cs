@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace ASUTGen.Devices.Pumps
 {
-    public class IDEXPumpControlViewModel : ReactiveObject, IDeviceControlWpf
+    public class IDEXPumpControlViewModel : ReactiveObject, IDeviceControl
     {
         public IDEXPumpControlViewModel()
         {

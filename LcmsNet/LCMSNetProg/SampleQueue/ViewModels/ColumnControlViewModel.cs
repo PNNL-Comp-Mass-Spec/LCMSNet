@@ -121,9 +121,9 @@ namespace LcmsNet.SampleQueue.ViewModels
                 normalColor = BackColor;
                 BackColor = Brushes.DodgerBlue;
                 var columnColor = Column.Color;
-                if (columnColor != System.Drawing.Color.Empty && columnColor != System.Drawing.Color.Transparent)
+                if (columnColor != Color.FromArgb(0,0,0,0) && columnColor != Colors.Transparent)
                 {
-                    BackColor = new SolidColorBrush(Color.FromArgb(columnColor.A, columnColor.R, columnColor.G, columnColor.B));
+                    BackColor = new SolidColorBrush(columnColor);
                 }
             }
             else if (normalColor != null)

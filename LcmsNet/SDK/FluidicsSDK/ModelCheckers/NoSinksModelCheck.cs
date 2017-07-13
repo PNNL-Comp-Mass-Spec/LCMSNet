@@ -11,8 +11,8 @@ using FluidicsSDK.Base;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
-using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -122,7 +122,7 @@ namespace FluidicsSDK.ModelCheckers
                 //No sink was found, so color the path red.
                 foreach(var connection in pathTaken)
                 {
-                    connection.Color = Color.Red;
+                    connection.Color = Colors.Red;
                 }
 
                 //if no sink is found, report to the notifcation system and add to the status list to be returned

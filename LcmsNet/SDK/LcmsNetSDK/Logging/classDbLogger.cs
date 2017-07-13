@@ -15,7 +15,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
+using System.Windows;
 using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Logging
@@ -194,8 +194,8 @@ namespace LcmsNetDataClasses.Logging
             {
                 var msg = "Exception logging error message: ";
                 UnwrapExceptionMsgs(ex, out msg);
-                MessageBox.Show(msg, "LOG ERROR", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(msg, "LOG ERROR", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -219,8 +219,8 @@ namespace LcmsNetDataClasses.Logging
                 m_ConnStr = "";
                 var msg = "Exception initializing log database: ";
                 UnwrapExceptionMsgs(ex, out msg);
-                MessageBox.Show(msg, "LOG ERROR", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(msg, "LOG ERROR", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
                 return false;
             }
         }

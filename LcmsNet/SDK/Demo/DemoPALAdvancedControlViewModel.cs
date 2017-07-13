@@ -5,7 +5,7 @@ using LcmsNetSDK;
 
 namespace DemoPluginLibrary
 {
-    public class DemoPALAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class DemoPALAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private DemoPAL m_PALdevice;
 

@@ -1,13 +1,7 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 9/5/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
 
 namespace FluidicsSDK.Managers
@@ -42,7 +36,7 @@ namespace FluidicsSDK.Managers
             foreach (var port in m_ports)
             {
                 var equals = string.Compare(port.ID, portID, StringComparison.CurrentCulture);
-                if ( equals == 0)
+                if (equals == 0)
                 {
                     foundPort = port;
                     break;
@@ -60,7 +54,6 @@ namespace FluidicsSDK.Managers
             m_ports.AddRange(ports);
             PortChanged?.Invoke(this, new PortChangedEventArgs<Port>());
         }
-
 
         public void AddPort(Port port)
         {
@@ -92,14 +85,14 @@ namespace FluidicsSDK.Managers
                 }
             }
         }
-         
+
         /// <summary>
         /// Render ports to the screen
         /// </summary>
-        /// <param name="g">a System.Drawing.Graphics object</param>
+        /// <param name="g">a System.Windows.Media.DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the ports with</param>
         /// <param name="scale">a float representing the scale at which to draw the ports</param>
-        public void Render(Graphics g, int alpha, float scale)
+        public void Render(DrawingContext g, byte alpha, float scale)
         {
             foreach (var port in m_ports)
             {
@@ -110,16 +103,16 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// tries to find a port at the specified location
         /// </summary>
-        /// <param name="location">a System.Drawing.Point representing the location clicked</param>
+        /// <param name="location">a Point representing the location clicked</param>
         /// <returns>a classPort object if one is found, or null otherwise</returns>
         internal Port Select(Point location)
         {
             //reverse the ports list, search from newest created to oldest created.
             var tmpList = new List<Port>(m_ports);
             tmpList.Reverse();
-            foreach(var port in tmpList)
+            foreach (var port in tmpList)
             {
-                if(port.Contains(location))
+                if (port.Contains(location))
                 {
                     return port;
                 }
