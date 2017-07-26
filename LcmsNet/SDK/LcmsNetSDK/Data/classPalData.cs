@@ -25,7 +25,7 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public classPalData()
         {
-            m_palMethod = CONST_METHOD_NAME;
+            Method = CONST_METHOD_NAME;
             m_PalTray = "";
             m_Well = CONST_DEFAULT_VIAL_NUMBER;
         }
@@ -40,11 +40,13 @@ namespace LcmsNetDataClasses.Data
         /// <returns>A new object reference as a copy of this.</returns>
         public object Clone()
         {
-            var newData = new classPalData();
-            newData.PALTray = m_PalTray;
-            newData.Method = m_palMethod;
-            newData.Well = m_Well;
-            newData.WellPlate = m_WellPlate;
+            var newData = new classPalData
+            {
+                PALTray = m_PalTray,
+                Method = Method,
+                Well = m_Well,
+                WellPlate = WellPlate
+            };
 
             return newData;
         }
@@ -79,24 +81,14 @@ namespace LcmsNetDataClasses.Data
         #region "Class variables"
 
         /// <summary>
-        /// Name of the PAL method to run.
-        /// </summary>
-        private string m_palMethod = "";
-
-        /// <summary>
         /// Name of the PAL tray to use.
         /// </summary>
-        private string m_PalTray = "";
+        private string m_PalTray;
 
         /// <summary>
         /// Vial index to use.
         /// </summary>
         private int m_Well;
-
-        /// <summary>
-        /// Wellplate name
-        /// </summary>
-        private string m_WellPlate = "";
 
         #endregion
 
@@ -144,20 +136,12 @@ namespace LcmsNetDataClasses.Data
         /// <summary>
         /// Gets or sets the PAL method to use.
         /// </summary>
-        public string Method
-        {
-            get { return m_palMethod; }
-            set { m_palMethod = value; }
-        }
+        public string Method { get; set; }
 
         /// <summary>
         /// Gets or sets the Wellplate name that is stored in DMS.
         /// </summary>
-        public string WellPlate
-        {
-            get { return m_WellPlate; }
-            set { m_WellPlate = value; }
-        }
+        public string WellPlate { get; set; }
 
 #endregion
 
