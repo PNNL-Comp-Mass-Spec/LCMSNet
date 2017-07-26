@@ -35,12 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LcmsNetSdk_DotNET4">
-      <HintPath>..\..\lib\LcmsNetSdk_DotNET4.dll</HintPath>
-    </Reference>
-    <Reference Include="LcmsNetSQLiteTools_DotNET4">
-      <HintPath>..\..\lib\LcmsNetSQLiteTools_DotNET4.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -75,9 +69,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\x86\Debug\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="controlDMSValidator.resx">
       <DependentUpon>controlDMSValidator.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -98,6 +89,16 @@
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.99</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LcmsNet\SDK\LcmsNetSDK\LcmsNetSDK_DotNET4.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK_DotNET4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LcmsNet\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools_DotNET4.csproj">
+      <Project>{b164f88d-3799-46b9-8926-20b40707b2e4}</Project>
+      <Name>SQLiteTools_DotNET4</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
