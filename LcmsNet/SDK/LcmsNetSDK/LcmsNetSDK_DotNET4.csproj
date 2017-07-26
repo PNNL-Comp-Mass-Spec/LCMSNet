@@ -260,7 +260,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetPath)" "$(SolutionDir)lib\$(TargetName)_DotNET4.dll"
+    <PostBuildEvent>if not exist "$(SolutionDir)lib\DotNET4" mkdir "$(SolutionDir)lib\DotNET4"
+xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\DotNET4"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -94,7 +94,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)lib\$(TargetName)_DotNET4.dll"
+    <PostBuildEvent>if not exist "$(SolutionDir)lib\DotNET4" mkdir "$(SolutionDir)lib\DotNET4"
+xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\DotNET4"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

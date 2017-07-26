@@ -102,7 +102,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetPath)" "$(SolutionDir)lib\$(TargetName)_DotNET4.dll"
+    <PostBuildEvent>if not exist "$(SolutionDir)lib\DotNET4" mkdir "$(SolutionDir)lib\DotNET4"
+xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\DotNET4"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
