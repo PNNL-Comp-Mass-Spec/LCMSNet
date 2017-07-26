@@ -418,7 +418,11 @@ namespace LcmsNetDataClasses
                 if (value < classCartConfiguration.MinimumVolume)
                 {
                     // Report property changed to force UI refresh
+#if DotNET4
+                    this.OnPropertyChanged(nameof(Volume));
+#else
                     this.OnPropertyChanged();
+#endif
                     return;
                 }
                 this.RaiseAndSetIfChanged(ref m_volume, value);
@@ -498,9 +502,9 @@ namespace LcmsNetDataClasses
             set { m_Operator = value; }
         }
 
-        #endregion
+#endregion
 
-        #region "Methods"
+#region "Methods"
 
         /// <summary>
         /// Gets current values for all the properties in the class in key/value format
@@ -652,21 +656,28 @@ namespace LcmsNetDataClasses
             }
         }
 
-        #endregion
+#endregion
 
-        #region "INotifyPropertyChanged implementation"
+#region "INotifyPropertyChanged implementation"
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+#if DotNET4
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+#else
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+#endif
+#endregion
 
-        #region "IEquatable Implementation"
+#region "IEquatable Implementation"
 
         public bool Equals(classSampleData other)
         {
@@ -688,6 +699,6 @@ namespace LcmsNetDataClasses
             return m_uniqueID.GetHashCode();
         }
 
-        #endregion
+#endregion
     }
 }

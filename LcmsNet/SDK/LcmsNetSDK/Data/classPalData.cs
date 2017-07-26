@@ -113,7 +113,11 @@ namespace LcmsNetDataClasses.Data
                 if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
                 {
                     // Say it changed, to force UI to refresh to the unchanged value
+#if DotNET4
+                    this.OnPropertyChanged(nameof(Well));
+#else
                     this.OnPropertyChanged();
+#endif
                     return;
                 }
                 this.RaiseAndSetIfChanged(ref m_Well, value);
@@ -147,7 +151,7 @@ namespace LcmsNetDataClasses.Data
             set { m_WellPlate = value; }
         }
 
-        #endregion
+#endregion
 
         //  /// <summary>
 
@@ -165,9 +169,17 @@ namespace LcmsNetDataClasses.Data
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+#if DotNET4
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+#else
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+#endif
     }
 }

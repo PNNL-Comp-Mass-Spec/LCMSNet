@@ -261,9 +261,17 @@ namespace LcmsNetDataClasses
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+#if DotNET4
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+#else
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+#endif
     }
 }

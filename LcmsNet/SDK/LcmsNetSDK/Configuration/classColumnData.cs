@@ -202,15 +202,23 @@ namespace LcmsNetDataClasses.Configuration
             set { Color = Color.FromArgb(value.A, value.R, value.G, value.B); }
         }
 
-        #endregion
+#endregion
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+#if DotNET4
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+#else
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+#endif
 
         public bool Equals(classColumnData other)
         {

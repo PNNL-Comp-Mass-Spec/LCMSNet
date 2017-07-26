@@ -32,9 +32,17 @@ namespace LcmsNetSDK.Data
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+#if DotNET4
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+#else
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+#endif
     }
 }

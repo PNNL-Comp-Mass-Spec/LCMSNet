@@ -5,15 +5,28 @@ using System.Runtime.CompilerServices;
 
 namespace LcmsNetSDK
 {
+#if DotNET4
+    public interface INotifyPropertyChangedExt : INotifyPropertyChanged
+    {
+        void OnPropertyChanged(string propertyName);
+    }
+
+#else
     public interface INotifyPropertyChangedExt : INotifyPropertyChanged
     {
         void OnPropertyChanged([CallerMemberName] string propertyName = "");
     }
+#endif
 
     public static class NotifyPropertyChangedExtensions
     {
+#if DotNET4
         public static TRet RaiseAndSetIfChanged<TRet>(this INotifyPropertyChangedExt obj,
+            ref TRet backingField, TRet newValue, string propertyName = null)
+#else
+                    public static TRet RaiseAndSetIfChanged<TRet>(this INotifyPropertyChangedExt obj,
             ref TRet backingField, TRet newValue, [CallerMemberName] string propertyName = null)
+#endif
         {
             if (propertyName == null)
             {
@@ -30,8 +43,13 @@ namespace LcmsNetSDK
             return newValue;
         }
 
+#if DotNET4
+        public static bool RaiseAndSetIfChangedRetBool<TRet>(this INotifyPropertyChangedExt obj,
+            ref TRet backingField, TRet newValue, string propertyName = null)
+#else
         public static bool RaiseAndSetIfChangedRetBool<TRet>(this INotifyPropertyChangedExt obj,
             ref TRet backingField, TRet newValue, [CallerMemberName] string propertyName = null)
+#endif
         {
             if (propertyName == null)
             {
@@ -48,4 +66,5 @@ namespace LcmsNetSDK
             return true;
         }
     }
+
 }
