@@ -120,7 +120,11 @@ namespace LcmsNetDataClasses.Data
 #endif
                     return;
                 }
+#if DotNET4
+                this.RaiseAndSetIfChanged(ref m_Well, value, nameof(Well));
+#else
                 this.RaiseAndSetIfChanged(ref m_Well, value);
+#endif
             }
         }
 
@@ -130,7 +134,11 @@ namespace LcmsNetDataClasses.Data
         public string PALTray
         {
             get { return m_PalTray; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_PalTray, value, nameof(PALTray)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_PalTray, value); }
+#endif
         }
 
         /// <summary>

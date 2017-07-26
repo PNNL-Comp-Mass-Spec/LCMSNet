@@ -47,7 +47,11 @@ namespace LcmsNetDataClasses
         public string MethodName
         {
             get { return methodName; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref methodName, value, nameof(MethodName)); }
+#else
             set { this.RaiseAndSetIfChanged(ref methodName, value); }
+#endif
         }
 
         /// <summary>

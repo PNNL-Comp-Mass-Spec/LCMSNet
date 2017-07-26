@@ -311,7 +311,11 @@ namespace LcmsNetDataClasses
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
                 var oldHasNotRun = HasNotRun;
                 var oldIsSetToRun = IsSetToRunOrHasRun;
+#if DotNET4
+                if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value, nameof(RunningStatus)))
+#else
                 if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value))
+#endif
                 {
                     if (oldHasNotRun != HasNotRun)
                     {
@@ -425,7 +429,11 @@ namespace LcmsNetDataClasses
 #endif
                     return;
                 }
+#if DotNET4
+                this.RaiseAndSetIfChanged(ref m_volume, value, nameof(Volume));
+#else
                 this.RaiseAndSetIfChanged(ref m_volume, value);
+#endif
             }
         }
 
@@ -438,7 +446,11 @@ namespace LcmsNetDataClasses
             set
             {
                 var oldColumn = m_columnData;
+#if DotNET4
+                if (this.RaiseAndSetIfChangedRetBool(ref m_columnData, value, nameof(ColumnData)))
+#else
                 if (this.RaiseAndSetIfChangedRetBool(ref m_columnData, value))
+#endif
                 {
                     if (oldColumn != null)
                     {

@@ -96,7 +96,11 @@ namespace LcmsNetDataClasses
             get { return requestName; }
             set
             {
+#if DotNET4
+                if (this.RaiseAndSetIfChangedRetBool(ref requestName, value, nameof(RequestName)))
+#else
                 if (this.RaiseAndSetIfChangedRetBool(ref requestName, value))
+#endif
                 {
                     if (string.IsNullOrEmpty(DatasetName))
                     {
@@ -112,7 +116,11 @@ namespace LcmsNetDataClasses
         public string DatasetName
         {
             get { return datasetName; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref datasetName, value, nameof(DatasetName)); }
+#else
             set { this.RaiseAndSetIfChanged(ref datasetName, value); }
+#endif
         }
 
         /// <summary>
@@ -121,7 +129,11 @@ namespace LcmsNetDataClasses
         public int RequestID
         {
             get { return requestId; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref requestId, value, nameof(RequestID)); }
+#else
             set { this.RaiseAndSetIfChanged(ref requestId, value); }
+#endif
         }
 
         /// <summary>
@@ -130,7 +142,11 @@ namespace LcmsNetDataClasses
         public string Experiment
         {
             get { return experiment; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref experiment, value, nameof(Experiment)); }
+#else
             set { this.RaiseAndSetIfChanged(ref experiment, value); }
+#endif
         }
 
         /// <summary>
@@ -139,7 +155,11 @@ namespace LcmsNetDataClasses
         public string DatasetType
         {
             get { return datasetType; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref datasetType, value, nameof(DatasetType)); }
+#else
             set { this.RaiseAndSetIfChanged(ref datasetType, value); }
+#endif
         }
 
         /// <summary>
@@ -148,7 +168,11 @@ namespace LcmsNetDataClasses
         public string UsageType
         {
             get { return usageType; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref usageType, value, nameof(UsageType)); }
+#else
             set { this.RaiseAndSetIfChanged(ref usageType, value); }
+#endif
         }
 
         /// <summary>
@@ -157,7 +181,11 @@ namespace LcmsNetDataClasses
         public string ProposalID
         {
             get { return proposalId; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref proposalId, value, nameof(ProposalID)); }
+#else
             set { this.RaiseAndSetIfChanged(ref proposalId, value); }
+#endif
         }
 
         /// <summary>
@@ -166,7 +194,11 @@ namespace LcmsNetDataClasses
         public string UserList
         {
             get { return userList; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref userList, value, nameof(UserList)); }
+#else
             set { this.RaiseAndSetIfChanged(ref userList, value); }
+#endif
         }
 
         /// <summary>
@@ -180,7 +212,11 @@ namespace LcmsNetDataClasses
         public string CartConfigName
         {
             get { return cartConfigName; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref cartConfigName, value, nameof(CartConfigName)); }
+#else
             set { this.RaiseAndSetIfChanged(ref cartConfigName, value); }
+#endif
         }
 
         /// <summary>
@@ -199,7 +235,11 @@ namespace LcmsNetDataClasses
         public int Block
         {
             get { return block; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref block, value, nameof(Block)); }
+#else
             set { this.RaiseAndSetIfChanged(ref block, value); }
+#endif
         }
 
         /// <summary>
@@ -208,7 +248,11 @@ namespace LcmsNetDataClasses
         public int RunOrder
         {
             get { return runOrder; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref runOrder, value, nameof(RunOrder)); }
+#else
             set { this.RaiseAndSetIfChanged(ref runOrder, value); }
+#endif
         }
 
         /// <summary>
@@ -217,7 +261,11 @@ namespace LcmsNetDataClasses
         public int Batch
         {
             get { return batch; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref batch, value, nameof(Batch)); }
+#else
             set { this.RaiseAndSetIfChanged(ref batch, value); }
+#endif
         }
 
         #endregion
