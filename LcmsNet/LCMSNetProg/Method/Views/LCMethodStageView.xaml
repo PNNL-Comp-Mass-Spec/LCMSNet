@@ -69,17 +69,19 @@
             <Button Margin="3" Content="Back" Command="{Binding BackCommand}" />
             <Button Margin="3" Content="Step" Command="{Binding StepCommand}" />
         </StackPanel>
-        <ItemsControl ItemsSource="{Binding LCMethodEvents}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <views:LCMethodEventView VerticalAlignment="Top" Height="33" DataContext="{Binding BindsDirectlyToSource=True}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding LCMethodEvents}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:LCMethodEventView VerticalAlignment="Top" Height="33" DataContext="{Binding BindsDirectlyToSource=True}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>
