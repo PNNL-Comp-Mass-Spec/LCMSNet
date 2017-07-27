@@ -202,7 +202,7 @@ namespace LcmsNetDataClasses.Configuration
             set { Color = Color.FromArgb(value.A, value.R, value.G, value.B); }
         }
 
-#endregion
+        #endregion
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;

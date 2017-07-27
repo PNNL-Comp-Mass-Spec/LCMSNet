@@ -514,9 +514,9 @@ namespace LcmsNetDataClasses
             set { m_Operator = value; }
         }
 
-#endregion
+        #endregion
 
-#region "Methods"
+        #region "Methods"
 
         /// <summary>
         /// Gets current values for all the properties in the class in key/value format
@@ -668,9 +668,9 @@ namespace LcmsNetDataClasses
             }
         }
 
-#endregion
+        #endregion
 
-#region "INotifyPropertyChanged implementation"
+        #region "INotifyPropertyChanged implementation"
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -687,9 +687,9 @@ namespace LcmsNetDataClasses
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 #endif
-#endregion
+        #endregion
 
-#region "IEquatable Implementation"
+        #region "IEquatable Implementation"
 
         public bool Equals(classSampleData other)
         {
@@ -711,6 +711,6 @@ namespace LcmsNetDataClasses
             return m_uniqueID.GetHashCode();
         }
 
-#endregion
+        #endregion
     }
 }
