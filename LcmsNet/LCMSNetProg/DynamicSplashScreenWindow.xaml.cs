@@ -54,8 +54,10 @@ namespace LcmsNet
             }
         }
 
-        public void LoadComplete()
+        public async void LoadComplete()
         {
+            // Wait for any updates to complete, to avoid thread cancellation exceptions
+            await Dispatcher.Yield();
             Dispatcher.InvokeShutdown();
         }
     }
