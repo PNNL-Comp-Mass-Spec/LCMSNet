@@ -62,7 +62,7 @@
                     <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" Text="{Binding RequestName}" />
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="4" Text="{Binding RequestIdStart}" />
                     <TextBox Grid.Row="1" Grid.Column="3" Margin="4" Text="{Binding RequestIdEnd}" />
-                    <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="4"  SelectedItem="{Binding Cart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartComboBoxOptions}" IsEnabled="{Binding AssignedRequestsOnly}" />
+                    <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="4"  SelectedItem="{Binding Cart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartSearchComboBoxOptions}" IsEnabled="{Binding AssignedRequestsOnly}" />
                     <Label Grid.Row="0" Grid.Column="5">Wellplate</Label>
                     <Label Grid.Row="1" Grid.Column="5">Batch ID</Label>
                     <Label Grid.Row="2" Grid.Column="5">Block</Label>
@@ -70,7 +70,7 @@
                     <TextBox Grid.Row="1" Grid.Column="6" Margin="4" Text="{Binding BatchId}" />
                     <TextBox Grid.Row="2" Grid.Column="6" Margin="4" Text="{Binding Block}" />
                     <CheckBox Grid.Row="0" Grid.Column="8" VerticalAlignment="Center" Margin="4" IsChecked="{Binding UnassignedRequestsOnly}">Unassigned Requests Only</CheckBox>
-                    <Button Grid.Row="1" Grid.Column="8" Grid.RowSpan="2" Margin="4" MaxHeight="50" HorizontalAlignment="Right" MaxWidth="100" MinWidth="90" Command="{Binding FindCommand}">
+                    <Button Grid.Row="1" Grid.Column="8" Grid.RowSpan="2" Margin="4" MaxHeight="50" HorizontalAlignment="Right" MaxWidth="100" MinWidth="90" IsDefault="True"  Command="{Binding FindCommand}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*" />
@@ -121,7 +121,7 @@
         <Label Grid.Row="5">Requests To Run</Label>
         <views:DMSDownloadDataGridView Grid.Row="6" DataContext="{Binding SelectedRequestData}"/>
         <StackPanel Grid.Row="7" HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Margin="5" MinWidth="180" IsDefault="True" Command="{Binding OkCommand}" Click="Ok_OnClick" ClickMode="Release">Ok</Button>
+            <Button Margin="5" MinWidth="180" Command="{Binding OkCommand}" Click="Ok_OnClick" ClickMode="Release">Ok</Button>
             <Button Margin="5" MinWidth="180" IsCancel="True" Click="Close_OnClick" ClickMode="Release">Cancel</Button>
         </StackPanel>
     </Grid>

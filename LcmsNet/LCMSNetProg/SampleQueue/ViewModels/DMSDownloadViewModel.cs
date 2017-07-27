@@ -26,7 +26,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Class variables"
 
-        private List<classSampleData> dmsRequestList;
+        private readonly List<classSampleData> dmsRequestList = new List<classSampleData>();
         private string matchString;
         private string cartName = string.Empty;
         private string cartConfigName = string.Empty;
@@ -41,6 +41,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private string block = string.Empty;
         private bool unassignedRequestsOnly;
         private readonly ReactiveList<string> lcCartComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> lcCartSearchComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> lcCartConfigComboBoxOptions = new ReactiveList<string>();
         private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel();
         private bool loadingData;
@@ -117,6 +118,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         public IReadOnlyReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
+
+        public IReadOnlyReactiveList<string> LcCartSearchComboBoxOptions => lcCartSearchComboBoxOptions;
 
         public string CartConfigName
         {
@@ -276,6 +279,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             List<string> cartList;
 
             lcCartComboBoxOptions.Clear();
+            lcCartSearchComboBoxOptions.Clear();
 
             // Get the list of carts from DMS
             try
@@ -308,6 +312,12 @@ namespace LcmsNet.SampleQueue.ViewModels
                 using (lcCartComboBoxOptions.SuppressChangeNotifications())
                 {
                     lcCartComboBoxOptions.AddRange(cartList);
+                }
+                using (lcCartSearchComboBoxOptions.SuppressChangeNotifications())
+                {
+                    // Add a blank for "No cart specified"
+                    lcCartSearchComboBoxOptions.Add("");
+                    lcCartSearchComboBoxOptions.AddRange(cartList);
                 }
             }
         }
@@ -457,11 +467,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             RequestsFoundString = tempRequestList.Count + " requests found";
 
             // Add the requests to the listview
-            if (dmsRequestList == null)
-            {
-                dmsRequestList = new List<classSampleData>();
-            }
-
             var availReqList = new List<classSampleData>();
             foreach (var request in tempRequestList)
             {
@@ -656,13 +661,18 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Updates selected requests in DMS to show new cart assignment
         /// </summary>
         /// <returns></returns>
-        bool UpdateDMSCartAssignment()
+        private bool UpdateDMSCartAssignment()
         {
             // Verify a cart is specified
             if (cartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 MessageBox.Show("Cart name must be specified", "CART NAME NOT SPECIFIED");
                 return false;
+            }
+
+            if (dmsRequestList.Count == 0)
+            {
+                return true;
             }
 
             // Update the cart assignments in DMS
