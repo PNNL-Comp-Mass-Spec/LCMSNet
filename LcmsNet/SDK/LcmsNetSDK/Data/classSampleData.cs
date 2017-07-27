@@ -291,7 +291,11 @@ namespace LcmsNetDataClasses
         public string SampleErrors
         {
             get { return m_SampleErrors; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_SampleErrors, value, nameof(SampleErrors)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_SampleErrors, value); }
+#endif
         }
 
         /// <summary>
@@ -336,7 +340,11 @@ namespace LcmsNetDataClasses
         public bool IsDuplicateRequestName
         {
             get { return m_IsDuplicateRequestName; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value, nameof(IsDuplicateRequestName)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value); }
+#endif
         }
 
         /// <summary>
@@ -363,7 +371,11 @@ namespace LcmsNetDataClasses
         public classInstrumentInfo InstrumentData
         {
             get { return m_instrumentData; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_instrumentData, value, nameof(InstrumentData)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_instrumentData, value); }
+#endif
         }
 
         /// <summary>
@@ -374,8 +386,13 @@ namespace LcmsNetDataClasses
             get { return m_method; }
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value) && m_method != null && m_method.Column != ColumnData.ID)
-                {
+#if DotNET4
+                var updated = this.RaiseAndSetIfChangedRetBool(ref m_method, value, nameof(LCMethod));
+#else
+                var updated = this.RaiseAndSetIfChangedRetBool(ref m_method, value);
+#endif
+                if (updated && m_method != null && m_method.Column != ColumnData.ID)
+                    {
                     if (m_method.Column >= 0)
                     {
                         ColumnData = classCartConfiguration.Columns[m_method.Column];
@@ -390,7 +407,11 @@ namespace LcmsNetDataClasses
         public classDMSData DmsData
         {
             get { return m_DmsData; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_DmsData, value, nameof(DmsData)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_DmsData, value); }
+#endif
         }
 
         /// <summary>
@@ -399,7 +420,11 @@ namespace LcmsNetDataClasses
         public long SequenceID
         {
             get { return m_sequenceNumber; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value, nameof(SequenceID)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value); }
+#endif
         }
 
         /// <summary>
@@ -408,7 +433,11 @@ namespace LcmsNetDataClasses
         public classPalData PAL
         {
             get { return m_palData; }
+#if DotNET4
+            set { this.RaiseAndSetIfChanged(ref m_palData, value, nameof(PAL)); }
+#else
             set { this.RaiseAndSetIfChanged(ref m_palData, value); }
+#endif
         }
 
         /// <summary>
@@ -680,7 +709,6 @@ namespace LcmsNetDataClasses
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
 #else
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
