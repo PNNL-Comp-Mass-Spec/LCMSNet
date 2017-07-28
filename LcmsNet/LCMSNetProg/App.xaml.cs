@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using LcmsNet.Devices;
 using LcmsNet.Method;
 using LcmsNet.Properties;
@@ -38,9 +39,11 @@ namespace LcmsNet
             //var mainWindowVm = new MainWindowViewModel();
             //mainWindow.DataContext = mainWindowVm;
             //mainWindow.Show();
-            MainLoad();
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            this.DispatcherUnhandledException += OnDispatcherUnhandledException;
+
+            MainLoad();
         }
 
         /// <summary>
@@ -57,12 +60,26 @@ namespace LcmsNet
         {
             if (args.ExceptionObject is Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                    "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
-
-                MessageBox.Show("Shutting down due to unhandled error: " + ex.Message + " \nFor additional information, see the log files at " +
-                                classDbLogger.LogFolderPath + "\\");
+                UnhandledErrorShutdown(ex);
             }
+            else
+            {
+                ShutdownCleanup();
+            }
+        }
+
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs args)
+        {
+            UnhandledErrorShutdown(args.Exception);
+        }
+
+        private void UnhandledErrorShutdown(Exception ex)
+        {
+            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
+
+            MessageBox.Show("Shutting down due to unhandled error: " + ex.Message + " \nFor additional information, see the log files at " +
+                            classDbLogger.LogFolderPath + "\\");
 
             ShutdownCleanup();
         }
@@ -328,8 +345,7 @@ namespace LcmsNet
 
             var splashLoadTime = DateTime.UtcNow;
 
-            var loadSuccessful = await LoadEverything();
-            if (!loadSuccessful)
+            if (!LoadEverything())
             {
                 return;
             }
@@ -370,7 +386,7 @@ namespace LcmsNet
             System.Windows.Threading.Dispatcher.Run();
         }
 
-        private async Task<bool> LoadEverything()
+        private bool LoadEverything()
         {
             LogVersionNumbers();
             LogMachineInformation();
