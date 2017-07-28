@@ -138,8 +138,8 @@ namespace LcmsNet.Method
             if (args != null)
                 m_sampleData = args.Sample;
 
-            var method = m_sampleData.LCMethod;
-            var methodEvents = m_sampleData.LCMethod.Events;
+            var method = m_sampleData.ActualLCMethod;
+            var methodEvents = m_sampleData.ActualLCMethod.Events;
             Exception ex = null;
 
             //We return the columnId as the "result" so the scheduler callback can determine which column events

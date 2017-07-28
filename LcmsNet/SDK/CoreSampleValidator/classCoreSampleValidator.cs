@@ -24,20 +24,20 @@ namespace LcmsNetDataClasses.Experiment
             
             // Validate the LC-Method
             
-            if (sample.LCMethod == null)
+            if (sample.ActualLCMethod == null)
             {
                 errors.Add(new classSampleValidationError("The LC-Method was not selected.", enumSampleValidationError.LCMethodNotSelected));
             }
             else
             {
                 var manager = classDeviceManager.Manager;
-                if (sample.LCMethod.Events.Count < 1)
+                if (sample.ActualLCMethod.Events.Count < 1)
                 {
                     errors.Add(new classSampleValidationError("The LC-Method was not selected or does not contain any events.", enumSampleValidationError.LCMethodHasNoEvents));
                 }
                 else
                 {
-                    foreach (var lcEvent in sample.LCMethod.Events)
+                    foreach (var lcEvent in sample.ActualLCMethod.Events)
                     {
                         
                         // VALIDATE THE DEVICE!!!
@@ -65,7 +65,7 @@ namespace LcmsNetDataClasses.Experiment
                         else
                         {
                             errors.Add(new classSampleValidationError(
-                                                string.Format("The LC-Method {0} is invalid. Make sure the method is built correctly. ", sample.LCMethod.Name),
+                                                string.Format("The LC-Method {0} is invalid. Make sure the method is built correctly. ", sample.ActualLCMethod.Name),
                                                 enumSampleValidationError.LCMethodIncorrect));
                         }
                     }
@@ -118,7 +118,7 @@ namespace LcmsNetDataClasses.Experiment
                 // Iterate over the blocks
                 // 
                 var tempSamples   = tempDictionary[itemKey];
-                var method                = tempSamples[0].LCMethod;
+                var method                = tempSamples[0].ActualLCMethod;
                 var columnID                        = tempSamples[0].ColumnData.ID;
 
                 // 
@@ -131,7 +131,7 @@ namespace LcmsNetDataClasses.Experiment
                     // 
                     // Make sure we also look at the sample method ... this is important.
                     // 
-                    if (tempSamples[i].ColumnData.ID != columnID || method.Name != tempSamples[i].LCMethod.Name)
+                    if (tempSamples[i].ColumnData.ID != columnID || method.Name != tempSamples[i].ActualLCMethod.Name)
                     {                        
                         badSamples.AddRange(tempSamples);
                         break;

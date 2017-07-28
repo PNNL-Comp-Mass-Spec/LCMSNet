@@ -900,7 +900,7 @@ namespace LcmsNet.SampleQueue
             if (sampleToCopy.LCMethod != null)
             {
                 newSample.LCMethod = sampleToCopy.LCMethod.Clone() as classLCMethod;
-                if (newSample.LCMethod != null && newSample.LCMethod.Column >= 0)
+                if (newSample.ActualLCMethod != null && newSample.LCMethod.Column >= 0)
                 {
                     var id = newSample.LCMethod.Column;
                     if (id < classCartConfiguration.Columns.Count && id >= 0)

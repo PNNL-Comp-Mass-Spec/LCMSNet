@@ -209,7 +209,7 @@ namespace LcmsNetDataClasses
                 string.Format("{0}_{1}_{2}{3}",
                     classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME),
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
-                    sample.LCMethod.Start.ToString("MM.dd.yyyy_hh.mm.ss"),
+                    sample.ActualLCMethod.Start.ToString("MM.dd.yyyy_hh.mm.ss"),
                     datasetName,
                     extension);
             return outFileName;
@@ -257,9 +257,14 @@ namespace LcmsNetDataClasses
         private long m_uniqueID;
 
         /// <summary>
-        /// LC Method that controls all of the hardware via the scheduling interface.
+        /// LC Method that controls all of the hardware via the scheduling interface - UI consistent version.
         /// </summary>
         private classLCMethod m_method;
+
+        /// <summary>
+        /// LC Method that controls all of the hardware via the scheduling interface.
+        /// </summary>
+        private classLCMethod m_actualMethod;
 
         /// <summary>
         /// Instrument info.
@@ -364,16 +369,27 @@ namespace LcmsNetDataClasses
         }
 
         /// <summary>
-        /// Gets or sets the experiment object data.
+        /// Gets the experiment object data.
+        /// </summary>
+        [NotStoredProperty]
+        public classLCMethod ActualLCMethod
+        {
+            get { return m_actualMethod; }
+            private set { m_actualMethod = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the experiment setup object data.
         /// </summary>
         public classLCMethod LCMethod
         {
             get { return m_method; }
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value) && m_method != null && m_method.Column != ColumnData.ID)
+                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value))
                 {
-                    if (m_method.Column >= 0)
+                    CloneLCMethod();
+                    if (m_method != null && m_method.Column != ColumnData.ID && m_method.Column >= 0)
                     {
                         ColumnData = classCartConfiguration.Columns[m_method.Column];
                     }
@@ -449,11 +465,22 @@ namespace LcmsNetDataClasses
             }
         }
 
-        public void CloneLCMethod()
+        /// <summary>
+        /// Wipes out the current <see cref="ActualLCMethod"/>, and replaces it with a clone of the parameter (or a clone of <see cref="LCMethod"/>)
+        /// </summary>
+        /// <param name="methodToClone">Method to be cloned to <see cref="ActualLCMethod"/>; if null, <see cref="LCMethod"/> cloned.</param>
+        public void CloneLCMethod(classLCMethod methodToClone = null)
         {
-            var method = this.LCMethod;
-            this.m_method = null; // Avoid firing the change notifications twice, by setting just the backing variable to null...
-            this.LCMethod = method.Clone() as classLCMethod;
+            if (methodToClone == null)
+            {
+                methodToClone = m_method;
+            }
+            if (methodToClone == null)
+            {
+                ActualLCMethod = new classLCMethod();
+                return;
+            }
+            ActualLCMethod = methodToClone.Clone() as classLCMethod;
         }
 
         void m_columnData_NameChanged(object sender, string name, string oldName)

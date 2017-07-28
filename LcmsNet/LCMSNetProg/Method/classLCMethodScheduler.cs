@@ -461,7 +461,7 @@ namespace LcmsNet.Method
             var sampleColumnID = data.ColumnData.ID;
 
             // Make sure we don't need to put this on the last column.
-            if (data.LCMethod.IsSpecialMethod)
+            if (data.ActualLCMethod.IsSpecialMethod)
             {
                 sampleColumnID = CONST_NUMBER_THREADS;
             }
@@ -477,23 +477,23 @@ namespace LcmsNet.Method
                 // basically, we want to ensure that a method doesn't start before it's expected start time
                 // has occurred.
                 //
-                if (TimeKeeper.Instance.Now.CompareTo(data.LCMethod.Start) >= 0)
+                if (TimeKeeper.Instance.Now.CompareTo(data.ActualLCMethod.Start) >= 0)
                 //(startSpan.Milliseconds >= 0)
                 {
                     data = m_sampleQueue.NextSampleStart();
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
                         data.DmsData.DatasetName,
-                        data.ColumnData.ID + 1, data.LCMethod.Start),
+                        data.ColumnData.ID + 1, data.ActualLCMethod.Start),
                         CONST_VERBOSE_LEAST, null, data);
                     //
                     // Hold on to a copy of the sample
                     //
 
-                    if (data.LCMethod.Events.Count > 0)
+                    if (data.ActualLCMethod.Events.Count > 0)
                     {
                         // Original code that relies on events firing properly
                         //sampleEndTime[sampleColumnID] = data.LCMethod.Events[0].End;
-                        sampleEndTime[sampleColumnID] = data.LCMethod.Events.Last().End;
+                        sampleEndTime[sampleColumnID] = data.ActualLCMethod.Events.Last().End;
                     }
                     else
 #if DEBUG
@@ -503,15 +503,15 @@ namespace LcmsNet.Method
 #endif
 
                     currentEvent[sampleColumnID] = 0;
-                    data.LCMethod.CurrentEventNumber = 0;
-                    data.LCMethod.ActualEnd = DateTime.MaxValue;
-                    data.LCMethod.ActualStart = TimeKeeper.Instance.Now;
+                    data.ActualLCMethod.CurrentEventNumber = 0;
+                    data.ActualLCMethod.ActualEnd = DateTime.MaxValue;
+                    data.ActualLCMethod.ActualStart = TimeKeeper.Instance.Now;
                     samples[sampleColumnID] = data.Clone() as classSampleData;
                     if (samples[sampleColumnID] == null)
                         samples[sampleColumnID] = new classSampleData();
 
-                    samples[sampleColumnID].LCMethod = null; // Wipe it out first
-                    samples[sampleColumnID].LCMethod = data.LCMethod.Clone() as classLCMethod;
+                    samples[sampleColumnID].LCMethod = data.LCMethod;
+                    samples[sampleColumnID].CloneLCMethod(data.ActualLCMethod);
 
                     m_columnWorkers[sampleColumnID].RunWorkerAsync(new classColumnArgs(data));
                 }
@@ -618,10 +618,10 @@ namespace LcmsNet.Method
                                         string deviceName;
                                         string eventName;
                                         TimeSpan eventDuration;
-                                        if (currentEvent[columnID] < samples[columnID].LCMethod.Events.Count)
+                                        if (currentEvent[columnID] < samples[columnID].ActualLCMethod.Events.Count)
                                         {
                                             var lcEvent =
-                                                samples[columnID].LCMethod.Events[currentEvent[columnID]];
+                                                samples[columnID].ActualLCMethod.Events[currentEvent[columnID]];
                                             deviceName = lcEvent.Device.Name;
                                             eventName = lcEvent.Name;
                                             eventDuration = lcEvent.Duration;
@@ -644,10 +644,10 @@ namespace LcmsNet.Method
                                         sampleEndTime[columnID] = DateTime.MinValue;
 
                                         if (currentEvent[columnID] <
-                                            m_columnThreads[columnID].Sample.LCMethod.ActualEvents.Count)
+                                            m_columnThreads[columnID].Sample.ActualLCMethod.ActualEvents.Count)
                                         {
                                             var evt =
-                                                m_columnThreads[columnID].Sample.LCMethod.ActualEvents[
+                                                m_columnThreads[columnID].Sample.ActualLCMethod.ActualEvents[
                                                     currentEvent[columnID]];
                                             evt.Duration =
                                                 evt.Start.Add(eventDuration).Add(overdueSpan).Subtract(evt.Start);
@@ -744,14 +744,14 @@ namespace LcmsNet.Method
                 //
                 // Make sure we have another event to process.
                 //
-                if (samples[columnID].LCMethod.Events.Count <= columnCurrentEvent)
+                if (samples[columnID].ActualLCMethod.Events.Count <= columnCurrentEvent)
                     return;
 
                 //
                 // Now update the expected end time for the current event.
                 //
                 sampleEndTime[columnID] = columnEndOfCurrentEvent;
-                samples[columnID].LCMethod.CurrentEventNumber = columnCurrentEvent;
+                samples[columnID].ActualLCMethod.CurrentEventNumber = columnCurrentEvent;
 
                 SampleProgress?.Invoke(this,
                                        new classSampleProgressEventArgs(
@@ -795,7 +795,7 @@ namespace LcmsNet.Method
                 {
                     var EVENT_ADJUST = 1;
                     var currentEventNumber = currentEvent[columnID] + EVENT_ADJUST <
-                                             samples[columnID].LCMethod.Events.Count
+                                             samples[columnID].ActualLCMethod.Events.Count
                         ? currentEvent[columnID] + EVENT_ADJUST
                         : currentEvent[columnID];
                     // we use currentEvent[columnID] + EVENT_ADJUST here as the scheduler still thinks we're on the old event.
@@ -804,10 +804,10 @@ namespace LcmsNet.Method
                         string.Format(
                             "Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
                             columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
-                            samples[columnID].LCMethod.Name,
+                            samples[columnID].ActualLCMethod.Name,
                             samples[columnID].DmsData.DatasetName,
-                            samples[columnID].LCMethod.Events[currentEventNumber].Name,
-                            samples[columnID].LCMethod.Events[currentEventNumber].Device.Name,
+                            samples[columnID].ActualLCMethod.Events[currentEventNumber].Name,
+                            samples[columnID].ActualLCMethod.Events[currentEventNumber].Device.Name,
                             stackTrace));
 
                     m_sampleQueue.CancelRunningSample(samples[columnID], true);

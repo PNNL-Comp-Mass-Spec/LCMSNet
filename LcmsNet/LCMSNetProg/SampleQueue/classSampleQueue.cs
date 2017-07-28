@@ -1771,24 +1771,24 @@ namespace LcmsNet.SampleQueue
 
                 sample.CloneLCMethod();
 
-                if (sample.LCMethod == null)
+                if (sample.ActualLCMethod == null)
                 {
                     classApplicationLogger.LogError(0, "LCMethod.Clone() returned a null method in StartSamples");
                     continue;
                 }
 
                 // validSamples.Add(sample);
-                sample.LCMethod.SetStartTime(next);
+                sample.ActualLCMethod.SetStartTime(next);
 
                 // We need to look for Daylight Savings Time Transitions and adjust for them here.
-                if (TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(sample.LCMethod.Start,
-                    sample.LCMethod.End))
+                if (TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(sample.ActualLCMethod.Start,
+                    sample.ActualLCMethod.End))
                 {
                     classApplicationLogger.LogMessage(
                         classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                         "QUEUE: some samples have been moved forward 1 hour due to a Daylight Savings Transition, this will avoid odd behavior while running the queue.");
 
-                    sample.LCMethod.SetStartTime(next.Add(new TimeSpan(1, 0, 0)));
+                    sample.ActualLCMethod.SetStartTime(next.Add(new TimeSpan(1, 0, 0)));
                 }
             }
 
@@ -1864,7 +1864,7 @@ namespace LcmsNet.SampleQueue
 
                 realSample.CloneLCMethod();
 
-                if (realSample.LCMethod == null)
+                if (realSample.ActualLCMethod == null)
                 {
                     classApplicationLogger.LogError(0, "LCMethod.Clone() returned a null method in MoveSamplesToRunningQueue");
                     continue;
@@ -1878,7 +1878,7 @@ namespace LcmsNet.SampleQueue
                     Debug.WriteLine("Optimizing sample against running queue.");
                     // We arent the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
-                    realSample.LCMethod.SetStartTime(next);
+                    realSample.ActualLCMethod.SetStartTime(next);
                     optimizer.AlignSamples(m_runningQueue, realSample);
                 }
                 else if (m_runningQueue.Count == 0)
@@ -1886,7 +1886,7 @@ namespace LcmsNet.SampleQueue
                     Debug.WriteLine("Setting sample start time as it is first in running queue.");
                     // Otherwise we are the first ones on the queue, but we don't need to do anything
                     // for alignment.
-                    realSample.LCMethod.SetStartTime(next);
+                    realSample.ActualLCMethod.SetStartTime(next);
                 }
                 m_runningQueue.Add(realSample);
             }

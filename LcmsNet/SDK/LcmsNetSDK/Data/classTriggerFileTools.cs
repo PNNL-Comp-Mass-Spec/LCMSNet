@@ -102,8 +102,8 @@ namespace LcmsNetDataClasses.Data
             AddParam(rootElement, "EMSL Proposal ID", proposal);
             AddParam(rootElement, "EMSL Usage Type", usage);
             AddParam(rootElement, "EMSL Users List", userList);
-            AddParam(rootElement, "Run Start", sample.LCMethod.ActualStart.ToString("MM/dd/yyyy HH:mm:ss"));
-            AddParam(rootElement, "Run Finish", sample.LCMethod.ActualEnd.ToString("MM/dd/yyyy HH:mm:ss"));
+            AddParam(rootElement, "Run Start", sample.ActualLCMethod.ActualStart.ToString("MM/dd/yyyy HH:mm:ss"));
+            AddParam(rootElement, "Run Finish", sample.ActualLCMethod.ActualEnd.ToString("MM/dd/yyyy HH:mm:ss"));
             // Removed to fix date comparison problems during DMS data import
             //AddParam(rootElement, "Run Finish UTC",   ConvertTimeLocalToUtc(sample.LCMethod.ActualEnd));
         }

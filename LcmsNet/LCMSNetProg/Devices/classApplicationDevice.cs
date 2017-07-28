@@ -70,7 +70,7 @@ namespace LcmsNet.Devices
                 classApplicationLogger.LogError(0, "Could not write the LC Method file.");
             }
 
-            sampleData.LCMethod.ActualEnd = TimeKeeper.Instance.Now;
+            sampleData.ActualLCMethod.ActualEnd = TimeKeeper.Instance.Now;
 
             try
             {

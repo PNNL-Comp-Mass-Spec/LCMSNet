@@ -52,12 +52,13 @@ namespace LcmsNet.Method.ViewModels
             var methods = new List<classLCMethod>();
             foreach (var sample in samples)
             {
-                if (sample?.LCMethod == null)
+                sample.CloneLCMethod();
+
+                if (sample?.ActualLCMethod == null)
                     continue;
 
-                // Clone this, so we don't have multiple copies competing for the same times, methods, etc.
-                sample.CloneLCMethod();
-                methods.Add(sample.LCMethod);
+                // Use the "Actual LC Method", so we don't have multiple copies competing for the same times, methods, etc.
+                methods.Add(sample.ActualLCMethod);
             }
 
             if (methods.Count > 0)

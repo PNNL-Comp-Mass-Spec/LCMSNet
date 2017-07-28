@@ -778,7 +778,7 @@ namespace LcmsNet
             switch (args.ProgressType)
             {
                 case enumSampleProgress.RunningNextEvent:
-                    lcMethod = sample.LCMethod;
+                    lcMethod = sample.ActualLCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
                         sample.ColumnData.ID + 1,
@@ -789,7 +789,7 @@ namespace LcmsNet
                     break;
                 case enumSampleProgress.Error:
                     message = "";
-                    lcMethod = sample.LCMethod;
+                    lcMethod = sample.ActualLCMethod;
                     var eventNumber = lcMethod.CurrentEventNumber;
                     if (eventNumber < lcMethod.Events.Count && eventNumber > -1)
                     {
@@ -801,7 +801,7 @@ namespace LcmsNet
                     isError = true;
                     break;
                 case enumSampleProgress.Stopped:
-                    lcMethod = sample.LCMethod;
+                    lcMethod = sample.ActualLCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Empty;
                     SampleProgressVm.UpdateError(sample, lcEvent);

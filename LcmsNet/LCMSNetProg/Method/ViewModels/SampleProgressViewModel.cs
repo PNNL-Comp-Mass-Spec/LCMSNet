@@ -68,7 +68,7 @@ namespace LcmsNet.Method.ViewModels
             }
 
             var columnID = sample.ColumnData.ID;
-            if (sample.LCMethod.IsSpecialMethod)
+            if (sample.ActualLCMethod.IsSpecialMethod)
             {
                 columnID = CONST_TOTAL_COLUMNS;
             }
@@ -89,7 +89,7 @@ namespace LcmsNet.Method.ViewModels
             if (sample != null)
             {
                 var columnID = sample.ColumnData.ID;
-                if (sample.LCMethod.IsSpecialMethod)
+                if (sample.ActualLCMethod.IsSpecialMethod)
                 {
                     columnID = CONST_TOTAL_COLUMNS;
                 }
@@ -149,10 +149,10 @@ namespace LcmsNet.Method.ViewModels
                     {
                         if (data != null)
                         {
-                            if (minTime.CompareTo(data.LCMethod.Start) > 0)
-                                minTime = data.LCMethod.Start;
-                            if (maxTime.CompareTo(data.LCMethod.End) < 0)
-                                maxTime = data.LCMethod.End;
+                            if (minTime.CompareTo(data.ActualLCMethod.Start) > 0)
+                                minTime = data.ActualLCMethod.Start;
+                            if (maxTime.CompareTo(data.ActualLCMethod.End) < 0)
+                                maxTime = data.ActualLCMethod.End;
                         }
                     }
 

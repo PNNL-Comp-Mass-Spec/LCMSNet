@@ -77,14 +77,14 @@ namespace LcmsNetDataClasses.Logging
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',");
-                var eventIndx = args.Sample.LCMethod.CurrentEventNumber;
-                if (eventIndx < 0 || eventIndx >= args.Sample.LCMethod.Events.Count)
+                var eventIndx = args.Sample.ActualLCMethod.CurrentEventNumber;
+                if (eventIndx < 0 || eventIndx >= args.Sample.ActualLCMethod.Events.Count)
                 {
                     sqlCmdBlder.Append("'',");
                 }
                 else
                 {
-                    sqlCmdBlder.Append("'" + args.Sample.LCMethod.Events[eventIndx].Device.Name + "',");
+                    sqlCmdBlder.Append("'" + args.Sample.ActualLCMethod.Events[eventIndx].Device.Name + "',");
                 }
             }
             else
@@ -125,11 +125,11 @@ namespace LcmsNetDataClasses.Logging
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',"); // Add column here
-                if (args.Sample.LCMethod.CurrentEventNumber >= 0)
+                if (args.Sample.ActualLCMethod.CurrentEventNumber >= 0)
                 {
-                    if (args.Sample.LCMethod.Events.Count > 0)
+                    if (args.Sample.ActualLCMethod.Events.Count > 0)
                         sqlCmdBlder.Append("'" +
-                                           args.Sample.LCMethod.Events[args.Sample.LCMethod.CurrentEventNumber].Device
+                                           args.Sample.ActualLCMethod.Events[args.Sample.ActualLCMethod.CurrentEventNumber].Device
                                                .Name + "',");
                     else
                         sqlCmdBlder.Append("'No events',");

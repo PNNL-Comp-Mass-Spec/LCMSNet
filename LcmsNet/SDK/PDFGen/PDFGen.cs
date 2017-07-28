@@ -94,7 +94,7 @@ namespace PDFGenerator
             doc.AddPageBreak();
             //fluidics design section
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Method");
-            doc.AddParagraph("Method Name: " + sample.LCMethod.Name);
+            doc.AddParagraph("Method Name: " + sample.ActualLCMethod.Name);
             doc.AddParagraph(""); // adds an empty line
             doc.AddParagraph(CreateLCMethodString(sample));
             //TODO pump method info
@@ -172,7 +172,7 @@ namespace PDFGenerator
             string[]  row = {"Device", "Event Name", "Duration", "HadError"};
             var lcMethodString = FormatString(fieldWidths, row);
 
-            foreach (var lcEvent in sample.LCMethod.Events)
+            foreach (var lcEvent in sample.ActualLCMethod.Events)
             {
                 var deviceName = lcEvent.Device.Name;
                 var deviceNameLength = lcEvent.Device.Name.Length;
@@ -239,16 +239,16 @@ namespace PDFGenerator
             string[] rid = {"Request Id:", sample.DmsData.RequestID.ToString()};
             var requestIdString = FormatString(FieldWidths, rid);
 
-            string[] sTime = {"Start Time:", sample.LCMethod.Start.ToLongTimeString() + " " + sample.LCMethod.Start.ToLongDateString()};
+            string[] sTime = {"Start Time:", sample.ActualLCMethod.Start.ToLongTimeString() + " " + sample.ActualLCMethod.Start.ToLongDateString()};
             var startFormatted = FormatString(FieldWidths, sTime);
 
-            string[] eTime = {"End Time:", sample.LCMethod.End.ToLongTimeString() + " " + sample.LCMethod.End.ToLongDateString()};
+            string[] eTime = {"End Time:", sample.ActualLCMethod.End.ToLongTimeString() + " " + sample.ActualLCMethod.End.ToLongDateString()};
             var endFormatted = FormatString(FieldWidths, eTime);
 
             string[] cd = { "Column:", sample.ColumnData.Name };
             var columnString = FormatString(FieldWidths, cd);
 
-            string[] lcm = { "LCMethod:", sample.LCMethod.Name };
+            string[] lcm = { "LCMethod:", sample.ActualLCMethod.Name };
             var LCMethodString = FormatString(FieldWidths, lcm);
 
             string[] pt = { "PAL Tray:", sample.PAL.PALTray };

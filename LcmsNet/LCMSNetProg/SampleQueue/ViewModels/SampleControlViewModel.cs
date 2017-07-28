@@ -385,7 +385,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 foreach (var data in samples)
                 {
-                    data.LCMethod.SetStartTime(TimeKeeper.Instance.Now);
+                    data.ActualLCMethod.SetStartTime(TimeKeeper.Instance.Now);
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)));
                 }
 

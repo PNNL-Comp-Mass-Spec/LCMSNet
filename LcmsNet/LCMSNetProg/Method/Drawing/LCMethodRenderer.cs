@@ -591,7 +591,7 @@ namespace LcmsNet.Method.Drawing
             foreach (var sample in samples)
             {
                 if (sample != null)
-                    methods.Add(sample.LCMethod);
+                    methods.Add(sample.ActualLCMethod);
             }
 
             RenderLCMethod(graphics, bounds, methods, startTime, duration, colorMap, progress);

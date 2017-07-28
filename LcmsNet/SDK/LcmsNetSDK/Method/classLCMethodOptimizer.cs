@@ -361,8 +361,8 @@ namespace LcmsNet.Method
             var methods = new List<classLCMethod>();
             foreach (var sample in samples)
             {
-                if (sample.LCMethod != null)
-                    methods.Add(sample.LCMethod);
+                if (sample.ActualLCMethod != null)
+                    methods.Add(sample.ActualLCMethod);
             }
 
             // 
@@ -386,8 +386,8 @@ namespace LcmsNet.Method
             var methods = new List<classLCMethod>();
             foreach (var sample in baselineSamples)
             {
-                if (sample.LCMethod != null)
-                    methods.Add(sample.LCMethod);
+                if (sample.ActualLCMethod != null)
+                    methods.Add(sample.ActualLCMethod);
             }
 
             // 
@@ -395,7 +395,7 @@ namespace LcmsNet.Method
             // 
             if (methods.Count < 1)
                 return true;
-            var done = AlignMethods(methods, aligneeSample.LCMethod);
+            var done = AlignMethods(methods, aligneeSample.ActualLCMethod);
             //PrintAlignedMethods(methods, aligneeSample.LCMethod);
             return done;
         }
