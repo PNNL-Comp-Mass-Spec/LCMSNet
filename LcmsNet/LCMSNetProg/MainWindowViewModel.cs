@@ -139,9 +139,10 @@ namespace LcmsNet
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                // Ignore errors here
+                MessageBox.Show("Warning: Exception occurred saving data to cache. Exception Message: \"" + e.Message + "\". See log for more details.");
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error occurred when saving queue to cache!", e);
             }
 
             //TODO: Check to see if things shutdown.
@@ -736,7 +737,7 @@ namespace LcmsNet
         }
 
         /// <summary>
-        /// Handles displaying an error mesasge when notified LCMS.
+        /// Handles displaying an error message when notified LCMS.
         /// </summary>
         /// <param name="errorLevel"></param>
         /// <param name="args"></param>
