@@ -72,6 +72,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x => this.SetRowColors());
 
+            this.WhenAnyValue(x => x.Sample.ActualLCMethod, x => x.Sample.ActualLCMethod.Start, x => x.Sample.ActualLCMethod.End,
+                x => x.Sample.ActualLCMethod.ActualStart, x => x.Sample.ActualLCMethod.ActualEnd).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceToolTipText)));
+
             // Extras to trigger the collection monitor when nested properties change
             this.WhenAnyValue(x => x.Sample.DmsData.Block, x => x.Sample.DmsData.RunOrder, x => x.Sample.DmsData.Batch,
                     x => x.Sample.DmsData.CartConfigName, x => x.Sample.DmsData.DatasetType, x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
@@ -254,6 +257,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         #region ToolTips
 
         private string requestNameToolTipText = "";
+        private string sequenceToolTipFormat = null;
 
         /// <summary>
         /// Tool tip text displaying status details
@@ -267,6 +271,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     case enumSampleRunningStatus.Complete:
                         statusMessage = "The sample ran successfully.";
+                        SequenceToolTipFormat = "Started: {2}\nFinished: {3}";
                         break;
                     case enumSampleRunningStatus.Error:
                         if (Sample.DmsData.Block > 0)
@@ -292,12 +297,15 @@ namespace LcmsNet.SampleQueue.ViewModels
                         break;
                     case enumSampleRunningStatus.Queued:
                         statusMessage = "The sample is queued but not scheduled to run.";
+                        SequenceToolTipFormat = null;
                         break;
                     case enumSampleRunningStatus.Running:
                         statusMessage = "The sample is running.";
+                        SequenceToolTipFormat = "Started: {2}\nEstimated End: {1}";
                         break;
                     case enumSampleRunningStatus.WaitingToRun:
                         statusMessage = "The sample is scheduled to run and waiting.";
+                        SequenceToolTipFormat = "Estimated Start: {0}\nEstimated End: {1}";
                         break;
                     default:
                         // Should never get here
@@ -315,6 +323,28 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             get { return requestNameToolTipText; }
             private set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
+        }
+
+        public string SequenceToolTipText
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(SequenceToolTipFormat))
+                {
+                    return string.Format(SequenceToolTipFormat, Sample.ActualLCMethod.Start, Sample.ActualLCMethod.End, Sample.ActualLCMethod.ActualStart, Sample.ActualLCMethod.ActualEnd);
+                }
+                return null;
+            }
+        }
+
+        private string SequenceToolTipFormat
+        {
+            get { return sequenceToolTipFormat; }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref sequenceToolTipFormat, value);
+                this.RaisePropertyChanged(nameof(SequenceToolTipText));
+            }
         }
 
         #endregion

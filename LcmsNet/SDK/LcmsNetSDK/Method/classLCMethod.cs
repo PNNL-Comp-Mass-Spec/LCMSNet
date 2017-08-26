@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using LcmsNetSDK;
 
 namespace LcmsNetDataClasses.Method
 {
@@ -9,7 +12,7 @@ namespace LcmsNetDataClasses.Method
     /// A method is a collection of LC-Events that define physical actions used to pipeline the control in an experiment.
     /// </summary>
     [Serializable]
-    public class classLCMethod : classDataClassBase, ICloneable, IEquatable<classLCMethod>
+    public class classLCMethod : classDataClassBase, ICloneable, IEquatable<classLCMethod>, INotifyPropertyChangedExt
     {
         /// <summary>
         /// Sample method key name.
@@ -76,6 +79,16 @@ namespace LcmsNetDataClasses.Method
         /// </summary>
         private DateTime mdate_end;
 
+        /// <summary>
+        /// Actual start time of the method
+        /// </summary>
+        [NonSerialized] private DateTime actualStart;
+
+        /// <summary>
+        /// Actual end time of the method
+        /// </summary>
+        [NonSerialized] private DateTime actualEnd;
+
         #endregion
 
         #region Properties
@@ -138,12 +151,20 @@ namespace LcmsNetDataClasses.Method
         /// <summary>
         /// Gets the actual start of the sample.
         /// </summary>
-        public DateTime ActualStart { get; set; }
+        public DateTime ActualStart
+        {
+            get { return actualStart; }
+            set { this.RaiseAndSetIfChanged(ref actualStart, value); }
+        }
 
         /// <summary>
         /// Gets the actual end time of the sample.
         /// </summary>
-        public DateTime ActualEnd { get; set; }
+        public DateTime ActualEnd
+        {
+            get { return actualEnd; }
+            set { this.RaiseAndSetIfChanged(ref actualEnd, value); }
+        }
 
         /// <summary>
         /// Gets the actual duration of the experiment that was run.
@@ -229,6 +250,8 @@ namespace LcmsNetDataClasses.Method
             {
                 mspan_duration = Events[Events.Count - 1].End.Subtract(mtime_start);
             }
+            OnPropertyChanged(nameof(Start));
+            OnPropertyChanged(nameof(End));
             //System.Diagnostics.Debug.WriteLine(string.Format("Method {0} start time: {1} end time {2}", this.Name, start, this.End));
         }
 
@@ -324,6 +347,20 @@ namespace LcmsNetDataClasses.Method
 
         #endregion
 
+        #region "INotifyPropertyChanged implementation"
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        #region "IEquatable Implementation"
+
         public bool Equals(classLCMethod other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -356,5 +393,7 @@ namespace LcmsNetDataClasses.Method
                 return hashCode;
             }
         }
+
+        #endregion
     }
 }

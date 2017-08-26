@@ -76,6 +76,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}" >
                             <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="ToolTip" Value="{Binding SequenceToolTipText}" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>

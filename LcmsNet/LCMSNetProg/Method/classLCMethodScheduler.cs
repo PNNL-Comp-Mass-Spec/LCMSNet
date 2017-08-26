@@ -839,18 +839,15 @@ namespace LcmsNet.Method
                     Print(mm, CONST_VERBOSE_LEAST, null, samples[columnID]);
                     sampleEndTime[columnID] = DateTime.MinValue;
                     currentEvent[columnID] = CONST_IDLE_FLAG;
-                    SampleProgress?.Invoke(this,
-    new classSampleProgressEventArgs(
-        "LC-Method Completed",
-        samples[columnID],
-        enumSampleProgress.Complete));
+                    SampleProgress?.Invoke(this, new classSampleProgressEventArgs("LC-Method Completed",
+                                                                                  samples[columnID],
+                                                                                  enumSampleProgress.Complete));
                     m_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
                     //
                     // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
                     // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
                     //
-                    ThreadPool.QueueUserWorkItem(WriteCompletedSampleInformation,
-                        m_columnThreads[columnID].Sample);
+                    ThreadPool.QueueUserWorkItem(WriteCompletedSampleInformation, m_columnThreads[columnID].Sample);
                     samples[columnID] = null;
                 }
             }

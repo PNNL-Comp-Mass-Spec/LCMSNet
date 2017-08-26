@@ -375,7 +375,11 @@ namespace LcmsNetDataClasses
         public classLCMethod ActualLCMethod
         {
             get { return m_actualMethod; }
-            private set { m_actualMethod = value; }
+            private set
+            {
+                m_actualMethod = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>

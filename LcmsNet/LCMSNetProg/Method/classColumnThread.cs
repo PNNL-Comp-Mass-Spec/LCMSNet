@@ -306,6 +306,12 @@ namespace LcmsNet.Method
                 throw new classColumnException(m_columnId, columnEx);
             }
 
+            if (method.ActualEnd > TimeKeeper.Instance.Now)
+            {
+                // Set the actual end time
+                method.ActualEnd = TimeKeeper.Instance.Now;
+            }
+
             //We may have finished the method, but if we were told to cancel between the time
             //we started the last event and now, we still have to die. Otherwise, we could cause
             //null reference exceptions in the scheduler due to how we have to handle the cancellation
