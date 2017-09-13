@@ -19,9 +19,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The Labjack's ID. Defaults to 0.
         /// </summary>
-        private int m_localID;
-        private float m_firmwareVersion;
-        private float m_driverVersion;
+        private int localID;
 
         private const char CONST_ANALOGPREFIX_1 = 'A';
         private const char CONST_ANALOGPREFIX_2 = 'O';
@@ -29,6 +27,10 @@ namespace LcmsNet.Devices.ContactClosure
         private const char CONST_DIGITALPREFIX = 'D';
         private const char CONST_IOPREFIX_1 = 'I';
         private const char CONST_IOPREFIX_2 = 'O';
+        private const string CONST_ANALOG_O_PREFIX = "AO";
+        private const string CONST_ANALOG_I_PREFIX = "AI";
+        private const string CONST_DIGITAL_PREFIX = "D";
+        private const string CONST_IO_PREFIX = "IO";
         private const int CONST_ERROR_INVALIDINPUT = 40;
 
         #endregion
@@ -40,9 +42,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         public classLabjackU12()
         {
-            m_localID = 0;
-            m_firmwareVersion = 0;
-            m_driverVersion = 0;
+            localID = 0;
+            FirmwareVersion = 0;
+            DriverVersion = 0;
         }
 
         /// <summary>
@@ -51,9 +53,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="labjackID">The labjack's local ID</param>
         public classLabjackU12(int labjackID)
         {
-            m_localID = labjackID;
-            m_firmwareVersion = 0;
-            m_driverVersion = 0;
+            localID = labjackID;
+            FirmwareVersion = 0;
+            DriverVersion = 0;
         }
 
         #endregion
@@ -66,25 +68,19 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         public int LocalID
         {
-            get
-            {
-                return m_localID;
-            }
-            set
-            {
-                m_localID = value;
-            }
+            get { return localID; }
+            set { localID = value; }
         }
 
         /// <summary>
         /// Gets the firmware version, as set by the getFirmwareVersion() function
         /// </summary>
-        public float FirmwareVersion => m_firmwareVersion;
+        public float FirmwareVersion { get; private set; }
 
         /// <summary>
         /// Gets the driver version, as set by the getDriverVersion() function
         /// </summary>
-        public float DriverVersion => m_driverVersion;
+        public float DriverVersion { get; private set; }
 
         #endregion
 
@@ -103,21 +99,27 @@ namespace LcmsNet.Devices.ContactClosure
 
             // Determine which type of port we are writing to
             // AO, D, or IO
-            if (portName[0] == CONST_ANALOGPREFIX_1 && portName[1] == CONST_ANALOGPREFIX_2)
+            //if (portName[0] == CONST_ANALOGPREFIX_1 && portName[1] == CONST_ANALOGPREFIX_2)
+            if (portName.StartsWith(CONST_ANALOG_O_PREFIX))
             {
                 // AO = Analog
-                WriteAnalog(portName[2]-'0', (float)value);
+                WriteAnalog(channel, (float)value);
+                //WriteAnalog(portName[2]-'0', (float)value);
                 //              ^-Finds the distance from '0' char (converts int to char)
             }
-            else if (portName[0] == CONST_DIGITALPREFIX)
+            //else if (portName[0] == CONST_DIGITALPREFIX)
+            else if (portName.StartsWith(CONST_DIGITAL_PREFIX))
             {
                 // D = Digital
-                WriteDigital(portName[1]-'0', (int)value);
+                WriteDigital(channel, (int)value);
+                //WriteDigital(portName[1]-'0', (int)value);
             }
-            else if (portName[0] == CONST_IOPREFIX_1 && portName[1] == CONST_IOPREFIX_2)
+            //else if (portName[0] == CONST_IOPREFIX_1 && portName[1] == CONST_IOPREFIX_2)
+            else if (portName.StartsWith(CONST_IO_PREFIX))
             {
                 // IO = Digital on top of labjack
-                WriteIO(portName[2] - '0', (int)value);
+                WriteIO(channel, (int) value);
+                //WriteIO(portName[2] - '0', (int)value);
             }
         }
 
@@ -136,38 +138,55 @@ namespace LcmsNet.Devices.ContactClosure
 
             // Determine which type of port we are reading from
             // AI, D, or IO
-            if (portName[0] == CONST_ANALOGPREFIX_1 && portName[1] == CONST_ANALOGPREFIX_3)
+            //if (portName[0] == CONST_ANALOGPREFIX_1 && portName[1] == CONST_ANALOGPREFIX_3)
+            if (portName.StartsWith(CONST_ANALOG_I_PREFIX))
             {
                 // AI = Analog
-                return (ReadAnalog(portName[2] - '0'));
+                return ReadAnalog(channel);
+                //return (ReadAnalog(portName[2] - '0'));
             }
 
-            if (portName[0] == CONST_DIGITALPREFIX)
+            //if (portName[0] == CONST_DIGITALPREFIX)
+            if (portName.StartsWith(CONST_DIGITAL_PREFIX))
             {
                 // D = Digital
-                return (ReadDigital(portName[1] - '0'));
+                return ReadDigital(channel);
+                //return (ReadDigital(portName[1] - '0'));
             }
 
-            if (portName[0] == CONST_IOPREFIX_1 && portName[1] == CONST_IOPREFIX_2)
+            //if (portName[0] == CONST_IOPREFIX_1 && portName[1] == CONST_IOPREFIX_2)
+            if (portName.StartsWith(CONST_IO_PREFIX))
             {
                 // IO = Digital on top of labjack
-                return (ReadIO(portName[2] - '0'));
+                return ReadIO(channel);
+                //return (ReadIO(portName[2] - '0'));
             }
 
             return -1;
         }
 
         /// <summary>
+        /// Reads the current voltage on an analog input port (AI0-AI7)
+        /// </summary>
+        /// <param name="port">The port to read from (</param>
+        /// <returns>channel voltage</returns>
+        private float ReadAnalog(enumLabjackU12InputPorts port)
+        {
+            var channel = int.Parse(port.ToString().Replace(CONST_ANALOG_I_PREFIX, ""));
+            return ReadAnalog(channel);
+        }
+
+        /// <summary>
         /// Reads the current voltage on an analog input channel (AI0-AI7)
         /// </summary>
         /// <param name="channel">The channel number to read</param>
-        /// <returns></returns>
+        /// <returns>channel voltage</returns>
         private float ReadAnalog(int channel)
-        {            
+        {
             var overVoltage = 0;
             var voltage = 0.0f;
 
-            var result = lj.LabJack.EAnalogIn(ref m_localID, 0, channel, 0, ref overVoltage, ref voltage);
+            var result = lj.LabJack.EAnalogIn(ref localID, 0, channel, 0, ref overVoltage, ref voltage);
             if (result != 0)
             {
 
@@ -175,6 +194,18 @@ namespace LcmsNet.Devices.ContactClosure
                 ThrowErrorMessage("Error reading analog input.  "  + error, result);
             }
             return voltage;
+        }
+
+        /// <summary>
+        /// Writes a voltage to an analog output channel (AO0 or AO1)
+        /// </summary>
+        /// <param name="port">The port to write to</param>
+        /// <param name="voltage">The voltage to write</param>
+        /// <returns>The error message, if applicable</returns>
+        private int WriteAnalog(enumLabjackU12OutputPorts port, float voltage)
+        {
+            var channel = int.Parse(port.ToString().Replace(CONST_ANALOG_O_PREFIX, ""));
+            return WriteAnalog(channel, voltage);
         }
 
         /// <summary>
@@ -189,11 +220,11 @@ namespace LcmsNet.Devices.ContactClosure
 
             if (channel == 0)
             {
-                result = lj.LabJack.EAnalogOut(ref m_localID, 0, voltage, 0.0f);
+                result = lj.LabJack.EAnalogOut(ref localID, 0, voltage, 0.0f);
             }
             else if (channel == 1)
             {
-                result = lj.LabJack.EAnalogOut(ref m_localID, 0, 0.0f, voltage);
+                result = lj.LabJack.EAnalogOut(ref localID, 0, 0.0f, voltage);
             }
             else
             {
@@ -201,15 +232,23 @@ namespace LcmsNet.Devices.ContactClosure
             }
 
             if (result != 0)
-            {                
+            {
                 var error = GetErrorString(result);
                 ThrowErrorMessage("Error writing analog output.  " + error, result);
             }
 
             return result;
+        }
 
-
-            
+        /// <summary>
+        /// Reads the current state of one of the digital ports
+        /// </summary>
+        /// <param name="port">The port to read from (</param>
+        /// <returns>The state of the channel</returns>
+        private int ReadDigital(enumLabjackU12InputPorts port)
+        {
+            var channel = int.Parse(port.ToString().Replace(CONST_DIGITAL_PREFIX, ""));
+            return ReadDigital(channel);
         }
 
         /// <summary>
@@ -218,16 +257,27 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="channel">The channel to read from (</param>
         /// <returns>The state of the channel</returns>
         private int ReadDigital(int channel)
-        {            
+        {
             var state = 0;
 
-            var result = lj.LabJack.EDigitalIn(ref m_localID, 0, channel, 1, ref state);
+            var result = lj.LabJack.EDigitalIn(ref localID, 0, channel, 1, ref state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading digital input.  " + error, result);
             }
             return state;
+        }
+
+        /// <summary>
+        /// Reads the current state of one of the IO ports
+        /// </summary>
+        /// <param name="port">The port to read from (</param>
+        /// <returns>The state of the channel</returns>
+        private int ReadIO(enumLabjackU12InputPorts port)
+        {
+            var channel = int.Parse(port.ToString().Replace(CONST_IO_PREFIX, ""));
+            return ReadIO(channel);
         }
 
         /// <summary>
@@ -239,7 +289,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             var state = 0;
 
-            var result = lj.LabJack.EDigitalIn(ref m_localID, 0, channel, 0, ref state);
+            var result = lj.LabJack.EDigitalIn(ref localID, 0, channel, 0, ref state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -250,6 +300,18 @@ namespace LcmsNet.Devices.ContactClosure
         }
 
         /// <summary>
+        /// Writes a state to an digital port (digital on top)
+        /// </summary>
+        /// <param name="port">The port to write to</param>
+        /// <param name="state">The state (0/1)</param>
+        /// <returns>The error message, if applicable</returns>
+        private int WriteDigital(enumLabjackU12OutputPorts port, int state)
+        {
+            var channel = int.Parse(port.ToString().Replace(CONST_DIGITAL_PREFIX, ""));
+            return WriteDigital(channel, state);
+        }
+
+        /// <summary>
         /// Writes a state to a digital channel
         /// </summary>
         /// <param name="channel">The channel to write to</param>
@@ -257,13 +319,25 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteDigital(int channel, int state)
         {
-            var result = lj.LabJack.EDigitalOut(ref m_localID, 0, channel, 1, state);
+            var result = lj.LabJack.EDigitalOut(ref localID, 0, channel, 1, state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
                 ThrowErrorMessage("Error setting digital output.  " + error, result);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Writes a state to an IO port (digital on top)
+        /// </summary>
+        /// <param name="port">The port to write to</param>
+        /// <param name="state">The state (0/1)</param>
+        /// <returns>The error message, if applicable</returns>
+        private int WriteIO(enumLabjackU12OutputPorts port, int state)
+        {
+            var channel = int.Parse(port.ToString().Replace(CONST_IO_PREFIX, ""));
+            return WriteIO(channel, state);
         }
 
         /// <summary>
@@ -274,7 +348,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteIO(int channel, int state)
         {
-            var result = lj.LabJack.EDigitalOut(ref m_localID, 0, channel, 0, state);
+            var result = lj.LabJack.EDigitalOut(ref localID, 0, channel, 0, state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -290,7 +364,7 @@ namespace LcmsNet.Devices.ContactClosure
         public float GetDriverVersion()
         {
             var tempVersion = lj.LabJack.GetDriverVersion();
-            m_driverVersion = tempVersion;
+            DriverVersion = tempVersion;
             if (Math.Abs(tempVersion) < float.Epsilon)
             {
                 ThrowErrorMessage("Unable to get driver version.", 12);
@@ -316,8 +390,8 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The firmware version, as a float</returns>
         public float GetFirmwareVersion()
         {
-            var tempVersion = lj.LabJack.GetFirmwareVersion(ref m_localID);
-            m_firmwareVersion = tempVersion;
+            var tempVersion = lj.LabJack.GetFirmwareVersion(ref localID);
+            FirmwareVersion = tempVersion;
             return (tempVersion);
         }
 
