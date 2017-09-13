@@ -12,6 +12,7 @@ namespace LcmsNet.Method.ViewModels
             Enum,
             Numeric,
             Text,
+            Boolean,
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace LcmsNet.Method.ViewModels
         public bool ShowComboBox { get { return ParameterType == ParameterTypeEnum.Enum; } }
         public bool ShowNumericUpDown { get { return ParameterType == ParameterTypeEnum.Numeric; } }
         public bool ShowTextBox { get { return ParameterType == ParameterTypeEnum.Text; } }
+        public bool ShowCheckBox { get { return ParameterType == ParameterTypeEnum.Boolean; } }
 
         public event EventHandler EventChanged;
 
@@ -57,6 +59,8 @@ namespace LcmsNet.Method.ViewModels
                         return NumberValue;
                     case ParameterTypeEnum.Text:
                         return TextValue;
+                    case ParameterTypeEnum.Boolean:
+                        return BoolValue;
                 }
                 return null;
             }
@@ -67,6 +71,7 @@ namespace LcmsNet.Method.ViewModels
                     SelectedOption = null;
                     TextValue = null;
                     NumberValue = 0;
+                    BoolValue = false;
                     return;
                 }
                 switch (ParameterType)
@@ -79,6 +84,9 @@ namespace LcmsNet.Method.ViewModels
                         break;
                     case ParameterTypeEnum.Text:
                         TextValue = value.ToString();
+                        break;
+                    case ParameterTypeEnum.Boolean:
+                        BoolValue = Convert.ToBoolean(value);
                         break;
                 }
             }
@@ -216,6 +224,26 @@ namespace LcmsNet.Method.ViewModels
         public double Increment
         {
             get { return 1.0 / Math.Pow(10, DecimalPlaces); }
+        }
+
+        #endregion
+
+        #region CheckBox settings
+
+        private bool boolValue;
+
+        public bool BoolValue
+        {
+            get { return boolValue; }
+            set
+            {
+                var oldValue = boolValue;
+                this.RaiseAndSetIfChanged(ref boolValue, value);
+                if (!Equals(oldValue, boolValue))
+                {
+                    OnEventChanged();
+                }
+            }
         }
 
         #endregion

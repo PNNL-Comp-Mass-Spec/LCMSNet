@@ -17,10 +17,11 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Content="{Binding ParameterLabel}" />
-        <ComboBox Grid.Column="1" Margin="3" SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboBoxOptions}" Visibility="{Binding ShowComboBox, Converter={StaticResource BoolToVis}}" />
-        <TextBox Grid.Column="1" Margin="3" MinWidth="100" Text="{Binding TextValue}" Visibility="{Binding ShowTextBox, Converter={StaticResource BoolToVis}}" />
-        <xctk:DoubleUpDown Grid.Column="1" Margin="3" Width="100" Increment="{Binding Increment}" Minimum="{Binding NumberMinimum}" Maximum="{Binding NumberMaximum}" Value="{Binding NumberValue}" FormatString="{Binding NumberFormat}" Visibility="{Binding ShowNumericUpDown, Converter={StaticResource BoolToVis}}" />
-        <Button Grid.Column="2" Margin="3" Width="32" x:Name="ConversionButton" Content=".." Click="ConversionButton_OnClick" Visibility="{Binding ShowNumericUpDown, Converter={StaticResource BoolToVis}}" />
+        <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding ParameterLabel}" />
+        <ComboBox Grid.Column="1" Margin="3" VerticalAlignment="Center" SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboBoxOptions}" Visibility="{Binding ShowComboBox, Converter={StaticResource BoolToVis}}" />
+        <TextBox Grid.Column="1" Margin="3" MinWidth="100" VerticalAlignment="Center" Text="{Binding TextValue}" Visibility="{Binding ShowTextBox, Converter={StaticResource BoolToVis}}" />
+        <xctk:DoubleUpDown Grid.Column="1" Margin="3" Width="100" VerticalAlignment="Center" Increment="{Binding Increment}" Minimum="{Binding NumberMinimum}" Maximum="{Binding NumberMaximum}" Value="{Binding NumberValue}" FormatString="{Binding NumberFormat}" Visibility="{Binding ShowNumericUpDown, Converter={StaticResource BoolToVis}}" />
+        <Button Grid.Column="2" Margin="3" Width="32" VerticalAlignment="Center" x:Name="ConversionButton" Content=".." Click="ConversionButton_OnClick" Visibility="{Binding ShowNumericUpDown, Converter={StaticResource BoolToVis}}" />
+        <CheckBox Grid.Column="1" Margin="3,3" MinWidth="20" VerticalAlignment="Center" IsChecked="{Binding BoolValue}" Visibility="{Binding ShowCheckBox, Converter={StaticResource BoolToVis}}" />
     </Grid>
 </UserControl>

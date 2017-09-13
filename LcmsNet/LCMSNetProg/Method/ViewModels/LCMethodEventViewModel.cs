@@ -757,6 +757,10 @@ namespace LcmsNet.Method.ViewModels
             {
                 control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Text);
             }
+            else if (typeof(bool) == t)
+            {
+                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Boolean);
+            }
 
             return control;
         }
