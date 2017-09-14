@@ -65,6 +65,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadU12.cs" />
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadU12ViewModel.cs" />
     <Compile Include="Devices\ContactClosure\classContactClosureU12.cs" />
     <Compile Include="Devices\ContactClosure\ContactClosureU12ViewModel.cs" />
     <Compile Include="Devices\NetworkStart\NetStartViewModel.cs" />

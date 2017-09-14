@@ -47,6 +47,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadView.xaml.cs">
+      <DependentUpon>ContactClosureReadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadViewModelBase.cs" />
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadViewModelDummy.cs" />
     <Compile Include="Devices\ContactClosure\ContactClosureView.xaml.cs">
       <DependentUpon>ContactClosureView.xaml</DependentUpon>
     </Compile>
@@ -78,6 +83,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Devices\ContactClosureRead\ContactClosureReadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Devices\ContactClosure\ContactClosureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
