@@ -69,7 +69,7 @@
             <Button Margin="3" Content="Back" Command="{Binding BackCommand}" />
             <Button Margin="3" Content="Step" Command="{Binding StepCommand}" />
         </StackPanel>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding LCMethodEvents}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
