@@ -850,6 +850,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterClean">
+    <ItemGroup>
+      <FilesToDelete Include="$(TargetDir)Plugins\*.*;$(TargetDir)Plugins\x86\*.*;$(TargetDir)Plugins\x64\*.*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+    <RemoveDir Directories="$(TargetDir)\Plugins\x86;$(TargetDir)\Plugins\x64" />
+  </Target>
   <PropertyGroup>
     <PostBuildEvent>rem xcopy /Y /F /D "$(SolutionDir)lib\*" "$(TargetDir)"
 xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
@@ -857,6 +864,8 @@ xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
 if not exist "$(TargetDir)Plugins\" mkdir "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.dll" "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.pdb" "$(TargetDir)Plugins\"
+xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x86\*.dll" "$(TargetDir)Plugins\x86\"
+xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x64\*.dll" "$(TargetDir)Plugins\x64\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"

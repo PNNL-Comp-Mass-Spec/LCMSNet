@@ -8,6 +8,7 @@
 
 using System;
 using System.Text;
+using LabJack;
 
 namespace LcmsNet.Devices.ContactClosure
 {
@@ -186,7 +187,7 @@ namespace LcmsNet.Devices.ContactClosure
             var overVoltage = 0;
             var voltage = 0.0f;
 
-            var result = lj.LabJack.EAnalogIn(ref localID, 0, channel, 0, ref overVoltage, ref voltage);
+            var result = LabJackU12Wrapper.EAnalogIn(ref localID, 0, channel, 0, ref overVoltage, ref voltage);
             if (result != 0)
             {
 
@@ -220,11 +221,11 @@ namespace LcmsNet.Devices.ContactClosure
 
             if (channel == 0)
             {
-                result = lj.LabJack.EAnalogOut(ref localID, 0, voltage, 0.0f);
+                result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, voltage, 0.0f);
             }
             else if (channel == 1)
             {
-                result = lj.LabJack.EAnalogOut(ref localID, 0, 0.0f, voltage);
+                result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, 0.0f, voltage);
             }
             else
             {
@@ -260,7 +261,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             var state = 0;
 
-            var result = lj.LabJack.EDigitalIn(ref localID, 0, channel, 1, ref state);
+            var result = LabJackU12Wrapper.EDigitalIn(ref localID, 0, channel, 1, ref state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -289,7 +290,7 @@ namespace LcmsNet.Devices.ContactClosure
         {
             var state = 0;
 
-            var result = lj.LabJack.EDigitalIn(ref localID, 0, channel, 0, ref state);
+            var result = LabJackU12Wrapper.EDigitalIn(ref localID, 0, channel, 0, ref state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -319,7 +320,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteDigital(int channel, int state)
         {
-            var result = lj.LabJack.EDigitalOut(ref localID, 0, channel, 1, state);
+            var result = LabJackU12Wrapper.EDigitalOut(ref localID, 0, channel, 1, state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -348,7 +349,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The error message, if applicable</returns>
         private int WriteIO(int channel, int state)
         {
-            var result = lj.LabJack.EDigitalOut(ref localID, 0, channel, 0, state);
+            var result = LabJackU12Wrapper.EDigitalOut(ref localID, 0, channel, 0, state);
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -363,7 +364,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The driver version, as a float</returns>
         public float GetDriverVersion()
         {
-            var tempVersion = lj.LabJack.GetDriverVersion();
+            var tempVersion = LabJackU12Wrapper.GetDriverVersion();
             DriverVersion = tempVersion;
             if (Math.Abs(tempVersion) < float.Epsilon)
             {
@@ -380,7 +381,7 @@ namespace LcmsNet.Devices.ContactClosure
         public string GetErrorString(int errorCode)
         {
             var tempBuilder = new StringBuilder(100);
-            lj.LabJack.GetErrorString(errorCode, tempBuilder);
+            LabJackU12Wrapper.GetErrorString(errorCode, tempBuilder);
             return (tempBuilder.ToString());
         }
 
@@ -390,7 +391,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <returns>The firmware version, as a float</returns>
         public float GetFirmwareVersion()
         {
-            var tempVersion = lj.LabJack.GetFirmwareVersion(ref localID);
+            var tempVersion = LabJackU12Wrapper.GetFirmwareVersion(ref localID);
             FirmwareVersion = tempVersion;
             return (tempVersion);
         }
@@ -403,7 +404,7 @@ namespace LcmsNet.Devices.ContactClosure
         private void ThrowErrorMessage(string msg, int errorCode)
         {
             var errorString = new StringBuilder(50);
-            lj.LabJack.GetErrorString(errorCode, errorString);
+            LabJackU12Wrapper.GetErrorString(errorCode, errorString);
             throw new classLabjackU12Exception(msg + ":\r\n\r\n" + errorString);
         }
 

@@ -4,7 +4,7 @@
 **/Installers
 *.suo
 *.lnk
-pluginDLLs/*
+**/pluginDLLs/*
 lcmsnetbuild.txt
 LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.xml
 LcmsNet/SQLiteTools/SQLite/x64
