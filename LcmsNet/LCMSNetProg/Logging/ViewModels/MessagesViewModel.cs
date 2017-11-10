@@ -39,9 +39,8 @@ namespace LcmsNet.Logging.ViewModels
         /// <returns>Formatted string message to display.</returns>
         private string FormatMessage(string message)
         {
-            return string.Format("{0} {1}: {2}",
-                DateTime.UtcNow.Subtract(TimeKeeper.Instance.TimeZone.BaseUtcOffset).ToLongDateString(),
-                DateTime.UtcNow.Subtract(TimeKeeper.Instance.TimeZone.BaseUtcOffset).TimeOfDay,
+            return string.Format("{0:MM/dd/yyyy HH:mm:ss.fff}: {1}",
+                TimeKeeper.Instance.Now,
                 message);
         }
 
