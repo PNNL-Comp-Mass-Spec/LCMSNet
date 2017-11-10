@@ -314,7 +314,7 @@ namespace LcmsNet
             //
             // Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
             //      no instance of the application is running. Otherwise, we exit.
-            // Code adapated from K. Scott Allen's OdeToCode.com at
+            // Code adapted from K. Scott Allen's OdeToCode.com at
             //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
             singleInstanceMutex = new Mutex(false, mutexName);
             if (!singleInstanceMutex.WaitOne(0, false))
@@ -325,7 +325,6 @@ namespace LcmsNet
             }
 
             KillExistingPalProcesses();
-            GC.KeepAlive(singleInstanceMutex);
 
             // Synch to the logger so we can display any messages coming back from the rest of the program and interface.
             classApplicationLogger.Message += classApplicationLogger_Message;
@@ -370,6 +369,8 @@ namespace LcmsNet
 
             main.Show();
             main.Activate();
+
+            GC.KeepAlive(singleInstanceMutex);
         }
 
         private void ShowSplashScreen()
