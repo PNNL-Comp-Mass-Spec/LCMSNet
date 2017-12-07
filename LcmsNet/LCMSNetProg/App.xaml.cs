@@ -317,11 +317,18 @@ namespace LcmsNet
             // Code adapted from K. Scott Allen's OdeToCode.com at
             //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
             singleInstanceMutex = new Mutex(false, mutexName);
-            if (!singleInstanceMutex.WaitOne(0, false))
+            try
             {
-                MessageBox.Show("A copy of LcmsNet is already running.");
-                classApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
-                return;
+                if (!singleInstanceMutex.WaitOne(0, false))
+                {
+                    MessageBox.Show("A copy of LcmsNet is already running.");
+                    classApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
+                    return;
+                }
+            }
+            catch (AbandonedMutexException)
+            {
+                classApplicationLogger.LogMessage(0, "Warning: The last LcmsNet session did not close properly (AbandonedMutexException).");
             }
 
             KillExistingPalProcesses();
