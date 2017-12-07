@@ -469,7 +469,7 @@ namespace LcmsNet.Method.ViewModels
 
                 foreach (var o in SavedMethodsComboBoxOptions)
                 {
-                    if (o.ToString().Equals(text))
+                    if (o.Equals(text))
                     {
                         return true;
                     }
@@ -864,6 +864,7 @@ namespace LcmsNet.Method.ViewModels
             path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
+            classApplicationLogger.LogMessage(0, "Writing method to file " + path);
             return writer.WriteMethod(path, method);
         }
 
@@ -890,9 +891,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public void SaveMethods()
         {
-            foreach (var nameObject in SavedMethodsComboBoxOptions)
+            foreach (var name in SavedMethodsComboBoxOptions)
             {
-                var name = Convert.ToString(nameObject);
                 var method = FindMethods(name);
                 SaveMethod(method);
             }
