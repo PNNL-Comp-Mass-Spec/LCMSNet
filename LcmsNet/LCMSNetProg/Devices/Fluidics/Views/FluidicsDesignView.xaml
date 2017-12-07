@@ -37,7 +37,7 @@
             <Button Margin="3" Command="{Binding LoadCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="/Images/Open.png" MaxHeight="18" />
-                    <Label Content="Save" />
+                    <Label Content="Load" />
                 </StackPanel>
             </Button>
         </StackPanel>
