@@ -144,7 +144,6 @@ namespace LcmsNet
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             classLCMSSettings.SetParameter(classLCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
 
-
             var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
             if (!string.IsNullOrWhiteSpace(emulation))
             {
