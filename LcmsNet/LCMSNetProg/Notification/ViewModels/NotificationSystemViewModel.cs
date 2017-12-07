@@ -608,7 +608,7 @@ namespace LcmsNet.Notification.ViewModels
             }
             catch (KeyNotFoundException ex)
             {
-                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished status {1}.", e.Notifier.Name, e.Notification), ex);
+                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification), ex);
             }
             catch (Exception ex)
             {
@@ -644,7 +644,7 @@ namespace LcmsNet.Notification.ViewModels
             }
             catch (KeyNotFoundException ex)
             {
-                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished error {1}.", e.Device.Name, e.Notification), ex);
+                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished error: \"{1}\".", e.Device.Name, e.Notification), ex);
             }
             catch (Exception ex)
             {
