@@ -426,7 +426,12 @@ namespace LcmsNet
                     failedDeviceFlag = true;
                     failedCount = failedDevices.Count;
                     var displayVm = new FailedDevicesViewModel(failedDevices);
-                    display = new FailedDevicesWindow() {DataContext = displayVm};
+                    display = new FailedDevicesWindow()
+                    {
+                        DataContext = displayVm,
+                        ShowActivated = true,
+                    };
+                    display.ShowDialog();
                 }
             }
 

@@ -337,6 +337,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             var display = new FailedDevicesWindow()
             {
                 DataContext = displayVm,
+                ShowActivated = true,
             };
 
             display.ShowDialog();
@@ -425,6 +426,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 var display = new FailedDevicesWindow()
                 {
                     DataContext = displayVm,
+                    ShowActivated = true,
                 };
 
                 display.ShowDialog();
