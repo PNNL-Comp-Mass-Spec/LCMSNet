@@ -1,7 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using LcmsNetDataClasses.Logging;
 
 namespace LcmsNet
 {
@@ -21,7 +23,17 @@ namespace LcmsNet
         /// </summary>
         public string Status
         {
-            set { Dispatcher.Invoke(() => StatusText.Text = value);}
+            set
+            {
+                try
+                {
+                    Dispatcher.Invoke(() => StatusText.Text = value);
+                }
+                catch (Exception ex)
+                {
+                    classApplicationLogger.LogError(2, "Could not update splash screen status. Message: " + value, ex);
+                }
+            }
         }
 
         public string SoftwareCopyright
