@@ -87,7 +87,7 @@ namespace Agilent.Devices.Pumps
 
         private void PumpOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(m_pump.Name))
+            if (e.PropertyName.Equals(nameof(m_pump.Name)))
             {
                 PumpDisplay.SetPumpName(m_pump.Name);
             }

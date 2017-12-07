@@ -63,21 +63,23 @@ Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                  DestDir: "{a
 Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";       DestDir: "{app}";      Flags: ignoreversion
 
 ;DLLs
-Source: "{#MyLib}\*"; Excludes:"FluidicsPack.dll,nunit_random_seed.tmp,LcmsNet.exe.config";                  DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\*.dll"; Excludes:"FluidicsPack.dll";              DestDir: "{app}";          Flags: ignoreversion
 Source: "{#MyLib}\FluidicsPack.dll";                                DestDir: "{app}\Plugins";  Flags: ignoreversion
 
 ;Core sample validator    
 Source: "SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";        DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
 
 ;Plugins
-Source: "{#MyPlugins}\*";                                           DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "{#MyPlugins}\*.dll";                                       DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "{#MyPlugins}\x86\*.dll";                                   DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
+Source: "{#MyPlugins}\x64\*.dll";                                   DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
 Source: "..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";             DestDir: "{sys}";          Flags: ignoreversion
 
 ;PAL Validator
 Source: "..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";         DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
-Source: "..\ExternalApplications\LogViewer\bin\x86\PNNLRelease\*";          DestDir: "{app}";          Flags: ignoreversion
+Source: "..\ExternalApplications\LogViewer\bin\PNNLRelease\*.exe";  DestDir: "{app}";          Flags: ignoreversion
 
 ; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 

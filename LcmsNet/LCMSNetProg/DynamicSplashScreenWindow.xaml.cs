@@ -31,7 +31,7 @@ namespace LcmsNet
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(2, "Could not update splash screen status. Message: " + value, ex);
+                    classApplicationLogger.LogMessage(0, "Could not update splash screen status. Message: " + value);
                 }
             }
         }
