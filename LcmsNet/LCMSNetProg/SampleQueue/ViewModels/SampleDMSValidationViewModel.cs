@@ -214,7 +214,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             else
             {
-                CanChangeEmslData = false;
+                CanChangeEmslData = true;
 
                 ProposalIdValid = classDMSSampleValidator.IsEMSLProposalIDValid(sample);
                 IsSampleValid = IsSampleValid && ProposalIdValid;
