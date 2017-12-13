@@ -807,7 +807,7 @@ namespace LcmsNet.Devices.Pal
             var status = "";
             if (error == 1)
             {
-                if (errorMessage.Contains("syringe"))
+                if (errorMessage.Contains("syringe") || errorMessage.ToLower().Contains("ul is not in pal") || errorMessage.ToLower().Contains("ml is not in pal"))
                 {
                     HandleError("The syringe in the PAL Method does not match the physical syringe loaded in the PAL Loader Arm. " + errorMessage);
                 }
@@ -917,7 +917,7 @@ namespace LcmsNet.Devices.Pal
             var statusMessage = "";
             var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
             StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
-                "continue method end: " + statusMessage + " " + errorCode.ToString(), this));
+                "continue method end", statusMessage + " " + errorCode.ToString(), this));
         }
 
         /// <summary>
@@ -995,7 +995,7 @@ namespace LcmsNet.Devices.Pal
 
         public List<string> GetStatusNotificationList()
         {
-            return new List<string>() { "Status", "Done Injecting start method", "continue method", "continue method end:" };
+            return new List<string>() { "Status", "Done Injecting start method", "continue method", "continue method end" };
         }
 
         public List<string> GetErrorNotificationList()

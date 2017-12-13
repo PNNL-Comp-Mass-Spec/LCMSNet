@@ -601,9 +601,15 @@ namespace LcmsNet.Notification.ViewModels
                 // Then the settings for those devices.
                 if (e.Notification.ToLower() != "none")
                 {
-                    var setting = linker.EventMap[e.Notification];
-                    // Handles the events.
-                    HandleEvents(e.Message, setting);
+                    if (linker.EventMap.TryGetValue(e.Notification, out var setting))
+                    {
+                        // Handles the events.
+                        HandleEvents(e.Message, setting);
+                    }
+                    else
+                    {
+                        classApplicationLogger.LogMessage(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification));
+                    }
                 }
             }
             catch (KeyNotFoundException ex)
