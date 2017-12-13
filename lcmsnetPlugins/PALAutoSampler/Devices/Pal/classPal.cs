@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
@@ -279,6 +280,27 @@ namespace LcmsNet.Devices.Pal
         }
 
         /// <summary>
+        /// The maximum valid vial number
+        /// </summary>
+        [classPersistenceAttribute("VialRange")]
+        public int MaxVial
+        {
+            get { return (int) VialRange; }
+            set
+            {
+                var newVal = Enum.GetValues(typeof(enumVialRanges)).Cast<int>().Where(x => x >= value).DefaultIfEmpty((int) enumVialRanges.Well1536).Min();
+                if (Enum.TryParse(newVal.ToString(), out enumVialRanges range))
+                {
+                    VialRange = range;
+                }
+                else
+                {
+                    VialRange = enumVialRanges.Well96;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the vial for the PAL to use.
         /// </summary>
         [classPersistenceAttribute("Vial")]
@@ -301,6 +323,7 @@ namespace LcmsNet.Devices.Pal
                 OnDeviceSaveRequired();
             }
         }
+
         /// <summary>
         /// Gets or sets the volume (in uL).
         /// </summary>
@@ -826,7 +849,7 @@ namespace LcmsNet.Devices.Pal
                     break;
                 }
 
-                if (status.Contains("WAITING FOR DS 1;Resetting PAL;"))
+                if (status.Contains("WAITING FOR DS 1;"))
                 {
                     break;
                 }

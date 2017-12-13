@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
@@ -193,8 +194,8 @@ namespace LcmsNet.Devices.Pal
         private void SetupCommands()
         {
             RefreshMethodListCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshMethods());
-            RunMethodCommand = ReactiveUI.ReactiveCommand.Create(() => RunMethod());
-            StopMethodCommand = ReactiveUI.ReactiveCommand.Create(() => StopMethod());
+            RunMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RunMethod()));
+            StopMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopMethod()));
             RefreshStatusCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshStatus());
             ApplyPortNameCommand = ReactiveUI.ReactiveCommand.Create(() => ApplyPortName());
         }

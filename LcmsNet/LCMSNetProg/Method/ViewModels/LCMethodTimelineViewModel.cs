@@ -227,7 +227,7 @@ namespace LcmsNet.Method.ViewModels
             renderer.ColumnNames.Add("Special");
             if (methods != null && methods.Count > 0)
             {
-                // Map the colors appropiately if they havent already been
+                // Map the colors appropriately if they haven't already been
                 if (deviceColorMappings.Count < 1)
                     RemapDevicesToColors();
 

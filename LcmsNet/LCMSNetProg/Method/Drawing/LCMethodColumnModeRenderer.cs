@@ -73,7 +73,7 @@ namespace LcmsNet.Method.Drawing
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!
-            var offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
+            var offset = bounds.Height * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
             // This tells us how much room we get per method or column spacing.
             var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);

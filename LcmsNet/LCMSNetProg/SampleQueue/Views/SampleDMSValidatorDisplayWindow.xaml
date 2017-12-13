@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Sample Validator" Height="703" Width="801"
+        Title="Sample Validator" Height="703" Width="801" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidatorDisplayViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.Resources>
