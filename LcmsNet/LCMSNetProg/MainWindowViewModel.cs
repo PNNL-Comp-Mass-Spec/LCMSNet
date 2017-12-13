@@ -95,12 +95,21 @@ namespace LcmsNet
 
         #region "Column event handlers"
 
-        void column_NameChanged(object sender, string name, string oldName)
+        void Column_NameChanged(object sender, string name, string oldName)
         {
             var column = sender as classColumnData;
             if (column != null)
             {
                 classLCMSSettings.SetParameter(classLCMSSettings.PARAM_COLUMNNAME + column.ID, column.Name);
+            }
+        }
+
+        void Column_StatusChanged(object sender, enumColumnStatus status, enumColumnStatus oldStatus)
+        {
+            var column = sender as classColumnData;
+            if (column != null && status != enumColumnStatus.Running && oldStatus != enumColumnStatus.Running)
+            {
+                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_COLUMNDISABLED + column.ID, (column.Status == enumColumnStatus.Disabled).ToString());
             }
         }
 
@@ -352,7 +361,8 @@ namespace LcmsNet
 
             foreach (var column in classCartConfiguration.Columns)
             {
-                column.NameChanged += column_NameChanged;
+                column.NameChanged += Column_NameChanged;
+                column.StatusChanged += Column_StatusChanged;
             }
 
 

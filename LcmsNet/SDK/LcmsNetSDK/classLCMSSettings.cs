@@ -45,6 +45,11 @@ namespace LcmsNetDataClasses
         public const string PARAM_COLUMNNAME1 = "ColumnName1";
         public const string PARAM_COLUMNNAME2 = "ColumnName2";
         public const string PARAM_COLUMNNAME3 = "ColumnName3";
+        public const string PARAM_COLUMNDISABLED = "ColumnDisabled";
+        public const string PARAM_COLUMNDISABLED0 = "ColumnDisabled0";
+        public const string PARAM_COLUMNDISABLED1 = "ColumnDisabled1";
+        public const string PARAM_COLUMNDISABLED2 = "ColumnDisabled2";
+        public const string PARAM_COLUMNDISABLED3 = "ColumnDisabled3";
         public const string PARAM_COPYMETHODFOLDERS = "CopyMethodFolders";
         public const string PARAM_COPYTRIGGERFILES = "CopyTriggerFiles";
         public const string PARAM_CREATEMETHODFOLDERS = "CreateMethodFolders";

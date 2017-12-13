@@ -8,19 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.CodeDom.Compiler;
-using System.Configuration;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace LcmsNet.Properties {
     
     
-    [CompilerGenerated()]
-    [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
-    internal sealed partial class Settings : ApplicationSettingsBase {
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings defaultInstance = ((Settings)(Synchronized(new Settings())));
+        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
         public static Settings Default {
             get {
@@ -28,54 +23,54 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("Plugins")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Plugins")]
         public string PluginFolder {
             get {
                 return ((string)(this["PluginFolder"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("C:\\Program Files (x86)\\PAL\\Cycle Composer\\HTS PAL")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\PAL\\Cycle Composer\\HTS PAL")]
         public string PalMethodsFolder {
             get {
                 return ((string)(this["PalMethodsFolder"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("tcp://proto-10.pnl.gov:61616")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tcp://proto-10.pnl.gov:61616")]
         public string BrokerURI {
             get {
                 return ((string)(this["BrokerURI"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("DAC.Control")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DAC.Control")]
         public string CmdQueueName {
             get {
                 return ((string)(this["CmdQueueName"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("DAC.Status")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DAC.Status")]
         public string StatusTopicName {
             get {
                 return ((string)(this["StatusTopicName"]));
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("BabyRuth")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BabyRuth")]
         public string InstName {
             get {
                 return ((string)(this["InstName"]));
@@ -85,18 +80,18 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("20")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int InstResponseTime {
             get {
                 return ((int)(this["InstResponseTime"]));
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("LC-ISCO-Standard")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LC-ISCO-Standard")]
         public string SeparationType {
             get {
                 return ((string)(this["SeparationType"]));
@@ -106,231 +101,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
-        public bool InitializeHardwareOnStartup {
-            get {
-                return ((bool)(this["InitializeHardwareOnStartup"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
-        public bool CreateMethodFolders {
-            get {
-                return ((bool)(this["CreateMethodFolders"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("D:\\Methods")]
-        public string BrukerMethodFolderLocalName {
-            get {
-                return ((string)(this["BrukerMethodFolderLocalName"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("D:\\Data_BrukerTest\\BrukerTest")]
-        public string BrukerOutputFolderLocalName {
-            get {
-                return ((string)(this["BrukerOutputFolderLocalName"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("7005")]
-        public int BrukerInstPort {
-            get {
-                return ((int)(this["BrukerInstPort"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("\\\\prismdev3.emsl.pnl.gov\\ProteomicsData")]
-        public string BrukerOutputFolderShareName {
-            get {
-                return ((string)(this["BrukerOutputFolderShareName"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("prismdev3.emsl.pnl.gov")]
-        public string BrukerInstNetName {
-            get {
-                return ((string)(this["BrukerInstNetName"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("\\\\prismdev3.emsl.pnl.gov\\Methods")]
-        public string BrukerMethodFolderShareName {
-            get {
-                return ((string)(this["BrukerMethodFolderShareName"]));
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("LCMSCache.que")]
-        public string CacheFileName {
-            get {
-                return ((string)(this["CacheFileName"]));
-            }
-            set {
-                this["CacheFileName"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NOTSET")]
-        public string ColumnName1 {
-            get {
-                return ((string)(this["ColumnName1"]));
-            }
-            set {
-                this["ColumnName1"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NOTSET")]
-        public string ColumnName2 {
-            get {
-                return ((string)(this["ColumnName2"]));
-            }
-            set {
-                this["ColumnName2"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NOTSET")]
-        public string ColumnName3 {
-            get {
-                return ((string)(this["ColumnName3"]));
-            }
-            set {
-                this["ColumnName3"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("NOTSET")]
-        public string ColumnName0 {
-            get {
-                return ((string)(this["ColumnName0"]));
-            }
-            set {
-                this["ColumnName0"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
-        public bool ValidateSamplesForDMS {
-            get {
-                return ((bool)(this["ValidateSamplesForDMS"]));
-            }
-            set {
-                this["ValidateSamplesForDMS"] = value;
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("2")]
-        public int LoggingErrorLevel {
-            get {
-                return ((int)(this["LoggingErrorLevel"]));
-            }
-        }
-        
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("2")]
-        public int LoggingMsgLevel {
-            get {
-                return ((int)(this["LoggingMsgLevel"]));
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("0.0.0.0")]
-        public string applicationVersion {
-            get {
-                return ((string)(this["applicationVersion"]));
-            }
-            set {
-                this["applicationVersion"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("10")]
-        public int NotificationWriteTimeMinutes {
-            get {
-                return ((int)(this["NotificationWriteTimeMinutes"]));
-            }
-            set {
-                this["NotificationWriteTimeMinutes"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("SystemHealth")]
-        public string NotificationDirectoryPath {
-            get {
-                return ((string)(this["NotificationDirectoryPath"]));
-            }
-            set {
-                this["NotificationDirectoryPath"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("notifications.xml")]
-        public string NotificationFilePath {
-            get {
-                return ((string)(this["NotificationFilePath"]));
-            }
-            set {
-                this["NotificationFilePath"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("False")]
-        public bool NotificationShouldNotify {
-            get {
-                return ((bool)(this["NotificationShouldNotify"]));
-            }
-            set {
-                this["NotificationShouldNotify"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Operator {
             get {
                 return ((string)(this["Operator"]));
@@ -340,9 +113,300 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("No_Cart")]
+        public string CartName {
+            get {
+                return ((string)(this["CartName"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unknown_Cart_Config")]
+        public string CartConfigName {
+            get {
+                return ((string)(this["CartConfigName"]));
+            }
+            set {
+                this["CartConfigName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool InitializeHardwareOnStartup {
+            get {
+                return ((bool)(this["InitializeHardwareOnStartup"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CreateMethodFolders {
+            get {
+                return ((bool)(this["CreateMethodFolders"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Methods")]
+        public string BrukerMethodFolderLocalName {
+            get {
+                return ((string)(this["BrukerMethodFolderLocalName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Data_BrukerTest\\BrukerTest")]
+        public string BrukerOutputFolderLocalName {
+            get {
+                return ((string)(this["BrukerOutputFolderLocalName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7005")]
+        public int BrukerInstPort {
+            get {
+                return ((int)(this["BrukerInstPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\ProteomicsData")]
+        public string BrukerOutputFolderShareName {
+            get {
+                return ((string)(this["BrukerOutputFolderShareName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("prismdev3.emsl.pnl.gov")]
+        public string BrukerInstNetName {
+            get {
+                return ((string)(this["BrukerInstNetName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\Methods")]
+        public string BrukerMethodFolderShareName {
+            get {
+                return ((string)(this["BrukerMethodFolderShareName"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LCMSCache.que")]
+        public string CacheFileName {
+            get {
+                return ((string)(this["CacheFileName"]));
+            }
+            set {
+                this["CacheFileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
+        public string ColumnName0 {
+            get {
+                return ((string)(this["ColumnName0"]));
+            }
+            set {
+                this["ColumnName0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
+        public string ColumnName1 {
+            get {
+                return ((string)(this["ColumnName1"]));
+            }
+            set {
+                this["ColumnName1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
+        public string ColumnName2 {
+            get {
+                return ((string)(this["ColumnName2"]));
+            }
+            set {
+                this["ColumnName2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
+        public string ColumnName3 {
+            get {
+                return ((string)(this["ColumnName3"]));
+            }
+            set {
+                this["ColumnName3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ColumnDisabled0 {
+            get {
+                return ((bool)(this["ColumnDisabled0"]));
+            }
+            set {
+                this["ColumnDisabled0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ColumnDisabled1 {
+            get {
+                return ((bool)(this["ColumnDisabled1"]));
+            }
+            set {
+                this["ColumnDisabled1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ColumnDisabled2 {
+            get {
+                return ((bool)(this["ColumnDisabled2"]));
+            }
+            set {
+                this["ColumnDisabled2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ColumnDisabled3 {
+            get {
+                return ((bool)(this["ColumnDisabled3"]));
+            }
+            set {
+                this["ColumnDisabled3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ValidateSamplesForDMS {
+            get {
+                return ((bool)(this["ValidateSamplesForDMS"]));
+            }
+            set {
+                this["ValidateSamplesForDMS"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int LoggingErrorLevel {
+            get {
+                return ((int)(this["LoggingErrorLevel"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int LoggingMsgLevel {
+            get {
+                return ((int)(this["LoggingMsgLevel"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.0")]
+        public string applicationVersion {
+            get {
+                return ((string)(this["applicationVersion"]));
+            }
+            set {
+                this["applicationVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int NotificationWriteTimeMinutes {
+            get {
+                return ((int)(this["NotificationWriteTimeMinutes"]));
+            }
+            set {
+                this["NotificationWriteTimeMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SystemHealth")]
+        public string NotificationDirectoryPath {
+            get {
+                return ((string)(this["NotificationDirectoryPath"]));
+            }
+            set {
+                this["NotificationDirectoryPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("notifications.xml")]
+        public string NotificationFilePath {
+            get {
+                return ((string)(this["NotificationFilePath"]));
+            }
+            set {
+                this["NotificationFilePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotificationShouldNotify {
+            get {
+                return ((bool)(this["NotificationShouldNotify"]));
+            }
+            set {
+                this["NotificationShouldNotify"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public string FirstTime {
             get {
                 return ((string)(this["FirstTime"]));
@@ -352,18 +416,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("(none)")]
-        public string CartName {
-            get {
-                return ((string)(this["CartName"]));
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("\\\\proto-5\\BionetXfer\\LCMSNetErrorReports")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\LCMSNetErrorReports")]
         public string ErrorPath {
             get {
                 return ((string)(this["ErrorPath"]));
@@ -373,9 +428,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("http://prismsupport.bionet/finchingest/update")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://prismsupport.bionet/finchingest/update")]
         public string FinchServerURL {
             get {
                 return ((string)(this["FinchServerURL"]));
@@ -385,9 +440,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("False")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ShouldDisplayQueue {
             get {
                 return ((bool)(this["ShouldDisplayQueue"]));
@@ -397,9 +452,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShouldDisplayPumps {
             get {
                 return ((bool)(this["ShouldDisplayPumps"]));
@@ -409,9 +464,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShouldDisplayConfig {
             get {
                 return ((bool)(this["ShouldDisplayConfig"]));
@@ -421,9 +476,9 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("5")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public string MinimumVolume {
             get {
                 return ((string)(this["MinimumVolume"]));
@@ -433,45 +488,45 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("\\\\proto-5\\BionetXfer\\TriggerTest")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\TriggerTest")]
         public string TriggerFileFolder {
             get {
                 return ((string)(this["TriggerFileFolder"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("False")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool CopyTriggerFiles {
             get {
                 return ((bool)(this["CopyTriggerFiles"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("False")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool CopyMethodFolders {
             get {
                 return ((bool)(this["CopyMethodFolders"]));
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool EmulationEnabled {
             get {
                 return ((bool)(this["EmulationEnabled"]));
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("D:\\")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\")]
         public string PdfPath {
             get {
                 return ((string)(this["PdfPath"]));
@@ -481,18 +536,18 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [ApplicationScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("True")]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public string AdminMode {
             get {
                 return ((string)(this["AdminMode"]));
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string TimeZone {
             get {
                 return ((string)(this["TimeZone"]));
@@ -502,27 +557,15 @@ namespace LcmsNet.Properties {
             }
         }
         
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("")]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DMSTool {
             get {
                 return ((string)(this["DMSTool"]));
             }
             set {
                 this["DMSTool"] = value;
-            }
-        }
-        
-        [UserScopedSetting()]
-        [DebuggerNonUserCode()]
-        [DefaultSettingValue("")]
-        public string CartConfigName {
-            get {
-                return ((string)(this["CartConfigName"]));
-            }
-            set {
-                this["CartConfigName"] = value;
             }
         }
     }

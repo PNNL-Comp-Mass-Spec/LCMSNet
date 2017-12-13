@@ -76,8 +76,13 @@ namespace LcmsNet
         private void UnhandledErrorShutdown(Exception ex)
         {
             classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                "Shutting down due to unhandled error: " + ex.Message + "; " + ex.StackTrace);
+                "Shutting down due to unhandled error.", ex);
 
+            var message = ex.Message;
+            if (ex.InnerException != null)
+            {
+                message += "Inner Exception: " + ex.InnerException.Message;
+            }
             MessageBox.Show("Shutting down due to unhandled error: " + ex.Message + " \nFor additional information, see the log files at " +
                             classDbLogger.LogFolderPath + "\\");
 
@@ -168,7 +173,17 @@ namespace LcmsNet
 
         private void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
-            Settings.Default[e.SettingName] = e.SettingValue;
+            var type = Settings.Default[e.SettingName].GetType();
+            object newValue = null;
+            try
+            {
+                newValue = Convert.ChangeType(e.SettingValue, type);
+            }
+            catch (Exception ex)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, $"Could not update setting \"{e.SettingName}\" of type \"{type.Name}\" with value \"{e.SettingValue}\".", ex);
+            }
+            Settings.Default[e.SettingName] = newValue;
             Settings.Default.Save();
         }
 
@@ -233,7 +248,7 @@ namespace LcmsNet
         }
 
         /// <summary>
-        /// Updates the splash screen with the appropiate messages.
+        /// Updates the splash screen with the appropriate messages.
         /// </summary>
         /// <param name="messageLevel">Filter for displaying messages.</param>
         /// <param name="args">Messages and other arguments passed from the sender.</param>
@@ -250,12 +265,33 @@ namespace LcmsNet
         /// </summary>
         private void InitializeSystemConfigurations()
         {
+            var columnStatus1 = enumColumnStatus.Idle;
+            var columnStatus2 = enumColumnStatus.Idle;
+            var columnStatus3 = enumColumnStatus.Idle;
+            var columnStatus4 = enumColumnStatus.Idle;
+            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED0, false))
+            {
+                columnStatus1 = enumColumnStatus.Disabled;
+            }
+            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED1, false))
+            {
+                columnStatus2 = enumColumnStatus.Disabled;
+            }
+            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED2, false))
+            {
+                columnStatus3 = enumColumnStatus.Disabled;
+            }
+            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED3, false))
+            {
+                columnStatus4 = enumColumnStatus.Disabled;
+            }
+
             // Create system data with columns.
             var columnOne = new classColumnData
             {
                 ID = 0,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME0),
-                Status = enumColumnStatus.Idle,
+                Status = columnStatus1,
                 Color = Colors.Tomato,
                 First = true
             };
@@ -264,7 +300,7 @@ namespace LcmsNet
             {
                 ID = 1,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME1),
-                Status = enumColumnStatus.Idle,
+                Status = columnStatus2,
                 Color = Colors.Lime
             };
 
@@ -272,7 +308,7 @@ namespace LcmsNet
             {
                 ID = 2,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME2),
-                Status = enumColumnStatus.Idle,
+                Status = columnStatus3,
                 Color = Colors.LightSteelBlue
             };
 
@@ -280,7 +316,7 @@ namespace LcmsNet
             {
                 ID = 3,
                 Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME3),
-                Status = enumColumnStatus.Idle,
+                Status = columnStatus4,
                 Color = Colors.LightSalmon
             };
 
