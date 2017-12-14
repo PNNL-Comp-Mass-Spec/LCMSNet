@@ -35,7 +35,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             fluidicsMod.ModelChanged += FluidicsModelChanged;
 
             SetupCommands();
-            this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => fluidicsControlVm.UpdateImage());
+            this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => FluidicsControlVm.Refresh());
         }
 
         private void ReleaseUnmanagedResources()
@@ -485,7 +485,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         private void ChangeHandler(object sender, EventArgs e)
         {
             //System.Diagnostics.Trace.WriteLine("changeHandler sender: " + sender.ToString());
-            FluidicsControlVm.UpdateImage();
             FluidicsControlVm.Refresh();
             RefreshEvent?.Invoke(this, EventArgs.Empty);
         }
@@ -549,6 +548,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> RemoveCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> ConnectCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -560,6 +560,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             AddCommand = ReactiveCommand.Create(() => this.AddDeviceToDeviceManager(), this.WhenAnyValue(x => x.DevicesUnlocked));
             RemoveCommand = ReactiveCommand.Create(() => this.RemoveDevice(), this.WhenAnyValue(x => x.DevicesUnlocked));
             ConnectCommand = ReactiveCommand.Create(() => this.ConnectDevices(), this.WhenAnyValue(x => x.DevicesUnlocked));
+            RefreshCommand = ReactiveCommand.Create(() => this.Refresh());
         }
 
         #endregion

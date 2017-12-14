@@ -21,26 +21,32 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Margin="3" Command="{Binding SaveAsCommand}">
+        <DockPanel Grid.Row="0" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Margin="3" Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
+                    <!--<Image Source="/Images/Save.png" MaxHeight="20" />-->
+                    <Label Content="Refresh displayed devices" />
+                </StackPanel>
+            </Button>
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="/Images/Save.png" MaxHeight="20" />
                     <Label Content="Export" />
                 </StackPanel>
             </Button>
-            <Button Margin="3" Command="{Binding SaveCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="/Images/Save.png" MaxHeight="20" />
                     <Label Content="Save" />
                 </StackPanel>
             </Button>
-            <Button Margin="3" Command="{Binding LoadCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="/Images/Open.png" MaxHeight="18" />
                     <Label Content="Load" />
                 </StackPanel>
             </Button>
-        </StackPanel>
+        </DockPanel>
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
             <Button Height="70" Margin="3" Command="{Binding LockUnlockCommand}">
                 <Grid>

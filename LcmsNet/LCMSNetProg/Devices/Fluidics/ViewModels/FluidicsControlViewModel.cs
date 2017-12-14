@@ -203,11 +203,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             }
         }
 
-        public void UpdateImage()
-        {
-            Refresh();
-        }
-
         private Size UpdateImage(DrawingContext drawingContext, Size size)
         {
             Debug.WriteLine("Updating Image Wpf");
