@@ -8,7 +8,7 @@
 // - 04/16/2009: BLL
 //         Made file logging class static so it can be used at program startup
 //         Changed file log name to include hhmmss using a flag to indicate whether the file exists.
-//     
+//
 //*********************************************************************************************************
 
 using System;
@@ -81,16 +81,12 @@ namespace LcmsNetDataClasses.Logging
                 msgStr.Append("\t");
 
                 var message = "Error message: " + args.Message + " ";
-                if (args.Exception != null)
-                {
-                    message += args.Exception.Message + " " + args.Exception.StackTrace;
-                }
                 msgStr.Append(message);
                 msgStr.Append("\t");
 
-                // 
+                //
                 // Make sure this is not just an error message with no relevant exception.
-                // 
+                //
                 if (args.Exception != null)
                 {
                     // Get all exception messages if exceptions are nested
@@ -131,12 +127,13 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="msg">Message(s) contained in exception</param>
         private static void GetExceptionMessage(Exception ex, out string msg)
         {
-            msg = ex.Message;
+            msg = ex.Message + " " + ex.StackTrace;
             if (ex.InnerException != null)
             {
                 string innerMsg;
                 GetExceptionMessage(ex.InnerException, out innerMsg);
-                msg += " Inner exception: " + innerMsg;
+                // adding \t prior to \n, so that it is separated from the previous text in notepad.
+                msg += "\t\nInner exception: " + innerMsg;
             }
         }
 
@@ -161,12 +158,12 @@ namespace LcmsNetDataClasses.Logging
                 {
                     FileInfo logFile;
 
-                    // 
+                    //
                     // We always create a new file every time we run the program.
                     // Here we check to see that the file has been created before
                     // because our file names will be Date_TimeOfDay which
                     // will change.
-                    // 
+                    //
                     if (m_logFileCreated == false || string.IsNullOrWhiteSpace(LogPath))
                     {
                         var path = CreateLogFilePath();
@@ -184,9 +181,9 @@ namespace LcmsNetDataClasses.Logging
                     if (logFile.Directory == null)
                         return;
 
-                    // 
+                    //
                     // Create the folder if it does not exist
-                    // 
+                    //
                     if (!logFile.Directory.Exists)
                     {
                         logFile.Directory.Create();

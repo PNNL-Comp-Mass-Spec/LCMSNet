@@ -388,12 +388,12 @@ namespace LcmsNetDataClasses.Logging
         /// <param name="msg">Input/Output message</param>
         private static void UnwrapExceptionMsgs(Exception ex, out string msg)
         {
-            msg = ex.Message;
+            msg = ex.Message + " " + ex.StackTrace;
             if (!(ex.InnerException == null))
             {
                 string innerMsg;
                 UnwrapExceptionMsgs(ex.InnerException, out innerMsg);
-                msg += " Inner exception: " + innerMsg;
+                msg += "\nInner exception: " + innerMsg;
             }
         }
 

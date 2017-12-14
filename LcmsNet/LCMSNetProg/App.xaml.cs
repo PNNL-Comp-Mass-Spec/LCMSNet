@@ -64,33 +64,54 @@ namespace LcmsNet
             }
             else
             {
-                ShutdownCleanup();
+                Shutdown();
             }
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs args)
         {
+            args.Handled = true;
             UnhandledErrorShutdown(args.Exception);
         }
 
         private void UnhandledErrorShutdown(Exception ex)
         {
+            lock (unhandledErrorLock)
+            {
+                if (unhandledError)
+                {
+                    return;
+                }
+                unhandledError = true;
+            }
+
             classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                 "Shutting down due to unhandled error.", ex);
 
             var message = ex.Message;
-            if (ex.InnerException != null)
+            var exi = ex.InnerException;
+            while (exi != null)
             {
-                message += "Inner Exception: " + ex.InnerException.Message;
+                message += "\nInner Exception: " + exi.Message;
+                exi = exi.InnerException;
             }
-            MessageBox.Show("Shutting down due to unhandled error: " + ex.Message + " \nFor additional information, see the log files at " +
+            MessageBox.Show("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
                             classDbLogger.LogFolderPath + "\\");
 
-            ShutdownCleanup();
+            Shutdown();
         }
 
         private void ShutdownCleanup()
         {
+            lock (cleanedUpLock)
+            {
+                if (cleanedUp)
+                {
+                    return;
+                }
+                cleanedUp = true;
+            }
+
             mainVm?.Dispose();
 
             // Just to make sure...let's kill the PAL at the end of the program as well.
@@ -100,6 +121,11 @@ namespace LcmsNet
             singleInstanceMutex?.ReleaseMutex();
             singleInstanceMutex?.Dispose();
         }
+
+        private bool unhandledError = false;
+        private bool cleanedUp = false;
+        private readonly object unhandledErrorLock = new object();
+        private readonly object cleanedUpLock = new object();
 
         #region "Constants"
 
@@ -411,8 +437,6 @@ namespace LcmsNet
 
             main.Show();
             main.Activate();
-
-            GC.KeepAlive(singleInstanceMutex);
         }
 
         private void ShowSplashScreen()
