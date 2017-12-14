@@ -44,10 +44,17 @@
                                     <ComboBox.Style>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding UsageTypeValid}" Value="False">
-                                                    <Setter Property="Background" Value="Red" />
-                                                    <Setter Property="Foreground" Value="White" />
-                                                </DataTrigger>
+                                                <MultiDataTrigger>
+                                                    <!-- Color the combo box red with white text when it is not valid, but remove the coloring when the drop down is open, so they can actually read the text. -->
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsDropDownOpen, RelativeSource={RelativeSource Self}}" Value="False" />
+                                                        <Condition Binding="{Binding UsageTypeValid}" Value="False" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="Background" Value="Red" />
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </ComboBox.Style>
