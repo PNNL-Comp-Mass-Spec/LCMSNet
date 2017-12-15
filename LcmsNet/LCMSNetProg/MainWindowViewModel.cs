@@ -509,7 +509,6 @@ namespace LcmsNet
                 classApplicationLogger.LogMessage(0, "System Ready.");
             }
 
-            display?.ShowDialog();
             SampleProgressVm.PreviewAvailable += SampleManagerVm.PreviewAvailable;
             NotificationSystemVm.LoadNotificationFile();
         }
