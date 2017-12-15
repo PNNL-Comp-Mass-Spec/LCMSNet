@@ -103,7 +103,6 @@ namespace LcmsNet.Notification.ViewModels
             this.WhenAnyValue(x => x.RemoteStatusLogInterval, x => x.LogStatusToRemotePath).Subscribe(x => this.UpdateTimer());
             this.WhenAnyValue(x => x.SelectedDevice).Subscribe(x => this.SelectedDeviceChanged());
             this.WhenAnyValue(x => x.SelectedEvent).Subscribe(x => this.SelectedEventChanged());
-            this.WhenAnyValue(x => x.SelectedAssignedEvent).Subscribe(x => this.SelectedAssignedEventChanged());
             this.WhenAnyValue(x => x.ConditionNumberChecked, x => x.ConditionTextChecked, x => x.ConditionOccurredChecked,
                     x => x.NumberConditionMinimum, x => x.NumberConditionMaximum, x => x.ConditionTextMatchString)
                 .Subscribe(x => this.StoreNotificationSettings());
@@ -197,7 +196,6 @@ namespace LcmsNet.Notification.ViewModels
         private string selectedDevice = "";
         private enumDeviceNotificationAction selectedAction;
         private string selectedEvent = "";
-        private string selectedAssignedEvent = "";
         private double numberConditionMinimum = 0;
         private double numberConditionMaximum = 0;
         private classLCMethod selectedLCMethod;
@@ -326,12 +324,6 @@ namespace LcmsNet.Notification.ViewModels
         {
             get { return selectedEvent; }
             set { this.RaiseAndSetIfChanged(ref selectedEvent, value); }
-        }
-
-        public string SelectedAssignedEvent
-        {
-            get { return selectedAssignedEvent; }
-            set { this.RaiseAndSetIfChanged(ref selectedAssignedEvent, value); }
         }
 
         public classLCMethod SelectedLCMethod
@@ -566,7 +558,7 @@ namespace LcmsNet.Notification.ViewModels
                 case enumDeviceNotificationAction.Ignore:
                     break;
                 case enumDeviceNotificationAction.NotifyOnly:
-                    classApplicationLogger.LogMessage(0, string.Format("Handling a user defined event from a device status change - {0}.", setting.Name));
+                    classApplicationLogger.LogMessage(0, string.Format("Handling a user defined event from a device status change - {0}, message: '{1}'.", setting.Name, message));
                     classNotifier.Path = RemoteStatusLogPath;
                     //m_classNotifier.Notify(message, setting);
                     break;
@@ -594,6 +586,11 @@ namespace LcmsNet.Notification.ViewModels
             if (e.Notification == null)
                 return;
 
+            var message = string.Empty;
+            if (!string.IsNullOrWhiteSpace(e.Message))
+            {
+                message = ": " + e.Message;
+            }
             try
             {
                 // Get the device link.
@@ -608,13 +605,13 @@ namespace LcmsNet.Notification.ViewModels
                     }
                     else
                     {
-                        classApplicationLogger.LogMessage(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification));
+                        classApplicationLogger.LogMessage(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification + message));
                     }
                 }
             }
             catch (KeyNotFoundException ex)
             {
-                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification), ex);
+                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification + message), ex);
             }
             catch (Exception ex)
             {
@@ -720,9 +717,11 @@ namespace LcmsNet.Notification.ViewModels
                 MethodSettingEnabled = false;
             }
 
-            if (currentSetting != null)
+            if (currentSetting != null && action != currentSetting.Action)
             {
-                if (currentSetting.Action == enumDeviceNotificationAction.Ignore && !assignedEventsList.Contains(currentNotification))
+                var previousAction = currentSetting.Action;
+                currentSetting.Action = action;
+                if (previousAction == enumDeviceNotificationAction.Ignore && !assignedEventsList.Contains(currentNotification))
                 {
                     eventsList.Remove(currentNotification);
                     assignedEventsList.Add(currentNotification);
@@ -732,7 +731,6 @@ namespace LcmsNet.Notification.ViewModels
                     assignedEventsList.Remove(currentNotification);
                     eventsList.Add(currentNotification);
                 }
-                currentSetting.Action = action;
             }
         }
 
@@ -757,7 +755,7 @@ namespace LcmsNet.Notification.ViewModels
 
         private void StoreNotificationSettings()
         {
-            if (string.IsNullOrWhiteSpace(SelectedEvent) && string.IsNullOrWhiteSpace(SelectedAssignedEvent))
+            if (string.IsNullOrWhiteSpace(SelectedEvent))
             {
                 return;
             }
@@ -844,6 +842,14 @@ namespace LcmsNet.Notification.ViewModels
                     EventsListEnabled = true;
                     EventSettingsEnabled = false;
                 }
+                if (eventsList.Count > 0)
+                {
+                    SelectedEvent = eventsList[0];
+                }
+                else if (assignedEventsList.Count > 0)
+                {
+                    SelectedEvent = assignedEventsList[0];
+                }
             }
         }
 
@@ -914,37 +920,10 @@ namespace LcmsNet.Notification.ViewModels
             }
         }
 
-        /// <summary>
-        /// Changes the settings object for assigned events.
-        /// </summary>
-        private void SelectedAssignedEventChanged()
-        {
-            if (currentDevice != null)
-            {
-                var linker = deviceEventTable[currentDevice];
-
-                var key = SelectedAssignedEvent;
-                if (string.IsNullOrWhiteSpace(key))
-                {
-                    return;
-                }
-                currentNotification = key;
-
-                if (linker.EventMap.ContainsKey(key))
-                {
-                    SettingLabelText = key;
-
-                    var setting = linker.EventMap[key];
-                    SetSetting(setting);
-                }
-            }
-        }
-
         private void ClearEventData()
         {
             currentNotification = "";
             SelectedEvent = "";
-            SelectedAssignedEvent = "";
             SelectedLCMethod = null;
 
             SettingLabelText = "Setting:";

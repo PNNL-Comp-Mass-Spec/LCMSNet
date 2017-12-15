@@ -44,9 +44,11 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Margin="3,0,3,0" Content="Unassigned Events" />
-                        <ListBox Grid.Row="1" Margin="3,0" ItemsSource="{Binding EventsList}" SelectedItem="{Binding SelectedEvent}" IsEnabled="{Binding EventsListEnabled}" />
+                        <!-- Using code-behind with GotFocus to run the desired control of the displayed data vs. the currently selected item -->
+                        <ListBox Grid.Row="1" Margin="3,0" ItemsSource="{Binding EventsList}" SelectedItem="{Binding SelectedEvent}" IsEnabled="{Binding EventsListEnabled}" GotFocus="EventsListBox_GotFocus" />
                         <Label Grid.Row="2" Margin="3,10,3,0" Content="Events With Actions" />
-                        <ListBox Grid.Row="3" Margin="3,0" ItemsSource="{Binding AssignedEventsList}" SelectedItem="{Binding SelectedAssignedEvent}" IsEnabled="{Binding EventsListEnabled}" />
+                        <!-- Using code-behind with GotFocus to run the desired control of the displayed data vs. the currently selected item -->
+                        <ListBox Grid.Row="3" Margin="3,0" ItemsSource="{Binding AssignedEventsList}" SelectedItem="{Binding SelectedEvent}" IsEnabled="{Binding EventsListEnabled}" GotFocus="EventsListBox_GotFocus" />
                         <Button Grid.Row="4" Margin="3" Command="{Binding IgnoreAllCommand}">
                             <Label Margin="15,3" Content="Ignore All" />
                         </Button>
