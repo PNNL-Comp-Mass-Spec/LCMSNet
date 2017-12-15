@@ -112,6 +112,12 @@ namespace LcmsNet
                 cleanedUp = true;
             }
 
+            // Make sure the splash screen is closed.
+            if (!splashScreenEnded)
+            {
+                splashScreen.LoadComplete();
+            }
+
             mainVm?.Dispose();
 
             // Just to make sure...let's kill the PAL at the end of the program as well.
@@ -144,6 +150,8 @@ namespace LcmsNet
         /// Reference to splash screen window.
         /// </summary>
         private DynamicSplashScreenWindow splashScreen;
+
+        private bool splashScreenEnded = false;
 
         private ManualResetEvent resetSplashCreated;
         private Thread splashThread;
@@ -432,6 +440,7 @@ namespace LcmsNet
             }
 
             splashScreen.LoadComplete();
+            splashScreenEnded = true;
 
             classApplicationLogger.Message -= classApplicationLogger_Message;
 
