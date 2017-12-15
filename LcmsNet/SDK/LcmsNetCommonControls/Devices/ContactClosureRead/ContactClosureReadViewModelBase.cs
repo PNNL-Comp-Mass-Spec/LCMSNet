@@ -51,6 +51,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         #region Members
 
         private double voltage;
+        private string readReport;
         private T selectedPort;
         private ContactClosureState status = ContactClosureState.Unknown;
 
@@ -80,6 +81,15 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         {
             get { return voltage; }
             protected set { this.RaiseAndSetIfChanged(ref voltage, value); }
+        }
+
+        /// <summary>
+        /// A report status message that may be shown to the user
+        /// </summary>
+        public string ReadReport
+        {
+            get { return readReport; }
+            protected set { this.RaiseAndSetIfChanged(ref readReport, value); }
         }
 
         /// <summary>

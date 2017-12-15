@@ -113,12 +113,12 @@ namespace LcmsNet.Devices.ContactClosureRead
 
         public virtual void CC_DeviceSaveRequired(object sender, EventArgs e)
         {
-            //Propogate this event
+            //Propagate this event
             OnSaveRequired();
         }
 
         /// <summary>
-        /// Handles sending a pulse to the Contact Closure when the user presses the button to do so.
+        /// Handles reading the status of the signal when the user presses the button to do so.
         /// </summary>
         protected override void ReadStatus()
         {
@@ -134,6 +134,7 @@ namespace LcmsNet.Devices.ContactClosureRead
                     Status = ContactClosureState.Open;
                 }
                 Voltage = contactClosureRead.ReadVoltage();
+                ReadReport = $"Input state read at {DateTime.Now:HH:m:s tt}";
             }
             catch (Exception ex)
             {
