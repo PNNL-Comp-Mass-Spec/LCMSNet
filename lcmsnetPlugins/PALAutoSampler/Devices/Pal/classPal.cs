@@ -102,37 +102,46 @@ namespace LcmsNet.Devices.Pal
         #endregion
 
         #region Events
+
         /// <summary>
         /// Indicates that a change requiring saving in the Fluidics designer has occured.
         /// </summary>
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+
         /// <summary>
         /// Indicates that the device is not busy and can accept commands.
         /// </summary>
         public event DelegateDeviceFree Free;
+
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
         public event EventHandler<classDeviceErrorEventArgs> Error;
+
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
+
         /// <summary>
         /// Fired when new tray names are available.
         /// </summary>
         public event EventHandler<classAutoSampleEventArgs> TrayNames;
+
         /// <summary>
         /// Fired when new method names are available.
         /// </summary>
         public event EventHandler<classAutoSampleEventArgs> MethodNames;
+
         /// <summary>
         /// Fired to the method editor handler with a List of method names
         /// </summary>
         public event DelegateDeviceHasData Methods;
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -141,7 +150,7 @@ namespace LcmsNet.Devices.Pal
             m_vialRange = enumVialRanges.Well96;
             m_name = "pal";
             AbortEvent = new System.Threading.ManualResetEvent(false);
-            StatusPollDelay = 10;
+            StatusPollDelay = 1;
         }
         #endregion
 
@@ -151,6 +160,7 @@ namespace LcmsNet.Devices.Pal
         /// Gets or sets the abort event for scheduling.
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         /// <summary>
         /// Gets or sets whether the device is emulation mode.
         /// </summary>
@@ -166,6 +176,7 @@ namespace LcmsNet.Devices.Pal
                 m_emulation = value;
             }
         }
+
         /// <summary>
         /// The current status of the PAL.
         /// </summary>
@@ -181,6 +192,7 @@ namespace LcmsNet.Devices.Pal
                 m_status = value;
             }
         }
+
         /// <summary>
         /// The PAL's version information.
         /// </summary>
@@ -196,6 +208,7 @@ namespace LcmsNet.Devices.Pal
                 OnDeviceSaveRequired();
             }
         }
+
         /// <summary>
         /// Gets or sets a uniquely identifiable name.
         /// </summary>
@@ -210,6 +223,7 @@ namespace LcmsNet.Devices.Pal
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets the folder containing the PAL method files.
         /// </summary>
@@ -237,6 +251,7 @@ namespace LcmsNet.Devices.Pal
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets the method for the PAL to run.
         /// </summary>
@@ -253,6 +268,7 @@ namespace LcmsNet.Devices.Pal
                 OnDeviceSaveRequired();
             }
         }
+
         /// <summary>
         /// Gets or sets the tray for the PAL to use.
         /// </summary>
@@ -340,6 +356,7 @@ namespace LcmsNet.Devices.Pal
                 OnDeviceSaveRequired();
             }
         }
+
         /// <summary>
         /// Gets or sets the serial port which the PAL is connected to.
         /// </summary>
@@ -349,6 +366,7 @@ namespace LcmsNet.Devices.Pal
             get;
             set;
         }
+
         /// <summary>
         /// Gets or sets the delay when polling for system status in seconds
         /// </summary>
@@ -358,6 +376,7 @@ namespace LcmsNet.Devices.Pal
             get;
             set;
         }
+
         public enumDeviceErrorStatus ErrorType
         {
             get;
@@ -412,6 +431,7 @@ namespace LcmsNet.Devices.Pal
         {
             Error?.Invoke(this, new classDeviceErrorEventArgs(message, ex, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, message));
         }
+
         /// <summary>
         /// Initializes the PAL.
         /// This is done by starting paldriv.exe, resetting the PAL,
@@ -720,6 +740,7 @@ namespace LcmsNet.Devices.Pal
             OnDeviceSaveRequired();
             OnFree();
         }
+
         ///
         /// Loads the method
         ///
@@ -750,14 +771,23 @@ namespace LcmsNet.Devices.Pal
             //
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
             //
+            var status = "";
+            var statusCheckError = m_PALDrvr.GetStatus(ref status);
             var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
             if (timeout > span.TotalSeconds)
-                ContinueMethod(timeout - span.TotalSeconds);
+            {
+                // If the PAL is waiting for data station synchronization, DO NOT CONTINUE IN THE START METHOD!
+                if (!status.Contains("WAITING FOR DS 1;"))
+                {
+                    ContinueMethod(timeout - span.TotalSeconds);
+                }
+            }
             else
                 return false;
 
             return true;
         }
+
         /// <summary>
         /// Sets the variables to use the next time StartMethod is called
         /// </summary>
@@ -786,6 +816,7 @@ namespace LcmsNet.Devices.Pal
             m_volume = volume;
             return true;
         }
+
         /// <summary>
         /// Runs a method as defined by the LoadMethod command.
         /// </summary>
@@ -869,6 +900,7 @@ namespace LcmsNet.Devices.Pal
         {
             Error?.Invoke(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
         }
+
         /// <summary>
         /// Pauses the currently running method.
         /// </summary>
@@ -980,6 +1012,7 @@ namespace LcmsNet.Devices.Pal
             OnFree();
             return 2;   //Not ready
         }
+
         /// <summary>
         /// Returns the name of the device.
         /// </summary>
@@ -1005,6 +1038,7 @@ namespace LcmsNet.Devices.Pal
         #endregion
 
         #region IDevice Data Provider Methods
+
         /// <summary>
         /// Registers the method with a data provider.
         /// </summary>
@@ -1020,6 +1054,7 @@ namespace LcmsNet.Devices.Pal
                     break;
             }
         }
+
         /// <summary>
         /// Unregisters the method from the data provider.
         /// </summary>
@@ -1034,9 +1069,11 @@ namespace LcmsNet.Devices.Pal
                     break;
             }
         }
+
         #endregion
 
         #region Finch Methods
+
         /// <summary>
         /// Writes any performance data for the last method used.
         /// </summary>
@@ -1098,6 +1135,7 @@ namespace LcmsNet.Devices.Pal
 
             return component;
         }*/
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
