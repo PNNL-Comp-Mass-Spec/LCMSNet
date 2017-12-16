@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
@@ -21,7 +22,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         protected ContactClosureViewModelBase()
         {
             outputPortComboBoxOptions = new ReactiveUI.ReactiveList<T>(Enum.GetValues(typeof(T)).Cast<T>());
-            SendPulseCommand = ReactiveUI.ReactiveCommand.Create(() => SendPulse());
+            SendPulseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SendPulse()));
         }
 
         #endregion

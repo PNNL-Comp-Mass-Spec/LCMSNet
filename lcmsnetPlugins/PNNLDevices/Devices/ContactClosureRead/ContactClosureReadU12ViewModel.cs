@@ -19,6 +19,11 @@ namespace LcmsNet.Devices.ContactClosureRead
         /// </summary>
         public ContactClosureReadU12ViewModel()
         {
+            MinimumAnalogVoltage = -10;
+            MaximumAnalogVoltage = 10;
+            AnalogVoltageThreshold = 2.5;
+            Port = enumLabjackU12InputPorts.AI0;
+            IsAnalog = true;
         }
 
         #endregion
@@ -48,6 +53,7 @@ namespace LcmsNet.Devices.ContactClosureRead
                 if (this.RaiseAndSetIfChangedRetBool(ref selectedInputPort, value) && loading == false)
                 {
                     contactClosureRead.Port = value;
+                    IsAnalog = value.ToString().ToUpper().StartsWith("A");
                 }
             }
         }
@@ -124,7 +130,17 @@ namespace LcmsNet.Devices.ContactClosureRead
         {
             try
             {
-                var state = contactClosureRead.ReadStatus();
+                var state = ContactClosureReadU12.ContactClosureState.Open;
+                if (IsAnalog)
+                {
+                    // Analog port: use analog read
+                    state = contactClosureRead.ReadStatus(AnalogVoltageThreshold);
+                }
+                else
+                {
+                    // Digital port: use digital read
+                    state = contactClosureRead.ReadStatus();
+                }
                 if (state.HasFlag(ContactClosureReadU12.ContactClosureState.Closed))
                 {
                     Status = ContactClosureState.Closed;
@@ -138,7 +154,7 @@ namespace LcmsNet.Devices.ContactClosureRead
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
+                classApplicationLogger.LogError(0, "Could not manually read a voltage or state in the contact closure read.", ex);
             }
         }
 

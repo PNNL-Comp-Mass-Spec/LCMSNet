@@ -13,6 +13,11 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
 
     internal class ContactClosureReadViewModelDummy : ContactClosureReadViewModelBase<DummyInputPorts>
     {
+        public ContactClosureReadViewModelDummy()
+        {
+            IsAnalog = true;
+        }
+
         public override IDevice Device { get; set; }
 
         protected override void ReadStatus()

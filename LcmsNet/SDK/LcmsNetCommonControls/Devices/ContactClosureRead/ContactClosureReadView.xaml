@@ -11,7 +11,11 @@
              MinHeight="65" MinWidth="250">
     <GroupBox Margin="3">
         <Grid Margin="3">
+            <Grid.Resources>
+                <BooleanToVisibilityConverter x:Key ="BoolToVis" />
+            </Grid.Resources>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -29,7 +33,9 @@
             <TextBox Grid.Row="1" Grid.Column="1" Margin="3" IsReadOnly="True" TextAlignment="Right" Text="{Binding Voltage, StringFormat={}{0:F2}, Mode=OneWay}" />
             <TextBox Grid.Row="1" Grid.Column="2" Margin="3" IsReadOnly="True" Text="{Binding Status, Mode=OneWay}" />
             <Button Grid.Row="1" Grid.Column="3" Margin="3" Content="Read" Command="{Binding ReadStatusCommand}" />
-            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" HorizontalAlignment="Center" Text="{Binding ReadReport}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Closed Voltage" Visibility="{Binding IsAnalog, Converter={StaticResource BoolToVis}}" />
+            <xctk:DoubleUpDown Grid.Row="2" Grid.Column="1" Margin="3" Minimum="{Binding MinimumAnalogVoltage}" Maximum="{Binding MaximumAnalogVoltage}" Value="{Binding AnalogVoltageThreshold}" FormatString="F2" Visibility="{Binding IsAnalog, Converter={StaticResource BoolToVis}}" />
+            <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" HorizontalAlignment="Center" Text="{Binding ReadReport}" />
         </Grid>
     </GroupBox>
 </UserControl>

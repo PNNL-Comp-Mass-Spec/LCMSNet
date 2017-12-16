@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
@@ -42,8 +43,10 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         protected ContactClosureReadViewModelBase()
         {
             inputPortComboBoxOptions = new ReactiveUI.ReactiveList<T>(Enum.GetValues(typeof(T)).Cast<T>());
-            ReadStatusCommand = ReactiveUI.ReactiveCommand.Create(() => ReadStatus());
-
+            ReadStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ReadStatus()));
+            MinimumAnalogVoltage = 0;
+            MaximumAnalogVoltage = 5;
+            AnalogVoltageThreshold = 2.5;
         }
 
         #endregion
@@ -51,8 +54,12 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         #region Members
 
         private double voltage;
+        private double analogVoltageThreshold;
+        private double minimumAnalogVoltage;
+        private double maximumAnalogVoltage;
         private string readReport;
         private T selectedPort;
+        private bool isAnalog;
         private ContactClosureState status = ContactClosureState.Unknown;
 
         /// <summary>
@@ -75,12 +82,48 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         public ReactiveUI.ReactiveCommand<Unit, Unit> ReadStatusCommand { get; private set; }
 
         /// <summary>
-        /// The voltage of the pulse
+        /// The voltage at the input
         /// </summary>
         public double Voltage
         {
             get { return voltage; }
             protected set { this.RaiseAndSetIfChanged(ref voltage, value); }
+        }
+
+        /// <summary>
+        /// The minimum voltage for an analog input to be considered "closed"
+        /// </summary>
+        public double AnalogVoltageThreshold
+        {
+            get { return analogVoltageThreshold; }
+            set { this.RaiseAndSetIfChanged(ref analogVoltageThreshold, value); }
+        }
+
+        /// <summary>
+        /// The minimum voltage for an analog input
+        /// </summary>
+        public double MinimumAnalogVoltage
+        {
+            get { return minimumAnalogVoltage; }
+            protected set { this.RaiseAndSetIfChanged(ref minimumAnalogVoltage, value); }
+        }
+
+        /// <summary>
+        /// The maximum voltage for an analog input
+        /// </summary>
+        public double MaximumAnalogVoltage
+        {
+            get { return maximumAnalogVoltage; }
+            protected set { this.RaiseAndSetIfChanged(ref maximumAnalogVoltage, value); }
+        }
+
+        /// <summary>
+        /// If the selected port is an analog port
+        /// </summary>
+        public bool IsAnalog
+        {
+            get { return isAnalog; }
+            protected set { this.RaiseAndSetIfChanged(ref isAnalog, value); }
         }
 
         /// <summary>
