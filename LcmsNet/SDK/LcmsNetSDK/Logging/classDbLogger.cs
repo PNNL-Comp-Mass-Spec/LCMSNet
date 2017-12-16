@@ -130,7 +130,7 @@ namespace LcmsNetDataClasses.Logging
                     if (args.Sample.ActualLCMethod.Events.Count > 0)
                         sqlCmdBlder.Append("'" +
                                            args.Sample.ActualLCMethod.Events[args.Sample.ActualLCMethod.CurrentEventNumber].Device
-                                               .Name + "',");
+                                               .Name.Replace("'", "''") + "',");
                     else
                         sqlCmdBlder.Append("'No events',");
                 }
@@ -144,7 +144,7 @@ namespace LcmsNetDataClasses.Logging
                 sqlCmdBlder.Append("'','','',");
             }
 
-            sqlCmdBlder.Append("'" + args.Message + "',");
+            sqlCmdBlder.Append("'" + args.Message.Replace("'", "''") + "',");
 
             // Create blank field for exception
             sqlCmdBlder.Append("'')");
