@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -84,6 +85,7 @@ namespace LcmsNet.Devices.Pal
         private int volume = 0;
         private string statusText = "";
         private string selectedPortName = "";
+        private bool monitorStatus = false;
 
         #endregion
 
@@ -128,6 +130,18 @@ namespace LcmsNet.Devices.Pal
         {
             get { return selectedPortName; }
             set { this.RaiseAndSetIfChanged(ref selectedPortName, value); }
+        }
+
+        public bool MonitorStatus
+        {
+            get { return monitorStatus; }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref monitorStatus, value))
+                {
+                    ControlMonitoring(value);
+                }
+            }
         }
 
         public classPal Pal
@@ -345,6 +359,52 @@ namespace LcmsNet.Devices.Pal
         {
             Pal.PortName = SelectedPortName;
             StatusText = "Port name changed to " + m_Pal.PortName;
+        }
+
+        private void ControlMonitoring(bool doMonitor)
+        {
+            if (doMonitor)
+            {
+                if (monitorTimer == null)
+                {
+                    monitorTimer = new Timer(MonitorUpdateStatus, this, 1000, 1000);
+                }
+                else
+                {
+                    monitorTimer.Change(1000, 0);
+                }
+                if (monitorTimeout == null)
+                {
+                    monitorTimeout = new Timer(TimeoutMonitor, this, TimeSpan.FromMinutes(5), Timeout.InfiniteTimeSpan);
+                }
+            }
+            else
+            {
+                TimeoutMonitor(this);
+            }
+        }
+
+        private Timer monitorTimer = null;
+        private Timer monitorTimeout = null;
+
+        private void MonitorUpdateStatus(object sender)
+        {
+            RefreshStatus();
+        }
+
+        private void TimeoutMonitor(object sender)
+        {
+            if (monitorTimer != null)
+            {
+                monitorTimer.Dispose();
+                monitorTimer = null;
+            }
+            if (monitorTimeout != null)
+            {
+                monitorTimeout.Dispose();
+                monitorTimeout = null;
+            }
+            MonitorStatus = false;
         }
 
         #endregion

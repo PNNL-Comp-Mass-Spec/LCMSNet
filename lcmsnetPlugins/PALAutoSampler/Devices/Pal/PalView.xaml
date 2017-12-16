@@ -54,7 +54,10 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBox Grid.Row="0" Margin="3" Text="{Binding StatusText, Mode=OneWay}" IsEnabled="False" />
-                        <Button Grid.Row="1" Margin="3" Width="81" Content="Refresh" Command="{Binding RefreshStatusCommand}" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Margin="3" Width="81" Content="Refresh" Command="{Binding RefreshStatusCommand}" />
+                            <CheckBox VerticalAlignment="Center" Margin="3" Content="Monitor 5 minutes" IsChecked="{Binding MonitorStatus}" />
+                        </StackPanel>
                     </Grid>
                 </GroupBox>
             </Grid>
