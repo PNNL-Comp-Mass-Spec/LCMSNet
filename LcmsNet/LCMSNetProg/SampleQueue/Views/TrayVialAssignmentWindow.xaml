@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
         mc:Ignorable="d"
-        Title="TrayVialAssignmentWindow" Height="532" Width="936"
+        Title="Tray/Vial Assignment" Height="532" Width="936"
         d:DataContext="{d:DesignInstance {x:Type viewModels:TrayVialAssignmentViewModel}, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner">
     <Grid>
