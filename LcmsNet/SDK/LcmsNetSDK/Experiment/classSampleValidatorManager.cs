@@ -17,8 +17,9 @@ namespace LcmsNetDataClasses.Experiment
         {
             var catalog = new AggregateCatalog(new AssemblyCatalog(typeof (classSampleValidatorManager).Assembly));
 
-            var validatorPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var validatorFolder = new DirectoryInfo(Path.Combine(validatorPath, CONST_VALIDATOR_PATH));
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var validatorPath = Path.Combine(appDataPath, CONST_VALIDATOR_PATH);
+            var validatorFolder = new DirectoryInfo(validatorPath);
 
             if (!validatorFolder.Exists)
                 validatorFolder.Create();
