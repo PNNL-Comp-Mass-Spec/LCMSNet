@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
@@ -255,7 +256,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var trays = args.TrayList;
 
-            SampleDataManager.AutoSamplerTrays = trays;
+            RxApp.MainThreadScheduler.Schedule(() => SampleDataManager.AutoSamplerTrays = trays);
         }
 
         /// <summary>

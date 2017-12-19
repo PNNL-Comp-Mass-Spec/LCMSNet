@@ -44,8 +44,6 @@ namespace LcmsNet.Devices.Pal
             {
                 Pal.DeviceSaveRequired += Pal_DeviceSaveRequired;
                 Pal.Free += OnFree;
-                Pal.TrayNames += m_Pal_PalTrayListReceived;
-                Pal.MethodNames += (sender, e) => { ProcessMethods(e.MethodList); };
             }
 
             SetBaseDevice(Pal);
@@ -207,10 +205,10 @@ namespace LcmsNet.Devices.Pal
 
         private void SetupCommands()
         {
-            RefreshMethodListCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshMethods());
-            RunMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RunMethod()));
-            StopMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopMethod()));
-            RefreshStatusCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshStatus());
+            RefreshMethodListCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RefreshMethods());
+            RunMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RunMethod());
+            StopMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => StopMethod());
+            RefreshStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RefreshStatus());
             ApplyPortNameCommand = ReactiveUI.ReactiveCommand.Create(() => ApplyPortName());
         }
 
@@ -301,13 +299,16 @@ namespace LcmsNet.Devices.Pal
             }
         }
 
-        private void RefreshMethods()
+        private async Task RefreshMethods()
         {
-            Pal.ListMethods();
-            Pal.ListTrays();
+            var methods = await Task.Run(() => Pal.ListMethods());
+            var trays = await Task.Run(() => Pal.ListTrays());
+
+            ProcessMethods(methods);
+            ProcessTrays(trays);
         }
 
-        private void RunMethod()
+        private async Task RunMethod()
         {
             if (string.IsNullOrWhiteSpace(SelectedTray))
             {
@@ -321,15 +322,18 @@ namespace LcmsNet.Devices.Pal
                 return;
             }
 
-            if (Pal.GetStatus().Contains("READY"))
+            await Task.Run(() =>
             {
-                Pal.LoadMethod(SelectedMethod, SelectedTray, VialNumber, Convert.ToString(Volume, CultureInfo.InvariantCulture));
-                Pal.StartMethod(1000);
-            }
-            else
-            {
-                Pal.ContinueMethod(0);
-            }
+                if (Pal.GetStatus().Contains("READY"))
+                {
+                    Pal.LoadMethod(SelectedMethod, SelectedTray, VialNumber, Convert.ToString(Volume, CultureInfo.InvariantCulture));
+                    Pal.StartMethod(1000);
+                }
+                else
+                {
+                    Pal.ContinueMethod(0);
+                }
+            });
         }
 
         private void Initialize()
@@ -345,14 +349,15 @@ namespace LcmsNet.Devices.Pal
             }
         }
 
-        private void RefreshStatus()
+        private async Task RefreshStatus()
         {
-            StatusText = Pal.GetStatus();
+            var status = await Task.Run(() => Pal.GetStatus());
+            StatusText = status;
         }
 
-        private void StopMethod()
+        private async Task StopMethod()
         {
-            Pal.StopMethod();
+            await Task.Run(() => Pal.StopMethod());
         }
 
         private void ApplyPortName()

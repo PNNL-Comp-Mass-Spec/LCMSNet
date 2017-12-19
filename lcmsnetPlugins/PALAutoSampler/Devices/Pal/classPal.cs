@@ -606,7 +606,7 @@ namespace LcmsNet.Devices.Pal
         /// Lists the available methods for use with the PAL.
         /// </summary>
         /// <returns>A string containing the methods</returns>
-        public string ListMethods()
+        public List<string> ListMethods()
         {
             var methods = "";
             //
@@ -625,32 +625,34 @@ namespace LcmsNet.Devices.Pal
             // Now to update the user interface, get the method names
             // and send them to any listeners.
             //
+            var methodsList = new List<string>();
             if (methods != null)
             {
                 var methodNames = methods.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL METHODS LENGTH: " + methodNames.Length);
-                var data = new List<string>();
 
                 if (methodNames.Length > 0)
-                    data.AddRange(methodNames);
+                {
+                    methodsList.AddRange(methodNames);
+                }
 
                 // For UI and other.
-                if (data.Count > 0)
+                if (methodsList.Count > 0)
                 {
-                    MethodNames?.Invoke(this, new classAutoSampleEventArgs(new List<string>(), data));
+                    MethodNames?.Invoke(this, new classAutoSampleEventArgs(new List<string>(), methodsList));
                 }
                 // For method editor.  Needs to be refactored to use event args like above.
-                if (data.Count > 0 && Methods != null)
+                if (methodsList.Count > 0 && Methods != null)
                 {
                     var objects = new List<object>();
-                    foreach (var name in data)
+                    foreach (var name in methodsList)
                     {
                         objects.Add(name);
                     }
                     Methods(this, objects);
                 }
             }
-            return methods;
+            return methodsList;
         }
 
         /// <summary>
