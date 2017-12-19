@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,6 +45,13 @@ namespace LcmsNet.Devices.Pal
             {
                 Pal.DeviceSaveRequired += Pal_DeviceSaveRequired;
                 Pal.Free += OnFree;
+
+                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
+                {
+                    ProcessTrays(Pal.TrayNamesList);
+                    ProcessMethods(Pal.MethodNamesList);
+                    ProcessTraysAndMaxVials(Pal.TraysAndMaxVials);
+                });
             }
 
             SetBaseDevice(Pal);
@@ -65,25 +73,26 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The class which controls the PAL itself.
         /// </summary>
-        private classPal m_Pal;
-
-        ///// <summary>
-        ///// An event listener to watch for events from the PAL class
-        ///// </summary>
-        //public PalEventListener m_PalEventListener;
+        private classPal pal;
 
         private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<string> trayComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<enumVialRanges> vialRangeComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<string> portNamesComboBoxOptions;
+        private readonly ReactiveUI.ReactiveList<string> trayNamesAndMaxVial = new ReactiveUI.ReactiveList<string>();
         private readonly bool isInDesignMode = false;
         private string selectedMethod = "";
         private string selectedTray = "";
-        private int vialNumber = 0;
-        private int volume = 0;
+        private int maxVialForTray = 1;
+        private int vialNumber = 1;
+        private int volume = 1;
         private string statusText = "";
         private string selectedPortName = "";
         private bool monitorStatus = false;
+        private string trayNamesAndMaxVialFormatted = "";
+        private string selectVialsInput;
+        private string selectVialsTray;
+        private string selectVialsOutput;
 
         #endregion
 
@@ -93,6 +102,7 @@ namespace LcmsNet.Devices.Pal
         public ReactiveUI.IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<enumVialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<string> PortNamesComboBoxOptions => portNamesComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
 
         public string SelectedMethod
         {
@@ -103,7 +113,23 @@ namespace LcmsNet.Devices.Pal
         public string SelectedTray
         {
             get { return selectedTray; }
-            set { this.RaiseAndSetIfChanged(ref selectedTray, value); }
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedTray, value) && Pal.TraysAndMaxVials.TryGetValue(value, out var maxTrayVial))
+                {
+                    MaxVialForTray = maxTrayVial;
+                }
+                else
+                {
+                    MaxVialForTray = 1;
+                }
+            }
+        }
+
+        public int MaxVialForTray
+        {
+            get { return maxVialForTray; }
+            set { this.RaiseAndSetIfChanged(ref maxVialForTray, value); }
         }
 
         public int VialNumber
@@ -130,6 +156,29 @@ namespace LcmsNet.Devices.Pal
             set { this.RaiseAndSetIfChanged(ref selectedPortName, value); }
         }
 
+        public string TrayNamesAndMaxVialFormatted {
+            get { return trayNamesAndMaxVialFormatted; }
+            private set { this.RaiseAndSetIfChanged(ref trayNamesAndMaxVialFormatted, value); }
+        }
+
+        public string SelectVialsInput
+        {
+            get { return selectVialsInput; }
+            set { this.RaiseAndSetIfChanged(ref selectVialsInput, value); }
+        }
+
+        public string SelectVialsTray
+        {
+            get { return selectVialsTray; }
+            set { this.RaiseAndSetIfChanged(ref selectVialsTray, value); }
+        }
+
+        public string SelectVialsOutput
+        {
+            get { return selectVialsOutput; }
+            private set { this.RaiseAndSetIfChanged(ref selectVialsOutput, value); }
+        }
+
         public bool MonitorStatus
         {
             get { return monitorStatus; }
@@ -144,8 +193,8 @@ namespace LcmsNet.Devices.Pal
 
         public classPal Pal
         {
-            get { return m_Pal; }
-            private set { this.RaiseAndSetIfChanged(ref m_Pal, value); }
+            get { return pal; }
+            private set { this.RaiseAndSetIfChanged(ref pal, value); }
         }
 
         public int MaxVial => (int) (Pal?.VialRange ?? enumVialRanges.Well96);
@@ -202,6 +251,7 @@ namespace LcmsNet.Devices.Pal
         public ReactiveUI.ReactiveCommand<Unit, Unit> StopMethodCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SelectVialsCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -210,6 +260,14 @@ namespace LcmsNet.Devices.Pal
             StopMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => StopMethod());
             RefreshStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RefreshStatus());
             ApplyPortNameCommand = ReactiveUI.ReactiveCommand.Create(() => ApplyPortName());
+            SelectVialsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => SelectVials());
+        }
+
+        private async Task SelectVials()
+        {
+            var result = await Task.Run(() => Pal.SelectVials(SelectVialsInput, SelectVialsTray, ""));
+
+            SelectVialsOutput = result;
         }
 
         #endregion
@@ -249,7 +307,7 @@ namespace LcmsNet.Devices.Pal
 
         public virtual void Pal_DeviceSaveRequired(object sender, EventArgs e)
         {
-            //Propogate this
+            //Propagate this
             //TODO: Figure out if this actually worked or not
             //System.Windows.Forms.MessageBox.Show("OH SNAP WE NEED TO SAVE");
             OnSaveRequired();
@@ -273,14 +331,6 @@ namespace LcmsNet.Devices.Pal
         }
 
         /// <summary>
-        /// Handles when the PAL says it has tray data.
-        /// </summary>
-        void m_Pal_PalTrayListReceived(object sender, classAutoSampleEventArgs args)
-        {
-            ProcessTrays(args.TrayList);
-        }
-
-        /// <summary>
         /// Converts the raw tray list string into a list of trays.
         /// </summary>
         /// <param name="trayList">The string which the PAL class returns after GetTrayList()</param>
@@ -299,13 +349,29 @@ namespace LcmsNet.Devices.Pal
             }
         }
 
+        public void ProcessTraysAndMaxVials(Dictionary<string, int> traysAndMaxVials)
+        {
+            if (traysAndMaxVials != null)
+            {
+                using (TrayNamesAndMaxVial.SuppressChangeNotifications())
+                {
+                    trayNamesAndMaxVial.Clear();
+                    trayNamesAndMaxVial.AddRange(traysAndMaxVials.Select(x => $"Tray: {x.Key}   Max Vial: {x.Value}"));
+                }
+            }
+
+            TrayNamesAndMaxVialFormatted = string.Join("\n", TrayNamesAndMaxVial);
+        }
+
         private async Task RefreshMethods()
         {
             var methods = await Task.Run(() => Pal.ListMethods());
             var trays = await Task.Run(() => Pal.ListTrays());
+            await Task.Run(() => Pal.SetMaxVialsForTrays());
 
             ProcessMethods(methods);
             ProcessTrays(trays);
+            ProcessTraysAndMaxVials(Pal.TraysAndMaxVials);
         }
 
         private async Task RunMethod()
@@ -363,7 +429,7 @@ namespace LcmsNet.Devices.Pal
         private void ApplyPortName()
         {
             Pal.PortName = SelectedPortName;
-            StatusText = "Port name changed to " + m_Pal.PortName;
+            StatusText = "Port name changed to " + pal.PortName;
         }
 
         private void ControlMonitoring(bool doMonitor)
@@ -392,9 +458,9 @@ namespace LcmsNet.Devices.Pal
         private Timer monitorTimer = null;
         private Timer monitorTimeout = null;
 
-        private void MonitorUpdateStatus(object sender)
+        private async void MonitorUpdateStatus(object sender)
         {
-            RefreshStatus();
+            await RefreshStatus();
         }
 
         private void TimeoutMonitor(object sender)

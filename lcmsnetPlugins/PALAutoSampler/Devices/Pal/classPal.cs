@@ -95,6 +95,10 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         private bool m_emulation;
 
+        private readonly Dictionary<string, int> traysAndMaxVials = new Dictionary<string, int>();
+        private readonly List<string> trayNames = new List<string>();
+        private readonly List<string> methodNames = new List<string>();
+
         private const int CONST_PALERR_PORTUNAVAILABLE = 2;
         private const int CONST_PALERR_PORTINUSE = 3;
         private const int CONST_WAITTIMEOUT = 10000; //milliseconds
@@ -155,6 +159,21 @@ namespace LcmsNet.Devices.Pal
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The list of trays addressable by the Pal. Populated by <see cref="ListTrays()"/>
+        /// </summary>
+        public List<string> TrayNamesList => trayNames;
+
+        /// <summary>
+        /// The list of methods in the Pal. Populated by <see cref="ListMethods()"/>
+        /// </summary>
+        public List<string> MethodNamesList => methodNames;
+
+        /// <summary>
+        /// A mapping of trays and max vials for each tray. Populated by <see cref="SetMaxVialsForTrays"/>
+        /// </summary>
+        public Dictionary<string, int> TraysAndMaxVials => traysAndMaxVials;
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -552,6 +571,8 @@ namespace LcmsNet.Devices.Pal
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
                 // list trays
                 ListTrays();
+                // set the max vial for each tray
+                SetMaxVialsForTrays();
             }
             OnFree();
             return true;
@@ -603,7 +624,7 @@ namespace LcmsNet.Devices.Pal
         }
 
         /// <summary>
-        /// Lists the available methods for use with the PAL.
+        /// Lists the available methods for use with the PAL. Also populates <see cref="MethodNamesList"/>
         /// </summary>
         /// <returns>A string containing the methods</returns>
         public List<string> ListMethods()
@@ -652,11 +673,15 @@ namespace LcmsNet.Devices.Pal
                     Methods(this, objects);
                 }
             }
+
+            MethodNamesList.Clear();
+            MethodNamesList.AddRange(methodsList);
+
             return methodsList;
         }
 
         /// <summary>
-        /// Lists the available trays known to the PAL.
+        /// Lists the available trays known to the PAL. Also populates <see cref="TrayNamesList"/>
         /// </summary>
         /// <returns>A string containing the methods</returns>
         public List<string> ListTrays()
@@ -707,7 +732,79 @@ namespace LcmsNet.Devices.Pal
             {
                 classApplicationLogger.LogError(0, "Empty traylist returned by PAL");
             }
+
+            TrayNamesList.Clear();
+            TrayNamesList.AddRange(trayList);
+
             return trayList;
+        }
+
+        /// <summary>
+        /// Populates <see cref="TraysAndMaxVials"/>
+        /// </summary>
+        public void SetMaxVialsForTrays()
+        {
+            if (TrayNamesList.Count == 0)
+            {
+                return;
+            }
+
+            TraysAndMaxVials.Clear();
+            foreach (var tray in TrayNamesList)
+            {
+                ValidateVial(tray, 0, out int lastVial);
+                TraysAndMaxVials.Add(tray, lastVial);
+            }
+        }
+
+        /// <summary>
+        /// Input: Unsure, can be blank. Opens a "Trays" UI for selecting vials from a provided initial tray.
+        /// </summary>
+        /// <param name="vialTypes"></param>
+        /// <param name="tray"></param>
+        /// <param name="selectedVials"></param>
+        /// <returns></returns>
+        public string SelectVials(string vialTypes, string tray, string selectedVials)
+        {
+            if (m_emulation)
+            {
+                return "Emulated";
+            }
+            var error = m_PALDrvr.SelectVials(vialTypes, tray, ref selectedVials);
+
+            return error.ToString() + ": " + selectedVials;
+        }
+
+        /// <summary>
+        /// Validates the currently set tray and vial
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidateVial()
+        {
+            return ValidateVial(Tray, Vial, out _);
+        }
+
+        /// <summary>
+        /// Validates a tray/vial pair
+        /// </summary>
+        /// <param name="tray">Tray name</param>
+        /// <param name="vial">Vial number.</param>
+        /// <param name="lastVial">The last vial in the specified tray</param>
+        /// <returns>True if the tray and vial combination is valid; otherwise false</returns>
+        public bool ValidateVial(string tray, int vial, out int lastVial)
+        {
+            lastVial = 0;
+            if (m_emulation)
+            {
+                return false;
+            }
+
+            var tempStr = "";
+            var error = m_PALDrvr.ValidateVial($"{tray}:{vial}", ref tempStr);
+
+            int.TryParse(tempStr, out lastVial);
+
+            return error == 0;
         }
 
         /// <summary>

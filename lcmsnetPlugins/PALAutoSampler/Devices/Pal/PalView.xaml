@@ -39,9 +39,9 @@
                         <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="3" ItemsSource="{Binding TrayComboBoxOptions}" SelectedItem="{Binding SelectedTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" Margin="3" HorizontalAlignment="Center" Width="80" Content="Refresh" Command="{Binding RefreshMethodListCommand}" />
                         <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Vial" />
-                        <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="3" Minimum="0" Maximum="{Binding MaxVial}" Value="{Binding VialNumber}" />
+                        <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="3" Minimum="1" Maximum="{Binding MaxVialForTray}" Value="{Binding VialNumber}" />
                         <TextBlock Grid.Row="3" Grid.Column="2" Margin="10,3,3,3" Text="Volume" />
-                        <xctk:IntegerUpDown Grid.Row="3" Grid.Column="3" Margin="3" Minimum="0" Maximum="1000" Value="{Binding Volume}" />
+                        <xctk:IntegerUpDown Grid.Row="3" Grid.Column="3" Margin="3" Minimum="1" Maximum="1000" Value="{Binding Volume}" />
                         <TextBlock Grid.Row="3" Grid.Column="4" Margin="3" Text="uL" />
                         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Content="Run/Continue Method" Command="{Binding RunMethodCommand}" />
                         <Button Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="3" Content="STOP!" Command="{Binding StopMethodCommand}" />
@@ -78,6 +78,46 @@
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" ItemsSource="{Binding VialRangeComboBoxOptions}" SelectedItem="{Binding Pal.VialRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedItem="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Button Grid.Row="1" Grid.Column="2" Margin="3" Width="75" Content="Apply" Command="{Binding ApplyPortNameCommand}" />
+            </Grid>
+        </TabItem>
+        <TabItem Header="Misc">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" Text="Vial Information" />
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" MaxLines="7" IsReadOnly="True" IsEnabled="False" Text="{Binding TrayNamesAndMaxVialFormatted, Mode=OneWay}" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" Text="Select Vials Test" />
+                <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Tray" />
+                <ComboBox Grid.Row="3" Grid.Column="1" Margin="3" MinWidth="50" ItemsSource="{Binding TrayComboBoxOptions}" SelectedItem="{Binding SelectVialsTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="3" Grid.Column="2" Margin="3" Text="Vial Type" />
+                <TextBox Grid.Row="3" Grid.Column="3" Margin="3" Text="{Binding SelectVialsInput}" />
+                <Button Grid.Row="4" Grid.Column="0" Margin="3" Content="Run" Command="{Binding SelectVialsCommand}" />
+                <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="3" IsReadOnly="True" IsEnabled="False" Text="{Binding SelectVialsOutput, Mode=OneWay}" />
+                <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Header="Status">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0" Margin="3" Text="{Binding StatusText, Mode=OneWay}" IsEnabled="False" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Margin="3" Width="81" Content="Refresh" Command="{Binding RefreshStatusCommand}" />
+                            <CheckBox VerticalAlignment="Center" Margin="3" Content="Monitor 5 minutes" IsChecked="{Binding MonitorStatus}" />
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
             </Grid>
         </TabItem>
     </TabControl>
