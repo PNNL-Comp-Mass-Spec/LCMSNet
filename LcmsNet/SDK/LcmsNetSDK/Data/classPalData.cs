@@ -25,9 +25,10 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public classPalData()
         {
-            m_palMethod = CONST_METHOD_NAME;
-            m_PalTray = "";
-            m_Well = CONST_DEFAULT_VIAL_NUMBER;
+            Method = CONST_METHOD_NAME;
+            palTray = "";
+            well = CONST_DEFAULT_VIAL_NUMBER;
+            WellPlate = "";
         }
 
         #endregion
@@ -40,11 +41,13 @@ namespace LcmsNetDataClasses.Data
         /// <returns>A new object reference as a copy of this.</returns>
         public object Clone()
         {
-            var newData = new classPalData();
-            newData.PALTray = m_PalTray;
-            newData.Method = m_palMethod;
-            newData.Well = m_Well;
-            newData.WellPlate = m_WellPlate;
+            var newData = new classPalData
+            {
+                PALTray = palTray,
+                Method = Method,
+                Well = well,
+                WellPlate = WellPlate
+            };
 
             return newData;
         }
@@ -79,24 +82,14 @@ namespace LcmsNetDataClasses.Data
         #region "Class variables"
 
         /// <summary>
-        /// Name of the PAL method to run.
-        /// </summary>
-        private string m_palMethod = "";
-
-        /// <summary>
         /// Name of the PAL tray to use.
         /// </summary>
-        private string m_PalTray = "";
+        private string palTray;
 
         /// <summary>
         /// Vial index to use.
         /// </summary>
-        private int m_Well;
-
-        /// <summary>
-        /// Wellplate name
-        /// </summary>
-        private string m_WellPlate = "";
+        private int well;
 
         #endregion
 
@@ -107,7 +100,7 @@ namespace LcmsNetDataClasses.Data
         /// </summary>
         public int Well
         {
-            get { return m_Well; }
+            get { return well; }
             set
             {
                 if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
@@ -116,36 +109,28 @@ namespace LcmsNetDataClasses.Data
                     this.OnPropertyChanged();
                     return;
                 }
-                this.RaiseAndSetIfChanged(ref m_Well, value);
+                this.RaiseAndSetIfChanged(ref well, value);
             }
         }
 
         /// <summary>
-        /// Gets or sets the tray name to use.
+        /// Name of the PAL tray to use.
         /// </summary>
         public string PALTray
         {
-            get { return m_PalTray; }
-            set { this.RaiseAndSetIfChanged(ref m_PalTray, value); }
+            get { return palTray; }
+            set { this.RaiseAndSetIfChanged(ref palTray, value); }
         }
 
         /// <summary>
-        /// Gets or sets the PAL method to use.
+        /// Name of the PAL method to run.
         /// </summary>
-        public string Method
-        {
-            get { return m_palMethod; }
-            set { m_palMethod = value; }
-        }
+        public string Method { get; set; }
 
         /// <summary>
-        /// Gets or sets the Wellplate name that is stored in DMS.
+        /// The Wellplate name that is stored in DMS.
         /// </summary>
-        public string WellPlate
-        {
-            get { return m_WellPlate; }
-            set { m_WellPlate = value; }
-        }
+        public string WellPlate { get; set; }
 
         #endregion
 
