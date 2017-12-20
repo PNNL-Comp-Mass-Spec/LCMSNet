@@ -19,3 +19,4 @@ lib/SQLite_Zips
 *.DotSettings
 *.user
 Installer/Output/
+/SampleValidators/

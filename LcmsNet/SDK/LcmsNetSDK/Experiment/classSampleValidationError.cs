@@ -13,5 +13,10 @@
 
         public string Error { get; set; }
         public enumSampleValidationError ValidationErrorType { get; set; }
+
+        public override string ToString()
+        {
+            return $"{ValidationErrorType.ToString()}: {Error}";
+        }
     }
 }

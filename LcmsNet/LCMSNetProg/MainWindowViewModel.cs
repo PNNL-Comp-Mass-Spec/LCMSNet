@@ -644,7 +644,7 @@ namespace LcmsNet
             var sampler = device as IAutoSampler;
             if (sampler != null)
             {
-                sampler.TrayNames += SampleManagerVm.AutoSamplerTrayList;
+                sampler.TrayNamesRead += SampleManagerVm.AutoSamplerTrayList;
             }
 
             var network = device as INetworkStart;
@@ -665,7 +665,7 @@ namespace LcmsNet
             {
                 var sampler = device as IAutoSampler;
                 if (sampler != null)
-                    sampler.TrayNames -= SampleManagerVm.AutoSamplerTrayList;
+                    sampler.TrayNamesRead -= SampleManagerVm.AutoSamplerTrayList;
             }
 
             if (type.IsAssignableFrom(typeof(INetworkStart)))

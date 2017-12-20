@@ -48,9 +48,9 @@ namespace LcmsNet.Devices.Pal
 
                 ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
                 {
-                    ProcessTrays(Pal.TrayNamesList);
-                    ProcessMethods(Pal.MethodNamesList);
-                    ProcessTraysAndMaxVials(Pal.TraysAndMaxVials);
+                    ProcessTrays(Pal.TrayNames);
+                    ProcessMethods(Pal.MethodNames);
+                    ProcessTraysAndMaxVials(Pal.TrayNamesAndMaxVials);
                 });
             }
 
@@ -115,7 +115,7 @@ namespace LcmsNet.Devices.Pal
             get { return selectedTray; }
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedTray, value) && Pal.TraysAndMaxVials.TryGetValue(value, out var maxTrayVial))
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedTray, value) && Pal.TrayNamesAndMaxVials.TryGetValue(value, out var maxTrayVial))
                 {
                     MaxVialForTray = maxTrayVial;
                 }
@@ -371,7 +371,7 @@ namespace LcmsNet.Devices.Pal
 
             ProcessMethods(methods);
             ProcessTrays(trays);
-            ProcessTraysAndMaxVials(Pal.TraysAndMaxVials);
+            ProcessTraysAndMaxVials(Pal.TrayNamesAndMaxVials);
         }
 
         private async Task RunMethod()

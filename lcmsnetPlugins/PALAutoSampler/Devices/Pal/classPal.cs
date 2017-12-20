@@ -95,7 +95,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         private bool m_emulation;
 
-        private readonly Dictionary<string, int> traysAndMaxVials = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> trayNamesAndMaxVials = new Dictionary<string, int>();
         private readonly List<string> trayNames = new List<string>();
         private readonly List<string> methodNames = new List<string>();
 
@@ -108,7 +108,7 @@ namespace LcmsNet.Devices.Pal
         #region Events
 
         /// <summary>
-        /// Indicates that a change requiring saving in the Fluidics designer has occured.
+        /// Indicates that a change requiring saving in the Fluidics designer has occurred.
         /// </summary>
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
 
@@ -130,12 +130,12 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Fired when new tray names are available.
         /// </summary>
-        public event EventHandler<classAutoSampleEventArgs> TrayNames;
+        public event EventHandler<classAutoSampleEventArgs> TrayNamesRead;
 
         /// <summary>
         /// Fired when new method names are available.
         /// </summary>
-        public event EventHandler<classAutoSampleEventArgs> MethodNames;
+        public event EventHandler<classAutoSampleEventArgs> MethodNamesRead;
 
         /// <summary>
         /// Fired to the method editor handler with a List of method names
@@ -163,17 +163,17 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The list of trays addressable by the Pal. Populated by <see cref="ListTrays()"/>
         /// </summary>
-        public List<string> TrayNamesList => trayNames;
+        public List<string> TrayNames => trayNames;
 
         /// <summary>
         /// The list of methods in the Pal. Populated by <see cref="ListMethods()"/>
         /// </summary>
-        public List<string> MethodNamesList => methodNames;
+        public List<string> MethodNames => methodNames;
 
         /// <summary>
         /// A mapping of trays and max vials for each tray. Populated by <see cref="SetMaxVialsForTrays"/>
         /// </summary>
-        public Dictionary<string, int> TraysAndMaxVials => traysAndMaxVials;
+        public Dictionary<string, int> TrayNamesAndMaxVials => trayNamesAndMaxVials;
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -566,6 +566,11 @@ namespace LcmsNet.Devices.Pal
                 WaitUntilReady(CONST_WAITTIMEOUT);
                 //If we made it this far, success! We can now access the PAL.
                 m_accessible = true;
+                // store the pal instance to make it available for, say, validators
+                if (!AutoSamplers.ConnectedAutoSamplers.Contains(this))
+                {
+                    AutoSamplers.ConnectedAutoSamplers.Add(this);
+                }
                 //list methods
                 ListMethods();
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
@@ -624,7 +629,7 @@ namespace LcmsNet.Devices.Pal
         }
 
         /// <summary>
-        /// Lists the available methods for use with the PAL. Also populates <see cref="MethodNamesList"/>
+        /// Lists the available methods for use with the PAL. Also populates <see cref="MethodNames"/>
         /// </summary>
         /// <returns>A string containing the methods</returns>
         public List<string> ListMethods()
@@ -660,7 +665,7 @@ namespace LcmsNet.Devices.Pal
                 // For UI and other.
                 if (methodsList.Count > 0)
                 {
-                    MethodNames?.Invoke(this, new classAutoSampleEventArgs(new List<string>(), methodsList));
+                    MethodNamesRead?.Invoke(this, new classAutoSampleEventArgs(new List<string>(), methodsList));
                 }
                 // For method editor.  Needs to be refactored to use event args like above.
                 if (methodsList.Count > 0 && Methods != null)
@@ -674,14 +679,14 @@ namespace LcmsNet.Devices.Pal
                 }
             }
 
-            MethodNamesList.Clear();
-            MethodNamesList.AddRange(methodsList);
+            MethodNames.Clear();
+            MethodNames.AddRange(methodsList);
 
             return methodsList;
         }
 
         /// <summary>
-        /// Lists the available trays known to the PAL. Also populates <see cref="TrayNamesList"/>
+        /// Lists the available trays known to the PAL. Also populates <see cref="TrayNames"/>
         /// </summary>
         /// <returns>A string containing the methods</returns>
         public List<string> ListTrays()
@@ -719,9 +724,9 @@ namespace LcmsNet.Devices.Pal
                 //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL TRAYS LIST: " + names.Length);
                 trayList.AddRange(names);
 
-                if (TrayNames != null)
+                if (TrayNamesRead != null)
                 {
-                    TrayNames(this, new classAutoSampleEventArgs(trayList, new List<string>()));
+                    TrayNamesRead(this, new classAutoSampleEventArgs(trayList, new List<string>()));
                 }
                 else
                 {
@@ -733,8 +738,8 @@ namespace LcmsNet.Devices.Pal
                 classApplicationLogger.LogError(0, "Empty traylist returned by PAL");
             }
 
-            TrayNamesList.Clear();
-            TrayNamesList.AddRange(trayList);
+            TrayNames.Clear();
+            TrayNames.AddRange(trayList);
 
             return trayList;
         }
@@ -744,16 +749,16 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         public void SetMaxVialsForTrays()
         {
-            if (TrayNamesList.Count == 0)
+            if (TrayNames.Count == 0)
             {
                 return;
             }
 
-            TraysAndMaxVials.Clear();
-            foreach (var tray in TrayNamesList)
+            TrayNamesAndMaxVials.Clear();
+            foreach (var tray in TrayNames)
             {
                 ValidateVial(tray, 0, out int lastVial);
-                TraysAndMaxVials.Add(tray, lastVial);
+                TrayNamesAndMaxVials.Add(tray, lastVial);
             }
         }
 

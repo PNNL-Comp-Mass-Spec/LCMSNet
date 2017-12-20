@@ -4,7 +4,8 @@
 #define MyAppVersion "4.3.1"
 #define MySource "..\LcmsNet\"
 #define MyLib    "..\lib"
-#define MyPlugins "..\PluginDlls"
+#define MyPlugins "..\PluginDlls" 
+#define MyValidators "..\SampleValidators"
 #define MyAppName "LCMSNet"
 #define MyAppVis  "PNNL"
 #define MyAppPublisher "Battelle"
@@ -66,17 +67,17 @@ Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";       DestDir: "{a
 Source: "{#MyLib}\*.dll"; Excludes:"FluidicsPack.dll";              DestDir: "{app}";          Flags: ignoreversion
 Source: "{#MyLib}\FluidicsPack.dll";                                DestDir: "{app}\Plugins";  Flags: ignoreversion
 
-;Core sample validator    
-Source: "SDK\CoreSampleValidator\bin\x86\PNNLRelease\*.dll";        DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags:ignoreversion
+;Sample Validators
+;Core sample validator, PAL Validator    
+Source: "{#MyValidators}\*.dll";                                    DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "{#MyValidators}\x86\*.dll";                                DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
+Source: "{#MyValidators}\x64\*.dll";                                DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
 
 ;Plugins
 Source: "{#MyPlugins}\*.dll";                                       DestDir: "{app}\Plugins\"; Flags: ignoreversion
 Source: "{#MyPlugins}\x86\*.dll";                                   DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
 Source: "{#MyPlugins}\x64\*.dll";                                   DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
 Source: "..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";             DestDir: "{sys}";          Flags: ignoreversion
-
-;PAL Validator
-Source: "..\lcmsnetPlugins\PalValidator\bin\x86\PNNLRelease\*.dll";         DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
 Source: "..\ExternalApplications\LogViewer\bin\PNNLRelease\*.exe";  DestDir: "{app}";          Flags: ignoreversion

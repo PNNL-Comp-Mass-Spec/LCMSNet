@@ -341,7 +341,7 @@ namespace LcmsNet.SampleQueue
                                 }
                                 else
                                 {
-                                    sample.Sample.SampleErrors = null;
+                                    sample.Sample.SampleErrors = string.Empty;
                                 }
                             }
                             else
@@ -366,7 +366,11 @@ namespace LcmsNet.SampleQueue
 
                                 if (errors.Count > 0)
                                 {
-                                    //TODO: Add notifications to what was wrong with the samples.
+                                    if (sample.Sample.SampleErrors.Length > 0)
+                                    {
+                                        sample.Sample.SampleErrors += "\n";
+                                    }
+                                    sample.Sample.SampleErrors += string.Join("\n", errors.Select(x => x.ToString()));
                                     foundError = true;
                                 }
                             }

@@ -54,7 +54,10 @@
     <PostBuildEvent>if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\SampleValidators" mkdir "%25appdata%25\LCMSNet\SampleValidators"
 
-xcopy /Y /F /D "$(TargetPath)" "%25appdata%25\LCMSNet\SampleValidators"</PostBuildEvent>
+xcopy /Y /F /D "$(TargetPath)" "%25appdata%25\LCMSNet\SampleValidators\"
+xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)SampleValidators\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)SampleValidators\"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)SampleValidators\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

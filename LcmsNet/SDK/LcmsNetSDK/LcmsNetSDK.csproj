@@ -194,6 +194,12 @@ xcopy /y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /y /F /D "$(TargetPath)" %25appdata%25\LCMSNet\dmsExtensions</PostBuildEvent>
+xcopy /y /F /D "$(TargetPath)" "%25appdata%25\LCMSNet\dmsExtensions\"
+
+xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)SampleValidators\"
+xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)SampleValidators\"
+xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)SampleValidators\"
+xcopy /y /f /d "$(TargetDir)x86\*.dll" "$(SolutionDir)SampleValidators\x86\"
+xcopy /y /f /d "$(TargetDir)x64\*.dll" "$(SolutionDir)SampleValidators\x64\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
