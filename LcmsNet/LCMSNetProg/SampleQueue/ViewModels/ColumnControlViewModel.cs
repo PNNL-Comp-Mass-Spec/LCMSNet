@@ -85,7 +85,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             SetupCommands();
 
             this.WhenAnyValue(x => x.ContainsKeyboardFocus).Subscribe(x => this.SetBackground());
-            this.WhenAnyValue(x => x.Column.Status).Subscribe(x => ColumnEnabled = x != enumColumnStatus.Disabled);
+            this.WhenAnyValue(x => x.Column.Status).Select(x => x != enumColumnStatus.Disabled).ToProperty(this, x => x.ColumnEnabled, out columnEnabled, true);
 
             Column = columnData;
             CommandsVisible = commandsAreVisible;
@@ -93,7 +93,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private bool containsKeyboardFocus = false;
         private bool commandsVisible = true;
-        private bool columnEnabled = true;
+        private ObservableAsPropertyHelper<bool> columnEnabled;
         private SolidColorBrush normalColor = null;
 
         public bool ContainsKeyboardFocus
@@ -108,11 +108,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
         }
 
-        public bool ColumnEnabled
-        {
-            get { return columnEnabled; }
-            private set { this.RaiseAndSetIfChanged(ref columnEnabled, value); }
-        }
+        public bool ColumnEnabled => columnEnabled != null ? columnEnabled.Value : true;
 
         private void SetBackground()
         {
