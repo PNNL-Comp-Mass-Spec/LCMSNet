@@ -38,6 +38,16 @@ namespace LcmsNet.Configuration.ViewModels
 
         private void Initialize()
         {
+            // Set all monitors for the column before we set any local monitors, since they get run on initialization
+            this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId, out columnId);
+            this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
+            {
+                this.ColumnEnabled = x != enumColumnStatus.Disabled;
+                LogColumnStatusChange();
+            });
+            this.WhenAnyValue(x => x.ColumnData.Name).Subscribe(x => this.ColumnNameChanged?.Invoke());
+
+            // Local/instance variables should now be initialized according to the target object, so set the monitors going the other way.
             this.WhenAnyValue(x => x.ColumnEnabled).Subscribe(x =>
             {
                 if (ColumnData != null)
@@ -52,13 +62,6 @@ namespace LcmsNet.Configuration.ViewModels
                     }
                 }
             });
-            this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId, out columnId);
-            this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
-            {
-                this.ColumnEnabled = x != enumColumnStatus.Disabled;
-                LogColumnStatusChange();
-            });
-            this.WhenAnyValue(x => x.ColumnData.Name).Subscribe(x => this.ColumnNameChanged?.Invoke());
         }
 
         #endregion
