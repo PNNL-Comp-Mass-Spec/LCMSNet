@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
@@ -119,9 +121,9 @@ namespace Eksigent.Devices.Pumps
             ShowMethodEditorCommand = ReactiveUI.ReactiveCommand.Create(() => ShowMethodMenu());
             ShowDirectControlCommand = ReactiveUI.ReactiveCommand.Create(() => ShowDirectControl());
             ShowMobilePhasesCommand = ReactiveUI.ReactiveCommand.Create(() => ShowMobilePhaseMenu());
-            UpdateMethodsCommand = ReactiveUI.ReactiveCommand.Create(() => UpdateMethods());
-            StartPumpCommand = ReactiveUI.ReactiveCommand.Create(() => StartPump());
-            StopPumpCommand = ReactiveUI.ReactiveCommand.Create(() => StopPump());
+            UpdateMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => UpdateMethods()));
+            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()));
+            StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopPump()));
             ShowIntrumentConfigCommand = ReactiveUI.ReactiveCommand.Create(() => ShowInstrumentConfig());
             ShowAdvancedSettingsCommand = ReactiveUI.ReactiveCommand.Create(() => ShowAdvancedSettings());
             ShowDiagnosticsCommand = ReactiveUI.ReactiveCommand.Create(() => ShowDiagnosticsMenu());
@@ -168,11 +170,14 @@ namespace Eksigent.Devices.Pumps
         /// <param name="data"></param>
         private void Pump_MethodNames(object sender, List<object> data)
         {
-            using (methodComboBoxOptions.SuppressChangeNotifications())
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
             {
-                methodComboBoxOptions.Clear();
-                methodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
-            }
+                using (methodComboBoxOptions.SuppressChangeNotifications())
+                {
+                    methodComboBoxOptions.Clear();
+                    methodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
+                }
+            });
         }
 
         private void m_pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)

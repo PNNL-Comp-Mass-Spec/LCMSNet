@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
@@ -117,9 +118,9 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
 
         private void SetupCommands()
         {
-            RefreshMethodsCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshMethods());
-            StartAcquisitionCommand = ReactiveUI.ReactiveCommand.Create(() => StartAcquisition());
-            StopAcquisitionCommand = ReactiveUI.ReactiveCommand.Create(() => StopAcquisition());
+            RefreshMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshMethods()));
+            StartAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAcquisition()));
+            StopAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAcquisition()));
         }
 
         #endregion

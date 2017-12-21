@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows;
 using ReactiveUI;
 
@@ -383,10 +384,10 @@ namespace LcmsNet.Devices.Pumps
 
         private void SetupCommands()
         {
-            SetSetpointCommand = ReactiveCommand.Create(() => ChangeSetpoint());
-            StartPumpCommand = ReactiveCommand.Create(() => StartPumpOperation());
-            StopPumpCommand = ReactiveCommand.Create(() => StopPumpOperation());
-            RefillCommand = ReactiveCommand.Create(() => Refill());
+            SetSetpointCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ChangeSetpoint()));
+            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPumpOperation()));
+            StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopPumpOperation()));
+            RefillCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refill()));
         }
 
         #endregion

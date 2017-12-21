@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
@@ -141,30 +143,30 @@ namespace Newport.ESP300
 
         private void SetupCommands()
         {
-            RefreshPositionCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshPosition());
-            Axis1ForwardCommand = ReactiveUI.ReactiveCommand.Create(() => Axis1FwdPress());
-            Axis2ForwardCommand = ReactiveUI.ReactiveCommand.Create(() => Axis2FwdPress());
-            Axis3ForwardCommand = ReactiveUI.ReactiveCommand.Create(() => Axis3FwdPress());
-            Axis1ForwardReleaseCommand = ReactiveUI.ReactiveCommand.Create(() => Axis1FwdRelease());
-            Axis2ForwardReleaseCommand = ReactiveUI.ReactiveCommand.Create(() => Axis2FwdRelease());
-            Axis3ForwardReleaseCommand = ReactiveUI.ReactiveCommand.Create(() => Axis3FwdRelease());
-            Axis1BackwardCommand = ReactiveUI.ReactiveCommand.Create(() => Axis1BackPress());
-            Axis2BackwardCommand = ReactiveUI.ReactiveCommand.Create(() => Axis2BackPress());
-            Axis3BackwardCommand = ReactiveUI.ReactiveCommand.Create(() => Axis3BackPress());
-            Axis1BackwardReleaseCommand = ReactiveUI.ReactiveCommand.Create(() => Axis1BackRelease());
-            Axis2BackwardReleaseCommand = ReactiveUI.ReactiveCommand.Create(() => Axis2BackRelease());
-            Axis3BackwardReleaseCommand = ReactiveUI.ReactiveCommand.Create(() => Axis3BackRelease());
-            ResetToHomePositionCommand = ReactiveUI.ReactiveCommand.Create(() => ResetToHome());
-            GoToSelectedPositionCommand = ReactiveUI.ReactiveCommand.Create(() => GoToSelectedPosition());
-            DeletePositionCommand = ReactiveUI.ReactiveCommand.Create(() => RemovePosition());
-            SetPositionCommand = ReactiveUI.ReactiveCommand.Create(() => SetPosition());
-            Axis1MotorPowerCommand = ReactiveUI.ReactiveCommand.Create(() => ToggleAxis1Motor());
-            Axis2MotorPowerCommand = ReactiveUI.ReactiveCommand.Create(() => ToggleAxis2Motor());
-            Axis3MotorPowerCommand = ReactiveUI.ReactiveCommand.Create(() => ToggleAxis3Motor());
-            GetErrorsCommand = ReactiveUI.ReactiveCommand.Create(() => GetErrors());
-            ClearErrorsCommand = ReactiveUI.ReactiveCommand.Create(() => ClearErrors());
-            OpenPortCommand = ReactiveUI.ReactiveCommand.Create(() => OpenPort());
-            ClosePortCommand = ReactiveUI.ReactiveCommand.Create(() => ClosePort());
+            RefreshPositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPosition()));
+            Axis1ForwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdPress()));
+            Axis2ForwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdPress()));
+            Axis3ForwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdPress()));
+            Axis1ForwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdRelease()));
+            Axis2ForwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdRelease()));
+            Axis3ForwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdRelease()));
+            Axis1BackwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackPress()));
+            Axis2BackwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackPress()));
+            Axis3BackwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackPress()));
+            Axis1BackwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackRelease()));
+            Axis2BackwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackRelease()));
+            Axis3BackwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackRelease()));
+            ResetToHomePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ResetToHome()));
+            GoToSelectedPositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GoToSelectedPosition()));
+            DeletePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RemovePosition()));
+            SetPositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPosition()));
+            Axis1MotorPowerCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis1Motor()));
+            Axis2MotorPowerCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis2Motor()));
+            Axis3MotorPowerCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis3Motor()));
+            GetErrorsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetErrors()));
+            ClearErrorsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearErrors()));
+            OpenPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
+            ClosePortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
         }
 
         #endregion
@@ -379,11 +381,14 @@ namespace Newport.ESP300
 
         private void UpdatePositionListBox()
         {
-            using (positionsList.SuppressChangeNotifications())
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
             {
-                positionsList.Clear();
-                positionsList.AddRange(NewportStage.Positions.Keys);
-            }
+                using (positionsList.SuppressChangeNotifications())
+                {
+                    positionsList.Clear();
+                    positionsList.AddRange(NewportStage.Positions.Keys);
+                }
+            });
         }
 
         private void PositionLoadHandler(object sender, EventArgs e)

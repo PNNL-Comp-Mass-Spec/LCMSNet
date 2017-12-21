@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using ReactiveUI;
@@ -107,11 +108,11 @@ namespace ASIpump
 
         private void SetupCommands()
         {
-            ConnectCommand = ReactiveCommand.Create(() => Connect());
-            RunCommand = ReactiveCommand.Create(() => Run());
-            AbortCommand = ReactiveCommand.Create(() => Abort());
-            GetPosACommand = ReactiveCommand.Create(() => GetPositionA());
-            GetPosBCommand = ReactiveCommand.Create(() => GetPositionB());
+            ConnectCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Connect()));
+            RunCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Run()));
+            AbortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Abort()));
+            GetPosACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetPositionA()));
+            GetPosBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetPositionB()));
         }
     }
 }

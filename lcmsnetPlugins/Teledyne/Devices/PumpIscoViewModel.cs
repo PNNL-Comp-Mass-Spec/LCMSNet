@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
@@ -108,7 +110,7 @@ namespace LcmsNet.Devices.Pumps
         private readonly ReactiveUI.ReactiveList<int> pumpCountComboBoxOptions = new ReactiveUI.ReactiveList<int>();
         private readonly ReactiveUI.ReactiveList<string> comPortComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<int> unitAddressComboBoxOptions = new ReactiveUI.ReactiveList<int>();
-        private readonly ReactiveUI.ReactiveList<enumIscoOperationMode> operationModeComboBoxOptions = new ReactiveUI.ReactiveList<enumIscoOperationMode>();
+        private readonly ReactiveUI.ReactiveList<enumIscoOperationMode> operationModeComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<RefillData> refillRates = new ReactiveUI.ReactiveList<RefillData>();
         private readonly ReactiveUI.ReactiveList<LimitData> limitsList = new ReactiveUI.ReactiveList<LimitData>();
         private string comPort = "";
@@ -215,15 +217,15 @@ namespace LcmsNet.Devices.Pumps
 
         private void SetupCommands()
         {
-            SetControlModeCommand = ReactiveUI.ReactiveCommand.Create(() => SetControlMode());
-            StartAllCommand = ReactiveUI.ReactiveCommand.Create(() => StartAllPumps());
-            StopAllCommand = ReactiveUI.ReactiveCommand.Create(() => StopAllPumps());
-            SetAllFlowCommand = ReactiveUI.ReactiveCommand.Create(() => SetAllFlow());
-            SetAllPressureCommand = ReactiveUI.ReactiveCommand.Create(() => SetAllPressure());
-            RefillAllCommand = ReactiveUI.ReactiveCommand.Create(() => RefillAll());
-            UpdateDisplaysCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshPumpDisplays());
-            SetPortSettingsCommand = ReactiveUI.ReactiveCommand.Create(() => SetPortProperties());
-            SetOperationModeCommand = ReactiveUI.ReactiveCommand.Create(() => SetOperationMode());
+            SetControlModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetControlMode()));
+            StartAllCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAllPumps()));
+            StopAllCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAllPumps()));
+            SetAllFlowCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllFlow()));
+            SetAllPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllPressure()));
+            RefillAllCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefillAll()));
+            UpdateDisplaysCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPumpDisplays()));
+            SetPortSettingsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPortProperties()));
+            SetOperationModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetOperationMode()));
         }
 
         #endregion
@@ -340,7 +342,7 @@ namespace LcmsNet.Devices.Pumps
         private void AddPumpDisplay(PumpIscoDisplayViewModel pumpDisplay)
         {
             //pumpDisplay.InitViewModel(pumpDisplays.Count);
-            pumpDisplays.Add(pumpDisplay);
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => pumpDisplays.Add(pumpDisplay));
 
             pumpDisplay.SetpointChanged += PumpDisplays_SetpointChanged;
             pumpDisplay.StartRefill += PumpDisplays_StartRefill;
@@ -397,54 +399,57 @@ namespace LcmsNet.Devices.Pumps
         /// </summary>
         private void UpdateLimitDisplay()
         {
-            if (limitsList.Count == 0)
+            if (LimitsList.Count == 0)
             {
-                using (limitsList.SuppressChangeNotifications())
+                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
                 {
-                    limitsList.Add(new LimitData("Flow Units"));
-                    limitsList.Add(new LimitData("Pressure Units"));
-                    limitsList.Add(new LimitData("Level Units"));
-                    limitsList.Add(new LimitData("Min Pressure SP"));
-                    limitsList.Add(new LimitData("Max Pressure SP (Note 1)"));
-                    limitsList.Add(new LimitData("Min Flow SP"));
-                    limitsList.Add(new LimitData("Max Flow SP"));
-                    limitsList.Add(new LimitData("Max Flow Value (Note 2)"));
-                    limitsList.Add(new LimitData("Min Refill Rate SP"));
-                    limitsList.Add(new LimitData("Max Refill Rate SP"));
-                }
+                    using (limitsList.SuppressChangeNotifications())
+                    {
+                        limitsList.Add(new LimitData("Flow Units"));
+                        limitsList.Add(new LimitData("Pressure Units"));
+                        limitsList.Add(new LimitData("Level Units"));
+                        limitsList.Add(new LimitData("Min Pressure SP"));
+                        limitsList.Add(new LimitData("Max Pressure SP (Note 1)"));
+                        limitsList.Add(new LimitData("Min Flow SP"));
+                        limitsList.Add(new LimitData("Max Flow SP"));
+                        limitsList.Add(new LimitData("Max Flow Value (Note 2)"));
+                        limitsList.Add(new LimitData("Min Refill Rate SP"));
+                        limitsList.Add(new LimitData("Max Refill Rate SP"));
+                    }
+                });
             }
 
             for (var indx = 0; indx < PumpDisplays.Count; indx++)
             {
                 // Flow units
-                limitsList[0].SetLimit(indx, classIscoConversions.GetFlowUnitsString());
+                LimitsList[0].SetLimit(indx, classIscoConversions.GetFlowUnitsString());
 
                 // Pressure units
-                limitsList[1].SetLimit(indx, classIscoConversions.GetPressUnitsString());
+                LimitsList[1].SetLimit(indx, classIscoConversions.GetPressUnitsString());
 
                 // Level units
-                limitsList[2].SetLimit(indx, "mL");
+                LimitsList[2].SetLimit(indx, "mL");
 
                 // Min press SP
-                limitsList[3].SetLimit(indx, PumpDisplays[indx].MinPressSp.ToString("0.000"));
+                LimitsList[3].SetLimit(indx, PumpDisplays[indx].MinPressSp.ToString("0.000"));
 
                 // Max press SP
-                limitsList[4].SetLimit(indx, PumpDisplays[indx].MaxPressSp.ToString("0.000"));
+                LimitsList[4].SetLimit(indx, PumpDisplays[indx].MaxPressSp.ToString("0.000"));
 
                 // Min flow SP
-                limitsList[5].SetLimit(indx, PumpDisplays[indx].MinFlowSp.ToString("0.000"));
+                LimitsList[5].SetLimit(indx, PumpDisplays[indx].MinFlowSp.ToString("0.000"));
 
                 // Max flow SP
-                limitsList[6].SetLimit(indx, PumpDisplays[indx].MaxFlowSp.ToString("0.000"));
+                LimitsList[6].SetLimit(indx, PumpDisplays[indx].MaxFlowSp.ToString("0.000"));
 
                 // Max flow limit
-                limitsList[7].SetLimit(indx, PumpDisplays[indx].MaxFlowLimit.ToString("0.000"));
+                LimitsList[7].SetLimit(indx, PumpDisplays[indx].MaxFlowLimit.ToString("0.000"));
 
                 // Min refill rate SP
-                limitsList[8].SetLimit(indx, "0.0");
+                LimitsList[8].SetLimit(indx, "0.0");
 
                 // Max refill rate SP
-                limitsList[9].SetLimit(indx, refillRates[indx].MaxRefillRate.ToString("0.000"));
+                LimitsList[9].SetLimit(indx, RefillRates[indx].MaxRefillRate.ToString("0.000"));
             }
         }
 
@@ -459,7 +464,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="pumpIndx"></param>
         private void PumpDisplays_StartRefill(object sender, int pumpIndx)
         {
-            if (pump.StartRefill(pumpIndx, refillRates[pumpIndx].RefillRate))
+            if (pump.StartRefill(pumpIndx, RefillRates[pumpIndx].RefillRate))
             {
                 UpdateStatusDisplay("Refill started");
             }
@@ -646,7 +651,7 @@ namespace LcmsNet.Devices.Pumps
             var success = true;
             for (var pumpIndx = 0; pumpIndx < pumpCount; pumpIndx++)
             {
-                if (!pump.StartRefill(pumpIndx, refillRates[pumpIndx].RefillRate))
+                if (!pump.StartRefill(pumpIndx, RefillRates[pumpIndx].RefillRate))
                     success = false;
             }
 
@@ -817,9 +822,9 @@ namespace LcmsNet.Devices.Pumps
                 PumpDisplays[indx].MaxPressSp = setpointLimits.MaxPressSp;
                 PumpDisplays[indx].MaxFlowLimit = setpointLimits.MaxFlowLimit;
 
-                refillRates[indx].MaxRefillRate = rangeData.MaxRefillRate;
+                RefillRates[indx].MaxRefillRate = rangeData.MaxRefillRate;
 
-                refillRates[indx].RefillRate = pump.GetPumpData(indx).RefillRate;
+                RefillRates[indx].RefillRate = pump.GetPumpData(indx).RefillRate;
             }
 
             // Fill in limits display

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using System.Collections.Generic;
 using LcmsNetDataClasses.Devices;
 using ReactiveUI;
@@ -130,27 +131,33 @@ namespace LcmsNet.Devices.ViewModels
         /// <param name="deviceControl"></param>
         private void AddDeviceControl(string groupName, IDevice device, IDeviceControl deviceControl)
         {
-            // Make sure group control exists exists.
-            AdvancedDeviceGroupControlViewModel control = null;
-            if (!m_nameToControlMap.ContainsKey(groupName))
+            // Ensure that this always happens on the main thread
+            RxApp.MainThreadScheduler.Schedule(() =>
             {
-                // Create the tab page
-                var page = new DeviceGroup(groupName);
-                m_nameToControlMap.Add(groupName, page.Content);
-                m_controlToPageMap.Add(page.Content, page);
-                deviceGroups.Add(page);
-            }
-            control = m_nameToControlMap[groupName];
-            m_deviceToControlMap.Add(device, control);
+                // Make sure group control exists.
+                AdvancedDeviceGroupControlViewModel control = null;
+                if (!m_nameToControlMap.ContainsKey(groupName))
+                {
+                    // Create the tab page
+                    var page = new DeviceGroup(groupName);
+                    m_nameToControlMap.Add(groupName, page.Content);
+                    m_controlToPageMap.Add(page.Content, page);
+                    deviceGroups.Add(page);
+                }
 
-            if (deviceControl == null)
-            {
-                deviceControl = new DefaultUserDeviceViewModel();
-            }
-            deviceControl.Device = device;
+                control = m_nameToControlMap[groupName];
+                m_deviceToControlMap.Add(device, control);
 
-            // Adds the device control to the group control
-            control.AddDevice(device, deviceControl);
+                if (deviceControl == null)
+                {
+                    deviceControl = new DefaultUserDeviceViewModel();
+                }
+
+                deviceControl.Device = device;
+
+                // Adds the device control to the group control
+                control.AddDevice(device, deviceControl);
+            });
         }
     }
 }

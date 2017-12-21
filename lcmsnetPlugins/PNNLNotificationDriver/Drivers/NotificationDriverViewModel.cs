@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using ReactiveUI;
@@ -14,7 +15,7 @@ namespace FailureInjector.Drivers
 
         public NotificationDriverViewModel()
         {
-            InjectFailureCommand = ReactiveCommand.Create(() => InjectFailure());
+            InjectFailureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InjectFailure()));
         }
 
         public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; private set; }

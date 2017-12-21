@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using LcmsNetCommonControls.Devices.NetworkStart;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Devices;
@@ -117,11 +118,14 @@ namespace LcmsNet.Devices.BrukerStart
         {
             var methodNames = new List<string>(data.Select(x => x.ToString()));
 
-            using (methodComboBoxOptions.SuppressChangeNotifications())
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
             {
-                methodComboBoxOptions.Clear();
-                methodComboBoxOptions.AddRange(methodNames);
-            }
+                using (methodComboBoxOptions.SuppressChangeNotifications())
+                {
+                    methodComboBoxOptions.Clear();
+                    methodComboBoxOptions.AddRange(methodNames);
+                }
+            });
 
             InstrumentMethodListReceived?.Invoke(methodNames);
         }

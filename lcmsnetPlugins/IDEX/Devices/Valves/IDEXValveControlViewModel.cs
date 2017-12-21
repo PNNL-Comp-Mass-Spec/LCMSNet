@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using ReactiveUI;
@@ -10,8 +11,8 @@ namespace ASUTGen.Devices.Valves
     {
         public IDEXValveControlViewModel()
         {
-            InjectFailureCommand = ReactiveCommand.Create(() => InjectFailure());
-            InjectStatusCommand = ReactiveCommand.Create(() => Console.WriteLine(@"Not Implemented!"));
+            InjectFailureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InjectFailure()));
+            InjectStatusCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Console.WriteLine(@"Not Implemented!")));
         }
 
         /// <summary>
