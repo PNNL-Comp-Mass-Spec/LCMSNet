@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO.Ports;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
@@ -116,13 +117,13 @@ namespace LcmsNet.Devices.Valves
 
         private void SetupCommands()
         {
-            ClearValveIdCommand = ReactiveUI.ReactiveCommand.Create(() => ClearValveId());
-            RefreshValveIdCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshValveId());
-            RefreshValvePositionCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshValvePosition());
-            RefreshValveVersionInfoCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshValveVersion());
-            OpenPortCommand = ReactiveUI.ReactiveCommand.Create(() => OpenPort());
-            ClosePortCommand = ReactiveUI.ReactiveCommand.Create(() => ClosePort());
-            InitializeDeviceCommand = ReactiveUI.ReactiveCommand.Create(() => InitializeDevice());
+            ClearValveIdCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
+            RefreshValveIdCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveId()));
+            RefreshValvePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValvePosition()));
+            RefreshValveVersionInfoCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveVersion()));
+            OpenPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
+            ClosePortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
+            InitializeDeviceCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
         }
 
         #endregion

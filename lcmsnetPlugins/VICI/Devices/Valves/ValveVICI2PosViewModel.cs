@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
@@ -16,8 +17,8 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         public ValveVICI2PosViewModel()
         {
-            SetPositionACommand = ReactiveUI.ReactiveCommand.Create(() => SetPositionA());
-            SetPositionBCommand = ReactiveUI.ReactiveCommand.Create(() => SetPositionB());
+            SetPositionACommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionA()));
+            SetPositionBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionB()));
         }
 
         protected override void RegisterDevice(IDevice device)

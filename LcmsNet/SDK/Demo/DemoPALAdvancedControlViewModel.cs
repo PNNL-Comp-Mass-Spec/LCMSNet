@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
@@ -11,7 +12,7 @@ namespace DemoPluginLibrary
 
         public DemoPALAdvancedControlViewModel()
         {
-            RunCommand = ReactiveUI.ReactiveCommand.Create(() => Run());
+            RunCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Run()));
         }
 
         public void RegisterDevice(IDevice device)

@@ -18,7 +18,7 @@ namespace LcmsNet.Devices.Valves
         {
             //Populate the combobox
             PopulateComboBox();
-            SetValvePositionCommand = ReactiveUI.ReactiveCommand.Create(() => SetValvePosition());
+            SetValvePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetValvePosition()));
         }
 
         protected override void RegisterDevice(IDevice device)

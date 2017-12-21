@@ -1,4 +1,6 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using FluidicsSDK.Devices;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
@@ -9,7 +11,7 @@ namespace LcmsNet.Devices.Valves
     {
         public SixPortInjectionValveViewModel()
         {
-            SetInjectionVolumeCommand = ReactiveUI.ReactiveCommand.Create(() => SetInjectionVolume());
+            SetInjectionVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetInjectionVolume()));
         }
 
         private void SetInjectionVolume()
@@ -37,5 +39,10 @@ namespace LcmsNet.Devices.Valves
         }
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetInjectionVolumeCommand { get; private set; }
+
+        public override UserControl GetDefaultView()
+        {
+            return new SixPortInjectionValveView();
+        }
     }
 }

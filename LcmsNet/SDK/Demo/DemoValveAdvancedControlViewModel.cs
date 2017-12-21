@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetDataClasses.Devices;
@@ -13,9 +14,9 @@ namespace DemoPluginLibrary
 
         public DemoValveAdvancedControlViewModel()
         {
-            SetACommand = ReactiveUI.ReactiveCommand.Create(() => SetStateA());
-            SetBCommand = ReactiveUI.ReactiveCommand.Create(() => SetStateB());
-            RefreshCommand = ReactiveUI.ReactiveCommand.Create(() => Refresh());
+            SetACommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetStateA()));
+            SetBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetStateB()));
+            RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refresh()));
         }
 
         private void SetStateA()

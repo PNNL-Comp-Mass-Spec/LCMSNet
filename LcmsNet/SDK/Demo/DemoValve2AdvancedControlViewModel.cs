@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
 using LcmsNetDataClasses.Devices;
@@ -14,9 +15,9 @@ namespace DemoPluginLibrary
 
         public DemoValve2AdvancedControlViewModel()
         {
-            valvePositionComboBoxOptions = new ReactiveUI.ReactiveList<EightPositionState>(Enum.GetValues(typeof(EightPositionState)).Cast<EightPositionState>());
-            SetCommand = ReactiveUI.ReactiveCommand.Create(() => Set());
-            RefreshCommand = ReactiveUI.ReactiveCommand.Create(() => Refresh());
+            valvePositionComboBoxOptions = new ReactiveUI.ReactiveList<EightPositionState>(Enum.GetValues(typeof(EightPositionState)).Cast<EightPositionState>().Where(x => x != EightPositionState.Unknown));
+            SetCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Set()));
+            RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refresh()));
         }
 
         public void RegisterDevice(IDevice device)
