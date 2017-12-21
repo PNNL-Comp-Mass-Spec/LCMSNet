@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetCommonControls.ViewModels;
@@ -243,23 +245,23 @@ namespace Agilent.Devices.Pumps
 
         private void SetupCommands()
         {
-            SetFlowRateCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.SetFlowRate(FlowRate));
-            ReadFlowRateCommand = ReactiveUI.ReactiveCommand.Create(() => FlowRateRead = m_pump.GetActualFlow());
-            SetMixerVolumeCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.SetMixerVolume(MixerVolume));
-            ReadMixerVolumeCommand = ReactiveUI.ReactiveCommand.Create(() => MixerVolumeRead = m_pump.GetMixerVolume());
-            SetPercentBCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.SetPercentB(PercentB));
-            ReadPercentBCommand = ReactiveUI.ReactiveCommand.Create(() => PercentBRead = m_pump.GetPercentB());
-            SetModeCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.SetMode(SelectedMode));
-            ReadPressureCommand = ReactiveUI.ReactiveCommand.Create(() => Pressure = m_pump.GetPressure());
-            PumpOnCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.PumpOn());
-            PumpOffCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.PumpOff());
+            SetFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetFlowRate(FlowRate)));
+            ReadFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => FlowRateRead = m_pump.GetActualFlow()));
+            SetMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetMixerVolume(MixerVolume)));
+            ReadMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MixerVolumeRead = m_pump.GetMixerVolume()));
+            SetPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetPercentB(PercentB)));
+            ReadPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => PercentBRead = m_pump.GetPercentB()));
+            SetModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetMode(SelectedMode)));
+            ReadPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pressure = m_pump.GetPressure()));
+            PumpOnCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PumpOn()));
+            PumpOffCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PumpOff()));
             PurgePumpCommand = ReactiveUI.ReactiveCommand.Create(() => PurgePump());
-            StartPumpCommand = ReactiveUI.ReactiveCommand.Create(() => StartPump());
-            StopPumpCommand = ReactiveUI.ReactiveCommand.Create(() => m_pump.StopMethod());
-            SetComPortCommand = ReactiveUI.ReactiveCommand.Create(() => SetComPortName());
-            ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.Create(() => MethodText = m_pump.RetrieveMethod());
-            LoadMethodsCommand = ReactiveUI.ReactiveCommand.Create(() => LoadMethods());
-            SaveMethodCommand = ReactiveUI.ReactiveCommand.Create(() => SaveMethod());
+            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()));
+            StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.StopMethod()));
+            SetComPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetComPortName()));
+            ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = m_pump.RetrieveMethod()));
+            LoadMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => LoadMethods()));
+            SaveMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SaveMethod()));
         }
 
         #endregion
@@ -319,7 +321,11 @@ namespace Agilent.Devices.Pumps
         /// <param name="e"></param>
         private void Pump_MethodUpdated(object sender, classPumpMethodEventArgs e)
         {
-            methodComboBoxOptions.Add(e.MethodName);
+            // This is likely rather pointless, but converting old code...
+            if (!methodComboBoxOptions.Contains(e.MethodName))
+            {
+                methodComboBoxOptions.Add(e.MethodName);
+            }
         }
 
         /// <summary>
@@ -342,7 +348,7 @@ namespace Agilent.Devices.Pumps
         private void ReadMethodDirectory()
         {
             // The reason we don't just add stuff straight into the user interface here, is to maintain the
-            // design pattern that things propogate events to us, since we are not in charge of managing the
+            // design pattern that things propagate events to us, since we are not in charge of managing the
             // data.  We will catch an event from adding a method that one was added...and thus update
             // the user interface intrinsically.
             var path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),
@@ -360,22 +366,36 @@ namespace Agilent.Devices.Pumps
                 methodSelected = SelectedMethod;
             }
 
-            // Clear any existing pump methods
-            if (filenames.Length > 0)
-                m_pump.ClearMethods();
             var methods = new Dictionary<string, string>();
             foreach (var filename in filenames)
             {
                 var method = System.IO.File.ReadAllText(filename);
                 methods[System.IO.Path.GetFileNameWithoutExtension(filename)] = method;
-                m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(filename), method);
             }
-            //m_pump.AddMethods(methods);
+
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => {
+                // Clear any existing pump methods
+                if (methods.Count > 0)
+                {
+                    m_pump.ClearMethods();
+                    using (methodComboBoxOptions.SuppressChangeNotifications())
+                    {
+                        methodComboBoxOptions.Clear();
+                    }
+
+                    m_pump.AddMethods(methods);
+                }
+            });
+
             if (methodSelected != null)
             {
                 // try to select the last selected method, if it has been loaded back in to the system.
-                SelectedMethod = ComPortComboBoxOptions.Contains(methodSelected) ? methodSelected : "";
+                SelectedMethod = MethodComboBoxOptions.Contains(methodSelected) ? methodSelected : "";
             }
+        }
+
+        private void ReplacePumpMethods(Dictionary<string, string> methods)
+        {
         }
 
         private readonly Random r = new Random();
