@@ -231,7 +231,7 @@ namespace LcmsNetDataClasses.Configuration
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return m_columnIndex == other.m_columnIndex && m_systemIndex == other.m_systemIndex;
+            return m_columnIndex == other.m_columnIndex && m_systemIndex == other.m_systemIndex && string.Equals(m_name, other.m_name) && m_columnColor.Equals(other.m_columnColor);
         }
 
         public override bool Equals(object obj)
@@ -246,7 +246,11 @@ namespace LcmsNetDataClasses.Configuration
         {
             unchecked
             {
-                return (m_columnIndex * 397) ^ m_systemIndex;
+                var hashCode = m_columnIndex;
+                hashCode = (hashCode * 397) ^ m_systemIndex;
+                hashCode = (hashCode * 397) ^ (m_name != null ? m_name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ m_columnColor.GetHashCode();
+                return hashCode;
             }
         }
     }

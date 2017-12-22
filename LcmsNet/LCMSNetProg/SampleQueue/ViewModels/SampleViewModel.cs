@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows.Media;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Configuration;
@@ -36,7 +37,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
             this.WhenAnyValue(x => x.Sample.ColumnData.ID).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
-            this.WhenAnyValue(x => x.Sample.ColumnData.Color).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumberBgColor)));
+            this.WhenAnyValue(x => x.Sample.ColumnData.Color).Select(x => new SolidColorBrush(x)).ToProperty(this, x => x.ColumnNumberBgColor, out columnNumberBgColor, Brushes.RoyalBlue);
 
             this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
             this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
@@ -243,14 +244,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        public SolidColorBrush ColumnNumberBgColor
-        {
-            get
-            {
-                // Define the background color for the LC Column
-                return new SolidColorBrush(Sample.ColumnData.Color);
-            }
-        }
+        private ObservableAsPropertyHelper<SolidColorBrush> columnNumberBgColor;
+
+        /// <summary>
+        /// Define the background color for the LC Column
+        /// </summary>
+        public SolidColorBrush ColumnNumberBgColor => columnNumberBgColor != null ? columnNumberBgColor.Value : Brushes.RoyalBlue;
 
         #endregion
 
