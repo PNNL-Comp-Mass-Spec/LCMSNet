@@ -122,7 +122,7 @@ namespace LcmsNet.Method.ViewModels
         public IReadOnlyReactiveList<object> ComboBoxOptions => comboBoxOptions;
 
         /// <summary>
-        /// Event method to storing objects in the list view.
+        /// Event method for storing objects in the list view.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
@@ -139,7 +139,7 @@ namespace LcmsNet.Method.ViewModels
                     comboBoxOptions.AddRange(data);
                 }
 
-                if (SelectedOption != null && !comboBoxOptions.Contains(SelectedOption))
+                if (SelectedOption == null || !comboBoxOptions.Contains(SelectedOption))
                 {
                     SelectedOption = comboBoxOptions.FirstOrDefault();
                 }
