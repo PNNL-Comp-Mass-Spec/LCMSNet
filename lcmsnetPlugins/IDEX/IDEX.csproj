@@ -19,6 +19,8 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\IDEX.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -27,6 +29,8 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Release\IDEX.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk">
@@ -37,8 +41,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -83,7 +85,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>

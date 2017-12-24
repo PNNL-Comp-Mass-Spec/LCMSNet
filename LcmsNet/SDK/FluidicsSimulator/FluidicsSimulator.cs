@@ -19,17 +19,29 @@ namespace FluidicsSimulator
     /// </summary>
     public class SimulatedEventArgs:EventArgs
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="evnt"></param>
+        /// <param name="elapsed"></param>
         public SimulatedEventArgs(classLCEvent evnt, TimeSpan elapsed)
         {
             Event = evnt;
             SimulatedTimeElapsed = elapsed;
         }
 
+        /// <summary>
+        /// LC Event
+        /// </summary>
         public classLCEvent Event
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// Elapsed time
+        /// </summary>
         public TimeSpan SimulatedTimeElapsed
         {
             get;
@@ -45,6 +57,9 @@ namespace FluidicsSimulator
         InformationOnly, WarningsOnly, ErrorsOnly,  InformationAndWarnings, InformationAndErrors, WarningsAndErrors, All
     }
 
+    /// <summary>
+    /// Class for simulating fluidics events
+    /// </summary>
     public class FluidicsSimulator: IModelCheckController
     {
         #region Members

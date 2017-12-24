@@ -24,6 +24,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\LcmsNetDmsTools.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +35,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\LcmsNetDmsTools.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <OutputPath>bin\PNNLRelease\</OutputPath>
@@ -43,6 +47,8 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\PNNLRelease\LcmsNetDmsTools.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk, Version=3.4.18.0, Culture=neutral, processorArchitecture=x86">
@@ -56,9 +62,6 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -77,9 +80,6 @@
     <None Include="PrismDMS.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\x86\Debug\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -103,16 +103,16 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /Y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
 
-xcopy /Y /F /D "$(TargetDir)*.dll" "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /Y /F /D "$(TargetDir)*.pdb" "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /Y /F /D "$(TargetDir)*.xml" "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /Y /F /D "$(TargetDir)*.config" "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /Y /F /D "$(ProjectDir)PrismDMS.config" "%25appdata%25\LCMSNet\dmsExtensions"
+xcopy /Y /F /D "$(TargetDir)*.dll" "%25appdata%25\LCMSNet\dmsExtensions\"
+xcopy /Y /F /D "$(TargetDir)*.pdb" "%25appdata%25\LCMSNet\dmsExtensions\"
+xcopy /Y /F /D "$(TargetDir)*.xml" "%25appdata%25\LCMSNet\dmsExtensions\"
+xcopy /Y /F /D "$(TargetDir)*.config" "%25appdata%25\LCMSNet\dmsExtensions\"
+xcopy /Y /F /D "$(ProjectDir)PrismDMS.config" "%25appdata%25\LCMSNet\dmsExtensions\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

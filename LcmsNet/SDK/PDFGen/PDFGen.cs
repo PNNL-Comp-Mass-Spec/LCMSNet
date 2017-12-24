@@ -17,7 +17,10 @@ using System.Windows.Media.Imaging;
 
 namespace PDFGenerator
 {
-    public class PDFGen:IPDF
+    /// <summary>
+    /// Class to facilitate the creation of a method and sample report
+    /// </summary>
+    public class PDFGen : IPDF
     {
         #region Methods
         /// <summary>

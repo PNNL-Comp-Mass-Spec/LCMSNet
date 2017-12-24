@@ -8,7 +8,7 @@ namespace DemoPluginLibrary
 {
       [classDeviceControlAttribute(null,
                                    typeof(FluidicsTee),
-                                   "DemoTee",
+                                   "Demo Tee",
                                    "Demo")]
     public class DemoTee:IDevice
     {

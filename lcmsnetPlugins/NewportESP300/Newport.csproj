@@ -20,6 +20,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\NewportESP300.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <OutputPath>bin\PNNLRelease\</OutputPath>
@@ -30,6 +32,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\PNNLRelease\NewportESP300.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluidicsSDK">
@@ -47,9 +51,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -88,7 +89,7 @@ powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach 
 
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"

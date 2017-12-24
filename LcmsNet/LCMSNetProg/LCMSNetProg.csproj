@@ -57,14 +57,12 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -854,7 +852,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>rem xcopy /Y /F /D "$(SolutionDir)lib\*" "$(TargetDir)"
-xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
+rem xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
 
 if not exist "$(TargetDir)Plugins\" mkdir "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.dll" "$(TargetDir)Plugins\"

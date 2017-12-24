@@ -66,9 +66,9 @@ namespace LcmsNet.Devices.Valves
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the emulation state of the device.
-        /// </summary>
+        ///// <summary>
+        ///// Gets or sets the emulation state of the device.
+        ///// </summary>
         //public bool Emulation
         //{
         //    get

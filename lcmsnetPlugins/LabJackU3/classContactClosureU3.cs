@@ -55,7 +55,9 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
+#pragma warning disable CS0067
         public event EventHandler<classDeviceErrorEventArgs> Error;
+#pragma warning restore CS0067
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>

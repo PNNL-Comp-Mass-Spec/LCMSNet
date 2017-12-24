@@ -14,9 +14,11 @@ namespace ASUTGen.Devices.Valves
     ]*/
     public class IDEXValve :  IDevice
     {
+#pragma warning disable CS0067
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
         public event EventHandler<classDeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Default constructor.

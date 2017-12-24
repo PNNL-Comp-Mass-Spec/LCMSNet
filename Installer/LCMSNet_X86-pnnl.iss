@@ -64,14 +64,11 @@ Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                  DestDir: "{a
 Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";       DestDir: "{app}";      Flags: ignoreversion
 
 ;DLLs
-Source: "{#MyLib}\*.dll"; Excludes:"FluidicsPack.dll";              DestDir: "{app}";          Flags: ignoreversion
-Source: "{#MyLib}\FluidicsPack.dll";                                DestDir: "{app}\Plugins";  Flags: ignoreversion
+Source: "{#MyLib}\*.dll";                                           DestDir: "{app}";          Flags: ignoreversion
 
 ;Sample Validators
 ;Core sample validator, PAL Validator    
 Source: "{#MyValidators}\*.dll";                                    DestDir: "{app}\Plugins\"; Flags: ignoreversion
-Source: "{#MyValidators}\x86\*.dll";                                DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
-Source: "{#MyValidators}\x64\*.dll";                                DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
 
 ;Plugins
 Source: "{#MyPlugins}\*.dll";                                       DestDir: "{app}\Plugins\"; Flags: ignoreversion

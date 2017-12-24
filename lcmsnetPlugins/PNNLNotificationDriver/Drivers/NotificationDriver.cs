@@ -17,7 +17,9 @@ namespace FailureInjector.Drivers
     {
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
         public event EventHandler<classDeviceErrorEventArgs> Error;
+#pragma warning disable CS0067
         public event EventHandler DeviceSaveRequired;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Default constructor.

@@ -22,6 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\FluidicsSimulator.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,14 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\FluidicsSimulator.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +56,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib"
-xcopy /y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"</PostBuildEvent>
+xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

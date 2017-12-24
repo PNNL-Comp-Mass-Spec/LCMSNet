@@ -22,6 +22,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\LcmsNetSdk.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -32,17 +34,16 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\PNNLRelease\LcmsNetSdk.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -190,16 +191,11 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
+xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
+xcopy /y /f /d "$(TargetDir)x86\*.dll" "$(SolutionDir)lib\x86\"
+xcopy /y /f /d "$(TargetDir)x64\*.dll" "$(SolutionDir)lib\x64\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /y /F /D "$(TargetPath)" "%25appdata%25\LCMSNet\dmsExtensions\"
-
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)SampleValidators\"
-xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)SampleValidators\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)SampleValidators\"
-xcopy /y /f /d "$(TargetDir)x86\*.dll" "$(SolutionDir)SampleValidators\x86\"
-xcopy /y /f /d "$(TargetDir)x64\*.dll" "$(SolutionDir)SampleValidators\x64\"</PostBuildEvent>
+if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"</PostBuildEvent>
   </PropertyGroup>
 </Project>

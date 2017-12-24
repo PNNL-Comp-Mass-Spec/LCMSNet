@@ -26,7 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DemoPluginLibrary">
-      <HintPath>..\..\lib\DemoPluginLibrary.dll</HintPath>
+      <HintPath>..\..\pluginDLLs\DemoPluginLibrary.dll</HintPath>
     </Reference>
     <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>

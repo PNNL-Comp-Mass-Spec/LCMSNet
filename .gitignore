@@ -6,15 +6,8 @@
 *.lnk
 **/pluginDLLs/*
 lcmsnetbuild.txt
-LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.xml
-LcmsNet/SQLiteTools/SQLite/x64
-LcmsNet/SQLiteTools/SQLite/x86
-LcmsNet/SQLiteTools/SQLite/System.Data.SQLite.dll
-lib/*.dll
-lib/*.pdb
-lib/*.xml
-lib/SQLite_Zips
-!lib/ZedGraph.dll
+LcmsNet/SQLiteTools/SQLite/
+/lib/
 **/.vs/
 *.DotSettings
 *.user

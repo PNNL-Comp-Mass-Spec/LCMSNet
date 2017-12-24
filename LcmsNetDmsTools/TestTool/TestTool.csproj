@@ -76,7 +76,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /y /f /d "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"
-xcopy /y /f /d "$(SolutionDir)lib\SQLite.Interop.dll" "$(TargetDir)"</PreBuildEvent>
+xcopy /y /f /d "$(SolutionDir)lib\x86\SQLite.Interop.dll" "$(TargetDir)\x86\"
+xcopy /y /f /d "$(SolutionDir)lib\x64\SQLite.Interop.dll" "$(TargetDir)\x64\"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

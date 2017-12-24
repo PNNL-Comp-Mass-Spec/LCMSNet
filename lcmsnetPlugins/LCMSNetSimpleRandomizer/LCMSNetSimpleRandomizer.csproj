@@ -19,6 +19,8 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\LCMSNetSimpleRandomizer.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
     <OutputPath>bin\PNNLRelease\</OutputPath>
@@ -27,6 +29,8 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\PNNLRelease\LCMSNetSimpleRandomizer.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk">

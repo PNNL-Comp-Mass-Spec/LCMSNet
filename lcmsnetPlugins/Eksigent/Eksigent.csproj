@@ -20,6 +20,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\x86\Debug\Eksigent.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
     <OutputPath>bin\x86\PNNLRelease\</OutputPath>
@@ -27,6 +29,8 @@
     <DebugSymbols>true</DebugSymbols>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\x86\PNNLRelease\Eksigent.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.DirectControl, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -50,8 +54,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -112,11 +114,12 @@ powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach 
 
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)AxInterop.*.dll" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)Interop.Eksigent*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+
+xcopy /y /F /D "$(ProjectDir)AxInterop.*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /F /D "$(ProjectDir)Interop.Eksigent*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

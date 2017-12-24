@@ -96,10 +96,10 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private List<string> instrumentMethods;
 
-        /// <summary>
-        /// Flag that turns off the coloring when a PAL item (method, tray) was not downloadable from the PAL.
-        /// </summary>
-        private bool ignoreMissingPALValues;
+        ///// <summary>
+        ///// Flag that turns off the coloring when a PAL item (method, tray) was not downloadable from the PAL.
+        ///// </summary>
+        //private bool ignoreMissingPALValues;
 
         private bool dmsAvailable = false;
         private bool cycleColumns = false;

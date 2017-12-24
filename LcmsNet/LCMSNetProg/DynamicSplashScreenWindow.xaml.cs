@@ -29,7 +29,7 @@ namespace LcmsNet
                 {
                     Dispatcher.Invoke(() => StatusText.Text = value);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     classApplicationLogger.LogMessage(0, "Could not update splash screen status. Message: " + value);
                 }

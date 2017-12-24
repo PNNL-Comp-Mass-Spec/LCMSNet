@@ -86,7 +86,7 @@ namespace LabJack
         public static extern int EAnalogOut(ref int idnum, int demo, float analogOut0, float analogOut1);
 
         /// <summary>
-        /// Easy function. This is a simplified version of Counter. Reads & resets the counter (CNT). Calling this function disables STB (which is the default anyway).
+        /// Easy function. This is a simplified version of Counter. Reads &amp; resets the counter (CNT). Calling this function disables STB (which is the default anyway).
         /// </summary>
         /// <param name="idnum">Local ID, serial number, or -1 for first found. Returns the local ID or –1 if no LabJack is found.</param>
         /// <param name="demo">Send 0 for normal operation, &gt;0 for demo mode. Demo mode allows this function to be called without a LabJack.</param>

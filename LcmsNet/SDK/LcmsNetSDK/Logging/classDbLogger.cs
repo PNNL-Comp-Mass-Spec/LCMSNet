@@ -289,31 +289,28 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Executes specified SQLite command
         /// </summary>
-        /// <param name="CmdStr">SQL statement to execute</param>
-        /// <param name="ConnStr">Connection string for SQL database file</param>
-        private static void ExecuteSQLiteCommand(string CmdStr, string connStr)
+        /// <param name="cmdStr">SQL statement to execute</param>
+        /// <param name="connStr">Connection string for SQL database file</param>
+        private static void ExecuteSQLiteCommand(string cmdStr, string connStr)
         {
-            int AffectedRows;
-            using (var Cn = new SQLiteConnection(connStr))
+            using (var cn = new SQLiteConnection(connStr))
+            using (var myCmd = new SQLiteCommand(cn))
             {
-                using (var myCmd = new SQLiteCommand(Cn))
+                myCmd.CommandType = CommandType.Text;
+                myCmd.CommandText = cmdStr;
+                try
                 {
-                    myCmd.CommandType = CommandType.Text;
-                    myCmd.CommandText = CmdStr;
-                    try
-                    {
-                        myCmd.Connection.Open();
-                        AffectedRows = myCmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        var ErrMsg = "SQLite exception executing command " + CmdStr;
-                        throw new classDbLoggerException(ErrMsg, ex);
-                    }
-                    finally
-                    {
-                        myCmd.Connection.Close();
-                    }
+                    myCmd.Connection.Open();
+                    myCmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    var errMsg = "SQLite exception executing command " + cmdStr;
+                    throw new classDbLoggerException(errMsg, ex);
+                }
+                finally
+                {
+                    myCmd.Connection.Close();
                 }
             }
         }
@@ -321,13 +318,13 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Determines if a particular table exists in the SQLite database
         /// </summary>
-        /// <param name="TableName">Name of the table to search for</param>
-        /// <param name="ConnStr">Connection string for database</param>
+        /// <param name="tableName">Name of the table to search for</param>
+        /// <param name="connStr">Connection string for database</param>
         /// <returns>TRUE if table found; FALSE if not found or error</returns>
-        private static bool VerifyTableExists(string TableName, string connStr)
+        private static bool VerifyTableExists(string tableName, string connStr)
         {
-            var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + TableName + "'";
-            var tableList = new DataTable();
+            var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
+            DataTable tableList;
             try
             {
                 // Get a list of database tables matching the specified table name
@@ -335,8 +332,8 @@ namespace LcmsNetDataClasses.Logging
             }
             catch (Exception ex)
             {
-                var ErrMsg = "SQLite exception verifying table " + TableName + " exists";
-                throw new classDbLoggerException(ErrMsg, ex);
+                var errMsg = "SQLite exception verifying table " + tableName + " exists";
+                throw new classDbLoggerException(errMsg, ex);
             }
 
             // If exactly 1 row returned, then table exists
@@ -350,33 +347,30 @@ namespace LcmsNetDataClasses.Logging
         /// <summary>
         /// Retrieves a data table from a SQLite database
         /// </summary>
-        /// <param name="CmdStr">SQL command to execute</param>
-        /// <param name="ConnStr">Connection string for SQLite database file</param>
-        /// <returns>A DataTable containing data specfied by CmdStr</returns>
-        private static DataTable GetSQLiteDataTable(string CmdStr, string connStr)
+        /// <param name="cmdStr">SQL command to execute</param>
+        /// <param name="connStr">Connection string for SQLite database file</param>
+        /// <returns>A DataTable containing data specfied by <paramref name="cmdStr"/></returns>
+        private static DataTable GetSQLiteDataTable(string cmdStr, string connStr)
         {
             var returnTable = new DataTable();
-            var FilledRows = 0;
-            using (var Cn = new SQLiteConnection(connStr))
+
+            using (var cn = new SQLiteConnection(connStr))
+            using (var da = new SQLiteDataAdapter())
+            using (var cmd = new SQLiteCommand(cmdStr, cn))
             {
-                using (var Da = new SQLiteDataAdapter())
+                cmd.CommandType = CommandType.Text;
+                da.SelectCommand = cmd;
+                try
                 {
-                    using (var Cmd = new SQLiteCommand(CmdStr, Cn))
-                    {
-                        Cmd.CommandType = CommandType.Text;
-                        Da.SelectCommand = Cmd;
-                        try
-                        {
-                            FilledRows = Da.Fill(returnTable);
-                        }
-                        catch (Exception ex)
-                        {
-                            var ErrMsg = "SQLite exception getting data table via query " + CmdStr;
-                            throw new classDbLoggerException(ErrMsg, ex);
-                        }
-                    }
+                    da.Fill(returnTable);
+                }
+                catch (Exception ex)
+                {
+                    var errMsg = "SQLite exception getting data table via query " + cmdStr;
+                    throw new classDbLoggerException(errMsg, ex);
                 }
             }
+
             // Everything worked, so return the table
             return returnTable;
         }
@@ -389,7 +383,7 @@ namespace LcmsNetDataClasses.Logging
         private static void UnwrapExceptionMsgs(Exception ex, out string msg)
         {
             msg = ex.Message + " " + ex.StackTrace;
-            if (!(ex.InnerException == null))
+            if (ex.InnerException != null)
             {
                 string innerMsg;
                 UnwrapExceptionMsgs(ex.InnerException, out innerMsg);

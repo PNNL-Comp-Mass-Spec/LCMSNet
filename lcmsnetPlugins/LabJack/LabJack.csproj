@@ -21,6 +21,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\LabJack.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
     <OutputPath>bin\PNNLRelease\</OutputPath>
@@ -29,13 +31,12 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\PNNLRelease\LabJack.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -62,10 +63,11 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)x86\*.dll" "$(SolutionDir)pluginDLLs\x86\"
-xcopy /y /f /d "$(TargetDir)x64\*.dll" "$(SolutionDir)pluginDLLs\x64\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
+
+xcopy /y /f /d "$(ProjectDir)x86\ljackuw.dll" "$(SolutionDir)pluginDLLs\x86\"
+xcopy /y /f /d "$(ProjectDir)x64\ljackuw.dll" "$(SolutionDir)pluginDLLs\x64\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

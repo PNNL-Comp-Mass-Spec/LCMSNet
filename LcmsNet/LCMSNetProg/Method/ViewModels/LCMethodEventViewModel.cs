@@ -109,7 +109,9 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Fired when this event is to be locked.
         /// </summary>
+#pragma warning disable CS0067 // this is actually used in LCMethodStageViewModel...
         public event DelegateLCMethodEventLocked Lock;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Fired when an event changes.

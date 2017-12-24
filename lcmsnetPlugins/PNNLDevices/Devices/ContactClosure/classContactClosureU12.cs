@@ -345,12 +345,14 @@ namespace LcmsNet.Devices.ContactClosure
         {
             return Trigger(pulseLengthSeconds, m_port, voltage);
         }
+
         /// <summary>
         /// Triggers a pulse of the specified voltage, lasting the specified duration.
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
+        /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
         [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)

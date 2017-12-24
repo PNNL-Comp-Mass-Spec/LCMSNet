@@ -232,6 +232,7 @@ namespace ASIpump
         /// <summary>
         /// Fired when a method is added.
         /// </summary>
+#pragma warning disable CS0067
         public event EventHandler<EventArgs> MethodAdded;
         /// <summary>
         /// Fired when a method is added.
@@ -245,6 +246,7 @@ namespace ASIpump
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
         public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+#pragma warning restore CS0067
         /// <summary>
         /// Fired when the Agilent Pump finds out what method names are available.
         /// </summary>
@@ -252,11 +254,13 @@ namespace ASIpump
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
+#pragma warning disable CS0067
         public event EventHandler DeviceSaveRequired;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
         public event EventHandler<classDeviceErrorEventArgs> Error;
+#pragma warning restore CS0067
         /// <summary>
         /// List of times monitoring data was received.
         /// </summary>

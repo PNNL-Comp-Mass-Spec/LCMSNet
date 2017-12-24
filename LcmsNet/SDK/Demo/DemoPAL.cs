@@ -11,7 +11,7 @@ namespace DemoPluginLibrary
 {
     [Serializable]
     [classDeviceControlAttribute(typeof(DemoPALAdvancedControlViewModel),
-                                 "DemoPAL",
+                                 "Demo PAL",
                                  "Demo")
     ]
     public class DemoPAL: IDevice, IFluidicsSampler

@@ -31,6 +31,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\LcmsNetSQLiteTools.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -48,11 +50,8 @@
       <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -86,15 +85,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == PNNLRelease goto :release else goto :end
-
-:release
-xcopy /Y /F /D "$(TargetDir)*.dll" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)*.pdb" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(SolutionDir)lib"
-
-:end
+    <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)System.Data.SQLite.dll" "$(SolutionDir)lib\"
+xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(SolutionDir)lib\x86\"
+xcopy /Y /F /D "$(TargetDir)\x64\*.dll" "$(SolutionDir)lib\x64\"
 
 if not exist "$(ProjectDir)..\SQLite" mkdir "$(ProjectDir)..\SQLite"
 if not exist "$(ProjectDir)..\SQLite\x86" mkdir "$(ProjectDir)..\SQLite\x86"

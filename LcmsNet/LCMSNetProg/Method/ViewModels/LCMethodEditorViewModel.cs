@@ -71,11 +71,6 @@ namespace LcmsNet.Method.ViewModels
             renderUpdateCount = 0;
         }
 
-        /// <summary>
-        /// Fired when editing a method.
-        /// </summary>
-        public event EventHandler<MethodEditingEventArgs> UpdatingMethod;
-
         #region Column Defintion Check Event Handlers And Configuration
 
         /// <summary>

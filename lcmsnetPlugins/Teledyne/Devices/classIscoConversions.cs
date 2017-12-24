@@ -35,7 +35,7 @@ namespace LcmsNet.Devices.Pumps
 
         #region "Methods"
         /// <summary>
-        /// Converts flow represented by G& return string to user units
+        /// Converts flow represented by G&amp; return string to user units
         /// (Overload to use default units specifier stored in class)
         /// </summary>
         /// <param name="inpFlow">Input flow string</param>
@@ -46,7 +46,7 @@ namespace LcmsNet.Devices.Pumps
         }
 
         /// <summary>
-        /// Converts flow represented by G& return string to user units
+        /// Converts flow represented by G&amp; return string to user units
         /// (Overload allowing user to specify units)
         /// </summary>
         /// <param name="inpFlow">Input flow string (liters/min * 10E10)</param>
@@ -93,7 +93,7 @@ namespace LcmsNet.Devices.Pumps
         }
 
         /// <summary>
-        /// Converts pressure represented by G& return string to user units
+        /// Converts pressure represented by G&amp; return string to user units
         /// (Overload to use default units specifier stored in class)
         /// </summary>
         /// <param name="inpPress">Input pressure string (PSI * 5)</param>
@@ -105,7 +105,7 @@ namespace LcmsNet.Devices.Pumps
         }
 
         /// <summary>
-        /// Converts pressure represented by G& return string to user units
+        /// Converts pressure represented by G&amp; return string to user units
         /// (Overload allowing user to specify units)
         /// </summary>
         /// <param name="inpPress">Input pressure string (PSI * 5)</param>

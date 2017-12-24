@@ -20,6 +20,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\Agilent.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
     <OutputPath>bin\PNNLRelease\</OutputPath>
@@ -28,9 +30,10 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\PNNLRelease\Agilent.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility" />
     <Reference Include="Agilent.Licop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac187d2a8ddbcb3c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\Agilent.Licop.dll</HintPath>
@@ -50,8 +53,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -94,9 +95,6 @@
     <PackageReference Include="Extended.Wpf.Toolkit">
       <Version>3.2.0</Version>
     </PackageReference>
-    <PackageReference Include="OxyPlot.Wpf">
-      <Version>1.0.0</Version>
-    </PackageReference>
     <PackageReference Include="reactiveui">
       <Version>7.4.0</Version>
     </PackageReference>
@@ -125,12 +123,13 @@ powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach 
 
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)Agilent.*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
+
+xcopy /y /f /d "$(ProjectDir)Resources\Agilent.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

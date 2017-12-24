@@ -745,7 +745,7 @@ namespace LcmsNet.Devices.Pal
         }
 
         /// <summary>
-        /// Populates <see cref="TraysAndMaxVials"/>
+        /// Populates <see cref="TrayNamesAndMaxVials"/>
         /// </summary>
         public void SetMaxVialsForTrays()
         {

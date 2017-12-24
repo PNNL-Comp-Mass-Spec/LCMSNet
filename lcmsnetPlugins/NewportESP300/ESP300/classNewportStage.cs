@@ -964,7 +964,9 @@ namespace Newport.ESP300
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
+#pragma warning disable CS0067
         public event EventHandler DeviceSaveRequired;
+#pragma warning restore CS0067
         /// <summary>
         /// Fired when the status changes.
         /// </summary>
