@@ -60,9 +60,6 @@
       <DependentUpon>DemoValveAdvancedControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DemoValveAdvancedControlViewModel.cs" />
-    <Compile Include="FluidicsSprayNeedle.cs" />
-    <Compile Include="FluidicsTee.cs" />
-    <Compile Include="FluidicsUnion.cs" />
     <Compile Include="PluginTemplate\PluginTemplate.cs" />
     <Compile Include="DemoClosure.cs" />
     <Compile Include="DemoPAL.cs" />
@@ -76,6 +73,10 @@
     <Compile Include="DemoValve2.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluidicsPack\FluidicsPack.csproj">
+      <Project>{6544bdea-10ae-4867-afc2-8113d7983d7d}</Project>
+      <Name>FluidicsPack</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">
       <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
       <Name>FluidicsSDK</Name>

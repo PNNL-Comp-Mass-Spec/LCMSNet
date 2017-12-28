@@ -47,6 +47,10 @@
       <Project>{36381f3a-1ca7-4c8b-b99c-035b3c4e84f4}</Project>
       <Name>DemoPluginLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FluidicsPack\FluidicsPack.csproj">
+      <Project>{6544bdea-10ae-4867-afc2-8113d7983d7d}</Project>
+      <Name>FluidicsPack</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">
       <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
       <Name>FluidicsSDK</Name>

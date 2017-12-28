@@ -11,6 +11,7 @@ using FluidicsSDK.Managers;
 using FluidicsSDK.ModelCheckers;
 using NUnit.Framework;
 using DemoPluginLibrary;
+using FluidicsPack;
 using FluidicsSDK.Devices;
 
 namespace FluidicsSDKUnitTests
