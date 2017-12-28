@@ -20,15 +20,19 @@ namespace FluidicsPack
 
         private IDevice m_device;
 
+        private const int RectWidth = 20;
+        private const int RectHeight = 200;
+
         public FluidicsColumnGlyph()
         {
-            var newsize = new Size(20, 200);
+            var newsize = new Size(RectWidth, RectHeight);
 
-            GraphicsPrimitive primitive = new FluidicsRectangle(new Point(0, 0), newsize, Colors.Black, Brushes.White);
+            var offset = new Point(2, Port.PORT_DEFAULT_RADIUS + 2);
+            var rect = new FluidicsRectangle(offset, newsize, Colors.Black, Brushes.White);
 
-            AddPrimitive(primitive);
+            AddPrimitive(rect);
 
-            var points = GeneratePortLocs();
+            var points = GeneratePortLocs(offset);
             var inputPort = new Port(points[0], this)
             {
                 Source = false,
@@ -65,11 +69,11 @@ namespace FluidicsPack
 
         }
 
-        private Point[] GeneratePortLocs()
+        private Point[] GeneratePortLocs(Point offset)
         {
             var points = new Point[2];
-            points[0] = new Point(Convert.ToInt32(Loc.X + (Size.Width / 2)), Loc.Y);
-            points[1] = new Point(Convert.ToInt32(Loc.X + (Size.Width / 2)), Loc.Y + Convert.ToInt32(Size.Height - m_info_controls_box.Size.Height));
+            points[0] = new Point(offset.X + (RectWidth / 2), offset.Y);
+            points[1] = new Point(offset.X + (RectWidth / 2), offset.Y + RectHeight);
 
             return points;
         }

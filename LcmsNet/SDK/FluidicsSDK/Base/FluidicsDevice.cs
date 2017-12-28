@@ -308,6 +308,18 @@ namespace FluidicsSDK.Base
         }
 
         /// <summary>
+        /// Adds a line to the list of graphics primitives representing this device.
+        /// </summary>
+        /// <param name="from">Starting point of the line</param>
+        /// <param name="to">End point of the line</param>
+        /// <param name="action">an Action delegate that takes 0 parameters, this is the action that is taken when the primitive is clicked</param>
+        protected virtual void AddLine(Point from, Point to, Action action = null)
+        {
+            var line = new FluidicsLine(from, to);
+            AddPrimitive(line, action);
+        }
+
+        /// <summary>
         ///  Add a circle to the list of graphics primitives representing this device.
         /// </summary>
         /// <param name="loc">Point representing the location of the circle on screen</param>
