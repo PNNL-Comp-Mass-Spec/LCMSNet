@@ -44,6 +44,12 @@ namespace FluidicsSDK.Graphic
             UpdateBoundingBox();
         }
 
+        public void AddPoint(double x, double y)
+        {
+            vertices.Add(new Point(x, y));
+            UpdateBoundingBox();
+        }
+
         private void UpdateBoundingBox()
         {
             var minX = vertices.Min(x => x.X);
@@ -144,6 +150,7 @@ namespace FluidicsSDK.Graphic
         {
             return BoundingBox.Contains(point);
         }
+
         #endregion
 
         #region Properties
@@ -163,7 +170,15 @@ namespace FluidicsSDK.Graphic
         public override Size Size
         {
             get { return BoundingBox.Size; }
-            set { throw new InvalidOperationException("Cannot change the size of a polygon directly. Modify it's points"); }
+            set { throw new InvalidOperationException("Cannot change the size of a polygon directly. Modify its points"); }
+        }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public override Rect Bounds
+        {
+            get { return new Rect(BoundingBox.Location, BoundingBox.Size); }
         }
 
         #endregion

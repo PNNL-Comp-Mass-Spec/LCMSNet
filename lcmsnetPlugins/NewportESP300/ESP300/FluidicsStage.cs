@@ -14,10 +14,11 @@ namespace Newport.ESP300
 
         public FluidicsStage()
         {
-            AddRectangle(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT), Colors.Black, Brushes.White, true, null);
-            AddPort(new Point(STAGE_WIDTH + 14, STAGE_HEIGHT / 2));
-            AddPort(new Point(Loc.X - 14, Loc.Y + STAGE_HEIGHT / 2));
-            m_info_controls_box = new Rect(new Point(0, 0), new Size(STAGE_WIDTH, STAGE_HEIGHT));
+            var offset = new Point(6 + Port.PORT_DEFAULT_RADIUS * 2, 2);
+            AddRectangle(offset, new Size(STAGE_WIDTH, STAGE_HEIGHT), Colors.Black, Brushes.White, true, null);
+            AddPort(new Point(offset.X + STAGE_WIDTH + 14, offset.Y + STAGE_HEIGHT / 2));
+            AddPort(new Point(offset.X + Loc.X - 14, offset.Y + Loc.Y + STAGE_HEIGHT / 2));
+            m_info_controls_box = new Rect(offset, new Size(STAGE_WIDTH, STAGE_HEIGHT));
         }
 
         public override int CurrentState

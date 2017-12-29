@@ -45,8 +45,9 @@ namespace FluidicsSDK.Devices
         /// </summary>
         public FluidicsPump()
         {
-            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
-            var portLoc = GeneratePortLoc();
+            var offset = new Point(2, 4 + Port.PORT_DEFAULT_RADIUS * 2);
+            AddRectangle(offset, new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
+            var portLoc = GeneratePortLoc(offset);
             AddPort(portLoc);
             var states = SetupStates();
             MaxVariance = MAX_PIXEL_VARIANCE;
@@ -62,8 +63,9 @@ namespace FluidicsSDK.Devices
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public FluidicsPump(Point loc)
         {
-            AddRectangle(loc, new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
-            var portLoc = GeneratePortLoc();
+            var offset = new Point(loc.X + 2, loc.X + 4 + Port.PORT_DEFAULT_RADIUS * 2);
+            AddRectangle(offset, new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
+            var portLoc = GeneratePortLoc(offset);
             AddPort(portLoc);
         }
 
@@ -71,10 +73,10 @@ namespace FluidicsSDK.Devices
         /// generate the locations of the ports associated with the pump, used at creation or when the device is moved around the screen
         /// </summary>
         /// <returns>a list of Point objects, one for each port</returns>
-        private Point GeneratePortLoc()
+        private Point GeneratePortLoc(Point offset)
         {
-            //create port1 to left side of pump
-            return new Point(Loc.X + (int) (Size.Width / 2), Loc.Y - MIN_DIST_FROM_EDGE);
+            //create port1 at top center side of pump
+            return new Point(Loc.X + offset.X + (int) (Size.Width / 2), Loc.Y + offset.Y - MIN_DIST_FROM_EDGE);
         }
 
         /// <summary>

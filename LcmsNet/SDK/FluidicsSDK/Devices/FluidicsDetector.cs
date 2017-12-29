@@ -13,7 +13,7 @@ namespace FluidicsSDK.Devices
 
         public FluidicsDetector()
         {
-            var myRectangle = new FluidicsRectangle(new Point(0, 0), m_size, Colors.Black, Brushes.White);
+            var myRectangle = new FluidicsRectangle(new Point(2, 2), m_size, Colors.Black, Brushes.White);
             AddPrimitive(myRectangle);
             m_deviceName = "Detector";
         }

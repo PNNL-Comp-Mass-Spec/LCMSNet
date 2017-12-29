@@ -7,6 +7,7 @@ namespace FluidicsSDK.Graphic
     public class FluidicsLine : GraphicsPrimitive
     {
         #region Members
+
         // origination of line
         private Point m_orig;
         // termination of line
@@ -124,7 +125,22 @@ namespace FluidicsSDK.Graphic
             }
         }
 
-        #endregion
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public override Rect Bounds
+        {
+            get
+            {
+                //var minX = Math.Min(Origin.X, Term.X);
+                //var minY = Math.Min(Origin.Y, Term.Y);
+                //var maxX = Math.Max(Origin.X, Term.X);
+                //var maxY = Math.Max(Origin.Y, Term.Y);
+                //return new Rect(minX, minY, maxX - minX, maxY - minY);
+                return new Rect(Origin, Term);
+            }
+        }
 
+        #endregion
     }
 }

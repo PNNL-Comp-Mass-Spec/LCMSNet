@@ -27,22 +27,23 @@ namespace FluidicsSDK.Devices
         /// <param name="basePoint">location for the "main" graphic to start at</param>
         public void DefineGraphics(Point basePoint)
         {
+            var offset = new Point(basePoint.X + 2, basePoint.Y + 37); // offset point from the base to compensate for negative Y values and line widths
             //define body
             //base rectangle
-            AddRectangle(basePoint, new Size(180, 40), Colors.Black, Brushes.White, fill: true);
+            AddRectangle(offset, new Size(180, 40), Colors.Black, Brushes.White, fill: true);
             // offset from base rectangle (5, 25)
-            AddRectangle(new Point(basePoint.X + 5, basePoint.Y + 25), new Size(170, 8), Colors.Black, Brushes.White, fill: true);
+            AddRectangle(new Point(offset.X + 5, offset.Y + 25), new Size(170, 8), Colors.Black, Brushes.White, fill: true);
 
             //define sampler arm
             // offset from base rectangle(25, -35)
-            var samplerArmBase = new Point(basePoint.X + 25, basePoint.Y - 35);
+            var samplerArmBase = new Point(offset.X + 25, offset.Y - 35);
             AddRectangle(samplerArmBase, new Size(35, 110), Colors.Black, Brushes.White, fill: true);
             // offset from sampler arm outer rectangle(5, 45)
             AddRectangle(new Point(samplerArmBase.X + 5, samplerArmBase.Y + 45), new Size(25, 62), Colors.Black, Brushes.Gray, fill: true);
 
             //define sample cabinet + drawers
             //offset from base rectangle (90, 41)
-            var cabinetBase = new Point(basePoint.X + 90, basePoint.Y + 41);
+            var cabinetBase = new Point(offset.X + 90, offset.Y + 41);
             AddRectangle(cabinetBase, new Size(80, 110), Colors.Black, Brushes.White, fill: true);
             //offset from cabinet outer rectangle (5, 8)
             var firstDrawerBase = new Point(cabinetBase.X + 5, cabinetBase.Y + 8);

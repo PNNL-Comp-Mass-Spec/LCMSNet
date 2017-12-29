@@ -10,7 +10,6 @@ namespace FluidicsSDK.Graphic
     /// </summary>
     public abstract class GraphicsPrimitive
     {
-
         #region Members
 
         /// <summary>
@@ -127,7 +126,6 @@ namespace FluidicsSDK.Graphic
             Render(g, alpha, scale, highlight, error);
         }
 
-
         // a primitive should be able to tell if a point is within itself.
         public abstract bool Contains(Point point, int max_variance);
 
@@ -142,26 +140,16 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual bool Fill
         {
-            get
-            {
-                return m_fill;
-            }
-            set
-            {
-                m_fill = value;
-            }
+            get { return m_fill; }
+            set { m_fill = value; }
         }
-
 
         /// <summary>
         /// Primary draw color of the graphics object
         /// </summary>
         public virtual Color Color
         {
-            get
-            {
-                return m_color;
-            }
+            get { return m_color; }
             set
             {
                 m_color = value;
@@ -169,7 +157,6 @@ namespace FluidicsSDK.Graphic
                 m_drawingPen.TryFreeze();
             }
         }
-
 
         /// <summary>
         /// read-only pen property
@@ -182,10 +169,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Color Highlight
         {
-            get
-            {
-                return m_highlightColor;
-            }
+            get { return m_highlightColor; }
             set
             {
                 m_highlightColor = value;
@@ -194,20 +178,15 @@ namespace FluidicsSDK.Graphic
             }
         }
 
-
         public virtual Color ErrorColor
         {
-            get
-            {
-                return m_errorColor;
-            }
+            get { return m_errorColor; }
             set
             {
                 m_errorColor = value;
                 m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
                 m_errorPen.TryFreeze();
             }
-
         }
 
         public virtual Pen ErrorPen => m_errorPen;
@@ -222,10 +201,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Brush FillBrush
         {
-            get
-            {
-                return m_fillBrush;
-            }
+            get { return m_fillBrush; }
             set
             {
                 m_fillBrush = value;
@@ -239,10 +215,15 @@ namespace FluidicsSDK.Graphic
         public abstract Size Size { get; set; }
 
         /// <summary>
-        /// Property representing the location of the primitive on screen
+        /// Property representing the location of the primitive on the drawing
         /// </summary>
         /// <remarks>The location of the upper-left corner of the primitive, or start point of the line.</remarks>
-        public virtual Point Loc { get; set; }
+        public abstract Point Loc { get; set; }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public abstract Rect Bounds { get; }
 
         #endregion
     }

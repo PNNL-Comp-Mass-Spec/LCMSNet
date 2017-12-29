@@ -98,10 +98,16 @@ namespace FluidicsPack
             var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, (11.0F * stringScale) * (96.0 / 72.0), br);
             m_info_controls_box = UpdateControlBoxLocation();
             //place the name at the top middle of the box
-            var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Height, scale);
-            g.PushTransform(new RotateTransform(90));
+            var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Width, scale);
+            g.PushTransform(new RotateTransform(90, Ports[0].Center.X, nameLocation.Y + deviceNameText.Height / 2));
             g.DrawText(deviceNameText, nameLocation);
             g.Pop();
+
+            if (Math.Abs(scale - 1) <= float.Epsilon)
+            {
+                RenderedOnceFullScale = true;
+                lastRenderedUnscaledControlsBounds = new Rect(nameLocation.Y, nameLocation.X, deviceNameText.Height, deviceNameText.Width);
+            }
         }
 
         /// <summary>
@@ -119,14 +125,13 @@ namespace FluidicsPack
         /// create location of a string to be drawn in the control box.
         /// </summary>
         /// <param name="y"></param>
-        /// <param name="stringHeight"></param>
+        /// <param name="stringWidth"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        protected override Point CreateStringLocation(int y, double stringHeight, float scale)
+        protected override Point CreateStringLocation(int y, double stringWidth, float scale)
         {
-            // The height is actually our "width" here, since we are drawing the string vertically.
-            return new Point((int)((m_info_controls_box.X * scale) - stringHeight / 2),
-                (int)(y + 10));
+            // We don't really care about the width, we just need to make sure we are positioned properly for the rotate
+            return new Point((m_info_controls_box.X * scale) - 10, (y + 10));
         }
 
         public override string StateString()

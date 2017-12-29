@@ -16,12 +16,15 @@ namespace FluidicsSDK.Graphic
     public class FluidicsTriangle : GraphicsPrimitive
     {
         #region Members
+
         Rect m_area;
         Rect m_scaledArea;
         readonly Point[] m_points;
+
         #endregion
 
         #region Methods
+
         public FluidicsTriangle(Rect a, Orient or)
         {
             m_points = new Point[3];
@@ -124,7 +127,6 @@ namespace FluidicsSDK.Graphic
             }
         }
 
-
         public override void MoveBy(Point relativeValues)
         {
             double maxx = 0;
@@ -154,6 +156,7 @@ namespace FluidicsSDK.Graphic
         {
             return m_scaledArea.Contains(point);
         }
+
         #endregion
 
         #region Properties
@@ -179,6 +182,14 @@ namespace FluidicsSDK.Graphic
         {
             get { return m_area.Size; }
             set { m_area.Size = value; }
+        }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public override Rect Bounds
+        {
+            get { return new Rect(m_area.Location, m_area.Size); }
         }
 
         #endregion

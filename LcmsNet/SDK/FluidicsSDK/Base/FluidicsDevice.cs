@@ -32,6 +32,11 @@ namespace FluidicsSDK.Base
         protected List<GraphicsPrimitive> m_actionPrims;
         //box to be drawn around controls and info strings, also determines positioning of said controls and strings
         protected Rect m_info_controls_box;
+
+        /// <summary>
+        /// Last rendered (at scale 1) bounds of the controls (name, status, actions)
+        /// </summary>
+        protected Rect lastRenderedUnscaledControlsBounds = new Rect(0, 0, 100, 100);
         #endregion
 
         #region Methods
@@ -205,6 +210,10 @@ namespace FluidicsSDK.Base
             var name = DeviceName;
             var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, (11.0F * stringScale) * (96.0 / 72.0), br);
             m_info_controls_box = UpdateControlBoxLocation();
+            var minX = m_info_controls_box.X;
+            var minY = m_info_controls_box.Y;
+            var maxX = m_info_controls_box.X;
+            var maxY = m_info_controls_box.Y;
             //place the name at the top middle of the box
             var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Width, scale);
             g.DrawText(deviceNameText, nameLocation);
@@ -212,20 +221,37 @@ namespace FluidicsSDK.Base
             var stateText = new FormattedText(StateString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, (11.0F * stringScale) * (96.0 / 72.0), br);
             var stateLocation = CreateStringLocation((int)(nameLocation.Y + deviceNameText.Height), stateText.Width, scale);
             g.DrawText(stateText, stateLocation);
+
+            minX = Math.Min(minX, Math.Min(nameLocation.X, stateLocation.X));
+            minY = Math.Min(minY, Math.Min(nameLocation.Y, stateLocation.Y));
+            maxX = Math.Max(maxX, Math.Max(nameLocation.X + deviceNameText.Width, stateLocation.X + stateText.Width));
+            maxY = Math.Max(maxY, Math.Max(nameLocation.Y + deviceNameText.Height, stateLocation.Y + stateText.Height));
+
             // default implementation, expecting only two controls. if a better implementation is needed...override it.
             if (m_actionPrims.Count == 2)
             {
                 var prim = m_actionPrims[0];
-                //left triangle padding(so it doesn't draw over the state string
+                // horizontal padding(so it doesn't draw over the state string
                 var padding = 3;
                 var relativeMove = new Vector(stateLocation.X - (prim.Size.Width * scale + padding + (prim.Loc.X * scale)), stateLocation.Y - (prim.Loc.Y * scale));
                 prim.Loc = Point.Add(prim.Loc, relativeMove);
                 prim.Render(g, alpha, scale, false, false);
-                prim = m_actionPrims[1];
 
-                relativeMove = new Vector(stateLocation.X + stateText.Width - (prim.Loc.X * scale) + padding, stateLocation.Y - (prim.Loc.Y * scale));
-                prim.Loc = Point.Add(prim.Loc, relativeMove);
-                prim.Render(g, alpha, scale, false, false);
+                var prim2 = m_actionPrims[1];
+                relativeMove = new Vector(stateLocation.X + stateText.Width - (prim2.Loc.X * scale) + padding, stateLocation.Y - (prim2.Loc.Y * scale));
+                prim2.Loc = Point.Add(prim2.Loc, relativeMove);
+                prim2.Render(g, alpha, scale, false, false);
+
+                minX = Math.Min(minX, Math.Min(prim.Loc.X, prim2.Loc.X));
+                minY = Math.Min(minY, Math.Min(prim.Loc.Y, prim2.Loc.Y));
+                maxX = Math.Max(maxX, Math.Max(prim.Loc.X + prim.Size.Width, prim2.Loc.X + prim2.Size.Width));
+                maxY = Math.Max(maxY, Math.Max(prim.Loc.Y + prim.Size.Height, prim2.Loc.Y + prim2.Size.Height));
+            }
+
+            if (Math.Abs(scale - 1) <= float.Epsilon)
+            {
+                RenderedOnceFullScale = true;
+                lastRenderedUnscaledControlsBounds = new Rect(minX, minY, maxX - minX, maxY - minY);
             }
         }
 
@@ -249,8 +275,8 @@ namespace FluidicsSDK.Base
         /// <returns></returns>
         protected virtual Point CreateStringLocation(int y, double stringWidth, float scale)
         {
-            return new Point((int)((m_info_controls_box.X * scale + (m_info_controls_box.Size.Width * scale / 2)) - (stringWidth / 2)),
-                (int)(y + 2));
+            return new Point((m_info_controls_box.X * scale + (m_info_controls_box.Size.Width * scale / 2)) - (stringWidth / 2),
+                y + 2);
         }
 
         /// <summary>
@@ -454,11 +480,37 @@ namespace FluidicsSDK.Base
             {
                 var s = new Size
                 {
-                    Width = m_primitives[PRIMARY_PRIMITIVE].Size.Width,
-                    Height = m_primitives[PRIMARY_PRIMITIVE].Size.Height
+                    Width = m_primitives.Max(x => x.Bounds.Width),
+                    Height = m_primitives.Max(x => x.Bounds.Height),
                 };
+
                 s.Height += m_info_controls_box.Size.Height;
                 return s;
+            }
+        }
+
+        /// <summary>
+        /// If this device has been rendered previously at full scale
+        /// </summary>
+        public virtual bool RenderedOnceFullScale { get; protected set; } = false;
+
+        /// <summary>
+        /// Get the full bounds needed to fully render the device at a given location; requires a previous rendering at full scale for complete accuracy
+        /// </summary>
+        public virtual Rect Bounds
+        {
+            get
+            {
+                var allBounds = new List<Rect>(m_primitives.Select(x => x.Bounds));
+                allBounds.AddRange(m_actionPrims.Select(x => x.Bounds));
+                allBounds.AddRange(Ports.Select(x => x.Bounds));
+                allBounds.Add(lastRenderedUnscaledControlsBounds);
+
+                var minX = allBounds.Min(x => x.X);
+                var minY = allBounds.Min(x => x.Y);
+                var maxX = allBounds.Max(x => x.Right);
+                var maxY = allBounds.Max(x => x.Bottom);
+                return new Rect(minX, minY, maxX - minX, maxY - minY);
             }
         }
 

@@ -15,11 +15,6 @@ namespace FluidicsSDK.Graphic
 
         #endregion
 
-        #region Constructors
-
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -102,6 +97,7 @@ namespace FluidicsSDK.Graphic
             m_rect.X += relativeValues.X;
             m_rect.Y += relativeValues.Y;
         }
+
         #endregion
 
         #region Properties
@@ -123,6 +119,14 @@ namespace FluidicsSDK.Graphic
         {
             get { return m_rect.Size; }
             set { }
+        }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public override Rect Bounds
+        {
+            get { return new Rect(m_rect.Location, m_rect.Size); }
         }
 
         /// <summary>

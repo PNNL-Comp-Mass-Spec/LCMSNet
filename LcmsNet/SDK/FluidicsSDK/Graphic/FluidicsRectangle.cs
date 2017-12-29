@@ -6,7 +6,9 @@ namespace FluidicsSDK.Graphic
     public class FluidicsRectangle : GraphicsPrimitive
     {
         #region Members
+
         Rect m_rect;
+
         #endregion
 
         #region Methods
@@ -95,8 +97,7 @@ namespace FluidicsSDK.Graphic
             get { return m_rect.Location; }
             set
             {
-                base.Loc = value;
-                m_rect.Location = base.Loc;
+                m_rect.Location = value;
             }
         }
 
@@ -107,6 +108,14 @@ namespace FluidicsSDK.Graphic
         {
             get { return m_rect.Size; }
             set { m_rect.Size = value; }
+        }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public override Rect Bounds
+        {
+            get { return new Rect(m_rect.Location, m_rect.Size); }
         }
 
         #endregion

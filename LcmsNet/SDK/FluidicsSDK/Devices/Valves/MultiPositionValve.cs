@@ -24,14 +24,18 @@ namespace FluidicsSDK.Devices.Valves
         #endregion
 
         #region Methods
+
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="numberOfPorts">the number of ports the valve will have</param>
-        public MultiPositionValve(int numberOfPorts):
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        public MultiPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2) :
             base()
         {
-            AddCircle(new Point(0, 0), m_radius, Colors.Black, Brushes.White, fill: true);
+            Offset = new Point(xOffset, yOffset);
+            AddCircle(Offset, m_radius, Colors.Black, Brushes.White, fill: true);
             m_info_controls_box = new Rect(Loc.X, Loc.Y + (int)Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             m_numberOfPorts = numberOfPorts;
             var portLocs = GeneratePortLocs();
@@ -43,6 +47,11 @@ namespace FluidicsSDK.Devices.Valves
             Source = false;
             Sink = false;
         }
+
+        /// <summary>
+        /// The x,y offset of the main drawing to compensate for line width, ports, etc.
+        /// </summary>
+        protected readonly Point Offset;
 
         /// <summary>
         /// generate the locations of the ports on screen relative to the valve itself

@@ -16,7 +16,7 @@ namespace FluidicsSDK.Devices.Valves
         ISixPortInjectionValve m_valve;
 
         public SixPortInjectionFluidicsValve() :
-            base(NUMBER_OF_PORTS)
+            base(NUMBER_OF_PORTS, yOffset: 32) // Additional vertical offset for injection port drawing
         {
             m_states = SetupStates();
             m_currentState = TwoPositionState.PositionA;
@@ -31,8 +31,8 @@ namespace FluidicsSDK.Devices.Valves
             //add right control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
             //add top "injection port"
-            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (int)Size.Width / 4, Loc.Y - 30), new Size((int)Size.Width / 2, 10), Colors.Black, Brushes.White));
-            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + (((int)Size.Width / 2) - 5), Loc.Y - 20), new Size(10, 20), Colors.Black, Brushes.White));
+            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + Offset.X + (int)Size.Width / 4, Loc.Y + Offset.Y - 30), new Size((int)Size.Width / 2, 10), Colors.Black, Brushes.White));
+            AddPrimitive(new FluidicsRectangle(new Point(Loc.X + Offset.X + (((int)Size.Width / 2) - 5), Loc.Y + Offset.Y - 20), new Size(10, 20), Colors.Black, Brushes.White));
             // add injection loop
             AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
             AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Colors.Black, Brushes.White, true, 1));

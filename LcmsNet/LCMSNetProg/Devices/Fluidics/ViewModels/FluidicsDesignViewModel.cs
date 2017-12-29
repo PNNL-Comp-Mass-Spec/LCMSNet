@@ -169,26 +169,26 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         }
 
         /// <summary>
-        ///  save the current fluidics design as a bitmap
+        /// Save the current fluidics design as a bitmap
         /// </summary>
         /// <returns>the image of the current fluidics design</returns>
         public BitmapSource GetImage()
         {
-            var r = fluidicsMod.GetBoundingBox();
-            var bounds = new Rect(0, 0, r.Width + 150, r.Height + 150);
+            var bounds = fluidicsMod.GetBoundingBox(false);
             var drawVisual = new DrawingVisual();
+            drawVisual.Offset = new Vector(-bounds.X, -bounds.Y); // Shift the drawing to minimize the blank space, or to show cropped drawings in their entirety
             using (var drawContext = drawVisual.RenderOpen())
             {
-                drawContext.PushClip(new RectangleGeometry(bounds));
                 drawContext.DrawRectangle(Brushes.White, null, bounds);
-                float scale = 1;
+                drawContext.PushClip(new RectangleGeometry(bounds)); // Clip the draw to the calculated boundaries
+                var scale = 1;
                 fluidicsMod.Render(drawContext, 255, scale, Layer.Devices);
                 fluidicsMod.Render(drawContext, 255, scale, Layer.Ports);
                 fluidicsMod.Render(drawContext, 255, scale, Layer.Connections);
                 drawContext.Pop();
             }
 
-            var rtb = new RenderTargetBitmap(800, 200, 96, 96, PixelFormats.Pbgra32);
+            var rtb = new RenderTargetBitmap((int)bounds.Width, (int)bounds.Height, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(drawVisual);
             rtb.Freeze();
             return rtb;

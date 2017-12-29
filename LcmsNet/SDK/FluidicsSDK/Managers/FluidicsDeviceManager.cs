@@ -137,7 +137,7 @@ namespace FluidicsSDK.Managers
         }
 
         /// <summary>
-        /// Get bounding box around
+        /// Get bounding box around all devices
         /// </summary>
         /// <returns></returns>
         public Rect GetBoundingBox(bool addBuffer)
@@ -146,17 +146,30 @@ namespace FluidicsSDK.Managers
             {
                 return new Rect(0, 0, 0, 0);
             }
+
             // extra pixels around edge of bounding box to ensure images taken using bounding box get full image
             var buffer = 200;
             if (!addBuffer)
             {
                 buffer = 10;
             }
-            var maxX = m_devices.Max(z => (int)(z.Loc.X + z.Size.Width));
-            var maxY = m_devices.Max(z => (int)(z.Loc.Y + z.Size.Height));
-            var x = m_devices.Min(z => z.Loc.X);
-            var y = m_devices.Min(z => z.Loc.Y);
-            return new Rect(x - buffer, y - buffer, maxX + buffer, maxY + buffer);
+
+            // Make sure all of the device graphics have been drawn at least once at full scale
+            if (m_devices.Any(z => !z.RenderedOnceFullScale))
+            {
+                var drawContext = new DrawingVisual().RenderOpen();
+                float scale = 1;
+                Render(drawContext, 255, scale);
+                drawContext.Close();
+            }
+
+            var deviceBounds = m_devices.Select(x => x.Bounds).ToList();
+            var maxX = deviceBounds.Max(x => x.Right);
+            var maxY = deviceBounds.Max(x => x.Bottom);
+            var minX = deviceBounds.Min(x => x.X);
+            var minY = deviceBounds.Min(x => x.Y);
+
+            return new Rect(minX - buffer, minY - buffer, maxX - minX + buffer * 2, maxY - minY + buffer * 2);
         }
 
         /// <summary>

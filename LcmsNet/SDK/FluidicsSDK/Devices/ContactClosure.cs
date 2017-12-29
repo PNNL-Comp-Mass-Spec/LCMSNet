@@ -47,7 +47,7 @@ namespace FluidicsSDK.Devices
         /// </summary>
         public ContactClosure()
         {
-            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
+            AddRectangle(new Point(2, 2), new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
             MaxVariance = MAX_PIXEL_VARIANCE;
         }
 

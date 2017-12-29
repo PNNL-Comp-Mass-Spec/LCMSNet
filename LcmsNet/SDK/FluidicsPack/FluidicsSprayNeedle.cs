@@ -98,6 +98,12 @@ namespace FluidicsPack
             // needle tip
             AddPrimitive(new FluidicsLine(needleStartPoint, needleTipPoint));
             AddPrimitive(new FluidicsLine(new Point(needleStartPoint.X, needleStartPoint.Y + (MAIN_RECT_HEIGHT / 2)), needleTipPoint));
+            // For a sharp pointed needle, use below code
+            //var needlePoint = new FluidicsPolygon();
+            //needlePoint.AddPoint(needleStartPoint);
+            //needlePoint.AddPoint(needleTipPoint);
+            //needlePoint.AddPoint(needleStartPoint.X, needleStartPoint.Y + (MAIN_RECT_HEIGHT / 2));
+            //AddPrimitive(needlePoint);
 
             AddPort(new Point(rightMostStartPoint.X + MAIN_RECT_WIDTH / 3 + 12, rightMostStartPoint.Y + MAIN_RECT_HEIGHT / 2));
             Sink = true;

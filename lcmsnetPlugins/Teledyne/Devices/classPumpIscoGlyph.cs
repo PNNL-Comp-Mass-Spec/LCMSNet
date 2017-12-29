@@ -16,10 +16,11 @@ namespace LcmsNet.Devices.Pumps
 
         public classPumpIscoGlyph()
         {
-            AddRectangle(new Point(0, 0), new Size(CONST_WIDTH, CONST_HEIGHT), Colors.Black, Brushes.White, fill: true);
-            AddPort(new Point((CONST_WIDTH * 0.25), -10));
-            AddPort(new Point((CONST_WIDTH * 0.5), -10));
-            AddPort(new Point((CONST_WIDTH * 0.75), -10));
+            var offset = new Point(26, 4 + Port.PORT_DEFAULT_RADIUS * 2); // Add extra X offset since the blank status display is that much wider
+            AddRectangle(offset, new Size(CONST_WIDTH, CONST_HEIGHT), Colors.Black, Brushes.White, fill: true);
+            AddPort(new Point(offset.X + (CONST_WIDTH * 0.25), offset.Y + -10));
+            AddPort(new Point(offset.X + (CONST_WIDTH * 0.5), offset.Y + -10));
+            AddPort(new Point(offset.X + (CONST_WIDTH * 0.75), offset.Y + -10));
             foreach (var port in Ports)
             {
                 port.Source = true;

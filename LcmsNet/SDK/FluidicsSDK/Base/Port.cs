@@ -202,6 +202,14 @@ namespace FluidicsSDK.Base
         }
 
         /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public Rect Bounds
+        {
+            get { return m_primitive.Bounds; }
+        }
+
+        /// <summary>
         /// property for determining if the port is selected or not.
         /// </summary>
         public bool Selected

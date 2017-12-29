@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.ComponentModel;
+using FluidicsSDK.Devices;
 using LcmsNetDataClasses;
 using LcmsNetDataClasses.Method;
 using LcmsNetDataClasses.Devices;
@@ -19,7 +20,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                                  "Network Start",
                                  "Detectors")
     ]
-    public class classNetStartSocket: IDevice
+    public class classNetStartSocket: IDevice, IFluidicsClosure
     {
         #region Members
         /// <summary>
@@ -592,7 +593,16 @@ namespace LcmsNet.Devices.NetworkStart.Socket
           {
               return new List<string>();
           }
-          #endregion
+        #endregion
+
+        #region IFluidicsCLosure Members
+
+        public string GetClosureType()
+        {
+            return "Network Start";
+        }
+
+        #endregion
 
         #region Settings and Saving Methods
         /// <summary>
