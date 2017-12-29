@@ -87,14 +87,7 @@ namespace FluidicsSDK.Graphic
                 }
             }
 
-            var figure = new PathFigure(newPoints[0], new[]
-            {
-                new LineSegment(newPoints[1], true),
-                new LineSegment(newPoints[2], true),
-            }, true);
-            var geometry = new PathGeometry(new[] { figure });
-
-            g.DrawGeometry(fillBrush, drawingPen, geometry);
+            g.DrawPolygon(fillBrush, drawingPen, newPoints);
         }
 
         /// <summary>
@@ -165,18 +158,11 @@ namespace FluidicsSDK.Graphic
 
         #region Properties
 
-        public Orient Orientation
-        {
-            get;
-            set;
-        }
+        public Orient Orientation { get; set; }
 
         public override Point Loc
         {
-            get
-            {
-                return m_area.Location;
-            }
+            get { return m_area.Location; }
             set
             {
                 m_area.Location = value;
@@ -191,15 +177,10 @@ namespace FluidicsSDK.Graphic
 
         public override Size Size
         {
-            get
-            {
-                return m_area.Size;
-            }
-            set
-            {
-                m_area.Size = value;
-            }
+            get { return m_area.Size; }
+            set { m_area.Size = value; }
         }
+
         #endregion
     }
 }

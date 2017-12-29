@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="FluidicsModerator.cs" />
     <Compile Include="Graphic\enumBrushType.cs" />
+    <Compile Include="Graphic\Extensions.cs" />
     <Compile Include="Graphic\FluidicsRectangle.cs" />
     <Compile Include="Graphic\FluidicsCircle.cs" />
     <Compile Include="Graphic\FluidicsGraphicsError.cs" />

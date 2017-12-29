@@ -92,10 +92,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public override Point Loc
         {
-            get
-            {
-                return m_rect.Location;
-            }
+            get { return m_rect.Location; }
             set
             {
                 base.Loc = value;
@@ -108,15 +105,10 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public override Size Size
         {
-            get
-            {
-                return m_rect.Size;
-            }
-            set
-            {
-                m_rect.Size = value;
-            }
+            get { return m_rect.Size; }
+            set { m_rect.Size = value; }
         }
+
         #endregion
     }
 }

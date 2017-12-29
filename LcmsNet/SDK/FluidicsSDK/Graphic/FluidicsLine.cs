@@ -89,10 +89,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public override Size Size
         {
-            get
-            {
-                return new Size(0, 0);
-            }
+            get { return new Size(0, 0); }
             set
             {
                 //ignore
@@ -104,14 +101,8 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public Point Origin
         {
-            get
-            {
-                return m_orig;
-            }
-            set
-            {
-                m_orig = value;
-            }
+            get { return m_orig; }
+            set { m_orig = value; }
 
         }
 
@@ -120,27 +111,19 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public Point Term
         {
-            get
-            {
-                return m_term;
-            }
-            set
-            {
-                m_term = value;
-            }
+            get { return m_term; }
+            set { m_term = value; }
         }
 
         public override Point Loc
         {
-            get
-            {
-                return Origin;
-            }
+            get { return Origin; }
             set
             {
                 // do nothing
             }
         }
+
         #endregion
 
     }

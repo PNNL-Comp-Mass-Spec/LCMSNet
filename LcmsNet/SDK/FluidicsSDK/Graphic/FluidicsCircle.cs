@@ -111,15 +111,9 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public override Point Loc
         {
-            get
-            {
-                return m_rect.Location;
-            }
+            get { return m_rect.Location; }
             // need to make a new rectangle as well as change the base Loc value to match the new Point location.
-            set
-            {
-                m_rect = new Rect(value.X, value.Y, m_myRadius * 2, m_myRadius * 2);
-            }
+            set { m_rect = new Rect(value.X, value.Y, m_myRadius * 2, m_myRadius * 2); }
         }
 
         /// <summary>
@@ -127,10 +121,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public override Size Size
         {
-            get
-            {
-                return m_rect.Size;
-            }
+            get { return m_rect.Size; }
             set { }
         }
 

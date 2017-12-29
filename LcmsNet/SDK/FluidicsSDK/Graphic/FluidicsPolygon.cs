@@ -6,23 +6,37 @@ using System.Windows.Media;
 
 namespace FluidicsSDK.Graphic
 {
-    public class FluidicsPolygon : GraphicsPrimitive
+    public class FluidicsPolygon : FluidicsPolyline
+    {
+        public FluidicsPolygon() : base(true)
+        {
+        }
+    }
+
+    public class FluidicsPolyline : GraphicsPrimitive
     {
         #region members
+
         private List<Point> vertices;
         Rect BoundingBox;
         private float m_scale;
+        private readonly bool isPolygon = false;
+
         #endregion
 
         #region methods
 
-        public FluidicsPolygon()
+        public FluidicsPolyline()
         {
             vertices = new List<Point>();
             BoundingBox = new Rect(0, 0, 0, 0);
             m_scale = 1;
         }
 
+        protected FluidicsPolyline(bool isClosed) : this()
+        {
+            isPolygon = isClosed;
+        }
 
         public void AddPoint(int x, int y)
         {
@@ -86,23 +100,22 @@ namespace FluidicsSDK.Graphic
             {
                 drawingPen = Pen;
             }
+
             Brush brush = null;
             if (Fill)
             {
                 brush = FillBrush;
             }
 
-            var figure = new PathFigure(scaledVertices[0], scaledVertices.Skip(1).Select(x => new LineSegment(x, true)), true);
-            var geometry = new PathGeometry(new[] { figure });
-
-            g.DrawGeometry(brush, drawingPen, geometry);
+            g.DrawPolygon(brush, drawingPen, scaledVertices);
         }
 
         public override void Render(DrawingContext g, byte alpha, float scale, Point moveby, bool highlight, bool error)
         {
             var transforms = new TransformGroup();
             transforms.Children.Add(new ScaleTransform(scale / 2, scale / 2));
-            transforms.Children.Add(new TranslateTransform(scale / 2, scale / 2));
+            transforms.Children.Add(new TranslateTransform(moveby.X, moveby.Y));
+            transforms.TryFreeze();
             g.PushTransform(transforms);
             Render(g, alpha, scale, highlight, error);
             g.Pop();
@@ -137,39 +150,22 @@ namespace FluidicsSDK.Graphic
 
         public List<Point> Points
         {
-            get
-            {
-                return vertices;
-            }
-            set
-            {
-                vertices = value;
-            }
+            get { return vertices; }
+            set { vertices = value; }
         }
-
 
         public override Point Loc
         {
-            get
-            {
-                return BoundingBox.Location;
-            }
-            set
-            {
-                throw new FluidicsGraphicsError("To change the location of a fluidics polygon, use moveby method");
-            }
+            get { return BoundingBox.Location; }
+            set { throw new FluidicsGraphicsError("To change the location of a fluidics polygon, use moveby method"); }
         }
+
         public override Size Size
         {
-            get
-            {
-                return BoundingBox.Size;
-            }
-            set
-            {
-                throw new InvalidOperationException("Cannot change the size of a polygon directly. Modify it's points");
-            }
+            get { return BoundingBox.Size; }
+            set { throw new InvalidOperationException("Cannot change the size of a polygon directly. Modify it's points"); }
         }
+
         #endregion
     }
 }

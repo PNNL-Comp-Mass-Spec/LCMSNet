@@ -68,7 +68,10 @@ namespace FluidicsSDK.Graphic
             m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
             m_errorColor = DEFAULT_ERROR;
             m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
-            m_fillBrush = new SolidColorBrush(Colors.White);
+            m_fillBrush = Brushes.White;
+            m_drawingPen.TryFreeze();
+            m_highlightPen.TryFreeze();
+            m_errorPen.TryFreeze();
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="myColor">the primary color to draw the object</param>
         /// <param name="fill">boolean, determines if the graphic is filled </param>
         protected GraphicsPrimitive(Color? myColor = null, bool fill = true) :
-            this(new SolidColorBrush(Colors.White), myColor: myColor, fill: fill)
+            this(Brushes.White, myColor: myColor, fill: fill)
         {
         }
 
@@ -97,6 +100,10 @@ namespace FluidicsSDK.Graphic
             m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
             m_errorColor = Colors.Red;
             m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
+            m_drawingPen.TryFreeze();
+            m_highlightPen.TryFreeze();
+            m_errorPen.TryFreeze();
+            m_fillBrush.TryFreeze();
         }
 
         // ALL inheriting classes must define their own Render() method, since only they can determine how they are rendered
@@ -159,6 +166,7 @@ namespace FluidicsSDK.Graphic
             {
                 m_color = value;
                 m_drawingPen = new Pen(new SolidColorBrush(m_color), PEN_WIDTH);
+                m_drawingPen.TryFreeze();
             }
         }
 
@@ -182,6 +190,7 @@ namespace FluidicsSDK.Graphic
             {
                 m_highlightColor = value;
                 m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
+                m_highlightPen.TryFreeze();
             }
         }
 
@@ -196,6 +205,7 @@ namespace FluidicsSDK.Graphic
             {
                 m_errorColor = value;
                 m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
+                m_errorPen.TryFreeze();
             }
 
         }
@@ -219,6 +229,7 @@ namespace FluidicsSDK.Graphic
             set
             {
                 m_fillBrush = value;
+                m_fillBrush.TryFreeze();
             }
         }
 
