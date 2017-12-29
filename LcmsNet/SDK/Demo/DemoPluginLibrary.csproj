@@ -32,6 +32,11 @@
     <NoWarn>1591</NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
     <DocumentationFile>bin\PNNLRelease\DemoPluginLibrary.xml</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />

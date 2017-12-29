@@ -43,6 +43,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\PNNLRelease\LcmsNetSQLiteTools.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
@@ -88,9 +90,9 @@
     <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /Y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)System.Data.SQLite.dll" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(SolutionDir)lib\x86\"
-xcopy /Y /F /D "$(TargetDir)\x64\*.dll" "$(SolutionDir)lib\x64\"
+rem xcopy /Y /F /D "$(TargetDir)System.Data.SQLite.dll" "$(SolutionDir)lib\"
+rem xcopy /Y /F /D "$(TargetDir)\x86\*.dll" "$(SolutionDir)lib\x86\"
+rem xcopy /Y /F /D "$(TargetDir)\x64\*.dll" "$(SolutionDir)lib\x64\"
 
 if not exist "$(ProjectDir)..\SQLite" mkdir "$(ProjectDir)..\SQLite"
 if not exist "$(ProjectDir)..\SQLite\x86" mkdir "$(ProjectDir)..\SQLite\x86"

@@ -192,8 +192,6 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-xcopy /y /f /d "$(TargetDir)x86\*.dll" "$(SolutionDir)lib\x86\"
-xcopy /y /f /d "$(TargetDir)x64\*.dll" "$(SolutionDir)lib\x64\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"</PostBuildEvent>

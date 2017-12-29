@@ -121,15 +121,15 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+rem powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 
 xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)lib\"</PostBuildEvent>
+rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

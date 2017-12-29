@@ -50,10 +50,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.51.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,11 +69,14 @@
       <Name>LcmsNetDmsTools</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite.Core">
+      <Version>1.0.99</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y /f /d "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"
-xcopy /y /f /d "$(SolutionDir)lib\x86\SQLite.Interop.dll" "$(TargetDir)\x86\"
-xcopy /y /f /d "$(SolutionDir)lib\x64\SQLite.Interop.dll" "$(TargetDir)\x64\"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y /f /d "$(ProjectDir)..\LcmsNetDmsTools\PrismDMS.config" "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
