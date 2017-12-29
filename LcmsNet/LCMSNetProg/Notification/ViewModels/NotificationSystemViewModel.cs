@@ -445,7 +445,13 @@ namespace LcmsNet.Notification.ViewModels
         {
             if (device.DeviceType == enumDeviceType.Fluidics)
                 return;
-            var linker = deviceEventTable[device];
+
+            if (!deviceEventTable.TryGetValue(device, out var linker))
+            {
+                // Add the device - it doesn't exist, maybe because of a name conflict
+                Manager_DeviceAdded(sender, device);
+                return;
+            }
             linker.Name = device.Name;
         }
 
@@ -468,6 +474,11 @@ namespace LcmsNet.Notification.ViewModels
 
         private void AddNotifier(INotifier device)
         {
+            if (itemToDeviceMap.ContainsKey(device.Name))
+            {
+                classApplicationLogger.LogMessage(0, $"Skipping addition of notifiers for device {device.Name}: notifiers for device with same name already exist!");
+                return;
+            }
             device.Error += Device_Error;
             device.StatusUpdate += Device_StatusUpdate;
 
@@ -504,7 +515,11 @@ namespace LcmsNet.Notification.ViewModels
 
             device.StatusUpdate -= Device_StatusUpdate;
 
-            var linker = deviceEventTable[device];
+            if (!deviceEventTable.TryGetValue(device, out var linker))
+            {
+                return;
+            }
+
             devicesList.Remove(linker.Name);
 
             if (currentDevice == device)
