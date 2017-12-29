@@ -65,7 +65,7 @@ namespace LcmsNet.Devices.Fluidics.Views
 
         private void RefreshVisualInternal()
         {
-            if (!this.IsVisible || System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
                 return;
             }
