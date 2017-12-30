@@ -25,6 +25,10 @@ namespace LcmsNet.Devices.ViewModels
             NotSelectedColor = Colors.Black;
 
             SetupCommands();
+
+            // Once an item is added to the device controls, automatically make the first one the "Selected device" if one hasn't been previously set.
+            this.WhenAnyValue(x => x.deviceControls, x => x.SelectedDevice, x => x.deviceControls.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
+                .Subscribe(x => SelectedDevice = x.Item1[0]);
         }
 
         public class DeviceControlData : ReactiveObject
