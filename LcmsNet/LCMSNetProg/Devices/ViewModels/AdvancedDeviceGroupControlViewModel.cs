@@ -177,6 +177,9 @@ namespace LcmsNet.Devices.ViewModels
             if (deviceToWrapperMap.ContainsKey(device))
             {
                 // Remove from maps
+                var deviceControl = deviceToWrapperMap[device];
+                deviceControls.Remove(deviceControl);
+
                 deviceToControlMap.Remove(device);
                 deviceToWrapperMap.Remove(device);
             }
@@ -193,6 +196,7 @@ namespace LcmsNet.Devices.ViewModels
             deviceControls.Add(deviceControl);
 
             deviceToControlMap.Add(device, control);
+            deviceToWrapperMap.Add(device, deviceControl);
         }
 
         #endregion
