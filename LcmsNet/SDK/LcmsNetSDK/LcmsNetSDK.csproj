@@ -155,10 +155,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="PluginDocumentation.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Instrument\" />
   </ItemGroup>
   <ItemGroup>
