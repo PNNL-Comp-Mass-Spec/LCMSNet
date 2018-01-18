@@ -179,7 +179,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             drawVisual.Offset = new Vector(-bounds.X, -bounds.Y); // Shift the drawing to minimize the blank space, or to show cropped drawings in their entirety
             using (var drawContext = drawVisual.RenderOpen())
             {
-                drawContext.DrawRectangle(Brushes.White, null, bounds);
+                drawContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 2), bounds);
                 drawContext.PushClip(new RectangleGeometry(bounds)); // Clip the draw to the calculated boundaries
                 var scale = 1;
                 fluidicsMod.Render(drawContext, 255, scale, Layer.Devices);
