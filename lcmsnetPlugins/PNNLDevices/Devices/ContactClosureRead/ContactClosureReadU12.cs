@@ -298,6 +298,7 @@ namespace LcmsNet.Devices.ContactClosureRead
         [classLCMethod("Read Port Digital", enumMethodOperationTime.Parameter, "", -1, false)]
         public ContactClosureState ReadStatus(enumLabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open, bool wait = false, float errorTimeout = 100)
         {
+            // TODO: WHAT IS 'wait' FOR?
             if (m_emulation)
             {
                 return 0;
@@ -361,6 +362,7 @@ namespace LcmsNet.Devices.ContactClosureRead
         [classLCMethod("Read Port Analog", enumMethodOperationTime.Parameter, "", -1, false)]
         public ContactClosureState ReadStatus(enumLabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open, bool wait = false, float errorTimeout = 100)
         {
+            // TODO: WHAT IS 'wait' FOR?
             if (m_emulation)
             {
                 return 0;
