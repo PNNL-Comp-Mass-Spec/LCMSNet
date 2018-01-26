@@ -575,7 +575,7 @@ namespace LcmsNetDataClasses.Devices
 
             foreach (var dev in m_devices)
             {
-                if (dev.Name == deviceName)
+                if (dev.Name.Equals(deviceName, StringComparison.OrdinalIgnoreCase))
                     return true;
             }
             return false;
@@ -600,7 +600,7 @@ namespace LcmsNetDataClasses.Devices
             foreach (var dev in m_devices)
             {
                 var devType = dev.GetType();
-                if (dev.Name == deviceName && devType == deviceType)
+                if (dev.Name.Equals(deviceName, StringComparison.OrdinalIgnoreCase) && devType == deviceType)
                 {
                     device = dev;
                     break;
@@ -626,7 +626,7 @@ namespace LcmsNetDataClasses.Devices
             //
             foreach (var dev in m_devices)
             {
-                if (dev.Name == deviceName)
+                if (dev.Name.Equals(deviceName, StringComparison.OrdinalIgnoreCase))
                 {
                     device = dev;
                     break;
@@ -668,7 +668,7 @@ namespace LcmsNetDataClasses.Devices
             // If this happens, then they are trying to name the device
             // the same thing....
             //
-            if (basename == oldName)
+            if (basename.Equals(oldName, StringComparison.OrdinalIgnoreCase))
                 return;
 
             var newName = CreateUniqueDeviceName(basename);
