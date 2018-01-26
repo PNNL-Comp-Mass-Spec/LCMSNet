@@ -219,7 +219,7 @@ namespace LcmsNetDataClasses.Logging
         {
             var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             //string logFileName = "Log_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".txt";
-            var logFileName = "Log_" + TimeKeeper.Instance.Now.ToString("MMddyyyy_HHmmss") + ".txt";
+            var logFileName = "Log_" + TimeKeeper.Instance.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
             var path = Path.Combine(appPath, AppFolder);
             return Path.Combine(Path.Combine(path, "Log"), logFileName);
         }
