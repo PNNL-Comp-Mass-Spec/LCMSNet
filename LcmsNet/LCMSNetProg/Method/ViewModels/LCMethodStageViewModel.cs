@@ -944,9 +944,6 @@ namespace LcmsNet.Method.ViewModels
         public ReactiveCommand<Unit, Unit> MoveEventDownCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SelectAllCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StepCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> BackCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -961,9 +958,6 @@ namespace LcmsNet.Method.ViewModels
             MoveEventDownCommand = ReactiveCommand.Create(() => MoveEventDown());
             SelectAllCommand = ReactiveCommand.Create(() => SetAllEventSelect(true));
             DeselectAllCommand = ReactiveCommand.Create(() => SetAllEventSelect(false));
-            StepCommand = ReactiveCommand.Create(() => LoadMethods());
-            BackCommand = ReactiveCommand.Create(() => LoadMethods());
-            StopCommand = ReactiveCommand.Create(() => LoadMethods());
         }
     }
 }

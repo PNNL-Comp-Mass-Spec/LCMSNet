@@ -64,11 +64,6 @@
             <Label DockPanel.Dock="Left" Margin="5" Foreground="Blue" Content="Column" />
             <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnComboBoxOptions}" />
         </DockPanel>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Margin="3" Content="Stop" Command="{Binding StopCommand}" />
-            <Button Margin="3" Content="Back" Command="{Binding BackCommand}" />
-            <Button Margin="3" Content="Step" Command="{Binding StepCommand}" />
-        </StackPanel>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding LCMethodEvents}">
                 <ItemsControl.ItemsPanel>
