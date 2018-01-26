@@ -1158,11 +1158,7 @@ namespace LcmsNet.SampleQueue
                 RemoveExcessSamples(m_waitingQueue);
                 ResequenceQueuedSamples(m_waitingQueue);
 
-                if (SamplesAdded != null)
-                {
-                    var args = new classSampleQueueArgs(GetAllSamples());
-                    SamplesAdded?.Invoke(this, args, REPLACE_EXISTING_ROWS);
-                }
+                SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
 
             PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
