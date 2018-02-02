@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -74,6 +75,9 @@
       <DependentUpon>PopoutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RepeatButtonCommands.cs" />
+    <Compile Include="Controls\SerialPortPropertyGrid.xaml.cs">
+      <DependentUpon>SerialPortPropertyGrid.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
@@ -105,6 +109,10 @@
     <Page Include="Views\PopoutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Controls\SerialPortPropertyGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

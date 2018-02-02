@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ASIpump"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="296" d:DesignWidth="651"
              d:DataContext="{d:DesignInstance {x:Type local:AsiUIViewModel}, IsDesignTimeCreatable=True}"
@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="274*" MinWidth="150" />
                 <ColumnDefinition Width="371*" />
             </Grid.ColumnDefinitions>
-            <xctk:PropertyGrid ShowTitle="False" ShowSearchBox="False" SelectedObject="{Binding Pump}" />
+            <controls:SerialPortPropertyGrid DataContext="{Binding Pump}" />
             <TextBox Grid.Row="0" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" AcceptsTab="True" Text="{Binding PumpLog, Mode=OneWay}" IsReadOnly="True" />
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Button Margin="3" Content="Connect" Command="{Binding ConnectCommand}" />

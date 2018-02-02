@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNet.Devices.Valves"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:SixPortInjectionValveViewModel}, IsDesignTimeCreatable=True}"
@@ -69,7 +69,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <xctk:PropertyGrid Grid.Row="0" Margin="3" ShowTitle="False" ShowSearchBox="False" SelectedObject="{Binding ComPort}" PropertyValueChanged="PropertyGrid_OnPropertyValueChanged" />
+                <controls:SerialPortPropertyGrid Grid.Row="0" Margin="3" DataContext="{Binding ComPort}" PropertyValueChanged="PropertyGrid_OnPropertyValueChanged" />
                 <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Left" Content="Open Port" Command="{Binding OpenPortCommand}" />
                 <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Center" Content="Close Port" Command="{Binding ClosePortCommand}" />
                 <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Right" Content="Initialize" Command="{Binding InitializeDeviceCommand}" />

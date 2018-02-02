@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Newport.ESP300"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="574" d:DesignWidth="889"
@@ -140,7 +139,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <xctk:PropertyGrid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" SelectedObject="{Binding NewportStage.Port}" />
+                <controls:SerialPortPropertyGrid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" DataContext="{Binding NewportStage.Port}" />
                 <Button Grid.Row="1" Grid.Column="0" Margin="3" Width="75" Content="Open Port" Command="{Binding OpenPortCommand}" />
                 <Button Grid.Row="1" Grid.Column="1" Margin="3" Width="75" Content="Close Port" Command="{Binding ClosePortCommand}" />
             </Grid>

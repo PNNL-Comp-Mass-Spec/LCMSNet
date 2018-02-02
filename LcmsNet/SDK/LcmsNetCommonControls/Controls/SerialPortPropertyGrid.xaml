@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="LcmsNetCommonControls.Controls.SerialPortPropertyGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
+             xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type ports:SerialPort}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <xctk:PropertyGrid ShowTitle="False" ShowSearchBox="False" SelectedObject="{Binding }" PropertyValueChanged="PropertyGrid_OnPropertyValueChanged">
+        <xctk:PropertyGrid.EditorDefinitions>
+            <xctk:EditorTemplateDefinition TargetProperties="PortName">
+                <xctk:EditorTemplateDefinition.EditingTemplate>
+                    <DataTemplate>
+                        <ComboBox SelectedItem="{Binding Value}" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:SerialPortPropertyGrid}, Path=SerialPortNames}" />
+                    </DataTemplate>
+                </xctk:EditorTemplateDefinition.EditingTemplate>
+            </xctk:EditorTemplateDefinition>
+        </xctk:PropertyGrid.EditorDefinitions>
+    </xctk:PropertyGrid>
+</UserControl>
