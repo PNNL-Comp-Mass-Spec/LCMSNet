@@ -491,7 +491,6 @@ namespace LcmsNet
             try
             {
                 m_sampleQueue.RetrieveQueueFromCache();
-                m_sampleQueue.IsDirty = false;
             }
             catch (Exception ex)
             {

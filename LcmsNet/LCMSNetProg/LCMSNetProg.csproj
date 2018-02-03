@@ -264,6 +264,7 @@
     <Compile Include="SampleQueue\IO\classQueueImportSQLite.cs" />
     <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
     <Compile Include="SampleQueue\SampleDataManager.cs" />
+    <Compile Include="SampleQueue\SampleQueueUndoRedo.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadDataViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleBadBlockDisplayViewModel.cs" />

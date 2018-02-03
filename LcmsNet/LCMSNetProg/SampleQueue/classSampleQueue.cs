@@ -165,10 +165,11 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private readonly string m_integrateName;
 
-        /// <summary>
-        /// List of columns that are enabled or disabled.
-        /// </summary>
+        ///// <summary>
+        ///// List of columns that are enabled or disabled.
+        ///// </summary>
         //private List<classColumnData> m_columnOrders;
+
         /// <summary>
         /// Queue of sample data to be run.  Index 0 should be the next sample to run.
         /// </summary>
@@ -191,22 +192,6 @@ namespace LcmsNet.SampleQueue
         private readonly List<long> m_uniqueID;
 
         /// <summary>
-        /// Stack of waiting queues for undo operations.
-        /// </summary>
-        /// <remarks>
-        /// The item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
-        /// </remarks>
-        private readonly Stack<List<classSampleData>> m_undoBackWaitingQueue;
-
-        /// <summary>
-        /// Stack of samples for redo operations
-        /// </summary>
-        /// <remarks>
-        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
-        /// </remarks>
-        private readonly Stack<List<classSampleData>> m_undoForwardWaitingQueue;
-
-        /// <summary>
         ///
         /// </summary>
         private List<classColumnData> m_columnOrders;
@@ -218,6 +203,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private bool m_startedSamples;
 
+        private readonly SampleQueueUndoRedo undoRedoHandler = new SampleQueueUndoRedo();
         private bool canUndo = false;
         private bool canRedo = false;
 
@@ -297,17 +283,11 @@ namespace LcmsNet.SampleQueue
             m_sampleWaitingEvent = new AutoResetEvent(false);
             m_columnOrders = new List<classColumnData>();
 
-            // Undo - redo operations
-            m_undoBackWaitingQueue = new Stack<List<classSampleData>>();
-            m_undoForwardWaitingQueue = new Stack<List<classSampleData>>();
-
-
             // Pointer to the next available sample that is queued for running.
             m_nextAvailableSample = 0;
 
             // Tracks what is the current sequence number that has been run previously.
             m_sequenceIndex = 1;
-
 
             UpdateColumnList();
             foreach (var column in classCartConfiguration.Columns)
@@ -800,109 +780,73 @@ namespace LcmsNet.SampleQueue
         #region Undo
 
         /// <summary>
-        /// Pushes the new queue onto the stack for undo operations.
+        /// Adds the current waiting queue to the list of undoable actions
         /// </summary>
-        /// <param name="backStack">Undo stack</param>
-        /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
-        /// <param name="queue">Queue to push onto stack.</param>
-        /// <remarks>
-        /// The undo/redo stacks are handled as follows:
-        /// Undo stack: the item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
-        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
-        /// </remarks>
-        private void PushQueue(Stack<List<classSampleData>> backStack, Stack<List<classSampleData>> forwardStack,
-            List<classSampleData> queue)
+        public void AddToUndoable()
         {
-            PushQueue(backStack, forwardStack, queue, clearForward:true);
-        }
-
-        /// <summary>
-        /// Pushes the queue onto the backstack and the
-        /// </summary>
-        /// <param name="backStack">Undo stack</param>
-        /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
-        /// <param name="queue"></param>
-        /// <param name="clearForward"></param>
-        /// <remarks>
-        /// The undo/redo stacks are handled as follows:
-        /// Undo stack: the item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
-        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
-        /// </remarks>
-        private void PushQueue(Stack<List<classSampleData>> backStack,
-            Stack<List<classSampleData>> forwardStack,
-            List<classSampleData> queue,
-            bool clearForward)
-        {
-            //
-            // If the user wants us to clear the forward stack then we will,
-            // otherwise we ignore it.
-            //
-            if (clearForward)
-                forwardStack?.Clear();
-
-            var pushQueue = new List<classSampleData>();
-            foreach (var data in queue)
+            if (isUndoRedoing || isBatchChange)
             {
-                var sample = data.Clone() as classSampleData;
-                if (sample?.LCMethod?.Name != null)
-                {
-                    if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
-                    {
-                        //
-                        // Because sample clones are deep copies, we cannot trust that
-                        // every object in the sample is serializable...so...we are stuck
-                        // making sure we re-hash the method using the name which
-                        // is copied during the serialization.
-                        //
-                        sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
-                    }
-                }
-                pushQueue.Add(sample);
+                return;
             }
-            backStack.Push(pushQueue);
-            IsDirty = true;
-
+            undoRedoHandler.AddToUndoable(m_waitingQueue);
             SetCanUndoRedo();
         }
 
-        public bool IsDirty { get; set; }
-
         /// <summary>
-        /// Pops the queue from the stack if available
+        /// Tells the undo/redo tracking that a batch change is going to occur, and to not track individual undo/redo actions until the returned object is disposed.
         /// </summary>
-        /// <param name="backStack">Undo stack to pop queue from.</param>
-        /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
-        private List<classSampleData> PopQueue(Stack<List<classSampleData>> backStack)
+        /// <returns></returns>
+        public BatchChangeDisposable StartBatchChange()
         {
-            if (backStack.Count < 1)
-                return null;
-
-            IsDirty = true;
-            var newQueue = backStack.Pop();
-
-            return newQueue;
+            isBatchChange = true;
+            return new BatchChangeDisposable(EndBatchChange);
         }
 
-        /// <summary>
-        /// Pops the queue from the stack if available
-        /// </summary>
-        /// <param name="backStack">Undo stack to pop queue from.</param>
-        /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
-        private List<classSampleData> PeekQueue(Stack<List<classSampleData>> backStack)
+        private void EndBatchChange(bool cancelled = false)
         {
-            if (backStack.Count < 1)
-                return null;
-
-            IsDirty = true;
-            var newQueue = backStack.Peek();
-
-            return newQueue;
+            isBatchChange = false;
+            if (cancelled)
+            {
+                Undo();
+            }
         }
+
+        public class BatchChangeDisposable : IDisposable
+        {
+            private readonly Action<bool> disposeMethod;
+
+            /// <summary>
+            /// If set to true, the performed changes will be removed.
+            /// </summary>
+            public bool Cancelled { get; set; }
+
+            public BatchChangeDisposable(Action<bool> onDisposeMethod)
+            {
+                disposeMethod = onDisposeMethod;
+                Cancelled = false;
+            }
+
+            public void Dispose()
+            {
+                disposeMethod(Cancelled);
+                GC.SuppressFinalize(this);
+            }
+
+            ~BatchChangeDisposable()
+            {
+                Dispose();
+            }
+        }
+
+        public bool IsDirty { get; private set; }
+        private bool isUndoRedoing = false;
+        private bool isBatchChange = false;
 
         private void SetCanUndoRedo()
         {
-            CanUndo = m_undoBackWaitingQueue.Count > 1;
-            CanRedo = m_undoForwardWaitingQueue.Count > 0;
+            CanUndo = undoRedoHandler.CanUndo;
+            CanRedo = undoRedoHandler.CanRedo;
+            IsDirty = undoRedoHandler.IsDirty;
         }
 
         /// <summary>
@@ -910,28 +854,20 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Undo()
         {
-            // Pop the first item on the queue, which is usually identical to the displayed data
-            var cqueue = PopQueue(m_undoBackWaitingQueue);
-            // Get the item on top of the undo queue
-            var queue = PeekQueue(m_undoBackWaitingQueue);
-
-            // Then if popping
-            if (queue != null && queue.Count > 0)
+            if (isUndoRedoing || isBatchChange)
             {
-                //
-                // Save the current waiting queue onto the forward stack, thus saving it for a redo
-                //
-                PushQueue(m_undoForwardWaitingQueue, null, m_waitingQueue);
+                return;
+            }
+            isUndoRedoing = true;
 
-                // Transfer the new queue to our waiting queue.
-                m_waitingQueue.Clear();
-                m_waitingQueue = queue;
+            if (undoRedoHandler.Undo(m_waitingQueue))
+            {
                 //ResetColumnData();
-
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
 
             SetCanUndoRedo();
+            isUndoRedoing = false;
         }
 
         /// <summary>
@@ -939,26 +875,20 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Redo()
         {
-            //
-            // Pull the queue off the forward stack if one exists
-            //
-            var queue = PopQueue(m_undoForwardWaitingQueue);
-
-            if (queue != null && queue.Count > 0)
+            if (isUndoRedoing || isBatchChange)
             {
-                //
-                // Push the current queue onto the back stack, thus saving our waiting queue.
-                //
-                PushQueue(m_undoBackWaitingQueue, null, m_waitingQueue);
+                return;
+            }
+            isUndoRedoing = true;
 
-                m_waitingQueue.Clear();
-                m_waitingQueue = queue;
+            if (undoRedoHandler.Redo(m_waitingQueue))
+            {
                 //ResetColumnData();
-
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
 
             SetCanUndoRedo();
+            isUndoRedoing = false;
         }
 
         #endregion
@@ -1018,7 +948,7 @@ namespace LcmsNet.SampleQueue
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
         }
 
         /// <summary>
@@ -1073,7 +1003,7 @@ namespace LcmsNet.SampleQueue
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
         }
 
         /// <summary>
@@ -1161,7 +1091,7 @@ namespace LcmsNet.SampleQueue
                 SamplesAdded?.Invoke(this, new classSampleQueueArgs(GetAllSamples()), REPLACE_EXISTING_ROWS);
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
 
             return added;
         }
@@ -1345,7 +1275,7 @@ namespace LcmsNet.SampleQueue
                 SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
 
             return removed;
         }
@@ -1380,7 +1310,7 @@ namespace LcmsNet.SampleQueue
                 ret = RemoveSample(uniqueList, resortColumns);
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
 
             return ret;
         }
@@ -1416,7 +1346,7 @@ namespace LcmsNet.SampleQueue
                 ret = RemoveSample(uniqueList, resortColumns);
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
 
             return ret;
         }
@@ -1452,7 +1382,7 @@ namespace LcmsNet.SampleQueue
             //TODO: Re-order by only sending the ones that changed.
             SamplesReordered?.Invoke(this, new classSampleQueueArgs(GetAllSamples()));
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
         }
 
         /// <summary>
@@ -1633,7 +1563,7 @@ namespace LcmsNet.SampleQueue
                 SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
         }
 
         /// <summary>
@@ -1669,7 +1599,7 @@ namespace LcmsNet.SampleQueue
                 SamplesUpdated?.Invoke(this, new classSampleQueueArgs(m_waitingQueue));
             }
 
-            PushQueue(m_undoBackWaitingQueue, m_undoForwardWaitingQueue, m_waitingQueue);
+            AddToUndoable();
         }
 
         #endregion
@@ -2293,6 +2223,8 @@ namespace LcmsNet.SampleQueue
                     SamplesAdded?.Invoke(this, args, true);
                 }
             }
+
+            IsDirty = false;
         }
 
         /// <summary>

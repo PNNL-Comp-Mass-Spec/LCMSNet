@@ -266,8 +266,16 @@ namespace LcmsNet.SampleQueue.ViewModels
             var trayVial = new TrayVialAssignmentViewModel(SampleDataManager.AutoSamplerTrays, samples);
             var trayVialWindow = new TrayVialAssignmentWindow() { DataContext = trayVial };
 
-            // We don't care about the dialog result here - everything that matters is handled in the viewModel
-            trayVialWindow.ShowDialog();
+            using (var batchDisp = SampleDataManager.StartBatchChange())
+            {
+                // We don't care about the dialog result here - everything that matters is handled in the viewModel
+                var result = trayVialWindow.ShowDialog();
+
+                if (!result.HasValue || !result.Value)
+                {
+                    batchDisp.Cancelled = true;
+                }
+            }
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));

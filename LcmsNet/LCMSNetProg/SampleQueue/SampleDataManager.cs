@@ -611,6 +611,11 @@ namespace LcmsNet.SampleQueue
             }
         }
 
+        public classSampleQueue.BatchChangeDisposable StartBatchChange()
+        {
+            return sampleQueue.StartBatchChange();
+        }
+
         /// <summary>
         /// Gets or sets a list of pal method names.
         /// </summary>
