@@ -14,6 +14,13 @@ namespace LcmsNet.SampleQueue.Views
 
         private void Close_OnClick(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
             this.Close();
         }
     }

@@ -47,32 +47,37 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
             }
 
-            try
+            using (var batchDisp = SampleDataManager.StartBatchChange())
             {
-                var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
-                var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-
-                var result = dmsDisplay.ShowDialog();
-                // We don't care what the result is..
-                if (!result.HasValue || !result.Value)
+                try
                 {
-                    return;
+                    var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
+                    var dmsDisplay = new SampleDMSValidatorDisplayWindow() {DataContext = dmsDisplayVm};
+
+                    var result = dmsDisplay.ShowDialog();
+
+                    if (!result.HasValue || !result.Value)
+                    {
+                        batchDisp.Cancelled = true;
+                        return;
+                    }
+
+                    // If samples are not valid...then what?
+                    if (!dmsDisplayVm.AreSamplesValid)
+                    {
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                            "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
+                    }
                 }
-                // If samples are not valid...then what?
-                if (!dmsDisplayVm.AreSamplesValid)
+                catch (InvalidOperationException ex)
                 {
                     classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
+                        "Unable to edit dmsdata:" + ex.Message, ex);
                 }
-            }
-            catch (InvalidOperationException ex)
-            {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                    "Unable to edit dmsdata:" + ex.Message, ex);
-            }
 
-            // Then update the sample queue...
-            SampleDataManager.UpdateSamples(samples);
+                // Then update the sample queue...
+                SampleDataManager.UpdateSamples(samples); // TODO: IS THIS NEEDED? AT ALL?
+            }
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -230,7 +235,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (samples.Count < 1)
                 return;
 
-            SampleDataManager.AddDateCartnameColumnIDToDatasetName(samples);
+            using (SampleDataManager.StartBatchChange())
+            {
+                SampleDataManager.AddDateCartnameColumnIDToDatasetName(samples);
+            }
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -268,7 +276,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             using (var batchDisp = SampleDataManager.StartBatchChange())
             {
-                // We don't care about the dialog result here - everything that matters is handled in the viewModel
                 var result = trayVialWindow.ShowDialog();
 
                 if (!result.HasValue || !result.Value)
@@ -304,7 +311,15 @@ namespace LcmsNet.SampleQueue.ViewModels
             var dialog = new SampleMethodFillDownWindow();
             dialog.DataContext = fillDownViewModel;
 
-            dialog.ShowDialog();
+            using (var batchDisp = SampleDataManager.StartBatchChange())
+            {
+                var result = dialog.ShowDialog();
+
+                if (!result.HasValue || !result.Value)
+                {
+                    batchDisp.Cancelled = true;
+                }
+            }
 
             // Re-select the first sample
             var firstValid = Samples.Select(x => x.Sample).Intersect(samples).FirstOrDefault();
@@ -335,17 +350,20 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var samples = dmsView.GetNewSamplesDMSView();
                 dmsView.ClearForm();
 
-                var insertToUnused = false;
-                if (HasUnusedSamples())
+                using (SampleDataManager.StartBatchChange())
                 {
-                    // Ask the user what to do with these samples?
-                    var dialog = new InsertOntoUnusedWindow();
-                    var insertResult = dialog.ShowDialog();
+                    var insertToUnused = false;
+                    if (HasUnusedSamples())
+                    {
+                        // Ask the user what to do with these samples?
+                        var dialog = new InsertOntoUnusedWindow();
+                        var insertResult = dialog.ShowDialog();
 
-                    insertToUnused = insertResult.HasValue && insertResult.Value;
+                        insertToUnused = insertResult.HasValue && insertResult.Value;
+                    }
+
+                    AddSamplesToManager(samples, insertToUnused);
                 }
-
-                AddSamplesToManager(samples, insertToUnused);
 
                 // Don't add directly to the user interface in case the
                 // sample manager class has something to say about one of the samples

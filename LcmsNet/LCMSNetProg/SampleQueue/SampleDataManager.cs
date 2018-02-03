@@ -272,7 +272,7 @@ namespace LcmsNet.SampleQueue
                        prop.Equals(nameof(obj.Sample.PAL.PALTray)) ||
                        prop.Equals(nameof(obj.Sample.SequenceID));
             }).Throttle(TimeSpan.FromSeconds(.25))
-            .Subscribe(x => this.SampleQueue.UpdateSample(x.Sender.Sample));
+            .Subscribe(x => this.ChangeMade(x.Sender));
 
             this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo, out canUndo);
             this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo, out canRedo);
@@ -558,13 +558,27 @@ namespace LcmsNet.SampleQueue
             }
         }
 
+        private bool recentlyChanged = false;
+
+        private bool RecentlyChanged()
+        {
+            return recentlyChanged;
+        }
+
+        private void ChangeMade(SampleViewModel sample)
+        {
+            recentlyChanged = true;
+            SampleQueue.UpdateSample(sample.Sample);
+        }
+
         /// <summary>
         /// Start a batch change, where change tracking for undo operations will not occur until the returned object is disposed.
         /// </summary>
         /// <returns></returns>
         public classSampleQueue.BatchChangeDisposable StartBatchChange()
         {
-            return sampleQueue.StartBatchChange();
+            recentlyChanged = false;
+            return sampleQueue.StartBatchChange(RecentlyChanged);
         }
 
         /// <summary>

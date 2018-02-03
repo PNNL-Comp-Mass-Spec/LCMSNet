@@ -796,39 +796,50 @@ namespace LcmsNet.SampleQueue
         /// Tells the undo/redo tracking that a batch change is going to occur, and to not track individual undo/redo actions until the returned object is disposed.
         /// </summary>
         /// <returns></returns>
-        public BatchChangeDisposable StartBatchChange()
+        public BatchChangeDisposable StartBatchChange(Func<bool> changeMonitor)
         {
+            // Make sure the current queue is saved
+            AddToUndoable();
             isBatchChange = true;
-            return new BatchChangeDisposable(EndBatchChange);
+            return new BatchChangeDisposable(EndBatchChange, changeMonitor);
         }
 
-        private void EndBatchChange(bool cancelled = false)
+        private void EndBatchChange(bool cancelled = false, bool changesApplied = false)
         {
             isBatchChange = false;
-            if (cancelled)
+            if (changesApplied)
             {
-                Undo();
+                if (cancelled)
+                {
+                    Undo();
+                }
+                else
+                {
+                    AddToUndoable();
+                }
             }
         }
 
         public class BatchChangeDisposable : IDisposable
         {
-            private readonly Action<bool> disposeMethod;
+            private readonly Action<bool, bool> disposeMethod;
+            private readonly Func<bool> changeMonitor;
 
             /// <summary>
             /// If set to true, the performed changes will be removed.
             /// </summary>
             public bool Cancelled { get; set; }
 
-            public BatchChangeDisposable(Action<bool> onDisposeMethod)
+            public BatchChangeDisposable(Action<bool, bool> onDisposeMethod, Func<bool> changeCheckMethod)
             {
                 disposeMethod = onDisposeMethod;
+                changeMonitor = changeCheckMethod;
                 Cancelled = false;
             }
 
             public void Dispose()
             {
-                disposeMethod(Cancelled);
+                disposeMethod(Cancelled, changeMonitor());
                 GC.SuppressFinalize(this);
             }
 
