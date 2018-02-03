@@ -118,7 +118,7 @@ namespace LcmsNetDataClasses
         public classSampleData(bool isDummySample = true)
         {
             IsDummySample = isDummySample;
-            m_DmsData = new classDMSData();
+            DmsData = new classDMSData();
 
             //
             // Set the default column to the first column,
@@ -126,10 +126,10 @@ namespace LcmsNetDataClasses
             //
             m_sequenceNumber = -1;
 
-            m_palData = new classPalData();
+            PAL = new classPalData();
             ColumnData = new classColumnData();
-            m_instrumentData = new classInstrumentInfo();
-            m_method = null;
+            InstrumentData = new classInstrumentInfo();
+            LCMethod = null;
             Volume = CONST_MIN_SAMPLE_VOLUME;
             //
             // Default state is always to be queued but not waiting to run.
@@ -365,7 +365,22 @@ namespace LcmsNetDataClasses
         public classInstrumentInfo InstrumentData
         {
             get { return m_instrumentData; }
-            set { this.RaiseAndSetIfChanged(ref m_instrumentData, value); }
+            set
+            {
+                var oldValue = m_instrumentData;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_instrumentData, value))
+                {
+                    if (oldValue != null)
+                    {
+                        oldValue.PropertyChanged -= InstrumentDataChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += InstrumentDataChanged;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -407,7 +422,22 @@ namespace LcmsNetDataClasses
         public classDMSData DmsData
         {
             get { return m_DmsData; }
-            set { this.RaiseAndSetIfChanged(ref m_DmsData, value); }
+            set
+            {
+                var oldValue = m_DmsData;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_DmsData, value))
+                {
+                    if (oldValue != null)
+                    {
+                        oldValue.PropertyChanged -= DmsDataChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += DmsDataChanged;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -425,7 +455,22 @@ namespace LcmsNetDataClasses
         public classPalData PAL
         {
             get { return m_palData; }
-            set { this.RaiseAndSetIfChanged(ref m_palData, value); }
+            set
+            {
+                var oldValue = m_palData;
+                if (this.RaiseAndSetIfChangedRetBool(ref m_palData, value))
+                {
+                    if (oldValue != null)
+                    {
+                        oldValue.PropertyChanged -= PalDataChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += PalDataChanged;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -681,6 +726,39 @@ namespace LcmsNetDataClasses
             {
                 LCMethod = new classLCMethod();
                 LCMethod.LoadPropertyValues(expProps);
+            }
+        }
+
+        #endregion
+
+        #region "PropertyChanged" event handlers
+
+        private void InstrumentDataChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName.Equals(nameof(InstrumentData.MethodName)))
+            {
+                OnPropertyChanged(nameof(InstrumentData));
+            }
+        }
+
+        private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName.Equals(nameof(DmsData.DatasetName)) || args.PropertyName.Equals(nameof(DmsData.RequestName)) ||
+                args.PropertyName.Equals(nameof(DmsData.CartConfigName)) || args.PropertyName.Equals(nameof(DmsData.DatasetType)) ||
+                args.PropertyName.Equals(nameof(DmsData.RunOrder)) || args.PropertyName.Equals(nameof(DmsData.Batch)) ||
+                args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.UsageType)) ||
+                args.PropertyName.Equals(nameof(DmsData.UserList)) || args.PropertyName.Equals(nameof(DmsData.Experiment)) ||
+                args.PropertyName.Equals(nameof(DmsData.RequestID)) || args.PropertyName.Equals(nameof(DmsData.ProposalID)))
+            {
+                OnPropertyChanged(nameof(DmsData));
+            }
+        }
+
+        private void PalDataChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName.Equals(nameof(PAL.PALTray)) || args.PropertyName.Equals(nameof(PAL.Well)))
+            {
+                OnPropertyChanged(nameof(PAL));
             }
         }
 

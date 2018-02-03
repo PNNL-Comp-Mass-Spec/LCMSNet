@@ -82,6 +82,9 @@ namespace LcmsNet.SampleQueue.ViewModels
                 .Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethod)));
+
+            Sample.WhenAnyValue(x => x.InstrumentData, x => x.PAL, x => x.DmsData, x => x.LCMethod)
+                .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
         }
 
         // Local "wrappers" around the static class options, for data binding purposes

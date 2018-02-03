@@ -33,56 +33,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ReactiveList<SampleViewModel> SelectedSamples => selectedSamples;
 
-        /// <summary>
-        /// Edits the selected samples in the sample view.
-        /// </summary>
-        private void EditDMSData()
-        {
-            var samples = GetSelectedSamples();
-
-            if (samples.Count < 1)
-            {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
-                    "You must select a sample to edit the DMS information.");
-                return;
-            }
-
-            using (var batchDisp = SampleDataManager.StartBatchChange())
-            {
-                try
-                {
-                    var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
-                    var dmsDisplay = new SampleDMSValidatorDisplayWindow() {DataContext = dmsDisplayVm};
-
-                    var result = dmsDisplay.ShowDialog();
-
-                    if (!result.HasValue || !result.Value)
-                    {
-                        batchDisp.Cancelled = true;
-                        return;
-                    }
-
-                    // If samples are not valid...then what?
-                    if (!dmsDisplayVm.AreSamplesValid)
-                    {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                            "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "Unable to edit dmsdata:" + ex.Message, ex);
-                }
-
-                // Then update the sample queue...
-                SampleDataManager.UpdateSamples(samples); // TODO: IS THIS NEEDED? AT ALL?
-            }
-
-            // Re-select the first sample
-            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-        }
-
         #region Manipulation Enablement
 
         /// <summary>
@@ -327,6 +277,53 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 SelectedSample = Samples.First(x => x.Sample.Equals(firstValid));
             }
+        }
+
+        /// <summary>
+        /// Edits the selected samples in the sample view.
+        /// </summary>
+        private void EditDMSData()
+        {
+            var samples = GetSelectedSamples();
+
+            if (samples.Count < 1)
+            {
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                    "You must select a sample to edit the DMS information.");
+                return;
+            }
+
+            using (var batchDisp = SampleDataManager.StartBatchChange())
+            {
+                try
+                {
+                    var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
+                    var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
+
+                    var result = dmsDisplay.ShowDialog();
+
+                    if (!result.HasValue || !result.Value)
+                    {
+                        batchDisp.Cancelled = true;
+                        return;
+                    }
+
+                    // If samples are not valid...then what?
+                    if (!dmsDisplayVm.AreSamplesValid)
+                    {
+                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                            "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
+                    }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        "Unable to edit dmsdata:" + ex.Message, ex);
+                }
+            }
+
+            // Re-select the first sample
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
