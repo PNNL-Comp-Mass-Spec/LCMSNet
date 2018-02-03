@@ -559,6 +559,15 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
+        /// Start a batch change, where change tracking for undo operations will not occur until the returned object is disposed.
+        /// </summary>
+        /// <returns></returns>
+        public classSampleQueue.BatchChangeDisposable StartBatchChange()
+        {
+            return sampleQueue.StartBatchChange();
+        }
+
+        /// <summary>
         /// Adds a sequence of samples to the manager.
         /// </summary>
         /// <param name="samples">List of samples to add to the manager.</param>
@@ -609,11 +618,6 @@ namespace LcmsNet.SampleQueue
                     HasData = false;
                 }
             }
-        }
-
-        public classSampleQueue.BatchChangeDisposable StartBatchChange()
-        {
-            return sampleQueue.StartBatchChange();
         }
 
         /// <summary>

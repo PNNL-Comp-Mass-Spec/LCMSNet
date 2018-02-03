@@ -36,72 +36,57 @@ namespace LcmsNet.SampleQueue
         public bool IsDirty { get; private set; }
 
         /// <summary>
-        /// Stack of waiting queues for undo operations.
+        /// List/history of queue changes to support undo and redo operations; undo is performed by decrementing the current index back by 1 and returning the queue at the new index, redo is performed by incrementing the current index by one and returning the queue at the new index
         /// </summary>
-        /// <remarks>
-        /// The item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
-        /// </remarks>
-        private readonly Stack<List<classSampleData>> undoBackWaitingQueue;
+        private readonly List<List<classSampleData>> undoRedoList;
 
         /// <summary>
-        /// Stack of samples for redo operations
+        /// The index of the currently displayed queue in the list/history of queue changes
         /// </summary>
-        /// <remarks>
-        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
-        /// </remarks>
-        private readonly Stack<List<classSampleData>> undoForwardWaitingQueue;
+        private int currentIndex = 0;
 
         public SampleQueueUndoRedo()
         {
             // Undo - redo operations
-            undoBackWaitingQueue = new Stack<List<classSampleData>>();
-            undoForwardWaitingQueue = new Stack<List<classSampleData>>();
+            undoRedoList = new List<List<classSampleData>>();
         }
 
         /// <summary>
-        /// Pushes the queue onto the backstack and the
+        /// Pushes the queue onto the queue history
         /// </summary>
-        /// <param name="backStack">Undo stack</param>
-        /// <param name="forwardStack">Redo stack; if null, no forward operation will be handled</param>
-        /// <param name="queue">Queue to push onto the stack</param>
-        /// <param name="clearForward">if the forward/redo stack should be cleared</param>
+        /// <param name="workingQueue">Queue to push onto the history</param>
         /// <remarks>
-        /// The undo/redo stacks are handled as follows:
-        /// Undo stack: the item on the top of the stack is generally the same as the displayed data; the second item down is what should be shown after a undo operation
-        /// Redo stack: the item on the top of the stack is the data to restore with a redo.
+        /// The undo/redo operations are handled as follows:
+        /// Undo is performed by decrementing the current index back by 1 and returning the queue at the new index
+        /// Redo is performed by incrementing the current index by one and returning the queue at the new index
         /// </remarks>
-        private void PushQueue(Stack<List<classSampleData>> backStack,
-            Stack<List<classSampleData>> forwardStack,
-            List<classSampleData> queue,
-            bool clearForward = true)
+        private void PushQueue(List<classSampleData> workingQueue)
         {
-            //
-            // If the user wants us to clear the forward stack then we will,
-            // otherwise we ignore it.
-            //
-            if (clearForward)
-                forwardStack?.Clear();
-
             var pushQueue = new List<classSampleData>();
-            foreach (var data in queue)
+            foreach (var data in workingQueue)
             {
                 var sample = data.Clone() as classSampleData;
                 if (sample?.LCMethod?.Name != null)
                 {
                     if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                     {
-                        //
                         // Because sample clones are deep copies, we cannot trust that
                         // every object in the sample is serializable...so...we are stuck
                         // making sure we re-hash the method using the name which
                         // is copied during the serialization.
-                        //
                         sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
                     }
                 }
                 pushQueue.Add(sample);
             }
-            backStack.Push(pushQueue);
+
+            // if an undo operation has been made, we need to remove the undone changes from the history
+            if (currentIndex < undoRedoList.Count - 1)
+            {
+                undoRedoList.RemoveRange(currentIndex + 1, undoRedoList.Count - currentIndex - 1);
+            }
+            undoRedoList.Add(pushQueue);
+            currentIndex = undoRedoList.Count - 1;
             IsDirty = true;
 
             SetCanUndoRedo();
@@ -110,48 +95,48 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Pops the queue from the stack if available
         /// </summary>
-        /// <param name="backStack">Undo stack to pop queue from.</param>
         /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
-        private List<classSampleData> PopQueue(Stack<List<classSampleData>> backStack)
+        private List<classSampleData> GetNextOlderQueue()
         {
-            if (backStack.Count < 1)
+            if (undoRedoList.Count <= 1 || currentIndex == 0)
                 return null;
 
             IsDirty = true;
-            var newQueue = backStack.Pop();
+            currentIndex--;
+            var newQueue = undoRedoList[currentIndex];
 
             return newQueue;
         }
 
         /// <summary>
-        /// Gets the top queue from the stack if available, but doesn't remove it
+        /// Gets the next older queue in the history of queue changes
         /// </summary>
-        /// <param name="stack">Stack to get the queue from.</param>
-        /// <returns>A new queue if there is one.  Otherwise null if the stack is empty.</returns>
-        private List<classSampleData> PeekQueue(Stack<List<classSampleData>> stack)
+        /// <returns>A new queue if available.  Otherwise null if the history is empty.</returns>
+        private List<classSampleData> GetNextNewerQueue()
         {
-            if (stack.Count < 1)
+            if (undoRedoList.Count <= 1 || currentIndex == undoRedoList.Count - 1)
                 return null;
 
             IsDirty = true;
-            var newQueue = stack.Peek();
+            currentIndex++;
+            var newQueue = undoRedoList[currentIndex];
 
             return newQueue;
         }
 
         private void SetCanUndoRedo()
         {
-            CanUndo = undoBackWaitingQueue.Count > 1;
-            CanRedo = undoForwardWaitingQueue.Count > 0;
+            CanUndo = currentIndex > 0;
+            CanRedo = 0 <= currentIndex && currentIndex < undoRedoList.Count - 1;
         }
 
         /// <summary>
-        /// Add the working queue to the list of undoable actions
+        /// Add the current working queue to the list of undoable actions
         /// </summary>
         /// <param name="workingQueue"></param>
         public void AddToUndoable(List<classSampleData> workingQueue)
         {
-            PushQueue(undoBackWaitingQueue, undoForwardWaitingQueue, workingQueue);
+            PushQueue(workingQueue);
         }
 
         /// <summary>
@@ -160,20 +145,13 @@ namespace LcmsNet.SampleQueue
         /// <returns>true if the working queue was modified</returns>
         public bool Undo(List<classSampleData> workingQueue)
         {
-            // Pop the first item on the queue, which is usually identical to the displayed data
-            var cqueue = PopQueue(undoBackWaitingQueue);
-            // Get the item on top of the undo queue
-            var queue = PeekQueue(undoBackWaitingQueue);
+            // Pop the first item on the queue
+            var queue = GetNextOlderQueue();
             var modified = false;
 
             // Then if popping
             if (queue != null && queue.Count > 0)
             {
-                //
-                // Save the current waiting queue onto the forward stack, thus saving it for a redo
-                //
-                PushQueue(undoForwardWaitingQueue, null, workingQueue);
-
                 // Transfer the new queue to our waiting queue.
                 workingQueue.Clear();
                 workingQueue.AddRange(queue);
@@ -191,19 +169,12 @@ namespace LcmsNet.SampleQueue
         /// <returns>true if the working queue was modified</returns>
         public bool Redo(List<classSampleData> workingQueue)
         {
-            //
             // Pull the queue off the forward stack if one exists
-            //
-            var queue = PopQueue(undoForwardWaitingQueue);
+            var queue = GetNextNewerQueue();
             var modified = false;
 
             if (queue != null && queue.Count > 0)
             {
-                //
-                // Push the current queue onto the back stack, thus saving our waiting queue.
-                //
-                PushQueue(undoBackWaitingQueue, null, workingQueue);
-
                 workingQueue.Clear();
                 workingQueue.AddRange(queue);
                 modified = true;
