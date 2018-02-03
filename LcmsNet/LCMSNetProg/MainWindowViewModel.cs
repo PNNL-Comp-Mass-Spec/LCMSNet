@@ -424,8 +424,7 @@ namespace LcmsNet
             // Initialize the hardware
             var failedDeviceFlag = false;
             var failedCount = 0;
-            classDeviceManager.Manager.InitialzingDevice +=
-                Manager_InitialzingDevice;
+            classDeviceManager.Manager.InitialzingDevice += Manager_InitialzingDevice;
             FailedDevicesWindow display = null;
             if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP, false))
             {
@@ -466,7 +465,11 @@ namespace LcmsNet
 
             if (userMethodErrors.Count > 0)
             {
-                var failedMethods = new FailedMethodLoadWindow {DataContext = new FailedMethodLoadViewModel(userMethodErrors)};
+                var failedMethods = new FailedMethodLoadWindow
+                {
+                    DataContext = new FailedMethodLoadViewModel(userMethodErrors),
+                    ShowActivated = true,
+                };
                 failedMethods.ShowDialog();
             }
 
