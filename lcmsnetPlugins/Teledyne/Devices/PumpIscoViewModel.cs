@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using LcmsNetCommonControls.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
@@ -108,7 +109,6 @@ namespace LcmsNet.Devices.Pumps
         private readonly ReactiveUI.ReactiveList<PumpIscoDisplayViewModel> pumpDisplays = new ReactiveUI.ReactiveList<PumpIscoDisplayViewModel>();
         private readonly ReactiveUI.ReactiveList<enumIscoControlMode> controlModesComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<int> pumpCountComboBoxOptions = new ReactiveUI.ReactiveList<int>();
-        private readonly ReactiveUI.ReactiveList<string> comPortComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<int> unitAddressComboBoxOptions = new ReactiveUI.ReactiveList<int>();
         private readonly ReactiveUI.ReactiveList<enumIscoOperationMode> operationModeComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<RefillData> refillRates = new ReactiveUI.ReactiveList<RefillData>();
@@ -129,7 +129,7 @@ namespace LcmsNet.Devices.Pumps
         public ReactiveUI.IReadOnlyReactiveList<PumpIscoDisplayViewModel> PumpDisplays => pumpDisplays;
         public ReactiveUI.IReadOnlyReactiveList<enumIscoControlMode> ControlModesComboBoxOptions => controlModesComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<int> PumpCountComboBoxOptions => pumpCountComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<string> ComPortComboBoxOptions => comPortComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
         public ReactiveUI.IReadOnlyReactiveList<int> UnitAddressComboBoxOptions => unitAddressComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<enumIscoOperationMode> OperationModeComboBoxOptions => operationModeComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<RefillData> RefillRates => refillRates;
@@ -250,16 +250,10 @@ namespace LcmsNet.Devices.Pumps
         /// </summary>
         private void InitControl()
         {
-            // Add a list of available com ports to the selection combo box
-            using (comPortComboBoxOptions.SuppressChangeNotifications())
-            {
-                comPortComboBoxOptions.Clear();
-                comPortComboBoxOptions.AddRange(System.IO.Ports.SerialPort.GetPortNames());
-            }
-
+            // Make sure a valid COM port is selected
             if (ComPortComboBoxOptions.Count > 0)
             {
-                COMPort = ComPortComboBoxOptions[0];
+                COMPort = ComPortComboBoxOptions[0].PortName;
             }
 
             // Add a list of available unit addresses to the unit address combo box
@@ -331,7 +325,7 @@ namespace LcmsNet.Devices.Pumps
                 refillRates.Add(new RefillData("Pump C", 2) { MaxRefillRate = 30D });
             }
 
-            if (ComPortComboBoxOptions.Contains(pump.PortName))
+            if (ComPortComboBoxOptions.Any(x => x.PortName.Equals(pump.PortName, StringComparison.OrdinalIgnoreCase)))
             {
                 COMPort = pump.PortName;
             }

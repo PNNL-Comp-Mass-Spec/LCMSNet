@@ -7,6 +7,7 @@ using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetCommonControls.ViewModels;
 using LcmsNetDataClasses.Devices;
@@ -58,18 +59,12 @@ namespace Agilent.Devices.Pumps
             // Add to the device manager.
             SetBaseDevice(m_pump);
 
-            // Add a list of available serial port names to the combo box.
-            using (comPortComboBoxOptions.SuppressChangeNotifications())
-            {
-                comPortComboBoxOptions.Clear();
-                comPortComboBoxOptions.AddRange(System.IO.Ports.SerialPort.GetPortNames());
-            }
-
+            // Make sure to select an option
             if (ComPortComboBoxOptions.Count > 0)
             {
-                SelectedComPort = ComPortComboBoxOptions[0];
+                SelectedComPort = ComPortComboBoxOptions[0].PortName;
             }
-            if (ComPortComboBoxOptions.Contains(m_pump.PortName))
+            if (ComPortComboBoxOptions.Any(x => x.PortName.Equals(m_pump.PortName, StringComparison.OrdinalIgnoreCase)))
             {
                 SelectedComPort = m_pump.PortName;
             }
@@ -120,7 +115,6 @@ namespace Agilent.Devices.Pumps
         private double pressure;
         private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private string selectedMethod = "";
-        private readonly ReactiveUI.ReactiveList<string> comPortComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private string selectedComPort = "";
         private string methodText = "";
         private readonly PumpDisplayViewModel pumpDisplay = null;
@@ -132,7 +126,7 @@ namespace Agilent.Devices.Pumps
 
         public ReactiveUI.IReadOnlyReactiveList<enumPumpAgilentModes> ModeComboBoxOptions => modeComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<string> ComPortComboBoxOptions => comPortComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
 
         public double FlowRate
         {

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using LcmsNetCommonControls.Controls;
 using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
 
@@ -25,7 +26,6 @@ namespace LcmsNet.Devices.Pal
         {
             isInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            portNamesComboBoxOptions = new ReactiveUI.ReactiveList<string>(System.IO.Ports.SerialPort.GetPortNames());
             vialRangeComboBoxOptions = new ReactiveUI.ReactiveList<enumVialRanges>(Enum.GetValues(typeof(enumVialRanges)).Cast<enumVialRanges>());
 
             SetupCommands();
@@ -78,7 +78,6 @@ namespace LcmsNet.Devices.Pal
         private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<string> trayComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<enumVialRanges> vialRangeComboBoxOptions;
-        private readonly ReactiveUI.ReactiveList<string> portNamesComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<string> trayNamesAndMaxVial = new ReactiveUI.ReactiveList<string>();
         private readonly bool isInDesignMode = false;
         private string selectedMethod = "";
@@ -101,7 +100,7 @@ namespace LcmsNet.Devices.Pal
         public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<enumVialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<string> PortNamesComboBoxOptions => portNamesComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
         public ReactiveUI.IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
 
         public string SelectedMethod

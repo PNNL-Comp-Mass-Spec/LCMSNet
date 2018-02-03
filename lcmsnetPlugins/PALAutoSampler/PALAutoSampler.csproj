@@ -43,6 +43,9 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>Resources\Interop.P.dll</HintPath>
     </Reference>
+    <Reference Include="LcmsNetCommonControls">
+      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
+    </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
