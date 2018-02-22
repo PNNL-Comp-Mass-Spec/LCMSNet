@@ -47,9 +47,13 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             if (Tray == 0)
             {
+                // TODO: Show this in a meaningful way; currently this leaves the PALTray selection at whatever it previously was
                 Sample.PAL.PALTray = string.Empty;
             }
-            Sample.PAL.PALTray = trayNames[Tray - 1];
+            else
+            {
+                Sample.PAL.PALTray = trayNames[Tray - 1];
+            }
             Sample.PAL.Well = Vial;
         }
     }
