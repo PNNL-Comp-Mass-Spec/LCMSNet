@@ -48,8 +48,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CueBannerOverlay\CueBannerAdorner.cs" />
+    <Compile Include="Controls\CueBannerOverlay\CueBannerService.cs" />
     <Compile Include="Controls\SerialPortData.cs" />
     <Compile Include="Controls\SerialPortGenericData.cs" />
+    <Compile Include="Controls\CueBannerOverlay\WeakDictionary.cs" />
+    <Compile Include="Controls\CueBannerOverlay\WpfPropertyChangeNotifier.cs" />
     <Compile Include="Devices\ContactClosureRead\ContactClosureReadView.xaml.cs">
       <DependentUpon>ContactClosureReadView.xaml</DependentUpon>
     </Compile>
@@ -129,6 +133,7 @@
       <Version>7.4.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility

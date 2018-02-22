@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
+    xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
     x:Class="LcmsNet.SampleQueue.Views.SampleView"
     d:DesignHeight="500"
     d:DesignWidth="800"
@@ -128,7 +129,11 @@
                 <DataGridTemplateColumn Header="PAL Tray" Width="Auto" MinWidth="40" Visibility="{Binding DataContext.PalTrayColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding Sample.PAL.PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
+                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding Sample.PAL.PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" >
+                                <cueBannerOverlay:CueBannerService.CueBanner>
+                                    <TextBlock Text="Select" />
+                                </cueBannerOverlay:CueBannerService.CueBanner>
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
