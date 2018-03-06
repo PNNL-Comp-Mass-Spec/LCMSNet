@@ -91,6 +91,8 @@ namespace LcmsNet.Devices.ContactClosure
                 if (value != null)
                 {
                     RegisterDevice(value);
+
+                    OnPropertyChanged(nameof(Port));
                 }
             }
         }
@@ -101,16 +103,13 @@ namespace LcmsNet.Devices.ContactClosure
 
         private void RegisterDevice(IDevice device)
         {
-
             m_loading = true;
             m_contactClosure = device as classContactClosureU12;
 
             if (m_contactClosure != null)
             {
                 Port = m_contactClosure.Port;
-            }
-            if (m_contactClosure != null)
-            {
+
                 m_contactClosure.DeviceSaveRequired += CC_DeviceSaveRequired;
             }
             SetBaseDevice(m_contactClosure);

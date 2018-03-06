@@ -47,7 +47,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             if (Tray == 0)
             {
-                // TODO: Show this in a meaningful way; currently this leaves the PALTray selection at whatever it previously was
                 Sample.PAL.PALTray = null;
             }
             else

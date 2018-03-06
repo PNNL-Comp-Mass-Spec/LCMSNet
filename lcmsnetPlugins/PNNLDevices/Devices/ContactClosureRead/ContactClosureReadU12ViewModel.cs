@@ -91,6 +91,9 @@ namespace LcmsNet.Devices.ContactClosureRead
                 if (value != null)
                 {
                     RegisterDevice(value);
+
+                    OnPropertyChanged(nameof(IsAnalog));
+                    OnPropertyChanged(nameof(Port));
                 }
             }
         }
@@ -101,16 +104,14 @@ namespace LcmsNet.Devices.ContactClosureRead
 
         private void RegisterDevice(IDevice device)
         {
-
             loading = true;
             contactClosureRead = device as ContactClosureReadU12;
 
             if (contactClosureRead != null)
             {
                 Port = contactClosureRead.Port;
-            }
-            if (contactClosureRead != null)
-            {
+                IsAnalog = contactClosureRead.Port.ToString().ToUpper().StartsWith("A");
+
                 contactClosureRead.DeviceSaveRequired += CC_DeviceSaveRequired;
             }
             SetBaseDevice(contactClosureRead);
