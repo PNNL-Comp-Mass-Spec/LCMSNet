@@ -229,8 +229,8 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
     /// <summary>
     /// Compares objects of the given type or WeakKeyReferences to them
     /// for equality based on the given comparer. Note that we can only
-    /// implement IEqualityComparer<T> for T = object as there is no
-    /// other common base between T and WeakKeyReference<T>. We need a
+    /// implement IEqualityComparer&lt;T&gt; for T = object as there is no
+    /// other common base between T and WeakKeyReference&lt;T&gt;. We need a
     /// single comparer to handle both types because we don't want to
     /// allocate a new weak reference for every lookup.
     /// </summary>
