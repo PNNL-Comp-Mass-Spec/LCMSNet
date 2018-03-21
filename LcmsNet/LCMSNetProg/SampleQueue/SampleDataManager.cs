@@ -497,6 +497,7 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         private bool Manager_MethodUpdated(object sender, classLCMethod method)
         {
+            // Update the samples first, then update the methods list.
             var samples = SampleQueue.GetWaitingQueue();
             var updateSamples = new List<classSampleData>();
             foreach (var sample in samples)
@@ -513,6 +514,12 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
+            var success = AddOrUpdateLCMethod(method);
+            if (!success)
+            {
+                return false;
+            }
+
             SampleQueue.UpdateSamples(updateSamples);
 
             return true;
@@ -526,7 +533,24 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         private bool Manager_MethodAdded(object sender, classLCMethod method)
         {
-            return AddOrUpdateLCMethod(method);
+            var success = AddOrUpdateLCMethod(method);
+            if (!success)
+            {
+                return false;
+            }
+
+            // If we just added a sample, we want to make sure the samples have a method selected.
+            if (lcMethodOptions.Count == 1)
+            {
+                foreach (var sample in Samples)
+                {
+                    sample.Sample.LCMethod = method;
+                }
+
+                SampleQueue.UpdateAllSamples();
+            }
+
+            return true;
         }
 
         #endregion
@@ -1546,12 +1570,14 @@ namespace LcmsNet.SampleQueue
 
             // Find the method if name exists
             var found = false;
+            classLCMethod foundMethod = null;
             foreach (var o in lcMethodOptions)
             {
-                var name = o.ToString();
-                if (name == method.Name)
+                var name = o.Name;
+                if (name.Equals(method.Name))
                 {
                     found = true;
+                    foundMethod = o;
                     break;
                 }
             }
@@ -1560,15 +1586,11 @@ namespace LcmsNet.SampleQueue
             if (found == false)
             {
                 lcMethodOptions.Add(method);
-                // If we just added a sample, we want to make sure the samples have a method selected.
-                if (lcMethodOptions.Count == 1)
-                {
-                }
             }
             else
             {
                 // Here we update the method that was in the list, with the new one that was added/updated
-                var indexOf = lcMethodOptions.IndexOf(method);
+                var indexOf = lcMethodOptions.IndexOf(foundMethod);
                 if (indexOf >= 0)
                     lcMethodOptions[indexOf] = method;
             }
@@ -1581,9 +1603,9 @@ namespace LcmsNet.SampleQueue
             if (method == null)
                 return false;
 
-            foreach (var o in lcMethodOptions)
+            foreach (var o in lcMethodOptions.ToList())
             {
-                if (o.Equals(method))
+                if (o.Name.Equals(method.Name))
                 {
                     lcMethodOptions.Remove(o);
                     break;
