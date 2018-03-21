@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNet.Devices.Valves"
              xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:SixPortInjectionValveViewModel}, IsDesignTimeCreatable=True}"
@@ -47,7 +48,7 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <TextBox Grid.Row="0" Margin="3" Text="{Binding InjectionVolume, StringFormat='0.000'}" />
+                        <xctk:DoubleUpDown Grid.Row="0" Margin="3" Minimum="0" Maximum="1000000" Value="{Binding InjectionVolume}" Increment="1" FormatString="F3" />
                         <Button Grid.Row="1" Margin="10,3" Content="Set" Command="{Binding SetInjectionVolumeCommand}" />
                     </Grid>
                 </GroupBox>
