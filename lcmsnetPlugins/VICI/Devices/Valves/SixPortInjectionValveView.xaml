@@ -48,7 +48,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBox Grid.Row="0" Margin="3" Text="{Binding InjectionVolume, StringFormat='0.000'}" />
-                        <Button Grid.Row="1" Margin="10,3" Content="Set" Command="{Binding }" />
+                        <Button Grid.Row="1" Margin="10,3" Content="Set" Command="{Binding SetInjectionVolumeCommand}" />
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Header="Version Info">

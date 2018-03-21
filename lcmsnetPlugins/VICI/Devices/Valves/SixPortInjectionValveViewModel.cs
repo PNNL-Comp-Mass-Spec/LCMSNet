@@ -16,8 +16,7 @@ namespace LcmsNet.Devices.Valves
 
         private void SetInjectionVolume()
         {
-            var injector = Device as ISixPortInjectionValve;
-            if (injector != null)
+            if (Device is ISixPortInjectionValve injector)
                 injector.InjectionVolume = InjectionVolume;
         }
 
@@ -25,9 +24,19 @@ namespace LcmsNet.Devices.Valves
         {
             base.RegisterDevice(device);
 
-            var injector = Device as ISixPortInjectionValve;
-            if (injector != null)
+            if (Device is ISixPortInjectionValve injector)
+            {
                 InjectionVolume = injector.InjectionVolume;
+                injector.InjectionVolumeChanged += Injector_InjectionVolumeChanged;
+            }
+        }
+
+        private void Injector_InjectionVolumeChanged(object sender, System.EventArgs e)
+        {
+            if (Device is ISixPortInjectionValve injector)
+            {
+                InjectionVolume = injector.InjectionVolume;
+            }
         }
 
         private double injectionVolume = 0;

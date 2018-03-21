@@ -13,23 +13,17 @@ namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(SixPortInjectionValveViewModel),
-                                 "Six-port Injection",
-                                 "Valves Two-Position")
-    ]
+    [classDeviceControlAttribute(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
     public class classValveVICISixPortInjection: classValveVICI2Pos, ISixPortInjectionValve
     {
-
         private double m_volume;
 
-         public classValveVICISixPortInjection()
-            : base()
+         public classValveVICISixPortInjection() : base()
         {
             m_volume = 0;
         }
 
-        public classValveVICISixPortInjection(SerialPort port)
-            : base(port)
+        public classValveVICISixPortInjection(SerialPort port) : base(port)
         {
             m_volume = 0;
         }
