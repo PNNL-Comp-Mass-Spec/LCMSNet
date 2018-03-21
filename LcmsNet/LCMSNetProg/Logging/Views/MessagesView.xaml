@@ -33,7 +33,7 @@
             </TabItem.HeaderTemplate>
             <DockPanel LastChildFill="True">
                 <Button DockPanel.Dock="Bottom" Margin="5" Height="32" Content="Clear Error Notification" Command="{Binding AcknowledgeErrorsCommand}" />
-                <TextBox Margin="5" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" Text="{Binding ErrorMessages, Mode=OneWay}" />
+                <ListBox Margin="5" ItemsSource="{Binding ErrorMessages}" />
             </DockPanel>
         </TabItem>
     </TabControl>

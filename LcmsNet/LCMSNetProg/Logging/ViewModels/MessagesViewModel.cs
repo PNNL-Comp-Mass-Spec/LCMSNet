@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Windows.Data;
 using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
@@ -17,7 +19,6 @@ namespace LcmsNet.Logging.ViewModels
             ErrorLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
             lockMessageList = new object();
             lockErrorList = new object();
-            ErrorMessages = "";
             BindingOperations.EnableCollectionSynchronization(MessageList, lockMessageList);
             SetupCommands();
         }
@@ -53,9 +54,8 @@ namespace LcmsNet.Logging.ViewModels
         {
             if (level <= messageLevel && message != null)
             {
-                InsertMessage(FormatMessage(message.Message));
-                //mlistBox_messages.Items.Insert(0, FormatMessage(message.Message));
-                //mlistBox_messages.SelectedIndex = 0;
+                var formatted = FormatMessage(message.Message);
+                RxApp.MainThreadScheduler.Schedule(x => InsertMessage(formatted));
             }
         }
 
@@ -80,32 +80,40 @@ namespace LcmsNet.Logging.ViewModels
         {
             if (level <= errorLevel && error != null)
             {
-                ErrorPresent?.Invoke(this, new EventArgs());
-                var exceptions = "";
-                lock (lockErrorList)
+                RxApp.MainThreadScheduler.Schedule(x => InsertError(error));
+            }
+        }
+
+        private void InsertError(classErrorLoggerArgs error)
+        {
+            ErrorPresent?.Invoke(this, new EventArgs());
+            lock (lockErrorList)
+            {
+                if (error.Exception != null)
                 {
-                    if (error.Exception != null)
+                    errorMessages.Insert(0, FormatMessage(error.Exception.StackTrace));
+
+                    var exMessages = new List<string>();
+                    var ex = error.Exception;
+                    while (ex != null)
                     {
-                        ErrorMessages = FormatMessage(error.Exception.StackTrace) + "\n" + ErrorMessages;
-
-                        var ex = error.Exception;
-                        while (ex != null)
-                        {
-                            exceptions += ex.Message + "\n";
-                            ex = ex.InnerException;
-                        }
-
-                        ErrorMessages = FormatMessage(exceptions) + "\n" + ErrorMessages;
+                        exMessages.Add(ex.Message);
+                        ex = ex.InnerException;
                     }
 
-                    ErrorMessages = FormatMessage(error.Message) + "\n" + ErrorMessages;
+                    errorMessages.Insert(0, FormatMessage(string.Join("\n", exMessages)));
                 }
+
+                errorMessages.Insert(0, FormatMessage(error.Message));
             }
         }
 
         private void AcknowledgeErrors()
         {
-            ErrorMessages = "";
+            using (errorMessages.SuppressChangeNotifications())
+            {
+                errorMessages.Clear();
+            }
             ErrorCleared?.Invoke(this, new EventArgs());
         }
 
@@ -145,8 +153,8 @@ namespace LcmsNet.Logging.ViewModels
         private readonly object lockMessageList;
         private readonly object lockErrorList;
 
-        private string errorMessages = "";
         private readonly ReactiveList<string> messageList = new ReactiveList<string>();
+        private readonly ReactiveList<string> errorMessages = new ReactiveList<string>();
 
         #endregion
 
@@ -170,13 +178,8 @@ namespace LcmsNet.Logging.ViewModels
             set { this.RaiseAndSetIfChanged(ref errorLevel, value); }
         }
 
-        public string ErrorMessages
-        {
-            get { return errorMessages; }
-            private set { this.RaiseAndSetIfChanged(ref errorMessages, value); }
-        }
-
         public IReadOnlyReactiveList<string> MessageList => messageList;
+        public IReadOnlyReactiveList<string> ErrorMessages => errorMessages;
 
         #endregion
     }
