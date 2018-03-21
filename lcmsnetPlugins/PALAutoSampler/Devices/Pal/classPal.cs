@@ -1139,6 +1139,7 @@ namespace LcmsNet.Devices.Pal
         {
             return new List<string>() { "AspirationError" };
         }
+
         #endregion
 
         #region IDevice Data Provider Methods

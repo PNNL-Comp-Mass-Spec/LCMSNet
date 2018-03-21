@@ -92,6 +92,7 @@ namespace LcmsNet.Devices.Pal
         private string selectVialsInput;
         private string selectVialsTray;
         private string selectVialsOutput;
+        private string timeReport = "";
 
         #endregion
 
@@ -190,6 +191,12 @@ namespace LcmsNet.Devices.Pal
             }
         }
 
+        public string TimeReport
+        {
+            get { return timeReport; }
+            set { this.RaiseAndSetIfChanged(ref timeReport, value); }
+        }
+
         public classPal Pal
         {
             get { return pal; }
@@ -251,6 +258,8 @@ namespace LcmsNet.Devices.Pal
         public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> SelectVialsCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ResetPalCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> FullResetPalCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -260,6 +269,8 @@ namespace LcmsNet.Devices.Pal
             RefreshStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RefreshStatus());
             ApplyPortNameCommand = ReactiveUI.ReactiveCommand.Create(() => ApplyPortName());
             SelectVialsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => SelectVials());
+            ResetPalCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => ResetPal());
+            FullResetPalCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => FullyResetPal());
         }
 
         private async Task SelectVials()
@@ -387,18 +398,56 @@ namespace LcmsNet.Devices.Pal
                 return;
             }
 
+            var taskType = "";
+            var elapsedSecs = 0.0;
             await Task.Run(() =>
             {
+                var sw = System.Diagnostics.Stopwatch.StartNew();
                 if (Pal.GetStatus().Contains("READY"))
                 {
+                    taskType = "Run Method";
                     Pal.LoadMethod(SelectedMethod, SelectedTray, VialNumber, Convert.ToString(Volume, CultureInfo.InvariantCulture));
                     Pal.StartMethod(1000);
                 }
                 else
                 {
+                    taskType = "Continue Method";
                     Pal.ContinueMethod(0);
                 }
+                sw.Stop();
+                elapsedSecs = sw.Elapsed.TotalSeconds;
             });
+
+            TimeReport = $"{taskType} took {elapsedSecs:F2} seconds.";
+        }
+
+        private async Task ResetPal()
+        {
+            var elapsedSecs = 0.0;
+            await Task.Run(() =>
+            {
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                Pal.ResetPAL();
+                sw.Stop();
+                elapsedSecs = sw.Elapsed.TotalSeconds;
+            });
+
+            TimeReport = $"Reset PAL took {elapsedSecs:F2} seconds.";
+        }
+
+        private async Task FullyResetPal()
+        {
+            var elapsedSecs = 0.0;
+            await Task.Run(() =>
+            {
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                Pal.StopMethod();
+                Pal.ResetPAL();
+                sw.Stop();
+                elapsedSecs = sw.Elapsed.TotalSeconds;
+            });
+
+            TimeReport = $"Fully Reset PAL took {elapsedSecs:F2} seconds.";
         }
 
         private void Initialize()
@@ -422,7 +471,16 @@ namespace LcmsNet.Devices.Pal
 
         private async Task StopMethod()
         {
-            await Task.Run(() => Pal.StopMethod());
+            var elapsedSecs = 0.0;
+            await Task.Run(() =>
+            {
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                Pal.StopMethod();
+                sw.Stop();
+                elapsedSecs = sw.Elapsed.TotalSeconds;
+            });
+
+            TimeReport = $"Stop Method took {elapsedSecs:F2} seconds.";
         }
 
         private void ApplyPortName()
