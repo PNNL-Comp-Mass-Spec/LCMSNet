@@ -696,7 +696,7 @@ namespace Agilent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(Status, type, message, this);
+                var args = new classDeviceStatusEventArgs(Status, type, this, message);
                 StatusUpdate(this, args);
             }
         }

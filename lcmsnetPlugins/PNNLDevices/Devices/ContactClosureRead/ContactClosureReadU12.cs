@@ -326,9 +326,10 @@ namespace LcmsNet.Devices.ContactClosureRead
             try
             {
                 var startTime = TimeKeeper.Instance.Now;
+                var endTime = startTime.Add(TimeSpan.FromSeconds(timeout));
                 var state = m_labjack.Read(port);
                 closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
-                while (TimeKeeper.Instance.Now.Subtract(TimeSpan.FromSeconds(timeout)) < startTime && !target.HasFlag(closureState))
+                while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
                     Thread.Sleep(TimeSpan.FromMilliseconds(200));
                     state = m_labjack.Read(port);
@@ -345,11 +346,8 @@ namespace LcmsNet.Devices.ContactClosureRead
             if (!target.HasFlag(closureState))
             {
                 Error?.Invoke(this, new classDeviceErrorEventArgs("Contact closure was not in the required state of \"" + target + "\"",
-                    null,
-                    enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                    this,
-                    "Read State Not Matched"));
-                throw new Exception("Contact closure was not in the required state of \"" + target + "\"");
+                    null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Read State Not Matched", DeviceEventLoggingType.Error));
+                Thread.Sleep(TimeSpan.FromSeconds(30)); // make sure to trigger a timeout
             }
 
             return closureState;
@@ -390,9 +388,10 @@ namespace LcmsNet.Devices.ContactClosureRead
             try
             {
                 var startTime = TimeKeeper.Instance.Now;
+                var endTime = startTime.Add(TimeSpan.FromSeconds(timeout));
                 var outVoltage = m_labjack.Read(port);
                 closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
-                while (TimeKeeper.Instance.Now.Subtract(TimeSpan.FromSeconds(timeout)) < startTime && !target.HasFlag(closureState))
+                while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
                     Thread.Sleep(TimeSpan.FromMilliseconds(200));
                     outVoltage = m_labjack.Read(port);
@@ -409,11 +408,8 @@ namespace LcmsNet.Devices.ContactClosureRead
             if (!target.HasFlag(closureState))
             {
                 Error?.Invoke(this, new classDeviceErrorEventArgs("Contact closure was not in the required state of \"" + target + "\"",
-                    null,
-                    enumDeviceErrorStatus.ErrorAffectsAllColumns,
-                    this,
-                    "Read State Not Matched"));
-                throw new Exception("Contact closure was not in the required state of \"" + target + "\"");
+                    null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Read State Not Matched", DeviceEventLoggingType.Error));
+                Thread.Sleep(TimeSpan.FromSeconds(30)); // make sure to trigger a timeout
             }
 
             return closureState;

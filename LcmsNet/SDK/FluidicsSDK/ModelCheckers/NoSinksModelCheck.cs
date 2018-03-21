@@ -126,7 +126,7 @@ namespace FluidicsSDK.ModelCheckers
                 }
 
                 //if no sink is found, report to the notifcation system and add to the status list to be returned
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, NO_PATH_FOUND, message,  this));
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, NO_PATH_FOUND,  this, message));
                 status.Add(new ModelStatus("No Sink on Path", "No sink on on path", Category, string.Empty,string.Empty, null, p.ParentDevice.IDevice));
             }
             watch.Stop();

@@ -274,7 +274,7 @@ namespace Newport.ESP300
                 cmd.Append(CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
                 m_motorStatus[axis - 1] = true;
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Motor", axis.ToString() + " On", this));
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Motor", this, axis.ToString() + " On"));
             }
         }
 
@@ -297,7 +297,7 @@ namespace Newport.ESP300
                 cmd.Append(CONST_CMD_TERMINATOR);
                 WriteCommand(cmd.ToString());
                 m_motorStatus[axis - 1] = false;
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Motor", axis.ToString() + " Off", this));
+                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, "Motor", this, axis.ToString() + " Off"));
             }
         }
 

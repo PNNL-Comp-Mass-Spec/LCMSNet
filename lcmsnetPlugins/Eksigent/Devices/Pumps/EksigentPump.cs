@@ -451,7 +451,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(Status, "Status", status, this);
+                var args = new classDeviceStatusEventArgs(Status, "Status", this, status);
 
                 StatusUpdate(this, args);
             }
@@ -469,7 +469,7 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(Status, statusNotifyString, status, this);
+                var args = new classDeviceStatusEventArgs(Status, statusNotifyString, this, status);
 
                 StatusUpdate(this, args);
             }
@@ -559,7 +559,7 @@ namespace Eksigent.Devices.Pumps
                     break;
             }
 
-            PumpStatus?.Invoke(this, new classDeviceStatusEventArgs(Status, "None", message, this));
+            PumpStatus?.Invoke(this, new classDeviceStatusEventArgs(Status, "None", this, message));
             if (code < m_notifyStrings.Length && code > -1)
             {
                 HandleStatusType(m_notifyStrings[code], message);

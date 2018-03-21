@@ -632,6 +632,15 @@ namespace LcmsNet.Notification.ViewModels
             {
                 classApplicationLogger.LogError(0, "Could not execute status update.", ex);
             }
+
+            if (e.LoggingType == DeviceEventLoggingType.Default || e.LoggingType == DeviceEventLoggingType.Message)
+            {
+                classApplicationLogger.LogMessage(0, $"Device {e.Notifier.Name} reported status: {e.Notification}{message}");
+            }
+            else if (e.LoggingType == DeviceEventLoggingType.Error)
+            {
+                classApplicationLogger.LogError(0, $"Device {e.Notifier.Name} reported status: {e.Notification}{message}");
+            }
         }
 
         /// <summary>
@@ -667,6 +676,20 @@ namespace LcmsNet.Notification.ViewModels
             catch (Exception ex)
             {
                 classApplicationLogger.LogError(0, "Could not execute status update.", ex);
+            }
+
+            var msg = "";
+            if (!string.IsNullOrWhiteSpace(e.Error))
+            {
+                msg = $":{e.Error}";
+            }
+            if (e.LoggingType == DeviceEventLoggingType.Message)
+            {
+                classApplicationLogger.LogMessage(0, $"Device {e.Device.Name} reported error: {e.Notification}{msg}");
+            }
+            else if (e.LoggingType == DeviceEventLoggingType.Default || e.LoggingType == DeviceEventLoggingType.Error)
+            {
+                classApplicationLogger.LogError(0, $"Device {e.Device.Name} reported error: {e.Notification}{msg}");
             }
         }
 

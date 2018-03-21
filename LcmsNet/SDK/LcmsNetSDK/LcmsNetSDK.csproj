@@ -54,6 +54,7 @@
     <Compile Include="Data\IDMSValidator.cs" />
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
+    <Compile Include="Devices\DeviceEventLoggingType.cs" />
     <Compile Include="Devices\IDeviceControl.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Experiment\classSampleValidationError.cs" />

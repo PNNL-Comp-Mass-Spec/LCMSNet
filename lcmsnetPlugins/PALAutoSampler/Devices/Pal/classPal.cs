@@ -1053,7 +1053,7 @@ namespace LcmsNet.Devices.Pal
             var statusMessage = "";
             var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
             StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
-                "continue method end", statusMessage + " " + errorCode.ToString(), this));
+                "continue method end", this, statusMessage + " " + errorCode.ToString()));
         }
 
         /// <summary>

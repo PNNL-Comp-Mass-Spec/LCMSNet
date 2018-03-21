@@ -20,36 +20,20 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="status"></param>
         /// <param name="device"></param>
         /// <param name="notifyStr"></param>
+        /// <param name="loggingType"></param>
         public classDeviceErrorEventArgs(string errorMessage,
             Exception ex,
             enumDeviceErrorStatus status,
             IDevice device,
-            string notifyStr)
+            string notifyStr = "None",
+            DeviceEventLoggingType loggingType = DeviceEventLoggingType.None)
         {
             Error = errorMessage;
             Exception = ex;
             ErrorStatus = status;
             Device = device;
             Notification = notifyStr;
-        }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="errorMessage"></param>
-        /// <param name="ex"></param>
-        /// <param name="status"></param>
-        /// <param name="device"></param>
-        public classDeviceErrorEventArgs(string errorMessage,
-            Exception ex,
-            enumDeviceErrorStatus status,
-            IDevice device)
-        {
-            Error = errorMessage;
-            Exception = ex;
-            ErrorStatus = status;
-            Device = device;
-            Notification = "None";
+            LoggingType = loggingType;
         }
 
         /// <summary>
@@ -76,5 +60,10 @@ namespace LcmsNetDataClasses.Devices
         /// Notification string
         /// </summary>
         public string Notification { get; set; }
+
+        /// <summary>
+        /// How the event should be logged
+        /// </summary>
+        public DeviceEventLoggingType LoggingType { get; set; }
     }
 }

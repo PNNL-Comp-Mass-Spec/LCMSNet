@@ -73,7 +73,7 @@ namespace FluidicsSDK.ModelCheckers
                     {
                         const string message = "Cycle in physical configuration";
                         var deviceName = source.ParentDevice.IDevice.Name;
-                        StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, deviceName, this));
+                        StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, deviceName, this, message));
                     }
                 }
             }
