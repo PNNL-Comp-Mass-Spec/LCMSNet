@@ -44,6 +44,7 @@ using LcmsNetDataClasses.Data;
 using LcmsNetSQLiteTools;
 // Deprecated: using System.ComponentModel.Composition;
 using System.IO;
+using System.Threading;
 using LcmsNetSDK;
 
 namespace LcmsNetDmsTools
@@ -54,7 +55,7 @@ namespace LcmsNetDmsTools
     // Deprecated export: [Export(typeof(IDmsTools))]
     // Deprecated export: [ExportMetadata("Name", "PrismDMSTools")]
     // Deprecated export: [ExportMetadata("Version", "1.0")]
-    public class classDBTools
+    public class classDBTools : IDisposable
     {
         #region "Class variables"
         string m_ErrMsg = "";
@@ -152,6 +153,162 @@ namespace LcmsNetDmsTools
             RecentExperimentsMonthsToLoad = 18;
             LoadConfiguration();
         }
+        #endregion
+
+        #region Instance
+
+        private SqlConnection connection = null;
+        private string lastConnectionString = "";
+        private DateTime lastConnectionAttempt = DateTime.MinValue;
+        private readonly TimeSpan minTimeBetweenConnectionAttempts = TimeSpan.FromSeconds(30);
+        private readonly TimeSpan connectionTimeoutTime = TimeSpan.FromSeconds(60);
+        private Timer connectionTimeoutTimer = null;
+        private string failedConnectionAttemptMessage = "";
+
+        private void ConnectionTimeoutActions(object sender)
+        {
+            CloseConnection();
+        }
+
+        /// <summary>
+        /// Close the stored SqlConnection
+        /// </summary>
+        public void CloseConnection()
+        {
+            connection?.Close();
+            connection?.Dispose();
+            connection = null;
+        }
+
+        ~classDBTools()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            CloseConnection();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Get a SQLiteConnection, but lim
+        /// </summary>
+        /// <param name="connString"></param>
+        /// <returns></returns>
+        private SqlConnectionWrapper GetConnection(string connString)
+        {
+            // Reset out the close timer with every use
+            connectionTimeoutTimer?.Dispose();
+            connectionTimeoutTimer = new Timer(ConnectionTimeoutActions, this, connectionTimeoutTime, TimeSpan.FromMilliseconds(-1));
+
+            var newServer = false;
+            if (!lastConnectionString.Equals(connString))
+            {
+                CloseConnection();
+                newServer = true;
+            }
+
+            if (connection == null && (DateTime.UtcNow > lastConnectionAttempt.Add(minTimeBetweenConnectionAttempts) || newServer))
+            {
+                lastConnectionString = connString;
+                lastConnectionAttempt = DateTime.UtcNow;
+                try
+                {
+                    var cn = new SqlConnection(connString);
+                    cn.Open();
+                    connection = cn;
+                    failedConnectionAttemptMessage = "";
+                }
+                catch (Exception e)
+                {
+                    failedConnectionAttemptMessage = $"Error connecting to database; Please check network connections and try again. Exception message: {e.Message}";
+                    ErrMsg = failedConnectionAttemptMessage;
+                    classApplicationLogger.LogError(0, failedConnectionAttemptMessage);
+                }
+            }
+
+            return new SqlConnectionWrapper(connection, failedConnectionAttemptMessage);
+        }
+
+        /// <summary>
+        /// A SqlConnection wrapper that only disposes in certain circumstances
+        /// </summary>
+        private class SqlConnectionWrapper : IDisposable
+        {
+            private readonly SqlConnection connection;
+            private readonly bool closeConnectionOnDispose = true;
+            public string FailedConnectionAttemptMessage { get; }
+
+            /// <summary>
+            /// Open a new connection, which will get closed on Dispose().
+            /// </summary>
+            /// <param name="connString"></param>
+            public SqlConnectionWrapper(string connString)
+            {
+                try
+                {
+                    connection = new SqlConnection(connString);
+                    connection.Open();
+                }
+                catch (Exception e)
+                {
+                    FailedConnectionAttemptMessage =
+                        $"Error connecting to database; Please check network connections and try again. Exception message: {e.Message}";
+                }
+
+                closeConnectionOnDispose = true;
+                IsValid = connection != null && connection.State == ConnectionState.Open;
+            }
+
+            /// <summary>
+            /// Wrap an existing connection, which will stay open on Dispose().
+            /// </summary>
+            /// <param name="existingConnection"></param>
+            /// <param name="failedConnectionAttemptMessage"></param>
+            public SqlConnectionWrapper(SqlConnection existingConnection, string failedConnectionAttemptMessage = "")
+            {
+                connection = existingConnection;
+                closeConnectionOnDispose = false;
+                IsValid = connection != null && connection.State == ConnectionState.Open;
+                FailedConnectionAttemptMessage = failedConnectionAttemptMessage;
+            }
+
+            public bool IsValid { get; }
+
+            public SqlConnection GetConnection()
+            {
+                return connection;
+            }
+
+            public SqlCommand CreateCommand()
+            {
+                return connection.CreateCommand();
+            }
+
+            public SqlTransaction BeginTransaction()
+            {
+                return connection.BeginTransaction();
+            }
+
+            ~SqlConnectionWrapper()
+            {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                if (!closeConnectionOnDispose)
+                {
+                    return;
+                }
+
+                connection?.Close();
+                connection?.Dispose();
+                GC.SuppressFinalize(this);
+            }
+        }
+
         #endregion
 
         #region "Methods"
@@ -1173,33 +1330,37 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Retrieves a data table from DMS
         /// </summary>
-        /// <param name="CmdStr">SQL command to retrieve table</param>
-        /// <param name="ConnStr">DMS connection string</param>
+        /// <param name="cmdStr">SQL command to retrieve table</param>
+        /// <param name="connStr">DMS connection string</param>
         /// <returns>DataTable containing requested data</returns>
-        private DataTable GetDataTable(string CmdStr, string ConnStr)
+        private DataTable GetDataTable(string cmdStr, string connStr)
         {
             var returnTable = new DataTable();
-            using (var cn = new SqlConnection(ConnStr))
+            var cn = GetConnection(connStr);
+            if (!cn.IsValid)
             {
-                using (var da = new SqlDataAdapter())
+                throw new Exception(cn.FailedConnectionAttemptMessage);
+            }
+
+            using (cn)
+            using (var da = new SqlDataAdapter())
+            using (var cmd = cn.CreateCommand())
+            {
+                cmd.CommandText = cmdStr;
+                cmd.CommandType = CommandType.Text;
+                da.SelectCommand = cmd;
+                try
                 {
-                    using (var cmd = new SqlCommand(CmdStr, cn))
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        da.SelectCommand = cmd;
-                        try
-                        {
-                            da.Fill(returnTable);
-                        }
-                        catch (Exception ex)
-                        {
-                            var errMsg = "SQL exception getting data table via query " + CmdStr;
-                            classApplicationLogger.LogError(0, errMsg, ex);
-                            throw new classDatabaseDataException(errMsg, ex);
-                        }
-                    }
+                    da.Fill(returnTable);
+                }
+                catch (Exception ex)
+                {
+                    var errMsg = "SQL exception getting data table via query " + cmdStr;
+                    classApplicationLogger.LogError(0, errMsg, ex);
+                    throw new classDatabaseDataException(errMsg, ex);
                 }
             }
+
             // Return the output table
             return returnTable;
         }
@@ -1207,33 +1368,35 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Executes a stored procedure
         /// </summary>
-        /// <param name="SpCmd">SQL command object containing SP parameters</param>
-        /// <param name="ConnStr">Connection string</param>
+        /// <param name="spCmd">SQL command object containing SP parameters</param>
+        /// <param name="connStr">Connection string</param>
         /// <returns>SP result code</returns>
-        private int ExecuteSP(SqlCommand SpCmd, string ConnStr)
+        private int ExecuteSP(SqlCommand spCmd, string connStr)
         {
             var resultCode = -9999;
             try
             {
-                using (var cn = new SqlConnection(ConnStr))
+                var cn = GetConnection(connStr);
+                if (!cn.IsValid)
                 {
-                    using (var da = new SqlDataAdapter())
-                    {
-                        using (var ds = new DataSet())
-                        {
-                            SpCmd.Connection = cn;
-                            da.SelectCommand = SpCmd;
-                            da.Fill(ds);
-                            resultCode = (int)da.SelectCommand.Parameters["@Return"].Value;
-                        }
-                    }
+                    throw new Exception(cn.FailedConnectionAttemptMessage);
+                }
+
+                using (cn)
+                using (var da = new SqlDataAdapter())
+                using (var ds = new DataSet())
+                {
+                    spCmd.Connection = cn.GetConnection();
+                    da.SelectCommand = spCmd;
+                    da.Fill(ds);
+                    resultCode = (int) da.SelectCommand.Parameters["@Return"].Value;
                 }
             }
             catch (Exception ex)
             {
-                ErrMsg = "Exception executing stored procedure " + SpCmd.CommandText;
+                ErrMsg = "Exception executing stored procedure " + spCmd.CommandText;
                 classApplicationLogger.LogError(0, ErrMsg, ex);
-                throw new classDatabaseStoredProcException(SpCmd.CommandText, resultCode, ex.Message);
+                throw new classDatabaseStoredProcException(spCmd.CommandText, resultCode, ex.Message);
             }
             return resultCode;
         }

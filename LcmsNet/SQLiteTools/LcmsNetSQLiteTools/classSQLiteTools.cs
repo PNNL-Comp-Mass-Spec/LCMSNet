@@ -31,7 +31,7 @@ using LcmsNetDataClasses.Logging;
 
 namespace LcmsNetSQLiteTools
 {
-    public static class classSQLiteTools
+    public class classSQLiteTools : IDisposable
     {
         #region Properties
 
@@ -68,6 +68,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         static classSQLiteTools()
         {
+            Instance = new classSQLiteTools();
             Initialize();
         }
 
@@ -126,6 +127,126 @@ namespace LcmsNetSQLiteTools
             {
                 classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                     "Could not load the sample queue cache.", ex);
+            }
+        }
+
+        #endregion
+
+        #region Instance
+
+        private static classSQLiteTools Instance { get; }
+
+        private classSQLiteTools()
+        {
+        }
+
+        private SQLiteConnection connection = null;
+        private string lastConnectionString = "";
+
+        private void Close()
+        {
+            connection?.Close();
+            connection?.Dispose();
+            connection = null;
+        }
+
+        ~classSQLiteTools()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            Close();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Get a SQLiteConnection, but lim
+        /// </summary>
+        /// <param name="connString"></param>
+        /// <returns></returns>
+        private static SQLiteConnectionWrapper GetConnection(string connString)
+        {
+            if (connString.Equals(ConnString))
+            {
+                if (!Instance.lastConnectionString.Equals(connString))
+                {
+                    Instance.Close();
+                }
+
+                if (Instance.connection == null)
+                {
+                    Instance.connection = new SQLiteConnection(connString).OpenAndReturn();
+                }
+
+                return new SQLiteConnectionWrapper(Instance.connection);
+            }
+
+            return new SQLiteConnectionWrapper(connString);
+        }
+
+        /// <summary>
+        /// Close the stored SQLite connection
+        /// </summary>
+        public static void CloseConnection()
+        {
+            Instance.Close();
+        }
+
+        /// <summary>
+        /// A SQLiteConnection wrapper that only disposes in certain circumstances
+        /// </summary>
+        private class SQLiteConnectionWrapper : IDisposable
+        {
+            private readonly SQLiteConnection connection;
+            private readonly bool closeConnectionOnDispose = true;
+
+            /// <summary>
+            /// Open a new connection, which will get closed on Dispose().
+            /// </summary>
+            /// <param name="connString"></param>
+            public SQLiteConnectionWrapper(string connString)
+            {
+                connection = new SQLiteConnection(connString).OpenAndReturn();
+                closeConnectionOnDispose = true;
+            }
+
+            /// <summary>
+            /// Wrap an existing connection, which will stay open on Dispose().
+            /// </summary>
+            /// <param name="existingConnection"></param>
+            public SQLiteConnectionWrapper(SQLiteConnection existingConnection)
+            {
+                connection = existingConnection;
+                closeConnectionOnDispose = false;
+            }
+
+            public SQLiteCommand CreateCommand()
+            {
+                return connection.CreateCommand();
+            }
+
+            public SQLiteTransaction BeginTransaction()
+            {
+                return connection.BeginTransaction();
+            }
+
+            ~SQLiteConnectionWrapper()
+            {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                if (!closeConnectionOnDispose)
+                {
+                    return;
+                }
+
+                connection?.Close();
+                connection?.Dispose();
+                GC.SuppressFinalize(this);
             }
         }
 
@@ -519,10 +640,9 @@ namespace LcmsNetSQLiteTools
                 return;
 
             // Convert input data for caching and call cache routine
-
             try
             {
-                using (var connection = new SQLiteConnection(ConnString).OpenAndReturn())
+                using (var connection = GetConnection(ConnString))
                 using (var transaction = connection.BeginTransaction())
                 using (var command = connection.CreateCommand())
                 {
@@ -661,7 +781,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr">Connection string for SQL database file</param>
         private static void ExecuteSQLiteCommand(string cmdStr, string connStr)
         {
-            using (var cn = new SQLiteConnection(connStr).OpenAndReturn())
+            using (var cn = GetConnection(connStr))
             using (var myCmd = cn.CreateCommand())
             {
                 myCmd.CommandType = CommandType.Text;
@@ -686,7 +806,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr">Connection string</param>
         private static void ExecuteSQLiteCmdsWithTransaction(IEnumerable<string> cmdList, string connStr)
         {
-            using (var connection = new SQLiteConnection(connStr).OpenAndReturn())
+            using (var connection = GetConnection(connStr))
             using (var command = connection.CreateCommand())
             using (var transaction = connection.BeginTransaction())
             {
@@ -725,11 +845,12 @@ namespace LcmsNetSQLiteTools
         private static DataTable GetSQLiteDataTable(string cmdStr, string connStr)
         {
             var returnTable = new DataTable();
-            using (var connection = new SQLiteConnection(connStr))
+            using (var connection = GetConnection(connStr))
             using (var dataAdapter = new SQLiteDataAdapter())
-            using (var command = new SQLiteCommand(cmdStr, connection))
+            using (var command = connection.CreateCommand())
             {
                 command.CommandType = CommandType.Text;
+                command.CommandText = cmdStr;
                 dataAdapter.SelectCommand = command;
 
                 try

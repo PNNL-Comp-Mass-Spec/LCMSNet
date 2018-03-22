@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using LcmsNet.Configuration;
 using LcmsNet.Configuration.ViewModels;
 using LcmsNet.Devices.Fluidics.ViewModels;
 using LcmsNet.Devices.Pumps.ViewModels;
@@ -944,6 +945,8 @@ namespace LcmsNet
 
         public void Dispose()
         {
+            clsDMSDataContainer.DBTools.CloseConnection();
+            classSQLiteTools.CloseConnection();
         }
     }
 }
