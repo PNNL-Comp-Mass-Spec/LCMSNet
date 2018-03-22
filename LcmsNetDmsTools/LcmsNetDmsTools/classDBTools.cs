@@ -369,11 +369,8 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetCartListFromDMS()
         {
-
-
             List<string> tmpCartList;   // Temp list for holding return values
             var connStr = GetConnectionString();
-
 
             // Get a List containing all the carts
             const string sqlCmd = "SELECT DISTINCT [Cart Name] FROM V_LC_Cart_List_Report " +
@@ -714,7 +711,6 @@ namespace LcmsNetDmsTools
                 classApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
-
 
             // Split the View back into the two tables it was built from.
             // Note: It would be faster if we had the component tables the View was created from.
@@ -1161,8 +1157,7 @@ namespace LcmsNetDmsTools
                 ErrMsg = "Exception getting single column table via command: " + CmdStr;
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
                 classApplicationLogger.LogError(0, ErrMsg, ex);
-                return retList;
-
+                throw new Exception(ErrMsg, ex);
             }
 
             // Copy the table contents into the list
@@ -1270,7 +1265,6 @@ namespace LcmsNetDmsTools
 
             return vialNumber;
         }
-
 
         private void CreateDefaultConfigFile(string configurationPath)
         {

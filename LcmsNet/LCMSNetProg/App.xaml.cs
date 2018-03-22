@@ -619,18 +619,16 @@ namespace LcmsNet
         /// </summary>
         private void CreateSQLCache()
         {
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.CartList);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" },
-                enumTableTypes.SeparationTypeList);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.DatasetTypeList);
-            classSQLiteTools.SaveInstListToCache(new List<classInstrumentInfo>());
-            classSQLiteTools.SaveUserListToCache(new List<classUserInfo>());
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "0", "1", "2", "3", "4" },
-                enumTableTypes.ColumnList);
-            classSQLiteTools.SaveExperimentListToCache(new List<classExperimentData> { new classExperimentData() });
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.CartList, false);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.SeparationTypeList, false);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.DatasetTypeList, false);
+            classSQLiteTools.SaveInstListToCache(new List<classInstrumentInfo>(), false);
+            classSQLiteTools.SaveUserListToCache(new List<classUserInfo>(), false);
+            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "0", "1", "2", "3", "4" }, enumTableTypes.ColumnList, false);
+            classSQLiteTools.SaveExperimentListToCache(new List<classExperimentData> { new classExperimentData() }, false);
             classSQLiteTools.SaveProposalUsers(new List<classProposalUser>(),
                 new List<classUserIDPIDCrossReferenceEntry>(),
-                new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>());
+                new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>(), false);
         }
 
         private void LogMessage(string message)

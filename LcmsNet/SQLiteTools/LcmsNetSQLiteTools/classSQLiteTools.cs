@@ -272,8 +272,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>TRUE if table found; FALSE if not found or error</returns>
         private static bool VerifyTableExists(string tableName, string connStr)
         {
-            int columnCount;
-            return VerifyTableExists(tableName, connStr, out columnCount);
+            return VerifyTableExists(tableName, connStr, out _);
         }
 
         /// <summary>
@@ -285,7 +284,22 @@ namespace LcmsNetSQLiteTools
         /// <returns>TRUE if table found; FALSE if not found or error</returns>
         private static bool VerifyTableExists(string tableName, string connStr, out int columnCount)
         {
+            return VerifyTableExists(tableName, connStr, out columnCount, out _, false);
+        }
+
+        /// <summary>
+        /// Determines if a particular table exists in the SQLite database
+        /// </summary>
+        /// <param name="tableName">Name of the table to search for</param>
+        /// <param name="connStr">Connection string for database</param>
+        /// <param name="columnCount">Number of columns in the table</param>
+        /// <param name="rowCount">Number of rows in the table</param>
+        /// <param name="getRowCount">If false, row count is skipped</param>
+        /// <returns>TRUE if table found; FALSE if not found or error</returns>
+        private static bool VerifyTableExists(string tableName, string connStr, out int columnCount, out int rowCount, bool getRowCount = true)
+        {
             columnCount = 0;
+            rowCount = 0;
 
             var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
             DataTable resultSet1;
@@ -323,6 +337,28 @@ namespace LcmsNetSQLiteTools
                 var errMsg = "SQLite exception counting columns in table " + tableName;
                 classApplicationLogger.LogError(0, errMsg, ex);
                 columnCount = 0;
+            }
+
+            if (!getRowCount)
+            {
+                return true;
+            }
+
+            // Count the number of rows
+            var rowCountSql = $"SELECT COUNT(*) FROM {tableName}";
+
+            try
+            {
+                // Use the pragma statement to get a table with one row per column
+                var resultSet3 = GetSQLiteDataTable(rowCountSql, connStr);
+
+                rowCount = Convert.ToInt32(resultSet3.Rows[0][0]);
+            }
+            catch (Exception ex)
+            {
+                var errMsg = "SQLite exception counting rows in table " + tableName;
+                classApplicationLogger.LogError(0, errMsg, ex);
+                rowCount = 0;
             }
 
             return true;
@@ -395,29 +431,26 @@ namespace LcmsNetSQLiteTools
         /// Saves the contents of specified sample queue to an SQLite database file
         /// Overload requires database connection string be specified
         /// </summary>
-        /// <param name="QueueData">List containing the sample data to save</param>
+        /// <param name="queueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache(
-            List<classSampleData> QueueData,
-            enumTableTypes tableType,
-            string connStr)
+        public static void SaveQueueToCache(List<classSampleData> queueData, enumTableTypes tableType, string connStr)
         {
-            var DataInList = (QueueData.Count > 0);
+            var dataInList = (queueData.Count > 0);
             var tableName = GetTableName(tableType);
 
             // Clear the cache table
             ClearCacheTable(tableName, connStr);
 
             //If no data in list, just exit
-            if (!DataInList)
+            if (!dataInList)
             {
                 return;
             }
 
             // Convert input data for caching and call cache routine
             var dataList = new List<ICacheInterface>();
-            foreach (var currentSample in QueueData)
+            foreach (var currentSample in queueData)
             {
                 dataList.Add(currentSample);
             }
@@ -427,16 +460,22 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Saves a list of users to cache
         /// </summary>
-        /// <param name="UserList">List containing user data</param>
-        public static void SaveUserListToCache(List<classUserInfo> UserList)
+        /// <param name="userList">List containing user data</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveUserListToCache(List<classUserInfo> userList, bool clearFirst = true)
         {
-            var dataInList = (UserList.Count > 0);
+            var dataInList = (userList.Count > 0);
             var tableName = GetTableName(enumTableTypes.UserList);
+
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && userList.Count <= rowCount)
+            {
+                return;
+            }
 
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_userInfo = new List<classUserInfo>(UserList);
+            m_userInfo = new List<classUserInfo>(userList);
 
             //If no data in list, exit
             if (!dataInList)
@@ -446,20 +485,30 @@ namespace LcmsNetSQLiteTools
 
             // Convert input data for caching and call cache routine
             var dataList = new List<ICacheInterface>();
-            foreach (var currentUser in UserList)
+            foreach (var currentUser in userList)
             {
                 dataList.Add(currentUser);
             }
             SavePropertiesToCache(dataList, tableName, ConnString, false);
         }
 
-        public static void SaveExperimentListToCache(List<classExperimentData> expList)
+        /// <summary>
+        /// Save a list of experiments to cache
+        /// </summary>
+        /// <param name="expList"></param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="expList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveExperimentListToCache(List<classExperimentData> expList, bool clearFirst = true)
         {
             if (expList == null || expList.Count < 1)
                 return;
 
             var listHasData = expList.Count != 0;
             var tableName = GetTableName(enumTableTypes.ExperimentList);
+
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && expList.Count <= rowCount)
+            {
+                return;
+            }
 
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
@@ -473,43 +522,34 @@ namespace LcmsNetSQLiteTools
 
             try
             {
-                using (var connection = new SQLiteConnection(ConnString))
+                using (var connection = new SQLiteConnection(ConnString).OpenAndReturn())
+                using (var transaction = connection.BeginTransaction())
+                using (var command = connection.CreateCommand())
                 {
-                    connection.Open();
-
                     if (!VerifyTableExists(tableName, ConnString))
                     {
-                        using (var command = connection.CreateCommand())
-                        {
-                            command.CommandText =
-                                "CREATE TABLE T_ExperimentList ('Created', 'Experiment', 'ID', 'Organism', 'Reason', 'Request', 'Researcher')";
-                            command.ExecuteNonQuery();
-                        }
+                        command.CommandText = "CREATE TABLE T_ExperimentList ('Created', 'Experiment', 'ID', 'Organism', 'Reason', 'Request', 'Researcher')";
+                        command.ExecuteNonQuery();
                     }
 
-                    using (var transaction = connection.BeginTransaction())
+                    foreach (var datum in expList)
                     {
-                        using (var command = connection.CreateCommand())
-                        {
-                            foreach (var datum in expList)
-                            {
-                                var commandText =
-                                    string.Format(
-                                        "INSERT INTO T_ExperimentList ('ID', 'Organism', 'Researcher', 'Reason', 'Request', 'Experiment', 'Created') " +
-                                        "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')",
-                                        datum.ID,
-                                        datum.Organism,
-                                        datum.Researcher,
-                                        datum.Reason?.Replace("'", "") ?? "",
-                                        datum.Request,
-                                        datum.Experiment,
-                                        datum.Created ?? DateTime.MinValue);
-                                command.CommandText = commandText;
-                                command.ExecuteNonQuery();
-                            }
-                        }
-                        transaction.Commit();
+                        var commandText =
+                            string.Format(
+                                "INSERT INTO T_ExperimentList ('ID', 'Organism', 'Researcher', 'Reason', 'Request', 'Experiment', 'Created') " +
+                                "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')",
+                                datum.ID,
+                                datum.Organism,
+                                datum.Researcher,
+                                datum.Reason?.Replace("'", "") ?? "",
+                                datum.Request,
+                                datum.Experiment,
+                                datum.Created ?? DateTime.MinValue);
+                        command.CommandText = commandText;
+                        command.ExecuteNonQuery();
                     }
+
+                    transaction.Commit();
                 }
             }
             catch (Exception ex)
@@ -529,12 +569,18 @@ namespace LcmsNetSQLiteTools
         /// <param name="pidIndexedReferenceList">
         /// A dictionary of cross reference lists that have been grouped by Proposal ID.
         /// </param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="users"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveProposalUsers(List<classProposalUser> users,
             List<classUserIDPIDCrossReferenceEntry> crossReferenceList,
-            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
+            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
         {
             var userTableName = GetTableName(enumTableTypes.PUserList);
             var referenceTableName = GetTableName(enumTableTypes.PReferenceList);
+
+            if (VerifyTableExists(userTableName, ConnString, out _, out int rowCount, true) && !clearFirst && users.Count <= rowCount)
+            {
+                return;
+            }
 
             ClearCacheTable(userTableName, ConnString);
             ClearCacheTable(referenceTableName, ConnString);
@@ -577,16 +623,22 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Saves a list of instruments to cache
         /// </summary>
-        /// <param name="InstList">List of classInstrumentInfo containing instrument data</param>
-        public static void SaveInstListToCache(List<classInstrumentInfo> InstList)
+        /// <param name="instList">List of classInstrumentInfo containing instrument data</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveInstListToCache(List<classInstrumentInfo> instList, bool clearFirst = true)
         {
-            var dataInList = (InstList.Count > 0);
+            var dataInList = (instList.Count > 0);
             var tableName = GetTableName(enumTableTypes.InstrumentList);
+
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && instList.Count <= rowCount)
+            {
+                return;
+            }
 
             // Clear the cache table
             ClearCacheTable(tableName, ConnString, 6);
 
-            m_instrumentInfo = new List<classInstrumentInfo>(InstList);
+            m_instrumentInfo = new List<classInstrumentInfo>(instList);
             //If no data in list, just exit
             if (!dataInList)
             {
@@ -595,7 +647,7 @@ namespace LcmsNetSQLiteTools
 
             // Convert input data for caching and call cache routine
             var dataList = new List<ICacheInterface>();
-            foreach (var currentInst in InstList)
+            foreach (var currentInst in instList)
             {
                 dataList.Add(currentInst);
             }
@@ -605,31 +657,24 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Executes specified SQLite command
         /// </summary>
-        /// <param name="CmdStr">SQL statement to execute</param>
+        /// <param name="cmdStr">SQL statement to execute</param>
         /// <param name="connStr">Connection string for SQL database file</param>
-        private static void ExecuteSQLiteCommand(string CmdStr, string connStr)
+        private static void ExecuteSQLiteCommand(string cmdStr, string connStr)
         {
-            using (var Cn = new SQLiteConnection(connStr))
+            using (var cn = new SQLiteConnection(connStr).OpenAndReturn())
+            using (var myCmd = cn.CreateCommand())
             {
-                using (var myCmd = new SQLiteCommand(Cn))
+                myCmd.CommandType = CommandType.Text;
+                myCmd.CommandText = cmdStr;
+                try
                 {
-                    myCmd.CommandType = CommandType.Text;
-                    myCmd.CommandText = CmdStr;
-                    try
-                    {
-                        myCmd.Connection.Open();
-                        var affectedRows = myCmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        var errMsg = "SQLite Exception executing command " + CmdStr;
-                        classApplicationLogger.LogError(0, errMsg, ex);
-                        throw new classDatabaseDataException(errMsg, ex);
-                    }
-                    finally
-                    {
-                        myCmd.Connection.Close();
-                    }
+                    var affectedRows = myCmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    var errMsg = "SQLite Exception executing command " + cmdStr;
+                    classApplicationLogger.LogError(0, errMsg, ex);
+                    throw new classDatabaseDataException(errMsg, ex);
                 }
             }
         }
@@ -641,42 +686,32 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr">Connection string</param>
         private static void ExecuteSQLiteCmdsWithTransaction(IEnumerable<string> cmdList, string connStr)
         {
-            using (var connection = new SQLiteConnection(connStr))
+            using (var connection = new SQLiteConnection(connStr).OpenAndReturn())
+            using (var command = connection.CreateCommand())
+            using (var transaction = connection.BeginTransaction())
             {
-                using (var command = new SQLiteCommand(connection))
+                try
                 {
                     command.CommandType = CommandType.Text;
-                    try
-                    {
-                        command.Connection.Open();
+                    // Turn off journal, which speeds up transaction
+                    command.CommandText = "PRAGMA journal_mode = OFF";
+                    command.ExecuteNonQuery();
 
-                        using (var transaction = connection.BeginTransaction())
-                        {
-                            // Turn off journal, which speeds up transaction
-                            command.CommandText = "PRAGMA journal_mode = OFF";
-                            command.ExecuteNonQuery();
-
-                            // Send each of the commands
-                            foreach (var currCmd in cmdList)
-                            {
-                                command.CommandText = currCmd;
-                                command.ExecuteNonQuery();
-                            }
-
-                            // End transaction
-                            transaction.Commit();
-                        }
-                    }
-                    catch (Exception ex)
+                    // Send each of the commands
+                    foreach (var currCmd in cmdList)
                     {
-                        const string errMsg = "SQLite exception adding data";
-                        classApplicationLogger.LogError(0, errMsg, ex);
-                        throw new classDatabaseDataException(errMsg, ex);
+                        command.CommandText = currCmd;
+                        command.ExecuteNonQuery();
                     }
-                    finally
-                    {
-                        command.Connection.Close();
-                    }
+
+                    // End transaction
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "SQLite exception adding data";
+                    classApplicationLogger.LogError(0, errMsg, ex);
+                    throw new classDatabaseDataException(errMsg, ex);
                 }
             }
         }
@@ -691,27 +726,24 @@ namespace LcmsNetSQLiteTools
         {
             var returnTable = new DataTable();
             using (var connection = new SQLiteConnection(connStr))
+            using (var dataAdapter = new SQLiteDataAdapter())
+            using (var command = new SQLiteCommand(cmdStr, connection))
             {
-                using (var dataAdapter = new SQLiteDataAdapter())
-                {
-                    using (var command = new SQLiteCommand(cmdStr, connection))
-                    {
-                        command.CommandType = CommandType.Text;
-                        dataAdapter.SelectCommand = command;
+                command.CommandType = CommandType.Text;
+                dataAdapter.SelectCommand = command;
 
-                        try
-                        {
-                            var rowCount = dataAdapter.Fill(returnTable);
-                        }
-                        catch (Exception ex)
-                        {
-                            var errMsg = "SQLite exception getting data table via query " + cmdStr + " : " + connStr;
-                            classApplicationLogger.LogError(0, errMsg, ex);
-                            throw new classDatabaseDataException(errMsg, ex);
-                        }
-                    }
+                try
+                {
+                    var rowCount = dataAdapter.Fill(returnTable);
+                }
+                catch (Exception ex)
+                {
+                    var errMsg = "SQLite exception getting data table via query " + cmdStr + " : " + connStr;
+                    classApplicationLogger.LogError(0, errMsg, ex);
+                    throw new classDatabaseDataException(errMsg, ex);
                 }
             }
+
             // Everything worked, so return the table
             return returnTable;
         }
@@ -1171,9 +1203,10 @@ namespace LcmsNetSQLiteTools
         /// Generic method for saving a single column list to the cache db
         /// </summary>
         /// <param name="tableType">enumTableNames specifying table name suffix</param>
-        /// <param name="ListData">List of data for storing in table</param>
+        /// <param name="listData">List of data for storing in table</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
-        public static void SaveSingleColumnListToCache(List<string> ListData, enumTableTypes tableType)
+        public static void SaveSingleColumnListToCache(List<string> listData, enumTableTypes tableType, bool clearFirst = true)
         {
             const string GENERIC_COLUMN_NAME = "Column1";
 
@@ -1188,8 +1221,13 @@ namespace LcmsNetSQLiteTools
             var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, GENERIC_COLUMN_NAME);
 
             // If table exists, clear it. Otherwise create one
-            if (VerifyTableExists(tableName, ConnString))
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
             {
+                if (!clearFirst && rowCount > listData.Count)
+                {
+                    return;
+                }
+
                 // Clear table
                 try
                 {
@@ -1223,7 +1261,7 @@ namespace LcmsNetSQLiteTools
             const int MAX_ROWS_PER_TRANSACTION = 100000;
 
             var cmdList = new List<string>();
-            foreach (var itemName in ListData)
+            foreach (var itemName in listData)
             {
                 var sqlInsertCmd = "INSERT INTO " + tableName + " values('" + itemName + "')";
                 cmdList.Add(sqlInsertCmd);
