@@ -12,12 +12,12 @@ namespace LcmsNet.Method.Drawing
     /// <summary>
     /// Class for rendering LC Methods
     /// </summary>
-    public class LCMethodRenderer
+    public abstract class LCMethodRenderer
     {
         /// <summary>
         /// Default constructor whose pixel padding is 0.0F
         /// </summary>
-        public LCMethodRenderer()
+        protected LCMethodRenderer()
         {
             PixelPadding = 0.0F;
             TimelinePixelSpacing = 5.0F;

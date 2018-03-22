@@ -78,6 +78,25 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
+        /// Use the given sample to clear out displayed progress and errors for the column
+        /// </summary>
+        /// <param name="sample"></param>
+        public void ResetColumn(classSampleData sample)
+        {
+            SampleProgress.ResetColumn(sample);
+            SampleProgressFull.ResetColumn(sample);
+        }
+
+        /// <summary>
+        /// Clears out the existing visuals
+        /// </summary>
+        public void ResetVisuals()
+        {
+            SampleProgress.ClearSamples();
+            SampleProgressFull.ClearSamples();
+        }
+
+        /// <summary>
         /// Updates the progress window with the sample data.
         /// </summary>
         /// <param name="sample"></param>
@@ -89,6 +108,7 @@ namespace LcmsNet.Method.ViewModels
 
         public void UpdateError(classSampleData sample, classLCEvent lcEvent)
         {
+            SampleProgress.UpdateError(sample, lcEvent);
             SampleProgressFull.UpdateError(sample, lcEvent);
         }
 

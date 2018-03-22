@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNet.Method.Drawing;
@@ -54,6 +55,33 @@ namespace LcmsNet.Method.ViewModels
             {
                 // Ignore errors here
             }
+        }
+
+        /// <summary>
+        /// Use the given sample to clear out displayed progress and errors for the column
+        /// </summary>
+        /// <param name="sample"></param>
+        public void ResetColumn(classSampleData sample)
+        {
+            if (sample == null)
+            {
+                return;
+            }
+
+            if (samples.Count(x => x != null) <= 1)
+            {
+                ClearSamples();
+                return;
+            }
+
+            var columnID = sample.ColumnData.ID;
+            if (sample.ActualLCMethod.IsSpecialMethod)
+            {
+                columnID = CONST_TOTAL_COLUMNS;
+            }
+
+            samples[columnID] = null;
+            errors[columnID].Clear();
         }
 
         /// <summary>
@@ -112,11 +140,14 @@ namespace LcmsNet.Method.ViewModels
             for (var i = 0; i < samples.Count; i++)
             {
                 samples[i] = null;
-                foreach (var key in errors.Keys)
-                {
-                    errors[key].Clear();
-                }
             }
+
+            foreach (var errorCollection in errors.Values)
+            {
+                errorCollection.Clear();
+            }
+
+            Refresh();
         }
 
         public void Refresh()

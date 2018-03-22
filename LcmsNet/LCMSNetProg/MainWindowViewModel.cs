@@ -775,6 +775,7 @@ namespace LcmsNet
         {
             // Tell the scheduler to stop running!
             m_scheduler.Stop();
+            SampleProgressVm.ResetVisuals();
         }
 
         /// <summary>
@@ -876,6 +877,7 @@ namespace LcmsNet
                     }
                     break;
                 case enumSampleProgress.Started:
+                    SampleProgressVm.ResetColumn(sample);
                     message = string.Empty;
                     break;
             }
