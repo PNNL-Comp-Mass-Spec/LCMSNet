@@ -541,14 +541,9 @@ namespace LcmsNet.Devices.Pal
                 }
 
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
-
-                //10 second delay (this kind of sucks)
-                var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-                var end = start;
-                while (end.Subtract(start).TotalMilliseconds < CONST_WAITTIMEOUT)
+                if (status != 0)
                 {
-                    System.Threading.Thread.Sleep(StatusPollDelay);
-                    end = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                    status = WaitUntilReady(CONST_WAITTIMEOUT);
                 }
 
                 var methodsFolder = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PALMETHODSFOLDER);
@@ -1001,6 +996,11 @@ namespace LcmsNet.Devices.Pal
                     break;
                 }
 
+                if (status.Contains("DISCONNECTED"))
+                {
+                    break;
+                }
+
                 if (status.Contains("WAITING FOR DS"))
                 {
                     break;
@@ -1059,12 +1059,22 @@ namespace LcmsNet.Devices.Pal
                 return;
             }
 
+            var prevStatus = "";
+            m_PALDrvr.GetStatus(ref prevStatus);
+
             StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
                 "continue method", this));
             m_PALDrvr.ContinueMethod();
 
             if (waitForComplete)
             {
+                var status = prevStatus;
+                while (status.Equals(prevStatus))
+                {
+                    System.Threading.Thread.Sleep(StatusPollDelay * 500); // Check at most every 1/2 second
+                    m_PALDrvr.GetStatus(ref status);
+                }
+
                 WaitUntilStopPoint(timeout);
             }
 

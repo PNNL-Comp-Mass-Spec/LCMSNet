@@ -386,18 +386,6 @@ namespace LcmsNet.Devices.Pal
 
         private async Task RunMethod()
         {
-            if (string.IsNullOrWhiteSpace(SelectedTray))
-            {
-                MessageBox.Show("No tray selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(SelectedMethod))
-            {
-                MessageBox.Show("No method selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
             var taskType = "";
             var elapsedSecs = 0.0;
             await Task.Run(() =>
@@ -405,6 +393,18 @@ namespace LcmsNet.Devices.Pal
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 if (Pal.GetStatus().Contains("READY"))
                 {
+                    if (string.IsNullOrWhiteSpace(SelectedTray))
+                    {
+                        MessageBox.Show("No tray selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(SelectedMethod))
+                    {
+                        MessageBox.Show("No method selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
                     taskType = "Run Method";
                     Pal.LoadMethod(SelectedMethod, SelectedTray, VialNumber, Convert.ToString(Volume, CultureInfo.InvariantCulture));
                     Pal.StartMethod(1000);
