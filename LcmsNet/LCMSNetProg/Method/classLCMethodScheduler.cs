@@ -794,28 +794,63 @@ namespace LcmsNet.Method
                 lock (m_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
                     var EVENT_ADJUST = 1;
-                    var currentEventNumber = currentEvent[columnID] + EVENT_ADJUST <
-                                             samples[columnID].ActualLCMethod.Events.Count
-                        ? currentEvent[columnID] + EVENT_ADJUST
-                        : currentEvent[columnID];
-                    // we use currentEvent[columnID] + EVENT_ADJUST here as the scheduler still thinks we're on the old event.
-                    var stackTrace = UnwrapException(ex);
-                    HandleError(samples[columnID],
-                        string.Format(
-                            "Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
-                            columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
-                            samples[columnID].ActualLCMethod.Name,
-                            samples[columnID].DmsData.DatasetName,
-                            samples[columnID].ActualLCMethod.Events[currentEventNumber].Name,
-                            samples[columnID].ActualLCMethod.Events[currentEventNumber].Device.Name,
-                            stackTrace));
+                    var skipDueToException = false;
+                    if (currentEvent == null)
+                    {
+                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent is null!");
+                        skipDueToException = true;
+                    }
+                    if (samples == null)
+                    {
+                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples is null!");
+                        skipDueToException = true;
+                    }
+                    else if (columnID >= samples.Length)
+                    {
+                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: columnID out of range: " + columnID + " >= " + samples.Length);
+                        skipDueToException = true;
+                    }
+                    else if (samples[columnID] == null)
+                    {
+                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "] is null!");
+                        skipDueToException = true;
+                    }
+                    else if (samples[columnID].ActualLCMethod == null)
+                    {
+                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod is null!");
+                        skipDueToException = true;
+                    }
+                    else if (samples[columnID].ActualLCMethod.Events == null)
+                    {
+                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod.Events is null!");
+                        skipDueToException = true;
+                    }
 
-                    m_sampleQueue.CancelRunningSample(samples[columnID], true);
-                    samples[columnID] = null;
-                    sampleEndTime[columnID] = DateTime.MinValue;
-                    currentEvent[columnID] = CONST_IDLE_FLAG;
-                    //Print("ERROR", CONST_VERBOSE_LEAST);
-                    ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, m_columnThreads[columnID].Sample);
+                    if (!skipDueToException)
+                    {
+                        var currentEventNumber = currentEvent[columnID] + EVENT_ADJUST <
+                                                 samples[columnID].ActualLCMethod.Events.Count
+                            ? currentEvent[columnID] + EVENT_ADJUST
+                            : currentEvent[columnID];
+                        // we use currentEvent[columnID] + EVENT_ADJUST here as the scheduler still thinks we're on the old event.
+                        var stackTrace = UnwrapException(ex);
+                        HandleError(samples[columnID],
+                            string.Format(
+                                "Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
+                                columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
+                                samples[columnID].ActualLCMethod.Name,
+                                samples[columnID].DmsData.DatasetName,
+                                samples[columnID].ActualLCMethod.Events[currentEventNumber].Name,
+                                samples[columnID].ActualLCMethod.Events[currentEventNumber].Device.Name,
+                                stackTrace));
+
+                        m_sampleQueue.CancelRunningSample(samples[columnID], true);
+                        samples[columnID] = null;
+                        sampleEndTime[columnID] = DateTime.MinValue;
+                        currentEvent[columnID] = CONST_IDLE_FLAG;
+                        //Print("ERROR", CONST_VERBOSE_LEAST);
+                        ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, m_columnThreads[columnID].Sample);
+                    }
                 }
                 Stop();
             }
