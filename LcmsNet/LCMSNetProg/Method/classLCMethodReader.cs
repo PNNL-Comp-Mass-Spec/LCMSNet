@@ -218,27 +218,51 @@ namespace LcmsNet.Method
                 }
                 else
                 {
-                    //
-                    // Poor mans way of converting these parameter arguments.  But it works, however, its
-                    // constraining for us.
-                    //
-                    switch (constructedParameterType.FullName)
+                    var typeFound = false;
+                    // Advanced way of converting parameter arguments; silently swallowing exceptions
+                    if (constructedParameterType.FullName != null)
                     {
-                        case "System.Double":
-                            parameterArray[i] = Convert.ToDouble(parameterValue.Value);
+                        try
+                        {
+                            var type = Type.GetType(constructedParameterType.FullName);
+                            if (type == null)
+                            {
+                                throw new TypeLoadException();
+                            }
+
+                            parameterArray[i] = Convert.ChangeType(parameterValue.Value, type);
                             parameterNameArray[i] = parameterName.Value;
-                            typeArray[i] = typeof (double);
-                            break;
-                        case "System.String":
-                            parameterArray[i] = parameterValue.Value;
-                            parameterNameArray[i] = parameterName.Value;
-                            typeArray[i] = typeof (string);
-                            break;
-                        default:
-                            parameterArray[i] = null;
-                            parameterNameArray[i] = parameterName.Value;
-                            typeArray[i] = typeof (classSampleData);
-                            break;
+                            typeArray[i] = type;
+                            typeFound = true;
+                        }
+                        catch
+                        {
+                            // Just swallow it
+                        }
+                    }
+
+                    if (!typeFound)
+                    {
+                        // Poor mans way of converting these parameter arguments.  But it works, however, its
+                        // constraining for us.
+                        switch (constructedParameterType.FullName)
+                        {
+                            case "System.Double":
+                                parameterArray[i] = Convert.ToDouble(parameterValue.Value);
+                                parameterNameArray[i] = parameterName.Value;
+                                typeArray[i] = typeof(double);
+                                break;
+                            case "System.String":
+                                parameterArray[i] = parameterValue.Value;
+                                parameterNameArray[i] = parameterName.Value;
+                                typeArray[i] = typeof(string);
+                                break;
+                            default:
+                                parameterArray[i] = null;
+                                parameterNameArray[i] = parameterName.Value;
+                                typeArray[i] = typeof(classSampleData);
+                                break;
+                        }
                     }
                 }
             }
