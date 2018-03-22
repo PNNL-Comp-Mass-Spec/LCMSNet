@@ -881,7 +881,7 @@ namespace LcmsNet.Devices.Pal
             if (timeout > span.TotalSeconds)
             {
                 // If the PAL is waiting for data station synchronization, DO NOT CONTINUE IN THE START METHOD!
-                if (!status.Contains("WAITING FOR DS 1;"))
+                if (!status.Contains("WAITING FOR DS"))
                 {
                     ContinueMethod(timeout - span.TotalSeconds);
                 }
@@ -936,10 +936,7 @@ namespace LcmsNet.Devices.Pal
             var errorMessage = "";
             var error = m_PALDrvr.StartMethod(m_method, ref tempArgs, ref errorMessage);
 
-            //
             // Check for an error!
-            //
-            var status = "";
             if (error == 1)
             {
                 if (errorMessage.Contains("syringe") || errorMessage.ToLower().Contains("ul is not in pal") || errorMessage.ToLower().Contains("ml is not in pal"))
@@ -953,6 +950,26 @@ namespace LcmsNet.Devices.Pal
                 return false;
             }
 
+            if (!WaitUntilStopPoint(timeout))
+            {
+                return false;
+            }
+
+            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+                "Done Injecting start method", this));
+            OnFree();
+            return true;
+        }
+
+        /// <summary>
+        /// Wait until error, synchronization point, or ready
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        [classLCMethodAttribute("Wait for SyncPoint", enumMethodOperationTime.Parameter, "", -1, false)]
+        public bool WaitUntilStopPoint(double timeout)
+        {
+            var status = "";
             var start = LcmsNetSDK.TimeKeeper.Instance.Now;
             var end = start;
 
@@ -984,7 +1001,7 @@ namespace LcmsNet.Devices.Pal
                     break;
                 }
 
-                if (status.Contains("WAITING FOR DS 1;"))
+                if (status.Contains("WAITING FOR DS"))
                 {
                     break;
                 }
@@ -992,12 +1009,8 @@ namespace LcmsNet.Devices.Pal
                 end = LcmsNetSDK.TimeKeeper.Instance.Now;
             }
 
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
-                "Done Injecting start method", this));
-            OnFree();
             return true;
         }
-
 
         [classLCMethodAttribute("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
         public void ThrowError(int timeToThrowup)
@@ -1039,7 +1052,7 @@ namespace LcmsNet.Devices.Pal
         /// Continues the method. This is way different than ResumeMethod.
         /// </summary>
         [classLCMethodAttribute("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
-        public void ContinueMethod(double timeout)
+        public void ContinueMethod(double timeout, bool waitForComplete = false)
         {
             if (m_emulation)
             {
@@ -1050,11 +1063,18 @@ namespace LcmsNet.Devices.Pal
                 "continue method", this));
             m_PALDrvr.ContinueMethod();
 
+            if (waitForComplete)
+            {
+                WaitUntilStopPoint(timeout);
+            }
+
             var statusMessage = "";
             var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
             StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
                 "continue method end", this, statusMessage + " " + errorCode.ToString()));
         }
+
+
 
         /// <summary>
         /// Stops the currently running method.

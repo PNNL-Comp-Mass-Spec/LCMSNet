@@ -412,7 +412,7 @@ namespace LcmsNet.Devices.Pal
                 else
                 {
                     taskType = "Continue Method";
-                    Pal.ContinueMethod(0);
+                    Pal.ContinueMethod(1000, true);
                 }
                 sw.Stop();
                 elapsedSecs = sw.Elapsed.TotalSeconds;
