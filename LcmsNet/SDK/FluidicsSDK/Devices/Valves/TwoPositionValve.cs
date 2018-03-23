@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
-using LcmsNetDataClasses.Devices;
 
 namespace FluidicsSDK.Devices.Valves
 {
@@ -12,7 +11,7 @@ namespace FluidicsSDK.Devices.Valves
     /// </summary>
     // can technically have 1-13 ports, more than that and the ports start overlapping and become unclickable.
     // used as a base class for other valve glyphs
-    public class TwoPositionValve : FluidicsDevice
+    public abstract class TwoPositionValve : FluidicsDevice
     {
         #region Members
 
@@ -36,7 +35,7 @@ namespace FluidicsSDK.Devices.Valves
         /// <param name="numberOfPorts">the number of ports the valve will have</param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        public TwoPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2) :
+        protected TwoPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2) :
             base()
         {
             Offset = new Point(xOffset, yOffset);
@@ -116,15 +115,5 @@ namespace FluidicsSDK.Devices.Valves
         }
 
         #endregion
-
-        protected override void SetDevice(IDevice device)
-        {
-
-        }
-
-        protected override void ClearDevice(IDevice device)
-        {
-
-        }
     }
 }

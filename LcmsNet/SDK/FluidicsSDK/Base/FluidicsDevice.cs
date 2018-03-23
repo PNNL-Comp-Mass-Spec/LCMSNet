@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -23,7 +24,7 @@ namespace FluidicsSDK.Base
         protected string m_deviceName;
         // top-left corner's location
         private Point m_loc;
-        // the IDevice this fluidicsdeivce controls
+        // the IDevice this fluidicsdevice controls
         private IDevice m_lcmsDevice;
         // dictionary of actions that can be taken by this device, keyed by the primitves that
         // activate them
@@ -65,23 +66,38 @@ namespace FluidicsSDK.Base
             m_primitives.Clear();
         }
 
-        public virtual void RegisterDevice(IDevice device)
+        public void RegisterDevice(IDevice device)
         {
             m_deviceName = device.Name;
             m_lcmsDevice = device;
             //TODO: Setup any error handlers
+            device.PropertyChanged += DeviceOnPropertyChanged;
             SetDevice(device);
+            SetPortNames();
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
+        }
+
+        private void DeviceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName.Equals(nameof(IDevice.Name)))
+            {
+                SetPortNames();
+            }
+        }
+
+        private void SetPortNames()
+        {
             foreach (var p in m_portList)
             {
                 p.ID = DeviceName + "." + m_portList.IndexOf(p);
             }
-            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
 
-        public virtual void DeregisterDevice(IDevice device)
+        public void DeregisterDevice(IDevice device)
         {
             //TODO: Remove any error handlers
             ClearDevice(device);
+            device.PropertyChanged -= DeviceOnPropertyChanged;
             DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
 
@@ -443,25 +459,19 @@ namespace FluidicsSDK.Base
         /// </summary>
         /// <returns></returns>
         public abstract string StateString();
+
         #endregion
 
         #region Properties
 
-        public int MaxVariance
-        {
-            get;
-            set;
-        }
+        public int MaxVariance { get; set; }
 
         /// <summary>
         ///  Property for determining the location of the device on screen
         /// </summary>
         public virtual Point Loc
         {
-            get
-            {
-                return m_loc;
-            }
+            get { return m_loc; }
             protected set
             {
                 var oldLoc = m_loc;
@@ -519,10 +529,7 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual Color Color
         {
-            get
-            {
-                return m_primitives[PRIMARY_PRIMITIVE].Color;
-            }
+            get { return m_primitives[PRIMARY_PRIMITIVE].Color; }
             set
             {
                 foreach (var prim in m_primitives)
@@ -543,14 +550,8 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual IDevice IDevice
         {
-            get
-            {
-                return m_lcmsDevice;
-            }
-            protected set
-            {
-                m_lcmsDevice = value;
-            }
+            get { return m_lcmsDevice; }
+            protected set { m_lcmsDevice = value; }
         }
 
         /// <summary>
@@ -558,24 +559,14 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual Color Highlight
         {
-            get
-            {
-                return m_primitives[PRIMARY_PRIMITIVE].Color;
-            }
-            set
-            {
-                m_primitives[PRIMARY_PRIMITIVE].Color = value;
-            }
+            get { return m_primitives[PRIMARY_PRIMITIVE].Color; }
+            set { m_primitives[PRIMARY_PRIMITIVE].Color = value; }
         }
 
         /// <summary>
         /// property for determining if the device is selected or not.
         /// </summary>
-        protected virtual bool Selected
-        {
-            get;
-            set;
-        }
+        protected virtual bool Selected { get; set; }
 
         public virtual List<Port> Ports => new List<Port>(m_portList);
 
@@ -585,17 +576,10 @@ namespace FluidicsSDK.Base
         ///
         public abstract int CurrentState { get; set; }
 
-        public bool Source
-        {
-            get;
-            set;
-        }
+        public bool Source { get; set; }
 
-        public bool Sink
-        {
-            get;
-            set;
-        }
+        public bool Sink { get; set; }
+
         #endregion
 
         #region Events

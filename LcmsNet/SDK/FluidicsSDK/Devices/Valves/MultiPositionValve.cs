@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
-using LcmsNetDataClasses.Devices;
 
 namespace FluidicsSDK.Devices.Valves
 {
@@ -12,7 +11,7 @@ namespace FluidicsSDK.Devices.Valves
     /// </summary>
     // can technically have 1-16 ports, more than that and the ports start overlapping and become unclickable.
     // used as a base class for other valve glyphs
-    public class MultiPositionValve : FluidicsDevice
+    public abstract class MultiPositionValve : FluidicsDevice
     {
         #region Members
         // radius of the valve's circle primitive in pixels, arbitrarily chosen
@@ -31,7 +30,7 @@ namespace FluidicsSDK.Devices.Valves
         /// <param name="numberOfPorts">the number of ports the valve will have</param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        public MultiPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2) :
+        protected MultiPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2) :
             base()
         {
             Offset = new Point(xOffset, yOffset);
@@ -81,11 +80,6 @@ namespace FluidicsSDK.Devices.Valves
             return points;
         }
 
-        public override string StateString()
-        {
-            throw new NotImplementedException("StateString() must be implemented in class inheriting MultiPositionValveBase");
-        }
-
         public override void ActivateState(int requestedState)
         {
             m_currentState = requestedState;
@@ -105,25 +99,10 @@ namespace FluidicsSDK.Devices.Valves
 
         public override int CurrentState
         {
-            get
-            {
-                return m_currentState;
-            }
-            set
-            {
-                m_currentState = value;
-            }
+            get { return m_currentState; }
+            set { m_currentState = value; }
         }
+
         #endregion
-
-        protected override void SetDevice(IDevice device)
-        {
-
-        }
-
-        protected override void ClearDevice(IDevice device)
-        {
-
-        }
     }
 }
