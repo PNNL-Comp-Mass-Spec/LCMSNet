@@ -392,6 +392,12 @@ namespace LcmsNetDataClasses
             get { return m_actualMethod; }
             private set
             {
+                // Disallow method changes on queued/running/complete samples
+                if (IsSetToRunOrHasRun)
+                {
+                    return;
+                }
+
                 m_actualMethod = value;
                 OnPropertyChanged();
             }
@@ -405,6 +411,12 @@ namespace LcmsNetDataClasses
             get { return m_method; }
             set
             {
+                // Disallow method changes on queued/running/complete samples
+                if (IsSetToRunOrHasRun)
+                {
+                    return;
+                }
+
                 if (this.RaiseAndSetIfChangedRetBool(ref m_method, value))
                 {
                     CloneLCMethod();
