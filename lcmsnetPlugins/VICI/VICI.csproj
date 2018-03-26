@@ -60,6 +60,7 @@
     <Compile Include="Devices\Valves\classValveVICI2Pos10Port.cs" />
     <Compile Include="Devices\Valves\classValveVICI2pos4port.cs" />
     <Compile Include="Devices\Valves\classValveVICI2Pos6Port.cs" />
+    <Compile Include="Devices\Valves\classValveVICIBase.cs" />
     <Compile Include="Devices\Valves\classValveVICIMultiPos.cs" />
     <Compile Include="Devices\Valves\classValveVICIMultiPos16Port.cs" />
     <Compile Include="Devices\Valves\classValveVICIMultipos9Port.cs" />
