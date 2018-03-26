@@ -135,12 +135,12 @@ namespace LcmsNet.Devices.ContactClosureRead
                 if (IsAnalog)
                 {
                     // Analog port: use analog read
-                    state = contactClosureRead.ReadStatusAnalog(100, AnalogVoltageThreshold);
+                    state = contactClosureRead.ReadStateAnalog(100, AnalogVoltageThreshold);
                 }
                 else
                 {
                     // Digital port: use digital read
-                    state = contactClosureRead.ReadStatusDigital(100);
+                    state = contactClosureRead.ReadStateDigital(100);
                 }
                 if (state.HasFlag(ContactClosureReadU12.ContactClosureState.Closed))
                 {

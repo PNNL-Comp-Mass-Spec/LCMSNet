@@ -991,25 +991,23 @@ namespace LcmsNet.Devices.Pal
                     return false;
                 }
 
-                if (status.Contains("READY"))
-                {
-                    break;
-                }
-
                 if (status.Contains("DISCONNECTED"))
                 {
-                    break;
+                    // Disconnected is a problem
+                    return false;
                 }
 
-                if (status.Contains("WAITING FOR DS"))
+                if (status.Contains("READY") || status.Contains("WAITING FOR DS"))
                 {
-                    break;
+                    return true;
                 }
+
                 System.Threading.Thread.Sleep(delayTime);
                 end = LcmsNetSDK.TimeKeeper.Instance.Now;
             }
 
-            return true;
+            // Timed out
+            return false;
         }
 
         [classLCMethodAttribute("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
@@ -1052,13 +1050,14 @@ namespace LcmsNet.Devices.Pal
         /// Continues the method. This is way different than ResumeMethod.
         /// </summary>
         [classLCMethodAttribute("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
-        public void ContinueMethod(double timeout, bool waitForComplete = false)
+        public bool ContinueMethod(double timeout, bool waitForComplete = false)
         {
             if (m_emulation)
             {
-                return;
+                return true;
             }
 
+            var result = true;
             var prevStatus = "";
             m_PALDrvr.GetStatus(ref prevStatus);
 
@@ -1071,17 +1070,19 @@ namespace LcmsNet.Devices.Pal
                 var status = prevStatus;
                 while (status.Equals(prevStatus))
                 {
-                    System.Threading.Thread.Sleep(StatusPollDelay * 500); // Check at most every 1/2 second
+                    System.Threading.Thread.Sleep(StatusPollDelay * 500);
                     m_PALDrvr.GetStatus(ref status);
                 }
 
-                WaitUntilStopPoint(timeout);
+                result = WaitUntilStopPoint(timeout);
             }
 
             var statusMessage = "";
             var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
             StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
                 "continue method end", this, statusMessage + " " + errorCode.ToString()));
+
+            return result;
         }
 
 

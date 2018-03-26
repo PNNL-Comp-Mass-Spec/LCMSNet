@@ -279,42 +279,112 @@ namespace LcmsNet.Devices.ContactClosureRead
         }
 
         /// <summary>
-        /// Read a port's status
+        /// Read a port's status, returning a bool for success if the state was matched
         /// </summary>
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>True if the state of the contact closure matched the target state</returns>
         [classLCMethod("Read", enumMethodOperationTime.Parameter, "", -1, false)]
-        public ContactClosureState ReadStatusAuto(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public bool ReadStatusAuto(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            if ((int) Port <= (int) enumLabjackU12InputPorts.AI7)
-            {
-                return ReadStatusAnalog(timeout, m_port, 2.5, target);
-            }
-            else
-            {
-                return ReadStatusDigital(timeout, m_port, target);
-            }
+            var closureState = ReadStateAuto(timeout, target);
+            return target.HasFlag(closureState);
         }
 
         /// <summary>
-        /// Read a port's status
+        /// Read a port's status, returning a bool for success if the state was matched
         /// </summary>
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>True if the state of the contact closure matched the target state</returns>
         [classLCMethod("Read Digital", enumMethodOperationTime.Parameter, "", -1, false)]
-        public ContactClosureState ReadStatusDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public bool ReadStatusDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             return ReadStatusDigital(timeout, m_port, target);
         }
 
         /// <summary>
-        /// Triggers a 5V pulse of the specified length.
+        /// Read a port's status, returning a bool for success if the state was matched
         /// </summary>
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="port">The LabJack port</param>
         /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>True if the state of the contact closure matched the target state</returns>
         [classLCMethod("Read Port Digital", enumMethodOperationTime.Parameter, "", -1, false)]
-        public ContactClosureState ReadStatusDigital(double timeout, enumLabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public bool ReadStatusDigital(double timeout, enumLabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        {
+            var closureState = ReadStateDigital(timeout, port, target);
+            return target.HasFlag(closureState);
+        }
+
+        /// <summary>
+        /// Reads a port's status, returning a bool for success if the state was matched
+        /// This is intended for use on the analog output ports--if it is a digital
+        /// port the specified voltage will be disregarded.
+        /// </summary>
+        /// <param name="timeout">Timeout, for when to consider the device has errored</param>
+        /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
+        /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>True if the state of the contact closure matched the target state</returns>
+        [classLCMethod("Read Analog", enumMethodOperationTime.Parameter, "", -1, false)]
+        public bool ReadStatusAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        {
+            return ReadStatusAnalog(timeout, m_port, voltage, target);
+        }
+        /// <summary>
+        /// Reads a port's status, returning a bool for success if the state was matched
+        /// This is intended for use on the analog output ports--if it is a digital
+        /// port the specified voltage will be disregarded.
+        /// </summary>
+        /// <param name="timeout">Timeout, for when to consider the device has errored</param>
+        /// <param name="port">The port to read</param>
+        /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
+        /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>True if the state of the contact closure matched the target state</returns>
+        [classLCMethod("Read Port Analog", enumMethodOperationTime.Parameter, "", -1, false)]
+        public bool ReadStatusAnalog(double timeout, enumLabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        {
+            var closureState = ReadStateAnalog(timeout, port, voltage, target);
+            return target.HasFlag(closureState);
+        }
+
+        /// <summary>
+        /// Read a port's status
+        /// </summary>
+        /// <param name="timeout">Timeout, for when to consider the device has errored</param>
+        /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>the state of the contact closure</returns>
+        public ContactClosureState ReadStateAuto(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        {
+            if ((int) Port <= (int) enumLabjackU12InputPorts.AI7)
+            {
+                return ReadStateAnalog(timeout, m_port, 2.5, target);
+            }
+            else
+            {
+                return ReadStateDigital(timeout, m_port, target);
+            }
+        }
+
+        /// <summary>
+        /// Read a port's status
+        /// </summary>
+        /// <param name="timeout">Timeout, for when to consider the device has errored</param>
+        /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>the state of the contact closure</returns>
+        public ContactClosureState ReadStateDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        {
+            return ReadStateDigital(timeout, m_port, target);
+        }
+
+        /// <summary>
+        /// Read a port's status
+        /// </summary>
+        /// <param name="timeout">Timeout, for when to consider the device has errored</param>
+        /// <param name="port">The LabJack port</param>
+        /// <param name="target">The desired state of the contact closure</param>
+        /// <returns>the state of the contact closure</returns>
+        public ContactClosureState ReadStateDigital(double timeout, enumLabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             if (m_emulation)
             {
@@ -347,27 +417,26 @@ namespace LcmsNet.Devices.ContactClosureRead
             {
                 Error?.Invoke(this, new classDeviceErrorEventArgs("Contact closure was not in the required state of \"" + target + "\"",
                     null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Read State Not Matched", DeviceEventLoggingType.Error));
-                Thread.Sleep(TimeSpan.FromSeconds(30)); // make sure to trigger a timeout
             }
 
             return closureState;
         }
 
         /// <summary>
-        /// Triggers a pulse of the specified voltage, lasting the specified duration.
+        /// Read a port's status
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
-        [classLCMethod("Read Analog", enumMethodOperationTime.Parameter, "", -1, false)]
-        public ContactClosureState ReadStatusAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        /// <returns>the state of the contact closure</returns>
+        public ContactClosureState ReadStateAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            return ReadStatusAnalog(timeout, m_port, voltage, target);
+            return ReadStateAnalog(timeout, m_port, voltage, target);
         }
         /// <summary>
-        /// Triggers a pulse of the specified voltage, lasting the specified duration.
+        /// Read a port's status
         /// This is intended for use on the analog output ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
@@ -375,8 +444,8 @@ namespace LcmsNet.Devices.ContactClosureRead
         /// <param name="port">The port to read</param>
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
-        [classLCMethod("Read Port Analog", enumMethodOperationTime.Parameter, "", -1, false)]
-        public ContactClosureState ReadStatusAnalog(double timeout, enumLabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        /// <returns>the state of the contact closure</returns>
+        public ContactClosureState ReadStateAnalog(double timeout, enumLabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             if (m_emulation)
             {
@@ -409,15 +478,16 @@ namespace LcmsNet.Devices.ContactClosureRead
             {
                 Error?.Invoke(this, new classDeviceErrorEventArgs("Contact closure was not in the required state of \"" + target + "\"",
                     null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Read State Not Matched", DeviceEventLoggingType.Error));
-                Thread.Sleep(TimeSpan.FromSeconds(30)); // make sure to trigger a timeout
             }
 
             return closureState;
         }
+
         public override string ToString()
         {
             return m_name;
         }
+
         #endregion
 
         #region IDevice Data Provider Methods
