@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNet.Devices.Pumps"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="345" d:DesignWidth="805"
              d:DataContext="{d:DesignInstance {x:Type local:PumpIscoViewModel}, IsDesignTimeCreatable=True}"
@@ -69,9 +70,9 @@
                                 <ColumnDefinition Width="60*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="Unit Addr:" />
-                            <ComboBox Grid.Row="1" Grid.Column="0" Margin="3" ItemsSource="{Binding UnitAddressComboBoxOptions}" SelectedItem="{Binding UnitAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ComboBox Grid.Row="1" Grid.Column="0" Margin="3" ItemsSource="{Binding UnitAddressComboBoxOptions}" SelectedItem="{Binding UnitAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="Serial Port:" />
-                            <ComboBox Grid.Row="3" Grid.Column="0" Margin="3" ItemsSource="{Binding ComPortComboBoxOptions}" SelectedValue="{Binding COMPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" />
+                            <ComboBox Grid.Row="3" Grid.Column="0" Margin="3" ItemsSource="{Binding ComPortComboBoxOptions}" SelectedValue="{Binding COMPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" VerticalAlignment="Center" Text="Read Timeout (ms):" />
                             <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" VerticalAlignment="Center" Text="Write Timeout (ms):" />
                             <TextBlock Grid.Row="2" Grid.Column="2" Margin="3" VerticalAlignment="Center" Text="Baud Rate" />
@@ -108,7 +109,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ComboBox Grid.Row="0" Margin="3,5" ItemsSource="{Binding OperationModeComboBoxOptions}" SelectedItem="{Binding OperationMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ComboBox Grid.Row="0" Margin="3,5" ItemsSource="{Binding OperationModeComboBoxOptions}" SelectedItem="{Binding OperationMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <Button Grid.Row="1" Margin="3,5" Content="Set" Command="{Binding SetOperationModeCommand}" />
                         </Grid>
                     </GroupBox>
@@ -139,7 +140,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ComboBox Grid.Row="0" Margin="3" Width="75" ItemsSource="{Binding ControlModesComboBoxOptions}" SelectedItem="{Binding ControlMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox Grid.Row="0" Margin="3" Width="75" ItemsSource="{Binding ControlModesComboBoxOptions}" SelectedItem="{Binding ControlMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                     <Button Grid.Row="1" Margin="3" Content="Set" Command="{Binding SetControlModeCommand}" />
                 </Grid>
             </GroupBox>
@@ -156,7 +157,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Pump Count:" />
-                    <ComboBox Grid.Column="1" Margin="3" Width="50" VerticalAlignment="Center" ItemsSource="{Binding PumpCountComboBoxOptions}" SelectedItem="{Binding PumpCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox Grid.Column="1" Margin="3" Width="50" VerticalAlignment="Center" ItemsSource="{Binding PumpCountComboBoxOptions}" SelectedItem="{Binding PumpCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </Grid>
             </GroupBox>
         </Grid>

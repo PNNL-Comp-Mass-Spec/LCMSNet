@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
+        xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
         mc:Ignorable="d"
         Title="SampleRandomizerWindow" Height="542" Width="789"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SampleRandomizerViewModel}, IsDesignTimeCreatable=True}"
@@ -29,7 +30,7 @@
         </DataGrid>
         <StackPanel Grid.Row="1" Grid.Column="1">
             <Label Content="Randomization Type" />
-            <ComboBox Margin="3" Width="Auto" SelectedItem="{Binding SelectedRandomizer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding RandomizerNameList}" />
+            <ComboBox Margin="3" Width="Auto" SelectedItem="{Binding SelectedRandomizer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding RandomizerNameList}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <Button Margin="3" Height="35" Content="Randomize" Command="{Binding RandomizeCommand}" />
         </StackPanel>
         <DataGrid Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Margin="3" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" RowHeaderWidth="0" ItemsSource="{Binding OutputSampleList}">

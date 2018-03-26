@@ -6,6 +6,7 @@
              xmlns:views="clr-namespace:LcmsNet.Method.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="826"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodEditorViewModel}, IsDesignTimeCreatable=True}">
@@ -36,7 +37,7 @@
                     </Grid.ColumnDefinitions>
                     <views:LCMethodSelectionView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding SelectedMethods}" />
                     <Label Grid.Row="1" Grid.Column="0" Content="Preview Mode" />
-                    <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding MethodTimelineThroughput.RenderMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PreviewModeComboBoxOptions}" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding MethodTimelineThroughput.RenderMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PreviewModeComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </Grid>
             </TabItem>
             <TabItem Header="Preview Options">

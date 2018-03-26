@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNet.Devices.Pal"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="367" d:DesignWidth="303"
              d:DataContext="{d:DesignInstance {x:Type local:PalViewModel}, IsDesignTimeCreatable=True}"
@@ -36,9 +37,9 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Method" />
-                        <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="3" ItemsSource="{Binding MethodComboBoxOptions}" SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="3" ItemsSource="{Binding MethodComboBoxOptions}" SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Tray" />
-                        <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="3" ItemsSource="{Binding TrayComboBoxOptions}" SelectedItem="{Binding SelectedTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="3" ItemsSource="{Binding TrayComboBoxOptions}" SelectedItem="{Binding SelectedTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Margin="3" HorizontalAlignment="Center" Width="80" Content="Refresh" Command="{Binding RefreshMethodListCommand}" />
                         <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Vial" />
                         <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="3" Minimum="1" Maximum="{Binding MaxVialForTray}" Value="{Binding VialNumber}" />
@@ -80,8 +81,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Vial Range" />
                 <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Port Name" />
-                <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" ItemsSource="{Binding VialRangeComboBoxOptions}" SelectedItem="{Binding Pal.VialRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" />
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" ItemsSource="{Binding VialRangeComboBoxOptions}" SelectedItem="{Binding Pal.VialRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 <Button Grid.Row="1" Grid.Column="2" Margin="3" Width="75" Content="Apply" Command="{Binding ApplyPortNameCommand}" />
             </Grid>
         </TabItem>
@@ -105,7 +106,7 @@
                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" MaxLines="7" IsReadOnly="True" IsEnabled="False" Text="{Binding TrayNamesAndMaxVialFormatted, Mode=OneWay}" />
                 <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" Text="Select Vials Test" />
                 <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Tray" />
-                <ComboBox Grid.Row="3" Grid.Column="1" Margin="3" MinWidth="50" ItemsSource="{Binding TrayComboBoxOptions}" SelectedItem="{Binding SelectVialsTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Row="3" Grid.Column="1" Margin="3" MinWidth="50" ItemsSource="{Binding TrayComboBoxOptions}" SelectedItem="{Binding SelectVialsTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 <TextBlock Grid.Row="3" Grid.Column="2" Margin="3" Text="Vial Type" />
                 <TextBox Grid.Row="3" Grid.Column="3" Margin="3" Text="{Binding SelectVialsInput}" />
                 <Button Grid.Row="4" Grid.Column="0" Margin="3" Content="Run" Command="{Binding SelectVialsCommand}" />

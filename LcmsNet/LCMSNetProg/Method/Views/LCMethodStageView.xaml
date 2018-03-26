@@ -5,13 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:LcmsNet.Method.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="551" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodStageViewModel}, IsDesignTimeCreatable=True}">
     <DockPanel LastChildFill="True">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
             <Label DockPanel.Dock="Left" Margin="5" Foreground="Blue" Content="Method Name:" />
-            <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedSavedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SavedMethodsComboBoxOptions}" />
+            <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedSavedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SavedMethodsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <TextBox DockPanel.Dock="Left" Margin="3" Width="120"  VerticalAlignment="Center" Text="{Binding MethodName}" />
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding BuildMethodCommand}">
                 <StackPanel Orientation="Horizontal">
@@ -62,7 +63,7 @@
                 <Image Source="/Images/Button_Up_16.png" MaxHeight="20" />
             </Button>
             <Label DockPanel.Dock="Left" Margin="5" Foreground="Blue" Content="Column" />
-            <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnComboBoxOptions}" />
+            <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         </DockPanel>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding LCMethodEvents}">

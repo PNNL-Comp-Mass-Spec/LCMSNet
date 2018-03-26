@@ -45,10 +45,19 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
             }
 
             // Hide the control adorner when the adorned element is hidden
-            Binding binding = new Binding("IsVisible");
-            binding.Source = adornedElement;
-            binding.Converter = new BooleanToVisibilityConverter();
-            this.SetBinding(VisibilityProperty, binding);
+            this.SetBinding(VisibilityProperty, new Binding(IsVisibleProperty.Name)
+            {
+                Mode = BindingMode.OneWay,
+                Source = adornedElement,
+                Converter = new BooleanToVisibilityConverter(),
+            });
+
+            // Make sure the DataContext is approriately set
+            this.SetBinding(DataContextProperty, new Binding(DataContextProperty.Name)
+            {
+                Mode = BindingMode.OneWay,
+                Source = AdornedElement,
+            });
         }
 
         #endregion

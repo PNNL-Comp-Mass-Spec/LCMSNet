@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
         mc:Ignorable="d"
         Title="Sample Validator" Height="703" Width="801" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidatorDisplayViewModel}, IsDesignTimeCreatable=True}">
@@ -40,7 +41,7 @@
                     <GridViewColumn Header="Usage Type" Width="115">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.UsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}">
+                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.UsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}" cueBannerOverlay:CueBannerService.CueBanner="Select">
                                     <ComboBox.Style>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Style.Triggers>

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNet.Devices.Valves"
              xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:ValveVICI2PosViewModel}, IsDesignTimeCreatable=True}"
@@ -78,7 +79,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0" Text="Set ID" />
-                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ValveIdComboBoxOptions}" SelectedItem="{Binding SelectedValveId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ValveIdComboBoxOptions}" SelectedItem="{Binding SelectedValveId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 <Button Grid.Row="1" Grid.Column="1" Margin="5" Content="Clear ID" Command="{Binding ClearValveIdCommand}" />
                 <TextBlock Grid.Row="2" Grid.Column="0" Margin="5,10,5,0" Text="Get ID" />
                 <TextBox Grid.Row="3" Grid.Column="0" MinWidth="56" Margin="5" Text="{Binding CurrentValveId, Mode=OneWay}" IsEnabled="False" />

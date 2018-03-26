@@ -129,11 +129,7 @@
                 <DataGridTemplateColumn Header="PAL Tray" Width="Auto" MinWidth="40" Visibility="{Binding DataContext.PalTrayColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding Sample.PAL.PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" >
-                                <cueBannerOverlay:CueBannerService.CueBanner>
-                                    <TextBlock Text="Select" />
-                                </cueBannerOverlay:CueBannerService.CueBanner>
-                            </ComboBox>
+                            <ComboBox x:Name="PALTraySelect" SelectedItem="{Binding Sample.PAL.PALTray, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PalTrayComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -184,21 +180,21 @@
                 <DataGridTemplateColumn Header="LC Method" MinWidth="80" Visibility="{Binding DataContext.LcMethodColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding Sample.LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
+                            <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding Sample.LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.ShowCueBannerOnComboBoxUnmatch="True" cueBannerOverlay:CueBannerService.CueBanner="{Binding LcMethodCueBannerText}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Instrument Method" MinWidth="80" Visibility="{Binding DataContext.InstrumentMethodColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="InstrumentMethodSelect" SelectedItem="{Binding InstrumentMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
+                            <ComboBox x:Name="InstrumentMethodSelect" SelectedItem="{Binding InstrumentMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Dataset Type" MinWidth="80" Visibility="{Binding DataContext.DatasetTypeColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding Sample.DmsData.DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding EditAllowed}" />
+                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding Sample.DmsData.DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -212,7 +208,7 @@
                 <DataGridTemplateColumn Header="Cart Config" MinWidth="80" Visibility="{Binding DataContext.CartConfigColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding Sample.DmsData.CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding EditAllowed}" ToolTip="{Binding CartConfigError}"/>
+                            <ComboBox x:Name="CartConfigSelect" SelectedItem="{Binding Sample.DmsData.CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding EditAllowed}" ToolTip="{Binding CartConfigError}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

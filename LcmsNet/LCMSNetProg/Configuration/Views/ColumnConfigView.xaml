@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Configuration.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="57" d:DesignWidth="266"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ColumnConfigViewModel}, IsDesignTimeCreatable=True}">
@@ -21,7 +22,7 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Background="{Binding ColumnData.Color, Converter={StaticResource ColorToSolidColorBrushConverter}}" IsEnabled="{Binding ColumnEnabled}" />
+        <Button Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Background="{Binding ColumnData.Color, Converter={StaticResource ColorToSolidColorBrushConverter}}" IsEnabled="{Binding ColumnEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="8,8,8,25" HorizontalAlignment="Center" VerticalAlignment="Center" >
             <Run Background="White" Text="{Binding ColumnId, Mode=OneWay}" />
         </Label>

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:LcmsNet.Method.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="31" d:DesignWidth="975"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodEventViewModel}, IsDesignTimeCreatable=True}"
@@ -18,8 +19,8 @@
         <Label DockPanel.Dock="Left" MinWidth="32" VerticalAlignment="Center" Margin="3" Content="{Binding EventNumber}" />
         <views:BreakpointView DockPanel.Dock="Left" Margin="3" DataContext="{Binding Breakpoint}" />
         <CheckBox DockPanel.Dock="Left" VerticalAlignment="Center" Margin="3" Background="Silver" IsChecked="{Binding IsSelected}" />
-        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" />
-        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" />
+        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" ToolTip="Optimize" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}" IsChecked="{Binding OptimizeWith}">
             <Image Source="/Images/highlighter.png" />
         </CheckBox>

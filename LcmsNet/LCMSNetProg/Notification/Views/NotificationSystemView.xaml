@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Notification.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="740" d:DesignWidth="938"
              d:DataContext="{d:DesignInstance {x:Type viewModels:NotificationSystemViewModel}, IsDesignTimeCreatable=True}">
@@ -102,8 +103,8 @@
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0" Margin="3" FontWeight="Normal" FontSize="12" Content="Then the system should do this:" />
                                 <Label Grid.Row="1" Grid.Column="0" Margin="3" FontWeight="Normal" FontSize="12" Content="LC-Method" />
-                                <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" FontWeight="Normal" FontSize="12" ItemsSource="{Binding ActionsComboBoxOptions}" SelectedItem="{Binding SelectedAction}" />
-                                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" FontWeight="Normal" FontSize="12" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedLCMethod}" IsEnabled="{Binding MethodSettingEnabled}" />
+                                <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" FontWeight="Normal" FontSize="12" ItemsSource="{Binding ActionsComboBoxOptions}" SelectedItem="{Binding SelectedAction}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" FontWeight="Normal" FontSize="12" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedLCMethod}" IsEnabled="{Binding MethodSettingEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             </Grid>
                         </GroupBox>
                         <Button Margin="3" HorizontalAlignment="Right" Command="{Binding IgnoreSettingCommand}">

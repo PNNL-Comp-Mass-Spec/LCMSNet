@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodSelectionViewModel}, IsDesignTimeCreatable=True}">
@@ -13,7 +14,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0" LastChildFill="True">
-            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" KeyUp="ComboBox_OnKeyUp" />
+            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" KeyUp="ComboBox_OnKeyUp" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <ListBox Margin="3" SelectionMode="Extended" SelectionChanged="MethodList_OnSelectionChanged" ItemsSource="{Binding ListSelectedLCMethods}" DisplayMemberPath="Name" />
         </DockPanel>
         <StackPanel Grid.Column="1" Width="60" Margin="3">

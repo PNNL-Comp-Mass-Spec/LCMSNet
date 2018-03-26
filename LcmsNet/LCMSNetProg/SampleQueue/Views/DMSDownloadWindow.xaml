@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
+        xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:DMSDownloadViewModel}, IsDesignTimeCreatable=True}"
         d:DesignHeight="768" d:DesignWidth="1024"
@@ -62,7 +63,7 @@
                     <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="4" Text="{Binding RequestName}" />
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="4" Text="{Binding RequestIdStart}" />
                     <TextBox Grid.Row="1" Grid.Column="3" Margin="4" Text="{Binding RequestIdEnd}" />
-                    <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="4"  SelectedItem="{Binding Cart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartSearchComboBoxOptions}" IsEnabled="{Binding AssignedRequestsOnly}" />
+                    <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="4"  SelectedItem="{Binding Cart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartSearchComboBoxOptions}" IsEnabled="{Binding AssignedRequestsOnly}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                     <Label Grid.Row="0" Grid.Column="5">Wellplate</Label>
                     <Label Grid.Row="1" Grid.Column="5">Batch ID</Label>
                     <Label Grid.Row="2" Grid.Column="5">Block</Label>
@@ -86,9 +87,9 @@
                 <Label Margin="3,0" FontWeight="Bold" VerticalAlignment="Bottom">LC Cart:</Label>
                 <Label Margin="3,0" FontWeight="Bold" VerticalAlignment="Bottom" Content="{Binding CartName}"/>
             </StackPanel>
-            <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" SelectedItem="{Binding CartName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartComboBoxOptions}" />
+            <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" SelectedItem="{Binding CartName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <Label Grid.Row="2" Grid.Column="1" Margin="3,0" FontWeight="Bold" VerticalAlignment="Bottom">LC Cart Config:</Label>
-            <ComboBox Grid.Row="3" Grid.Column="1" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartConfigComboBoxOptions}" />
+            <ComboBox Grid.Row="3" Grid.Column="1" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcCartConfigComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <Button Grid.Row="4" Grid.Column="1" Margin="4" MaxWidth="120" HorizontalAlignment="Right" Command="{Binding UpdateCartInfoCommand}">Update Cart Info</Button>
         </Grid>
         <Label Grid.Row="1">Available Requests</Label>

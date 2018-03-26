@@ -85,6 +85,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             Sample.WhenAnyValue(x => x.InstrumentData, x => x.PAL, x => x.DmsData, x => x.LCMethod)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
+
+            Sample.WhenAnyValue(x => x.ActualLCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
@@ -463,6 +465,19 @@ namespace LcmsNet.SampleQueue.ViewModels
                     Sample.InstrumentData.MethodName = value;
                     this.RaisePropertyChanged();
                 }
+            }
+        }
+
+        public string LcMethodCueBannerText
+        {
+            get
+            {
+                if (Sample.IsSetToRunOrHasRun)
+                {
+                    return Sample.ActualLCMethod.Name;
+                }
+
+                return "Select";
             }
         }
 

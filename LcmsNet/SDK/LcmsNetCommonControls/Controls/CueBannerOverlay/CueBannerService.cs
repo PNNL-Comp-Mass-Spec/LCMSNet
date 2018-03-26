@@ -21,6 +21,14 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
            typeof(CueBannerService),
            new FrameworkPropertyMetadata((object)null, new PropertyChangedCallback(OnCueBannerChanged)));
 
+        /// <summary>
+        /// ShowCueBannerOnComboBoxUnmatch Attached Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty ShowCueBannerOnComboBoxUnmatchProperty = DependencyProperty.RegisterAttached(
+            "ShowCueBannerOnComboBoxUnmatch",
+            typeof(bool),
+            typeof(ComboBox), new PropertyMetadata(false));
+
         #region Private Fields
 
         /// <summary>
@@ -51,6 +59,26 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
         }
 
         /// <summary>
+        /// Gets the GetShowCueBannerOnComboBoxUnmatch property.  This dependency property indicates if the CueBanner should be shown when a ComboBox's SelectedItem has no match in ItemsSource.
+        /// </summary>
+        /// <param name="d"><see cref="DependencyObject"/> to get the property from</param>
+        /// <returns>The value of the GetShowCueBannerOnComboBoxUnmatch property</returns>
+        public static bool GetShowCueBannerOnComboBoxUnmatch(DependencyObject d)
+        {
+            return (bool)d.GetValue(ShowCueBannerOnComboBoxUnmatchProperty);
+        }
+
+        /// <summary>
+        /// Sets the GetShowCueBannerOnComboBoxUnmatch property.  This dependency property indicates if the CueBanner should be shown when a ComboBox's SelectedItem has no match in ItemsSource.
+        /// </summary>
+        /// <param name="d"><see cref="DependencyObject"/> to set the property on</param>
+        /// <param name="value">value of the property</param>
+        public static void SetShowCueBannerOnComboBoxUnmatch(DependencyObject d, bool value)
+        {
+            d.SetValue(ShowCueBannerOnComboBoxUnmatchProperty, value);
+        }
+
+        /// <summary>
         /// Handles changes to the CueBanner property.
         /// </summary>
         /// <param name="d"><see cref="DependencyObject"/> that fired the event</param>
@@ -75,7 +103,7 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
                 }
                 else if (d is ComboBox cb)
                 {
-                    cb.SelectionChanged += SelectionChanged;
+                    cb.SelectionChanged += Control_ContentChanged;
                 }
             }
             else if (d is ItemsControl)
@@ -98,24 +126,6 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
                 // WpfPropertyChangeNotifier uses weak references and WPF data binding to avoid holding a strong reference to the object
                 var notifier = new WpfPropertyChangeNotifier(i, nameof(i.ItemsSource));
                 notifier.ValueChanged += ItemsSourceChanged;
-            }
-        }
-
-        /// <summary>
-        /// Event handler for the selection changed event
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">A <see cref="ItemsChangedEventArgs"/> that contains the event data.</param>
-        private static void SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Control control = (Control)sender;
-            if (ShouldShowCueBanner(control))
-            {
-                ShowCueBanner(control);
-            }
-            else
-            {
-                RemoveCueBanner(control);
             }
         }
 
@@ -267,9 +277,29 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
         /// <returns>true if the CueBanner should be shown; false otherwise</returns>
         private static bool ShouldShowCueBanner(Control c)
         {
-            if (c is ComboBox)
+            if (c is ComboBox cb)
             {
-                return (c as ComboBox).SelectedItem == null;
+                if (cb.SelectedItem == null)
+                {
+                    return true;
+                }
+
+                if (GetShowCueBannerOnComboBoxUnmatch(c))
+                {
+                    foreach (var obj in cb.ItemsSource)
+                    {
+                        if (obj.Equals(cb.SelectedItem))
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                return false;
+
+                //return (c as ComboBox).SelectedItem == null;
                 //return (c as ComboBox).Text == string.Empty;
             }
             else if (c is TextBox)
