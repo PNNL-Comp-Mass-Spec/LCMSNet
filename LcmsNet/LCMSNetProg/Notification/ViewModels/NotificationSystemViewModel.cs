@@ -681,7 +681,7 @@ namespace LcmsNet.Notification.ViewModels
             var msg = "";
             if (!string.IsNullOrWhiteSpace(e.Error))
             {
-                msg = $":{e.Error}";
+                msg = $": {e.Error}";
             }
             if (e.LoggingType == DeviceEventLoggingType.Message)
             {

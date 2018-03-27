@@ -174,7 +174,9 @@
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="2">
-            <StatusBarItem Content="{Binding StatusMessage}" />
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" />
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </Window>

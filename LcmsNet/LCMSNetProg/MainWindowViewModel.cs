@@ -235,7 +235,14 @@ namespace LcmsNet
         public string StatusMessage
         {
             get { return statusMessage; }
-            set { this.RaiseAndSetIfChanged(ref statusMessage, value); }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    value = value.Replace("\r\n", "\t").Replace("\n", "\t");
+                }
+                this.RaiseAndSetIfChanged(ref statusMessage, value);
+            }
         }
 
         public bool CanSimulate
