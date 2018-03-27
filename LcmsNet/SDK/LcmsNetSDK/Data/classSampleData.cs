@@ -145,16 +145,26 @@ namespace LcmsNetDataClasses
         /// Makes a deep copy of this object
         /// </summary>
         /// <returns>Deep copy of object</returns>
-        public object Clone() // TODO: do a normal clone, not the serialize/deserialize oddness
+        public object Clone()
         {
-            //Create a formatter and a memory stream
-            IFormatter formatter = new BinaryFormatter();
-            var ms = new MemoryStream();
-            //Serialize the input object
-            formatter.Serialize(ms, this);
-            //Reset the stream to its beginning and de-serialize into the return object
-            ms.Seek(0, SeekOrigin.Begin);
-            var newSample = formatter.Deserialize(ms) as classSampleData;
+            var newSample = new classSampleData(this.IsDummySample);
+
+            newSample.DmsData = this.DmsData?.Clone() as classDMSData;
+            newSample.m_sequenceNumber = this.m_sequenceNumber;
+            newSample.PAL = this.PAL?.Clone() as classPalData;
+            newSample.m_volume = this.m_volume;
+            newSample.ColumnData = this.ColumnData?.Clone() as classColumnData;
+            newSample.m_uniqueID = this.m_uniqueID;
+            newSample.LCMethod = this.LCMethod;
+            newSample.m_actualMethod = this.m_actualMethod?.Clone() as classLCMethod;
+            newSample.InstrumentData = this.InstrumentData?.Clone() as classInstrumentInfo;
+            newSample.m_Operator = this.m_Operator;
+            newSample.m_IsDuplicateRequestName = this.m_IsDuplicateRequestName;
+            newSample.m_SampleErrors = this.m_SampleErrors;
+
+            // The ability to set some properties is keyed on the value of this property, so set it last.
+            newSample.m_RunningStatus = this.m_RunningStatus;
+
             return newSample;
         }
 

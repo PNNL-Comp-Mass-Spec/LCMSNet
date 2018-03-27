@@ -26,7 +26,7 @@ namespace LcmsNetDataClasses
     /// Class file for handling data used in communication with DMS
     /// </summary>
     [Serializable]
-    public class classDMSData : classDataClassBase, INotifyPropertyChangedExt
+    public class classDMSData : classDataClassBase, INotifyPropertyChangedExt, ICloneable
     {
         /// <summary>
         /// The matching string to ensure only valid characters exist in a dataset name
@@ -61,6 +61,34 @@ namespace LcmsNetDataClasses
             SelectedToRun = false;
             UsageType = "";
             UserList = "";
+        }
+
+        /// <summary>
+        /// Clone - get a deep copy
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            var newDmsData = new classDMSData();
+
+            newDmsData.Batch = Batch;
+            newDmsData.Block = Block;
+            newDmsData.CartName = CartName;
+            newDmsData.CartConfigName = CartConfigName;
+            newDmsData.Comment = Comment;
+            newDmsData.DatasetName = DatasetName;
+            newDmsData.DatasetType = DatasetType;
+            newDmsData.Experiment = Experiment;
+            newDmsData.MRMFileID = MRMFileID;
+            newDmsData.ProposalID = ProposalID;
+            newDmsData.RequestID = RequestID;
+            newDmsData.RequestName = RequestName;
+            newDmsData.RunOrder = RunOrder;
+            newDmsData.SelectedToRun = SelectedToRun;
+            newDmsData.UsageType = UsageType;
+            newDmsData.UserList = UserList;
+
+            return newDmsData;
         }
 
         #region Property Backing Variables

@@ -24,7 +24,7 @@ namespace LcmsNetDataClasses
     /// </summary>
     ///
     [Serializable]
-    public class classInstrumentInfo : classDataClassBase, IEquatable<classInstrumentInfo>, INotifyPropertyChangedExt
+    public class classInstrumentInfo : classDataClassBase, IEquatable<classInstrumentInfo>, INotifyPropertyChangedExt, ICloneable
     {
         private string methodName;
 
@@ -69,6 +69,24 @@ namespace LcmsNetDataClasses
         public string SharePath { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// Clone - make a deep copy
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            var newInstrumentData = new classInstrumentInfo();
+
+            newInstrumentData.DMSName = DMSName;
+            newInstrumentData.CommonName = CommonName;
+            newInstrumentData.MethodName = MethodName;
+            newInstrumentData.Status = Status;
+            newInstrumentData.HostName = HostName;
+            newInstrumentData.SharePath = SharePath;
+
+            return newInstrumentData;
+        }
 
         #region Methods
 

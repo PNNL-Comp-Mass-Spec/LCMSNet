@@ -11,7 +11,7 @@ namespace LcmsNetDataClasses.Configuration
     /// Class that manages all of the information about a given column
     /// </summary>
     [Serializable]
-    public class classColumnData : classDataClassBase, INotifyPropertyChangedExt, IEquatable<classColumnData>
+    public class classColumnData : classDataClassBase, INotifyPropertyChangedExt, IEquatable<classColumnData>, ICloneable
     {
         #region Constructors
 
@@ -25,6 +25,24 @@ namespace LcmsNetDataClasses.Configuration
             m_systemIndex = 0;
             m_status = enumColumnStatus.Idle;
             m_first = false;
+        }
+
+        /// <summary>
+        /// Clone - get a deep copy
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            var newColumnData = new classColumnData();
+
+            newColumnData.First = First;
+            newColumnData.Status = Status;
+            newColumnData.ID = ID;
+            newColumnData.SystemID = SystemID;
+            newColumnData.Name = Name;
+            newColumnData.Color = Color;
+
+            return newColumnData;
         }
 
         #endregion

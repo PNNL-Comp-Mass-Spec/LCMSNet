@@ -506,12 +506,16 @@ namespace LcmsNet.Method
                     data.ActualLCMethod.CurrentEventNumber = 0;
                     data.ActualLCMethod.ActualEnd = DateTime.MaxValue;
                     data.ActualLCMethod.ActualStart = TimeKeeper.Instance.Now;
-                    samples[sampleColumnID] = data.Clone() as classSampleData;
-                    if (samples[sampleColumnID] == null)
-                        samples[sampleColumnID] = new classSampleData();
+                    var dataClone = data.Clone() as classSampleData;
+                    if (dataClone == null)
+                    {
+                        dataClone = new classSampleData();
+                        dataClone.LCMethod = data.LCMethod;
+                        dataClone.CloneLCMethod(data.ActualLCMethod);
+                        dataClone.RunningStatus = data.RunningStatus;
+                    }
 
-                    samples[sampleColumnID].LCMethod = data.LCMethod;
-                    samples[sampleColumnID].CloneLCMethod(data.ActualLCMethod);
+                    samples[sampleColumnID] = dataClone;
 
                     m_columnWorkers[sampleColumnID].RunWorkerAsync(new classColumnArgs(data));
                 }
