@@ -793,36 +793,41 @@ namespace LcmsNet.Method
 
                 lock (m_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-                    var EVENT_ADJUST = 1;
+                    var EVENT_ADJUST = 0;
                     var skipDueToException = false;
                     if (currentEvent == null)
                     {
-                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent is null!");
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent is null!");
+                        skipDueToException = true;
+                    }
+                    else if (columnID >= currentEvent.Length)
+                    {
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent: columnID out of range: " + columnID + " >= " + currentEvent.Length);
                         skipDueToException = true;
                     }
                     if (samples == null)
                     {
-                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples is null!");
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples is null!");
                         skipDueToException = true;
                     }
                     else if (columnID >= samples.Length)
                     {
-                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: columnID out of range: " + columnID + " >= " + samples.Length);
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples: columnID out of range: " + columnID + " >= " + samples.Length);
                         skipDueToException = true;
                     }
                     else if (samples[columnID] == null)
                     {
-                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "] is null!");
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "] is null!");
                         skipDueToException = true;
                     }
                     else if (samples[columnID].ActualLCMethod == null)
                     {
-                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod is null!");
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod is null!");
                         skipDueToException = true;
                     }
                     else if (samples[columnID].ActualLCMethod.Events == null)
                     {
-                        classApplicationLogger.LogMessage(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod.Events is null!");
+                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod.Events is null!");
                         skipDueToException = true;
                     }
 
@@ -834,14 +839,25 @@ namespace LcmsNet.Method
                             : currentEvent[columnID];
                         // we use currentEvent[columnID] + EVENT_ADJUST here as the scheduler still thinks we're on the old event.
                         var stackTrace = UnwrapException(ex);
+                        var eventName = "unknown";
+                        var eventDeviceName = "unknown";
+                        if (currentEventNumber >= samples[columnID].ActualLCMethod.Events.Count)
+                        {
+                            classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: sample events: currentEventNumber out of range: " + currentEventNumber + " >= " + samples[columnID].ActualLCMethod.Events.Count);
+                        }
+                        else
+                        {
+                            eventName = samples[columnID].ActualLCMethod.Events[currentEventNumber].Name;
+                            eventDeviceName = samples[columnID].ActualLCMethod.Events[currentEventNumber].Device.Name;
+                        }
                         HandleError(samples[columnID],
                             string.Format(
                                 "Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
                                 columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                 samples[columnID].ActualLCMethod.Name,
                                 samples[columnID].DmsData.DatasetName,
-                                samples[columnID].ActualLCMethod.Events[currentEventNumber].Name,
-                                samples[columnID].ActualLCMethod.Events[currentEventNumber].Device.Name,
+                                eventName,
+                                eventDeviceName,
                                 stackTrace));
 
                         m_sampleQueue.CancelRunningSample(samples[columnID], true);
