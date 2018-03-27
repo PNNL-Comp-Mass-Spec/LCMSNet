@@ -54,7 +54,7 @@ namespace LcmsNet.SampleQueue.IO
             var localFolder = MakeLocalMethodFolder(sample);
             if (localFolder == "")
             {
-                var message = "Could not create a folder for the output method data for: " + sample.LCMethod.Name;
+                var message = "Could not create a folder for the output method data for: " + sample.ActualLCMethod.Name;
                 classApplicationLogger.LogError(0, message);
                 return;
             }
@@ -67,11 +67,11 @@ namespace LcmsNet.SampleQueue.IO
             var lcWriter = new classLCMethodWriter();
             try
             {
-                lcWriter.WriteMethod(lcMethodFileNamePath, sample.LCMethod);
+                lcWriter.WriteMethod(lcMethodFileNamePath, sample.ActualLCMethod);
             }
             catch (Exception ex)
             {
-                var msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
+                var msg = "Could not write the LC Method file for: " + sample.ActualLCMethod.Name;
                 classApplicationLogger.LogError(0, msg, ex, sample);
             }
             finally
@@ -105,7 +105,7 @@ namespace LcmsNet.SampleQueue.IO
             var localFolder = MakeLocalMethodFolder(sample);
             if (localFolder == "")
             {
-                var message = "Could not create a folder for the output method data for: " + sample.LCMethod.Name;
+                var message = "Could not create a folder for the output method data for: " + sample.ActualLCMethod.Name;
                 classApplicationLogger.LogError(0, message);
                 return;
             }
@@ -119,11 +119,11 @@ namespace LcmsNet.SampleQueue.IO
             var lcWriter = new classLCMethodWriter();
             try
             {
-                lcWriter.WriteMethod(lcMethodFileNamePath, sample.LCMethod);
+                lcWriter.WriteMethod(lcMethodFileNamePath, sample.ActualLCMethod);
             }
             catch (Exception ex)
             {
-                var msg = "Could not write the LC Method file for: " + sample.LCMethod.Name;
+                var msg = "Could not write the LC Method file for: " + sample.ActualLCMethod.Name;
                 classApplicationLogger.LogError(0, msg, ex, sample);
                 return;
             }
@@ -138,7 +138,7 @@ namespace LcmsNet.SampleQueue.IO
             //string performanceFile =
             //try
             //{
-            //    sample.LCMethod.WritePerformanceData(localFolder);
+            //    sample.ActualLCMethod.WritePerformanceData(localFolder);
             //}
             //catch (Exception ex)
             //{
