@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Attribute used to save a device's settings

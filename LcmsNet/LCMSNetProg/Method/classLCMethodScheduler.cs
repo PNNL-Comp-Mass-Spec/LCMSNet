@@ -14,12 +14,11 @@ using System.Threading;
 using LcmsNet.Notification;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Method
 {
@@ -499,7 +498,7 @@ namespace LcmsNet.Method
 #if DEBUG
                         sampleEndTime[sampleColumnID] = TimeKeeper.Instance.Now.AddSeconds(5);
 #else
-                        sampleEndTime[sampleColumnID] = LcmsNetSDK.TimeKeeper.Instance.Now;
+                        sampleEndTime[sampleColumnID] = TimeKeeper.Instance.Now;
 #endif
 
                     currentEvent[sampleColumnID] = 0;

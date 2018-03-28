@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method
 {

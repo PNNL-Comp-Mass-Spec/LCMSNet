@@ -6,14 +6,14 @@
  *********************************************************************************************************/
 using System;
 using FluidicsSDK.Devices;
-using LcmsNetDataClasses.Devices;
 using System.IO.Ports;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
+    [classDeviceControl(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
     public class classValveVICISixPortInjection: classValveVICI2Pos, ISixPortInjectionValve
     {
         private double m_volume;
@@ -38,7 +38,7 @@ namespace LcmsNet.Devices.Valves
             InjectionVolume = volume;
         }
 
-        [classPersistenceAttribute("InjectionVolume")]
+        [classPersistence("InjectionVolume")]
         public double InjectionVolume
         {
             get { return m_volume;  }

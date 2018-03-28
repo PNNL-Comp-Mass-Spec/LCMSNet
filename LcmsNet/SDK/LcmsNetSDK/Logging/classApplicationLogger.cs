@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Logging
+namespace LcmsNetSDK.Logging
 {
     public class ThreadPoolStateObject
     {

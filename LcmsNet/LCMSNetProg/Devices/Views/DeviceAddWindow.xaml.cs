@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using LcmsNet.Devices.ViewModels;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Views
 {

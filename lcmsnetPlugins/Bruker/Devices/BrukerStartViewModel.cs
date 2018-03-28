@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Reactive.Concurrency;
 using LcmsNetCommonControls.Devices.NetworkStart;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.BrukerStart
 {

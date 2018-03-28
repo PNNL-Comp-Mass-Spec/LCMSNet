@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNet.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Abstract Control class that allows the user to define how the value is grabbed

@@ -12,9 +12,10 @@ using System.Windows.Media;
 using DemoPluginLibrary;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

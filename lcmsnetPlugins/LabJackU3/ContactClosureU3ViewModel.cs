@@ -1,8 +1,8 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.Devices.ContactClosure
 {

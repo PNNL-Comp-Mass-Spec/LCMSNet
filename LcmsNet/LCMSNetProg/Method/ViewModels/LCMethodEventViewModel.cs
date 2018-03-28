@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

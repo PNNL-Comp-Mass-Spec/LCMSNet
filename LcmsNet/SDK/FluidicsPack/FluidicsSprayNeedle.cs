@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {

@@ -3,8 +3,8 @@ using System.IO;
 using System.Xml;
 using LcmsNet.Method;
 using LcmsNet.Notification;
-using LcmsNetDataClasses.Devices;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Devices
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Devices.Pumps
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Interface for displaying pump data

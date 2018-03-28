@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace Newport.ESP300
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(NewportStageViewModel),
+    [classDeviceControl(typeof(NewportStageViewModel),
                                  typeof(FluidicsStage),
                                  "Newport Stage",
                                  "Stages")
@@ -164,7 +165,7 @@ namespace Newport.ESP300
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="positionName">the position to go to</param>
-        [classLCMethodAttribute("Go To Predefined Position", enumMethodOperationTime.Parameter, "POSNAMES", 1,false)]
+        [classLCMethod("Go To Predefined Position", enumMethodOperationTime.Parameter, "POSNAMES", 1,false)]
         public void GoToPosition(double timeout, string positionName) // bool block = true)
         {
             if(Emulation)
@@ -223,7 +224,7 @@ namespace Newport.ESP300
                         ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
                         if (Error != null)
                         {
-                            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0, "Unexpected response when querying stage position");
+                            classApplicationLogger.LogError(0, "Unexpected response when querying stage position");
                             Error(this, new classDeviceErrorEventArgs("Unexpected response", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
                         }
                         return 0.0;
@@ -374,7 +375,7 @@ namespace Newport.ESP300
                     ErrorType = enumDeviceErrorStatus.ErrorAffectsAllColumns;
                     if (Error != null)
                     {
-                        LcmsNetDataClasses.Logging.classApplicationLogger.LogError(0, "Unexpected response when checking motion completion");
+                        classApplicationLogger.LogError(0, "Unexpected response when checking motion completion");
                         Error(this, new classDeviceErrorEventArgs("Unexpected response", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this));
                     }
                 }
@@ -420,7 +421,7 @@ namespace Newport.ESP300
                 return true;
             }
 
-            LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                 "Attempt to modify invalid axis detected");
             return false;
         }
@@ -581,7 +582,7 @@ namespace Newport.ESP300
         /// <summary>
         /// Attempt to open the serial port
         /// </summary>
-        [classLCMethodAttribute("Open Port", 1, true, "", -1, false)]
+        [classLCMethod("Open Port", 1, true, "", -1, false)]
         public void OpenPort()
         {
             if(Emulation)
@@ -688,7 +689,7 @@ namespace Newport.ESP300
         /// <summary>
         /// Gets or Sets the number of Axes available on this ESP300.
         /// </summary>
-        [classPersistenceAttribute("NumAxes")]
+        [classPersistence("NumAxes")]
         public int NumAxes
         {
             get
@@ -704,7 +705,7 @@ namespace Newport.ESP300
         /// <summary>
         /// used to persist serial config to ini file and reload serial config from ini file.
         /// </summary>
-        [classPersistenceAttribute("Port")]
+        [classPersistence("Port")]
         public string PortStr
         {
             get
@@ -805,7 +806,7 @@ namespace Newport.ESP300
         /// <summary>
         /// used to persist the positions to ini config file and reload positions from ini file.
         /// </summary>
-        [classPersistenceAttribute("Positions")]
+        [classPersistence("Positions")]
         public string PositionsStr
         {
             get
@@ -871,7 +872,7 @@ namespace Newport.ESP300
         /// <summary>
         /// Get or Sets the current position of the stage
         /// </summary>
-        [classPersistenceAttribute("currentPosition")]
+        [classPersistence("currentPosition")]
         public string CurrentPos
         {
             get

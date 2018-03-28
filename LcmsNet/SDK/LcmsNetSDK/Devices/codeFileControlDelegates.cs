@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetSDK.Devices
 {
     public delegate void DelegateNameChanged(object sender, string newname);
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {

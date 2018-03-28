@@ -6,6 +6,7 @@
 //
 //*********************************************************************************************************
 using System;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Devices.Pumps
 {
@@ -91,7 +92,7 @@ namespace LcmsNet.Devices.Pumps
             OperationStatus = enumIscoOperationStatus.Stopped;
             ControlMode = enumIscoControlMode.Local;
             ProblemStatus = enumIscoProblemStatus.None;
-            PointTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            PointTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
         }
 
         /// <summary>

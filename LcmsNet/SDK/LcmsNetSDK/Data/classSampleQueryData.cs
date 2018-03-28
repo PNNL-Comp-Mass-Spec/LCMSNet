@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Class for holding data used to query DMS for samples to run

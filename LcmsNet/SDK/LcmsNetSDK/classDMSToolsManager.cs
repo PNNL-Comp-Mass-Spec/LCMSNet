@@ -12,8 +12,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Data;
+using LcmsNetSDK.Data;
 
 namespace LcmsNetSDK
 {

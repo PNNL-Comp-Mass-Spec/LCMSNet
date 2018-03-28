@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     [Serializable]
     public class classLCColumn

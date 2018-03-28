@@ -5,14 +5,14 @@
  *
  *********************************************************************************************************/
 using System;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
 using System.IO.Ports;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(ValveVICI2PosViewModel),
+    [classDeviceControl(typeof(ValveVICI2PosViewModel),
                                  "Four-Port",
                                  "Valves Two-Position")
     ]

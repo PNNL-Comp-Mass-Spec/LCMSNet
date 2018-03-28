@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace LcmsNetDataClasses.Experiment
+namespace LcmsNetSDK.Experiment
 {
     public class classSampleValidatorManager
     {

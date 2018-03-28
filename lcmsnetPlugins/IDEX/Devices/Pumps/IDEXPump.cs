@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace ASUTGen.Devices.Pumps
 {
@@ -111,7 +111,7 @@ namespace ASUTGen.Devices.Pumps
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool SetFlowRate(double timeout, double flowRate)
         {
 

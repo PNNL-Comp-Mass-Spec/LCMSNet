@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using LcmsNetCommonControls.Devices.Pumps;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Devices.Pumps;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.Pumps.ViewModels

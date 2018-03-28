@@ -37,16 +37,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Method;
-using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Enumeration describing the status of a sample.

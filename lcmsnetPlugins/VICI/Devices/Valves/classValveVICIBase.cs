@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.Ports;
 using FluidicsSDK.Base;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves
 {
@@ -161,7 +161,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistenceAttribute("PortName")]
+        [classPersistence("PortName")]
         public string PortName
         {
             get { return Port.PortName; }
@@ -175,7 +175,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistenceAttribute("ReadTimeout")]
+        [classPersistence("ReadTimeout")]
         public int ReadTimeout
         {
             get { return Port.ReadTimeout; }
@@ -189,7 +189,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistenceAttribute("WriteTimeout")]
+        [classPersistence("WriteTimeout")]
         public int WriteTimeout
         {
             get { return Port.WriteTimeout; }
@@ -203,7 +203,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets and sets the valve's ID in the software. DOES NOT CHANGE THE VALVE'S HARDWARE ID.
         /// </summary>
-        [classPersistenceAttribute("SoftwareID")]
+        [classPersistence("SoftwareID")]
         public char SoftwareID
         {
             get { return m_valveID; }

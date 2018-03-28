@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.ViewModels
 {

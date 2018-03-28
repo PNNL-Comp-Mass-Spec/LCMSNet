@@ -10,11 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using LcmsNetDataClasses.Devices.Pumps;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Device manager class for maintaining a list of all devices used by the application.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Arguments for manager status arguments.

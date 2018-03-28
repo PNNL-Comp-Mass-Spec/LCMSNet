@@ -9,13 +9,13 @@
 //*********************************************************************************************************
 
 using System;
-using System.ComponentModel;
-using LcmsNetDataClasses.Configuration;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Media;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Logging;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     [Serializable]
     public class classDataClassBase : ICacheInterface

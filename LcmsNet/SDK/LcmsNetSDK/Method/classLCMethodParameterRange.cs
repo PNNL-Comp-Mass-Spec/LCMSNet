@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Class for specifying a range of a paramter

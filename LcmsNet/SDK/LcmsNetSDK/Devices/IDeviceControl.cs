@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Describes the interface for user control's that interface a given hardware device or object.
@@ -29,7 +29,7 @@
         /// </summary>
         string Name { get; set; }
 
-        System.Windows.Controls.UserControl GetDefaultView();
+        global::System.Windows.Controls.UserControl GetDefaultView();
 
         #endregion
     }

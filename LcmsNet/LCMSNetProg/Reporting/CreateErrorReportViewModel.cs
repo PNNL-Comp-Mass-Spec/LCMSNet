@@ -2,8 +2,8 @@
 using System.Reactive;
 using System.Windows.Controls;
 using LcmsNet.Method;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Reporting

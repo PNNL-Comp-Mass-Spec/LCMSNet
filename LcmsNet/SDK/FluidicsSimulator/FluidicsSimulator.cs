@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
 using System.Threading;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace FluidicsSimulator
 {
@@ -386,7 +386,7 @@ namespace FluidicsSimulator
             // this keeps odd events from happening, such as timers from actually causing the simulator
             // to actually wait <xx> seconds before it continues to the next step.
 
-            if (currentEvent.Device.DeviceType != LcmsNetDataClasses.Devices.enumDeviceType.BuiltIn && currentEvent.Device.DeviceType != LcmsNetDataClasses.Devices.enumDeviceType.Virtual)
+            if (currentEvent.Device.DeviceType != enumDeviceType.BuiltIn && currentEvent.Device.DeviceType != enumDeviceType.Virtual)
             {
                 currentEvent.Method.Invoke(currentEvent.Device, currentEvent.Parameters);
                 //CheckModel(m_currentEvent);

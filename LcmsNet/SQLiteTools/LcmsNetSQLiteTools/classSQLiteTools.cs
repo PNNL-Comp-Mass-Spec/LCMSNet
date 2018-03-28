@@ -25,9 +25,9 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNetSQLiteTools
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Class that encapsulates all trackable diagnostic data for the cart.

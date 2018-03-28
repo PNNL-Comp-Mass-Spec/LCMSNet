@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace ASUTGen.Devices.Valves
 {
@@ -111,13 +111,13 @@ namespace ASUTGen.Devices.Valves
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Change Position", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Change Position", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool ChangePosition(double timeout, int position)
         {
 
             return true;
         }
-        [classLCMethodAttribute("Home Valve", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Home Valve", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool HomeValve(double timeout, int position)
         {
 

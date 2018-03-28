@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-// Deprecated: using System.ComponentModel.Composition;
-using LcmsNetDataClasses;
-// Deprecated: using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Experiment;
+using LcmsNetSDK.Data;
 
 namespace LcmsNetDmsTools
 {

@@ -1,7 +1,7 @@
 ﻿using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace ASIpump

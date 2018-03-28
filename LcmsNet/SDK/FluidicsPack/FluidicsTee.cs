@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
@@ -75,12 +76,12 @@ namespace FluidicsPack
             //do nothing
         }
 
-        protected override void SetDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void SetDevice(IDevice device)
         {
             //do nothing
         }
 
-        protected override void ClearDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void ClearDevice(IDevice device)
         {
             // do nothing
         }

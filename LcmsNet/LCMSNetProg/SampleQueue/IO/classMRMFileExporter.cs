@@ -15,9 +15,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
 using LcmsNetDmsTools;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {

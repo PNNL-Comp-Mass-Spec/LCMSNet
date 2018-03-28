@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Method
+﻿namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Enumeration indicating what type of timeout is available.

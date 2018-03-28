@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace ASUTGen.Devices.Pumps

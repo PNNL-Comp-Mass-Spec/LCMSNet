@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace DemoPluginLibrary
 {
-    [classDeviceControlAttribute(typeof(DemoValveAdvancedControlViewModel),
+    [classDeviceControl(typeof(DemoValveAdvancedControlViewModel),
                                  "Demo Valve - Two Position",
                                  "Demo")]
     public class DemoValve : IDevice, IFourPortValve
@@ -60,13 +60,13 @@ namespace DemoPluginLibrary
             return new List<string>();
         }
 
-        [classLCMethodAttribute("GetPosition", 1.0, "", -1, false)]
+        [classLCMethod("GetPosition", 1.0, "", -1, false)]
         public int GetPosition()
         {
             return Position;
         }
 
-        [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]
+        [classLCMethod("SetPosition", 1.0, "", -1, false)]
         public void SetPosition(TwoPositionState position)
         {
             if ((int)position < 0 || (int)position > 1)

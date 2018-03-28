@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace DemoPluginLibrary
 {
-     [classDeviceControlAttribute(typeof(DemoClosureAdvancedControlViewModel),
+     [classDeviceControl(typeof(DemoClosureAdvancedControlViewModel),
                                  "Demo Closure",
                                  "Demo")]
 
@@ -65,7 +65,7 @@ namespace DemoPluginLibrary
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="portName">The port to send the voltage on</param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool Trigger(int pulseLengthSeconds, string portName, double voltage)
         {
             //interact with hardware here.

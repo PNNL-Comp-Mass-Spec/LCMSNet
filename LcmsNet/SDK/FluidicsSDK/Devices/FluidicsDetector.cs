@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices
 {
@@ -18,12 +19,12 @@ namespace FluidicsSDK.Devices
             m_deviceName = "Detector";
         }
 
-        protected override void ClearDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void ClearDevice(IDevice device)
         {
             // do nothing
         }
 
-        protected override void SetDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void SetDevice(IDevice device)
         {
             var detector = device as IFluidicsClosure;
             if (detector != null)

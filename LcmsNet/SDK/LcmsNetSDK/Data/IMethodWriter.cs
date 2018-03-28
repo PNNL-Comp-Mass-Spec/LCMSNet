@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Data
+﻿namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// A bridge between our DLL and our concrete classes for writing LC methods.

@@ -6,16 +6,16 @@
  *********************************************************************************************************/
 using System;
 using System.IO.Ports;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(ValveVICIMultiPosViewModel),
+    [classDeviceControl(typeof(ValveVICIMultiPosViewModel),
                                  "Sixteen-Port",
                                  "Valves Multi-Position")
     ]
@@ -33,7 +33,7 @@ namespace LcmsNet.Devices.Valves
         }
 
 
-        [classLCMethodAttribute("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
+        [classLCMethod("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
         public void SetPosition(FifteenPositionState position)
         {
             var err = base.SetPosition((int)position);

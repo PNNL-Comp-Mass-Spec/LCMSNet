@@ -37,15 +37,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
-
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Data;
 using LcmsNetSQLiteTools;
 // Deprecated: using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNetDmsTools
 {

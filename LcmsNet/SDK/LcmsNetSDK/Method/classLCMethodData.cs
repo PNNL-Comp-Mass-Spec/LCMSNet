@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Method
+namespace LcmsNetSDK.Method
 {
     public class BreakEventArgs : EventArgs
     {

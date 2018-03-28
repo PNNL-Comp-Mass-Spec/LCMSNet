@@ -14,12 +14,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Devices.Pal
 {
@@ -28,7 +29,7 @@ namespace LcmsNet.Devices.Pal
     /// </summary>
     [Serializable]
 
-    [classDeviceControlAttribute(typeof(PalViewModel),
+    [classDeviceControl(typeof(PalViewModel),
                                  "PAL Autosampler",
                                  "Auto-Samplers")]
     public class classPal : IDevice, IAutoSampler, IFluidicsSampler
@@ -246,7 +247,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the folder containing the PAL method files.
         /// </summary>
-        [classPersistenceAttribute("MethodsFolder")]
+        [classPersistence("MethodsFolder")]
         public string MethodsFolder
         {
             get
@@ -274,7 +275,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the method for the PAL to run.
         /// </summary>
-        [classPersistenceAttribute("Method")]
+        [classPersistence("Method")]
         public string Method
         {
             get
@@ -291,7 +292,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the tray for the PAL to use.
         /// </summary>
-        [classPersistenceAttribute("Tray")]
+        [classPersistence("Tray")]
         public string Tray
         {
             get
@@ -317,7 +318,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The maximum valid vial number
         /// </summary>
-        [classPersistenceAttribute("VialRange")]
+        [classPersistence("VialRange")]
         public int MaxVial
         {
             get { return (int) VialRange; }
@@ -338,7 +339,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the vial for the PAL to use.
         /// </summary>
-        [classPersistenceAttribute("Vial")]
+        [classPersistence("Vial")]
         public int Vial
         {
             get
@@ -362,7 +363,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the volume (in uL).
         /// </summary>
-        [classPersistenceAttribute("Volume")]
+        [classPersistence("Volume")]
         public string Volume
         {
             get
@@ -379,7 +380,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the serial port which the PAL is connected to.
         /// </summary>
-        [classPersistenceAttribute("Port")]
+        [classPersistence("Port")]
         public string PortName
         {
             get;
@@ -389,7 +390,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the delay when polling for system status in seconds
         /// </summary>
-        [classPersistenceAttribute("StatusPollDelay")]
+        [classPersistence("StatusPollDelay")]
         public int StatusPollDelay
         {
             get;
@@ -843,7 +844,7 @@ namespace LcmsNet.Devices.Pal
         ///
         /// Loads the method
         ///
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
+        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool LoadMethod(double timeout, classSampleData sample, string methodName)
         {
             if (m_emulation)
@@ -854,7 +855,7 @@ namespace LcmsNet.Devices.Pal
             //
             // We let start method run
             //
-            var start = LcmsNetSDK.TimeKeeper.Instance.Now;
+            var start = TimeKeeper.Instance.Now;
 
             //
             // Load the method...
@@ -872,7 +873,7 @@ namespace LcmsNet.Devices.Pal
             //
             var status = "";
             var statusCheckError = m_PALDrvr.GetStatus(ref status);
-            var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
+            var span = TimeKeeper.Instance.Now.Subtract(start);
             if (timeout > span.TotalSeconds)
             {
                 // If the PAL is waiting for data station synchronization, DO NOT CONTINUE IN THE START METHOD!
@@ -961,11 +962,11 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        [classLCMethodAttribute("Wait for SyncPoint", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Wait for SyncPoint", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool WaitUntilStopPoint(double timeout)
         {
             var status = "";
-            var start = LcmsNetSDK.TimeKeeper.Instance.Now;
+            var start = TimeKeeper.Instance.Now;
             var end = start;
 
             var delayTime = StatusPollDelay * 1000;
@@ -1003,14 +1004,14 @@ namespace LcmsNet.Devices.Pal
                 }
 
                 System.Threading.Thread.Sleep(delayTime);
-                end = LcmsNetSDK.TimeKeeper.Instance.Now;
+                end = TimeKeeper.Instance.Now;
             }
 
             // Timed out
             return false;
         }
 
-        [classLCMethodAttribute("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
         public void ThrowError(int timeToThrowup)
         {
             Error?.Invoke(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
@@ -1020,7 +1021,7 @@ namespace LcmsNet.Devices.Pal
         /// Pauses the currently running method.
         /// </summary>
         ///
-        [classLCMethodAttribute("Pause Method", .5, "", -1, false)]
+        [classLCMethod("Pause Method", .5, "", -1, false)]
         public void PauseMethod()
         {
             if (m_emulation)
@@ -1035,7 +1036,7 @@ namespace LcmsNet.Devices.Pal
         /// Resumes the method.
         /// </summary>
         ///
-        [classLCMethodAttribute("Resume Method", 500, "", -1, false)]
+        [classLCMethod("Resume Method", 500, "", -1, false)]
         public void ResumeMethod()
         {
             if (m_emulation)
@@ -1049,7 +1050,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Continues the method. This is way different than ResumeMethod.
         /// </summary>
-        [classLCMethodAttribute("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool ContinueMethod(double timeout, bool waitForComplete = false)
         {
             if (m_emulation)
@@ -1090,7 +1091,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [classLCMethodAttribute("Stop Method", .5, "", -1, false)]
+        [classLCMethod("Stop Method", .5, "", -1, false)]
         public void StopMethod()
         {
             if (m_emulation)
@@ -1105,7 +1106,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         /// <param name="waitTimeoutms">The timeout value, in milliseconds.</param>
         /// <returns>Integer error code.</returns>
-        [classLCMethodAttribute("Wait Until Ready", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Wait Until Ready", enumMethodOperationTime.Parameter, "", -1, false)]
         public int WaitUntilReady(double waitTimeoutms)
         {
             var timeoutms = Convert.ToInt32(waitTimeoutms);
@@ -1114,9 +1115,9 @@ namespace LcmsNet.Devices.Pal
             {
                 return 0;
             }
-            var endTime = LcmsNetSDK.TimeKeeper.Instance.Now + TimeSpan.FromMilliseconds(timeoutms - 100);
+            var endTime = TimeKeeper.Instance.Now + TimeSpan.FromMilliseconds(timeoutms - 100);
             var status = GetStatus();
-            var currentTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var currentTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             while (currentTime < endTime && !status.Contains("READY"))
             {
                 var handles = new System.Threading.WaitHandle[1];
@@ -1128,7 +1129,7 @@ namespace LcmsNet.Devices.Pal
                 }
 
                 status = GetStatus();
-                currentTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                currentTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             }
 
             if (currentTime < endTime && status.Contains("READY"))

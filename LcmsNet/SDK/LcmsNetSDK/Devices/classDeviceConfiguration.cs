@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Holds the configuration of a collection of devices for persistence.

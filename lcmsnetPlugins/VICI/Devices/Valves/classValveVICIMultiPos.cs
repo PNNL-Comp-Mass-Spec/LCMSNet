@@ -2,10 +2,10 @@
 using System.IO.Ports;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves
 {
@@ -118,7 +118,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistenceAttribute("NumberOfPositions")]
+        [classPersistence("NumberOfPositions")]
         public int NumberOfPositions
         {
             get { return m_numberOfPositions; }

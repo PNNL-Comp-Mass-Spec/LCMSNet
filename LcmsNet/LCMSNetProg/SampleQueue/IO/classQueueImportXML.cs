@@ -12,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.SampleQueue.IO
 {

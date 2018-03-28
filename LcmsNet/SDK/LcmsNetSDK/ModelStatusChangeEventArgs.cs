@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Event args for ModelCheck event

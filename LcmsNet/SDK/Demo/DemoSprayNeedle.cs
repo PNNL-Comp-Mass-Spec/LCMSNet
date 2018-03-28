@@ -9,14 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsPack;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary
 {
-    [classDeviceControlAttribute(null,
+    [classDeviceControl(null,
                                  typeof(FluidicsSprayNeedle),
                                  "Demo Spray Needle",
                                  "Demo")]

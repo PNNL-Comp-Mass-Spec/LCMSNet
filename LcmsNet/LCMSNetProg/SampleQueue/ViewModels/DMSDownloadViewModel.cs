@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using LcmsNetDataClasses;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 using LcmsNetSQLiteTools;
 using ReactiveUI;
 

@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using LcmsNetDataClasses;
+using LcmsNetSDK;
 
 namespace LcmsNet.SampleQueue
 {

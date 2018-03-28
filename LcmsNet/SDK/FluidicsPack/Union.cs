@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
-    [classDeviceControlAttribute(null,
+    [classDeviceControl(null,
         typeof(FluidicsUnion),
         "Union",
         "Fluidics Components")]

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Data;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

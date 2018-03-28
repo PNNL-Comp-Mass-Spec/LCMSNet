@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Experiment;
 
 namespace LcmsNetDataClasses.Experiment
 {

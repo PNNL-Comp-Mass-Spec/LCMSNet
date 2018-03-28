@@ -5,14 +5,15 @@ using System.Globalization;
 using System.Threading;
 using FluidicsSDK.Devices;
 using LcmsNet.Devices.ContactClosure;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Devices.ContactClosureRead
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(ContactClosureReadU12ViewModel),
+    [classDeviceControl(typeof(ContactClosureReadU12ViewModel),
             "Contact Closure Read U12",
             "Contact Closure Readers")
     ]

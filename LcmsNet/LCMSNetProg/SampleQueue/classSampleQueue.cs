@@ -21,12 +21,13 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Experiment;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue

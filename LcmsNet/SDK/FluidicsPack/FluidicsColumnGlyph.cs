@@ -6,7 +6,7 @@ using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Graphic;
 using FluidicsSDK.Managers;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {

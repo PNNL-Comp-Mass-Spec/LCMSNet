@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.Devices.BrukerStart
 {

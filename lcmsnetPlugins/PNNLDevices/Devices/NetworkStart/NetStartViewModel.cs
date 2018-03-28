@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using LcmsNet.Devices.NetworkStart.Socket;
 using LcmsNetCommonControls.Devices.NetworkStart;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.NetworkStart
 {

@@ -13,11 +13,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Timers;
 using FluidicsSDK.Devices;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Devices.BrukerStart
 {
@@ -26,7 +26,7 @@ namespace LcmsNet.Devices.BrukerStart
     /// </summary>
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(BrukerStartViewModel), "Bruker", "Detectors")]
+    [classDeviceControl(typeof(BrukerStartViewModel), "Bruker", "Detectors")]
     public class classBrukerStart : IDevice, IFluidicsClosure
     {
         #region "Constants"
@@ -154,7 +154,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// <summary>
         /// Gets or sets the Port number to connect to on the Bruker System.
         /// </summary>
-        [classPersistenceAttribute("Port")]
+        [classPersistence("Port")]
         public int Port
         {
             get
@@ -169,7 +169,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// <summary>
         /// Gets or sets the IP address of the Bruker System.
         /// </summary>
-        [classPersistenceAttribute("IPAddress")]
+        [classPersistence("IPAddress")]
         public string IPAddress
         {
             get
@@ -282,7 +282,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="sample">Data object for sample to be run</param>
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, true, 1, "", -1, false)]
+        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, true, 1, "", -1, false)]
         public bool StartAcquisition(double timeout, classSampleData sample)
         {
             if (m_Emulation)
@@ -527,7 +527,7 @@ new classDeviceErrorEventArgs(msg,
         /// <summary>
         /// Stops data acquisition
         /// </summary>
-        [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopAcquisition(double timeout)
         {
             if (m_Emulation)

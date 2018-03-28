@@ -11,9 +11,8 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using LcmsNetSDK;
 
-namespace LcmsNetDataClasses.Data
+namespace LcmsNetSDK.Data
 {
     [Serializable]
     public class classPalData : classDataClassBase, ICloneable, INotifyPropertyChangedExt

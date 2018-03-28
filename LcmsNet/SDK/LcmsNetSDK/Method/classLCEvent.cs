@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using LcmsNet.Method;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
-namespace LcmsNetDataClasses.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Class that holds data for relative starting of LC-methods/events

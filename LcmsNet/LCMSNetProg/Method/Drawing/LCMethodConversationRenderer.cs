@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {

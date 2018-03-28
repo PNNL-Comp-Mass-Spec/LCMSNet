@@ -8,17 +8,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace DemoPluginLibrary
 {
     //TODO: Add a custom user control for this guy....maybe?
-    [classDeviceControlAttribute(null,
+    [classDeviceControl(null,
                                  "Demo Pump",
                                  "Demo")]
     public class DemoPump : IDevice, IPump, IFluidicsPump
@@ -110,13 +109,13 @@ namespace DemoPluginLibrary
 
         public event DelegateDeviceHasData MethodNames;
 
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
+        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             return true;
         }
 
-        [classLCMethodAttribute("Stop Method", 1.0, "", -1, false)]
+        [classLCMethod("Stop Method", 1.0, "", -1, false)]
         public bool StopMethod()
         {
             return true;

@@ -10,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using LcmsNetSDK;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 
 namespace PDFGenerator
 {
@@ -33,7 +34,7 @@ namespace PDFGenerator
         /// <param name="columnData">a list of classColumnData for each enabled column</param>
         /// <param name="devices">a list of 3-tuples of string containing device name, status, and error type</param>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
-        public void WritePDF(string documentPath, string title, classSampleData sample, string numEnabledColumns, List<LcmsNetDataClasses.Configuration.classColumnData> columnData,
+        public void WritePDF(string documentPath, string title, classSampleData sample, string numEnabledColumns, List<classColumnData> columnData,
             List<IDevice> devices, BitmapSource fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
@@ -63,12 +64,12 @@ namespace PDFGenerator
                 //solvent data currently unavailable. TODO: implement if/when solvent information is available
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Mobile Phases");
                 ////TODO: get solvent info from lcmsnet
-            var pumps = new List<LcmsNetDataClasses.Devices.Pumps.IPump>();
+            var pumps = new List<IPump>();
             foreach(var device in devices)
             {
-                if(device is LcmsNetDataClasses.Devices.Pumps.IPump)
+                if(device is IPump)
                 {
-                    pumps.Add(device as LcmsNetDataClasses.Devices.Pumps.IPump);
+                    pumps.Add(device as IPump);
                 }
             }
             var mobilePhases = new StringBuilder();
@@ -211,7 +212,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="columnData">a list containing data for the columns</param>
         /// <returns>a formatted string of column data</returns>
-        private static string CreateColumnString(List<LcmsNetDataClasses.Configuration.classColumnData> columnData)
+        private static string CreateColumnString(List<classColumnData> columnData)
         {
             //Column data, we want to be able to determine other column names and status..but this would only happen at the *end* of the run, perhaps not so useful?
             int[] FieldWidths = { -20, -20};

@@ -1,9 +1,9 @@
-﻿using LcmsNetDataClasses.Devices;
+﻿using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(FluidicsColumnControlViewModel),
+    [classDeviceControl(typeof(FluidicsColumnControlViewModel),
                                  typeof(FluidicsColumnGlyph),
                                  "Column",
                                  "Fluidics Components")

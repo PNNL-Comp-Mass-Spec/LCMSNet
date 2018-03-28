@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue
 {

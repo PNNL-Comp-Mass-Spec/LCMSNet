@@ -8,7 +8,7 @@
 
 using System;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Custom attribute class for display of plugin name

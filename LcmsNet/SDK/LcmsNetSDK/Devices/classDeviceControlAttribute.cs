@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     public class classDeviceControlAttribute : Attribute
     {

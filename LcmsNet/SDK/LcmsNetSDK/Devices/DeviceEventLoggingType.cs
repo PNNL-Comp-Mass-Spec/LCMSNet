@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Enum to specify how a status or error event should be logged

@@ -8,10 +8,10 @@
 
 using System.Globalization;
 using System.Text;
-using LcmsNetDataClasses.Devices;
-using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     public enum ModelStatusCategory
     {

@@ -7,13 +7,13 @@
 using System;
 using FluidicsSDK.Devices;
 using System.IO.Ports;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(ValveVICI2PosViewModel),
+    [classDeviceControl(typeof(ValveVICI2PosViewModel),
                                  "Six-Port",
                                  "Valves Two-Position")
     ]

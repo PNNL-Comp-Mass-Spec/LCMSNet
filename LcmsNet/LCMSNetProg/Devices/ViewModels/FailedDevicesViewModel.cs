@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels

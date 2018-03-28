@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows.Media;
-using LcmsNetSDK;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Configuration
+namespace LcmsNetSDK.Configuration
 {
     /// <summary>
     /// Class that manages all of the information about a given column

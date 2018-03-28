@@ -6,7 +6,7 @@ using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
 using FluidicsSDK.Managers;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices.Valves
 {

@@ -13,9 +13,9 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Logging;
 
-namespace LcmsNetDataClasses.Data
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Tools for generation of trigger files

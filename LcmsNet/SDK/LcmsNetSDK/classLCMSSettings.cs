@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     public class SettingChangedEventArgs : EventArgs
     {

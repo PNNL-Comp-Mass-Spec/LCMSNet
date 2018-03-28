@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsPack;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary
 {
-      [classDeviceControlAttribute(null,
+      [classDeviceControl(null,
                                    typeof(FluidicsTee),
                                    "Demo Tee",
                                    "Demo")]

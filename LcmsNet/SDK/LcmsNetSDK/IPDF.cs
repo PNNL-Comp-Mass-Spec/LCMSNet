@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media.Imaging;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNetSDK
 {

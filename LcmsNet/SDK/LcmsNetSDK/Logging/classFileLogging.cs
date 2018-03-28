@@ -14,9 +14,9 @@
 using System;
 using System.IO;
 using System.Text;
-using LcmsNetSDK;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Logs errors and messages to a file

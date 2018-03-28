@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
-using LcmsNetDataClasses.Method;
-using LcmsNetSDK;
+using LcmsNetSDK.Method;
 
 //using LcmsNet.Devices;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Class that handles low level timing.  Has one method to wait!

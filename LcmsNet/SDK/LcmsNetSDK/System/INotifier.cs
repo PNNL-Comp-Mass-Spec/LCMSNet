@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
-namespace LcmsNetSDK.Notifications
+namespace LcmsNetSDK.System
 {
     /// <summary>
     /// Inteface used to notify the system when something bad has happened (or status)

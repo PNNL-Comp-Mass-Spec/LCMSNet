@@ -4,11 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Windows;
 using LcmsNet.Method;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Reporting
 {

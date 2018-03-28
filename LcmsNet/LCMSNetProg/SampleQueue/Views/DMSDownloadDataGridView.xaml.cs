@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using LcmsNet.SampleQueue.ViewModels;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.Views
 {

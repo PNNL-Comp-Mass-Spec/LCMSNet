@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method
 {

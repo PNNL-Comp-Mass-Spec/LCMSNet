@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Xml;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method
 {

@@ -9,7 +9,7 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Class to hold data about LcmsNet users

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Windows.Data;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Logging.ViewModels

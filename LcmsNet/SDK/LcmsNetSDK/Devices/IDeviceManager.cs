@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Delegate definition when a device is added or removed.

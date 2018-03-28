@@ -1,8 +1,8 @@
-﻿using LcmsNetDataClasses.Devices;
+﻿using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
-    [classDeviceControlAttribute(null,
+    [classDeviceControl(null,
         typeof(FluidicsTee),
         "Tee",
         "Fluidics Components")]

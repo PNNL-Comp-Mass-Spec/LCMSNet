@@ -5,10 +5,10 @@ using System.Linq;
 using System.Reactive;
 using System.Windows;
 using System.Windows.Data;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

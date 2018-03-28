@@ -13,12 +13,11 @@ using LcmsNet.Devices;
 using LcmsNet.Method;
 using LcmsNet.Properties;
 using LcmsNet.SampleQueue.IO;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSQLiteTools;
 
 namespace LcmsNet

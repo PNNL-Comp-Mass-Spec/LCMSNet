@@ -15,9 +15,8 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using LcmsNetSDK;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Class to hold data about the instrument connected to the LC cart

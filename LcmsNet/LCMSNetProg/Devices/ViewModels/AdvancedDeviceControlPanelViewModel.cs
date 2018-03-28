@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels

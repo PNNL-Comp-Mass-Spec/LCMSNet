@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses.Devices.Pumps
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Class for event handler arguments.

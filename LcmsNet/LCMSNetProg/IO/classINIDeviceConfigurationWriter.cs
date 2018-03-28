@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices
 {

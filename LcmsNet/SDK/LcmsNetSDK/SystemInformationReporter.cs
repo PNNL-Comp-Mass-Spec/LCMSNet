@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     public class SystemInformationReporter
     {

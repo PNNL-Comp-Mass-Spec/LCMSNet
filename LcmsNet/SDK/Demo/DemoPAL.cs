@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
-using LcmsNetDataClasses;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace DemoPluginLibrary
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(DemoPALAdvancedControlViewModel),
+    [classDeviceControl(typeof(DemoPALAdvancedControlViewModel),
                                  "Demo PAL",
                                  "Demo")
     ]
@@ -92,7 +92,7 @@ namespace DemoPluginLibrary
 
         }
 
-        [classLCMethodAttribute("Run Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
+        [classLCMethod("Run Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public void RunMethod(double timeout, classSampleData sample, string method)
         {
             // Interact with hardware here.

@@ -16,13 +16,13 @@ using System.Globalization;
 using System.IO;
 
 using Agilent.Licop;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace Agilent.Devices.Pumps
 {
@@ -30,7 +30,7 @@ namespace Agilent.Devices.Pumps
     /// Interface to Agilent Pumps for running the solution of a gradient.
     /// </summary>
     [Serializable]
-    [classDeviceControlAttribute(typeof(PumpAgilentViewModel),
+    [classDeviceControl(typeof(PumpAgilentViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
     public class classPumpAgilent : IDevice, IPump, IFluidicsPump
@@ -265,13 +265,13 @@ namespace Agilent.Devices.Pumps
         #endregion
 
         #region Properties
-        [classPersistenceAttribute("TotalMonitoringMinutes")]
+        [classPersistence("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistenceAttribute("TotalMonitoringSecondsElapsed")]
+        [classPersistence("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -352,7 +352,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
-        [classPersistenceAttribute("PortName")]
+        [classPersistence("PortName")]
         public string PortName
         {
             get;
@@ -390,7 +390,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="flow"></param>
         /// <param name="numberOfMinutes"></param>
         /// <returns></returns>
-        [classLCMethodAttribute("Purge Channel", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Purge Channel", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool PurgePump(double timeout, enumPurgePumpChannel channel, double flow, double numberOfMinutes)
         {
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
@@ -429,7 +429,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        [classLCMethodAttribute("Abort Purge", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Abort Purge", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool AbortPurges(double timeout)
         {
             var reply = "";
@@ -800,7 +800,7 @@ namespace Agilent.Devices.Pumps
         }
         private void ProcessMonitoringData(double flowrate, double pressure, double compositionB)
         {
-            var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var time = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
             if (Math.Abs(m_flowrate) > float.Epsilon)
@@ -931,7 +931,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the pump mode.
         /// </summary>
         /// <param name="newMode">The new mode</param>
-        [classLCMethodAttribute("Set Mode", 1, "", -1, false)]
+        [classLCMethod("Set Mode", 1, "", -1, false)]
         public void SetMode(enumPumpAgilentModes newMode)
         {
             if (m_emulation)
@@ -947,7 +947,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="newFlowRate">The new flow rate.</param>
         ///
-        [classLCMethodAttribute("Set Flow Rate", 1, "", -1, false)]
+        [classLCMethod("Set Flow Rate", 1, "", -1, false)]
         public void SetFlowRate(double newFlowRate)
         {
             if (m_emulation)
@@ -963,7 +963,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the mixer volume
         /// </summary>
         /// <param name="newVolumeuL">The new mixer volume, in uL</param>
-        [classLCMethodAttribute("Set Mixer Volume", 1, "", -1, false)]
+        [classLCMethod("Set Mixer Volume", 1, "", -1, false)]
         public void SetMixerVolume(double newVolumeuL)
         {
             if (m_emulation)
@@ -980,7 +980,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the percent B concentration.
         /// </summary>
         /// <param name="percent">Percent B concentration to have.</param>
-        [classLCMethodAttribute("Set Percent B", 1, "", -1, false)]
+        [classLCMethod("Set Percent B", 1, "", -1, false)]
         public void SetPercentB(double percent)
         {
             var reply = "";
@@ -992,17 +992,17 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="method">Method to run stored on the pumps.</param>
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
+        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
         public void StartMethod(double timeout, string method)
         {
-            var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             StartMethod(method);
 
             //
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
             //
-            var span = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(start);
+            var span = TimeKeeper.Instance.Now.Subtract(start);
 
             var timer = new classTimerDevice();
             timer.WaitSeconds(span.TotalSeconds);
@@ -1047,7 +1047,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [classLCMethodAttribute("Stop Method", 1, "", -1, false)]
+        [classLCMethod("Stop Method", 1, "", -1, false)]
         public void StopMethod()
         {
             var reply = "";
@@ -1056,7 +1056,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Turns the pumps on.
         /// </summary>
-        [classLCMethodAttribute("Turn Pump On", 1, "", -1, false)]
+        [classLCMethod("Turn Pump On", 1, "", -1, false)]
         public void PumpOn()
         {
             var reply = "";
@@ -1065,7 +1065,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Turns the pumps off
         /// </summary>
-        [classLCMethodAttribute("Turn Pump Off", 1, "", -1, false)]
+        [classLCMethod("Turn Pump Off", 1, "", -1, false)]
         public void PumpOff()
         {
             var reply = "";

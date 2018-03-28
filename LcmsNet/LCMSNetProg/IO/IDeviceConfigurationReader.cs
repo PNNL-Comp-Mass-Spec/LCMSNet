@@ -1,4 +1,4 @@
-﻿using LcmsNetDataClasses.Devices;
+﻿using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices
 {

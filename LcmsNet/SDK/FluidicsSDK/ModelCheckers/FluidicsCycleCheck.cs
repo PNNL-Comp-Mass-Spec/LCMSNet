@@ -7,13 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -73,7 +74,7 @@ namespace FluidicsSDK.ModelCheckers
                     {
                         const string message = "Cycle in physical configuration";
                         var deviceName = source.ParentDevice.IDevice.Name;
-                        StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, deviceName, this, message));
+                        StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, deviceName, this, message));
                     }
                 }
             }
@@ -122,9 +123,9 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error
+        public event EventHandler<classDeviceErrorEventArgs> Error
         {
             add { }
             remove { }

@@ -11,11 +11,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO.Ports;
 using System.Xml;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
 using System.Threading;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Devices.Pumps
 {
@@ -24,7 +25,7 @@ namespace LcmsNet.Devices.Pumps
     /// </summary>
     [Serializable]
 
-    [classDeviceControlAttribute(typeof(PumpIscoViewModel), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
+    [classDeviceControl(typeof(PumpIscoViewModel), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
     public class classPumpIsco : IDevice
     {
         #region "Constants"
@@ -110,7 +111,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port name
         /// </summary>
-        [classPersistenceAttribute("PortName")]
+        [classPersistence("PortName")]
         public string PortName
         {
             get { return m_SerialPort.PortName; }
@@ -125,7 +126,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port baud rate
         /// </summary>
-        [classPersistenceAttribute("BaudRate")]
+        [classPersistence("BaudRate")]
         public int BaudRate
         {
             get { return m_SerialPort.BaudRate; }
@@ -135,7 +136,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port read timeout (msec)
         /// </summary>
-        [classPersistenceAttribute("ReadTimeout")]
+        [classPersistence("ReadTimeout")]
         public int ReadTimeout
         {
             get { return m_SerialPort.ReadTimeout; }
@@ -145,7 +146,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port write timeout (msec)
         /// </summary>
-        [classPersistenceAttribute("WriteTimeout")]
+        [classPersistence("WriteTimeout")]
         public int WriteTimeout
         {
             get { return m_SerialPort.WriteTimeout; }
@@ -160,7 +161,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Number of pumps connected to this controller (1 min, 3 max)
         /// </summary>
-        [classPersistenceAttribute("PumpCount")]
+        [classPersistence("PumpCount")]
         public int PumpCount
         {
             get { return m_PumpCount; }
@@ -170,7 +171,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Address for the pump controller
         /// </summary>
-        [classPersistenceAttribute("UnitAddress")]
+        [classPersistence("UnitAddress")]
         public int UnitAddress
         {
             get { return m_UnitAddr; }
@@ -467,7 +468,7 @@ namespace LcmsNet.Devices.Pumps
                 return false;
             }
         }
-        [classLCMethodAttribute("Set Mode", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Set Mode", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool SetOperationMode(double timeout, enumIscoOperationMode newMode)
         {
             return SetOperationMode(newMode);
@@ -1050,7 +1051,7 @@ namespace LcmsNet.Devices.Pumps
         }
 
 
-        [classLCMethodAttribute("Refill", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Refill", enumMethodOperationTime.Parameter, "", -1, false)]
         //public bool StartRefill(double timeout, int pumpIndx, double refillRate)
         public bool StartRefill(double timeout, enumISCOPumpChannels pump, double refillRate)
         {
@@ -1124,7 +1125,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="pump"></param>
         /// <returns></returns>
-        [classLCMethodAttribute("Start Pump", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Start Pump", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StartPump(double timeout, enumISCOPumpChannels pump)
         {
             return StartPump(timeout, (int)pump);
@@ -1180,7 +1181,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="pump">Pump to stop</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        [classLCMethodAttribute("Stop Pump", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Stop Pump", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopPump(double timeout, enumISCOPumpChannels pump)
         {
             return StopPump(timeout, (int)pump);
@@ -1229,7 +1230,7 @@ namespace LcmsNet.Devices.Pumps
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
         }
-        [classLCMethodAttribute("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
         //public bool SetFlow(double timeout, int pumpIndx, double newFlow)
         public bool SetFlow(double timeout, enumISCOPumpChannels pump, double newFlow)
         {
@@ -1286,7 +1287,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="pump">Pump to set</param>
         /// <param name="newPress">New pressure setpoint</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        [classLCMethodAttribute("Set Pressure", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Set Pressure", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool SetPressure(double timeout, enumISCOPumpChannels pump, double newPress)
         {
             return SetPressure((int)pump, newPress);
@@ -2016,7 +2017,7 @@ namespace LcmsNet.Devices.Pumps
                 for (var pump = 0; pump < m_PumpCount; pump++)
                 {
                     // Sample time
-                    retArray[pump].PointTime = LcmsNetSDK.TimeKeeper.Instance.Now;// DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+                    retArray[pump].PointTime = TimeKeeper.Instance.Now;// DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
                     // Pressure
                     retArray[pump].Pressure = classIscoConversions.ConvertPressFromString(tokens[pump], models[pump]);

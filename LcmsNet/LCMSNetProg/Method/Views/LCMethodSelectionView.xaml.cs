@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.SampleQueue.ViewModels;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.Views

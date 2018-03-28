@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Enumeration describing errors that can occur on the carts.

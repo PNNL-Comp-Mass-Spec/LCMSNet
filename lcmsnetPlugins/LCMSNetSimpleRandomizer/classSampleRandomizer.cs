@@ -11,8 +11,9 @@
 //*********************************************************************************************************
 using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses;
 using System.Collections;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue
 {

@@ -8,10 +8,9 @@
 
 using System;
 using System.Globalization;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 
-namespace LcmsNetSDK
+namespace LcmsNetSDK.System
 {
     public class TimeKeeper
     {

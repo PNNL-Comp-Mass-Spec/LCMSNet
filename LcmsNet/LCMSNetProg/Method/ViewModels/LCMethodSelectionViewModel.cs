@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Data;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

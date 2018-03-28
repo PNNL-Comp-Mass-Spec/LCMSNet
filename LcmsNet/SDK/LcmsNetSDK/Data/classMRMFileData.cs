@@ -6,7 +6,7 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Holds MRM file data downloaded from DMS

@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     //All these need to be propogated up through the class
     public delegate void DelegateDevicePositionChange(object sender, string p);

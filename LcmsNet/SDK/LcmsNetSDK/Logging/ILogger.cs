@@ -1,6 +1,7 @@
 ﻿using System;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Logging
+namespace LcmsNetSDK.Logging
 {
     public interface ILogger
     {

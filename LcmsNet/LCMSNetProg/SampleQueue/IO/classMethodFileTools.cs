@@ -9,9 +9,9 @@
 using System;
 using System.IO;
 using LcmsNet.Method;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {

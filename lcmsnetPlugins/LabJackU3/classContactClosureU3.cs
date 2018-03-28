@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Devices.ContactClosure
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(ContactClosureU3ViewModel),
+    [classDeviceControl(typeof(ContactClosureU3ViewModel),
                                  "Contact Closure U3",
                                  "Contact Closures")
     ]
@@ -184,7 +185,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [classPersistenceAttribute("Port")]
+        [classPersistence("Port")]
         public enumLabjackU3OutputPorts Port
         {
             get
@@ -197,7 +198,7 @@ namespace LcmsNet.Devices.ContactClosure
                 OnDeviceSaveRequired();
             }
         }
-        [classPersistenceAttribute("Labjack ID")]
+        [classPersistence("Labjack ID")]
         public int LabJackID
         {
             get
@@ -231,7 +232,7 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 Status       = enumDeviceStatus.Error;
                 errorMessage = "Could not create a labjack object. Is one connected?";
-                LcmsNetDataClasses.Logging.classApplicationLogger.LogError(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to create LabJack U3 object. Exception: " + ex.Message);
+                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to create LabJack U3 object. Exception: " + ex.Message);
                 return false;
             }
             Version = m_labjack.GetDriverVersion().ToString(CultureInfo.InvariantCulture);
@@ -275,7 +276,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double pulseLengthSeconds, enumLabjackU3OutputPorts port, double voltage)
         {
             if (m_emulation)

@@ -12,9 +12,9 @@
 
 using System;
 using System.Threading;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     public interface IDevice : INotifier
     {

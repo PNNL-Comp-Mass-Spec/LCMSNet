@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNetCommonControls.Devices.NetworkStart
 {

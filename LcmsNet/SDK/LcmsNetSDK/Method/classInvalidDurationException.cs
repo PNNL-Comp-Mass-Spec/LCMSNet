@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Class thrown if the duration of an LC Event was invalid

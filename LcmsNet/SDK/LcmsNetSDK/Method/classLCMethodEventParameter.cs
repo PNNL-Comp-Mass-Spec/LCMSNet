@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LcmsNet.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Class that pairs parameter values with controls and their names for editing them.

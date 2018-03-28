@@ -7,8 +7,9 @@
 //*********************************************************************************************************
 
 using System;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Experiment
+namespace LcmsNetSDK.Experiment
 {
     /// <summary>
     /// Experiment data

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace Newport.ESP300
 {

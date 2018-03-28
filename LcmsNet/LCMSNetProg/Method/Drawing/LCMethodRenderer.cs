@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {

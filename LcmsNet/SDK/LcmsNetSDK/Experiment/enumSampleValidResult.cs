@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Experiment
+﻿namespace LcmsNetSDK.Experiment
 {
     /// <summary>
     /// Sample Validation Result

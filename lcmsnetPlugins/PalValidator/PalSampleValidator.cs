@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetDataClasses.Experiment;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Data;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Logging;
 
 namespace PALAutoSampler.Validator
 {
@@ -21,10 +21,10 @@ namespace PALAutoSampler.Validator
         /// </summary>
         /// <param name="samples"></param>
         /// <returns></returns>
-        public List<LcmsNetDataClasses.classSampleData> ValidateBlocks(List<LcmsNetDataClasses.classSampleData> samples)
+        public List<classSampleData> ValidateBlocks(List<classSampleData> samples)
         {
             // Blocks don't matter to the PAL.
-            return new List<LcmsNetDataClasses.classSampleData>();
+            return new List<classSampleData>();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PALAutoSampler.Validator
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public List<classSampleValidationError> ValidateSamples(LcmsNetDataClasses.classSampleData sample)
+        public List<classSampleValidationError> ValidateSamples(classSampleData sample)
         {
             var errors = new List<classSampleValidationError>();
 

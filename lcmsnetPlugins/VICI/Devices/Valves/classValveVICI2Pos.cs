@@ -15,11 +15,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.Ports;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Devices.Valves
 {
@@ -324,7 +324,7 @@ namespace LcmsNet.Devices.Valves
         /// Sets the position of the valve (A or B).
         /// </summary>
         /// <param name="newPosition">The new position.</param>
-        [classLCMethodAttribute("Set Position", 1, true, "", -1, false)]
+        [classLCMethod("Set Position", 1, true, "", -1, false)]
         public void SetPosition(TwoPositionState newPosition)
         {
 

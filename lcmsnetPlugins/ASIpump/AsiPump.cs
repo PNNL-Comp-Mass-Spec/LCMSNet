@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
-
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK.Data;
 
 using System.ComponentModel;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace ASIpump
 {
 
-    [classDeviceControlAttribute(typeof(AsiUIViewModel),
+    [classDeviceControl(typeof(AsiUIViewModel),
                                  "ASi Pump",
                                  "Syringe Pumps")]
     public class AsiPump : SerialDevice, IDevice, IPump, IFluidicsPump
@@ -45,7 +44,7 @@ namespace ASIpump
         [Description("Total flow in uL/minute")]
         [Category("Program Parameters")]
         [DisplayName("Total Flow")]
-        [classPersistenceAttribute("TotalFlow")]
+        [classPersistence("TotalFlow")]
         public double TotalFlow
         {
             get { return totalFlow; }
@@ -61,7 +60,7 @@ namespace ASIpump
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % A")]
-        [classPersistenceAttribute("StartPercentA")]
+        [classPersistence("StartPercentA")]
         public double StartPercentA
         {
             get { return startPercentA; }
@@ -77,7 +76,7 @@ namespace ASIpump
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % B")]
-        [classPersistenceAttribute("StartPercentB")]
+        [classPersistence("StartPercentB")]
         public double StartPercentB
         {
             get { return startPercentB; }
@@ -93,7 +92,7 @@ namespace ASIpump
         [Description("Gradient Time (seconds)")]
         [Category("Program Parameters")]
         [DisplayName("Gradient Time")]
-        [classPersistenceAttribute("GradientTime")]
+        [classPersistence("GradientTime")]
         public double GradientTime
         {
             get { return gradientTime; }
@@ -109,7 +108,7 @@ namespace ASIpump
         [Description("Initial Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Initial Iso Time")]
-        [classPersistenceAttribute("InitialIsoTime")]
+        [classPersistence("InitialIsoTime")]
         public double InitialIsoTime
         {
             get { return initialIsoTime; }
@@ -125,7 +124,7 @@ namespace ASIpump
         [Description("Final Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Final Iso Time")]
-        [classPersistenceAttribute("FinalIsoTime")]
+        [classPersistence("FinalIsoTime")]
         public double FinalIsoTime
         {
             get { return finalIsoTime; }
@@ -280,13 +279,13 @@ namespace ASIpump
         #endregion
 
         #region Properties
-        [classPersistenceAttribute("TotalMonitoringMinutes")]
+        [classPersistence("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistenceAttribute("TotalMonitoringSecondsElapsed")]
+        [classPersistence("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -300,7 +299,7 @@ namespace ASIpump
         /// <summary>
         /// Gets the device's status
         /// </summary>
-        public LcmsNetDataClasses.Devices.enumDeviceStatus Status { get; set; }
+        public enumDeviceStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets whether the device is running
@@ -607,12 +606,12 @@ namespace ASIpump
         [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, true)]
         public void StartMethod(double timeout, double flowrate, string methodName)
         {
-            var start = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             //Some method starting private function StartMethod(methodName);
         }
 
-        [classLCMethodAttribute("Turn On", 1, false, "", -1, false)]
+        [classLCMethod("Turn On", 1, false, "", -1, false)]
         public void TurnOn()
         {
 

@@ -4,10 +4,11 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Devices;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Devices.NetworkStart.Socket
 {
@@ -15,7 +16,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
     /// Network Start using old command packing messaging for communication with mass spectrometer.
     /// </summary>
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControlAttribute(typeof(NetStartViewModel),
+    [classDeviceControl(typeof(NetStartViewModel),
 
                                  "Network Start",
                                  "Detectors")
@@ -115,17 +116,17 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the send timeout for the socket.
         /// </summary>
-        [classPersistenceAttribute("SendTimeout")]
+        [classPersistence("SendTimeout")]
         public int SendTimeout { get; set; }
         /// <summary>
         /// Gets or sets the receive timeout for the socket.
         /// </summary>
-        [classPersistenceAttribute("ReceiveTimeout")]
+        [classPersistence("ReceiveTimeout")]
         public int ReceiveTimeout { get; set; }
         /// <summary>
         /// Gets or sets the IP address or DNS name of the server instrument.
         /// </summary>
-        [classPersistenceAttribute("IPAddress")]
+        [classPersistence("IPAddress")]
         public string Address
         {
             get
@@ -140,7 +141,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the port used to connect to the server.
         /// </summary>
-        [classPersistenceAttribute("Port")]
+        [classPersistence("Port")]
         public int Port
         {
             get
@@ -341,7 +342,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <param name="timeout"></param>
         /// <param name="sample">Name of sample to run.</param>
         /// <returns>True if start successful.  False if start failed for any reason.</returns>
-        [classLCMethodAttribute("Start Acquisition", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
+        [classLCMethod("Start Acquisition", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
         public bool StartAcquisition(double timeout, classSampleData sample)
         {
             if (Emulation)
@@ -442,10 +443,10 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Stops instrument acquisition.
         /// </summary>
-        [classLCMethodAttribute("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopAcquisition(double delayTime)
         {
-            var startTime = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var startTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             if (Emulation)
             {

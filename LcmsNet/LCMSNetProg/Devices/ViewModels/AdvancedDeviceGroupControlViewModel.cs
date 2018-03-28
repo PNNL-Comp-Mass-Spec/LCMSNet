@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels

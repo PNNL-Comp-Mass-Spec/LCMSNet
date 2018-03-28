@@ -9,11 +9,11 @@ using FluidicsSDK;
 using LcmsNet.Devices;
 using LcmsNet.Method;
 using LcmsNet.Properties;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Notification.ViewModels

@@ -1,6 +1,6 @@
-﻿ using System;
-using LcmsNetDataClasses;
+﻿using System;
 using LcmsNetDmsTools;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
 namespace FailureInjector.Drivers
 {
@@ -127,7 +127,7 @@ namespace FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Inject Failure", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Inject Failure", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool MethodFailure(double timeout)
         {
             if (this.Error != null)
@@ -148,7 +148,7 @@ namespace FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Send Number", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Send Number", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool SendNumber(double timeout, double number)
         {
             if (StatusUpdate != null)
@@ -194,7 +194,7 @@ namespace FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Inject Status", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Inject Status", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool MethodStatus(double timeout)
         {
             if (this.StatusUpdate != null)

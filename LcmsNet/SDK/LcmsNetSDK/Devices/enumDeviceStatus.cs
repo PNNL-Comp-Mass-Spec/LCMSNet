@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Devices
+﻿namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Enumeration of possible status.

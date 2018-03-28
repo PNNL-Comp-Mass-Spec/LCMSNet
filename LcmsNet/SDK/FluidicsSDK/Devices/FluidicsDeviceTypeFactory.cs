@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices
 {

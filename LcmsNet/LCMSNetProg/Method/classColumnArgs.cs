@@ -5,7 +5,7 @@
  *
  *********************************************************************************************************/
 
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.Method
 {

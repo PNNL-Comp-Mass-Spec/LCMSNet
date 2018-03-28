@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Experiment
+namespace LcmsNetSDK.Experiment
 {
     public interface ISampleValidator
     {

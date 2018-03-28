@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using LcmsNetSDK;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     public class BaseDeviceControlViewModel : INotifyPropertyChangedExt
     {

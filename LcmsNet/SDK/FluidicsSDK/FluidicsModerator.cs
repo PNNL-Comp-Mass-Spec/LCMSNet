@@ -5,9 +5,8 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK
 {

@@ -14,15 +14,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Devices;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Devices.ContactClosure
 {
     [Serializable]
-    [classDeviceControlAttribute(typeof(ContactClosureU12ViewModel),
+    [classDeviceControl(typeof(ContactClosureU12ViewModel),
                                  "Contact Closure U12",
                                  "Contact Closures")
     ]
@@ -196,7 +196,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [classPersistenceAttribute("Port")]
+        [classPersistence("Port")]
         public enumLabjackU12OutputPorts Port
         {
             get
@@ -209,7 +209,7 @@ namespace LcmsNet.Devices.ContactClosure
                 OnDeviceSaveRequired();
             }
         }
-        [classPersistenceAttribute("Labjack ID")]
+        [classPersistence("Labjack ID")]
         public int LabJackID
         {
             get
@@ -266,7 +266,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        [classLCMethodAttribute("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
             return Trigger(timeout, m_port, pulseLengthSeconds);
@@ -277,7 +277,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="timeout"></param>
         /// <param name="port"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        [classLCMethodAttribute("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(double timeout, enumLabjackU12OutputPorts port, double pulseLengthSeconds)
         {
             if (m_emulation)
@@ -340,7 +340,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethodAttribute("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, double voltage)
         {
             return Trigger(pulseLengthSeconds, m_port, voltage);
@@ -354,7 +354,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethodAttribute("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)
         {
             if (m_emulation)
@@ -380,7 +380,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw ex;
             }
 
-            var timer = new LcmsNetDataClasses.Devices.classTimerDevice();
+            var timer = new classTimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try

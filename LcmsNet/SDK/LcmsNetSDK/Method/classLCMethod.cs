@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using LcmsNetSDK;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// A method is a collection of LC-Events that define physical actions used to pipeline the control in an experiment.

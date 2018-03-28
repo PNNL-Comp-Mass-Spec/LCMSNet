@@ -10,9 +10,9 @@ using System.Windows.Media.Imaging;
 using FluidicsSDK;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 using Microsoft.Win32;
 

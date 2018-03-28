@@ -1,8 +1,9 @@
 ﻿using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary
 {
@@ -66,7 +67,7 @@ namespace DemoPluginLibrary
         private void Run()
         {
             // use a defaulted sampledata object since there's no sample associated with a user clicking "run"
-            m_PALdevice.RunMethod(Timeout, new LcmsNetDataClasses.classSampleData(), SelectedMethod);
+            m_PALdevice.RunMethod(Timeout, new classSampleData(), SelectedMethod);
         }
     }
 }

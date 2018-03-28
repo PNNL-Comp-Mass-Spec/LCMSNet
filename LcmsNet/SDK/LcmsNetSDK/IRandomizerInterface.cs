@@ -10,8 +10,9 @@
 //*********************************************************************************************************
 
 using System.Collections.Generic;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Inteface for sample run order randomizer

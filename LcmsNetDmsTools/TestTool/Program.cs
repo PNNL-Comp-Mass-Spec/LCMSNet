@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Logging;
 using LcmsNetDmsTools;
+using LcmsNetSDK.Logging;
 
 namespace TestTool
 {

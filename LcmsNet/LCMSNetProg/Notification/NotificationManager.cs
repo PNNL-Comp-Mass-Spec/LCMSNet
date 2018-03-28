@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Notification
 {

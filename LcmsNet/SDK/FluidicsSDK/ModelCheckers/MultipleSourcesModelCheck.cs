@@ -7,13 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -71,7 +72,7 @@ namespace FluidicsSDK.ModelCheckers
                     if (StatusUpdate != null)
                     {
                         const string message = "Multiple Sources";
-                        StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, this));
+                        StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, message, this));
                     }
                     status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null,
                         TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture), null, source.ParentDevice.IDevice));
@@ -136,9 +137,9 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error
+        public event EventHandler<classDeviceErrorEventArgs> Error
         {
             add { }
             remove { }

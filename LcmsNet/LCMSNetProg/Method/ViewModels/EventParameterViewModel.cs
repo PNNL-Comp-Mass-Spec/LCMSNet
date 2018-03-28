@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

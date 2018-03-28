@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
 //using DirectControl;
 using EksigentNanoLC;
 using System.IO;
-using LcmsNetDataClasses.Devices.Pumps;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace Eksigent.Devices.Pumps
 {
@@ -18,7 +18,7 @@ namespace Eksigent.Devices.Pumps
     /// <summary>
     /// Software interface to the Eksigent pumps.
     /// </summary>
-    [classDeviceControlAttribute(typeof(EksigentPumpControlViewModel),
+    [classDeviceControl(typeof(EksigentPumpControlViewModel),
                                  null,
                                  "Eksigent Pump",
                                  "Pumps")
@@ -146,13 +146,13 @@ namespace Eksigent.Devices.Pumps
 
         #region Properties
 
-        [classPersistenceAttribute("TotalMonitoringMinutes")]
+        [classPersistence("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistenceAttribute("TotalMonitoringSecondsElapsed")]
+        [classPersistence("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -642,7 +642,7 @@ namespace Eksigent.Devices.Pumps
         }
         void driv_DataAvailable(ref byte colnum, ref Array values, ref float T, ref float Qa, ref float Qb, ref float Pa, ref float Pb, ref float PnodeA, ref float PnodeB, ref float PowA, ref float PowB)
         {
-            var time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+            var time = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
             //if (m_flowrate != 0)
@@ -714,7 +714,7 @@ namespace Eksigent.Devices.Pumps
         /// <param name="channel"></param>
         /// <param name="methodName"></param>
         /// <returns></returns>
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
+        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             if (Emulation)
@@ -778,7 +778,7 @@ namespace Eksigent.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="channel"></param>
         /// <returns></returns>
-        [classLCMethodAttribute("Stop Method", enumMethodOperationTime.Parameter, "", -1, false)]
+        [classLCMethod("Stop Method", enumMethodOperationTime.Parameter, "", -1, false)]
         public bool StopMethod(double timeout, double channel)
         {
             if (Emulation)

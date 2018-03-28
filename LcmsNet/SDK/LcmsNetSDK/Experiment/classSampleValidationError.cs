@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Experiment
+﻿namespace LcmsNetSDK.Experiment
 {
     /// <summary>
     /// Holds information regarding the type of error that

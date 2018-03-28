@@ -8,7 +8,7 @@
 
 using System;
 
-namespace LcmsNetDataClasses.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Custom exception for database logging problems

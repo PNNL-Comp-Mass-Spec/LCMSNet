@@ -1,7 +1,7 @@
 ﻿using System;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     public class classDeviceStatusEventArgs : EventArgs
     {

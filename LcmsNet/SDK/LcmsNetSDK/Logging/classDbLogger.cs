@@ -16,9 +16,9 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using LcmsNetSDK;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Logs errors and messages to a SQLite database

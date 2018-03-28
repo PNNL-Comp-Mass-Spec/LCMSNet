@@ -1,4 +1,4 @@
-﻿namespace LcmsNetDataClasses.Configuration
+﻿namespace LcmsNetSDK.Configuration
 {
     /// <summary>
     /// Enumeration describing the status of a column.

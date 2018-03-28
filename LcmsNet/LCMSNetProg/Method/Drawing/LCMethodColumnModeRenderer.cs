@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {

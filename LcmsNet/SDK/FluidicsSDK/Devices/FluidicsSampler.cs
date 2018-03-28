@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices
 {
@@ -59,7 +60,7 @@ namespace FluidicsSDK.Devices
         /// IDevice required
         /// </summary>
         /// <param name="device"></param>
-        protected override void ClearDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void ClearDevice(IDevice device)
         {
             IDevice = null;
         }
@@ -68,7 +69,7 @@ namespace FluidicsSDK.Devices
         /// IDevice required
         /// </summary>
         /// <param name="device"></param>
-        protected override void SetDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void SetDevice(IDevice device)
         {
             IDevice = device;
         }

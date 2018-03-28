@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

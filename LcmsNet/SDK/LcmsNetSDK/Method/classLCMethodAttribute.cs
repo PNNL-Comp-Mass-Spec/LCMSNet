@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Method
+namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Defines the attribute the scheduling algorithm and method handler will use to determine what methods to call

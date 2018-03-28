@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetSDK;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK.Data
 {
     [Obsolete("Interface deprecated. Use a direct reference to classDBTools.cs")]
     public interface IDmsTools

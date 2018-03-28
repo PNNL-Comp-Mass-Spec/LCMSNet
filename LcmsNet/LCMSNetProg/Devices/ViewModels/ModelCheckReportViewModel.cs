@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetDataClasses;
+using LcmsNetSDK;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
