@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 
-namespace Agilent.Devices.Pumps
+namespace LcmsNetPlugins.Agilent.Pumps
 {
     public class AgilentPumpPurgeViewModel : ReactiveObject
     {
@@ -21,7 +21,7 @@ namespace Agilent.Devices.Pumps
         /// Constructor.
         /// </summary>
         /// <param name="pump"></param>
-        public AgilentPumpPurgeViewModel(classPumpAgilent pump)
+        public AgilentPumpPurgeViewModel(AgilentPump pump)
         {
             m_pump = pump;
             pump.DeviceSaveRequired += pump_DeviceSaveRequired;
@@ -32,7 +32,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Pump to purge.
         /// </summary>
-        private readonly classPumpAgilent m_pump;
+        private readonly AgilentPump m_pump;
 
         private string title = "";
         private double a1Duration = 10;
@@ -111,10 +111,10 @@ namespace Agilent.Devices.Pumps
 
         private void SetupCommands()
         {
-            PurgeA1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, enumPurgePumpChannel.A1, A1FlowRate, A1Duration)));
-            PurgeA2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, enumPurgePumpChannel.A2, A2FlowRate, A2Duration)));
-            PurgeB1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, enumPurgePumpChannel.B1, B1FlowRate, B1Duration)));
-            PurgeB2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, enumPurgePumpChannel.B2, B2FlowRate, B2Duration)));
+            PurgeA1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.A1, A1FlowRate, A1Duration)));
+            PurgeA2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.A2, A2FlowRate, A2Duration)));
+            PurgeB1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.B1, B1FlowRate, B1Duration)));
+            PurgeB2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.B2, B2FlowRate, B2Duration)));
             AbortPurgesCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.AbortPurges(0)));
         }
     }

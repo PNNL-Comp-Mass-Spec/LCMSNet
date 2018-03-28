@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Agilent.Pumps
 {
 
     /// <summary>

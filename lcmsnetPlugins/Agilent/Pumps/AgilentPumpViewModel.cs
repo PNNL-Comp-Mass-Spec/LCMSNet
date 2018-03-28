@@ -15,9 +15,9 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using Microsoft.Win32;
 
-namespace Agilent.Devices.Pumps
+namespace LcmsNetPlugins.Agilent.Pumps
 {
-    public class PumpAgilentViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class AgilentPumpViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private const string CONST_PUMP_METHOD_PATH = "pumpmethods";
 
@@ -26,7 +26,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// The default Constructor.
         /// </summary>
-        public PumpAgilentViewModel()
+        public AgilentPumpViewModel()
         {
             pumpDisplay = new PumpDisplayViewModel("Unknown");
             pumpPopoutVm = new PopoutViewModel(pumpDisplay);
@@ -36,7 +36,7 @@ namespace Agilent.Devices.Pumps
 
         private void RegisterDevice(IDevice device)
         {
-            m_pump = device as classPumpAgilent;
+            m_pump = device as AgilentPump;
 
             // Initialize the underlying device class
             if (m_pump != null)
@@ -96,7 +96,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// A pump object to use.
         /// </summary>
-        private classPumpAgilent m_pump;
+        private AgilentPump m_pump;
 
         /// <summary>
         /// Fired when a new method is available from the pumps.
@@ -263,7 +263,7 @@ namespace Agilent.Devices.Pumps
 
         public UserControl GetDefaultView()
         {
-            return new PumpAgilentView();
+            return new AgilentPumpView();
         }
 
         ///// <summary>

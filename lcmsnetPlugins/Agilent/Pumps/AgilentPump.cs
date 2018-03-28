@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-
 using Agilent.Licop;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
@@ -24,16 +23,16 @@ using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace Agilent.Devices.Pumps
+namespace LcmsNetPlugins.Agilent.Pumps
 {
     /// <summary>
     /// Interface to Agilent Pumps for running the solution of a gradient.
     /// </summary>
     [Serializable]
-    [DeviceControl(typeof(PumpAgilentViewModel),
+    [DeviceControl(typeof(AgilentPumpViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
-    public class classPumpAgilent : IDevice, IPump, IFluidicsPump
+    public class AgilentPump : IDevice, IPump, IFluidicsPump
     {
         #region Members
         /// <summary>
@@ -190,7 +189,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public classPumpAgilent()
+        public AgilentPump()
         {
             CreateErrorCodes();
             CreateStatusCodes();
@@ -391,7 +390,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="numberOfMinutes"></param>
         /// <returns></returns>
         [LCMethodEvent("Purge Channel", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool PurgePump(double timeout, enumPurgePumpChannel channel, double flow, double numberOfMinutes)
+        public bool PurgePump(double timeout, PumpPurgeChannel channel, double flow, double numberOfMinutes)
         {
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
             var reply = "";
@@ -404,16 +403,16 @@ namespace Agilent.Devices.Pumps
             var bitField = 0;
             switch (channel)
             {
-                case enumPurgePumpChannel.A1:
+                case PumpPurgeChannel.A1:
                     bitField = 1;
                     break;
-                case enumPurgePumpChannel.A2:
+                case PumpPurgeChannel.A2:
                     bitField = 2;
                     break;
-                case enumPurgePumpChannel.B1:
+                case PumpPurgeChannel.B1:
                     bitField = 4;
                     break;
-                case enumPurgePumpChannel.B2:
+                case PumpPurgeChannel.B2:
                     bitField = 8;
                     break;
             }
@@ -506,7 +505,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void m_pumps_ErrorOccurred(object sender, Agilent.Licop.ErrorEventArgs e)
+        void m_pumps_ErrorOccurred(object sender, global::Agilent.Licop.ErrorEventArgs e)
         {
             if (e.Message == null)
                 return;

@@ -4,15 +4,9 @@
 // Copyright 2009, Battelle Memorial Institute
 // Created 08/17/2009
 //
-// Last modified 08/17/2009
 //*********************************************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Agilent.Pumps
 {
     /// <summary>
     /// The available modes for the Agilent pump
