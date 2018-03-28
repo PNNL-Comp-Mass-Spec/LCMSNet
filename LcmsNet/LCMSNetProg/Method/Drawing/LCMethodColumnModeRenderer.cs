@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using LcmsNetDataClasses.Configuration;
 using LcmsNetDataClasses.Devices;
 using LcmsNetDataClasses.Method;
 
@@ -76,8 +78,10 @@ namespace LcmsNet.Method.Drawing
             var offset = bounds.Height * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
             // This tells us how much room we get per method or column spacing.
-            var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
-            heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, CONST_MAX_HEIGHT));
+            var columnsEnabled = classCartConfiguration.Columns.Count(x => x.Status != enumColumnStatus.Disabled) + 1;
+            //var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
+            var heightPer = (bounds.Height - CONST_COLUMN_SPACING * columnsEnabled - offset) / Convert.ToSingle(columnsEnabled);
+            heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, (int)(CONST_MAX_HEIGHT * 1.5)));
 
             // Draw the data for the columns
             for (var i = 0; i < ColumnNames.Count; i++)
@@ -92,7 +96,6 @@ namespace LcmsNet.Method.Drawing
 
                 RenderColumnName(graphics, string.Format("Column {0}: {1}", i + 1, ColumnNames[i]), x, top);
             }
-
 
             var alignedEvents = new List<classLCEvent>();
             if (methods != null && methods.Count > 0)
@@ -128,7 +131,8 @@ namespace LcmsNet.Method.Drawing
 
                     if (columnID < 0)
                     {
-                        columnID = CONST_NUMBER_OF_COLUMNS;
+                        //columnID = CONST_NUMBER_OF_COLUMNS;
+                        columnID = columnsEnabled;
                     }
 
                     // Calculate the number of pixels the method should start from based on its time value.
