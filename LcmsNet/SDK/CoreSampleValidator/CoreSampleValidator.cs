@@ -4,7 +4,7 @@ using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;
 
-namespace LcmsNetDataClasses.Experiment
+namespace CoreSampleValidator
 {
     /// <summary>
     /// Validates a sample for the basics before it can be run by LCMSNet.
@@ -12,7 +12,7 @@ namespace LcmsNetDataClasses.Experiment
     [Export(typeof(ISampleValidator))]
     [ExportMetadata("Name", "CoreSampleValidator")]
     [ExportMetadata("Version", "1.0")]
-    public class classCoreSampleValidator : ISampleValidator
+    public class CoreSampleValidator : ISampleValidator
     {
         /// <summary>
         /// Validates a sample based on the methods being correct and not in error.
