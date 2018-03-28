@@ -29,7 +29,7 @@ namespace LcmsNet.SampleQueue.IO
             var sampleList = new List<SampleData>();
             try
             {
-                sampleList = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue, connStr);
+                sampleList = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.WaitingQueue, connStr);
                 var msg = "Successfully read input queue file " + path;
                 ApplicationLogger.LogMessage(0, msg);
             }

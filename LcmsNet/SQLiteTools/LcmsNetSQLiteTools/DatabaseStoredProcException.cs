@@ -16,7 +16,7 @@ namespace LcmsNetSQLiteTools
     /// <summary>
     /// Custom exception for reporting errors during stored procedure execution
     /// </summary>
-    public class classDatabaseStoredProcException : Exception
+    public class DatabaseStoredProcException : Exception
     {
         #region "Methods"
 
@@ -26,7 +26,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="SPName">Name of stored procedure that returned error</param>
         /// <param name="RetCode">Stored procedure return code</param>
         /// <param name="ErrMsg">Error message returned by stored procedure</param>
-        public classDatabaseStoredProcException(string SPName, int RetCode, string ErrMsg)
+        public DatabaseStoredProcException(string SPName, int RetCode, string ErrMsg)
         {
             ProcName = SPName;
             ReturnCode = RetCode;

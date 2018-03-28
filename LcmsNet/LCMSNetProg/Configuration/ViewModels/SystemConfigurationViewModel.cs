@@ -268,7 +268,7 @@ namespace LcmsNet.Configuration.ViewModels
             }
             TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
 
-            LoadUserCombo(classSQLiteTools.GetUserList(false));
+            LoadUserCombo(SQLiteTools.GetUserList(false));
 
             ReloadData();
 
@@ -312,7 +312,7 @@ namespace LcmsNet.Configuration.ViewModels
         private void LoadInstrumentInformation()
         {
             // Load combo box
-            var instList = classSQLiteTools.GetInstrumentList(false);
+            var instList = SQLiteTools.GetInstrumentList(false);
 
             if (instList == null)
             {
@@ -438,13 +438,13 @@ namespace LcmsNet.Configuration.ViewModels
         private void SaveCartConfigName()
         {
             LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTCONFIGNAME, CartConfigName);
-            classSQLiteTools.SaveSelectedCartConfigName(LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
+            SQLiteTools.SaveSelectedCartConfigName(LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
         }
 
         private void SaveSeparationType()
         {
             LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SeparationType);
-            classSQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
+            SQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
         }
 
         private void ReloadData()
@@ -489,7 +489,7 @@ namespace LcmsNet.Configuration.ViewModels
 
         private void LoadSeparationTypes()
         {
-            var separationTypes = classSQLiteTools.GetSepTypeList(false);
+            var separationTypes = SQLiteTools.GetSepTypeList(false);
 
             using (separationTypeComboBoxOptions.SuppressChangeNotifications())
             {
@@ -505,11 +505,11 @@ namespace LcmsNet.Configuration.ViewModels
             try
             {
                 // Get the new cart config names from the cache db
-                cartConfigNameList = classSQLiteTools.GetCartConfigNameList(true);
+                cartConfigNameList = SQLiteTools.GetCartConfigNameList(true);
                 fullCount = cartConfigNameList.Count;
-                cartConfigNameList = classSQLiteTools.GetCartConfigNameList(CartConfiguration.CartName, false);
+                cartConfigNameList = SQLiteTools.GetCartConfigNameList(CartConfiguration.CartName, false);
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
@@ -562,9 +562,9 @@ namespace LcmsNet.Configuration.ViewModels
             try
             {
                 // Get the new list of columns from the cache db
-                columnList = classSQLiteTools.GetColumnList(true);
+                columnList = SQLiteTools.GetColumnList(true);
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }

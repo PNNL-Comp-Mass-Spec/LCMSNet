@@ -285,9 +285,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of carts from DMS
             try
             {
-                cartList = classSQLiteTools.GetCartNameList();
+                cartList = SQLiteTools.GetCartNameList();
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart listing.\r\n" +
@@ -295,7 +295,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
                 var innerException = string.Empty;
@@ -335,9 +335,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of cart configuration names from DMS
             try
             {
-                cartConfigList = classSQLiteTools.GetCartConfigNameList(false);
+                cartConfigList = SQLiteTools.GetCartConfigNameList(false);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
@@ -345,7 +345,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
                 var innerException = string.Empty;
@@ -426,7 +426,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
                 tempRequestList = dmsTools.GetSamplesFromDMS(queryData);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting request listing\r\n";
@@ -434,7 +434,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 var errMsg = ex.Message;
                 if (ex.InnerException != null)
@@ -524,7 +524,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
                 tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting request listing\r\n";
@@ -532,7 +532,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return null;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 var errMsg = ex.Message;
                 if (ex.InnerException != null)
@@ -703,7 +703,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 success = dmsTools.UpdateDMSCartAssignment(reqIDs, cartName, cartConfigName, true);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart listing\r\n";
@@ -711,7 +711,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return false;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 var errMsg = ex.Message;
                 if (ex.InnerException != null)
@@ -721,7 +721,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return true;
             }
-            catch (classDatabaseStoredProcException ex)
+            catch (DatabaseStoredProcException ex)
             {
                 var errMsg = "Error " + ex.ReturnCode + " while executing stored procedure ";
                 errMsg = errMsg + ex.ProcName + ": " + ex.ErrMessage;

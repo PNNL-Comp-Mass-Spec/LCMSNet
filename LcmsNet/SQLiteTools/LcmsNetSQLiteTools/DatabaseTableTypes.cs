@@ -15,7 +15,7 @@ namespace LcmsNetSQLiteTools
     /// <summary>
     /// Describes the available data table names
     /// </summary>
-    public enum enumTableTypes
+    public enum DatabaseTableTypes
     {
         WaitingQueue,
         RunningQueue,

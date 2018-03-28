@@ -14,12 +14,11 @@ using System;
 namespace LcmsNetSQLiteTools
 {
     /// <summary>
-    ///  Custom exception for reporting problems during a database query
+    /// Custom exception for reporting invalid database connection string
     /// </summary>
-    public class classDatabaseDataException : Exception
-    {
-        public classDatabaseDataException(string message, Exception ex) :
-            base(message, ex)
+    public class DatabaseConnectionStringException : Exception
+    {        public DatabaseConnectionStringException(string message) :
+            base(message)
         {
         }
     }

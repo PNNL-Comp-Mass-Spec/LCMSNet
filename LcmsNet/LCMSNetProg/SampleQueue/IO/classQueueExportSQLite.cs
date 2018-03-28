@@ -22,7 +22,7 @@ namespace LcmsNet.SampleQueue.IO
 
             try
             {
-                classSQLiteTools.SaveQueueToCache(data, enumTableTypes.WaitingQueue, connStr);
+                SQLiteTools.SaveQueueToCache(data, DatabaseTableTypes.WaitingQueue, connStr);
             }
             catch (Exception ex)
             {

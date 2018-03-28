@@ -2103,27 +2103,27 @@ namespace LcmsNet.SampleQueue
             // This means that we have to recompile the data ...
             if (buildconnectionString)
             {
-                var cartNames = classSQLiteTools.GetCartNameList();
-                var columnNames = classSQLiteTools.GetColumnList(false);
-                var datasetNames = classSQLiteTools.GetDatasetTypeList(false);
-                var instrumentList = classSQLiteTools.GetInstrumentList(false);
-                var separationTypes = classSQLiteTools.GetSepTypeList(false);
-                var userNames = classSQLiteTools.GetUserList(false);
-                var separationDefault = classSQLiteTools.GetDefaultSeparationType();
+                var cartNames = SQLiteTools.GetCartNameList();
+                var columnNames = SQLiteTools.GetColumnList(false);
+                var datasetNames = SQLiteTools.GetDatasetTypeList(false);
+                var instrumentList = SQLiteTools.GetInstrumentList(false);
+                var separationTypes = SQLiteTools.GetSepTypeList(false);
+                var userNames = SQLiteTools.GetUserList(false);
+                var separationDefault = SQLiteTools.GetDefaultSeparationType();
 
-                classSQLiteTools.BuildConnectionString(true);
+                SQLiteTools.BuildConnectionString(true);
 
-                classSQLiteTools.SaveInstListToCache(instrumentList);
-                classSQLiteTools.SaveSelectedSeparationType(separationDefault);
-                classSQLiteTools.SaveSingleColumnListToCache(columnNames, enumTableTypes.ColumnList);
-                classSQLiteTools.SaveSingleColumnListToCache(datasetNames, enumTableTypes.DatasetTypeList);
-                classSQLiteTools.SaveSingleColumnListToCache(separationTypes, enumTableTypes.SeparationTypeList);
-                classSQLiteTools.SaveSingleColumnListToCache(cartNames, enumTableTypes.CartList);
-                classSQLiteTools.SaveUserListToCache(userNames);
+                SQLiteTools.SaveInstListToCache(instrumentList);
+                SQLiteTools.SaveSelectedSeparationType(separationDefault);
+                SQLiteTools.SaveSingleColumnListToCache(columnNames, DatabaseTableTypes.ColumnList);
+                SQLiteTools.SaveSingleColumnListToCache(datasetNames, DatabaseTableTypes.DatasetTypeList);
+                SQLiteTools.SaveSingleColumnListToCache(separationTypes, DatabaseTableTypes.SeparationTypeList);
+                SQLiteTools.SaveSingleColumnListToCache(cartNames, DatabaseTableTypes.CartList);
+                SQLiteTools.SaveUserListToCache(userNames);
             }
-            classSQLiteTools.SaveQueueToCache(m_waitingQueue, enumTableTypes.WaitingQueue);
-            classSQLiteTools.SaveQueueToCache(m_runningQueue, enumTableTypes.RunningQueue);
-            classSQLiteTools.SaveQueueToCache(m_completeQueue, enumTableTypes.CompletedQueue);
+            SQLiteTools.SaveQueueToCache(m_waitingQueue, DatabaseTableTypes.WaitingQueue);
+            SQLiteTools.SaveQueueToCache(m_runningQueue, DatabaseTableTypes.RunningQueue);
+            SQLiteTools.SaveQueueToCache(m_completeQueue, DatabaseTableTypes.CompletedQueue);
             IsDirty = false;
         }
 
@@ -2133,7 +2133,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="cachePath"></param>
         public void CacheQueue(string cachePath)
         {
-            classSQLiteTools.SetCacheLocation(cachePath);
+            SQLiteTools.SetCacheLocation(cachePath);
             CacheQueue(true);
         }
 
@@ -2149,7 +2149,7 @@ namespace LcmsNet.SampleQueue
         {
             lock (m_completeQueue)
             {
-                m_completeQueue = classSQLiteTools.GetQueueFromCache(enumTableTypes.CompletedQueue);
+                m_completeQueue = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.CompletedQueue);
 
                 foreach (var sample in m_completeQueue)
                 {
@@ -2180,7 +2180,7 @@ namespace LcmsNet.SampleQueue
             //
             // Loads the samples and creates unique sequence ID's and unique id's
             //
-            var waitingSamples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);
+            var waitingSamples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.WaitingQueue);
 
             //
             // Update the Waiting Sample queue with the right LC-Methods.  This makes sure

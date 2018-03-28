@@ -1480,7 +1480,7 @@ namespace LcmsNet.SampleQueue
             // Add the dataset type items to the data grid
             try
             {
-                var datasetTypes = classSQLiteTools.GetDatasetTypeList(false);
+                var datasetTypes = SQLiteTools.GetDatasetTypeList(false);
                 datasetTypeOptions.Clear();
                 datasetTypeOptions.AddRange(datasetTypes);
             }
@@ -1492,9 +1492,9 @@ namespace LcmsNet.SampleQueue
             // Get the list of cart configuration names from DMS
             try
             {
-                var totalConfigCount = classSQLiteTools.GetCartConfigNameList(false).Count;
+                var totalConfigCount = SQLiteTools.GetCartConfigNameList(false).Count;
                 var cartName = CartConfiguration.CartName;
-                var cartConfigList = classSQLiteTools.GetCartConfigNameList(cartName, false);
+                var cartConfigList = SQLiteTools.GetCartConfigNameList(cartName, false);
                 if (cartConfigList.Count > 0)
                 {
                     cartConfigOptions.Clear();
@@ -1513,7 +1513,7 @@ namespace LcmsNet.SampleQueue
                     }
                 }
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
@@ -1521,7 +1521,7 @@ namespace LcmsNet.SampleQueue
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
                 var innerException = string.Empty;

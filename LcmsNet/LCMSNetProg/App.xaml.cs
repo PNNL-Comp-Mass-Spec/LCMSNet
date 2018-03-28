@@ -618,14 +618,14 @@ namespace LcmsNet
         /// </summary>
         private void CreateSQLCache()
         {
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.CartList, false);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.SeparationTypeList, false);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.DatasetTypeList, false);
-            classSQLiteTools.SaveInstListToCache(new List<InstrumentInfo>(), false);
-            classSQLiteTools.SaveUserListToCache(new List<UserInfo>(), false);
-            classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "0", "1", "2", "3", "4" }, enumTableTypes.ColumnList, false);
-            classSQLiteTools.SaveExperimentListToCache(new List<ExperimentData> { new ExperimentData() }, false);
-            classSQLiteTools.SaveProposalUsers(new List<ProposalUser>(),
+            SQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, DatabaseTableTypes.CartList, false);
+            SQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, DatabaseTableTypes.SeparationTypeList, false);
+            SQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, DatabaseTableTypes.DatasetTypeList, false);
+            SQLiteTools.SaveInstListToCache(new List<InstrumentInfo>(), false);
+            SQLiteTools.SaveUserListToCache(new List<UserInfo>(), false);
+            SQLiteTools.SaveSingleColumnListToCache(new List<string> { "0", "1", "2", "3", "4" }, DatabaseTableTypes.ColumnList, false);
+            SQLiteTools.SaveExperimentListToCache(new List<ExperimentData> { new ExperimentData() }, false);
+            SQLiteTools.SaveProposalUsers(new List<ProposalUser>(),
                 new List<UserIDPIDCrossReferenceEntry>(),
                 new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(), false);
         }

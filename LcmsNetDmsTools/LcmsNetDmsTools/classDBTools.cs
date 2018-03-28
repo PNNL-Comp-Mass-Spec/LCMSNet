@@ -392,7 +392,7 @@ namespace LcmsNetDmsTools
 
             ReportProgress("Loading data from DMS (determining Connection String)", 0, stepCountTotal);
 
-            var sqLiteConnectionString = classSQLiteTools.ConnString;
+            var sqLiteConnectionString = SQLiteTools.ConnString;
             var equalsIndex = sqLiteConnectionString.IndexOf('=');
             string cacheFilePath;
 
@@ -510,7 +510,7 @@ namespace LcmsNetDmsTools
             // Store the list of cart config names in the cache db
             try
             {
-                classSQLiteTools.SaveSingleColumnListToCache(tmpCartConfigNames, enumTableTypes.CartConfigNameList);
+                SQLiteTools.SaveSingleColumnListToCache(tmpCartConfigNames, DatabaseTableTypes.CartConfigNameList);
             }
             catch (Exception ex)
             {
@@ -545,7 +545,7 @@ namespace LcmsNetDmsTools
             // Store the list of carts in the cache db
             try
             {
-                classSQLiteTools.SaveSingleColumnListToCache(tmpCartList, enumTableTypes.CartList);
+                SQLiteTools.SaveSingleColumnListToCache(tmpCartList, DatabaseTableTypes.CartList);
             }
             catch (Exception ex)
             {
@@ -579,7 +579,7 @@ namespace LcmsNetDmsTools
                 // Store the data in the cache db
                 try
                 {
-                    classSQLiteTools.SaveSingleColumnListToCache(datasetList, enumTableTypes.DatasetList);
+                    SQLiteTools.SaveSingleColumnListToCache(datasetList, DatabaseTableTypes.DatasetList);
                 }
                 catch (Exception ex)
                 {
@@ -612,7 +612,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting column list";
-                //              throw new classDatabaseDataException(ErrMsg, ex);
+                //              throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -620,7 +620,7 @@ namespace LcmsNetDmsTools
             // Store the list of carts in the cache db
             try
             {
-                classSQLiteTools.SaveSingleColumnListToCache(tmpColList, enumTableTypes.ColumnList);
+                SQLiteTools.SaveSingleColumnListToCache(tmpColList, DatabaseTableTypes.ColumnList);
             }
             catch (Exception ex)
             {
@@ -671,7 +671,7 @@ namespace LcmsNetDmsTools
 
             try
             {
-                classSQLiteTools.SaveEntireLCColumnListToCache(lcColumnList);
+                SQLiteTools.SaveEntireLCColumnListToCache(lcColumnList);
             }
             catch (Exception ex)
             {
@@ -697,7 +697,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting separation type list";
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -705,7 +705,7 @@ namespace LcmsNetDmsTools
             // Store data in cache
             try
             {
-                classSQLiteTools.SaveSingleColumnListToCache(tmpRetVal, enumTableTypes.SeparationTypeList);
+                SQLiteTools.SaveSingleColumnListToCache(tmpRetVal, DatabaseTableTypes.SeparationTypeList);
             }
             catch (Exception ex)
             {
@@ -731,7 +731,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting dataset type list";
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -739,7 +739,7 @@ namespace LcmsNetDmsTools
             // Store data in cache
             try
             {
-                classSQLiteTools.SaveSingleColumnListToCache(tmpRetVal, enumTableTypes.DatasetTypeList);
+                SQLiteTools.SaveSingleColumnListToCache(tmpRetVal, DatabaseTableTypes.DatasetTypeList);
             }
             catch (Exception ex)
             {
@@ -767,7 +767,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting user list";
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -786,7 +786,7 @@ namespace LcmsNetDmsTools
             // Store data in cache
             try
             {
-                classSQLiteTools.SaveUserListToCache(tmpRetVal);
+                SQLiteTools.SaveUserListToCache(tmpRetVal);
             }
             catch (Exception ex)
             {
@@ -840,7 +840,7 @@ namespace LcmsNetDmsTools
 
             try
             {
-                classSQLiteTools.SaveExperimentListToCache(experimentData);
+                SQLiteTools.SaveExperimentListToCache(experimentData);
             }
             catch (Exception ex)
             {
@@ -914,12 +914,12 @@ namespace LcmsNetDmsTools
 
             try
             {
-                classSQLiteTools.SaveProposalUsers(users, referenceList, referenceDictionary);
+                SQLiteTools.SaveProposalUsers(users, referenceList, referenceDictionary);
             }
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing Proposal Users list in cache";
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
@@ -946,7 +946,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting instrument list";
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
@@ -969,7 +969,7 @@ namespace LcmsNetDmsTools
             // Store data in cache
             try
             {
-                classSQLiteTools.SaveInstListToCache(tmpRetVal);
+                SQLiteTools.SaveInstListToCache(tmpRetVal);
             }
             catch (Exception ex)
             {
@@ -1009,7 +1009,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting run request list";
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return tmpReturnVal;
             }
@@ -1088,7 +1088,7 @@ namespace LcmsNetDmsTools
             {
                 m_ErrMsg = "Exception getting MRM file data from DMS";
                 ApplicationLogger.LogError(0, m_ErrMsg, ex);
-                throw new classDatabaseDataException(m_ErrMsg, ex);
+                throw new DatabaseDataException(m_ErrMsg, ex);
             }
 
             if (dt != null)
@@ -1129,7 +1129,7 @@ namespace LcmsNetDmsTools
             {
                 m_ErrMsg = "Exception getting MRM file list from DMS";
                 ApplicationLogger.LogError(0, m_ErrMsg, ex);
-                throw new classDatabaseDataException(m_ErrMsg, ex);
+                throw new DatabaseDataException(m_ErrMsg, ex);
             }
 
             // Pull the data from the table
@@ -1191,7 +1191,7 @@ namespace LcmsNetDmsTools
             }
             else
             {
-                throw new classDatabaseConnectionStringException(
+                throw new DatabaseConnectionStringException(
                     "DMS version string not found in configuration file (this parameter is the " +
                     "name of the database to connect to).  Delete the " + CONFIG_FILE + " file and " +
                     "it will be automatically re-created with the default values.");
@@ -1212,7 +1212,7 @@ namespace LcmsNetDmsTools
             }
             else
             {
-                throw new classDatabaseConnectionStringException(
+                throw new DatabaseConnectionStringException(
                     "DMS password string not found in configuration file (this is the password " +
                     "for the LCMSOperator username.  Delete the " + CONFIG_FILE + " file and " +
                     "it will be automatically re-created with the default values.");
@@ -1283,7 +1283,7 @@ namespace LcmsNetDmsTools
             if (resultCode != 0)    // Error occurred
             {
                 var returnMsg = spCmd.Parameters["@message"].ToString();
-                throw new classDatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
+                throw new DatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
             }
 
             // Success!
@@ -1310,7 +1310,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting single column table via command: " + CmdStr;
-                //                  throw new classDatabaseDataException(ErrMsg, ex);
+                //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 throw new Exception(ErrMsg, ex);
             }
@@ -1355,7 +1355,7 @@ namespace LcmsNetDmsTools
                 {
                     var errMsg = "SQL exception getting data table via query " + cmdStr;
                     ApplicationLogger.LogError(0, errMsg, ex);
-                    throw new classDatabaseDataException(errMsg, ex);
+                    throw new DatabaseDataException(errMsg, ex);
                 }
             }
 
@@ -1394,7 +1394,7 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception executing stored procedure " + spCmd.CommandText;
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                throw new classDatabaseStoredProcException(spCmd.CommandText, resultCode, ex.Message);
+                throw new DatabaseStoredProcException(spCmd.CommandText, resultCode, ex.Message);
             }
             return resultCode;
         }

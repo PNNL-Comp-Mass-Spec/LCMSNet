@@ -127,7 +127,7 @@ namespace LcmsNet
             //m_fluidicsDesign.SaveConfiguration();
 
             // Cache the selected separation type
-            classSQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
+            SQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
 
             // Shut off the scheduler...
             try
@@ -376,7 +376,7 @@ namespace LcmsNet
 
             SystemConfiguration = new SystemConfigurationViewModel();
             SystemConfiguration.ColumnNameChanged += SystemConfiguration_ColumnNameChanged;
-            classSQLiteTools.GetSepTypeList(false);
+            SQLiteTools.GetSepTypeList(false);
 
             // Fludics Design display
             FluidicsDesignVm = new FluidicsDesignViewModel();
@@ -427,7 +427,7 @@ namespace LcmsNet
 
 
             // Get the most recently used separation type
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, classSQLiteTools.GetDefaultSeparationType());
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
             var failedDeviceFlag = false;
@@ -953,7 +953,7 @@ namespace LcmsNet
         public void Dispose()
         {
             clsDMSDataContainer.DBTools.CloseConnection();
-            classSQLiteTools.CloseConnection();
+            SQLiteTools.CloseConnection();
         }
     }
 }
