@@ -1,14 +1,13 @@
 using System;
-using System.IO.Ports;
-using System.Threading;
 using System.ComponentModel;
-
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace ASIpump
+namespace LcmsNetPlugins.ASIpump
 {
     public class SerialDevice : INotifyPropertyChangedExt
     {
@@ -16,7 +15,6 @@ namespace ASIpump
 
         public delegate void MessageSentDelegate(string rcvStr);
         public event MessageSentDelegate MessageSent;
-
 
         public delegate void MessageStreamDelegate(string rcvStr);
         public event MessageStreamDelegate MessageStreamed;
@@ -37,7 +35,6 @@ namespace ASIpump
 
             Timeout = 1;
         }
-
 
         private string mReplyDelimeter = "\r\n";
         public string ReplyDelimeter
@@ -276,14 +273,12 @@ namespace ASIpump
         {
             lock (mConcatStr)
             {
-
                 while (mConcatStr.Contains(mReplyDelimeter))
                 {
                     var pos = mConcatStr.IndexOf(mReplyDelimeter, StringComparison.Ordinal);
                     mReplyStr += mConcatStr.Substring(0, pos);
                     mConcatStr = mConcatStr.Substring(pos + mReplyDelimeter.Length);
                 }
-
 
                 if (MessageStreamed != null && !String.IsNullOrEmpty(mReplyStr))
                 {

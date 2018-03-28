@@ -6,7 +6,7 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Class for holding response data from sXc
@@ -29,5 +29,5 @@ namespace LcmsNet.Devices.BrukerStart
                 WaitingForParam = false;
             }
         #endregion
-    }   
+    }
 }

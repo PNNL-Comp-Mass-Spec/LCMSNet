@@ -6,7 +6,7 @@
     <ProjectGuid>{301C4DAC-24B7-4032-88BF-3BFB13B9DEFE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Newport</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.Newport</RootNamespace>
     <AssemblyName>NewportESP300</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

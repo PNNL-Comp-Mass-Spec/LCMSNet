@@ -4,7 +4,7 @@ using System.Windows.Media;
 using FluidicsSDK.Base;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     public sealed class classPumpIscoGlyph : FluidicsDevice
     {
@@ -89,7 +89,6 @@ namespace LcmsNet.Devices.Pumps
             }
             set
             {
-
             }
         }
     }

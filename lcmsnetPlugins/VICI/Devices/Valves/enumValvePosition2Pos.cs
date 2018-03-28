@@ -1,4 +1,4 @@
-﻿namespace LcmsNet.Devices.Valves
+﻿namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     public enum enumValvePosition2Pos
     {

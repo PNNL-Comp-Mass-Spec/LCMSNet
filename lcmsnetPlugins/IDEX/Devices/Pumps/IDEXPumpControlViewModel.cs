@@ -2,7 +2,7 @@
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
-namespace ASUTGen.Devices.Pumps
+namespace LcmsNetPlugins.IDEX.Devices.Pumps
 {
     public class IDEXPumpControlViewModel : ReactiveObject, IDeviceControl
     {
@@ -49,7 +49,6 @@ namespace ASUTGen.Devices.Pumps
 
         public void ShowProps()
         {
-
         }
 
         #endregion

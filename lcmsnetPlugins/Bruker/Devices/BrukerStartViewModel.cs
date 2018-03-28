@@ -5,7 +5,7 @@ using LcmsNetCommonControls.Devices.NetworkStart;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Control for detector triggered by Bruker start commands

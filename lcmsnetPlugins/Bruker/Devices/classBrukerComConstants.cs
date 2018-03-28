@@ -5,9 +5,10 @@
 // Created 06/29/2010
 //
 //*********************************************************************************************************
+
 using System;
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Class to hold constants and enums required for communication with Bruker solarXcontrol

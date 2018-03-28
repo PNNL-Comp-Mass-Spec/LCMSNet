@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using FluidicsSDK.Devices;
-using LcmsNetSDK.Data;
-
-using System.ComponentModel;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace ASIpump
+namespace LcmsNetPlugins.ASIpump
 {
-
     [DeviceControl(typeof(AsiUIViewModel),
                                  "ASi Pump",
                                  "Syringe Pumps")]
     public class AsiPump : SerialDevice, IDevice, IPump, IFluidicsPump
     {
-
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
         /// </summary>
         private readonly Dictionary<string, string> mdict_methods;
 
         #region Program parameters
-
 
         // constant values
         public double uStepPeruL = 15400;
@@ -38,7 +34,6 @@ namespace ASIpump
         private double gradientTime;
         private double initialIsoTime;
         private double finalIsoTime;
-
 
         // entered values
         [Description("Total flow in uL/minute")]
@@ -210,8 +205,6 @@ namespace ASIpump
 
         #endregion
 
-
-
         public void AsiPump_MessageStreamed(string msg)
         {
             // note the round down vs. round
@@ -353,9 +346,7 @@ namespace ASIpump
         }
         #endregion
 
-
         #region Methods
-
 
         /// <summary>
         /// Initializes the device.
@@ -376,7 +367,6 @@ namespace ASIpump
 
             ReplyDelimeter = "\r\n"; //carriage return linefeed
             SendDelimeter = "\n"; //Carriage return
-
 
             // catch messages sent by the pump
             // add this here so it gets on the end of the event queue
@@ -402,9 +392,6 @@ namespace ASIpump
             Send(MotorAddress + intData.ToString());
         }
 
-
-
-
         /// <summary>
         /// Internal error handler that propogates the error message to listening objects.
         /// </summary>
@@ -417,7 +404,6 @@ namespace ASIpump
         /// </summary>
         private void HandleError(string message, string type, Exception ex)
         {
-
         }
 
         public void Escape()
@@ -436,13 +422,11 @@ namespace ASIpump
         /// <returns>True on success</returns>
         public bool Shutdown()
         {
-
             Escape();
             return true;
         }
 
         #endregion
-
 
         #region Pump Interface methods
 
@@ -506,7 +490,6 @@ namespace ASIpump
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {
-
         }
         #endregion
 
@@ -535,7 +518,6 @@ namespace ASIpump
         /// <param name="remoteMethod">Method to invoke when data provider has new data.</param>
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
             switch (key.ToUpper())
             {
                 case "METHODNAMES":
@@ -570,13 +552,11 @@ namespace ASIpump
         /// <param name="parameters">Parameters used to create the performance data.</param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
-
         }
         public List<string> GetStatusNotificationList()
         {
             var notifications = new List<string>() { "Status"
                                                             };
-
 
             return notifications;
         }
@@ -614,7 +594,6 @@ namespace ASIpump
         [LCMethodEvent("Turn On", 1, false, "", -1, false)]
         public void TurnOn()
         {
-
         }
 
         #region IFinchComponent Members
@@ -623,14 +602,12 @@ namespace ASIpump
         {
             FinchComponentData component = new FinchComponentData();
 
-
             return component;
         }*/
 
         #endregion
 
         #region IPump Members
-
 
         public List<MobilePhase> MobilePhases
         {

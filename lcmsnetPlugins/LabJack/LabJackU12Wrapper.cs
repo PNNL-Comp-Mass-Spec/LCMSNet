@@ -2,12 +2,13 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+
 // ReSharper disable IdentifierTypo
 // ReSharper disable InconsistentNaming
 // ReSharper disable StringLiteralTypo
 // ReSharper disable CommentTypo
 
-namespace LabJack
+namespace LcmsNetPlugins.LabJack
 {
     public class LabJackU12Wrapper
     {

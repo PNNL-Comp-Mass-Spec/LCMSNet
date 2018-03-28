@@ -8,7 +8,7 @@
 
 using System;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     /// <summary>
     /// Unauthorized access exception - the port is probably used by something else.
@@ -27,7 +27,6 @@ namespace LcmsNet.Devices.Valves
             : base(message, ex)
         {
         }
-
     }
 
     /// <summary>

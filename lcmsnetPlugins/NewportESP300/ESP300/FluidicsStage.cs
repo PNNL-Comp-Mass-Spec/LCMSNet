@@ -3,7 +3,7 @@ using System.Windows.Media;
 using FluidicsSDK.Base;
 using LcmsNetSDK.Devices;
 
-namespace Newport.ESP300
+namespace LcmsNetPlugins.Newport.ESP300
 {
     public sealed class FluidicsStage : FluidicsDevice
     {
@@ -29,7 +29,6 @@ namespace Newport.ESP300
             }
             set
             {
-
             }
         }
 
@@ -45,7 +44,6 @@ namespace Newport.ESP300
 
         public override void ActivateState(int state)
         {
-
         }
 
         protected override void ClearDevice(IDevice device)

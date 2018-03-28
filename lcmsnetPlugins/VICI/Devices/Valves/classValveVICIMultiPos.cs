@@ -1,16 +1,11 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Collections.Generic;
-using System.ComponentModel;
 using FluidicsSDK.Base;
-using FluidicsSDK.Devices;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
-
     /// <summary>
     /// Class used for interacting with the VICI multipositon valve
     /// </summary>
@@ -105,7 +100,6 @@ namespace LcmsNet.Devices.Valves
 
         #region Properties
 
-
         /// <summary>
         /// Gets the last measured position of the valve.
         /// </summary>
@@ -179,7 +173,6 @@ namespace LcmsNet.Devices.Valves
 
             if (newPosition > 0 && newPosition <= m_numberOfPositions)
             {
-
                 try
                 {
                     m_lastSentPosition = newPosition;
@@ -285,7 +278,6 @@ namespace LcmsNet.Devices.Valves
             {
                 tempBuffer    = Port.ReadExisting();
                 var contains = tempBuffer.Contains("Position is =");
-
 
                 var data = tempBuffer.Split(new[] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
                 tempBuffer = "";

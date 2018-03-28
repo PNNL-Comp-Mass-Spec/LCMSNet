@@ -5,9 +5,10 @@
 // Created 02/15/2011
 //
 //*********************************************************************************************************
+
 using System;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Unauthorized access exception - serial port is probably being used by something else
@@ -28,7 +29,7 @@ namespace LcmsNet.Devices.Pumps
             : base(msg, ex)
         {
         }
-    }   
+    }
 
     /// <summary>
     /// Read timeout exception - the device is probably disconnected
@@ -48,7 +49,7 @@ namespace LcmsNet.Devices.Pumps
             : base(msg, ex)
         {
         }
-    }   
+    }
 
     /// <summary>
     /// Write timeout exception - the device is probably disconnected
@@ -68,7 +69,7 @@ namespace LcmsNet.Devices.Pumps
             : base(msg, ex)
         {
         }
-    }   
+    }
 
     /// <summary>
     /// Error message received from pump
@@ -89,7 +90,7 @@ namespace LcmsNet.Devices.Pumps
             : base(msg, ex)
         {
         }
-    }   
+    }
 
     /// <summary>
     /// Generic ISCO pump exception
@@ -110,5 +111,5 @@ namespace LcmsNet.Devices.Pumps
             : base(msg, ex)
         {
         }
-    }   
+    }
 }

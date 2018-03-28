@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-//using DirectControl;
-using EksigentNanoLC;
 using System.IO;
+using EksigentNanoLC;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
@@ -11,10 +10,10 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
+//using DirectControl;
 
-namespace Eksigent.Devices.Pumps
+namespace LcmsNetPlugins.Eksigent.Devices.Pumps
 {
-
     /// <summary>
     /// Software interface to the Eksigent pumps.
     /// </summary>
@@ -92,7 +91,6 @@ namespace Eksigent.Devices.Pumps
         private const string MethodFolder1 = @"C:\Program Files (x86)\Eksigent NanoLC\settings\method";
         private const string MethodFolder2 = @"C:\Program Files\Eksigent NanoLC\settings\method";
         #endregion
-
 
         /// <summary>
         /// Default constructor.
@@ -388,7 +386,6 @@ namespace Eksigent.Devices.Pumps
 
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
             switch (key.ToUpper())
             {
                 case "METHODNAMES":
@@ -399,7 +396,6 @@ namespace Eksigent.Devices.Pumps
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
             switch (key.ToUpper())
             {
                 case "METHODNAMES":
@@ -409,7 +405,6 @@ namespace Eksigent.Devices.Pumps
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-
         }
 
         public List<string> GetStatusNotificationList()
@@ -820,7 +815,6 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         public void ShowMethodMenu(int channelNumber, string methodName)
         {
-
             var path = GetPathFromMethod(methodName);
             if (path == null)
             {
@@ -910,9 +904,6 @@ namespace Eksigent.Devices.Pumps
         private List<MobilePhase> m_mobilePhases;
         #endregion
 
-
-
-
         public double GetPressure()
         {
             return double.NaN;
@@ -937,7 +928,6 @@ namespace Eksigent.Devices.Pumps
         {
             return double.NaN;
         }
-
 
         public List<MobilePhase> MobilePhases
         {

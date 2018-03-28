@@ -8,13 +8,12 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
-namespace LcmsNet.Devices.ContactClosure
+namespace LcmsNetPlugins.LabJackU3
 {
     [Serializable]
     [DeviceControl(typeof(ContactClosureU3ViewModel),
                                  "Contact Closure U3",
-                                 "Contact Closures")
-    ]
+                                 "Contact Closures")]
     public class classContactClosureU3 : IDevice, IContactClosure
     {
          #region Members
@@ -327,7 +326,6 @@ namespace LcmsNet.Devices.ContactClosure
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         #endregion
 
@@ -339,7 +337,6 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
-
         }
 
         #region IDevice Members
@@ -359,7 +356,6 @@ namespace LcmsNet.Devices.ContactClosure
         #endregion
 
         #region IDevice Members
-
 
         public List<string> GetStatusNotificationList()
         {

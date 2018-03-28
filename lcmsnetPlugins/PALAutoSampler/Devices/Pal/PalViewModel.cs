@@ -13,7 +13,7 @@ using LcmsNetCommonControls.Controls;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Pal
+namespace LcmsNetPlugins.PALAutoSampler.Devices.Pal
 {
     public class PalViewModel : BaseDeviceControlViewModel, IDeviceControl
     {

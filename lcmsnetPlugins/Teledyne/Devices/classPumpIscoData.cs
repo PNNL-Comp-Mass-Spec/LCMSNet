@@ -5,10 +5,11 @@
 // Created 03/03/2011
 //
 //*********************************************************************************************************
+
 using System;
 using LcmsNetSDK.System;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Holds status data for one ISCO pump

@@ -4,13 +4,13 @@
  * Copyright 2014 Battle Memorial Institute
  *
  *********************************************************************************************************/
+
 using System;
-using FluidicsSDK.Devices;
 using System.IO.Ports;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]

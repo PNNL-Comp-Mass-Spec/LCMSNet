@@ -74,7 +74,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Agilent1200Pump.png" />
+    <Resource Include="Images\Agilent1200Pump.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Agilent.Licop.dll" />

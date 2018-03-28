@@ -4,7 +4,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.Devices.ContactClosure
+namespace LcmsNetPlugins.LabJackU3
 {
     /// <summary>
     /// Triggers a mass spectrometer or other device using a labjack TTL pulse.
@@ -101,7 +101,6 @@ namespace LcmsNet.Devices.ContactClosure
 
         private void RegisterDevice(IDevice device)
         {
-
             m_loading = true;
             m_contactClosure = device as classContactClosureU3;
 
@@ -133,7 +132,6 @@ namespace LcmsNet.Devices.ContactClosure
                 try
                 {
                     m_contactClosure.Trigger(PulseLength, Port, Voltage);
-
                 }
                 catch (Exception ex)
                 {

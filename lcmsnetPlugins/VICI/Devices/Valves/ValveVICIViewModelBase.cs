@@ -9,7 +9,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     public abstract class ValveVICIViewModelBase : BaseDeviceControlViewModel, IDeviceControl
     {

@@ -5,9 +5,10 @@
 // Created 04/19/2011
 //
 //*********************************************************************************************************
+
 using System;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Utility class for converting between units and setting display captions in ISCO pump classes

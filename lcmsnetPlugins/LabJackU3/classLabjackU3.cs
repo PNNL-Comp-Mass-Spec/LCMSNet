@@ -5,13 +5,12 @@
 // Created 1/7/2014
 //
 //*********************************************************************************************************
+
 using System;
 using LabJack.LabJackUD;
 
-namespace LcmsNet.Devices.ContactClosure
+namespace LcmsNetPlugins.LabJackU3
 {
-    
-
     [Serializable]
     public class classLabjackU3
     {
@@ -35,7 +34,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// Default constructor.
         /// </summary>
         public classLabjackU3():this(0)
-        {            
+        {
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace LcmsNet.Devices.ContactClosure
             m_firmwareVersion = 0;
             m_driverVersion    = 0;
         }
-        
+
         #endregion
 
         #region Properties
@@ -83,7 +82,6 @@ namespace LcmsNet.Devices.ContactClosure
 
         public void Initialize()
         {
-         
             // Per example code
             // If an ID other than 0 is wanted for the U3 object being initialized
             // it must be changed before calling initialize, or initialze must be called again afterwards.
@@ -91,11 +89,10 @@ namespace LcmsNet.Devices.ContactClosure
             //Start by using the pin_configuration_reset IOType so that all
             //pin assignments are in the factory default condition.
             LJUD.ePut(m_device.ljhandle, LJUD.IO.PIN_CONFIGURATION_RESET, 0, 0, 0);
-            
         }
 
         #region Methods
-          
+
         /// <summary>
         /// General method for writing to a port
         /// </summary>
@@ -111,9 +108,9 @@ namespace LcmsNet.Devices.ContactClosure
                 WriteAnalog(port, value);
             }
             else if (channel.ToString().EndsWith("Digital"))
-            {                
+            {
                 WriteDigital(port, Convert.ToInt32(value));
-            }         
+            }
         }
 
         /// <summary>
@@ -136,7 +133,7 @@ namespace LcmsNet.Devices.ContactClosure
             else if (tempPortName.EndsWith("Digital"))
             {
                 return (ReadDigital(port));
-            }        
+            }
             else
             {
                 return (-1);    //Is this a bad idea? Theoretically, we're never going to be here.
@@ -168,7 +165,6 @@ namespace LcmsNet.Devices.ContactClosure
             var result = U3.eAIN(m_device.ljhandle, channel, differentialchannel, ref voltage, range, resolution, settling, binary);
             if (result != LJUD.LJUDERROR.NOERROR)
             {
-
                 var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading analog input.  " + error, result);
             }
@@ -191,7 +187,7 @@ namespace LcmsNet.Devices.ContactClosure
                 var reserved1 = 0; // not used currently by driver, pass 0 as per 4.2.18 of U3 user guide, same for reserved 2
                 var reserved2 = 0;
                 result = U3.eDAC(m_device.ljhandle, channel, voltage, binary, reserved1, reserved2);
-            }         
+            }
             else
             {
                 result = LJUD.LJUDERROR.INVALID_PARAMETER; // closest thing I could find to the U12 invalidinput, CONST_ERROR_INVALIDINPUT; //Error code 40 - Invalid Input
@@ -202,7 +198,6 @@ namespace LcmsNet.Devices.ContactClosure
                 ThrowErrorMessage("Error writing analog output.  " + error, result);
             }
             return result;
-
         }
 
         /// <summary>
@@ -240,7 +235,7 @@ namespace LcmsNet.Devices.ContactClosure
                 ThrowErrorMessage("Error setting digital output.  " + error, result);
             }
             return result;
-        }        
+        }
 
         /// <summary>
         /// Gets the current Labjack driver version
@@ -263,7 +258,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="errorCode">The integer error code</param>
         /// <returns>The error description, as a string</returns>
         public string GetErrorString(LJUD.LJUDERROR errorCode)
-        {            
+        {
             var errorString = new char[CONST_ERROR_STRING_BUFFER_SIZE];
             U3.ErrorToString(errorCode, errorString);
             var tmpStr = new string(errorString);

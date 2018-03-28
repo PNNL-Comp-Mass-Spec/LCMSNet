@@ -5,6 +5,7 @@
 // Created 06/29/2010
 //
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -12,7 +13,7 @@ using System.Net.Sockets;
 using System.Text;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Tools for handling Bruker sXc messages
@@ -709,7 +710,6 @@ namespace LcmsNet.Devices.BrukerStart
         #region IDisposable Members
         public void Dispose()
         {
-
         }
         #endregion
     }

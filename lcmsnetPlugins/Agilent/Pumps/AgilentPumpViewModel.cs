@@ -409,7 +409,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region Control Event Handlers
 
-
         /// <summary>
         /// Saves the Pump method to file.
         /// </summary>

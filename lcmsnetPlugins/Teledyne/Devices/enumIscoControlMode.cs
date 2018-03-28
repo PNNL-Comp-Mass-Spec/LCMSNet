@@ -6,7 +6,7 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Enum for ISCO pump control sources

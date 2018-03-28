@@ -2,7 +2,6 @@
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {
-
     /// <summary>
     /// Class that encapsulates method event arguments.
     /// </summary>

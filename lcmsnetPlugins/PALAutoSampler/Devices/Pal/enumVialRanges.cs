@@ -1,4 +1,4 @@
-﻿namespace LcmsNet.Devices.Pal
+﻿namespace LcmsNetPlugins.PALAutoSampler.Devices.Pal
 {
     /// <summary>
     /// Specifies different ranges of valid vial numbers

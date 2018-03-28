@@ -1,5 +1,4 @@
-﻿
-namespace LcmsNet.Devices.Pumps
+﻿namespace LcmsNetPlugins.Teledyne.Devices
 {
     public enum enumISCOPumpChannels
     {

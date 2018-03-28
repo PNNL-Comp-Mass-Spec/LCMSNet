@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2011, Battelle Memorial Institute
@@ -9,7 +8,7 @@
 
 using System.IO.Ports;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Class to hold settings for the pump serial port
@@ -62,5 +61,5 @@ namespace LcmsNet.Devices.Pumps
                 this.NewLine = CONST_DFLT_NEWLINE;
             }
         #endregion
-    }   
+    }
 }

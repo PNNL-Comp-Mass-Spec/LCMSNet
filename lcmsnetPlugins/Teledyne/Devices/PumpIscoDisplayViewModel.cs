@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ReactiveUI;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     public class PumpIscoDisplayViewModel : ReactiveObject
     {

@@ -6,9 +6,10 @@
 // Created 06/29/2010
 //
 //*********************************************************************************************************
+
 using System;
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Class used for transferring results of output folder creation
@@ -31,5 +32,5 @@ namespace LcmsNet.Devices.BrukerStart
                 CreationException = null;
             }
         #endregion
-    }   
+    }
 }

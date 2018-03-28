@@ -6,7 +6,7 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNet.Devices.ContactClosure
+namespace LcmsNetPlugins.LabJack.Devices
 {
     /// <summary>
     /// All available ports on the Labjack U12

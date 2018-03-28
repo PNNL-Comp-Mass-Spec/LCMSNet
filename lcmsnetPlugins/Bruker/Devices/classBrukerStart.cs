@@ -7,6 +7,7 @@
 // Updates:
 // - 06/29/2010 (DAC) - Added details for Bruker operation
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +20,7 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Class for detector using Bruker network trigger
@@ -677,7 +678,6 @@ new DeviceErrorEventArgs(msg,
         /// <returns>TRUE if FTMS_READY received; FALSE on error or not received within timeout</returns>
         private bool WaitForReady()
         {
-
             m_CmdTimedOut = false;
 
             mobject_CmdTimeoutTimer.Enabled = true;
@@ -755,7 +755,6 @@ new DeviceErrorEventArgs(msg,
             }
 
             ApplicationLogger.LogMessage(2, "classBrukerStart.HandleBrukerMsg: Exiting method");
-
         }
 
         /// <summary>
@@ -797,7 +796,6 @@ new DeviceErrorEventArgs(msg,
                                      this,
                                      "None"));
                 }
-
             }
 
             // Alert listeners that new methods are available
@@ -951,7 +949,6 @@ new DeviceErrorEventArgs(msg,
 
         public List<string> GetErrorNotificationList()
         {
-
             return new List<string>();
         }
         #endregion
@@ -963,7 +960,6 @@ new DeviceErrorEventArgs(msg,
 
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         #endregion
 

@@ -7,7 +7,7 @@
     <ProjectGuid>{4F2EEDA1-5398-4009-B268-1A5996FB7B90}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PalValidator</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.PalValidator</RootNamespace>
     <AssemblyName>PalValidator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -6,7 +6,7 @@ using FluidicsSDK.Base;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     public abstract class classValveVICIBase : IDevice
     {
@@ -254,7 +254,6 @@ namespace LcmsNet.Devices.Valves
             {
                 if (Error != null)
                 {
-
                 }
                 throw new ValveExceptionUnauthorizedAccess();
             }
@@ -343,7 +342,6 @@ namespace LcmsNet.Devices.Valves
             }
             catch (ValveExceptionUnauthorizedAccess ex)
             {
-
                 errorMessage = "Could not get the valve position. " + ex.Message;
                 return false;
             }
@@ -614,7 +612,6 @@ namespace LcmsNet.Devices.Valves
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
 
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)

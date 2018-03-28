@@ -493,7 +493,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     {"ES 2122", "Column flow out of sensor range."}
                 };
 
-
                 m_statusCodes = map;
             }
         }
@@ -600,7 +599,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
-
 
             //
             // Open a list channel to read time tables.
@@ -1383,7 +1381,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                                         CONST_PUMP_ERROR
             };
 
-
             foreach (var value in m_errorCodes.Values)
             {
                 notifications.Add(value);
@@ -1454,7 +1451,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         #endregion
 
         #region IPump Members
-
 
         public List<MobilePhase> MobilePhases
         {

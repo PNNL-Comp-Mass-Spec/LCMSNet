@@ -1,4 +1,4 @@
-﻿namespace LcmsNet.Devices.NetworkStart.Socket
+﻿namespace LcmsNetPlugins.PNNLDevices.Devices.NetworkStart.Socket
 {
     public enum enumNetStartMessageTypes
     {

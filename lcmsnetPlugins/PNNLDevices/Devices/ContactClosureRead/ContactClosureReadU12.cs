@@ -4,19 +4,18 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using FluidicsSDK.Devices;
-using LcmsNet.Devices.ContactClosure;
+using LcmsNetPlugins.LabJack.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNet.Devices.ContactClosureRead
+namespace LcmsNetPlugins.PNNLDevices.Devices.ContactClosureRead
 {
     [Serializable]
     [DeviceControl(typeof(ContactClosureReadU12ViewModel),
             "Contact Closure Read U12",
-            "Contact Closure Readers")
-    ]
+            "Contact Closure Readers")]
     public class ContactClosureReadU12 : IDevice, IContactClosure
     {
         [Flags]
@@ -497,7 +496,6 @@ namespace LcmsNet.Devices.ContactClosureRead
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         #endregion
 
@@ -509,7 +507,6 @@ namespace LcmsNet.Devices.ContactClosureRead
         /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
-
         }
 
         #region IDevice Members
@@ -529,7 +526,6 @@ namespace LcmsNet.Devices.ContactClosureRead
         #endregion
 
         #region IDevice Members
-
 
         public List<string> GetStatusNotificationList()
         {

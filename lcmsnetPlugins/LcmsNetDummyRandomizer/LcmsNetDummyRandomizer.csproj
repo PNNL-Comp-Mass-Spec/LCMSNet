@@ -6,7 +6,7 @@
     <ProjectGuid>{1CE62A77-40A1-418D-B143-C7C6935BD17A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LcmsNetDummyRandomizer</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.LcmsNetDummyRandomizer</RootNamespace>
     <AssemblyName>LcmsNetDummyRandomizer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

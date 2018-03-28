@@ -6,7 +6,7 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Enum for ISCO pressure unit displays and conversions

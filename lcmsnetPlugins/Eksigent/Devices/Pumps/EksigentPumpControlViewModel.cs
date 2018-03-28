@@ -9,7 +9,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 
-namespace Eksigent.Devices.Pumps
+namespace LcmsNetPlugins.Eksigent.Devices.Pumps
 {
     public class EksigentPumpControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
@@ -37,7 +37,6 @@ namespace Eksigent.Devices.Pumps
         {
             try
             {
-
             }
             catch (Exception ex)
             {

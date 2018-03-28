@@ -6,7 +6,7 @@
     <ProjectGuid>{A68203D4-AF87-44F6-A2F6-9A34FE308789}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PALAutoSampler</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.PALAutoSampler</RootNamespace>
     <AssemblyName>PALAutoSampler</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -68,21 +68,9 @@
     </Compile>
     <Compile Include="Devices\Pal\PalViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PAL.png" />
+    <Resource Include="Images\PAL.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Interop.P.dll" />

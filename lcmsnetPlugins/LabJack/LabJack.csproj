@@ -6,7 +6,7 @@
     <ProjectGuid>{4E97009E-F375-426B-8108-DEE8575C8D67}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LabJack</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.LabJack</RootNamespace>
     <AssemblyName>LabJack</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

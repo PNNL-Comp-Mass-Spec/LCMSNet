@@ -1,12 +1,11 @@
 ﻿using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using FluidicsSDK.Devices;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     public class SixPortInjectionValveViewModel : ValveVICI2PosViewModel
     {

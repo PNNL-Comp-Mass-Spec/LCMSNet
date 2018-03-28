@@ -5,20 +5,21 @@
 // Created 03/03/2011
 //
 //*********************************************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO.Ports;
-using System.Xml;
 using System.Threading;
+using System.Xml;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// Interface to ISCO pumps
@@ -387,14 +388,12 @@ namespace LcmsNet.Devices.Pumps
                     LogMessage("Disconnect: Setting initialization state to FALSE");    // DAC testing
 #endif
 
-
                 m_Initialized = false;
             }
 
 #if DACTEST
                 LogMessage("Disconnect: Firing Disconnected event");    // DAC testing
 #endif
-
 
             Disconnected?.Invoke();
             return true;
@@ -603,7 +602,6 @@ namespace LcmsNet.Devices.Pumps
                 msg = "Could not read pump units.";
                 return false;
             }
-
 
             // Refresh the pump data
             if (!Refresh())
@@ -1050,7 +1048,6 @@ namespace LcmsNet.Devices.Pumps
             return ParseRangeMessage(resp);
         }
 
-
         [LCMethodEvent("Refill", MethodOperationTimeoutType.Parameter, "", -1, false)]
         //public bool StartRefill(double timeout, int pumpIndx, double refillRate)
         public bool StartRefill(double timeout, enumISCOPumpChannels pump, double refillRate)
@@ -1436,7 +1433,6 @@ namespace LcmsNet.Devices.Pumps
 
             if (ParseUnitsMessage(resp))
             {
-
                 return true;
             }
 

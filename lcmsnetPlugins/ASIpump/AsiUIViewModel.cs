@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
-namespace ASIpump
+namespace LcmsNetPlugins.ASIpump
 {
     public class AsiUIViewModel : ReactiveObject, IDeviceControl
     {

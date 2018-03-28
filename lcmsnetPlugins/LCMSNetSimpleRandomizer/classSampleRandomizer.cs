@@ -1,5 +1,4 @@
-﻿
-//*********************************************************************************************************
+﻿//*********************************************************************************************************
 // Written by Dave Clark, Brian LaMarche for the US Department of Energy
 // Pacific Northwest National Laboratory, Richland, WA
 // Copyright 2009, Battelle Memorial Institute
@@ -9,13 +8,14 @@
 // - 03/04/2009 (DAC) - Added display name attribute
 //
 //*********************************************************************************************************
+
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetPlugins.LCMSNetSimpleRandomizer
 {
     /// <summary>
     /// Plugin class for doing simple randomization of sample run order
@@ -64,7 +64,7 @@ namespace LcmsNet.SampleQueue
                     var NextIndx = RandNumGen.Next(0, m_Items.Count +1);
                     m_Items.Insert(NextIndx, SeqID);
                 }
-            }   
+            }
 
             /// <summary>
             /// Implements IEnumerable's GetEnumerator method for returning a list's enumerator
@@ -88,7 +88,7 @@ namespace LcmsNet.SampleQueue
                     SeqNums.Add(Sample.SequenceID);
                 }
                 return SeqNums;
-            }   
+            }
         #endregion
-    }   
+    }
 }

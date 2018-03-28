@@ -6,7 +6,7 @@
     <ProjectGuid>{96BA0FF2-5C3C-4A64-A494-452D45FE0B3B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Eksigent</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.Eksigent</RootNamespace>
     <AssemblyName>Eksigent</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -66,21 +66,9 @@
     </Compile>
     <Compile Include="Devices\Pumps\EksigentPumpControlViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\deviceGlyph.png" />
+    <Resource Include="Images\deviceGlyph.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AxInterop.DirectControl.dll" />

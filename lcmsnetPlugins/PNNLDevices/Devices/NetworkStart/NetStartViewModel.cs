@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
-using LcmsNet.Devices.NetworkStart.Socket;
 using LcmsNetCommonControls.Devices.NetworkStart;
+using LcmsNetPlugins.PNNLDevices.Devices.NetworkStart.Socket;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.NetworkStart
+namespace LcmsNetPlugins.PNNLDevices.Devices.NetworkStart
 {
     /// <summary>
     /// Control for detector triggered by network start signal (presently just a stub)

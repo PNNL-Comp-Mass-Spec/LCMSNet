@@ -6,9 +6,8 @@
 //
 //*********************************************************************************************************
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
-
     #region "Delegates for use with ISCO pump control"
 
     public delegate void DelegateIscoPumpDisplayHandler(object sender, int pumpIndx);

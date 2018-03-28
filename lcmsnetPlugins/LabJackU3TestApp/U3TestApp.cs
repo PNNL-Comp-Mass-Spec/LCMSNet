@@ -5,7 +5,7 @@
  *
  *********************************************************************************************************/
 using System;
-using LcmsNet.Devices.ContactClosure;
+using LcmsNetPlugins.LabJackU3;
 
 namespace LabJackU3TestApp
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Newport.ESP300
+namespace LcmsNetPlugins.Newport.ESP300
 {
     /// <summary>
     /// represents a stage position in x,y,z coordinates
@@ -18,7 +18,6 @@ namespace Newport.ESP300
                 0.0f
             };
         }
-
 
         /// <summary>
         /// Get the coordinate of specified axis

@@ -6,12 +6,12 @@
 //
 //*********************************************************************************************************
 
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 
-namespace LcmsNet.SampleQueue
+namespace LcmsNetPlugins.LcmsNetDummyRandomizer
 {
     /// <summary>
     /// Plugin for testing randomizer loading. This merely inverts the input list

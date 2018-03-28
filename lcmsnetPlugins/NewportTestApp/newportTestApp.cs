@@ -5,7 +5,7 @@
  *
  *********************************************************************************************************/
 using System;
-using Newport.ESP300;
+using LcmsNetPlugins.Newport.ESP300;
 
 namespace NewportTestApp
 {

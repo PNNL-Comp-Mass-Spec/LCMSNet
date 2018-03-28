@@ -5,7 +5,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace ASUTGen.Devices.Pumps
+namespace LcmsNetPlugins.IDEX.Devices.Pumps
 {
     /*[DeviceControlAttribute(typeof(IDEXPumpControlViewModel),
                                  typeof(IDEXPumpGlyph),
@@ -83,15 +83,12 @@ namespace ASUTGen.Devices.Pumps
         }
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-
         }
         public MonitoringComponent GetHealthData()
         {
@@ -114,7 +111,6 @@ namespace ASUTGen.Devices.Pumps
         [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool SetFlowRate(double timeout, double flowRate)
         {
-
             return true;
         }
         /// <summary>

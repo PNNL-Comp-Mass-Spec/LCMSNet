@@ -5,7 +5,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace ASUTGen.Devices.Valves
+namespace LcmsNetPlugins.IDEX.Devices.Valves
 {
     /*[DeviceControlAttribute(typeof(IDEXValveControlViewModel),
                                  typeof(IDEXValveGlyph),
@@ -83,15 +83,12 @@ namespace ASUTGen.Devices.Valves
         }
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-
         }
         public MonitoringComponent GetHealthData()
         {
@@ -114,13 +111,11 @@ namespace ASUTGen.Devices.Valves
         [LCMethodEvent("Change Position", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool ChangePosition(double timeout, int position)
         {
-
             return true;
         }
         [LCMethodEvent("Home Valve", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool HomeValve(double timeout, int position)
         {
-
             return true;
         }
         public override string ToString()

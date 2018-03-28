@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Net.Sockets;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Net.Sockets;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
@@ -10,7 +10,7 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNet.Devices.NetworkStart.Socket
+namespace LcmsNetPlugins.PNNLDevices.Devices.NetworkStart.Socket
 {
     /// <summary>
     /// Network Start using old command packing messaging for communication with mass spectrometer.
@@ -238,7 +238,6 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                     var rawMessage = m_reader.ReadLine();
                     var message = UnpackMessage(rawMessage);
 
-
                     foreach (var argument in message.ArgumentList)
                     {
                         methods.Add(argument.Value);
@@ -390,7 +389,6 @@ namespace LcmsNet.Devices.NetworkStart.Socket
 
                     if (UnpackMessage(outputString).Descriptor == "ACQREADY")
                     {
-
                         //
                         // Tell the system to prepare for acquisition
                         //
@@ -470,7 +468,6 @@ namespace LcmsNet.Devices.NetworkStart.Socket
                      SendMessage(streamWriter, enumNetStartMessageTypes.Post, 0, "ACQSTOP", arguments);
                 outputString = streamReader.ReadLine();
                 success = true;
-
             }
             catch(Exception ex)
             {

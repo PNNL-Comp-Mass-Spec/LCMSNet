@@ -6,7 +6,7 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
-namespace FailureInjector.Drivers
+namespace LcmsNetPlugins.FailureInjector.Drivers
 {
     /*[DeviceControlAttribute(typeof(NotificationDriverViewModel),
                                  typeof(controlNotificationDriverGlyph),
@@ -99,15 +99,12 @@ namespace FailureInjector.Drivers
         }
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-
         }
         public MonitoringComponent GetHealthData()
         {

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
-namespace FailureInjector.Drivers
+namespace LcmsNetPlugins.FailureInjector.Drivers
 {
     public class NotificationDriverViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
@@ -51,7 +51,6 @@ namespace FailureInjector.Drivers
 
         public void ShowProps()
         {
-
         }
         #endregion
     }

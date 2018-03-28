@@ -4,13 +4,13 @@
  * Copyright 2014 Battle Memorial Institute
  *
  *********************************************************************************************************/
+
 using System;
-using FluidicsSDK.Devices;
 using System.IO.Ports;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
     [Serializable]
     [DeviceControl(typeof(ValveVICI2PosViewModel),
@@ -19,7 +19,6 @@ namespace LcmsNet.Devices.Valves
     ]
     public class classValveVICI2pos4port: classValveVICI2Pos, IFourPortValve
     {
-
         public classValveVICI2pos4port()
             : base()
         {
@@ -28,7 +27,6 @@ namespace LcmsNet.Devices.Valves
         public classValveVICI2pos4port(SerialPort port)
             : base(port)
         {
-
         }
     }
 }

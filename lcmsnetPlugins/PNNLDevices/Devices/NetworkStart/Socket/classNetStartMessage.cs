@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
-
-namespace LcmsNet.Devices.NetworkStart.Socket
+namespace LcmsNetPlugins.PNNLDevices.Devices.NetworkStart.Socket
 {
     class classNetStartMessage
     {

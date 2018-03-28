@@ -6,7 +6,7 @@
     <ProjectGuid>{EDF39882-C0AF-424B-9096-6F1384A5FD71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VICI</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.VICI</RootNamespace>
     <AssemblyName>VICI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -82,22 +82,8 @@
     <Compile Include="Devices\Valves\ValveVICIMultiPosViewModel.cs" />
     <Compile Include="Devices\Valves\ValveVICIViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Devices\Valves\SixPortInjectionValveView.xaml">
       <SubType>Designer</SubType>

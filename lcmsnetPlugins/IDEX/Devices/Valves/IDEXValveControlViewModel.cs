@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
-namespace ASUTGen.Devices.Valves
+namespace LcmsNetPlugins.IDEX.Devices.Valves
 {
     public class IDEXValveControlViewModel : ReactiveObject, IDeviceControl
     {
@@ -62,7 +62,6 @@ namespace ASUTGen.Devices.Valves
 
         public void ShowProps()
         {
-
         }
 
         #endregion

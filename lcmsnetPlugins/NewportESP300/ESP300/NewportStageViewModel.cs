@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace Newport.ESP300
+namespace LcmsNetPlugins.Newport.ESP300
 {
     public class NewportStageViewModel : BaseDeviceControlViewModel, IDeviceControl
     {

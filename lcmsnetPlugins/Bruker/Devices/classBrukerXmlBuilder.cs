@@ -5,11 +5,12 @@
 // Created 06/29/2010
 //
 //*********************************************************************************************************
+
 using System;
 using System.IO;
 using System.Xml;
 
-namespace LcmsNet.Devices.BrukerStart
+namespace LcmsNetPlugins.Bruker.Devices
 {
     /// <summary>
     /// Class to provide methods for building XML strings required by sXc

@@ -22,7 +22,7 @@ using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNet.Devices.Pal
+namespace LcmsNetPlugins.PALAutoSampler.Devices.Pal
 {
     /// <summary>
     /// Interface to the LEAP PAL robotic sampler.
@@ -417,7 +417,6 @@ namespace LcmsNet.Devices.Pal
             Free?.Invoke(this);
         }
 
-
         /// <summary>
         /// Indicates that a change requiring saving in the Fluidics designer has occured.
         /// </summary>
@@ -687,7 +686,6 @@ namespace LcmsNet.Devices.Pal
         /// <returns>A string containing the methods</returns>
         public List<string> ListTrays()
         {
-
             var trays = "";
             var tries = 0;
             var MAX_TRIES = 50;
@@ -1086,8 +1084,6 @@ namespace LcmsNet.Devices.Pal
             return result;
         }
 
-
-
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
@@ -1219,7 +1215,6 @@ namespace LcmsNet.Devices.Pal
         /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
-
         }
 
         /*

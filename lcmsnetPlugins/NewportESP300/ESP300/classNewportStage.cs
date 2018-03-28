@@ -1,22 +1,21 @@
 ﻿using System;
-using System.IO.Ports;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO.Ports;
 using System.Text;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
-namespace Newport.ESP300
+namespace LcmsNetPlugins.Newport.ESP300
 {
     [Serializable]
     [DeviceControl(typeof(NewportStageViewModel),
                                  typeof(FluidicsStage),
                                  "Newport Stage",
-                                 "Stages")
-    ]
+                                 "Stages")]
     public class classNewportStage:IDisposable, IDevice
     {
         #region Members
@@ -103,7 +102,6 @@ namespace Newport.ESP300
             GC.SuppressFinalize(this);
         }
 
-
         /// <summary>
         /// IDisposable pattern method
         /// </summary>
@@ -150,7 +148,6 @@ namespace Newport.ESP300
             m_positions[positionName] = position;
         }
 
-
         /// <summary>
         /// remove a position from the list of stored positions.
         /// </summary>
@@ -177,7 +174,6 @@ namespace Newport.ESP300
             {
                 try
                 {
-
                     MoveToPosition(i, Convert.ToSingle(m_positions[positionName][i - 1]));
                 }
                 catch (Exception ex)
@@ -301,7 +297,6 @@ namespace Newport.ESP300
                 StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, "Motor", this, axis.ToString() + " Off"));
             }
         }
-
 
         public bool GetMotorStatus(int axis)
         {
@@ -509,7 +504,6 @@ namespace Newport.ESP300
             return errString.ToString();
         }
 
-
         public void ClearErrors()
         {
             m_reportedErrors.Clear();
@@ -626,7 +620,6 @@ namespace Newport.ESP300
             }
         }
 
-
         /// <summary>
         /// Lists the position names
         /// </summary>
@@ -673,7 +666,6 @@ namespace Newport.ESP300
             get { return m_port; }
             set { this.RaiseAndSetIfChanged(ref m_port, value); }
         }
-
 
         public string Version
         {
@@ -800,7 +792,6 @@ namespace Newport.ESP300
                     throw new ESP300Exception("Invalid Port Handshake");
                 }
             }
-
         }
 
         /// <summary>
@@ -937,7 +928,6 @@ namespace Newport.ESP300
             StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, "Shutdown", this));
             return true;
         }
-
 
         public bool Initialize(ref string astring)
         {

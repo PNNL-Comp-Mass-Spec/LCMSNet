@@ -9,7 +9,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.Devices.Pumps
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     public class PumpIscoViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
@@ -495,7 +495,6 @@ namespace LcmsNet.Devices.Pumps
             if (pump.StartPump(0, pumpIndx))
             {
                 UpdateStatusDisplay("Pump started");
-
             }
             else
             {

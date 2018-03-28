@@ -6,7 +6,7 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
 
-namespace PALAutoSampler.Validator
+namespace LcmsNetPlugins.PalValidator
 {
     /// <summary>
     /// Sample Validator for PAL AutoSampler

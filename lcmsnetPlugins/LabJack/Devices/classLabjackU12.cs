@@ -8,9 +8,8 @@
 
 using System;
 using System.Text;
-using LabJack;
 
-namespace LcmsNet.Devices.ContactClosure
+namespace LcmsNetPlugins.LabJack.Devices
 {
     [Serializable]
     public class classLabjackU12
@@ -190,7 +189,6 @@ namespace LcmsNet.Devices.ContactClosure
             var result = LabJackU12Wrapper.EAnalogIn(ref localID, 0, channel, 0, ref overVoltage, ref voltage);
             if (result != 0)
             {
-
                 var error = GetErrorString(result);
                 ThrowErrorMessage("Error reading analog input.  "  + error, result);
             }

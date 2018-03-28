@@ -5,10 +5,11 @@
 // Created 03/04/2011
 //
 //*********************************************************************************************************
-using System.Collections.Generic;
-using System;
 
-namespace LcmsNet.Devices.Pumps
+using System;
+using System.Collections.Generic;
+
+namespace LcmsNetPlugins.Teledyne.Devices
 {
     /// <summary>
     /// This class provides a wrapper around a dictionary containing ISCO pump status notification strings

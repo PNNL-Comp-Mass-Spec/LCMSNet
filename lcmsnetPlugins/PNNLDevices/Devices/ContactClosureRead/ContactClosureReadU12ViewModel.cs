@@ -1,11 +1,11 @@
 ﻿using System;
-using LcmsNet.Devices.ContactClosure;
 using LcmsNetCommonControls.Devices.ContactClosureRead;
+using LcmsNetPlugins.LabJack.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.Devices.ContactClosureRead
+namespace LcmsNetPlugins.PNNLDevices.Devices.ContactClosureRead
 {
     /// <summary>
     /// Reads/waits for a ready signal from a mass spectrometer or other device using a labjack TTL I/O.

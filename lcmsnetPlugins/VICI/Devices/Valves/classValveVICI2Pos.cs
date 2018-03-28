@@ -12,19 +12,14 @@
 /*********************************************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO.Ports;
-using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace LcmsNet.Devices.Valves
+namespace LcmsNetPlugins.VICI.Devices.Valves
 {
-
     /// <summary>
     /// Class used for interacting with the VICI 2-position valve
     /// </summary>
@@ -94,7 +89,6 @@ namespace LcmsNet.Devices.Valves
         #endregion
 
         #region Properties
-
 
         /// <summary>
         /// Gets the last measured position of the valve.
@@ -190,7 +184,6 @@ namespace LcmsNet.Devices.Valves
                 throw new ValveExceptionUnauthorizedAccess();
             }
 
-
             //Make a string containing the position
             var tempPosition = "Unknown";        //Default to unknown
 
@@ -231,7 +224,6 @@ namespace LcmsNet.Devices.Valves
 //        [LCMethodEventAttribute("Set Position", 1, true, "", -1, false)]
 //        public FluidicsSDK.Base.ValveErrors SetPosition(TwoPositionState newPosition)
 //        {
-
 //#if DEBUG
 //            System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
 //#endif
@@ -328,7 +320,6 @@ namespace LcmsNet.Devices.Valves
         [LCMethodEvent("Set Position", 1, true, "", -1, false)]
         public void SetPosition(TwoPositionState newPosition)
         {
-
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
 #endif
