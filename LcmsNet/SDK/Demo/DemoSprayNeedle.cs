@@ -11,6 +11,7 @@ using System.ComponentModel;
 using FluidicsPack;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 

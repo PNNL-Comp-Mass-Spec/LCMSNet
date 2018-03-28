@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves

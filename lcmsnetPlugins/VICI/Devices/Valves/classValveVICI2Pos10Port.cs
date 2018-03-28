@@ -7,6 +7,7 @@
 using System;
 using FluidicsSDK.Devices;
 using System.IO.Ports;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices.Valves

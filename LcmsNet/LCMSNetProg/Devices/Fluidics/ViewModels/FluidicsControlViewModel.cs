@@ -230,9 +230,9 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
 
                 //each layer is rendered at the transparency value specified by the UI transparency trackbar for that layer, possible values 0-255.
-                fluidicsModerator.Render(drawingContext, (byte)DeviceTransparency, scale, Layer.Devices);
-                fluidicsModerator.Render(drawingContext, (byte)ConnectionTransparency, scale, Layer.Connections);
-                fluidicsModerator.Render(drawingContext, (byte)PortTransparency, scale, Layer.Ports);
+                fluidicsModerator.Render(drawingContext, (byte)DeviceTransparency, scale, RenderLayer.Devices);
+                fluidicsModerator.Render(drawingContext, (byte)ConnectionTransparency, scale, RenderLayer.Connections);
+                fluidicsModerator.Render(drawingContext, (byte)PortTransparency, scale, RenderLayer.Ports);
 
                 return new Size(Math.Max(size.Width, imageSize.Width), Math.Max(size.Height, imageSize.Height));
             }

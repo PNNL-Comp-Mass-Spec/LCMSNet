@@ -177,20 +177,20 @@ namespace FluidicsSDK
         /// <param name="alpha">Transparency value to be  applied to the devices</param>
         /// <param name="scale">scale all objects in the layer by this amount</param>
         /// <param name="layer"></param>
-        public void Render(DrawingContext g, byte alpha, float scale, Layer layer)
+        public void Render(DrawingContext g, byte alpha, float scale, RenderLayer layer)
         {
             //System.Diagnostics.Trace.WriteLine(string.Format("Moderator Render called for {0}", layer));
             //define at what scale the graphics are being drawn, for use in selection of glyphs while scaled.
             m_last_scaled_at = scale;
             switch (layer)
             {
-                case Layer.Devices:
+                case RenderLayer.Devices:
                     m_fluidicsDevManager.Render(g, alpha, scale);
                     break;
-                case Layer.Ports:
+                case RenderLayer.Ports:
                     m_portManager.Render(g, alpha, scale);
                     break;
-                case Layer.Connections:
+                case RenderLayer.Connections:
                     m_conManager.Render(g, alpha, scale);
                     break;
             }

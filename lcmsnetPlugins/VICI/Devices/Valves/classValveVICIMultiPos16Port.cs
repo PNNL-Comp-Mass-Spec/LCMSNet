@@ -8,6 +8,7 @@ using System;
 using System.IO.Ports;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

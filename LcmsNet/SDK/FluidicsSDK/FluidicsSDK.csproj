@@ -47,27 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\Connection.cs" />
-    <Compile Include="Base\enumConnectionStyles.cs" />
-    <Compile Include="Base\enumValveErrors.cs" />
+    <Compile Include="Base\ConnectionStyles.cs" />
     <Compile Include="Base\Fluid.cs" />
     <Compile Include="Base\FluidicsDevChangeEventArgs.cs" />
     <Compile Include="Base\FluidicsDevice.cs" />
     <Compile Include="Base\Port.cs" />
+    <Compile Include="Base\ValveErrors.cs" />
     <Compile Include="Base\ValveStates.cs" />
-    <Compile Include="Devices\ContactClosure.cs" />
-    <Compile Include="Devices\FluidicsDetector.cs" />
-    <Compile Include="Devices\FluidicsDeviceAddedEventArgs.cs" />
-    <Compile Include="Devices\FluidicsDeviceExistsException.cs" />
-    <Compile Include="Devices\FluidicsDeviceTypeFactory.cs" />
-    <Compile Include="Devices\FluidicsPump.cs" />
-    <Compile Include="Devices\FluidicsSampler.cs" />
-    <Compile Include="Devices\IContactClosure.cs" />
-    <Compile Include="Devices\IFluidicsClosure.cs" />
-    <Compile Include="Devices\IFluidicsDevice.cs" />
-    <Compile Include="Devices\IFluidicsPump.cs" />
-    <Compile Include="Devices\IFluidicsSampler.cs" />
-    <Compile Include="Devices\InvalidCustomFluidicsDeviceException.cs" />
-    <Compile Include="Devices\PumpEventArgs.cs" />
     <Compile Include="Devices\Valves\ElevenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\FourPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\IElevenPortValve.cs" />
@@ -88,21 +74,30 @@
     <Compile Include="Devices\Valves\TenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\TwoPositionValve.cs" />
     <Compile Include="Devices\Valves\ValvePositionEventArgs.cs" />
-    <Compile Include="enumLayer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FluidicsModerator.cs" />
-    <Compile Include="Graphic\enumBrushType.cs" />
+    <Compile Include="Devices\ContactClosure.cs" />
+    <Compile Include="Devices\FluidicsDetector.cs" />
+    <Compile Include="Devices\FluidicsDeviceAddedEventArgs.cs" />
+    <Compile Include="Devices\FluidicsDeviceExistsException.cs" />
+    <Compile Include="Devices\FluidicsDeviceTypeFactory.cs" />
+    <Compile Include="Devices\FluidicsPump.cs" />
+    <Compile Include="Devices\FluidicsSampler.cs" />
+    <Compile Include="Devices\IContactClosure.cs" />
+    <Compile Include="Devices\IFluidicsClosure.cs" />
+    <Compile Include="Devices\IFluidicsDevice.cs" />
+    <Compile Include="Devices\IFluidicsPump.cs" />
+    <Compile Include="Devices\IFluidicsSampler.cs" />
+    <Compile Include="Devices\InvalidCustomFluidicsDeviceException.cs" />
+    <Compile Include="Devices\PumpEventArgs.cs" />
+    <Compile Include="Graphic\BrushType.cs" />
     <Compile Include="Graphic\Extensions.cs" />
-    <Compile Include="Graphic\FluidicsRectangle.cs" />
     <Compile Include="Graphic\FluidicsCircle.cs" />
     <Compile Include="Graphic\FluidicsGraphicsError.cs" />
     <Compile Include="Graphic\FluidicsLine.cs" />
     <Compile Include="Graphic\FluidicsPolygon.cs" />
+    <Compile Include="Graphic\FluidicsRectangle.cs" />
     <Compile Include="Graphic\FluidicsTriangle.cs" />
     <Compile Include="Graphic\GraphicsPrimitive.cs" />
     <Compile Include="Graphic\StateControlPrimitive.cs" />
-    <Compile Include="IRenderable.cs" />
     <Compile Include="Managers\ConnectionChangedEventArgs.cs" />
     <Compile Include="Managers\ConnectionManager.cs" />
     <Compile Include="Managers\FluidicsDeviceManager.cs" />
@@ -113,8 +108,10 @@
     <Compile Include="ModelCheckers\NoSinksModelCheck.cs" />
     <Compile Include="ModelCheckers\TestModelCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FluidicsModerator.cs" />
+    <Compile Include="IRenderable.cs" />
+    <Compile Include="RenderLayer.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>

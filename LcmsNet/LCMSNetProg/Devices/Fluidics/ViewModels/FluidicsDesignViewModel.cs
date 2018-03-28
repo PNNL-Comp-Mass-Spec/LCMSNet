@@ -182,9 +182,9 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 drawContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 2), bounds);
                 drawContext.PushClip(new RectangleGeometry(bounds)); // Clip the draw to the calculated boundaries
                 var scale = 1;
-                fluidicsMod.Render(drawContext, 255, scale, Layer.Devices);
-                fluidicsMod.Render(drawContext, 255, scale, Layer.Ports);
-                fluidicsMod.Render(drawContext, 255, scale, Layer.Connections);
+                fluidicsMod.Render(drawContext, 255, scale, RenderLayer.Devices);
+                fluidicsMod.Render(drawContext, 255, scale, RenderLayer.Ports);
+                fluidicsMod.Render(drawContext, 255, scale, RenderLayer.Connections);
                 drawContext.Pop();
             }
 

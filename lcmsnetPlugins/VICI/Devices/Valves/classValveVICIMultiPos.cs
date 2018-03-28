@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
@@ -150,18 +151,18 @@ namespace LcmsNet.Devices.Valves
         /// Sets the position of the valve.
         /// </summary>
         /// <param name="position">The new position.</param>
-        public enumValveErrors SetPosition(int position)
+        public ValveErrors SetPosition(int position)
         {
             var newPosition = Convert.ToInt32(position);
             if (Emulation)
             {
                 m_lastSentPosition = m_lastMeasuredPosition = newPosition;
                 OnPosChanged(newPosition);
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
             if(position == m_lastMeasuredPosition)
             {
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
             //If the serial port is not open, open it
             if (!Port.IsOpen)
@@ -172,7 +173,7 @@ namespace LcmsNet.Devices.Valves
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    return enumValveErrors.UnauthorizedAccess;
+                    return ValveErrors.UnauthorizedAccess;
                 }
             }
 
@@ -188,12 +189,12 @@ namespace LcmsNet.Devices.Valves
                 catch (TimeoutException)
                 {
                     //ApplicationLogger.LogError(0, "Could not set position.  Write timeout.");
-                    return enumValveErrors.TimeoutDuringWrite;
+                    return ValveErrors.TimeoutDuringWrite;
                 }
                 catch (UnauthorizedAccessException)
                 {
                     //ApplicationLogger.LogError(0, "Could not set position.  Could not access serial port.");
-                    return enumValveErrors.UnauthorizedAccess;
+                    return ValveErrors.UnauthorizedAccess;
                 }
 
                 //Wait m_rotationDelayTimems for valve to actually switch before proceeding
@@ -203,7 +204,7 @@ namespace LcmsNet.Devices.Valves
 
                 var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, m_rotationDelayTimems);
                 if (waited)
-                    return enumValveErrors.BadArgument;
+                    return ValveErrors.BadArgument;
 
                 //System.Threading.Thread.Sleep(m_rotationDelayTimems);
 
@@ -215,26 +216,26 @@ namespace LcmsNet.Devices.Valves
                 catch (ValveExceptionWriteTimeout)
                 {
                     //ApplicationLogger.LogError(0, "Could not set position.  The write operation timed out to device.");
-                    return enumValveErrors.TimeoutDuringWrite;
+                    return ValveErrors.TimeoutDuringWrite;
                 }
                 catch (ValveExceptionUnauthorizedAccess)
                 {
                     //ApplicationLogger.LogError(0, "Could not set position. Could not access port.");
-                    return enumValveErrors.UnauthorizedAccess;
+                    return ValveErrors.UnauthorizedAccess;
                 }
 
                 if (m_lastMeasuredPosition != m_lastSentPosition)
                 {
                     //ApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
-                    return enumValveErrors.ValvePositionMismatch;
+                    return ValveErrors.ValvePositionMismatch;
                 }
 
                 OnPosChanged(m_lastMeasuredPosition);
                 //ApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
 
-            return enumValveErrors.BadArgument;
+            return ValveErrors.BadArgument;
         }
 
         /// <summary>
@@ -335,12 +336,12 @@ namespace LcmsNet.Devices.Valves
         /// </summary>
         /// <param name="numPositions"></param>
         /// <returns></returns>
-        public enumValveErrors SetNumberOfPositions(int numPositions)
+        public ValveErrors SetNumberOfPositions(int numPositions)
         {
             if (Emulation)
             {
                 m_numberOfPositions = numPositions;
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
 
             try
@@ -354,14 +355,14 @@ namespace LcmsNet.Devices.Valves
             }
             catch (TimeoutException)
             {
-                return enumValveErrors.TimeoutDuringWrite;
+                return ValveErrors.TimeoutDuringWrite;
             }
             catch (UnauthorizedAccessException)
             {
-                return enumValveErrors.UnauthorizedAccess;
+                return ValveErrors.UnauthorizedAccess;
             }
 
-            return enumValveErrors.Success;
+            return ValveErrors.Success;
         }
         /// <summary>
         /// Gets the number of positions from the device.

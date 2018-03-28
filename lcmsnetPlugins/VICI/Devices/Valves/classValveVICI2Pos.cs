@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.IO.Ports;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -228,7 +229,7 @@ namespace LcmsNet.Devices.Valves
 //        /// </summary>
 //        /// <param name="newPosition">The new position.</param>
 //        [LCMethodEventAttribute("Set Position", 1, true, "", -1, false)]
-//        public FluidicsSDK.Base.enumValveErrors SetPosition(TwoPositionState newPosition)
+//        public FluidicsSDK.Base.ValveErrors SetPosition(TwoPositionState newPosition)
 //        {
 
 //#if DEBUG
@@ -239,12 +240,12 @@ namespace LcmsNet.Devices.Valves
 //            {
 //                m_lastSentPosition = m_lastMeasuredPosition = newPosition;
 //                OnPositionChanged(m_lastMeasuredPosition);
-//                return enumValveErrors.Success;
+//                return ValveErrors.Success;
 //            }
 //            // short circuit..if we're already in that position, why bother trying to move to it?
 //            if (newPosition == m_lastMeasuredPosition)
 //            {
-//                return enumValveErrors.Success;
+//                return ValveErrors.Success;
 //            }
 //            //If the serial port is not open, open it
 //            if (!m_serialPort.IsOpen)
@@ -255,7 +256,7 @@ namespace LcmsNet.Devices.Valves
 //                }
 //                catch (UnauthorizedAccessException)
 //                {
-//                    return enumValveErrors.UnauthorizedAccess;
+//                    return ValveErrors.UnauthorizedAccess;
 //                }
 //            }
 
@@ -273,7 +274,7 @@ namespace LcmsNet.Devices.Valves
 //            }
 //            else
 //            {
-//                return enumValveErrors.BadArgument;
+//                return ValveErrors.BadArgument;
 //            }
 
 //            try
@@ -282,11 +283,11 @@ namespace LcmsNet.Devices.Valves
 //            }
 //            catch (TimeoutException)
 //            {
-//                return enumValveErrors.TimeoutDuringWrite;
+//                return ValveErrors.TimeoutDuringWrite;
 //            }
 //            catch (UnauthorizedAccessException)
 //            {
-//                return enumValveErrors.UnauthorizedAccess;
+//                return ValveErrors.UnauthorizedAccess;
 //            }
 
 //            //Wait 145ms for valve to actually switch before proceeding
@@ -302,21 +303,21 @@ namespace LcmsNet.Devices.Valves
 //            }
 //            catch (ValveExceptionWriteTimeout)
 //            {
-//                return enumValveErrors.TimeoutDuringWrite;
+//                return ValveErrors.TimeoutDuringWrite;
 //            }
 //            catch (ValveExceptionUnauthorizedAccess)
 //            {
-//                return enumValveErrors.UnauthorizedAccess;
+//                return ValveErrors.UnauthorizedAccess;
 //            }
 
 //            if (m_lastMeasuredPosition != m_lastSentPosition)
 //            {
-//                return enumValveErrors.ValvePositionMismatch;
+//                return ValveErrors.ValvePositionMismatch;
 //            }
 //            else
 //            {
 //                OnPositionChanged(m_lastMeasuredPosition);
-//                return enumValveErrors.Success;
+//                return ValveErrors.Success;
 //            }
 //        }
 

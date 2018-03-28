@@ -497,11 +497,11 @@ namespace LcmsNet.Devices.Valves
         /// Sets the hardware ID of the connected valve.
         /// </summary>
         /// <param name="newID">The new ID, as a character 0-9.</param>
-        public enumValveErrors SetHardwareID(char newID)
+        public ValveErrors SetHardwareID(char newID)
         {
             if (Emulation)
             {
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
 
             //Validate the new ID
@@ -531,27 +531,27 @@ namespace LcmsNet.Devices.Valves
                 }
                 catch (TimeoutException)
                 {
-                    return enumValveErrors.TimeoutDuringWrite;
+                    return ValveErrors.TimeoutDuringWrite;
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    return enumValveErrors.UnauthorizedAccess;
+                    return ValveErrors.UnauthorizedAccess;
                 }
                 OnDeviceSaveRequired();
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
 
-            return enumValveErrors.BadArgument;
+            return ValveErrors.BadArgument;
         }
 
         /// <summary>
         /// Clears the hardware ID.
         /// </summary>
-        public enumValveErrors ClearHardwareID()
+        public ValveErrors ClearHardwareID()
         {
             if (Emulation)
             {
-                return enumValveErrors.Success;
+                return ValveErrors.Success;
             }
 
             try
@@ -565,14 +565,14 @@ namespace LcmsNet.Devices.Valves
             }
             catch (TimeoutException)
             {
-                return enumValveErrors.TimeoutDuringWrite;
+                return ValveErrors.TimeoutDuringWrite;
             }
             catch (UnauthorizedAccessException)
             {
-                return enumValveErrors.UnauthorizedAccess;
+                return ValveErrors.UnauthorizedAccess;
             }
 
-            return enumValveErrors.Success;
+            return ValveErrors.Success;
         }
 
         /// <summary>

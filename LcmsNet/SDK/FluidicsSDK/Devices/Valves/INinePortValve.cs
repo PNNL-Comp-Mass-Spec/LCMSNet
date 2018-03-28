@@ -1,7 +1,7 @@
 ﻿using System;
 using FluidicsSDK.Base;
 
-namespace FluidicsSDK.Devices
+namespace FluidicsSDK.Devices.Valves
 {
     public interface INinePortValve : IFluidicsDevice
     {
