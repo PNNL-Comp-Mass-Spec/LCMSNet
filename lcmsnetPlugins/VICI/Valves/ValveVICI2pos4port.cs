@@ -14,17 +14,17 @@ namespace LcmsNetPlugins.VICI.Valves
 {
     [Serializable]
     [DeviceControl(typeof(ValveVICI2PosViewModel),
-                                 "Ten-Port",
+                                 "Four-Port",
                                  "Valves Two-Position")
     ]
-    public class classValveVICI2pos10port : classValveVICI2Pos, ITenPortValve
+    public class ValveVICI2Pos4port: ValveVICI2Pos, IFourPortValve
     {
-        public classValveVICI2pos10port()
+        public ValveVICI2Pos4port()
             : base()
         {
         }
 
-        public classValveVICI2pos10port(SerialPort port)
+        public ValveVICI2Pos4port(SerialPort port)
             : base(port)
         {
         }

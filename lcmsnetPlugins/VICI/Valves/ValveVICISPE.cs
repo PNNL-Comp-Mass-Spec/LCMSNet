@@ -13,18 +13,19 @@ using LcmsNetSDK.Devices;
 namespace LcmsNetPlugins.VICI.Valves
 {
     [Serializable]
+    ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [DeviceControl(typeof(ValveVICI2PosViewModel),
-                                 "Four-Port",
+                                 "Six-port SPE",
                                  "Valves Two-Position")
     ]
-    public class classValveVICI2pos4port: classValveVICI2Pos, IFourPortValve
+    class ValveVICISPE:ValveVICI2Pos, ISolidPhaseExtractor
     {
-        public classValveVICI2pos4port()
+        public ValveVICISPE()
             : base()
         {
         }
 
-        public classValveVICI2pos4port(SerialPort port)
+        public ValveVICISPE(SerialPort port)
             : base(port)
         {
         }

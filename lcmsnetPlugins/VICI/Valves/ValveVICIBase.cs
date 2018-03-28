@@ -8,7 +8,7 @@ using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.VICI.Valves
 {
-    public abstract class classValveVICIBase : IDevice
+    public abstract class ValveVICIBase : IDevice
     {
         #region Members
 
@@ -58,7 +58,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="readTimeout">serial port read timeout</param>
         /// <param name="writeTimeout">serial port write timeout</param>
         /// <param name="defaultName">default device name</param>
-        protected classValveVICIBase(int readTimeout, int writeTimeout, string defaultName)
+        protected ValveVICIBase(int readTimeout, int writeTimeout, string defaultName)
         {
             //     Baud Rate   9600
             //     Parity      None
@@ -92,7 +92,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         /// <param name="port">The serial port object to use.</param>
         /// <param name="defaultName">default device name</param>
-        protected classValveVICIBase(SerialPort port, string defaultName)
+        protected ValveVICIBase(SerialPort port, string defaultName)
         {
             //Set positions to unknown
 

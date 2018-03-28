@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected override void RegisterDevice(IDevice device)
         {
-            m_valve = device as classValveVICIMultiPos;
+            m_valve = device as ValveVICIMultiPos;
             if (m_valve != null)
             {
                 m_valve.PosChanged += OnPosChanged;
@@ -62,7 +62,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Class that interfaces the hardware.
         /// </summary>
-        private classValveVICIMultiPos m_valve;
+        private ValveVICIMultiPos m_valve;
 
         /// <summary>
         /// Event fired when the position of the valve changes.

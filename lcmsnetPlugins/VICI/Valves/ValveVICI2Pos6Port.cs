@@ -18,14 +18,14 @@ namespace LcmsNetPlugins.VICI.Valves
                                  "Six-Port",
                                  "Valves Two-Position")
     ]
-    public class classValveVICI2Pos6Port:classValveVICI2Pos, ISixPortValve
+    public class ValveVICI2Pos6Port:ValveVICI2Pos, ISixPortValve
     {
-        public classValveVICI2Pos6Port()
+        public ValveVICI2Pos6Port()
             : base()
         {
         }
 
-        public classValveVICI2Pos6Port(SerialPort port)
+        public ValveVICI2Pos6Port(SerialPort port)
             : base(port)
         {
         }

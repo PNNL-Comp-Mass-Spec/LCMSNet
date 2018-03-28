@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected override void RegisterDevice(IDevice device)
         {
-            m_valve = device as classValveVICI2Pos;
+            m_valve = device as ValveVICI2Pos;
 
             //TODO: Throw error!
             if (m_valve == null)
@@ -58,7 +58,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// The valve object
         /// </summary>
-        protected classValveVICI2Pos m_valve;
+        protected ValveVICI2Pos m_valve;
 
         //public ValveEventListener m_valveEventListener;
 

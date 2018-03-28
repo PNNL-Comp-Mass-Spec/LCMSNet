@@ -1,13 +1,13 @@
 ﻿namespace LcmsNetPlugins.VICI.Valves
 {
-    public enum enumValvePosition2Pos
+    public enum ValvePosition2Pos
     {
         A,
         B,
         Unknown
     }
 
-    public enum enumValvePositionMultiPos
+    public enum ValvePositionMultiPos
     {
         P1 = 1,
         P2 = 2,

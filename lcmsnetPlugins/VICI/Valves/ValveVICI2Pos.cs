@@ -30,7 +30,7 @@ namespace LcmsNetPlugins.VICI.Valves
                                  "Valve 2-Position",
                                  "Valves")
     ]*/
-    public class classValveVICI2Pos : classValveVICIBase, IDevice
+    public class ValveVICI2Pos : ValveVICIBase, IDevice
     {
         // Serial port Settings for EHCA-CE (2-pos actuator):
         //     Baud Rate   9600
@@ -68,7 +68,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Default constructor
         /// </summary>
-        public classValveVICI2Pos() : base(CONST_READTIMEOUT, CONST_WRITETIMEOUT, "valve")
+        public ValveVICI2Pos() : base(CONST_READTIMEOUT, CONST_WRITETIMEOUT, "valve")
         {
             //Set positions to unknown
             m_lastMeasuredPosition = TwoPositionState.Unknown;
@@ -79,7 +79,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Constructor from a supplied serial port object.
         /// </summary>
         /// <param name="port">The serial port object to use.</param>
-        public classValveVICI2Pos(SerialPort port) : base(port, "valve")
+        public ValveVICI2Pos(SerialPort port) : base(port, "valve")
         {
             //Set positions to unknown
             m_lastMeasuredPosition   = TwoPositionState.Unknown;

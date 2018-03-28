@@ -16,7 +16,7 @@ namespace LcmsNetPlugins.VICI.Valves
     //                             "Valve Multi-Position",
     //                             "Valves")
     //]
-    public class classValveVICIMultiPos : classValveVICIBase, IDevice
+    public class ValveVICIMultiPos : ValveVICIBase, IDevice
     {
         // Settings for EMTCA-CE (Multi-pos actuator):
         //     Baud Rate   9600
@@ -73,7 +73,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Default constructor
         /// </summary>
-        public classValveVICIMultiPos(int numPositions) : base(CONST_DEFAULT_TIMEOUT, CONST_DEFAULT_TIMEOUT, "MPValve")
+        public ValveVICIMultiPos(int numPositions) : base(CONST_DEFAULT_TIMEOUT, CONST_DEFAULT_TIMEOUT, "MPValve")
         {
             //Set positions to unknown
             m_lastMeasuredPosition   = -1;
@@ -87,7 +87,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         /// <param name="numPositions"></param>
         /// <param name="port">The serial port object to use.</param>
-        public classValveVICIMultiPos(int numPositions, SerialPort port) : base(port, "MPValve")
+        public ValveVICIMultiPos(int numPositions, SerialPort port) : base(port, "MPValve")
         {
             //Set positions to unknown
             m_lastMeasuredPosition   = -1;
