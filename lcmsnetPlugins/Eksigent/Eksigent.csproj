@@ -60,11 +60,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Devices\Pumps\EksigentPump.cs" />
-    <Compile Include="Devices\Pumps\EksigentPumpControlView.xaml.cs">
+    <Compile Include="Pumps\EksigentPump.cs" />
+    <Compile Include="Pumps\EksigentPumpControlView.xaml.cs">
       <DependentUpon>EksigentPumpControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Pumps\EksigentPumpControlViewModel.cs" />
+    <Compile Include="Pumps\EksigentPumpControlViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +83,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Devices\Pumps\EksigentPumpControlView.xaml">
+    <Page Include="Pumps\EksigentPumpControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

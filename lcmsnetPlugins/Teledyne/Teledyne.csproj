@@ -54,34 +54,34 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Devices\classIscoConversions.cs" />
-    <Compile Include="Devices\classIscoErrorNotifications.cs" />
-    <Compile Include="Devices\classIscoExceptions.cs" />
-    <Compile Include="Devices\classIscoSerPortProps.cs" />
-    <Compile Include="Devices\classIscoStatusNotifications.cs" />
-    <Compile Include="Devices\classPumpIsco.cs" />
-    <Compile Include="Devices\classPumpIscoData.cs" />
-    <Compile Include="Devices\classPumpIscoGlyph.cs" />
-    <Compile Include="Devices\classPumpIscoRangeData.cs" />
-    <Compile Include="Devices\classPumpIscoSetpointLimits.cs" />
-    <Compile Include="Devices\codeFilePumpIscoDelegates.cs" />
-    <Compile Include="Devices\enumIscoControlMode.cs" />
-    <Compile Include="Devices\enumIscoFlowUnits.cs" />
-    <Compile Include="Devices\enumISCOModel.cs" />
-    <Compile Include="Devices\enumIscoMsgAckCodes.cs" />
-    <Compile Include="Devices\enumIscoOperationMode.cs" />
-    <Compile Include="Devices\enumIscoOperationStatus.cs" />
-    <Compile Include="Devices\enumIscoPressureUnits.cs" />
-    <Compile Include="Devices\enumIscoProblemStatus.cs" />
-    <Compile Include="Devices\enumISCOPumpChannels.cs" />
-    <Compile Include="Devices\PumpIscoDisplayView.xaml.cs">
+    <Compile Include="Pumps\classIscoConversions.cs" />
+    <Compile Include="Pumps\classIscoErrorNotifications.cs" />
+    <Compile Include="Pumps\classIscoExceptions.cs" />
+    <Compile Include="Pumps\classIscoSerPortProps.cs" />
+    <Compile Include="Pumps\classIscoStatusNotifications.cs" />
+    <Compile Include="Pumps\classPumpIsco.cs" />
+    <Compile Include="Pumps\classPumpIscoData.cs" />
+    <Compile Include="Pumps\classPumpIscoGlyph.cs" />
+    <Compile Include="Pumps\classPumpIscoRangeData.cs" />
+    <Compile Include="Pumps\classPumpIscoSetpointLimits.cs" />
+    <Compile Include="Pumps\codeFilePumpIscoDelegates.cs" />
+    <Compile Include="Pumps\enumIscoControlMode.cs" />
+    <Compile Include="Pumps\enumIscoFlowUnits.cs" />
+    <Compile Include="Pumps\enumISCOModel.cs" />
+    <Compile Include="Pumps\enumIscoMsgAckCodes.cs" />
+    <Compile Include="Pumps\enumIscoOperationMode.cs" />
+    <Compile Include="Pumps\enumIscoOperationStatus.cs" />
+    <Compile Include="Pumps\enumIscoPressureUnits.cs" />
+    <Compile Include="Pumps\enumIscoProblemStatus.cs" />
+    <Compile Include="Pumps\enumISCOPumpChannels.cs" />
+    <Compile Include="Pumps\PumpIscoDisplayView.xaml.cs">
       <DependentUpon>PumpIscoDisplayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\PumpIscoDisplayViewModel.cs" />
-    <Compile Include="Devices\PumpIscoView.xaml.cs">
+    <Compile Include="Pumps\PumpIscoDisplayViewModel.cs" />
+    <Compile Include="Pumps\PumpIscoView.xaml.cs">
       <DependentUpon>PumpIscoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\PumpIscoViewModel.cs" />
+    <Compile Include="Pumps\PumpIscoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,11 +101,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Devices\PumpIscoDisplayView.xaml">
+    <Page Include="Pumps\PumpIscoDisplayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Devices\PumpIscoView.xaml">
+    <Page Include="Pumps\PumpIscoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

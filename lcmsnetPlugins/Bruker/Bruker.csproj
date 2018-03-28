@@ -50,14 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Devices\BrukerStartViewModel.cs" />
-    <Compile Include="Devices\classBrukerComConstants.cs" />
-    <Compile Include="Devices\classBrukerMsgTools.cs" />
-    <Compile Include="Devices\classBrukerStart.cs" />
-    <Compile Include="Devices\classBrukerXmlBuilder.cs" />
-    <Compile Include="Devices\classFolderCreateResults.cs" />
-    <Compile Include="Devices\classFtmsResponse.cs" />
-    <Compile Include="Devices\codefileBrukerMsgDelegates.cs" />
+    <Compile Include="BrukerStartViewModel.cs" />
+    <Compile Include="classBrukerComConstants.cs" />
+    <Compile Include="classBrukerMsgTools.cs" />
+    <Compile Include="classBrukerStart.cs" />
+    <Compile Include="classBrukerXmlBuilder.cs" />
+    <Compile Include="classFolderCreateResults.cs" />
+    <Compile Include="classFtmsResponse.cs" />
+    <Compile Include="codefileBrukerMsgDelegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>
