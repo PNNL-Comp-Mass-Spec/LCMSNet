@@ -13,7 +13,7 @@ namespace LcmsNetPlugins.LabJackU3
     /// FIO and EIO ports can do Analog Input or Digital I/O.
     /// CIO ports can do only Digital I/O,
     /// /// </summary>
-    public enum enumLabjackU3Ports
+    public enum LabjackU3Ports
     {
         // FIO pins on the front of the U3, digital mode
         FIO0Digital = 0,
@@ -64,7 +64,7 @@ namespace LcmsNetPlugins.LabJackU3
     /// <summary>
     /// All input ports on the Labjack U3
     /// </summary>
-    public enum enumLabjackU3InputPorts
+    public enum LabjackU3InputPorts
     {
         // FIO pins on the front of the U3, digital mode
         FIO0Digital = 0,
@@ -112,7 +112,7 @@ namespace LcmsNetPlugins.LabJackU3
     /// <summary>
     /// All output ports on the Labjack U3
     /// </summary>
-    public enum enumLabjackU3OutputPorts
+    public enum LabjackU3OutputPorts
     {
         // FIO pins on the front of the U3, digital mode
         FIO0Digital = 0,

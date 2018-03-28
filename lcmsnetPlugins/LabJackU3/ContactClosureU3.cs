@@ -14,17 +14,17 @@ namespace LcmsNetPlugins.LabJackU3
     [DeviceControl(typeof(ContactClosureU3ViewModel),
                                  "Contact Closure U3",
                                  "Contact Closures")]
-    public class classContactClosureU3 : IDevice, IContactClosure
+    public class ContactClosureU3 : IDevice, IContactClosure
     {
          #region Members
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
-        private readonly classLabjackU3 m_labjack;
+        private readonly LabjackU3 m_labjack;
         /// <summary>
         /// The port on the labjack on which to apply the voltage.
         /// </summary>
-        private enumLabjackU3OutputPorts m_port;
+        private LabjackU3OutputPorts m_port;
         /// <summary>
         /// The name, used in software for the symbol.
         /// </summary>
@@ -68,10 +68,10 @@ namespace LcmsNetPlugins.LabJackU3
         /// <summary>
         /// Default constructor--no labjack assigned!
         /// </summary>
-        public classContactClosureU3()
+        public ContactClosureU3()
         {
-            m_labjack = new classLabjackU3();
-            m_port    = enumLabjackU3OutputPorts.DAC1Analog;
+            m_labjack = new LabjackU3();
+            m_port    = LabjackU3OutputPorts.DAC1Analog;
             m_name = "Contact Closure";
         }
 
@@ -79,10 +79,10 @@ namespace LcmsNetPlugins.LabJackU3
         /// Constructor which assigns a labjack
         /// </summary>
         /// <param name="lj">The labjack</param>
-        public classContactClosureU3(classLabjackU3 lj)
+        public ContactClosureU3(LabjackU3 lj)
         {
             m_labjack = lj;
-            m_port    = enumLabjackU3OutputPorts.DAC1Analog;
+            m_port    = LabjackU3OutputPorts.DAC1Analog;
             m_name = "Contact Closure";
         }
 
@@ -90,9 +90,9 @@ namespace LcmsNetPlugins.LabJackU3
         /// Constructor which assigns a port
         /// </summary>
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
-        public classContactClosureU3(enumLabjackU3OutputPorts newPort)
+        public ContactClosureU3(LabjackU3OutputPorts newPort)
         {
-            m_labjack = new classLabjackU3();
+            m_labjack = new LabjackU3();
             m_port    = newPort;
             m_name = "Contact Closure";
         }
@@ -102,7 +102,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         /// <param name="lj">The labjack</param>
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
-        public classContactClosureU3(classLabjackU3 lj, enumLabjackU3OutputPorts newPort)
+        public ContactClosureU3(LabjackU3 lj, LabjackU3OutputPorts newPort)
         {
             m_labjack = lj;
             m_port    = newPort;
@@ -185,7 +185,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
         [PersistenceData("Port")]
-        public enumLabjackU3OutputPorts Port
+        public LabjackU3OutputPorts Port
         {
             get
             {
@@ -276,7 +276,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
         [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public int Trigger(double pulseLengthSeconds, enumLabjackU3OutputPorts port, double voltage)
+        public int Trigger(double pulseLengthSeconds, LabjackU3OutputPorts port, double voltage)
         {
             if (m_emulation)
             {
@@ -295,7 +295,7 @@ namespace LcmsNetPlugins.LabJackU3
                     m_labjack.Write(port, CONST_DIGITALHIGH);
                 }
             }
-            catch (classLabjackU3Exception)
+            catch (LabjackU3Exception)
             {
                 throw;
             }
@@ -307,7 +307,7 @@ namespace LcmsNetPlugins.LabJackU3
             {
                 m_labjack.Write(port, CONST_LOW);
             }
-            catch (classLabjackU3Exception)
+            catch (LabjackU3Exception)
             {
                 throw;
             }

@@ -13,9 +13,10 @@ namespace LcmsNetPlugins.Bruker
     /// <summary>
     /// Class to hold constants and enums required for communication with Bruker solarXcontrol
     /// </summary>
-    public class classBrukerComConstants
+    public class BrukerComConstants
     {
         #region "Enums"
+
         // Represents response from sXc
         public enum SxcReplies : short
         {
@@ -37,9 +38,11 @@ namespace LcmsNetPlugins.Bruker
             SXC_NOMESSAGE = 30,
             SXC_INVALID = 40
         }
+
         #endregion
 
         #region "Constants"
+
         // Commands sent to solarXcontrol
         public const short SOCKET_INITFTMS = 0;
         public const short SOCKET_EXITFTMS = 1;
@@ -95,9 +98,11 @@ namespace LcmsNetPlugins.Bruker
         // CHECKMSSTATUS params
         public const short PARAM_CHECKMSSTATUS_READY = 0;
         public const short PARAM_CHECKMSSTATUS_NOTREADY = 1;
+
         #endregion
 
         #region "Methods"
+
         public static SxcReplies ConvertShortToSxcReply(short inpVal)
         {
             if (Enum.IsDefined(typeof(SxcReplies), inpVal))
@@ -108,7 +113,8 @@ namespace LcmsNetPlugins.Bruker
             {
                 return SxcReplies.SXC_INVALID;
             }
-        }   
+        }
+
         #endregion
-    }   
+    }
 }

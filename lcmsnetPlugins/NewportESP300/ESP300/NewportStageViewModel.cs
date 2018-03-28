@@ -19,7 +19,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         #region Members
 
-        private classNewportStage newportStage;
+        private NewportStage newportStage;
         private const string units = "mm";
         private const string positionNotDefined = "NoPosition";
         private readonly ReactiveUI.ReactiveList<string> positionsList = new ReactiveUI.ReactiveList<string>();
@@ -100,7 +100,7 @@ namespace LcmsNetPlugins.Newport.ESP300
             set { this.RaiseAndSetIfChanged(ref controlsTabSelected, value); }
         }
 
-        public classNewportStage NewportStage
+        public NewportStage NewportStage
         {
             get { return newportStage; }
             private set { this.RaiseAndSetIfChanged(ref newportStage, value); }
@@ -186,7 +186,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         public void RegisterDevice(IDevice device)
         {
-            NewportStage = device as classNewportStage;
+            NewportStage = device as NewportStage;
             SetBaseDevice(NewportStage);
             NewportStage.PositionsLoaded += PositionLoadHandler;
             NewportStage.PositionChanged += PositionChangedHandler;
@@ -398,7 +398,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         private void PositionChangedHandler(object sender, EventArgs e)
         {
-            var stage = sender as classNewportStage;
+            var stage = sender as NewportStage;
             if (stage != null)
                 UpdatePositionLabel(stage.CurrentPos);
         }

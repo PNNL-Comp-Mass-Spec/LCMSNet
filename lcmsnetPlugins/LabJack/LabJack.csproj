@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="classLabjackU12.cs" />
-    <Compile Include="classLabjackU12Exception.cs" />
-    <Compile Include="enumLabjackU12Ports.cs" />
+    <Compile Include="LabjackU12.cs" />
+    <Compile Include="LabjackU12Exception.cs" />
+    <Compile Include="LabjackU12Ports.cs" />
     <Compile Include="LabJackU12Wrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

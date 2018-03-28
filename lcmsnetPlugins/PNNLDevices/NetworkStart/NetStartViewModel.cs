@@ -21,7 +21,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
 
         private void RegisterDevice(IDevice device)
         {
-            m_netStart = device as classNetStartSocket;
+            m_netStart = device as NetStartSocket;
             if (m_netStart != null)
             {
                 m_netStart.MethodNames += m_netStart_MethodNames;
@@ -39,7 +39,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
         /// <summary>
         /// A NesStart object to use
         /// </summary>
-        private classNetStartSocket m_netStart;
+        private NetStartSocket m_netStart;
 
         /// <summary>
         /// Fired when the instrument methods are updated.

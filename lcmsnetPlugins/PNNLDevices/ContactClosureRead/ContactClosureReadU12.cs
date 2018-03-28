@@ -29,11 +29,11 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <summary>
         /// The labjack used for reading the ready signal
         /// </summary>
-        private readonly classLabjackU12 m_labjack;
+        private readonly LabjackU12 m_labjack;
         /// <summary>
         /// The port on the labjack on which to read the voltage.
         /// </summary>
-        private enumLabjackU12InputPorts m_port;
+        private LabjackU12InputPorts m_port;
         /// <summary>
         /// The name, used in software for the symbol.
         /// </summary>
@@ -79,8 +79,8 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// </summary>
         public ContactClosureReadU12()
         {
-            m_labjack = new classLabjackU12();
-            m_port = enumLabjackU12InputPorts.AI1;
+            m_labjack = new LabjackU12();
+            m_port = LabjackU12InputPorts.AI1;
             m_name = "Contact Closure Reader";
         }
 
@@ -88,10 +88,10 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// Constructor which assigns a labjack
         /// </summary>
         /// <param name="lj">The labjack</param>
-        public ContactClosureReadU12(classLabjackU12 lj)
+        public ContactClosureReadU12(LabjackU12 lj)
         {
             m_labjack = lj;
-            m_port = enumLabjackU12InputPorts.AI1;
+            m_port = LabjackU12InputPorts.AI1;
             m_name = "Contact Closure Reader";
         }
 
@@ -99,9 +99,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// Constructor which assigns a port
         /// </summary>
         /// <param name="newPort">The port on the labjack to use for reading the ready signal</param>
-        public ContactClosureReadU12(enumLabjackU12InputPorts newPort)
+        public ContactClosureReadU12(LabjackU12InputPorts newPort)
         {
-            m_labjack = new classLabjackU12();
+            m_labjack = new LabjackU12();
             m_port = newPort;
             m_name = "Contact Closure Reader";
         }
@@ -111,7 +111,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// </summary>
         /// <param name="lj">The labjack</param>
         /// <param name="newPort">The port on the labjack to use for reading the ready signal</param>
-        public ContactClosureReadU12(classLabjackU12 lj, enumLabjackU12InputPorts newPort)
+        public ContactClosureReadU12(LabjackU12 lj, LabjackU12InputPorts newPort)
         {
             m_labjack = lj;
             m_port = newPort;
@@ -194,7 +194,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
         [PersistenceData("Port")]
-        public enumLabjackU12InputPorts Port
+        public LabjackU12InputPorts Port
         {
             get
             {
@@ -263,7 +263,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
             return ReadVoltage(m_port);
         }
 
-        public float ReadVoltage(enumLabjackU12InputPorts port)
+        public float ReadVoltage(LabjackU12InputPorts port)
         {
             var state = 0f;
 
@@ -271,7 +271,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
             {
                 state = m_labjack.Read(port);
             }
-            catch (classLabjackU12Exception)
+            catch (LabjackU12Exception)
             {
             }
 
@@ -311,7 +311,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
         [LCMethodEvent("Read Port Digital", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool ReadStatusDigital(double timeout, enumLabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public bool ReadStatusDigital(double timeout, LabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateDigital(timeout, port, target);
             return target.HasFlag(closureState);
@@ -342,7 +342,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
         [LCMethodEvent("Read Port Analog", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool ReadStatusAnalog(double timeout, enumLabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public bool ReadStatusAnalog(double timeout, LabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateAnalog(timeout, port, voltage, target);
             return target.HasFlag(closureState);
@@ -356,7 +356,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateAuto(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            if ((int) Port <= (int) enumLabjackU12InputPorts.AI7)
+            if ((int) Port <= (int) LabjackU12InputPorts.AI7)
             {
                 return ReadStateAnalog(timeout, m_port, 2.5, target);
             }
@@ -384,7 +384,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="port">The LabJack port</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>the state of the contact closure</returns>
-        public ContactClosureState ReadStateDigital(double timeout, enumLabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public ContactClosureState ReadStateDigital(double timeout, LabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             if (m_emulation)
             {
@@ -406,7 +406,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
                     closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
             }
-            catch (classLabjackU12Exception ex)
+            catch (LabjackU12Exception ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not read the port.",
                               ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Read Failure"));
@@ -445,7 +445,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>the state of the contact closure</returns>
-        public ContactClosureState ReadStateAnalog(double timeout, enumLabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
+        public ContactClosureState ReadStateAnalog(double timeout, LabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             if (m_emulation)
             {
@@ -467,7 +467,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
                     closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
             }
-            catch (classLabjackU12Exception ex)
+            catch (LabjackU12Exception ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not read the port.",
                               ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Read Failure"));

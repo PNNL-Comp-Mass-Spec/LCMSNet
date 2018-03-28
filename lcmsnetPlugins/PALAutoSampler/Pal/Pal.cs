@@ -32,7 +32,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
     [DeviceControl(typeof(PalViewModel),
                                  "PAL Autosampler",
                                  "Auto-Samplers")]
-    public class classPal : IDevice, IAutoSampler, IFluidicsSampler
+    public class Pal : IDevice, IAutoSampler, IFluidicsSampler
     {
         #region Members
 
@@ -69,7 +69,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// The valid range of vials.
         /// </summary>
-        private enumVialRanges m_vialRange;// = enumVialRanges._96Well;
+        private VialRanges m_vialRange;// = enumVialRanges._96Well;
 
         /// <summary>
         /// The current volume setting.
@@ -150,9 +150,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public classPal()
+        public Pal()
         {
-            m_vialRange = enumVialRanges.Well96;
+            m_vialRange = VialRanges.Well96;
             m_name = "pal";
             AbortEvent = new System.Threading.ManualResetEvent(false);
             StatusPollDelay = 1;
@@ -309,7 +309,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// The range of valid vial numbers
         /// </summary>
-        public enumVialRanges VialRange
+        public VialRanges VialRange
         {
             get { return m_vialRange; }
             set { this.RaiseAndSetIfChanged(ref m_vialRange, value); }
@@ -324,14 +324,14 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             get { return (int) VialRange; }
             set
             {
-                var newVal = Enum.GetValues(typeof(enumVialRanges)).Cast<int>().Where(x => x >= value).DefaultIfEmpty((int) enumVialRanges.Well1536).Min();
-                if (Enum.TryParse(newVal.ToString(), out enumVialRanges range))
+                var newVal = Enum.GetValues(typeof(VialRanges)).Cast<int>().Where(x => x >= value).DefaultIfEmpty((int) VialRanges.Well1536).Min();
+                if (Enum.TryParse(newVal.ToString(), out VialRanges range))
                 {
                     VialRange = range;
                 }
                 else
                 {
-                    VialRange = enumVialRanges.Well96;
+                    VialRange = VialRanges.Well96;
                 }
             }
         }

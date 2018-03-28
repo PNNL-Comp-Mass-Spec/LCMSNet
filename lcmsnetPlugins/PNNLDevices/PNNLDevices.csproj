@@ -55,13 +55,13 @@
   <ItemGroup>
     <Compile Include="ContactClosureRead\ContactClosureReadU12.cs" />
     <Compile Include="ContactClosureRead\ContactClosureReadU12ViewModel.cs" />
-    <Compile Include="ContactClosure\classContactClosureU12.cs" />
+    <Compile Include="ContactClosure\ContactClosureU12.cs" />
     <Compile Include="ContactClosure\ContactClosureU12ViewModel.cs" />
     <Compile Include="NetworkStart\NetStartViewModel.cs" />
-    <Compile Include="NetworkStart\Socket\classNetStartArgument.cs" />
-    <Compile Include="NetworkStart\Socket\classNetStartMessage.cs" />
-    <Compile Include="NetworkStart\Socket\classNetStartSocket.cs" />
-    <Compile Include="NetworkStart\Socket\enumNetStartMessageTypes.cs" />
+    <Compile Include="NetworkStart\Socket\NetStartArgument.cs" />
+    <Compile Include="NetworkStart\Socket\NetStartMessage.cs" />
+    <Compile Include="NetworkStart\Socket\NetStartSocket.cs" />
+    <Compile Include="NetworkStart\Socket\NetStartMessageTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

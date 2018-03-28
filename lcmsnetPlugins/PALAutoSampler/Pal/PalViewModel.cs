@@ -26,7 +26,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             isInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            vialRangeComboBoxOptions = new ReactiveUI.ReactiveList<enumVialRanges>(Enum.GetValues(typeof(enumVialRanges)).Cast<enumVialRanges>());
+            vialRangeComboBoxOptions = new ReactiveUI.ReactiveList<VialRanges>(Enum.GetValues(typeof(VialRanges)).Cast<VialRanges>());
 
             SetupCommands();
 
@@ -39,7 +39,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <param name="device"></param>
         private void RegisterDevice(IDevice device)
         {
-            Pal = device as classPal;
+            Pal = device as Pal;
 
             if (Pal != null)
             {
@@ -73,11 +73,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// The class which controls the PAL itself.
         /// </summary>
-        private classPal pal;
+        private Pal pal;
 
         private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private readonly ReactiveUI.ReactiveList<string> trayComboBoxOptions = new ReactiveUI.ReactiveList<string>();
-        private readonly ReactiveUI.ReactiveList<enumVialRanges> vialRangeComboBoxOptions;
+        private readonly ReactiveUI.ReactiveList<VialRanges> vialRangeComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<string> trayNamesAndMaxVial = new ReactiveUI.ReactiveList<string>();
         private readonly bool isInDesignMode = false;
         private string selectedMethod = "";
@@ -100,7 +100,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<enumVialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<VialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
         public ReactiveUI.IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
 
@@ -197,13 +197,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             set { this.RaiseAndSetIfChanged(ref timeReport, value); }
         }
 
-        public classPal Pal
+        public Pal Pal
         {
             get { return pal; }
             private set { this.RaiseAndSetIfChanged(ref pal, value); }
         }
 
-        public int MaxVial => (int) (Pal?.VialRange ?? enumVialRanges.Well96);
+        public int MaxVial => (int) (Pal?.VialRange ?? VialRanges.Well96);
 
         //TODO: This. There are wait/free events, do I still need this?
         /// <summary>
@@ -232,7 +232,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             get { return Pal; }
             set
             {
-                Pal = value as classPal;
+                Pal = value as Pal;
                 if (Pal != null && !isInDesignMode)
                 {
                     try

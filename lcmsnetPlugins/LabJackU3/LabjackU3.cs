@@ -12,7 +12,7 @@ using LabJack.LabJackUD;
 namespace LcmsNetPlugins.LabJackU3
 {
     [Serializable]
-    public class classLabjackU3
+    public class LabjackU3
     {
         #region Members
 
@@ -33,7 +33,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public classLabjackU3():this(0)
+        public LabjackU3():this(0)
         {
         }
 
@@ -41,7 +41,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// Constructor which specifies ID.
         /// </summary>
         /// <param name="labjackID">The labjack's local ID</param>
-        public classLabjackU3(int labjackID)
+        public LabjackU3(int labjackID)
         {
             m_localID            = labjackID;
             m_firmwareVersion = 0;
@@ -98,7 +98,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         /// <param name="channel">Enumerated port to write to</param>
         /// <param name="value">The value to write (0/1 for digital)</param>
-        public void Write(enumLabjackU3OutputPorts channel, double value)
+        public void Write(LabjackU3OutputPorts channel, double value)
         {
             //Determine which type of port we are writing to
             var port = (int)channel;
@@ -118,9 +118,9 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         /// <param name="channel">Enumerated port to read from</param>
         /// <returns>The measured value</returns>
-        public double Read(enumLabjackU3InputPorts channel)
+        public double Read(LabjackU3InputPorts channel)
         {
-            var tempPortName = Enum.GetName(typeof(enumLabjackU3InputPorts), channel).ToString();
+            var tempPortName = Enum.GetName(typeof(LabjackU3InputPorts), channel).ToString();
 
             //Determine which type of port we are reading from
             var port = (int) channel;
@@ -285,7 +285,7 @@ namespace LcmsNetPlugins.LabJackU3
         private void ThrowErrorMessage(string msg, LJUD.LJUDERROR errorCode)
         {
             var errorString = GetErrorString(errorCode);
-            throw new classLabjackU3Exception(msg + ":\r\n\r\n" + errorString);
+            throw new LabjackU3Exception(msg + ":\r\n\r\n" + errorString);
         }
 
         #endregion

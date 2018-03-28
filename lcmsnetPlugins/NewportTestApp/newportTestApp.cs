@@ -13,7 +13,7 @@ namespace NewportTestApp
     {
         static void Main(string[] args)
         {
-            var stage = new classNewportStage();
+            var stage = new NewportStage();
             stage.OpenPort();
             PrintMenu();
             while (true)

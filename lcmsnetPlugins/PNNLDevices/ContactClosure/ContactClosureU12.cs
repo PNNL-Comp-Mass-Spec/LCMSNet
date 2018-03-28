@@ -26,17 +26,17 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
     [DeviceControl(typeof(ContactClosureU12ViewModel),
                                  "Contact Closure U12",
                                  "Contact Closures")]
-    public class classContactClosureU12 : IDevice, IContactClosure
+    public class ContactClosureU12 : IDevice, IContactClosure
     {
         #region Members
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
-        private readonly classLabjackU12 m_labjack;
+        private readonly LabjackU12 m_labjack;
         /// <summary>
         /// The port on the labjack on which to apply the voltage.
         /// </summary>
-        private enumLabjackU12OutputPorts m_port;
+        private LabjackU12OutputPorts m_port;
         /// <summary>
         /// The name, used in software for the symbol.
         /// </summary>
@@ -80,10 +80,10 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <summary>
         /// Default constructor--no labjack assigned!
         /// </summary>
-        public classContactClosureU12()
+        public ContactClosureU12()
         {
-            m_labjack = new classLabjackU12();
-            m_port    = enumLabjackU12OutputPorts.AO1;
+            m_labjack = new LabjackU12();
+            m_port    = LabjackU12OutputPorts.AO1;
             m_name = "Contact Closure";
         }
 
@@ -91,10 +91,10 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// Constructor which assigns a labjack
         /// </summary>
         /// <param name="lj">The labjack</param>
-        public classContactClosureU12(classLabjackU12 lj)
+        public ContactClosureU12(LabjackU12 lj)
         {
             m_labjack = lj;
-            m_port    = enumLabjackU12OutputPorts.AO1;
+            m_port    = LabjackU12OutputPorts.AO1;
             m_name = "Contact Closure";
         }
 
@@ -102,9 +102,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// Constructor which assigns a port
         /// </summary>
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
-        public classContactClosureU12(enumLabjackU12OutputPorts newPort)
+        public ContactClosureU12(LabjackU12OutputPorts newPort)
         {
-            m_labjack = new classLabjackU12();
+            m_labjack = new LabjackU12();
             m_port    = newPort;
             m_name = "Contact Closure";
         }
@@ -114,7 +114,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         /// <param name="lj">The labjack</param>
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
-        public classContactClosureU12(classLabjackU12 lj, enumLabjackU12OutputPorts newPort)
+        public ContactClosureU12(LabjackU12 lj, LabjackU12OutputPorts newPort)
         {
             m_labjack = lj;
             m_port    = newPort;
@@ -197,7 +197,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
         [PersistenceData("Port")]
-        public enumLabjackU12OutputPorts Port
+        public LabjackU12OutputPorts Port
         {
             get
             {
@@ -278,14 +278,14 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <param name="port"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         [LCMethodEvent("Trigger Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public int Trigger(double timeout, enumLabjackU12OutputPorts port, double pulseLengthSeconds)
+        public int Trigger(double timeout, LabjackU12OutputPorts port, double pulseLengthSeconds)
         {
             if (m_emulation)
             {
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), m_port).ToString();
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), m_port).ToString();
 
             var error = 0;
 
@@ -300,7 +300,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
                     m_labjack.Write(port, CONST_DIGITALHIGH);
                 }
             }
-            catch (classLabjackU12Exception ex)
+            catch (LabjackU12Exception ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
                                      ex,
@@ -320,7 +320,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             {
                 m_labjack.Write(port, CONST_ANALOGLOW);
             }
-            catch (classLabjackU12Exception ex)
+            catch (LabjackU12Exception ex)
             {
                 Error?.Invoke(this,
                     new DeviceErrorEventArgs("Could not stop the trigger.",
@@ -355,14 +355,14 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
         [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)
+        public int Trigger(int pulseLengthSeconds, LabjackU12OutputPorts port, double voltage)
         {
             if (m_emulation)
             {
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(enumLabjackU12OutputPorts), m_port).ToString();
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), m_port).ToString();
             var error = 0;
             try
             {
@@ -375,7 +375,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
                     m_labjack.Write(port, CONST_DIGITALHIGH);
                 }
             }
-            catch (classLabjackU12Exception ex)
+            catch (LabjackU12Exception ex)
             {
                 throw ex;
             }
@@ -387,7 +387,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             {
                 m_labjack.Write(port, CONST_ANALOGLOW);
             }
-            catch (classLabjackU12Exception ex)
+            catch (LabjackU12Exception ex)
             {
                 throw ex;
             }

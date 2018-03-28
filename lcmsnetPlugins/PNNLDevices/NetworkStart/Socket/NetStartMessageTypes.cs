@@ -1,6 +1,6 @@
 ﻿namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 {
-    public enum enumNetStartMessageTypes
+    public enum NetStartMessageTypes
     {
         Unknown = 0,
         Query,

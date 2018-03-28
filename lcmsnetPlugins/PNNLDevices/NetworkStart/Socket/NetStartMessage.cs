@@ -2,14 +2,14 @@
 
 namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 {
-    class classNetStartMessage
+    class NetStartMessage
     {
-        public enumNetStartMessageTypes Type { get; set; }
+        public NetStartMessageTypes Type { get; set; }
 
         public int Sequence { get; set; }
 
         public string Descriptor { get; set; }
 
-        public List<classNetStartArgument> ArgumentList { get; set; }
+        public List<NetStartArgument> ArgumentList { get; set; }
     }
 }

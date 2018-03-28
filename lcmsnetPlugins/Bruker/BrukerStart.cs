@@ -28,13 +28,16 @@ namespace LcmsNetPlugins.Bruker
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [DeviceControl(typeof(BrukerStartViewModel), "Bruker", "Detectors")]
-    public class classBrukerStart : IDevice, IFluidicsClosure
+    public class BrukerStart : IDevice, IFluidicsClosure
     {
         #region "Constants"
+
         const double COMMAND_TIMEOUT_MSEC = 20000;
+
         #endregion
 
         #region "Class variables"
+
         /// <summary>
         /// Device name
         /// </summary>
@@ -60,16 +63,19 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         private DeviceStatus m_status;
 
-        readonly classBrukerMsgTools mobject_MsgTools;
+        readonly BrukerMsgTools mobject_MsgTools;
         readonly string m_OuputFolderLocal;
         readonly string m_OutputFolderRemote;
         readonly string m_MethodFolderLocal;
-        classBrukerComConstants.SxcReplies mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
+        BrukerComConstants.SxcReplies mobject_sXcReply = BrukerComConstants.SxcReplies.SXC_NOMESSAGE;
         bool m_AcquisitionInProgress;
         readonly Timer mobject_CmdTimeoutTimer;
+
         bool m_DeviceError;
+
         //          string m_DeviceErrorMessage = "";
         bool m_CmdTimedOut;
+
         #endregion
 
         #region "Events"
@@ -89,14 +95,17 @@ namespace LcmsNetPlugins.Bruker
         /// Fired when new method names are available.
         /// </summary>
         public event DelegateDeviceHasData MethodNames;
+
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
+
         #endregion
 
         #region "Constructors"
-        public classBrukerStart()
+
+        public BrukerStart()
         {
             m_Name = "Bruker Start";
 
@@ -107,7 +116,7 @@ namespace LcmsNetPlugins.Bruker
             var brukerNetName = Bruker.Properties.Settings.Default.BrukerInstNetName;
             var brukerPort = Bruker.Properties.Settings.Default.BrukerInstPort;
 
-            mobject_MsgTools = new classBrukerMsgTools(m_OuputFolderLocal, m_MethodFolderLocal, brukerNetName, brukerPort);
+            mobject_MsgTools = new BrukerMsgTools(m_OuputFolderLocal, m_MethodFolderLocal, brukerNetName, brukerPort);
             mobject_MsgTools.BrukerMsgReceived += BrukerMsgReceived;
 
             mobject_CmdTimeoutTimer = new Timer();
@@ -117,23 +126,19 @@ namespace LcmsNetPlugins.Bruker
             mobject_CmdTimeoutTimer.Enabled = false;
             mobject_CmdTimeoutTimer.EndInit();
         }
+
         #endregion
 
         #region "Properties"
+
         /// <summary>
         /// Gets or sets emulation state
         /// </summary>
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get
-            {
-                return m_Emulation;
-            }
-            set
-            {
-                m_Emulation = value;
-            }
+            get { return m_Emulation; }
+            set { m_Emulation = value; }
         }
 
         /// <summary>
@@ -141,10 +146,7 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get { return m_status; }
             set
             {
                 if (value != m_status)
@@ -152,35 +154,25 @@ namespace LcmsNetPlugins.Bruker
                 m_status = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the Port number to connect to on the Bruker System.
         /// </summary>
         [PersistenceData("Port")]
         public int Port
         {
-            get
-            {
-                return mobject_MsgTools.Port;
-            }
-            set
-            {
-                mobject_MsgTools.Port = value;
-            }
+            get { return mobject_MsgTools.Port; }
+            set { mobject_MsgTools.Port = value; }
         }
+
         /// <summary>
         /// Gets or sets the IP address of the Bruker System.
         /// </summary>
         [PersistenceData("IPAddress")]
         public string IPAddress
         {
-            get
-            {
-                return mobject_MsgTools.IPAddress;
-            }
-            set
-            {
-                mobject_MsgTools.IPAddress = value;
-            }
+            get { return mobject_MsgTools.IPAddress; }
+            set { mobject_MsgTools.IPAddress = value; }
         }
 
         /// <summary>
@@ -188,14 +180,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public bool Running
         {
-            get
-            {
-                return m_Running;
-            }
-            set
-            {
-                m_Running = value;
-            }
+            get { return m_Running; }
+            set { m_Running = value; }
         }
 
         /// <summary>
@@ -218,18 +204,14 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public string Version
         {
-            get
-            {
-                return m_Version;
-            }
-            set
-            {
-                m_Version = value;
-            }
+            get { return m_Version; }
+            set { m_Version = value; }
         }
+
         #endregion
 
         #region "Methods"
+
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
@@ -274,6 +256,7 @@ namespace LcmsNetPlugins.Bruker
             {
                 return true;
             }
+
             //TODO: Put real code here
             return true;
         }
@@ -303,8 +286,7 @@ namespace LcmsNetPlugins.Bruker
                 msg = "StartAcquisition: Acquisition already in progress";
                 ApplicationLogger.LogError(0, msg);
                 //Error(this, new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-                Error?.Invoke(this,
-                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
+                Error?.Invoke(this, new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
 
@@ -315,7 +297,7 @@ namespace LcmsNetPlugins.Bruker
                 // There was a problem making the folder. Details are in result
                 ApplicationLogger.LogError(0, result.Message, result.CreationException, sample);
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, result.Message, DeviceErrorStatus.ErrorSampleOnly, result.CreationException));
-new DeviceErrorEventArgs(result.Message, result.CreationException, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
+                    new DeviceErrorEventArgs(result.Message, result.CreationException, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
 
@@ -327,11 +309,7 @@ new DeviceErrorEventArgs(result.Message, result.CreationException, DeviceErrorSt
                 // There was a problem making the folder. Details are in result
                 ApplicationLogger.LogError(0, result.Message, result.CreationException, sample);
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, result.Message, DeviceErrorStatus.ErrorSampleOnly, result.CreationException));
-    new DeviceErrorEventArgs(result.Message,
-                         result.CreationException,
-                         DeviceErrorStatus.ErrorSampleOnly,
-                         this,
-                         "None"));
+                    new DeviceErrorEventArgs(result.Message, result.CreationException, DeviceErrorStatus.ErrorSampleOnly, this, "None"));
                 return false;
             }
 
@@ -344,25 +322,16 @@ new DeviceErrorEventArgs(result.Message, result.CreationException, DeviceErrorSt
                     msg = "StartAcquisiton: Socket already connected - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
+
                 if (!mobject_MsgTools.ConnectSxcSocket())
                 {
                     msg = "StartAcquisiton: Problem connecting to sXc - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -372,28 +341,20 @@ new DeviceErrorEventArgs(msg,
                     msg = "StartAcquisition: Problem starting message listen method - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     mobject_MsgTools.DisconnectSXC();
                     return false;
                 }
+
                 // Send INIT_FTMS
-                mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
+                mobject_sXcReply = BrukerComConstants.SxcReplies.SXC_NOMESSAGE;
                 if (!mobject_MsgTools.InitFTMS())
                 {
                     msg = "StartAcquistion: Problem sending INIT_FTMS - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-    new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -405,32 +366,22 @@ new DeviceErrorEventArgs(msg,
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
                 ApplicationLogger.LogMessage(2, "StartAcuisition.WaitForReady completed OK");
 
                 // Send the sample info
-                mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
-                var sampleInfoXml = classBrukerXmlBuilder.CreateXmlString(m_OuputFolderLocal, m_MethodFolderLocal, sampleName, methodName);
+                mobject_sXcReply = BrukerComConstants.SxcReplies.SXC_NOMESSAGE;
+                var sampleInfoXml = BrukerXmlBuilder.CreateXmlString(m_OuputFolderLocal, m_MethodFolderLocal, sampleName, methodName);
                 if (!mobject_MsgTools.SendSampleInfo(sampleInfoXml))
                 {
                     msg = "StartAcquistion: Problem sending sample info - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -442,31 +393,21 @@ new DeviceErrorEventArgs(msg,
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
                 ApplicationLogger.LogMessage(2, "StartAcuisition.WaitForReady completed OK");
 
                 // Send PREPARE_ACQUISITION
-                mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
+                mobject_sXcReply = BrukerComConstants.SxcReplies.SXC_NOMESSAGE;
                 if (!mobject_MsgTools.PrepareAcquisition())
                 {
                     msg = "StartAcquistion: Problem sending PREPARE_ACQUISITION - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -478,12 +419,7 @@ new DeviceErrorEventArgs(msg,
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -496,12 +432,7 @@ new DeviceErrorEventArgs(msg,
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -515,12 +446,7 @@ new DeviceErrorEventArgs(msg,
                 ApplicationLogger.LogError(0, msg, ex, sample);
                 StopSxcCommunication();
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-            new DeviceErrorEventArgs(msg,
-                         null,
-                         DeviceErrorStatus.ErrorAffectsAllColumns,
-                         this,
-                         "None"));
+                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
         }
@@ -541,31 +467,21 @@ new DeviceErrorEventArgs(msg,
                 msg = "EndAcquisition: No acquisition in progress";
                 ApplicationLogger.LogError(0, msg);
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-            new DeviceErrorEventArgs(msg,
-                         null,
-                         DeviceErrorStatus.ErrorAffectsAllColumns,
-                         this,
-                         "None"));
+                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
 
             try
             {
                 // Send message to stop running after current scan finishes
-                mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_NOMESSAGE;
+                mobject_sXcReply = BrukerComConstants.SxcReplies.SXC_NOMESSAGE;
                 if (!mobject_MsgTools.FinishAcq())
                 {
                     msg = "EndAcquistion: Problem sending FINISHACQUISITION - " + mobject_MsgTools.Msg;
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -576,12 +492,7 @@ new DeviceErrorEventArgs(msg,
                     ApplicationLogger.LogError(0, msg);
                     StopSxcCommunication();
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                     null,
-                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                     this,
-                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     return false;
                 }
 
@@ -598,12 +509,7 @@ new DeviceErrorEventArgs(msg,
                 msg = "StopAcquisition: Exception stopping acquisition" + ex.Message;
                 ApplicationLogger.LogError(0, msg, ex);
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-            new DeviceErrorEventArgs(msg,
-                         null,
-                         DeviceErrorStatus.ErrorAffectsAllColumns,
-                         this,
-                         "None"));
+                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
         }
@@ -626,12 +532,7 @@ new DeviceErrorEventArgs(msg,
                 mobject_MsgTools.ExitFTMS();
                 mobject_MsgTools.DisconnectSXC();
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-            new DeviceErrorEventArgs(msg,
-                         null,
-                         DeviceErrorStatus.ErrorAffectsAllColumns,
-                         this,
-                         "None"));
+                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
 
@@ -644,11 +545,7 @@ new DeviceErrorEventArgs(msg,
                 ApplicationLogger.LogError(0, msg);
                 mobject_MsgTools.DisconnectSXC();
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-        new DeviceErrorEventArgs(msg,
-                                         null,
-                                         DeviceErrorStatus.ErrorAffectsAllColumns,
-                                         this,
-                                         "None"));
+                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
 
@@ -660,11 +557,7 @@ new DeviceErrorEventArgs(msg,
                 msg = "StopSxcCommunication: Problem disconnecting from sXc - " + mobject_MsgTools.Msg;
                 ApplicationLogger.LogError(0, msg);
                 Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-        new DeviceErrorEventArgs(msg,
-                                         null,
-                                         DeviceErrorStatus.ErrorAffectsAllColumns,
-                                         this,
-                                         "None"));
+                    new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 return false;
             }
 
@@ -681,8 +574,8 @@ new DeviceErrorEventArgs(msg,
             m_CmdTimedOut = false;
 
             mobject_CmdTimeoutTimer.Enabled = true;
-            while ((mobject_sXcReply != classBrukerComConstants.SxcReplies.FTMS_READY) && (!m_DeviceError)
-                        && (!m_CmdTimedOut) && (!m_DeviceError))
+            while ((mobject_sXcReply != BrukerComConstants.SxcReplies.FTMS_READY) && (!m_DeviceError)
+                                                                                  && (!m_CmdTimedOut) && (!m_DeviceError))
             {
                 //TODO: Figure out how to log this, if necessary
                 //clsLogTools.LogDebugMsg("WaitForReady: m_sXcReply = " + m_sXcReply.ToString());
@@ -692,11 +585,12 @@ new DeviceErrorEventArgs(msg,
                     ApplicationLogger.LogError(0, msg);
                     break;
                 }
+
                 System.Threading.Thread.Sleep(500); // Take a 500 msec nap
             }
 
             // Check to see if wait loop exited because FTMS_READY received, or because there was a problem.
-            if ((mobject_sXcReply == classBrukerComConstants.SxcReplies.FTMS_READY) && (!m_DeviceError))
+            if ((mobject_sXcReply == BrukerComConstants.SxcReplies.FTMS_READY) && (!m_DeviceError))
             {
                 // FTMS_READY received
                 mobject_CmdTimeoutTimer.Enabled = false;
@@ -712,7 +606,7 @@ new DeviceErrorEventArgs(msg,
         /// Handles a message that has been received from Bruker sXc and processed
         /// </summary>
         /// <param name="sXcReply">Reply received from Bruker</param>
-        private void HandleBrukerMsg(classBrukerComConstants.SxcReplies sXcReply)
+        private void HandleBrukerMsg(BrukerComConstants.SxcReplies sXcReply)
         {
             ApplicationLogger.LogMessage(2, "classBrukerStart.HandleBrukerMsg: Starting method");
 
@@ -721,32 +615,23 @@ new DeviceErrorEventArgs(msg,
 
             switch (sXcReply)
             {
-                case classBrukerComConstants.SxcReplies.FTMS_CRITICALERROR:
+                case BrukerComConstants.SxcReplies.FTMS_CRITICALERROR:
                     mobject_CmdTimeoutTimer.Enabled = false;
                     msg = "Critical error " + sXcReply.ToString() + " received from Bruker";
                     ApplicationLogger.LogError(0, msg);
                     m_DeviceError = true;
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-        new DeviceErrorEventArgs(msg,
-                                     null,
-                                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                                     this,
-                                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     break;
-                case classBrukerComConstants.SxcReplies.FTMS_ERROR:
+                case BrukerComConstants.SxcReplies.FTMS_ERROR:
                     mobject_CmdTimeoutTimer.Enabled = false;
                     msg = "Error " + sXcReply.ToString() + " received from Bruker";
                     ApplicationLogger.LogError(0, msg);
                     m_DeviceError = true;
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, null));
-
-        new DeviceErrorEventArgs(msg,
-                                     null,
-                                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                                     this,
-                                     "None"));
+                        new DeviceErrorEventArgs(msg, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                     break;
-                case classBrukerComConstants.SxcReplies.SXC_INVALID:
+                case BrukerComConstants.SxcReplies.SXC_INVALID:
                     ApplicationLogger.LogError(0, "Invalid message recevied from Bruker");
                     break;
                 default:
@@ -789,12 +674,7 @@ new DeviceErrorEventArgs(msg,
                 {
                     var msg = "Could not retrieve the methods from the Bruker instrument";
                     Error?.Invoke(this, //new classDeviceErrorArgs(this, msg, DeviceErrorStatus.ErrorAffectsAllColumns, ex));
-
-        new DeviceErrorEventArgs(msg,
-                                     ex,
-                                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                                     this,
-                                     "None"));
+                        new DeviceErrorEventArgs(msg, ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
                 }
             }
 
@@ -815,9 +695,9 @@ new DeviceErrorEventArgs(msg,
         /// </summary>
         /// <param name="datasetName">Dataset name that will be used to create the folder name</param>
         /// <returns>Object describing results</returns>
-        private classFolderCreateResults MakeOutputFolder(string datasetName)
+        private FolderCreateResults MakeOutputFolder(string datasetName)
         {
-            var result = new classFolderCreateResults();
+            var result = new FolderCreateResults();
             var outFolderName = Path.Combine(m_OutputFolderRemote, datasetName);
 
             try
@@ -859,9 +739,9 @@ new DeviceErrorEventArgs(msg,
         /// <param name="datasetFolderName">Fully qualified path to dataset output folder</param>
         /// <param name="methodFolderName">Name of method folder to be created</param>
         /// <returns>Object describing results</returns>
-        private classFolderCreateResults MakeMethodOutputFolder(string datasetFolderName, string methodFolderName)
+        private FolderCreateResults MakeMethodOutputFolder(string datasetFolderName, string methodFolderName)
         {
-            var result = new classFolderCreateResults();
+            var result = new FolderCreateResults();
             var outFolderName = Path.Combine(datasetFolderName, methodFolderName);
 
             try
@@ -905,14 +785,16 @@ new DeviceErrorEventArgs(msg,
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
         }
+
         #endregion
 
         #region "Event handlers"
+
         /// <summary>
         /// Handles an incoming message from sXc
         /// </summary>
         /// <param name="sXcReply">Message</param>
-        void BrukerMsgReceived(classBrukerComConstants.SxcReplies sXcReply)
+        void BrukerMsgReceived(BrukerComConstants.SxcReplies sXcReply)
         {
             ApplicationLogger.LogMessage(2, "classBrukerStart.BrukerMsgReceived: Handling BrukerMsgReceived event");
             HandleBrukerMsg(sXcReply);
@@ -930,13 +812,15 @@ new DeviceErrorEventArgs(msg,
 
             mobject_CmdTimeoutTimer.Enabled = false;
             m_DeviceError = true;
-            mobject_sXcReply = classBrukerComConstants.SxcReplies.SXC_INVALID;
+            mobject_sXcReply = BrukerComConstants.SxcReplies.SXC_INVALID;
             m_CmdTimedOut = true;
             ApplicationLogger.LogError(1, "classBrukerStart: Command timeout");
         }
+
         #endregion
 
         #region IDevice Members
+
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>
@@ -944,16 +828,18 @@ new DeviceErrorEventArgs(msg,
 
         public List<string> GetStatusNotificationList()
         {
-            return new List<string>() { "Status Changed" };
+            return new List<string>() {"Status Changed"};
         }
 
         public List<string> GetErrorNotificationList()
         {
             return new List<string>();
         }
+
         #endregion
 
         #region IDevice Data Provider Methods
+
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
@@ -961,19 +847,18 @@ new DeviceErrorEventArgs(msg,
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         #endregion
 
         #region IDevice Members
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+
+        public DeviceErrorStatus ErrorType { get; set; }
         public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 
         #region IDevice Members
+
         /*public FinchComponentData GetData()
         {
             FinchComponentData component    = new FinchComponentData();
@@ -1002,6 +887,7 @@ new DeviceErrorEventArgs(msg,
         #endregion
 
         #region IFluidicsCLosure Members
+
         public string GetClosureType()
         {
             return "Bruker";
@@ -1010,6 +896,7 @@ new DeviceErrorEventArgs(msg,
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void OnPropertyChanged(string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

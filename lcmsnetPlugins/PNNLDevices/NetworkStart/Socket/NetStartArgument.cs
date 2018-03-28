@@ -1,14 +1,14 @@
 ﻿namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 {
-    public class classNetStartArgument
+    public class NetStartArgument
     {
-        public classNetStartArgument()
+        public NetStartArgument()
         {
             Key = "";
             Value = "";
         }
 
-        public classNetStartArgument(string key, string value)
+        public NetStartArgument(string key, string value)
         {
             Key = key;
             Value = value;

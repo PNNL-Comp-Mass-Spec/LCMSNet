@@ -7,7 +7,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 {
     public sealed class FluidicsStage : FluidicsDevice
     {
-        private classNewportStage m_obj;
+        private NewportStage m_obj;
 
         private const int STAGE_WIDTH = 100;
         private const int STAGE_HEIGHT = 100;
@@ -53,7 +53,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         protected override void SetDevice(IDevice device)
         {
-            m_obj = device as classNewportStage;
+            m_obj = device as NewportStage;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
     /// <summary>
     /// Triggers a mass spectrometer or other device using a labjack TTL pulse.
     /// </summary>
-    public class ContactClosureU12ViewModel : ContactClosureViewModelBase<enumLabjackU12OutputPorts>
+    public class ContactClosureU12ViewModel : ContactClosureViewModelBase<LabjackU12OutputPorts>
     {
         #region Constructors
 
@@ -28,13 +28,13 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <summary>
         /// The contact closure class used for triggering a pulse.
         /// </summary>
-        private classContactClosureU12 m_contactClosure;
+        private ContactClosureU12 m_contactClosure;
 
         private const int CONST_MINIMUMVOLTAGE = -5;
         private const int CONST_MAXIMUMVOLTAGE = 5;
         private const int CONST_MINIMUMPULSELENGTH = 0;
         private bool m_loading;
-        private enumLabjackU12OutputPorts selectedOutputPort;
+        private LabjackU12OutputPorts selectedOutputPort;
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <summary>
         /// Gets or sets the output port of the device.
         /// </summary>
-        public override enumLabjackU12OutputPorts Port
+        public override LabjackU12OutputPorts Port
         {
             get { return m_contactClosure.Port; }
             set
@@ -105,7 +105,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         private void RegisterDevice(IDevice device)
         {
             m_loading = true;
-            m_contactClosure = device as classContactClosureU12;
+            m_contactClosure = device as ContactClosureU12;
 
             if (m_contactClosure != null)
             {

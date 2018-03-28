@@ -16,7 +16,7 @@ namespace LcmsNetPlugins.Newport.ESP300
                                  typeof(FluidicsStage),
                                  "Newport Stage",
                                  "Stages")]
-    public class classNewportStage:IDisposable, IDevice
+    public class NewportStage:IDisposable, IDevice
     {
         #region Members
         private SerialPort m_port;
@@ -25,7 +25,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         private readonly double[] m_SpeedNormal;
         private readonly bool[] m_motorStatus;
         private bool m_disposed;
-        private Dictionary<string, classStagePosition> m_positions;
+        private Dictionary<string, StagePosition> m_positions;
         private readonly List<string> m_reportedErrors;
         private string m_name;
         private string m_position;
@@ -51,7 +51,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <summary>
         /// Creates a stage which tries to communicate on COM1
         /// </summary>
-        public classNewportStage()
+        public NewportStage()
             : this(null, "NoPosition", 2)
         {
         }
@@ -62,7 +62,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <param name="port">a System.IO.Ports SerialPort, defaults to COM1</param>
         /// <param name="currentPos"></param>
         /// <param name="numAxes">an integer representing the number of axes of movement available to this stage</param>
-        public classNewportStage(SerialPort port, string currentPos, int numAxes)
+        public NewportStage(SerialPort port, string currentPos, int numAxes)
         {
             m_disposed = false;
             if (port == null)
@@ -77,14 +77,14 @@ namespace LcmsNetPlugins.Newport.ESP300
             }
             NumAxes = numAxes;
             m_SpeedNormal = new double[NumAxes];
-            m_positions = new Dictionary<string, classStagePosition>();
+            m_positions = new Dictionary<string, StagePosition>();
             Name = "Stage";
             m_position = currentPos;
             m_reportedErrors = new List<string>();
             m_motorStatus = new bool[CONST_MAX_AXES];
         }
 
-        ~classNewportStage()
+        ~NewportStage()
         {
             Dispose();
         }
@@ -138,7 +138,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         //[LCMethodEventAttribute("Define Position", 1, true, "", -1, false)]
         public void SetPositionCoordinates(string positionName, float axis1Coord, float axis2Coord, float axis3Coord)
         {
-            var position = new classStagePosition
+            var position = new StagePosition
             {
                 NumAxes = 2,
                 [0] = axis1Coord,
@@ -834,7 +834,7 @@ namespace LcmsNetPlugins.Newport.ESP300
                         if (position != string.Empty)
                         {
                             var positionInfo = position.Split(positionInfoSeparator);
-                            var persistedPosition = new classStagePosition();
+                            var persistedPosition = new StagePosition();
                             var key = positionInfo[0];
                             persistedPosition[0] = Convert.ToSingle(positionInfo[1]);
                             persistedPosition[1] = Convert.ToSingle(positionInfo[2]);
@@ -849,7 +849,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <summary>
         /// Gets the positions of the axes of this ESP300
         /// </summary>
-        public Dictionary<string, classStagePosition> Positions
+        public Dictionary<string, StagePosition> Positions
         {
             get
             {

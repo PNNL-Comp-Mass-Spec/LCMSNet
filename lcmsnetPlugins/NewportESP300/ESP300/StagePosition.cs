@@ -5,11 +5,11 @@ namespace LcmsNetPlugins.Newport.ESP300
     /// <summary>
     /// represents a stage position in x,y,z coordinates
     /// </summary>
-    public class classStagePosition
+    public class StagePosition
     {
         private readonly List<float> m_coordinates;
 
-        public classStagePosition()
+        public StagePosition()
         {
             NumAxes = 2;
             m_coordinates = new List<float> {

@@ -55,11 +55,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="classContactClosureU3.cs" />
-    <Compile Include="classLabjackU3.cs" />
-    <Compile Include="classLabjackU3Exception.cs" />
+    <Compile Include="ContactClosureU3.cs" />
+    <Compile Include="LabjackU3.cs" />
+    <Compile Include="LabjackU3Exception.cs" />
     <Compile Include="ContactClosureU3ViewModel.cs" />
-    <Compile Include="enumLabjackU3Ports.cs" />
+    <Compile Include="LabjackU3Ports.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

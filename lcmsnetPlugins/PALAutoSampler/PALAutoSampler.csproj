@@ -61,8 +61,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pal\classPal.cs" />
-    <Compile Include="Pal\enumVialRanges.cs" />
+    <Compile Include="Pal\Pal.cs" />
+    <Compile Include="Pal\VialRanges.cs" />
     <Compile Include="Pal\PalView.xaml.cs">
       <DependentUpon>PalView.xaml</DependentUpon>
     </Compile>

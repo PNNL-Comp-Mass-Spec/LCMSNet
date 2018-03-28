@@ -10,7 +10,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
     /// <summary>
     /// Reads/waits for a ready signal from a mass spectrometer or other device using a labjack TTL I/O.
     /// </summary>
-    public class ContactClosureReadU12ViewModel : ContactClosureReadViewModelBase<enumLabjackU12InputPorts>
+    public class ContactClosureReadU12ViewModel : ContactClosureReadViewModelBase<LabjackU12InputPorts>
     {
         #region Constructors
 
@@ -22,7 +22,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
             MinimumAnalogVoltage = -10;
             MaximumAnalogVoltage = 10;
             AnalogVoltageThreshold = 2.5;
-            Port = enumLabjackU12InputPorts.AI0;
+            Port = LabjackU12InputPorts.AI0;
             IsAnalog = true;
         }
 
@@ -36,7 +36,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         private ContactClosureReadU12 contactClosureRead;
 
         private bool loading;
-        private enumLabjackU12InputPorts selectedInputPort;
+        private LabjackU12InputPorts selectedInputPort;
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <summary>
         /// Gets or sets the output port of the device.
         /// </summary>
-        public override enumLabjackU12InputPorts Port
+        public override LabjackU12InputPorts Port
         {
             get { return contactClosureRead.Port; }
             set

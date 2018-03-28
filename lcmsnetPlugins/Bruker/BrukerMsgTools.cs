@@ -18,20 +18,23 @@ namespace LcmsNetPlugins.Bruker
     /// <summary>
     /// Tools for handling Bruker sXc messages
     /// </summary>
-    class classBrukerMsgTools : IDisposable
+    class BrukerMsgTools : IDisposable
     {
         #region "Constants"
+
         const int DEFAULT_TIME_OFFSET = 0;
         const int MAX_ZERO_BYTE_RESPONSE_COUNT = 4;
+
         #endregion
 
         #region "Class variables"
+
         Socket mobject_Socket;
         readonly byte[] mbyte_DataBuffer = new byte[128];
         IAsyncResult mobject_AsyncResult;
         AsyncCallback mobjecct_RcxCallback;
         readonly Queue<byte> mobject_IncomingBytes = new Queue<byte>();
-        classFtmsResponse mobject_ResponseData;
+        FtmsResponse mobject_ResponseData;
         bool m_Connected;
         string m_OutputFolderLocal;
         string m_MethodFolderLocal;
@@ -40,25 +43,31 @@ namespace LcmsNetPlugins.Bruker
         string m_Msg;
         bool m_ListenToSxc = true;
         int m_ZeroByteMsgCount;
+
         #endregion
 
         #region "Delegats"
+
         private delegate void delegateOnDataReceived();
+
         #endregion
 
         #region "Events"
+
         private event delegateOnDataReceived DataReceived;
         public event delegateBrukerMsgReceived BrukerMsgReceived;
+
         #endregion
 
         #region "Properties"
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public bool SocketConneted => m_Connected;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string Msg => m_Msg;
 
@@ -67,33 +76,24 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public string IPAddress
         {
-            get
-            {
-                return m_InstAddress;
-            }
-            set
-            {
-                m_InstAddress = value;
-            }
+            get { return m_InstAddress; }
+            set { m_InstAddress = value; }
         }
+
         /// <summary>
         /// Gets or sets the Port
         /// </summary>
         public int Port
         {
-            get
-            {
-                return m_InstPort;
-            }
-            set
-            {
-                m_InstPort = value;
-            }
+            get { return m_InstPort; }
+            set { m_InstPort = value; }
         }
+
         #endregion
 
         #region "Constructors"
-        public classBrukerMsgTools(string outFolderLocal, string methodFolderLocal, string instAddress, int instPort)
+
+        public BrukerMsgTools(string outFolderLocal, string methodFolderLocal, string instAddress, int instPort)
         {
             m_OutputFolderLocal = outFolderLocal;
             m_MethodFolderLocal = methodFolderLocal;
@@ -102,9 +102,11 @@ namespace LcmsNetPlugins.Bruker
 
             DataReceived += sXcDataReceived;
         }
+
         #endregion
 
         #region "Methods"
+
         /// <summary>
         /// Connects to the socket used by sXc on the Bruker instrument
         /// </summary>
@@ -156,11 +158,11 @@ namespace LcmsNetPlugins.Bruker
             }
 
             // Send command
-            var codeToSend = classBrukerComConstants.SOCKET_INITFTMS;
+            var codeToSend = BrukerComConstants.SOCKET_INITFTMS;
             if (!SendShortInt(codeToSend))
                 return false;
             // Send parameter
-            codeToSend = classBrukerComConstants.PARAM_INITFTMS_ESI;
+            codeToSend = BrukerComConstants.PARAM_INITFTMS_ESI;
             if (!SendShortInt(codeToSend))
                 return false;
 
@@ -182,7 +184,7 @@ namespace LcmsNetPlugins.Bruker
             }
 
             // Send command
-            var codeToSend = classBrukerComConstants.SOCKET_PROCESSLCMSSAMPLEINFORMATION;
+            var codeToSend = BrukerComConstants.SOCKET_PROCESSLCMSSAMPLEINFORMATION;
             if (!SendShortInt(codeToSend))
                 return false;
             // Send XML data
@@ -206,11 +208,11 @@ namespace LcmsNetPlugins.Bruker
             }
 
             // Send command
-            var codeToSend = classBrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
+            var codeToSend = BrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
             if (!SendShortInt(codeToSend))
                 return false;
             // Send parameter
-            codeToSend = classBrukerComConstants.PARAM_STARTSTOP_PREPARE;
+            codeToSend = BrukerComConstants.PARAM_STARTSTOP_PREPARE;
             if (!SendShortInt(codeToSend))
                 return false;
 
@@ -231,7 +233,7 @@ namespace LcmsNetPlugins.Bruker
             }
 
             // Send command
-            var codeToSend = classBrukerComConstants.SOCKET_STARTACQUISITION;
+            var codeToSend = BrukerComConstants.SOCKET_STARTACQUISITION;
             if (!SendShortInt(codeToSend))
                 return false;
             // Send parameter
@@ -256,11 +258,11 @@ namespace LcmsNetPlugins.Bruker
             }
 
             // Send command
-            var codeToSend = classBrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
+            var codeToSend = BrukerComConstants.SOCKET_STARTSTOPABORTFTMS;
             if (!SendShortInt(codeToSend))
                 return false;
             // Send parameter
-            codeToSend = classBrukerComConstants.PARAM_STARTSTOP_FINISH;
+            codeToSend = BrukerComConstants.PARAM_STARTSTOP_FINISH;
             if (!SendShortInt(codeToSend))
                 return false;
 
@@ -290,7 +292,7 @@ namespace LcmsNetPlugins.Bruker
             }
 
             // Send command
-            var codeToSend = classBrukerComConstants.SOCKET_EXITFTMS;
+            var codeToSend = BrukerComConstants.SOCKET_EXITFTMS;
             if (!SendShortInt(codeToSend))
                 return false;
             // Send parameter
@@ -387,14 +389,14 @@ namespace LcmsNetPlugins.Bruker
             {
                 var ipe = new IPEndPoint(address, port);
                 var tempSocket =
-                     new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
                 tempSocket.Connect(ipe);
 
                 if (tempSocket.Connected)
                 {
                     s = tempSocket;
-                    mobject_ResponseData = new classFtmsResponse();
+                    mobject_ResponseData = new FtmsResponse();
                     break;
                 }
             }
@@ -508,7 +510,7 @@ namespace LcmsNetPlugins.Bruker
             // Pop the first two bytes off the queue and convert to a short int
             var tmpByte1 = mobject_IncomingBytes.Dequeue();
             var tmpByte2 = mobject_IncomingBytes.Dequeue();
-            byte[] tmpByteArray = { tmpByte1, tmpByte2 };
+            byte[] tmpByteArray = {tmpByte1, tmpByte2};
             return BitConverter.ToInt16(tmpByteArray, 0);
         }
 
@@ -516,7 +518,7 @@ namespace LcmsNetPlugins.Bruker
         /// Processes data recevied from Bruker sXc
         /// </summary>
         /// <param name="responseData">Class holding sXc data</param>
-        private void ProcessResponse(ref classFtmsResponse responseData)
+        private void ProcessResponse(ref FtmsResponse responseData)
         {
             // Log program location for debugging purposes
             ApplicationLogger.LogMessage(2, "ProcessResponse: m_IncomingBytes.Count = " + mobject_IncomingBytes.Count.ToString());
@@ -533,7 +535,7 @@ namespace LcmsNetPlugins.Bruker
                 ApplicationLogger.LogMessage(2, "ProcessResponse: responseData.WaitingForParam = " + responseData.WaitingForParam.ToString());
 
                 short tmpResp;
-                classBrukerComConstants.SxcReplies tmpReply;
+                BrukerComConstants.SxcReplies tmpReply;
                 if (responseData.WaitingForParam)
                 {
                     //TODO: Figure out how to log this, if necessary
@@ -541,24 +543,23 @@ namespace LcmsNetPlugins.Bruker
                     responseData.ParamCode = tmpRcvdValue;
                     responseData.WaitingForParam = false;
                     // Since this was the param code, notify the world that a value was received
-                    tmpResp = (short)(responseData.ParamCode + 20);
-                    tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
+                    tmpResp = (short) (responseData.ParamCode + 20);
+                    tmpReply = BrukerComConstants.ConvertShortToSxcReply(tmpResp);
 
                     ApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
-
                     ApplicationLogger.LogMessage(2, "ProcessResponse: Firing BrukerMsgReceived event");
                     BrukerMsgReceived?.Invoke(tmpReply);
                     ApplicationLogger.LogMessage(2, "ProcessResponse: BrukerMsgReceived event handling complete");
                     return;
                 }
-                
+
                 //TODO: Figure out how to log this, if necessary
                 //clsLogTools.LogDebugMsg("Label 3");
                 responseData.CommandCode = tmpRcvdValue;
 
                 // Handle the incoming code if it's not the parameter for an earlier status message
                 ApplicationLogger.LogMessage(2, "ProcessResponse: responseData.CommandCode = " + responseData.CommandCode.ToString());
-                if (responseData.CommandCode == classBrukerComConstants.SOCKET_REQUEST_CHECKMSSTATUS)
+                if (responseData.CommandCode == BrukerComConstants.SOCKET_REQUEST_CHECKMSSTATUS)
                 {
                     //TODO: Figure out how to log this, if necessary
                     //clsLogTools.LogDebugMsg("Label 4");
@@ -570,13 +571,13 @@ namespace LcmsNetPlugins.Bruker
                         responseData.ParamCode = tmpRcvdValue;
                         responseData.WaitingForParam = false;
                         // We've received the whole message, so notify the world
-                        tmpResp = (short)(responseData.ParamCode + 20);
-                        tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
+                        tmpResp = (short) (responseData.ParamCode + 20);
+                        tmpReply = BrukerComConstants.ConvertShortToSxcReply(tmpResp);
                         ApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
                         BrukerMsgReceived?.Invoke(tmpReply);
                         return;
                     }
-                    
+
                     // There weren't enough bytes left in the queue, so wait for more incoming data
                     // This may be dangerous, since it relies on WaitForData to exit before OnDataReceived is triggered
                     //TODO: Figure out how to log this, if necessary
@@ -584,22 +585,23 @@ namespace LcmsNetPlugins.Bruker
                     responseData.WaitingForParam = true;
                     return;
                 }
+
                 // This was a parameterless response, so just send out a notification
                 //TODO: Figure out how to log this, if necessary
                 //clsLogTools.LogDebugMsg("Label 7");
-                tmpResp = (short)(responseData.ParamCode + 20);
-                tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
+                tmpResp = (short) (responseData.ParamCode + 20);
+                tmpReply = BrukerComConstants.ConvertShortToSxcReply(tmpResp);
                 ApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
                 BrukerMsgReceived?.Invoke(tmpReply);
                 return;
             }
-            
+
             // This shouldn't ever happen (and pigs can fly!)
             //TODO: Figure out how to log this, if necessary
             //clsLogTools.LogDebugMsg("Label 8");
             //System.Windows.Forms.MessageBox.Show("ProcessResponse Outer Loop: Invalid byte count received: " +
             //  m_IncomingBytes.Count.ToString());
-            
+
         }
 
         /// <summary>
@@ -639,6 +641,7 @@ namespace LcmsNetPlugins.Bruker
         #endregion
 
         #region "Event handlers"
+
         /// <summary>
         /// Processes bytes held in the incoming message queue
         /// </summary>
@@ -681,6 +684,7 @@ namespace LcmsNetPlugins.Bruker
                 {
                     mobject_IncomingBytes.Enqueue(mbyte_DataBuffer[byteIndx]);
                 }
+
                 m_ZeroByteMsgCount = 0;
             }
             else
@@ -705,12 +709,15 @@ namespace LcmsNetPlugins.Bruker
 
             StartListeningToSXC();
         }
+
         #endregion
 
         #region IDisposable Members
+
         public void Dispose()
         {
         }
+
         #endregion
     }
 }

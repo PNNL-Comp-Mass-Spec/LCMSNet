@@ -12,7 +12,7 @@ using System.Text;
 namespace LcmsNetPlugins.LabJack
 {
     [Serializable]
-    public class classLabjackU12
+    public class LabjackU12
     {
         #region Members
 
@@ -40,7 +40,7 @@ namespace LcmsNetPlugins.LabJack
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public classLabjackU12()
+        public LabjackU12()
         {
             localID = 0;
             FirmwareVersion = 0;
@@ -51,7 +51,7 @@ namespace LcmsNetPlugins.LabJack
         /// Constructor which specifies ID. Probably won't get used.
         /// </summary>
         /// <param name="labjackID">The labjack's local ID</param>
-        public classLabjackU12(int labjackID)
+        public LabjackU12(int labjackID)
         {
             localID = labjackID;
             FirmwareVersion = 0;
@@ -91,9 +91,9 @@ namespace LcmsNetPlugins.LabJack
         /// </summary>
         /// <param name="channel">Enumerated port to write to</param>
         /// <param name="value">The value to write (0/1 for digital)</param>
-        public void Write(enumLabjackU12OutputPorts channel, double value)
+        public void Write(LabjackU12OutputPorts channel, double value)
         {
-            var portName = Enum.GetName(typeof(enumLabjackU12OutputPorts), channel);
+            var portName = Enum.GetName(typeof(LabjackU12OutputPorts), channel);
             if (portName == null)
                 return;
 
@@ -128,9 +128,9 @@ namespace LcmsNetPlugins.LabJack
         /// </summary>
         /// <param name="channel">Enumerated port to read from</param>
         /// <returns>The measured value, or -1 if a problem</returns>
-        public float Read(enumLabjackU12InputPorts channel)
+        public float Read(LabjackU12InputPorts channel)
         {
-            var portName = Enum.GetName(typeof(enumLabjackU12InputPorts), channel);
+            var portName = Enum.GetName(typeof(LabjackU12InputPorts), channel);
             if (portName == null)
             {
                 return -1;
@@ -170,7 +170,7 @@ namespace LcmsNetPlugins.LabJack
         /// </summary>
         /// <param name="port">The port to read from (</param>
         /// <returns>channel voltage</returns>
-        private float ReadAnalog(enumLabjackU12InputPorts port)
+        private float ReadAnalog(LabjackU12InputPorts port)
         {
             var channel = int.Parse(port.ToString().Replace(CONST_ANALOG_I_PREFIX, ""));
             return ReadAnalog(channel);
@@ -201,7 +201,7 @@ namespace LcmsNetPlugins.LabJack
         /// <param name="port">The port to write to</param>
         /// <param name="voltage">The voltage to write</param>
         /// <returns>The error message, if applicable</returns>
-        private int WriteAnalog(enumLabjackU12OutputPorts port, float voltage)
+        private int WriteAnalog(LabjackU12OutputPorts port, float voltage)
         {
             var channel = int.Parse(port.ToString().Replace(CONST_ANALOG_O_PREFIX, ""));
             return WriteAnalog(channel, voltage);
@@ -244,7 +244,7 @@ namespace LcmsNetPlugins.LabJack
         /// </summary>
         /// <param name="port">The port to read from (</param>
         /// <returns>The state of the channel</returns>
-        private int ReadDigital(enumLabjackU12InputPorts port)
+        private int ReadDigital(LabjackU12InputPorts port)
         {
             var channel = int.Parse(port.ToString().Replace(CONST_DIGITAL_PREFIX, ""));
             return ReadDigital(channel);
@@ -273,7 +273,7 @@ namespace LcmsNetPlugins.LabJack
         /// </summary>
         /// <param name="port">The port to read from (</param>
         /// <returns>The state of the channel</returns>
-        private int ReadIO(enumLabjackU12InputPorts port)
+        private int ReadIO(LabjackU12InputPorts port)
         {
             var channel = int.Parse(port.ToString().Replace(CONST_IO_PREFIX, ""));
             return ReadIO(channel);
@@ -304,7 +304,7 @@ namespace LcmsNetPlugins.LabJack
         /// <param name="port">The port to write to</param>
         /// <param name="state">The state (0/1)</param>
         /// <returns>The error message, if applicable</returns>
-        private int WriteDigital(enumLabjackU12OutputPorts port, int state)
+        private int WriteDigital(LabjackU12OutputPorts port, int state)
         {
             var channel = int.Parse(port.ToString().Replace(CONST_DIGITAL_PREFIX, ""));
             return WriteDigital(channel, state);
@@ -333,7 +333,7 @@ namespace LcmsNetPlugins.LabJack
         /// <param name="port">The port to write to</param>
         /// <param name="state">The state (0/1)</param>
         /// <returns>The error message, if applicable</returns>
-        private int WriteIO(enumLabjackU12OutputPorts port, int state)
+        private int WriteIO(LabjackU12OutputPorts port, int state)
         {
             var channel = int.Parse(port.ToString().Replace(CONST_IO_PREFIX, ""));
             return WriteIO(channel, state);
@@ -403,7 +403,7 @@ namespace LcmsNetPlugins.LabJack
         {
             var errorString = new StringBuilder(50);
             LabJackU12Wrapper.GetErrorString(errorCode, errorString);
-            throw new classLabjackU12Exception(msg + ":\r\n\r\n" + errorString);
+            throw new LabjackU12Exception(msg + ":\r\n\r\n" + errorString);
         }
 
         #endregion

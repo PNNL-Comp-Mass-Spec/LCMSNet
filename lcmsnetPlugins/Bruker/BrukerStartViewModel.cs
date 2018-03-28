@@ -29,7 +29,7 @@ namespace LcmsNetPlugins.Bruker
 
         public void RegisterDevice(IDevice device)
         {
-            m_BrukerStart = device as classBrukerStart;
+            m_BrukerStart = device as BrukerStart;
             if (m_BrukerStart != null)
             {
                 m_BrukerStart.MethodNames += m_BrukerStart_MethodNames;
@@ -49,7 +49,7 @@ namespace LcmsNetPlugins.Bruker
         /// <summary>
         /// BrukerStart object to use
         /// </summary>
-        private classBrukerStart m_BrukerStart;
+        private BrukerStart m_BrukerStart;
 
         #endregion
 

@@ -21,7 +21,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                                  "Network Start",
                                  "Detectors")
     ]
-    public class classNetStartSocket: IDevice, IFluidicsClosure
+    public class NetStartSocket: IDevice, IFluidicsClosure
     {
         #region Members
         /// <summary>
@@ -99,7 +99,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public classNetStartSocket()
+        public NetStartSocket()
         {
             m_address = "localhost";
             m_name = "network start"; // classDeviceManager.Manager.CreateUniqueDeviceName("networkStart");
@@ -232,8 +232,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             {
                 try
                 {
-                    var arguments = new List<classNetStartArgument>();
-                    SendMessage(m_writer, enumNetStartMessageTypes.Query, 0, CONST_QUERY_GETMETHODNAMES, arguments);
+                    var arguments = new List<NetStartArgument>();
+                    SendMessage(m_writer, NetStartMessageTypes.Query, 0, CONST_QUERY_GETMETHODNAMES, arguments);
 
                     var rawMessage = m_reader.ReadLine();
                     var message = UnpackMessage(rawMessage);
@@ -274,7 +274,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <param name="sequence">Message Sequence Number</param>
         /// <param name="descriptor">Message Description (e.g. ACQSTARTED...)</param>
         /// <param name="arglist">Arguments to send with message (e.g. sample name or method name).</param>
-        private void SendMessage(TextWriter streamWriter, enumNetStartMessageTypes type, int sequence, string descriptor, List<classNetStartArgument> arglist)
+        private void SendMessage(TextWriter streamWriter, NetStartMessageTypes type, int sequence, string descriptor, List<NetStartArgument> arglist)
         {
             //Console.WriteLine(descriptor);
 
@@ -284,17 +284,17 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             Console.WriteLine("Send: " + message);
             streamWriter.Flush();
         }
-        private string PackMessage(enumNetStartMessageTypes type, int sequence, string descriptor, List<classNetStartArgument> arglist)
+        private string PackMessage(NetStartMessageTypes type, int sequence, string descriptor, List<NetStartArgument> arglist)
         {
             var message = type.GetHashCode().ToString() + ":" + sequence.ToString() + "|" + descriptor;
-            if (type == enumNetStartMessageTypes.Post || type == enumNetStartMessageTypes.Response || type == enumNetStartMessageTypes.Execute)
+            if (type == NetStartMessageTypes.Post || type == NetStartMessageTypes.Response || type == NetStartMessageTypes.Execute)
             {
                 foreach (var arg in arglist)
                 {
                     message += "@" + arg.Key + "=" + arg.Value;
                 }
             }
-            else if (type == enumNetStartMessageTypes.Query)
+            else if (type == NetStartMessageTypes.Query)
             {
                 foreach (var arg in arglist)
                 {
@@ -309,22 +309,22 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        private classNetStartMessage UnpackMessage(string message)
+        private NetStartMessage UnpackMessage(string message)
         {
             //<type>:<sqnc>|<dscp>@<argS1>=<argV1>@<argS1>=<argV1>...@<argSn>=<argVn>
 
-            var msg = new classNetStartMessage();
-            var args = new List<classNetStartArgument>();
+            var msg = new NetStartMessage();
+            var args = new List<NetStartArgument>();
             char[] tokens = {':','@','|','='};
             var messagepieces = message.Split(tokens);
 
-            msg.Type = (enumNetStartMessageTypes)Enum.Parse(typeof(enumNetStartMessageTypes), messagepieces[0]);
+            msg.Type = (NetStartMessageTypes)Enum.Parse(typeof(NetStartMessageTypes), messagepieces[0]);
             msg.Sequence = Int32.Parse(messagepieces[1]);
             msg.Descriptor = messagepieces[2];
 
             for (var i = 3; i < messagepieces.Length - 1; i+=2)
             {
-                args.Add(new classNetStartArgument(messagepieces[i], messagepieces[i+1]));
+                args.Add(new NetStartArgument(messagepieces[i], messagepieces[i+1]));
             }
 
             msg.ArgumentList = args;
@@ -352,8 +352,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                 return true;
             }
 
-            var arguments   = new List<classNetStartArgument>();
-            var receivedMessage    = new classNetStartMessage();
+            var arguments   = new List<NetStartArgument>();
+            var receivedMessage    = new NetStartMessage();
 
             var success = false;
 
@@ -369,14 +369,14 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                 Connect(m_address, m_port);
                 var streamReader = m_reader;
                 var streamWriter = m_writer;
-                SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
+                SendMessage(streamWriter, NetStartMessageTypes.Query, i++, "ACQIDLE", arguments);
 
                 var outputString = streamReader.ReadLine();
                 if (UnpackMessage(outputString).Descriptor == "ACQIDLE")
                 {
-                    arguments.Add(new classNetStartArgument("Method", methodName));
-                    arguments.Add(new classNetStartArgument("SampleName", sampleName));
-                    SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPARAMS", arguments);
+                    arguments.Add(new NetStartArgument("Method", methodName));
+                    arguments.Add(new NetStartArgument("SampleName", sampleName));
+                    SendMessage(streamWriter, NetStartMessageTypes.Post, i++, "ACQPARAMS", arguments);
                     arguments.Clear();
 
                     outputString = streamReader.ReadLine();     //RECEIVED
@@ -384,7 +384,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                     //
                     // Now see if the system is ready
                     //
-                    SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQREADY", arguments);
+                    SendMessage(streamWriter, NetStartMessageTypes.Query, i++, "ACQREADY", arguments);
                     outputString = streamReader.ReadLine();     //READY
 
                     if (UnpackMessage(outputString).Descriptor == "ACQREADY")
@@ -392,14 +392,14 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                         //
                         // Tell the system to prepare for acquisition
                         //
-                        SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
+                        SendMessage(streamWriter, NetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
                         outputString = streamReader.ReadLine();     // Read off auto-response
 
                         //
                         // Then ask if it is prepared...this should be in some kind of loop
                         //
                         {
-                            SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
+                            SendMessage(streamWriter, NetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
 
                             //
                             // Check to see if it is prepared...
@@ -408,10 +408,10 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                             var preparedMessage = UnpackMessage(outputString);
                             if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
                             {
-                                SendMessage(streamWriter, enumNetStartMessageTypes.Post, i++, "ACQSTART", arguments);
+                                SendMessage(streamWriter, NetStartMessageTypes.Post, i++, "ACQSTART", arguments);
                                 var startResponse = m_reader.ReadLine();
 
-                                SendMessage(streamWriter, enumNetStartMessageTypes.Query, i++, "ACQSTARTED", arguments);
+                                SendMessage(streamWriter, NetStartMessageTypes.Query, i++, "ACQSTARTED", arguments);
                                 outputString = streamReader.ReadLine();     //STARTED
 
                                 var startedMessage = UnpackMessage(outputString);
@@ -458,14 +458,14 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
             var streamReader = m_reader;
             var streamWriter = m_writer;
-            var arguments = new List<classNetStartArgument>();
-            var receivedMessage = new classNetStartMessage();
+            var arguments = new List<NetStartArgument>();
+            var receivedMessage = new NetStartMessage();
 
             bool success;
             try
             {
                 string outputString;
-                     SendMessage(streamWriter, enumNetStartMessageTypes.Post, 0, "ACQSTOP", arguments);
+                     SendMessage(streamWriter, NetStartMessageTypes.Post, 0, "ACQSTOP", arguments);
                 outputString = streamReader.ReadLine();
                 success = true;
             }

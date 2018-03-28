@@ -17,7 +17,7 @@ namespace LcmsNetPlugins.LcmsNetDummyRandomizer
     /// Plugin for testing randomizer loading. This merely inverts the input list
     /// </summary>
     [PlugInDisplayName("Invert")]
-    public class classDummyRandomizer : IRandomizerInterface, IEnumerable
+    public class DummyRandomizer : IRandomizerInterface, IEnumerable
     {
         #region "Class variables"
         private readonly List<long> m_Items;
@@ -28,7 +28,7 @@ namespace LcmsNetPlugins.LcmsNetDummyRandomizer
         /// <summary>
         /// Constructor
         /// </summary>
-        public classDummyRandomizer()
+        public DummyRandomizer()
         {
             m_Items = new List<long> {0, 1, 2};
         }

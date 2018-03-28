@@ -57,9 +57,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ESP300\classStagePosition.cs" />
-    <Compile Include="ESP300\classNewportStage.cs" />
-    <Compile Include="ESP300\enumCoordinates.cs" />
+    <Compile Include="ESP300\StagePosition.cs" />
+    <Compile Include="ESP300\NewportStage.cs" />
+    <Compile Include="ESP300\Coordinates.cs" />
     <Compile Include="ESP300\ESP300Exception.cs" />
     <Compile Include="ESP300\FluidicsStage.cs" />
     <Compile Include="ESP300\NewportStageView.xaml.cs">

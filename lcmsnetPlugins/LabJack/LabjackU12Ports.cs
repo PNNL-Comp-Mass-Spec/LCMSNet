@@ -11,7 +11,7 @@ namespace LcmsNetPlugins.LabJack
     /// <summary>
     /// All available ports on the Labjack U12
     /// </summary>
-    public enum enumLabjackU12Ports
+    public enum LabjackU12Ports
     {
         AI0,
         AI1,
@@ -48,7 +48,7 @@ namespace LcmsNetPlugins.LabJack
     /// <summary>
     /// All input ports on the Labjack U12
     /// </summary>
-    public enum enumLabjackU12InputPorts
+    public enum LabjackU12InputPorts
     {
         AI0,
         AI1,
@@ -83,7 +83,7 @@ namespace LcmsNetPlugins.LabJack
     /// <summary>
     /// All output ports on the Labjack U12
     /// </summary>
-    public enum enumLabjackU12OutputPorts
+    public enum LabjackU12OutputPorts
     {
         AO0,
         AO1,

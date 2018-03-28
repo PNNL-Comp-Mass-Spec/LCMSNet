@@ -21,7 +21,7 @@ namespace LcmsNetPlugins.LCMSNetSimpleRandomizer
     /// Plugin class for doing simple randomization of sample run order
     /// </summary>
     [PlugInDisplayName("Simple")]
-    public class classSampleRandomizer : IRandomizerInterface, IEnumerable
+    public class SampleRandomizer : IRandomizerInterface, IEnumerable
     {
         #region "Class variables"
             List<long> m_Items;
