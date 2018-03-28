@@ -84,9 +84,9 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="node">Node that contains the event definition</param>
         /// <returns>An LC-Event</returns>
-        private classLCEvent ReadEventNode(XmlNode node)
+        private LCEvent ReadEventNode(XmlNode node)
         {
-            var lcEvent = new classLCEvent();
+            var lcEvent = new LCEvent();
 
             // Read the name
             if (node.Attributes != null)
@@ -126,7 +126,7 @@ namespace LcmsNet.Method
             }
             else
             {
-                throw new classInvalidTimeSpanException("Could not read the hold time in the method.");
+                throw new InvalidTimeSpanException("Could not read the hold time in the method.");
             }
 
             value = node.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_DURATION);
@@ -136,7 +136,7 @@ namespace LcmsNet.Method
             }
             else
             {
-                throw new classInvalidTimeSpanException("Could not read the duration of the method.");
+                throw new InvalidTimeSpanException("Could not read the duration of the method.");
             }
 
             // Read the parameters
@@ -260,7 +260,7 @@ namespace LcmsNet.Method
                             default:
                                 parameterArray[i] = null;
                                 parameterNameArray[i] = parameterName.Value;
-                                typeArray[i] = typeof(classSampleData);
+                                typeArray[i] = typeof(SampleData);
                                 break;
                         }
                     }
@@ -279,7 +279,7 @@ namespace LcmsNet.Method
             var deviceTypeName = attribute.Value;
 
             var devicetype = FindType(deviceTypeName);
-            var device = classDeviceManager.Manager.FindDevice(deviceName, devicetype);
+            var device = DeviceManager.Manager.FindDevice(deviceName, devicetype);
             if (device == null)
             {
                 throw new classDeviceNotFoundException("Could not find the device " + deviceName + ".", deviceName);
@@ -344,7 +344,7 @@ namespace LcmsNet.Method
                 var methodAttributes = method.GetCustomAttributes(false);
                 foreach (var attr in methodAttributes)
                 {
-                    var meth = attr as classLCMethodAttribute;
+                    var meth = attr as LCMethodEventAttribute;
                     if (meth != null)
                     {
                         lcEvent.MethodAttribute = meth;
@@ -366,7 +366,7 @@ namespace LcmsNet.Method
         /// <param name="filePath">Path of file that contains method.</param>
         /// <param name="errors"></param>
         /// <returns>Null if the path does not exist. New method object if successful.</returns>
-        public classLCMethod ReadMethod(string filePath, List<Exception> errors)
+        public LCMethod ReadMethod(string filePath, List<Exception> errors)
         {
             return ReadMethod(filePath, false, errors);
         }
@@ -378,7 +378,7 @@ namespace LcmsNet.Method
         /// <param name="readActuals">Flag indicating whether to read the actual event information (if it exists).</param>
         /// <param name="errors"></param>
         /// <returns>LC-Method read from the file.</returns>
-        public classLCMethod ReadMethod(string filePath, bool readActuals, List<Exception> errors)
+        public LCMethod ReadMethod(string filePath, bool readActuals, List<Exception> errors)
         {
             if (File.Exists(filePath) == false)
                 return null;
@@ -414,9 +414,9 @@ namespace LcmsNet.Method
         /// <param name="readActual">Flag indicating whether to read the actual data instead of the proposed data.</param>
         /// <param name="errors"></param>
         /// <returns>LC-Method containing all event information.</returns>
-        private classLCMethod ReadEventList(XmlNode root, bool readActual, List<Exception> errors)
+        private LCMethod ReadEventList(XmlNode root, bool readActual, List<Exception> errors)
         {
-            classLCMethod method = null;
+            LCMethod method = null;
 
             //
             // Get the name of the lc-method
@@ -425,7 +425,7 @@ namespace LcmsNet.Method
             try
             {
                 var nameAttribute = root.Attributes.GetNamedItem(classLCMethodFactory.CONST_XPATH_NAME);
-                method = new classLCMethod {
+                method = new LCMethod {
                     Name = nameAttribute.Value
                 };
 
@@ -493,7 +493,7 @@ namespace LcmsNet.Method
                                       ex.DeviceName,
                                       i);
                     var newException = new Exception(error, ex);
-                    classApplicationLogger.LogError(1, error, ex);
+                    ApplicationLogger.LogError(1, error, ex);
                     errors.Add(newException);
                 }
             }

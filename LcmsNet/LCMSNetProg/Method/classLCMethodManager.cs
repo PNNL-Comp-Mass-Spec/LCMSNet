@@ -11,7 +11,7 @@ namespace LcmsNet.Method
     /// </summary>
     /// <param name="sender">Object who updated the method.</param>
     /// <param name="method">Method that was updated.</param>
-    public delegate bool DelegateMethodUpdated(object sender, classLCMethod method);
+    public delegate bool DelegateMethodUpdated(object sender, LCMethod method);
 
     /// <summary>
     /// Class that manages all of the LC Methods.
@@ -29,7 +29,7 @@ namespace LcmsNet.Method
         /// </summary>
         private classLCMethodManager()
         {
-            m_methods = new Dictionary<string, classLCMethod>();
+            m_methods = new Dictionary<string, LCMethod>();
         }
 
         #region Events
@@ -56,7 +56,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// List of available methods.
         /// </summary>
-        private readonly Dictionary<string, classLCMethod> m_methods;
+        private readonly Dictionary<string, LCMethod> m_methods;
 
         /// <summary>
         /// Static object that manages each LC method to be accessible to other objects.
@@ -72,7 +72,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="method">Method to add</param>
         /// <returns>True if the method was added.  False if the method already existed.</returns>
-        public bool AddMethod(classLCMethod method)
+        public bool AddMethod(LCMethod method)
         {
             if (method?.Name == null)
                 return false;
@@ -94,14 +94,14 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets the list of LC methods available to run.
         /// </summary>
-        public Dictionary<string, classLCMethod> Methods => m_methods;
+        public Dictionary<string, LCMethod> Methods => m_methods;
 
         /// <summary>
         /// Removes the method from the list of available methods.
         /// </summary>
         /// <param name="method">Method to remove.</param>
         /// <returns>True if the method was removed, false if not.</returns>
-        public bool RemoveMethod(classLCMethod method)
+        public bool RemoveMethod(LCMethod method)
         {
             var result = true;
 
@@ -154,14 +154,14 @@ namespace LcmsNet.Method
             //bool retValue = false;
 
             var reader = new classLCMethodReader();
-            classLCMethod method;
+            LCMethod method;
             try
             {
                 method = reader.ReadMethod(filePath, errors);
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not load method from " + filePath, ex);
+                ApplicationLogger.LogError(0, "Could not load method from " + filePath, ex);
                 throw;
             }
 
@@ -177,7 +177,7 @@ namespace LcmsNet.Method
                 //TODO: Figure out what to do if a duplicate method exists.
                 var errorMessage = string.Format("The user method name from {0} conflicts with another method.",
                     filePath);
-                classApplicationLogger.LogMessage(0, errorMessage);
+                ApplicationLogger.LogMessage(0, errorMessage);
                 throw new Exception(errorMessage);
             }
             //
@@ -215,7 +215,7 @@ namespace LcmsNet.Method
                 {
                     errors.Add(filePath, new List<Exception> {exception});
 
-                    classApplicationLogger.LogError(0,
+                    ApplicationLogger.LogError(0,
                         "An unhandled exception occured when reading a user method.",
                         exception);
                 }

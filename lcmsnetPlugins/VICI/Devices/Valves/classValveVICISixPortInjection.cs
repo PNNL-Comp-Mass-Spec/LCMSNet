@@ -13,7 +13,7 @@ namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControl(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
+    [DeviceControl(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
     public class classValveVICISixPortInjection: classValveVICI2Pos, ISixPortInjectionValve
     {
         private double m_volume;
@@ -38,7 +38,7 @@ namespace LcmsNet.Devices.Valves
             InjectionVolume = volume;
         }
 
-        [classPersistence("InjectionVolume")]
+        [PersistenceData("InjectionVolume")]
         public double InjectionVolume
         {
             get { return m_volume;  }

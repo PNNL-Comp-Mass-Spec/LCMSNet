@@ -104,7 +104,7 @@ namespace FluidicsSDK
                     }
                 }
                 //watch.Stop();
-                //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Model Checkers took " + watch.Elapsed.TotalMilliseconds + "ms to run. Found " + statusChanges.Count + " Possible Errors");
+                //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Model Checkers took " + watch.Elapsed.TotalMilliseconds + "ms to run. Found " + statusChanges.Count + " Possible Errors");
             }
             return statusChanges;
         }

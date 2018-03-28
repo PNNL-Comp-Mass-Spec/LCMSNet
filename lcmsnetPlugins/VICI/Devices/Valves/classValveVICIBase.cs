@@ -25,7 +25,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Holds the status of the device.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
 
         protected static readonly int IDChangeDelayTimems = 325;  //milliseconds
 
@@ -41,12 +41,12 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Fired when the status changes.
         /// </summary>
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 
         #endregion
 
@@ -113,19 +113,19 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
         /// </summary>
-        //[classPersistenceAttribute("Emulated")]
+        //[PersistenceDataAttribute("Emulated")]
         public bool Emulation { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the device
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
                 if (Emulation)
                 {
-                    return enumDeviceStatus.Initialized;
+                    return DeviceStatus.Initialized;
                 }
 
                 return m_status;
@@ -133,7 +133,7 @@ namespace LcmsNet.Devices.Valves
             set
             {
                 if (value != m_status)
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status Changed", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status Changed", this));
                 m_status = value;
             }
         }
@@ -161,7 +161,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistence("PortName")]
+        [PersistenceData("PortName")]
         public string PortName
         {
             get { return Port.PortName; }
@@ -175,7 +175,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistence("ReadTimeout")]
+        [PersistenceData("ReadTimeout")]
         public int ReadTimeout
         {
             get { return Port.ReadTimeout; }
@@ -189,7 +189,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistence("WriteTimeout")]
+        [PersistenceData("WriteTimeout")]
         public int WriteTimeout
         {
             get { return Port.WriteTimeout; }
@@ -203,7 +203,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         /// Gets and sets the valve's ID in the software. DOES NOT CHANGE THE VALVE'S HARDWARE ID.
         /// </summary>
-        [classPersistence("SoftwareID")]
+        [PersistenceData("SoftwareID")]
         public char SoftwareID
         {
             get { return m_valveID; }
@@ -231,7 +231,7 @@ namespace LcmsNet.Devices.Valves
             DeviceSaveRequired?.Invoke(this, null);
         }
 
-        protected virtual void SendError(classDeviceErrorEventArgs args)
+        protected virtual void SendError(DeviceErrorEventArgs args)
         {
             Error?.Invoke(this, args);
         }
@@ -337,7 +337,7 @@ namespace LcmsNet.Devices.Valves
                 if (position == -1)
                 {
                     errorMessage = "The valve position is unknown.  Make sure it is plugged in.";
-                    SendError(new classDeviceErrorEventArgs(errorMessage, null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "Valve Position"));
+                    SendError(new DeviceErrorEventArgs(errorMessage, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Valve Position"));
                     return false;
                 }
             }
@@ -621,13 +621,13 @@ namespace LcmsNet.Devices.Valves
         {
         }
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
         }
 
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 

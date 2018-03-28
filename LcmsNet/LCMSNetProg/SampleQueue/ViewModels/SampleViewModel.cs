@@ -20,13 +20,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        public classSampleData Sample { get; private set; }
+        public SampleData Sample { get; private set; }
 
         [Obsolete("For WPF Design time use only.", true)]
         public SampleViewModel()
         { }
 
-        public SampleViewModel(classSampleData sample)
+        public SampleViewModel(SampleData sample)
         {
             Sample = sample;
             isChecked = Sample.IsSetToRunOrHasRun;
@@ -90,7 +90,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
         public IReadOnlyReactiveList<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
         public IReadOnlyReactiveList<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
         public IReadOnlyReactiveList<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
@@ -152,19 +152,19 @@ namespace LcmsNet.SampleQueue.ViewModels
             // but only for queued, or completed (including error) sample status.
             switch (Sample.RunningStatus)
             {
-                case enumSampleRunningStatus.Running:
+                case SampleRunningStatus.Running:
                     RowBackColor = Brushes.Lime;
                     RowForeColor = Brushes.Black;
                     RowSelectionBackColor = RowBackColor;
                     RowSelectionForeColor = RowForeColor;
                     break;
-                case enumSampleRunningStatus.WaitingToRun:
+                case SampleRunningStatus.WaitingToRun:
                     RowForeColor = Brushes.Black;
                     RowBackColor = Brushes.Yellow;
                     RowSelectionBackColor = RowBackColor;
                     RowSelectionForeColor = RowForeColor;
                     break;
-                case enumSampleRunningStatus.Error:
+                case SampleRunningStatus.Error:
                     if (Sample.DmsData.Block > 0)
                     {
                         RowBackColor = Brushes.Orange;
@@ -178,7 +178,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     RowSelectionForeColor = Brushes.White;
                     RowSelectionBackColor = Brushes.Navy;
                     break;
-                case enumSampleRunningStatus.Stopped:
+                case SampleRunningStatus.Stopped:
                     if (Sample.DmsData.Block > 0)
                     {
                         RowBackColor = Brushes.SeaGreen;
@@ -192,13 +192,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                     RowSelectionForeColor = Brushes.White;
                     RowSelectionBackColor = Brushes.Navy;
                     break;
-                case enumSampleRunningStatus.Complete:
+                case SampleRunningStatus.Complete:
                     RowBackColor = Brushes.DarkGreen;
                     RowForeColor = Brushes.White;
                     RowSelectionForeColor = Brushes.White;
                     RowSelectionBackColor = Brushes.Navy;
                     break;
-                case enumSampleRunningStatus.Queued:
+                case SampleRunningStatus.Queued:
                     goto default;
                 default:
                     RowBackColor = Brushes.White;
@@ -209,7 +209,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             var status = Sample.ColumnData.Status;
-            if (status == enumColumnStatus.Disabled)
+            if (status == ColumnStatus.Disabled)
             {
                 RowBackColor = new SolidColorBrush(Color.FromArgb(RowBackColor.Color.A, (byte)Math.Max(0, RowBackColor.Color.R - 128),
                     (byte)Math.Max(0, RowBackColor.Color.G - 128),
@@ -240,7 +240,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             else if (!Sample.DmsData.DatasetNameCharactersValid())
             {
                 RequestNameBackColor = Brushes.Crimson;
-                RequestNameToolTipText = "Request name contains invalid characters!\n" + classDMSData.ValidDatasetNameCharacters;
+                RequestNameToolTipText = "Request name contains invalid characters!\n" + DMSData.ValidDatasetNameCharacters;
             }
             else
             {
@@ -273,11 +273,11 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var statusMessage = "";
                 switch (Sample.RunningStatus)
                 {
-                    case enumSampleRunningStatus.Complete:
+                    case SampleRunningStatus.Complete:
                         statusMessage = "The sample ran successfully.";
                         SequenceToolTipFormat = "Started: {2}\nFinished: {3}";
                         break;
-                    case enumSampleRunningStatus.Error:
+                    case SampleRunningStatus.Error:
                         if (Sample.DmsData.Block > 0)
                         {
                             statusMessage =
@@ -288,7 +288,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                             statusMessage = "An error occured while running this sample.";
                         }
                         break;
-                    case enumSampleRunningStatus.Stopped:
+                    case SampleRunningStatus.Stopped:
                         if (Sample.DmsData.Block > 0)
                         {
                             statusMessage =
@@ -299,15 +299,15 @@ namespace LcmsNet.SampleQueue.ViewModels
                             statusMessage = "The sample execution was stopped.";
                         }
                         break;
-                    case enumSampleRunningStatus.Queued:
+                    case SampleRunningStatus.Queued:
                         statusMessage = "The sample is queued but not scheduled to run.";
                         SequenceToolTipFormat = null;
                         break;
-                    case enumSampleRunningStatus.Running:
+                    case SampleRunningStatus.Running:
                         statusMessage = "The sample is running.";
                         SequenceToolTipFormat = "Started: {2}\nEstimated End: {1}";
                         break;
-                    case enumSampleRunningStatus.WaitingToRun:
+                    case SampleRunningStatus.WaitingToRun:
                         statusMessage = "The sample is scheduled to run and waiting.";
                         SequenceToolTipFormat = "Estimated Start: {0}\nEstimated End: {1}";
                         break;
@@ -390,10 +390,10 @@ namespace LcmsNet.SampleQueue.ViewModels
                 SetRowColors();
                 switch (Sample.RunningStatus)
                 {
-                    case enumSampleRunningStatus.Complete:
+                    case SampleRunningStatus.Complete:
                         statusMessage = "Complete";
                         break;
-                    case enumSampleRunningStatus.Error:
+                    case SampleRunningStatus.Error:
                         if (Sample.DmsData.Block > 0)
                         {
                             statusMessage = "Block Error";
@@ -403,16 +403,16 @@ namespace LcmsNet.SampleQueue.ViewModels
                             statusMessage = "Error";
                         }
                         break;
-                    case enumSampleRunningStatus.Stopped:
+                    case SampleRunningStatus.Stopped:
                         statusMessage = "Stopped";
                         break;
-                    case enumSampleRunningStatus.Queued:
+                    case SampleRunningStatus.Queued:
                         statusMessage = "Queued";
                         break;
-                    case enumSampleRunningStatus.Running:
+                    case SampleRunningStatus.Running:
                         statusMessage = "Running";
                         break;
-                    case enumSampleRunningStatus.WaitingToRun:
+                    case SampleRunningStatus.WaitingToRun:
                         statusMessage = "Waiting";
                         break;
                     default:
@@ -458,7 +458,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 if (Sample.InstrumentData == null)
                 {
-                    Sample.InstrumentData = new classInstrumentInfo();
+                    Sample.InstrumentData = new InstrumentInfo();
                 }
                 if (!object.Equals(Sample.InstrumentData.MethodName, value))
                 {

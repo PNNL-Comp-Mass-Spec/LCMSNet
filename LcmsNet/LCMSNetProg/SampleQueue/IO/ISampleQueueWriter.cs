@@ -13,6 +13,6 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="path">Path to write data to.</param>
         /// <param name="data">Data to write.</param>
-        void WriteSamples(string path, List<classSampleData> data);
+        void WriteSamples(string path, List<SampleData> data);
     }
 }

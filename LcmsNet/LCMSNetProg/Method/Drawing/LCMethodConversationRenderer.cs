@@ -77,7 +77,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<classLCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!
@@ -126,7 +126,7 @@ namespace LcmsNet.Method.Drawing
                 buttonLocations[1] = new Rect((x + widthPer) + 5 - negOffset, (bounds.Height - offset - 5), (bounds.Width - (x + widthPer)) + negOffset, offset);
             }
 
-            var alignedEvents = new List<classLCEvent>();
+            var alignedEvents = new List<LCEvent>();
             if (methods != null && methods.Count > 0)
             {
                 // Find the start and end times of the samples so we can scale everything accordingly.
@@ -152,7 +152,7 @@ namespace LcmsNet.Method.Drawing
 
                 // Draw each method
 
-                var methodMap = new Dictionary<classLCEvent, classLCMethod>();
+                var methodMap = new Dictionary<LCEvent, LCMethod>();
                 foreach (var method in methods)
                 {
                     method.Events.ForEach(u => methodMap.Add(u, method));

@@ -7,7 +7,7 @@
 // Updates
 // - 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
 // - 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
-// - 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<classSampleData>
+// - 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<SampleData>
 // - 02/19/2009 (DAC) - Incorporated renamed exceptions
 // - 02/24/2009 (DAC) - Changed to cache downloaded data in SQLite database
 // - 03/09/2009 (DAC) - Added download of DMS Comment field
@@ -222,7 +222,7 @@ namespace LcmsNetDmsTools
                 {
                     failedConnectionAttemptMessage = $"Error connecting to database; Please check network connections and try again. Exception message: {e.Message}";
                     ErrMsg = failedConnectionAttemptMessage;
-                    classApplicationLogger.LogError(0, failedConnectionAttemptMessage);
+                    ApplicationLogger.LogError(0, failedConnectionAttemptMessage);
                 }
             }
 
@@ -359,7 +359,7 @@ namespace LcmsNetDmsTools
                 throw new InvalidOperationException(e.Message, e.Exception);
             }
 
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DmsTools Configuration warning: " + e.Message);
+            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DmsTools Configuration warning: " + e.Message);
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting cart config names";
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -515,7 +515,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing LC cart config names in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -538,7 +538,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting cart list";
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -550,7 +550,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing LC cart list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -584,13 +584,13 @@ namespace LcmsNetDmsTools
                 catch (Exception ex)
                 {
                     const string errMsg = "Exception storing dataset list in cache";
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                 }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting dataset list";
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
             }
 
         }
@@ -613,7 +613,7 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting column list";
                 //              throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -625,7 +625,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing column list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -643,7 +643,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting experiment list";
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -656,11 +656,11 @@ namespace LcmsNetDmsTools
             //}
 
             var rowCount = lcColumnTable.Rows.Count;
-            var lcColumnList = new List<classLCColumn>(rowCount);
+            var lcColumnList = new List<LCColumnData>(rowCount);
 
             foreach (DataRow currentRow in lcColumnTable.Rows)
             {
-                var tempObject = new classLCColumn
+                var tempObject = new LCColumnData
                 {
                     LCColumn = currentRow["Column Number"] as string,
                     State = currentRow["State"] as string
@@ -676,7 +676,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing LC Column data list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -698,7 +698,7 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting separation type list";
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -710,7 +710,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing separation type list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -732,7 +732,7 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting dataset type list";
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
@@ -744,7 +744,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing dataset type list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -753,7 +753,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetUserListFromDMS()
         {
-            var tmpRetVal = new List<classUserInfo>();  // Temp list for holding user data
+            var tmpRetVal = new List<UserInfo>();  // Temp list for holding user data
             var connStr = GetConnectionString();
 
             DataTable userTable;
@@ -768,14 +768,14 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting user list";
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
             //Fill out the temp list
             foreach (DataRow currRow in userTable.Rows)
             {
-                var tempUser = new classUserInfo
+                var tempUser = new UserInfo
                 {
                     UserName = (string)currRow[userTable.Columns["Name"]],
                     PayrollNum = (string)currRow[userTable.Columns["Payroll"]]
@@ -791,7 +791,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing user list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -815,16 +815,16 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting experiment list";
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
             var rowCount = expTable.Rows.Count;
-            var experimentData = new List<classExperimentData>(rowCount);
+            var experimentData = new List<ExperimentData>(rowCount);
 
             foreach (DataRow currentRow in expTable.Rows)
             {
-                var tempObject = new classExperimentData
+                var tempObject = new ExperimentData
                 {
                     Created = currentRow["Created"] as DateTime?,
                     Experiment = currentRow["Experiment"] as string,
@@ -845,7 +845,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing experiment list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -863,18 +863,18 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting EUS Proposal Users list";
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
             // Split the View back into the two tables it was built from.
             // Note: It would be faster if we had the component tables the View was created from.
 
-            var users = new List<classProposalUser>();
-            var referenceList = new List<classUserIDPIDCrossReferenceEntry>();
-            var referenceDictionary = new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>();
+            var users = new List<ProposalUser>();
+            var referenceList = new List<UserIDPIDCrossReferenceEntry>();
+            var referenceDictionary = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
 
-            var userMap = new Dictionary<int, classProposalUser>();
+            var userMap = new Dictionary<int, ProposalUser>();
 
             foreach (DataRow row in expTable.Rows)
             {
@@ -885,8 +885,8 @@ namespace LcmsNetDmsTools
                 if (!uid.HasValue || string.IsNullOrWhiteSpace(pid) || string.IsNullOrWhiteSpace(userName))
                     continue;
 
-                var user = new classProposalUser();
-                var crossReference = new classUserIDPIDCrossReferenceEntry();
+                var user = new ProposalUser();
+                var crossReference = new UserIDPIDCrossReferenceEntry();
 
                 user.UserID = uid.Value;
                 user.UserName = userName;
@@ -901,7 +901,7 @@ namespace LcmsNetDmsTools
                 }
 
                 if (!referenceDictionary.ContainsKey(crossReference.PID))
-                    referenceDictionary.Add(crossReference.PID, new List<classUserIDPIDCrossReferenceEntry>());
+                    referenceDictionary.Add(crossReference.PID, new List<UserIDPIDCrossReferenceEntry>());
 
                 if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
                 {
@@ -920,7 +920,7 @@ namespace LcmsNetDmsTools
             {
                 const string errMsg = "Exception storing Proposal Users list in cache";
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -929,7 +929,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetInstrumentListFromDMS()
         {
-            var tmpRetVal = new List<classInstrumentInfo>();    // Temp list for holding instrument data
+            var tmpRetVal = new List<InstrumentInfo>();    // Temp list for holding instrument data
             var connStr = GetConnectionString();
 
             DataTable instTable;
@@ -947,14 +947,14 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting instrument list";
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
             }
 
             //Fill out the temp list
             foreach (DataRow currRow in instTable.Rows)
             {
-                var tempInst = new classInstrumentInfo
+                var tempInst = new InstrumentInfo
                 {
                     DMSName = (string)currRow[instTable.Columns["Instrument"]],
                     CommonName = (string)currRow[instTable.Columns["NameAndUsage"]],
@@ -974,7 +974,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 const string errMsg = "Exception storing instrument list in cache";
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -983,7 +983,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
         [Obsolete("This method has a misleading name; use GetRequestedRunsFromDMS instead")]
-        public List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData)
+        public List<SampleData> GetSamplesFromDMS(SampleQueryData queryData)
         {
             return GetRequestedRunsFromDMS(queryData);
         }
@@ -992,9 +992,9 @@ namespace LcmsNetDmsTools
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
-        public List<classSampleData> GetRequestedRunsFromDMS(classSampleQueryData queryData)
+        public List<SampleData> GetRequestedRunsFromDMS(SampleQueryData queryData)
         {
-            var tmpReturnVal = new List<classSampleData>(); // Temp list for holding samples
+            var tmpReturnVal = new List<SampleData>(); // Temp list for holding samples
             var connStr = GetConnectionString();
 
             DataTable schedRunList;
@@ -1010,13 +1010,13 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting run request list";
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 return tmpReturnVal;
             }
 
             foreach (DataRow currRow in schedRunList.Rows)
             {
-                var tmpDMSData = new classSampleData
+                var tmpDMSData = new SampleData
                 {
                     DmsData =
                     {
@@ -1067,7 +1067,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="FileIndxList">Comma-separated list of file indices needing data</param>
         /// <param name="fileData">ist of file names and contents; new data will be appended to this list</param>
-        public void GetMRMFilesFromDMS(string FileIndxList, List<classMRMFileData> fileData)
+        public void GetMRMFilesFromDMS(string FileIndxList, List<MRMFileData> fileData)
         {
             if (fileData == null)
             {
@@ -1087,7 +1087,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 m_ErrMsg = "Exception getting MRM file data from DMS";
-                classApplicationLogger.LogError(0, m_ErrMsg, ex);
+                ApplicationLogger.LogError(0, m_ErrMsg, ex);
                 throw new classDatabaseDataException(m_ErrMsg, ex);
             }
 
@@ -1095,7 +1095,7 @@ namespace LcmsNetDmsTools
             {
                 foreach (DataRow currRow in dt.Rows)
                 {
-                    var currData = new classMRMFileData
+                    var currData = new MRMFileData
                     {
                         FileName = currRow[dt.Columns["File_Name"]] as string,
                         FileContents = currRow[dt.Columns["Contents"]] as string
@@ -1128,7 +1128,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 m_ErrMsg = "Exception getting MRM file list from DMS";
-                classApplicationLogger.LogError(0, m_ErrMsg, ex);
+                ApplicationLogger.LogError(0, m_ErrMsg, ex);
                 throw new classDatabaseDataException(m_ErrMsg, ex);
             }
 
@@ -1199,7 +1199,7 @@ namespace LcmsNetDmsTools
 
             if (!mConnectionStringLogged)
             {
-                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
                                                   "Database connection string: " + retStr + ";Password=....");
                 mConnectionStringLogged = true;
             }
@@ -1276,7 +1276,7 @@ namespace LcmsNetDmsTools
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Exception updating DMS cart information", ex);
+                ApplicationLogger.LogError(0, "Exception updating DMS cart information", ex);
                 return false;
             }
 
@@ -1311,7 +1311,7 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting single column table via command: " + CmdStr;
                 //                  throw new classDatabaseDataException(ErrMsg, ex);
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 throw new Exception(ErrMsg, ex);
             }
 
@@ -1354,7 +1354,7 @@ namespace LcmsNetDmsTools
                 catch (Exception ex)
                 {
                     var errMsg = "SQL exception getting data table via query " + cmdStr;
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     throw new classDatabaseDataException(errMsg, ex);
                 }
             }
@@ -1393,7 +1393,7 @@ namespace LcmsNetDmsTools
             catch (Exception ex)
             {
                 ErrMsg = "Exception executing stored procedure " + spCmd.CommandText;
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 throw new classDatabaseStoredProcException(spCmd.CommandText, resultCode, ex.Message);
             }
             return resultCode;
@@ -1421,7 +1421,7 @@ namespace LcmsNetDmsTools
             {
                 // vialPosition is in the form A1 or B10
                 // Convert it using ConvertVialToInt
-                vialNumber = LcmsNetSDK.Data.classConvertVialPosition.ConvertVialToInt(vialPosition);
+                vialNumber = ConvertVialPosition.ConvertVialToInt(vialPosition);
             }
 
             return vialNumber;

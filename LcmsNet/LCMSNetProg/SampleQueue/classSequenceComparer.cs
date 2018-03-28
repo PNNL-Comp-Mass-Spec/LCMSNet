@@ -3,11 +3,11 @@ using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue
 {
-    public class classSequenceComparer : IComparer<classSampleData>
+    public class classSequenceComparer : IComparer<SampleData>
     {
-        #region IComparer<classSampleData> Members
+        #region IComparer<SampleData> Members
 
-        public int Compare(classSampleData x, classSampleData y)
+        public int Compare(SampleData x, SampleData y)
         {
             return x.SequenceID.CompareTo(y.SequenceID);
         }

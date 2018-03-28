@@ -15,7 +15,7 @@ namespace LcmsNet.Devices.Valves
     /// </summary>
     //[Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    //[classDeviceControlAttribute(typeof(controlValveVICIMultiPos),
+    //[DeviceControlAttribute(typeof(controlValveVICIMultiPos),
     //                             typeof(controlValveVICIMultiPosGlyph),
     //                             "Valve Multi-Position",
     //                             "Valves")
@@ -118,7 +118,7 @@ namespace LcmsNet.Devices.Valves
         /// <summary>
         ///
         /// </summary>
-        [classPersistence("NumberOfPositions")]
+        [PersistenceData("NumberOfPositions")]
         public int NumberOfPositions
         {
             get { return m_numberOfPositions; }
@@ -187,12 +187,12 @@ namespace LcmsNet.Devices.Valves
 
                 catch (TimeoutException)
                 {
-                    //classApplicationLogger.LogError(0, "Could not set position.  Write timeout.");
+                    //ApplicationLogger.LogError(0, "Could not set position.  Write timeout.");
                     return enumValveErrors.TimeoutDuringWrite;
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    //classApplicationLogger.LogError(0, "Could not set position.  Could not access serial port.");
+                    //ApplicationLogger.LogError(0, "Could not set position.  Could not access serial port.");
                     return enumValveErrors.UnauthorizedAccess;
                 }
 
@@ -214,23 +214,23 @@ namespace LcmsNet.Devices.Valves
                 }
                 catch (ValveExceptionWriteTimeout)
                 {
-                    //classApplicationLogger.LogError(0, "Could not set position.  The write operation timed out to device.");
+                    //ApplicationLogger.LogError(0, "Could not set position.  The write operation timed out to device.");
                     return enumValveErrors.TimeoutDuringWrite;
                 }
                 catch (ValveExceptionUnauthorizedAccess)
                 {
-                    //classApplicationLogger.LogError(0, "Could not set position. Could not access port.");
+                    //ApplicationLogger.LogError(0, "Could not set position. Could not access port.");
                     return enumValveErrors.UnauthorizedAccess;
                 }
 
                 if (m_lastMeasuredPosition != m_lastSentPosition)
                 {
-                    //classApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
+                    //ApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
                     return enumValveErrors.ValvePositionMismatch;
                 }
 
                 OnPosChanged(m_lastMeasuredPosition);
-                //classApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
+                //ApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
                 return enumValveErrors.Success;
             }
 

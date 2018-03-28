@@ -13,7 +13,7 @@ using LcmsNetSDK.System;
 namespace ASIpump
 {
 
-    [classDeviceControl(typeof(AsiUIViewModel),
+    [DeviceControl(typeof(AsiUIViewModel),
                                  "ASi Pump",
                                  "Syringe Pumps")]
     public class AsiPump : SerialDevice, IDevice, IPump, IFluidicsPump
@@ -44,7 +44,7 @@ namespace ASIpump
         [Description("Total flow in uL/minute")]
         [Category("Program Parameters")]
         [DisplayName("Total Flow")]
-        [classPersistence("TotalFlow")]
+        [PersistenceData("TotalFlow")]
         public double TotalFlow
         {
             get { return totalFlow; }
@@ -60,7 +60,7 @@ namespace ASIpump
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % A")]
-        [classPersistence("StartPercentA")]
+        [PersistenceData("StartPercentA")]
         public double StartPercentA
         {
             get { return startPercentA; }
@@ -76,7 +76,7 @@ namespace ASIpump
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % B")]
-        [classPersistence("StartPercentB")]
+        [PersistenceData("StartPercentB")]
         public double StartPercentB
         {
             get { return startPercentB; }
@@ -92,7 +92,7 @@ namespace ASIpump
         [Description("Gradient Time (seconds)")]
         [Category("Program Parameters")]
         [DisplayName("Gradient Time")]
-        [classPersistence("GradientTime")]
+        [PersistenceData("GradientTime")]
         public double GradientTime
         {
             get { return gradientTime; }
@@ -108,7 +108,7 @@ namespace ASIpump
         [Description("Initial Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Initial Iso Time")]
-        [classPersistence("InitialIsoTime")]
+        [PersistenceData("InitialIsoTime")]
         public double InitialIsoTime
         {
             get { return initialIsoTime; }
@@ -124,7 +124,7 @@ namespace ASIpump
         [Description("Final Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Final Iso Time")]
-        [classPersistence("FinalIsoTime")]
+        [PersistenceData("FinalIsoTime")]
         public double FinalIsoTime
         {
             get { return finalIsoTime; }
@@ -244,7 +244,7 @@ namespace ASIpump
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 #pragma warning restore CS0067
         /// <summary>
         /// Fired when the Agilent Pump finds out what method names are available.
@@ -258,7 +258,7 @@ namespace ASIpump
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 #pragma warning restore CS0067
         /// <summary>
         /// List of times monitoring data was received.
@@ -279,13 +279,13 @@ namespace ASIpump
         #endregion
 
         #region Properties
-        [classPersistence("TotalMonitoringMinutes")]
+        [PersistenceData("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistence("TotalMonitoringSecondsElapsed")]
+        [PersistenceData("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -299,7 +299,7 @@ namespace ASIpump
         /// <summary>
         /// Gets the device's status
         /// </summary>
-        public enumDeviceStatus Status { get; set; }
+        public DeviceStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets whether the device is running
@@ -324,7 +324,7 @@ namespace ASIpump
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
-        [classPersistence("PortName")]
+        [PersistenceData("PortName")]
         public new string PortName
         {
             get { return base.PortName; }
@@ -333,7 +333,7 @@ namespace ASIpump
         /// <summary>
         /// Gets or sets the error type of the last error reported.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -341,7 +341,7 @@ namespace ASIpump
         /// <summary>
         /// Gets the system device type.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -603,7 +603,7 @@ namespace ASIpump
         /// <param name="timeout"></param>
         /// <param name="flowrate"></param>
         /// <param name="methodName">Method to run stored on the pumps.</param>
-        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, true)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, true)]
         public void StartMethod(double timeout, double flowrate, string methodName)
         {
             var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -611,7 +611,7 @@ namespace ASIpump
             //Some method starting private function StartMethod(methodName);
         }
 
-        [classLCMethod("Turn On", 1, false, "", -1, false)]
+        [LCMethodEvent("Turn On", 1, false, "", -1, false)]
         public void TurnOn()
         {
 

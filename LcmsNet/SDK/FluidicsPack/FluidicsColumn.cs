@@ -3,7 +3,7 @@
 namespace FluidicsPack
 {
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControl(typeof(FluidicsColumnControlViewModel),
+    [DeviceControl(typeof(FluidicsColumnControlViewModel),
                                  typeof(FluidicsColumnGlyph),
                                  "Column",
                                  "Fluidics Components")

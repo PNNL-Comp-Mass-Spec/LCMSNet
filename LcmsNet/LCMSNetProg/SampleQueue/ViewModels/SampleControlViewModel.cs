@@ -158,7 +158,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="samples">List of samples to add to the manager.</param>
         /// <param name="insertIntoUnused"></param>
-        protected virtual void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
+        protected virtual void AddSamplesToManager(List<SampleData> samples, bool insertIntoUnused)
         {
             SampleDataManager.AddSamplesToManager(samples, insertIntoUnused);
         }
@@ -209,7 +209,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var samples = GetSelectedSamples();
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
+            samples.RemoveAll(sample => sample.RunningStatus != SampleRunningStatus.Queued);
 
             if (samples.Count < 1)
             {
@@ -218,7 +218,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (SampleDataManager.AutoSamplerTrays.Count < 6)
             {
-                classApplicationLogger.LogError(0, "Not enough PAL Trays are available.");
+                ApplicationLogger.LogError(0, "Not enough PAL Trays are available.");
                 return;
             }
 
@@ -248,7 +248,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var samples = GetSelectedSamples();
 
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
+            samples.RemoveAll(sample => sample.RunningStatus != SampleRunningStatus.Queued);
 
             if (samples.Count < 1)
             {
@@ -289,7 +289,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (samples.Count < 1)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
                     "You must select a sample to edit the DMS information.");
                 return;
             }
@@ -312,13 +312,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                     // If samples are not valid...then what?
                     if (!dmsDisplayVm.AreSamplesValid)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
                     }
                 }
                 catch (InvalidOperationException ex)
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                         "Unable to edit dmsdata:" + ex.Message, ex);
                 }
             }
@@ -365,7 +365,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 // Don't add directly to the user interface in case the
                 // sample manager class has something to say about one of the samples
-                classApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
+                ApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
             }
         }
 
@@ -373,9 +373,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Returns the list of selected samples.
         /// </summary>
         /// <returns></returns>
-        public virtual List<classSampleData> GetSelectedSamples()
+        public virtual List<SampleData> GetSelectedSamples()
         {
-            var samples = new List<classSampleData>();
+            var samples = new List<SampleData>();
             try
             {
                 foreach (var sample in SelectedSamples)
@@ -387,7 +387,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Error in GetSelectedSamples: " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Error in GetSelectedSamples: " + ex.Message, ex);
             }
 
             return samples;
@@ -428,7 +428,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        protected virtual classSampleData AddNewSample(bool insertIntoUnused)
+        protected virtual SampleData AddNewSample(bool insertIntoUnused)
         {
             var newData = SampleDataManager.AddNewSample(insertIntoUnused);
 
@@ -486,14 +486,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void RandomizeSelectedSamples()
         {
-            var samplesToRandomize = new List<classSampleData>();
+            var samplesToRandomize = new List<SampleData>();
             // Get all the data references that we want to randomize.
             foreach (var row in SelectedSamples)
             {
                 var data = row.Sample;
-                if (data != null && data.RunningStatus == enumSampleRunningStatus.Queued)
+                if (data != null && data.RunningStatus == SampleRunningStatus.Queued)
                 {
-                    var sample = data.Clone() as classSampleData;
+                    var sample = data.Clone() as SampleData;
                     if (sample?.LCMethod?.Name != null)
                     {
                         if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
@@ -518,7 +518,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
                 catch
                 {
-                    classApplicationLogger.LogError(0, "No randomization plug-ins exist.");
+                    ApplicationLogger.LogError(0, "No randomization plug-ins exist.");
                     return;
                 }
                 var randomizer = new SampleRandomizerWindow() { DataContext = randomizerVm };
@@ -534,12 +534,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             else if (samplesToRandomize.Count == 1)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Select more than one sample for randomization.");
             }
             else
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "No samples selected for randomization.");
             }
             if (samplesToRandomize.Count > 0)
@@ -594,7 +594,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Exception in RemoveSelectedSamples: " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Exception in RemoveSelectedSamples: " + ex.Message, ex);
             }
         }
 
@@ -731,15 +731,15 @@ namespace LcmsNet.SampleQueue.ViewModels
                 @"You are about to clear your queued samples.  Select Ok to clear, or Cancel to have no change.", @"Clear Queue Confirmation",
                 MessageBoxButton.OKCancel);
 
-            classApplicationLogger.LogMessage(3, "The user clicked to clear the samples");
+            ApplicationLogger.LogMessage(3, "The user clicked to clear the samples");
             if (result == MessageBoxResult.OK)
             {
-                classApplicationLogger.LogMessage(3, "The user clicked to ok to clear the samples");
+                ApplicationLogger.LogMessage(3, "The user clicked to ok to clear the samples");
                 SampleDataManager.ClearAllSamples();
             }
             else
             {
-                classApplicationLogger.LogMessage(3, "The user clicked to cancel clearing samples");
+                ApplicationLogger.LogMessage(3, "The user clicked to cancel clearing samples");
             }
         }
 

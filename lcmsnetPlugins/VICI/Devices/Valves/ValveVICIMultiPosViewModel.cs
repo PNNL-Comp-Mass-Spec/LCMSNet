@@ -332,7 +332,7 @@ namespace LcmsNet.Devices.Valves
         {
             if (string.IsNullOrWhiteSpace(SelectedValvePosition))
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "A valve position selection should be made.");
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "A valve position selection should be made.");
                 return;
             }
 

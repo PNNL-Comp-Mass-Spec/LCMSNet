@@ -81,7 +81,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// Saves the given method to file.
         /// </summary>
         /// <param name="method"></param>
-        public bool SaveMethod(classLCMethod method)
+        public bool SaveMethod(LCMethod method)
         {
             // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
             if (method == null)
@@ -91,7 +91,7 @@ namespace LcmsNet.Simulator.ViewModels
             var writer = new classLCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!

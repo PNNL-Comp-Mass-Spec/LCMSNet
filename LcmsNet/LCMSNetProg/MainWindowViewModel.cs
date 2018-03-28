@@ -98,19 +98,19 @@ namespace LcmsNet
 
         void Column_NameChanged(object sender, string name, string oldName)
         {
-            var column = sender as classColumnData;
+            var column = sender as ColumnData;
             if (column != null)
             {
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_COLUMNNAME + column.ID, column.Name);
+                LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNNAME + column.ID, column.Name);
             }
         }
 
-        void Column_StatusChanged(object sender, enumColumnStatus status, enumColumnStatus oldStatus)
+        void Column_StatusChanged(object sender, ColumnStatus status, ColumnStatus oldStatus)
         {
-            var column = sender as classColumnData;
-            if (column != null && status != enumColumnStatus.Running && oldStatus != enumColumnStatus.Running)
+            var column = sender as ColumnData;
+            if (column != null && status != ColumnStatus.Running && oldStatus != ColumnStatus.Running)
             {
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_COLUMNDISABLED + column.ID, (column.Status == enumColumnStatus.Disabled).ToString());
+                LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLED + column.ID, (column.Status == ColumnStatus.Disabled).ToString());
             }
         }
 
@@ -127,7 +127,7 @@ namespace LcmsNet
             //m_fluidicsDesign.SaveConfiguration();
 
             // Cache the selected separation type
-            classSQLiteTools.SaveSelectedSeparationType(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE));
+            classSQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
 
             // Shut off the scheduler...
             try
@@ -141,7 +141,7 @@ namespace LcmsNet
                 {
                     var result =
                         MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
-                            classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME)
+                            LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME)
                         ), "Confirm Queue Save", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
@@ -152,7 +152,7 @@ namespace LcmsNet
             catch (Exception e)
             {
                 MessageBox.Show("Warning: Exception occurred saving data to cache. Exception Message: \"" + e.Message + "\". See log for more details.");
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error occurred when saving queue to cache!", e);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error occurred when saving queue to cache!", e);
             }
 
             //TODO: Check to see if things shutdown.
@@ -335,7 +335,7 @@ namespace LcmsNet
         /// <summary>
         /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
         /// </summary>
-        private classApplicationLogger m_logger;
+        private ApplicationLogger m_logger;
 
         /// <summary>
         /// default PDF generator, used to generate a pdf of information after a sample run.
@@ -354,10 +354,10 @@ namespace LcmsNet
         private void Initialize()
         {
             Thread.CurrentThread.Name = "Main Thread";
-            m_logger = new classApplicationLogger();
+            m_logger = new ApplicationLogger();
             WindowTitle = "LcmsNet Version: " + Assembly.GetEntryAssembly().GetName().Version;
-            WindowTitle += " Cart - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-            var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
+            WindowTitle += " Cart - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+            var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
             if (emulation != null)
             {
                 var isEmulated = Convert.ToBoolean(emulation);
@@ -367,7 +367,7 @@ namespace LcmsNet
                 }
             }
 
-            foreach (var column in classCartConfiguration.Columns)
+            foreach (var column in CartConfiguration.Columns)
             {
                 column.NameChanged += Column_NameChanged;
                 column.StatusChanged += Column_StatusChanged;
@@ -382,7 +382,7 @@ namespace LcmsNet
             FluidicsDesignVm = new FluidicsDesignViewModel();
 
             // Notification System
-            NotificationSystemVm = new NotificationSystemViewModel(classDeviceManager.Manager);
+            NotificationSystemVm = new NotificationSystemViewModel(DeviceManager.Manager);
             NotificationSystemVm.ActionRequired += m_notifications_ActionRequired;
 
 
@@ -390,16 +390,16 @@ namespace LcmsNet
             m_sampleQueue = new classSampleQueue();
             SampleManagerVm = new SampleManagerViewModel(m_sampleQueue);
 
-            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
-            classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
-            classDeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
+            DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+            DeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
+            DeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
 
             // Displays the pump data.
             PumpDisplaysVm = new PumpDisplaysViewModel();
             PumpDisplaysPopoutVm = new PopoutViewModel(PumpDisplaysVm);
 
-            classApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
+            ApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
             FluidicsDesignVm.LoadConfiguration();
 
 
@@ -415,10 +415,10 @@ namespace LcmsNet
             MessagesVm = new MessagesViewModel();
             MessagesVm.ErrorCleared += Messages_ErrorCleared;
             MessagesVm.ErrorPresent += Messages_ErrorPresent;
-            classApplicationLogger.Error += MessagesVm.ShowErrors;
-            classApplicationLogger.Error += classApplicationLogger_Error;
-            classApplicationLogger.Message += MessagesVm.ShowMessage;
-            classApplicationLogger.Message += classApplicationLogger_Message;
+            ApplicationLogger.Error += MessagesVm.ShowErrors;
+            ApplicationLogger.Error += ApplicationLogger_Error;
+            ApplicationLogger.Message += MessagesVm.ShowMessage;
+            ApplicationLogger.Message += ApplicationLogger_Message;
 
             // Method Editor
             MethodEditorVm = new LCMethodEditorViewModel();
@@ -427,17 +427,17 @@ namespace LcmsNet
 
 
             // Get the most recently used separation type
-            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_SEPARATIONTYPE, classSQLiteTools.GetDefaultSeparationType());
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, classSQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
             var failedDeviceFlag = false;
             var failedCount = 0;
-            classDeviceManager.Manager.InitialzingDevice += Manager_InitialzingDevice;
+            DeviceManager.Manager.InitialzingDevice += Manager_InitialzingDevice;
             FailedDevicesWindow display = null;
-            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP, false))
+            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP, false))
             {
-                classApplicationLogger.LogMessage(0, "Initializing hardware.");
-                var failedDevices = classDeviceManager.Manager.InitializeDevices();
+                ApplicationLogger.LogMessage(0, "Initializing hardware.");
+                var failedDevices = DeviceManager.Manager.InitializeDevices();
                 if (failedDevices != null && failedDevices.Count > 0)
                 {
                     failedDeviceFlag = true;
@@ -453,7 +453,7 @@ namespace LcmsNet
             }
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
-            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false))
+            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false))
             {
                 //add simulator button to main form and add simulator forms.
                 SimulatorVm = new SimulatorCombinedViewModel();
@@ -468,8 +468,8 @@ namespace LcmsNet
             }
 
             // Load the methods from the LC-Methods folder.
-            classApplicationLogger.LogMessage(0, "Reading User Methods.");
-            var userMethodErrors = classLCMethodManager.Manager.LoadMethods(Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER));
+            ApplicationLogger.LogMessage(0, "Reading User Methods.");
+            var userMethodErrors = classLCMethodManager.Manager.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             if (userMethodErrors.Count > 0)
             {
@@ -491,7 +491,7 @@ namespace LcmsNet
             //AddForm(systemConfiguration);
             //AddForm(m_sampleManager);
 
-            classApplicationLogger.LogMessage(0, "Loading Sample Queue...");
+            ApplicationLogger.LogMessage(0, "Loading Sample Queue...");
             //Application.DoEvents();
             //
             // Tell the sample queue to load samples from cache after everything is loaded.
@@ -502,21 +502,21 @@ namespace LcmsNet
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message, ex);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message, ex);
             }
 
             if (failedDeviceFlag)
             {
-                classApplicationLogger.LogMessage(0,
+                ApplicationLogger.LogMessage(0,
                     string.Format("System Unsure.  {0} devices failed to initialize.", failedCount));
             }
             else if (userMethodErrors.Count > 0)
             {
-                classApplicationLogger.LogMessage(0, "All devices initialized.  Errors were found in the LC-Methods");
+                ApplicationLogger.LogMessage(0, "All devices initialized.  Errors were found in the LC-Methods");
             }
             else
             {
-                classApplicationLogger.LogMessage(0, "System Ready.");
+                ApplicationLogger.LogMessage(0, "System Ready.");
             }
 
             SampleProgressVm.PreviewAvailable += SampleManagerVm.PreviewAvailable;
@@ -547,22 +547,22 @@ namespace LcmsNet
             switch (e.Action)
             {
                 case enumDeviceNotificationAction.Stop:
-                    classApplicationLogger.LogError(0, "The notification system is shutting down the queue");
+                    ApplicationLogger.LogError(0, "The notification system is shutting down the queue");
                     m_scheduler.Stop();
                     //m_sampleQueue.StopRunningQueue();
-                    classApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
+                    ApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
                 case enumDeviceNotificationAction.Shutdown:
-                    classApplicationLogger.LogError(0, "The notification system is shutting down the queue");
+                    ApplicationLogger.LogError(0, "The notification system is shutting down the queue");
                     //m_sampleQueue.StopRunningQueue();
                     m_scheduler.Stop();
-                    classApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
+                    ApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
                 case enumDeviceNotificationAction.StopAndRunMethodNow:
                     // Runs the method if it is not null.
                     if (e.Method != null)
                     {
-                        classApplicationLogger.LogError(0,
+                        ApplicationLogger.LogError(0,
                             string.Format(
                                 "The notification system is stopping all current runs and running the special method {1} because of the setting {0}",
                                 e.Name, e.Method.Name));
@@ -570,7 +570,7 @@ namespace LcmsNet
 
                         //m_sampleQueue.StopRunningQueue();
                         m_scheduler.Stop();
-                        var dummySample = new classSampleData
+                        var dummySample = new SampleData
                         {
                             DmsData = {
                                 DatasetName = string.Format("NotificationAction--{0}", e.Method.Name)
@@ -579,14 +579,14 @@ namespace LcmsNet
 
                         if (columnID >= 0)
                         {
-                            dummySample.ColumnData = classCartConfiguration.Columns[columnID];
+                            dummySample.ColumnData = CartConfiguration.Columns[columnID];
                         }
 
                         dummySample.LCMethod = e.Method;
                         m_sampleQueue.RunNext(dummySample);
 
 
-                        classApplicationLogger.LogError(0,
+                        ApplicationLogger.LogError(0,
                             string.Format(
                                 "Queue restarted with special method {1} because of the setting {0}", e.Name,
                                 e.Method.Name));
@@ -597,20 +597,20 @@ namespace LcmsNet
                     {
                         var columnID = e.Method.Column;
 
-                        classApplicationLogger.LogError(0,
+                        ApplicationLogger.LogError(0,
                             string.Format(
                                 "The notification system is queuing the special method {1} because of the setting {0}.",
                                 e.Name, e.Method.Name));
 
-                        var stupidSample = new classSampleData();
+                        var stupidSample = new SampleData();
                         if (columnID >= 0)
                         {
-                            stupidSample.ColumnData = classCartConfiguration.Columns[columnID];
+                            stupidSample.ColumnData = CartConfiguration.Columns[columnID];
                         }
                         stupidSample.LCMethod = e.Method;
                         m_sampleQueue.RunNext(stupidSample);
 
-                        classApplicationLogger.LogError(0,
+                        ApplicationLogger.LogError(0,
                             string.Format(
                                 "The special method {2} was queued to run next on the column {0} because of the notification system event {1} ",
                                 columnID,
@@ -640,7 +640,7 @@ namespace LcmsNet
 
         private void Manager_DevicesInitialized(object sender, EventArgs e)
         {
-            classApplicationLogger.LogMessage(0, "Device initialization complete.");
+            ApplicationLogger.LogMessage(0, "Device initialization complete.");
         }
 
         #region Device Manager Events
@@ -693,7 +693,7 @@ namespace LcmsNet
         /// <param name="device"></param>
         private void Manager_DeviceRenamed(object sender, IDevice device)
         {
-            classApplicationLogger.LogMessage(0, "Renamed a device to " + device.Name);
+            ApplicationLogger.LogMessage(0, "Renamed a device to " + device.Name);
         }
 
         /// <summary>
@@ -704,7 +704,7 @@ namespace LcmsNet
         private void Manager_DeviceRemoved(object sender, IDevice device)
         {
             DeRegisterDeviceEventHandlers(device);
-            classApplicationLogger.LogMessage(0, "Removed device " + device.Name);
+            ApplicationLogger.LogMessage(0, "Removed device " + device.Name);
         }
 
         /// <summary>
@@ -715,7 +715,7 @@ namespace LcmsNet
         private void Manager_DeviceAdded(object sender, IDevice device)
         {
             RegisterDeviceEventHandlers(device);
-            classApplicationLogger.LogMessage(0, "Added device " + device.Name);
+            ApplicationLogger.LogMessage(0, "Added device " + device.Name);
         }
 
         /// <summary>
@@ -723,9 +723,9 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Manager_InitialzingDevice(object sender, classDeviceManagerStatusArgs e)
+        private void Manager_InitialzingDevice(object sender, DeviceManagerStatusArgs e)
         {
-            classApplicationLogger.LogMessage(-1, e.Message);
+            ApplicationLogger.LogMessage(-1, e.Message);
         }
 
         #region Methods
@@ -752,9 +752,9 @@ namespace LcmsNet
         /// </summary>
         /// <param name="messageLevel">Message filter.</param>
         /// <param name="args">Data associated with messages.</param>
-        private void classApplicationLogger_Message(int messageLevel, classMessageLoggerArgs args)
+        private void ApplicationLogger_Message(int messageLevel, MessageLoggerArgs args)
         {
-            if (args != null && messageLevel <= classApplicationLogger.CONST_STATUS_LEVEL_USER)
+            if (args != null && messageLevel <= ApplicationLogger.CONST_STATUS_LEVEL_USER)
             {
                 SetStatusMessage(args.Message);
             }
@@ -765,7 +765,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="errorLevel"></param>
         /// <param name="args"></param>
-        private void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
+        private void ApplicationLogger_Error(int errorLevel, ErrorLoggerArgs args)
         {
             SetStatusMessage(args.Message);
         }
@@ -793,8 +793,8 @@ namespace LcmsNet
         {
             var message = "";
             var sample = args.Sample;
-            classLCEvent lcEvent = null;
-            classLCMethod lcMethod;
+            LCEvent lcEvent = null;
+            LCMethod lcMethod;
             var isError = false;
 
             //
@@ -821,7 +821,7 @@ namespace LcmsNet
                         lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     }
                     SampleProgressVm.UpdateError(sample, lcEvent);
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message,
+                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, args.Message,
                         null, args.Sample);
                     isError = true;
                     break;
@@ -845,7 +845,7 @@ namespace LcmsNet
                     }
                     try
                     {
-                        docPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PDFPATH);
+                        docPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_PDFPATH);
                     }
                     catch
                     {
@@ -859,7 +859,7 @@ namespace LcmsNet
                         {
                             if (!pdfFolder.Root.Exists)
                             {
-                                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
                                     "Invalid PDF document folder defined in LcmsNet.exe.config (drive not found): " +
                                     docPath);
                                 break;
@@ -868,19 +868,19 @@ namespace LcmsNet
                         }
 
                         message = string.Empty;
-                        if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
+                        if (bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS)))
                         {
                             classMethodFileTools.MoveLocalMethodFiles();
                         }
                         var filePath =
                             FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
                         m_pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
-                            classCartConfiguration.NumberOfEnabledColumns.ToString(), classCartConfiguration.Columns,
-                            classDeviceManager.Manager.Devices, configImage);
+                            CartConfiguration.NumberOfEnabledColumns.ToString(), CartConfiguration.Columns,
+                            DeviceManager.Manager.Devices, configImage);
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
                             "PDF Generation Error for " + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
                     }
                     break;
@@ -892,7 +892,7 @@ namespace LcmsNet
 
             if (!string.IsNullOrWhiteSpace(message))
             {
-                classApplicationLogger.LogMessage(0, message, sample);
+                ApplicationLogger.LogMessage(0, message, sample);
             }
 
 
@@ -919,7 +919,7 @@ namespace LcmsNet
         /// <param name="sender"></param>
         /// <param name="sample"></param>
         /// <param name="errorMessage"></param>
-        private void Scheduler_Error(object sender, classSampleData sample, string errorMessage)
+        private void Scheduler_Error(object sender, SampleData sample, string errorMessage)
         {
             var args = new classSampleProgressEventArgs(errorMessage, sample, enumSampleProgress.Error);
             UpdateSampleProgress(sender, args);
@@ -932,7 +932,7 @@ namespace LcmsNet
         private void ReportError(ContentControl[] controls)
         {
             var manager = classLCMethodManager.Manager;
-            var logPath = classFileLogging.LogPath;
+            var logPath = FileLogging.LogPath;
 
             var controlList = new List<ContentControl>();
             var about = new AboutWindow();

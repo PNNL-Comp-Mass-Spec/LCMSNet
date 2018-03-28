@@ -75,7 +75,7 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Gets or sets the status of the device.
         /// </summary>
-        enumDeviceStatus Status { get; set; }
+        DeviceStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -85,12 +85,12 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Gets the error type for a given device.
         /// </summary>
-        enumDeviceErrorStatus ErrorType { get; }
+        DeviceErrorStatus ErrorType { get; }
 
         /// <summary>
         /// Gets the device type.
         /// </summary>
-        enumDeviceType DeviceType { get; }
+        DeviceType DeviceType { get; }
 
         /// <summary>
         /// Gets or sets whether the device is emulation mode or not.

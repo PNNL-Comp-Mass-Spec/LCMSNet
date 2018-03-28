@@ -18,7 +18,6 @@ namespace LcmsNetSDK
         public IFluidicsModelChecker ModelChecker { get; set; }
     }
 
-
     public interface IModelCheckController
     {
         List<IFluidicsModelChecker> GetModelCheckers();

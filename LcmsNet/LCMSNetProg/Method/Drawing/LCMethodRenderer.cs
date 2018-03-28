@@ -40,7 +40,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="methods">Samples to analyze</param>
         /// <param name="start">Starting time.</param>
         /// <param name="duration">Duration.</param>
-        protected void FindTimeExtremas(List<classLCMethod> methods, out DateTime start, out TimeSpan duration)
+        protected void FindTimeExtremas(List<LCMethod> methods, out DateTime start, out TimeSpan duration)
         {
             start = DateTime.MaxValue;
             var end = DateTime.MinValue;
@@ -145,7 +145,7 @@ namespace LcmsNet.Method.Drawing
         /// <summary>
         /// Draws when the instrument is acquiring data.
         /// </summary>
-        public virtual void RenderAcquisitionTimes(DrawingContext g, Rect bounds, DateTime start, TimeSpan duration, List<classLCEvent> events)
+        public virtual void RenderAcquisitionTimes(DrawingContext g, Rect bounds, DateTime start, TimeSpan duration, List<LCEvent> events)
         {
             var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
             var startPoint = PixelPadding;
@@ -252,7 +252,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="start"></param>
         /// <param name="duration"></param>
         /// <param name="methods"></param>
-        public virtual void RenderOptimizationsOnTimeline(DrawingContext graphics, Rect bounds, DateTime start, TimeSpan duration, List<classLCMethod> methods)
+        public virtual void RenderOptimizationsOnTimeline(DrawingContext graphics, Rect bounds, DateTime start, TimeSpan duration, List<LCMethod> methods)
         {
             if (methods == null || methods.Count == 0)
                 return;
@@ -295,7 +295,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="bounds"></param>
         /// <param name="lcEvent"></param>
         /// <param name="backColor"></param>
-        public virtual void RenderLCEvent(DrawingContext graphics, Rect bounds, classLCEvent lcEvent, Color backColor)
+        public virtual void RenderLCEvent(DrawingContext graphics, Rect bounds, LCEvent lcEvent, Color backColor)
         {
             // Make sure that we don't have some garbage event that has a zero time width.
             if (bounds.Width <= 0)
@@ -352,7 +352,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="lcEvent"></param>
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
-        public virtual void RenderLCEventError(DrawingContext graphics, Rect allBounds, classLCEvent lcEvent, DateTime startTime, TimeSpan duration)
+        public virtual void RenderLCEventError(DrawingContext graphics, Rect allBounds, LCEvent lcEvent, DateTime startTime, TimeSpan duration)
         {
             // Pixels per time (PPT)
             var ppt = (allBounds.Width - allBounds.X) / Convert.ToSingle(duration.TotalSeconds);
@@ -395,7 +395,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
-        public virtual void RenderLCEvent(DrawingContext graphics, Rect allBounds, List<classLCEvent> events, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap)
+        public virtual void RenderLCEvent(DrawingContext graphics, Rect allBounds, List<LCEvent> events, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap)
         {
             if (events == null || events.Count == 0)
             {
@@ -459,7 +459,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, classLCMethod method, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, LCMethod method, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
 
@@ -534,7 +534,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, List<classLCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             if (methods != null && methods.Count > 0)
             {
@@ -583,11 +583,11 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap">Device to color mapping.</param>
         /// <param name="progress"></param>
-        public virtual void RenderSamples(DrawingContext graphics, Rect bounds, List<classSampleData> samples, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderSamples(DrawingContext graphics, Rect bounds, List<SampleData> samples, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Gather the sample methods into a list, then call the
             // drawing method.
-            var methods = new List<classLCMethod>();
+            var methods = new List<LCMethod>();
             foreach (var sample in samples)
             {
                 if (sample != null)

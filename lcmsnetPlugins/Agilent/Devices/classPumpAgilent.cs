@@ -30,7 +30,7 @@ namespace Agilent.Devices.Pumps
     /// Interface to Agilent Pumps for running the solution of a gradient.
     /// </summary>
     [Serializable]
-    [classDeviceControl(typeof(PumpAgilentViewModel),
+    [DeviceControl(typeof(PumpAgilentViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
     public class classPumpAgilent : IDevice, IPump, IFluidicsPump
@@ -101,7 +101,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Status of the device.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
         private const string CONST_DEFAULTPORT = "COM1";
         private const int CONST_DEFAULTTIMEOUT = 6000; //milliseconds
         private const int CONST_WRITETIMEOUT = 10000; //milliseconds
@@ -155,7 +155,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when the Agilent Pump finds out what method names are available.
         /// </summary>
@@ -167,7 +167,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         /// <summary>
         /// List of times monitoring data was received.
         /// </summary>
@@ -205,7 +205,7 @@ namespace Agilent.Devices.Pumps
                 var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
                 path = Path.Combine(Path.GetDirectoryName(path), "..\\pumpmethods");
                 path = path.Substring(path.IndexOf(":", StringComparison.Ordinal) + 2); // gets rid of the file:/ tag.
-                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
+                //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
                 mwatcher_methods = new FileSystemWatcher(path, "*.txt");
                 mwatcher_methods.Created += mwatcher_methods_Created;
                 mwatcher_methods.Changed += mwatcher_methods_Changed;
@@ -217,7 +217,7 @@ namespace Agilent.Devices.Pumps
             m_percentB = new List<double>();
             m_pressures = new List<double>();
             m_times = new List<DateTime>();
-            m_status = enumDeviceStatus.NotInitialized;
+            m_status = DeviceStatus.NotInitialized;
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed = CONST_MONITORING_SECONDS_ELAPSED;
@@ -246,7 +246,7 @@ namespace Agilent.Devices.Pumps
                 try
                 {
                     AddMethod(Path.GetFileNameWithoutExtension(e.FullPath), File.ReadAllText(e.FullPath));
-                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " changed.");
+                    ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " changed.");
                     methodLoaded = true;
                 }
                 catch (IOException)
@@ -259,19 +259,19 @@ namespace Agilent.Devices.Pumps
         void mwatcher_methods_Created(object sender, FileSystemEventArgs e)
         {
             //AddMethod(Path.GetFileNameWithoutExtension(e.FullPath), File.ReadAllText(e.FullPath));
-            //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " created.");
+            //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " created.");
         }
 
         #endregion
 
         #region Properties
-        [classPersistence("TotalMonitoringMinutes")]
+        [PersistenceData("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistence("TotalMonitoringSecondsElapsed")]
+        [PersistenceData("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -294,7 +294,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets the device's status
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
@@ -303,7 +303,7 @@ namespace Agilent.Devices.Pumps
             set
             {
                 if (value != m_status)
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 m_status = value;
             }
         }
@@ -352,7 +352,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
-        [classPersistence("PortName")]
+        [PersistenceData("PortName")]
         public string PortName
         {
             get;
@@ -361,7 +361,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets or sets the error type of the last error reported.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -369,7 +369,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Gets the system device type.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -390,7 +390,7 @@ namespace Agilent.Devices.Pumps
         /// <param name="flow"></param>
         /// <param name="numberOfMinutes"></param>
         /// <returns></returns>
-        [classLCMethod("Purge Channel", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Purge Channel", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool PurgePump(double timeout, enumPurgePumpChannel channel, double flow, double numberOfMinutes)
         {
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
@@ -429,7 +429,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        [classLCMethod("Abort Purge", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Abort Purge", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool AbortPurges(double timeout)
         {
             var reply = "";
@@ -685,9 +685,9 @@ namespace Agilent.Devices.Pumps
                     type = CONST_DEFAULT_ERROR;
                 }
                 Error(this,
-                      new classDeviceErrorEventArgs(message,
+                      new DeviceErrorEventArgs(message,
                                                     ex,
-                                                    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                                    DeviceErrorStatus.ErrorAffectsAllColumns,
                                                     this,
                                                     type));
             }
@@ -696,7 +696,7 @@ namespace Agilent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(Status, type, this, message);
+                var args = new DeviceStatusEventArgs(Status, type, this, message);
                 StatusUpdate(this, args);
             }
         }
@@ -713,33 +713,33 @@ namespace Agilent.Devices.Pumps
 
             if (data.Contains("EE 2014"))
             {
-                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE,
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE,
     null,
-    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    DeviceErrorStatus.ErrorAffectsAllColumns,
     this,
     CONST_ERROR_ABOVE_PRESSURE));
             }
             else if (data.Contains("EE 2015"))
             {
-                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE,
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE,
     null,
-    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    DeviceErrorStatus.ErrorAffectsAllColumns,
     this,
     CONST_ERROR_BELOW_PRESSURE));
             }
             else if (data.Contains("EE 2064"))
             {
-                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS,
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS,
     null,
-    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    DeviceErrorStatus.ErrorAffectsAllColumns,
     this,
     CONST_ERROR_FLOW_EXCEEDS));
             }
             else if (data.Contains("EE 2066"))
             {
-                Error?.Invoke(this, new classDeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE,
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE,
     null,
-    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+    DeviceErrorStatus.ErrorAffectsAllColumns,
     this,
     CONST_ERROR_FLOW_UNSTABLE));
             }
@@ -756,7 +756,7 @@ namespace Agilent.Devices.Pumps
                     HandleError("Pump " + Name + " status: " + data, CONST_PUMP_ERROR);
                 }
             }
-            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(2, Name + " Agilent Pump Message " + data);
+            //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(2, Name + " Agilent Pump Message " + data);
         }
         /// <summary>
         /// Handles m5onitoring data from the pumps.
@@ -931,7 +931,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the pump mode.
         /// </summary>
         /// <param name="newMode">The new mode</param>
-        [classLCMethod("Set Mode", 1, "", -1, false)]
+        [LCMethodEvent("Set Mode", 1, "", -1, false)]
         public void SetMode(enumPumpAgilentModes newMode)
         {
             if (m_emulation)
@@ -947,7 +947,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="newFlowRate">The new flow rate.</param>
         ///
-        [classLCMethod("Set Flow Rate", 1, "", -1, false)]
+        [LCMethodEvent("Set Flow Rate", 1, "", -1, false)]
         public void SetFlowRate(double newFlowRate)
         {
             if (m_emulation)
@@ -963,7 +963,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the mixer volume
         /// </summary>
         /// <param name="newVolumeuL">The new mixer volume, in uL</param>
-        [classLCMethod("Set Mixer Volume", 1, "", -1, false)]
+        [LCMethodEvent("Set Mixer Volume", 1, "", -1, false)]
         public void SetMixerVolume(double newVolumeuL)
         {
             if (m_emulation)
@@ -980,7 +980,7 @@ namespace Agilent.Devices.Pumps
         /// Sets the percent B concentration.
         /// </summary>
         /// <param name="percent">Percent B concentration to have.</param>
-        [classLCMethod("Set Percent B", 1, "", -1, false)]
+        [LCMethodEvent("Set Percent B", 1, "", -1, false)]
         public void SetPercentB(double percent)
         {
             var reply = "";
@@ -992,7 +992,7 @@ namespace Agilent.Devices.Pumps
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="method">Method to run stored on the pumps.</param>
-        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 1, true)]
         public void StartMethod(double timeout, string method)
         {
             var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -1004,7 +1004,7 @@ namespace Agilent.Devices.Pumps
             //
             var span = TimeKeeper.Instance.Now.Subtract(start);
 
-            var timer = new classTimerDevice();
+            var timer = new TimerDevice();
             timer.WaitSeconds(span.TotalSeconds);
         }
         /// <summary>
@@ -1047,7 +1047,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [classLCMethod("Stop Method", 1, "", -1, false)]
+        [LCMethodEvent("Stop Method", 1, "", -1, false)]
         public void StopMethod()
         {
             var reply = "";
@@ -1056,7 +1056,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Turns the pumps on.
         /// </summary>
-        [classLCMethod("Turn Pump On", 1, "", -1, false)]
+        [LCMethodEvent("Turn Pump On", 1, "", -1, false)]
         public void PumpOn()
         {
             var reply = "";
@@ -1065,7 +1065,7 @@ namespace Agilent.Devices.Pumps
         /// <summary>
         /// Turns the pumps off
         /// </summary>
-        [classLCMethod("Turn Pump Off", 1, "", -1, false)]
+        [LCMethodEvent("Turn Pump Off", 1, "", -1, false)]
         public void PumpOff()
         {
             var reply = "";

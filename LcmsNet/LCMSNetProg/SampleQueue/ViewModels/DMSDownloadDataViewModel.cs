@@ -6,16 +6,16 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class DMSDownloadDataViewModel : ReactiveObject
     {
-        private readonly ReactiveList<classSampleData> data = new ReactiveList<classSampleData>();
-        private readonly ReactiveList<classSampleData> selectedData = new ReactiveList<classSampleData>();
-        private classSampleData selectedItem;
+        private readonly ReactiveList<SampleData> data = new ReactiveList<SampleData>();
+        private readonly ReactiveList<SampleData> selectedData = new ReactiveList<SampleData>();
+        private SampleData selectedItem;
         private object dataLock = new object();
         private object selectedDataLock = new object();
 
-        public ReactiveList<classSampleData> Data => data;
-        public ReactiveList<classSampleData> SelectedData => selectedData;
+        public ReactiveList<SampleData> Data => data;
+        public ReactiveList<SampleData> SelectedData => selectedData;
 
-        public classSampleData SelectedItem
+        public SampleData SelectedItem
         {
             get { return selectedItem; }
             set { this.RaiseAndSetIfChanged(ref selectedItem, value); }

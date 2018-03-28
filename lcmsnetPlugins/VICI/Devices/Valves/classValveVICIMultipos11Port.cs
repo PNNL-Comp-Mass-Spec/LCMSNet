@@ -15,7 +15,7 @@ namespace LcmsNet.Devices.Valves
 {
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControl(typeof(ValveVICIMultiPosViewModel),
+    [DeviceControl(typeof(ValveVICIMultiPosViewModel),
                                  "Eleven-Port",
                                  "Valves Multi-Position")
     ]
@@ -34,7 +34,7 @@ namespace LcmsNet.Devices.Valves
         }
 
 
-        [classLCMethod("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
+        [LCMethodEvent("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
         public void SetPosition(TenPositionState position)
         {
             var err = base.SetPosition((int)position);

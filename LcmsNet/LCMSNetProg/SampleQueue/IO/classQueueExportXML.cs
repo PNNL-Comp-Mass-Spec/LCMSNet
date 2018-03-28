@@ -40,7 +40,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="InpSamples">List to be exported</param>
         /// <param name="ExportFileNamePath">Full name and path of file to export</param>
-        public void WriteSamples(string ExportFileNamePath, List<classSampleData> InpSamples)
+        public void WriteSamples(string ExportFileNamePath, List<SampleData> InpSamples)
         {
             // Verify there are samples to export
             if (!InpSamples.Any())
@@ -88,15 +88,15 @@ namespace LcmsNet.SampleQueue.IO
             SaveQueue(m_ExportDoc, ExportFileNamePath);
 
             // Notify user
-            classApplicationLogger.LogMessage(0, "Export complete");
+            ApplicationLogger.LogMessage(0, "Export complete");
         }
 
         /// <summary>
-        /// Converts a single classSampleData object to XML
+        /// Converts a single SampleData object to XML
         /// </summary>
-        /// <param name="InpSample">classSampleData object to convert</param>
+        /// <param name="InpSample">SampleData object to convert</param>
         /// <param name="ParentElement">XML element that will be the parent of this element</param>
-        void AddOneSample(classSampleData InpSample, XmlElement ParentElement)
+        void AddOneSample(SampleData InpSample, XmlElement ParentElement)
         {
             // Description element
             var descElement = AddElementWithTypeAttribute("Description", ParentElement, "String",
@@ -153,7 +153,7 @@ namespace LcmsNet.SampleQueue.IO
             catch (Exception ex)
             {
                 var ErrMsg = "Exception saving file " + FileNamePath + ": " + ex.Message;
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 throw new classDataExportException(ErrMsg, ex);
             }
         }

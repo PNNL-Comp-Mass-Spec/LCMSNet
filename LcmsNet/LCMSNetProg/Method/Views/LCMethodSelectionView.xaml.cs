@@ -58,10 +58,10 @@ namespace LcmsNet.Method.Views
                 }
                 if (selector.SelectedItems.Count == 1)
                 {
-                    dc.SelectedListLCMethods.Add((classLCMethod)selector.SelectedItems[0]);
+                    dc.SelectedListLCMethods.Add((LCMethod)selector.SelectedItems[0]);
                     return;
                 }
-                dc.SelectedListLCMethods.AddRange(selector.SelectedItems.Cast<classLCMethod>());
+                dc.SelectedListLCMethods.AddRange(selector.SelectedItems.Cast<LCMethod>());
             }
         }
 

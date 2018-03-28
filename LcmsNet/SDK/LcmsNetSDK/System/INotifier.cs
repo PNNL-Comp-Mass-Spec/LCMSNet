@@ -26,11 +26,11 @@ namespace LcmsNetSDK.System
         /// <summary>
         /// Fired when the status of a device has changed.
         /// </summary>
-        event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs on a device.
         /// </summary>
-        event EventHandler<classDeviceErrorEventArgs> Error;
+        event EventHandler<DeviceErrorEventArgs> Error;
     }
 }

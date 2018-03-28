@@ -138,7 +138,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // TODO: // This is the text that is appended to the application title bar
-            TitleBarTextAddition = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
+            TitleBarTextAddition = "Sample Queue - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
         }
 
         public void PreviewAvailable(object sender, Method.ViewModels.SampleProgressPreviewArgs e)
@@ -253,7 +253,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Supplies the list of PAL trays to the sample queue and associated objects.
         /// </summary>
-        public void AutoSamplerTrayList(object sender, classAutoSampleEventArgs args)
+        public void AutoSamplerTrayList(object sender, AutoSampleEventArgs args)
         {
             var trays = args.TrayList;
 
@@ -263,7 +263,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Supplies a list of instrument methods to the sample queue and associated objects.
         /// </summary>
-        public void InstrumentMethodList(object sender, classNetworkStartEventArgs args)
+        public void InstrumentMethodList(object sender, NetworkStartEventArgs args)
         {
             var methods = args.MethodList;
 
@@ -281,17 +281,17 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             if (writer == null)
             {
-                classApplicationLogger.LogError(0, "The file type for exporting was not recognized.");
+                ApplicationLogger.LogError(0, "The file type for exporting was not recognized.");
                 return;
             }
             try
             {
                 sampleQueue.SaveQueue(name, writer, true);
-                classApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
+                ApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Export Failed!  " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Export Failed!  " + ex.Message, ex);
             }
         }
 
@@ -346,11 +346,11 @@ namespace LcmsNet.SampleQueue.ViewModels
                 try
                 {
                     sampleQueue.LoadQueue(fileDialog.FileName, reader);
-                    classApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
+                    ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
+                    ApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
                 }
             }
         }
@@ -378,14 +378,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             if (sampleQueue.IsRunning)
             {
-                classApplicationLogger.LogMessage(0, "Samples are already running.");
+                ApplicationLogger.LogMessage(0, "Samples are already running.");
                 return;
             }
             var samples = sampleQueue.GetRunningQueue();
 
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             samples.RemoveAll(
-                delegate (classSampleData data) { return data.RunningStatus != enumSampleRunningStatus.WaitingToRun; });
+                delegate (SampleData data) { return data.RunningStatus != SampleRunningStatus.WaitingToRun; });
 
             if (samples.Count < 1)
                 return;
@@ -395,9 +395,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Seeing if the sample's method has all of the devices present in the method.
             // Later we will add to make sure none of the devices have an error that has
             // been thrown on them.
-            var errors = new Dictionary<classSampleData, List<classSampleValidationError>>();
+            var errors = new Dictionary<SampleData, List<SampleValidationError>>();
 
-            foreach (var reference in classSampleValidatorManager.Instance.Validators)
+            foreach (var reference in SampleValidatorManager.Instance.Validators)
             {
                 var validator = reference.Value;
                 foreach (var sample in samples)
@@ -438,8 +438,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Then for trigger file checks, we want the sample data for DMS to be complete.
             // So here we validate all of the samples and show the user all samples before running.
             // This way they can validate if they need to all of this information.
-            var validateSamples = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
-                                  !(string.IsNullOrWhiteSpace(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL)));
+            var validateSamples = LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
+                                  !(string.IsNullOrWhiteSpace(LCMSSettings.GetParameter(LCMSSettings.PARAM_DMSTOOL)));
             if (validateSamples)
             {
                 var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
@@ -478,13 +478,13 @@ namespace LcmsNet.SampleQueue.ViewModels
             try
             {
                 sampleQueue.CacheQueue(false);
-                classApplicationLogger.LogMessage(0,
-                    "Queue saved \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "\".");
+                ApplicationLogger.LogMessage(0,
+                    "Queue saved \"" + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) + "\".");
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0,
-                    "Could not save queue: " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "  " + ex.Message, ex);
+                ApplicationLogger.LogError(0,
+                    "Could not save queue: " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) + "  " + ex.Message, ex);
             }
         }
 
@@ -507,8 +507,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 sampleQueue.CacheQueue(lastSavedFileName);
                 // TODO: // This is the text that is appended to the application title bar
                 TitleBarTextAddition = "Sample Queue - " + saveDialog.FileName;
-                classApplicationLogger.LogMessage(0,
-                    "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
+                ApplicationLogger.LogMessage(0,
+                    "Queue saved to \"" + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) +
                     "\" and is now the default queue.");
             }
         }

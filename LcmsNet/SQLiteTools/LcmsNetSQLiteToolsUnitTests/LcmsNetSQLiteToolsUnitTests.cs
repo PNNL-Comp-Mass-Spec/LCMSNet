@@ -90,8 +90,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestD()
         {
-            var usersExampleData = new List<classUserInfo>();
-            var example = new classUserInfo
+            var usersExampleData = new List<UserInfo>();
+            var example = new UserInfo
             {
                 PayrollNum = "1",
                 UserName = "Test User"
@@ -137,14 +137,14 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestH()
         {
-            var samples = new List<classSampleData>
+            var samples = new List<SampleData>
             {
-                new classSampleData()
+                new SampleData()
             };
             samples[0].UniqueID = 1;
             samples[0].DmsData.DatasetName = "Test";
 
-            samples.Add(new classSampleData());
+            samples.Add(new SampleData());
             samples[1].UniqueID = 2;
 
             classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.WaitingQueue);
@@ -166,9 +166,9 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestJ()
         {
-            var samples = new List<classSampleData>
+            var samples = new List<SampleData>
             {
-                new classSampleData()
+                new SampleData()
             };
             samples[0].UniqueID = 2;
             classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.RunningQueue);
@@ -191,8 +191,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestL()
         {
-            var experiments = new List<classExperimentData>();
-            var experiment = new classExperimentData
+            var experiments = new List<ExperimentData>();
+            var experiment = new ExperimentData
             {
                 ID = 1,
                 Experiment = "Test",
@@ -222,8 +222,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestN()
         {
-            var instInfo = new List<classInstrumentInfo>();
-            var inst = new classInstrumentInfo
+            var instInfo = new List<InstrumentInfo>();
+            var inst = new InstrumentInfo
             {
                 CommonName = "Test instrument"
             };
@@ -247,13 +247,13 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestP()
         {
-            var users = new List<classProposalUser>();
-            var user = new classProposalUser
+            var users = new List<ProposalUser>();
+            var user = new ProposalUser
             {
                 UserID = 1
             };
             users.Add(user);
-            classSQLiteTools.SaveProposalUsers(users, new List<classUserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>());
+            classSQLiteTools.SaveProposalUsers(users, new List<UserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>());
         }
 
         /// <summary>
@@ -262,8 +262,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestQ()
         {
-            List<classProposalUser> users;
-            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> dict;
+            List<ProposalUser> users;
+            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> dict;
             classSQLiteTools.GetProposalUsers(out users, out dict);
             Assert.AreEqual(1, users[0].UserID);
         }
@@ -274,8 +274,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestR()
         {
-            var cols = new List<classLCColumn>();
-            var col = new classLCColumn
+            var cols = new List<LCColumnData>();
+            var col = new LCColumnData
             {
                 LCColumn = "ColTest1"
             };

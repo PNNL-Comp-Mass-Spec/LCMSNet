@@ -155,7 +155,7 @@ namespace LcmsNet.Devices.ContactClosureRead
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not manually read a voltage or state in the contact closure read.", ex);
+                ApplicationLogger.LogError(0, "Could not manually read a voltage or state in the contact closure read.", ex);
             }
         }
 

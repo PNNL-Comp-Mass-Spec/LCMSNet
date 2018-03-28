@@ -17,10 +17,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         private bool applyGroup2;
         private bool applyGroup3;
         private bool applyGroup4;
-        private classLCMethod lcMethodGroup1;
-        private classLCMethod lcMethodGroup2;
-        private classLCMethod lcMethodGroup3;
-        private classLCMethod lcMethodGroup4;
+        private LCMethod lcMethodGroup1;
+        private LCMethod lcMethodGroup2;
+        private LCMethod lcMethodGroup3;
+        private LCMethod lcMethodGroup4;
         private string instrumentMethodGroup1;
         private string instrumentMethodGroup2;
         private string instrumentMethodGroup3;
@@ -66,25 +66,25 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref applyGroup4, value); }
         }
 
-        public classLCMethod LCMethodGroup1
+        public LCMethod LCMethodGroup1
         {
             get { return lcMethodGroup1; }
             set { this.RaiseAndSetIfChanged(ref lcMethodGroup1, value); }
         }
 
-        public classLCMethod LCMethodGroup2
+        public LCMethod LCMethodGroup2
         {
             get { return lcMethodGroup2; }
             set { this.RaiseAndSetIfChanged(ref lcMethodGroup2, value); }
         }
 
-        public classLCMethod LCMethodGroup3
+        public LCMethod LCMethodGroup3
         {
             get { return lcMethodGroup3; }
             set { this.RaiseAndSetIfChanged(ref lcMethodGroup3, value); }
         }
 
-        public classLCMethod LCMethodGroup4
+        public LCMethod LCMethodGroup4
         {
             get { return lcMethodGroup4; }
             set { this.RaiseAndSetIfChanged(ref lcMethodGroup4, value); }
@@ -187,7 +187,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
         public IReadOnlyReactiveList<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
         public IReadOnlyReactiveList<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
         public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
@@ -195,7 +195,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public double VolumeMinimum
         {
-            get { return classSampleData.CONST_MIN_SAMPLE_VOLUME; }
+            get { return SampleData.CONST_MIN_SAMPLE_VOLUME; }
         }
 
         #endregion
@@ -225,7 +225,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Properties
 
-        public List<classSampleData> Samples { get; set; }
+        public List<SampleData> Samples { get; set; }
 
         #endregion
 
@@ -364,7 +364,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void LCMethodFillDown()
         {
             EnsureItemsAreSelected();
-            var methods = new List<classLCMethod>();
+            var methods = new List<LCMethod>();
             if (ApplyGroup1)
             {
                 methods.Add(LCMethodGroup1);
@@ -393,7 +393,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     if (tempMethod.Column >= 0)
                     {
-                        samples.ColumnData = classCartConfiguration.Columns[tempMethod.Column];
+                        samples.ColumnData = CartConfiguration.Columns[tempMethod.Column];
                     }
                 }
                 samples.LCMethod = tempMethod;
@@ -438,7 +438,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var i = 0;
             foreach (var sample in Samples)
             {
-                sample.InstrumentData = new classInstrumentInfo();
+                sample.InstrumentData = new InstrumentInfo();
                 sample.InstrumentData.MethodName = methods[i];
                 i++;
                 // mod?

@@ -12,7 +12,7 @@ using LcmsNetSDK.Devices;
 namespace LcmsNet.Devices.Valves
 {
     [Serializable]
-    [classDeviceControl(typeof(ValveVICI2PosViewModel),
+    [DeviceControl(typeof(ValveVICI2PosViewModel),
                                  "Ten-Port",
                                  "Valves Two-Position")
     ]

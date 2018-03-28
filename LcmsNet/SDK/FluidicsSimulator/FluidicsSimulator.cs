@@ -24,7 +24,7 @@ namespace FluidicsSimulator
         /// </summary>
         /// <param name="evnt"></param>
         /// <param name="elapsed"></param>
-        public SimulatedEventArgs(classLCEvent evnt, TimeSpan elapsed)
+        public SimulatedEventArgs(LCEvent evnt, TimeSpan elapsed)
         {
             Event = evnt;
             SimulatedTimeElapsed = elapsed;
@@ -33,7 +33,7 @@ namespace FluidicsSimulator
         /// <summary>
         /// LC Event
         /// </summary>
-        public classLCEvent Event
+        public LCEvent Event
         {
             get;
             set;
@@ -83,7 +83,7 @@ namespace FluidicsSimulator
         /// <summary>
         /// Stack to hold the completed events, lets us step backwards through simulation.
         /// </summary>
-        private readonly Stack<classLCEvent> m_completedEvents;
+        private readonly Stack<LCEvent> m_completedEvents;
 
         /// <summary>
         /// Sorted Set allows us to enumerate over simulation event lists as if they were in a priority queue.
@@ -96,7 +96,7 @@ namespace FluidicsSimulator
         /// </summary>
         private SimEventList m_runningEvents;
 
-        private classLCEvent m_breakEvent;
+        private LCEvent m_breakEvent;
         private DateTime m_FirstStartTime;
         private DateTime m_currentStartTime;
         private TimeSpan m_elapsedTime;
@@ -116,7 +116,7 @@ namespace FluidicsSimulator
         // </summary>
         private FluidicsSimulator()
         {
-            m_completedEvents = new Stack<classLCEvent>();
+            m_completedEvents = new Stack<LCEvent>();
             m_simulationQueue = new SortedSet<SimEventList>();
             m_runningEvents = null;
             SimulationSpeed = DEFAULT_TIMER_INTERVAL;
@@ -186,7 +186,7 @@ namespace FluidicsSimulator
         /// Take an optimized list of LCMethods and prepare to simulate it
         /// </summary>
         /// <param name="methods"></param>
-        public void PrepSimulation(List<classLCMethod> methods)
+        public void PrepSimulation(List<LCMethod> methods)
         {
             ClearSimulator();
             try
@@ -211,7 +211,7 @@ namespace FluidicsSimulator
             }
         }
 
-        public static SortedSet<SimEventList> BuildEventList(IEnumerable<classLCMethod> methods, DateTime startTime)
+        public static SortedSet<SimEventList> BuildEventList(IEnumerable<LCMethod> methods, DateTime startTime)
         {
             var sequence = new SortedSet<SimEventList>();
 
@@ -293,7 +293,7 @@ namespace FluidicsSimulator
             }
         }
 
-        private void CheckForBreakpointExecuteEventIfNot(classLCEvent currentEvent)
+        private void CheckForBreakpointExecuteEventIfNot(LCEvent currentEvent)
         {
             //if the prepared event is a breakpoint, temporarily halt operations, if however, the current event is a breakpoint AND we've already stopped
             // at this breakpoint, let it pass through and execute it.
@@ -316,9 +316,9 @@ namespace FluidicsSimulator
         /// prepare an event to be executed
         /// </summary>
         /// <returns></returns>
-        private classLCEvent PrepareEventForExecution()
+        private LCEvent PrepareEventForExecution()
         {
-            classLCEvent currentEvent;
+            LCEvent currentEvent;
 
             //if we are tat a breakpoint, we want to run the event that we halted at
             if (AtBreakPoint)
@@ -380,13 +380,13 @@ namespace FluidicsSimulator
         /// Execute the current LCEvent
         /// </summary>
         /// <param name="currentEvent">the classLCEvent to execute</param>
-        private void ExecuteEvent(classLCEvent currentEvent)
+        private void ExecuteEvent(LCEvent currentEvent)
         {
             // if device is a builtin or virtual, just mark it as complete, don't actually try to invoke it
             // this keeps odd events from happening, such as timers from actually causing the simulator
             // to actually wait <xx> seconds before it continues to the next step.
 
-            if (currentEvent.Device.DeviceType != enumDeviceType.BuiltIn && currentEvent.Device.DeviceType != enumDeviceType.Virtual)
+            if (currentEvent.Device.DeviceType != DeviceType.BuiltIn && currentEvent.Device.DeviceType != DeviceType.Virtual)
             {
                 currentEvent.Method.Invoke(currentEvent.Device, currentEvent.Parameters);
                 //CheckModel(m_currentEvent);
@@ -498,7 +498,7 @@ namespace FluidicsSimulator
         /// <summary>
         /// Check the fluidics model for any status changes
         /// </summary>
-        private void CheckModel(classLCEvent lcEvent)
+        private void CheckModel(LCEvent lcEvent)
         {
             foreach (var check in m_modelCheckers)
             {

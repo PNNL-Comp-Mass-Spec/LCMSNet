@@ -130,17 +130,17 @@ namespace LcmsNet.Devices.ViewModels
 
             try
             {
-                classDeviceManager.Manager.InitializeDevice(SelectedDevice.Device);
+                DeviceManager.Manager.InitializeDevice(SelectedDevice.Device);
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, message, ex);
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, message, ex);
+                ApplicationLogger.LogError(0, ex.Message);
             }
             //bool wasOk = SelectedDevice.Initialize(ref message);
             //if (!wasOk)
             //{
-            //    classApplicationLogger.LogError(0, message);
+            //    ApplicationLogger.LogError(0, message);
             //}
         }
 
@@ -158,7 +158,7 @@ namespace LcmsNet.Devices.ViewModels
             if (SelectedDevice.Name == newName)
                 return;
 
-            classDeviceManager.Manager.RenameDevice(device, newName);
+            DeviceManager.Manager.RenameDevice(device, newName);
 
             // Update the user interface with the new name
             SelectedDevice.NameEdit = device.Name;
@@ -167,7 +167,7 @@ namespace LcmsNet.Devices.ViewModels
         private void ClearSelectedDeviceError()
         {
             if (SelectedDevice != null)
-                SelectedDevice.Device.Status = enumDeviceStatus.Initialized;
+                SelectedDevice.Device.Status = DeviceStatus.Initialized;
         }
 
         #region Public Methods For Adding and Removing Devices for the UI

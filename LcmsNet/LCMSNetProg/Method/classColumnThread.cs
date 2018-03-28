@@ -34,7 +34,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Object that contains method to run with parameters.
         /// </summary>
-        private classSampleData m_sampleData;
+        private SampleData m_sampleData;
 
         /// <summary>
         /// synchronization event used for classDeviceTimer
@@ -56,7 +56,7 @@ namespace LcmsNet.Method
 
         public string Name { get; set; }
 
-        public classSampleData Sample => m_sampleData;
+        public SampleData Sample => m_sampleData;
 
         public bool IsErrored { get; private set; }
 
@@ -112,7 +112,7 @@ namespace LcmsNet.Method
         /// Executes a method for a given column.
         /// </summary>
         /// <param name="lcEvent">Event to execute</param>
-        private bool ExecuteEvent(classLCEvent lcEvent)
+        private bool ExecuteEvent(LCEvent lcEvent)
         {
             lcEvent.Device.AbortEvent = m_abortEvent;
             try
@@ -125,7 +125,7 @@ namespace LcmsNet.Method
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "EVENT ERROR: " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "EVENT ERROR: " + ex.Message, ex);
                 throw;
             }
         }
@@ -187,7 +187,7 @@ namespace LcmsNet.Method
                     method.CurrentEventNumber = eventNumber;
 
                     // Used for statistics
-                    var actualEvent = methodEvents[eventNumber].Clone() as classLCEvent;
+                    var actualEvent = methodEvents[eventNumber].Clone() as LCEvent;
                     actualEvent.Start = start;
                     actualEvent.Duration = new TimeSpan(0, 0, 0);
                     method.ActualEvents.Add(actualEvent);
@@ -202,7 +202,7 @@ namespace LcmsNet.Method
                     {
                         var tempStatus = lcEvent.Device.Status;
 
-                        lcEvent.Device.Status = enumDeviceStatus.InUseByMethod;
+                        lcEvent.Device.Status = DeviceStatus.InUseByMethod;
                         if (lcEvent.MethodAttribute.RequiresSampleInput)
                             lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
 
@@ -233,7 +233,7 @@ namespace LcmsNet.Method
                                 lcEvent.Name,
                                 lcEvent.Device.Name),
                             CONST_VERBOSE_EVENTS);
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                                                         string.Format(
                                                             "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
                                                             finished,
@@ -252,7 +252,7 @@ namespace LcmsNet.Method
                         // Here we'll wait enough time so that
                         // we don't run the next event before its scheduled start.  This is flow control.
                         //
-                        var timer = new classTimerDevice();
+                        var timer = new TimerDevice();
                         var span = next.Subtract(TimeKeeper.Instance.Now);
                         var totalMilliseconds = 0;
                         try
@@ -261,7 +261,7 @@ namespace LcmsNet.Method
                         }
                         catch (OverflowException ex2)
                         {
-                            classApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
+                            ApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
                         }
                         if (totalMilliseconds > 2)
                         {
@@ -286,7 +286,7 @@ namespace LcmsNet.Method
                         // gracefully notify people in charge, and exit.
                         //
 
-                        lcEvent.Device.Status = enumDeviceStatus.Error;
+                        lcEvent.Device.Status = DeviceStatus.Error;
                         m_sampleData = null;
                         if (ex == null)
                         {
@@ -325,7 +325,7 @@ namespace LcmsNet.Method
 
         private void WriteTimeoutLog(object message)
         {
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message as string);
+            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message as string);
         }
 
         #endregion

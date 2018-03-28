@@ -31,13 +31,13 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="path"></param>
         /// <param name="data"></param>
-        public void WriteSamples(string path, List<classSampleData> data)
+        public void WriteSamples(string path, List<SampleData> data)
         {
             // Make a copy of the data list, so that the rest of the app doesn't get screwed up by the sort
-            var sortedData = new List<classSampleData>();
+            var sortedData = new List<SampleData>();
             foreach (var currSample in data)
             {
-                var tmpSample = (classSampleData) currSample.Clone();
+                var tmpSample = (SampleData) currSample.Clone();
                 sortedData.Add(tmpSample);
             }
 
@@ -63,7 +63,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <param name="sample1">First sample to be compared</param>
         /// <param name="sample2">2nd sample to be compared</param>
         /// <returns>0 if equal, 1 if 1st sample's column ID > 2nd, otherwise -1</returns>
-        private static int CompareSamplesByRunOrder(classSampleData sample1, classSampleData sample2)
+        private static int CompareSamplesByRunOrder(SampleData sample1, SampleData sample2)
         {
             if (sample1 == null)
             {
@@ -100,7 +100,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="samples">List of samples</param>
         /// <returns>String representing entire file contents</returns>
-        private string BuildOutputString(List<classSampleData> samples)
+        private string BuildOutputString(List<SampleData> samples)
         {
             var strBld = new StringBuilder();
 
@@ -135,12 +135,12 @@ namespace LcmsNet.SampleQueue.IO
             try
             {
                 File.WriteAllText(fileNamePath, outputStr);
-                classApplicationLogger.LogMessage(0, "Queue exported to CSV file " + fileNamePath);
+                ApplicationLogger.LogMessage(0, "Queue exported to CSV file " + fileNamePath);
             }
             catch (Exception ex)
             {
                 var errMsg = "Could not write samples to file " + fileNamePath;
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
                 throw new classDataExportException(errMsg, ex);
             }
         }

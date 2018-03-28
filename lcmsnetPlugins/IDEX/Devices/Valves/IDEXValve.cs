@@ -7,7 +7,7 @@ using LcmsNetSDK.Method;
 
 namespace ASUTGen.Devices.Valves
 {
-    /*[classDeviceControlAttribute(typeof(IDEXValveControlViewModel),
+    /*[DeviceControlAttribute(typeof(IDEXValveControlViewModel),
                                  typeof(IDEXValveGlyph),
                                  "IDEX Valve",
                                  "Valves")
@@ -15,8 +15,8 @@ namespace ASUTGen.Devices.Valves
     public class IDEXValve :  IDevice
     {
 #pragma warning disable CS0067
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
 #pragma warning restore CS0067
 
@@ -42,7 +42,7 @@ namespace ASUTGen.Devices.Valves
             get;
             set;
         }
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -55,7 +55,7 @@ namespace ASUTGen.Devices.Valves
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -63,7 +63,7 @@ namespace ASUTGen.Devices.Valves
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -93,7 +93,7 @@ namespace ASUTGen.Devices.Valves
         {
 
         }
-        public classMonitoringComponent GetHealthData()
+        public MonitoringComponent GetHealthData()
         {
             return null;
         }
@@ -111,13 +111,13 @@ namespace ASUTGen.Devices.Valves
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethod("Change Position", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Change Position", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool ChangePosition(double timeout, int position)
         {
 
             return true;
         }
-        [classLCMethod("Home Valve", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Home Valve", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool HomeValve(double timeout, int position)
         {
 

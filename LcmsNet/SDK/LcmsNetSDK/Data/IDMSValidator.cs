@@ -14,6 +14,6 @@ namespace LcmsNetSDK.Data
         ///  Determines if sample is valid for DMS
         /// </summary>
         /// <returns>true/false</returns>
-        bool IsSampleValid(classSampleData sample);
+        bool IsSampleValid(SampleData sample);
     }
 }

@@ -33,7 +33,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Maps the check box clicked to a specific column data.
         /// </summary>
-        private readonly Dictionary<string, classColumnData> checkBoxToColumnDataMap;
+        private readonly Dictionary<string, ColumnData> checkBoxToColumnDataMap;
 
         /// <summary>
         /// List of controls that manage events.
@@ -50,7 +50,7 @@ namespace LcmsNet.Method.ViewModels
             MethodFolderPath = CONST_METHOD_FOLDER_PATH;
 
             // Build the button to method dictionary.
-            checkBoxToColumnDataMap = new Dictionary<string, classColumnData>();
+            checkBoxToColumnDataMap = new Dictionary<string, ColumnData>();
             UpdateConfiguration();
             //TODO: In Code-behind?: MethodName.LostFocus += MethodName_LostFocus;
             classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
@@ -135,12 +135,12 @@ namespace LcmsNet.Method.ViewModels
             private set { this.RaiseAndSetIfChanged(ref canUpdate, value); }
         }
 
-        public List<classLCEvent> LCEvents
+        public List<LCEvent> LCEvents
         {
             get
             {
                 // Grab the selected method items from the user interfaces
-                var data = new List<classLCMethodData>();
+                var data = new List<LCMethodData>();
                 foreach (var lcEvent in eventsList)
                 {
                     data.Add(lcEvent.SelectedMethod);
@@ -148,7 +148,7 @@ namespace LcmsNet.Method.ViewModels
 
                 // Then return a list of events for this stage that are
                 // assigned with the correct timing data.
-                return classLCMethodOptimizer.ConstructEvents(data);
+                return LCMethodOptimizer.ConstructEvents(data);
             }
         }
 
@@ -163,7 +163,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public string MethodFolderPath { get; set; }
 
-        bool Manager_MethodUpdated(object sender, classLCMethod method)
+        bool Manager_MethodUpdated(object sender, LCMethod method)
         {
             //only stages that already have this method loaded should reload it.
             if (MethodName == method.Name && !triggeredUpdate)
@@ -177,7 +177,7 @@ namespace LcmsNet.Method.ViewModels
             return true;
         }
 
-        public bool Manager_MethodRemoved(object sender, classLCMethod method)
+        public bool Manager_MethodRemoved(object sender, LCMethod method)
         {
             if (method != null)
             {
@@ -190,7 +190,7 @@ namespace LcmsNet.Method.ViewModels
             return true;
         }
 
-        public bool Manager_MethodAdded(object sender, classLCMethod method)
+        public bool Manager_MethodAdded(object sender, LCMethod method)
         {
             if (method != null)
             {
@@ -218,9 +218,9 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private classLCMethod FindMethods(string name)
+        private LCMethod FindMethods(string name)
         {
-            classLCMethod method = null;
+            LCMethod method = null;
             if (classLCMethodManager.Manager.Methods.ContainsKey(name))
             {
                 method = classLCMethodManager.Manager.Methods[name];
@@ -232,7 +232,7 @@ namespace LcmsNet.Method.ViewModels
         /// Loads the method into the editor.
         /// </summary>
         /// <param name="method"></param>
-        private void LoadMethod(classLCMethod method)
+        private void LoadMethod(LCMethod method)
         {
             if (method != null)
             {
@@ -339,10 +339,10 @@ namespace LcmsNet.Method.ViewModels
             checkBoxToColumnDataMap.Clear();
             columnComboBoxOptions.Clear();
 
-            if (classCartConfiguration.Columns == null)
+            if (CartConfiguration.Columns == null)
                 return;
 
-            foreach (var column in classCartConfiguration.Columns)
+            foreach (var column in CartConfiguration.Columns)
             {
                 var id = (column.ID + 1).ToString();
                 checkBoxToColumnDataMap.Add(id, column);
@@ -374,12 +374,12 @@ namespace LcmsNet.Method.ViewModels
         /// Builds the LC Method.
         /// </summary>
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
-        public classLCMethod BuildMethod()
+        public LCMethod BuildMethod()
         {
             var method = classLCMethodBuilder.BuildMethod(LCEvents);
             if (method == null)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Cannot create the LC-method from an empty event list.  You need to add events to the method.");
                 return null;
             }
@@ -426,7 +426,7 @@ namespace LcmsNet.Method.ViewModels
             CanUpdate = false;
             CanSave = true;
 
-            classApplicationLogger.LogMessage(0, "LC-Methods updated internally.");
+            ApplicationLogger.LogMessage(0, "LC-Methods updated internally.");
         }
 
         /// <summary>
@@ -438,7 +438,7 @@ namespace LcmsNet.Method.ViewModels
             var columnSelected = IsColumnSelected();
             if (!columnSelected)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Please select a column before building the method.");
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Please select a column before building the method.");
                 return;
             }
             Build();
@@ -446,7 +446,7 @@ namespace LcmsNet.Method.ViewModels
             CanUpdate = true;
             CanBuild = false;
             CanSave = true;
-            classApplicationLogger.LogMessage(0, "Method built.");
+            ApplicationLogger.LogMessage(0, "Method built.");
         }
 
         private void SaveSelectedMethod()
@@ -457,7 +457,7 @@ namespace LcmsNet.Method.ViewModels
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not save the current method.  " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Could not save the current method.  " + ex.Message, ex);
             }
         }
 
@@ -550,7 +550,7 @@ namespace LcmsNet.Method.ViewModels
             {
                 eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodAttribute.Name, deviceEvent.SelectedMethod.Parameters);
             }
-            classApplicationLogger.LogMessage(0, "Control event added - " + eventData);
+            ApplicationLogger.LogMessage(0, "Control event added - " + eventData);
             eventsList.Add(deviceEvent);
             RenderEventList();
         }
@@ -560,14 +560,14 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="method"></param>
         /// <param name="clearOld"></param>
-        public void LoadMethod(classLCMethod method, bool clearOld)
+        public void LoadMethod(LCMethod method, bool clearOld)
         {
             if (clearOld)
                 eventsList.Clear();
 
             foreach (var lcEvent in method.Events)
             {
-                var parameters = new classLCMethodEventParameter();
+                var parameters = new LCMethodEventParameter();
                 for (var i = 0; i < lcEvent.Parameters.Length; i++)
 
                 {
@@ -595,7 +595,7 @@ namespace LcmsNet.Method.ViewModels
                     parameters.AddParameter(parameter, control, name, lcEvent.MethodAttribute.DataProvider);
                 }
 
-                var data = new classLCMethodData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
+                var data = new LCMethodData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
                     { OptimizeWith = lcEvent.OptimizeWith };
 
                 // Construct an event.  We send false as locked because its not a locking event.
@@ -611,7 +611,7 @@ namespace LcmsNet.Method.ViewModels
             }
             else
             {
-                var column = classCartConfiguration.Columns[method.Column];
+                var column = CartConfiguration.Columns[method.Column];
                 if (column != null)
                 {
                     foreach (var item in ColumnComboBoxOptions)
@@ -635,7 +635,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender"></param>
         /// <param name="enabled"></param>
         /// <param name="method"></param>
-        void deviceEvent_Lock(object sender, bool enabled, classLCMethodData method)
+        void deviceEvent_Lock(object sender, bool enabled, LCMethodData method)
         {
             if (!enabled)
                 return;
@@ -689,7 +689,7 @@ namespace LcmsNet.Method.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(0, "There was an error when removing the device event. " + ex.Message, ex);
+                        ApplicationLogger.LogError(0, "There was an error when removing the device event. " + ex.Message, ex);
                     }
                 }
                 for (var i = indexOfLastDeleted; i < eventsList.Count; i++)
@@ -698,7 +698,7 @@ namespace LcmsNet.Method.ViewModels
                 }
                 lcMethodEvents.Remove(deviceEvent);
                 eventsList.Remove(deviceEvent);
-                classApplicationLogger.LogMessage(0, string.Format("A control event for the device {0} was  removed from method {1}.", deviceEvent.SelectedDevice.Name, data.Method.Name));
+                ApplicationLogger.LogMessage(0, string.Format("A control event for the device {0} was  removed from method {1}.", deviceEvent.SelectedDevice.Name, data.Method.Name));
             }
         }
 
@@ -747,7 +747,7 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            classApplicationLogger.LogMessage(0, "Control event moved up.");
+            ApplicationLogger.LogMessage(0, "Control event moved up.");
             RenderEventList();
         }
 
@@ -791,7 +791,7 @@ namespace LcmsNet.Method.ViewModels
                 maxPos = indices[j];
             }
 
-            classApplicationLogger.LogMessage(0, "Control event moved down.");
+            ApplicationLogger.LogMessage(0, "Control event moved down.");
             RenderEventList();
         }
 
@@ -851,7 +851,7 @@ namespace LcmsNet.Method.ViewModels
         /// Saves the given method to file.
         /// </summary>
         /// <param name="method"></param>
-        public bool SaveMethod(classLCMethod method)
+        public bool SaveMethod(LCMethod method)
         {
             if (method == null)
                 return false;
@@ -860,11 +860,11 @@ namespace LcmsNet.Method.ViewModels
             var writer = new classLCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
-            classApplicationLogger.LogMessage(0, "Writing method to file " + path);
+            ApplicationLogger.LogMessage(0, "Writing method to file " + path);
             return writer.WriteMethod(path, method);
         }
 
@@ -898,7 +898,7 @@ namespace LcmsNet.Method.ViewModels
             }
 
             CanSave = false;
-            classApplicationLogger.LogMessage(0, "LC-Methods Saved.");
+            ApplicationLogger.LogMessage(0, "LC-Methods Saved.");
         }
 
         /// <summary>
@@ -924,11 +924,11 @@ namespace LcmsNet.Method.ViewModels
             var methods = Directory.GetFiles(MethodFolderPath, "*.xml");
             foreach (var method in methods)
             {
-                classApplicationLogger.LogMessage(0, "Loading method " + method);
+                ApplicationLogger.LogMessage(0, "Loading method " + method);
                 OpenMethod(method);
             }
 
-            classApplicationLogger.LogMessage(0, "Methods loaded.");
+            ApplicationLogger.LogMessage(0, "Methods loaded.");
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace FluidicsSimulator
     /// <summary>
     /// This list is meant to hold concurrent events.
     /// </summary>
-    public class SimEventList : List<classLCEvent>, IComparable
+    public class SimEventList : List<LCEvent>, IComparable
     {
 
         #region methods

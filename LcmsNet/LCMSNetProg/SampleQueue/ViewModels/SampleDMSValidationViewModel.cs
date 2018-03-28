@@ -18,7 +18,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public SampleDMSValidationViewModel(classSampleData sample, bool sampleIsValid, bool canEditEmslData, bool usageTypeValid, bool proposalIdValid, bool userListValid, bool experimentValid)
+        public SampleDMSValidationViewModel(SampleData sample, bool sampleIsValid, bool canEditEmslData, bool usageTypeValid, bool proposalIdValid, bool userListValid, bool experimentValid)
         {
             this.sample = sample;
             IsSampleValid = sampleIsValid;
@@ -29,7 +29,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             ExperimentValid = experimentValid;
         }
 
-        public SampleDMSValidationViewModel(classSampleData sample)
+        public SampleDMSValidationViewModel(SampleData sample)
         {
             // Make sure the sample is valid so we dont get an exception later when we try to edit it.
             if (sample == null)
@@ -58,7 +58,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Members
 
-        private readonly classSampleData sample;
+        private readonly SampleData sample;
         private bool canChangeEmslData = true;
         private bool isSampleValid = false;
         private bool usageTypeValid = true;
@@ -73,7 +73,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public int ID { get; set; }
 
         public IReadOnlyReactiveList<string> UsageTypeComboBoxOptions => usageTypeComboBoxOptions;
-        public classSampleData Sample => sample;
+        public SampleData Sample => sample;
 
         public bool CanChangeEmslData
         {
@@ -134,7 +134,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         // TODO: OLD:     {
         // TODO: OLD:         case Keys.Enter:
         // TODO: OLD:             Console.WriteLine(@"Enter Pressed!");
-        // TODO: OLD:             LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
+        // TODO: OLD:             LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
         // TODO: OLD:             isEnterType = true;
         // TODO: OLD:             break;
         // TODO: OLD:         case Keys.Up:

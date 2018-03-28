@@ -47,7 +47,7 @@
 //        private void WriteProperties(XmlDocument document, XmlElement root)
 //        {
 //            XmlElement propertiesElement = document.CreateElement("assembly");
-//            propertiesElement.SetAttribute("name", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME));
+//            propertiesElement.SetAttribute("name", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME));
 //            propertiesElement.SetAttribute("class", "LC-Cart");
 
 //            XmlElement statusProperties = document.CreateElement("property");
@@ -145,7 +145,7 @@
 //                    // writes each device.
 //                    foreach (IDevice device in devices)
 //                    {
-//                        if (device.DeviceType == enumDeviceType.Component)
+//                        if (device.DeviceType == DeviceType.Component)
 //                        {
 //                            WriteDeviceProperties(document, propertiesElement, device);
 //                        }

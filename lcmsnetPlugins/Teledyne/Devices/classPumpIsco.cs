@@ -25,7 +25,7 @@ namespace LcmsNet.Devices.Pumps
     /// </summary>
     [Serializable]
 
-    [classDeviceControl(typeof(PumpIscoViewModel), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
+    [DeviceControl(typeof(PumpIscoViewModel), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
     public class classPumpIsco : IDevice
     {
         #region "Constants"
@@ -41,7 +41,7 @@ namespace LcmsNet.Devices.Pumps
         string m_Version;
 
         // Device status
-        enumDeviceStatus m_Status;
+        DeviceStatus m_Status;
 
         // Emulation mode
         bool m_Emulation;
@@ -111,7 +111,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port name
         /// </summary>
-        [classPersistence("PortName")]
+        [PersistenceData("PortName")]
         public string PortName
         {
             get { return m_SerialPort.PortName; }
@@ -126,7 +126,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port baud rate
         /// </summary>
-        [classPersistence("BaudRate")]
+        [PersistenceData("BaudRate")]
         public int BaudRate
         {
             get { return m_SerialPort.BaudRate; }
@@ -136,7 +136,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port read timeout (msec)
         /// </summary>
-        [classPersistence("ReadTimeout")]
+        [PersistenceData("ReadTimeout")]
         public int ReadTimeout
         {
             get { return m_SerialPort.ReadTimeout; }
@@ -146,7 +146,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Serial port write timeout (msec)
         /// </summary>
-        [classPersistence("WriteTimeout")]
+        [PersistenceData("WriteTimeout")]
         public int WriteTimeout
         {
             get { return m_SerialPort.WriteTimeout; }
@@ -161,7 +161,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Number of pumps connected to this controller (1 min, 3 max)
         /// </summary>
-        [classPersistence("PumpCount")]
+        [PersistenceData("PumpCount")]
         public int PumpCount
         {
             get { return m_PumpCount; }
@@ -171,7 +171,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Address for the pump controller
         /// </summary>
-        [classPersistence("UnitAddress")]
+        [PersistenceData("UnitAddress")]
         public int UnitAddress
         {
             get { return m_UnitAddr; }
@@ -376,8 +376,8 @@ namespace LcmsNet.Devices.Pumps
                 }
                 catch (Exception ex)
                 {
-                    var args = new classDeviceErrorEventArgs("Exception closing serial port during Disconnect",
-                                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                    var args = new DeviceErrorEventArgs("Exception closing serial port during Disconnect",
+                                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                     Error?.Invoke(this, args);
                     return false;
@@ -421,8 +421,8 @@ namespace LcmsNet.Devices.Pumps
             // check initialization state
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -453,22 +453,22 @@ namespace LcmsNet.Devices.Pumps
             {
                 var resp = SendCommand(cmd, true);
                 m_ControlMode = newMode;
-                var args = new classDeviceStatusEventArgs(m_Status, notifyString, this);
+                var args = new DeviceStatusEventArgs(m_Status, notifyString, this);
                 StatusUpdate?.Invoke(this, args);
                 ControlModeSet?.Invoke(newMode);
                 return true;
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception setting control mode", GetBaseException(ex),
-                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception setting control mode", GetBaseException(ex),
+                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                             classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 ControlModeSet?.Invoke(m_ControlMode);
                 return false;
             }
         }
-        [classLCMethod("Set Mode", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Mode", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool SetOperationMode(double timeout, enumIscoOperationMode newMode)
         {
             return SetOperationMode(newMode);
@@ -520,8 +520,8 @@ namespace LcmsNet.Devices.Pumps
                 }
                 catch (Exception ex)
                 {
-                    var errArgs = new classDeviceErrorEventArgs("Exception setting operation mode",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                    var errArgs = new DeviceErrorEventArgs("Exception setting operation mode",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                     Error?.Invoke(this, errArgs);
                     success = false;
@@ -532,7 +532,7 @@ namespace LcmsNet.Devices.Pumps
             if (success)
             {
                 m_OpMode = newMode;
-                var args = new classDeviceStatusEventArgs(m_Status, notifyString, this);
+                var args = new DeviceStatusEventArgs(m_Status, notifyString, this);
                 StatusUpdate?.Invoke(this, args);
                 OperationModeSet?.Invoke(newMode);
                 return true;
@@ -561,8 +561,8 @@ namespace LcmsNet.Devices.Pumps
             {
                 msg = "Initialization error during Disconnect";
                 notifyStr = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.InitializationError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, null,
-                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, null,
+                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                             notifyStr);
                 Error?.Invoke(this, args);
                 return false;
@@ -583,8 +583,8 @@ namespace LcmsNet.Devices.Pumps
             {
                 msg = "Initialization error when opening serial port";
                 notifyStr = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.InitializationError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, ex,
-                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, ex,
+                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                             notifyStr);
                 Error?.Invoke(this, args);
                 return false;
@@ -662,7 +662,7 @@ namespace LcmsNet.Devices.Pumps
             }
             var cmd = "IDENTIFY";
             var result = SendCommand(cmd, true);
-            //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO MODELS STRING: " + result);
+            //ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO MODELS STRING: " + result);
             var tokens = result.Split(',');
             //The models should be in tokens 1,3, and 5.
             var retval = true;
@@ -694,14 +694,14 @@ namespace LcmsNet.Devices.Pumps
         /// <returns>TRUE for success; FALSE otherwise</returns>
         public bool Refresh()
         {
-            //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "ISCO REFRESH STATUS DATA");
+            //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "ISCO REFRESH STATUS DATA");
             if (m_Emulation)
                 return true;
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -715,8 +715,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception refreshing status", GetBaseException(ex),
-                                                enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception refreshing status", GetBaseException(ex),
+                                                DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -728,9 +728,9 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception parsing status message",
+                var args = new DeviceErrorEventArgs("Exception parsing status message",
                                                 GetBaseException(ex),
-                                                enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                                                DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -778,8 +778,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -806,8 +806,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint", GetBaseException(ex),
-                                                enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint", GetBaseException(ex),
+                                                DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -828,8 +828,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -845,8 +845,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint limit",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -867,8 +867,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -884,8 +884,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint limit",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -906,8 +906,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -923,8 +923,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint limit",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -945,8 +945,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -962,8 +962,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint limit",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -984,8 +984,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -1001,8 +1001,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint limit",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -1023,8 +1023,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return null;
@@ -1040,8 +1040,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting setpoint limit",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return null;
@@ -1051,7 +1051,7 @@ namespace LcmsNet.Devices.Pumps
         }
 
 
-        [classLCMethod("Refill", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Refill", MethodOperationTimeoutType.Parameter, "", -1, false)]
         //public bool StartRefill(double timeout, int pumpIndx, double refillRate)
         public bool StartRefill(double timeout, enumISCOPumpChannels pump, double refillRate)
         {
@@ -1070,8 +1070,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!m_Initialized)
             {
-                var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
@@ -1090,8 +1090,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception setting refill rate",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception setting refill rate",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -1104,15 +1104,15 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception starting refill",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception starting refill",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
-            var statusArgs = new classDeviceStatusEventArgs(enumDeviceStatus.Initialized,
+            var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
                         classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Refilling.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
@@ -1125,7 +1125,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="pump"></param>
         /// <returns></returns>
-        [classLCMethod("Start Pump", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Start Pump", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool StartPump(double timeout, enumISCOPumpChannels pump)
         {
             return StartPump(timeout, (int)pump);
@@ -1144,8 +1144,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!m_Initialized)
             {
-                var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
@@ -1160,15 +1160,15 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception starting pump",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception starting pump",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
-            var statusArgs = new classDeviceStatusEventArgs(enumDeviceStatus.Initialized,
+            var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
                         classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Running.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
@@ -1181,7 +1181,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="pump">Pump to stop</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        [classLCMethod("Stop Pump", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Pump", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool StopPump(double timeout, enumISCOPumpChannels pump)
         {
             return StopPump(timeout, (int)pump);
@@ -1200,8 +1200,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!m_Initialized)
             {
-                var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
@@ -1216,21 +1216,21 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception stopping pump",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception stopping pump",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
-            var statusArgs = new classDeviceStatusEventArgs(enumDeviceStatus.Initialized,
+            var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
                         classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Stopped.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
         }
-        [classLCMethod("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
         //public bool SetFlow(double timeout, int pumpIndx, double newFlow)
         public bool SetFlow(double timeout, enumISCOPumpChannels pump, double newFlow)
         {
@@ -1249,8 +1249,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!m_Initialized)
             {
-                var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
@@ -1265,15 +1265,15 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception setting flow",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception setting flow",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
-            var statusArgs = new classDeviceStatusEventArgs(enumDeviceStatus.Initialized,
+            var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
                         classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.FlowSet.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
@@ -1287,7 +1287,7 @@ namespace LcmsNet.Devices.Pumps
         /// <param name="pump">Pump to set</param>
         /// <param name="newPress">New pressure setpoint</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        [classLCMethod("Set Pressure", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Pressure", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool SetPressure(double timeout, enumISCOPumpChannels pump, double newPress)
         {
             return SetPressure((int)pump, newPress);
@@ -1306,8 +1306,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!m_Initialized)
             {
-                var errorArgs = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
@@ -1322,15 +1322,15 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception setting pressure",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception setting pressure",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
-            var statusArgs = new classDeviceStatusEventArgs(enumDeviceStatus.Initialized,
+            var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
                         classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.PressSet.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
@@ -1381,8 +1381,8 @@ namespace LcmsNet.Devices.Pumps
                 if (errorFound)
                 {
                     // Pump had an error, so report it
-                    var args = new classDeviceErrorEventArgs("Pump error", null,
-                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this, notifyMsg);
+                    var args = new DeviceErrorEventArgs("Pump error", null,
+                            DeviceErrorStatus.ErrorAffectsAllColumns, this, notifyMsg);
                     Error?.Invoke(this, args);
                 }
             }
@@ -1405,8 +1405,8 @@ namespace LcmsNet.Devices.Pumps
                 classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
                 classIscoConversions.PressUnits = enumIscoPressureUnits.error;
 
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -1419,16 +1419,16 @@ namespace LcmsNet.Devices.Pumps
             try
             {
                 resp = SendCommand(cmdStr, true);
-                //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO READPUMPUNITS RESPONSE:" + resp);
+                //ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO READPUMPUNITS RESPONSE:" + resp);
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO READPUMPUNITS ERROR:" + ex.Message);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO READPUMPUNITS ERROR:" + ex.Message);
                 classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
                 classIscoConversions.PressUnits = enumIscoPressureUnits.error;
 
-                var args = new classDeviceErrorEventArgs("Exception getting units",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting units",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
@@ -1455,8 +1455,8 @@ namespace LcmsNet.Devices.Pumps
 
             if (!(m_Initialized || m_Initializing))
             {
-                var args = new classDeviceErrorEventArgs("Device not initialized", null,
-                                    enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Device not initialized", null,
+                                    DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -1472,8 +1472,8 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                var args = new classDeviceErrorEventArgs("Exception getting refill rate",
-                                                GetBaseException(ex), enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs("Exception getting refill rate",
+                                                GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                 classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
@@ -2046,8 +2046,8 @@ namespace LcmsNet.Devices.Pumps
                 var msg = "Exception parsing status string";
                 var notifyStr =
                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, ex,
-                                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, ex,
+                                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
                 Error?.Invoke(this, args);
                 return null;
@@ -2072,8 +2072,8 @@ namespace LcmsNet.Devices.Pumps
                 var msg = "Exception parsing numeric field";
                 var notifyStr =
                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, ex,
-                                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, ex,
+                                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
                 Error?.Invoke(this, args);
                 return -1000;
@@ -2096,8 +2096,8 @@ namespace LcmsNet.Devices.Pumps
                 var msg = "Invalid field count in RANGE response string";
                 var notifyStr =
                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, null,
-                                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, null,
+                                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
                 Error?.Invoke(this, args);
                 return null;
@@ -2133,8 +2133,8 @@ namespace LcmsNet.Devices.Pumps
                 var msg = "Exception parsing RANGE string";
                 var notifyStr =
                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, ex,
-                                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, ex,
+                                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
                 Error?.Invoke(this, args);
                 return null;
@@ -2154,15 +2154,15 @@ namespace LcmsNet.Devices.Pumps
             // for 65D the length should be 3, but we still only care about the first 2.
             if (unitsArray.Length != 2 && unitsArray.Length != 3)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ParseUnits array length wrong: " + unitsArray.Length + " Array: " + unitsArray);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ParseUnits array length wrong: " + unitsArray.Length + " Array: " + unitsArray);
                 classIscoConversions.PressUnits = enumIscoPressureUnits.error;
                 classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
 
                 var msg = "Invalid field count in UNITSA response string";
                 var notifyStr =
                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, null,
-                                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, null,
+                                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
                 Error?.Invoke(this, args);
                 return false;
@@ -2182,12 +2182,12 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ParseUnits exception:  " + ex.Message);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ParseUnits exception:  " + ex.Message);
                 var msg = "Exception parsing UNITSA string";
                 var notifyStr =
                     classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
-                var args = new classDeviceErrorEventArgs(msg, ex,
-                                                            enumDeviceErrorStatus.ErrorAffectsAllColumns, this,
+                var args = new DeviceErrorEventArgs(msg, ex,
+                                                            DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
                 Error?.Invoke(this, args);
                 return false;
@@ -2225,7 +2225,7 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Device status
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get { return m_Status; }
             set { m_Status = value; }
@@ -2240,12 +2240,12 @@ namespace LcmsNet.Devices.Pumps
         /// <summary>
         /// Error type for device
         /// </summary>
-        public enumDeviceErrorStatus ErrorType { get; set; }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         /// <summary>
         /// Device type for component
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 
@@ -2253,7 +2253,7 @@ namespace LcmsNet.Devices.Pumps
         public bool Initialize(ref string errorMessage)
         {
             var notifyStr = classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Initializing.ToString());
-            var args = new classDeviceStatusEventArgs(enumDeviceStatus.NotInitialized, notifyStr, this);
+            var args = new DeviceStatusEventArgs(DeviceStatus.NotInitialized, notifyStr, this);
             StatusUpdate?.Invoke(this, args);
 
             if (!InitDevice(ref errorMessage))
@@ -2262,7 +2262,7 @@ namespace LcmsNet.Devices.Pumps
             }
 
             notifyStr = classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.InitSucceeded.ToString());
-            args = new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, notifyStr, this);
+            args = new DeviceStatusEventArgs(DeviceStatus.Initialized, notifyStr, this);
             StatusUpdate?.Invoke(this, args);
             return true;
         }
@@ -2378,9 +2378,9 @@ namespace LcmsNet.Devices.Pumps
         #endregion
 
         #region "IDevice Events"
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 
         public event EventHandler DeviceSaveRequired;
         #endregion

@@ -81,7 +81,7 @@ namespace LcmsNet.Method.ViewModels
         /// Use the given sample to clear out displayed progress and errors for the column
         /// </summary>
         /// <param name="sample"></param>
-        public void ResetColumn(classSampleData sample)
+        public void ResetColumn(SampleData sample)
         {
             SampleProgress.ResetColumn(sample);
             SampleProgressFull.ResetColumn(sample);
@@ -100,13 +100,13 @@ namespace LcmsNet.Method.ViewModels
         /// Updates the progress window with the sample data.
         /// </summary>
         /// <param name="sample"></param>
-        public void UpdateSample(classSampleData sample)
+        public void UpdateSample(SampleData sample)
         {
             SampleProgress.UpdateSample(sample);
             SampleProgressFull.UpdateSample(sample);
         }
 
-        public void UpdateError(classSampleData sample, classLCEvent lcEvent)
+        public void UpdateError(SampleData sample, LCEvent lcEvent)
         {
             SampleProgress.UpdateError(sample, lcEvent);
             SampleProgressFull.UpdateError(sample, lcEvent);
@@ -145,7 +145,7 @@ namespace LcmsNet.Method.ViewModels
                 }
                 catch
                 {
-                    classApplicationLogger.LogError(0, "Error attempting to update column sample progress.");
+                    ApplicationLogger.LogError(0, "Error attempting to update column sample progress.");
                 }
             }
         }

@@ -16,7 +16,7 @@ namespace LcmsNet.SampleQueue
     /// <summary>
     /// Plugin for testing randomizer loading. This merely inverts the input list
     /// </summary>
-    [classPlugInDisplayName("Invert")]
+    [PlugInDisplayName("Invert")]
     public class classDummyRandomizer : IRandomizerInterface, IEnumerable
     {
         #region "Class variables"
@@ -38,7 +38,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="InputSampleList">List containing samples to be randomized</param>
         /// <returns>List containing same samples with sequence numbers randomized</returns>
-        public List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList)
+        public List<SampleData> RandomizeSamples(List<SampleData> InputSampleList)
         {
             // Create a list of the sequence numbers from the input sample list
             var SeqList = GetSeqNumbers(InputSampleList);
@@ -68,7 +68,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="InpSamples">List of sample data objects</param>
         /// <returns>List of sequence numbers</returns>
-        List<long> GetSeqNumbers(List<classSampleData> InpSamples)
+        List<long> GetSeqNumbers(List<SampleData> InpSamples)
         {
             var SeqNums = new List<long>();
             foreach (var Sample in InpSamples)

@@ -200,11 +200,11 @@ namespace FluidicsSDK.Base
                 //don't highlight primitives that have actions associated with them.
                 if (m_actions[primitive] == null)
                 {
-                    primitive.Render(g, alpha, scale, Selected, IDevice.Status == enumDeviceStatus.Error);
+                    primitive.Render(g, alpha, scale, Selected, IDevice.Status == DeviceStatus.Error);
                 }
                 else
                 {
-                    primitive.Render(g, alpha, scale, false, IDevice.Status == enumDeviceStatus.Error);
+                    primitive.Render(g, alpha, scale, false, IDevice.Status == DeviceStatus.Error);
                 }
             }
             DrawControls(g, alpha, scale);

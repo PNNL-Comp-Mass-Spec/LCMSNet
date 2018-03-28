@@ -29,7 +29,7 @@ namespace LcmsNet.Devices.Pal
     /// </summary>
     [Serializable]
 
-    [classDeviceControl(typeof(PalViewModel),
+    [DeviceControl(typeof(PalViewModel),
                                  "PAL Autosampler",
                                  "Auto-Samplers")]
     public class classPal : IDevice, IAutoSampler, IFluidicsSampler
@@ -89,7 +89,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The current status of the PAL.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
 
         /// <summary>
         /// Indicates whether or not the PAL is in emulation mode.
@@ -111,7 +111,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Indicates that a change requiring saving in the Fluidics designer has occurred.
         /// </summary>
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Indicates that the device is not busy and can accept commands.
@@ -121,7 +121,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 
         /// <summary>
         /// Fired when a property changes in the device.
@@ -131,12 +131,12 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Fired when new tray names are available.
         /// </summary>
-        public event EventHandler<classAutoSampleEventArgs> TrayNamesRead;
+        public event EventHandler<AutoSampleEventArgs> TrayNamesRead;
 
         /// <summary>
         /// Fired when new method names are available.
         /// </summary>
-        public event EventHandler<classAutoSampleEventArgs> MethodNamesRead;
+        public event EventHandler<AutoSampleEventArgs> MethodNamesRead;
 
         /// <summary>
         /// Fired to the method editor handler with a List of method names
@@ -184,7 +184,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets whether the device is emulation mode.
         /// </summary>
-        //[classPersistenceAttribute("Emulated")]
+        //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
             get
@@ -200,7 +200,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The current status of the PAL.
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
@@ -208,7 +208,7 @@ namespace LcmsNet.Devices.Pal
             }
             set
             {
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
+                StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 m_status = value;
             }
         }
@@ -247,7 +247,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the folder containing the PAL method files.
         /// </summary>
-        [classPersistence("MethodsFolder")]
+        [PersistenceData("MethodsFolder")]
         public string MethodsFolder
         {
             get
@@ -275,7 +275,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the method for the PAL to run.
         /// </summary>
-        [classPersistence("Method")]
+        [PersistenceData("Method")]
         public string Method
         {
             get
@@ -292,7 +292,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the tray for the PAL to use.
         /// </summary>
-        [classPersistence("Tray")]
+        [PersistenceData("Tray")]
         public string Tray
         {
             get
@@ -318,7 +318,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// The maximum valid vial number
         /// </summary>
-        [classPersistence("VialRange")]
+        [PersistenceData("VialRange")]
         public int MaxVial
         {
             get { return (int) VialRange; }
@@ -339,7 +339,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the vial for the PAL to use.
         /// </summary>
-        [classPersistence("Vial")]
+        [PersistenceData("Vial")]
         public int Vial
         {
             get
@@ -363,7 +363,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the volume (in uL).
         /// </summary>
-        [classPersistence("Volume")]
+        [PersistenceData("Volume")]
         public string Volume
         {
             get
@@ -380,7 +380,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the serial port which the PAL is connected to.
         /// </summary>
-        [classPersistence("Port")]
+        [PersistenceData("Port")]
         public string PortName
         {
             get;
@@ -390,20 +390,20 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Gets or sets the delay when polling for system status in seconds
         /// </summary>
-        [classPersistence("StatusPollDelay")]
+        [PersistenceData("StatusPollDelay")]
         public int StatusPollDelay
         {
             get;
             set;
         }
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
         }
 
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 
@@ -449,7 +449,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         private void HandleError(string message, Exception ex)
         {
-            Error?.Invoke(this, new classDeviceErrorEventArgs(message, ex, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, message));
+            Error?.Invoke(this, new DeviceErrorEventArgs(message, ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, message));
         }
 
         /// <summary>
@@ -547,12 +547,12 @@ namespace LcmsNet.Devices.Pal
                     status = WaitUntilReady(CONST_WAITTIMEOUT);
                 }
 
-                var methodsFolder = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PALMETHODSFOLDER);
+                var methodsFolder = LCMSSettings.GetParameter(LCMSSettings.PARAM_PALMETHODSFOLDER);
                 var exists = System.IO.Directory.Exists(methodsFolder);
                 if (!exists)
                 {
                     var newMethodsFolder = methodsFolder.Replace("Program Files (x86)", "Program Files");
-                    classApplicationLogger.LogError(0,
+                    ApplicationLogger.LogError(0,
                                         string.Format("Could not find the PAL Methods folder {0}.  Looking for folder path: {1}",
                                             methodsFolder,
                                             newMethodsFolder));
@@ -651,7 +651,7 @@ namespace LcmsNet.Devices.Pal
             if (methods != null)
             {
                 var methodNames = methods.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL METHODS LENGTH: " + methodNames.Length);
+                //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL METHODS LENGTH: " + methodNames.Length);
 
                 if (methodNames.Length > 0)
                 {
@@ -661,7 +661,7 @@ namespace LcmsNet.Devices.Pal
                 // For UI and other.
                 if (methodsList.Count > 0)
                 {
-                    MethodNamesRead?.Invoke(this, new classAutoSampleEventArgs(new List<string>(), methodsList));
+                    MethodNamesRead?.Invoke(this, new AutoSampleEventArgs(new List<string>(), methodsList));
                 }
                 // For method editor.  Needs to be refactored to use event args like above.
                 if (methodsList.Count > 0 && Methods != null)
@@ -717,12 +717,12 @@ namespace LcmsNet.Devices.Pal
             if (!string.IsNullOrEmpty(trays))
             {
                 var names = trays.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL TRAYS LIST: " + names.Length);
+                //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PAL TRAYS LIST: " + names.Length);
                 trayList.AddRange(names);
 
                 if (TrayNamesRead != null)
                 {
-                    TrayNamesRead(this, new classAutoSampleEventArgs(trayList, new List<string>()));
+                    TrayNamesRead(this, new AutoSampleEventArgs(trayList, new List<string>()));
                 }
                 else
                 {
@@ -731,7 +731,7 @@ namespace LcmsNet.Devices.Pal
             }
             else
             {
-                classApplicationLogger.LogError(0, "Empty traylist returned by PAL");
+                ApplicationLogger.LogError(0, "Empty traylist returned by PAL");
             }
 
             TrayNames.Clear();
@@ -844,8 +844,8 @@ namespace LcmsNet.Devices.Pal
         ///
         /// Loads the method
         ///
-        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
-        public bool LoadMethod(double timeout, classSampleData sample, string methodName)
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]
+        public bool LoadMethod(double timeout, SampleData sample, string methodName)
         {
             if (m_emulation)
             {
@@ -951,7 +951,7 @@ namespace LcmsNet.Devices.Pal
                 return false;
             }
 
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
                 "Done Injecting start method", this));
             OnFree();
             return true;
@@ -962,7 +962,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        [classLCMethod("Wait for SyncPoint", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Wait for SyncPoint", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool WaitUntilStopPoint(double timeout)
         {
             var status = "";
@@ -975,7 +975,7 @@ namespace LcmsNet.Devices.Pal
                 var statusCheckError = m_PALDrvr.GetStatus(ref status);
                 /*if (this.StatusUpdate != null)
                 {
-                    this.StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+                    this.StatusUpdate(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
                         "PAL: " + status + " " + statusCheckError.ToString(),
                         this));
                 }*/
@@ -1011,17 +1011,17 @@ namespace LcmsNet.Devices.Pal
             return false;
         }
 
-        [classLCMethod("Throwup", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Throwup", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public void ThrowError(int timeToThrowup)
         {
-            Error?.Invoke(this, new classDeviceErrorEventArgs("AHHH!", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
+            Error?.Invoke(this, new DeviceErrorEventArgs("AHHH!", null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
         }
 
         /// <summary>
         /// Pauses the currently running method.
         /// </summary>
         ///
-        [classLCMethod("Pause Method", .5, "", -1, false)]
+        [LCMethodEvent("Pause Method", .5, "", -1, false)]
         public void PauseMethod()
         {
             if (m_emulation)
@@ -1036,7 +1036,7 @@ namespace LcmsNet.Devices.Pal
         /// Resumes the method.
         /// </summary>
         ///
-        [classLCMethod("Resume Method", 500, "", -1, false)]
+        [LCMethodEvent("Resume Method", 500, "", -1, false)]
         public void ResumeMethod()
         {
             if (m_emulation)
@@ -1050,7 +1050,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Continues the method. This is way different than ResumeMethod.
         /// </summary>
-        [classLCMethod("Continue Method", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Continue Method", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool ContinueMethod(double timeout, bool waitForComplete = false)
         {
             if (m_emulation)
@@ -1062,7 +1062,7 @@ namespace LcmsNet.Devices.Pal
             var prevStatus = "";
             m_PALDrvr.GetStatus(ref prevStatus);
 
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
                 "continue method", this));
             m_PALDrvr.ContinueMethod();
 
@@ -1080,7 +1080,7 @@ namespace LcmsNet.Devices.Pal
 
             var statusMessage = "";
             var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.InUseByMethod,
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
                 "continue method end", this, statusMessage + " " + errorCode.ToString()));
 
             return result;
@@ -1091,7 +1091,7 @@ namespace LcmsNet.Devices.Pal
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [classLCMethod("Stop Method", .5, "", -1, false)]
+        [LCMethodEvent("Stop Method", .5, "", -1, false)]
         public void StopMethod()
         {
             if (m_emulation)
@@ -1106,7 +1106,7 @@ namespace LcmsNet.Devices.Pal
         /// </summary>
         /// <param name="waitTimeoutms">The timeout value, in milliseconds.</param>
         /// <returns>Integer error code.</returns>
-        [classLCMethod("Wait Until Ready", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Wait Until Ready", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int WaitUntilReady(double waitTimeoutms)
         {
             var timeoutms = Convert.ToInt32(waitTimeoutms);

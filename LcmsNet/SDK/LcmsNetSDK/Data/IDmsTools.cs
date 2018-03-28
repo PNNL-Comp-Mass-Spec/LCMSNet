@@ -23,11 +23,11 @@ namespace LcmsNetSDK.Data
 
         Dictionary<int, int> GetMRMFileListFromDMS(int MinID, int MaxID);
 
-        void GetMRMFilesFromDMS(string FileIndxList, ref List<classMRMFileData> fileData);
+        void GetMRMFilesFromDMS(string FileIndxList, ref List<MRMFileData> fileData);
 
         void GetProposalUsers();
 
-        List<classSampleData> GetSamplesFromDMS(classSampleQueryData queryData);
+        List<SampleData> GetSamplesFromDMS(SampleQueryData queryData);
 
         void GetSepTypeListFromDMS();
         void GetUserListFromDMS();

@@ -2,7 +2,7 @@
 
 namespace FluidicsPack
 {
-    [classDeviceControl(null,
+    [DeviceControl(null,
         typeof(FluidicsSprayNeedle),
         "Spray Needle",
         "Fluidics Components")]

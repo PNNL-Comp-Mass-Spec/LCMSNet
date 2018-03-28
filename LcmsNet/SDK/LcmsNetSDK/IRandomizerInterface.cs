@@ -22,7 +22,7 @@ namespace LcmsNetSDK
 
         #region "Methods"
 
-        List<classSampleData> RandomizeSamples(List<classSampleData> InputSampleList);
+        List<SampleData> RandomizeSamples(List<SampleData> InputSampleList);
 
         #endregion
     }

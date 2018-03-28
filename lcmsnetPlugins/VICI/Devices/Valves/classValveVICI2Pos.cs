@@ -29,7 +29,7 @@ namespace LcmsNet.Devices.Valves
     /// </summary>
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    /*[classDeviceControlAttribute(typeof(controlValveVICI2Pos),
+    /*[DeviceControlAttribute(typeof(controlValveVICI2Pos),
                                  typeof(controlValveVICI2PosGlyph),
                                  "Valve 2-Position",
                                  "Valves")
@@ -227,7 +227,7 @@ namespace LcmsNet.Devices.Valves
 //        /// Sets the position of the valve (A or B).
 //        /// </summary>
 //        /// <param name="newPosition">The new position.</param>
-//        [classLCMethodAttribute("Set Position", 1, true, "", -1, false)]
+//        [LCMethodEventAttribute("Set Position", 1, true, "", -1, false)]
 //        public FluidicsSDK.Base.enumValveErrors SetPosition(TwoPositionState newPosition)
 //        {
 
@@ -324,7 +324,7 @@ namespace LcmsNet.Devices.Valves
         /// Sets the position of the valve (A or B).
         /// </summary>
         /// <param name="newPosition">The new position.</param>
-        [classLCMethod("Set Position", 1, true, "", -1, false)]
+        [LCMethodEvent("Set Position", 1, true, "", -1, false)]
         public void SetPosition(TwoPositionState newPosition)
         {
 

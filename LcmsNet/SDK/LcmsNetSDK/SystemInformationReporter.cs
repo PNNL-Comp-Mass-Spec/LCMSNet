@@ -11,8 +11,8 @@ namespace LcmsNetSDK
         {
             var name = "[SystemInfo]\r\n";
             name += string.Format("Machine Name = {0}\r\n", Environment.MachineName);
-            name += string.Format("CartName = {0}\r\n", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME));
-            name += string.Format("CartConfigName = {0}\r\n", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME));
+            name += string.Format("CartName = {0}\r\n", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME));
+            name += string.Format("CartConfigName = {0}\r\n", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
             try
             {
                 var hostName = Dns.GetHostName();

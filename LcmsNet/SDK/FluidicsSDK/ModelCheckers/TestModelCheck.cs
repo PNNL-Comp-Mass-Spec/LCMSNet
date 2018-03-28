@@ -52,7 +52,7 @@ namespace FluidicsSDK.ModelCheckers
             {
                 new ModelStatus("Test Check", "This status was created by the Test Model Check. The Model Checks are being run.", Category)
             };
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.NotInitialized, "Test Model Check Run.", null));
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.NotInitialized, "Test Model Check Run.", null));
             return testList;
         }
 
@@ -69,9 +69,9 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }

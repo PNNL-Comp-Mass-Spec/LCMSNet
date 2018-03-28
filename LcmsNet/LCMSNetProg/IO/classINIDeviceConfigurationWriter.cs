@@ -23,7 +23,7 @@ namespace LcmsNet.Devices
         /// </summary>
         /// <param name="path">Path to write configuration to.</param>
         /// <param name="configuration"></param>
-        public void WriteConfiguration(string path, classDeviceConfiguration configuration)
+        public void WriteConfiguration(string path, DeviceConfiguration configuration)
         {
             using (TextWriter writer = File.CreateText(path))
             {

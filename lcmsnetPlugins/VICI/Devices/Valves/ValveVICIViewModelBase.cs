@@ -153,7 +153,7 @@ namespace LcmsNet.Devices.Valves
         /// <param name="message">The message to display</param>
         protected void ShowError(string message)
         {
-            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message);
+            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message);
         }
 
         /// <summary>

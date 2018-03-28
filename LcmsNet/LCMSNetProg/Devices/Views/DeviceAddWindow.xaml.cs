@@ -76,10 +76,10 @@ namespace LcmsNet.Devices.Views
                 }
                 if (selector.SelectedItems.Count == 1)
                 {
-                    dc.SelectedPlugins.Add((classDevicePluginInformation)selector.SelectedItems[0]);
+                    dc.SelectedPlugins.Add((DevicePluginInformation)selector.SelectedItems[0]);
                     return;
                 }
-                dc.SelectedPlugins.AddRange(selector.SelectedItems.Cast<classDevicePluginInformation>());
+                dc.SelectedPlugins.AddRange(selector.SelectedItems.Cast<DevicePluginInformation>());
             }
         }
 
@@ -91,7 +91,7 @@ namespace LcmsNet.Devices.Views
                 return;
             }
 
-            dc.SelectedPlugin = e.NewValue as classDevicePluginInformation;
+            dc.SelectedPlugin = e.NewValue as DevicePluginInformation;
         }
     }
 }

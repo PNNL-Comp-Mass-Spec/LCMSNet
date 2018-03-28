@@ -28,11 +28,11 @@ namespace TestTool
         private static void TestDMSDataLoading()
         {
 
-            classApplicationLogger.Error += classApplicationLogger_Error;
-            classApplicationLogger.ErrorLevel = 3;
+            ApplicationLogger.Error += ApplicationLogger_Error;
+            ApplicationLogger.ErrorLevel = 3;
 
-            classApplicationLogger.Message += classApplicationLogger_Message;
-            classApplicationLogger.MessageLevel = 2;
+            ApplicationLogger.Message += ApplicationLogger_Message;
+            ApplicationLogger.MessageLevel = 2;
 
             var dbt = new classDBTools
             {
@@ -49,7 +49,7 @@ namespace TestTool
             Console.WriteLine("Data loaded");
         }
 
-        private static void classApplicationLogger_Error(int errorLevel, classErrorLoggerArgs args)
+        private static void ApplicationLogger_Error(int errorLevel, ErrorLoggerArgs args)
         {
             Console.WriteLine(@"=== Exception ===");
             Console.WriteLine(args.Message);
@@ -58,7 +58,7 @@ namespace TestTool
                 Console.WriteLine(args.Exception.Message);
         }
 
-        private static void classApplicationLogger_Message(int messageLevel, classMessageLoggerArgs args)
+        private static void ApplicationLogger_Message(int messageLevel, MessageLoggerArgs args)
         {
             Console.WriteLine(args.Message);
         }

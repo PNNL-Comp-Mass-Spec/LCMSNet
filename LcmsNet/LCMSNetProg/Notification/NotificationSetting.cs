@@ -40,7 +40,7 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Gets or sets the method to run if notification setting is set to run a method.
         /// </summary>
-        public classLCMethod Method { get; set; }
+        public LCMethod Method { get; set; }
 
         /// <summary>
         /// Gets or sets the action to take when an error occurs.

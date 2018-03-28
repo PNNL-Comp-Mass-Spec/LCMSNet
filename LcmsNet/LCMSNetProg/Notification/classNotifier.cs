@@ -35,7 +35,7 @@
 
             if (exists)
             {
-                string name     = LcmsNetDataClasses.classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
+                string name     = LcmsNetDataClasses.LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
                 string newPath = System.IO.Path.Combine(Path, name + "-systemHealth.xml");
                 LcmsNet.Devices.classDeviceManager.Manager.WriteSystemHealth(newPath);
             }

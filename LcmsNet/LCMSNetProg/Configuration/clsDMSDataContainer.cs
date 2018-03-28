@@ -14,7 +14,7 @@ namespace LcmsNet.Configuration
         public static classDBTools DBTools { get; }
 
         /// <summary>
-        /// When true, progress events from DBTools are logged using classApplicationLogger
+        /// When true, progress events from DBTools are logged using ApplicationLogger
         /// </summary>
         /// <remarks>Set to false if another class is logging the events</remarks>
         public static bool LogDBToolsEvents { get; set; }
@@ -42,7 +42,7 @@ namespace LcmsNet.Configuration
             if (!LogDBToolsEvents)
                 return;
 
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, e.CurrentTask);
+            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER, e.CurrentTask);
             Console.WriteLine(e.CurrentTask);
         }
     }

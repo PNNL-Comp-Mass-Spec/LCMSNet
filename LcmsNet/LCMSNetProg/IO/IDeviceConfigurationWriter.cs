@@ -7,6 +7,6 @@ namespace LcmsNet.Devices
     /// </summary>
     interface IDeviceConfigurationWriter
     {
-        void WriteConfiguration(string path, classDeviceConfiguration configuration);
+        void WriteConfiguration(string path, DeviceConfiguration configuration);
     }
 }

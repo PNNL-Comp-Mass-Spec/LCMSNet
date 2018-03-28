@@ -23,9 +23,9 @@ namespace FluidicsSDK.ModelCheckers
         private readonly List<string> m_status;
         private const string NO_PATH_FOUND = "No Sink Found";
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -125,11 +125,11 @@ namespace FluidicsSDK.ModelCheckers
                 }
 
                 //if no sink is found, report to the notifcation system and add to the status list to be returned
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, NO_PATH_FOUND,  this, message));
+                StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.Initialized, NO_PATH_FOUND,  this, message));
                 status.Add(new ModelStatus("No Sink on Path", "No sink on on path", Category, string.Empty,string.Empty, null, p.ParentDevice.IDevice));
             }
             watch.Stop();
-            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "NoSink check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
+            //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "NoSink check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
             return status;
         }
 

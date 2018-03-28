@@ -7,6 +7,6 @@ namespace LcmsNet.Devices
     /// </summary>
     interface IDeviceConfigurationReader
     {
-        classDeviceConfiguration ReadConfiguration(string path);
+        DeviceConfiguration ReadConfiguration(string path);
     }
 }

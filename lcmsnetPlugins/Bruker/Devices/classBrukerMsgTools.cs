@@ -297,7 +297,7 @@ namespace LcmsNet.Devices.BrukerStart
             if (!SendShortInt(codeToSend))
                 return false;
 
-            classApplicationLogger.LogMessage(2, "ExitFTMS(): Sent EXIT_FTMS command");
+            ApplicationLogger.LogMessage(2, "ExitFTMS(): Sent EXIT_FTMS command");
 
             return true;
         }
@@ -308,7 +308,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// <returns>TRUE for success; FALSE otherwise</returns>
         public bool DisconnectSXC()
         {
-            classApplicationLogger.LogMessage(2, "DisconnectSXC() starting");
+            ApplicationLogger.LogMessage(2, "DisconnectSXC() starting");
 
             // Verify socket isn't already disconnected
             if ((mobject_Socket == null) || (!m_Connected))
@@ -323,7 +323,7 @@ namespace LcmsNet.Devices.BrukerStart
             mobject_Socket = null;
             m_Connected = false;
 
-            classApplicationLogger.LogMessage(2, "DisconnectSXC() socket disconnected");
+            ApplicationLogger.LogMessage(2, "DisconnectSXC() socket disconnected");
             return true;
         }
 
@@ -334,15 +334,15 @@ namespace LcmsNet.Devices.BrukerStart
         public bool StartListeningToSXC()
         {
             // Log program location for debugging
-            classApplicationLogger.LogMessage(2, "StartListeningToSXC()");
+            ApplicationLogger.LogMessage(2, "StartListeningToSXC()");
 
             if (!m_ListenToSxc)
             {
-                classApplicationLogger.LogMessage(2, "sXc listening disabled");
+                ApplicationLogger.LogMessage(2, "sXc listening disabled");
                 return false;
             }
 
-            classApplicationLogger.LogMessage(2, "sXc listening enabled");
+            ApplicationLogger.LogMessage(2, "sXc listening enabled");
 
             if (mobjecct_RcxCallback == null)
                 mobjecct_RcxCallback = OnDataReceived;
@@ -356,7 +356,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// <returns>TRUE for success; FALSE otherwise</returns>
         public bool StopListeningToSXC()
         {
-            classApplicationLogger.LogMessage(2, "StopListeningToSXC()");
+            ApplicationLogger.LogMessage(2, "StopListeningToSXC()");
             m_ListenToSxc = false;
 
             //TODO: Does something else need to be done here?
@@ -518,7 +518,7 @@ namespace LcmsNet.Devices.BrukerStart
         private void ProcessResponse(ref classFtmsResponse responseData)
         {
             // Log program location for debugging purposes
-            classApplicationLogger.LogMessage(2, "ProcessResponse: m_IncomingBytes.Count = " + mobject_IncomingBytes.Count.ToString());
+            ApplicationLogger.LogMessage(2, "ProcessResponse: m_IncomingBytes.Count = " + mobject_IncomingBytes.Count.ToString());
 
             if (mobject_IncomingBytes.Count > 1)
             {
@@ -528,8 +528,8 @@ namespace LcmsNet.Devices.BrukerStart
                 var tmpRcvdValue = GetShortIntFromRcvQueue();
 
                 // If command code already received, this is the parm code; otherwise it's the command code
-                classApplicationLogger.LogMessage(2, "ProcessResponse: tmpRcvdValue = " + tmpRcvdValue.ToString());
-                classApplicationLogger.LogMessage(2, "ProcessResponse: responseData.WaitingForParam = " + responseData.WaitingForParam.ToString());
+                ApplicationLogger.LogMessage(2, "ProcessResponse: tmpRcvdValue = " + tmpRcvdValue.ToString());
+                ApplicationLogger.LogMessage(2, "ProcessResponse: responseData.WaitingForParam = " + responseData.WaitingForParam.ToString());
 
                 short tmpResp;
                 classBrukerComConstants.SxcReplies tmpReply;
@@ -543,11 +543,11 @@ namespace LcmsNet.Devices.BrukerStart
                     tmpResp = (short)(responseData.ParamCode + 20);
                     tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
 
-                    classApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
+                    ApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
 
-                    classApplicationLogger.LogMessage(2, "ProcessResponse: Firing BrukerMsgReceived event");
+                    ApplicationLogger.LogMessage(2, "ProcessResponse: Firing BrukerMsgReceived event");
                     BrukerMsgReceived?.Invoke(tmpReply);
-                    classApplicationLogger.LogMessage(2, "ProcessResponse: BrukerMsgReceived event handling complete");
+                    ApplicationLogger.LogMessage(2, "ProcessResponse: BrukerMsgReceived event handling complete");
                     return;
                 }
                 
@@ -556,7 +556,7 @@ namespace LcmsNet.Devices.BrukerStart
                 responseData.CommandCode = tmpRcvdValue;
 
                 // Handle the incoming code if it's not the parameter for an earlier status message
-                classApplicationLogger.LogMessage(2, "ProcessResponse: responseData.CommandCode = " + responseData.CommandCode.ToString());
+                ApplicationLogger.LogMessage(2, "ProcessResponse: responseData.CommandCode = " + responseData.CommandCode.ToString());
                 if (responseData.CommandCode == classBrukerComConstants.SOCKET_REQUEST_CHECKMSSTATUS)
                 {
                     //TODO: Figure out how to log this, if necessary
@@ -571,7 +571,7 @@ namespace LcmsNet.Devices.BrukerStart
                         // We've received the whole message, so notify the world
                         tmpResp = (short)(responseData.ParamCode + 20);
                         tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
-                        classApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
+                        ApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
                         BrukerMsgReceived?.Invoke(tmpReply);
                         return;
                     }
@@ -588,7 +588,7 @@ namespace LcmsNet.Devices.BrukerStart
                 //clsLogTools.LogDebugMsg("Label 7");
                 tmpResp = (short)(responseData.ParamCode + 20);
                 tmpReply = classBrukerComConstants.ConvertShortToSxcReply(tmpResp);
-                classApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
+                ApplicationLogger.LogMessage(2, "ProcessResponse: Message with param = " + tmpReply.ToString());
                 BrukerMsgReceived?.Invoke(tmpReply);
                 return;
             }
@@ -615,7 +615,7 @@ namespace LcmsNet.Devices.BrukerStart
                 outStrBld.Append(dataBuffer[byteIndx].ToString() + ",");
             }
 
-            classApplicationLogger.LogMessage(2, outStrBld.ToString());
+            ApplicationLogger.LogMessage(2, outStrBld.ToString());
         }
 
         /// <summary>
@@ -632,7 +632,7 @@ namespace LcmsNet.Devices.BrukerStart
                 outStrBld.Append(dataBuffer[byteIndx].ToString() + ",");
             }
 
-            classApplicationLogger.LogMessage(2, outStrBld.ToString());
+            ApplicationLogger.LogMessage(2, outStrBld.ToString());
         }
 
         #endregion
@@ -643,7 +643,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// </summary>
         private void sXcDataReceived()
         {
-            classApplicationLogger.LogMessage(2, "classBrukerMsgTools.sXcDataReceived: Handling DataReceived event");
+            ApplicationLogger.LogMessage(2, "classBrukerMsgTools.sXcDataReceived: Handling DataReceived event");
             while (mobject_IncomingBytes.Count > 0)
             {
                 ProcessResponse(ref mobject_ResponseData);
@@ -659,7 +659,7 @@ namespace LcmsNet.Devices.BrukerStart
             System.Threading.Thread.CurrentThread.Name = "OnDataReceived";
 
             // Log location in program for debugging
-            classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived()");
+            ApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived()");
 
             SocketError myError;
 
@@ -672,7 +672,7 @@ namespace LcmsNet.Devices.BrukerStart
             if (bytesReceived > 0)
             {
                 // Log the incoming data
-                classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: Byte count = " + bytesReceived.ToString());
+                ApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: Byte count = " + bytesReceived.ToString());
                 LogIncomingBytes(mbyte_DataBuffer, bytesReceived);
 
                 // Add incoming data to byte queue
@@ -685,20 +685,20 @@ namespace LcmsNet.Devices.BrukerStart
             else
             {
                 m_ZeroByteMsgCount++;
-                classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: 0-byte message received from sXc");
+                ApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: 0-byte message received from sXc");
             }
 
             // Check to see if multiple consecutive 0-byte responses have been received (indicates sXc probably disconnected)
             if (m_ZeroByteMsgCount > MAX_ZERO_BYTE_RESPONSE_COUNT)
             {
                 m_Msg = "classBrukerMsgTools.OnDataReceived: Excessive consecutive 0-byte messages. Disabling receive";
-                classApplicationLogger.LogMessage(2, m_Msg);
+                ApplicationLogger.LogMessage(2, m_Msg);
                 m_ListenToSxc = false;
             }
 
-            classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: Firing DataReceived event");
+            ApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: Firing DataReceived event");
             DataReceived?.Invoke();
-            classApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: DataReceived event handling complete");
+            ApplicationLogger.LogMessage(2, "classBrukerMsgTools.OnDataReceived: DataReceived event handling complete");
 
             System.Threading.Thread.Sleep(20);
 

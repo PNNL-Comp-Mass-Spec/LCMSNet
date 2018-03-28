@@ -29,7 +29,7 @@ namespace LcmsNet.Notification.ViewModels
         {
         }
 
-        public NotificationSystemViewModel(classDeviceManager manager)
+        public NotificationSystemViewModel(DeviceManager manager)
         {
             Disable();
 
@@ -54,7 +54,7 @@ namespace LcmsNet.Notification.ViewModels
             classNotifier.Path = RemoteStatusLogPath;
 
             // Add any existing devices.
-            var devices = classDeviceManager.Manager.Devices;
+            var devices = DeviceManager.Manager.Devices;
             if (devices.Count > 0)
             {
                 foreach (var device in devices)
@@ -198,12 +198,12 @@ namespace LcmsNet.Notification.ViewModels
         private string selectedEvent = "";
         private double numberConditionMinimum = 0;
         private double numberConditionMaximum = 0;
-        private classLCMethod selectedLCMethod;
+        private LCMethod selectedLCMethod;
         private readonly ReactiveList<string> devicesList = new ReactiveList<string>();
         private readonly ReactiveList<string> eventsList = new ReactiveList<string>();
         private readonly ReactiveList<string> assignedEventsList = new ReactiveList<string>();
         private readonly ReactiveList<enumDeviceNotificationAction> actionsComboBoxOptions = new ReactiveList<enumDeviceNotificationAction>();
-        private readonly ReactiveList<classLCMethod> methodsComboBoxOptions = new ReactiveList<classLCMethod>();
+        private readonly ReactiveList<LCMethod> methodsComboBoxOptions = new ReactiveList<LCMethod>();
 
         #endregion
 
@@ -326,7 +326,7 @@ namespace LcmsNet.Notification.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedEvent, value); }
         }
 
-        public classLCMethod SelectedLCMethod
+        public LCMethod SelectedLCMethod
         {
             get { return selectedLCMethod; }
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
@@ -336,7 +336,7 @@ namespace LcmsNet.Notification.ViewModels
         public IReadOnlyReactiveList<string> EventsList => eventsList;
         public IReadOnlyReactiveList<string> AssignedEventsList => assignedEventsList;
         public IReadOnlyReactiveList<enumDeviceNotificationAction> ActionsComboBoxOptions => actionsComboBoxOptions;
-        public IReadOnlyReactiveList<classLCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         #endregion
 
@@ -397,14 +397,14 @@ namespace LcmsNet.Notification.ViewModels
             var writer = new classXMLDeviceNotificationConfigurationWriter();
             writer.WriteConfiguration(Settings.Default.NotificationFilePath, configuration);
 
-            classApplicationLogger.LogMessage(0, "Notification file saved to: " + Settings.Default.NotificationFilePath);
+            ApplicationLogger.LogMessage(0, "Notification file saved to: " + Settings.Default.NotificationFilePath);
         }
 
         #endregion
 
         #region Method Manager Events
 
-        private bool Manager_MethodUpdated(object sender, classLCMethod method)
+        private bool Manager_MethodUpdated(object sender, LCMethod method)
         {
             if (methodsComboBoxOptions.Contains(method))
             {
@@ -414,7 +414,7 @@ namespace LcmsNet.Notification.ViewModels
             return true;
         }
 
-        private bool Manager_MethodRemoved(object sender, classLCMethod method)
+        private bool Manager_MethodRemoved(object sender, LCMethod method)
         {
             if (methodsComboBoxOptions.Contains(method))
             {
@@ -423,7 +423,7 @@ namespace LcmsNet.Notification.ViewModels
             return true;
         }
 
-        private bool Manager_MethodAdded(object sender, classLCMethod method)
+        private bool Manager_MethodAdded(object sender, LCMethod method)
         {
             if (!methodsComboBoxOptions.Contains(method))
             {
@@ -443,7 +443,7 @@ namespace LcmsNet.Notification.ViewModels
         /// <param name="device"></param>
         private void Manager_DeviceRenamed(object sender, IDevice device)
         {
-            if (device.DeviceType == enumDeviceType.Fluidics)
+            if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
             if (!deviceEventTable.TryGetValue(device, out var linker))
@@ -466,7 +466,7 @@ namespace LcmsNet.Notification.ViewModels
                 return;
 
             // Make sure we only add components, and the error device(for testing)
-            if (device.DeviceType != enumDeviceType.Component && !(device.GetType() == typeof(classErrorDevice)))
+            if (device.DeviceType != DeviceType.Component && !(device.GetType() == typeof(classErrorDevice)))
                 return;
 
             AddNotifier(device);
@@ -476,7 +476,7 @@ namespace LcmsNet.Notification.ViewModels
         {
             if (itemToDeviceMap.ContainsKey(device.Name))
             {
-                classApplicationLogger.LogMessage(0, $"Skipping addition of notifiers for device {device.Name}: notifiers for device with same name already exist!");
+                ApplicationLogger.LogMessage(0, $"Skipping addition of notifiers for device {device.Name}: notifiers for device with same name already exist!");
                 return;
             }
             device.Error += Device_Error;
@@ -510,7 +510,7 @@ namespace LcmsNet.Notification.ViewModels
 
         private void RemoveNotifier(INotifier device)
         {
-            if (device == null || ((IDevice)device).DeviceType == enumDeviceType.Fluidics)
+            if (device == null || ((IDevice)device).DeviceType == DeviceType.Fluidics)
                 return;
 
             device.StatusUpdate -= Device_StatusUpdate;
@@ -573,7 +573,7 @@ namespace LcmsNet.Notification.ViewModels
                 case enumDeviceNotificationAction.Ignore:
                     break;
                 case enumDeviceNotificationAction.NotifyOnly:
-                    classApplicationLogger.LogMessage(0, string.Format("Handling a user defined event from a device status change - {0}, message: '{1}'.", setting.Name, message));
+                    ApplicationLogger.LogMessage(0, string.Format("Handling a user defined event from a device status change - {0}, message: '{1}'.", setting.Name, message));
                     classNotifier.Path = RemoteStatusLogPath;
                     //m_classNotifier.Notify(message, setting);
                     break;
@@ -581,7 +581,7 @@ namespace LcmsNet.Notification.ViewModels
 
                     if (ActionRequired != null)
                     {
-                        classApplicationLogger.LogMessage(0, string.Format("Action has been set for {0}.", setting.Name));
+                        ApplicationLogger.LogMessage(0, string.Format("Action has been set for {0}.", setting.Name));
                         ActionRequired(this, setting);
                     }
                     break;
@@ -593,7 +593,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Device_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+        private void Device_StatusUpdate(object sender, DeviceStatusEventArgs e)
         {
             if (e?.Notifier == null)
                 return;
@@ -620,26 +620,26 @@ namespace LcmsNet.Notification.ViewModels
                     }
                     else
                     {
-                        classApplicationLogger.LogMessage(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification + message));
+                        ApplicationLogger.LogMessage(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification + message));
                     }
                 }
             }
             catch (KeyNotFoundException ex)
             {
-                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification + message), ex);
+                ApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished status: \"{1}\".", e.Notifier.Name, e.Notification + message), ex);
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not execute status update.", ex);
+                ApplicationLogger.LogError(0, "Could not execute status update.", ex);
             }
 
             if (e.LoggingType == DeviceEventLoggingType.Default || e.LoggingType == DeviceEventLoggingType.Message)
             {
-                classApplicationLogger.LogMessage(0, $"Device {e.Notifier.Name} reported status: {e.Notification}{message}");
+                ApplicationLogger.LogMessage(0, $"Device {e.Notifier.Name} reported status: {e.Notification}{message}");
             }
             else if (e.LoggingType == DeviceEventLoggingType.Error)
             {
-                classApplicationLogger.LogError(0, $"Device {e.Notifier.Name} reported status: {e.Notification}{message}");
+                ApplicationLogger.LogError(0, $"Device {e.Notifier.Name} reported status: {e.Notification}{message}");
             }
         }
 
@@ -648,7 +648,7 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Device_Error(object sender, classDeviceErrorEventArgs e)
+        private void Device_Error(object sender, DeviceErrorEventArgs e)
         {
             if (e?.Device == null)
                 return;
@@ -671,11 +671,11 @@ namespace LcmsNet.Notification.ViewModels
             }
             catch (KeyNotFoundException ex)
             {
-                classApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished error: \"{1}\".", e.Device.Name, e.Notification), ex);
+                ApplicationLogger.LogError(0, string.Format("The device {0} mentioned an unpublished error: \"{1}\".", e.Device.Name, e.Notification), ex);
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not execute status update.", ex);
+                ApplicationLogger.LogError(0, "Could not execute status update.", ex);
             }
 
             var msg = "";
@@ -685,11 +685,11 @@ namespace LcmsNet.Notification.ViewModels
             }
             if (e.LoggingType == DeviceEventLoggingType.Message)
             {
-                classApplicationLogger.LogMessage(0, $"Device {e.Device.Name} reported error: {e.Notification}{msg}");
+                ApplicationLogger.LogMessage(0, $"Device {e.Device.Name} reported error: {e.Notification}{msg}");
             }
             else if (e.LoggingType == DeviceEventLoggingType.Default || e.LoggingType == DeviceEventLoggingType.Error)
             {
-                classApplicationLogger.LogError(0, $"Device {e.Device.Name} reported error: {e.Notification}{msg}");
+                ApplicationLogger.LogError(0, $"Device {e.Device.Name} reported error: {e.Notification}{msg}");
             }
         }
 

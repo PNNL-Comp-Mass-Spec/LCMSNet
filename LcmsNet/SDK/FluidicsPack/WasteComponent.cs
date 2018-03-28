@@ -2,7 +2,7 @@
 
 namespace FluidicsPack
 {
-    [classDeviceControl(null,
+    [DeviceControl(null,
         typeof(FluidicsWasteComponent),
         "Waste",
         "Fluidics Components")]

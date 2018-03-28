@@ -158,12 +158,12 @@ namespace LcmsNet.Method.ViewModels
         /// Builds the LC Method.
         /// </summary>
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
-        public classLCMethod BuildMethod()
+        public LCMethod BuildMethod()
         {
             var method = classLCMethodBuilder.BuildMethod(AcquisitionStage.LCEvents);
             if (method == null)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Cannot create the LC-method from an empty event list.  You need to add events to the method.");
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Cannot create the LC-method from an empty event list.  You need to add events to the method.");
                 return null;
             }
 
@@ -186,7 +186,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the throughput timelines.
         /// </summary>
         /// <param name="methods">Methods to render for showing throughput.</param>
-        private void RenderThroughput(List<classLCMethod> methods)
+        private void RenderThroughput(List<LCMethod> methods)
         {
             if (methods == null)
                 return;
@@ -203,7 +203,7 @@ namespace LcmsNet.Method.ViewModels
             // Align methods - blindly!
             try
             {
-                var optimizer = new classLCMethodOptimizer();
+                var optimizer = new LCMethodOptimizer();
                 optimizer.UpdateRequired += optimizer_UpdateRequired;
                 var methods = SelectedMethods.SelectedMethods;
                 renderUpdateCount = 0;
@@ -225,7 +225,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// On an update, the optimizer will tell us the status of the methods here.
         /// </summary>
-        void optimizer_UpdateRequired(classLCMethodOptimizer sender)
+        void optimizer_UpdateRequired(LCMethodOptimizer sender)
         {
             // Render the updates if we animating and past the rendering threshold.
             if (MethodPreviewOptions.Animate && renderUpdateCount++ >= MethodPreviewOptions.FrameDelay)
@@ -247,7 +247,7 @@ namespace LcmsNet.Method.ViewModels
         /// Saves the given method to file.
         /// </summary>
         /// <param name="method"></param>
-        public bool SaveMethod(classLCMethod method)
+        public bool SaveMethod(LCMethod method)
         {
             // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
             if (method == null)
@@ -257,7 +257,7 @@ namespace LcmsNet.Method.ViewModels
             var writer = new classLCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
@@ -287,11 +287,11 @@ namespace LcmsNet.Method.ViewModels
             var methods = Directory.GetFiles(MethodFolderPath, "*.xml");
             foreach (var method in methods)
             {
-                classApplicationLogger.LogMessage(0, "Loading method " + method);
+                ApplicationLogger.LogMessage(0, "Loading method " + method);
                 OpenMethod(method);
             }
 
-            classApplicationLogger.LogMessage(0, "Methods loaded.");
+            ApplicationLogger.LogMessage(0, "Methods loaded.");
         }
 
         #endregion

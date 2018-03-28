@@ -14,8 +14,8 @@ namespace LcmsNet.Devices.ViewModels
             m_nameToControlMap = new Dictionary<string, AdvancedDeviceGroupControlViewModel>();
             m_deviceToControlMap = new Dictionary<IDevice, AdvancedDeviceGroupControlViewModel>();
 
-            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+            DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
         }
 
         public class DeviceGroup : IEquatable<DeviceGroup>
@@ -105,10 +105,10 @@ namespace LcmsNet.Devices.ViewModels
         {
             var type = device.GetType();
 
-            var attributes = type.GetCustomAttributes(typeof(classDeviceControlAttribute), false);
+            var attributes = type.GetCustomAttributes(typeof(DeviceControlAttribute), false);
             foreach (var o in attributes)
             {
-                var monitorAttribute = o as classDeviceControlAttribute;
+                var monitorAttribute = o as DeviceControlAttribute;
                 if (monitorAttribute != null)
                 {
                     IDeviceControl control = null;

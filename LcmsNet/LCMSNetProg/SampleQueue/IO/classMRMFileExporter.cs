@@ -34,14 +34,14 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="path">File path where data will be stored</param>
         /// <param name="data">List containing samples which may need MRM files</param>
-        public void WriteSamples(string path, List<classSampleData> data)
+        public void WriteSamples(string path, List<SampleData> data)
         {
             // Get a list of sample IDs that may have associated MRM files
             var sampleIDs = GetSampleIDList(data);
             if (sampleIDs.Count < 1)
             {
                 // There are no samples with request IDs, therefore no MRM files are needed
-                classApplicationLogger.LogMessage(0, "No MRM files to write");
+                ApplicationLogger.LogMessage(0, "No MRM files to write");
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace LcmsNet.SampleQueue.IO
             if (filesToGet.Count < 1)
             {
                 // There are no files to retrieve
-                classApplicationLogger.LogMessage(0, "No MRM files to write");
+                ApplicationLogger.LogMessage(0, "No MRM files to write");
                 return;
             }
 
@@ -67,12 +67,12 @@ namespace LcmsNet.SampleQueue.IO
                 catch (Exception ex)
                 {
                     var ErrMsg = "Exception writing MRM files";
-                    classApplicationLogger.LogError(0, ErrMsg, ex);
+                    ApplicationLogger.LogError(0, ErrMsg, ex);
                 }
             }
 
             // Report success
-            classApplicationLogger.LogMessage(0, "MRM file write complete");
+            ApplicationLogger.LogMessage(0, "MRM file write complete");
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace LcmsNet.SampleQueue.IO
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Exception getting list of MRM file ID's", ex);
+                ApplicationLogger.LogError(0, "Exception getting list of MRM file ID's", ex);
                 return retList;
             }
 
@@ -133,9 +133,9 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="filesToGet">Dictionary containing IDs of files to get</param>
         /// <returns>List with file names and data</returns>
-        private List<classMRMFileData> GetMRMFileData(List<string> filesToGet)
+        private List<MRMFileData> GetMRMFileData(List<string> filesToGet)
         {
-            var retData = new List<classMRMFileData>();
+            var retData = new List<MRMFileData>();
 
             var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
 
@@ -177,7 +177,7 @@ namespace LcmsNet.SampleQueue.IO
                     catch (Exception ex)
                     {
                         var ErrMsg = "Exception getting MRM files from DMS";
-                        classApplicationLogger.LogError(0, ErrMsg, ex);
+                        ApplicationLogger.LogError(0, ErrMsg, ex);
                         return retData;
                     }
 
@@ -199,7 +199,7 @@ namespace LcmsNet.SampleQueue.IO
                 catch (Exception ex)
                 {
                     var ErrMsg = "Exception getting MRM files from DMS";
-                    classApplicationLogger.LogError(0, ErrMsg, ex);
+                    ApplicationLogger.LogError(0, ErrMsg, ex);
                     return retData;
                 }
             }
@@ -211,7 +211,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="InpList">List containing an input queue</param>
         /// <returns>Sorted List of DMS request ID's</returns>
-        private List<int> GetSampleIDList(IEnumerable<classSampleData> InpList)
+        private List<int> GetSampleIDList(IEnumerable<SampleData> InpList)
         {
             var retList = new List<int>();
 
@@ -231,10 +231,10 @@ namespace LcmsNet.SampleQueue.IO
         ///// </summary>
         ///// <param name="InpList">List of samples to check for file downloads</param>
         ///// <returns></returns>
-        //private Dictionary<int, string> GetMRMFileIDs(List<classSampleData> InpList)
+        //private Dictionary<int, string> GetMRMFileIDs(List<SampleData> InpList)
         //{
         //   Dictionary<int, string> returnList = new Dictionary<int, string>();
-        //   foreach (classSampleData sample in InpList)
+        //   foreach (SampleData sample in InpList)
         //   {
         //      int tmpIndx = sample.DmsData.MRMFileID;
         //      // Check to see if the sample has a file download required
@@ -260,7 +260,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="FilePath">Location for MRM file</param>
         /// <param name="InpData">classMRMFileData object containing MRM file name and contents</param>
-        private void WriteToMRMFile(string FilePath, classMRMFileData InpData)
+        private void WriteToMRMFile(string FilePath, MRMFileData InpData)
         {
             var mrmFileNamePath = Path.Combine(FilePath, InpData.FileName);
 
@@ -271,7 +271,7 @@ namespace LcmsNet.SampleQueue.IO
                     fileWriter.Write(InpData.FileContents);
 
                 }
-                classApplicationLogger.LogMessage(0, "Completed writing MRM file " + mrmFileNamePath);
+                ApplicationLogger.LogMessage(0, "Completed writing MRM file " + mrmFileNamePath);
             }
             catch (Exception ex)
             {

@@ -24,7 +24,7 @@ namespace LcmsNet.Devices
 
         #region IDeviceConfigurationReader Members
 
-        public classDeviceConfiguration ReadConfiguration(string path)
+        public DeviceConfiguration ReadConfiguration(string path)
         {
             var configLines = File.ReadAllLines(path);
 
@@ -50,7 +50,7 @@ namespace LcmsNet.Devices
                 i++;
             }
 
-            var configuration = new classDeviceConfiguration();
+            var configuration = new DeviceConfiguration();
             for (i = 0; i < deviceHeaders.Count; i++)
             {
                 var k = i + 1;

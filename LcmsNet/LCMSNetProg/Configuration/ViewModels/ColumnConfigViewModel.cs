@@ -17,7 +17,7 @@ namespace LcmsNet.Configuration.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnConfigViewModel()
         {
-            columnData = new classColumnData
+            columnData = new ColumnData
             {
                 ID = 0,
                 Color = Colors.Red
@@ -28,7 +28,7 @@ namespace LcmsNet.Configuration.ViewModels
             Initialize();
         }
 
-        public ColumnConfigViewModel(classColumnData column, IReadOnlyReactiveList<string> columnNames)
+        public ColumnConfigViewModel(ColumnData column, IReadOnlyReactiveList<string> columnNames)
         {
             columnData = column;
             columnNamesComboBoxOptions = columnNames;
@@ -42,7 +42,7 @@ namespace LcmsNet.Configuration.ViewModels
             this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId, out columnId);
             this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
             {
-                this.ColumnEnabled = x != enumColumnStatus.Disabled;
+                this.ColumnEnabled = x != ColumnStatus.Disabled;
                 LogColumnStatusChange();
             });
             this.WhenAnyValue(x => x.ColumnData.Name).Subscribe(x => this.ColumnNameChanged?.Invoke());
@@ -54,11 +54,11 @@ namespace LcmsNet.Configuration.ViewModels
                 {
                     if (ColumnEnabled)
                     {
-                        columnData.Status = enumColumnStatus.Idle;
+                        columnData.Status = ColumnStatus.Idle;
                     }
                     else
                     {
-                        columnData.Status = enumColumnStatus.Disabled;
+                        columnData.Status = ColumnStatus.Disabled;
                     }
                 }
             });
@@ -73,7 +73,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// <summary>
         /// Column configuration object.
         /// </summary>
-        private classColumnData columnData;
+        private ColumnData columnData;
 
         private ObservableAsPropertyHelper<int> columnId;
         private readonly IReadOnlyReactiveList<string> columnNamesComboBoxOptions;
@@ -108,7 +108,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// <summary>
         /// Gets or sets the data associated with the column.
         /// </summary>
-        public classColumnData ColumnData
+        public ColumnData ColumnData
         {
             get { return columnData; }
             private set { this.RaiseAndSetIfChanged(ref columnData, value); }
@@ -130,7 +130,7 @@ namespace LcmsNet.Configuration.ViewModels
         {
             var statusMessage = string.Format("Status: {0}", ColumnData.Status);
             //TODO: change this magic number into a constant.
-            classApplicationLogger.LogMessage(1, statusMessage);
+            ApplicationLogger.LogMessage(1, statusMessage);
         }
 
         #endregion

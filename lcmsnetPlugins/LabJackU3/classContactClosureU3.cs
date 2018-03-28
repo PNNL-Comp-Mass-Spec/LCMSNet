@@ -11,7 +11,7 @@ using LcmsNetSDK.Method;
 namespace LcmsNet.Devices.ContactClosure
 {
     [Serializable]
-    [classDeviceControl(typeof(ContactClosureU3ViewModel),
+    [DeviceControl(typeof(ContactClosureU3ViewModel),
                                  "Contact Closure U3",
                                  "Contact Closures")
     ]
@@ -37,7 +37,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The current status of the Labjack.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
         /// <summary>
         /// Flag indicating if the device is in emulation mode.
         /// </summary>
@@ -52,12 +52,12 @@ namespace LcmsNet.Devices.ContactClosure
         /// Fired when the status changes.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
 #pragma warning disable CS0067
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 #pragma warning restore CS0067
         /// <summary>
         /// Fired when a property changes in the device.
@@ -121,7 +121,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the emulation state of the device.
         /// </summary>
-        //[classPersistenceAttribute("Emulated")]
+        //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
             get
@@ -136,7 +136,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the current status of the device.
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
@@ -146,7 +146,7 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 if (value != m_status)
                 {
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 }
                 m_status = value;
             }
@@ -185,7 +185,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [classPersistence("Port")]
+        [PersistenceData("Port")]
         public enumLabjackU3OutputPorts Port
         {
             get
@@ -198,7 +198,7 @@ namespace LcmsNet.Devices.ContactClosure
                 OnDeviceSaveRequired();
             }
         }
-        [classPersistence("Labjack ID")]
+        [PersistenceData("Labjack ID")]
         public int LabJackID
         {
             get
@@ -230,9 +230,9 @@ namespace LcmsNet.Devices.ContactClosure
             }
             catch(Exception ex)
             {
-                Status       = enumDeviceStatus.Error;
+                Status       = DeviceStatus.Error;
                 errorMessage = "Could not create a labjack object. Is one connected?";
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to create LabJack U3 object. Exception: " + ex.Message);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Unable to create LabJack U3 object. Exception: " + ex.Message);
                 return false;
             }
             Version = m_labjack.GetDriverVersion().ToString(CultureInfo.InvariantCulture);
@@ -242,11 +242,11 @@ namespace LcmsNet.Devices.ContactClosure
             if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
                 m_labjack.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
             {
-                Status = enumDeviceStatus.Initialized;
+                Status = DeviceStatus.Initialized;
                 return true;
             }
 
-            Status = enumDeviceStatus.Error;
+            Status = DeviceStatus.Error;
             errorMessage = "Could not get the firmware version or driver version information.";
             return false;
         }
@@ -276,7 +276,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethod("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(double pulseLengthSeconds, enumLabjackU3OutputPorts port, double voltage)
         {
             if (m_emulation)
@@ -301,7 +301,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw;
             }
 
-            var timer = new classTimerDevice();
+            var timer = new TimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try
@@ -346,7 +346,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -354,7 +354,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the device type.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 

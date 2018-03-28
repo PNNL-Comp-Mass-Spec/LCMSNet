@@ -3,7 +3,7 @@
 /*
 [Serializable]
 // for full understanding of the following attribute please see the LcmsNetSDK.
-[classDeviceControlAttribute(typeof(YOURUSERCONTROLHERE), typeof(YOURCUSTOMFLUIDICSGLYPHHERE), "RenameThisTemplate", "DeviceCategoryGoesHere")]
+[DeviceControlAttribute(typeof(YOURUSERCONTROLHERE), typeof(YOURCUSTOMFLUIDICSGLYPHHERE), "RenameThisTemplate", "DeviceCategoryGoesHere")]
 public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK glyph, you should inherit the interface for that glyph, instead of using its type in the attribute above.
 {
     #region PluginMethods
@@ -16,7 +16,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
 
     //This is a template for a method exposed to LcmsNet to operate the device, copy+paste as many as you need.
     // for full understanding of the following attribute please see the LcmsNetSDK.
-    [classLCMethodAttribute("YourMethodHere", 1.0, false, "", -1, false)]
+    [LCMethodEventAttribute("YourMethodHere", 1.0, false, "", -1, false)]
     public void YourMethodHere()
     {
         // operation code goes here
@@ -90,7 +90,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// <summary>
     /// Gets or sets the status of the device.
     /// </summary>
-    enumDeviceStatus Status { get; set; }
+    DeviceStatus Status { get; set; }
     /// <summary>
     /// Gets or sets the abort event for scheduling.
     /// </summary>
@@ -98,7 +98,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// <summary>
     /// Gets or sets the error type for a given device.
     /// </summary>
-    enumDeviceErrorStatus ErrorType
+    DeviceErrorStatus ErrorType
     {
         get;
         set;
@@ -106,7 +106,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// <summary>
     /// Gets or sets the device type.
     /// </summary>
-    enumDeviceType DeviceType
+    DeviceType DeviceType
     {
         get;
     }

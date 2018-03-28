@@ -38,7 +38,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// List/history of queue changes to support undo and redo operations; undo is performed by decrementing the current index back by 1 and returning the queue at the new index, redo is performed by incrementing the current index by one and returning the queue at the new index
         /// </summary>
-        private readonly List<List<classSampleData>> undoRedoList;
+        private readonly List<List<SampleData>> undoRedoList;
 
         /// <summary>
         /// The index of the currently displayed queue in the list/history of queue changes
@@ -48,7 +48,7 @@ namespace LcmsNet.SampleQueue
         public SampleQueueUndoRedo()
         {
             // Undo - redo operations
-            undoRedoList = new List<List<classSampleData>>();
+            undoRedoList = new List<List<SampleData>>();
         }
 
         /// <summary>
@@ -60,12 +60,12 @@ namespace LcmsNet.SampleQueue
         /// Undo is performed by decrementing the current index back by 1 and returning the queue at the new index
         /// Redo is performed by incrementing the current index by one and returning the queue at the new index
         /// </remarks>
-        private void PushQueue(List<classSampleData> workingQueue)
+        private void PushQueue(List<SampleData> workingQueue)
         {
-            var pushQueue = new List<classSampleData>();
+            var pushQueue = new List<SampleData>();
             foreach (var data in workingQueue)
             {
-                var sample = data.Clone() as classSampleData;
+                var sample = data.Clone() as SampleData;
                 if (sample?.LCMethod?.Name != null)
                 {
                     if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
@@ -96,7 +96,7 @@ namespace LcmsNet.SampleQueue
         /// Pops the queue from the stack if available
         /// </summary>
         /// <returns>A new queue if it can be popped.  Otherwise null if the back stack is empty.</returns>
-        private List<classSampleData> GetNextOlderQueue()
+        private List<SampleData> GetNextOlderQueue()
         {
             if (undoRedoList.Count <= 1 || currentIndex == 0)
                 return null;
@@ -112,7 +112,7 @@ namespace LcmsNet.SampleQueue
         /// Gets the next older queue in the history of queue changes
         /// </summary>
         /// <returns>A new queue if available.  Otherwise null if the history is empty.</returns>
-        private List<classSampleData> GetNextNewerQueue()
+        private List<SampleData> GetNextNewerQueue()
         {
             if (undoRedoList.Count <= 1 || currentIndex == undoRedoList.Count - 1)
                 return null;
@@ -134,7 +134,7 @@ namespace LcmsNet.SampleQueue
         /// Add the current working queue to the list of undoable actions
         /// </summary>
         /// <param name="workingQueue"></param>
-        public void AddToUndoable(List<classSampleData> workingQueue)
+        public void AddToUndoable(List<SampleData> workingQueue)
         {
             PushQueue(workingQueue);
         }
@@ -143,7 +143,7 @@ namespace LcmsNet.SampleQueue
         /// Undoes the most recent operation on the queue.
         /// </summary>
         /// <returns>true if the working queue was modified</returns>
-        public bool Undo(List<classSampleData> workingQueue)
+        public bool Undo(List<SampleData> workingQueue)
         {
             // Pop the first item on the queue
             var queue = GetNextOlderQueue();
@@ -167,7 +167,7 @@ namespace LcmsNet.SampleQueue
         /// Undoes the most recent operation on the queue.
         /// </summary>
         /// <returns>true if the working queue was modified</returns>
-        public bool Redo(List<classSampleData> workingQueue)
+        public bool Redo(List<SampleData> workingQueue)
         {
             // Pull the queue off the forward stack if one exists
             var queue = GetNextNewerQueue();

@@ -77,7 +77,7 @@ namespace LcmsNet.Devices.NetworkStart
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void m_netStart_Error(object sender, classDeviceErrorEventArgs e)
+        void m_netStart_Error(object sender, DeviceErrorEventArgs e)
         {
             SetStatus(m_netStart.Status, e.Error);
         }
@@ -115,7 +115,7 @@ namespace LcmsNet.Devices.NetworkStart
         /// </summary>
         /// <param name="status"></param>
         /// <param name="message"></param>
-        private void SetStatus(enumDeviceStatus status, string message)
+        private void SetStatus(DeviceStatus status, string message)
         {
             Status = "Status: " + m_netStart.Status + " - " + message;
         }
@@ -134,7 +134,7 @@ namespace LcmsNet.Devices.NetworkStart
             }
             var methodName = SelectedMethod;
 
-            var sample = new classSampleData
+            var sample = new SampleData
             {
                 DmsData = { DatasetName = SampleName },
                 InstrumentData = {MethodName = methodName}

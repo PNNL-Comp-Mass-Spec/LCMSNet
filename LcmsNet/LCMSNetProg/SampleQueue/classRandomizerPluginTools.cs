@@ -27,7 +27,7 @@ namespace LcmsNet.SampleQueue
 
             // Get list of DLL's in plugin folder
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            var pluginFolder = Path.Combine(fi.DirectoryName, classLCMSSettings.GetParameter(classLCMSSettings.PARAM_PLUGINFOLDER));
+            var pluginFolder = Path.Combine(fi.DirectoryName, LCMSSettings.GetParameter(LCMSSettings.PARAM_PLUGINFOLDER));
             var dllFiles = Directory.GetFiles(pluginFolder, "*.dll");
             if (dllFiles.GetLength(0) == 0)
             {
@@ -70,7 +70,7 @@ namespace LcmsNet.SampleQueue
             foreach (var testAttribute in attributes)
             {
                 // Determine if custom attribute is the correct type
-                var pluginAttr = testAttribute as classPlugInDisplayNameAttribute;
+                var pluginAttr = testAttribute as PlugInDisplayNameAttribute;
                 if (pluginAttr != null)
                 {
                     pluginName = pluginAttr.ToString();

@@ -22,7 +22,7 @@ using LcmsNetSDK.Method;
 namespace LcmsNet.Devices.ContactClosure
 {
     [Serializable]
-    [classDeviceControl(typeof(ContactClosureU12ViewModel),
+    [DeviceControl(typeof(ContactClosureU12ViewModel),
                                  "Contact Closure U12",
                                  "Contact Closures")
     ]
@@ -48,7 +48,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The current status of the Labjack.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
         /// <summary>
         /// Flag indicating if the device is in emulation mode.
         /// </summary>
@@ -65,11 +65,11 @@ namespace LcmsNet.Devices.ContactClosure
         /// Fired when the status changes.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
@@ -132,7 +132,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the emulation state of the device.
         /// </summary>
-        //[classPersistenceAttribute("Emulated")]
+        //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
             get
@@ -147,7 +147,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the current status of the device.
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
@@ -157,7 +157,7 @@ namespace LcmsNet.Devices.ContactClosure
             {
                 if (value != m_status)
                 {
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 }
                 m_status = value;
             }
@@ -196,7 +196,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [classPersistence("Port")]
+        [PersistenceData("Port")]
         public enumLabjackU12OutputPorts Port
         {
             get
@@ -209,7 +209,7 @@ namespace LcmsNet.Devices.ContactClosure
                 OnDeviceSaveRequired();
             }
         }
-        [classPersistence("Labjack ID")]
+        [PersistenceData("Labjack ID")]
         public int LabJackID
         {
             get
@@ -266,7 +266,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        [classLCMethod("Trigger", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
             return Trigger(timeout, m_port, pulseLengthSeconds);
@@ -277,7 +277,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="timeout"></param>
         /// <param name="port"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        [classLCMethod("Trigger Port", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(double timeout, enumLabjackU12OutputPorts port, double pulseLengthSeconds)
         {
             if (m_emulation)
@@ -302,14 +302,14 @@ namespace LcmsNet.Devices.ContactClosure
             }
             catch (classLabjackU12Exception ex)
             {
-                Error?.Invoke(this, new classDeviceErrorEventArgs("Could not start the trigger.",
+                Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
                                      ex,
-                                     enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                     DeviceErrorStatus.ErrorAffectsAllColumns,
                                      this));
                 throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
-            var timer = new classTimerDevice();
+            var timer = new TimerDevice();
             if (AbortEvent != null)
             {
                 timer.AbortEvent = AbortEvent;
@@ -323,9 +323,9 @@ namespace LcmsNet.Devices.ContactClosure
             catch (classLabjackU12Exception ex)
             {
                 Error?.Invoke(this,
-                    new classDeviceErrorEventArgs("Could not stop the trigger.",
+                    new DeviceErrorEventArgs("Could not stop the trigger.",
                                              ex,
-                                             enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                             DeviceErrorStatus.ErrorAffectsAllColumns,
                                              this));
                 error = 1;
                 throw;
@@ -340,7 +340,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethod("Trigger With Voltage", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger With Voltage", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, double voltage)
         {
             return Trigger(pulseLengthSeconds, m_port, voltage);
@@ -354,7 +354,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
-        [classLCMethod("Trigger With Voltage Port", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, enumLabjackU12OutputPorts port, double voltage)
         {
             if (m_emulation)
@@ -380,7 +380,7 @@ namespace LcmsNet.Devices.ContactClosure
                 throw ex;
             }
 
-            var timer = new classTimerDevice();
+            var timer = new TimerDevice();
             timer.WaitSeconds(pulseLengthSeconds);
 
             try
@@ -425,7 +425,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -433,7 +433,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the device type.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 

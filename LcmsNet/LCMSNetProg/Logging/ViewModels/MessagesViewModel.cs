@@ -16,8 +16,8 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         public MessagesViewModel()
         {
-            MessageLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
-            ErrorLevel = classApplicationLogger.CONST_STATUS_LEVEL_USER;
+            MessageLevel = ApplicationLogger.CONST_STATUS_LEVEL_USER;
+            ErrorLevel = ApplicationLogger.CONST_STATUS_LEVEL_USER;
             lockMessageList = new object();
             lockErrorList = new object();
             BindingOperations.EnableCollectionSynchronization(MessageList, lockMessageList);
@@ -51,7 +51,7 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         /// <param name="level">Filter for displaying messages.</param>
         /// <param name="message">Message to show user.</param>
-        public void ShowMessage(int level, classMessageLoggerArgs message)
+        public void ShowMessage(int level, MessageLoggerArgs message)
         {
             if (level <= messageLevel && message != null)
             {
@@ -77,7 +77,7 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         /// <param name="level">Level of errors to display.</param>
         /// <param name="error">Error to display.</param>
-        public void ShowErrors(int level, classErrorLoggerArgs error)
+        public void ShowErrors(int level, ErrorLoggerArgs error)
         {
             if (level <= errorLevel && error != null)
             {
@@ -85,7 +85,7 @@ namespace LcmsNet.Logging.ViewModels
             }
         }
 
-        private void InsertError(classErrorLoggerArgs error)
+        private void InsertError(ErrorLoggerArgs error)
         {
             ErrorPresent?.Invoke(this, new EventArgs());
             lock (lockErrorList)

@@ -21,18 +21,18 @@ namespace LcmsNet.Devices
         {
             Name = "ErrorDevice";
             Version = "Version X";
-            m_status = enumDeviceStatus.NotInitialized;
+            m_status = DeviceStatus.NotInitialized;
         }
 
         /// <summary>
         /// Fired when the status changes.
         /// </summary>
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 
         /// <summary>
         /// Fired when a property changes in the device.
@@ -62,7 +62,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Status of the device currently.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
 
         private string name;
 
@@ -97,13 +97,13 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Gets or sets the status of this device.
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get { return m_status; }
             set
             {
                 if (value != m_status)
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }
@@ -138,7 +138,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Throws an exception.
         /// </summary>
-        [classLCMethod("Throw Exception", 1, false, "", -1, false)]
+        [LCMethodEvent("Throw Exception", 1, false, "", -1, false)]
         public bool ThrowException()
         {
             var dummyCode = false;
@@ -147,24 +147,24 @@ namespace LcmsNet.Devices
             return false;
         }
 
-        [classLCMethod("Return Error", 1, false, "", -1, false)]
+        [LCMethodEvent("Return Error", 1, false, "", -1, false)]
         public bool ReturnError()
         {
             return false;
         }
 
-        [classLCMethod("Event Error", 1, false, "", -1, false)]
+        [LCMethodEvent("Event Error", 1, false, "", -1, false)]
         public void EventError()
         {
             Error?.Invoke(this,
-                          new classDeviceErrorEventArgs("Error!", null, enumDeviceErrorStatus.ErrorSampleOnly, this, "Error!"));
+                          new DeviceErrorEventArgs("Error!", null, DeviceErrorStatus.ErrorSampleOnly, this, "Error!"));
         }
 
         /// <summary>
         /// This method times out, waiting indefinitely.
         /// </summary>
         /// <returns>False</returns>
-        [classLCMethod("Timeout", 1, false, "", -1, false)]
+        [LCMethodEvent("Timeout", 1, false, "", -1, false)]
         public bool Timeout()
         {
             Thread.Sleep(4000);
@@ -175,7 +175,7 @@ namespace LcmsNet.Devices
         /// This method times out, waiting indefinitely.
         /// </summary>
         /// <returns>False</returns>
-        [classLCMethod("Wait Full Timeout", 1, false, "", -1, false)]
+        [LCMethodEvent("Wait Full Timeout", 1, false, "", -1, false)]
         public bool WaitUntilTimeout()
         {
             Thread.Sleep(1000);
@@ -203,9 +203,9 @@ namespace LcmsNet.Devices
 
         #region IDevice Members
 
-        public enumDeviceErrorStatus ErrorType { get; set; }
+        public DeviceErrorStatus ErrorType { get; set; }
 
-        public enumDeviceType DeviceType => enumDeviceType.BuiltIn;
+        public DeviceType DeviceType => DeviceType.BuiltIn;
 
         #endregion
 

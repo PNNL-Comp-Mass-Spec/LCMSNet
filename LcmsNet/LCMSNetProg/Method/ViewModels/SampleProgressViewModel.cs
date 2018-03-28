@@ -27,29 +27,29 @@ namespace LcmsNet.Method.ViewModels
             PreviewSeconds = CONST_PREVIEW_SECONDS;
 
             // Create internal lists
-            samples = new List<classSampleData>();
+            samples = new List<SampleData>();
 
             deviceColorMappings = new Dictionary<IDevice, Color>();
 
             // Maintain a list of errors.
-            errors = new Dictionary<int, List<classLCEvent>>();
+            errors = new Dictionary<int, List<LCEvent>>();
             for (var i = 0; i < CONST_TOTAL_COLUMNS + 1; i++)
             {
-                errors.Add(i, new List<classLCEvent>());
+                errors.Add(i, new List<LCEvent>());
                 samples.Add(null);
             }
 
             // Synch to the device manager so we can construct device-to-color mappings.
             try
             {
-                if (classDeviceManager.Manager != null)
+                if (DeviceManager.Manager != null)
                 {
                     // Maps device colors from device manager.
                     RemapDevicesToColors();
 
                     // Register device additions and deletions so that we remap color information for display.
-                    classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-                    classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+                    DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+                    DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
                 }
             }
             catch
@@ -62,7 +62,7 @@ namespace LcmsNet.Method.ViewModels
         /// Use the given sample to clear out displayed progress and errors for the column
         /// </summary>
         /// <param name="sample"></param>
-        public void ResetColumn(classSampleData sample)
+        public void ResetColumn(SampleData sample)
         {
             if (sample == null)
             {
@@ -89,7 +89,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the method provided.
         /// </summary>
         /// <param name="sample"></param>
-        public void UpdateSample(classSampleData sample)
+        public void UpdateSample(SampleData sample)
         {
             if (sample == null)
             {
@@ -113,7 +113,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="sample"></param>
         /// <param name="lcEvent"></param>
-        public void UpdateError(classSampleData sample, classLCEvent lcEvent)
+        public void UpdateError(SampleData sample, LCEvent lcEvent)
         {
             if (sample != null)
             {
@@ -164,9 +164,9 @@ namespace LcmsNet.Method.ViewModels
                 try
                 {
                     var renderer = new LCMethodColumnModeRenderer();
-                    foreach (var column in classCartConfiguration.Columns)
+                    foreach (var column in CartConfiguration.Columns)
                     {
-                        if (column.Status != enumColumnStatus.Disabled)
+                        if (column.Status != ColumnStatus.Disabled)
                         {
                             renderer.ColumnNames.Add(column.Name);
                         }
@@ -239,7 +239,7 @@ namespace LcmsNet.Method.ViewModels
 
                     foreach (var key in errors.Keys)
                     {
-                        var oldEvents = new List<classLCEvent>();
+                        var oldEvents = new List<LCEvent>();
                         var lcEvents = errors[key];
                         foreach (var lcEvent in lcEvents)
                         {
@@ -267,9 +267,9 @@ namespace LcmsNet.Method.ViewModels
             else
             {
                 var renderer = new LCMethodColumnModeRenderer();
-                foreach (var column in classCartConfiguration.Columns)
+                foreach (var column in CartConfiguration.Columns)
                 {
-                    if (column.Status != enumColumnStatus.Disabled)
+                    if (column.Status != ColumnStatus.Disabled)
                     {
                         renderer.ColumnNames.Add(column.Name);
                     }
@@ -320,7 +320,7 @@ namespace LcmsNet.Method.ViewModels
         private void RemapDevicesToColors()
         {
             // Clear the list so we can re-adjust the mappings
-            deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
+            deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(DeviceManager.Manager.Devices);
         }
 
         #endregion
@@ -339,7 +339,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// List of samples that are run on columns.
         /// </summary>
-        private readonly List<classSampleData> samples;
+        private readonly List<SampleData> samples;
 
         /// <summary>
         /// Dictionary to map a device to a color for visual integrity
@@ -349,7 +349,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Maintains a list of errors that happened on the column.
         /// </summary>
-        private readonly Dictionary<int, List<classLCEvent>> errors;
+        private readonly Dictionary<int, List<LCEvent>> errors;
 
         #endregion
 

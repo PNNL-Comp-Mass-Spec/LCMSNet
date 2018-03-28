@@ -7,7 +7,7 @@ using LcmsNetSDK.Method;
 
 namespace ASUTGen.Devices.Pumps
 {
-    /*[classDeviceControlAttribute(typeof(IDEXPumpControlViewModel),
+    /*[DeviceControlAttribute(typeof(IDEXPumpControlViewModel),
                                  typeof(IDEXPumpGlyph),
                                  "IDEX Pump",
                                  "Pumps")
@@ -15,8 +15,8 @@ namespace ASUTGen.Devices.Pumps
     public class IDEXPump :  IDevice
     {
 #pragma warning disable CS0067
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
 #pragma warning restore CS0067
 
@@ -42,7 +42,7 @@ namespace ASUTGen.Devices.Pumps
             get;
             set;
         }
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -55,7 +55,7 @@ namespace ASUTGen.Devices.Pumps
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -63,7 +63,7 @@ namespace ASUTGen.Devices.Pumps
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -93,7 +93,7 @@ namespace ASUTGen.Devices.Pumps
         {
 
         }
-        public classMonitoringComponent GetHealthData()
+        public MonitoringComponent GetHealthData()
         {
             return null;
         }
@@ -111,7 +111,7 @@ namespace ASUTGen.Devices.Pumps
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethod("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool SetFlowRate(double timeout, double flowRate)
         {
 

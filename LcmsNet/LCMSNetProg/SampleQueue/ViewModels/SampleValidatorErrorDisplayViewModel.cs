@@ -17,7 +17,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
         }
 
-        public SampleValidatorErrorDisplayViewModel(Dictionary<classSampleData, List<classSampleValidationError>> errorsSet)
+        public SampleValidatorErrorDisplayViewModel(Dictionary<SampleData, List<SampleValidationError>> errorsSet)
         {
             using (errors.SuppressChangeNotifications())
             {
@@ -34,10 +34,10 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public class ErrorData
         {
-            public classSampleData Sample { get; private set; }
-            public classSampleValidationError Error { get; private set; }
+            public SampleData Sample { get; private set; }
+            public SampleValidationError Error { get; private set; }
 
-            public ErrorData(classSampleData sample, classSampleValidationError error)
+            public ErrorData(SampleData sample, SampleValidationError error)
             {
                 Sample = sample;
                 Error = error;

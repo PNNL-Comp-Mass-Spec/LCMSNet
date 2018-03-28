@@ -34,7 +34,7 @@ namespace PDFGenerator
         /// <param name="columnData">a list of classColumnData for each enabled column</param>
         /// <param name="devices">a list of 3-tuples of string containing device name, status, and error type</param>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
-        public void WritePDF(string documentPath, string title, classSampleData sample, string numEnabledColumns, List<classColumnData> columnData,
+        public void WritePDF(string documentPath, string title, SampleData sample, string numEnabledColumns, List<ColumnData> columnData,
             List<IDevice> devices, BitmapSource fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
@@ -94,7 +94,7 @@ namespace PDFGenerator
 
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Mass Spectrometer Configuration");
             //TODO: Get mass spectrometer name from lcmsnet
-            doc.AddParagraph(string.Format("Mass Spectrometer: {0}", classLCMSSettings.GetParameter(classLCMSSettings.PARAM_INSTNAME)));
+            doc.AddParagraph(string.Format("Mass Spectrometer: {0}", LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME)));
             doc.AddPageBreak();
             //fluidics design section
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Method");
@@ -170,7 +170,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="sample">sample data</param>
         /// <returns>a formatted string of LCMethod data</returns>
-        private static string CreateLCMethodString(classSampleData sample)
+        private static string CreateLCMethodString(SampleData sample)
         {
             int[] fieldWidths = {-20, -20, -20, -20};
             string[]  row = {"Device", "Event Name", "Duration", "HadError"};
@@ -212,7 +212,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="columnData">a list containing data for the columns</param>
         /// <returns>a formatted string of column data</returns>
-        private static string CreateColumnString(List<classColumnData> columnData)
+        private static string CreateColumnString(List<ColumnData> columnData)
         {
             //Column data, we want to be able to determine other column names and status..but this would only happen at the *end* of the run, perhaps not so useful?
             int[] FieldWidths = { -20, -20};
@@ -231,7 +231,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="sample">sample information</param>
         /// <returns>a string consisting of formatted dataset info</returns>
-        private static string CreateDatasetParagraph(classSampleData sample)
+        private static string CreateDatasetParagraph(SampleData sample)
         {
             /* this paragraph contains all information in two columns, first the information identifier, for example "RequestID" and the second
                contains the actual information such as "42" */

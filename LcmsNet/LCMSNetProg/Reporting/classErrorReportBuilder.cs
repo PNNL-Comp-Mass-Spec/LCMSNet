@@ -37,7 +37,7 @@ namespace LcmsNet.Reporting
         /// <param name="methods"></param>
         /// <param name="logPath"></param>
         public string CreateReport(List<ContentControl> errorControls,
-            List<classLCMethod> methods,
+            List<LCMethod> methods,
             string logPath,
             string hardwarePath)
         {
@@ -65,7 +65,7 @@ namespace LcmsNet.Reporting
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not copy the current log file.", ex);
+                ApplicationLogger.LogError(0, "Could not copy the current log file.", ex);
             }
 
             try
@@ -74,7 +74,7 @@ namespace LcmsNet.Reporting
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not copy the current hardware configuration file.", ex);
+                ApplicationLogger.LogError(0, "Could not copy the current hardware configuration file.", ex);
             }
 
             var zipPath = newPath + ".zip";
@@ -86,7 +86,7 @@ namespace LcmsNet.Reporting
             catch (Exception ex)
             {
                 zipPath = null;
-                classApplicationLogger.LogError(0, "Could not create the error report zip file.", ex);
+                ApplicationLogger.LogError(0, "Could not create the error report zip file.", ex);
             }
 
             return zipPath;
@@ -115,7 +115,7 @@ namespace LcmsNet.Reporting
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0, "Could not copy the error report file to the server.", ex);
+                    ApplicationLogger.LogError(0, "Could not copy the error report file to the server.", ex);
                 }
             }
         }
@@ -194,7 +194,7 @@ namespace LcmsNet.Reporting
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not create control screenshots.", ex);
+                ApplicationLogger.LogError(0, "Could not create control screenshots.", ex);
             }
         }
 
@@ -212,7 +212,7 @@ namespace LcmsNet.Reporting
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0,
+                    ApplicationLogger.LogError(0,
                         string.Format("Could not create the root error reporting directory {0}.", basePath), ex);
                     return false;
                 }
@@ -224,7 +224,7 @@ namespace LcmsNet.Reporting
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0,
+                ApplicationLogger.LogError(0,
                     string.Format("Could not create a error reporting directory {0}.", basePath), ex);
                 return false;
             }
@@ -237,7 +237,7 @@ namespace LcmsNet.Reporting
         /// </summary>
         /// <param name="path"></param>
         /// <param name="methods"></param>
-        private void SaveMethods(string path, List<classLCMethod> methods)
+        private void SaveMethods(string path, List<LCMethod> methods)
         {
             var writer = new classLCMethodWriter();
             foreach (var method in methods)
@@ -248,7 +248,7 @@ namespace LcmsNet.Reporting
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0,
+                    ApplicationLogger.LogError(0,
                         string.Format("Could not save the LC method {0} for error reporting.", method.Name), ex);
                 }
             }

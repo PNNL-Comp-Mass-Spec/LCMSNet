@@ -8,7 +8,7 @@ namespace LcmsNet.Method
     /// </summary>
     /// <param name="sender">Scheduler sending data.</param>
     /// <param name="errorMessage">Error message found.</param>
-    public delegate void DelegateError(object sender, classSampleData sample, string errorMessage);
+    public delegate void DelegateError(object sender, SampleData sample, string errorMessage);
 
     /// <summary>
     /// Delegate defining sample progress information.
@@ -28,7 +28,7 @@ namespace LcmsNet.Method
         /// <param name="message">Message from the sender.</param>
         /// <param name="sample">Sample data whose progress is being reported for.</param>
         /// <param name="progressType"></param>
-        public classSampleProgressEventArgs(string message, classSampleData sample, enumSampleProgress progressType)
+        public classSampleProgressEventArgs(string message, SampleData sample, enumSampleProgress progressType)
         {
             Message = message;
             Sample = sample;
@@ -38,7 +38,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets or sets the sample whose progress has been made.
         /// </summary>
-        public classSampleData Sample { get; set; }
+        public SampleData Sample { get; set; }
 
         /// <summary>
         /// Gets or sets the message about the sample progress.

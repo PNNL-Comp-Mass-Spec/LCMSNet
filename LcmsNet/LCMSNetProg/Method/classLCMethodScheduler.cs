@@ -42,7 +42,7 @@ namespace LcmsNet.Method
             m_threadLocks = new List<object>();
             sampleEndTime = new DateTime[CONST_NUMBER_THREADS + 1];
             currentEvent = new int[CONST_NUMBER_THREADS + 1];
-            samples = new classSampleData[CONST_NUMBER_THREADS + 1];
+            samples = new SampleData[CONST_NUMBER_THREADS + 1];
 
             for (var i = 0; i < CONST_NUMBER_THREADS + 1; i++)
             {
@@ -192,7 +192,7 @@ namespace LcmsNet.Method
         // state updates to the scheduler occur as they happen on the columns, instead of waiting for the
         // scheduler thread to get around to dealing with the report.
         //
-        readonly classSampleData[] samples;
+        readonly SampleData[] samples;
 
         //
         // These two arrays tell us when the sample should finish
@@ -367,7 +367,7 @@ namespace LcmsNet.Method
         /// <param name="level">Level of message</param>
         /// <param name="ex">Exception</param>
         /// <param name="sample">Sample</param>
-        private void Print(string message, int level, Exception ex = null, classSampleData sample = null)
+        private void Print(string message, int level, Exception ex = null, SampleData sample = null)
         {
             if (level <= VerboseLevel)
             {
@@ -375,7 +375,7 @@ namespace LcmsNet.Method
                 Trace.Flush();
                 Exception exVal = null;
                 var error = ex != null;
-                classSampleData sampVal = null;
+                SampleData sampVal = null;
                 if (Logger != null)
                 {
                     if (ex != null)
@@ -423,12 +423,12 @@ namespace LcmsNet.Method
         private static void WriteCompletedSampleInformation(object sample)
         {
             //Write methods files
-            classMethodFileTools.WriteMethodFiles((classSampleData)sample);
+            classMethodFileTools.WriteMethodFiles((SampleData)sample);
         }
 
         private static void WriteIncompleteSampleInformation(object sample)
         {
-            classMethodFileTools.WriteIncompleteMethodFiles((classSampleData)sample);
+            classMethodFileTools.WriteIncompleteMethodFiles((SampleData)sample);
         }
 
         /// <summary>
@@ -436,7 +436,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="sample"></param>
         /// <param name="errorMessage">Error message to report.</param>
-        private void HandleError(classSampleData sample, string errorMessage)
+        private void HandleError(SampleData sample, string errorMessage)
         {
             SchedulerError?.Invoke(this, sample, errorMessage);
         }
@@ -505,10 +505,10 @@ namespace LcmsNet.Method
                     data.ActualLCMethod.CurrentEventNumber = 0;
                     data.ActualLCMethod.ActualEnd = DateTime.MaxValue;
                     data.ActualLCMethod.ActualStart = TimeKeeper.Instance.Now;
-                    var dataClone = data.Clone() as classSampleData;
+                    var dataClone = data.Clone() as SampleData;
                     if (dataClone == null)
                     {
-                        dataClone = new classSampleData();
+                        dataClone = new SampleData();
                         dataClone.LCMethod = data.LCMethod;
                         dataClone.CloneLCMethod(data.ActualLCMethod);
                         dataClone.RunningStatus = data.RunningStatus;
@@ -574,7 +574,7 @@ namespace LcmsNet.Method
                         {
                             m_sampleQueue.StopRunningQueue();
                             m_notifyOnKill = false;
-                            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.Error, CONST_ERROR_STOPPED, this));
+                            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.Error, CONST_ERROR_STOPPED, this));
                         }
                         Print("Done killing columns.  ", CONST_VERBOSE_EVENTS);
                         m_stoppedSamples.Set();
@@ -712,13 +712,13 @@ namespace LcmsNet.Method
             set { this.RaiseAndSetIfChanged(ref name, value); }
         }
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
         /// <remarks>This event is required by IDevice but this class does not use it</remarks>
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -778,7 +778,7 @@ namespace LcmsNet.Method
                 {
                     //Note: This shouldn't be possible, this is here just in case something funky happens.
                     Stop();
-                    HandleError(new classSampleData(), "Report by Unknown column worker");
+                    HandleError(new SampleData(), "Report by Unknown column worker");
                 }
                 lock (m_threadLocks[workerIndex])
                 {
@@ -800,37 +800,37 @@ namespace LcmsNet.Method
                     var skipDueToException = false;
                     if (currentEvent == null)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent is null!");
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent is null!");
                         skipDueToException = true;
                     }
                     else if (columnID >= currentEvent.Length)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent: columnID out of range: " + columnID + " >= " + currentEvent.Length);
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: currentEvent: columnID out of range: " + columnID + " >= " + currentEvent.Length);
                         skipDueToException = true;
                     }
                     if (samples == null)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples is null!");
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples is null!");
                         skipDueToException = true;
                     }
                     else if (columnID >= samples.Length)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples: columnID out of range: " + columnID + " >= " + samples.Length);
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples: columnID out of range: " + columnID + " >= " + samples.Length);
                         skipDueToException = true;
                     }
                     else if (samples[columnID] == null)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "] is null!");
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "] is null!");
                         skipDueToException = true;
                     }
                     else if (samples[columnID].ActualLCMethod == null)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod is null!");
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod is null!");
                         skipDueToException = true;
                     }
                     else if (samples[columnID].ActualLCMethod.Events == null)
                     {
-                        classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod.Events is null!");
+                        ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: samples[" + columnID + "].ActualLCMethod.Events is null!");
                         skipDueToException = true;
                     }
 
@@ -846,7 +846,7 @@ namespace LcmsNet.Method
                         var eventDeviceName = "unknown";
                         if (currentEventNumber >= samples[columnID].ActualLCMethod.Events.Count)
                         {
-                            classApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: sample events: currentEventNumber out of range: " + currentEventNumber + " >= " + samples[columnID].ActualLCMethod.Events.Count);
+                            ApplicationLogger.LogError(0, "LcmsNet.Method.classLCMethodScheduler.ColumnWorkerComplete_Handler: sample events: currentEventNumber out of range: " + currentEventNumber + " >= " + samples[columnID].ActualLCMethod.Events.Count);
                         }
                         else
                         {

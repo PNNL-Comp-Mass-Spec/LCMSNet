@@ -303,8 +303,8 @@ namespace LcmsNet.Devices.Pumps
             pump.Disconnected += Pump_Disconnected;
 
 #if DACTEST
-                pump.StatusUpdate += new EventHandler<classDeviceStatusEventArgs>(Pump_StatusUpdate);
-                pump.Error += new EventHandler<classDeviceErrorEventArgs>(Pump_Error);
+                pump.StatusUpdate += new EventHandler<DeviceStatusEventArgs>(Pump_StatusUpdate);
+                pump.Error += new EventHandler<DeviceErrorEventArgs>(Pump_Error);
 #endif
             // Initial control mode display
             ControlMode = enumIscoControlMode.Local;
@@ -781,7 +781,7 @@ namespace LcmsNet.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Exception occured trying to refresh pump data " + ex.StackTrace);
+                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Exception occured trying to refresh pump data " + ex.StackTrace);
             }
             //mcontrol_IscoGraphs.UpdateAllPlots(m_Pump.PumpData);
         }
@@ -862,13 +862,13 @@ namespace LcmsNet.Devices.Pumps
         }
 
 #if DACTEST
-        private void Pump_Error(object sender, classDeviceErrorEventArgs e)
+        private void Pump_Error(object sender, DeviceErrorEventArgs e)
         {
             string msg = "ERROR: " + e.Notification;
             LogDebugMessage(msg);
         }
 
-        private void Pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+        private void Pump_StatusUpdate(object sender, DeviceStatusEventArgs e)
         {
             string msg = "STATUS: " + e.Notification;
             LogDebugMessage(msg);

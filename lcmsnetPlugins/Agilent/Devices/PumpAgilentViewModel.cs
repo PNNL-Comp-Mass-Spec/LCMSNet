@@ -458,7 +458,7 @@ namespace Agilent.Devices.Pumps
             }
             catch (System.IO.DirectoryNotFoundException ex)
             {
-                classApplicationLogger.LogError(0, ex.Message, ex);
+                ApplicationLogger.LogError(0, ex.Message, ex);
             }
         }
 

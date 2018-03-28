@@ -74,12 +74,12 @@ namespace FluidicsSDK.ModelCheckers
                     {
                         const string message = "Cycle in physical configuration";
                         var deviceName = source.ParentDevice.IDevice.Name;
-                        StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, deviceName, this, message));
+                        StatusUpdate(this, new DeviceStatusEventArgs(DeviceStatus.Initialized, deviceName, this, message));
                     }
                 }
             }
             watch.Stop();
-            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Cycle check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
+            //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Cycle check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
             return status;
         }
 
@@ -123,9 +123,9 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }

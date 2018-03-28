@@ -11,12 +11,12 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Fired when new trays are available.
         /// </summary>
-        event EventHandler<classAutoSampleEventArgs> TrayNamesRead;
+        event EventHandler<AutoSampleEventArgs> TrayNamesRead;
 
         /// <summary>
         /// Fired when new methods are available.
         /// </summary>
-        event EventHandler<classAutoSampleEventArgs> MethodNamesRead;
+        event EventHandler<AutoSampleEventArgs> MethodNamesRead;
 
         /// <summary>
         /// List of tray names in the autosampler
@@ -42,9 +42,9 @@ namespace LcmsNetSDK.Devices
     /// <summary>
     /// Event args passed when IAutoSampler events are fired
     /// </summary>
-    public class classAutoSampleEventArgs : EventArgs
+    public class AutoSampleEventArgs : EventArgs
     {
-        public classAutoSampleEventArgs(List<string> trayList, List<string> methodList)
+        public AutoSampleEventArgs(List<string> trayList, List<string> methodList)
         {
             TrayList = trayList;
             MethodList = methodList;

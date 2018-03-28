@@ -72,14 +72,14 @@ namespace FluidicsSDK.ModelCheckers
                     if (StatusUpdate != null)
                     {
                         const string message = "Multiple Sources";
-                        StatusUpdate(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, message, this));
+                        StatusUpdate(this, new DeviceStatusEventArgs(DeviceStatus.Initialized, message, this));
                     }
                     status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null,
                         TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture), null, source.ParentDevice.IDevice));
                 }
             }
             watch.Stop();
-            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "MultiSource check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
+            //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "MultiSource check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
             return status;
         }
 
@@ -137,9 +137,9 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }

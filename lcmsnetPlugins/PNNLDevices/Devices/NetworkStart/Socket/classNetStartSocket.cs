@@ -16,7 +16,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
     /// Network Start using old command packing messaging for communication with mass spectrometer.
     /// </summary>
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [classDeviceControl(typeof(NetStartViewModel),
+    [DeviceControl(typeof(NetStartViewModel),
 
                                  "Network Start",
                                  "Detectors")
@@ -72,7 +72,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Status of the device.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
         #endregion
 
         #region Events
@@ -80,11 +80,11 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// Fired when the status changes for the device.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
         /// <summary>
         /// Fired when an error occurs.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         /// <summary>
         /// Fired when the Agilent Pump finds out what method names are available.
         /// </summary>
@@ -105,7 +105,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             m_name = "network start"; // classDeviceManager.Manager.CreateUniqueDeviceName("networkStart");
             Version = "May-2010";
             m_port       = CONST_SERVER_PORT;
-            m_status    = enumDeviceStatus.NotInitialized;
+            m_status    = DeviceStatus.NotInitialized;
 
             AbortEvent      = new System.Threading.ManualResetEvent(false);
             Emulation       = true;
@@ -116,17 +116,17 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the send timeout for the socket.
         /// </summary>
-        [classPersistence("SendTimeout")]
+        [PersistenceData("SendTimeout")]
         public int SendTimeout { get; set; }
         /// <summary>
         /// Gets or sets the receive timeout for the socket.
         /// </summary>
-        [classPersistence("ReceiveTimeout")]
+        [PersistenceData("ReceiveTimeout")]
         public int ReceiveTimeout { get; set; }
         /// <summary>
         /// Gets or sets the IP address or DNS name of the server instrument.
         /// </summary>
-        [classPersistence("IPAddress")]
+        [PersistenceData("IPAddress")]
         public string Address
         {
             get
@@ -141,7 +141,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the port used to connect to the server.
         /// </summary>
-        [classPersistence("Port")]
+        [PersistenceData("Port")]
         public int Port
         {
             get
@@ -342,8 +342,8 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <param name="timeout"></param>
         /// <param name="sample">Name of sample to run.</param>
         /// <returns>True if start successful.  False if start failed for any reason.</returns>
-        [classLCMethod("Start Acquisition", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
-        public bool StartAcquisition(double timeout, classSampleData sample)
+        [LCMethodEvent("Start Acquisition", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]
+        public bool StartAcquisition(double timeout, SampleData sample)
         {
             if (Emulation)
             {
@@ -443,7 +443,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Stops instrument acquisition.
         /// </summary>
-        [classLCMethod("Stop Acquisition", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Acquisition", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool StopAcquisition(double delayTime)
         {
             var startTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -504,7 +504,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the Emulation state.
         /// </summary>
-        //[classPersistenceAttribute("Emulated")]
+        //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
             get;set;
@@ -512,7 +512,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the device's status.
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
@@ -521,7 +521,7 @@ namespace LcmsNet.Devices.NetworkStart.Socket
             set
             {
                 if (value != m_status)
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }
@@ -664,20 +664,20 @@ namespace LcmsNet.Devices.NetworkStart.Socket
         /// <param name="ex"></param>
         private void HandleError(string message, Exception ex)
         {
-            Error?.Invoke(this, new classDeviceErrorEventArgs(message,
+            Error?.Invoke(this, new DeviceErrorEventArgs(message,
                                  ex,
-                                 enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                 DeviceErrorStatus.ErrorAffectsAllColumns,
                                  this,
                                  "None"));
         }
 
         #region IDevice Members
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
         }
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         #endregion
 

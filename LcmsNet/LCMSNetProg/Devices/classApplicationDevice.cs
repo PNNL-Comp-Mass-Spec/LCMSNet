@@ -24,20 +24,20 @@ namespace LcmsNet.Devices
         {
             Name = "Application";
             Version = "Version 1.0";
-            m_status = enumDeviceStatus.NotInitialized;
+            m_status = DeviceStatus.NotInitialized;
 
         }
 
         /// <summary>
         /// Fired when the status changes.
         /// </summary>
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
         /// <remarks>This event is required by IDevice but this class does not use it</remarks>
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -58,8 +58,8 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Creates a trigger file.
         /// </summary>
-        [classLCMethod("Create Trigger Files", true, 0, 5, "", -1, false)]
-        public bool CreateTriggerFiles(classSampleData sampleData)
+        [LCMethodEvent("Create Trigger Files", true, 0, 5, "", -1, false)]
+        public bool CreateTriggerFiles(SampleData sampleData)
         {
             try
             {
@@ -67,18 +67,18 @@ namespace LcmsNet.Devices
             }
             catch (Exception)
             {
-                classApplicationLogger.LogError(0, "Could not write the LC Method file.");
+                ApplicationLogger.LogError(0, "Could not write the LC Method file.");
             }
 
             sampleData.ActualLCMethod.ActualEnd = TimeKeeper.Instance.Now;
 
             try
             {
-                classTriggerFileTools.GenerateTriggerFile(sampleData);
+                TriggerFileTools.GenerateTriggerFile(sampleData);
             }
             catch
             {
-                classApplicationLogger.LogError(0, "Could not write the trigger file.");
+                ApplicationLogger.LogError(0, "Could not write the trigger file.");
             }
             return true;
         }
@@ -99,7 +99,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Status of the device currently.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
 
         private string name;
 
@@ -139,20 +139,20 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Gets or sets the status of this device.
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get { return m_status; }
             set
             {
                 if (value != m_status)
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }
 
         public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
+            Status = DeviceStatus.Initialized;
             return true;
         }
 
@@ -183,9 +183,9 @@ namespace LcmsNet.Devices
             return new List<string>();
         }
 
-        public enumDeviceErrorStatus ErrorType { get; set; }
+        public DeviceErrorStatus ErrorType { get; set; }
 
-        public enumDeviceType DeviceType => enumDeviceType.BuiltIn;
+        public DeviceType DeviceType => DeviceType.BuiltIn;
 
         #endregion
 

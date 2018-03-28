@@ -137,7 +137,7 @@ namespace LcmsNet.Devices.ContactClosure
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
+                    ApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
                 }
             }
         }

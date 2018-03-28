@@ -10,7 +10,7 @@ namespace LcmsNet.Method.ViewModels
 {
     public delegate void DelegateLCMethodEventOptimize(object sender, bool optimize);
 
-    public delegate void DelegateLCMethodEventLocked(object sender, bool enabled, classLCMethodData methodData);
+    public delegate void DelegateLCMethodEventLocked(object sender, bool enabled, LCMethodData methodData);
 
     /// <summary>
     /// LC-Method User Interface for building an LC-Method.
@@ -45,7 +45,7 @@ namespace LcmsNet.Method.ViewModels
         /// Constructor for an unlocking event.
         /// </summary>
         /// <param name="device"></param>
-        public LCMethodEventViewModel(classLCMethodData methodData, bool locked)
+        public LCMethodEventViewModel(LCMethodData methodData, bool locked)
         {
             Initialize();
 
@@ -56,7 +56,7 @@ namespace LcmsNet.Method.ViewModels
             // make sure here the device is not a timer, because if it is, then we must
             // find the device name string "Timer" from the combo box so we can
             // get the right reference.
-            if (!(methodData.Device is classTimerDevice))
+            if (!(methodData.Device is TimerDevice))
             {
                 SelectedDevice = methodData.Device;
             }
@@ -80,7 +80,7 @@ namespace LcmsNet.Method.ViewModels
             if (locked)
             {
                 // Create a dummy classLCMethodData
-                var tempObj = new classLCMethodData(null, null, new classLCMethodAttribute("Unlock", 0.0, "", 0, false), null);
+                var tempObj = new LCMethodData(null, null, new LCMethodEventAttribute("Unlock", 0.0, "", 0, false), null);
                 methodsComboBoxOptions.Add(tempObj);
                 SelectedLCMethod = tempObj;
             }
@@ -131,7 +131,7 @@ namespace LcmsNet.Method.ViewModels
         private void Initialize()
         {
             // Add the devices to the method editor
-            deviceMappings = new Dictionary<IDevice, List<classLCMethodData>>();
+            deviceMappings = new Dictionary<IDevice, List<LCMethodData>>();
             RegisterDevices();
             Breakpoint = new BreakpointViewModel();
 
@@ -142,9 +142,9 @@ namespace LcmsNet.Method.ViewModels
             Breakpoint.BreakpointChanged += Breakpoint_Changed;
 
             // Register to listen for device additions or deletions.
-            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
-            classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
+            DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+            DeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
         }
 
         void Breakpoint_Changed(object sender, BreakpointArgs e)
@@ -152,7 +152,7 @@ namespace LcmsNet.Method.ViewModels
             methodData.BreakPoint = e.IsSet;
         }
 
-        private int FindMethodIndex(classLCMethodData method)
+        private int FindMethodIndex(LCMethodData method)
         {
             var i = 0;
             foreach (var data in MethodsComboBoxOptions)
@@ -200,12 +200,12 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Method data that has been selected to be displayed.
         /// </summary>
-        private classLCMethodData methodData;
+        private LCMethodData methodData;
 
         /// <summary>
         /// List of device methods and parameters to use.
         /// </summary>
-        private Dictionary<IDevice, List<classLCMethodData>> deviceMappings;
+        private Dictionary<IDevice, List<LCMethodData>> deviceMappings;
 
         /// <summary>
         /// Flag indicating if this event is a placeholder so that we know it's an unlocking event
@@ -216,9 +216,9 @@ namespace LcmsNet.Method.ViewModels
         private string eventNumber = "1";
         private bool optimizeWith = false;
         private IDevice selectedDevice = null;
-        private classLCMethodData selectedLCMethod = null;
+        private LCMethodData selectedLCMethod = null;
         private readonly ReactiveList<IDevice> devicesComboBoxOptions = new ReactiveList<IDevice>();
-        private readonly ReactiveList<classLCMethodData> methodsComboBoxOptions = new ReactiveList<classLCMethodData>();
+        private readonly ReactiveList<LCMethodData> methodsComboBoxOptions = new ReactiveList<LCMethodData>();
         private readonly ReactiveList<EventParameterViewModel> eventParameterList = new ReactiveList<EventParameterViewModel>();
         private bool devicesComboBoxEnabled = true;
         private bool eventUnlocked = true;
@@ -252,14 +252,14 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// The selected method
         /// </summary>
-        public classLCMethodData SelectedLCMethod
+        public LCMethodData SelectedLCMethod
         {
             get { return selectedLCMethod; }
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
         }
 
         public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => devicesComboBoxOptions;
-        public IReadOnlyReactiveList<classLCMethodData> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public IReadOnlyReactiveList<LCMethodData> MethodsComboBoxOptions => methodsComboBoxOptions;
         public IReadOnlyReactiveList<EventParameterViewModel> EventParameterList => eventParameterList;
 
         public bool DevicesComboBoxEnabled
@@ -283,7 +283,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Gets the method selected to run by the user.
         /// </summary>
-        public classLCMethodData SelectedMethod
+        public LCMethodData SelectedMethod
         {
             get
             {
@@ -359,7 +359,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="device"></param>
         void Manager_DeviceRenamed(object sender, IDevice device)
         {
-            if (device.DeviceType == enumDeviceType.Fluidics)
+            if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
             if (devicesComboBoxOptions.Contains(device))
@@ -376,7 +376,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="device"></param>
         void Manager_DeviceRemoved(object sender, IDevice device)
         {
-            if (device.DeviceType == enumDeviceType.Fluidics)
+            if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
             if (devicesComboBoxOptions.Contains(device))
@@ -399,7 +399,7 @@ namespace LcmsNet.Method.ViewModels
             // If this was the first device added for some odd reason, then make sure we enable the device.
             var isFirstDevice = false;
 
-            if (device.DeviceType == enumDeviceType.Fluidics)
+            if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
 
@@ -447,12 +447,12 @@ namespace LcmsNet.Method.ViewModels
             // are not persisted throughout a method or across methods.  Thus we need to test to see
             // if this is true, if so, then we need to just find the device in the
             // device manager and get the device method mappings that way.
-            if (device is classTimerDevice)
+            if (device is TimerDevice)
             {
                 // Find the timer device.
                 foreach (var tempDevice in deviceMappings.Keys)
                 {
-                    if (tempDevice is classTimerDevice)
+                    if (tempDevice is TimerDevice)
                     {
                         device = tempDevice;
                         break;
@@ -479,7 +479,7 @@ namespace LcmsNet.Method.ViewModels
         /// Displays the given device method names and selected controls.
         /// </summary>
         /// <param name="method"></param>
-        private void LoadMethodParameters(classLCMethodData method)
+        private void LoadMethodParameters(LCMethodData method)
         {
             // Make sure the device is not null
             if (method == null)
@@ -612,9 +612,9 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void RegisterDevices()
         {
-            foreach (var device in classDeviceManager.Manager.Devices)
+            foreach (var device in DeviceManager.Manager.Devices)
             {
-                if (device.DeviceType == enumDeviceType.Fluidics)
+                if (device.DeviceType == DeviceType.Fluidics)
                     continue;
 
                 var methodPairs = ReflectDevice(device);
@@ -636,7 +636,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Reflects the given device and puts the method and parameter information in the appropiate combo boxes.
         /// </summary>
-        public List<classLCMethodData> ReflectDevice(IDevice device)
+        public List<LCMethodData> ReflectDevice(IDevice device)
         {
             if (device == null)
                 throw new NullReferenceException("Device cannot be null.");
@@ -644,21 +644,21 @@ namespace LcmsNet.Method.ViewModels
             var type = device.GetType();
 
             // List of method editing pairs
-            var methodPairs = new List<classLCMethodData>();
+            var methodPairs = new List<LCMethodData>();
 
             // We are trying to enumerate all the methods for this device building their method-parameter pairs.
             foreach (var method in type.GetMethods())
             {
-                var customAttributes = method.GetCustomAttributes(typeof(classLCMethodAttribute), true);
+                var customAttributes = method.GetCustomAttributes(typeof(LCMethodEventAttribute), true);
                 foreach (var objAttribute in customAttributes)
                 {
                     // If the method has a custom LC Method Attribute, then we want to look at the parameters used
-                    var attr = objAttribute as classLCMethodAttribute;
+                    var attr = objAttribute as LCMethodEventAttribute;
                     if (attr != null)
                     {
                         // Grab the parameters used for this method
                         var info = method.GetParameters();
-                        var parameters = new classLCMethodEventParameter();
+                        var parameters = new LCMethodEventParameter();
 
                         // Here we are looking to see if the method has a parameter
                         // that requires a data provider.
@@ -723,7 +723,7 @@ namespace LcmsNet.Method.ViewModels
                         // Construct the new method from what we found
                         // during the reflection phase and add it to the list of
                         // possible methods to call for this device.
-                        var newMethod = new classLCMethodData(device, method, attr, parameters);
+                        var newMethod = new LCMethodData(device, method, attr, parameters);
                         methodPairs.Add(newMethod);
                     }
                 }

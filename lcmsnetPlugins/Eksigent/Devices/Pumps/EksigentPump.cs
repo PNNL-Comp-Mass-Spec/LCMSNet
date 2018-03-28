@@ -18,7 +18,7 @@ namespace Eksigent.Devices.Pumps
     /// <summary>
     /// Software interface to the Eksigent pumps.
     /// </summary>
-    [classDeviceControl(typeof(EksigentPumpControlViewModel),
+    [DeviceControl(typeof(EksigentPumpControlViewModel),
                                  null,
                                  "Eksigent Pump",
                                  "Pumps")
@@ -27,9 +27,9 @@ namespace Eksigent.Devices.Pumps
     {
         #region Events
         public delegate void DelegateChannelNumbers(int totalChannels);
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceStatusEventArgs> PumpStatus;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> PumpStatus;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
         public event DelegateChannelNumbers ChannelNumbers;
         /// <summary>
@@ -146,13 +146,13 @@ namespace Eksigent.Devices.Pumps
 
         #region Properties
 
-        [classPersistence("TotalMonitoringMinutes")]
+        [PersistenceData("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistence("TotalMonitoringSecondsElapsed")]
+        [PersistenceData("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -161,7 +161,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Gets or sets the value to wait for the instrument to go into a valid state before starting a run.
         /// </summary>
-        [classPersistence("PrepareTimeout")]
+        [PersistenceData("PrepareTimeout")]
         public int PrepareTimeout
         {
             get;
@@ -170,7 +170,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Path to the methods folder.
         /// </summary>
-        [classPersistence("MethodsFolder")]
+        [PersistenceData("MethodsFolder")]
         public string MethodsFolder
         {
             get;
@@ -211,11 +211,11 @@ namespace Eksigent.Devices.Pumps
             get;
             set;
         }
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
         /// <summary>
         /// Gets or sets Current Status of device
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get
             {
@@ -224,7 +224,7 @@ namespace Eksigent.Devices.Pumps
             set
             {
                 m_status = value;
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "Status", this));
+                StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
             }
         }
         /// <summary>
@@ -238,7 +238,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Gets or sets the error type status.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -246,7 +246,7 @@ namespace Eksigent.Devices.Pumps
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -320,43 +320,43 @@ namespace Eksigent.Devices.Pumps
 
                     if (counts > CONST_STATUS_TRIES)
                     {
-                        classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent InstrStatus " + i + " EXCEEDED MAX TRIES");
-                        Status = enumDeviceStatus.NotInitialized;
+                        ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent InstrStatus " + i + " EXCEEDED MAX TRIES");
+                        Status = DeviceStatus.NotInitialized;
                         return false;
                     }
                 }
 
-                //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent COMDRIVER");
+                //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent COMDRIVER");
                 try
                 {
                     m_comDriver = m_hardware.get_COMInterface();
-                    //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS");
-                    //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "flowprofilecomplete");
+                    //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS");
+                    //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "flowprofilecomplete");
                     m_comDriver.FlowProfileComplete += driv_FlowProfileComplete;
-                    //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "devicemessage");
+                    //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "devicemessage");
                     m_comDriver.DeviceMessage += driv_DeviceMessage;
-                    //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "davavail");
+                    //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "davavail");
                     m_comDriver.DataAvailable += driv_DataAvailable;
-                    //classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS COMPLETE");
+                    //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent HANDLERS COMPLETE");
                 }
                 catch (Exception)
                 {
                     // for some reason, assigning the event handlers above causes an invalid cast error to be thrown.
                     // it seems to have no effect on the functionality of the plugin, so we're ignoring it
                     // and not logging it so that it's not a distraction to users.
-                    //classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
+                    //ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
                 }
 
                 if (RequiresOCXInitialization != null)
                 {
                     try
                     {
-                        classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent OCXINIT");
+                        ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent OCXINIT");
                         RequiresOCXInitialization(this, null);
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent OCXINITFAILED");
+                        ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent OCXINITFAILED");
                         HandleError("The registration failed for the Eksigent OCX.", ex);
                         errorMessage = "The registration failed for the Eksigent OCX.";
                         return false;
@@ -364,20 +364,20 @@ namespace Eksigent.Devices.Pumps
                 }
                 else
                 {
-                    classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent STEPNOTPERFORMED");
+                    ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent STEPNOTPERFORMED");
                     errorMessage = "A step in the initialization was not performed that is required by the software.";
                     return false;
                 }
             }
             else
             {
-                classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent SDKFAILURE");
+                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent SDKFAILURE");
                 errorMessage = "Could not get a software hold on the Eksigent SDK objects required to control this device.";
                 return false;
             }
-            Status = enumDeviceStatus.Initialized;
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(Status, CONST_INITIALIZED, this));
-            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent INITIALIZED!");
+            Status = DeviceStatus.Initialized;
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, CONST_INITIALIZED, this));
+            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Eksigent INITIALIZED!");
             return true;
         }
 
@@ -435,12 +435,12 @@ namespace Eksigent.Devices.Pumps
         {
             if (Error != null)
             {
-                var args = new classDeviceErrorEventArgs(error, ex, ErrorType, this, "Error");
+                var args = new DeviceErrorEventArgs(error, ex, ErrorType, this, "Error");
                 Error(this, args);
             }
             else
             {
-                classApplicationLogger.LogError(0, error, ex);
+                ApplicationLogger.LogError(0, error, ex);
             }
         }
         /// <summary>
@@ -451,13 +451,13 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(Status, "Status", this, status);
+                var args = new DeviceStatusEventArgs(Status, "Status", this, status);
 
                 StatusUpdate(this, args);
             }
             else
             {
-                classApplicationLogger.LogMessage(0, status);
+                ApplicationLogger.LogMessage(0, status);
             }
         }
         /// <summary>
@@ -469,13 +469,13 @@ namespace Eksigent.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(Status, statusNotifyString, this, status);
+                var args = new DeviceStatusEventArgs(Status, statusNotifyString, this, status);
 
                 StatusUpdate(this, args);
             }
             else
             {
-                classApplicationLogger.LogMessage(0, status);
+                ApplicationLogger.LogMessage(0, status);
             }
         }
         private void ConvertAndLogStatus(int code)
@@ -559,7 +559,7 @@ namespace Eksigent.Devices.Pumps
                     break;
             }
 
-            PumpStatus?.Invoke(this, new classDeviceStatusEventArgs(Status, "None", this, message));
+            PumpStatus?.Invoke(this, new DeviceStatusEventArgs(Status, "None", this, message));
             if (code < m_notifyStrings.Length && code > -1)
             {
                 HandleStatusType(m_notifyStrings[code], message);
@@ -702,7 +702,7 @@ namespace Eksigent.Devices.Pumps
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        //[classLCMethodAttribute("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
+        //[LCMethodEventAttribute("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool SetFlowRate(double timeout, double flowRate)
         {
             return true;
@@ -714,7 +714,7 @@ namespace Eksigent.Devices.Pumps
         /// <param name="channel"></param>
         /// <param name="methodName"></param>
         /// <returns></returns>
-        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, false)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             if (Emulation)
@@ -778,7 +778,7 @@ namespace Eksigent.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="channel"></param>
         /// <returns></returns>
-        [classLCMethod("Stop Method", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Method", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool StopMethod(double timeout, double channel)
         {
             if (Emulation)

@@ -19,11 +19,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
 
-        private classLCMethod selectedLCMethod;
+        private LCMethod selectedLCMethod;
 
-        public classLCMethod SelectedLCMethod
+        public LCMethod SelectedLCMethod
         {
             get { return selectedLCMethod; }
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
@@ -113,9 +113,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 normalColor = BackColor;
                 BackColor = Brushes.DodgerBlue;
-                if (SelectedLCMethod != null && SelectedLCMethod.Column >= 0 && SelectedLCMethod.Column < classCartConfiguration.Columns.Count)
+                if (SelectedLCMethod != null && SelectedLCMethod.Column >= 0 && SelectedLCMethod.Column < CartConfiguration.Columns.Count)
                 {
-                    var columnColor = classCartConfiguration.Columns[SelectedLCMethod.Column].Color;
+                    var columnColor = CartConfiguration.Columns[SelectedLCMethod.Column].Color;
                     if (columnColor != Color.FromArgb(0,0,0,0) && columnColor != Colors.Transparent)
                     {
                         BackColor = new SolidColorBrush(columnColor);
@@ -162,7 +162,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        protected override classSampleData AddNewSample(bool insertIntoUnused)
+        protected override SampleData AddNewSample(bool insertIntoUnused)
         {
             var newData = base.AddNewSample(insertIntoUnused);
 
@@ -180,7 +180,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="samples"></param>
         /// <param name="insertIntoUnused"></param>
         /// <returns></returns>
-        protected override void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
+        protected override void AddSamplesToManager(List<SampleData> samples, bool insertIntoUnused)
         {
             // For every sample, add the column data to it, then add it into the manager.
             // We don't add to our list first so the manager can verify the sample and
@@ -240,10 +240,10 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
                 // Don't put a column that has been run, at the end of the queue again.
-                var samples = new List<classSampleData>();
+                var samples = new List<SampleData>();
                 foreach (var sample in selectedSamples)
                 {
-                    if (sample.RunningStatus == enumSampleRunningStatus.Queued && !method.Equals(sample.LCMethod))
+                    if (sample.RunningStatus == SampleRunningStatus.Queued && !method.Equals(sample.LCMethod))
                     {
                         samples.Add(sample);
                     }
@@ -289,7 +289,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
+                        ApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
                     }
                     if (samples.Count > 0)
                     {

@@ -84,7 +84,7 @@ namespace LcmsNet
                 unhandledError = true;
             }
 
-            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                 "Shutting down due to unhandled error.", ex);
 
             var message = ex.Message;
@@ -95,7 +95,7 @@ namespace LcmsNet
                 exi = exi.InnerException;
             }
             MessageBox.Show("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
-                            classDbLogger.LogFolderPath + "\\");
+                            DbLogger.LogFolderPath + "\\");
 
             Shutdown();
         }
@@ -175,18 +175,18 @@ namespace LcmsNet
             {
                 var propertyName = currProperty.Name;
                 var propertyValue = Settings.Default[propertyName].ToString();
-                classLCMSSettings.SetParameter(propertyName, propertyValue);
+                LCMSSettings.SetParameter(propertyName, propertyValue);
             }
 
             // Add path to executable as a saved setting
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
 
-            var emulation = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED);
+            var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
             if (!string.IsNullOrWhiteSpace(emulation))
             {
                 var isEmulated = Convert.ToBoolean(emulation);
-                splashScreen.SetEmulatedLabelVisibility(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME), isEmulated);
+                splashScreen.SetEmulatedLabelVisibility(LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME), isEmulated);
             }
         }
 
@@ -204,7 +204,7 @@ namespace LcmsNet
             LogMessage(systemInformation);
         }
 
-        private void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
+        private void LCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
             var type = Settings.Default[e.SettingName].GetType();
             object newValue = null;
@@ -214,7 +214,7 @@ namespace LcmsNet
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, $"Could not update setting \"{e.SettingName}\" of type \"{type.Name}\" with value \"{e.SettingValue}\".", ex);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, $"Could not update setting \"{e.SettingName}\" of type \"{type.Name}\" with value \"{e.SettingValue}\".", ex);
             }
             Settings.Default[e.SettingName] = newValue;
             Settings.Default.Save();
@@ -285,7 +285,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="messageLevel">Filter for displaying messages.</param>
         /// <param name="args">Messages and other arguments passed from the sender.</param>
-        private void classApplicationLogger_Message(int messageLevel, classMessageLoggerArgs args)
+        private void ApplicationLogger_Message(int messageLevel, MessageLoggerArgs args)
         {
             if (messageLevel < 1)
             {
@@ -298,62 +298,62 @@ namespace LcmsNet
         /// </summary>
         private void InitializeSystemConfigurations()
         {
-            var columnStatus1 = enumColumnStatus.Idle;
-            var columnStatus2 = enumColumnStatus.Idle;
-            var columnStatus3 = enumColumnStatus.Idle;
-            var columnStatus4 = enumColumnStatus.Idle;
-            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED0, false))
+            var columnStatus1 = ColumnStatus.Idle;
+            var columnStatus2 = ColumnStatus.Idle;
+            var columnStatus3 = ColumnStatus.Idle;
+            var columnStatus4 = ColumnStatus.Idle;
+            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED0, false))
             {
-                columnStatus1 = enumColumnStatus.Disabled;
+                columnStatus1 = ColumnStatus.Disabled;
             }
-            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED1, false))
+            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED1, false))
             {
-                columnStatus2 = enumColumnStatus.Disabled;
+                columnStatus2 = ColumnStatus.Disabled;
             }
-            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED2, false))
+            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED2, false))
             {
-                columnStatus3 = enumColumnStatus.Disabled;
+                columnStatus3 = ColumnStatus.Disabled;
             }
-            if (classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNDISABLED3, false))
+            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED3, false))
             {
-                columnStatus4 = enumColumnStatus.Disabled;
+                columnStatus4 = ColumnStatus.Disabled;
             }
 
             // Create system data with columns.
-            var columnOne = new classColumnData
+            var columnOne = new ColumnData
             {
                 ID = 0,
-                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME0),
+                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0),
                 Status = columnStatus1,
                 Color = Colors.Tomato,
                 First = true
             };
 
-            var columnTwo = new classColumnData
+            var columnTwo = new ColumnData
             {
                 ID = 1,
-                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME1),
+                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME1),
                 Status = columnStatus2,
                 Color = Colors.Lime
             };
 
-            var columnThree = new classColumnData
+            var columnThree = new ColumnData
             {
                 ID = 2,
-                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME2),
+                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME2),
                 Status = columnStatus3,
                 Color = Colors.LightSteelBlue
             };
 
-            var columnFour = new classColumnData
+            var columnFour = new ColumnData
             {
                 ID = 3,
-                Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME3),
+                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME3),
                 Status = columnStatus4,
                 Color = Colors.LightSalmon
             };
 
-            classCartConfiguration.Columns = new List<classColumnData> {
+            CartConfiguration.Columns = new List<ColumnData> {
                 columnOne, columnTwo, columnThree, columnFour};
         }
 
@@ -370,12 +370,12 @@ namespace LcmsNet
             var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
 
             // Before we do anything, let's initialize the file logging capability.
-            classApplicationLogger.Error += classFileLogging.LogError;
-            classApplicationLogger.Message += classFileLogging.LogMessage;
+            ApplicationLogger.Error += FileLogging.LogError;
+            ApplicationLogger.Message += FileLogging.LogMessage;
 
             // Now lets initialize logging to SQLite database.
-            classApplicationLogger.Error += classDbLogger.LogError;
-            classApplicationLogger.Message += classDbLogger.LogMessage;
+            ApplicationLogger.Error += DbLogger.LogError;
+            ApplicationLogger.Message += DbLogger.LogMessage;
 
             // Note that we used icons from here for the gears on the main form window.
             //     http://labs.chemist2dio.com/free-vector-gears.php/
@@ -390,19 +390,19 @@ namespace LcmsNet
                 if (!singleInstanceMutex.WaitOne(0, false))
                 {
                     MessageBox.Show("A copy of LcmsNet is already running.");
-                    classApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
+                    ApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
                     return;
                 }
             }
             catch (AbandonedMutexException)
             {
-                classApplicationLogger.LogMessage(0, "Warning: The last LcmsNet session did not close properly (AbandonedMutexException).");
+                ApplicationLogger.LogMessage(0, "Warning: The last LcmsNet session did not close properly (AbandonedMutexException).");
             }
 
             KillExistingPalProcesses();
 
             // Synch to the logger so we can display any messages coming back from the rest of the program and interface.
-            classApplicationLogger.Message += classApplicationLogger_Message;
+            ApplicationLogger.Message += ApplicationLogger_Message;
 
             // Show the splash screen
             resetSplashCreated = new ManualResetEvent(false);
@@ -441,7 +441,7 @@ namespace LcmsNet
             splashScreen.LoadComplete();
             splashScreenEnded = true;
 
-            classApplicationLogger.Message -= classApplicationLogger_Message;
+            ApplicationLogger.Message -= ApplicationLogger_Message;
 
             main.Show();
             main.Activate();
@@ -477,12 +477,12 @@ namespace LcmsNet
             try
             {
                 CreatePath(classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-                CreatePath(classDeviceManager.CONST_PUMP_METHOD_PATH);
-                CreatePath(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
+                CreatePath(DeviceManager.CONST_PUMP_METHOD_PATH);
+                CreatePath(DeviceManager.CONST_DEVICE_PLUGIN_PATH);
             }
             catch (UnauthorizedAccessException ex)
             {
-                classApplicationLogger.LogError(0, "Could not create necessary directories.", ex);
+                ApplicationLogger.LogError(0, "Could not create necessary directories.", ex);
                 MessageBox.Show("The application does not have the required privileges to run.  Please run as administrator.");
                 return false;
             }
@@ -492,16 +492,16 @@ namespace LcmsNet
             LoadSettings();
 
             // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
-            classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
+            LCMSSettings.SettingChanged += LCMSSettings_SettingChanged;
 
             //LogMessage(-1, "Creating Initial System Configurations");
             InitializeSystemConfigurations();
 
             // Create a device manager.
             //LogMessage(-1, "Creating the Device Manager");
-            var deviceManager = classDeviceManager.Manager;
-            deviceManager.Emulate = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false);
-            deviceManager.AddDevice(new classTimerDevice());
+            var deviceManager = DeviceManager.Manager;
+            deviceManager.Emulate = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false);
+            deviceManager.AddDevice(new TimerDevice());
             deviceManager.AddDevice(new classBlockDevice());
             deviceManager.AddDevice(new classLogDevice());
             deviceManager.AddDevice(new classApplicationDevice());
@@ -511,29 +511,29 @@ namespace LcmsNet
             var areDevicesLoaded = true;
             try
             {
-                classDeviceManager.Manager.LoadPlugins(Assembly.GetExecutingAssembly(), true);
+                DeviceManager.Manager.LoadPlugins(Assembly.GetExecutingAssembly(), true);
             }
             catch
             {
                 areDevicesLoaded = false;
-                classApplicationLogger.LogError(0, "Could not load internal device plug-ins.");
+                ApplicationLogger.LogError(0, "Could not load internal device plug-ins.");
             }
             LogMessage(-1, "Loading external device plug-ins.");
             try
             {
-                classDeviceManager.Manager.LoadSatelliteAssemblies(classDeviceManager.CONST_DEVICE_PLUGIN_PATH);
-                classDeviceManager.Manager.LoadPlugins(classDeviceManager.CONST_DEVICE_PLUGIN_PATH, "*.dll", true);
+                DeviceManager.Manager.LoadSatelliteAssemblies(DeviceManager.CONST_DEVICE_PLUGIN_PATH);
+                DeviceManager.Manager.LoadPlugins(DeviceManager.CONST_DEVICE_PLUGIN_PATH, "*.dll", true);
             }
             catch
             {
                 areDevicesLoaded = false;
-                classApplicationLogger.LogError(0, "Could not load external device plug-ins.");
+                ApplicationLogger.LogError(0, "Could not load external device plug-ins.");
             }
             //TODO: Whoops! not all of the device plug-in loading should kill this effort.  If one set loaded,
             // that may be ok.
             if (!areDevicesLoaded)
             {
-                classApplicationLogger.LogError(-1, "Failed to load some of the device plug-ins.");
+                ApplicationLogger.LogError(-1, "Failed to load some of the device plug-ins.");
                 return false;
             }
             LogMessage(-1, "Device plug-ins are loaded.");
@@ -548,17 +548,17 @@ namespace LcmsNet
             //LogMessage(-1, "Creating the Method Manager");
 
             // Set the logging levels
-            var logLevelErrors = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGERRORLEVEL);
+            var logLevelErrors = LCMSSettings.GetParameter(LCMSSettings.PARAM_LOGGINGERRORLEVEL);
             if (!string.IsNullOrWhiteSpace(logLevelErrors))
-                classApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
+                ApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
             else
-                classApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
+                ApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
 
-            var logLevelMessages = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_LOGGINGMSGLEVEL);
+            var logLevelMessages = LCMSSettings.GetParameter(LCMSSettings.PARAM_LOGGINGMSGLEVEL);
             if (!string.IsNullOrWhiteSpace(logLevelMessages))
-                classApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
+                ApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
             else
-                classApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
+                ApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
 
             CreateSQLCache();
             LogMessage(-1, "Loading DMS data");
@@ -567,7 +567,7 @@ namespace LcmsNet
             {
 
                 var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
+                LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
 
                 dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
                 LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = false;
@@ -580,23 +580,23 @@ namespace LcmsNet
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error caching DMS data: " + ex.Message);
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error caching DMS data: " + ex.Message);
                 if (ex.StackTrace != null)
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Stack trace: " + ex.StackTrace);
+                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Stack trace: " + ex.StackTrace);
             }
 
             // Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
-            if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYTRIGGERFILES)))
+            if (bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYTRIGGERFILES)))
             {
-                if (classTriggerFileTools.CheckLocalTriggerFiles())
+                if (TriggerFileTools.CheckLocalTriggerFiles())
                 {
                     LogMessage(-1, "Copying trigger files to DMS");
-                    classTriggerFileTools.MoveLocalTriggerFiles();
+                    TriggerFileTools.MoveLocalTriggerFiles();
                 }
             }
 
             // Check to see if any method folders need to be copied to the transfer server, and copy if necessary
-            if (bool.Parse(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COPYMETHODFOLDERS)))
+            if (bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS)))
             {
                 if (classMethodFileTools.CheckLocalMethodFolders())
                 {
@@ -621,13 +621,13 @@ namespace LcmsNet
             classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.CartList, false);
             classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.SeparationTypeList, false);
             classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "default" }, enumTableTypes.DatasetTypeList, false);
-            classSQLiteTools.SaveInstListToCache(new List<classInstrumentInfo>(), false);
-            classSQLiteTools.SaveUserListToCache(new List<classUserInfo>(), false);
+            classSQLiteTools.SaveInstListToCache(new List<InstrumentInfo>(), false);
+            classSQLiteTools.SaveUserListToCache(new List<UserInfo>(), false);
             classSQLiteTools.SaveSingleColumnListToCache(new List<string> { "0", "1", "2", "3", "4" }, enumTableTypes.ColumnList, false);
-            classSQLiteTools.SaveExperimentListToCache(new List<classExperimentData> { new classExperimentData() }, false);
-            classSQLiteTools.SaveProposalUsers(new List<classProposalUser>(),
-                new List<classUserIDPIDCrossReferenceEntry>(),
-                new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>(), false);
+            classSQLiteTools.SaveExperimentListToCache(new List<ExperimentData> { new ExperimentData() }, false);
+            classSQLiteTools.SaveProposalUsers(new List<ProposalUser>(),
+                new List<UserIDPIDCrossReferenceEntry>(),
+                new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(), false);
         }
 
         private void LogMessage(string message)
@@ -637,7 +637,7 @@ namespace LcmsNet
 
         private void LogMessage(int msgLevel, string message)
         {
-            classFileLogging.LogMessage(msgLevel, new classMessageLoggerArgs(message));
+            FileLogging.LogMessage(msgLevel, new MessageLoggerArgs(message));
         }
 
         #endregion

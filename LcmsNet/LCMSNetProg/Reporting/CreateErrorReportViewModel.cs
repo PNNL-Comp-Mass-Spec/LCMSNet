@@ -40,11 +40,11 @@ namespace LcmsNet.Reporting
             SetupCommands();
         }
 
-        private readonly ReactiveList<classLCMethod> lcMethodsList = new ReactiveList<classLCMethod>();
-        private readonly ReactiveList<classLCMethod> lcMethodsSelected = new ReactiveList<classLCMethod>();
+        private readonly ReactiveList<LCMethod> lcMethodsList = new ReactiveList<LCMethod>();
+        private readonly ReactiveList<LCMethod> lcMethodsSelected = new ReactiveList<LCMethod>();
 
-        public IReadOnlyReactiveList<classLCMethod> LCMethodsList => lcMethodsList;
-        public ReactiveList<classLCMethod> LCMethodsSelected => lcMethodsSelected;
+        public IReadOnlyReactiveList<LCMethod> LCMethodsList => lcMethodsList;
+        public ReactiveList<LCMethod> LCMethodsSelected => lcMethodsSelected;
 
         #region Button Handler Events
 
@@ -60,13 +60,13 @@ namespace LcmsNet.Reporting
         /// </summary>
         private void CreateReport()
         {
-            var methods = new List<classLCMethod>(LCMethodsSelected);
+            var methods = new List<LCMethod>(LCMethodsSelected);
 
             var builder = new classErrorReportBuilder();
             var path = builder.CreateReport(controls, methods, logPath, "hardwareconfig.ini");
 
-            var cartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-            var errorReportPath = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_ERRORPATH);
+            var cartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+            var errorReportPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_ERRORPATH);
 
             classErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
         }
@@ -81,7 +81,7 @@ namespace LcmsNet.Reporting
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        private bool MethodManager_MethodRemoved(object sender, classLCMethod method)
+        private bool MethodManager_MethodRemoved(object sender, LCMethod method)
         {
             if (!lcMethodsList.Contains(method))
                 return true;
@@ -96,7 +96,7 @@ namespace LcmsNet.Reporting
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        private bool MethodManager_MethodAdded(object sender, classLCMethod method)
+        private bool MethodManager_MethodAdded(object sender, LCMethod method)
         {
             if (lcMethodsList.Contains(method))
                 return true;

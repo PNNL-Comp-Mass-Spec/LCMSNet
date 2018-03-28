@@ -32,7 +32,7 @@ namespace LcmsNet.SampleQueue.Views
 
             dc.SelectedData.Clear();
             //dc.SelectedData.AddRange(selector.SelectedItems.Cast<DMSDownloadDataGridViewModel>());
-            dc.SelectedData.AddRange(selector.SelectedItems.Cast<classSampleData>());
+            dc.SelectedData.AddRange(selector.SelectedItems.Cast<SampleData>());
         }
     }
 }

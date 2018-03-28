@@ -11,11 +11,11 @@ namespace LcmsNet.Method
 {
     public class classColumnArgs
     {
-        public classColumnArgs(classSampleData data)
+        public classColumnArgs(SampleData data)
         {
             Sample = data;
         }
 
-        public classSampleData Sample { get; private set; }
+        public SampleData Sample { get; private set; }
     }
 }

@@ -255,7 +255,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <param name="ex">message to show user</param>
         private void ShowError(Exception ex)
         {
-            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
+            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
         }
 
         /// <summary>

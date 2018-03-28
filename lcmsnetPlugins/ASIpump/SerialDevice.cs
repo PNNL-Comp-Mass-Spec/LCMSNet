@@ -58,7 +58,7 @@ namespace ASIpump
         [Description("Timeout")]
         [Category("Serial")]
         [DisplayName("Timeout")]
-        [classPersistence("Timeout")]
+        [PersistenceData("Timeout")]
         public double Timeout
         {
             get { return timeout; }
@@ -68,7 +68,7 @@ namespace ASIpump
         [Description("Port Name")]
         [Category("Serial")]
         [DisplayName("Port Name")]
-        [classPersistence("PortName")]
+        [PersistenceData("PortName")]
         public string PortName
         {
             get { return mPort.PortName; }
@@ -100,7 +100,7 @@ namespace ASIpump
         [Description("Handshake")]
         [Category("Serial")]
         [DisplayName("Handshake")]
-        [classPersistence("Handshake")]
+        [PersistenceData("Handshake")]
         public Handshake Handshake
         {
             get { return mPort.Handshake; }
@@ -114,7 +114,7 @@ namespace ASIpump
         [Description("DTR Enabled")]
         [Category("Serial")]
         [DisplayName("DTR Enabled")]
-        [classPersistence("DTREnable")]
+        [PersistenceData("DTREnable")]
         public bool DtrEnable
         {
             get { return mPort.DtrEnable; }
@@ -128,7 +128,7 @@ namespace ASIpump
         [Description("RTS Enabled")]
         [Category("Serial")]
         [DisplayName("RTS Enabled")]
-        [classPersistence("RTSEnable")]
+        [PersistenceData("RTSEnable")]
         public bool RtsEnable
         {
             get { return mPort.RtsEnable; }
@@ -142,7 +142,7 @@ namespace ASIpump
         [Description("Baud Rate")]
         [Category("Serial")]
         [DisplayName("Baud Rate")]
-        [classPersistence("BaudRate")]
+        [PersistenceData("BaudRate")]
         public int BaudRate
         {
             get { return mPort.BaudRate; }
@@ -158,7 +158,7 @@ namespace ASIpump
         [Description("Data Bits")]
         [Category("Serial")]
         [DisplayName("Data Bits")]
-        [classPersistence("DataBits")]
+        [PersistenceData("DataBits")]
         public int DataBits
         {
             get { return mPort.DataBits; }
@@ -174,7 +174,7 @@ namespace ASIpump
         [Description("Stop Bits")]
         [Category("Serial")]
         [DisplayName("Stop Bits")]
-        [classPersistence("StopBits")]
+        [PersistenceData("StopBits")]
         public StopBits StopBits
         {
             get { return mPort.StopBits; }
@@ -190,7 +190,7 @@ namespace ASIpump
         [Description("Parity")]
         [Category("Serial")]
         [DisplayName("Parity")]
-        [classPersistence("Parity")]
+        [PersistenceData("Parity")]
         public Parity Parity
         {
             get { return mPort.Parity; }

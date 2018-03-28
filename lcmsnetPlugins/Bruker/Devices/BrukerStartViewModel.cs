@@ -94,7 +94,7 @@ namespace LcmsNet.Devices.BrukerStart
         /// </summary>
         /// <param name="status"></param>
         /// <param name="message"></param>
-        private void SetStatus(enumDeviceStatus status, string message)
+        private void SetStatus(DeviceStatus status, string message)
         {
             Status = "Status: " + m_BrukerStart.Status + " - " + message;
         }
@@ -109,7 +109,7 @@ namespace LcmsNet.Devices.BrukerStart
             SetStatus(m_BrukerStart.Status, "");
         }
 
-        private void m_BrukerStart_Error(object sender, classDeviceErrorEventArgs e)
+        private void m_BrukerStart_Error(object sender, DeviceErrorEventArgs e)
         {
             SetStatus(m_BrukerStart.Status, e.Error);
         }
@@ -143,7 +143,7 @@ namespace LcmsNet.Devices.BrukerStart
             }
             var methodName = SelectedMethod;
 
-            var sample = new classSampleData
+            var sample = new SampleData
             {
                 DmsData = { DatasetName = SampleName },
                 InstrumentData = { MethodName = methodName }

@@ -10,7 +10,7 @@ using LcmsNetSDK.Method;
 namespace DemoPluginLibrary
 {
     [Serializable]
-    [classDeviceControl(typeof(DemoPALAdvancedControlViewModel),
+    [DeviceControl(typeof(DemoPALAdvancedControlViewModel),
                                  "Demo PAL",
                                  "Demo")
     ]
@@ -21,7 +21,7 @@ namespace DemoPluginLibrary
         /// Fired when new method names are available.
         /// </summary>
 #pragma warning disable 67
-        public event EventHandler<classAutoSampleEventArgs> MethodNames
+        public event EventHandler<AutoSampleEventArgs> MethodNames
         {
             add { }
             remove { }
@@ -43,8 +43,8 @@ namespace DemoPluginLibrary
 
          public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
-            ErrorType = enumDeviceErrorStatus.NoError;
+            Status = DeviceStatus.Initialized;
+            ErrorType = DeviceErrorStatus.NoError;
             return true;
         }
 
@@ -92,8 +92,8 @@ namespace DemoPluginLibrary
 
         }
 
-        [classLCMethod("Run Method", enumMethodOperationTime.Parameter, true, 1, "MethodNames", 2, false)]
-        public void RunMethod(double timeout, classSampleData sample, string method)
+        [LCMethodEvent("Run Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]
+        public void RunMethod(double timeout, SampleData sample, string method)
         {
             // Interact with hardware here.
         }
@@ -107,13 +107,13 @@ namespace DemoPluginLibrary
         {
             return new List<string>();
         }
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
             remove { }
         }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -125,9 +125,9 @@ namespace DemoPluginLibrary
             remove { }
         }
 
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -146,7 +146,7 @@ namespace DemoPluginLibrary
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;

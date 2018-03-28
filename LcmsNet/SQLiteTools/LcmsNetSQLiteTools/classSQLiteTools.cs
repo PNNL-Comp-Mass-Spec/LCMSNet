@@ -51,13 +51,13 @@ namespace LcmsNetSQLiteTools
 
         private static List<string> m_datasetNames;
 
-        private static List<classUserInfo> m_userInfo;
-        private static List<classInstrumentInfo> m_instrumentInfo;
-        private static List<classExperimentData> m_experimentsData;
-        private static List<classLCColumn> m_lcColumns;
+        private static List<UserInfo> m_userInfo;
+        private static List<InstrumentInfo> m_instrumentInfo;
+        private static List<ExperimentData> m_experimentsData;
+        private static List<LCColumnData> m_lcColumns;
 
-        private static List<classProposalUser> m_proposalUsers;
-        private static Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> m_pidIndexedReferenceList;
+        private static List<ProposalUser> m_proposalUsers;
+        private static Dictionary<string, List<UserIDPIDCrossReferenceEntry>> m_pidIndexedReferenceList;
 
         #endregion
 
@@ -91,8 +91,8 @@ namespace LcmsNetSQLiteTools
         /// <remarks>Starts off as a filename, but is changed to a path by BuildConnectionString</remarks>
         public static string CacheName
         {
-            get { return classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME); }
-            private set { classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CACHEFILENAME, value); }
+            get { return LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME); }
+            private set { LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, value); }
         }
 
         public static string AppDataFolderName { get; set; }
@@ -101,7 +101,7 @@ namespace LcmsNetSQLiteTools
         {
             try
             {
-                var name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
+                var name = LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
                 var exists = File.Exists(name);
                 if (!exists && !newCache)
                 {
@@ -113,7 +113,7 @@ namespace LcmsNetSQLiteTools
                         Directory.CreateDirectory(name);
                     }
                     name = Path.Combine(name, CacheName);
-                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_CACHEFILENAME, name);
+                    LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, name);
                 }
 
                 //workaround for SQLite library version 1.0.93 for network addresses
@@ -125,7 +125,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                     "Could not load the sample queue cache.", ex);
             }
         }
@@ -280,7 +280,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <returns>List containing queue data</returns>
-        public static List<classSampleData> GetQueueFromCache(enumTableTypes tableType)
+        public static List<SampleData> GetQueueFromCache(enumTableTypes tableType)
         {
             return GetQueueFromCache(tableType, ConnString);
         }
@@ -292,9 +292,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <param name="connectionString">Cache connection string</param>
         /// <returns>List containing queue data</returns>
-        public static List<classSampleData> GetQueueFromCache(enumTableTypes tableType, string connectionString)
+        public static List<SampleData> GetQueueFromCache(enumTableTypes tableType, string connectionString)
         {
-            var returnData = new List<classSampleData>();
+            var returnData = new List<SampleData>();
 
             // Convert type of queue into a data table name
             var tableName = GetTableName(tableType);
@@ -306,8 +306,8 @@ namespace LcmsNetSQLiteTools
             //      and load the property values
             foreach (var sampleProps in allSampleProps)
             {
-                // Create a classSampleData object
-                var sampleData = new classSampleData(false);
+                // Create a SampleData object
+                var sampleData = new SampleData(false);
 
                 // Load the sample data object from the string dictionary
                 sampleData.LoadPropertyValues(sampleProps);
@@ -433,7 +433,7 @@ namespace LcmsNetSQLiteTools
             {
                 var errMsg = "SQLite exception verifying table " + tableName + " exists";
                 // throw new classDatabaseDataException(errMsg, ex);
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
                 return false;
             }
 
@@ -456,7 +456,7 @@ namespace LcmsNetSQLiteTools
             catch (Exception ex)
             {
                 var errMsg = "SQLite exception counting columns in table " + tableName;
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
                 columnCount = 0;
             }
 
@@ -478,7 +478,7 @@ namespace LcmsNetSQLiteTools
             catch (Exception ex)
             {
                 var errMsg = "SQLite exception counting rows in table " + tableName;
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
                 rowCount = 0;
             }
 
@@ -520,7 +520,7 @@ namespace LcmsNetSQLiteTools
                 catch (Exception ex)
                 {
                     var errMsg = "SQLite exception creating table " + tableName;
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     return;
                 }
             }
@@ -541,9 +541,9 @@ namespace LcmsNetSQLiteTools
         /// Saves the contents of specified sample queue to the SQLite cache file
         /// Connection string and database name are defined by defaults
         /// </summary>
-        /// <param name="QueueData">List of classSampleData containing the sample data to save</param>
+        /// <param name="QueueData">List of SampleData containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        public static void SaveQueueToCache(List<classSampleData> QueueData, enumTableTypes tableType)
+        public static void SaveQueueToCache(List<SampleData> QueueData, enumTableTypes tableType)
         {
             SaveQueueToCache(QueueData, tableType, ConnString);
         }
@@ -555,7 +555,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="queueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache(List<classSampleData> queueData, enumTableTypes tableType, string connStr)
+        public static void SaveQueueToCache(List<SampleData> queueData, enumTableTypes tableType, string connStr)
         {
             var dataInList = (queueData.Count > 0);
             var tableName = GetTableName(tableType);
@@ -583,7 +583,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="userList">List containing user data</param>
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveUserListToCache(List<classUserInfo> userList, bool clearFirst = true)
+        public static void SaveUserListToCache(List<UserInfo> userList, bool clearFirst = true)
         {
             var dataInList = (userList.Count > 0);
             var tableName = GetTableName(enumTableTypes.UserList);
@@ -596,7 +596,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_userInfo = new List<classUserInfo>(userList);
+            m_userInfo = new List<UserInfo>(userList);
 
             //If no data in list, exit
             if (!dataInList)
@@ -618,7 +618,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="expList"></param>
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="expList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveExperimentListToCache(List<classExperimentData> expList, bool clearFirst = true)
+        public static void SaveExperimentListToCache(List<ExperimentData> expList, bool clearFirst = true)
         {
             if (expList == null || expList.Count < 1)
                 return;
@@ -634,7 +634,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_experimentsData = new List<classExperimentData>(expList);
+            m_experimentsData = new List<ExperimentData>(expList);
             // Exit if there's nothing to cache
             if (!listHasData)
                 return;
@@ -674,7 +674,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0,
+                ApplicationLogger.LogError(0,
                     string.Format("Could not insert all of the experiment data into the experiment table. {0}",
                         ex.Message));
             }
@@ -690,9 +690,9 @@ namespace LcmsNetSQLiteTools
         /// A dictionary of cross reference lists that have been grouped by Proposal ID.
         /// </param>
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="users"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveProposalUsers(List<classProposalUser> users,
-            List<classUserIDPIDCrossReferenceEntry> crossReferenceList,
-            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
+        public static void SaveProposalUsers(List<ProposalUser> users,
+            List<UserIDPIDCrossReferenceEntry> crossReferenceList,
+            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
         {
             var userTableName = GetTableName(enumTableTypes.PUserList);
             var referenceTableName = GetTableName(enumTableTypes.PReferenceList);
@@ -719,7 +719,7 @@ namespace LcmsNetSQLiteTools
             m_pidIndexedReferenceList = pidIndexedReferenceList;
         }
 
-        public static void SaveEntireLCColumnListToCache(List<classLCColumn> lcColumnList)
+        public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
         {
             var listHasData = lcColumnList.Count != 0;
             var tableName = GetTableName(enumTableTypes.LCColumnList);
@@ -727,7 +727,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_lcColumns = new List<classLCColumn>(lcColumnList);
+            m_lcColumns = new List<LCColumnData>(lcColumnList);
             // Exit if there's nothing to cache
             if (!listHasData)
                 return;
@@ -743,9 +743,9 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Saves a list of instruments to cache
         /// </summary>
-        /// <param name="instList">List of classInstrumentInfo containing instrument data</param>
+        /// <param name="instList">List of InstrumentInfo containing instrument data</param>
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveInstListToCache(List<classInstrumentInfo> instList, bool clearFirst = true)
+        public static void SaveInstListToCache(List<InstrumentInfo> instList, bool clearFirst = true)
         {
             var dataInList = (instList.Count > 0);
             var tableName = GetTableName(enumTableTypes.InstrumentList);
@@ -758,7 +758,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString, 6);
 
-            m_instrumentInfo = new List<classInstrumentInfo>(instList);
+            m_instrumentInfo = new List<InstrumentInfo>(instList);
             //If no data in list, just exit
             if (!dataInList)
             {
@@ -793,7 +793,7 @@ namespace LcmsNetSQLiteTools
                 catch (Exception ex)
                 {
                     var errMsg = "SQLite Exception executing command " + cmdStr;
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     throw new classDatabaseDataException(errMsg, ex);
                 }
             }
@@ -830,7 +830,7 @@ namespace LcmsNetSQLiteTools
                 catch (Exception ex)
                 {
                     const string errMsg = "SQLite exception adding data";
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     throw new classDatabaseDataException(errMsg, ex);
                 }
             }
@@ -860,7 +860,7 @@ namespace LcmsNetSQLiteTools
                 catch (Exception ex)
                 {
                     var errMsg = "SQLite exception getting data table via query " + cmdStr + " : " + connStr;
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     throw new classDatabaseDataException(errMsg, ex);
                 }
             }
@@ -1053,11 +1053,11 @@ namespace LcmsNetSQLiteTools
         /// Gets user list from cache
         /// </summary>
         /// <returns>List of user data</returns>
-        public static List<classUserInfo> GetUserList(bool force)
+        public static List<UserInfo> GetUserList(bool force)
         {
             if (m_userInfo == null || force)
             {
-                var returnData = new List<classUserInfo>();
+                var returnData = new List<UserInfo>();
 
                 // Get data table name
                 var tableName = GetTableName(enumTableTypes.UserList);
@@ -1070,7 +1070,7 @@ namespace LcmsNetSQLiteTools
                 foreach (var userProps in allUserProps)
                 {
                     // Create a classUserInfo object
-                    var userData = new classUserInfo();
+                    var userData = new UserInfo();
 
                     // Load the user data object from the string dictionary
                     userData.LoadPropertyValues(userProps);
@@ -1088,11 +1088,11 @@ namespace LcmsNetSQLiteTools
         /// Gets a list of instruments from the cache
         /// </summary>
         /// <returns>List of instruments</returns>
-        public static List<classInstrumentInfo> GetInstrumentList(bool force)
+        public static List<InstrumentInfo> GetInstrumentList(bool force)
         {
             if (m_instrumentInfo == null)
             {
-                var returnData = new List<classInstrumentInfo>();
+                var returnData = new List<InstrumentInfo>();
 
                 // Convert type of list into a data table name
                 var tableName = GetTableName(enumTableTypes.InstrumentList);
@@ -1104,8 +1104,8 @@ namespace LcmsNetSQLiteTools
                 //      and load the property values
                 foreach (var instProps in allInstProps)
                 {
-                    // Create a classInstrumentInfo object
-                    var instData = new classInstrumentInfo();
+                    // Create a InstrumentInfo object
+                    var instData = new InstrumentInfo();
 
                     // Load the instrument data object from the string dictionary
                     instData.LoadPropertyValues(instProps);
@@ -1120,11 +1120,11 @@ namespace LcmsNetSQLiteTools
             return m_instrumentInfo;
         }
 
-        public static List<classExperimentData> GetExperimentList()
+        public static List<ExperimentData> GetExperimentList()
         {
             if (m_experimentsData == null)
             {
-                var returnData = new List<classExperimentData>();
+                var returnData = new List<ExperimentData>();
 
                 var tableName = GetTableName(enumTableTypes.ExperimentList);
 
@@ -1132,7 +1132,7 @@ namespace LcmsNetSQLiteTools
 
                 foreach (var props in allExpProperties)
                 {
-                    var expDatum = new classExperimentData();
+                    var expDatum = new ExperimentData();
 
                     expDatum.LoadPropertyValues(props);
 
@@ -1146,8 +1146,8 @@ namespace LcmsNetSQLiteTools
         }
 
         public static void GetProposalUsers(
-            out List<classProposalUser> users,
-            out Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
+            out List<ProposalUser> users,
+            out Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
         {
             if (m_proposalUsers != null && m_proposalUsers.Count > 0 && m_pidIndexedReferenceList != null &&
                 m_pidIndexedReferenceList.Count > 0)
@@ -1157,10 +1157,10 @@ namespace LcmsNetSQLiteTools
             }
             else
             {
-                var crossReferenceList = new List<classUserIDPIDCrossReferenceEntry>();
-                pidIndexedReferenceList = new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>();
+                var crossReferenceList = new List<UserIDPIDCrossReferenceEntry>();
+                pidIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
 
-                users = new List<classProposalUser>();
+                users = new List<ProposalUser>();
                 var userTableName = GetTableName(enumTableTypes.PUserList);
                 var referenceTableName = GetTableName(enumTableTypes.PReferenceList);
 
@@ -1170,14 +1170,14 @@ namespace LcmsNetSQLiteTools
 
                 foreach (var props in userExpProperties)
                 {
-                    var datum = new classProposalUser();
+                    var datum = new ProposalUser();
                     datum.LoadPropertyValues(props);
                     users.Add(datum);
                 }
 
                 foreach (var props in referenceExpProperties)
                 {
-                    var datum = new classUserIDPIDCrossReferenceEntry();
+                    var datum = new UserIDPIDCrossReferenceEntry();
                     datum.LoadPropertyValues(props);
                     crossReferenceList.Add(datum);
                 }
@@ -1188,7 +1188,7 @@ namespace LcmsNetSQLiteTools
                     {
                         pidIndexedReferenceList.Add(
                             crossReference.PID,
-                            new List<classUserIDPIDCrossReferenceEntry>());
+                            new List<UserIDPIDCrossReferenceEntry>());
                     }
 
                     pidIndexedReferenceList[crossReference.PID].Add(crossReference);
@@ -1199,11 +1199,11 @@ namespace LcmsNetSQLiteTools
             }
         }
 
-        public static List<classLCColumn> GetEntireLCColumnList()
+        public static List<LCColumnData> GetEntireLCColumnList()
         {
             if (m_experimentsData == null)
             {
-                var returnData = new List<classLCColumn>();
+                var returnData = new List<LCColumnData>();
 
                 var tableName = GetTableName(enumTableTypes.LCColumnList);
 
@@ -1211,7 +1211,7 @@ namespace LcmsNetSQLiteTools
 
                 foreach (var props in allLCColumnProperties)
                 {
-                    var datum = new classLCColumn();
+                    var datum = new LCColumnData();
                     datum.LoadPropertyValues(props);
                     returnData.Add(datum);
                 }
@@ -1291,7 +1291,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                var firstTimeLookupedSelectedSepType = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
+                var firstTimeLookupedSelectedSepType = LCMSSettings.GetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
 
                 var isFirstTime = true;
                 if (!string.IsNullOrWhiteSpace(firstTimeLookupedSelectedSepType))
@@ -1303,11 +1303,11 @@ namespace LcmsNetSQLiteTools
                 {
                     const string errorMessage =
                         "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
-                    classApplicationLogger.LogError(0, errorMessage, ex);
+                    ApplicationLogger.LogError(0, errorMessage, ex);
                 }
                 else
                 {
-                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE, false.ToString());
+                    LCMSSettings.SetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE, false.ToString());
                 }
                 return string.Empty;
             }
@@ -1358,7 +1358,7 @@ namespace LcmsNetSQLiteTools
                 {
                     var errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
                     // throw new classDatabaseDataException(errMsg, ex);
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     return;
                 }
             }
@@ -1373,7 +1373,7 @@ namespace LcmsNetSQLiteTools
                 {
                     var errMsg = "SQLite exception creating table " + tableName;
                     // throw new classDatabaseDataException(errMsg, ex);
-                    classApplicationLogger.LogError(0, errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
                     return;
                 }
             }
@@ -1411,7 +1411,7 @@ namespace LcmsNetSQLiteTools
             {
                 var errMsg = "SQLite exception filling table " + tableName;
                 // throw new classDatabaseDataException(errMsg, ex);
-                classApplicationLogger.LogError(0, errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -1526,7 +1526,7 @@ namespace LcmsNetSQLiteTools
                 catch (Exception ex)
                 {
                     var errorMessage = "Exception clearing table " + tableName;
-                    classApplicationLogger.LogError(0, errorMessage, ex);
+                    ApplicationLogger.LogError(0, errorMessage, ex);
                     throw new classDatabaseDataException("Exception clearing table " + tableName, ex);
                 }
             }

@@ -17,7 +17,7 @@ using LcmsNetSDK.Method;
 namespace DemoPluginLibrary
 {
     //TODO: Add a custom user control for this guy....maybe?
-    [classDeviceControl(null,
+    [DeviceControl(null,
                                  "Demo Pump",
                                  "Demo")]
     public class DemoPump : IDevice, IPump, IFluidicsPump
@@ -48,8 +48,8 @@ namespace DemoPluginLibrary
 
         public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
-            ErrorType = enumDeviceErrorStatus.NoError;
+            Status = DeviceStatus.Initialized;
+            ErrorType = DeviceErrorStatus.NoError;
             return true;
         }
 
@@ -109,13 +109,13 @@ namespace DemoPluginLibrary
 
         public event DelegateDeviceHasData MethodNames;
 
-        [classLCMethod("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 2, false)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, false)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             return true;
         }
 
-        [classLCMethod("Stop Method", 1.0, "", -1, false)]
+        [LCMethodEvent("Stop Method", 1.0, "", -1, false)]
         public bool StopMethod()
         {
             return true;
@@ -124,13 +124,13 @@ namespace DemoPluginLibrary
         #endregion
 
         #region Events
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
             remove { }
         }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -173,7 +173,7 @@ namespace DemoPluginLibrary
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -185,13 +185,13 @@ namespace DemoPluginLibrary
             set;
         }
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
         }
 
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         public bool Emulation
         {

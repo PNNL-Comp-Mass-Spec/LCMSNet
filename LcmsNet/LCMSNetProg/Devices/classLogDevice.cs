@@ -22,7 +22,7 @@ namespace LcmsNet.Devices
         public classLogDevice()
         {
             m_name = "Logger";
-            m_status = enumDeviceStatus.NotInitialized;
+            m_status = DeviceStatus.NotInitialized;
         }
 
 
@@ -45,7 +45,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Status of the device currently.
         /// </summary>
-        private enumDeviceStatus m_status;
+        private DeviceStatus m_status;
 
         #endregion
 
@@ -55,12 +55,12 @@ namespace LcmsNet.Devices
         /// Fired when the status changes.
         /// </summary>
         //public event DelegateDeviceStatusUpdate StatusUpdate;
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -83,14 +83,14 @@ namespace LcmsNet.Devices
         /// Prints the message provided to the debug console.
         /// </summary>
         /// <param name="message">Message to write.</param>
-        [classLCMethod("Write Message", 3, false, "", -1, false)]
+        [LCMethodEvent("Write Message", 3, false, "", -1, false)]
         public void DebugWrite(string message)
         {
             Debug.WriteLine("\t\t{0} -- {1}", m_name, message);
             Debug.Flush();
         }
 
-        [classLCMethod("Update status!", 3, false, "", -1, false)]
+        [LCMethodEvent("Update status!", 3, false, "", -1, false)]
         public void UpdateStatus()
         {
         }
@@ -168,13 +168,13 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Status of the device
         /// </summary>
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get { return m_status; }
             set
             {
                 if (value != m_status)
-                    StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(value, "None", this));
+                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "None", this));
                 m_status = value;
             }
         }
@@ -209,9 +209,9 @@ namespace LcmsNet.Devices
 
         #region IDevice Members
 
-        public enumDeviceErrorStatus ErrorType { get; set; }
+        public DeviceErrorStatus ErrorType { get; set; }
 
-        public enumDeviceType DeviceType => enumDeviceType.BuiltIn;
+        public DeviceType DeviceType => DeviceType.BuiltIn;
 
         #endregion
 

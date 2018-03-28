@@ -16,7 +16,7 @@ namespace LcmsNet.SampleQueue
         /// Constructor that takes an array of samples that were operated upon.
         /// </summary>
         /// <param name="data">Samples of question.</param>
-        public classSampleQueueArgs(IEnumerable<classSampleData> data)
+        public classSampleQueueArgs(IEnumerable<SampleData> data)
         {
             Samples = data;
         }
@@ -30,7 +30,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="complete"></param>
         /// <param name="waiting"></param>
         public classSampleQueueArgs(
-            IEnumerable<classSampleData> data,
+            IEnumerable<SampleData> data,
             int runningIndex,
             int running,
             int complete,
@@ -52,7 +52,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets the samples that had an action performed on them.
         /// </summary>
-        public IEnumerable<classSampleData> Samples { get; }
+        public IEnumerable<SampleData> Samples { get; }
 
         /// <summary>
         ///

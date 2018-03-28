@@ -16,7 +16,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Writes the LC-Event from the specified node.
         /// </summary>
-        private void WriteEventNode(XmlDocument document, XmlElement eventRoot, classLCEvent lcEvent)
+        private void WriteEventNode(XmlDocument document, XmlElement eventRoot, LCEvent lcEvent)
         {
 
             //
@@ -79,7 +79,7 @@ namespace LcmsNet.Method
                     sampleSpecific = true;
 
                     // Alternatively use .AssemblyQualifiedName;
-                    type = typeof (classSampleData).FullName;
+                    type = typeof (SampleData).FullName;
                     value = "";
                 }
                 else
@@ -120,7 +120,7 @@ namespace LcmsNet.Method
         /// <param name="filePath">Path of file that contains method.</param>
         /// <param name="method"></param>
         /// <returns>Null if the path does not exist. New method object if successful.</returns>
-        public bool WriteMethod(string filePath, classLCMethod method)
+        public bool WriteMethod(string filePath, LCMethod method)
         {
             // Don't write if the method is null.
             if (method == null)

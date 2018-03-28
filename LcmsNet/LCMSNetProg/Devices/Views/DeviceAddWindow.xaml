@@ -33,7 +33,7 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding Plugins}">
                     <TextBlock Text="{Binding Category}" />
                     <HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate DataType="{x:Type devices:classDevicePluginInformation}">
+                        <DataTemplate DataType="{x:Type devices:DevicePluginInformation}">
                             <TextBlock Text="{Binding DeviceAttribute.Name}" />
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>

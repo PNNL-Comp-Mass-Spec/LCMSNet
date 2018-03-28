@@ -24,7 +24,7 @@ namespace LcmsNet.Method.ViewModels
         public LCMethodTimelineViewModel()
         {
             // Create internal lists
-            methods = new List<classLCMethod>();
+            methods = new List<LCMethod>();
             deviceColorMappings = new Dictionary<IDevice, Color>();
 
             // We map before we register our delegates with events to make sure devices that are built-in are
@@ -33,8 +33,8 @@ namespace LcmsNet.Method.ViewModels
             {
                 RemapDevicesToColors();
                 // Register device additions and deletions so that we remap color information for display.
-                classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-                classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+                DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+                DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             }
             catch
             {
@@ -130,7 +130,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// The list of methods to render.
         /// </summary>
-        private readonly List<classLCMethod> methods;
+        private readonly List<LCMethod> methods;
 
         /// <summary>
         /// Maps a device to a color.
@@ -171,7 +171,7 @@ namespace LcmsNet.Method.ViewModels
         private void RemapDevicesToColors()
         {
             // Clear the list so we can re-adjust the mappings
-            deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
+            deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(DeviceManager.Manager.Devices);
         }
 
         #endregion
@@ -182,7 +182,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the method provided.
         /// </summary>
         /// <param name="method"></param>
-        public void RenderLCMethod(classLCMethod method)
+        public void RenderLCMethod(LCMethod method)
         {
             methods.Clear();
             methods.Add(method);
@@ -193,7 +193,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the method provided.
         /// </summary>
         /// <param name="methodList"></param>
-        public void RenderLCMethod(List<classLCMethod> methodList)
+        public void RenderLCMethod(List<LCMethod> methodList)
         {
             methods.Clear();
             methods.AddRange(methodList);
@@ -218,9 +218,9 @@ namespace LcmsNet.Method.ViewModels
 
             var startTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             var duration = new TimeSpan(0, 30, 0);
-            foreach (var column in classCartConfiguration.Columns)
+            foreach (var column in CartConfiguration.Columns)
             {
-                if (column.Status != enumColumnStatus.Disabled)
+                if (column.Status != ColumnStatus.Disabled)
                 {
                     renderer.ColumnNames.Add(column.Name);
                 }

@@ -48,10 +48,10 @@ namespace LcmsNet.Reporting
                 }
                 if (selector.SelectedItems.Count == 1)
                 {
-                    dc.LCMethodsSelected.Add((classLCMethod)selector.SelectedItems[0]);
+                    dc.LCMethodsSelected.Add((LCMethod)selector.SelectedItems[0]);
                     return;
                 }
-                dc.LCMethodsSelected.AddRange(selector.SelectedItems.Cast<classLCMethod>());
+                dc.LCMethodsSelected.AddRange(selector.SelectedItems.Cast<LCMethod>());
             }
         }
 

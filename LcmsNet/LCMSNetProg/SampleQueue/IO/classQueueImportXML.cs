@@ -34,15 +34,15 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="path">Name and path of file to import</param>
         /// <returns>List containing samples read from XML file</returns>
-        public List<classSampleData> ReadSamples(string path)
+        public List<SampleData> ReadSamples(string path)
         {
-            var returnList = new List<classSampleData>();
+            var returnList = new List<SampleData>();
 
             // Verify input file exists
             if (!File.Exists(path))
             {
                 var ErrMsg = "Import file " + path + " not found";
-                classApplicationLogger.LogMessage(0, ErrMsg);
+                ApplicationLogger.LogMessage(0, ErrMsg);
                 return returnList;
             }
 
@@ -55,7 +55,7 @@ namespace LcmsNet.SampleQueue.IO
             catch (Exception ex)
             {
                 var ErrMsg = "Exception loading XML file " + path;
-                classApplicationLogger.LogError(0, ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
                 throw new classDataImportException(ErrMsg, ex);
             }
 
@@ -66,7 +66,7 @@ namespace LcmsNet.SampleQueue.IO
             if (nodeList == null || nodeList.Count < 1)
             {
                 var errMsg = "No sample data found for import in file " + path;
-                classApplicationLogger.LogMessage(0, errMsg);
+                ApplicationLogger.LogMessage(0, errMsg);
                 return returnList;
             }
 
@@ -83,7 +83,7 @@ namespace LcmsNet.SampleQueue.IO
                     catch (Exception ex)
                     {
                         var ErrMsg = "Exception converting XML item node to sample " + currentNode.Name;
-                        classApplicationLogger.LogError(0, ErrMsg, ex);
+                        ApplicationLogger.LogError(0, ErrMsg, ex);
                         throw new classDataImportException(ErrMsg, ex);
                     }
                 }
@@ -96,10 +96,10 @@ namespace LcmsNet.SampleQueue.IO
         /// Converts an individual XML node into a sampledata object
         /// </summary>
         /// <param name="itemNode">XML node containing data for 1 sample</param>
-        /// <returns>classSampleData object containing data from the XML node</returns>
-        private classSampleData ConvertXMLNodeToSample(XmlNode itemNode)
+        /// <returns>SampleData object containing data from the XML node</returns>
+        private SampleData ConvertXMLNodeToSample(XmlNode itemNode)
         {
-            var retData = new classSampleData(false);
+            var retData = new SampleData(false);
 
             // Description (DMS.Name)
             var tempStr = GetNodeValue(itemNode, "Description");
@@ -110,7 +110,7 @@ namespace LcmsNet.SampleQueue.IO
             }
             else
             {
-                classApplicationLogger.LogMessage(0, "Description field empty or missing. Import cannot be performed");
+                ApplicationLogger.LogMessage(0, "Description field empty or missing. Import cannot be performed");
                 return null;
             }
 
@@ -136,7 +136,7 @@ namespace LcmsNet.SampleQueue.IO
 
             // Separation Method (Experiment.ExperimentName)
             var methodName = GetNodeValue(itemNode, "Separation/Method");
-            retData.LCMethod = new classLCMethod {
+            retData.LCMethod = new LCMethod {
                 Name = methodName
             };
 

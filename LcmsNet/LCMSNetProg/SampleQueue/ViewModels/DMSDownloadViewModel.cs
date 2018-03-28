@@ -27,7 +27,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Class variables"
 
-        private readonly List<classSampleData> dmsRequestList = new List<classSampleData>();
+        private readonly List<SampleData> dmsRequestList = new List<SampleData>();
         private string matchString;
         private string cartName = string.Empty;
         private string cartConfigName = string.Empty;
@@ -262,10 +262,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             UpdateCartConfigList();
 
             // Cart name
-            CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-            CartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
+            CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+            CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
 
-            if (CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
+            if (CartName.ToLower() == LCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 // No cart name is assigned, user will need to select one
                 CartName = "";
@@ -371,10 +371,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private async void FindDmsRequests()
         {
-            List<classSampleData> tempRequestList;
+            List<SampleData> tempRequestList;
 
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
-            var queryData = new classSampleQueryData {
+            var queryData = new SampleQueryData {
                 RequestName = this.RequestName
             };
 
@@ -468,7 +468,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             RequestsFoundString = tempRequestList.Count + " requests found";
 
             // Add the requests to the listview
-            var availReqList = new List<classSampleData>();
+            var availReqList = new List<SampleData>();
             foreach (var request in tempRequestList)
             {
                 // Determine if already in list of requests
@@ -514,9 +514,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private List<classSampleData> GetDMSData(classSampleQueryData queryData)
+        private List<SampleData> GetDMSData(SampleQueryData queryData)
         {
-            var tempRequestList = new List<classSampleData>();
+            var tempRequestList = new List<SampleData>();
 
             // Get a list of requests from DMS
             try
@@ -554,7 +554,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="inputData">List containing downloaded samples</param>
         /// <returns>TRUE if any samples have blcoking enabled; otherwise FALSE</returns>
-        private bool IsBlockingEnabled(List<classSampleData> inputData)
+        private bool IsBlockingEnabled(List<SampleData> inputData)
         {
             foreach (var testSample in inputData)
             {
@@ -618,7 +618,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="request">classDMSData object passed in from FindIndex method</param>
         /// <returns>True if match is made; otherwise False</returns>
-        private bool PredContainsRequestName(classSampleData request)
+        private bool PredContainsRequestName(SampleData request)
         {
             if (string.Equals(request.DmsData.RequestName, matchString, StringComparison.CurrentCultureIgnoreCase))
             {
@@ -639,19 +639,19 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         /// <summary>
         /// Transfers the current list of classDMSData objects that have been selected
-        /// for running to the calling program as a list of classSampleData objects
+        /// for running to the calling program as a list of SampleData objects
         /// </summary>
-        /// <returns>List of classSampleData objects</returns>
-        public List<classSampleData> GetNewSamplesDMSView()
+        /// <returns>List of SampleData objects</returns>
+        public List<SampleData> GetNewSamplesDMSView()
         {
-            var retList = new List<classSampleData>();
+            var retList = new List<SampleData>();
 
             foreach (var tempSampleData in SelectedRequestData.Data)
             {
                 tempSampleData.DmsData.CartName = cartName;
                 tempSampleData.DmsData.CartConfigName = cartConfigName;
 
-                //                  classSampleData tempSampleData = CopyDMSDataObj(tempDMSData);
+                //                  SampleData tempSampleData = CopyDMSDataObj(tempDMSData);
                 retList.Add(tempSampleData);
             }
 //              classStatusTools.SendStatusMsg("Adding " + retList.Count.ToString() + " samples from DMS");
@@ -665,7 +665,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private bool UpdateDMSCartAssignment()
         {
             // Verify a cart is specified
-            if (cartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
+            if (cartName.ToLower() == LCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 MessageBox.Show("Cart name must be specified", "CART NAME NOT SPECIFIED");
                 return false;

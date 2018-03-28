@@ -197,7 +197,7 @@ namespace Newport.ESP300
             UpdateMotorStatus();
         }
 
-        private void m_obj_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+        private void m_obj_StatusUpdate(object sender, DeviceStatusEventArgs e)
         {
             var tokens = e.Message.Split(new char[' ']);
             if (e.Notification == "Motor")

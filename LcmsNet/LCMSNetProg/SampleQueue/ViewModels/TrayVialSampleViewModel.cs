@@ -7,7 +7,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class TrayVialSampleViewModel : ReactiveObject
     {
-        public TrayVialSampleViewModel(classSampleData sample, List<string> trayNames)
+        public TrayVialSampleViewModel(SampleData sample, List<string> trayNames)
         {
             this.sample = sample;
             this.trayNames = trayNames;
@@ -18,12 +18,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         private readonly List<string> trayNames;
-        private readonly classSampleData sample;
+        private readonly SampleData sample;
         private int tray;
         private int vial;
         private bool dataChanged;
 
-        public classSampleData Sample => sample;
+        public SampleData Sample => sample;
 
         public int ColumnId => Sample.ColumnData.ID + 1;
 

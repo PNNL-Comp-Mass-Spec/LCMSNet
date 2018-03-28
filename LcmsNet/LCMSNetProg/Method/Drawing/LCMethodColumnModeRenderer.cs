@@ -71,14 +71,14 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<classLCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!
             var offset = bounds.Height * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
             // This tells us how much room we get per method or column spacing.
-            var columnsEnabled = classCartConfiguration.Columns.Count(x => x.Status != enumColumnStatus.Disabled) + 1;
+            var columnsEnabled = CartConfiguration.Columns.Count(x => x.Status != ColumnStatus.Disabled) + 1;
             //var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
             var heightPer = (bounds.Height - CONST_COLUMN_SPACING * columnsEnabled - offset) / Convert.ToSingle(columnsEnabled);
             heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, (int)(CONST_MAX_HEIGHT * 1.5)));
@@ -97,7 +97,7 @@ namespace LcmsNet.Method.Drawing
                 RenderColumnName(graphics, string.Format("Column {0}: {1}", i + 1, ColumnNames[i]), x, top);
             }
 
-            var alignedEvents = new List<classLCEvent>();
+            var alignedEvents = new List<LCEvent>();
             if (methods != null && methods.Count > 0)
             {
                 // Find the start and end times of the samples so we can scale everything accordingly.

@@ -65,10 +65,10 @@ namespace FluidicsSDK.Devices
         public static FluidicsDevice CreateDevice(Type deviceType)
         {
             FluidicsDevice device = null;
-            var attributes = deviceType.GetCustomAttributes(typeof(classDeviceControlAttribute), false);
+            var attributes = deviceType.GetCustomAttributes(typeof(DeviceControlAttribute), false);
             foreach (var o in attributes)
             {
-                var monitorAttribute = o as classDeviceControlAttribute;
+                var monitorAttribute = o as DeviceControlAttribute;
                 if (monitorAttribute != null)
                 {
                     var fluidicsDeviceType = monitorAttribute.FluidicsDeviceType;

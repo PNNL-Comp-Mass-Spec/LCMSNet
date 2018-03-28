@@ -41,7 +41,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not register the Eksigent control software OCX. " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Could not register the Eksigent control software OCX. " + ex.Message, ex);
             }
         }
 
@@ -148,7 +148,7 @@ namespace Eksigent.Devices.Pumps
             MaxChannelNumber = totalChannels;
         }
 
-        private void UpdateStatusLabelText(object sender, classDeviceStatusEventArgs e)
+        private void UpdateStatusLabelText(object sender, DeviceStatusEventArgs e)
         {
             StatusText = e.Message;
         }
@@ -158,7 +158,7 @@ namespace Eksigent.Devices.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Pump_PumpStatus(object sender, classDeviceStatusEventArgs e)
+        private void Pump_PumpStatus(object sender, DeviceStatusEventArgs e)
         {
             UpdateStatusLabelText(sender, e);
         }
@@ -180,12 +180,12 @@ namespace Eksigent.Devices.Pumps
             });
         }
 
-        private void m_pump_StatusUpdate(object sender, classDeviceStatusEventArgs e)
+        private void m_pump_StatusUpdate(object sender, DeviceStatusEventArgs e)
         {
             UpdateStatusDisplay(e.Message);
         }
 
-        private void m_pump_Error(object sender, classDeviceErrorEventArgs e)
+        private void m_pump_Error(object sender, DeviceErrorEventArgs e)
         {
             UpdateStatusDisplay(e.Error);
         }
@@ -230,7 +230,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -249,7 +249,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -263,7 +263,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -277,7 +277,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -296,7 +296,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -310,7 +310,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -324,7 +324,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -348,7 +348,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 
@@ -367,7 +367,7 @@ namespace Eksigent.Devices.Pumps
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, ex.Message);
             }
         }
 

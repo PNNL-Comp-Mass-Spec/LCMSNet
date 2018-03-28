@@ -19,21 +19,21 @@ namespace LcmsNetDataClasses.Experiment
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public List<classSampleValidationError> ValidateSamples(classSampleData sample)
+        public List<SampleValidationError> ValidateSamples(SampleData sample)
         {
-            var errors = new List<classSampleValidationError>();
+            var errors = new List<SampleValidationError>();
 
             // Validate the LC-Method
             if (sample.ActualLCMethod == null)
             {
-                errors.Add(new classSampleValidationError("The LC-Method was not selected.", enumSampleValidationError.LCMethodNotSelected));
+                errors.Add(new SampleValidationError("The LC-Method was not selected.", SampleValidationErrorType.LCMethodNotSelected));
             }
             else
             {
-                var manager = classDeviceManager.Manager;
+                var manager = DeviceManager.Manager;
                 if (sample.ActualLCMethod.Events.Count < 1)
                 {
-                    errors.Add(new classSampleValidationError("The LC-Method was not selected or does not contain any events.", enumSampleValidationError.LCMethodHasNoEvents));
+                    errors.Add(new SampleValidationError("The LC-Method was not selected or does not contain any events.", SampleValidationErrorType.LCMethodHasNoEvents));
                 }
                 else
                 {
@@ -46,22 +46,22 @@ namespace LcmsNetDataClasses.Experiment
                         if (device != null)
                         {
                             // Make sure the device exists in the configuration correctly!
-                            if (device.GetType() == typeof(classTimerDevice))
+                            if (device.GetType() == typeof(TimerDevice))
                             {
                                 // Do nothing!
                             }
                             else if (!manager.Devices.Contains(device))
                             {
-                                errors.Add(new classSampleValidationError(
+                                errors.Add(new SampleValidationError(
                                                     string.Format("The device {0} in the LC-Method does not exist.  Make sure the method is valid.", device.Name),
-                                                    enumSampleValidationError.DeviceDoesNotExist));
+                                                    SampleValidationErrorType.DeviceDoesNotExist));
                             }
                         }
                         else
                         {
-                            errors.Add(new classSampleValidationError(
+                            errors.Add(new SampleValidationError(
                                                 string.Format("The LC-Method {0} is invalid. Make sure the method is built correctly. ", sample.ActualLCMethod.Name),
-                                                enumSampleValidationError.LCMethodIncorrect));
+                                                SampleValidationErrorType.LCMethodIncorrect));
                         }
                     }
                 }
@@ -75,11 +75,11 @@ namespace LcmsNetDataClasses.Experiment
         /// </summary>
         /// <param name="samples"></param>
         /// <returns></returns>
-        public List<classSampleData> ValidateBlocks(List<classSampleData> samples)
+        public List<SampleData> ValidateBlocks(List<SampleData> samples)
         {
             // First we want to bin the samples based on block number, then we want to
             // figure out for each block if we are scheduled to run on the same column.
-            var tempDictionary = new Dictionary<string,List<classSampleData>>();
+            var tempDictionary = new Dictionary<string,List<SampleData>>();
             foreach (var sample in samples)
             {
                 var block = sample.DmsData.Block;
@@ -97,11 +97,11 @@ namespace LcmsNetDataClasses.Experiment
                 }
                 else
                 {
-                    tempDictionary.Add(key, new List<classSampleData>(){sample});
+                    tempDictionary.Add(key, new List<SampleData>(){sample});
                 }
             }
 
-            var badSamples = new List<classSampleData>();
+            var badSamples = new List<SampleData>();
 
             // Iterate over the batches
             foreach (var itemKey in tempDictionary.Keys)
