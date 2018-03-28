@@ -13,7 +13,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// <summary>
     /// Class to hold settings for the pump serial port
     /// </summary>
-    class classIscoSerPortProps
+    class IscoSerPortProps
     {
         #region "Constants"
             const string CONST_DFLT_COMM_PORT = "COM1";
@@ -47,7 +47,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         #endregion
 
         #region "Constructors"
-            public classIscoSerPortProps()
+            public IscoSerPortProps()
             {
                 this.PortName = CONST_DFLT_COMM_PORT;
                 this.BaudRate = CONST_DFLT_BAUD_RATE;

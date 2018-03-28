@@ -26,8 +26,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// </summary>
     [Serializable]
 
-    [DeviceControl(typeof(PumpIscoViewModel), typeof(classPumpIscoGlyph), "ISCO Pump", "Pumps")]
-    public class classPumpIsco : IDevice
+    [DeviceControl(typeof(IscoPumpViewModel), typeof(IscoPumpGlyph), "ISCO Pump", "Pumps")]
+    public class IscoPump : IDevice
     {
         #region "Constants"
         const int CONST_MAX_PUMPS = 3;
@@ -58,25 +58,25 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         Timer m_refresh;
 
         // Pump control mode (local/remote)
-        enumIscoControlMode m_ControlMode = enumIscoControlMode.Local;
+        IscoControlMode m_ControlMode = IscoControlMode.Local;
 
         // Pump operation mode (Constant pressure/Constant flow)
-        enumIscoOperationMode m_OpMode = enumIscoOperationMode.ConstantPressure;
+        IscoOperationMode m_OpMode = IscoOperationMode.ConstantPressure;
 
         // Number of pumps connected to this controller (3 max)
         int m_PumpCount;
 
         // Status data for each pump
-        classPumpIscoData[] m_PumpData;
+        IscoPumpData[] m_PumpData;
 
         // Maximum ranges for pump parameters
-        readonly classPumpIscoRangeData[] m_PumpRanges;
+        readonly IscoPumpRangeData[] m_PumpRanges;
 
         // Setpoint limits for the pumps
-        readonly classPumpIscoSetpointLimits[] m_SetpointLimits;
+        readonly IscoPumpSetpointLimits[] m_SetpointLimits;
 
         // Serial port properties
-        readonly classIscoSerPortProps m_PortProps;
+        readonly IscoSerPortProps m_PortProps;
 
         // Serial port object
         SerialPort m_SerialPort;
@@ -84,7 +84,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Pump models
         /// </summary>
-        readonly enumISCOModel[] models; // up to 3 per controller...
+        readonly ISCOModel[] models; // up to 3 per controller...
         #endregion
 
         #region "Delegates"
@@ -196,7 +196,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Control mode (local/remote)
         /// </summary>
-        public enumIscoControlMode ControlMode
+        public IscoControlMode ControlMode
         {
             get { return m_ControlMode; }
             set { SetControlMode(value); }
@@ -205,7 +205,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Operation mode (Const flow/Const pressure)
         /// </summary>
-        public enumIscoOperationMode OperationMode
+        public IscoOperationMode OperationMode
         {
             get { return m_OpMode; }
             set { SetOperationMode(value); }
@@ -214,37 +214,37 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Current data for all pumps
         /// </summary>
-        public classPumpIscoData[] PumpData => m_PumpData;
+        public IscoPumpData[] PumpData => m_PumpData;
 
         #endregion
 
         #region "Constructors"
-        public classPumpIsco()
+        public IscoPump()
         {
             m_Name = "Isco Pump";
 
             // Set the default number of pumps as the max
             m_PumpCount = CONST_MAX_PUMPS;
 
-            models = new enumISCOModel[CONST_MAX_PUMPS];
+            models = new ISCOModel[CONST_MAX_PUMPS];
 
             //m_Name = classDeviceManager.Manager.CreateUniqueDeviceName(m_Name);
             // Initialize pump data array
-            m_PumpData = new[] { new classPumpIscoData(), new classPumpIscoData(),
-                                        new classPumpIscoData() };
+            m_PumpData = new[] { new IscoPumpData(), new IscoPumpData(),
+                                        new IscoPumpData() };
 
             // Initialize setpoint array
-            m_SetpointLimits = new[] { new classPumpIscoSetpointLimits(),
-                                                new classPumpIscoSetpointLimits(), new classPumpIscoSetpointLimits() };
+            m_SetpointLimits = new[] { new IscoPumpSetpointLimits(),
+                                                new IscoPumpSetpointLimits(), new IscoPumpSetpointLimits() };
 
             // Initialize pump range array
-            m_PumpRanges = new[] { new classPumpIscoRangeData(),
-                                                new classPumpIscoRangeData(), new classPumpIscoRangeData() };
+            m_PumpRanges = new[] { new IscoPumpRangeData(),
+                                                new IscoPumpRangeData(), new IscoPumpRangeData() };
 
             m_SerialPort = new SerialPort();
 
             // Configure the serial port with default settings
-            m_PortProps = new classIscoSerPortProps();
+            m_PortProps = new IscoSerPortProps();
             ConfigSerialPort(m_PortProps);
         }
         #endregion
@@ -293,7 +293,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="pumpIndx">Index of pump (0-2)</param>
         /// <returns>Object containing pump data</returns>
-        public classPumpIscoData GetPumpData(int pumpIndx)
+        public IscoPumpData GetPumpData(int pumpIndx)
         {
             if (pumpIndx < m_PumpData.Length)
             {
@@ -308,7 +308,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="pumpIndx">Index of pump (0-2)</param>
         /// <returns>Object containing range data</returns>
-        public classPumpIscoRangeData GetPumpRanges(int pumpIndx)
+        public IscoPumpRangeData GetPumpRanges(int pumpIndx)
         {
             if (pumpIndx < m_PumpRanges.Length)
             {
@@ -323,7 +323,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="pumpIndx">Index of pump (0-2)</param>
         /// <returns>Object containing setpoint limit data</returns>
-        public classPumpIscoSetpointLimits GetSetpointLimits(int pumpIndx)
+        public IscoPumpSetpointLimits GetSetpointLimits(int pumpIndx)
         {
             if (pumpIndx < m_SetpointLimits.Length)
             {
@@ -379,7 +379,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 {
                     var args = new DeviceErrorEventArgs("Exception closing serial port during Disconnect",
                                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                     Error?.Invoke(this, args);
                     return false;
                 }
@@ -404,7 +404,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="newMode">New control mode</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        public bool SetControlMode(enumIscoControlMode newMode)
+        public bool SetControlMode(IscoControlMode newMode)
         {
             if (m_Emulation)
             {
@@ -422,7 +422,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -433,17 +433,17 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             switch (newMode)
             {
-                case enumIscoControlMode.External:
+                case IscoControlMode.External:
                     cmd = "EXTERNAL";
-                    notifyString = classIscoStatusNotifications.GetNotificationString(newMode.ToString());
+                    notifyString = IscoStatusNotifications.GetNotificationString(newMode.ToString());
                     break;
-                case enumIscoControlMode.Local:
+                case IscoControlMode.Local:
                     cmd = "LOCAL";
-                    notifyString = classIscoStatusNotifications.GetNotificationString(newMode.ToString());
+                    notifyString = IscoStatusNotifications.GetNotificationString(newMode.ToString());
                     break;
-                case enumIscoControlMode.Remote:
+                case IscoControlMode.Remote:
                     cmd = "REMOTE";
-                    notifyString = classIscoStatusNotifications.GetNotificationString(newMode.ToString());
+                    notifyString = IscoStatusNotifications.GetNotificationString(newMode.ToString());
                     break;
             }
 
@@ -461,14 +461,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception setting control mode", GetBaseException(ex),
                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                            classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                            IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 ControlModeSet?.Invoke(m_ControlMode);
                 return false;
             }
         }
         [LCMethodEvent("Set Mode", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool SetOperationMode(double timeout, enumIscoOperationMode newMode)
+        public bool SetOperationMode(double timeout, IscoOperationMode newMode)
         {
             return SetOperationMode(newMode);
         }
@@ -477,7 +477,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="newMode">New operation mode</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        public bool SetOperationMode(enumIscoOperationMode newMode)
+        public bool SetOperationMode(IscoOperationMode newMode)
         {
             if (m_Emulation)
             {
@@ -496,13 +496,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             // Initialize the command
             switch (newMode)
             {
-                case enumIscoOperationMode.ConstantFlow:
+                case IscoOperationMode.ConstantFlow:
                     baseCmd = "CONST FLOW";
-                    notifyString = classIscoStatusNotifications.GetNotificationString(newMode.ToString());
+                    notifyString = IscoStatusNotifications.GetNotificationString(newMode.ToString());
                     break;
-                case enumIscoOperationMode.ConstantPressure:
+                case IscoOperationMode.ConstantPressure:
                     baseCmd = "CONST PRESS";
-                    notifyString = classIscoStatusNotifications.GetNotificationString(newMode.ToString());
+                    notifyString = IscoStatusNotifications.GetNotificationString(newMode.ToString());
                     break;
             }
 
@@ -521,7 +521,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 {
                     var errArgs = new DeviceErrorEventArgs("Exception setting operation mode",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                     Error?.Invoke(this, errArgs);
                     success = false;
                 }
@@ -559,7 +559,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             if (!Disconnect())
             {
                 msg = "Initialization error during Disconnect";
-                notifyStr = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.InitializationError.ToString());
+                notifyStr = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.InitializationError.ToString());
                 var args = new DeviceErrorEventArgs(msg, null,
                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                             notifyStr);
@@ -581,7 +581,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             catch (Exception ex)
             {
                 msg = "Initialization error when opening serial port";
-                notifyStr = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.InitializationError.ToString());
+                notifyStr = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.InitializationError.ToString());
                 var args = new DeviceErrorEventArgs(msg, ex,
                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                             notifyStr);
@@ -629,7 +629,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             m_ControlMode = PumpData[0].ControlMode;
 
             // Set remote mode
-            if (!SetControlMode(enumIscoControlMode.Remote))
+            if (!SetControlMode(IscoControlMode.Remote))
             {
                 msg = "Could not set the control mode.";
                 return false;
@@ -671,15 +671,15 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 m += 2;
                 if (tokenOfInterest.Contains("100D"))
                 {
-                    models[i] = enumISCOModel.ISCO100D;
+                    models[i] = ISCOModel.ISCO100D;
                 }
                 else if (tokenOfInterest.Contains("65D"))
                 {
-                    models[i] = enumISCOModel.ISCO65D;
+                    models[i] = ISCOModel.ISCO65D;
                 }
                 else
                 {
-                    models[i] = enumISCOModel.Unknown;
+                    models[i] = ISCOModel.Unknown;
                     retval = false;
                 }
             }
@@ -700,7 +700,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -715,7 +715,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception refreshing status", GetBaseException(ex),
                                                 DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -729,7 +729,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 var args = new DeviceErrorEventArgs("Exception parsing status message",
                                                 GetBaseException(ex),
                                                 DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -757,7 +757,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         }
 
         //public double GetPumpVolume(double timeout, int pumpId)
-        public double GetPumpVolume(double timeout, enumISCOPumpChannels pump)
+        public double GetPumpVolume(double timeout, ISCOPumpChannels pump)
         {
             Refresh();
             return m_PumpData[(int)pump].Volume;
@@ -769,7 +769,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="pumpIndx">Index of pump</param>
         /// <param name="opMode">Operation mode (determines whether to get flow or pressure SP)</param>
         /// <returns>Current setpoint; -1000 if there's a problem</returns>
-        public double ReadSetpoint(int pumpIndx, enumIscoOperationMode opMode)
+        public double ReadSetpoint(int pumpIndx, IscoOperationMode opMode)
         {
             if (m_Emulation)
                 return 0.0;
@@ -778,7 +778,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -788,10 +788,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             // Create the command string
             switch (opMode)
             {
-                case enumIscoOperationMode.ConstantPressure:
+                case IscoOperationMode.ConstantPressure:
                     cmdStr = "SETPRESS" + ConvertPumpIndxToString(pumpIndx, false);
                     break;
-                case enumIscoOperationMode.ConstantFlow:
+                case IscoOperationMode.ConstantFlow:
                     cmdStr = "SETFLOW" + ConvertPumpIndxToString(pumpIndx, false);
                     break;
             }
@@ -806,7 +806,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint", GetBaseException(ex),
                                                 DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -828,7 +828,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -845,7 +845,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -867,7 +867,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -884,7 +884,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -906,7 +906,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -923,7 +923,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -945,7 +945,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -962,7 +962,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -984,7 +984,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -1001,7 +1001,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -1014,7 +1014,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="pumpIndx">Index of pump</param>
         /// <returns>Object containing pump range data</returns>
-        public classPumpIscoRangeData ReadPumpRanges(int pumpIndx)
+        public IscoPumpRangeData ReadPumpRanges(int pumpIndx)
         {
             if (m_Emulation)
                 return null;
@@ -1023,7 +1023,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return null;
             }
@@ -1040,7 +1040,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting setpoint limit",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return null;
             }
@@ -1050,7 +1050,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         [LCMethodEvent("Refill", MethodOperationTimeoutType.Parameter, "", -1, false)]
         //public bool StartRefill(double timeout, int pumpIndx, double refillRate)
-        public bool StartRefill(double timeout, enumISCOPumpChannels pump, double refillRate)
+        public bool StartRefill(double timeout, ISCOPumpChannels pump, double refillRate)
         {
             return StartRefill((int)pump, refillRate);
         }
@@ -1069,7 +1069,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
             }
@@ -1089,7 +1089,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception setting refill rate",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -1103,14 +1103,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception starting refill",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
             var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
-                        classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Refilling.ToString() +
+                        IscoStatusNotifications.GetNotificationString(IscoOperationStatus.Refilling.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
@@ -1123,7 +1123,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="pump"></param>
         /// <returns></returns>
         [LCMethodEvent("Start Pump", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool StartPump(double timeout, enumISCOPumpChannels pump)
+        public bool StartPump(double timeout, ISCOPumpChannels pump)
         {
             return StartPump(timeout, (int)pump);
         }
@@ -1143,7 +1143,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
             }
@@ -1159,14 +1159,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception starting pump",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
             var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
-                        classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Running.ToString() +
+                        IscoStatusNotifications.GetNotificationString(IscoOperationStatus.Running.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
@@ -1179,7 +1179,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="pump">Pump to stop</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
         [LCMethodEvent("Stop Pump", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool StopPump(double timeout, enumISCOPumpChannels pump)
+        public bool StopPump(double timeout, ISCOPumpChannels pump)
         {
             return StopPump(timeout, (int)pump);
         }
@@ -1199,7 +1199,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
             }
@@ -1215,21 +1215,21 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception stopping pump",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
             var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
-                        classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Stopped.ToString() +
+                        IscoStatusNotifications.GetNotificationString(IscoOperationStatus.Stopped.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
         }
         [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
         //public bool SetFlow(double timeout, int pumpIndx, double newFlow)
-        public bool SetFlow(double timeout, enumISCOPumpChannels pump, double newFlow)
+        public bool SetFlow(double timeout, ISCOPumpChannels pump, double newFlow)
         {
             return SetFlow((int)pump, newFlow);
         }
@@ -1248,7 +1248,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
             }
@@ -1264,14 +1264,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception setting flow",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
             var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
-                        classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.FlowSet.ToString() +
+                        IscoStatusNotifications.GetNotificationString(IscoOperationStatus.FlowSet.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
@@ -1285,7 +1285,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="newPress">New pressure setpoint</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
         [LCMethodEvent("Set Pressure", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool SetPressure(double timeout, enumISCOPumpChannels pump, double newPress)
+        public bool SetPressure(double timeout, ISCOPumpChannels pump, double newPress)
         {
             return SetPressure((int)pump, newPress);
         }
@@ -1305,7 +1305,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var errorArgs = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, errorArgs);
                 return false;
             }
@@ -1321,14 +1321,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception setting pressure",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
 
             // Everything worked, so send message and return success
             var statusArgs = new DeviceStatusEventArgs(DeviceStatus.Initialized,
-                        classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.PressSet.ToString() +
+                        IscoStatusNotifications.GetNotificationString(IscoOperationStatus.PressSet.ToString() +
                         ConvertPumpIndxToString(pumpIndx, false)), this);
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
@@ -1345,31 +1345,31 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 var errorFound = false;
                 switch (m_PumpData[indx].ProblemStatus)
                 {
-                    case enumIscoProblemStatus.None:
+                    case IscoProblemStatus.None:
                         // No action necessary
                         break;
-                    case enumIscoProblemStatus.OverPressure:
-                        notifyMsg = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.OverPressure.ToString() +
+                    case IscoProblemStatus.OverPressure:
+                        notifyMsg = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.OverPressure.ToString() +
                             ConvertPumpIndxToString(indx, false));
                         errorFound = true;
                         break;
-                    case enumIscoProblemStatus.UnderPressure:
-                        notifyMsg = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.UnderPressure.ToString() +
+                    case IscoProblemStatus.UnderPressure:
+                        notifyMsg = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.UnderPressure.ToString() +
                             ConvertPumpIndxToString(indx, false));
                         errorFound = true;
                         break;
-                    case enumIscoProblemStatus.CylinderBottom:
-                        notifyMsg = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.CylinderBottom.ToString() +
+                    case IscoProblemStatus.CylinderBottom:
+                        notifyMsg = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.CylinderBottom.ToString() +
                             ConvertPumpIndxToString(indx, false));
                         errorFound = true;
                         break;
-                    case enumIscoProblemStatus.CylinderEmpty:
-                        notifyMsg = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.CylinderEmpty.ToString() +
+                    case IscoProblemStatus.CylinderEmpty:
+                        notifyMsg = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.CylinderEmpty.ToString() +
                             ConvertPumpIndxToString(indx, false));
                         errorFound = true;
                         break;
-                    case enumIscoProblemStatus.MotorFailure:
-                        notifyMsg = classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MotorFailure.ToString() +
+                    case IscoProblemStatus.MotorFailure:
+                        notifyMsg = IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MotorFailure.ToString() +
                             ConvertPumpIndxToString(indx, false));
                         errorFound = true;
                         break;
@@ -1392,19 +1392,19 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             if (m_Emulation)
             {
-                classIscoConversions.FlowUnits = enumIscoFlowUnits.ul_min;
-                classIscoConversions.PressUnits = enumIscoPressureUnits.psi;
+                IscoConversions.FlowUnits = IscoFlowUnits.ul_min;
+                IscoConversions.PressUnits = IscoPressureUnits.psi;
                 return true;
             }
 
             if (!(m_Initialized || m_Initializing))
             {
-                classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
-                classIscoConversions.PressUnits = enumIscoPressureUnits.error;
+                IscoConversions.FlowUnits = IscoFlowUnits.error;
+                IscoConversions.PressUnits = IscoPressureUnits.error;
 
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -1421,12 +1421,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             catch (Exception ex)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ISCO READPUMPUNITS ERROR:" + ex.Message);
-                classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
-                classIscoConversions.PressUnits = enumIscoPressureUnits.error;
+                IscoConversions.FlowUnits = IscoFlowUnits.error;
+                IscoConversions.PressUnits = IscoPressureUnits.error;
 
                 var args = new DeviceErrorEventArgs("Exception getting units",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return false;
             }
@@ -1453,7 +1453,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Device not initialized", null,
                                     DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.DeviceNotInitialized.ToString()));
+                                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.DeviceNotInitialized.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -1470,7 +1470,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var args = new DeviceErrorEventArgs("Exception getting refill rate",
                                                 GetBaseException(ex), DeviceErrorStatus.ErrorAffectsAllColumns, this,
-                                                classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.ComError.ToString()));
+                                                IscoErrorNotifications.GetNotificationString(IscoProblemStatus.ComError.ToString()));
                 Error?.Invoke(this, args);
                 return -1000;
             }
@@ -1484,7 +1484,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// Configures the serial port
         /// </summary>
         /// <param name="portProps">Port properties</param>
-        private void ConfigSerialPort(classIscoSerPortProps portProps)
+        private void ConfigSerialPort(IscoSerPortProps portProps)
         {
             if (m_SerialPort == null)
             {
@@ -1518,7 +1518,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             try
             {
-                return SendCommand(cmdStr, enumIscoMsgAckCodes.Recvd, false);
+                return SendCommand(cmdStr, IscoMsgAckCodes.Recvd, false);
             }
             catch (IscoExceptionWriteTimeout)
             {
@@ -1549,7 +1549,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             try
             {
-                return SendCommand(cmdStr, enumIscoMsgAckCodes.Recvd, waitResp);
+                return SendCommand(cmdStr, IscoMsgAckCodes.Recvd, waitResp);
             }
             catch (IscoExceptionWriteTimeout)
             {
@@ -1576,7 +1576,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="ack">Message acknowledgement code</param>
         /// <param name="waitResp">TRUE if a response is expected from pump; FALSE otherwise</param>
         /// <returns>Empty string or string containing response from pump</returns>
-        private string SendCommand(string cmdStr, enumIscoMsgAckCodes ack, bool waitResp)
+        private string SendCommand(string cmdStr, IscoMsgAckCodes ack, bool waitResp)
         {
             string errMsg;
 
@@ -1615,7 +1615,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             // If we're supposed to wait for a response, then read it in
             var respStr = "";
-            var ackIn = enumIscoMsgAckCodes.PumpComError;
+            var ackIn = IscoMsgAckCodes.PumpComError;
             if (waitResp)
             {
                 string msgIn;
@@ -1659,12 +1659,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                     throw new IscoExceptionMessageError("ISCO message error: Bad checksum");
                 }
 
-                if (ackIn == enumIscoMsgAckCodes.PumpBusy)
+                if (ackIn == IscoMsgAckCodes.PumpBusy)
                 {
                     throw new IscoExceptionMessageError("ISCO message error: Pump unit busy");
                 }
 
-                if (ackIn == enumIscoMsgAckCodes.PumpComError)
+                if (ackIn == IscoMsgAckCodes.PumpComError)
                     throw new IscoExceptionMessageError("ISCO message error: Pump unit error");
             }
 
@@ -1756,7 +1756,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="ack">Message acknowldgement code</param>
         /// <param name="msg">Message text</param>
         /// <returns>TRUE if valid checksum was received; FALSE otherwise</returns>
-        private bool ParseMsgFrame(string inpMsg, ref enumIscoMsgAckCodes ack, ref string msg)
+        private bool ParseMsgFrame(string inpMsg, ref IscoMsgAckCodes ack, ref string msg)
         {
             /* Message format is:
              *  Acknowledgement (1 char)
@@ -1783,13 +1783,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 switch (ackStr)
                 {
                     case "R":
-                        ack = enumIscoMsgAckCodes.Recvd;
+                        ack = IscoMsgAckCodes.Recvd;
                         break;
                     case "E":
-                        ack = enumIscoMsgAckCodes.PumpComError;
+                        ack = IscoMsgAckCodes.PumpComError;
                         break;
                     case "B":
-                        ack = enumIscoMsgAckCodes.PumpBusy;
+                        ack = IscoMsgAckCodes.PumpBusy;
                         break;
                     default:
                         // Shouldn't ever get here. If we did, something is wrong
@@ -1828,7 +1828,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="msg">Message text</param>
         /// <param name="ack">Acknowledgement code</param>
         /// <returns>Complete message frame</returns>
-        private string BuildCtrlMsgFrame(int srce, int dest, string msg, enumIscoMsgAckCodes ack)
+        private string BuildCtrlMsgFrame(int srce, int dest, string msg, IscoMsgAckCodes ack)
         {
             /* Message structure:
              * Destination unit address (1 char)
@@ -1844,13 +1844,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             switch (ack)
             {
-                case enumIscoMsgAckCodes.Recvd:
+                case IscoMsgAckCodes.Recvd:
                     outFrame += "R";
                     break;
-                case enumIscoMsgAckCodes.PumpBusy:
+                case IscoMsgAckCodes.PumpBusy:
                     outFrame += "B";
                     break;
-                case enumIscoMsgAckCodes.PumpComError:
+                case IscoMsgAckCodes.PumpComError:
                     outFrame += "E";
                     break;
                 default:
@@ -1878,26 +1878,26 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpStr">Input status code</param>
         /// <returns>Operation status enum</returns>
-        private enumIscoOperationStatus ConvertStatusCodeToEnum(string inpStr)
+        private IscoOperationStatus ConvertStatusCodeToEnum(string inpStr)
         {
-            enumIscoOperationStatus outVal;
+            IscoOperationStatus outVal;
 
             switch (inpStr)
             {
                 case "S":
-                    outVal = enumIscoOperationStatus.Stopped;
+                    outVal = IscoOperationStatus.Stopped;
                     break;
                 case "R":
-                    outVal = enumIscoOperationStatus.Running;
+                    outVal = IscoOperationStatus.Running;
                     break;
                 case "F":
-                    outVal = enumIscoOperationStatus.Refilling;
+                    outVal = IscoOperationStatus.Refilling;
                     break;
                 case "H":
-                    outVal = enumIscoOperationStatus.Hold;
+                    outVal = IscoOperationStatus.Hold;
                     break;
                 case "E":
-                    outVal = enumIscoOperationStatus.Equilibrating;
+                    outVal = IscoOperationStatus.Equilibrating;
                     break;
                 default:
                     // Shouldn't ever get here
@@ -1912,20 +1912,20 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpStr">Input control type code</param>
         /// <returns>Control type enum</returns>
-        private enumIscoControlMode ConvertControlModeCodeToEnum(string inpStr)
+        private IscoControlMode ConvertControlModeCodeToEnum(string inpStr)
         {
-            enumIscoControlMode outVal;
+            IscoControlMode outVal;
 
             switch (inpStr)
             {
                 case "L":
-                    outVal = enumIscoControlMode.Local;
+                    outVal = IscoControlMode.Local;
                     break;
                 case "R":
-                    outVal = enumIscoControlMode.Remote;
+                    outVal = IscoControlMode.Remote;
                     break;
                 case "E":
-                    outVal = enumIscoControlMode.External;
+                    outVal = IscoControlMode.External;
                     break;
                 default:
                     // Should never get here
@@ -1940,29 +1940,29 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpStr"></param>
         /// <returns></returns>
-        private enumIscoProblemStatus ConvertProblemCodeToEnum(string inpStr)
+        private IscoProblemStatus ConvertProblemCodeToEnum(string inpStr)
         {
-            enumIscoProblemStatus outVal;
+            IscoProblemStatus outVal;
 
             switch (inpStr)
             {
                 case "-":
-                    outVal = enumIscoProblemStatus.None;
+                    outVal = IscoProblemStatus.None;
                     break;
                 case "E":
-                    outVal = enumIscoProblemStatus.CylinderEmpty;
+                    outVal = IscoProblemStatus.CylinderEmpty;
                     break;
                 case "B":
-                    outVal = enumIscoProblemStatus.CylinderBottom;
+                    outVal = IscoProblemStatus.CylinderBottom;
                     break;
                 case "O":
-                    outVal = enumIscoProblemStatus.OverPressure;
+                    outVal = IscoProblemStatus.OverPressure;
                     break;
                 case "U":
-                    outVal = enumIscoProblemStatus.UnderPressure;
+                    outVal = IscoProblemStatus.UnderPressure;
                     break;
                 case "M":
-                    outVal = enumIscoProblemStatus.MotorFailure;
+                    outVal = IscoProblemStatus.MotorFailure;
                     break;
                 default:
                     // Should never get here
@@ -1977,10 +1977,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpMsg">Status request reply string</param>
         /// <returns>Array containing status for all 3 pumps</returns>
-        private classPumpIscoData[] ParseStatusMessage(string inpMsg)
+        private IscoPumpData[] ParseStatusMessage(string inpMsg)
         {
             // Set up return array
-            classPumpIscoData[] retArray = { new classPumpIscoData(), new classPumpIscoData(), new classPumpIscoData() };
+            IscoPumpData[] retArray = { new IscoPumpData(), new IscoPumpData(), new IscoPumpData() };
 
             // Wrap the whole mess in a try/catch just in case something goes wrong
             try
@@ -2016,14 +2016,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                     retArray[pump].PointTime = TimeKeeper.Instance.Now;// DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
                     // Pressure
-                    retArray[pump].Pressure = classIscoConversions.ConvertPressFromString(tokens[pump], models[pump]);
+                    retArray[pump].Pressure = IscoConversions.ConvertPressFromString(tokens[pump], models[pump]);
 
                     // Flow
                     var tokenIndx = 9 + (pump * 5);
-                    retArray[pump].Flow = classIscoConversions.ConvertFlowFromString(tokens[tokenIndx]);
+                    retArray[pump].Flow = IscoConversions.ConvertFlowFromString(tokens[tokenIndx]);
 
                     // Volume
-                    retArray[pump].Volume = classIscoConversions.ConvertVolumeFromString(tokens[tokenIndx + 1]);
+                    retArray[pump].Volume = IscoConversions.ConvertVolumeFromString(tokens[tokenIndx + 1]);
 
                     // Operaton status
                     retArray[pump].OperationStatus = ConvertStatusCodeToEnum(tokens[tokenIndx + 2]);
@@ -2041,7 +2041,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var msg = "Exception parsing status string";
                 var notifyStr =
-                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
+                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString());
                 var args = new DeviceErrorEventArgs(msg, ex,
                                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
@@ -2067,7 +2067,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var msg = "Exception parsing numeric field";
                 var notifyStr =
-                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
+                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString());
                 var args = new DeviceErrorEventArgs(msg, ex,
                                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
@@ -2081,7 +2081,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpMsg">Input message</param>
         /// <returns>Object containing instrument range data</returns>
-        private classPumpIscoRangeData ParseRangeMessage(string inpMsg)
+        private IscoPumpRangeData ParseRangeMessage(string inpMsg)
         {
             // Split the input message at the commas
             var rangeArray = inpMsg.Split(',');
@@ -2091,7 +2091,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var msg = "Invalid field count in RANGE response string";
                 var notifyStr =
-                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
+                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString());
                 var args = new DeviceErrorEventArgs(msg, null,
                                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
@@ -2099,7 +2099,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 return null;
             }
 
-            var retData = new classPumpIscoRangeData();
+            var retData = new IscoPumpRangeData();
             try
             {
                 // Pressure field
@@ -2128,7 +2128,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             {
                 var msg = "Exception parsing RANGE string";
                 var notifyStr =
-                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
+                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString());
                 var args = new DeviceErrorEventArgs(msg, ex,
                                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
@@ -2151,12 +2151,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             if (unitsArray.Length != 2 && unitsArray.Length != 3)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ParseUnits array length wrong: " + unitsArray.Length + " Array: " + unitsArray);
-                classIscoConversions.PressUnits = enumIscoPressureUnits.error;
-                classIscoConversions.FlowUnits = enumIscoFlowUnits.error;
+                IscoConversions.PressUnits = IscoPressureUnits.error;
+                IscoConversions.FlowUnits = IscoFlowUnits.error;
 
                 var msg = "Invalid field count in UNITSA response string";
                 var notifyStr =
-                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
+                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString());
                 var args = new DeviceErrorEventArgs(msg, null,
                                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
@@ -2169,19 +2169,19 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 // Pressure field
                 var signIndx = unitsArray[0].IndexOf("=", StringComparison.Ordinal);
                 var tmpStr = unitsArray[0].Substring(signIndx + 1, unitsArray[0].Length - signIndx - 1);
-                classIscoConversions.PressUnits = classIscoConversions.ConvertPressStrToEnum(tmpStr);
+                IscoConversions.PressUnits = IscoConversions.ConvertPressStrToEnum(tmpStr);
 
                 // Flow field
                 signIndx = unitsArray[1].IndexOf("=", StringComparison.Ordinal);
                 tmpStr = unitsArray[1].Substring(signIndx + 1, unitsArray[1].Length - signIndx - 1);
-                classIscoConversions.FlowUnits = classIscoConversions.ConvertFlowStrToEnum(tmpStr);
+                IscoConversions.FlowUnits = IscoConversions.ConvertFlowStrToEnum(tmpStr);
             }
             catch (Exception ex)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "ParseUnits exception:  " + ex.Message);
                 var msg = "Exception parsing UNITSA string";
                 var notifyStr =
-                    classIscoErrorNotifications.GetNotificationString(enumIscoProblemStatus.MessageParseError.ToString());
+                    IscoErrorNotifications.GetNotificationString(IscoProblemStatus.MessageParseError.ToString());
                 var args = new DeviceErrorEventArgs(msg, ex,
                                                             DeviceErrorStatus.ErrorAffectsAllColumns, this,
                                                             notifyStr);
@@ -2248,7 +2248,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         #region "IDevice Methods"
         public bool Initialize(ref string errorMessage)
         {
-            var notifyStr = classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.Initializing.ToString());
+            var notifyStr = IscoStatusNotifications.GetNotificationString(IscoOperationStatus.Initializing.ToString());
             var args = new DeviceStatusEventArgs(DeviceStatus.NotInitialized, notifyStr, this);
             StatusUpdate?.Invoke(this, args);
 
@@ -2257,7 +2257,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 return false;
             }
 
-            notifyStr = classIscoStatusNotifications.GetNotificationString(enumIscoOperationStatus.InitSucceeded.ToString());
+            notifyStr = IscoStatusNotifications.GetNotificationString(IscoOperationStatus.InitSucceeded.ToString());
             args = new DeviceStatusEventArgs(DeviceStatus.Initialized, notifyStr, this);
             StatusUpdate?.Invoke(this, args);
             return true;
@@ -2364,12 +2364,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public List<string> GetStatusNotificationList()
         {
-            return classIscoStatusNotifications.GetNotificationListStrings();
+            return IscoStatusNotifications.GetNotificationListStrings();
         }
 
         public List<string> GetErrorNotificationList()
         {
-            return classIscoErrorNotifications.GetNotificationListStrings();
+            return IscoErrorNotifications.GetNotificationListStrings();
         }
         #endregion
 

@@ -13,21 +13,21 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// <summary>
     /// Utility class for converting between units and setting display captions in ISCO pump classes
     /// </summary>
-    public static class classIscoConversions
+    public static class IscoConversions
     {
         #region "Class variables"
-        static enumIscoFlowUnits m_FlowUnits = enumIscoFlowUnits.ul_min;
-        static enumIscoPressureUnits menu_PressUnits = enumIscoPressureUnits.psi;
+        static IscoFlowUnits m_FlowUnits = IscoFlowUnits.ul_min;
+        static IscoPressureUnits menu_PressUnits = IscoPressureUnits.psi;
         #endregion
 
         #region "Properties"
-        public static enumIscoFlowUnits FlowUnits
+        public static IscoFlowUnits FlowUnits
         {
             get { return m_FlowUnits; }
             set { m_FlowUnits = value; }
         }
 
-        public static enumIscoPressureUnits PressUnits
+        public static IscoPressureUnits PressUnits
         {
             get { return menu_PressUnits; }
             set { menu_PressUnits = value; }
@@ -53,7 +53,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="inpFlow">Input flow string (liters/min * 10E10)</param>
         /// <param name="units">Units specifier</param>
         /// <returns>Flow in user units; -1000 on failure</returns>
-        public static double ConvertFlowFromString(string inpFlow, enumIscoFlowUnits units)
+        public static double ConvertFlowFromString(string inpFlow, IscoFlowUnits units)
         {
             // Convert input to double
             double tmpVal;
@@ -73,16 +73,16 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             double retVal;
             switch (units)
             {
-                case enumIscoFlowUnits.ml_hour:
+                case IscoFlowUnits.ml_hour:
                     retVal = tmpVal * 1000D * 60D;  // 1000 mL/L; 60 min/hr
                     break;
-                case enumIscoFlowUnits.ml_min:
+                case IscoFlowUnits.ml_min:
                     retVal = tmpVal * 1000D;    // 1000 mL/L
                     break;
-                case enumIscoFlowUnits.ul_hr:
+                case IscoFlowUnits.ul_hr:
                     retVal = tmpVal * Math.Pow(10, 6) * 60D;    // 10E6 uL/L; 60 min/hr
                     break;
-                case enumIscoFlowUnits.ul_min:
+                case IscoFlowUnits.ul_min:
                     retVal = tmpVal * Math.Pow(10, 6);  // 10E6 uL/L
                     break;
                 default:
@@ -100,7 +100,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="inpPress">Input pressure string (PSI * 5)</param>
         /// <param name="model"></param>
         /// <returns>Pressure in user units; -1000 on failure</returns>
-        public static double ConvertPressFromString(string inpPress, enumISCOModel model)
+        public static double ConvertPressFromString(string inpPress, ISCOModel model)
         {
             return ConvertPressFromString(inpPress, menu_PressUnits, model);
         }
@@ -113,9 +113,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="units">Units specifier</param>
         /// <param name="model"></param>
         /// <returns>Pressure in user units; -1000 on failure</returns>
-        public static double ConvertPressFromString(string inpPress, enumIscoPressureUnits units, enumISCOModel model)
+        public static double ConvertPressFromString(string inpPress, IscoPressureUnits units, ISCOModel model)
         {
-            if (model == enumISCOModel.Unknown)
+            if (model == ISCOModel.Unknown)
             {
                 //this is an error.
                 return -1000;
@@ -127,11 +127,11 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 tmpVal = double.Parse(inpPress);
 
                 // Convert to PSI, return value from pump is PSI * 2.5 if model is 65D, PSI * 5 if 100D
-                if (model == enumISCOModel.ISCO65D)
+                if (model == ISCOModel.ISCO65D)
                 {
                     tmpVal = tmpVal / 2.5D;
                 }
-                else if (model == enumISCOModel.ISCO100D)
+                else if (model == ISCOModel.ISCO100D)
                 {
                     tmpVal = tmpVal / 5D;
                 }
@@ -145,16 +145,16 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             double retVal;
             switch (units)
             {
-                case enumIscoPressureUnits.atm:
+                case IscoPressureUnits.atm:
                     retVal = tmpVal / 14.695;   // 1 atm/14.695 psi
                     break;
-                case enumIscoPressureUnits.bar:
+                case IscoPressureUnits.bar:
                     retVal = tmpVal / 14.504;   // 1 bar/14.504 psi
                     break;
-                case enumIscoPressureUnits.kPa:
+                case IscoPressureUnits.kPa:
                     retVal = tmpVal * 6.895;    // 1 psi = 6.895 kPa
                     break;
-                case enumIscoPressureUnits.psi:
+                case IscoPressureUnits.psi:
                     retVal = tmpVal;
                     break;
                 default:
@@ -199,24 +199,24 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="units">Units specifier enum</param>
         /// <returns>String specifying flow units; Empty string on error</returns>
-        public static string GetFlowUnitsString(enumIscoFlowUnits units)
+        public static string GetFlowUnitsString(IscoFlowUnits units)
         {
             var retStr = "";
             switch (units)
             {
-                case enumIscoFlowUnits.ml_hour:
+                case IscoFlowUnits.ml_hour:
                     retStr = "mL/hr";
                     break;
-                case enumIscoFlowUnits.ml_min:
+                case IscoFlowUnits.ml_min:
                     retStr = "mL/min";
                     break;
-                case enumIscoFlowUnits.ul_hr:
+                case IscoFlowUnits.ul_hr:
                     retStr = "uL/hr";
                     break;
-                case enumIscoFlowUnits.ul_min:
+                case IscoFlowUnits.ul_min:
                     retStr = "uL/min";
                     break;
-                case enumIscoFlowUnits.error:
+                case IscoFlowUnits.error:
                     retStr = "Err";
                     break;
             }
@@ -240,24 +240,24 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="units">Units specifier enum</param>
         /// <returns>String specifying pressure units; Empty string on error</returns>
-        public static string GetPressUnitsString(enumIscoPressureUnits units)
+        public static string GetPressUnitsString(IscoPressureUnits units)
         {
             var retStr = "";
             switch (units)
             {
-                case enumIscoPressureUnits.atm:
+                case IscoPressureUnits.atm:
                     retStr = "atm";
                     break;
-                case enumIscoPressureUnits.bar:
+                case IscoPressureUnits.bar:
                     retStr = "bar";
                     break;
-                case enumIscoPressureUnits.kPa:
+                case IscoPressureUnits.kPa:
                     retStr = "kPa";
                     break;
-                case enumIscoPressureUnits.psi:
+                case IscoPressureUnits.psi:
                     retStr = "psi";
                     break;
-                case enumIscoPressureUnits.error:
+                case IscoPressureUnits.error:
                     retStr = "Err";
                     break;
             }
@@ -270,25 +270,25 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpStr">Input string from pump</param>
         /// <returns>Enum specified by input string</returns>
-        public static enumIscoFlowUnits ConvertFlowStrToEnum(string inpStr)
+        public static IscoFlowUnits ConvertFlowStrToEnum(string inpStr)
         {
-            enumIscoFlowUnits retVal;
+            IscoFlowUnits retVal;
             switch (inpStr.ToLower())
             {
                 case "ml/min":
-                    retVal = enumIscoFlowUnits.ml_min;
+                    retVal = IscoFlowUnits.ml_min;
                     break;
                 case "ml/hr":
-                    retVal = enumIscoFlowUnits.ml_hour;
+                    retVal = IscoFlowUnits.ml_hour;
                     break;
                 case "ul/min":
-                    retVal = enumIscoFlowUnits.ul_min;
+                    retVal = IscoFlowUnits.ul_min;
                     break;
                 case "ul/hr":
-                    retVal = enumIscoFlowUnits.ul_hr;
+                    retVal = IscoFlowUnits.ul_hr;
                     break;
                 default:
-                    retVal = enumIscoFlowUnits.error;
+                    retVal = IscoFlowUnits.error;
                     break;
             }
 
@@ -300,25 +300,25 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         /// <param name="inpStr">Input string from pump</param>
         /// <returns>Enum specified by input string</returns>
-        public static enumIscoPressureUnits ConvertPressStrToEnum(string inpStr)
+        public static IscoPressureUnits ConvertPressStrToEnum(string inpStr)
         {
-            enumIscoPressureUnits retVal;
+            IscoPressureUnits retVal;
             switch (inpStr.ToLower())
             {
                 case "atm":
-                    retVal = enumIscoPressureUnits.atm;
+                    retVal = IscoPressureUnits.atm;
                     break;
                 case "bar":
-                    retVal = enumIscoPressureUnits.bar;
+                    retVal = IscoPressureUnits.bar;
                     break;
                 case "kpa":
-                    retVal = enumIscoPressureUnits.kPa;
+                    retVal = IscoPressureUnits.kPa;
                     break;
                 case "psi":
-                    retVal = enumIscoPressureUnits.psi;
+                    retVal = IscoPressureUnits.psi;
                     break;
                 default:
-                    retVal = enumIscoPressureUnits.error;
+                    retVal = IscoPressureUnits.error;
                     break;
             }
 

@@ -1,6 +1,6 @@
 ﻿namespace LcmsNetPlugins.Teledyne.Pumps
 {
-    public enum enumISCOPumpChannels
+    public enum ISCOPumpChannels
     {
         A = 0,
         B = 1,

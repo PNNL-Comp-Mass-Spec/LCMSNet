@@ -6,15 +6,15 @@ using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
-    public sealed class classPumpIscoGlyph : FluidicsDevice
+    public sealed class IscoPumpGlyph : FluidicsDevice
     {
         private const int CONST_WIDTH = 300;
         private const int CONST_HEIGHT = 25;
-        private classPumpIsco m_device;
+        private IscoPump m_device;
 
         public override event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
 
-        public classPumpIscoGlyph()
+        public IscoPumpGlyph()
         {
             var offset = new Point(26, 4 + Port.PORT_DEFAULT_RADIUS * 2); // Add extra X offset since the blank status display is that much wider
             AddRectangle(offset, new Size(CONST_WIDTH, CONST_HEIGHT), Colors.Black, Brushes.White, fill: true);
@@ -30,7 +30,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         protected override void SetDevice(IDevice device)
         {
-            m_device = device as classPumpIsco;
+            m_device = device as IscoPump;
             if (m_device != null)
                 m_device.RefreshComplete += m_device_RefreshComplete;
         }
@@ -43,8 +43,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         public override string StateString()
         {
             var formatStr = "{0, -7}{1,6} {2,-8}{3, -7}{4,6} {5, -8}{6,-7}{7,6} {8,-8}\n";
-            var pressUnits = classIscoConversions.GetPressUnitsString();
-            var flowUnits = classIscoConversions.GetFlowUnitsString();
+            var pressUnits = IscoConversions.GetPressUnitsString();
+            var flowUnits = IscoConversions.GetFlowUnitsString();
             var volUnits = "mL";
 
             var pumpA = string.Format(formatStr,

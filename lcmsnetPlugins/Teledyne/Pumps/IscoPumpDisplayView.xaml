@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="LcmsNetPlugins.Teledyne.Pumps.PumpIscoDisplayView"
+﻿<UserControl x:Class="LcmsNetPlugins.Teledyne.Pumps.IscoPumpDisplayView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +7,7 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="102" d:DesignWidth="384"
-             d:DataContext="{d:DesignInstance {x:Type local:PumpIscoDisplayViewModel}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type local:IscoPumpDisplayViewModel}, IsDesignTimeCreatable=True}"
              MinHeight="100" MinWidth="280">
     <Grid>
         <Grid.RowDefinitions>

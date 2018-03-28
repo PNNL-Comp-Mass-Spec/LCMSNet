@@ -1,6 +1,6 @@
 ﻿namespace LcmsNetPlugins.Teledyne.Pumps
 {
-    public enum enumISCOModel
+    public enum ISCOModel
     {
         Unknown,
         ISCO65D,

@@ -9,43 +9,54 @@
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
     /// <summary>
-    /// Holds data from a the response to a RANGE command
+    /// Holds instrument setpoint ranges
     /// </summary>
-    public class classPumpIscoRangeData
+    public class IscoPumpSetpointLimits
     {
         #region "Properties"
             /// <summary>
-            /// Max pressure (PSI)
+            /// Min flow SP
             /// </summary>
-            public double MaxPressure { get; set; }
+            public double MinFlowSp { get; set; }
 
             /// <summary>
-            /// Max flow rate (ml/min)
+            /// Max flow SP
             /// </summary>
-            public double MaxFlowRate { get; set; }
+            public double MaxFlowSp { get; set; }
 
             /// <summary>
-            /// Max refill rate (ml/min)
+            /// Maximum flow limit
             /// </summary>
-            public double MaxRefillRate { get; set; }
+            public double MaxFlowLimit { get; set; }
 
             /// <summary>
-            /// Max volume (ml)
+            /// Min pressure SP
             /// </summary>
-            public double MaxVolume { get; set; }
+            public double MinPressSp { get; set; }
+
+            /// <summary>
+            /// Max pressure SP
+            /// </summary>
+            public double MaxPressSp { get; set; }
+
+            /// <summary>
+            /// Max refill rate SP
+            /// </summary>
+            public double MaxRefillRateSp { get; set; }
         #endregion
 
         #region "Constructors"
             /// <summary>
             /// Default constructor
             /// </summary>
-            public classPumpIscoRangeData()
+            public IscoPumpSetpointLimits()
             {
-                MaxPressure = 10000D;
-                MaxFlowRate = 25D;
-                MaxRefillRate = 30D;
-                MaxVolume = 102.96D;
+                MinFlowSp = 0.0010D;
+                MaxFlowSp = 25D;
+                MinPressSp = 10D;
+                MaxPressSp = 10000D;
+                MaxRefillRateSp = 30D;
             }
         #endregion
-    }   
-}
+    }    
+}   

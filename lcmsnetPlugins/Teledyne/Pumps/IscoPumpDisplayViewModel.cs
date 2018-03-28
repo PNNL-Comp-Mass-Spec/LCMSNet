@@ -6,18 +6,18 @@ using ReactiveUI;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
-    public class PumpIscoDisplayViewModel : ReactiveObject
+    public class IscoPumpDisplayViewModel : ReactiveObject
     {
         #region "Constructors"
 
-        public PumpIscoDisplayViewModel()
+        public IscoPumpDisplayViewModel()
         {
             SetupCommands();
             this.WhenAnyValue(x => x.MinFlowSp, x => x.MaxFlowSp, x => x.MinPressSp, x => x.MaxPressSp).Subscribe(x => UpdateSetpointLimits());
             UpdateSetpointLimits();
         }
 
-        public PumpIscoDisplayViewModel(int index) : this()
+        public IscoPumpDisplayViewModel(int index) : this()
         {
             SetPumpIndex(index);
         }
@@ -36,7 +36,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         #region "Class variables"
 
         private int pumpIndex;
-        private enumIscoOperationMode operationMode;
+        private IscoOperationMode operationMode;
         private string pumpName = "X";
         private double flowRate;
         private double pressure;
@@ -46,7 +46,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         private double maxSetpoint;
         private string setpointUnits = "PSI";
         private string setpointType = "Set Press";
-        private enumIscoProblemStatus problemStatus = enumIscoProblemStatus.None;
+        private IscoProblemStatus problemStatus = IscoProblemStatus.None;
         private string problemStatusString = "NA";
         private double maxFlowSp = 25D;
         private double minFlowSp = 0.0010D;
@@ -132,7 +132,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Operation mode
         /// </summary>
-        public enumIscoOperationMode OperationMode
+        public IscoOperationMode OperationMode
         {
             get { return operationMode; }
             set
@@ -190,7 +190,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Problem status
         /// </summary>
-        public enumIscoProblemStatus ProblemStatus
+        public IscoProblemStatus ProblemStatus
         {
             get { return problemStatus; }
             set
@@ -254,12 +254,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             switch (OperationMode)
             {
-                case enumIscoOperationMode.ConstantFlow:
-                    SetpointUnits = classIscoConversions.GetFlowUnitsString();
+                case IscoOperationMode.ConstantFlow:
+                    SetpointUnits = IscoConversions.GetFlowUnitsString();
                     SetpointType = "Set Flow";
                     break;
-                case enumIscoOperationMode.ConstantPressure:
-                    SetpointUnits = classIscoConversions.GetPressUnitsString();
+                case IscoOperationMode.ConstantPressure:
+                    SetpointUnits = IscoConversions.GetPressUnitsString();
                     SetpointType = "Set Press";
                     break;
             }
@@ -285,22 +285,22 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             switch (ProblemStatus)
             {
-                case enumIscoProblemStatus.CylinderBottom:
+                case IscoProblemStatus.CylinderBottom:
                     ProblemStatusString = "Bottom";
                     break;
-                case enumIscoProblemStatus.CylinderEmpty:
+                case IscoProblemStatus.CylinderEmpty:
                     ProblemStatusString = "Empty";
                     break;
-                case enumIscoProblemStatus.MotorFailure:
+                case IscoProblemStatus.MotorFailure:
                     ProblemStatusString = "Mot Fail";
                     break;
-                case enumIscoProblemStatus.None:
+                case IscoProblemStatus.None:
                     ProblemStatusString = "";
                     break;
-                case enumIscoProblemStatus.OverPressure:
+                case IscoProblemStatus.OverPressure:
                     ProblemStatusString = "Over Press";
                     break;
-                case enumIscoProblemStatus.UnderPressure:
+                case IscoProblemStatus.UnderPressure:
                     ProblemStatusString = "Under Press";
                     break;
                 default:
@@ -311,7 +311,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         private void UpdateSetpointLimits()
         {
-            if (operationMode == enumIscoOperationMode.ConstantFlow)
+            if (operationMode == IscoOperationMode.ConstantFlow)
             {
                 MinSetpoint = MinFlowSp;
                 MaxSetpoint = MaxFlowSp;
@@ -334,7 +334,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             var input = Setpoint;
             bool validInput;
 
-            if (operationMode == enumIscoOperationMode.ConstantFlow)
+            if (operationMode == IscoOperationMode.ConstantFlow)
             {
                 validInput = IsValueInRange(input, MinFlowSp, MaxFlowSp);
             }

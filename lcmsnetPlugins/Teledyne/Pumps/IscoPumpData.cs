@@ -14,11 +14,11 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// <summary>
     /// Holds status data for one ISCO pump
     /// </summary>
-    public class classPumpIscoData
+    public class IscoPumpData
     {
         #region "Member variables"
 
-        enumIscoOperationMode m_OpMode = enumIscoOperationMode.ConstantPressure;
+        IscoOperationMode m_OpMode = IscoOperationMode.ConstantPressure;
 
         #endregion
 
@@ -42,22 +42,22 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Pump operation status
         /// </summary>
-        public enumIscoOperationStatus OperationStatus { get; set; }
+        public IscoOperationStatus OperationStatus { get; set; }
 
         /// <summary>
         /// Pump control method (Local/Remote)
         /// </summary>
-        public enumIscoControlMode ControlMode { get; set; }
+        public IscoControlMode ControlMode { get; set; }
 
         /// <summary>
         /// Pump problem status
         /// </summary>
-        public enumIscoProblemStatus ProblemStatus { get; set; }
+        public IscoProblemStatus ProblemStatus { get; set; }
 
         /// <summary>
         /// Pump operation mode
         /// </summary>
-        public enumIscoOperationMode OperationMode
+        public IscoOperationMode OperationMode
         {
             get { return m_OpMode; }
             set { m_OpMode = value; }
@@ -85,14 +85,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Constructor overload requiring no parameters
         /// </summary>
-        public classPumpIscoData()
+        public IscoPumpData()
         {
             Pressure = 0;
             Flow = 0;
             Volume = 0;
-            OperationStatus = enumIscoOperationStatus.Stopped;
-            ControlMode = enumIscoControlMode.Local;
-            ProblemStatus = enumIscoProblemStatus.None;
+            OperationStatus = IscoOperationStatus.Stopped;
+            ControlMode = IscoControlMode.Local;
+            ProblemStatus = IscoProblemStatus.None;
             PointTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
         }
 
@@ -106,9 +106,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="ctrlType">Pump control type (Local/Remote)</param>
         /// <param name="probStatus">Pump error status</param>
         /// <param name="currTime"></param>
-        public classPumpIscoData(double press, double flo, double vol,
-            enumIscoOperationStatus opStatus, enumIscoControlMode ctrlType,
-            enumIscoProblemStatus probStatus, DateTime currTime)
+        public IscoPumpData(double press, double flo, double vol,
+            IscoOperationStatus opStatus, IscoControlMode ctrlType,
+            IscoProblemStatus probStatus, DateTime currTime)
         {
             Pressure = press;
             Flow = flo;

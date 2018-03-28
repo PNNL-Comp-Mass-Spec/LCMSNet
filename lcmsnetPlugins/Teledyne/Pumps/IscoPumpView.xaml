@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="LcmsNetPlugins.Teledyne.Pumps.PumpIscoView"
+﻿<UserControl x:Class="LcmsNetPlugins.Teledyne.Pumps.IscoPumpView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,7 +8,7 @@
              xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="345" d:DesignWidth="805"
-             d:DataContext="{d:DesignInstance {x:Type local:PumpIscoViewModel}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type local:IscoPumpViewModel}, IsDesignTimeCreatable=True}"
              MinHeight="320" MinWidth="650">
     <Grid>
         <Grid.RowDefinitions>
@@ -24,8 +24,8 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type local:PumpIscoDisplayViewModel}">
-                            <local:PumpIscoDisplayView Margin="3" />
+                        <DataTemplate DataType="{x:Type local:IscoPumpDisplayViewModel}">
+                            <local:IscoPumpDisplayView Margin="3" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -90,7 +90,7 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type local:PumpIscoViewModel+RefillData}">
+                                <DataTemplate DataType="{x:Type local:IscoPumpViewModel+RefillData}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />

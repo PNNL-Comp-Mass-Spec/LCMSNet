@@ -3,11 +3,11 @@
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
     /// <summary>
-    /// Interaction logic for PumpIscoView.xaml
+    /// Interaction logic for IscoPumpDisplayView.xaml
     /// </summary>
-    public partial class PumpIscoView : UserControl
+    public partial class IscoPumpDisplayView : UserControl
     {
-        public PumpIscoView()
+        public IscoPumpDisplayView()
         {
             InitializeComponent();
         }

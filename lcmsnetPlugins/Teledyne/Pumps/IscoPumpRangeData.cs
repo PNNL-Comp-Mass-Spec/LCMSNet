@@ -9,54 +9,43 @@
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
     /// <summary>
-    /// Holds instrument setpoint ranges
+    /// Holds data from a the response to a RANGE command
     /// </summary>
-    public class classPumpIscoSetpointLimits
+    public class IscoPumpRangeData
     {
         #region "Properties"
             /// <summary>
-            /// Min flow SP
+            /// Max pressure (PSI)
             /// </summary>
-            public double MinFlowSp { get; set; }
+            public double MaxPressure { get; set; }
 
             /// <summary>
-            /// Max flow SP
+            /// Max flow rate (ml/min)
             /// </summary>
-            public double MaxFlowSp { get; set; }
+            public double MaxFlowRate { get; set; }
 
             /// <summary>
-            /// Maximum flow limit
+            /// Max refill rate (ml/min)
             /// </summary>
-            public double MaxFlowLimit { get; set; }
+            public double MaxRefillRate { get; set; }
 
             /// <summary>
-            /// Min pressure SP
+            /// Max volume (ml)
             /// </summary>
-            public double MinPressSp { get; set; }
-
-            /// <summary>
-            /// Max pressure SP
-            /// </summary>
-            public double MaxPressSp { get; set; }
-
-            /// <summary>
-            /// Max refill rate SP
-            /// </summary>
-            public double MaxRefillRateSp { get; set; }
+            public double MaxVolume { get; set; }
         #endregion
 
         #region "Constructors"
             /// <summary>
             /// Default constructor
             /// </summary>
-            public classPumpIscoSetpointLimits()
+            public IscoPumpRangeData()
             {
-                MinFlowSp = 0.0010D;
-                MaxFlowSp = 25D;
-                MinPressSp = 10D;
-                MaxPressSp = 10000D;
-                MaxRefillRateSp = 30D;
+                MaxPressure = 10000D;
+                MaxFlowRate = 25D;
+                MaxRefillRate = 30D;
+                MaxVolume = 102.96D;
             }
         #endregion
-    }    
-}   
+    }   
+}

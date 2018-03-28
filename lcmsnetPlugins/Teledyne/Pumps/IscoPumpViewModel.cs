@@ -11,15 +11,15 @@ using LcmsNetSDK.Logging;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
-    public class PumpIscoViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class IscoPumpViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         #region "Constructors"
 
-        public PumpIscoViewModel()
+        public IscoPumpViewModel()
         {
-            controlModesComboBoxOptions = new ReactiveUI.ReactiveList<enumIscoControlMode>(Enum.GetValues(typeof(enumIscoControlMode)).Cast<enumIscoControlMode>());
-            operationModeComboBoxOptions = new ReactiveUI.ReactiveList<enumIscoOperationMode>(Enum.GetValues(typeof(enumIscoOperationMode)).Cast<enumIscoOperationMode>());
-            controlModesComboBoxOptions.Remove(enumIscoControlMode.External); // External is not an option...
+            controlModesComboBoxOptions = new ReactiveUI.ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>());
+            operationModeComboBoxOptions = new ReactiveUI.ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
+            controlModesComboBoxOptions.Remove(IscoControlMode.External); // External is not an option...
             SetupCommands();
             PropertyChanged += PumpIscoViewModel_PropertyChanged;
         }
@@ -104,20 +104,20 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             }
         }
 
-        private classPumpIsco pump = new classPumpIsco();
+        private IscoPump pump = new IscoPump();
         private int pumpCount = 3;
-        private readonly ReactiveUI.ReactiveList<PumpIscoDisplayViewModel> pumpDisplays = new ReactiveUI.ReactiveList<PumpIscoDisplayViewModel>();
-        private readonly ReactiveUI.ReactiveList<enumIscoControlMode> controlModesComboBoxOptions;
+        private readonly ReactiveUI.ReactiveList<IscoPumpDisplayViewModel> pumpDisplays = new ReactiveUI.ReactiveList<IscoPumpDisplayViewModel>();
+        private readonly ReactiveUI.ReactiveList<IscoControlMode> controlModesComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<int> pumpCountComboBoxOptions = new ReactiveUI.ReactiveList<int>();
         private readonly ReactiveUI.ReactiveList<int> unitAddressComboBoxOptions = new ReactiveUI.ReactiveList<int>();
-        private readonly ReactiveUI.ReactiveList<enumIscoOperationMode> operationModeComboBoxOptions;
+        private readonly ReactiveUI.ReactiveList<IscoOperationMode> operationModeComboBoxOptions;
         private readonly ReactiveUI.ReactiveList<RefillData> refillRates = new ReactiveUI.ReactiveList<RefillData>();
         private readonly ReactiveUI.ReactiveList<LimitData> limitsList = new ReactiveUI.ReactiveList<LimitData>();
         private string comPort = "";
         private int unitAddress = 6;
         private string notes = "";
-        private enumIscoControlMode controlMode = enumIscoControlMode.Local;
-        private enumIscoOperationMode operationMode = enumIscoOperationMode.ConstantPressure;
+        private IscoControlMode controlMode = IscoControlMode.Local;
+        private IscoOperationMode operationMode = IscoOperationMode.ConstantPressure;
         private int portReadTimeout = 500;
         private int portWriteTimeout = 500;
         private int portBaudRate = 9600;
@@ -126,12 +126,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region "Properties"
 
-        public ReactiveUI.IReadOnlyReactiveList<PumpIscoDisplayViewModel> PumpDisplays => pumpDisplays;
-        public ReactiveUI.IReadOnlyReactiveList<enumIscoControlMode> ControlModesComboBoxOptions => controlModesComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays => pumpDisplays;
+        public ReactiveUI.IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions => controlModesComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<int> PumpCountComboBoxOptions => pumpCountComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
         public ReactiveUI.IReadOnlyReactiveList<int> UnitAddressComboBoxOptions => unitAddressComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<enumIscoOperationMode> OperationModeComboBoxOptions => operationModeComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions => operationModeComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<RefillData> RefillRates => refillRates;
         public ReactiveUI.IReadOnlyReactiveList<LimitData> LimitsList => limitsList;
 
@@ -153,13 +153,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             set { this.RaiseAndSetIfChanged(ref notes, value); }
         }
 
-        public enumIscoControlMode ControlMode
+        public IscoControlMode ControlMode
         {
             get { return controlMode; }
             set { this.RaiseAndSetIfChanged(ref controlMode, value); }
         }
 
-        public enumIscoOperationMode OperationMode
+        public IscoOperationMode OperationMode
         {
             get { return operationMode; }
             set { this.RaiseAndSetIfChanged(ref operationMode, value); }
@@ -234,7 +234,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public UserControl GetDefaultView()
         {
-            return new PumpIscoView();
+            return new IscoPumpView();
         }
 
         private void PumpIscoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -291,9 +291,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             Notes = noteStr;
 
             // Initialize the pump display controls
-            AddPumpDisplay(new PumpIscoDisplayViewModel(0));
-            AddPumpDisplay(new PumpIscoDisplayViewModel(1));
-            AddPumpDisplay(new PumpIscoDisplayViewModel(2));
+            AddPumpDisplay(new IscoPumpDisplayViewModel(0));
+            AddPumpDisplay(new IscoPumpDisplayViewModel(1));
+            AddPumpDisplay(new IscoPumpDisplayViewModel(2));
 
             // Assign pump class event handlers
             pump.RefreshComplete += Pump_RefreshComplete;
@@ -307,13 +307,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 pump.Error += new EventHandler<DeviceErrorEventArgs>(Pump_Error);
 #endif
             // Initial control mode display
-            ControlMode = enumIscoControlMode.Local;
+            ControlMode = IscoControlMode.Local;
 
             // Set initial number of pumps to max
             PumpCount = pump.PumpCount;
 
             // Set initial operation mode display
-            OperationMode = enumIscoOperationMode.ConstantFlow;
+            OperationMode = IscoOperationMode.ConstantFlow;
             SetOperationMode();
 
             // Initialize refill rate array
@@ -333,7 +333,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             UpdateLimitDisplay();
         }
 
-        private void AddPumpDisplay(PumpIscoDisplayViewModel pumpDisplay)
+        private void AddPumpDisplay(IscoPumpDisplayViewModel pumpDisplay)
         {
             //pumpDisplay.InitViewModel(pumpDisplays.Count);
             ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => pumpDisplays.Add(pumpDisplay));
@@ -346,7 +346,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         private void RegisterDevice(IDevice device)
         {
-            pump = device as classPumpIsco;
+            pump = device as IscoPump;
             InitControl();
 
             // Add to the device manager
@@ -416,10 +416,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             for (var indx = 0; indx < PumpDisplays.Count; indx++)
             {
                 // Flow units
-                LimitsList[0].SetLimit(indx, classIscoConversions.GetFlowUnitsString());
+                LimitsList[0].SetLimit(indx, IscoConversions.GetFlowUnitsString());
 
                 // Pressure units
-                LimitsList[1].SetLimit(indx, classIscoConversions.GetPressUnitsString());
+                LimitsList[1].SetLimit(indx, IscoConversions.GetPressUnitsString());
 
                 // Level units
                 LimitsList[2].SetLimit(indx, "mL");
@@ -512,7 +512,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             bool success;
 
-            if (pump.OperationMode == enumIscoOperationMode.ConstantFlow)
+            if (pump.OperationMode == IscoOperationMode.ConstantFlow)
             {
                 success = pump.SetFlow(pumpIndex, newValue);
             }
@@ -589,7 +589,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void SetAllFlow()
         {
-            if (pump.OperationMode != enumIscoOperationMode.ConstantFlow)
+            if (pump.OperationMode != IscoOperationMode.ConstantFlow)
             {
                 UpdateStatusDisplay("Pump must be in constant flow mode");
                 return;
@@ -615,7 +615,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void SetAllPressure()
         {
-            if (pump.OperationMode != enumIscoOperationMode.ConstantPressure)
+            if (pump.OperationMode != IscoOperationMode.ConstantPressure)
             {
                 UpdateStatusDisplay("Pump must be in constant pressure mode");
                 return;
@@ -661,15 +661,15 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void SetControlMode()
         {
-            var newMode = enumIscoControlMode.External;
+            var newMode = IscoControlMode.External;
 
-            if (ControlMode == enumIscoControlMode.Local)
+            if (ControlMode == IscoControlMode.Local)
             {
-                newMode = enumIscoControlMode.Local;
+                newMode = IscoControlMode.Local;
             }
             else
             {
-                newMode = enumIscoControlMode.Remote;
+                newMode = IscoControlMode.Remote;
             }
 
             if (pump.SetControlMode(newMode))
@@ -695,14 +695,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void SetOperationMode()
         {
-            var newMode = enumIscoOperationMode.ConstantPressure;
+            var newMode = IscoOperationMode.ConstantPressure;
 
-            if (OperationMode == enumIscoOperationMode.ConstantFlow)
+            if (OperationMode == IscoOperationMode.ConstantFlow)
             {
-                newMode = enumIscoOperationMode.ConstantFlow;
+                newMode = IscoOperationMode.ConstantFlow;
             }
             else
-                newMode = enumIscoOperationMode.ConstantPressure;
+                newMode = IscoOperationMode.ConstantPressure;
 
             if (pump.SetOperationMode(newMode))
             {
@@ -805,9 +805,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 var setpointLimits = pump.GetSetpointLimits(indx);
 
                 if (rangeData == null)
-                    rangeData = new classPumpIscoRangeData(); // Use the defaults in the class
+                    rangeData = new IscoPumpRangeData(); // Use the defaults in the class
                 if (setpointLimits == null)
-                    setpointLimits = new classPumpIscoSetpointLimits(); // Use the defaults in the class
+                    setpointLimits = new IscoPumpSetpointLimits(); // Use the defaults in the class
 
                 PumpDisplays[indx].MinFlowSp = setpointLimits.MinFlowSp;
                 PumpDisplays[indx].MaxFlowSp = setpointLimits.MaxFlowSp;
@@ -831,7 +831,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// OperationModeSet handler
         /// </summary>
         /// <param name="newMode"></param>
-        private void Pump_OperationModeSet(enumIscoOperationMode newMode)
+        private void Pump_OperationModeSet(IscoOperationMode newMode)
         {
             OperationMode = newMode;
         }
@@ -840,15 +840,15 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// ControlModeSet handler
         /// </summary>
         /// <param name="newMode"></param>
-        private void Pump_ControlModeSet(enumIscoControlMode newMode)
+        private void Pump_ControlModeSet(IscoControlMode newMode)
         {
-            if (newMode == enumIscoControlMode.Local)
+            if (newMode == IscoControlMode.Local)
             {
-                ControlMode = enumIscoControlMode.Local;
+                ControlMode = IscoControlMode.Local;
             }
             else
             {
-                ControlMode = enumIscoControlMode.Remote;
+                ControlMode = IscoControlMode.Remote;
             }
         }
 

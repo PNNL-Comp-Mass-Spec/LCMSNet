@@ -14,59 +14,59 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// <summary>
     /// This class provides a wrapper around a dictionary containing ISCO pump error notification strings
     /// </summary>
-    public static class classIscoErrorNotifications
+    public static class IscoErrorNotifications
     {
         #region "Class variables"
         static readonly Dictionary<string, string> m_NotifyList = new Dictionary<string, string>();
         #endregion
 
         #region "Constructor"
-        static classIscoErrorNotifications()
+        static IscoErrorNotifications()
         {
             //NOTE: This method may need updating if the enums it's based on change!!!
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.DeviceNotInitialized),
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.DeviceNotInitialized),
                 "Device Not Initialized");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.ComError),
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.ComError),
                 "Communication Error");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.InitializationError),
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.InitializationError),
                 "Initialization Error");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MessageParseError),
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.MessageParseError),
                 "Message Parse Error");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderBottom) + "A",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.CylinderBottom) + "A",
                 "Pump A: Cylinder at bottom");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderBottom) + "B",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.CylinderBottom) + "B",
                 "Pump B: Cylinder at bottom");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderBottom) + "C",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.CylinderBottom) + "C",
                 "Pump C: Cylinder at bottom");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderEmpty) + "A",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.CylinderEmpty) + "A",
                 "Pump A: Cylinder empty");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderEmpty) + "B",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.CylinderEmpty) + "B",
                 "Pump B: Cylinder empty");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.CylinderEmpty) + "C",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.CylinderEmpty) + "C",
                 "Pump C: Cylinder empty");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MotorFailure) + "A",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.MotorFailure) + "A",
                 "Pump A: Motor Failure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MotorFailure) + "B",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.MotorFailure) + "B",
                 "Pump B: Motor Failure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.MotorFailure) + "C",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.MotorFailure) + "C",
                 "Pump C: Motor Failure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.OverPressure) + "A",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.OverPressure) + "A",
                 "Pump A: Over pressure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.OverPressure) + "B",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.OverPressure) + "B",
                 "Pump B: Over pressure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.OverPressure) + "C",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.OverPressure) + "C",
                 "Pump C: Over pressure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.UnderPressure) + "A",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.UnderPressure) + "A",
                 "Pump A: Under pressure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.UnderPressure) + "B",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.UnderPressure) + "B",
                 "Pump B: Under pressure");
-            m_NotifyList.Add(GetEnumName(enumIscoProblemStatus.UnderPressure) + "C",
+            m_NotifyList.Add(GetEnumName(IscoProblemStatus.UnderPressure) + "C",
                 "Pump C: Under pressure");
         }
 
-        private static string GetEnumName(enumIscoProblemStatus iscoProblemStatus)
+        private static string GetEnumName(IscoProblemStatus iscoProblemStatus)
         {
-            var name = Enum.GetName(typeof(enumIscoProblemStatus), iscoProblemStatus);
+            var name = Enum.GetName(typeof(IscoProblemStatus), iscoProblemStatus);
             if (string.IsNullOrWhiteSpace(name))
                 return "InvalidEnum_" + (int)iscoProblemStatus;
 

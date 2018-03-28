@@ -20,9 +20,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
     public delegate void DelegateIscoPumpInitializingHandler();
 
-    public delegate void DelegateIscoPumpOpModeSetHandler(enumIscoOperationMode newMode);
+    public delegate void DelegateIscoPumpOpModeSetHandler(IscoOperationMode newMode);
 
-    public delegate void DelegateIscoPumpControlModeSetHandler(enumIscoControlMode newMode);
+    public delegate void DelegateIscoPumpControlModeSetHandler(IscoControlMode newMode);
 
     public delegate void DelegateIscoPumpDisconnected();
 

@@ -11,7 +11,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// <summary>
     /// Enum for ISCO operation status
     /// </summary>
-    public enum enumIscoOperationStatus
+    public enum IscoOperationStatus
     {
         Stopped,
         Running,

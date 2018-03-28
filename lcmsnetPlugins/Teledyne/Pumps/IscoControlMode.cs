@@ -9,19 +9,12 @@
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
     /// <summary>
-    /// Enum for ISCO pump problem reporting constants
+    /// Enum for ISCO pump control sources
     /// </summary>
-    public enum enumIscoProblemStatus
+    public enum IscoControlMode
     {
-        None,
-        CylinderEmpty,
-        CylinderBottom,
-        OverPressure,
-        UnderPressure,
-        MotorFailure,
-        ComError,
-        InitializationError,
-        MessageParseError,
-        DeviceNotInitialized
+        Local,
+        Remote,
+        External
     }
 }
