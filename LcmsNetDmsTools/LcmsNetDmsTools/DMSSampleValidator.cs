@@ -51,15 +51,15 @@ namespace LcmsNetDmsTools
     // Deprecated export: [ExportMetadata("RelatedToolName", "PrismDMSTools")]
     // Deprecated export: [ExportMetadata("Version", "1.0")]
     // Deprecated export: [ExportMetadata("RequiredDMSToolVersion", "1.0")]
-    public class classDMSSampleValidator
+    public class DMSSampleValidator
     {
         public List<string> CartConfigNamesValidForCart = new List<string>();
 
-        public classDMSSampleValidator()
+        public DMSSampleValidator()
         {
         }
 
-        public classDMSSampleValidator(IEnumerable<string> cartConfigNamesValidForCart)
+        public DMSSampleValidator(IEnumerable<string> cartConfigNamesValidForCart)
         {
             CartConfigNamesValidForCart.AddRange(cartConfigNamesValidForCart);
         }

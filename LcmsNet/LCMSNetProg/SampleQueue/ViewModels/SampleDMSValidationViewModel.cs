@@ -216,16 +216,16 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 CanChangeEmslData = true;
 
-                ProposalIdValid = classDMSSampleValidator.IsEMSLProposalIDValid(sample);
+                ProposalIdValid = DMSSampleValidator.IsEMSLProposalIDValid(sample);
                 IsSampleValid = IsSampleValid && ProposalIdValid;
 
-                UsageTypeValid = classDMSSampleValidator.IsEMSLUsageTypeValid(sample);
+                UsageTypeValid = DMSSampleValidator.IsEMSLUsageTypeValid(sample);
                 IsSampleValid = IsSampleValid && UsageTypeValid;
 
-                UserListValid = classDMSSampleValidator.IsEMSLUserValid(sample);
+                UserListValid = DMSSampleValidator.IsEMSLUserValid(sample);
                 IsSampleValid = IsSampleValid && UserListValid;
 
-                ExperimentValid = classDMSSampleValidator.IsExperimentNameValid(sample);
+                ExperimentValid = DMSSampleValidator.IsExperimentNameValid(sample);
                 IsSampleValid = IsSampleValid && ExperimentValid;
             }
 

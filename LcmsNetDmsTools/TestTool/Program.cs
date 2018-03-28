@@ -34,7 +34,7 @@ namespace TestTool
             ApplicationLogger.Message += ApplicationLogger_Message;
             ApplicationLogger.MessageLevel = 2;
 
-            var dbt = new classDBTools
+            var dbt = new DMSDBTools
             {
                 LoadExperiments = true,
                 LoadDatasets = true,

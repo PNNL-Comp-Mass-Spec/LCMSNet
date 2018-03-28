@@ -22,9 +22,9 @@ namespace LcmsNetSDK
     /// <remarks>
     /// Looks for DLLs in C:\Users\Username\AppData\Roaming\LCMSNet\dmsExtensions
     /// that have classes marked with attribute Export(typeof(IDmsTools)) or attribute Export(typeof(IDMSValidator))
-    /// Typically classes classDBTools and classDMSSampleValidator in LcmsNetDmsTools.dll have those attributes
+    /// Typically classes DMSDBTools and DMSSampleValidator in LcmsNetDmsTools.dll have those attributes
     /// </remarks>
-    [Obsolete("Deprecated; use direct references to classDBTools and classDMSSampleValidator")]
+    [Obsolete("Deprecated; use direct references to DMSDBTools and DMSSampleValidator")]
     public class DMSToolsManager
     {
         private static DMSToolsManager m_instance;
@@ -62,7 +62,7 @@ namespace LcmsNetSDK
             catalog.Catalogs.Add(new DirectoryCatalog(catalogPath));
 
             // Find DLLs that have classes marked with attribute Export(typeof(IDmsTools)) or attribute Export(typeof(IDMSValidator))
-            // Typically classes classDBTools and classDMSSampleValidator in LcmsNetDmsTools.dll have those attributes
+            // Typically classes DMSDBTools and DMSSampleValidator in LcmsNetDmsTools.dll have those attributes
             // For each found DLL, update auto-properties DmsTools and Validators to include instances of the corresponding class
             var mefCompositionContainer = new CompositionContainer(catalog);
             mefCompositionContainer.ComposeParts(this);

@@ -28,7 +28,7 @@ namespace LcmsNet.SampleQueue
 
         public IReadOnlyReactiveList<SampleViewModel> Samples => samplesList;
 
-        private readonly classDMSSampleValidator mValidator;
+        private readonly DMSSampleValidator mValidator;
 
         #region Column Events
 
@@ -146,7 +146,7 @@ namespace LcmsNet.SampleQueue
 
             try
             {
-                mValidator = new classDMSSampleValidator(CartConfigOptions);
+                mValidator = new DMSSampleValidator(CartConfigOptions);
                 Initialize(sampleQueue);
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace LcmsNet.SampleQueue
 
             try
             {
-                mValidator = new classDMSSampleValidator();
+                mValidator = new DMSSampleValidator();
                 Initialize(null);
             }
             catch (Exception ex)

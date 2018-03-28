@@ -53,7 +53,7 @@ namespace LcmsNetDmsTools
     // Deprecated export: [Export(typeof(IDmsTools))]
     // Deprecated export: [ExportMetadata("Name", "PrismDMSTools")]
     // Deprecated export: [ExportMetadata("Version", "1.0")]
-    public class classDBTools : IDisposable
+    public class DMSDBTools : IDisposable
     {
         #region "Class variables"
         string m_ErrMsg = "";
@@ -144,7 +144,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Constructor
         /// </summary>
-        public classDBTools()
+        public DMSDBTools()
         {
             mConfiguration = new Dictionary<string, string>();
             RecentDatasetsMonthsToLoad = 12;
@@ -178,7 +178,7 @@ namespace LcmsNetDmsTools
             connection = null;
         }
 
-        ~classDBTools()
+        ~DMSDBTools()
         {
             Dispose();
         }
@@ -326,7 +326,7 @@ namespace LcmsNetDmsTools
             var folderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(folderPath))
             {
-                throw new DirectoryNotFoundException("Directory for the executing assembly is empty; unable to load the configuration in classDBTools");
+                throw new DirectoryNotFoundException("Directory for the executing assembly is empty; unable to load the configuration in DMSDBTools");
             }
 
             var configurationPath = Path.Combine(folderPath, CONFIG_FILE);

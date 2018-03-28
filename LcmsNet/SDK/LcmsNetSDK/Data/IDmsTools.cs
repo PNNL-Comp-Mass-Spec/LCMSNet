@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LcmsNetSDK.Data
 {
-    [Obsolete("Interface deprecated. Use a direct reference to classDBTools.cs")]
+    [Obsolete("Interface deprecated. Use a direct reference to DMSDBTools.cs")]
     public interface IDmsTools
     {
         string ErrMsg { get; set; }

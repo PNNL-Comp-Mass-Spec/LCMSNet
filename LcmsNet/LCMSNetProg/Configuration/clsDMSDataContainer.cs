@@ -11,7 +11,7 @@ namespace LcmsNet.Configuration
     public static class clsDMSDataContainer
     {
 
-        public static classDBTools DBTools { get; }
+        public static DMSDBTools DBTools { get; }
 
         /// <summary>
         /// When true, progress events from DBTools are logged using ApplicationLogger
@@ -24,7 +24,7 @@ namespace LcmsNet.Configuration
         /// </summary>
         static clsDMSDataContainer()
         {
-            DBTools = new classDBTools
+            DBTools = new DMSDBTools
             {
                 LoadExperiments = true,
                 LoadDatasets = true,
