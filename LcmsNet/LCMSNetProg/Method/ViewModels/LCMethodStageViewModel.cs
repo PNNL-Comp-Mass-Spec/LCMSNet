@@ -53,9 +53,9 @@ namespace LcmsNet.Method.ViewModels
             checkBoxToColumnDataMap = new Dictionary<string, ColumnData>();
             UpdateConfiguration();
             //TODO: In Code-behind?: MethodName.LostFocus += MethodName_LostFocus;
-            classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
-            classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
-            classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
+            LCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+            LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+            LCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
 
             BindingOperations.EnableCollectionSynchronization(SavedMethodsComboBoxOptions, savedMethodsComboBoxOptionsLock);
             BindingOperations.EnableCollectionSynchronization(ColumnComboBoxOptions, columnComboBoxOptionsLock);
@@ -221,9 +221,9 @@ namespace LcmsNet.Method.ViewModels
         private LCMethod FindMethods(string name)
         {
             LCMethod method = null;
-            if (classLCMethodManager.Manager.Methods.ContainsKey(name))
+            if (LCMethodManager.Manager.Methods.ContainsKey(name))
             {
-                method = classLCMethodManager.Manager.Methods[name];
+                method = LCMethodManager.Manager.Methods[name];
             }
             return method;
         }
@@ -376,7 +376,7 @@ namespace LcmsNet.Method.ViewModels
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
         public LCMethod BuildMethod()
         {
-            var method = classLCMethodBuilder.BuildMethod(LCEvents);
+            var method = LCMethodBuilder.BuildMethod(LCEvents);
             if (method == null)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
@@ -415,7 +415,7 @@ namespace LcmsNet.Method.ViewModels
             //currentMethod = method;
 
             // Register the method
-            classLCMethodManager.Manager.AddMethod(method);
+            LCMethodManager.Manager.AddMethod(method);
             OnEventChanged();
         }
 
@@ -857,11 +857,11 @@ namespace LcmsNet.Method.ViewModels
                 return false;
 
             // Create a new writer.
-            var writer = new classLCMethodWriter();
+            var writer = new LCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
+            path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
             ApplicationLogger.LogMessage(0, "Writing method to file " + path);
@@ -906,13 +906,13 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public void OpenMethod(string path)
         {
-            var reader = new classLCMethodReader();
+            var reader = new LCMethodReader();
             var errors = new List<Exception>();
             var method = reader.ReadMethod(path, errors);
 
             if (method != null)
             {
-                classLCMethodManager.Manager.AddMethod(method);
+                LCMethodManager.Manager.AddMethod(method);
             }
         }
 

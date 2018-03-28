@@ -79,7 +79,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Object that manages the list of all samples.
         /// </summary>
-        private classSampleQueue sampleQueue;
+        private SampleQueue sampleQueue;
 
         /// <summary>
         /// Names of the methods available on the PAL
@@ -127,7 +127,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Constructor that accepts dmsView and sampleQueue
         /// </summary>
-        public SampleDataManager(classSampleQueue sampleQueue)
+        public SampleDataManager(SampleQueue sampleQueue)
         {
             BindingOperations.EnableCollectionSynchronization(samplesList, new object());
             foreach (var column in CartConfiguration.Columns)
@@ -211,7 +211,7 @@ namespace LcmsNet.SampleQueue
         /// Performs initialization for the constructors.
         /// </summary>
         /// <param name="sampleQueue"></param>
-        private void Initialize(classSampleQueue sampleQueue)
+        private void Initialize(SampleQueue sampleQueue)
         {
             this.WhenAnyValue(x => x.CycleColumns)
                 .Subscribe(x =>
@@ -238,11 +238,11 @@ namespace LcmsNet.SampleQueue
             instrumentMethods = new List<string>();
 
             // Hook into the method manager so we can update list boxes when methods change...
-            if (classLCMethodManager.Manager != null)
+            if (LCMethodManager.Manager != null)
             {
-                classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
-                classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
-                classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
+                LCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+                LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+                LCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
             }
 
             // Update Method Combo Boxes
@@ -596,7 +596,7 @@ namespace LcmsNet.SampleQueue
         /// Start a batch change, where change tracking for undo operations will not occur until the returned object is disposed.
         /// </summary>
         /// <returns></returns>
-        public classSampleQueue.BatchChangeDisposable StartBatchChange()
+        public SampleQueue.BatchChangeDisposable StartBatchChange()
         {
             recentlyChanged = false;
             return sampleQueue.StartBatchChange(RecentlyChanged);
@@ -629,7 +629,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets or sets the sample queue that handles all queue management at a low level.
         /// </summary>
-        private classSampleQueue SampleQueue
+        private SampleQueue SampleQueue
         {
             get { return sampleQueue; }
             set
@@ -773,7 +773,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void ShowLCSeparationMethods()
         {
-            SetLCMethods(classLCMethodManager.Manager.Methods.Values);
+            SetLCMethods(LCMethodManager.Manager.Methods.Values);
         }
 
         #endregion
@@ -1096,7 +1096,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Moves all the selected samples an offset of their original sequence id.
         /// </summary>
-        public void MoveSamples(List<SampleData> data, int offset, enumMoveSampleType moveType)
+        public void MoveSamples(List<SampleData> data, int offset, MoveSampleType moveType)
         {
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             data.RemoveAll(sample => sample.RunningStatus != SampleRunningStatus.Queued);
@@ -1108,7 +1108,7 @@ namespace LcmsNet.SampleQueue
             {
                 // We have to make sure the data is sorted by sequence
                 // number in order for the sample queue movement to work
-                data.Sort(new classSequenceComparer());
+                data.Sort(new SequenceComparer());
 
                 // Move in the sample queue
                 SampleQueue.MoveQueuedSamples(data, 0, offset, moveType);
@@ -1245,7 +1245,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender">Queue manager that is updated.</param>
         /// <param name="data">Data arguments that contain the updated sample information.</param>
-        private void SampleQueue_SamplesUpdated(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SamplesUpdated(object sender, SampleQueueArgs data)
         {
             SamplesUpdated(sender, data);
         }
@@ -1255,7 +1255,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SamplesUpdated(object sender, classSampleQueueArgs data)
+        private void SamplesUpdated(object sender, SampleQueueArgs data)
         {
             UpdateRows(data.Samples);
         }
@@ -1265,7 +1265,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SamplesStopped(object sender, classSampleQueueArgs data)
+        private void SamplesStopped(object sender, SampleQueueArgs data)
         {
             SamplesUpdated(sender, data);
         }
@@ -1275,7 +1275,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SamplesStopped(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SamplesStopped(object sender, SampleQueueArgs data)
         {
             SamplesStopped(sender, data);
         }
@@ -1285,7 +1285,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SamplesWaitingToRun(object sender, SampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1310,7 +1310,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SampleStarted(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SampleStarted(object sender, SampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1323,7 +1323,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SampleRemoved(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SampleRemoved(object sender, SampleQueueArgs data)
         {
             // Start fresh and add the samples from the queue to the list.
             // But track the position of the scroll bar to be nice to the user.
@@ -1355,7 +1355,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SampleFinished(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SampleFinished(object sender, SampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1368,7 +1368,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SampleCancelled(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SampleCancelled(object sender, SampleQueueArgs data)
         {
             if (data?.Samples == null)
                 return;
@@ -1382,7 +1382,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="sender"></param>
         /// <param name="data"></param>
         /// <param name="replaceExistingRows"></param>
-        private void SampleQueue_SampleAdded(object sender, classSampleQueueArgs data, bool replaceExistingRows)
+        private void SampleQueue_SampleAdded(object sender, SampleQueueArgs data, bool replaceExistingRows)
         {
             if (data?.Samples == null)
                 return;
@@ -1423,7 +1423,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void SampleQueue_SamplesReordered(object sender, classSampleQueueArgs data)
+        private void SampleQueue_SamplesReordered(object sender, SampleQueueArgs data)
         {
             using (samplesList.SuppressChangeNotifications())
             {

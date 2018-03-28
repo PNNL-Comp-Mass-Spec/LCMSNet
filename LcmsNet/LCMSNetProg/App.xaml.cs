@@ -476,7 +476,7 @@ namespace LcmsNet
             // Make sure we can log/error report locally before we do anything!
             try
             {
-                CreatePath(classLCMethodFactory.CONST_LC_METHOD_FOLDER);
+                CreatePath(LCMethodFactory.CONST_LC_METHOD_FOLDER);
                 CreatePath(DeviceManager.CONST_PUMP_METHOD_PATH);
                 CreatePath(DeviceManager.CONST_DEVICE_PLUGIN_PATH);
             }
@@ -502,9 +502,9 @@ namespace LcmsNet
             var deviceManager = DeviceManager.Manager;
             deviceManager.Emulate = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false);
             deviceManager.AddDevice(new TimerDevice());
-            deviceManager.AddDevice(new classBlockDevice());
-            deviceManager.AddDevice(new classLogDevice());
-            deviceManager.AddDevice(new classApplicationDevice());
+            deviceManager.AddDevice(new BlockDevice());
+            deviceManager.AddDevice(new LogDevice());
+            deviceManager.AddDevice(new ApplicationDevice());
 
             // Load the device plug-ins.
             LogMessage(-1, "Loading necessary device plug-ins.");
@@ -566,15 +566,15 @@ namespace LcmsNet
             try
             {
 
-                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
 
                 dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
-                LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = false;
+                LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = false;
 
                 dmsTools.LoadCacheFromDMS(false);
 
-                LcmsNet.Configuration.clsDMSDataContainer.LogDBToolsEvents = true;
+                LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = true;
                 dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;
 
             }
@@ -598,10 +598,10 @@ namespace LcmsNet
             // Check to see if any method folders need to be copied to the transfer server, and copy if necessary
             if (bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS)))
             {
-                if (classMethodFileTools.CheckLocalMethodFolders())
+                if (MethodFileTools.CheckLocalMethodFolders())
                 {
                     LogMessage(-1, "Copying method folders to DMS");
-                    classMethodFileTools.MoveLocalMethodFiles();
+                    MethodFileTools.MoveLocalMethodFiles();
                 }
             }
 

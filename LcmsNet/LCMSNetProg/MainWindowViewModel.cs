@@ -287,7 +287,7 @@ namespace LcmsNet
         /// <summary>
         /// Method Scheduler and execution engine.
         /// </summary>
-        private classLCMethodScheduler m_scheduler;
+        private LCMethodScheduler m_scheduler;
 
         /// <summary>
         /// Form that manages views of the sample queue class for handling sample
@@ -298,7 +298,7 @@ namespace LcmsNet
         /// <summary>
         /// Object that manages operation of the samples.
         /// </summary>
-        private classSampleQueue m_sampleQueue;
+        private SampleQueue.SampleQueue m_sampleQueue;
 
         /// <summary>
         /// Form that displays the configuration of the columns.
@@ -387,7 +387,7 @@ namespace LcmsNet
 
 
             // Construct the sample queue object that holds and manages sample data ordering
-            m_sampleQueue = new classSampleQueue();
+            m_sampleQueue = new SampleQueue.SampleQueue();
             SampleManagerVm = new SampleManagerViewModel(m_sampleQueue);
 
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
@@ -404,7 +404,7 @@ namespace LcmsNet
 
 
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
-            m_scheduler = new classLCMethodScheduler(m_sampleQueue) { Logger = m_logger };
+            m_scheduler = new LCMethodScheduler(m_sampleQueue) { Logger = m_logger };
             m_scheduler.SchedulerError += Scheduler_Error;
             m_scheduler.SampleProgress += Scheduler_SampleProgress;
             m_scheduler.Initialize();
@@ -469,7 +469,7 @@ namespace LcmsNet
 
             // Load the methods from the LC-Methods folder.
             ApplicationLogger.LogMessage(0, "Reading User Methods.");
-            var userMethodErrors = classLCMethodManager.Manager.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER));
+            var userMethodErrors = LCMethodManager.Manager.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             if (userMethodErrors.Count > 0)
             {
@@ -546,19 +546,19 @@ namespace LcmsNet
         {
             switch (e.Action)
             {
-                case enumDeviceNotificationAction.Stop:
+                case DeviceNotificationAction.Stop:
                     ApplicationLogger.LogError(0, "The notification system is shutting down the queue");
                     m_scheduler.Stop();
                     //m_sampleQueue.StopRunningQueue();
                     ApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
-                case enumDeviceNotificationAction.Shutdown:
+                case DeviceNotificationAction.Shutdown:
                     ApplicationLogger.LogError(0, "The notification system is shutting down the queue");
                     //m_sampleQueue.StopRunningQueue();
                     m_scheduler.Stop();
                     ApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
-                case enumDeviceNotificationAction.StopAndRunMethodNow:
+                case DeviceNotificationAction.StopAndRunMethodNow:
                     // Runs the method if it is not null.
                     if (e.Method != null)
                     {
@@ -592,7 +592,7 @@ namespace LcmsNet
                                 e.Method.Name));
                     }
                     break;
-                case enumDeviceNotificationAction.RunMethodNext:
+                case DeviceNotificationAction.RunMethodNext:
                     if (e.Method != null)
                     {
                         var columnID = e.Method.Column;
@@ -789,7 +789,7 @@ namespace LcmsNet
         /// <summary>
         /// Updates the status windows and log files with messages.
         /// </summary>
-        private void UpdateSampleProgress(object sender, classSampleProgressEventArgs args)
+        private void UpdateSampleProgress(object sender, SampleProgressEventArgs args)
         {
             var message = "";
             var sample = args.Sample;
@@ -802,7 +802,7 @@ namespace LcmsNet
             //
             switch (args.ProgressType)
             {
-                case enumSampleProgress.RunningNextEvent:
+                case SampleProgressType.RunningNextEvent:
                     lcMethod = sample.ActualLCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
@@ -812,7 +812,7 @@ namespace LcmsNet
                         lcEvent.Name,
                         sample.DmsData.DatasetName);
                     break;
-                case enumSampleProgress.Error:
+                case SampleProgressType.Error:
                     message = "";
                     lcMethod = sample.ActualLCMethod;
                     var eventNumber = lcMethod.CurrentEventNumber;
@@ -825,14 +825,14 @@ namespace LcmsNet
                         null, args.Sample);
                     isError = true;
                     break;
-                case enumSampleProgress.Stopped:
+                case SampleProgressType.Stopped:
                     lcMethod = sample.ActualLCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Empty;
                     SampleProgressVm.UpdateError(sample, lcEvent);
                     isError = true;
                     break;
-                case enumSampleProgress.Complete:
+                case SampleProgressType.Complete:
                     if (FluidicsDesignVm == null)
                     {
                         break;
@@ -870,7 +870,7 @@ namespace LcmsNet
                         message = string.Empty;
                         if (bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS)))
                         {
-                            classMethodFileTools.MoveLocalMethodFiles();
+                            MethodFileTools.MoveLocalMethodFiles();
                         }
                         var filePath =
                             FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
@@ -884,7 +884,7 @@ namespace LcmsNet
                             "PDF Generation Error for " + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
                     }
                     break;
-                case enumSampleProgress.Started:
+                case SampleProgressType.Started:
                     SampleProgressVm.ResetColumn(sample);
                     message = string.Empty;
                     break;
@@ -908,7 +908,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void Scheduler_SampleProgress(object sender, classSampleProgressEventArgs args)
+        private void Scheduler_SampleProgress(object sender, SampleProgressEventArgs args)
         {
             UpdateSampleProgress(null, args);
         }
@@ -921,7 +921,7 @@ namespace LcmsNet
         /// <param name="errorMessage"></param>
         private void Scheduler_Error(object sender, SampleData sample, string errorMessage)
         {
-            var args = new classSampleProgressEventArgs(errorMessage, sample, enumSampleProgress.Error);
+            var args = new SampleProgressEventArgs(errorMessage, sample, SampleProgressType.Error);
             UpdateSampleProgress(sender, args);
         }
 
@@ -931,7 +931,7 @@ namespace LcmsNet
 
         private void ReportError(ContentControl[] controls)
         {
-            var manager = classLCMethodManager.Manager;
+            var manager = LCMethodManager.Manager;
             var logPath = FileLogging.LogPath;
 
             var controlList = new List<ContentControl>();
@@ -952,7 +952,7 @@ namespace LcmsNet
 
         public void Dispose()
         {
-            clsDMSDataContainer.DBTools.CloseConnection();
+            DMSDataContainer.DBTools.CloseConnection();
             SQLiteTools.CloseConnection();
         }
     }

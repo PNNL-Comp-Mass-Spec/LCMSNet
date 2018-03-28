@@ -452,7 +452,7 @@ namespace LcmsNet.Configuration.ViewModels
             // Get a fresh list of columns from DMS and store it in the cache db
             try
             {
-                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 dmsTools.GetColumnListFromDMS();
             }
             catch (Exception ex)

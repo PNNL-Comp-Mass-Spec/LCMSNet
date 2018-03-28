@@ -12,14 +12,14 @@ namespace LcmsNet.Reporting
     {
         private readonly List<ContentControl> controls = null;
         private readonly string logPath;
-        private readonly classLCMethodManager methodManager;
+        private readonly LCMethodManager methodManager;
 
         public CreateErrorReportViewModel()
         {
             SetupCommands();
         }
 
-        public CreateErrorReportViewModel(classLCMethodManager manager, string logPath, List<ContentControl> controls)
+        public CreateErrorReportViewModel(LCMethodManager manager, string logPath, List<ContentControl> controls)
         {
             methodManager = manager;
             methodManager.MethodAdded += MethodManager_MethodAdded;
@@ -62,13 +62,13 @@ namespace LcmsNet.Reporting
         {
             var methods = new List<LCMethod>(LCMethodsSelected);
 
-            var builder = new classErrorReportBuilder();
+            var builder = new ErrorReportBuilder();
             var path = builder.CreateReport(controls, methods, logPath, "hardwareconfig.ini");
 
             var cartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
             var errorReportPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_ERRORPATH);
 
-            classErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
+            ErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
         }
 
         #endregion

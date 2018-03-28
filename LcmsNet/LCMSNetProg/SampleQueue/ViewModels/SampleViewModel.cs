@@ -219,7 +219,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             // If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
             // samples to help the user normalize samples on columns.
-            if (Sample.DmsData.DatasetName.Contains(classSampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
+            if (Sample.DmsData.DatasetName.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
             {
                 RowBackColor = Brushes.LightGray;
                 RowForeColor = Brushes.DarkGray;
@@ -431,7 +431,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             get
             {
-                if (Sample.DmsData.DatasetName.Contains(classSampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
+                if (Sample.DmsData.DatasetName.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
                 {
                     return Sample.DmsData.RequestName;
                 }

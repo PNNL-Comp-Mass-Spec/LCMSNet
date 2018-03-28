@@ -39,8 +39,8 @@ namespace LcmsNet.Method.ViewModels
         private LCMethodTimelineViewModel methodTimelineThroughput;
         private LCMethodStageViewModel acquisitionStage;
         private LCMethodSelectionViewModel selectedMethods;
-        private classMethodPreviewOptions methodPreviewOptions;
-        private readonly ReactiveList<enumLCMethodRenderMode> previewModeComboBoxOptions = new ReactiveList<enumLCMethodRenderMode>();
+        private MethodPreviewOptions methodPreviewOptions;
+        private readonly ReactiveList<LCMethodRenderMode> previewModeComboBoxOptions = new ReactiveList<LCMethodRenderMode>();
 
         /// <summary>
         /// Constructor that allows for users to edit methods.
@@ -50,7 +50,7 @@ namespace LcmsNet.Method.ViewModels
             MethodTimelineThroughput = new LCMethodTimelineViewModel();
             AcquisitionStage = new LCMethodStageViewModel();
             SelectedMethods = new LCMethodSelectionViewModel();
-            MethodPreviewOptions = new classMethodPreviewOptions();
+            MethodPreviewOptions = new MethodPreviewOptions();
 
             MethodFolderPath = CONST_METHOD_FOLDER_PATH;
 
@@ -60,9 +60,9 @@ namespace LcmsNet.Method.ViewModels
             SelectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
             SelectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
-            previewModeComboBoxOptions.Add(enumLCMethodRenderMode.Column);
+            previewModeComboBoxOptions.Add(LCMethodRenderMode.Column);
 
-            MethodPreviewOptions = new classMethodPreviewOptions
+            MethodPreviewOptions = new MethodPreviewOptions
             {
                 FrameDelay = CONST_DEFAULT_RENDER_WAIT_COUNT,
                 Animate = false,
@@ -88,7 +88,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Gets or sets the method animation preview options.
         /// </summary>
-        public classMethodPreviewOptions MethodPreviewOptions
+        public MethodPreviewOptions MethodPreviewOptions
         {
             get { return methodPreviewOptions; }
             set { this.RaiseAndSetIfChanged(ref methodPreviewOptions, value); }
@@ -117,7 +117,7 @@ namespace LcmsNet.Method.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedMethods, value); }
         }
 
-        public IReadOnlyReactiveList<enumLCMethodRenderMode> PreviewModeComboBoxOptions => previewModeComboBoxOptions;
+        public IReadOnlyReactiveList<LCMethodRenderMode> PreviewModeComboBoxOptions => previewModeComboBoxOptions;
 
         #endregion
 
@@ -160,7 +160,7 @@ namespace LcmsNet.Method.ViewModels
         /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
         public LCMethod BuildMethod()
         {
-            var method = classLCMethodBuilder.BuildMethod(AcquisitionStage.LCEvents);
+            var method = LCMethodBuilder.BuildMethod(AcquisitionStage.LCEvents);
             if (method == null)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Cannot create the LC-method from an empty event list.  You need to add events to the method.");
@@ -254,11 +254,11 @@ namespace LcmsNet.Method.ViewModels
                 return false;
 
             // Create a new writer.
-            var writer = new classLCMethodWriter();
+            var writer = new LCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
+            path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
             return writer.WriteMethod(path, method);
@@ -269,13 +269,13 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public void OpenMethod(string path)
         {
-            var reader = new classLCMethodReader();
+            var reader = new LCMethodReader();
             var errors = new List<Exception>();
             var method = reader.ReadMethod(path, errors);
 
             if (method != null)
             {
-                classLCMethodManager.Manager.AddMethod(method);
+                LCMethodManager.Manager.AddMethod(method);
             }
         }
 

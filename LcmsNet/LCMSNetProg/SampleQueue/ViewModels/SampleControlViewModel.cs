@@ -468,7 +468,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Moves all the selected samples an offset of their original sequence id.
         /// </summary>
-        protected virtual void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        protected virtual void MoveSelectedSamples(int offset, MoveSampleType moveType)
         {
             var data = SelectedSamples.Select(x => x.Sample).ToList();
 
@@ -496,13 +496,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                     var sample = data.Clone() as SampleData;
                     if (sample?.LCMethod?.Name != null)
                     {
-                        if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                        if (LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                         {
                             // Because sample clones are deep copies, we cannot trust that
                             // every object in the sample is serializable...so...we are stuck
                             // making sure we re-hash the method using the name which
                             // is copied during the serialization.
-                            sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
+                            sample.LCMethod = LCMethodManager.Manager.Methods[sample.LCMethod.Name];
                         }
                     }
                     samplesToRandomize.Add(sample);
@@ -780,8 +780,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             FillDownCommand = ReactiveCommand.Create(() => this.FillDown(), this.WhenAnyValue(x => x.ItemsSelected));
             TrayVialCommand = ReactiveCommand.Create(() => this.EditTrayAndVial(), this.WhenAnyValue(x => x.ItemsSelected));
             RandomizeCommand = ReactiveCommand.Create(() => this.RandomizeSelectedSamples(), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData(), this.WhenAnyValue(x => x.ItemsSelected));

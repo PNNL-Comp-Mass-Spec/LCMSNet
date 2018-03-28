@@ -241,7 +241,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             string dbInUse;
             try
             {
-                if (LcmsNet.Configuration.clsDMSDataContainer.DBTools.DMSVersion.Contains("_T3"))
+                if (LcmsNet.Configuration.DMSDataContainer.DBTools.DMSVersion.Contains("_T3"))
                 {
                     dbInUse = " (Using Development Database)";
                 }
@@ -521,7 +521,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get a list of requests from DMS
             try
             {
-                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData);
             }
             catch (DatabaseConnectionStringException ex)
@@ -698,7 +698,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Call the DMS stored procedure to update the cart assignments
             bool success;
 
-            var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+            var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
             try
             {
                 success = dmsTools.UpdateDMSCartAssignment(reqIDs, cartName, cartConfigName, true);

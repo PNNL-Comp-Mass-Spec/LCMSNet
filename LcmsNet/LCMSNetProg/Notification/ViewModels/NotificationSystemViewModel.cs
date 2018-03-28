@@ -33,16 +33,16 @@ namespace LcmsNet.Notification.ViewModels
         {
             Disable();
 
-            deviceEventTable = new Dictionary<INotifier, classNotificationLinker>();
+            deviceEventTable = new Dictionary<INotifier, NotificationLinker>();
             itemToDeviceMap = new Dictionary<string, INotifier>();
             currentSetting = new NotificationAlwaysSetting();
 
             // Setup notifier and options.
-            classNotifier = new classNotifier();
-            var actions = Enum.GetValues(typeof(enumDeviceNotificationAction));
+            classNotifier = new Notifier();
+            var actions = Enum.GetValues(typeof(DeviceNotificationAction));
             using (actionsComboBoxOptions.SuppressChangeNotifications())
             {
-                actionsComboBoxOptions.AddRange(actions.Cast<enumDeviceNotificationAction>());
+                actionsComboBoxOptions.AddRange(actions.Cast<DeviceNotificationAction>());
             }
 
             // Set the total number of minutes between system health writes.
@@ -83,7 +83,7 @@ namespace LcmsNet.Notification.ViewModels
             NotificationBroadcaster.Manager.Removed += Manager_Removed;
 
             // Add any existing methods.
-            var methods = classLCMethodManager.Manager.Methods;
+            var methods = LCMethodManager.Manager.Methods;
             if (methods.Count > 0)
             {
                 foreach (var key in methods.Keys)
@@ -93,9 +93,9 @@ namespace LcmsNet.Notification.ViewModels
             }
 
             // Synch methods
-            classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
-            classLCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
-            classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+            LCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+            LCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
+            LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
 
             remoteStatusLogTimer = new Timer(WriteLogData, this, Timeout.Infinite, Timeout.Infinite);
             ResetRemoteLoggingInterval();
@@ -145,7 +145,7 @@ namespace LcmsNet.Notification.ViewModels
         /// <summary>
         /// Maintains map between device and object that holds the notifications settings.
         /// </summary>
-        private readonly Dictionary<INotifier, classNotificationLinker> deviceEventTable;
+        private readonly Dictionary<INotifier, NotificationLinker> deviceEventTable;
 
         /// <summary>
         /// Fired when an event is required to be handled by an external component.
@@ -155,7 +155,7 @@ namespace LcmsNet.Notification.ViewModels
         /// <summary>
         /// Notifier object that sends status to remote listeners.
         /// </summary>
-        private readonly classNotifier classNotifier;
+        private readonly Notifier classNotifier;
 
         /// <summary>
         /// Current setting object.
@@ -194,7 +194,7 @@ namespace LcmsNet.Notification.ViewModels
         private string deviceLabelText = "Device:";
         private string settingLabelText = "Setting:";
         private string selectedDevice = "";
-        private enumDeviceNotificationAction selectedAction;
+        private DeviceNotificationAction selectedAction;
         private string selectedEvent = "";
         private double numberConditionMinimum = 0;
         private double numberConditionMaximum = 0;
@@ -202,7 +202,7 @@ namespace LcmsNet.Notification.ViewModels
         private readonly ReactiveList<string> devicesList = new ReactiveList<string>();
         private readonly ReactiveList<string> eventsList = new ReactiveList<string>();
         private readonly ReactiveList<string> assignedEventsList = new ReactiveList<string>();
-        private readonly ReactiveList<enumDeviceNotificationAction> actionsComboBoxOptions = new ReactiveList<enumDeviceNotificationAction>();
+        private readonly ReactiveList<DeviceNotificationAction> actionsComboBoxOptions = new ReactiveList<DeviceNotificationAction>();
         private readonly ReactiveList<LCMethod> methodsComboBoxOptions = new ReactiveList<LCMethod>();
 
         #endregion
@@ -314,7 +314,7 @@ namespace LcmsNet.Notification.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedDevice, value); }
         }
 
-        public enumDeviceNotificationAction SelectedAction
+        public DeviceNotificationAction SelectedAction
         {
             get { return selectedAction; }
             set { this.RaiseAndSetIfChanged(ref selectedAction, value); }
@@ -335,7 +335,7 @@ namespace LcmsNet.Notification.ViewModels
         public IReadOnlyReactiveList<string> DevicesList => devicesList;
         public IReadOnlyReactiveList<string> EventsList => eventsList;
         public IReadOnlyReactiveList<string> AssignedEventsList => assignedEventsList;
-        public IReadOnlyReactiveList<enumDeviceNotificationAction> ActionsComboBoxOptions => actionsComboBoxOptions;
+        public IReadOnlyReactiveList<DeviceNotificationAction> ActionsComboBoxOptions => actionsComboBoxOptions;
         public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         #endregion
@@ -352,7 +352,7 @@ namespace LcmsNet.Notification.ViewModels
             var path = Settings.Default.NotificationFilePath;
             if (File.Exists(path))
             {
-                var reader = new classXMLDeviceNotifierConfigurationReader();
+                var reader = new DeviceNotifierConfigurationXMLReader();
                 var config = reader.ReadConfiguration(path);
 
                 var devices = config.GetMappedNotifiers();
@@ -387,14 +387,14 @@ namespace LcmsNet.Notification.ViewModels
                 foreach (var key in linker.EventMap.Keys)
                 {
                     var setting = linker.EventMap[key];
-                    if (setting.Action != enumDeviceNotificationAction.Ignore)
+                    if (setting.Action != DeviceNotificationAction.Ignore)
                     {
                         setting.Name = key;
                         configuration.AddSetting(device, setting);
                     }
                 }
             }
-            var writer = new classXMLDeviceNotificationConfigurationWriter();
+            var writer = new DeviceNotifierConfigurationXMLWriter();
             writer.WriteConfiguration(Settings.Default.NotificationFilePath, configuration);
 
             ApplicationLogger.LogMessage(0, "Notification file saved to: " + Settings.Default.NotificationFilePath);
@@ -466,7 +466,7 @@ namespace LcmsNet.Notification.ViewModels
                 return;
 
             // Make sure we only add components, and the error device(for testing)
-            if (device.DeviceType != DeviceType.Component && !(device.GetType() == typeof(classErrorDevice)))
+            if (device.DeviceType != DeviceType.Component && !(device.GetType() == typeof(ErrorDevice)))
                 return;
 
             AddNotifier(device);
@@ -482,7 +482,7 @@ namespace LcmsNet.Notification.ViewModels
             device.Error += Device_Error;
             device.StatusUpdate += Device_StatusUpdate;
 
-            var linker = new classNotificationLinker(device.Name);
+            var linker = new NotificationLinker(device.Name);
             var errors = device.GetErrorNotificationList();
             if (errors != null)
             {
@@ -570,9 +570,9 @@ namespace LcmsNet.Notification.ViewModels
             // Run the action now!
             switch (setting.Action)
             {
-                case enumDeviceNotificationAction.Ignore:
+                case DeviceNotificationAction.Ignore:
                     break;
-                case enumDeviceNotificationAction.NotifyOnly:
+                case DeviceNotificationAction.NotifyOnly:
                     ApplicationLogger.LogMessage(0, string.Format("Handling a user defined event from a device status change - {0}, message: '{1}'.", setting.Name, message));
                     classNotifier.Path = RemoteStatusLogPath;
                     //m_classNotifier.Notify(message, setting);
@@ -746,7 +746,7 @@ namespace LcmsNet.Notification.ViewModels
                 return;
             }
             var action = SelectedAction;
-            if (action == enumDeviceNotificationAction.RunMethodNext || action == enumDeviceNotificationAction.StopAndRunMethodNow)
+            if (action == DeviceNotificationAction.RunMethodNext || action == DeviceNotificationAction.StopAndRunMethodNow)
             {
                 MethodSettingEnabled = true;
             }
@@ -759,12 +759,12 @@ namespace LcmsNet.Notification.ViewModels
             {
                 var previousAction = currentSetting.Action;
                 currentSetting.Action = action;
-                if (previousAction == enumDeviceNotificationAction.Ignore && !assignedEventsList.Contains(currentNotification))
+                if (previousAction == DeviceNotificationAction.Ignore && !assignedEventsList.Contains(currentNotification))
                 {
                     eventsList.Remove(currentNotification);
                     assignedEventsList.Add(currentNotification);
                 }
-                else if (action == enumDeviceNotificationAction.Ignore && !eventsList.Contains(currentNotification))
+                else if (action == DeviceNotificationAction.Ignore && !eventsList.Contains(currentNotification))
                 {
                     assignedEventsList.Remove(currentNotification);
                     eventsList.Add(currentNotification);
@@ -861,7 +861,7 @@ namespace LcmsNet.Notification.ViewModels
                 foreach (var key in linker.EventMap.Keys)
                 {
                     var setting = linker.EventMap[key];
-                    if (setting.Action != enumDeviceNotificationAction.Ignore)
+                    if (setting.Action != DeviceNotificationAction.Ignore)
                     {
                         assignedEventsList.Add(key);
                     }
@@ -915,8 +915,8 @@ namespace LcmsNet.Notification.ViewModels
             EventSettingsEnabled = true;
             SelectedAction = setting.Action;
 
-            if (setting.Action == enumDeviceNotificationAction.RunMethodNext ||
-                setting.Action == enumDeviceNotificationAction.StopAndRunMethodNow)
+            if (setting.Action == DeviceNotificationAction.RunMethodNext ||
+                setting.Action == DeviceNotificationAction.StopAndRunMethodNow)
             {
                 MethodSettingEnabled = true;
             }
@@ -974,7 +974,7 @@ namespace LcmsNet.Notification.ViewModels
 
             ConditionOccurredChecked = true;
 
-            SelectedAction = enumDeviceNotificationAction.Ignore;
+            SelectedAction = DeviceNotificationAction.Ignore;
         }
 
         /// <summary>
@@ -989,7 +989,7 @@ namespace LcmsNet.Notification.ViewModels
                 foreach (var item in assignedEventsList)
                 {
                     var setting = deviceEventTable[currentDevice].EventMap[item];
-                    setting.Action = enumDeviceNotificationAction.Ignore;
+                    setting.Action = DeviceNotificationAction.Ignore;
                     removals.Add(item);
                 }
 
@@ -1019,7 +1019,7 @@ namespace LcmsNet.Notification.ViewModels
             SaveCommand = ReactiveCommand.Create(() => SaveNotificationFile());
             EnableCommand = ReactiveCommand.Create(() => Enable(), this.WhenAnyValue(x => x.SettingsDisabled).Select(x => x));
             DisableCommand = ReactiveCommand.Create(() => Disable(), this.WhenAnyValue(x => x.SettingsDisabled).Select(x => !x));
-            IgnoreSettingCommand = ReactiveCommand.Create(() => SelectedAction = enumDeviceNotificationAction.Ignore, this.WhenAnyValue(x => x.SelectedAction).Select(x => x != enumDeviceNotificationAction.Ignore));
+            IgnoreSettingCommand = ReactiveCommand.Create(() => SelectedAction = DeviceNotificationAction.Ignore, this.WhenAnyValue(x => x.SelectedAction).Select(x => x != DeviceNotificationAction.Ignore));
             IgnoreAllCommand = ReactiveCommand.Create(() => IgnoreAll(), this.WhenAnyValue(x => x.assignedEventsList.Count).Select(x => x > 0));
         }
 

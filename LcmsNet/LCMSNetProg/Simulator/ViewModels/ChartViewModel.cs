@@ -33,9 +33,9 @@ namespace LcmsNet.Simulator.ViewModels
 
             reporter = new ModelCheckReportsViewModel(FluidicsModerator.Moderator);
             ganttChartTimelineVm = new LCMethodTimelineViewModel();
-            ganttChartTimelineVm.RenderMode = enumLCMethodRenderMode.Column;
+            ganttChartTimelineVm.RenderMode = LCMethodRenderMode.Column;
             conversationChartTimelineVm = new LCMethodTimelineViewModel();
-            conversationChartTimelineVm.RenderMode = enumLCMethodRenderMode.Conversation;
+            conversationChartTimelineVm.RenderMode = LCMethodRenderMode.Conversation;
 
             reporterPopoutVm = new PopoutViewModel(reporter);
             ganttChartTimelinePopoutVm = new PopoutViewModel(ganttChartTimelineVm);

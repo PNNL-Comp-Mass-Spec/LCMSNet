@@ -45,12 +45,12 @@ namespace LcmsNet.Method.ViewModels
             this.WhenAnyValue(x => x.RenderMode).Subscribe(x => this.Refresh());
         }
 
-        private enumLCMethodRenderMode renderMode;
+        private LCMethodRenderMode renderMode;
 
         /// <summary>
         /// Gets or sets the type of rendering to perform.
         /// </summary>
-        public enumLCMethodRenderMode RenderMode
+        public LCMethodRenderMode RenderMode
         {
             get { return renderMode; }
             set { this.RaiseAndSetIfChanged(ref renderMode, value); }
@@ -66,7 +66,7 @@ namespace LcmsNet.Method.ViewModels
 
         public void MouseUpUpdates(Point mouseLocation, ref bool mouseNotMoved)
         {
-            if (RenderMode != enumLCMethodRenderMode.Conversation)
+            if (RenderMode != LCMethodRenderMode.Conversation)
             {
                 return;
             }
@@ -94,7 +94,7 @@ namespace LcmsNet.Method.ViewModels
 
         public void MouseMovedUpdates(Point mouseLocation, ref Point oldMouseLocation)
         {
-            if (RenderMode != enumLCMethodRenderMode.Conversation)
+            if (RenderMode != LCMethodRenderMode.Conversation)
             {
                 return;
             }
@@ -243,7 +243,7 @@ namespace LcmsNet.Method.ViewModels
                 }
                 duration = endTime.Subtract(startTime);
             }
-            if (RenderMode == enumLCMethodRenderMode.Conversation)
+            if (RenderMode == LCMethodRenderMode.Conversation)
             {
                 renderer.StartEventIndex = StartEventIndex;
             }
@@ -257,7 +257,7 @@ namespace LcmsNet.Method.ViewModels
             renderer.RenderLCMethod(e, bounds, methods, startTime, duration, deviceColorMappings, DateTime.MaxValue);
 
             //Render scroll buttons
-            if (RenderMode == enumLCMethodRenderMode.Conversation)
+            if (RenderMode == LCMethodRenderMode.Conversation)
             {
                 var classLcMethodConversationRenderer = renderer as LCMethodConversationRenderer;
                 if (classLcMethodConversationRenderer != null)

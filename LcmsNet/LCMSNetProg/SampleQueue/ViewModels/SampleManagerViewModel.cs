@@ -48,7 +48,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Manages adding the samples to the queue.
         /// </summary>
-        private classSampleQueue sampleQueue;
+        private SampleQueue sampleQueue;
 
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
@@ -91,7 +91,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Default constructor that takes cart configuration data.
         /// </summary>
         /// <param name="queue">Sample queue to provide interface to.</param>
-        public SampleManagerViewModel(classSampleQueue queue)
+        public SampleManagerViewModel(SampleQueue queue)
         {
             Initialize(queue);
             synchronizationContext = SynchronizationContext.Current;
@@ -113,7 +113,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Initialization code.
         /// </summary>
         /// <param name="queue"></param>
-        private void Initialize(classSampleQueue queue)
+        private void Initialize(SampleQueue queue)
         {
             dmsView = new DMSDownloadViewModel();
             sampleQueue = queue;
@@ -220,7 +220,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private void DetermineIfShouldSetButtons(classSampleQueueArgs data)
+        private void DetermineIfShouldSetButtons(SampleQueueArgs data)
         {
             var runningCount = data.RunningSamplePosition;
             var totalSamples = data.RunningQueueTotal;
@@ -244,7 +244,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SamplesWaitingToRun(object sender, SampleQueueArgs data)
         {
             synchronizationContext.Post(d => DetermineIfShouldSetButtons(data), sender);
             //DetermineIfShouldSetButtons(data);
@@ -308,7 +308,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (folderDialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var mrmFilePath = folderDialog.FileName;
-                var mrmWriter = new classMRMFileExporter();
+                var mrmWriter = new MRMFileExporter();
                 sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
             }
         }
@@ -336,10 +336,10 @@ namespace LcmsNet.SampleQueue.ViewModels
                 switch (extension)
                 {
                     case ".xml":
-                        reader = new classQueueImportXML();
+                        reader = new QueueImportXML();
                         break;
                     case CONST_DEFAULT_QUEUE_EXTENSION:
-                        reader = new classQueueImportSQLite();
+                        reader = new QueueImportSQLite();
                         break;
                 }
 
@@ -529,7 +529,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new classQueueExportXML();
+                ISampleQueueWriter writer = new QueueExportXML();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
@@ -550,7 +550,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new classQueueExportCSV();
+                ISampleQueueWriter writer = new QueueExportCSV();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
@@ -571,7 +571,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new classQueueExportExcalCSV();
+                ISampleQueueWriter writer = new QueueExportExcalCSV();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }

@@ -37,7 +37,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void InitControls()
         {
             // Load list of randomizer types
-            randomizersDict = classRandomizerPluginTools.GetRandomizerPlugins();
+            randomizersDict = RandomizerPluginTools.GetRandomizerPlugins();
 
             if (randomizersDict.Count < 1)
                 return;

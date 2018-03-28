@@ -68,13 +68,13 @@ namespace LcmsNet.SampleQueue
                 var sample = data.Clone() as SampleData;
                 if (sample?.LCMethod?.Name != null)
                 {
-                    if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                    if (LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                     {
                         // Because sample clones are deep copies, we cannot trust that
                         // every object in the sample is serializable...so...we are stuck
                         // making sure we re-hash the method using the name which
                         // is copied during the serialization.
-                        sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
+                        sample.LCMethod = LCMethodManager.Manager.Methods[sample.LCMethod.Name];
                     }
                 }
                 pushQueue.Add(sample);

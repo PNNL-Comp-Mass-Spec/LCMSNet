@@ -150,8 +150,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             AddBlankAppendCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
             RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
             //DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(Column, enumColumnDataHandling.LeaveAlone));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToMethod(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
         }
 
@@ -197,9 +197,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="offset">Amount to move the samples (-1 for lower sequence numbers) (1 for higher sequence numbers)</param>
         /// <param name="moveType"></param>
-        protected override void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        protected override void MoveSelectedSamples(int offset, MoveSampleType moveType)
         {
-            base.MoveSelectedSamples(offset, enumMoveSampleType.Column);
+            base.MoveSelectedSamples(offset, MoveSampleType.Column);
         }
 
         /// <summary>

@@ -233,7 +233,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
             }
 
-            var writer = new classINIDeviceConfigurationWriter();
+            var writer = new DeviceConfigurationINIWriter();
             writer.WriteConfiguration(path, configuration);
 
             ApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.", path));
@@ -257,7 +257,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public void LoadConfiguration(string path)
         {
             fluidicsMod.BeginModelSuspension();
-            var reader = new classINIDeviceConfigurationReader();
+            var reader = new DeviceConfigurationINIReader();
             var configuration = reader.ReadConfiguration(path);
 
             DeviceManager.Manager.LoadPersistentConfiguration(configuration);

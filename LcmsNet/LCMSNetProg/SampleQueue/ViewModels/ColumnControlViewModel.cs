@@ -172,8 +172,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             AddBlankAppendCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
             RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.CreateUnused), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(Column, enumColumnDataHandling.CreateUnused));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
             MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused), this.WhenAnyValue(x => x.ItemsSelected));
         }
 
@@ -249,13 +249,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="offset">Amount to move the samples (-1 for lower sequence numbers) (1 for higher sequence numbers)</param>
         /// <param name="moveType"></param>
-        protected override void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        protected override void MoveSelectedSamples(int offset, MoveSampleType moveType)
         {
             var numEnabledColumns = CartConfiguration.NumberOfEnabledColumns;
 
             // We are moving the sample by N in the queue to offset for the enabled / disabled columns.
             offset *= numEnabledColumns;
-            base.MoveSelectedSamples(offset, enumMoveSampleType.Column);
+            base.MoveSelectedSamples(offset, MoveSampleType.Column);
         }
 
         /// <summary>

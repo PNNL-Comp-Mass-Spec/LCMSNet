@@ -75,7 +75,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// <summary>
         /// Gets or sets the method animation preview options.
         /// </summary>
-        public classMethodPreviewOptions MethodPreviewOptions { get; set; }
+        public MethodPreviewOptions MethodPreviewOptions { get; set; }
 
         /// <summary>
         /// Saves the given method to file.
@@ -88,11 +88,11 @@ namespace LcmsNet.Simulator.ViewModels
                 return false;
 
             // Create a new writer.
-            var writer = new classLCMethodWriter();
+            var writer = new LCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
+            path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
             return writer.WriteMethod(path, method);

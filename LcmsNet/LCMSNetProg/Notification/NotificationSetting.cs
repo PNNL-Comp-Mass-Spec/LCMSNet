@@ -14,7 +14,7 @@ namespace LcmsNet.Notification
         /// </summary>
         protected NotificationSetting()
         {
-            Action = enumDeviceNotificationAction.Ignore;
+            Action = DeviceNotificationAction.Ignore;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Gets or sets the action to take when an error occurs.
         /// </summary>
-        public enumDeviceNotificationAction Action { get; set; }
+        public DeviceNotificationAction Action { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the setting.

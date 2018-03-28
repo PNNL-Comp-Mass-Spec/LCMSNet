@@ -2,14 +2,14 @@
 {
     public class LCRendererFactory
     {
-        public static LCMethodRenderer GetRenderer(enumLCMethodRenderMode mode)
+        public static LCMethodRenderer GetRenderer(LCMethodRenderMode mode)
         {
             LCMethodRenderer renderer = null;
-            if (mode == enumLCMethodRenderMode.Column)
+            if (mode == LCMethodRenderMode.Column)
             {
                 renderer = new LCMethodColumnModeRenderer();
             }
-            else if (mode == enumLCMethodRenderMode.Conversation)
+            else if (mode == LCMethodRenderMode.Conversation)
             {
                 renderer = new LCMethodConversationRenderer();
             }

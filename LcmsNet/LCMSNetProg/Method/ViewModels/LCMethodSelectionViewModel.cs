@@ -20,11 +20,11 @@ namespace LcmsNet.Method.ViewModels
         public LCMethodSelectionViewModel()
         {
             // The stupid designer forces us to check if this guy is null or not.
-            if (classLCMethodManager.Manager != null)
+            if (LCMethodManager.Manager != null)
             {
-                classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
-                classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
-                classLCMethodManager.Manager.MethodUpdated += Manager_MethodAdded;
+                LCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+                LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+                LCMethodManager.Manager.MethodUpdated += Manager_MethodAdded;
             }
             BindingOperations.EnableCollectionSynchronization(ListSelectedLCMethods, listSelectedLcMethodsLock);
             BindingOperations.EnableCollectionSynchronization(MethodsComboBoxOptions, methodsComboBoxOptionsLock);
