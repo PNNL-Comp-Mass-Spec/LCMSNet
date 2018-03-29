@@ -320,6 +320,11 @@ namespace LcmsNetSDK.Data
             get { return m_RunningStatus; }
             set
             {
+                if (m_RunningStatus == SampleRunningStatus.Complete)
+                {
+                    OnPropertyChanged(nameof(RunningStatus));
+                    return;
+                }
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
                 var oldHasNotRun = HasNotRun;
                 var oldIsSetToRun = IsSetToRunOrHasRun;
@@ -596,6 +601,30 @@ namespace LcmsNetSDK.Data
         #endregion
 
         #region "Methods"
+
+        /// <summary>
+        /// Reset the sample completion status by force, done by method to allow the property to prevent this accidentally occurring. This only has an effect if the current status is "Complete".
+        /// </summary>
+        /// <param name="desiredStatus"></param>
+        public void ResetSampleCompletedStatus(SampleRunningStatus desiredStatus = SampleRunningStatus.Queued)
+        {
+            // Exit if the current status is not "Complete"
+            if (m_RunningStatus != SampleRunningStatus.Complete)
+            {
+                return;
+            }
+
+            // First set the backing variable to a non-complete status that is not the desired status
+            var firstSetStatus = SampleRunningStatus.Stopped;
+            if (desiredStatus == SampleRunningStatus.Stopped)
+            {
+                firstSetStatus = SampleRunningStatus.Queued;
+            }
+            m_RunningStatus = firstSetStatus;
+
+            // Set the desired status, using the property so that the appropriate "PropertyChanged" events are raised.
+            RunningStatus = desiredStatus;
+        }
 
         /// <summary>
         /// Gets current values for all the properties in the class in key/value format

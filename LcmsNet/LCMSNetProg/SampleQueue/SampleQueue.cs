@@ -1956,12 +1956,12 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void StopRunningQueue()
         {
-            foreach (var sample in m_runningQueue)
+            foreach (var sample in m_runningQueue.Where(x => x.RunningStatus != SampleRunningStatus.Complete))
                 sample.RunningStatus = SampleRunningStatus.Queued;
 
             lock (m_waitingQueue)
             {
-                m_waitingQueue.InsertRange(0, m_runningQueue);
+                m_waitingQueue.InsertRange(0, m_runningQueue.Where(x => x.RunningStatus != SampleRunningStatus.Complete));
             }
             lock (m_runningQueue)
             {
@@ -2010,6 +2010,8 @@ namespace LcmsNet.SampleQueue
 
             lock (m_runningQueue)
             {
+                // TODO: It appears that this is not actually removing the sample from the running queue (at least according to StopRunningQueue);
+                // TODO: the issue has been otherwise solved for now by preventing the change of a sample status after it is marked as "Complete"
                 m_runningQueue.Remove(sample);
             }
 
