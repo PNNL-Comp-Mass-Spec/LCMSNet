@@ -25,9 +25,9 @@ namespace LcmsNetSDK.Configuration
             {
                 var n = 0;
 
-                // 
+                //
                 // Figure out what columns are enabled or disabled.
-                //             
+                //
                 foreach (var col in Columns)
                 {
                     if (col.Status != ColumnStatus.Disabled)
@@ -60,10 +60,10 @@ namespace LcmsNetSDK.Configuration
             if (orderByFirst == false)
                 return orderList;
 
-            // 
+            //
             // For every column add it to the build list,
             // if it is not disabled to run
-            // 
+            //
             var tempList1 = new List<ColumnData>();
             var tempList2 = new List<ColumnData>();
             var ptrList = tempList1;

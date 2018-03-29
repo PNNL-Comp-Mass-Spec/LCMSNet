@@ -540,7 +540,7 @@ namespace LcmsNet
 
 #if DEBUG
             // Create a device we can use for testing errors with.
-            IDevice dev = new classErrorDevice();
+            IDevice dev = new ErrorDevice();
             deviceManager.AddDevice(dev);
 #endif
 
