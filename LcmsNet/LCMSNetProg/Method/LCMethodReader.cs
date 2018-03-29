@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using LcmsNet.Devices;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -56,26 +57,34 @@ namespace LcmsNet.Method
             assemblies.AddRange(loadedAssemblies);
             assemblies.Add(Assembly.GetExecutingAssembly()); // Make sure we check the LCMS Net ones as well.
 
-            foreach (var ass in assemblies)
+            for (var i = 0; i < 2; i++)
             {
-                try
+                foreach (var asm in assemblies)
                 {
-                    var types = ass.GetTypes();
-                    foreach (var assType in types)
+                    try
                     {
-                        // Alternatively use .AssemblyQualifiedName;
-                        if (assType.FullName == name)
+                        var types = asm.GetTypes();
+                        foreach (var asmType in types)
                         {
-                            constructedParameterType = assType;
-                            return constructedParameterType;
+                            // Alternatively use .AssemblyQualifiedName;
+                            if (asmType.FullName == name)
+                            {
+                                constructedParameterType = asmType;
+                                return constructedParameterType;
+                            }
                         }
                     }
+                    catch (ReflectionTypeLoadException)
+                    {
+                        // Ignore...we don't need to worry about these problems.
+                    }
                 }
-                catch (ReflectionTypeLoadException)
-                {
-                    // Ignore...we don't need to worry about these problems.
-                }
+
+                // if it wasn't found, try matching it with an old device type name and translating it
+                name = OldDeviceNameTranslator.TranslateOldDeviceFullName(name);
             }
+            ApplicationLogger.LogError(0, $"Failed to find type match for type name '{name}'");
+
             return constructedParameterType;
         }
 

@@ -96,6 +96,7 @@
     <Compile Include="Devices\Fluidics\Views\FluidicsDesignView.xaml.cs">
       <DependentUpon>FluidicsDesignView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Devices\OldDeviceNameTranslator.cs" />
     <Compile Include="DynamicSplashScreenWindow.xaml.cs">
       <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
     </Compile>

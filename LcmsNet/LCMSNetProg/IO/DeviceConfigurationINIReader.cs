@@ -81,7 +81,12 @@ namespace LcmsNet.Devices
                 deviceName = Convert.ToString(data["DeviceName"]);
                 foreach (var key in data.Keys)
                 {
-                    configuration.AddSetting(deviceName, key, data[key]);
+                    var value = data[key];
+                    if (key.Equals("DeviceType"))
+                    {
+                        value = OldDeviceNameTranslator.TranslateOldDeviceFullName(value.ToString());
+                    }
+                    configuration.AddSetting(deviceName, key, value);
                 }
             }
             for (var j = connectionsIndex; j < configLines.Length; j++)
