@@ -102,7 +102,7 @@ namespace LcmsNet.Method.Drawing
         #region CONSTANTS
 
         protected const float CONST_HEADER_PADDING = .25F;
-        protected const float CONST_HEADER_PADDING_MAX = 25.0F;
+        protected const float CONST_HEADER_PADDING_MAX = 27.0F;
         protected const float CONST_TRIANGLE_HEIGHT = 15.0F;
         protected const float CONST_MIN_HEIGHT = 8.0F;
         protected const float CONST_MID_HEIGHT = 30.0F;

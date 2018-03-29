@@ -56,7 +56,10 @@
                             <views:ColumnConfigView Grid.Row="1" Grid.Column="0" Margin="3" DataContext="{Binding Column3ViewModel}" />
                             <views:ColumnConfigView Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding Column4ViewModel}" />
                         </Grid>
-                        <Button Width="202" HorizontalAlignment="Left" Command="{Binding ReloadCartDataCommand}" >Reload Column Names</Button>
+                        <DockPanel LastChildFill="False">
+                            <Button DockPanel.Dock="Left" Width="202" Margin="3" HorizontalAlignment="Left" Content="Reload Column Names" Command="{Binding ReloadCartDataCommand}" />
+                            <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" Content="Display Special Column" IsChecked="{Binding SpecialColumnEnabled}" />
+                        </DockPanel>
                     </StackPanel>
                 </GroupBox>
                 <StackPanel Orientation="Horizontal" Margin="5">

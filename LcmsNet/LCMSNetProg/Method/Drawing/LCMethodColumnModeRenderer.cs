@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -78,10 +79,15 @@ namespace LcmsNet.Method.Drawing
             var offset = bounds.Height * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
             // This tells us how much room we get per method or column spacing.
-            var columnsEnabled = CartConfiguration.Columns.Count(x => x.Status != ColumnStatus.Disabled) + 1;
+            var columnsEnabled = CartConfiguration.Columns.Count(x => x.Status != ColumnStatus.Disabled);
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
+            {
+                // Also show the "Special" column
+                columnsEnabled += 1;
+            }
             //var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
             var heightPer = (bounds.Height - CONST_COLUMN_SPACING * columnsEnabled - offset) / Convert.ToSingle(columnsEnabled);
-            heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, (int)(CONST_MAX_HEIGHT * 1.5)));
+            heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, (int)(CONST_MAX_HEIGHT * 3)));
 
             // Draw the data for the columns
             for (var i = 0; i < ColumnNames.Count; i++)

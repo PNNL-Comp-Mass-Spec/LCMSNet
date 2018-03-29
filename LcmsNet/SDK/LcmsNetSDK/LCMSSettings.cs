@@ -50,6 +50,7 @@ namespace LcmsNetSDK
         public const string PARAM_COLUMNDISABLED1 = "ColumnDisabled1";
         public const string PARAM_COLUMNDISABLED2 = "ColumnDisabled2";
         public const string PARAM_COLUMNDISABLED3 = "ColumnDisabled3";
+        public const string PARAM_COLUMNDISABLEDSPECIAL = "ColumnDisabledSpecial";
         public const string PARAM_COPYMETHODFOLDERS = "CopyMethodFolders";
         public const string PARAM_COPYTRIGGERFILES = "CopyTriggerFiles";
         public const string PARAM_CREATEMETHODFOLDERS = "CreateMethodFolders";

@@ -171,7 +171,12 @@ namespace LcmsNet.Method.ViewModels
                             renderer.ColumnNames.Add(column.Name);
                         }
                     }
-                    renderer.ColumnNames.Add("Special");
+
+                    if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
+                    {
+                        // Also show the "Special" column
+                        renderer.ColumnNames.Add("Special");
+                    }
 
                     var minTime = DateTime.MaxValue;
                     var maxTime = DateTime.MinValue;
@@ -274,7 +279,13 @@ namespace LcmsNet.Method.ViewModels
                         renderer.ColumnNames.Add(column.Name);
                     }
                 }
-                renderer.ColumnNames.Add("Special");
+
+                if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
+                {
+                    // Also show the "Special" column
+                    renderer.ColumnNames.Add("Special");
+                }
+
                 renderer.RenderSamples(e, bounds, null, now, new TimeSpan(1, 0, 0), deviceColorMappings, DateTime.MaxValue);
             }
         }

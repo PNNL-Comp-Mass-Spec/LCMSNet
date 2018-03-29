@@ -67,6 +67,7 @@ namespace LcmsNet.Configuration.ViewModels
         private readonly ReactiveList<string> separationTypeComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> operatorsComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> columnNameComboBoxOptions = new ReactiveList<string>();
+        private bool specialColumnEnabled;
 
         #endregion
 
@@ -181,6 +182,12 @@ namespace LcmsNet.Configuration.ViewModels
             set { this.RaiseAndSetIfChanged(ref column4ViewModel, value); }
         }
 
+        public bool SpecialColumnEnabled
+        {
+            get { return specialColumnEnabled; }
+            set { this.RaiseAndSetIfChanged(ref specialColumnEnabled, value); }
+        }
+
         public bool InstrumentNameNotSaved
         {
             get { return instrumentNameNotSaved; }
@@ -251,6 +258,7 @@ namespace LcmsNet.Configuration.ViewModels
             RegisterColumn(Column2ViewModel);
             RegisterColumn(Column3ViewModel);
             RegisterColumn(Column4ViewModel);
+            SpecialColumnEnabled = !LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true);
 
             // Cart name
             CartName = CartConfiguration.CartName;
@@ -274,6 +282,7 @@ namespace LcmsNet.Configuration.ViewModels
 
             this.WhenAnyValue(x => x.InstrumentOperator).Subscribe(x => this.OperatorNotSaved = true);
             this.WhenAnyValue(x => x.InstrumentName).Subscribe(x => this.InstrumentNameNotSaved = true);
+            this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
             OperatorNotSaved = false;
             InstrumentNameNotSaved = false;
 
