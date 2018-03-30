@@ -1915,10 +1915,10 @@ namespace LcmsNet.SampleQueue
             //
             // Remove the sample from the running queue
             //
-            lock (m_runningQueue)
-            {
-                m_runningQueue.Remove(sample);
-            }
+            //lock (m_runningQueue)
+            //{
+            //    m_runningQueue.Remove(sample);
+            //}
             //enumSampleRunningStatus status = enumSampleRunningStatus.Stopped;
             //if (error)
             //{
@@ -1930,10 +1930,10 @@ namespace LcmsNet.SampleQueue
             //
             // Requeue the sample putting it back on the queue it came from.
             //
-            lock (m_completeQueue)
-            {
-                m_completeQueue.Add(sample);
-            }
+            //lock (m_waitingQueue)
+            //{
+            //    m_waitingQueue.Add(sample);
+            //}
 
             var samples = new[] { sample };
             var args = new SampleQueueArgs(samples,
@@ -1956,7 +1956,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void StopRunningQueue()
         {
-            foreach (var sample in m_runningQueue.Where(x => x.RunningStatus != SampleRunningStatus.Complete))
+            foreach (var sample in m_runningQueue.Where(x => x.RunningStatus == SampleRunningStatus.Running || x.RunningStatus == SampleRunningStatus.WaitingToRun ))
                 sample.RunningStatus = SampleRunningStatus.Queued;
 
             lock (m_waitingQueue)
