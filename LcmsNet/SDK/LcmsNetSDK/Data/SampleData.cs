@@ -760,6 +760,10 @@ namespace LcmsNetSDK.Data
 
             // Call each of LoadPropertyValues methods for properties that represent objects
             base.LoadPropertyValues(baseProps);
+
+            var existingRunningStatus = RunningStatus;
+            ResetSampleCompletedStatus();
+
             DmsData.LoadPropertyValues(dmsProps);
             PAL.LoadPropertyValues(palProps);
 
@@ -774,6 +778,8 @@ namespace LcmsNetSDK.Data
                 LCMethod = new LCMethod();
                 LCMethod.LoadPropertyValues(expProps);
             }
+
+            RunningStatus = existingRunningStatus;
         }
 
         #endregion
