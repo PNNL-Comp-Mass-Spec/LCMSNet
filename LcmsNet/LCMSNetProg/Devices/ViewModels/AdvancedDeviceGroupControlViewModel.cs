@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -116,12 +117,12 @@ namespace LcmsNet.Devices.ViewModels
 
         private void SetupCommands()
         {
-            RenameDeviceCommand = ReactiveCommand.Create(() => RenameSelectedDevice(), this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-            InitializeDeviceCommand = ReactiveCommand.Create(() => InitializeSelectedDevice(), this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-            ClearErrorCommand = ReactiveCommand.Create(() => ClearSelectedDeviceError(), this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            RenameDeviceCommand = ReactiveCommand.Create(RenameSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(InitializeSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            ClearErrorCommand = ReactiveCommand.Create(ClearSelectedDeviceError, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
         }
 
-        private void InitializeSelectedDevice()
+        private async Task InitializeSelectedDevice()
         {
             if (SelectedDevice == null)
                 return;
@@ -130,7 +131,7 @@ namespace LcmsNet.Devices.ViewModels
 
             try
             {
-                DeviceManager.Manager.InitializeDevice(SelectedDevice.Device);
+                await Task.Run(() => DeviceManager.Manager.InitializeDevice(SelectedDevice.Device));
             }
             catch (Exception ex)
             {

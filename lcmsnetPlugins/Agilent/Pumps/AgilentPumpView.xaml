@@ -8,6 +8,7 @@
              xmlns:pumpViews="clr-namespace:LcmsNetCommonControls.Devices.Pumps;assembly=LcmsNetCommonControls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+             xmlns:styles="clr-namespace:LcmsNetCommonControls.Styles;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="577" d:DesignWidth="822"
              d:DataContext="{d:DesignInstance {x:Type local:AgilentPumpViewModel}, IsDesignTimeCreatable=True}"
@@ -15,7 +16,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="422*" MinWidth="400" />
-            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="8" />
             <ColumnDefinition Width="400*" />
         </Grid.ColumnDefinitions>
         <TabControl Grid.Column="0" MinWidth="400">
@@ -182,7 +183,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" />
+        <GridSplitter Grid.Column="1" Width="8" BorderThickness="1,0" BorderBrush="DimGray" VerticalAlignment="Stretch" ShowsPreview="False" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyleVertical}" />
         <commonViews:PopoutView Grid.Column="2" Grid.RowSpan="6" VerticalButtonAlignment="Top" HorizontalButtonAlignment="Right" OverlayButton="True" DataContext="{Binding PumpPopoutVm}" WindowHeight="577" WindowWidth="400" Title="{Binding Child.PumpName}">
             <pumpViews:PumpDisplayView />
         </commonViews:PopoutView>

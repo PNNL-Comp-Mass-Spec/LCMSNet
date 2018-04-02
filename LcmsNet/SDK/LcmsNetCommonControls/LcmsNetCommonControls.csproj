@@ -74,6 +74,8 @@
       <DependentUpon>PumpDisplayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Styles\LcmsNetStyles.cs" />
+    <Compile Include="Styles\StyleRefExtension.cs" />
     <Compile Include="ViewModels\PopoutViewModel.cs" />
     <Compile Include="Views\PopoutView.xaml.cs">
       <DependentUpon>PopoutView.xaml</DependentUpon>
@@ -108,6 +110,14 @@
     <Page Include="Devices\Pumps\PumpDisplayView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\CombinedStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\GridSplitterStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopoutView.xaml">
       <SubType>Designer</SubType>

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LcmsNet.Devices.Pumps.ViewModels;
 using LcmsNetCommonControls.Devices.Pumps;
+using LcmsNetCommonControls.Styles;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.Pumps.Views
@@ -68,14 +69,17 @@ namespace LcmsNet.Devices.Pumps.Views
                     var splitter = new GridSplitter()
                     {
                         ShowsPreview = false,
-                        Width = 5,
+                        Width = 8,
                         VerticalAlignment = VerticalAlignment.Stretch,
                         ResizeBehavior = GridResizeBehavior.PreviousAndNext,
                         ResizeDirection = GridResizeDirection.Columns,
+                        BorderThickness = new Thickness(1,0,1,0),
+                        BorderBrush = Brushes.DimGray,
+                        Style = LcmsNetStyles.GetStyle("GridSplitterWithDotsStyleVertical"),
                     };
 
                     PumpStatusGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                    PumpStatusGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5) });
+                    PumpStatusGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(8) });
 
                     pdv.SetValue(Grid.ColumnProperty, column++);
                     splitter.SetValue(Grid.ColumnProperty, column++);

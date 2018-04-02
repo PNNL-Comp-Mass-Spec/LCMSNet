@@ -6,6 +6,7 @@
              xmlns:views="clr-namespace:LcmsNet.Method.Views"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:styles="clr-namespace:LcmsNetCommonControls.Styles;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="793" d:DesignWidth="1258"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ColumnSampleProgressViewModel}, IsDesignTimeCreatable=True}">
@@ -13,7 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="8" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" LastChildFill="False">
@@ -26,7 +27,7 @@
             <Label DockPanel.Dock="Right" Content="Display (minutes : seconds : milliseconds):" />
         </DockPanel>
         <views:SampleProgressView Grid.Row="1" DataContext="{Binding SampleProgress}" />
-        <GridSplitter Grid.Row="2" Height="5" ShowsPreview="False" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
+        <GridSplitter Grid.Row="2" Height="8" BorderThickness="0,1" BorderBrush="DimGray" ShowsPreview="False" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyle}" />
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

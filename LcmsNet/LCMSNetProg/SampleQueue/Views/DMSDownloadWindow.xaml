@@ -6,6 +6,7 @@
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
         xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+        xmlns:styles="clr-namespace:LcmsNetCommonControls.Styles;assembly=LcmsNetCommonControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:DMSDownloadViewModel}, IsDesignTimeCreatable=True}"
         d:DesignHeight="768" d:DesignWidth="1024"
@@ -21,7 +22,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="4*" />
             <RowDefinition Height="1*" MinHeight="40" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="8" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="4*" />
             <RowDefinition Height="1*" MinHeight="40" />
@@ -118,7 +119,7 @@
             </Button>
             <Label Margin="40,0,0,0" VerticalAlignment="Center" Content="{Binding RequestsFoundString}" />
         </StackPanel>
-        <GridSplitter Grid.Row="4" Background="DarkGray" ResizeDirection="Rows" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" />
+        <GridSplitter Grid.Row="4" BorderThickness="0,1" BorderBrush="DimGray" ResizeDirection="Rows" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyle}" />
         <Label Grid.Row="5">Requests To Run</Label>
         <views:DMSDownloadDataGridView Grid.Row="6" DataContext="{Binding SelectedRequestData}"/>
         <StackPanel Grid.Row="7" HorizontalAlignment="Right" Orientation="Horizontal">

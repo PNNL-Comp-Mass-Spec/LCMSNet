@@ -6,6 +6,7 @@
              xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
              xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
              xmlns:commonViews="clr-namespace:LcmsNetCommonControls.Views;assembly=LcmsNetCommonControls"
+             xmlns:styles="clr-namespace:LcmsNetCommonControls.Styles;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="555" d:DesignWidth="973"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SimulatorCombinedViewModel}, IsDesignTimeCreatable=True}">
@@ -103,7 +104,7 @@
         <commonViews:PopoutView Grid.Column="0" DataContext="{Binding ConfigPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Fluidics Configuration" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
             <views:SimConfigurationView />
         </commonViews:PopoutView>
-        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Visibility="{Binding BothTacked, Converter={StaticResource BoolToVis}}" />
+        <GridSplitter Grid.Column="1" Width="8" BorderThickness="1,0" BorderBrush="DimGray" VerticalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Visibility="{Binding BothTacked, Converter={StaticResource BoolToVis}}" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyleVertical}" />
         <commonViews:PopoutView Grid.Column="2" DataContext="{Binding ControlsPopoutVm}" HorizontalButtonAlignment="Right" VerticalButtonAlignment="Bottom" OverlayButton="False" PreferVerticalBorder="False" Title="LcmsNet Simulator Controls and Charts" WindowWidth="772" WindowHeight="450" Visibility="{Binding Tacked, Converter={StaticResource BoolToVis}}">
             <views:SimulatorControlsAndChartsView />
         </commonViews:PopoutView>
