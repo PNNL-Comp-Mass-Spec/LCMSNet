@@ -161,6 +161,11 @@ namespace LcmsNetSQLiteTools
             GC.SuppressFinalize(this);
         }
 
+        public static SQLiteTools GetInstance()
+        {
+            return Instance;
+        }
+
         /// <summary>
         /// Get a SQLiteConnection, but lim
         /// </summary>

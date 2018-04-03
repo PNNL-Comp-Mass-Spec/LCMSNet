@@ -281,6 +281,7 @@ namespace LcmsNet
         private bool canSimulate = true;
         private bool isMessageError = false;
         private bool queueTabSelected = true;
+        private readonly SQLiteTools sqlInstance = SQLiteTools.GetInstance();
 
         private FluidicsDesignViewModel fluidicsDesign;
 
@@ -954,6 +955,7 @@ namespace LcmsNet
         {
             DMSDataContainer.DBTools.CloseConnection();
             SQLiteTools.CloseConnection();
+            sqlInstance.Dispose();
         }
     }
 }
