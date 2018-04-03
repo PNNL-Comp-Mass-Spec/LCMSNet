@@ -12,4 +12,5 @@ LcmsNet/SQLiteTools/SQLite/
 *.DotSettings
 *.user
 Installer/Output/
+/lib/DotNET4/
 /SampleValidators/

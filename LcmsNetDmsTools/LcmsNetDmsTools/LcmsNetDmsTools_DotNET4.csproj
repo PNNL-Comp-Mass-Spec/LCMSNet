@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F3EB0B04-7562-4B7D-871C-579C2C8A2045}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LcmsNetDmsTools</RootNamespace>
+    <AssemblyName>LcmsNetDmsTools</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\NET4\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\NET4\Debug\LcmsNetDmsTools.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\NET4\Release\</OutputPath>
+    <DefineConstants>TRACE;NET4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\NET4\Release\LcmsNetDmsTools.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DMSDBTools.cs" />
+    <Compile Include="DMSSampleValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PrismDMS.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite.Core">
+      <Version>1.0.99</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LcmsNet\SDK\LcmsNetSDK\LcmsNetSDK_DotNET4.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK_DotNET4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LcmsNet\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools_DotNET4.csproj">
+      <Project>{b164f88d-3799-46b9-8926-20b40707b2e4}</Project>
+      <Name>SQLiteTools_DotNET4</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(SolutionDir)lib\NET4" mkdir "$(SolutionDir)lib\NET4"
+xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\NET4"
+xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\NET4"
+
+rem Skip since .NET 4: if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
+rem Skip since .NET 4: if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
+
+rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.dll" "%25appdata%25\LCMSNet\dmsExtensions"
+rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.pdb" "%25appdata%25\LCMSNet\dmsExtensions"
+rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.xml" "%25appdata%25\LCMSNet\dmsExtensions"
+rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.config" "%25appdata%25\LCMSNet\dmsExtensions"
+rem Skip since .NET 4: xcopy /Y /F /D "$(ProjectDir)PrismDMS.config" "%25appdata%25\LCMSNet\dmsExtensions"
+</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
