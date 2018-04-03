@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -72,25 +72,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)lib\NET4" mkdir "$(SolutionDir)lib\NET4"
-xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\NET4"
-xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\NET4"
-
-rem Skip since .NET 4: if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-rem Skip since .NET 4: if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
-
-rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.dll" "%25appdata%25\LCMSNet\dmsExtensions"
-rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.pdb" "%25appdata%25\LCMSNet\dmsExtensions"
-rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.xml" "%25appdata%25\LCMSNet\dmsExtensions"
-rem Skip since .NET 4: xcopy /Y /F /D "$(TargetDir)*.config" "%25appdata%25\LCMSNet\dmsExtensions"
-rem Skip since .NET 4: xcopy /Y /F /D "$(ProjectDir)PrismDMS.config" "%25appdata%25\LCMSNet\dmsExtensions"
+    <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\NET4\"
+xcopy /Y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\NET4\"
+xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\NET4\"
 </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
