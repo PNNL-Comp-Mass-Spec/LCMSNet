@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -48,6 +49,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private bool loadingData;
         private string requestsFoundString = string.Empty;
         private DMSDownloadDataViewModel selectedRequestData = new DMSDownloadDataViewModel();
+        private bool blockingEnabled = false;
 
         public string WindowTitle
         {
@@ -154,6 +156,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set { this.RaiseAndSetIfChanged(ref selectedRequestData, value); }
         }
 
+        private bool BlockingEnabled
+        {
+            get { return blockingEnabled; }
+            set { this.RaiseAndSetIfChanged(ref blockingEnabled, value); }
+        }
+
         #endregion
 
         #region "Event Handlers"
@@ -161,55 +169,50 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Command for FIND button to load available request list from DMS
         /// </summary>
-        public ReactiveCommand FindCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> FindCommand { get; protected set; }
 
         /// <summary>
         /// Command for MoveDown button to move requests from Available Requests to Requests To Run list
         /// </summary>
-        public ReactiveCommand MoveDownCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; protected set; }
 
         /// <summary>
         /// Command for MoveUp button to move requests from Requests To Run to Available Requests list
         /// </summary>
-        public ReactiveCommand MoveUpCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
 
         /// <summary>
         /// Command for OK button to tell calling form that new DMS data is available
         /// </summary>
-        public ReactiveCommand OkCommand { get; protected set; }
+        public ReactiveCommand<Unit, bool> OkCommand { get; protected set; }
 
         /// <summary>
         /// Command to trigger list of carts in combo boxes to be updated
         /// </summary>
-        public ReactiveCommand UpdateCartInfoCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> RefreshCartInfoCommand { get; protected set; }
+
+        /// <summary>
+        /// Command to sort available requests by batch, block, and run order
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> SortByBatchBlockRunOrderCommand { get; protected set; }
 
         private void SetupCommands()
         {
-            FindCommand = ReactiveCommand.Create(() => FindDmsRequests());
-            MoveDownCommand = ReactiveCommand.Create(() => MoveRequestsToRunList());
-            MoveUpCommand = ReactiveCommand.Create(() => RemoveRequestsFromRunList());
-            OkCommand = ReactiveCommand.Create(() => UpdateDMSCartAssignment());
-            UpdateCartInfoCommand = ReactiveCommand.Create(() => UpdateCartInfo());
-        }
-
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            // Update cart assignments in DMS
-            //TODO: if (UpdateDMSCartAssignment())
-            //TODO: {
-            //TODO:     // Hide the form if update was successful
-            //TODO:     Hide();
-            //TODO:     DialogResult = DialogResult.OK;
-            //TODO: }
+            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
+            MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
+            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
+            OkCommand = ReactiveCommand.Create(UpdateDMSCartAssignment);
+            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
+            SortByBatchBlockRunOrderCommand = ReactiveCommand.CreateFromTask(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
         }
 
         /// <summary>
         /// Causes list of carts in combo boxes to be updated
         /// </summary>
-        private void UpdateCartInfo()
+        private void RefreshCartInfo()
         {
-            UpdateCartList();
-            UpdateCartConfigList();
+            RefreshCartList();
+            RefreshCartConfigList();
         }
 
         #endregion
@@ -258,8 +261,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             WindowTitle = "LcmsNet V" + Assembly.GetEntryAssembly().GetName().Version + dbInUse;
 
             // Load the LC cart lists
-            UpdateCartList();
-            UpdateCartConfigList();
+            RefreshCartList();
+            RefreshCartConfigList();
 
             // Cart name
             CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
@@ -275,7 +278,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Loads the LC cart dropdowns with data from cache
         /// </summary>
-        private void UpdateCartList()
+        private void RefreshCartList()
         {
             List<string> cartList;
 
@@ -326,7 +329,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Loads the LC cart config dropdown with data from cache
         /// </summary>
-        private void UpdateCartConfigList()
+        private void RefreshCartConfigList()
         {
             List<string> cartConfigList;
 
@@ -366,10 +369,11 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
             }
         }
+
         /// <summary>
         /// Loads listViewAvailableRequests with all requests in DMS matching specified criteria
         /// </summary>
-        private async void FindDmsRequests()
+        private async Task FindDmsRequests()
         {
             List<SampleData> tempRequestList;
 
@@ -500,12 +504,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // Hide the wait message and display the listview again
-//              listviewAvailableRequests.EndUpdate();
             LoadingData = false;
-//              classStatusTools.SendStatusMsg("Found " + listviewAvailableRequests.Items.Count.ToString() + " requests in DMS");
+            //classStatusTools.SendStatusMsg("Found " + listviewAvailableRequests.Items.Count.ToString() + " requests in DMS");
 
             // Check to see if any items have blocking enabled
-            if (IsBlockingEnabled(tempRequestList))
+            BlockingEnabled = IsBlockingEnabled(tempRequestList);
+            if (BlockingEnabled)
             {
                 var msg =
                     "You have downloaded samples that have blocking enabled. Please be sure you have downloaded the " +
@@ -560,12 +564,20 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 if (testSample.DmsData.Block > 0)
                 {
-                    // Blocking is enabled for this sample, no furhter test required
+                    // Blocking is enabled for this sample, no further test required
                     return true;
                 }
             }
             // If we got to here, no samples have blocking enabled
             return false;
+        }
+
+        /// <summary>
+        /// Sorts the available requests by batch, block, and run order
+        /// </summary>
+        private async Task SortByBatchBlockRunOrder()
+        {
+            await Task.Run(() => AvailableRequestData.SortByBatchBlockRunOrder());
         }
 
         /// <summary>
