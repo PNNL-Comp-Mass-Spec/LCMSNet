@@ -2123,6 +2123,12 @@ namespace LcmsNet.SampleQueue
                 SQLiteTools.SaveSingleColumnListToCache(cartNames, DatabaseTableTypes.CartList);
                 SQLiteTools.SaveUserListToCache(userNames);
             }
+
+            // Clean up the queues first
+            m_waitingQueue.RemoveAll(x => m_completeQueue.Any(y => y.DmsData.DatasetName.Equals(x.DmsData.DatasetName)));
+            m_waitingQueue.RemoveAll(x => m_runningQueue.Any(y => y.DmsData.DatasetName.Equals(x.DmsData.DatasetName)));
+            m_runningQueue.RemoveAll(x => m_completeQueue.Any(y => y.DmsData.DatasetName.Equals(x.DmsData.DatasetName)));
+
             SQLiteTools.SaveQueueToCache(m_waitingQueue, DatabaseTableTypes.WaitingQueue);
             SQLiteTools.SaveQueueToCache(m_runningQueue, DatabaseTableTypes.RunningQueue);
             SQLiteTools.SaveQueueToCache(m_completeQueue, DatabaseTableTypes.CompletedQueue);
