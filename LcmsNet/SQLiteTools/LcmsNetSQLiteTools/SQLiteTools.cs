@@ -145,9 +145,16 @@ namespace LcmsNetSQLiteTools
 
         private void Close()
         {
-            connection?.Close();
-            connection?.Dispose();
-            connection = null;
+            try
+            {
+                connection?.Close();
+                connection?.Dispose();
+                connection = null;
+            }
+            catch
+            {
+                // Swallow any exceptions that occurred...
+            }
         }
 
         ~SQLiteTools()

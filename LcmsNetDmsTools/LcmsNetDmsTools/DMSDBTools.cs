@@ -173,9 +173,16 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void CloseConnection()
         {
-            connection?.Close();
-            connection?.Dispose();
-            connection = null;
+            try
+            {
+                connection?.Close();
+                connection?.Dispose();
+                connection = null;
+            }
+            catch
+            {
+                // Swallow any exceptions that occurred...
+            }
         }
 
         ~DMSDBTools()
