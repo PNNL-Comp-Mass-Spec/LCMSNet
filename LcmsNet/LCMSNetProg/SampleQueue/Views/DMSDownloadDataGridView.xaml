@@ -10,7 +10,7 @@
              DataContextChanged="DmsDownloadData_OnDataContextChanged">
     <DataGrid x:Name="SampleDataGrid" AutoGenerateColumns="False"
               ItemsSource="{Binding Data}"
-              CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserSortColumns="True"
+              CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserSortColumns="{Binding UserSortable}"
               SelectionMode="Extended"
               SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
               SelectionChanged="Selector_OnSelectionChanged" VirtualizingPanel.VirtualizationMode="Standard">

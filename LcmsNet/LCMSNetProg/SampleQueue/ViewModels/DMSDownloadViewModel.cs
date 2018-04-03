@@ -45,10 +45,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         private readonly ReactiveList<string> lcCartComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> lcCartSearchComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> lcCartConfigComboBoxOptions = new ReactiveList<string>();
-        private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel();
+        private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel(true);
         private bool loadingData;
         private string requestsFoundString = string.Empty;
-        private DMSDownloadDataViewModel selectedRequestData = new DMSDownloadDataViewModel();
+        private DMSDownloadDataViewModel selectedRequestData = new DMSDownloadDataViewModel(false);
         private bool blockingEnabled = false;
 
         public string WindowTitle

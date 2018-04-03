@@ -22,8 +22,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedItem, value); }
         }
 
-        public DMSDownloadDataViewModel()
+        public bool UserSortable { get; }
+
+        public DMSDownloadDataViewModel(bool userSortable = false)
         {
+            UserSortable = userSortable;
             BindingOperations.EnableCollectionSynchronization(data, dataLock);
             BindingOperations.EnableCollectionSynchronization(selectedData, selectedDataLock);
         }
@@ -35,6 +38,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public void SortByBatchBlockRunOrder()
         {
+            if (!UserSortable)
+            {
+                return;
+            }
+
             Data.Sort((x, y) =>
             {
                 var result = x.DmsData.Batch.CompareTo(y.DmsData.Batch);
