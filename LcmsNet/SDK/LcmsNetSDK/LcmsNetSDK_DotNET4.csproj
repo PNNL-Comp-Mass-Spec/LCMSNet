@@ -15,6 +15,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET4\Debug\</OutputPath>
+    <BaseIntermediateOutputPath>obj\NET4</BaseIntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -26,6 +27,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET4\Release\</OutputPath>
+    <BaseIntermediateOutputPath>obj\NET4</BaseIntermediateOutputPath>
     <DefineConstants>TRACE;NET4</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
