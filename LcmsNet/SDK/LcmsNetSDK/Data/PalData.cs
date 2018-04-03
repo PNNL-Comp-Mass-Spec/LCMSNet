@@ -10,7 +10,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace LcmsNetSDK.Data
 {
@@ -105,10 +104,10 @@ namespace LcmsNetSDK.Data
                 if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
                 {
                     // Say it changed, to force UI to refresh to the unchanged value
-                    this.RaisePropertyChanged();
+                    this.RaisePropertyChanged(nameof(Well));
                     return;
                 }
-                this.RaiseAndSetIfChanged(ref well, value);
+                this.RaiseAndSetIfChanged(ref well, value, nameof(Well));
             }
         }
 
@@ -118,7 +117,7 @@ namespace LcmsNetSDK.Data
         public string PALTray
         {
             get { return palTray; }
-            set { this.RaiseAndSetIfChanged(ref palTray, value); }
+            set { this.RaiseAndSetIfChanged(ref palTray, value, nameof(PALTray)); }
         }
 
         /// <summary>
@@ -149,7 +148,7 @@ namespace LcmsNetSDK.Data
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

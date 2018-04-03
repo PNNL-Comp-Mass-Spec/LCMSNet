@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using LcmsNetSDK.Data;
 
@@ -154,7 +153,7 @@ namespace LcmsNetSDK.Method
         public DateTime ActualStart
         {
             get { return actualStart; }
-            set { this.RaiseAndSetIfChanged(ref actualStart, value); }
+            set { this.RaiseAndSetIfChanged(ref actualStart, value, nameof(ActualStart)); }
         }
 
         /// <summary>
@@ -163,7 +162,7 @@ namespace LcmsNetSDK.Method
         public DateTime ActualEnd
         {
             get { return actualEnd; }
-            set { this.RaiseAndSetIfChanged(ref actualEnd, value); }
+            set { this.RaiseAndSetIfChanged(ref actualEnd, value, nameof(ActualEnd)); }
         }
 
         /// <summary>
@@ -352,7 +351,7 @@ namespace LcmsNetSDK.Method
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -37,7 +37,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
@@ -302,7 +301,7 @@ namespace LcmsNetSDK.Data
         public string SampleErrors
         {
             get { return m_SampleErrors; }
-            set { this.RaiseAndSetIfChanged(ref m_SampleErrors, value); }
+            set { this.RaiseAndSetIfChanged(ref m_SampleErrors, value, nameof(SampleErrors)); }
         }
 
         /// <summary>
@@ -328,7 +327,7 @@ namespace LcmsNetSDK.Data
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
                 var oldHasNotRun = HasNotRun;
                 var oldIsSetToRun = IsSetToRunOrHasRun;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value, nameof(RunningStatus)))
                 {
                     if (oldHasNotRun != HasNotRun)
                     {
@@ -349,7 +348,7 @@ namespace LcmsNetSDK.Data
         public bool IsDuplicateRequestName
         {
             get { return m_IsDuplicateRequestName; }
-            set { this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value); }
+            set { this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value, nameof(IsDuplicateRequestName)); }
         }
 
         /// <summary>
@@ -379,7 +378,7 @@ namespace LcmsNetSDK.Data
             set
             {
                 var oldValue = m_instrumentData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_instrumentData, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_instrumentData, value, nameof(InstrumentData)))
                 {
                     if (oldValue != null)
                     {
@@ -410,7 +409,7 @@ namespace LcmsNetSDK.Data
                 }
 
                 m_actualMethod = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(ActualLCMethod));
             }
         }
 
@@ -428,7 +427,7 @@ namespace LcmsNetSDK.Data
                     return;
                 }
 
-                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value, nameof(LCMethod)))
                 {
                     CloneLCMethod();
                     if (m_method != null && m_method.Column != ColumnData.ID && m_method.Column >= 0)
@@ -448,7 +447,7 @@ namespace LcmsNetSDK.Data
             set
             {
                 var oldValue = m_DmsData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_DmsData, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_DmsData, value, nameof(DmsData)))
                 {
                     if (oldValue != null)
                     {
@@ -469,7 +468,7 @@ namespace LcmsNetSDK.Data
         public long SequenceID
         {
             get { return m_sequenceNumber; }
-            set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value); }
+            set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value, nameof(SequenceID)); }
         }
 
         /// <summary>
@@ -481,7 +480,7 @@ namespace LcmsNetSDK.Data
             set
             {
                 var oldValue = m_palData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_palData, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_palData, value, nameof(PAL)))
                 {
                     if (oldValue != null)
                     {
@@ -507,10 +506,10 @@ namespace LcmsNetSDK.Data
                 if (value < CartConfiguration.MinimumVolume)
                 {
                     // Report property changed to force UI refresh
-                    this.RaisePropertyChanged();
+                    this.RaisePropertyChanged(nameof(Volume));
                     return;
                 }
-                this.RaiseAndSetIfChanged(ref m_volume, value);
+                this.RaiseAndSetIfChanged(ref m_volume, value, nameof(Volume));
             }
         }
 
@@ -523,7 +522,7 @@ namespace LcmsNetSDK.Data
             set
             {
                 var oldColumn = m_columnData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_columnData, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_columnData, value, nameof(ColumnData)))
                 {
                     if (oldColumn != null)
                     {
@@ -833,7 +832,7 @@ namespace LcmsNetSDK.Data
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

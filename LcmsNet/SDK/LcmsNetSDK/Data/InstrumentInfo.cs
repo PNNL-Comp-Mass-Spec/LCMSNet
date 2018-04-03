@@ -14,7 +14,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace LcmsNetSDK.Data
 {
@@ -46,7 +45,7 @@ namespace LcmsNetSDK.Data
         public string MethodName
         {
             get { return methodName; }
-            set { this.RaiseAndSetIfChanged(ref methodName, value); }
+            set { this.RaiseAndSetIfChanged(ref methodName, value, nameof(MethodName)); }
         }
 
         /// <summary>
@@ -105,7 +104,7 @@ namespace LcmsNetSDK.Data
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

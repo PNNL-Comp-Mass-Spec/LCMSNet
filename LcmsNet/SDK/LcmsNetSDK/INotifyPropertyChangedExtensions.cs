@@ -7,7 +7,7 @@ namespace LcmsNetSDK
 {
     public interface INotifyPropertyChangedExt : INotifyPropertyChanged
     {
-        void OnPropertyChanged([CallerMemberName] string propertyName = "");
+        void OnPropertyChanged(string propertyName);
     }
 
     public static class NotifyPropertyChangedExtensions
@@ -22,7 +22,11 @@ namespace LcmsNetSDK
         /// <param name="propertyName"></param>
         /// <returns>final value of backingField</returns>
         public static TRet RaiseAndSetIfChanged<TRet>(this INotifyPropertyChangedExt obj,
+#if NET4
+            ref TRet backingField, TRet newValue, string propertyName)
+#else
             ref TRet backingField, TRet newValue, [CallerMemberName] string propertyName = null)
+#endif
         {
             if (propertyName == null)
             {
@@ -49,7 +53,11 @@ namespace LcmsNetSDK
         /// <param name="propertyName"></param>
         /// <returns>true if changed, false if not</returns>
         public static bool RaiseAndSetIfChangedRetBool<TRet>(this INotifyPropertyChangedExt obj,
+#if NET4
+            ref TRet backingField, TRet newValue, string propertyName)
+#else
             ref TRet backingField, TRet newValue, [CallerMemberName] string propertyName = null)
+#endif
         {
             if (propertyName == null)
             {
@@ -77,7 +85,11 @@ namespace LcmsNetSDK
         /// <param name="propertyName"></param>
         /// <returns>final value of backingField</returns>
         public static TRet RaiseAndSetIfChangedLockCheck<TRet>(this INotifyPropertyChangedExt obj,
+#if NET4
+            ref TRet backingField, TRet newValue, bool isLocked, string propertyName)
+#else
             ref TRet backingField, TRet newValue, bool isLocked, [CallerMemberName] string propertyName = null)
+#endif
         {
             if (isLocked)
             {
@@ -111,7 +123,11 @@ namespace LcmsNetSDK
         /// <param name="propertyName"></param>
         /// <returns>true if changed, false if not</returns>
         public static bool RaiseAndSetIfChangedLockCheckRetBool<TRet>(this INotifyPropertyChangedExt obj,
+#if NET4
+            ref TRet backingField, TRet newValue, bool isLocked, string propertyName)
+#else
             ref TRet backingField, TRet newValue, bool isLocked, [CallerMemberName] string propertyName = null)
+#endif
         {
             if (isLocked)
             {
@@ -139,7 +155,12 @@ namespace LcmsNetSDK
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
-        public static void RaisePropertyChanged(this INotifyPropertyChangedExt obj, [CallerMemberName] string propertyName = null)
+        public static void RaisePropertyChanged(this INotifyPropertyChangedExt obj,
+#if NET4
+            string propertyName)
+#else
+            [CallerMemberName] string propertyName = null)
+#endif
         {
             if (propertyName == null)
             {

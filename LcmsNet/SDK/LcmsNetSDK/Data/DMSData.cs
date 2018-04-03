@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace LcmsNetSDK.Data
@@ -145,7 +144,7 @@ namespace LcmsNetSDK.Data
         public bool LockData
         {
             get => lockData;
-            private set => this.RaiseAndSetIfChanged(ref lockData, value);
+            private set => this.RaiseAndSetIfChanged(ref lockData, value, nameof(LockData));
         }
 
         /// <summary>
@@ -154,7 +153,7 @@ namespace LcmsNetSDK.Data
         public bool SelectedToRun
         {
             get => selectedToRun;
-            set => this.RaiseAndSetIfChangedLockCheck(ref selectedToRun, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref selectedToRun, value, LockData, nameof(SelectedToRun));
         }
 
         /// <summary>
@@ -166,7 +165,7 @@ namespace LcmsNetSDK.Data
             get => requestName;
             set
             {
-                if (this.RaiseAndSetIfChangedLockCheckRetBool(ref requestName, value, LockData))
+                if (this.RaiseAndSetIfChangedLockCheckRetBool(ref requestName, value, LockData, nameof(RequestName)))
                 {
                     if (string.IsNullOrWhiteSpace(DatasetName))
                     {
@@ -182,7 +181,7 @@ namespace LcmsNetSDK.Data
         public string DatasetName
         {
             get => datasetName;
-            set => this.RaiseAndSetIfChangedLockCheck(ref datasetName, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref datasetName, value, LockData, nameof(DatasetName));
         }
 
         /// <summary>
@@ -191,7 +190,7 @@ namespace LcmsNetSDK.Data
         public int RequestID
         {
             get => requestId;
-            set => this.RaiseAndSetIfChangedLockCheck(ref requestId, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref requestId, value, LockData, nameof(RequestID));
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace LcmsNetSDK.Data
             get => experiment;
             set
             {
-                this.RaiseAndSetIfChangedLockCheck(ref experiment, value, LockData);
+                this.RaiseAndSetIfChangedLockCheck(ref experiment, value, LockData, nameof(Experiment));
             }
         }
 
@@ -212,7 +211,7 @@ namespace LcmsNetSDK.Data
         public string DatasetType
         {
             get => datasetType;
-            set => this.RaiseAndSetIfChangedLockCheck(ref datasetType, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref datasetType, value, LockData, nameof(DatasetType));
         }
 
         /// <summary>
@@ -221,7 +220,7 @@ namespace LcmsNetSDK.Data
         public string EMSLUsageType
         {
             get => emslUsageType;
-            set => this.RaiseAndSetIfChangedLockCheck(ref emslUsageType, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref emslUsageType, value, LockData, nameof(EMSLUsageType));
         }
 
         /// <summary>
@@ -230,7 +229,7 @@ namespace LcmsNetSDK.Data
         public string EMSLProposalID
         {
             get => emslProposalId;
-            set => this.RaiseAndSetIfChangedLockCheck(ref emslProposalId, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref emslProposalId, value, LockData, nameof(EMSLProposalID));
         }
 
         /// <summary>
@@ -239,7 +238,7 @@ namespace LcmsNetSDK.Data
         public string UserList
         {
             get => userList;
-            set => this.RaiseAndSetIfChangedLockCheck(ref userList, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref userList, value, LockData, nameof(UserList));
         }
 
         /// <summary>
@@ -249,7 +248,7 @@ namespace LcmsNetSDK.Data
         public string CartName
         {
             get => cartName;
-            set => this.RaiseAndSetIfChanged(ref cartName, value);
+            set => this.RaiseAndSetIfChanged(ref cartName, value, nameof(CartName));
         }
 
         /// <summary>
@@ -259,7 +258,7 @@ namespace LcmsNetSDK.Data
         public string CartConfigName
         {
             get => cartConfigName;
-            set => this.RaiseAndSetIfChanged(ref cartConfigName, value);
+            set => this.RaiseAndSetIfChanged(ref cartConfigName, value, nameof(CartConfigName));
         }
 
         /// <summary>
@@ -268,7 +267,7 @@ namespace LcmsNetSDK.Data
         public string Comment
         {
             get => comment;
-            set => this.RaiseAndSetIfChangedLockCheck(ref comment, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref comment, value, LockData, nameof(Comment));
         }
 
         /// <summary>
@@ -277,7 +276,7 @@ namespace LcmsNetSDK.Data
         public int MRMFileID
         {
             get => mrmFileId;
-            set => this.RaiseAndSetIfChangedLockCheck(ref mrmFileId, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref mrmFileId, value, LockData, nameof(MRMFileID));
         }
 
         /// <summary>
@@ -286,7 +285,7 @@ namespace LcmsNetSDK.Data
         public int Block
         {
             get => block;
-            set => this.RaiseAndSetIfChangedLockCheck(ref block, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref block, value, LockData, nameof(Block));
         }
 
         /// <summary>
@@ -295,7 +294,7 @@ namespace LcmsNetSDK.Data
         public int RunOrder
         {
             get => runOrder;
-            set => this.RaiseAndSetIfChangedLockCheck(ref runOrder, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref runOrder, value, LockData, nameof(RunOrder));
         }
 
         /// <summary>
@@ -304,7 +303,7 @@ namespace LcmsNetSDK.Data
         public int Batch
         {
             get => batch;
-            set => this.RaiseAndSetIfChangedLockCheck(ref batch, value, LockData);
+            set => this.RaiseAndSetIfChangedLockCheck(ref batch, value, LockData, nameof(Batch));
         }
 
         #endregion
@@ -348,7 +347,7 @@ namespace LcmsNetSDK.Data
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

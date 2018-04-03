@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows.Media;
 using LcmsNetSDK.Data;
@@ -178,7 +177,7 @@ namespace LcmsNetSDK.Configuration
                 // let someone know.
                 //
                 var previousStatus = m_status;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_status, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_status, value, nameof(Status)))
                 {
                     StatusChanged?.Invoke(this, previousStatus, m_status);
                 }
@@ -191,7 +190,7 @@ namespace LcmsNetSDK.Configuration
         public int ID
         {
             get { return m_columnIndex; }
-            set { this.RaiseAndSetIfChanged(ref m_columnIndex, value); }
+            set { this.RaiseAndSetIfChanged(ref m_columnIndex, value, nameof(ID)); }
         }
 
         /// <summary>
@@ -212,7 +211,7 @@ namespace LcmsNetSDK.Configuration
             set
             {
                 var oldName = m_name;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value, nameof(Name)))
                 {
                     NameChanged?.Invoke(this, m_name, oldName);
                 }
@@ -228,7 +227,7 @@ namespace LcmsNetSDK.Configuration
             set
             {
                 var oldColor = m_columnColor;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_columnColor, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref m_columnColor, value, nameof(Color)))
                 {
                     ColorChanged?.Invoke(this, oldColor, m_columnColor);
                 }
@@ -240,7 +239,7 @@ namespace LcmsNetSDK.Configuration
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
