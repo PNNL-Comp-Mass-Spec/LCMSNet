@@ -52,7 +52,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             UpdateUserInterface();
 
             this.WhenAnyValue(x => x.IsSampleValid).Subscribe(x => this.RaisePropertyChanged(nameof(SampleNotValid)));
-            Sample.DmsData.WhenAnyValue(x => x.DatasetName, x => x.UsageType, x => x.ProposalID, x => x.UserList, x => x.Experiment)
+            Sample.DmsData.WhenAnyValue(x => x.DatasetName, x => x.EMSLUsageType, x => x.EMSLProposalID, x => x.UserList, x => x.Experiment)
                 .Subscribe(x => this.UpdateUserInterface());
         }
 

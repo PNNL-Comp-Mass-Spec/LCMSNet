@@ -132,8 +132,8 @@ namespace LcmsNet.SampleQueue.IO
             AddElementWithTypeAttribute("Comment", dmsElement, "String", InpSample.DmsData.Comment);
             AddElementWithTypeAttribute("DatasetType", dmsElement, "String", InpSample.DmsData.DatasetType);
             AddElementWithTypeAttribute("Experiment", dmsElement, "String", InpSample.DmsData.Experiment);
-            AddElementWithTypeAttribute("EMSLProposalID", dmsElement, "String", InpSample.DmsData.ProposalID);
-            AddElementWithTypeAttribute("EMSLUsageType", dmsElement, "String", InpSample.DmsData.UsageType);
+            AddElementWithTypeAttribute("EMSLProposalID", dmsElement, "String", InpSample.DmsData.EMSLProposalID);
+            AddElementWithTypeAttribute("EMSLUsageType", dmsElement, "String", InpSample.DmsData.EMSLUsageType);
             AddElementWithTypeAttribute("EMSLUser", dmsElement, "String", InpSample.DmsData.UserList);
         }
 

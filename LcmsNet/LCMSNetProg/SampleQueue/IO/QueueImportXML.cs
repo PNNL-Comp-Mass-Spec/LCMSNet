@@ -156,10 +156,10 @@ namespace LcmsNet.SampleQueue.IO
             retData.DmsData.Experiment = GetNodeValue(itemNode, "DMS/Experiment");
 
             // DMS EMSLProposalID (DMSData.ProposalID)
-            retData.DmsData.ProposalID = GetNodeValue(itemNode, "DMS/EMSLProposalID");
+            retData.DmsData.EMSLProposalID = GetNodeValue(itemNode, "DMS/EMSLProposalID");
 
             // DMS EMSLUsageType (DMSData.UsageType)
-            retData.DmsData.UsageType = GetNodeValue(itemNode, "DMS/EMSLUsageType");
+            retData.DmsData.EMSLUsageType = GetNodeValue(itemNode, "DMS/EMSLUsageType");
 
             // DMS EMSLUser (DMSData.UserList)
             retData.DmsData.UserList = GetNodeValue(itemNode, "DMS/EMSLUser");

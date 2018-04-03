@@ -975,10 +975,10 @@ namespace LcmsNet.SampleQueue
             newSample.DmsData.Comment = "Blank";
             newSample.DmsData.Experiment = "";
             newSample.DmsData.MRMFileID = 0;
-            newSample.DmsData.ProposalID = "";
+            newSample.DmsData.EMSLProposalID = "";
             newSample.DmsData.RequestID = 0;
             newSample.DmsData.RunOrder = 0;
-            newSample.DmsData.UsageType = "";
+            newSample.DmsData.EMSLUsageType = "";
 
             return newSample;
         }

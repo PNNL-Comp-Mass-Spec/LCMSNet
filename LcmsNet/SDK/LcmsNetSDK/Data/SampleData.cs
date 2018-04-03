@@ -410,7 +410,7 @@ namespace LcmsNetSDK.Data
                 }
 
                 m_actualMethod = value;
-                OnPropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
 
@@ -507,7 +507,7 @@ namespace LcmsNetSDK.Data
                 if (value < CartConfiguration.MinimumVolume)
                 {
                     // Report property changed to force UI refresh
-                    this.OnPropertyChanged();
+                    this.RaisePropertyChanged();
                     return;
                 }
                 this.RaiseAndSetIfChanged(ref m_volume, value);
@@ -810,9 +810,9 @@ namespace LcmsNetSDK.Data
             if (args.PropertyName.Equals(nameof(DmsData.DatasetName)) || args.PropertyName.Equals(nameof(DmsData.RequestName)) ||
                 args.PropertyName.Equals(nameof(DmsData.CartConfigName)) || args.PropertyName.Equals(nameof(DmsData.DatasetType)) ||
                 args.PropertyName.Equals(nameof(DmsData.RunOrder)) || args.PropertyName.Equals(nameof(DmsData.Batch)) ||
-                args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.UsageType)) ||
+                args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.EMSLUsageType)) ||
                 args.PropertyName.Equals(nameof(DmsData.UserList)) || args.PropertyName.Equals(nameof(DmsData.Experiment)) ||
-                args.PropertyName.Equals(nameof(DmsData.RequestID)) || args.PropertyName.Equals(nameof(DmsData.ProposalID)))
+                args.PropertyName.Equals(nameof(DmsData.RequestID)) || args.PropertyName.Equals(nameof(DmsData.EMSLProposalID)))
             {
                 OnPropertyChanged(nameof(DmsData));
             }

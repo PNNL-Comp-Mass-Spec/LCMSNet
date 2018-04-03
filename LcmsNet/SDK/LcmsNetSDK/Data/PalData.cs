@@ -105,7 +105,7 @@ namespace LcmsNetSDK.Data
                 if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
                 {
                     // Say it changed, to force UI to refresh to the unchanged value
-                    this.OnPropertyChanged();
+                    this.RaisePropertyChanged();
                     return;
                 }
                 this.RaiseAndSetIfChanged(ref well, value);

@@ -93,9 +93,9 @@ namespace LcmsNetSDK.Data
             var proposal = "";
             if (sample.DmsData.RequestID <= 0)
             {
-                usage = sample.DmsData.UsageType;
+                usage = sample.DmsData.EMSLUsageType;
                 userList = sample.DmsData.UserList;
-                proposal = sample.DmsData.ProposalID;
+                proposal = sample.DmsData.EMSLProposalID;
             }
 
             AddParam(rootElement, "Request", sample.DmsData.RequestID.ToString());

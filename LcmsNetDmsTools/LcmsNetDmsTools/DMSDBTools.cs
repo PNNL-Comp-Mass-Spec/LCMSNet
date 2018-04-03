@@ -1022,10 +1022,10 @@ namespace LcmsNetDmsTools
                     {
                         DatasetType = currRow[schedRunList.Columns["Type"]] as string,
                         Experiment = currRow[schedRunList.Columns["Experiment"]] as string,
-                        ProposalID = currRow[schedRunList.Columns["Proposal ID"]] as string,
+                        EMSLProposalID = currRow[schedRunList.Columns["Proposal ID"]] as string,
                         RequestID = (int)currRow[schedRunList.Columns["Request"]],
                         RequestName = currRow[schedRunList.Columns["Name"]] as string,
-                        UsageType = currRow[schedRunList.Columns["Usage Type"]] as string,
+                        EMSLUsageType = currRow[schedRunList.Columns["Usage Type"]] as string,
                         UserList = currRow[schedRunList.Columns["EUS Users"]] as string
                     }
                 };
