@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -340,6 +341,26 @@ namespace LcmsNetSDK.Data
             }
 
             return NameValidationRegex.IsMatch(name);
+        }
+
+        /// <summary>
+        /// Loads the class properties from a string dictionary
+        /// </summary>
+        /// <param name="propValues">String dictionary containing property names and values</param>
+        public override void LoadPropertyValues(Dictionary<string, string> propValues)
+        {
+            // FUTURE TODO: when generally rolled out, this should be delete-able (temporary mapping to allow upgrading from existing queues)
+            if (propValues.TryGetValue("UsageType", out var usage))
+            {
+                propValues.Add(nameof(EMSLUsageType), usage);
+            }
+
+            if (propValues.TryGetValue("ProposalID", out var proposal))
+            {
+                propValues.Add(nameof(EMSLProposalID), proposal);
+            }
+
+            base.LoadPropertyValues(propValues);
         }
 
         #endregion

@@ -498,6 +498,71 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Check if the table has the correct column count and names
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="connStr"></param>
+        /// <param name="fieldNames"></param>
+        /// <returns></returns>
+        private static bool TableColumnNamesMatched(string tableName, string connStr, Dictionary<string, string> fieldNames)
+        {
+            if (!VerifyTableExists(tableName, connStr, out var columnCount))
+            {
+                return false;
+            }
+
+            if (columnCount != fieldNames.Count)
+            {
+                return false;
+            }
+
+            var sqlString = "pragma table_info(" + tableName + ")";
+            DataTable resultSet1;
+            try
+            {
+                // Get a list of database tables matching the specified table name
+                resultSet1 = GetSQLiteDataTable(sqlString, connStr);
+            }
+            catch (Exception ex)
+            {
+                var errMsg = "SQLite exception verifying table " + tableName + " exists";
+                // throw new DatabaseDataException(errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
+                return false;
+            }
+
+            if (resultSet1.Rows.Count < 1)
+            {
+                return false;
+            }
+
+            var namesList = new List<string>();
+            foreach (DataRow currentRow in resultSet1.Rows)
+            {
+                foreach (DataColumn column in resultSet1.Columns)
+                {
+                    var colName = column.ColumnName;
+                    if (colName.ToLower().Equals("name"))
+                    {
+                        // row that contains the column name
+                        var colData = (string)currentRow[resultSet1.Columns[colName]];
+                        namesList.Add(colData);
+                    }
+                }
+            }
+
+            foreach (var name in fieldNames.Keys)
+            {
+                if (!namesList.Contains(name))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Saves a list of properties for an object to the cache database
         /// </summary>
         /// <param name="dataToCache">List of ICacheInterface objects to save properites for</param>
@@ -518,15 +583,24 @@ namespace LcmsNetSQLiteTools
             // Create a string dictionary holding the property names and values for object,
             //      using the first object in the input list
             var firstItem = dataToCache[0];
-            var FieldNames = firstItem.GetPropertyValues();
+            var fieldNames = firstItem.GetPropertyValues();
 
-            // Verify table exists; if not, create it; Otherwise, clear it
-            if (!VerifyTableExists(tableName, connStr))
+            // Verify table exists, and column names are correct; if not, create it; Otherwise, clear it
+            var tableExists = VerifyTableExists(tableName, connStr);
+            var tableColumnsCorrect = !tableExists || TableColumnNamesMatched(tableName, connStr, fieldNames); // if the table doesn't exist, automatically set this to true
+            if (!tableExists || !tableColumnsCorrect)
             {
-                // Table doesn't exist, so create it
-                var sqlCmd = BuildCreatePropTableCmd(FieldNames, tableName);
                 try
                 {
+                    if (!tableColumnsCorrect)
+                    {
+                        // table column names mismatched, drop the table so we can re-create it
+                        var sqlStr = "DROP TABLE " + tableName;
+                        ExecuteSQLiteCommand(sqlStr, connStr);
+                    }
+
+                    // Table doesn't exist, so create it
+                    var sqlCmd = BuildCreatePropTableCmd(fieldNames, tableName);
                     ExecuteSQLiteCommand(sqlCmd, connStr);
                 }
                 catch (Exception ex)

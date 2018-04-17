@@ -41,7 +41,7 @@
                     <GridViewColumn Header="Usage Type" Width="115">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.UsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}" cueBannerOverlay:CueBannerService.CueBanner="Select">
+                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.EMSLUsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}" cueBannerOverlay:CueBannerService.CueBanner="Select">
                                     <ComboBox.Style>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Style.Triggers>
@@ -66,7 +66,7 @@
                     <GridViewColumn Header="Proposal ID" Width="85">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="70" Text="{Binding Sample.DmsData.ProposalID}" IsEnabled="{Binding CanChangeEmslData}">
+                                <TextBox Width="70" Text="{Binding Sample.DmsData.EMSLProposalID}" IsEnabled="{Binding CanChangeEmslData}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Style.Triggers>

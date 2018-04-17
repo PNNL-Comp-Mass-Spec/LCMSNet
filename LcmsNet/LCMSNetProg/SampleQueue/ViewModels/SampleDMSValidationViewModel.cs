@@ -8,10 +8,10 @@ namespace LcmsNet.SampleQueue.ViewModels
     public class SampleDMSValidationViewModel : ReactiveObject
     {
         private readonly static ReactiveList<string> usageTypeComboBoxOptions = new ReactiveList<string>(new string[] {
-            "Broken",
-            "Cap_Dev",
-            "Maintenance",
-            "User"});
+            "BROKEN",
+            "CAP_DEV",
+            "MAINTENANCE", // TODO: PULL this information from DMS T_EUS_UsageType and cache in SQLite DB!
+            "USER"});
 
 
         /// <summary>
