@@ -593,7 +593,7 @@ namespace LcmsNet.SampleQueue
                         foreach (var sample in samplesList.Reverse())
                         {
                             // bypass samples not set to run
-                            if (!sample.Sample.IsSetToRunOrHasRun)
+                            if (!sample.Sample.IsSetToRunOrHasRun || sample.Sample.RunningStatus == SampleRunningStatus.Complete)
                             {
                                 continue;
                             }
