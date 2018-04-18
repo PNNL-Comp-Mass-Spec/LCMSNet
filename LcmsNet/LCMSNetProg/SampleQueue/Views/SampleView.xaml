@@ -5,6 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
     xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+    xmlns:data="clr-namespace:LcmsNetSDK.Data;assembly=LcmsNetSdk"
+    xmlns:configuration="clr-namespace:LcmsNetSDK.Configuration;assembly=LcmsNetSdk"
+    xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
     x:Class="LcmsNet.SampleQueue.Views.SampleView"
     d:DesignHeight="500"
     d:DesignWidth="800"
@@ -13,6 +16,7 @@
     <Grid>
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key ="BoolToVis" />
+            <views:ColorInverter x:Key ="ColorInvert" />
         </Grid.Resources>
         <!-- The following is a dummy element to allow control over column visibility via the parent datacontext. -->
         <FrameworkElement x:Name="BaseDC" />
@@ -24,29 +28,122 @@
                   SelectedItem="{Binding SelectedSample, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionChanged="SampleGrid_OnSelectionChanged"
                   RowHeaderWidth="20" ColumnWidth="SizeToCells"
-                  FrozenColumnCount="{Binding NumFrozenColumns, Mode=OneTime}">
+                  FrozenColumnCount="{Binding NumFrozenColumns, Mode=OneTime}"
+                  RowBackground="White"
+                  AlternatingRowBackground="Gainsboro"
+                  BeginningEdit="SampleGrid_OnBeginningEdit">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridRow}" x:Key="DefaultRowStyle">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasError}" Value="True">
+                            <Setter Property="ToolTip" Value="{Binding Sample.SampleErrors}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type DataGridCell}" x:Key="DefaultCellStyle" >
+                    <Style.Triggers>
+                        <!--
+                        We need to color the sample based on its status.
+                        Make sure selected rows column colors don't change for running and waiting to run
+                        but only for queued, or completed (including error) sample status.
+                        -->
+                        <DataTrigger Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Running}">
+                            <Setter Property="Background" Value="Lime" />
+                            <Setter Property="BorderBrush" Value="Lime" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.WaitingToRun}">
+                            <Setter Property="Background" Value="Yellow" />
+                            <Setter Property="BorderBrush" Value="Yellow" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Error}">
+                            <Setter Property="Background" Value="DarkRed" />
+                            <Setter Property="BorderBrush" Value="DarkRed" />
+                            <Setter Property="Foreground" Value="White" />
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Error}" />
+                                <Condition Binding="{Binding IsBlockedSample}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" Value="Orange" />
+                            <Setter Property="BorderBrush" Value="Orange" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Stopped}">
+                            <Setter Property="Background" Value="Tomato" />
+                            <Setter Property="BorderBrush" Value="Tomato" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Stopped}" />
+                                <Condition Binding="{Binding IsBlockedSample}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" Value="SeaGreen" />
+                            <Setter Property="BorderBrush" Value="SeaGreen" />
+                            <Setter Property="Foreground" Value="White" />
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Complete}">
+                            <Setter Property="Background" Value="DarkGreen" />
+                            <Setter Property="BorderBrush" Value="DarkGreen" />
+                            <Setter Property="Foreground" Value="White" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Sample.ColumnData.Status}" Value="{x:Static configuration:ColumnStatus.Disabled}">
+                            <Setter Property="Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ColorInvert}}" />
+                            <!--
+                            Can't do both the background and the border brush, and can't link their colors to the inverse of the existing setting, because it will lead to a recursive converter call with no exit condition
+                            <Setter Property="BorderBrush" Value="{Binding Background, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ColorInvert}}" />
+                            -->
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsUnusedSample}" Value="True">
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="BorderBrush" Value="LightGray" />
+                            <Setter Property="Foreground" Value="DimGray" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasError}" Value="True">
+                            <Setter Property="Background" Value="DeepPink" />
+                            <Setter Property="BorderBrush" Value="DeepPink" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </DataTrigger>
+
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Navy" />
+                            <Setter Property="BorderBrush" Value="Navy" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.Running}" />
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" Value="Lime" />
+                            <Setter Property="BorderBrush" Value="Lime" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Sample.RunningStatus}" Value="{x:Static data:SampleRunningStatus.WaitingToRun}" />
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" Value="Yellow" />
+                            <Setter Property="BorderBrush" Value="Yellow" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DefaultRowStyle}" />
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" />
+            </DataGrid.CellStyle>
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding DataContext.RemoveSelectedCommand, Source={x:Reference BaseDC}}" />
             </DataGrid.InputBindings>
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="ToolTip" Value="{Binding Sample.SampleErrors}" />
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}" >
-                    <Setter Property="Background" Value="{Binding RowBackColor}" />
-                    <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
-                    <Setter Property="Foreground" Value="{Binding RowForeColor}" />
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
-                            <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
-                            <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="X" MinWidth="25" MaxWidth="30" Visibility="{Binding DataContext.CheckboxColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -57,18 +154,8 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn x:Name="Status" Header="Status" MinWidth="54" MaxWidth="60" Binding="{Binding Status}" IsReadOnly="True" Visibility="{Binding DataContext.StatusColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}" >
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}" >
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" >
                             <Setter Property="ToolTip" Value="{Binding StatusToolTipText}" />
-                            <Setter Property="Background" Value="{Binding RowBackColor}" />
-                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
-                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
-                                </Trigger>
-                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -94,20 +181,19 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding RequestName}" >
+                <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding RequestName}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}" >
-                            <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" >
                             <Setter Property="ToolTip" Value="{Binding RequestNameToolTipText}" />
-                            <Setter Property="Background" Value="{Binding RequestNameBackColor}" />
-                            <Setter Property="BorderBrush" Value="{Binding RequestNameBackColor}" />
-                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
                             <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
-                                </Trigger>
+                                <DataTrigger Binding="{Binding Sample.IsDuplicateRequestName}" Value="True">
+                                    <Setter Property="Background" Value="Crimson" />
+                                    <Setter Property="BorderBrush" Value="Crimson" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding NameHasInvalidChars}" Value="True">
+                                    <Setter Property="Background" Value="Crimson" />
+                                    <Setter Property="BorderBrush" Value="Crimson" />
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -139,21 +225,6 @@
                             <Setter Property="HorizontalAlignment" Value="Right" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}" >
-                            <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
-                            <Setter Property="Background" Value="{Binding RowBackColor}" />
-                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
-                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Volume" MaxWidth="50" Width="Auto" MinWidth="40" Binding="{Binding Sample.Volume}" Visibility="{Binding DataContext.VolumeColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTextColumn.ElementStyle>
@@ -161,21 +232,6 @@
                             <Setter Property="HorizontalAlignment" Value="Right" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}" >
-                            <Setter Property="IsEnabled" Value="{Binding EditAllowed}" />
-                            <Setter Property="Background" Value="{Binding RowBackColor}" />
-                            <Setter Property="BorderBrush" Value="{Binding RowBackColor}" />
-                            <Setter Property="Foreground" Value="{Binding RowForeColor}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="BorderBrush" Value="{Binding RowSelectionBackColor}" />
-                                    <Setter Property="Foreground" Value="{Binding RowSelectionForeColor}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTemplateColumn Header="LC Method" MinWidth="80" Visibility="{Binding DataContext.LcMethodColumnVisible, Converter={StaticResource BoolToVis}, Source={x:Reference BaseDC}}">
                     <DataGridTemplateColumn.CellTemplate>

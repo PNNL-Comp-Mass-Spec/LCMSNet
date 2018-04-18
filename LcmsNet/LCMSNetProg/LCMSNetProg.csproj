@@ -274,6 +274,7 @@
     <Compile Include="SampleQueue\ViewModels\TrayVialAssignmentViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialSampleViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialViewModel.cs" />
+    <Compile Include="SampleQueue\Views\ColorConverters.cs" />
     <Compile Include="SampleQueue\Views\DMSDownloadDataGridView.xaml.cs">
       <DependentUpon>DMSDownloadDataGridView.xaml</DependentUpon>
     </Compile>

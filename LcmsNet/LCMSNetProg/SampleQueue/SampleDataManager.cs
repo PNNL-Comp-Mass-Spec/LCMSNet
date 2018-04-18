@@ -189,6 +189,204 @@ namespace LcmsNet.SampleQueue
                 ApplicationLogger.LogError(0,
                     "An exception occurred while trying to build the sample queue controls.  Constructor 2: " + ex.Message, ex);
             }
+
+            #region DesignTimeData
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Queued",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Queued,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Running",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Running,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Waiting",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.WaitingToRun,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Error",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Error,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_ErrorBlocked",
+                    Block = 1,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Error,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Stopped",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Stopped,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_StoppedBlocked",
+                    Block = 1,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Stopped,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Complete",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Complete,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Disabled_Column",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Disabled,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Queued,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Queued,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_HasErrorData",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Queued,
+                SampleErrors = "This is an error!",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design_Dataset_Duplicate",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = true,
+                RunningStatus = SampleRunningStatus.Queued,
+                SampleErrors = "",
+            }));
+            samplesList.Add(new SampleViewModel(new SampleData()
+            {
+                DmsData = new DMSData()
+                {
+                    RequestName = "Design Dataset Bad Name",
+                    Block = 0,
+                },
+                ColumnData = new ColumnData()
+                {
+                    Status = ColumnStatus.Idle,
+                },
+                IsDuplicateRequestName = false,
+                RunningStatus = SampleRunningStatus.Queued,
+                SampleErrors = "",
+            }));
+            #endregion
         }
 
         private void LCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)

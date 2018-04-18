@@ -31,7 +31,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             Sample = sample;
             isChecked = Sample.IsSetToRunOrHasRun;
 
-            this.WhenAnyValue(x => x.Sample.ColumnData).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.ColumnData, x => x.Sample.LCMethod).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
@@ -44,34 +44,22 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 this.RaisePropertyChanged(nameof(Status));
                 this.RaisePropertyChanged(nameof(StatusToolTipText));
-                //this.RaisePropertyChanged(nameof(IsChecked));
-                SetRowColors();
             });
 
-            this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x =>
-            {
-                this.RaisePropertyChanged(nameof(ColumnNumber));
-                this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
-            });
-
-            this.WhenAnyValue(x => x.Sample.DmsData).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.DmsData.DatasetName).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.DmsData, x => x.Sample.DmsData.DatasetName, x => x.Sample.DmsData.RequestName).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(RequestName));
-                this.SetRowColors();
-            });
-            this.WhenAnyValue(x => x.Sample.DmsData.RequestName).Subscribe(x =>
-            {
-                this.RaisePropertyChanged(nameof(RequestName));
-                this.SetRowColors();
+                this.RaisePropertyChanged(nameof(IsUnusedSample));
+                this.RaisePropertyChanged(nameof(NameHasInvalidChars));
+                this.CheckDatasetName();
             });
 
             this.WhenAnyValue(x => x.Sample.InstrumentData).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
             this.WhenAnyValue(x => x.Sample.InstrumentData.MethodName).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
 
-            this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x => this.SetRowColors());
+            this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x => this.CheckDatasetName());
 
-            this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x => this.SetRowColors());
+            this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x => this.RaisePropertyChanged(nameof(HasError)));
 
             this.WhenAnyValue(x => x.Sample.ActualLCMethod, x => x.Sample.ActualLCMethod.Start, x => x.Sample.ActualLCMethod.End,
                 x => x.Sample.ActualLCMethod.ActualStart, x => x.Sample.ActualLCMethod.ActualEnd).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceToolTipText)));
@@ -82,6 +70,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 .Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethod)));
+
+            this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(IsBlockedSample)));
 
             Sample.WhenAnyValue(x => x.InstrumentData, x => x.PAL, x => x.DmsData, x => x.LCMethod)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
@@ -97,154 +87,36 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
         public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
-        #region Row and cell colors
+        #region Row and cell color control
 
-        private SolidColorBrush rowBackColor;
-        private SolidColorBrush rowForeColor;
-        private SolidColorBrush rowSelectionBackColor;
-        private SolidColorBrush rowSelectionForeColor;
-        private SolidColorBrush requestNameBackColor = null;
+        public bool IsBlockedSample => Sample.DmsData.Block > 0;
 
-        public SolidColorBrush RowBackColor
-        {
-            get { return rowBackColor; }
-            private set { this.RaiseAndSetIfChanged(ref rowBackColor, value); }
-        }
+        /// <summary>
+        /// If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
+        /// samples to help the user normalize samples on columns.
+        /// </summary>
+        public bool IsUnusedSample => Sample.DmsData.DatasetName.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME);
 
-        public SolidColorBrush RowForeColor
-        {
-            get { return rowForeColor; }
-            private set { this.RaiseAndSetIfChanged(ref rowForeColor, value); }
-        }
+        public bool HasError => !string.IsNullOrWhiteSpace(Sample.SampleErrors);
 
-        public SolidColorBrush RowSelectionBackColor
-        {
-            get { return rowSelectionBackColor; }
-            private set { this.RaiseAndSetIfChanged(ref rowSelectionBackColor, value); }
-        }
-
-        public SolidColorBrush RowSelectionForeColor
-        {
-            get { return rowSelectionForeColor; }
-            private set { this.RaiseAndSetIfChanged(ref rowSelectionForeColor, value); }
-        }
-
-        public SolidColorBrush RequestNameBackColor
-        {
-            get
-            {
-                if (requestNameBackColor == null)
-                {
-                    return RowBackColor;
-                }
-                return requestNameBackColor;
-            }
-            private set { this.RaiseAndSetIfChanged(ref requestNameBackColor, value); }
-        }
+        public bool NameHasInvalidChars => !Sample.DmsData.DatasetNameCharactersValid();
 
         /// <summary>
         /// Sets the row colors based on the sample data
         /// </summary>
-        public void SetRowColors()
+        public void CheckDatasetName()
         {
-            // We need to color the sample based on its status.
-            // Make sure selected rows column colors don't change for running and waiting to run
-            // but only for queued, or completed (including error) sample status.
-            switch (Sample.RunningStatus)
-            {
-                case SampleRunningStatus.Running:
-                    RowBackColor = Brushes.Lime;
-                    RowForeColor = Brushes.Black;
-                    RowSelectionBackColor = RowBackColor;
-                    RowSelectionForeColor = RowForeColor;
-                    break;
-                case SampleRunningStatus.WaitingToRun:
-                    RowForeColor = Brushes.Black;
-                    RowBackColor = Brushes.Yellow;
-                    RowSelectionBackColor = RowBackColor;
-                    RowSelectionForeColor = RowForeColor;
-                    break;
-                case SampleRunningStatus.Error:
-                    if (Sample.DmsData.Block > 0)
-                    {
-                        RowBackColor = Brushes.Orange;
-                        RowForeColor = Brushes.Black;
-                    }
-                    else
-                    {
-                        RowBackColor = Brushes.DarkRed;
-                        RowForeColor = Brushes.White;
-                    }
-                    RowSelectionForeColor = Brushes.White;
-                    RowSelectionBackColor = Brushes.Navy;
-                    break;
-                case SampleRunningStatus.Stopped:
-                    if (Sample.DmsData.Block > 0)
-                    {
-                        RowBackColor = Brushes.SeaGreen;
-                        RowForeColor = Brushes.White;
-                    }
-                    else
-                    {
-                        RowBackColor = Brushes.Tomato;
-                        RowForeColor = Brushes.Black;
-                    }
-                    RowSelectionForeColor = Brushes.White;
-                    RowSelectionBackColor = Brushes.Navy;
-                    break;
-                case SampleRunningStatus.Complete:
-                    RowBackColor = Brushes.DarkGreen;
-                    RowForeColor = Brushes.White;
-                    RowSelectionForeColor = Brushes.White;
-                    RowSelectionBackColor = Brushes.Navy;
-                    break;
-                case SampleRunningStatus.Queued:
-                    goto default;
-                default:
-                    RowBackColor = Brushes.White;
-                    RowForeColor = Brushes.Black;
-                    RowSelectionForeColor = Brushes.White;
-                    RowSelectionBackColor = Brushes.Navy;
-                    break;
-            }
-
-            var status = Sample.ColumnData.Status;
-            if (status == ColumnStatus.Disabled)
-            {
-                RowBackColor = new SolidColorBrush(Color.FromArgb(RowBackColor.Color.A, (byte)Math.Max(0, RowBackColor.Color.R - 128),
-                    (byte)Math.Max(0, RowBackColor.Color.G - 128),
-                    (byte)Math.Max(0, RowBackColor.Color.B - 128)));
-                RowForeColor = Brushes.LightGray;
-            }
-
-            // If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
-            // samples to help the user normalize samples on columns.
-            if (Sample.DmsData.DatasetName.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
-            {
-                RowBackColor = Brushes.LightGray;
-                RowForeColor = Brushes.DarkGray;
-            }
-
-            if (!string.IsNullOrEmpty(Sample.SampleErrors))
-            {
-                RowBackColor = Brushes.DeepPink;
-                RowForeColor = Brushes.Black;
-            }
-
             // Specially color any rows with duplicate request names
             if (Sample.IsDuplicateRequestName)
             {
-                RequestNameBackColor = Brushes.Crimson;
                 RequestNameToolTipText = "Duplicate Request Name Found!";
             }
             else if (!Sample.DmsData.DatasetNameCharactersValid())
             {
-                RequestNameBackColor = Brushes.Crimson;
                 RequestNameToolTipText = "Request name contains invalid characters!\n" + DMSData.ValidDatasetNameCharacters;
             }
             else
             {
-                RequestNameBackColor = null;
                 RequestNameToolTipText = null;
             }
         }
@@ -260,7 +132,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region ToolTips
 
-        private string requestNameToolTipText = "";
+        private string requestNameToolTipText = null;
         private string sequenceToolTipFormat = null;
 
         /// <summary>
@@ -387,7 +259,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             get
             {
                 var statusMessage = "";
-                SetRowColors();
+                CheckDatasetName();
                 switch (Sample.RunningStatus)
                 {
                     case SampleRunningStatus.Complete:

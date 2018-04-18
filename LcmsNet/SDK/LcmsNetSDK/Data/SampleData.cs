@@ -301,7 +301,14 @@ namespace LcmsNetSDK.Data
         public string SampleErrors
         {
             get { return m_SampleErrors; }
-            set { this.RaiseAndSetIfChanged(ref m_SampleErrors, value, nameof(SampleErrors)); }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    value = null; // For UI purposes, we want this to be null if it is blank (because it then prevents appearance of the tooltip).
+                }
+                this.RaiseAndSetIfChanged(ref m_SampleErrors, value, nameof(SampleErrors));
+            }
         }
 
         /// <summary>

@@ -8,7 +8,6 @@ using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Views;
-using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
@@ -139,12 +138,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void Initialize(DMSDownloadViewModel dmsView)
         {
             DMSView = dmsView;
-
-            // Background colors
-            // TODO: Alternating back colors to enhance user visual feedback.
-            // TODO: m_colors = new Color[2];
-            // TODO: m_colors[0] = Color.White;
-            // TODO: m_colors[1] = Color.Gainsboro;
 
             this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
         }
