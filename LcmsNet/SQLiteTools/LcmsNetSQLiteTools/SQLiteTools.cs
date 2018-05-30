@@ -174,7 +174,7 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Get a SQLiteConnection, but lim
+        /// Get a SQLiteConnection, but limit how often we open a new connection
         /// </summary>
         /// <param name="connString"></param>
         /// <returns></returns>
@@ -189,6 +189,7 @@ namespace LcmsNetSQLiteTools
 
                 if (Instance.connection == null)
                 {
+                    Instance.lastConnectionString = connString;
                     Instance.connection = new SQLiteConnection(connString).OpenAndReturn();
                 }
 
