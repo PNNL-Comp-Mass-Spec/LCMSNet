@@ -281,19 +281,6 @@ namespace LcmsNet
         }
 
         /// <summary>
-        /// Updates the splash screen with the appropriate messages.
-        /// </summary>
-        /// <param name="messageLevel">Filter for displaying messages.</param>
-        /// <param name="args">Messages and other arguments passed from the sender.</param>
-        private void ApplicationLogger_Message(int messageLevel, MessageLoggerArgs args)
-        {
-            if (messageLevel < 1)
-            {
-                splashScreen.Status = args.Message;
-            }
-        }
-
-        /// <summary>
         /// Creates the configurations for the columns and systems
         /// </summary>
         private void InitializeSystemConfigurations()
@@ -401,9 +388,6 @@ namespace LcmsNet
 
             KillExistingPalProcesses();
 
-            // Synch to the logger so we can display any messages coming back from the rest of the program and interface.
-            ApplicationLogger.Message += ApplicationLogger_Message;
-
             // Show the splash screen
             resetSplashCreated = new ManualResetEvent(false);
 
@@ -432,6 +416,9 @@ namespace LcmsNet
             main.DataContext = mainVm;
             main.ShowActivated = true;
 
+            Application.Current.MainWindow = main;
+            MainWindow = main;
+
             // Assure that the splash screen has been visible for at least 3 seconds
             while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
             {
@@ -441,19 +428,13 @@ namespace LcmsNet
             splashScreen.LoadComplete();
             splashScreenEnded = true;
 
-            ApplicationLogger.Message -= ApplicationLogger_Message;
-
             main.Show();
             main.Activate();
         }
 
         private void ShowSplashScreen()
         {
-            splashScreen = new DynamicSplashScreenWindow()
-            {
-                SoftwareCopyright = SOFTWARE_COPYRIGHT,
-                SoftwareDevelopers = SOFTWARE_DEVELOPERS
-            };
+            splashScreen = new DynamicSplashScreenWindow(SOFTWARE_COPYRIGHT, SOFTWARE_DEVELOPERS);
             splashScreen.Show();
 
             // set the reset, to allow startup to continue

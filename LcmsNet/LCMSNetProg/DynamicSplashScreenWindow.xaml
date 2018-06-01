@@ -1,9 +1,23 @@
 ﻿<Window x:Class="LcmsNet.DynamicSplashScreenWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lcmsNet="clr-namespace:LcmsNet"
         Height="513" Width="736"
         WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        BorderThickness="10" BorderBrush="#003500">
+        BorderThickness="10" BorderBrush="#003500"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance {x:Type lcmsNet:DynamicSplashScreenWindow}, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Calibri" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,10 +28,20 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Image Grid.Row="0" Margin="0,0,0,-30" Source="/Images/LCMSNet.png" />
-        <TextBlock x:Name="Version" Grid.Row="1" Margin="5,10" FontFamily="Calibri" FontSize="29" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Version:" />
-        <TextBlock x:Name="Cart" Grid.Row="2" Margin="5,5" FontFamily="Calibri" FontSize="29" Foreground="#004000" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Cart" />
-        <TextBlock x:Name="Copyright" Grid.Row="3" Margin="5,5" FontFamily="Calibri" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Copyright Battelle Memorial Institute, 2017" />
-        <TextBlock x:Name="Developers" Grid.Row="4" Margin="5,10" FontFamily="Calibri" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Developers: populated at runtime" />
-        <TextBlock x:Name="StatusText" Grid.Row="5" Margin="5,5" FontFamily="Calibri" FontSize="21" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Loading..." />
+        <TextBlock Grid.Row="1" Margin="5,10" Style="{StaticResource TextBlockStyle}" FontSize="29" Text="{Binding Version}" />
+        <TextBlock Grid.Row="2" Margin="5,5" FontSize="29" Foreground="#004000" Text="{Binding CartName}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEmulated}" Value="True">
+                            <Setter Property="Foreground" Value="Red" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock Grid.Row="3" Margin="5,5" Style="{StaticResource TextBlockStyle}" FontSize="16" Text="{Binding SoftwareCopyright}" />
+        <TextBlock Grid.Row="4" Margin="5,10" Style="{StaticResource TextBlockStyle}" FontSize="16" Text="{Binding SoftwareDevelopers}" />
+        <TextBlock Grid.Row="5" Margin="5,5" Style="{StaticResource TextBlockStyle}" FontSize="21" FontWeight="Bold" Text="{Binding Status}" />
     </Grid>
 </Window>
