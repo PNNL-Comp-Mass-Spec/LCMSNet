@@ -58,7 +58,7 @@ namespace LcmsNet.Method.Drawing
             var brushColor = Colors.Black;
             brushColor.A = 128;
             var brush = new SolidColorBrush(brushColor);
-            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, 8.0F * (96.0/72.0), brush);
+            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             graphics.DrawText(columnNameText, new Point(x, y - columnNameText.Height));
         }
 

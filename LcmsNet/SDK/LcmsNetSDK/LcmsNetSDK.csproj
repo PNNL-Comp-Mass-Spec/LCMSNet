@@ -136,6 +136,7 @@
     <Compile Include="ModelStatusChangeEventArgs.cs" />
     <Compile Include="PlugInDisplayNameAttribute.cs" />
     <Compile Include="SystemInformationReporter.cs" />
+    <Compile Include="WpfConversions.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite.Core">

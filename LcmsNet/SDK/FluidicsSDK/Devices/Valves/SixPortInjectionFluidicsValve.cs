@@ -44,7 +44,7 @@ namespace FluidicsSDK.Devices.Valves
             var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
 
             var font = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
-            var volumeText = new FormattedText(Volume.ToString(CultureInfo.InvariantCulture) + " \u00b5" + "L", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, (11.0F * stringScale) * (96.0 / 72.0), Brushes.Black);
+            var volumeText = new FormattedText(Volume.ToString(CultureInfo.InvariantCulture) + " \u00b5" + "L", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, ElevenPoint * stringScale, Brushes.Black, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             g.DrawText(volumeText, new Point((Center.X * scale - 20), (Center.Y * scale - 10)));
         }
 

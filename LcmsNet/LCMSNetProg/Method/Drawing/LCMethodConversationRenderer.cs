@@ -57,7 +57,7 @@ namespace LcmsNet.Method.Drawing
             var brushColor = Colors.Black;
             brushColor.A = 128;
             var brush = new SolidColorBrush(brushColor);
-            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, 8.0F * (96.0 / 72.0), brush);
+            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             y += columnNameText.Height;
             graphics.DrawText(columnNameText, new Point(x, y));
         }
@@ -179,8 +179,8 @@ namespace LcmsNet.Method.Drawing
                         var timeSpanSinceStart = simList[0].Start.Subtract(firstEvent);
 
                         graphics.DrawLine(linePen, new Point(0, top), new Point(bounds.Width - CONST_COLUMN_SPACING, top));
-                        var timeSpanSinceStartText = new FormattedText(timeSpanSinceStart.ToString("g"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, 8.0F * (96.0 / 72.0), brush);
-                        var simListStart = new FormattedText(simList[0].Start.ToString("h:mm:ss"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, 8.0F * (96.0 / 72.0), brush);
+                        var timeSpanSinceStartText = new FormattedText(timeSpanSinceStart.ToString("g"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+                        var simListStart = new FormattedText(simList[0].Start.ToString("h:mm:ss"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                         graphics.DrawText(timeSpanSinceStartText, new Point(0, top));
                         graphics.DrawText(simListStart, new Point(0, top + timeSpanSinceStartText.Height));
                         graphics.DrawLine(linePen, new Point(0, top + eventHeight), new Point(bounds.Width - CONST_COLUMN_SPACING, top + eventHeight));

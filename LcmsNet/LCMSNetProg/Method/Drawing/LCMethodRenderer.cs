@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -31,6 +32,9 @@ namespace LcmsNet.Method.Drawing
         /// Gets or sets the color to use when rendering the acquisition times.
         /// </summary>
         public SolidColorBrush AcquisitionColor { get; set; }
+
+        protected readonly double SixPt = WpfConversions.GetWpfLength("6pt");
+        protected readonly double EightPt = WpfConversions.GetWpfLength("8pt");
 
         #region Time Conversions
 
@@ -234,11 +238,11 @@ namespace LcmsNet.Method.Drawing
 
                 graphics.DrawLine(pen, new Point(x, y - tickHeight), new Point(x, 0));
 
-                var startDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, 6.0F * (96.0 / 72.0), timelineBrush);
+                var startDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, SixPt, timelineBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(startDateText, new Point(x - 3.0F, y - tickHeight * 2));
 
                 dateString = start.AddSeconds(currentTime).ToLongTimeString();
-                var endDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, 6.0F * (96.0 / 72.0), timelineBrush);
+                var endDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, SixPt, timelineBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(endDateText, new Point(x - 3.0F, y - tickHeight * 3));
                 currentTime += timePerDraw;
             }
@@ -280,7 +284,7 @@ namespace LcmsNet.Method.Drawing
                         var alignedBounds = new Rect(x, y - 15.0F, eventWidth, 20.0F);
                         graphics.PushClip(new RectangleGeometry(alignedBounds));
                         graphics.DrawRectangle(optBrush, null, new Rect(x, y - 15.0F, eventWidth, 20.0F));
-                        var endDateText = new FormattedText(optimize, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, 6.0F * (96.0 / 72.0), timelineBrush);
+                        var endDateText = new FormattedText(optimize, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, SixPt, timelineBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                         graphics.DrawText(endDateText, new Point(x, y));
                         graphics.Pop();
                     }
@@ -318,11 +322,11 @@ namespace LcmsNet.Method.Drawing
 
             if (bounds.Height >= CONST_MID_HEIGHT)
             {
-                var deviceNameText = new FormattedText(lcEvent.Device.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, 8.0F * (96.0 / 72.0), nameBrush);
+                var deviceNameText = new FormattedText(lcEvent.Device.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, nameBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(deviceNameText, bounds.Location);
 
                 // Render the name of the event
-                var nameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, 8.0F * (96.0 / 72.0), nameBrush);
+                var nameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, nameBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 nameText.MaxTextWidth = bounds.Width;
                 nameText.MaxTextHeight = bounds.Height;
                 graphics.DrawText(nameText, new Point(bounds.X, bounds.Y + (bounds.Height / 2.0F)));
@@ -330,7 +334,7 @@ namespace LcmsNet.Method.Drawing
                 // Render the params of the event
                 if (lcEvent.Parameters.Length > 0 && lcEvent.Parameters[0] != null)
                 {
-                    var parametersText = new FormattedText(lcEvent.Parameters[0].ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, 8.0F * (96.0 / 72.0), new SolidColorBrush(Color.FromRgb(80, 80, 80)));
+                    var parametersText = new FormattedText(lcEvent.Parameters[0].ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, new SolidColorBrush(Color.FromRgb(80, 80, 80)), 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                     graphics.DrawText(parametersText, new Point(bounds.X, bounds.Y + (bounds.Height / 2.0F) + nameText.Height));
                 }
             }
@@ -481,7 +485,7 @@ namespace LcmsNet.Method.Drawing
                 specialColor = Colors.Black;
                 specialColor.A = 70;
                 var specialBrush = new SolidColorBrush(specialColor);
-                var specialNameText = new FormattedText(specialName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, 8.0F * (96.0 / 72.0), specialBrush);
+                var specialNameText = new FormattedText(specialName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, specialBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(specialNameText, new Point(startPoint, bounds.Top + specialNameText.Height));
             }
 
@@ -492,16 +496,16 @@ namespace LcmsNet.Method.Drawing
             var textFont = new Typeface(new FontFamily("Microsoft Sans Serif"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
             Brush brush = Brushes.Black;
 
-            var methodNameText = new FormattedText(method.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 8.0F * (96.0 / 72.0), brush);
+            var methodNameText = new FormattedText(method.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             graphics.DrawText(methodNameText, new Point(startPoint, bounds.Y - 13));
 
             // Draw the duration strings for the method
             var span = method.Duration;
             var durationString = span.ToString();
 
-            var methodStartText = new FormattedText(method.Start.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 6.0F * (96.0 / 72.0), brush);
-            var methodDurationText = new FormattedText(durationString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 6.0F * (96.0 / 72.0), brush);
-            var methodEndText = new FormattedText(method.End.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 6.0F * (96.0 / 72.0), brush);
+            var methodStartText = new FormattedText(method.Start.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, SixPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var methodDurationText = new FormattedText(durationString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, SixPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var methodEndText = new FormattedText(method.End.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, SixPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
 
             var x = startPoint + methodNameText.Width + 15.0F;
 
