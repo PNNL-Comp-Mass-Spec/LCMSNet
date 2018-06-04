@@ -77,7 +77,7 @@ namespace LcmsNet.Devices.Fluidics.Views
                 // Use scrollviewer size, since the size of the contained items isn't automatically stretched to match the scrollviewer boundaries
                 //drawContext.DrawRectangle(Brushes.White, null, new Rect(new Point(-5, -5), new Size(DrawingContainer.ActualWidth + 5, DrawingContainer.ActualHeight + 5)));
                 drawContext.DrawRectangle(Brushes.White, null,
-                    new Rect(new Point(-5, -5), new Size(ScrollViewer.ActualWidth + 5, ScrollViewer.ActualHeight + 5)));
+                    new Rect(new Point(-5, -5), new Size(ScrollViewer.ActualWidth + 10, ScrollViewer.ActualHeight + 10)));
                 drawContext.Pop();
                 //var size = fluidicsControlDataContext.RenderGraphics(drawContext, DrawingContainer.RenderSize);
                 size = fluidicsControlDataContext.RenderGraphics(drawContext, ScrollViewer.RenderSize);
