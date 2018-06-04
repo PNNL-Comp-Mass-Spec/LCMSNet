@@ -46,45 +46,48 @@ Name: "{app}\x64"
 
 [Files]
 ; Exe
-Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                           DestDir: "{app}";          Flags: ignoreversion
 
 ; Nuget DLLs
-Source: LCMSNetProg\bin\x86\PNNLRelease\Microsoft.WindowsAPICodePack*.dll;        DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\PNNLRelease\System.Reactive*.dll;       DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\PNNLRelease\Reactive*.dll;              DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\PNNLRelease\Splat*.dll;                 DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\PNNLRelease\Xceed.Wpf*.dll;             DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\Microsoft.WindowsAPICodePack*.dll;     DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\OxyPlot*.dll;                          DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\Reactive*.dll;                         DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\Splat*.dll;                            DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\System.Data.SQLite.dll;                DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\System.Drawing.Primitives.dll;         DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\System.Reactive*.dll;                  DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\Xceed.Wpf*.dll;                        DestDir: "{app}";          Flags: ignoreversion
 
 ; DLLs are copied below in the "DLLs" section, sourced from {#MyLib}\*
 
 ; Copy SQLite.Interop.dll (both x86 and x64, even though we're likely compiling against x86)
-Source: LCMSNetProg\bin\x86\PNNLRelease\x86\*.dll;                  DestDir: "{app}\x86";      Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                  DestDir: "{app}\x64";      Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\x86\*.dll;                             DestDir: "{app}\x86";      Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\PNNLRelease\x64\*.dll;                             DestDir: "{app}\x64";      Flags: ignoreversion
 
-Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";       DestDir: "{app}";      Flags: ignoreversion
+Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";                  DestDir: "{app}";          Flags: ignoreversion
 
 ;DLLs
-Source: "{#MyLib}\*.dll";                                           DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\*.dll";                                                      DestDir: "{app}";          Flags: ignoreversion
 
 ;Sample Validators
 ;Core sample validator, PAL Validator    
-Source: "{#MyValidators}\*.dll";                                    DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "{#MyValidators}\*.dll";                                               DestDir: "{app}\Plugins\"; Flags: ignoreversion
 
 ;Plugins
-Source: "{#MyPlugins}\*.dll";                                       DestDir: "{app}\Plugins\"; Flags: ignoreversion
-Source: "{#MyPlugins}\x86\*.dll";                                   DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
-Source: "{#MyPlugins}\x64\*.dll";                                   DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
-Source: "..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";             DestDir: "{sys}";          Flags: ignoreversion
+Source: "{#MyPlugins}\*.dll";                                                  DestDir: "{app}\Plugins\"; Flags: ignoreversion
+Source: "{#MyPlugins}\x86\*.dll";                                              DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
+Source: "{#MyPlugins}\x64\*.dll";                                              DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
+Source: "..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";                        DestDir: "{sys}";          Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
-Source: "..\ExternalApplications\LogViewer\bin\PNNLRelease\*.exe";  DestDir: "{app}";          Flags: ignoreversion
+Source: "..\ExternalApplications\LogViewer\bin\PNNLRelease\*.exe";             DestDir: "{app}";          Flags: ignoreversion
 
 ; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 
 ; config.default! If you want to make changes to the deployed defaults, change the 
 ; Settings.settings file, compile, and then copy LcmsNet.exe.config into the proper 
 ; directory and rename it LcmsNet.exe.config.default before running this script! 
-Source: "..\Installer\LcmsNet.exe.config.default";                               DestName: "LcmsNet.exe.config";    DestDir: "{app}";          Flags: ignoreversion
+Source: "..\Installer\LcmsNet.exe.config.default";                             DestName: "LcmsNet.exe.config";    DestDir: "{app}";          Flags: ignoreversion
 ; END SETTINGS FILE---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -101,20 +104,27 @@ Filename: "{sys}\paldriv.exe"; Flags: nowait postinstall skipifsilent
 [Code]
 function InitializeSetup(): Boolean;
 var
+    key: string;
     NetFrameWorkInstalled : Boolean;
+    release, minVersion: cardinal;
 begin
-	NetFrameWorkInstalled := RegKeyExists(HKLM,'SOFTWARE\Microsoft\Net Framework Setup\NDP\v4.0');
-	if NetFrameWorkInstalled =true then
-	begin
-		Result := true;
-	end;
+    // https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+    // http://kynosarges.org/DotNetVersion.html
+    key := 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full';
+    minVersion := 394802;
+    Result := false;
+    NetFrameWorkInstalled := RegKeyExists(HKLM, key);
+    if NetFrameWorkInstalled =true then
+    begin
+        Result := RegQueryDWordValue(HKLM, key, 'Release', release);
+        Result := Result and (release >= minVersion);
+    end;
 
-	if NetFrameWorkInstalled =false then
-	begin
-		MsgBox('This setup requires the .NET Framework 4.0. Please install the .NET Framework and run this setup again.',
-			mbInformation, MB_OK);
-		Result:=false;
-	end;
+    if Result =false then
+    begin
+        MsgBox('This setup requires the .NET Framework version 4.6.2. Please install the .NET Framework and run this setup again.',
+            mbInformation, MB_OK);
+    end;
 end;
 
 
