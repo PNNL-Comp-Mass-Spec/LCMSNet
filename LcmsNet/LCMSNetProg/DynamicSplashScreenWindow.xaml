@@ -27,7 +27,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Image Grid.Row="0" Margin="0,0,0,-30" Source="/Images/LCMSNet.png" />
+        <Image Grid.Row="0" Margin="0,0,0,-30" Source="{StaticResource LcmsNetBannerImage}" />
         <TextBlock Grid.Row="1" Margin="5,10" Style="{StaticResource TextBlockStyle}" FontSize="29" Text="{Binding Version}" />
         <TextBlock Grid.Row="2" Margin="5,5" FontSize="29" Foreground="#004000" Text="{Binding CartName}">
             <TextBlock.Style>

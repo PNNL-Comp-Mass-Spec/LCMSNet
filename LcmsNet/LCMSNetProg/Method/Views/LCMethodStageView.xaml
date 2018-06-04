@@ -16,31 +16,31 @@
             <TextBox DockPanel.Dock="Left" Margin="3" Width="120"  VerticalAlignment="Center" Text="{Binding MethodName}" />
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding BuildMethodCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/Build.png" MaxHeight="24" />
+                    <Image Source="{StaticResource BuildImage}" MaxHeight="24" />
                     <Label Content="Build" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding UpdateMethodCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/BuildUpdate.png" MaxHeight="24" />
+                    <Image Source="{StaticResource BuildUpdateImage}" MaxHeight="24" />
                     <Label Content="Update" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAllMethodsCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/SaveWithIndicator.png" MaxHeight="24" />
+                    <Image Source="{StaticResource SaveWithIndicatorImage}" MaxHeight="24" />
                     <Label Content="Save All" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveMethodCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/SaveWithIndicator.png" MaxHeight="24" />
+                    <Image Source="{StaticResource SaveWithIndicatorImage}" MaxHeight="24" />
                     <Label Content="Save" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadMethodCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/Open.png" MaxHeight="16" />
+                    <Image Source="{StaticResource OpenImage}" MaxHeight="16" />
                     <Label Content="Load" />
                 </StackPanel>
             </Button>
@@ -51,16 +51,16 @@
             <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" Content="Post-Overlap" IsChecked="{Binding AllowPostOverlap}" />
             <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" Content="Pre-Overlap" IsChecked="{Binding AllowPreOverlap}" />
             <Button DockPanel.Dock="Left" Margin="3" Width="50" Command="{Binding AddEventCommand}">
-                <Image Source="/Images/Add.png" MaxHeight="20" />
+                <Image Source="{StaticResource AddImage}" MaxHeight="20" />
             </Button>
             <Button DockPanel.Dock="Left" Margin="3" Width="50" Command="{Binding RemoveEventCommand}">
-                <Image Source="/Images/Button_Delete_16.png" MaxHeight="20" />
+                <Image Source="{StaticResource ButtonDeleteImage16}" MaxHeight="20" />
             </Button>
             <Button DockPanel.Dock="Left" Margin="3" Width="50" Command="{Binding MoveEventDownCommand}">
-                <Image Source="/Images/Button_Down_16.png" MaxHeight="20" />
+                <Image Source="{StaticResource ButtonDownImage16}" MaxHeight="20" />
             </Button>
             <Button DockPanel.Dock="Left" Margin="3" Width="50" Command="{Binding MoveEventUpCommand}">
-                <Image Source="/Images/Button_Up_16.png" MaxHeight="20" />
+                <Image Source="{StaticResource ButtonUpImage16}" MaxHeight="20" />
             </Button>
             <Label DockPanel.Dock="Left" Margin="5" Foreground="Blue" Content="Column" />
             <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />

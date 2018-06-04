@@ -27,7 +27,7 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="*" MinWidth="110" />
                 </Grid.ColumnDefinitions>
-                <Image Source="/Images/InsertUnused.png" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="48" />
+                <Image Source="{StaticResource InsertUnusedImage}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="48" />
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">Insert onto Unused</TextBlock>
             </Grid>
         </Button>
@@ -37,7 +37,7 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="*" MinWidth="115" />
                 </Grid.ColumnDefinitions>
-                <Image Source="/Images/Append.png" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="48" />
+                <Image Source="{StaticResource AppendImage}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="48" />
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">Append the samples</TextBlock>
             </Grid>
         </Button>

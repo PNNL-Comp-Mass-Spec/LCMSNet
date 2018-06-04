@@ -17,15 +17,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding Samples}">
+        <ListView Grid.Row="0" ItemsSource="{Binding Samples}" d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidationViewModel}, IsDesignTimeCreatable=True}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="" Width="30">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Image Source="/Images/AllIsGood.png" MaxWidth="16" Visibility="{Binding IsSampleValid, Converter={StaticResource BoolToVis}}" />
-                                    <Image Source="/Images/ButtonDeleteRed.png" MaxWidth="16" Visibility="{Binding SampleNotValid, Converter={StaticResource BoolToVis}}" />
+                                    <Image Source="{StaticResource AllIsGoodImage}" MaxWidth="16" Visibility="{Binding IsSampleValid, Converter={StaticResource BoolToVis}}" />
+                                    <Image Source="{StaticResource ButtonDeleteRedImage}" MaxWidth="16" Visibility="{Binding SampleNotValid, Converter={StaticResource BoolToVis}}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

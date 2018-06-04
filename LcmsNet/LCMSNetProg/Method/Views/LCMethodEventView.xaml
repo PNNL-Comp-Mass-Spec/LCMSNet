@@ -22,7 +22,7 @@
         <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" ToolTip="Optimize" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}" IsChecked="{Binding OptimizeWith}">
-            <Image Source="/Images/highlighter.png" />
+            <Image Source="{StaticResource HighlighterImage}" />
         </CheckBox>
         <StackPanel DockPanel.Dock="Right" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}">
         </StackPanel>

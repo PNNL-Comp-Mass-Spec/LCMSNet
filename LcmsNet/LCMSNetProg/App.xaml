@@ -3,4 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Startup="ApplicationStartup"
              Exit="ApplicationExit">
+    <Application.Resources>
+        <!-- Icons -->
+        <BitmapImage x:Key="LcmsNetIcon2" UriSource="Resources\Icons\LCMSLogo2.ico" />
+        <BitmapImage x:Key="WarningIcon" UriSource="Resources\Icons\Warning.ico" />
+
+        <!-- Images -->
+        <BitmapImage x:Key="AboutImage" UriSource="Resources\Images\About.png" />
+        <BitmapImage x:Key="AddImage" UriSource="Resources\Images\Add.png" />
+        <BitmapImage x:Key="AddAppendBlankImage" UriSource="Resources\Images\AddAppendBlank.png" />
+        <BitmapImage x:Key="AddAppendDmsImage" UriSource="Resources\Images\AddAppendDMS.png" />
+        <BitmapImage x:Key="AddDmsImage" UriSource="Resources\Images\AddDMS.png" />
+        <BitmapImage x:Key="AllIsGoodImage" UriSource="Resources\Images\AllIsGood.png" />
+        <BitmapImage x:Key="AppendImage" UriSource="Resources\Images\Append.png" />
+        <BitmapImage x:Key="BreakpointImage" UriSource="Resources\Images\breakpoint.png" />
+        <BitmapImage x:Key="BreakpointDisabledImage" UriSource="Resources\Images\breakpointDisabled.png" />
+        <BitmapImage x:Key="BuildImage" UriSource="Resources\Images\Build.png" />
+        <BitmapImage x:Key="BuildUpdateImage" UriSource="Resources\Images\BuildUpdate.png" />
+        <BitmapImage x:Key="ButtonDeleteImage16" UriSource="Resources\Images\Button_Delete_16.png" />
+        <BitmapImage x:Key="ButtonDownImage16" UriSource="Resources\Images\Button_Down_16.png" />
+        <BitmapImage x:Key="ButtonUpImage16" UriSource="Resources\Images\Button_Up_16.png" />
+        <BitmapImage x:Key="ButtonDeleteRedImage" UriSource="Resources\Images\ButtonDeleteRed.png" />
+        <BitmapImage x:Key="CartImage" UriSource="Resources\Images\Cart.png" />
+        <BitmapImage x:Key="CartColumnNameImage" UriSource="Resources\Images\CartColumnName.png" />
+        <BitmapImage x:Key="ColumnImage" UriSource="Resources\Images\Column.png" />
+        <BitmapImage x:Key="CycleYellowImage16" UriSource="Resources\Images\Cycle_16_Yellow.png" />
+        <BitmapImage x:Key="DashboardImage" UriSource="Resources\Images\dashboard.png" />
+        <BitmapImage x:Key="DmsEditImage" UriSource="Resources\Images\DMSEdit.png" />
+        <BitmapImage x:Key="ErrorsImage" UriSource="Resources\Images\Errors.png" />
+        <BitmapImage x:Key="ExpandImage" UriSource="Resources\Images\Expand.png" />
+        <BitmapImage x:Key="ExportImage" UriSource="Resources\Images\Export.png" />
+        <BitmapImage x:Key="FillDownImage" UriSource="Resources\Images\Filldown.png" />
+        <BitmapImage x:Key="FillDownAllImage" UriSource="Resources\Images\FillDownAll.png" />
+        <BitmapImage x:Key="GearsImage" UriSource="Resources\Images\gears.png" />
+        <BitmapImage x:Key="HighlighterImage" UriSource="Resources\Images\highlighter.png" />
+        <BitmapImage x:Key="InsertUnusedImage" UriSource="Resources\Images\InsertUnused.png" />
+        <BitmapImage x:Key="LcmsNetBannerImage" UriSource="Resources\Images\LCMSNet.png" />
+        <BitmapImage x:Key="LockImage" UriSource="Resources\Images\lock.png" />
+        <BitmapImage x:Key="MethodEditorImage" UriSource="Resources\Images\MethodEditor.png" />
+        <BitmapImage x:Key="NextImage32" UriSource="Resources\Images\next-32.png" />
+        <BitmapImage x:Key="NotifyImage" UriSource="Resources\Images\notify.png" />
+        <BitmapImage x:Key="NotOkImage" UriSource="Resources\Images\notOK.png" />
+        <BitmapImage x:Key="OkImage" UriSource="Resources\Images\ok.png" />
+        <BitmapImage x:Key="OpenImage" UriSource="Resources\Images\Open.png" />
+        <BitmapImage x:Key="PreviousImage32" UriSource="Resources\Images\previous-32.png" />
+        <BitmapImage x:Key="ProgressImage" UriSource="Resources\Images\progress.png" />
+        <BitmapImage x:Key="PumpsImage" UriSource="Resources\Images\Pumps.png" />
+        <BitmapImage x:Key="Pumps2Image" UriSource="Resources\Images\pumps2.png" />
+        <BitmapImage x:Key="RandomizeImage" UriSource="Resources\Images\Randomize.png" />
+        <BitmapImage x:Key="RedoImage16" UriSource="Resources\Images\redo_16.png" />
+        <BitmapImage x:Key="SaveImage" UriSource="Resources\Images\Save.png" />
+        <BitmapImage x:Key="SaveUpdateImage" UriSource="Resources\Images\SaveUpdate.png" />
+        <BitmapImage x:Key="SaveWithIndicatorImage" UriSource="Resources\Images\SaveWithIndicator.png" />
+        <BitmapImage x:Key="SearchImage" UriSource="Resources\Images\Search.png" />
+        <BitmapImage x:Key="SimPauseImage" UriSource="Resources\Images\SimPause.png" />
+        <BitmapImage x:Key="SimPlayImage" UriSource="Resources\Images\SimPlay.png" />
+        <BitmapImage x:Key="SimResetImage" UriSource="Resources\Images\SimReset.png" />
+        <BitmapImage x:Key="SimStepImage" UriSource="Resources\Images\SimStep.png" />
+        <BitmapImage x:Key="SimStopImage" UriSource="Resources\Images\SimStop.png" />
+        <BitmapImage x:Key="SimulateImage" UriSource="Resources\Images\Simulate.png" />
+        <BitmapImage x:Key="StackImage32" UriSource="Resources\Images\stack-32.png" />
+        <BitmapImage x:Key="StartImage2" UriSource="Resources\Images\start2.png" />
+        <BitmapImage x:Key="StatusMessagesImage" UriSource="Resources\Images\StatusMessages.png" />
+        <BitmapImage x:Key="StatusMessagesErrorImage" UriSource="Resources\Images\StatusMessagesError.png" />
+        <BitmapImage x:Key="TestTubeImage" UriSource="Resources\Images\testTube.png" />
+        <BitmapImage x:Key="TestTubeImage32" UriSource="Resources\Images\test-tube-32.png" />
+        <BitmapImage x:Key="UndoImage16" UriSource="Resources\Images\undo_16.png" />
+        <BitmapImage x:Key="UnlockImage" UriSource="Resources\Images\unlock.png" />
+        <BitmapImage x:Key="VialRealImage" UriSource="Resources\Images\vialReal.png" />
+        <BitmapImage x:Key="WaterImage" UriSource="Resources\Images\water.png" />
+    </Application.Resources>
 </Application>

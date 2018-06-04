@@ -132,19 +132,19 @@
         <DockPanel Grid.Row="1" LastChildFill="False">
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding DisableCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/lock.png" MaxHeight="32" />
+                    <Image Source="{StaticResource LockImage}" MaxHeight="32" />
                     <Label VerticalAlignment="Center" Content="Disable"/>
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding EnableCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/unlock.png" MaxHeight="32" />
+                    <Image Source="{StaticResource UnlockImage}" MaxHeight="32" />
                     <Label VerticalAlignment="Center" Content="Enable"/>
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Images/Save.png" MaxHeight="20" />
+                    <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
                     <Label VerticalAlignment="Center" Content="Save"/>
                 </StackPanel>
             </Button>

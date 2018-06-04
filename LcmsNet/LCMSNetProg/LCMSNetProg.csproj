@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <StartupObject>LcmsNet.App</StartupObject>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationIcon>LCMSLogo3.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\LCMSLogo2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -230,11 +230,6 @@
       <DependentUpon>NotificationSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -369,11 +364,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -382,198 +372,145 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\AllIsGood.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="lib\16\sampleQueue_16.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icons.txt" />
-    <Resource Include="Images\next-32-2.png" />
-    <Resource Include="Images\next-32.png" />
-    <Resource Include="Images\test-tube-32.png" />
-    <Resource Include="Images\SimPause.png" />
-    <Resource Include="Images\SimPlay.png" />
-    <Resource Include="Images\SimReset.png" />
-    <Resource Include="Images\SimStep.png" />
-    <Resource Include="Images\SimStop.png" />
-    <Resource Include="Images\Warning.ico" />
-    <Content Include="LCMSLogo3.ico" />
-    <Content Include="lib\16\accepted_16.png" />
-    <Content Include="lib\16\Button Delete_16.png" />
-    <Resource Include="Images\About.png" />
-    <Resource Include="Images\Add.png" />
-    <Resource Include="Images\AddAppendBlank.png" />
-    <Resource Include="Images\AddAppendDMS.png" />
-    <Resource Include="Images\AddDMS.png" />
-    <Resource Include="Images\AllIsGood.png" />
-    <Resource Include="Images\Append.png" />
-    <Resource Include="Images\breakpoint.png" />
-    <Resource Include="Images\breakpointDisabled.png" />
-    <Resource Include="Images\Build.png" />
-    <Resource Include="Images\BuildUpdate.png" />
-    <Resource Include="Images\ButtonDeleteRed.png" />
-    <Resource Include="Images\Button_Delete_16.png" />
-    <Resource Include="Images\Button_Down_16.png" />
-    <Resource Include="Images\Button_Up_16.png" />
-    <Resource Include="Images\Cart.png" />
-    <Resource Include="Images\CartColumnName.png" />
-    <Resource Include="Images\Column.png" />
-    <Resource Include="Images\Cycle_16_Yellow.png" />
-    <Resource Include="Images\dashboard.png" />
-    <Resource Include="Images\DMSEdit.png" />
-    <Resource Include="Images\Errors.png" />
-    <Resource Include="Images\Expand.png" />
-    <Resource Include="Images\Export.png" />
-    <Resource Include="Images\Filldown.png" />
-    <Resource Include="Images\FillDownAll.png" />
-    <Resource Include="Images\gears.png" />
-    <Resource Include="Images\highlighter.png" />
-    <Resource Include="Images\InsertUnused.png" />
-    <Resource Include="Images\LCMSLogo2.ico" />
-    <Resource Include="Images\LCMSNet.png" />
-    <Resource Include="Images\lock.png" />
-    <Resource Include="Images\MethodEditor.png" />
-    <Resource Include="Images\notify.png" />
-    <Resource Include="Images\notOK.png" />
-    <Resource Include="Images\ok.png" />
-    <Resource Include="Images\Open.png" />
-    <Resource Include="Images\progress.png" />
-    <Resource Include="Images\Pumps.png" />
-    <Resource Include="Images\pumps2.png" />
-    <Resource Include="Images\Randomize.png" />
-    <Resource Include="Images\redo_16.png" />
-    <Resource Include="Images\Save.png" />
-    <Resource Include="Images\SaveUpdate.png" />
-    <Resource Include="Images\SaveWithIndicator.png" />
-    <Resource Include="Images\Search.png" />
-    <Resource Include="Images\Simulate.png" />
-    <Resource Include="Images\stack-32.png" />
-    <Resource Include="Images\start2.png" />
-    <Resource Include="Images\StatusMessages.png" />
-    <Resource Include="Images\StatusMessagesError.png" />
-    <Resource Include="Images\testTube.png" />
-    <Resource Include="Images\undo_16.png" />
-    <Resource Include="Images\unlock.png" />
-    <Resource Include="Images\vialReal.png" />
-    <Resource Include="Images\water.png" />
-    <None Include="Resources\water.png" />
-    <None Include="lib\16\button delete_161.png" />
-    <Content Include="lib\16\Button Down_16.png" />
-    <None Include="lib\16\Button Up_16.png" />
-    <None Include="lib\16\Button Up_161.png" />
-    <Content Include="lib\16\cancel_16.png" />
-    <Content Include="lib\16\Cycle_16_Blue.png" />
-    <Content Include="lib\16\Cycle_16_Yellow.png" />
-    <None Include="lib\16\undo_16.png" />
-    <None Include="lib\16\redo_16.png" />
-    <Content Include="lib\32\accepted_32.png" />
-    <None Include="lib\32\breakpoint.png" />
-    <None Include="lib\32\breakpoint1.png" />
-    <None Include="lib\32\breakpointDisabled.png" />
-    <Content Include="lib\32\Button Delete_32.png" />
-    <Content Include="lib\32\Button Down_32.png" />
-    <None Include="lib\32\Button Up32.png" />
-    <Content Include="lib\32\cancel_32.png" />
-    <None Include="lib\32\gears.jpg" />
-    <None Include="lib\32\progress.png" />
-    <None Include="lib\32\dashboard.png" />
-    <None Include="lib\32\Logs.png" />
-    <None Include="lib\32\MethodEditor.png" />
-    <None Include="lib\32\LCMSLogo.png" />
-    <None Include="lib\32\LCMSLogo.ico" />
-    <None Include="lib\32\Cart.png" />
-    <None Include="lib\32\lock.png" />
-    <None Include="lib\32\Save.png" />
-    <None Include="lib\32\Open.png" />
-    <None Include="lib\32\LCMSLogo3.ico" />
-    <None Include="lib\32\gears.png" />
-    <None Include="lib\32\SaveWithIndicator.png" />
-    <None Include="lib\32\notify.png" />
-    <None Include="lib\32\pumps2.png" />
-    <None Include="lib\32\highlighter.png" />
-    <Content Include="lib\32\Screensaver2.png" />
-    <Content Include="lib\32\Settings.png" />
-    <None Include="lib\32\vialReal.png" />
-    <None Include="lib\32\StatusMessages.png" />
-    <None Include="lib\32\unlock.png" />
-    <None Include="lib\32\testTube.png" />
-    <None Include="lib\32\StatusMessages1.png" />
-    <Content Include="lib\64\Drive Metal - C.png" />
-    <Content Include="lib\64\No access.png" />
-    <Content Include="lib\64\Screensaver2.png" />
-    <None Include="lib\exclamation.png" />
-    <None Include="lib\DeviceImages\PAL.png" />
-    <None Include="lib\DeviceImages\Valve.png" />
-    <None Include="lib\DeviceImages\Agilent1200Pump.png" />
-    <None Include="lib\DeviceImages\BrukerStart.png" />
-    <None Include="lib\DeviceImages\ISCO.png" />
-    <None Include="lib\DeviceImages\NetworkStart.png" />
-    <None Include="lib\DeviceImages\TwoPositionValve.png" />
-    <None Include="lib\DeviceImages\MultiPositionValve.png" />
-    <None Include="lib\DeviceImages\labjack.png" />
-    <Content Include="lib\LCMSNet.png" />
-    <Content Include="lib\Misc\add.png" />
-    <None Include="lib\Misc\add1.png" />
-    <None Include="lib\Misc\add11.png" />
-    <None Include="lib\Misc\add2.png" />
-    <None Include="lib\Misc\add12.png" />
-    <Content Include="lib\Misc\skull.jpg" />
-    <None Include="lib\ok.jpg" />
-    <None Include="lib\ok1.jpg" />
-    <None Include="lib\notOK.jpg" />
-    <None Include="lib\ok.png" />
-    <None Include="lib\notOK.png" />
-    <Content Include="lib\Spanner.ico" />
-    <None Include="lib\start2.png" />
-    <None Include="Resources\BuildUpdate1.png" />
-    <None Include="lib\stopit.gif" />
-    <None Include="Resources\Pumps.png" />
-    <None Include="Resources\Export.png" />
-    <None Include="Resources\Filldown1.png" />
-    <None Include="Resources\About.png" />
-    <None Include="Resources\BuildUpdate.png" />
-    <None Include="Resources\Build.png" />
-    <None Include="Resources\Errors.png" />
-    <None Include="Resources\Append.png" />
-    <None Include="Resources\InsertUnused.png" />
-    <None Include="Resources\InsertUnused.bmp" />
-    <None Include="Resources\Randomize.png" />
-    <None Include="Resources\CartColumnName.png" />
-    <None Include="Resources\Search.png" />
-    <None Include="Resources\Expand.png" />
-    <None Include="Resources\Column.png" />
-    <None Include="Resources\Filldown.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Devices\Plugins\" />
+    <Resource Include="Resources\Icons\LCMSLogo2.ico" />
+    <Resource Include="Resources\Icons\Warning.ico" />
+    <Resource Include="Resources\Images\About.png" />
+    <Resource Include="Resources\Images\Add.png" />
+    <Resource Include="Resources\Images\AddAppendBlank.png" />
+    <Resource Include="Resources\Images\AddAppendDMS.png" />
+    <Resource Include="Resources\Images\AddDMS.png" />
+    <Resource Include="Resources\Images\AllIsGood.png" />
+    <Resource Include="Resources\Images\Append.png" />
+    <Resource Include="Resources\Images\breakpoint.png" />
+    <Resource Include="Resources\Images\breakpointDisabled.png" />
+    <Resource Include="Resources\Images\Build.png" />
+    <Resource Include="Resources\Images\BuildUpdate.png" />
+    <Resource Include="Resources\Images\ButtonDeleteRed.png" />
+    <Resource Include="Resources\Images\Button_Delete_16.png" />
+    <Resource Include="Resources\Images\Button_Down_16.png" />
+    <Resource Include="Resources\Images\Button_Up_16.png" />
+    <Resource Include="Resources\Images\Cart.png" />
+    <Resource Include="Resources\Images\CartColumnName.png" />
+    <Resource Include="Resources\Images\Column.png" />
+    <Resource Include="Resources\Images\Cycle_16_Yellow.png" />
+    <Resource Include="Resources\Images\dashboard.png" />
+    <Resource Include="Resources\Images\DMSEdit.png" />
+    <Resource Include="Resources\Images\Errors.png" />
+    <Resource Include="Resources\Images\Expand.png" />
+    <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\Filldown.png" />
+    <Resource Include="Resources\Images\FillDownAll.png" />
+    <Resource Include="Resources\Images\gears.png" />
+    <Resource Include="Resources\Images\highlighter.png" />
+    <Resource Include="Resources\Images\InsertUnused.png" />
+    <Resource Include="Resources\Images\LCMSNet.png" />
+    <Resource Include="Resources\Images\lock.png" />
+    <Resource Include="Resources\Images\MethodEditor.png" />
+    <Resource Include="Resources\Images\next-32.png" />
+    <Resource Include="Resources\Images\notify.png" />
+    <Resource Include="Resources\Images\notOK.png" />
+    <Resource Include="Resources\Images\ok.png" />
+    <Resource Include="Resources\Images\Open.png" />
+    <Resource Include="Resources\Images\previous-32.png" />
+    <Resource Include="Resources\Images\progress.png" />
+    <Resource Include="Resources\Images\Pumps.png" />
+    <Resource Include="Resources\Images\pumps2.png" />
+    <Resource Include="Resources\Images\Randomize.png" />
+    <Resource Include="Resources\Images\redo_16.png" />
+    <Resource Include="Resources\Images\Save.png" />
+    <Resource Include="Resources\Images\SaveUpdate.png" />
+    <Resource Include="Resources\Images\SaveWithIndicator.png" />
+    <Resource Include="Resources\Images\Search.png" />
+    <Resource Include="Resources\Images\SimPause.png" />
+    <Resource Include="Resources\Images\SimPlay.png" />
+    <Resource Include="Resources\Images\SimReset.png" />
+    <Resource Include="Resources\Images\SimStep.png" />
+    <Resource Include="Resources\Images\SimStop.png" />
+    <Resource Include="Resources\Images\Simulate.png" />
+    <Resource Include="Resources\Images\stack-32.png" />
+    <Resource Include="Resources\Images\start2.png" />
+    <Resource Include="Resources\Images\StatusMessages.png" />
+    <Resource Include="Resources\Images\StatusMessagesError.png" />
+    <Resource Include="Resources\Images\test-tube-32.png" />
+    <Resource Include="Resources\Images\testTube.png" />
+    <Resource Include="Resources\Images\undo_16.png" />
+    <Resource Include="Resources\Images\unlock.png" />
+    <Resource Include="Resources\Images\vialReal.png" />
+    <Resource Include="Resources\Images\water.png" />
+    <None Include="Resources\OtherImages\16\accepted_16.png" />
+    <None Include="Resources\OtherImages\16\Button Delete_16.png" />
+    <None Include="Resources\OtherImages\16\button delete_161.png" />
+    <None Include="Resources\OtherImages\16\Button Down_16.png" />
+    <None Include="Resources\OtherImages\16\Button Up_16.png" />
+    <None Include="Resources\OtherImages\16\Button Up_161.png" />
+    <None Include="Resources\OtherImages\16\cancel_16.png" />
+    <None Include="Resources\OtherImages\16\Cycle_16_Blue.png" />
+    <None Include="Resources\OtherImages\16\Cycle_16_Yellow.png" />
+    <None Include="Resources\OtherImages\16\redo_16.png" />
+    <None Include="Resources\OtherImages\16\sampleQueue_16.png" />
+    <None Include="Resources\OtherImages\16\undo_16.png" />
+    <None Include="Resources\OtherImages\32\accepted_32.png" />
+    <None Include="Resources\OtherImages\32\breakpoint.png" />
+    <None Include="Resources\OtherImages\32\breakpoint1.png" />
+    <None Include="Resources\OtherImages\32\breakpointDisabled.png" />
+    <None Include="Resources\OtherImages\32\Button Delete_32.png" />
+    <None Include="Resources\OtherImages\32\Button Down_32.png" />
+    <None Include="Resources\OtherImages\32\Button Up32.png" />
+    <None Include="Resources\OtherImages\32\cancel_32.png" />
+    <None Include="Resources\OtherImages\32\Cart.png" />
+    <None Include="Resources\OtherImages\32\dashboard.png" />
+    <None Include="Resources\OtherImages\32\gears.jpg" />
+    <None Include="Resources\OtherImages\32\gears.png" />
+    <None Include="Resources\OtherImages\32\highlighter.png" />
+    <None Include="Resources\OtherImages\32\LCMSLogo.ico" />
+    <None Include="Resources\OtherImages\32\LCMSLogo.png" />
+    <None Include="Resources\OtherImages\32\LCMSLogo3.ico" />
+    <None Include="Resources\OtherImages\32\lock.png" />
+    <None Include="Resources\OtherImages\32\Logs.png" />
+    <None Include="Resources\OtherImages\32\MethodEditor.png" />
+    <None Include="Resources\OtherImages\32\notify.png" />
+    <None Include="Resources\OtherImages\32\Open.png" />
+    <None Include="Resources\OtherImages\32\progress.png" />
+    <None Include="Resources\OtherImages\32\pumps2.png" />
+    <None Include="Resources\OtherImages\32\Save.png" />
+    <None Include="Resources\OtherImages\32\SaveWithIndicator.png" />
+    <None Include="Resources\OtherImages\32\Screensaver2.png" />
+    <None Include="Resources\OtherImages\32\Settings.png" />
+    <None Include="Resources\OtherImages\32\StatusMessages.png" />
+    <None Include="Resources\OtherImages\32\StatusMessages1.png" />
+    <None Include="Resources\OtherImages\32\testTube.png" />
+    <None Include="Resources\OtherImages\32\unlock.png" />
+    <None Include="Resources\OtherImages\32\vialReal.png" />
+    <None Include="Resources\OtherImages\64\Drive Metal - C.png" />
+    <None Include="Resources\OtherImages\64\No access.png" />
+    <None Include="Resources\OtherImages\64\Screensaver2.png" />
+    <None Include="Resources\OtherImages\DeviceImages\Agilent1200Pump.png" />
+    <None Include="Resources\OtherImages\DeviceImages\BrukerStart.png" />
+    <None Include="Resources\OtherImages\DeviceImages\ISCO.png" />
+    <None Include="Resources\OtherImages\DeviceImages\labjack.png" />
+    <None Include="Resources\OtherImages\DeviceImages\MultiPositionValve.png" />
+    <None Include="Resources\OtherImages\DeviceImages\NetworkStart.png" />
+    <None Include="Resources\OtherImages\DeviceImages\PAL.png" />
+    <None Include="Resources\OtherImages\DeviceImages\TwoPositionValve.png" />
+    <None Include="Resources\OtherImages\DeviceImages\Valve.png" />
+    <None Include="Resources\OtherImages\Misc\add.png" />
+    <None Include="Resources\OtherImages\Misc\add1.png" />
+    <None Include="Resources\OtherImages\Misc\add11.png" />
+    <None Include="Resources\OtherImages\Misc\add12.png" />
+    <None Include="Resources\OtherImages\Misc\add2.png" />
+    <None Include="Resources\OtherImages\Misc\skull.jpg" />
+    <None Include="Resources\OtherImages\exclamation.png" />
+    <None Include="Resources\OtherImages\LCMSNet.png" />
+    <None Include="Resources\OtherImages\notOK.jpg" />
+    <None Include="Resources\OtherImages\notOK.png" />
+    <None Include="Resources\OtherImages\ok.jpg" />
+    <None Include="Resources\OtherImages\ok.png" />
+    <None Include="Resources\OtherImages\ok1.jpg" />
+    <None Include="Resources\OtherImages\Spanner.ico" />
+    <None Include="Resources\OtherImages\start2.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj">

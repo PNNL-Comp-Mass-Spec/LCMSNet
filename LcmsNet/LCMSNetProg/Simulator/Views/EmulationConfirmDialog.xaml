@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="WARNING!" Height="300" Width="549"
         WindowStartupLocation="CenterScreen"
-        Icon="/Images/Warning.ico">
+        Icon="{StaticResource WarningIcon}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -78,7 +78,7 @@
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="1*" MinWidth="40" />
                             </Grid.ColumnDefinitions>
-                            <Image Source="/Images/Search.png" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="32" />
+                            <Image Source="{StaticResource SearchImage}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="32" />
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Text="Search" />
                         </Grid>
                     </Button>
@@ -106,7 +106,7 @@
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="1*" MinWidth="120" />
                     </Grid.ColumnDefinitions>
-                    <Image Source="/Images/Button_Down_16.png" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="20" />
+                    <Image Source="{StaticResource ButtonDownImage16}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="20" />
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Grid.Column="1" Text="Move To Run List" />
                 </Grid>
             </Button>
@@ -116,7 +116,7 @@
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="1*" MinWidth="120" />
                     </Grid.ColumnDefinitions>
-                    <Image Source="/Images/Button_Up_16.png" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="20" />
+                    <Image Source="{StaticResource ButtonUpImage16}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="20" />
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Grid.Column="1" Text="Remove From Run List" />
                 </Grid>
             </Button>

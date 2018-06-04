@@ -21,7 +21,7 @@
         Width="1086" Height="723"
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
-        Icon="/Images/LCMSLogo2.ico">
+        Icon="{StaticResource LcmsNetIcon2}">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="TaskBarInfo" />
     </Window.TaskbarItemInfo>
@@ -54,12 +54,12 @@
             <MenuItem Header="_Help">
                 <MenuItem Header="Report _Error" Click="ReportError_OnClick" >
                     <MenuItem.Icon>
-                        <Image Source="/Images/Append.png" MaxHeight="22" />
+                        <Image Source="{StaticResource AppendImage}" MaxHeight="22" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_About" Command="{Binding ShowAboutCommand}" >
                     <MenuItem.Icon>
-                        <Image Source="/Images/About.png" MaxHeight="22" />
+                        <Image Source="{StaticResource AboutImage}" MaxHeight="22" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -69,7 +69,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/vialReal.png" />
+                            <Image Source="{StaticResource VialRealImage}" />
                             <Label Content="Queue" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -80,7 +80,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/water.png" />
+                            <Image Source="{StaticResource WaterImage}" />
                             <Label Content="Design" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -91,7 +91,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/Simulate.png" />
+                            <Image Source="{StaticResource SimulateImage}" />
                             <Label Content="Simulate" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -102,7 +102,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/progress.png" />
+                            <Image Source="{StaticResource ProgressImage}" />
                             <Label Content="Progress" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -113,7 +113,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/MethodEditor.png" />
+                            <Image Source="{StaticResource MethodEditorImage}" />
                             <Label Content="Methods" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -124,7 +124,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/pumps2.png" />
+                            <Image Source="{StaticResource Pumps2Image}" />
                             <Label Content="Pumps" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -137,7 +137,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/notify.png" />
+                            <Image Source="{StaticResource NotifyImage}" />
                             <Label Content="Notifications" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -153,8 +153,8 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <!-- funny bindings because of how DataTemplates usually work with visual trees -->
-                            <Image Grid.Column="0" Source="/Images/StatusMessages.png" x:Name="MessageNormal" Visibility="{Binding DataContext.IsMessageNormal, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
-                            <Image Grid.Column="0" Source="/Images/StatusMessagesError.png" x:Name="MessageError" Visibility="{Binding DataContext.IsMessageError, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                            <Image Grid.Column="0" Source="{StaticResource StatusMessagesImage}" x:Name="MessageNormal" Visibility="{Binding DataContext.IsMessageNormal, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                            <Image Grid.Column="0" Source="{StaticResource StatusMessagesErrorImage}" x:Name="MessageError" Visibility="{Binding DataContext.IsMessageError, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
                             <Label Grid.Column="1" Content="Messages" VerticalAlignment="Center" />
                         </Grid>
                     </DataTemplate>
@@ -165,7 +165,7 @@
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/gears.png" />
+                            <Image Source="{StaticResource GearsImage}" />
                             <Label Content="Config" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>

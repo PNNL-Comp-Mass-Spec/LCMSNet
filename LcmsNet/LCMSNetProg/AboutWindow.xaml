@@ -13,7 +13,7 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Image Grid.Row="1" Source="/Images/LCMSNet.png" />
+        <Image Grid.Row="1" Source="{StaticResource LcmsNetBannerImage}" />
         <Label x:Name="CopyrightLabel" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Copyright Battelle Memorial Institue, 2017" FontFamily="Calibri" FontSize="20" />
         <TextBlock x:Name="Developers" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Developers: Populated at runtime" FontFamily="Calibri" FontSize="20" TextWrapping="Wrap" />
         <Label x:Name="VersionLabel"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Version: Populated at runtime" FontFamily="Calibri" FontSize="26" />

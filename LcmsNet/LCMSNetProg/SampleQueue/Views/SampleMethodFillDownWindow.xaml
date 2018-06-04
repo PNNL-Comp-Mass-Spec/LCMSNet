@@ -95,7 +95,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Filldown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
@@ -106,7 +106,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/FillDown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
@@ -117,7 +117,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Filldown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
@@ -127,7 +127,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Filldown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
@@ -137,7 +137,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Filldown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply</TextBlock>
                 </Grid>
             </Button>
@@ -148,7 +148,7 @@
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="1*" MinHeight="15" />
                 </Grid.RowDefinitions>
-                <Image Source="/Images/FillDownAll.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
+                <Image Source="{StaticResource FillDownAllImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Apply All</TextBlock>
             </Grid>
         </Button>

@@ -13,18 +13,18 @@
             <ContextMenu>
                 <MenuItem Header="Undo" Command="{Binding UndoCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Images/undo_16.png" Stretch="Uniform" />
+                        <Image Source="{StaticResource UndoImage16}" Stretch="Uniform" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Redo" Command="{Binding RedoCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Images/redo_16.png" Stretch="Uniform" />
+                        <Image Source="{StaticResource RedoImage16}" Stretch="Uniform" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="Add Blank" Command="{Binding AddBlankCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Images/Add.png" />
+                        <Image Source="{StaticResource AddImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Insert Blank Into Unused" Command="{Binding AddBlankToUnusedCommand}" />
@@ -34,7 +34,7 @@
                 <Separator />
                 <MenuItem Header="Delete Selected" Command="{Binding RemoveSelectedCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Images/Button_Delete_16.png" />
+                        <Image Source="{StaticResource ButtonDeleteImage16}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Delete Unused" Command="{Binding DeleteUnusedCommand}" />
@@ -95,7 +95,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Add.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource AddImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Blank</TextBlock>
                 </Grid>
             </Button>
@@ -105,7 +105,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/AddAppendBlank.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
+                    <Image Source="{StaticResource AddAppendBlankImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Blank</TextBlock>
                 </Grid>
             </Button>
@@ -115,7 +115,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/AddDMS.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
+                    <Image Source="{StaticResource AddDmsImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">DMS</TextBlock>
                 </Grid>
             </Button>
@@ -125,7 +125,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Button_Delete_16.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource ButtonDeleteImage16}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Selected</TextBlock>
                 </Grid>
             </Button>
@@ -135,15 +135,15 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Button_Delete_16.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource ButtonDeleteImage16}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Unused</TextBlock>
                 </Grid>
             </Button>
             <Button Grid.Column="5" Margin="4" Command="{Binding MoveUpCommand}" TabIndex="29" >
-                <Image Source="/Images/Button_Up_16.png" Stretch="None" VerticalAlignment="Top" />
+                <Image Source="{StaticResource ButtonUpImage16}" Stretch="None" VerticalAlignment="Top" />
             </Button>
             <Button Grid.Column="6" Margin="4" Command="{Binding MoveDownCommand}" TabIndex="30" >
-                <Image Source="/Images/Button_Down_16.png" Stretch="None" VerticalAlignment="Top" />
+                <Image Source="{StaticResource ButtonDownImage16}" Stretch="None" VerticalAlignment="Top" />
             </Button>
             <Button Grid.Column="7" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding FillDownCommand}" TabIndex="36" >
                 <Grid>
@@ -151,7 +151,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Filldown.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
+                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">Fill Down</TextBlock>
                 </Grid>
             </Button>
@@ -161,7 +161,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/testTube.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
+                    <Image Source="{StaticResource TestTubeImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">Tray Vial</TextBlock>
                 </Grid>
             </Button>
@@ -171,7 +171,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/Column.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
+                    <Image Source="{StaticResource ColumnImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">Move</TextBlock>
                 </Grid>
             </Button>
@@ -181,7 +181,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/CartColumnName.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="48" />
+                    <Image Source="{StaticResource CartColumnNameImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="48" />
                     <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Cart, Col, Date</TextBlock>
                 </Grid>
             </Button>
@@ -191,7 +191,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
-                    <Image Source="/Images/DMSEdit.png" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
+                    <Image Source="{StaticResource DmsEditImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">DMS Edit</TextBlock>
                 </Grid>
             </Button>
