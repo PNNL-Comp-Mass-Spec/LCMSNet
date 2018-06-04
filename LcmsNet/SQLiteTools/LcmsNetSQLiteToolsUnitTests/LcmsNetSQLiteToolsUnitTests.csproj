@@ -60,9 +60,6 @@
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.99</Version>
     </PackageReference>
-    <PackageReference Include="WPFToolkit">
-      <Version>3.5.50211.1</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

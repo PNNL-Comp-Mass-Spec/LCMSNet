@@ -71,8 +71,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="reactiveui">
-      <Version>7.4.0</Version>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>8.2.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
