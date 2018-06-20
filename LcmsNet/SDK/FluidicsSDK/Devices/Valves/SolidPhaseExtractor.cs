@@ -1,20 +1,15 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 12/31/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
-using FluidicsSDK.Graphic;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
-using System.Drawing;
-using LcmsNetDataClasses.Devices;
+using FluidicsSDK.Graphic;
+using LcmsNetSDK.Devices;
 
-namespace FluidicsSDK.Devices
+namespace FluidicsSDK.Devices.Valves
 {
-    public sealed class SolidPhaseExtractor:TwoPositionValve
+    public sealed class SolidPhaseExtractor : TwoPositionValve
     {
         private const int NUMBER_OF_PORTS = 6;
         private ISolidPhaseExtractor m_valve;
@@ -28,25 +23,25 @@ namespace FluidicsSDK.Devices
             var stateControlSize = new Size(15, 15);
             var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 2), Center.Y - (stateControlSize.Height / 2));
             var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height / 2));
-            var stateControlRectangle = new Rectangle(stateControl1Loc, stateControlSize);
-            var stateControlRectangle2 = new Rectangle(stateControl2Loc, stateControlSize);
+            var stateControlRectangle = new Rect(stateControl1Loc, stateControlSize);
+            var stateControlRectangle2 = new Rect(stateControl2Loc, stateControlSize);
             //add left control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
             // add loop
             AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
-            AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Color.Black, Brushes.White, fill:true, atScale:1));
+            AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Colors.Black, Brushes.White, fill: true, atScale: 1));
         }
 
-        public override void Render(Graphics g, int alpha, float scale = 1)
+        public override void Render(DrawingContext g, byte alpha, float scale = 1)
         {
             base.Render(g, alpha, scale);
             var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
-            using (var f = new Font("Calibri", 11 + stringScale))
-            {
-                g.DrawString("SPE", f, Brushes.Black, new PointF(Center.X - 20, Center.Y - 10));
-            }
+
+            var font = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+            var volumeText = new FormattedText("SPE", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, ElevenPoint * stringScale, Brushes.Black, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            g.DrawText(volumeText, new Point(Center.X - 20, Center.Y - 10));
         }
 
         private void SetValvePosition(TwoPositionState pos)
@@ -81,7 +76,6 @@ namespace FluidicsSDK.Devices
             };
             return states;
         }
-
 
         void m_valve_PositionChanged(object sender, ValvePositionEventArgs<TwoPositionState> e)
         {
@@ -137,6 +131,5 @@ namespace FluidicsSDK.Devices
         {
             ChangePosition(false);
         }
-
     }
 }

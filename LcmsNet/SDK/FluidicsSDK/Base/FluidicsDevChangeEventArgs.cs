@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.Windows;
 
 namespace FluidicsSDK.Base
 {
@@ -7,8 +7,7 @@ namespace FluidicsSDK.Base
     /// eventargs for a fluidics device change event
     /// </summary>
     public class FluidicsDevChangeEventArgs:EventArgs
-    {        
-
+    {
         public FluidicsDevChangeEventArgs()
         {
             OldLocation = null;
@@ -26,7 +25,7 @@ namespace FluidicsSDK.Base
             OldLocation = null;
             Message = message;
         }
-        
+
         public Point? OldLocation
         {
             get;
@@ -38,6 +37,5 @@ namespace FluidicsSDK.Base
             get;
             private set;
         }
-
     }
 }

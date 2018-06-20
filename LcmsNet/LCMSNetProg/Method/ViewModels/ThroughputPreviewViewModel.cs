@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.ViewModels
 {
@@ -20,13 +20,13 @@ namespace LcmsNet.Method.ViewModels
         /// Displays the alignment for the samples.
         /// </summary>
         /// <param name="samples"></param>
-        public void ShowAlignmentForSamples(List<classSampleData> samples)
+        public void ShowAlignmentForSamples(List<SampleData> samples)
         {
             // Show the samples
             UpdateSampleMethods(samples);
 
             // Align the samples
-            var optimizer = new classLCMethodOptimizer();
+            var optimizer = new LCMethodOptimizer();
             optimizer.UpdateRequired += optimizer_UpdateRequired;
             optimizer.AlignSamples(samples);
 
@@ -39,7 +39,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the alignment as it occurs.
         /// </summary>
         /// <param name="sender"></param>
-        void optimizer_UpdateRequired(classLCMethodOptimizer sender)
+        void optimizer_UpdateRequired(LCMethodOptimizer sender)
         {
             RenderMethods(sender.Methods);
         }
@@ -47,17 +47,18 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Renders the sample methods.
         /// </summary>
-        void UpdateSampleMethods(List<classSampleData> samples)
+        void UpdateSampleMethods(List<SampleData> samples)
         {
-            var methods = new List<classLCMethod>();
+            var methods = new List<LCMethod>();
             foreach (var sample in samples)
             {
-                if (sample?.LCMethod == null)
+                sample.CloneLCMethod();
+
+                if (sample?.ActualLCMethod == null)
                     continue;
 
-                // Clone this, so we don't have multiple copies competing for the same times, methods, etc.
-                sample.CloneLCMethod();
-                methods.Add(sample.LCMethod);
+                // Use the "Actual LC Method", so we don't have multiple copies competing for the same times, methods, etc.
+                methods.Add(sample.ActualLCMethod);
             }
 
             if (methods.Count > 0)
@@ -68,7 +69,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders all of the methods.
         /// </summary>
         /// <param name="methods"></param>
-        private void RenderMethods(List<classLCMethod> methods)
+        private void RenderMethods(List<LCMethod> methods)
         {
             RenderLCMethod(methods);
         }

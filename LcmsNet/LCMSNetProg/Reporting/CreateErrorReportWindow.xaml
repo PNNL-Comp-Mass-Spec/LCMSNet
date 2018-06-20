@@ -1,0 +1,28 @@
+﻿<Window x:Class="LcmsNet.Reporting.CreateErrorReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LcmsNet.Reporting"
+        mc:Ignorable="d"
+        Title="Error Report Tool" Height="393" Width="278"
+        d:DataContext="{d:DesignInstance {x:Type local:CreateErrorReportViewModel}, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner"
+        DataContextChanged="CreateErrorReportWindow_OnDataContextChanged"
+        Loaded="CreateErrorReportWindow_OnLoaded">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Select LC Methods To Add to Report" />
+        <ListBox x:Name="MethodList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,3" ItemsSource="{Binding LCMethodsList}" SelectionMode="Extended" SelectionChanged="MethodList_OnSelectionChanged" />
+        <Button Grid.Row="2" Grid.Column="0" Margin="3" Height="38" Content="Create" IsDefault="True" Command="{Binding CreateReportCommand}" ClickMode="Release" Click="Create_OnClick" />
+        <Button Grid.Row="2" Grid.Column="1" Margin="3" Height="38" Content="Cancel" IsCancel="True" Click="Cancel_OnClick" />
+    </Grid>
+</Window>

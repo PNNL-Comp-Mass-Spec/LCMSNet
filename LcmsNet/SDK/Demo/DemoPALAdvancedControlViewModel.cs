@@ -1,17 +1,19 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary
 {
-    public class DemoPALAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class DemoPALAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private DemoPAL m_PALdevice;
 
         public DemoPALAdvancedControlViewModel()
         {
-            RunCommand = ReactiveUI.ReactiveCommand.Create(() => Run());
+            RunCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Run()));
         }
 
         public void RegisterDevice(IDevice device)
@@ -65,7 +67,7 @@ namespace DemoPluginLibrary
         private void Run()
         {
             // use a defaulted sampledata object since there's no sample associated with a user clicking "run"
-            m_PALdevice.RunMethod(Timeout, new LcmsNetDataClasses.classSampleData(), SelectedMethod);
+            m_PALdevice.RunMethod(Timeout, new SampleData(), SelectedMethod);
         }
     }
 }

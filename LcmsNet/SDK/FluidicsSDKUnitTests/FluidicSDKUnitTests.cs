@@ -7,11 +7,11 @@
  *********************************************************************************************************/
 using System;
 using System.Linq;
+using System.Windows;
 using NUnit.Framework;
 using FluidicsSDK.Base;
 using DemoPluginLibrary;
 using FluidicsSDK.Managers;
-using System.Drawing;
 
 namespace FluidicsSDKUnitTests
 {
@@ -69,13 +69,13 @@ namespace FluidicsSDKUnitTests
             p1 = null;
             p2 = null;
         }
-        
+
         /// <summary>
         /// Test to ensure that a port cannot be connected to itself.
         /// </summary>
         [Test]
         public void ConnectionmanagerDoNotConnectTheSamePortToItself()
-        {            
+        {
             Assert.Throws<ArgumentException>(DoNotConnectHelper);
             PortManager.GetPortManager.RemovePort(PortManager.GetPortManager.Ports[0]); //clean up the port that was added by the helper
         }
@@ -95,13 +95,13 @@ namespace FluidicsSDKUnitTests
         [Test]
         public void ConnectionsTwoPortsOnlyConnectOnce()
         {
-           
+
             Assert.Throws<ArgumentException>(OnlyOnceHelper);
             // clean up the ports that were added by the helper.
             PortManager.GetPortManager.RemovePort(PortManager.GetPortManager.Ports[1]);
             PortManager.GetPortManager.RemovePort(PortManager.GetPortManager.Ports[0]);
         }
-       
+
         /// <summary>
         /// helper for ConnectionsTwoPortsOnlyConnectOnce
         /// </summary>
@@ -128,6 +128,6 @@ namespace FluidicsSDKUnitTests
             FluidicsDeviceManager.DeviceManager.Remove(p);
             fp = null;
             p = null;
-        }   
+        }
     }
 }

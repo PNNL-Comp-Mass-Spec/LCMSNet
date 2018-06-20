@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
 {
     public class TrayVialSampleViewModel : ReactiveObject
     {
-        public TrayVialSampleViewModel(classSampleData sample, List<string> trayNames)
+        public TrayVialSampleViewModel(SampleData sample, List<string> trayNames)
         {
             this.sample = sample;
             this.trayNames = trayNames;
@@ -18,12 +18,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         private readonly List<string> trayNames;
-        private readonly classSampleData sample;
+        private readonly SampleData sample;
         private int tray;
         private int vial;
         private bool dataChanged;
 
-        public classSampleData Sample => sample;
+        public SampleData Sample => sample;
 
         public int ColumnId => Sample.ColumnData.ID + 1;
 
@@ -47,9 +47,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             if (Tray == 0)
             {
-                Sample.PAL.PALTray = string.Empty;
+                Sample.PAL.PALTray = null;
             }
-            Sample.PAL.PALTray = trayNames[Tray - 1];
+            else
+            {
+                Sample.PAL.PALTray = trayNames[Tray - 1];
+            }
             Sample.PAL.Well = Vial;
         }
     }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Data;
+using LcmsNetSDK.Data;
 using LcmsNetSQLiteTools;
 using NUnit.Framework;
 
@@ -13,14 +12,14 @@ namespace LcmsNetSQLiteToolsUnitTests
     public class LcmsNetSQLiteToolsUnitTests
     {
         const string CONST_TEST_FOLDER = "LCMSNetUnitTests";
-        const string CONST_TEST_CACHE = "classSQLiteToolsUnitTests.que";
+        const string CONST_TEST_CACHE = "SQLiteToolsUnitTests.que";
 
         private const bool DELETE_CACHE_DB = true;
 
         public LcmsNetSQLiteToolsUnitTests()
         {
 
-            classSQLiteTools.Initialize(CONST_TEST_FOLDER);
+            SQLiteTools.Initialize(CONST_TEST_FOLDER);
 
             var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var file = Path.Combine(appPath, CONST_TEST_FOLDER, CONST_TEST_CACHE);
@@ -30,7 +29,7 @@ namespace LcmsNetSQLiteToolsUnitTests
             }
 
             // Note that this will call BuildConnectionString
-            classSQLiteTools.SetCacheLocation(file);
+            SQLiteTools.SetCacheLocation(file);
 
         }
 
@@ -48,8 +47,8 @@ namespace LcmsNetSQLiteToolsUnitTests
             //actual buildconnectionstring call is in constructor
             var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                           CONST_TEST_FOLDER, CONST_TEST_CACHE);
-            Console.WriteLine("ConnectionString: " + classSQLiteTools.ConnString);
-            Assert.AreEqual("data source=" + folderPath, classSQLiteTools.ConnString);
+            Console.WriteLine("ConnectionString: " + SQLiteTools.ConnString);
+            Assert.AreEqual("data source=" + folderPath, SQLiteTools.ConnString);
         }
 
         /// <summary>
@@ -66,7 +65,7 @@ namespace LcmsNetSQLiteToolsUnitTests
             };
 
             // if the following line doesn't throw an exception, it "worked".
-            classSQLiteTools.SaveSingleColumnListToCache(testSeparationTypes, enumTableTypes.SeparationTypeList);
+            SQLiteTools.SaveSingleColumnListToCache(testSeparationTypes, DatabaseTableTypes.SeparationTypeList);
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace LcmsNetSQLiteToolsUnitTests
                 "Separation 2",
                 "Separation 3"
             };
-            var retrieved = classSQLiteTools.GetSepTypeList(false);
+            var retrieved = SQLiteTools.GetSepTypeList(false);
             Assert.IsTrue(retrieved.SequenceEqual(testList)); // If this is equal, both TestB and C worked, and we read the information back from the cache
         }
 
@@ -91,14 +90,14 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestD()
         {
-            var usersExampleData = new List<classUserInfo>();
-            var example = new classUserInfo
+            var usersExampleData = new List<UserInfo>();
+            var example = new UserInfo
             {
                 PayrollNum = "1",
                 UserName = "Test User"
             };
             usersExampleData.Add(example);
-            classSQLiteTools.SaveUserListToCache(usersExampleData);
+            SQLiteTools.SaveUserListToCache(usersExampleData);
         }
 
 
@@ -108,7 +107,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestE()
         {
-            var users = classSQLiteTools.GetUserList(false);
+            var users = SQLiteTools.GetUserList(false);
             Assert.AreEqual(1, users.Count);
             Assert.IsTrue(users.Exists(x => x.UserName == "Test User" && x.PayrollNum == "1"));
         }
@@ -119,7 +118,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestF()
         {
-            classSQLiteTools.SaveSelectedSeparationType("Separation3");
+            SQLiteTools.SaveSelectedSeparationType("Separation3");
         }
 
         /// <summary>
@@ -128,7 +127,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestG()
         {
-            var result = classSQLiteTools.GetDefaultSeparationType();
+            var result = SQLiteTools.GetDefaultSeparationType();
             Assert.AreEqual("Separation3", result);
         }
 
@@ -138,17 +137,17 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestH()
         {
-            var samples = new List<classSampleData>
+            var samples = new List<SampleData>
             {
-                new classSampleData()
+                new SampleData()
             };
             samples[0].UniqueID = 1;
             samples[0].DmsData.DatasetName = "Test";
 
-            samples.Add(new classSampleData());
+            samples.Add(new SampleData());
             samples[1].UniqueID = 2;
 
-            classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.WaitingQueue);
+            SQLiteTools.SaveQueueToCache(samples, DatabaseTableTypes.WaitingQueue);
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestI()
         {
-            var samples = classSQLiteTools.GetQueueFromCache(enumTableTypes.WaitingQueue);
+            var samples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.WaitingQueue);
             Assert.AreEqual(1, samples[0].UniqueID);
         }
 
@@ -167,12 +166,12 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestJ()
         {
-            var samples = new List<classSampleData>
+            var samples = new List<SampleData>
             {
-                new classSampleData()
+                new SampleData()
             };
             samples[0].UniqueID = 2;
-            classSQLiteTools.SaveQueueToCache(samples, enumTableTypes.RunningQueue);
+            SQLiteTools.SaveQueueToCache(samples, DatabaseTableTypes.RunningQueue);
         }
 
         /// <summary>
@@ -181,7 +180,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestK()
         {
-            var samples = classSQLiteTools.GetQueueFromCache(enumTableTypes.RunningQueue);
+            var samples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.RunningQueue);
             Assert.AreEqual(2, samples[0].UniqueID);
         }
 
@@ -192,8 +191,8 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestL()
         {
-            var experiments = new List<classExperimentData>();
-            var experiment = new classExperimentData
+            var experiments = new List<ExperimentData>();
+            var experiment = new ExperimentData
             {
                 ID = 1,
                 Experiment = "Test",
@@ -202,7 +201,7 @@ namespace LcmsNetSQLiteToolsUnitTests
                 Reason = "Software testing"
             };
             experiments.Add(experiment);
-            classSQLiteTools.SaveExperimentListToCache(experiments);
+            SQLiteTools.SaveExperimentListToCache(experiments);
         }
 
 
@@ -212,7 +211,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestM()
         {
-            var experiments = classSQLiteTools.GetExperimentList();
+            var experiments = SQLiteTools.GetExperimentList();
             Assert.AreEqual(1, experiments[0].ID);
             Assert.AreEqual("Test", experiments[0].Experiment);
         }
@@ -223,13 +222,13 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestN()
         {
-            var instInfo = new List<classInstrumentInfo>();
-            var inst = new classInstrumentInfo
+            var instInfo = new List<InstrumentInfo>();
+            var inst = new InstrumentInfo
             {
                 CommonName = "Test instrument"
             };
             instInfo.Add(inst);
-            classSQLiteTools.SaveInstListToCache(instInfo);
+            SQLiteTools.SaveInstListToCache(instInfo);
         }
 
         /// <summary>
@@ -238,7 +237,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestO()
         {
-            var insts = classSQLiteTools.GetInstrumentList(false);
+            var insts = SQLiteTools.GetInstrumentList(false);
             Assert.AreEqual("Test instrument", insts[0].CommonName);
         }
 
@@ -248,13 +247,13 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestP()
         {
-            var users = new List<classProposalUser>();
-            var user = new classProposalUser
+            var users = new List<ProposalUser>();
+            var user = new ProposalUser
             {
                 UserID = 1
             };
             users.Add(user);
-            classSQLiteTools.SaveProposalUsers(users, new List<classUserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<classUserIDPIDCrossReferenceEntry>>());
+            SQLiteTools.SaveProposalUsers(users, new List<UserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>());
         }
 
         /// <summary>
@@ -263,9 +262,9 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestQ()
         {
-            List<classProposalUser> users;
-            Dictionary<string, List<classUserIDPIDCrossReferenceEntry>> dict;
-            classSQLiteTools.GetProposalUsers(out users, out dict);
+            List<ProposalUser> users;
+            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> dict;
+            SQLiteTools.GetProposalUsers(out users, out dict);
             Assert.AreEqual(1, users[0].UserID);
         }
 
@@ -275,13 +274,13 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestR()
         {
-            var cols = new List<classLCColumn>();
-            var col = new classLCColumn
+            var cols = new List<LCColumnData>();
+            var col = new LCColumnData
             {
                 LCColumn = "ColTest1"
             };
             cols.Add(col);
-            classSQLiteTools.SaveEntireLCColumnListToCache(cols);
+            SQLiteTools.SaveEntireLCColumnListToCache(cols);
         }
 
         /// <summary>
@@ -290,7 +289,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestS()
         {
-            var cols = classSQLiteTools.GetEntireLCColumnList();
+            var cols = SQLiteTools.GetEntireLCColumnList();
             Assert.AreEqual(1, cols.Count);
             Assert.IsTrue(cols[0].LCColumn == "ColTest1");
         }

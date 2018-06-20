@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluidicsSDK.Devices
+namespace FluidicsSDK.Devices.Valves
 {
     /// <summary>
     /// Event arguments for when a position is changed in a valve.

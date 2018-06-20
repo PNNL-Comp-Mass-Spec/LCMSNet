@@ -1,0 +1,123 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using LcmsNetSDK.Data;
+
+namespace LcmsNetSDK.Configuration
+{
+    /// <summary>
+    /// Class that encapsulates the configuration of the cart from
+    /// systems to columns.
+    /// </summary>
+    public static class CartConfiguration
+    {
+        static CartConfiguration()
+        {
+            Columns = new List<ColumnData>();
+        }
+
+        /// <summary>
+        /// Gets the number of enabled columns.
+        /// </summary>
+        public static int NumberOfEnabledColumns
+        {
+            get
+            {
+                var n = 0;
+
+                //
+                // Figure out what columns are enabled or disabled.
+                //
+                foreach (var col in Columns)
+                {
+                    if (col.Status != ColumnStatus.Disabled)
+                    {
+                        n++;
+                    }
+                }
+                return n;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the list of columns available.
+        /// </summary>
+        public static List<ColumnData> Columns { get; set; }
+
+        /// <summary>
+        /// Builds a list of columns from the cart configuration object.
+        /// </summary>
+        /// <param name="orderByFirst">Orders the list by the first selected column. e.g. list[0] = column3 iff column3.First = True</param>
+        /// <returns>List of columns stored in cart configuration.</returns>
+        public static List<ColumnData> BuildColumnList(bool orderByFirst)
+        {
+            var orderList = new List<ColumnData>();
+            foreach (var column in Columns)
+            {
+                orderList.Add(column);
+            }
+
+            if (orderByFirst == false)
+                return orderList;
+
+            //
+            // For every column add it to the build list,
+            // if it is not disabled to run
+            //
+            var tempList1 = new List<ColumnData>();
+            var tempList2 = new List<ColumnData>();
+            var ptrList = tempList1;
+            var copyNew = false;
+            foreach (var data in orderList)
+            {
+                if (data.Status != ColumnStatus.Disabled)
+                {
+                    if (data.First)
+                    {
+                        ptrList = tempList2;
+                        copyNew = true;
+                    }
+                    ptrList.Add(data);
+                }
+            }
+            if (copyNew)
+            {
+                ptrList.AddRange(tempList1);
+            }
+
+            return ptrList;
+        }
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the name of the cart.
+        /// </summary>
+        public static string CartName
+        {
+            get { return LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME); }
+            set { LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTNAME, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the cart configuration in use
+        /// </summary>
+        public static string CartConfigName
+        {
+            get { return LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME); }
+            set { LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTCONFIGNAME, value); }
+        }
+
+        public static double MinimumVolume
+        {
+            get
+            {
+                var volume = LCMSSettings.GetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, 0.0);
+                return Math.Max(volume, SampleData.CONST_MIN_SAMPLE_VOLUME);
+            }
+            set { LCMSSettings.SetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture)); }
+        }
+
+        #endregion
+    }
+}

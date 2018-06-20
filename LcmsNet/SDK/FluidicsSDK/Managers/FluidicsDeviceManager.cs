@@ -1,17 +1,11 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 9/5/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
-using FluidicsSDK.Devices;
-using LcmsNetDataClasses.Devices;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
+using FluidicsSDK.Devices;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Managers
 {
@@ -84,7 +78,6 @@ namespace FluidicsSDK.Managers
                 {
                     deviceRemoved = true;
                     deviceToRemove = fluidicsDevice;
-
                 }
             }
             if (!deviceRemoved)
@@ -101,10 +94,10 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// render all fluidics devices to screen
         /// </summary>
-        /// <param name="g">a System.Drawing Graphics object</param>
+        /// <param name="g">a System.Windows.Media DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the devices with</param>
         /// <param name="scale">a float repsenting how much to scale the devices by</param>
-        public void Render(Graphics g, int alpha, float scale)
+        public void Render(DrawingContext g, byte alpha, float scale)
         {
             foreach (var device in m_devices)
             {
@@ -124,7 +117,7 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// try to find a fluidics device at the selected location
         /// </summary>
-        /// <param name="location">a System.Drawing.Point object representing the location clicked</param>
+        /// <param name="location">a Point object representing the location clicked</param>
         /// <returns>a classFluidicsDevice object if one is found, or null</returns>
         public FluidicsDevice Select(Point location)
         {
@@ -144,27 +137,41 @@ namespace FluidicsSDK.Managers
         }
 
         /// <summary>
-        /// Get bounding box around
+        /// Get bounding box around all devices
         /// </summary>
         /// <returns></returns>
-        public Rectangle GetBoundingBox(bool addBuffer)
+        public Rect GetBoundingBox(bool addBuffer)
         {
             if (m_devices.Count == 0)
             {
-                return new Rectangle(0, 0, 0, 0);
+                return new Rect(0, 0, 0, 0);
             }
+
             // extra pixels around edge of bounding box to ensure images taken using bounding box get full image
             var buffer = 200;
             if (!addBuffer)
             {
                 buffer = 10;
             }
-            var maxX = m_devices.Max(z => (int)(z.Loc.X + z.Size.Width));
-            var maxY = m_devices.Max(z => (int)(z.Loc.Y + z.Size.Height));
-            var x = m_devices.Min(z => z.Loc.X);
-            var y = m_devices.Min(z => z.Loc.Y);
-            return new Rectangle(x - buffer, y - buffer, maxX + buffer, maxY + buffer);
+
+            // Make sure all of the device graphics have been drawn at least once at full scale
+            if (m_devices.Any(z => !z.RenderedOnceFullScale))
+            {
+                var drawContext = new DrawingVisual().RenderOpen();
+                float scale = 1;
+                Render(drawContext, 255, scale);
+                drawContext.Close();
+            }
+
+            var deviceBounds = m_devices.Select(x => x.Bounds).ToList();
+            var maxX = deviceBounds.Max(x => x.Right);
+            var maxY = deviceBounds.Max(x => x.Bottom);
+            var minX = deviceBounds.Min(x => x.X);
+            var minY = deviceBounds.Min(x => x.Y);
+
+            return new Rect(minX - buffer, minY - buffer, maxX - minX + buffer * 2, maxY - minY + buffer * 2);
         }
+
         /// <summary>
         /// confirm selection of a fluidics device, allows selection hilighting for user
         /// </summary>
@@ -186,7 +193,6 @@ namespace FluidicsSDK.Managers
 
         /// <summary>
         ///  reorder the list to make sure devices when moved, are brought to front
-        ///  
         /// </summary>
         public void BringToFront(List<FluidicsDevice> devices)
         {

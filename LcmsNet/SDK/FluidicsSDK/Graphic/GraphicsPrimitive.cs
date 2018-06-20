@@ -1,11 +1,6 @@
-﻿/*********************************************************************************************************
- * Written by Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 8/16/2013
- *
- ********************************************************************************************************/
-using System.Drawing;
+﻿using System;
+using System.Windows;
+using System.Windows.Media;
 
 namespace FluidicsSDK.Graphic
 {
@@ -15,7 +10,6 @@ namespace FluidicsSDK.Graphic
     /// </summary>
     public abstract class GraphicsPrimitive
     {
-
         #region Members
 
         /// <summary>
@@ -30,14 +24,14 @@ namespace FluidicsSDK.Graphic
 
         /// <summary>
         ///  Brush to use to draw object, solid, hatched, crosshatched are the options.
-        /// </summary>        
+        /// </summary>
         private Brush m_fillBrush;
 
         /// <summary>
         ///  the current pen to draw with.
         /// </summary>
         private Pen m_drawingPen;
-        
+
         /// <summary>
         /// color to use when object is highlighted
         /// </summary>
@@ -53,9 +47,9 @@ namespace FluidicsSDK.Graphic
         private Pen m_errorPen;
 
         private const int PEN_WIDTH = 4;
-        private static readonly Color DEFAULT_HILIGHT = Color.DarkGray;
-        private static readonly Color DEFAULT_COLOR = Color.Black;
-        private static readonly Color DEFAULT_ERROR = Color.Red;
+        private static readonly Color DEFAULT_HILIGHT = Colors.DarkGray;
+        private static readonly Color DEFAULT_COLOR = Colors.Black;
+        private static readonly Color DEFAULT_ERROR = Colors.Red;
 
         #endregion
 
@@ -68,12 +62,15 @@ namespace FluidicsSDK.Graphic
         {
             m_fill = true;
             m_color = DEFAULT_COLOR;
-            m_drawingPen = new Pen(new SolidBrush(m_color)) { Width = PEN_WIDTH };
+            m_drawingPen = new Pen(new SolidColorBrush(m_color), PEN_WIDTH);
             m_highlightColor = DEFAULT_HILIGHT;
-            m_highlightPen = new Pen(new SolidBrush(m_highlightColor)) { Width = PEN_WIDTH };
+            m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
             m_errorColor = DEFAULT_ERROR;
-            m_errorPen = new Pen(new SolidBrush(m_errorColor)) { Width = PEN_WIDTH };
-            m_fillBrush = new SolidBrush(Color.White);
+            m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
+            m_fillBrush = Brushes.White;
+            m_drawingPen.TryFreeze();
+            m_highlightPen.TryFreeze();
+            m_errorPen.TryFreeze();
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="myColor">the primary color to draw the object</param>
         /// <param name="fill">boolean, determines if the graphic is filled </param>
         protected GraphicsPrimitive(Color? myColor = null, bool fill = true) :
-            this(new SolidBrush(Color.White), myColor: myColor, fill: fill)
+            this(Brushes.White, myColor: myColor, fill: fill)
         {
         }
 
@@ -97,30 +94,37 @@ namespace FluidicsSDK.Graphic
             m_fill = fill;
             m_color = myColor ?? DEFAULT_COLOR;
             m_fillBrush = fillbrush;
-            m_drawingPen = new Pen(new SolidBrush(m_color)) { Width = PEN_WIDTH };
+            m_drawingPen = new Pen(new SolidColorBrush(m_color), PEN_WIDTH);
             m_highlightColor = DEFAULT_HILIGHT;
-            m_highlightPen = new Pen(new SolidBrush(m_highlightColor)) { Width = PEN_WIDTH };
-            m_errorColor = Color.Red;
-            m_errorPen = new Pen(new SolidBrush(m_errorColor)) { Width = PEN_WIDTH };
+            m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
+            m_errorColor = Colors.Red;
+            m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
+            m_drawingPen.TryFreeze();
+            m_highlightPen.TryFreeze();
+            m_errorPen.TryFreeze();
+            m_fillBrush.TryFreeze();
         }
-
-        //cleanup to prevent leaks. both the Pen and Brush objects need to be disposed as they wrap unmanaged resources
-        ~GraphicsPrimitive()
-        {
-            m_drawingPen.Dispose();
-            m_highlightPen.Dispose();
-            m_errorPen.Dispose();
-        }
-
 
         // ALL inheriting classes must define their own Render() method, since only they can determine how they are rendered
-        public abstract void Render(Graphics g, int alpha, float scale, bool highlight, bool error);
+        [Obsolete("Use version with \"byte\" alpha")]
+        public void Render(DrawingContext g, int alpha, float scale, bool highlight, bool error)
+        {
+            Render(g, (byte)alpha, scale, highlight, error);
+        }
 
-        public virtual void Render(Graphics g, int alpha, float scale, Point moveby, bool highlight, bool error)
+        [Obsolete("Use version with \"byte\" alpha")]
+        public void Render(DrawingContext g, int alpha, float scale, Point moveby, bool highlight, bool error)
+        {
+            Render(g, (byte)alpha, scale, highlight, error);
+        }
+
+        // ALL inheriting classes must define their own Render() method, since only they can determine how they are rendered
+        public abstract void Render(DrawingContext g, byte alpha, float scale, bool highlight, bool error);
+
+        public virtual void Render(DrawingContext g, byte alpha, float scale, Point moveby, bool highlight, bool error)
         {
             Render(g, alpha, scale, highlight, error);
         }
-
 
         // a primitive should be able to tell if a point is within itself.
         public abstract bool Contains(Point point, int max_variance);
@@ -136,34 +140,23 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual bool Fill
         {
-            get
-            {
-                return m_fill;
-            }
-            set
-            {
-                m_fill = value;
-            }
+            get { return m_fill; }
+            set { m_fill = value; }
         }
-
 
         /// <summary>
         /// Primary draw color of the graphics object
         /// </summary>
         public virtual Color Color
         {
-            get
-            {
-                return m_color;
-            }
+            get { return m_color; }
             set
             {
                 m_color = value;
-                m_drawingPen.Dispose();
-                m_drawingPen = new Pen(new SolidBrush(m_color)) { Width = PEN_WIDTH };
+                m_drawingPen = new Pen(new SolidColorBrush(m_color), PEN_WIDTH);
+                m_drawingPen.TryFreeze();
             }
         }
-
 
         /// <summary>
         /// read-only pen property
@@ -176,32 +169,24 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Color Highlight
         {
-            get
-            {
-                return m_highlightColor;
-            }
+            get { return m_highlightColor; }
             set
             {
                 m_highlightColor = value;
-                m_highlightPen.Dispose();
-                m_highlightPen = new Pen(new SolidBrush(m_highlightColor)) {Width = PEN_WIDTH};
+                m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
+                m_highlightPen.TryFreeze();
             }
         }
 
-
         public virtual Color ErrorColor
         {
-            get
-            {
-                return m_errorColor;
-            }
+            get { return m_errorColor; }
             set
             {
                 m_errorColor = value;
-                m_errorPen.Dispose();
-                m_errorPen = new Pen(new SolidBrush(m_errorColor)) {Width = PEN_WIDTH};
+                m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
+                m_errorPen.TryFreeze();
             }
-
         }
 
         public virtual Pen ErrorPen => m_errorPen;
@@ -216,13 +201,11 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Brush FillBrush
         {
-            get
-            {
-                return m_fillBrush;
-            }
+            get { return m_fillBrush; }
             set
             {
                 m_fillBrush = value;
+                m_fillBrush.TryFreeze();
             }
         }
 
@@ -232,10 +215,15 @@ namespace FluidicsSDK.Graphic
         public abstract Size Size { get; set; }
 
         /// <summary>
-        /// Property representing the location of the primitive on screen
+        /// Property representing the location of the primitive on the drawing
         /// </summary>
         /// <remarks>The location of the upper-left corner of the primitive, or start point of the line.</remarks>
-        public virtual Point Loc { get; set; }
+        public abstract Point Loc { get; set; }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public abstract Rect Bounds { get; }
 
         #endregion
     }

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using LcmsNetSDK;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     public class BaseDeviceControlViewModel : INotifyPropertyChangedExt
     {
@@ -13,7 +12,7 @@ namespace LcmsNetDataClasses.Devices
         protected IDevice device
         {
             get { return deviceBacker; }
-            set { this.RaiseAndSetIfChanged(ref deviceBacker, value); }
+            set { this.RaiseAndSetIfChanged(ref deviceBacker, value, nameof(device)); }
         }
 
         private IDevice deviceBacker;
@@ -87,7 +86,7 @@ namespace LcmsNetDataClasses.Devices
         public string Name
         {
             get { return device?.Name ?? name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            set { this.RaiseAndSetIfChanged(ref name, value, nameof(Name)); }
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace LcmsNetDataClasses.Devices
         public string DeviceStatus
         {
             get { return deviceStatus; }
-            private set { this.RaiseAndSetIfChanged(ref deviceStatus, value); }
+            private set { this.RaiseAndSetIfChanged(ref deviceStatus, value, nameof(DeviceStatus)); }
         }
 
         private string name = "";
@@ -107,7 +106,7 @@ namespace LcmsNetDataClasses.Devices
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")
         {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

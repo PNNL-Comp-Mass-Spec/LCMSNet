@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
-namespace LcmsNetSDK.Notifications
+namespace LcmsNetSDK.System
 {
     /// <summary>
     /// Inteface used to notify the system when something bad has happened (or status)
@@ -26,11 +26,11 @@ namespace LcmsNetSDK.Notifications
         /// <summary>
         /// Fired when the status of a device has changed.
         /// </summary>
-        event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
         /// Fired when an error occurs on a device.
         /// </summary>
-        event EventHandler<classDeviceErrorEventArgs> Error;
+        event EventHandler<DeviceErrorEventArgs> Error;
     }
 }

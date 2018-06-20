@@ -1,63 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{44F85A93-8010-44CE-8655-21DDAEC72AC1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Teledyne</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.Teledyne</RootNamespace>
     <AssemblyName>Teledyne</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\Teledyne.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
     <OutputPath>bin\PNNLRelease\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
-    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\PNNLRelease\Teledyne.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluidicsSDK">
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetCommonControls">
+      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
@@ -65,118 +46,66 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="ZedGraph">
-      <HintPath>..\..\lib\ZedGraph.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Devices\classIscoConversions.cs" />
-    <Compile Include="Devices\classIscoErrorNotifications.cs" />
-    <Compile Include="Devices\classIscoExceptions.cs" />
-    <Compile Include="Devices\classIscoSerPortProps.cs" />
-    <Compile Include="Devices\classIscoStatusNotifications.cs" />
-    <Compile Include="Devices\classPumpIsco.cs" />
-    <Compile Include="Devices\classPumpIscoData.cs" />
-    <Compile Include="Devices\classPumpIscoDisplayArray.cs" />
-    <Compile Include="Devices\classPumpIscoGlyph.cs" />
-    <Compile Include="Devices\classPumpIscoGlyphWpf.cs" />
-    <Compile Include="Devices\classPumpIscoRangeData.cs" />
-    <Compile Include="Devices\classPumpIscoSetpointLimits.cs" />
-    <Compile Include="Devices\codeFilePumpIscoDelegates.cs" />
-    <Compile Include="Devices\controlPumpIsco.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Pumps\IscoConversions.cs" />
+    <Compile Include="Pumps\IscoErrorNotifications.cs" />
+    <Compile Include="Pumps\IscoExceptions.cs" />
+    <Compile Include="Pumps\IscoSerPortProps.cs" />
+    <Compile Include="Pumps\IscoStatusNotifications.cs" />
+    <Compile Include="Pumps\IscoPump.cs" />
+    <Compile Include="Pumps\IscoPumpData.cs" />
+    <Compile Include="Pumps\IscoPumpGlyph.cs" />
+    <Compile Include="Pumps\IscoPumpRangeData.cs" />
+    <Compile Include="Pumps\IscoPumpSetpointLimits.cs" />
+    <Compile Include="Pumps\IscoPumpDelegates.cs" />
+    <Compile Include="Pumps\IscoControlMode.cs" />
+    <Compile Include="Pumps\IscoFlowUnits.cs" />
+    <Compile Include="Pumps\ISCOModel.cs" />
+    <Compile Include="Pumps\IscoMsgAckCodes.cs" />
+    <Compile Include="Pumps\IscoOperationMode.cs" />
+    <Compile Include="Pumps\IscoOperationStatus.cs" />
+    <Compile Include="Pumps\IscoPressureUnits.cs" />
+    <Compile Include="Pumps\IscoProblemStatus.cs" />
+    <Compile Include="Pumps\ISCOPumpChannels.cs" />
+    <Compile Include="Pumps\IscoPumpDisplayView.xaml.cs">
+      <DependentUpon>IscoPumpDisplayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\controlPumpIsco.designer.cs">
-      <DependentUpon>controlPumpIsco.cs</DependentUpon>
+    <Compile Include="Pumps\IscoPumpDisplayViewModel.cs" />
+    <Compile Include="Pumps\IscoPumpView.xaml.cs">
+      <DependentUpon>IscoPumpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\controlPumpIscoDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoDisplay.designer.cs">
-      <DependentUpon>controlPumpIscoDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoGraphs.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlPumpIscoGraphs.Designer.cs" />
-    <Compile Include="Devices\enumIscoControlMode.cs" />
-    <Compile Include="Devices\enumIscoFlowUnits.cs" />
-    <Compile Include="Devices\enumISCOModel.cs" />
-    <Compile Include="Devices\enumIscoMsgAckCodes.cs" />
-    <Compile Include="Devices\enumIscoOperationMode.cs" />
-    <Compile Include="Devices\enumIscoOperationStatus.cs" />
-    <Compile Include="Devices\enumIscoPressureUnits.cs" />
-    <Compile Include="Devices\enumIscoProblemStatus.cs" />
-    <Compile Include="Devices\enumISCOPumpChannels.cs" />
-    <Compile Include="Devices\PumpIscoDisplayView.xaml.cs">
-      <DependentUpon>PumpIscoDisplayView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\PumpIscoDisplayViewModel.cs" />
-    <Compile Include="Devices\PumpIscoView.xaml.cs">
-      <DependentUpon>PumpIscoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\PumpIscoViewModel.cs" />
+    <Compile Include="Pumps\IscoPumpViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Devices\controlPumpIsco.resx">
-      <DependentUpon>controlPumpIsco.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\controlPumpIscoDisplay.resx">
-      <DependentUpon>controlPumpIscoDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\controlPumpIscoGraphs.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="Resources\Resources.resx">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="lib\ISCO.png" />
+    <Resource Include="Images\ISCO.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.0.0</Version>
+      <Version>3.3.0</Version>
     </PackageReference>
-    <PackageReference Include="reactiveui">
-      <Version>7.4.0</Version>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>8.2.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Devices\PumpIscoDisplayView.xaml">
+    <Page Include="Pumps\IscoPumpDisplayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Devices\PumpIscoView.xaml">
+    <Page Include="Pumps\IscoPumpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,14 +120,14 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+rem powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

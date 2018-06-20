@@ -42,19 +42,19 @@
         <GroupBox Grid.Row="0" Grid.Column="1" Header="Simulator Controls">
             <StackPanel Margin="3" Orientation="Horizontal">
                 <Button Margin="3" Command="{Binding ResetCommand}">
-                    <Image Source="/Images/SimReset.png" Margin="3,0" MaxHeight="24" />
+                    <Image Source="{StaticResource SimResetImage}" Margin="3,0" MaxHeight="24" />
                 </Button>
                 <Button Margin="3" Command="{Binding StepCommand}">
-                    <Image Source="/Images/SimStep.png" Margin="3,0" MaxHeight="24" />
+                    <Image Source="{StaticResource SimStepImage}" Margin="3,0" MaxHeight="24" />
                 </Button>
                 <Button Margin="3" Command="{Binding PlayCommand}">
-                    <Image Source="/Images/SimPlay.png" Margin="3,0" MaxHeight="24" />
+                    <Image Source="{StaticResource SimPlayImage}" Margin="3,0" MaxHeight="24" />
                 </Button>
                 <Button Margin="3" Command="{Binding PauseCommand}">
-                    <Image Source="/Images/SimPause.png" Margin="3,0" MaxHeight="24" />
+                    <Image Source="{StaticResource SimPauseImage}" Margin="3,0" MaxHeight="24" />
                 </Button>
                 <Button Margin="3" Command="{Binding StopCommand}">
-                    <Image Source="/Images/SimStop.png" Margin="3,0" MaxHeight="24" />
+                    <Image Source="{StaticResource SimStopImage}" Margin="3,0" MaxHeight="24" />
                 </Button>
             </StackPanel>
         </GroupBox>

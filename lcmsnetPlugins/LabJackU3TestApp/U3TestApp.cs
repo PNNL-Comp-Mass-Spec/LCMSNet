@@ -5,7 +5,7 @@
  *
  *********************************************************************************************************/
 using System;
-using LcmsNet.Devices.ContactClosure;
+using LcmsNetPlugins.LabJackU3;
 
 namespace LabJackU3TestApp
 {
@@ -13,7 +13,7 @@ namespace LabJackU3TestApp
     {
         static void Main(string[] args)
         {
-            var myU3 = new classLabjackU3();
+            var myU3 = new LabjackU3();
             myU3.Initialize();
 
             PrintMenu();
@@ -44,37 +44,37 @@ namespace LabJackU3TestApp
                     {
 
                         Console.WriteLine("Digital read channel: " + channelNum);
-                        readValue = myU3.Read((enumLabjackU3InputPorts)channelNum);
+                        readValue = myU3.Read((LabjackU3InputPorts)channelNum);
                         Console.WriteLine("Value read: " + readValue.ToString("0.00"));
                     }
                     else if (cmdStr == "DO")
                     {
                         Console.WriteLine("Digital write (1) to channel: " + channelNum);
-                        myU3.Write((enumLabjackU3OutputPorts)channelNum, 1);
+                        myU3.Write((LabjackU3OutputPorts)channelNum, 1);
                         Console.WriteLine("Written.");
                     }
                     else if (cmdStr == "DO2")
                     {
                         Console.WriteLine("Digital write (0) to channel: " + channelNum);
-                        myU3.Write((enumLabjackU3OutputPorts)channelNum, 0);
+                        myU3.Write((LabjackU3OutputPorts)channelNum, 0);
                         Console.WriteLine("Written.");
                     }
                     else if (cmdStr == "AI")
                     {
                         Console.WriteLine("Analog Read from channel: " + channelNum);
-                        readValue = myU3.Read((enumLabjackU3InputPorts)channelNum);
+                        readValue = myU3.Read((LabjackU3InputPorts)channelNum);
                         Console.WriteLine("Value read: " + readValue.ToString("0.00"));
                     }
                     else if (cmdStr == "AO")
                     {
                         Console.WriteLine("Analog write (5v) to channel: " + channelNum);
-                        myU3.Write((enumLabjackU3OutputPorts)channelNum, 5);
+                        myU3.Write((LabjackU3OutputPorts)channelNum, 5);
                         Console.WriteLine("Written.");
                     }
                     else if (cmdStr == "AO2")
                     {
                         Console.WriteLine("Analog write (0v) to channel: " + channelNum);
-                        myU3.Write((enumLabjackU3OutputPorts)channelNum, 0);
+                        myU3.Write((LabjackU3OutputPorts)channelNum, 0);
                         Console.WriteLine("Written.");
                     }
                     else if (cmdStr == "help")

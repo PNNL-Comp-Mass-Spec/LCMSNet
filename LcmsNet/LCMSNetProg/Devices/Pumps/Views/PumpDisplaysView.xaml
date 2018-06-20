@@ -53,10 +53,10 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14" Foreground="DarkRed" Content="{Binding PumpName}" />
                     <Button Grid.Row="1" Grid.Column="0" MaxHeight="32" Margin="3" Command="{Binding MoveLeftCommand}" >
-                        <Image Source="/Images/next-32-2.png" MaxHeight="32" Margin="-3" />
+                        <Image Source="{StaticResource PreviousImage32}" MaxHeight="32" Margin="-3" />
                     </Button>
                     <Button Grid.Row="1" Grid.Column="2" MaxHeight="32" Margin="3" Command="{Binding MoveRightCommand}" >
-                        <Image Source="/Images/next-32.png" MaxHeight="32" Margin="-3" />
+                        <Image Source="{StaticResource NextImage32}" MaxHeight="32" Margin="-3" />
                     </Button>
                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="3">
                         <GroupBox Margin="5" Header="{Binding PumpName}" Foreground="DarkRed">
@@ -77,8 +77,5 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Command="{Binding ChangeTackCommand}" Content="{Binding TackType}" />
-        </StackPanel>
     </Grid>
 </UserControl>

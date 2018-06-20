@@ -65,5 +65,19 @@ namespace LcmsNet.SampleQueue.Views
             dc.SelectedSamples.Clear();
             dc.SelectedSamples.AddRange(selector.SelectedItems.Cast<SampleViewModel>());
         }
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/3843331/how-to-make-wpf-datagridcell-readonly
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SampleGrid_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            if (e.Row.DataContext is SampleViewModel svm && !svm.EditAllowed)
+            {
+                e.Cancel = true;
+                e.EditingEventArgs.Handled = true;
+            }
+        }
     }
 }

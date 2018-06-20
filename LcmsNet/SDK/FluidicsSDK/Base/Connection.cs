@@ -1,18 +1,12 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 9/5/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Graphic;
-using System.Drawing;
 
 namespace FluidicsSDK.Base
 {
-    public sealed class Connection:IRenderable
+    public sealed class Connection : IRenderable
     {
         #region Members
         // the list of line primitives that make up the device
@@ -20,18 +14,18 @@ namespace FluidicsSDK.Base
 
         // the device the connection belongs to, if it is a connection internal to a device.
         private FluidicsDevice m_device;
-        
+
         //max  variance is used to give users leeway when attempting to click on a connection, so they do not have to be pixel accurate with their clicks.
         // 400 because the formula tell if a point is on a line uses derivatives, and 400 gives a few pixels worth of inaccuracy to users.
         const int MAX_VARIANCE = 800;
-        
+
         // an id to identify the connection
         private readonly long m_id;
-        
+
         //we want each connection to have a unique id, this tracks the next available id..first connection made will get ID 0, next connection 1, next connection 2, etc.
         //no need for it to be a GUUID or such, since it's incredibly unlikely that any program would need 2^64 -1 ports.
         private static long availableId;
-        
+
         #endregion
 
         #region Methods
@@ -82,7 +76,7 @@ namespace FluidicsSDK.Base
             {
                 var diffX = Math.Abs(to.Center.X - from.Center.X);
                 var diffY = Math.Abs(to.Center.Y - from.Center.Y);
-                var midPoint = new Point(0,0);
+                var midPoint = new Point(0, 0);
                 if (diffY > diffX)
                 {
                     midPoint = new Point(from.Center.X, to.Center.Y);
@@ -108,10 +102,10 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// Render all connections
         /// </summary>
-        /// <param name="g">a System.Drawing Graphics object</param>
+        /// <param name="g">a System.Windows.Media DrawingContext object</param>
         /// <param name="alpha">a integer representing the alpha value to draw the connections with</param>
         /// <param name="scale">a float representing the value to scale the connections by</param>
-        public void Render(Graphics g, int alpha, float scale)
+        public void Render(DrawingContext g, byte alpha, float scale)
         {
             if (!Transparent)
             {
@@ -133,16 +127,14 @@ namespace FluidicsSDK.Base
             {
                 var diffX = Math.Abs(P2.Center.X - P1.Center.X);
                 var diffY = Math.Abs(P2.Center.Y - P1.Center.Y);
-                var midPoint = new Point(0,0);
+                var midPoint = new Point(0, 0);
                 if (diffY > diffX)
                 {
                     midPoint = new Point(P1.Center.X, P2.Center.Y);
-                 
                 }
                 else if (diffX > diffY)
                 {
                     midPoint = new Point(P2.Center.X, P1.Center.Y);
-                  
                 }
                 var lineA = m_prims[0] as FluidicsLine;
                 if (lineA != null)
@@ -163,18 +155,18 @@ namespace FluidicsSDK.Base
                 var line = m_prims[0] as FluidicsLine;
                 if (line != null)
                 {
-                    line.Origin  = P1.Center;
+                    line.Origin = P1.Center;
                     line.Term = P2.Center;
                 }
             }
-         
+
             //if (port.ID == P1.ID)
             //{
             //    List<GraphicsPrimitive> prims = SetupLines(port, P2);
             //    for (int i = 0; i < prims.Count; i++)
             //    {
             //        m_prims[i] = prims[i];
-            //    }      
+            //    }
             //}
             //else if (port.ID == P2.ID)
             //{
@@ -182,8 +174,8 @@ namespace FluidicsSDK.Base
             //    for (int i = 0; i < prims.Count; i++)
             //    {
             //        m_prims[i] = prims[i];
-            //    }      
-            //}            
+            //    }
+            //}
             //else
             //{
             //    throw new Exception("Attempt to move connection not belonging to moving port detected!");
@@ -203,19 +195,19 @@ namespace FluidicsSDK.Base
         /// <summary>
         ///  Determine if the connection occupies a location on screen
         /// </summary>
-        /// <param name="location">a System.Drawing.Point object</param>
+        /// <param name="location">a System.Windows.Point object</param>
         /// <returns>true if so, false if not</returns>
         public bool OnPoint(Point location)
         {
             //check to see if the point is on any of the lines that make up the connection
             if (!Transparent) // if the connection is transparent, we don't want to be able to select it
             {
-                
                 foreach (var singleLine in m_prims)
                 {
                     var line = (FluidicsLine)singleLine;
                     var existsOnPoint = line.Contains(location, MAX_VARIANCE);
-                    if (existsOnPoint) {
+                    if (existsOnPoint)
+                    {
                         return true;
                     }
                 }
@@ -263,7 +255,7 @@ namespace FluidicsSDK.Base
 
         public Port FindOppositeEndOfConnection(Port p)
         {
-            if(p.ID == P1.ID)
+            if (p.ID == P1.ID)
             {
                 return P2;
             }
@@ -371,10 +363,9 @@ namespace FluidicsSDK.Base
             get;
             set;
         }
-        
+
         public ConnectionStyles ConnectionStyle { get; set; }
+
         #endregion
-    
-        
     }
 }

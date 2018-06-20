@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
              xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="245" d:DesignWidth="460"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ModelCheckListViewModel}, IsDesignTimeCreatable=True}">
@@ -21,7 +22,7 @@
                     <DataTemplate>
                         <DockPanel LastChildFill="False">
                             <CheckBox DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="{Binding Name}" IsChecked="{Binding IsEnabled}" />
-                            <ComboBox DockPanel.Dock="Right" Margin="3" MinWidth="120" SelectedItem="{Binding Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext.StatusCategoryComboBoxOptions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:ModelCheckListView}}}" />
+                            <ComboBox DockPanel.Dock="Right" Margin="3" MinWidth="120" SelectedItem="{Binding Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DataContext.StatusCategoryComboBoxOptions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:ModelCheckListView}}}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <TextBlock DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" Text="Display as:" />
                         </DockPanel>
                     </DataTemplate>

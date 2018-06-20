@@ -47,13 +47,13 @@
             <StackPanel Orientation="Horizontal">
                 <Button Margin="3" Command="{Binding InitializeDeviceCommand}">
                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                        <Image Source="/Images/Cycle_16_Yellow.png" MaxHeight="20" />
+                        <Image Source="{StaticResource CycleYellowImage16}" MaxHeight="20" />
                         <Label Content="Initialize" />
                     </StackPanel>
                 </Button>
                 <Button Margin="3" Command="{Binding ClearErrorCommand}">
                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                        <Image Source="/Images/ButtonDeleteRed.png" MaxHeight="16" />
+                        <Image Source="{StaticResource ButtonDeleteRedImage}" MaxHeight="16" />
                         <Label Content="Clear Error" />
                     </StackPanel>
                 </Button>

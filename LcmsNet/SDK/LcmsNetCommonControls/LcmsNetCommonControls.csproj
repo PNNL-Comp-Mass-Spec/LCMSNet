@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LcmsNetCommonControls</RootNamespace>
     <AssemblyName>LcmsNetCommonControls</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile />
@@ -41,12 +41,24 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xaml" />
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CueBannerOverlay\CueBannerAdorner.cs" />
+    <Compile Include="Controls\CueBannerOverlay\CueBannerService.cs" />
+    <Compile Include="Controls\SerialPortData.cs" />
+    <Compile Include="Controls\SerialPortGenericData.cs" />
+    <Compile Include="Controls\CueBannerOverlay\WeakDictionary.cs" />
+    <Compile Include="Controls\CueBannerOverlay\WpfPropertyChangeNotifier.cs" />
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadView.xaml.cs">
+      <DependentUpon>ContactClosureReadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadViewModelBase.cs" />
+    <Compile Include="Devices\ContactClosureRead\ContactClosureReadViewModelDummy.cs" />
     <Compile Include="Devices\ContactClosure\ContactClosureView.xaml.cs">
       <DependentUpon>ContactClosureView.xaml</DependentUpon>
     </Compile>
@@ -62,6 +74,8 @@
       <DependentUpon>PumpDisplayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Styles\LcmsNetStyles.cs" />
+    <Compile Include="Styles\StyleRefExtension.cs" />
     <Compile Include="ViewModels\PopoutViewModel.cs" />
     <Compile Include="Views\PopoutView.xaml.cs">
       <DependentUpon>PopoutView.xaml</DependentUpon>
@@ -70,6 +84,9 @@
       <DependentUpon>PopoutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RepeatButtonCommands.cs" />
+    <Compile Include="Controls\SerialPortPropertyGrid.xaml.cs">
+      <DependentUpon>SerialPortPropertyGrid.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
@@ -78,6 +95,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Devices\ContactClosureRead\ContactClosureReadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Devices\ContactClosure\ContactClosureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -90,6 +111,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Styles\CombinedStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\GridSplitterStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PopoutView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
@@ -98,30 +127,35 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Controls\SerialPortPropertyGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.0.0</Version>
+      <Version>3.3.0</Version>
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf">
       <Version>1.0.0</Version>
     </PackageReference>
-    <PackageReference Include="reactiveui">
-      <Version>7.4.0</Version>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>8.2.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+rem powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 
 xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)lib\"</PostBuildEvent>
+xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,47 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{51F59458-D3D7-41D6-8E09-19A12AD54B7A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LcmsNet</RootNamespace>
     <AssemblyName>LcmsNet</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>LcmsNet.Program</StartupObject>
+    <StartupObject>LcmsNet.App</StartupObject>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationIcon>LCMSLogo3.ico</ApplicationIcon>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
+    <ApplicationIcon>Resources\Icons\LCMSLogo2.ico</ApplicationIcon>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -78,61 +57,22 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Design" />
-    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\classSystemData.cs" />
-    <Compile Include="Configuration\clsDMSDataContainer.cs" />
-    <Compile Include="Configuration\controlColumn.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\controlColumn.designer.cs">
-      <DependentUpon>controlColumn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\controlSystem.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Configuration\controlSystem.designer.cs">
-      <DependentUpon>controlSystem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\formSystemConfiguration.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\formSystemConfiguration.designer.cs">
-      <DependentUpon>formSystemConfiguration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Configuration\formSystemConfiguration2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\formSystemConfiguration2.Designer.cs">
-      <DependentUpon>formSystemConfiguration2.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Configuration\DMSDataContainer.cs" />
     <Compile Include="Configuration\ViewModels\ColumnConfigViewModel.cs" />
     <Compile Include="Configuration\ViewModels\SystemConfigurationViewModel.cs" />
     <Compile Include="Configuration\Views\ColumnConfigView.xaml.cs">
@@ -141,67 +81,13 @@
     <Compile Include="Configuration\Views\SystemConfigurationView.xaml.cs">
       <DependentUpon>SystemConfigurationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="controlFluidicsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="controlFluidicsControl.Designer.cs">
-      <DependentUpon>controlFluidicsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="controlFluidicsPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomTabControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Devices\AdvancedDeviceControl.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\AdvancedDeviceControl.Designer.cs">
-      <DependentUpon>AdvancedDeviceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\AdvancedDeviceControlPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\AdvancedDeviceControlPanel.Designer.cs">
-      <DependentUpon>AdvancedDeviceControlPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\AdvancedDeviceGroupControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\AdvancedDeviceGroupControl.Designer.cs">
-      <DependentUpon>AdvancedDeviceGroupControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\classApplicationDevice.cs" />
-    <Compile Include="Devices\classBlockDevice.cs" />
-    <Compile Include="Devices\Dashboard\formResolveDeviceStatus.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\Dashboard\formResolveDeviceStatus.Designer.cs">
-      <DependentUpon>formResolveDeviceStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\DefaultUserDevice.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\DefaultUserDevice.Designer.cs">
-      <DependentUpon>DefaultUserDevice.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Devices\ApplicationDevice.cs" />
+    <Compile Include="Devices\BlockDevice.cs" />
     <Compile Include="Devices\DefaultUserDeviceView.xaml.cs">
       <DependentUpon>DefaultUserDeviceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\DefaultUserDeviceViewModel.cs" />
     <Compile Include="Devices\DeviceAddController.cs" />
-    <Compile Include="Devices\Fluidics\FluidicsDesign.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\Fluidics\FluidicsDesign.Designer.cs">
-      <DependentUpon>FluidicsDesign.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Fluidics\FluidicsDesign2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\Fluidics\FluidicsDesign2.Designer.cs">
-      <DependentUpon>FluidicsDesign2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devices\Fluidics\ViewModels\FluidicsControlViewModel.cs" />
     <Compile Include="Devices\Fluidics\ViewModels\FluidicsDesignViewModel.cs" />
     <Compile Include="Devices\Fluidics\Views\FluidicsControlView.xaml.cs">
@@ -210,11 +96,9 @@
     <Compile Include="Devices\Fluidics\Views\FluidicsDesignView.xaml.cs">
       <DependentUpon>FluidicsDesignView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Pumps\formPumpDisplays2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\Pumps\formPumpDisplays2.Designer.cs">
-      <DependentUpon>formPumpDisplays2.cs</DependentUpon>
+    <Compile Include="Devices\OldDeviceNameTranslator.cs" />
+    <Compile Include="DynamicSplashScreenWindow.xaml.cs">
+      <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\Pumps\ViewModels\PumpDisplaysViewModel.cs" />
     <Compile Include="Devices\Pumps\Views\MobilePhaseEditorView.xaml.cs">
@@ -222,9 +106,6 @@
     </Compile>
     <Compile Include="Devices\Pumps\Views\PumpDisplaysView.xaml.cs">
       <DependentUpon>PumpDisplaysView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Pumps\Views\PumpDisplaysWindow.xaml.cs">
-      <DependentUpon>PumpDisplaysWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\ViewModels\AdvancedDeviceControlPanelViewModel.cs" />
     <Compile Include="Devices\ViewModels\AdvancedDeviceGroupControlViewModel.cs" />
@@ -251,70 +132,25 @@
       <DependentUpon>ModelCheckReportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\Views\SizeLimitedContentControl.cs" />
-    <Compile Include="frmEmulationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmEmulationDialog.Designer.cs">
-      <DependentUpon>frmEmulationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IO\classSystemHealthMonitorXMLWriter.cs" />
-    <Compile Include="IO\classXMLDeviceNotiferConfigurationWriter.cs" />
-    <Compile Include="IO\classXMLDeviceNotifierConfigurationReader.cs" />
+    <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
+    <Compile Include="IO\DeviceNotifierConfigurationXMLWriter.cs" />
+    <Compile Include="IO\DeviceNotifierConfigurationXMLReader.cs" />
     <Compile Include="IO\FileUtilities.cs" />
-    <Compile Include="Logging\formMessageWindow2.cs">
-      <SubType>Form</SubType>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logging\formMessageWindow2.Designer.cs">
-      <DependentUpon>formMessageWindow2.cs</DependentUpon>
-    </Compile>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Logging\ViewModels\MessagesViewModel.cs" />
     <Compile Include="Logging\Views\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Method\classColumnArgs.cs" />
-    <Compile Include="Method\classColumnException.cs" />
-    <Compile Include="Method\Drawing\classLCMethodConversationRenderer.cs" />
+    <Compile Include="Method\ColumnArgs.cs" />
+    <Compile Include="Method\ColumnException.cs" />
     <Compile Include="Method\Drawing\LCMethodColumnModeRenderer.cs" />
     <Compile Include="Method\Drawing\LCMethodConversationRenderer.cs" />
     <Compile Include="Method\Drawing\LCMethodRenderer.cs" />
     <Compile Include="Method\Drawing\LCRendererFactory.cs" />
-    <Compile Include="Method\enumLCMethodRenderMode.cs" />
-    <Compile Include="Method\Forms\controlBreakpoint.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlBreakpoint.Designer.cs">
-      <DependentUpon>controlBreakpoint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\controlParameterNumericUpDown.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlParameterNumericUpDown.Designer.cs">
-      <DependentUpon>controlParameterNumericUpDown.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formColumnSampleProgress2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formColumnSampleProgress2.Designer.cs">
-      <DependentUpon>formColumnSampleProgress2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formConvertToSeconds.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formConvertToSeconds.Designer.cs">
-      <DependentUpon>formConvertToSeconds.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formFailedMethodLoadDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formFailedMethodLoadDisplay.Designer.cs">
-      <DependentUpon>formFailedMethodLoadDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\FormMethodEditor2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\FormMethodEditor2.Designer.cs">
-      <DependentUpon>FormMethodEditor2.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Method\LCMethodRenderMode.cs" />
     <Compile Include="Method\ViewModels\BreakpointViewModel.cs" />
     <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
     <Compile Include="Method\ViewModels\ConvertToolViewModel.cs" />
@@ -364,330 +200,67 @@
     <Compile Include="Method\Views\ThroughputPreviewWindow.xaml.cs">
       <DependentUpon>ThroughputPreviewWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ModelCheckReport.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ModelCheckReport.Designer.cs">
-      <DependentUpon>ModelCheckReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notification\Forms\formNotificationSystem2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Notification\Forms\formNotificationSystem2.Designer.cs">
-      <DependentUpon>formNotificationSystem2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Notification\NotificationConditionNode.cs" />
     <Compile Include="Notification\NotificationManager.cs" />
     <Compile Include="Notification\NotificationSetting.cs" />
-    <Compile Include="Notification\classNotifier.cs" />
-    <Compile Include="Devices\Dashboard\formDeviceAddForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\Dashboard\formDeviceAddForm.Designer.cs">
-      <DependentUpon>formDeviceAddForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\classErrorDevice.cs" />
-    <Compile Include="formAbout.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="formAbout.Designer.cs">
-      <DependentUpon>formAbout.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IO\classINIDeviceConfigurationReader.cs" />
-    <Compile Include="IO\classINIDeviceConfigurationWriter.cs" />
-    <Compile Include="Devices\classLogDevice.cs" />
-    <Compile Include="Devices\formDeviceManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\formDeviceManager.Designer.cs">
-      <DependentUpon>formDeviceManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\formFailedDevicesDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\formFailedDevicesDisplay.Designer.cs">
-      <DependentUpon>formFailedDevicesDisplay.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Notification\Notifier.cs" />
+    <Compile Include="Devices\ErrorDevice.cs" />
+    <Compile Include="IO\DeviceConfigurationINIReader.cs" />
+    <Compile Include="IO\DeviceConfigurationINIWriter.cs" />
+    <Compile Include="Devices\LogDevice.cs" />
     <Compile Include="IO\IDeviceConfigurationReader.cs" />
     <Compile Include="IO\IDeviceConfigurationWriter.cs" />
-    <Compile Include="Configuration\formInstrumentSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Configuration\formInstrumentSetup.Designer.cs">
-      <DependentUpon>formInstrumentSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="formMDImain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="formMDImain.Designer.cs">
-      <DependentUpon>formMDImain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="formMessageWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="formMessageWindow.Designer.cs">
-      <DependentUpon>formMessageWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="formSplashScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="formSplashScreen.Designer.cs">
-      <DependentUpon>formSplashScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\classColumnThread.cs" />
-    <Compile Include="Method\classDeviceNotFoundException.cs" />
-    <Compile Include="Method\classLCMethodDeviceArgs.cs" />
-    <Compile Include="Method\classLCMethodFactory.cs" />
-    <Compile Include="Method\classLCMethodReader.cs" />
-    <Compile Include="Method\classLCMethodManager.cs" />
-    <Compile Include="Method\classLCMethodScheduler.cs" />
-    <Compile Include="Method\classLCMethodWriter.cs" />
-    <Compile Include="Method\classLCMethodBuilder.cs" />
-    <Compile Include="Method\classMethodPreviewOptions.cs" />
-    <Compile Include="Method\codeFileLCMethodSchedulerDelegates.cs" />
-    <Compile Include="Method\Drawing\classLCMethodColumnModeRenderer.cs" />
-    <Compile Include="Method\Drawing\classLCMethodRenderer.cs" />
-    <Compile Include="Method\enumColumnState.cs" />
-    <Compile Include="Method\Forms\controlLCMethodEvent.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodEvent.Designer.cs">
-      <DependentUpon>controlLCMethodEvent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodSelection.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodSelection.Designer.cs">
-      <DependentUpon>controlLCMethodSelection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\controlSampleProgress.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlSampleProgress.Designer.cs">
-      <DependentUpon>controlSampleProgress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formColumnSampleProgress.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formColumnSampleProgress.Designer.cs">
-      <DependentUpon>formColumnSampleProgress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formMethodPreviewOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formMethodPreviewOptions.Designer.cs">
-      <DependentUpon>formMethodPreviewOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notification\Forms\formNotificationSystem.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Notification\Forms\formNotificationSystem.Designer.cs">
-      <DependentUpon>formNotificationSystem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formSamplePerformanceAnalysis.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formSamplePerformanceAnalysis.Designer.cs">
-      <DependentUpon>formSamplePerformanceAnalysis.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formThroughputPreview.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formThroughputPreview.Designer.cs">
-      <DependentUpon>formThroughputPreview.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodStage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodStage.Designer.cs">
-      <DependentUpon>controlLCMethodStage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodEditor.Designer.cs">
-      <DependentUpon>controlLCMethodEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodTimeline.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\controlLCMethodTimeline.Designer.cs">
-      <DependentUpon>controlLCMethodTimeline.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Method\Forms\formMethodEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Method\Forms\formMethodEditor.Designer.cs">
-      <DependentUpon>formMethodEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Notification\enumDeviceNotificationAction.cs" />
+    <Compile Include="Method\ColumnThread.cs" />
+    <Compile Include="Method\DeviceNotFoundException.cs" />
+    <Compile Include="Method\LCMethodDeviceArgs.cs" />
+    <Compile Include="Method\LCMethodFactory.cs" />
+    <Compile Include="Method\LCMethodReader.cs" />
+    <Compile Include="Method\LCMethodManager.cs" />
+    <Compile Include="Method\LCMethodScheduler.cs" />
+    <Compile Include="Method\LCMethodWriter.cs" />
+    <Compile Include="Method\LCMethodBuilder.cs" />
+    <Compile Include="Method\MethodPreviewOptions.cs" />
+    <Compile Include="Method\LCMethodSchedulerDelegates.cs" />
+    <Compile Include="Notification\DeviceNotificationAction.cs" />
     <Compile Include="Notification\NotificationConfiguration.cs" />
     <Compile Include="Notification\NotificationSettingAlways.cs" />
     <Compile Include="Notification\NotificationSettingNumber.cs" />
     <Compile Include="Notification\NotificationSettingText.cs" />
+    <Compile Include="Notification\TaskBarManipulation.cs" />
     <Compile Include="Notification\ViewModels\NotificationSystemViewModel.cs" />
     <Compile Include="Notification\Views\NotificationSystemView.xaml.cs">
       <DependentUpon>NotificationSystemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reporting\classErrorReportBuilder.cs" />
-    <Compile Include="Reporting\Forms\formCreateErrorReport.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Reporting\ErrorReportBuilder.cs" />
+    <Compile Include="Reporting\CreateErrorReportViewModel.cs" />
+    <Compile Include="Reporting\CreateErrorReportWindow.xaml.cs">
+      <DependentUpon>CreateErrorReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Reporting\Forms\formCreateErrorReport.Designer.cs">
-      <DependentUpon>formCreateErrorReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\classDataExportException.cs" />
-    <Compile Include="SampleQueue\classDataImportException.cs" />
-    <Compile Include="SampleQueue\classListViewItemComparer.cs" />
-    <Compile Include="SampleQueue\classRandomizerPluginTools.cs" />
-    <Compile Include="SampleQueue\classSampleNotRunningException.cs" />
-    <Compile Include="SampleQueue\classSampleQueue.cs" />
-    <Compile Include="SampleQueue\classSampleQueueArgs.cs" />
-    <Compile Include="SampleQueue\classSequenceComparer.cs" />
-    <Compile Include="SampleQueue\codeFileTrayVialAssignmentDelegates.cs" />
-    <Compile Include="SampleQueue\Forms\controlNotSelectedSamples.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlNotSelectedSamples.Designer.cs">
-      <DependentUpon>controlNotSelectedSamples.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlSampleCoreValidatorErrorDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlSampleCoreValidatorErrorDisplay.Designer.cs">
-      <DependentUpon>controlSampleCoreValidatorErrorDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\enumListViewComparerMode.cs" />
-    <Compile Include="SampleQueue\enumMoveType.cs" />
-    <Compile Include="SampleQueue\Forms\controlTray.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlTray.Designer.cs">
-      <DependentUpon>controlTray.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formExpansion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formExpansion.Designer.cs">
-      <DependentUpon>formExpansion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleBadBlockDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleBadBlockDisplay.Designer.cs">
-      <DependentUpon>formSampleBadBlockDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleCoreValidatorErrorDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleCoreValidatorErrorDisplay.Designer.cs">
-      <DependentUpon>formSampleCoreValidatorErrorDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\classDataGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\classDataGrid.Designer.cs">
-      <DependentUpon>classDataGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlColumnView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlColumnView.Designer.cs">
-      <DependentUpon>controlColumnView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlSampleView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlSampleView.Designer.cs">
-      <DependentUpon>controlSampleView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\controlSequenceView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formDMSView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formDMSView.Designer.cs">
-      <DependentUpon>formDMSView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formInsertOntoUnusedDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formInsertOntoUnusedDialog.Designer.cs">
-      <DependentUpon>formInsertOntoUnusedDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formMethodFillDown.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formMethodFillDown.Designer.cs">
-      <DependentUpon>formMethodFillDown.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formMoveToColumnSelector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formMoveToColumnSelector.Designer.cs">
-      <DependentUpon>formMoveToColumnSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleDMSValidatorDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleDMSValidatorDisplay.Designer.cs">
-      <DependentUpon>formSampleDMSValidatorDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleManager.Designer.cs">
-      <DependentUpon>formSampleManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleManager2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleManager2.Designer.cs">
-      <DependentUpon>formSampleManager2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleRandomizer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleRandomizer.Designer.cs">
-      <DependentUpon>formSampleRandomizer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleQueueOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formSampleQueueOptions.Designer.cs">
-      <DependentUpon>formSampleQueueOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formTrayVialAssignment.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\formTrayVialAssignment.Designer.cs">
-      <DependentUpon>formTrayVialAssignment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Forms\SampleToRowTranslator.cs" />
+    <Compile Include="SampleQueue\DataExportException.cs" />
+    <Compile Include="SampleQueue\DataImportException.cs" />
+    <Compile Include="SampleQueue\RandomizerPluginTools.cs" />
+    <Compile Include="SampleQueue\SampleQueue.cs" />
+    <Compile Include="SampleQueue\SampleQueueArgs.cs" />
+    <Compile Include="SampleQueue\SequenceComparer.cs" />
+    <Compile Include="SampleQueue\MoveSampleType.cs" />
     <Compile Include="SampleQueue\IO\ISampleQueueReader.cs" />
     <Compile Include="SampleQueue\IO\ISampleQueueWriter.cs" />
-    <Compile Include="SampleQueue\IO\classMethodFileTools.cs" />
-    <Compile Include="SampleQueue\IO\classMRMFileExporter.cs" />
-    <Compile Include="SampleQueue\IO\classQueueExportCSV.cs" />
-    <Compile Include="SampleQueue\IO\classQueueExportExcalCSV.cs" />
-    <Compile Include="SampleQueue\IO\classQueueExportSQLite.cs" />
-    <Compile Include="SampleQueue\IO\classQueueExportXML.cs" />
-    <Compile Include="SampleQueue\IO\classQueueImportSQLite.cs" />
-    <Compile Include="SampleQueue\IO\classQueueImportXML.cs" />
+    <Compile Include="SampleQueue\IO\MethodFileTools.cs" />
+    <Compile Include="SampleQueue\IO\MRMFileExporter.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportCSV.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportExcalCSV.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportSQLite.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportXML.cs" />
+    <Compile Include="SampleQueue\IO\QueueImportSQLite.cs" />
+    <Compile Include="SampleQueue\IO\QueueImportXML.cs" />
     <Compile Include="SampleQueue\SampleDataManager.cs" />
+    <Compile Include="SampleQueue\SampleQueueUndoRedo.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadDataViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleBadBlockDisplayViewModel.cs" />
@@ -698,6 +271,7 @@
     <Compile Include="SampleQueue\ViewModels\TrayVialAssignmentViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialSampleViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialViewModel.cs" />
+    <Compile Include="SampleQueue\Views\ColorConverters.cs" />
     <Compile Include="SampleQueue\Views\DMSDownloadDataGridView.xaml.cs">
       <DependentUpon>DMSDownloadDataGridView.xaml</DependentUpon>
     </Compile>
@@ -707,7 +281,6 @@
     <Compile Include="SampleQueue\Views\InsertOntoUnusedWindow.xaml.cs">
       <DependentUpon>InsertOntoUnusedWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageUtils.cs" />
     <Compile Include="SampleQueue\ViewModels\ColumnManagerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\MethodManagerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\MoveToColumnSelectorViewModel.cs" />
@@ -764,67 +337,6 @@
       <DependentUpon>TrayVialView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Simulator\formChartPopoutWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Simulator\formChartPopoutWindow.Designer.cs">
-      <DependentUpon>formChartPopoutWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\formSimConfiguration.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Simulator\formSimConfiguration.Designer.cs">
-      <DependentUpon>formSimConfiguration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\formSimulatorCombined.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Simulator\formSimulatorCombined.Designer.cs">
-      <DependentUpon>formSimulatorCombined.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\formSimulatorCombined2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Simulator\formSimulatorCombined2.Designer.cs">
-      <DependentUpon>formSimulatorCombined2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\formSimulatorControlsAndCharts.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Simulator\formSimulatorControlsAndCharts.Designer.cs">
-      <DependentUpon>formSimulatorControlsAndCharts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ModelCheckControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ModelCheckControl.Designer.cs">
-      <DependentUpon>ModelCheckControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ModelCheckListControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ModelCheckListControl.Designer.cs">
-      <DependentUpon>ModelCheckListControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ModelCheckReportViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ModelCheckReportViewer.Designer.cs">
-      <DependentUpon>ModelCheckReportViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\SimConfigControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Simulator\SimConfigControl.Designer.cs">
-      <DependentUpon>SimConfigControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\SimControlsAndChartsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Simulator\SimControlsAndChartsControl.Designer.cs">
-      <DependentUpon>SimControlsAndChartsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Simulator\TackEventArgs.cs" />
     <Compile Include="SampleQueue\Views\MethodManagerView.xaml.cs">
       <DependentUpon>MethodManagerView.xaml</DependentUpon>
     </Compile>
@@ -851,480 +363,156 @@
     <Compile Include="Simulator\Views\SimulatorControlsAndChartsView.xaml.cs">
       <DependentUpon>SimulatorControlsAndChartsView.xaml</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Configuration\controlColumn.resx">
-      <DependentUpon>controlColumn.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\controlSystem.resx">
-      <DependentUpon>controlSystem.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\formSystemConfiguration.resx">
-      <DependentUpon>formSystemConfiguration.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\formSystemConfiguration2.resx">
-      <DependentUpon>formSystemConfiguration2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="controlFluidicsControl.resx">
-      <DependentUpon>controlFluidicsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="controlFluidicsPanel.resx">
-      <DependentUpon>controlFluidicsPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\AdvancedDeviceControl.resx">
-      <DependentUpon>AdvancedDeviceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\AdvancedDeviceControlPanel.resx">
-      <DependentUpon>AdvancedDeviceControlPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\AdvancedDeviceGroupControl.resx">
-      <DependentUpon>AdvancedDeviceGroupControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Dashboard\formDeviceAddForm.resx">
-      <DependentUpon>formDeviceAddForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Dashboard\formResolveDeviceStatus.resx">
-      <DependentUpon>formResolveDeviceStatus.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Fluidics\FluidicsDesign.resx">
-      <DependentUpon>FluidicsDesign.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Fluidics\FluidicsDesign2.resx">
-      <DependentUpon>FluidicsDesign2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\formDeviceManager.resx">
-      <DependentUpon>formDeviceManager.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\formFailedDevicesDisplay.resx">
-      <DependentUpon>formFailedDevicesDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Configuration\formInstrumentSetup.resx">
-      <DependentUpon>formInstrumentSetup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Pumps\formPumpDisplays2.resx">
-      <DependentUpon>formPumpDisplays2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="formAbout.resx">
-      <DependentUpon>formAbout.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="formMDImain.resx">
-      <DependentUpon>formMDImain.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="formMessageWindow.resx">
-      <DependentUpon>formMessageWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="formSplashScreen.resx">
-      <DependentUpon>formSplashScreen.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmEmulationDialog.resx">
-      <DependentUpon>frmEmulationDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Logging\formMessageWindow2.resx">
-      <DependentUpon>formMessageWindow2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlBreakpoint.resx">
-      <DependentUpon>controlBreakpoint.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlLCMethodEvent.resx">
-      <DependentUpon>controlLCMethodEvent.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlLCMethodSelection.resx">
-      <DependentUpon>controlLCMethodSelection.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlLCMethodStage.resx">
-      <DependentUpon>controlLCMethodStage.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlLCMethodEditor.resx">
-      <DependentUpon>controlLCMethodEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlLCMethodTimeline.resx">
-      <DependentUpon>controlLCMethodTimeline.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlParameterNumericUpDown.resx">
-      <DependentUpon>controlParameterNumericUpDown.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\controlSampleProgress.resx">
-      <DependentUpon>controlSampleProgress.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formColumnSampleProgress2.resx">
-      <DependentUpon>formColumnSampleProgress2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formConvertToSeconds.resx">
-      <DependentUpon>formConvertToSeconds.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formFailedMethodLoadDisplay.resx">
-      <DependentUpon>formFailedMethodLoadDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formMethodEditor.resx">
-      <DependentUpon>formMethodEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formColumnSampleProgress.resx">
-      <DependentUpon>formColumnSampleProgress.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\FormMethodEditor2.resx">
-      <DependentUpon>FormMethodEditor2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formMethodPreviewOptions.resx">
-      <DependentUpon>formMethodPreviewOptions.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ModelCheckListControl.resx">
-      <DependentUpon>ModelCheckListControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ModelCheckReport.resx">
-      <DependentUpon>ModelCheckReport.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notification\Forms\formNotificationSystem.resx">
-      <DependentUpon>formNotificationSystem.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Method\Forms\formThroughputPreview.resx">
-      <DependentUpon>formThroughputPreview.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Notification\Forms\formNotificationSystem2.resx">
-      <DependentUpon>formNotificationSystem2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reporting\Forms\formCreateErrorReport.resx">
-      <DependentUpon>formCreateErrorReport.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlNotSelectedSamples.resx">
-      <DependentUpon>controlNotSelectedSamples.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlSampleCoreValidatorErrorDisplay.resx">
-      <DependentUpon>controlSampleCoreValidatorErrorDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlSequenceView.resx">
-      <DependentUpon>controlSequenceView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlTray.resx">
-      <DependentUpon>controlTray.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formExpansion.resx">
-      <DependentUpon>formExpansion.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleBadBlockDisplay.resx">
-      <DependentUpon>formSampleBadBlockDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleCoreValidatorErrorDisplay.resx">
-      <DependentUpon>formSampleCoreValidatorErrorDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlColumnView.resx">
-      <DependentUpon>controlColumnView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\controlSampleView.resx">
-      <DependentUpon>controlSampleView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formDMSView.resx">
-      <DependentUpon>formDMSView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formInsertOntoUnusedDialog.resx">
-      <DependentUpon>formInsertOntoUnusedDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formMethodFillDown.resx">
-      <DependentUpon>formMethodFillDown.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formMoveToColumnSelector.resx">
-      <DependentUpon>formMoveToColumnSelector.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleDMSValidatorDisplay.resx">
-      <DependentUpon>formSampleDMSValidatorDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager.resx">
-      <DependentUpon>formSampleManager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleManager2.resx">
-      <DependentUpon>formSampleManager2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleQueueOptions.resx">
-      <DependentUpon>formSampleQueueOptions.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formSampleRandomizer.resx">
-      <DependentUpon>formSampleRandomizer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SampleQueue\Forms\formTrayVialAssignment.resx">
-      <DependentUpon>formTrayVialAssignment.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\formChartPopoutWindow.resx">
-      <DependentUpon>formChartPopoutWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\formSimConfiguration.resx">
-      <DependentUpon>formSimConfiguration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\formSimulatorCombined.resx">
-      <DependentUpon>formSimulatorCombined.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\formSimulatorCombined2.resx">
-      <DependentUpon>formSimulatorCombined2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\formSimulatorControlsAndCharts.resx">
-      <DependentUpon>formSimulatorControlsAndCharts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ModelCheckControl.resx">
-      <DependentUpon>ModelCheckControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ModelCheckReportViewer.resx">
-      <DependentUpon>ModelCheckReportViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\SimConfigControl.resx">
-      <DependentUpon>SimConfigControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Simulator\SimControlsAndChartsControl.resx">
-      <DependentUpon>SimControlsAndChartsControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="Properties\DataSources\LcmsNet.SampleQueue.Forms.SampleToRowTranslator.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\AllIsGood.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="lib\16\sampleQueue_16.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icons.txt" />
-    <Resource Include="Images\next-32-2.png" />
-    <Resource Include="Images\next-32.png" />
-    <Resource Include="Images\test-tube-32.png" />
-    <Resource Include="Images\SimPause.png" />
-    <Resource Include="Images\SimPlay.png" />
-    <Resource Include="Images\SimReset.png" />
-    <Resource Include="Images\SimStep.png" />
-    <Resource Include="Images\SimStop.png" />
-    <Content Include="LCMSLogo3.ico" />
-    <Content Include="lib\16\accepted_16.png" />
-    <Content Include="lib\16\Button Delete_16.png" />
-    <Resource Include="Images\About.png" />
-    <Resource Include="Images\Add.png" />
-    <Resource Include="Images\AddAppendBlank.png" />
-    <Resource Include="Images\AddAppendDMS.png" />
-    <Resource Include="Images\AddDMS.png" />
-    <Resource Include="Images\AllIsGood.png" />
-    <Resource Include="Images\Append.png" />
-    <Resource Include="Images\breakpoint.png" />
-    <Resource Include="Images\breakpointDisabled.png" />
-    <Resource Include="Images\Build.png" />
-    <Resource Include="Images\BuildUpdate.png" />
-    <Resource Include="Images\ButtonDeleteRed.png" />
-    <Resource Include="Images\Button_Delete_16.png" />
-    <Resource Include="Images\Button_Down_16.png" />
-    <Resource Include="Images\Button_Up_16.png" />
-    <Resource Include="Images\Cart.png" />
-    <Resource Include="Images\CartColumnName.png" />
-    <Resource Include="Images\Column.png" />
-    <Resource Include="Images\Cycle_16_Yellow.png" />
-    <Resource Include="Images\dashboard.png" />
-    <Resource Include="Images\DMSEdit.png" />
-    <Resource Include="Images\Errors.png" />
-    <Resource Include="Images\Expand.png" />
-    <Resource Include="Images\Export.png" />
-    <Resource Include="Images\Filldown.png" />
-    <Resource Include="Images\FillDownAll.png" />
-    <Resource Include="Images\gears.png" />
-    <Resource Include="Images\highlighter.png" />
-    <Resource Include="Images\InsertUnused.png" />
-    <Resource Include="Images\LCMSLogo2.ico" />
-    <Resource Include="Images\LCMSNet.png" />
-    <Resource Include="Images\lock.png" />
-    <Resource Include="Images\MethodEditor.png" />
-    <Resource Include="Images\notify.png" />
-    <Resource Include="Images\notOK.png" />
-    <Resource Include="Images\ok.png" />
-    <Resource Include="Images\Open.png" />
-    <Resource Include="Images\progress.png" />
-    <Resource Include="Images\Pumps.png" />
-    <Resource Include="Images\pumps2.png" />
-    <Resource Include="Images\Randomize.png" />
-    <Resource Include="Images\redo_16.png" />
-    <Resource Include="Images\Save.png" />
-    <Resource Include="Images\SaveUpdate.png" />
-    <Resource Include="Images\SaveWithIndicator.png" />
-    <Resource Include="Images\Search.png" />
-    <Resource Include="Images\start2.png" />
-    <Resource Include="Images\StatusMessages.png" />
-    <Resource Include="Images\StatusMessagesError.png" />
-    <Resource Include="Images\testTube.png" />
-    <Resource Include="Images\undo_16.png" />
-    <Resource Include="Images\unlock.png" />
-    <Resource Include="Images\vialReal.png" />
-    <Resource Include="Images\water.png" />
-    <None Include="Resources\water.png" />
-    <None Include="lib\16\button delete_161.png" />
-    <Content Include="lib\16\Button Down_16.png" />
-    <None Include="lib\16\Button Up_16.png" />
-    <None Include="lib\16\Button Up_161.png" />
-    <Content Include="lib\16\cancel_16.png" />
-    <Content Include="lib\16\Cycle_16_Blue.png" />
-    <Content Include="lib\16\Cycle_16_Yellow.png" />
-    <None Include="lib\16\undo_16.png" />
-    <None Include="lib\16\redo_16.png" />
-    <Content Include="lib\32\accepted_32.png" />
-    <None Include="lib\32\breakpoint.png" />
-    <None Include="lib\32\breakpoint1.png" />
-    <None Include="lib\32\breakpointDisabled.png" />
-    <Content Include="lib\32\Button Delete_32.png" />
-    <Content Include="lib\32\Button Down_32.png" />
-    <None Include="lib\32\Button Up32.png" />
-    <Content Include="lib\32\cancel_32.png" />
-    <None Include="lib\32\gears.jpg" />
-    <None Include="lib\32\progress.png" />
-    <None Include="lib\32\dashboard.png" />
-    <None Include="lib\32\Logs.png" />
-    <None Include="lib\32\MethodEditor.png" />
-    <None Include="lib\32\LCMSLogo.png" />
-    <None Include="lib\32\LCMSLogo.ico" />
-    <None Include="lib\32\Cart.png" />
-    <None Include="lib\32\lock.png" />
-    <None Include="lib\32\Save.png" />
-    <None Include="lib\32\Open.png" />
-    <None Include="lib\32\LCMSLogo3.ico" />
-    <None Include="lib\32\gears.png" />
-    <None Include="lib\32\SaveWithIndicator.png" />
-    <None Include="lib\32\notify.png" />
-    <None Include="lib\32\pumps2.png" />
-    <None Include="lib\32\highlighter.png" />
-    <Content Include="lib\32\Screensaver2.png" />
-    <Content Include="lib\32\Settings.png" />
-    <None Include="lib\32\vialReal.png" />
-    <None Include="lib\32\StatusMessages.png" />
-    <None Include="lib\32\unlock.png" />
-    <None Include="lib\32\testTube.png" />
-    <None Include="lib\32\StatusMessages1.png" />
-    <Content Include="lib\64\Drive Metal - C.png" />
-    <Content Include="lib\64\No access.png" />
-    <Content Include="lib\64\Screensaver2.png" />
-    <None Include="lib\exclamation.png" />
-    <None Include="lib\DeviceImages\PAL.png" />
-    <None Include="lib\DeviceImages\Valve.png" />
-    <None Include="lib\DeviceImages\Agilent1200Pump.png" />
-    <None Include="lib\DeviceImages\BrukerStart.png" />
-    <None Include="lib\DeviceImages\ISCO.png" />
-    <None Include="lib\DeviceImages\NetworkStart.png" />
-    <None Include="lib\DeviceImages\TwoPositionValve.png" />
-    <None Include="lib\DeviceImages\MultiPositionValve.png" />
-    <None Include="lib\DeviceImages\labjack.png" />
-    <Content Include="lib\LCMSNet.png" />
-    <Content Include="lib\Misc\add.png" />
-    <None Include="lib\Misc\add1.png" />
-    <None Include="lib\Misc\add11.png" />
-    <None Include="lib\Misc\add2.png" />
-    <None Include="lib\Misc\add12.png" />
-    <Content Include="lib\Misc\skull.jpg" />
-    <None Include="lib\ok.jpg" />
-    <None Include="lib\ok1.jpg" />
-    <None Include="lib\notOK.jpg" />
-    <None Include="lib\ok.png" />
-    <None Include="lib\notOK.png" />
-    <Content Include="lib\Spanner.ico" />
-    <None Include="lib\start2.png" />
-    <None Include="Resources\BuildUpdate1.png" />
-    <None Include="lib\stopit.gif" />
-    <None Include="Resources\Pumps.png" />
-    <None Include="Resources\Export.png" />
-    <None Include="Resources\Filldown1.png" />
-    <None Include="Resources\About.png" />
-    <None Include="Resources\BuildUpdate.png" />
-    <None Include="Resources\Build.png" />
-    <None Include="Resources\Errors.png" />
-    <None Include="Resources\Append.png" />
-    <None Include="Resources\InsertUnused.png" />
-    <None Include="Resources\InsertUnused.bmp" />
-    <None Include="Resources\Randomize.png" />
-    <None Include="Resources\CartColumnName.png" />
-    <None Include="Resources\Search.png" />
-    <None Include="Resources\Expand.png" />
-    <None Include="Resources\Column.png" />
-    <None Include="Resources\Filldown.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Shell32">
-      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Devices\Plugins\" />
+    <Resource Include="Resources\Icons\LCMSLogo2.ico" />
+    <Resource Include="Resources\Icons\Warning.ico" />
+    <Resource Include="Resources\Images\About.png" />
+    <Resource Include="Resources\Images\Add.png" />
+    <Resource Include="Resources\Images\AddAppendBlank.png" />
+    <Resource Include="Resources\Images\AddAppendDMS.png" />
+    <Resource Include="Resources\Images\AddDMS.png" />
+    <Resource Include="Resources\Images\AllIsGood.png" />
+    <Resource Include="Resources\Images\Append.png" />
+    <Resource Include="Resources\Images\breakpoint.png" />
+    <Resource Include="Resources\Images\breakpointDisabled.png" />
+    <Resource Include="Resources\Images\Build.png" />
+    <Resource Include="Resources\Images\BuildUpdate.png" />
+    <Resource Include="Resources\Images\ButtonDeleteRed.png" />
+    <Resource Include="Resources\Images\Button_Delete_16.png" />
+    <Resource Include="Resources\Images\Button_Down_16.png" />
+    <Resource Include="Resources\Images\Button_Up_16.png" />
+    <Resource Include="Resources\Images\Cart.png" />
+    <Resource Include="Resources\Images\CartColumnName.png" />
+    <Resource Include="Resources\Images\Column.png" />
+    <Resource Include="Resources\Images\Cycle_16_Yellow.png" />
+    <Resource Include="Resources\Images\dashboard.png" />
+    <Resource Include="Resources\Images\DMSEdit.png" />
+    <Resource Include="Resources\Images\Errors.png" />
+    <Resource Include="Resources\Images\Expand.png" />
+    <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\Filldown.png" />
+    <Resource Include="Resources\Images\FillDownAll.png" />
+    <Resource Include="Resources\Images\gears.png" />
+    <Resource Include="Resources\Images\highlighter.png" />
+    <Resource Include="Resources\Images\InsertUnused.png" />
+    <Resource Include="Resources\Images\LCMSNet.png" />
+    <Resource Include="Resources\Images\lock.png" />
+    <Resource Include="Resources\Images\MethodEditor.png" />
+    <Resource Include="Resources\Images\next-32.png" />
+    <Resource Include="Resources\Images\notify.png" />
+    <Resource Include="Resources\Images\notOK.png" />
+    <Resource Include="Resources\Images\ok.png" />
+    <Resource Include="Resources\Images\Open.png" />
+    <Resource Include="Resources\Images\previous-32.png" />
+    <Resource Include="Resources\Images\progress.png" />
+    <Resource Include="Resources\Images\Pumps.png" />
+    <Resource Include="Resources\Images\pumps2.png" />
+    <Resource Include="Resources\Images\Randomize.png" />
+    <Resource Include="Resources\Images\redo_16.png" />
+    <Resource Include="Resources\Images\Save.png" />
+    <Resource Include="Resources\Images\SaveUpdate.png" />
+    <Resource Include="Resources\Images\SaveWithIndicator.png" />
+    <Resource Include="Resources\Images\Search.png" />
+    <Resource Include="Resources\Images\SimPause.png" />
+    <Resource Include="Resources\Images\SimPlay.png" />
+    <Resource Include="Resources\Images\SimReset.png" />
+    <Resource Include="Resources\Images\SimStep.png" />
+    <Resource Include="Resources\Images\SimStop.png" />
+    <Resource Include="Resources\Images\Simulate.png" />
+    <Resource Include="Resources\Images\stack-32.png" />
+    <Resource Include="Resources\Images\start2.png" />
+    <Resource Include="Resources\Images\StatusMessages.png" />
+    <Resource Include="Resources\Images\StatusMessagesError.png" />
+    <Resource Include="Resources\Images\test-tube-32.png" />
+    <Resource Include="Resources\Images\testTube.png" />
+    <Resource Include="Resources\Images\undo_16.png" />
+    <Resource Include="Resources\Images\unlock.png" />
+    <Resource Include="Resources\Images\vialReal.png" />
+    <Resource Include="Resources\Images\water.png" />
+    <None Include="Resources\OtherImages\16\accepted_16.png" />
+    <None Include="Resources\OtherImages\16\Button Delete_16.png" />
+    <None Include="Resources\OtherImages\16\button delete_161.png" />
+    <None Include="Resources\OtherImages\16\Button Down_16.png" />
+    <None Include="Resources\OtherImages\16\Button Up_16.png" />
+    <None Include="Resources\OtherImages\16\Button Up_161.png" />
+    <None Include="Resources\OtherImages\16\cancel_16.png" />
+    <None Include="Resources\OtherImages\16\Cycle_16_Blue.png" />
+    <None Include="Resources\OtherImages\16\Cycle_16_Yellow.png" />
+    <None Include="Resources\OtherImages\16\redo_16.png" />
+    <None Include="Resources\OtherImages\16\sampleQueue_16.png" />
+    <None Include="Resources\OtherImages\16\undo_16.png" />
+    <None Include="Resources\OtherImages\32\accepted_32.png" />
+    <None Include="Resources\OtherImages\32\breakpoint.png" />
+    <None Include="Resources\OtherImages\32\breakpoint1.png" />
+    <None Include="Resources\OtherImages\32\breakpointDisabled.png" />
+    <None Include="Resources\OtherImages\32\Button Delete_32.png" />
+    <None Include="Resources\OtherImages\32\Button Down_32.png" />
+    <None Include="Resources\OtherImages\32\Button Up32.png" />
+    <None Include="Resources\OtherImages\32\cancel_32.png" />
+    <None Include="Resources\OtherImages\32\Cart.png" />
+    <None Include="Resources\OtherImages\32\dashboard.png" />
+    <None Include="Resources\OtherImages\32\gears.jpg" />
+    <None Include="Resources\OtherImages\32\gears.png" />
+    <None Include="Resources\OtherImages\32\highlighter.png" />
+    <None Include="Resources\OtherImages\32\LCMSLogo.ico" />
+    <None Include="Resources\OtherImages\32\LCMSLogo.png" />
+    <None Include="Resources\OtherImages\32\LCMSLogo3.ico" />
+    <None Include="Resources\OtherImages\32\lock.png" />
+    <None Include="Resources\OtherImages\32\Logs.png" />
+    <None Include="Resources\OtherImages\32\MethodEditor.png" />
+    <None Include="Resources\OtherImages\32\notify.png" />
+    <None Include="Resources\OtherImages\32\Open.png" />
+    <None Include="Resources\OtherImages\32\progress.png" />
+    <None Include="Resources\OtherImages\32\pumps2.png" />
+    <None Include="Resources\OtherImages\32\Save.png" />
+    <None Include="Resources\OtherImages\32\SaveWithIndicator.png" />
+    <None Include="Resources\OtherImages\32\Screensaver2.png" />
+    <None Include="Resources\OtherImages\32\Settings.png" />
+    <None Include="Resources\OtherImages\32\StatusMessages.png" />
+    <None Include="Resources\OtherImages\32\StatusMessages1.png" />
+    <None Include="Resources\OtherImages\32\testTube.png" />
+    <None Include="Resources\OtherImages\32\unlock.png" />
+    <None Include="Resources\OtherImages\32\vialReal.png" />
+    <None Include="Resources\OtherImages\64\Drive Metal - C.png" />
+    <None Include="Resources\OtherImages\64\No access.png" />
+    <None Include="Resources\OtherImages\64\Screensaver2.png" />
+    <None Include="Resources\OtherImages\DeviceImages\Agilent1200Pump.png" />
+    <None Include="Resources\OtherImages\DeviceImages\BrukerStart.png" />
+    <None Include="Resources\OtherImages\DeviceImages\ISCO.png" />
+    <None Include="Resources\OtherImages\DeviceImages\labjack.png" />
+    <None Include="Resources\OtherImages\DeviceImages\MultiPositionValve.png" />
+    <None Include="Resources\OtherImages\DeviceImages\NetworkStart.png" />
+    <None Include="Resources\OtherImages\DeviceImages\PAL.png" />
+    <None Include="Resources\OtherImages\DeviceImages\TwoPositionValve.png" />
+    <None Include="Resources\OtherImages\DeviceImages\Valve.png" />
+    <None Include="Resources\OtherImages\Misc\add.png" />
+    <None Include="Resources\OtherImages\Misc\add1.png" />
+    <None Include="Resources\OtherImages\Misc\add11.png" />
+    <None Include="Resources\OtherImages\Misc\add12.png" />
+    <None Include="Resources\OtherImages\Misc\add2.png" />
+    <None Include="Resources\OtherImages\Misc\skull.jpg" />
+    <None Include="Resources\OtherImages\exclamation.png" />
+    <None Include="Resources\OtherImages\LCMSNet.png" />
+    <None Include="Resources\OtherImages\notOK.jpg" />
+    <None Include="Resources\OtherImages\notOK.png" />
+    <None Include="Resources\OtherImages\ok.jpg" />
+    <None Include="Resources\OtherImages\ok.png" />
+    <None Include="Resources\OtherImages\ok1.jpg" />
+    <None Include="Resources\OtherImages\Spanner.ico" />
+    <None Include="Resources\OtherImages\start2.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj">
@@ -1342,6 +530,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DynamicSplashScreenWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1370,10 +566,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Devices\Pumps\Views\PumpDisplaysView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Devices\Pumps\Views\PumpDisplaysWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1454,6 +646,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Method\Views\LCMethodTimelineView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reporting\CreateErrorReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1557,13 +753,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
-      <Version>1.0.8</Version>
+      <Version>3.3.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.WindowsAPICodePack-Shell">
       <Version>1.1.0</Version>
@@ -1571,28 +768,30 @@
     <PackageReference Include="OxyPlot.Wpf">
       <Version>1.0.0</Version>
     </PackageReference>
-    <PackageReference Include="reactiveui">
-      <Version>7.4.0</Version>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>8.2.1</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.99</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Target Name="AfterClean">
+    <ItemGroup>
+      <FilesToDelete Include="$(TargetDir)Plugins\*.*;$(TargetDir)Plugins\x86\*.*;$(TargetDir)Plugins\x64\*.*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+    <RemoveDir Directories="$(TargetDir)\Plugins\x86;$(TargetDir)\Plugins\x64" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <PropertyGroup>
     <PostBuildEvent>rem xcopy /Y /F /D "$(SolutionDir)lib\*" "$(TargetDir)"
-xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
+rem xcopy /Y /F /D "$(SolutionDir)lib\DemoPluginLibrary.dll" "$(TargetDir)"
 
 if not exist "$(TargetDir)Plugins\" mkdir "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.dll" "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.pdb" "$(TargetDir)Plugins\"
+xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x86\*.dll" "$(TargetDir)Plugins\x86\"
+xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x64\*.dll" "$(TargetDir)Plugins\x64\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
 if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"

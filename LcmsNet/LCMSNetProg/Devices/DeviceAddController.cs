@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.Devices
 {
@@ -11,10 +11,10 @@ namespace LcmsNet.Devices
         /// Gets a list of available plugins.
         /// </summary>
         /// <returns></returns>
-        public List<classDevicePluginInformation> GetAvailablePlugins()
+        public List<DevicePluginInformation> GetAvailablePlugins()
         {
-            var manager = classDeviceManager.Manager;
-            var availablePlugins = new List<classDevicePluginInformation>();
+            var manager = DeviceManager.Manager;
+            var availablePlugins = new List<DevicePluginInformation>();
             foreach (var plugin in manager.AvailablePlugins)
             {
                 availablePlugins.Add(plugin);
@@ -23,10 +23,10 @@ namespace LcmsNet.Devices
             return availablePlugins;
         }
 
-        public List<classDeviceErrorEventArgs> AddDevices(List<classDevicePluginInformation> plugins,
+        public List<DeviceErrorEventArgs> AddDevices(List<DevicePluginInformation> plugins,
             bool initializeOnAdd)
         {
-            var failedDevices = new List<classDeviceErrorEventArgs>();
+            var failedDevices = new List<DeviceErrorEventArgs>();
 
             foreach (var plugin in plugins)
             {
@@ -34,29 +34,29 @@ namespace LcmsNet.Devices
                 {
                     try
                     {
-                        var wasAdded = classDeviceManager.Manager.AddDevice(plugin, initializeOnAdd);
+                        var wasAdded = DeviceManager.Manager.AddDevice(plugin, initializeOnAdd);
                         if (!wasAdded)
                         {
-                            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                                 "Could not create the selected device: " + plugin.DeviceAttribute.Name);
                         }
                         else
                         {
-                            classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                                 "A " + plugin.DeviceAttribute.Name + " device was added.");
                         }
                     }
-                    catch (classDeviceInitializationException ex)
+                    catch (DeviceInitializationException ex)
                     {
                         failedDevices.Add(ex.ErrorDetails);
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             string.Format(
                                 "The device {0} was added but was not initialized properly. Error Message: {1}",
                                 ex.ErrorDetails.Device.Name, ex.ErrorDetails.Error));
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
                             "Could not create the device " + plugin.DeviceAttribute.Name + " " + ex.Message, ex);
                     }
                 }

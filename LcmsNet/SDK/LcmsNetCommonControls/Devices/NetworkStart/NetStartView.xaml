@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetCommonControls.Devices.NetworkStart"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay"
              mc:Ignorable="d"
              d:DesignHeight="365" d:DesignWidth="262"
              d:DataContext="{d:DesignInstance {x:Type local:NetStartViewModelDummy}, IsDesignTimeCreatable=True}"
@@ -22,7 +23,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Margin="3,5,3,0" Text="Methods" />
-                <ComboBox Grid.Row="1" Margin="3" ItemsSource="{Binding MethodComboBoxOptions}" SelectedItem="{Binding SelectedMethod}" />
+                <ComboBox Grid.Row="1" Margin="3" ItemsSource="{Binding MethodComboBoxOptions}" SelectedItem="{Binding SelectedMethod}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 <Button Grid.Row="2" Margin="3,3,20,3" Width="93" HorizontalAlignment="Right" Content="Refresh" Command="{Binding RefreshMethodsCommand}" />
                 <TextBlock Grid.Row="3" Margin="3,5,3,0" Text="Sample Name" />
                 <TextBox Grid.Row="4" Margin="3" Text="{Binding SampleName}" />

@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DemoPluginLibrary</RootNamespace>
     <AssemblyName>DemoPluginLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -24,30 +22,33 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <DocumentationFile>bin\Debug\DemoPluginLibrary.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <OutputPath>bin\PNNLRelease\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <DocumentationFile>bin\PNNLRelease\DemoPluginLibrary.xml</DocumentationFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoClosureAdvanceControlViewModel.cs" />
     <Compile Include="DemoClosureAdvancedControlView.xaml.cs">
       <DependentUpon>DemoClosureAdvancedControlView.xaml</DependentUpon>
     </Compile>
@@ -64,27 +65,9 @@
       <DependentUpon>DemoValveAdvancedControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DemoValveAdvancedControlViewModel.cs" />
-    <Compile Include="FluidicsSprayNeedle.cs" />
-    <Compile Include="FluidicsSprayNeedleWpf.cs" />
-    <Compile Include="FluidicsTee.cs" />
-    <Compile Include="FluidicsTeeWpf.cs" />
-    <Compile Include="FluidicsUnion.cs" />
-    <Compile Include="FluidicsUnionWpf.cs" />
     <Compile Include="PluginTemplate\PluginTemplate.cs" />
     <Compile Include="DemoClosure.cs" />
-    <Compile Include="DemoClosureAdvanceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoClosureAdvanceControl.Designer.cs">
-      <DependentUpon>DemoClosureAdvanceControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="DemoPAL.cs" />
-    <Compile Include="DemoPALAdvancedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoPALAdvancedControl.Designer.cs">
-      <DependentUpon>DemoPALAdvancedControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="DemoPump.cs" />
     <Compile Include="DemoSPE.cs" />
     <Compile Include="DemoSprayNeedle.cs" />
@@ -93,34 +76,12 @@
     <Compile Include="DemoValve.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DemoValve2.cs" />
-    <Compile Include="DemoValve2AdvancedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoValve2AdvancedControl.Designer.cs">
-      <DependentUpon>DemoValve2AdvancedControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DemoValveAdvancedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DemoValveAdvancedControl.Designer.cs">
-      <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DemoClosureAdvanceControl.resx">
-      <DependentUpon>DemoClosureAdvanceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DemoPALAdvancedControl.resx">
-      <DependentUpon>DemoPALAdvancedControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DemoValve2AdvancedControl.resx">
-      <DependentUpon>DemoValve2AdvancedControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DemoValveAdvancedControl.resx">
-      <DependentUpon>DemoValveAdvancedControl.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\FluidicsPack\FluidicsPack.csproj">
+      <Project>{6544bdea-10ae-4867-afc2-8113d7983d7d}</Project>
+      <Name>FluidicsPack</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluidicsSDK\FluidicsSDK.csproj">
       <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
       <Name>FluidicsSDK</Name>
@@ -150,23 +111,17 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.0.0</Version>
+      <Version>3.3.0</Version>
     </PackageReference>
-    <PackageReference Include="reactiveui">
-      <Version>7.4.0</Version>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>8.2.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
-
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)pluginDLLs"
-xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs"
-xcopy /y /f /d "$(TargetDir)*.dll" "$(SolutionDir)lib"
-xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)lib"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

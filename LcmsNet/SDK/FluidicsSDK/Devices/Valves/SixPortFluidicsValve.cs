@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using FluidicsSDK.Base;
-using System.Drawing;
 using FluidicsSDK.Graphic;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
-namespace FluidicsSDK.Devices
+namespace FluidicsSDK.Devices.Valves
 {
     public sealed class SixPortFluidicsValve : TwoPositionValve
     {
         private const int NUMBER_OF_PORTS = 6;
         ISixPortValve m_valve;
 
-        public SixPortFluidicsValve():
+        public SixPortFluidicsValve() :
             base(NUMBER_OF_PORTS)
         {
             m_states = SetupStates();
@@ -20,9 +20,9 @@ namespace FluidicsSDK.Devices
             base.ActivateState(m_states[m_currentState]);
             var stateControlSize = new Size(15, 15);
             var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 2), Center.Y - (stateControlSize.Height / 2));
-            var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height /2));
-            var stateControlRectangle = new Rectangle(stateControl1Loc, stateControlSize);
-            var stateControlRectangle2 = new Rectangle(stateControl2Loc, stateControlSize);
+            var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height / 2));
+            var stateControlRectangle = new Rect(stateControl1Loc, stateControlSize);
+            var stateControlRectangle2 = new Rect(stateControl2Loc, stateControlSize);
             //add left control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle, Orient.Left), LeftButtonAction);
             //add right control
@@ -32,7 +32,7 @@ namespace FluidicsSDK.Devices
         private void SetValvePosition(TwoPositionState pos)
         {
             m_valve.SetPosition(pos);
-        }   
+        }
 
         protected override void SetDevice(IDevice device)
         {
@@ -42,9 +42,9 @@ namespace FluidicsSDK.Devices
                 if (m_valve != null)
                     m_valve.PositionChanged += m_valve_PositionChanged;
             }
-            catch(Exception)
+            catch (Exception)
             {
-               // MessageBox.Show("Null valve: " + ex.Message);
+                // MessageBox.Show("Null valve: " + ex.Message);
             }
         }
 
@@ -62,9 +62,8 @@ namespace FluidicsSDK.Devices
             return states;
         }
 
-
         void m_valve_PositionChanged(object sender, ValvePositionEventArgs<TwoPositionState> e)
-        {            
+        {
             ActivateState((int)e.Position);
         }
 

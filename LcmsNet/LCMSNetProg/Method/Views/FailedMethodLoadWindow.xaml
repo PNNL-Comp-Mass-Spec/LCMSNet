@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Method Load Issues" Height="529" Width="800"
         d:DataContext="{d:DesignInstance {x:Type viewModels:FailedMethodLoadViewModel}, IsDesignTimeCreatable=True}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

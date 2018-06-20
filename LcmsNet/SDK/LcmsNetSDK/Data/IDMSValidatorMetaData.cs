@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace LcmsNetDataClasses.Data
+namespace LcmsNetSDK.Data
 {
-    [Obsolete("Interface deprecated. Use a direct reference to classDMSSampleValidator.cs")]
+    [Obsolete("Interface deprecated. Use a direct reference to DMSSampleValidator.cs")]
     public interface IDMSValidatorMetaData
     {
         /// <summary>

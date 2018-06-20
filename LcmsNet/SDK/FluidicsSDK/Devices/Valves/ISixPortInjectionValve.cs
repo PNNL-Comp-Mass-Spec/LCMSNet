@@ -1,7 +1,6 @@
 ﻿using System;
-using FluidicsSDK.Devices.Valves;
 
-namespace FluidicsSDK.Devices
+namespace FluidicsSDK.Devices.Valves
 {
     public interface ISixPortInjectionValve : ITwoPositionValve
     {

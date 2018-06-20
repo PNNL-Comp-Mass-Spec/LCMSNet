@@ -1,24 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LcmsNetSDK</RootNamespace>
     <AssemblyName>LcmsNetSdk</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +21,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\LcmsNetSdk.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -38,209 +33,110 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\PNNLRelease\LcmsNetSdk.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph">
-      <HintPath>..\..\..\lib\ZedGraph.dll</HintPath>
-    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="classDMSToolsManager.cs" />
-    <Compile Include="Data\classConvertVialPosition.cs" />
-    <Compile Include="Data\classDMSBaseControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Data\classDMSBaseControl.Designer.cs">
-      <DependentUpon>classDMSBaseControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\DmsValidatorEventArgs.cs" />
+    <Compile Include="Configuration\CartConfiguration.cs" />
+    <Compile Include="Configuration\ColumnData.cs" />
+    <Compile Include="Configuration\ColumnStatus.cs" />
+    <Compile Include="Data\ConvertVialPosition.cs" />
+    <Compile Include="Data\DMSData.cs" />
+    <Compile Include="Data\ExperimentData.cs" />
     <Compile Include="Data\IDMSValidator.cs" />
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
-    <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
-    <Compile Include="Devices\IDeviceControlWpf.cs" />
-    <Compile Include="EventArgs.cs" />
-    <Compile Include="Experiment\classSampleValidationError.cs" />
-    <Compile Include="Experiment\classSampleValidatorManager.cs" />
-    <Compile Include="Configuration\classCartConfiguration.cs" />
-    <Compile Include="Data\classExperimentData.cs" />
-    <Compile Include="Data\classLCColumn.cs" />
-    <Compile Include="Data\classProposalUser.cs" />
-    <Compile Include="Data\classSampleQueryData.cs" />
-    <Compile Include="Data\classTriggerFileTools.cs" />
-    <Compile Include="Configuration\classColumnData.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Configuration\enumColumnStatus.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Data\classDataClassBase.cs" />
-    <Compile Include="Data\classDMSData.cs" />
-    <Compile Include="Data\classInstrumentInfo.cs" />
-    <Compile Include="Data\classMRMFileData.cs" />
-    <Compile Include="Data\classPalData.cs" />
-    <Compile Include="Data\classSampleData.cs" />
-    <Compile Include="Data\classUserIDPIDCrossReferenceEntry.cs" />
-    <Compile Include="Data\classUserInfo.cs" />
     <Compile Include="Data\IDmsMetaData.cs" />
     <Compile Include="Data\IDmsTools.cs" />
     <Compile Include="Data\IMethodWriter.cs" />
+    <Compile Include="Data\InstrumentInfo.cs" />
+    <Compile Include="Data\LCColumnData.cs" />
+    <Compile Include="Data\LcmsNetDataClassBase.cs" />
+    <Compile Include="Data\MRMFileData.cs" />
     <Compile Include="Data\MobilePhase.cs" />
-    <Compile Include="Devices\classDeviceConfiguration.cs" />
-    <Compile Include="Devices\classDeviceErrorEventArgs.cs" />
-    <Compile Include="Devices\classDeviceControlAttribute.cs" />
-    <Compile Include="Devices\classDeviceManager.cs" />
-    <Compile Include="Devices\classDeviceManagerStatusArgs.cs" />
-    <Compile Include="Devices\classDevicePluginInformation.cs" />
-    <Compile Include="Devices\classDeviceStatusEventArgs.cs" />
-    <Compile Include="Devices\classPersistenceAttribute.cs" />
-    <Compile Include="Devices\classTimerDevice.cs" />
-    <Compile Include="Devices\codeFileControlDelegates.cs" />
-    <Compile Include="Devices\codeFileDeviceDelegates.cs" />
-    <Compile Include="Devices\controlBaseDeviceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlBaseDeviceControl.Designer.cs">
-      <DependentUpon>controlBaseDeviceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\controlDeviceStatusDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\controlDeviceStatusDisplay.Designer.cs">
-      <DependentUpon>controlDeviceStatusDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Pumps\controlMobilePhaseEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Pumps\controlMobilePhaseEditor.Designer.cs">
-      <DependentUpon>controlMobilePhaseEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Pumps\controlPumpDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Pumps\controlPumpDisplay.Designer.cs">
-      <DependentUpon>controlPumpDisplay.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\enumDeviceErrorStatus.cs" />
-    <Compile Include="Devices\enumDeviceStatus.cs" />
-    <Compile Include="Devices\enumDeviceType.cs">
-    </Compile>
-    <Compile Include="Devices\Pumps\formPumpDisplays.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Devices\Pumps\formPumpDisplays.Designer.cs">
-      <DependentUpon>formPumpDisplays.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Data\PalData.cs" />
+    <Compile Include="Data\ProposalUser.cs" />
+    <Compile Include="Data\SampleData.cs" />
+    <Compile Include="Data\SampleQueryData.cs" />
+    <Compile Include="Data\TriggerFileTools.cs" />
+    <Compile Include="Data\UserIDPIDCrossReferenceEntry.cs" />
+    <Compile Include="Data\UserInfo.cs" />
+    <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
+    <Compile Include="Devices\DeviceConfiguration.cs" />
+    <Compile Include="Devices\DeviceControlAttribute.cs" />
+    <Compile Include="Devices\DeviceErrorEventArgs.cs" />
+    <Compile Include="Devices\DeviceErrorStatus.cs" />
+    <Compile Include="Devices\DeviceEventLoggingType.cs" />
+    <Compile Include="Devices\DeviceManager.cs" />
+    <Compile Include="Devices\DeviceManagerStatusArgs.cs" />
+    <Compile Include="Devices\DevicePluginInformation.cs" />
+    <Compile Include="Devices\DeviceStatus.cs" />
+    <Compile Include="Devices\DeviceStatusEventArgs.cs" />
+    <Compile Include="Devices\DeviceType.cs" />
+    <Compile Include="Devices\FileControlDelegates.cs" />
+    <Compile Include="Devices\FileDeviceDelegates.cs" />
     <Compile Include="Devices\IAutoSampler.cs" />
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Devices\IDeviceControl.cs" />
     <Compile Include="Devices\IDeviceManager.cs" />
     <Compile Include="Devices\INetworkStart.cs" />
-    <Compile Include="Devices\classMonitoringComponent.cs" />
     <Compile Include="Devices\IPump.cs" />
+    <Compile Include="Devices\MonitoringComponent.cs" />
+    <Compile Include="Devices\PersistenceDataAttribute.cs" />
     <Compile Include="Devices\PumpDataReceivedHandler.cs" />
-    <Compile Include="Experiment\classLCExperimentData.cs" />
-    <Compile Include="classPlugInDisplayNameAttribute.cs" />
-    <Compile Include="classLCMSSettings.cs" />
-    <Compile Include="Experiment\enumSampleValidationError.cs" />
-    <Compile Include="Experiment\enumSampleValidResult.cs" />
+    <Compile Include="Devices\TimerDevice.cs" />
     <Compile Include="Experiment\ISampleValidator.cs" />
     <Compile Include="Experiment\ISampleValidatorMetaData.cs" />
+    <Compile Include="Experiment\LCExperimentData.cs" />
+    <Compile Include="Experiment\SampleValidResult.cs" />
+    <Compile Include="Experiment\SampleValidationError.cs" />
+    <Compile Include="Experiment\SampleValidationErrorType.cs" />
+    <Compile Include="Experiment\SampleValidatorManager.cs" />
+    <Compile Include="Logging\ApplicationLogger.cs" />
+    <Compile Include="Logging\DbLogger.cs" />
+    <Compile Include="Logging\DbLoggerException.cs" />
+    <Compile Include="Logging\ErrorLoggerArgs.cs" />
+    <Compile Include="Logging\FileLogging.cs" />
+    <Compile Include="Logging\IDeviceHealthWriter.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\MessageLoggerArgs.cs" />
+    <Compile Include="Method\IParameter.cs" />
+    <Compile Include="Method\InvalidTimeSpanException.cs" />
+    <Compile Include="Method\LCEvent.cs" />
+    <Compile Include="Method\LCMethod.cs" />
+    <Compile Include="Method\LCMethodData.cs" />
+    <Compile Include="Method\LCMethodEventAttribute.cs" />
+    <Compile Include="Method\LCMethodEventParameter.cs" />
+    <Compile Include="Method\LCMethodOptimizer.cs" />
+    <Compile Include="Method\LCMethodParameterNumericRange.cs" />
+    <Compile Include="Method\MethodOperationTimeoutType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\INotifier.cs" />
+    <Compile Include="System\TimeKeeper.cs" />
+    <Compile Include="DMSToolsManager.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="ICacheInterface.cs" />
     <Compile Include="IFluidicsModelChecker.cs" />
     <Compile Include="IModelCheckController.cs" />
+    <Compile Include="INotifyPropertyChangedExtensions.cs" />
     <Compile Include="IPDF.cs" />
     <Compile Include="IRandomizerInterface.cs" />
-    <Compile Include="Logging\classApplicationLogger.cs" />
-    <Compile Include="Logging\classDbLogger.cs" />
-    <Compile Include="Logging\classDbLoggerException.cs" />
-    <Compile Include="Logging\classErrorLoggerArgs.cs" />
-    <Compile Include="Logging\classFileLogging.cs" />
-    <Compile Include="Logging\classMessageLoggerArgs.cs" />
-    <Compile Include="Logging\IDeviceHealthWriter.cs" />
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Method\classInvalidDurationException.cs" />
-    <Compile Include="Method\classLCEvent.cs" />
-    <Compile Include="Method\classLCMethod.cs" />
-    <Compile Include="Method\classLCMethodAttribute.cs" />
-    <Compile Include="Method\classLCMethodData.cs" />
-    <Compile Include="Method\classLCMethodEventParameter.cs" />
-    <Compile Include="Method\classLCMethodOptimizer.cs" />
-    <Compile Include="Method\classLCMethodParameterRange.cs" />
-    <Compile Include="Method\enumMethodOperationTime.cs" />
-    <Compile Include="Method\IParameter.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="LCMSSettings.cs" />
     <Compile Include="ModelStatus.cs" />
     <Compile Include="ModelStatusChangeEventArgs.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="PlugInDisplayNameAttribute.cs" />
     <Compile Include="SystemInformationReporter.cs" />
-    <Compile Include="System\INotifier.cs" />
-    <Compile Include="INotifyPropertyChangedExtensions.cs" />
-    <Compile Include="System\TimeKeeper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Devices\controlBaseDeviceControl.resx">
-      <DependentUpon>controlBaseDeviceControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\controlDeviceStatusDisplay.resx">
-      <DependentUpon>controlDeviceStatusDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Pumps\controlMobilePhaseEditor.resx">
-      <DependentUpon>controlMobilePhaseEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Pumps\controlPumpDisplay.resx">
-      <DependentUpon>controlPumpDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Pumps\formPumpDisplays.resx">
-      <DependentUpon>formPumpDisplays.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="PluginDocumentation.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Instrument\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AllIsGood.bmp" />
-    <None Include="Resources\AllIsGood.png" />
-    <None Include="Resources\button delete_161.png" />
+    <Compile Include="WpfConversions.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite.Core">
@@ -248,13 +144,6 @@
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <PropertyGroup>
     <PreBuildEvent>REM SubWCRev.exe "$(ProjectDir)Properties" "$(ProjectDir)Properties\AssemblyInfoTemplate.cs" "$(ProjectDir)Properties\AssemblyInfo.cs"
 REM if exist "$(TargetPath).locked" del "$(TargetPath).locked"
@@ -264,10 +153,9 @@ REM if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).lock
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)*.xml" "$(SolutionDir)lib\"
+xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
 
 if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /y /F /D "$(TargetPath)" %25appdata%25\LCMSNet\dmsExtensions</PostBuildEvent>
+if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"</PostBuildEvent>
   </PropertyGroup>
 </Project>

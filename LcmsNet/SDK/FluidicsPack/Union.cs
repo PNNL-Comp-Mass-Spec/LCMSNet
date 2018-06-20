@@ -1,34 +1,27 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 1/3/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
-     [classDeviceControlAttribute(null,
-                                  typeof(FluidicsUnion),
-                                 "Union",
-                                 "Fluidics Components")]
-    public class Union:IDevice
+    [DeviceControl(null,
+        typeof(FluidicsUnion),
+        "Union",
+        "Fluidics Components")]
+    public class Union : IDevice
     {
         #region Methods
-         public Union()
-         {
-             Name = "Union";
-         }
+        public Union()
+        {
+            Name = "Union";
+        }
 
         public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
-            ErrorType = enumDeviceErrorStatus.NoError;
+            Status = DeviceStatus.Initialized;
+            ErrorType = DeviceErrorStatus.NoError;
             return true;
         }
 
@@ -65,13 +58,13 @@ namespace FluidicsPack
         #endregion
 
         #region Events
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
             remove { }
         }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -86,9 +79,9 @@ namespace FluidicsPack
         #endregion
 
         #region Properties
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -107,7 +100,7 @@ namespace FluidicsPack
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.Configuration.ViewModels
@@ -17,10 +17,10 @@ namespace LcmsNet.Configuration.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnConfigViewModel()
         {
-            columnData = new classColumnData
+            columnData = new ColumnData
             {
                 ID = 0,
-                ColorWpf = Colors.Red
+                Color = Colors.Red
             };
 
             columnNamesComboBoxOptions = new ReactiveList<string>(new string[] {"NOTSET"});
@@ -28,7 +28,7 @@ namespace LcmsNet.Configuration.ViewModels
             Initialize();
         }
 
-        public ColumnConfigViewModel(classColumnData column, IReadOnlyReactiveList<string> columnNames)
+        public ColumnConfigViewModel(ColumnData column, IReadOnlyReactiveList<string> columnNames)
         {
             columnData = column;
             columnNamesComboBoxOptions = columnNames;
@@ -38,27 +38,30 @@ namespace LcmsNet.Configuration.ViewModels
 
         private void Initialize()
         {
+            // Set all monitors for the column before we set any local monitors, since they get run on initialization
+            this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId, out columnId);
+            this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
+            {
+                this.ColumnEnabled = x != ColumnStatus.Disabled;
+                LogColumnStatusChange();
+            });
+            this.WhenAnyValue(x => x.ColumnData.Name).Subscribe(x => this.ColumnNameChanged?.Invoke());
+
+            // Local/instance variables should now be initialized according to the target object, so set the monitors going the other way.
             this.WhenAnyValue(x => x.ColumnEnabled).Subscribe(x =>
             {
                 if (ColumnData != null)
                 {
                     if (ColumnEnabled)
                     {
-                        columnData.Status = enumColumnStatus.Idle;
+                        columnData.Status = ColumnStatus.Idle;
                     }
                     else
                     {
-                        columnData.Status = enumColumnStatus.Disabled;
+                        columnData.Status = ColumnStatus.Disabled;
                     }
                 }
             });
-            this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId, out columnId);
-            this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
-            {
-                this.ColumnEnabled = x != enumColumnStatus.Disabled;
-                LogColumnStatusChange();
-            });
-            this.WhenAnyValue(x => x.ColumnData.Name).Subscribe(x => this.ColumnNameChanged?.Invoke());
         }
 
         #endregion
@@ -70,7 +73,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// <summary>
         /// Column configuration object.
         /// </summary>
-        private classColumnData columnData;
+        private ColumnData columnData;
 
         private ObservableAsPropertyHelper<int> columnId;
         private readonly IReadOnlyReactiveList<string> columnNamesComboBoxOptions;
@@ -105,7 +108,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// <summary>
         /// Gets or sets the data associated with the column.
         /// </summary>
-        public classColumnData ColumnData
+        public ColumnData ColumnData
         {
             get { return columnData; }
             private set { this.RaiseAndSetIfChanged(ref columnData, value); }
@@ -127,7 +130,7 @@ namespace LcmsNet.Configuration.ViewModels
         {
             var statusMessage = string.Format("Status: {0}", ColumnData.Status);
             //TODO: change this magic number into a constant.
-            classApplicationLogger.LogMessage(1, statusMessage);
+            ApplicationLogger.LogMessage(1, statusMessage);
         }
 
         #endregion

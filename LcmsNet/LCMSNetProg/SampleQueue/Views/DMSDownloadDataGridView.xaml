@@ -6,28 +6,29 @@
              xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type viewModels:DMSDownloadDataViewModel}, IsDesignTimeCreatable=True}"
-             d:DesignHeight="300" d:DesignWidth="800">
-    <DataGrid AutoGenerateColumns="False"
+             d:DesignHeight="300" d:DesignWidth="800"
+             DataContextChanged="DmsDownloadData_OnDataContextChanged">
+    <DataGrid x:Name="SampleDataGrid" AutoGenerateColumns="False"
               ItemsSource="{Binding Data}"
-              CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False"
+              CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserSortColumns="{Binding UserSortable}"
               SelectionMode="Extended"
               SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-              SelectionChanged="Selector_OnSelectionChanged">
-        <DataGrid.RowStyle>
-            <Style TargetType="{x:Type DataGridRow}">
+              SelectionChanged="Selector_OnSelectionChanged" VirtualizingPanel.VirtualizationMode="Standard">
+        <DataGrid.CellStyle>
+            <Style TargetType="{x:Type DataGridCell}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding DmsData.CartName}" Value="unknown">
                         <Setter Property="Background" Value="Yellow"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-        </DataGrid.RowStyle>
+        </DataGrid.CellStyle>
         <DataGrid.Columns>
             <DataGridTextColumn Header="Request Name" Binding="{Binding DmsData.RequestName}" IsReadOnly="True" />
             <DataGridTextColumn Header="Request #" Binding="{Binding DmsData.RequestID}" IsReadOnly="True" />
             <DataGridTextColumn Header="Cart" Binding="{Binding DmsData.CartName}" IsReadOnly="True" />
             <DataGridTextColumn Header="EMSL User" Binding="{Binding DmsData.UserList}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Usage Type" Binding="{Binding DmsData.UsageType}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Usage Type" Binding="{Binding DmsData.EMSLUsageType}" IsReadOnly="True" />
             <DataGridTextColumn Header="Batch" Binding="{Binding DmsData.Batch}" IsReadOnly="True" />
             <DataGridTextColumn Header="Block" Binding="{Binding DmsData.Block}" IsReadOnly="True" />
             <DataGridTextColumn Header="Run Order" Binding="{Binding DmsData.RunOrder}" IsReadOnly="True" />

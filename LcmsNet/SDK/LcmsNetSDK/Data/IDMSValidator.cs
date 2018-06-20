@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LcmsNetDataClasses.Data
+namespace LcmsNetSDK.Data
 {
-    [Obsolete("Interface deprecated. Use a direct reference to classDMSSampleValidator.cs")]
+    [Obsolete("Interface deprecated. Use a direct reference to DMSSampleValidator.cs")]
     public interface IDMSValidator
     {
         /// <summary>
@@ -14,6 +14,6 @@ namespace LcmsNetDataClasses.Data
         ///  Determines if sample is valid for DMS
         /// </summary>
         /// <returns>true/false</returns>
-        bool IsSampleValid(classSampleData sample);
+        bool IsSampleValid(SampleData sample);
     }
 }

@@ -1,21 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EDF39882-C0AF-424B-9096-6F1384A5FD71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VICI</RootNamespace>
+    <RootNamespace>LcmsNetPlugins.VICI</RootNamespace>
     <AssemblyName>VICI</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -27,37 +21,25 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\VICI.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
     <OutputPath>bin\PNNLRelease\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
-    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\PNNLRelease\VICI.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluidicsSDK">
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetCommonControls">
+      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
@@ -65,115 +47,63 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Devices\Valves\classValveExceptions.cs" />
-    <Compile Include="Devices\Valves\classValveVICI2Pos.cs" />
-    <Compile Include="Devices\Valves\classValveVICI2Pos10Port.cs" />
-    <Compile Include="Devices\Valves\classValveVICI2pos4port.cs" />
-    <Compile Include="Devices\Valves\classValveVICI2Pos6Port.cs" />
-    <Compile Include="Devices\Valves\classValveVICIMultiPos.cs" />
-    <Compile Include="Devices\Valves\classValveVICIMultiPos16Port.cs" />
-    <Compile Include="Devices\Valves\classValveVICIMultipos9Port.cs" />
-    <Compile Include="Devices\Valves\classValveVICIMultipos11Port.cs" />
-    <Compile Include="Devices\Valves\classValveVICISixPortInjection.cs" />
-    <Compile Include="Devices\Valves\classValveVICISPE.cs" />
-    <Compile Include="Devices\Valves\controlSixPortInjectionValve.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\controlSixPortInjectionValve.Designer.cs">
-      <DependentUpon>controlSixPortInjectionValve.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICI2Pos.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICI2Pos.Designer.cs">
-      <DependentUpon>controlValveVICI2Pos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICIMultiPos.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\controlValveVICIMultiPos.designer.cs">
-      <DependentUpon>controlValveVICIMultiPos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Valves\enumValvePosition2Pos.cs" />
-    <Compile Include="Devices\Valves\SixPortInjectionValveView.xaml.cs">
+    <Compile Include="Valves\ValveExceptions.cs" />
+    <Compile Include="Valves\ValveVICI2Pos.cs" />
+    <Compile Include="Valves\ValveVICI2Pos10Port.cs" />
+    <Compile Include="Valves\ValveVICI2Pos4port.cs" />
+    <Compile Include="Valves\ValveVICI2Pos6Port.cs" />
+    <Compile Include="Valves\ValveVICIBase.cs" />
+    <Compile Include="Valves\ValveVICIMultiPos.cs" />
+    <Compile Include="Valves\ValveVICIMultiPos16Port.cs" />
+    <Compile Include="Valves\ValveVICIMultiPos9Port.cs" />
+    <Compile Include="Valves\ValveVICIMultiPos11Port.cs" />
+    <Compile Include="Valves\ValveVICISixPortInjection.cs" />
+    <Compile Include="Valves\ValveVICISPE.cs" />
+    <Compile Include="Valves\ValvePosition2Pos.cs" />
+    <Compile Include="Valves\SixPortInjectionValveView.xaml.cs">
       <DependentUpon>SixPortInjectionValveView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Valves\SixPortInjectionValveViewModel.cs" />
-    <Compile Include="Devices\Valves\ValveVICI2PosView.xaml.cs">
+    <Compile Include="Valves\SixPortInjectionValveViewModel.cs" />
+    <Compile Include="Valves\ValveVICI2PosView.xaml.cs">
       <DependentUpon>ValveVICI2PosView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Valves\ValveVICI2PosViewModel.cs" />
-    <Compile Include="Devices\Valves\ValveVICIMultiPosView.xaml.cs">
+    <Compile Include="Valves\ValveVICI2PosViewModel.cs" />
+    <Compile Include="Valves\ValveVICIMultiPosView.xaml.cs">
       <DependentUpon>ValveVICIMultiPosView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Valves\ValveVICIMultiPosViewModel.cs" />
-    <Compile Include="Devices\Valves\ValveVICIViewModelBase.cs" />
+    <Compile Include="Valves\ValveVICIMultiPosViewModel.cs" />
+    <Compile Include="Valves\ValveVICIViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Devices\Valves\controlSixPortInjectionValve.resx">
-      <DependentUpon>controlSixPortInjectionValve.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Valves\controlValveVICI2Pos.resx">
-      <DependentUpon>controlValveVICI2Pos.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Valves\controlValveVICIMultiPos.resx">
-      <DependentUpon>controlValveVICIMultiPos.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Devices\Valves\SixPortInjectionValveView.xaml">
+    <Page Include="Valves\SixPortInjectionValveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Devices\Valves\ValveVICI2PosView.xaml">
+    <Page Include="Valves\ValveVICI2PosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Devices\Valves\ValveVICIMultiPosView.xaml">
+    <Page Include="Valves\ValveVICIMultiPosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.0.0</Version>
+      <Version>3.3.0</Version>
     </PackageReference>
-    <PackageReference Include="reactiveui">
-      <Version>7.4.0</Version>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>8.2.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -186,14 +116,14 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+rem powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
-xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

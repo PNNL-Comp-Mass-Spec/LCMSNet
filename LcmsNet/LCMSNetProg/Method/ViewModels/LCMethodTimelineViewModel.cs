@@ -4,10 +4,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNet.Method.Drawing;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
@@ -23,7 +24,7 @@ namespace LcmsNet.Method.ViewModels
         public LCMethodTimelineViewModel()
         {
             // Create internal lists
-            methods = new List<classLCMethod>();
+            methods = new List<LCMethod>();
             deviceColorMappings = new Dictionary<IDevice, Color>();
 
             // We map before we register our delegates with events to make sure devices that are built-in are
@@ -32,8 +33,8 @@ namespace LcmsNet.Method.ViewModels
             {
                 RemapDevicesToColors();
                 // Register device additions and deletions so that we remap color information for display.
-                classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-                classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+                DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+                DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             }
             catch
             {
@@ -44,12 +45,12 @@ namespace LcmsNet.Method.ViewModels
             this.WhenAnyValue(x => x.RenderMode).Subscribe(x => this.Refresh());
         }
 
-        private enumLCMethodRenderMode renderMode;
+        private LCMethodRenderMode renderMode;
 
         /// <summary>
         /// Gets or sets the type of rendering to perform.
         /// </summary>
-        public enumLCMethodRenderMode RenderMode
+        public LCMethodRenderMode RenderMode
         {
             get { return renderMode; }
             set { this.RaiseAndSetIfChanged(ref renderMode, value); }
@@ -65,7 +66,7 @@ namespace LcmsNet.Method.ViewModels
 
         public void MouseUpUpdates(Point mouseLocation, ref bool mouseNotMoved)
         {
-            if (RenderMode != enumLCMethodRenderMode.Conversation)
+            if (RenderMode != LCMethodRenderMode.Conversation)
             {
                 return;
             }
@@ -93,7 +94,7 @@ namespace LcmsNet.Method.ViewModels
 
         public void MouseMovedUpdates(Point mouseLocation, ref Point oldMouseLocation)
         {
-            if (RenderMode != enumLCMethodRenderMode.Conversation)
+            if (RenderMode != LCMethodRenderMode.Conversation)
             {
                 return;
             }
@@ -129,7 +130,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// The list of methods to render.
         /// </summary>
-        private readonly List<classLCMethod> methods;
+        private readonly List<LCMethod> methods;
 
         /// <summary>
         /// Maps a device to a color.
@@ -170,7 +171,7 @@ namespace LcmsNet.Method.ViewModels
         private void RemapDevicesToColors()
         {
             // Clear the list so we can re-adjust the mappings
-            deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(classDeviceManager.Manager.Devices);
+            deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(DeviceManager.Manager.Devices);
         }
 
         #endregion
@@ -181,7 +182,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the method provided.
         /// </summary>
         /// <param name="method"></param>
-        public void RenderLCMethod(classLCMethod method)
+        public void RenderLCMethod(LCMethod method)
         {
             methods.Clear();
             methods.Add(method);
@@ -192,7 +193,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the method provided.
         /// </summary>
         /// <param name="methodList"></param>
-        public void RenderLCMethod(List<classLCMethod> methodList)
+        public void RenderLCMethod(List<LCMethod> methodList)
         {
             methods.Clear();
             methods.AddRange(methodList);
@@ -211,15 +212,15 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="bounds"></param>
         public void RenderGraphics(DrawingContext e, Rect bounds)
         {
-            var renderer = LCRendererFactory.GetRendererWpf(RenderMode);
+            var renderer = LCRendererFactory.GetRenderer(RenderMode);
             if (renderer == null)
                 return;
 
             var startTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             var duration = new TimeSpan(0, 30, 0);
-            foreach (var column in classCartConfiguration.Columns)
+            foreach (var column in CartConfiguration.Columns)
             {
-                if (column.Status != enumColumnStatus.Disabled)
+                if (column.Status != ColumnStatus.Disabled)
                 {
                     renderer.ColumnNames.Add(column.Name);
                 }
@@ -227,7 +228,7 @@ namespace LcmsNet.Method.ViewModels
             renderer.ColumnNames.Add("Special");
             if (methods != null && methods.Count > 0)
             {
-                // Map the colors appropiately if they havent already been
+                // Map the colors appropriately if they haven't already been
                 if (deviceColorMappings.Count < 1)
                     RemapDevicesToColors();
 
@@ -242,7 +243,7 @@ namespace LcmsNet.Method.ViewModels
                 }
                 duration = endTime.Subtract(startTime);
             }
-            if (RenderMode == enumLCMethodRenderMode.Conversation)
+            if (RenderMode == LCMethodRenderMode.Conversation)
             {
                 renderer.StartEventIndex = StartEventIndex;
             }
@@ -256,7 +257,7 @@ namespace LcmsNet.Method.ViewModels
             renderer.RenderLCMethod(e, bounds, methods, startTime, duration, deviceColorMappings, DateTime.MaxValue);
 
             //Render scroll buttons
-            if (RenderMode == enumLCMethodRenderMode.Conversation)
+            if (RenderMode == LCMethodRenderMode.Conversation)
             {
                 var classLcMethodConversationRenderer = renderer as LCMethodConversationRenderer;
                 if (classLcMethodConversationRenderer != null)

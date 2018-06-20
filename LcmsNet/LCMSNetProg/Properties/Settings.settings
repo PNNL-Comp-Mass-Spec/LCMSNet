@@ -26,6 +26,15 @@
     <Setting Name="SeparationType" Type="System.String" Scope="User">
       <Value Profile="(Default)">LC-ISCO-Standard</Value>
     </Setting>
+    <Setting Name="Operator" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CartName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">No_Cart</Value>
+    </Setting>
+    <Setting Name="CartConfigName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Unknown_Cart_Config</Value>
+    </Setting>
     <Setting Name="InitializeHardwareOnStartup" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -53,6 +62,9 @@
     <Setting Name="CacheFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">LCMSCache.que</Value>
     </Setting>
+    <Setting Name="ColumnName0" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NOTSET</Value>
+    </Setting>
     <Setting Name="ColumnName1" Type="System.String" Scope="User">
       <Value Profile="(Default)">NOTSET</Value>
     </Setting>
@@ -62,8 +74,20 @@
     <Setting Name="ColumnName3" Type="System.String" Scope="User">
       <Value Profile="(Default)">NOTSET</Value>
     </Setting>
-    <Setting Name="ColumnName0" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NOTSET</Value>
+    <Setting Name="ColumnDisabled0" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ColumnDisabled1" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ColumnDisabled2" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ColumnDisabled3" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ColumnDisabledSpecial" Type="System.String" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ValidateSamplesForDMS" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -89,14 +113,8 @@
     <Setting Name="NotificationShouldNotify" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Operator" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="FirstTime" Type="System.String" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="CartName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">No_Cart</Value>
     </Setting>
     <Setting Name="ErrorPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\proto-5\BionetXfer\LCMSNetErrorReports</Value>
@@ -138,9 +156,6 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DMSTool" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="CartConfigName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

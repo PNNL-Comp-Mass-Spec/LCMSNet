@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {
     /// <summary>
     /// Class for rendering LC Methods
     /// </summary>
-    public class LCMethodRenderer
+    public abstract class LCMethodRenderer
     {
         /// <summary>
         /// Default constructor whose pixel padding is 0.0F
         /// </summary>
-        public LCMethodRenderer()
+        protected LCMethodRenderer()
         {
             PixelPadding = 0.0F;
             TimelinePixelSpacing = 5.0F;
@@ -32,6 +33,9 @@ namespace LcmsNet.Method.Drawing
         /// </summary>
         public SolidColorBrush AcquisitionColor { get; set; }
 
+        protected readonly double SixPt = WpfConversions.GetWpfLength("6pt");
+        protected readonly double EightPt = WpfConversions.GetWpfLength("8pt");
+
         #region Time Conversions
 
         /// <summary>
@@ -40,7 +44,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="methods">Samples to analyze</param>
         /// <param name="start">Starting time.</param>
         /// <param name="duration">Duration.</param>
-        protected void FindTimeExtremas(List<classLCMethod> methods, out DateTime start, out TimeSpan duration)
+        protected void FindTimeExtremas(List<LCMethod> methods, out DateTime start, out TimeSpan duration)
         {
             start = DateTime.MaxValue;
             var end = DateTime.MinValue;
@@ -102,7 +106,7 @@ namespace LcmsNet.Method.Drawing
         #region CONSTANTS
 
         protected const float CONST_HEADER_PADDING = .25F;
-        protected const float CONST_HEADER_PADDING_MAX = 25.0F;
+        protected const float CONST_HEADER_PADDING_MAX = 27.0F;
         protected const float CONST_TRIANGLE_HEIGHT = 15.0F;
         protected const float CONST_MIN_HEIGHT = 8.0F;
         protected const float CONST_MID_HEIGHT = 30.0F;
@@ -145,7 +149,7 @@ namespace LcmsNet.Method.Drawing
         /// <summary>
         /// Draws when the instrument is acquiring data.
         /// </summary>
-        public virtual void RenderAcquisitionTimes(DrawingContext g, Rect bounds, DateTime start, TimeSpan duration, List<classLCEvent> events)
+        public virtual void RenderAcquisitionTimes(DrawingContext g, Rect bounds, DateTime start, TimeSpan duration, List<LCEvent> events)
         {
             var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
             var startPoint = PixelPadding;
@@ -234,11 +238,11 @@ namespace LcmsNet.Method.Drawing
 
                 graphics.DrawLine(pen, new Point(x, y - tickHeight), new Point(x, 0));
 
-                var startDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, 6.0F * (96.0 / 72.0), timelineBrush);
+                var startDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, SixPt, timelineBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(startDateText, new Point(x - 3.0F, y - tickHeight * 2));
 
                 dateString = start.AddSeconds(currentTime).ToLongTimeString();
-                var endDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, 6.0F * (96.0 / 72.0), timelineBrush);
+                var endDateText = new FormattedText(dateString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, SixPt, timelineBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(endDateText, new Point(x - 3.0F, y - tickHeight * 3));
                 currentTime += timePerDraw;
             }
@@ -252,7 +256,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="start"></param>
         /// <param name="duration"></param>
         /// <param name="methods"></param>
-        public virtual void RenderOptimizationsOnTimeline(DrawingContext graphics, Rect bounds, DateTime start, TimeSpan duration, List<classLCMethod> methods)
+        public virtual void RenderOptimizationsOnTimeline(DrawingContext graphics, Rect bounds, DateTime start, TimeSpan duration, List<LCMethod> methods)
         {
             if (methods == null || methods.Count == 0)
                 return;
@@ -280,7 +284,7 @@ namespace LcmsNet.Method.Drawing
                         var alignedBounds = new Rect(x, y - 15.0F, eventWidth, 20.0F);
                         graphics.PushClip(new RectangleGeometry(alignedBounds));
                         graphics.DrawRectangle(optBrush, null, new Rect(x, y - 15.0F, eventWidth, 20.0F));
-                        var endDateText = new FormattedText(optimize, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, 6.0F * (96.0 / 72.0), timelineBrush);
+                        var endDateText = new FormattedText(optimize, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, dateFont, SixPt, timelineBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                         graphics.DrawText(endDateText, new Point(x, y));
                         graphics.Pop();
                     }
@@ -295,7 +299,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="bounds"></param>
         /// <param name="lcEvent"></param>
         /// <param name="backColor"></param>
-        public virtual void RenderLCEvent(DrawingContext graphics, Rect bounds, classLCEvent lcEvent, Color backColor)
+        public virtual void RenderLCEvent(DrawingContext graphics, Rect bounds, LCEvent lcEvent, Color backColor)
         {
             // Make sure that we don't have some garbage event that has a zero time width.
             if (bounds.Width <= 0)
@@ -318,11 +322,11 @@ namespace LcmsNet.Method.Drawing
 
             if (bounds.Height >= CONST_MID_HEIGHT)
             {
-                var deviceNameText = new FormattedText(lcEvent.Device.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, 8.0F * (96.0 / 72.0), nameBrush);
+                var deviceNameText = new FormattedText(lcEvent.Device.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, nameBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(deviceNameText, bounds.Location);
 
                 // Render the name of the event
-                var nameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, 8.0F * (96.0 / 72.0), nameBrush);
+                var nameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, nameBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 nameText.MaxTextWidth = bounds.Width;
                 nameText.MaxTextHeight = bounds.Height;
                 graphics.DrawText(nameText, new Point(bounds.X, bounds.Y + (bounds.Height / 2.0F)));
@@ -330,7 +334,7 @@ namespace LcmsNet.Method.Drawing
                 // Render the params of the event
                 if (lcEvent.Parameters.Length > 0 && lcEvent.Parameters[0] != null)
                 {
-                    var parametersText = new FormattedText(lcEvent.Parameters[0].ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, 8.0F * (96.0 / 72.0), new SolidColorBrush(Color.FromRgb(80, 80, 80)));
+                    var parametersText = new FormattedText(lcEvent.Parameters[0].ToString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, new SolidColorBrush(Color.FromRgb(80, 80, 80)), 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                     graphics.DrawText(parametersText, new Point(bounds.X, bounds.Y + (bounds.Height / 2.0F) + nameText.Height));
                 }
             }
@@ -352,7 +356,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="lcEvent"></param>
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
-        public virtual void RenderLCEventError(DrawingContext graphics, Rect allBounds, classLCEvent lcEvent, DateTime startTime, TimeSpan duration)
+        public virtual void RenderLCEventError(DrawingContext graphics, Rect allBounds, LCEvent lcEvent, DateTime startTime, TimeSpan duration)
         {
             // Pixels per time (PPT)
             var ppt = (allBounds.Width - allBounds.X) / Convert.ToSingle(duration.TotalSeconds);
@@ -395,7 +399,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
-        public virtual void RenderLCEvent(DrawingContext graphics, Rect allBounds, List<classLCEvent> events, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap)
+        public virtual void RenderLCEvent(DrawingContext graphics, Rect allBounds, List<LCEvent> events, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap)
         {
             if (events == null || events.Count == 0)
             {
@@ -459,7 +463,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, classLCMethod method, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, LCMethod method, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(duration.TotalSeconds);
 
@@ -481,7 +485,7 @@ namespace LcmsNet.Method.Drawing
                 specialColor = Colors.Black;
                 specialColor.A = 70;
                 var specialBrush = new SolidColorBrush(specialColor);
-                var specialNameText = new FormattedText(specialName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, 8.0F * (96.0 / 72.0), specialBrush);
+                var specialNameText = new FormattedText(specialName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, specialBrush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                 graphics.DrawText(specialNameText, new Point(startPoint, bounds.Top + specialNameText.Height));
             }
 
@@ -492,16 +496,16 @@ namespace LcmsNet.Method.Drawing
             var textFont = new Typeface(new FontFamily("Microsoft Sans Serif"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
             Brush brush = Brushes.Black;
 
-            var methodNameText = new FormattedText(method.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 8.0F * (96.0 / 72.0), brush);
+            var methodNameText = new FormattedText(method.Name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             graphics.DrawText(methodNameText, new Point(startPoint, bounds.Y - 13));
 
             // Draw the duration strings for the method
             var span = method.Duration;
             var durationString = span.ToString();
 
-            var methodStartText = new FormattedText(method.Start.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 6.0F * (96.0 / 72.0), brush);
-            var methodDurationText = new FormattedText(durationString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 6.0F * (96.0 / 72.0), brush);
-            var methodEndText = new FormattedText(method.End.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, 6.0F * (96.0 / 72.0), brush);
+            var methodStartText = new FormattedText(method.Start.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, SixPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var methodDurationText = new FormattedText(durationString, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, SixPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var methodEndText = new FormattedText(method.End.ToLongTimeString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, textFont, SixPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
 
             var x = startPoint + methodNameText.Width + 15.0F;
 
@@ -534,7 +538,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, List<classLCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             if (methods != null && methods.Count > 0)
             {
@@ -583,15 +587,15 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap">Device to color mapping.</param>
         /// <param name="progress"></param>
-        public virtual void RenderSamples(DrawingContext graphics, Rect bounds, List<classSampleData> samples, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderSamples(DrawingContext graphics, Rect bounds, List<SampleData> samples, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Gather the sample methods into a list, then call the
             // drawing method.
-            var methods = new List<classLCMethod>();
+            var methods = new List<LCMethod>();
             foreach (var sample in samples)
             {
                 if (sample != null)
-                    methods.Add(sample.LCMethod);
+                    methods.Add(sample.ActualLCMethod);
             }
 
             RenderLCMethod(graphics, bounds, methods, startTime, duration, colorMap, progress);

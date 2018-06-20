@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -29,7 +29,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             Tray6 = new TrayVialViewModel(6, sampleVms);
         }
 
-        public TrayVialAssignmentViewModel(List<string> trayNamesList, List<classSampleData> samples)
+        public TrayVialAssignmentViewModel(List<string> trayNamesList, List<SampleData> samples)
         {
             LoadSampleList(trayNamesList, samples);
 
@@ -50,7 +50,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ReactiveCommand<Unit, Unit> ApplyChangesCommand { get; private set; }
 
-        public List<classSampleData> SampleList { get; private set; }
+        public List<SampleData> SampleList { get; private set; }
 
         #endregion
 
@@ -77,7 +77,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="trayNamesList">List of PAL tray names</param>
         /// <param name="samples">List of samples</param>
-        private void LoadSampleList(List<string> trayNamesList, List<classSampleData> samples)
+        private void LoadSampleList(List<string> trayNamesList, List<SampleData> samples)
         {
             this.trayNames = trayNamesList;
             SampleList = samples;

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodSelectionViewModel}, IsDesignTimeCreatable=True}">
@@ -13,21 +14,21 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0" LastChildFill="True">
-            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" KeyUp="ComboBox_OnKeyUp" />
+            <ComboBox DockPanel.Dock="Top" Margin="3" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" DisplayMemberPath="Name" KeyUp="ComboBox_OnKeyUp" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <ListBox Margin="3" SelectionMode="Extended" SelectionChanged="MethodList_OnSelectionChanged" ItemsSource="{Binding ListSelectedLCMethods}" DisplayMemberPath="Name" />
         </DockPanel>
         <StackPanel Grid.Column="1" Width="60" Margin="3">
             <Button Margin="3" Command="{Binding AddCommand}" >
-                <Image Source="/Images/Add.png" MaxHeight="16" Margin="3"/>
+                <Image Source="{StaticResource AddImage}" MaxHeight="16" Margin="3"/>
             </Button>
             <Button Margin="3" Command="{Binding MoveUpCommand}" >
-                <Image Source="/Images/Button_Up_16.png" MaxHeight="16" Margin="3"/>
+                <Image Source="{StaticResource ButtonUpImage16}" MaxHeight="16" Margin="3"/>
             </Button>
             <Button Margin="3" Command="{Binding MoveDownCommand}" >
-                <Image Source="/Images/Button_Down_16.png" MaxHeight="16" Margin="3"/>
+                <Image Source="{StaticResource ButtonDownImage16}" MaxHeight="16" Margin="3"/>
             </Button>
             <Button Margin="3" Command="{Binding RemoveCommand}" >
-                <Image Source="/Images/Button_Delete_16.png" MaxHeight="16" Margin="3"/>
+                <Image Source="{StaticResource ButtonDeleteImage16}" MaxHeight="16" Margin="3"/>
             </Button>
         </StackPanel>
     </Grid>

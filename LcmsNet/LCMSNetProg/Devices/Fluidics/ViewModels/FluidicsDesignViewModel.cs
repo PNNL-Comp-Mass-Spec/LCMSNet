@@ -10,9 +10,9 @@ using System.Windows.Media.Imaging;
 using FluidicsSDK;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 using Microsoft.Win32;
 
@@ -22,10 +22,10 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
     {
         public FluidicsDesignViewModel()
         {
-            classDeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-            classDeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
-            classDeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
-            fluidicsMod = FluidicsModeratorWpf.Moderator;
+            DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+            DeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
+            fluidicsMod = FluidicsModerator.Moderator;
             FluidicsControlVm = new FluidicsControlViewModel();
             RefreshEvent += FluidicsControlVm.RefreshHandler;
             Reporter = new ModelCheckReportsViewModel(fluidicsMod);
@@ -35,12 +35,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             fluidicsMod.ModelChanged += FluidicsModelChanged;
 
             SetupCommands();
-            this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => fluidicsControlVm.UpdateImage());
+            this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => FluidicsControlVm.Refresh());
         }
 
         private void ReleaseUnmanagedResources()
         {
-            classDeviceManager.Manager.ShutdownDevices();
+            DeviceManager.Manager.ShutdownDevices();
         }
 
         public void Dispose()
@@ -57,7 +57,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         #region Members
 
         // fluidics moderator, controls access to fluidics managers and provides interface for working with them
-        private readonly FluidicsModeratorWpf fluidicsMod;
+        private readonly FluidicsModerator fluidicsMod;
 
         /// <summary>
         /// Filter for file dialogs.
@@ -95,12 +95,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                     if (devicesLocked)
                     {
                         // Locked, we want the unlock button to be pressable to unlock.
-                        classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been locked.");
+                        ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been locked.");
                     }
                     else
                     {
                         // Unlocked, we want the lock button to be lockable.
-                        classApplicationLogger.LogMessage(classApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been un-locked.");
+                        ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been un-locked.");
                     }
                 }
             }
@@ -152,7 +152,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <param name="ex">Exception</param>
         private void ShowError(Exception ex)
         {
-            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
+            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
         }
 
         /// <summary>
@@ -163,33 +163,35 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             var devicesToRemoveFromDeviceManager = fluidicsMod.RemoveSelectedDevices();
             foreach (var device in devicesToRemoveFromDeviceManager)
             {
-                classDeviceManager.Manager.RemoveDevice(device);
+                DeviceManager.Manager.RemoveDevice(device);
             }
             fluidicsMod.RemoveSelectedConnections();
         }
 
         /// <summary>
-        ///  save the current fluidics design as a bitmap
+        /// Save the current fluidics design as a bitmap
         /// </summary>
         /// <returns>the image of the current fluidics design</returns>
-        public System.Drawing.Bitmap GetImage()
+        public BitmapSource GetImage()
         {
-            var r = fluidicsMod.GetBoundingBox();
-            var bounds = new Rect(0, 0, r.Width + 150, r.Height + 150);
+            var bounds = fluidicsMod.GetBoundingBox(false);
             var drawVisual = new DrawingVisual();
-            var drawContext = drawVisual.RenderOpen();
-            drawContext.PushClip(new RectangleGeometry(bounds));
-            drawContext.DrawRectangle(Brushes.White, null, bounds);
-            float scale = 1;
-            fluidicsMod.Render(drawContext, 255, scale, Layer.Devices);
-            fluidicsMod.Render(drawContext, 255, scale, Layer.Ports);
-            fluidicsMod.Render(drawContext, 255, scale, Layer.Connections);
-            drawContext.Pop();
-            drawContext.Close();
-            var rtb = new RenderTargetBitmap(800, 200, 96, 96, PixelFormats.Pbgra32);
+            drawVisual.Offset = new Vector(-bounds.X, -bounds.Y); // Shift the drawing to minimize the blank space, or to show cropped drawings in their entirety
+            using (var drawContext = drawVisual.RenderOpen())
+            {
+                drawContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 2), bounds);
+                drawContext.PushClip(new RectangleGeometry(bounds)); // Clip the draw to the calculated boundaries
+                var scale = 1;
+                fluidicsMod.Render(drawContext, 255, scale, RenderLayer.Devices);
+                fluidicsMod.Render(drawContext, 255, scale, RenderLayer.Ports);
+                fluidicsMod.Render(drawContext, 255, scale, RenderLayer.Connections);
+                drawContext.Pop();
+            }
+
+            var rtb = new RenderTargetBitmap((int)bounds.Width, (int)bounds.Height, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(drawVisual);
             rtb.Freeze();
-            return rtb.ToImage();
+            return rtb;
         }
 
         public List<Tuple<string, string, string>> ListDevicesAndStatus()
@@ -202,12 +204,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         public void SaveConfiguration(string path = CONST_DEFAULT_CONFIG_FILEPATH)
         {
-            var configuration = new classDeviceConfiguration
+            var configuration = new DeviceConfiguration
             {
-                CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME)
+                CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME)
             };
 
-            classDeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);
+            DeviceManager.Manager.ExtractToPersistConfiguration(ref configuration);
             var connectionIds = new List<long>();
             //For each device, extract the X,Y position for persistence.
             foreach (var device in fluidicsMod.GetDevices())
@@ -231,10 +233,10 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
             }
 
-            var writer = new classINIDeviceConfigurationWriter();
+            var writer = new DeviceConfigurationINIWriter();
             writer.WriteConfiguration(path, configuration);
 
-            classApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.", path));
+            ApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.", path));
         }
 
         /// <summary>
@@ -255,10 +257,10 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public void LoadConfiguration(string path)
         {
             fluidicsMod.BeginModelSuspension();
-            var reader = new classINIDeviceConfigurationReader();
+            var reader = new DeviceConfigurationINIReader();
             var configuration = reader.ReadConfiguration(path);
 
-            classDeviceManager.Manager.LoadPersistentConfiguration(configuration);
+            DeviceManager.Manager.LoadPersistentConfiguration(configuration);
 
             foreach (var device in fluidicsMod.GetDevices())
             {
@@ -279,7 +281,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Could not load the position or state of the device.", ex);
+                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Could not load the position or state of the device.", ex);
                 }
             }
             var connections = configuration.GetConnections();
@@ -295,12 +297,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                     }
                     catch (Exception)
                     {
-                        classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Unable to create connection between " + properties[0] + " " + properties[1]);
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Unable to create connection between " + properties[0] + " " + properties[1]);
                     }
                 }
                 else
                 {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, "Unable to create connection, specified ports invalid or missing connection style." + " port1: " + properties[0] + " port2: " + properties[1] + " style: " + properties[2]);
+                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Unable to create connection, specified ports invalid or missing connection style." + " port1: " + properties[0] + " port2: " + properties[1] + " style: " + properties[2]);
                 }
             }
             Trace.WriteLine("Configuration Loaded");
@@ -337,6 +339,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             var display = new FailedDevicesWindow()
             {
                 DataContext = displayVm,
+                ShowActivated = true,
             };
 
             display.ShowDialog();
@@ -347,7 +350,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         private void LoadHardware()
         {
-            var deviceCount = classDeviceManager.Manager.DeviceCount;
+            var deviceCount = DeviceManager.Manager.DeviceCount;
             if (deviceCount > 0)
             {
                 var result = MessageBox.Show("Do you want to clear the existing device configuration?", "Clear Configuration", MessageBoxButton.YesNo);
@@ -367,12 +370,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 // Since this is an event driven architecture, we don't have to worry about explicitly
                 // clearing our glyphs.
                 fluidicsMod.BeginModelSuspension();
-                classDeviceManager.Manager.ShutdownDevices(true);
+                DeviceManager.Manager.ShutdownDevices(true);
                 fluidicsMod.EndModelSuspension(true);
                 // Then we actually load the next data
                 LoadConfiguration(openFileDialog.FileName);
 
-                classApplicationLogger.LogMessage(0, "Device configuration loaded from " + openFileDialog.FileName);
+                ApplicationLogger.LogMessage(0, "Device configuration loaded from " + openFileDialog.FileName);
             }
         }
 
@@ -400,7 +403,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         private void InitializeDevices()
         {
-            var initializedCount = classDeviceManager.Manager.InitializedDeviceCount;
+            var initializedCount = DeviceManager.Manager.InitializedDeviceCount;
 
             var reinitialize = false;
             if (initializedCount > 0)
@@ -418,13 +421,14 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
             }
 
-            var failedDevices = classDeviceManager.Manager.InitializeDevices(reinitialize);
+            var failedDevices = DeviceManager.Manager.InitializeDevices(reinitialize);
             if (failedDevices != null && failedDevices.Count > 0)
             {
                 var displayVm = new FailedDevicesViewModel(failedDevices);
                 var display = new FailedDevicesWindow()
                 {
                     DataContext = displayVm,
+                    ShowActivated = true,
                 };
 
                 display.ShowDialog();
@@ -483,7 +487,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         private void ChangeHandler(object sender, EventArgs e)
         {
             //System.Diagnostics.Trace.WriteLine("changeHandler sender: " + sender.ToString());
-            FluidicsControlVm.UpdateImage();
             FluidicsControlVm.Refresh();
             RefreshEvent?.Invoke(this, EventArgs.Empty);
         }
@@ -547,6 +550,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> RemoveCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> ConnectCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -558,6 +562,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             AddCommand = ReactiveCommand.Create(() => this.AddDeviceToDeviceManager(), this.WhenAnyValue(x => x.DevicesUnlocked));
             RemoveCommand = ReactiveCommand.Create(() => this.RemoveDevice(), this.WhenAnyValue(x => x.DevicesUnlocked));
             ConnectCommand = ReactiveCommand.Create(() => this.ConnectDevices(), this.WhenAnyValue(x => x.DevicesUnlocked));
+            RefreshCommand = ReactiveCommand.Create(() => this.Refresh());
         }
 
         #endregion

@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNetCommonControls.Devices.NetworkStart
 {
     /// <summary>
     /// Control for detector triggered by network start signal (presently just a stub)
     /// </summary>
-    public abstract class NetStartViewModelBase : BaseDeviceControlViewModel, IDeviceControlWpf
+    public abstract class NetStartViewModelBase : BaseDeviceControlViewModel, IDeviceControl
     {
         #region "Constructors"
 
@@ -117,9 +118,9 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
 
         private void SetupCommands()
         {
-            RefreshMethodsCommand = ReactiveUI.ReactiveCommand.Create(() => RefreshMethods());
-            StartAcquisitionCommand = ReactiveUI.ReactiveCommand.Create(() => StartAcquisition());
-            StopAcquisitionCommand = ReactiveUI.ReactiveCommand.Create(() => StopAcquisition());
+            RefreshMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshMethods()));
+            StartAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAcquisition()));
+            StopAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAcquisition()));
         }
 
         #endregion

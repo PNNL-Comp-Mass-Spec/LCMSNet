@@ -10,7 +10,7 @@
         </sectionGroup>
     </configSections>
   <startup useLegacyV2RuntimeActivationPolicy="true">
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.1" />
   </startup>
     <applicationSettings>
         <LcmsNet.Properties.Settings>
@@ -31,6 +31,9 @@
             </setting>
             <setting name="InstResponseTime" serializeAs="String">
                 <value>20</value>
+            </setting>
+            <setting name="CartName" serializeAs="String">
+                <value>(none)</value>
             </setting>
             <setting name="InitializeHardwareOnStartup" serializeAs="String">
                 <value>True</value>
@@ -62,9 +65,6 @@
             <setting name="LoggingMsgLevel" serializeAs="String">
                 <value>2</value>
             </setting>
-            <setting name="CartName" serializeAs="String">
-                <value>(none)</value>
-            </setting>
             <setting name="TriggerFileFolder" serializeAs="String">
                 <value>\\proto-5\BionetXfer\run_complete_trigger</value>
             </setting>
@@ -90,8 +90,17 @@
             <setting name="SeparationType" serializeAs="String">
                 <value>LC-ISCO-Standard</value>
             </setting>
+            <setting name="Operator" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="CartConfigName" serializeAs="String">
+                <value>Unknown_Cart_Config</value>
+            </setting>
             <setting name="CacheFileName" serializeAs="String">
                 <value>LCMSCache.que</value>
+            </setting>
+            <setting name="ColumnName0" serializeAs="String">
+                <value>NOTSET</value>
             </setting>
             <setting name="ColumnName1" serializeAs="String">
                 <value>NOTSET</value>
@@ -102,8 +111,20 @@
             <setting name="ColumnName3" serializeAs="String">
                 <value>NOTSET</value>
             </setting>
-            <setting name="ColumnName0" serializeAs="String">
-                <value>NOTSET</value>
+            <setting name="ColumnDisabled0" serializeAs="String">
+                <value>False</value>
+            </setting>
+            <setting name="ColumnDisabled1" serializeAs="String">
+                <value>False</value>
+            </setting>
+            <setting name="ColumnDisabled2" serializeAs="String">
+                <value>True</value>
+            </setting>
+            <setting name="ColumnDisabled3" serializeAs="String">
+                <value>True</value>
+            </setting>
+            <setting name="ColumnDisabledSpecial" serializeAs="String">
+                <value>True</value>
             </setting>
             <setting name="ValidateSamplesForDMS" serializeAs="String">
                 <value>True</value>
@@ -122,9 +143,6 @@
             </setting>
             <setting name="NotificationShouldNotify" serializeAs="String">
                 <value>False</value>
-            </setting>
-            <setting name="Operator" serializeAs="String">
-                <value />
             </setting>
             <setting name="FirstTime" serializeAs="String">
                 <value>True</value>
@@ -154,9 +172,6 @@
                 <value />
             </setting>
             <setting name="DMSTool" serializeAs="String">
-                <value />
-            </setting>
-            <setting name="CartConfigName" serializeAs="String">
                 <value />
             </setting>
         </LcmsNet.Properties.Settings>

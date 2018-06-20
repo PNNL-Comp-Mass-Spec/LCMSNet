@@ -8,13 +8,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows.Media;
 using DemoPluginLibrary;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest
@@ -30,60 +31,60 @@ namespace LcmsnetUnitTest
                 //
                 // Create system data with columns.
                 //
-                var columnOne = new classColumnData
+                var columnOne = new ColumnData
                 {
                     ID = 0,
-                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME0),
-                    Status = enumColumnStatus.Idle,
-                    Color = Color.Tomato,
+                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0),
+                    Status = ColumnStatus.Idle,
+                    Color = Colors.Tomato,
                     First = true
                 };
 
-                var columnTwo = new classColumnData
+                var columnTwo = new ColumnData
                 {
                     ID = 1,
-                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME1),
-                    Status = enumColumnStatus.Idle,
-                    Color = Color.Lime
+                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME1),
+                    Status =ColumnStatus.Idle,
+                    Color = Colors.Lime
                 };
 
-                var columnThree = new classColumnData
+                var columnThree = new ColumnData
                 {
                     ID = 2,
-                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME2),
-                    Status = enumColumnStatus.Idle,
-                    Color = Color.LightSteelBlue
+                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME2),
+                    Status =ColumnStatus.Idle,
+                    Color = Colors.LightSteelBlue
                 };
 
-                var columnFour = new classColumnData
+                var columnFour = new ColumnData
                 {
                     ID = 3,
-                    Name = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_COLUMNNAME3),
-                    Status = enumColumnStatus.Idle,
-                    Color = Color.LightSalmon
+                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME3),
+                    Status =ColumnStatus.Idle,
+                    Color = Colors.LightSalmon
                 };
 
-                classCartConfiguration.Columns = new List<classColumnData> {
+                CartConfiguration.Columns = new List<ColumnData> {
                     columnOne, columnTwo, columnThree, columnFour};
 
-                optimizer = new classLCMethodOptimizer();
+                optimizer = new LCMethodOptimizer();
             }
-            q = new LcmsNet.SampleQueue.classSampleQueue();
-            samples = new List<classSampleData>();
+            q = new SampleQueue();
+            samples = new List<SampleData>();
         }
 
-        classLCMethodOptimizer optimizer;
-        LcmsNet.SampleQueue.classSampleQueue q;
-        List<classSampleData> samples;
+        LCMethodOptimizer optimizer;
+        SampleQueue q;
+        List<SampleData> samples;
 
 
         [Test]
         public void TestSampleQueueAddToQueue()
         {
-            var sampleA = new classSampleData();
-            var sampleB = new classSampleData();
+            var sampleA = new SampleData();
+            var sampleB = new SampleData();
 
-            var lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
+            var lcEvent = new LCEvent(); // use the same event for both samples LCMethod.
             var pump = new DemoPump();
             lcEvent.Device = pump;
             lcEvent.Duration = new TimeSpan(0, 0, 0, 1);
@@ -96,11 +97,11 @@ namespace LcmsnetUnitTest
             lcEvent.Parameters[0] = 1;
             lcEvent.ParameterNames = new string[1];
             lcEvent.ParameterNames[0] = "rate";
-            lcEvent.MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
 
             sampleA.ColumnData.ID = 0;
-            sampleA.LCMethod = new classLCMethod();
+            sampleA.LCMethod = new LCMethod();
             sampleA.LCMethod.Events.Add(lcEvent);
             sampleA.LCMethod.Column = 0;
             sampleA.Volume = 5;
@@ -109,10 +110,10 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            var lcEvent2 = lcEvent.Clone() as classLCEvent;
+            var lcEvent2 = lcEvent.Clone() as LCEvent;
 
             sampleB.ColumnData.ID = 0;
-            sampleB.LCMethod = new classLCMethod();
+            sampleB.LCMethod = new LCMethod();
             sampleB.LCMethod.Events.Add(lcEvent2);
             sampleB.LCMethod.Column = 0;
             sampleB.Volume = 5;
@@ -132,10 +133,10 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestSampleQueueQuery()
         {
-            var sampleA = new classSampleData();
-            var sampleB = new classSampleData();
+            var sampleA = new SampleData();
+            var sampleB = new SampleData();
 
-            var lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
+            var lcEvent = new LCEvent(); // use the same event for both samples LCMethod.
             var pump = new DemoPump();
             lcEvent.Device = pump;
             lcEvent.Duration = new TimeSpan(0, 0, 0, 1);
@@ -148,11 +149,11 @@ namespace LcmsnetUnitTest
             lcEvent.Parameters[0] = 1;
             lcEvent.ParameterNames = new string[1];
             lcEvent.ParameterNames[0] = "rate";
-            lcEvent.MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
 
             sampleA.ColumnData.ID = 0;
-            sampleA.LCMethod = new classLCMethod();
+            sampleA.LCMethod = new LCMethod();
             sampleA.LCMethod.Events.Add(lcEvent);
             sampleA.LCMethod.Column = 0;
             sampleA.Volume = 5;
@@ -161,10 +162,10 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            var lcEvent2 = lcEvent.Clone() as classLCEvent;
+            var lcEvent2 = lcEvent.Clone() as LCEvent;
 
             sampleB.ColumnData.ID = 0;
-            sampleB.LCMethod = new classLCMethod();
+            sampleB.LCMethod = new LCMethod();
             sampleB.LCMethod.Events.Add(lcEvent2);
             sampleB.LCMethod.Column = 0;
             sampleB.Volume = 5;
@@ -196,10 +197,10 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestSampleQueueReturnCorrectSample()
         {
-            var sampleA = new classSampleData();
-            var sampleB = new classSampleData();
+            var sampleA = new SampleData();
+            var sampleB = new SampleData();
 
-            var lcEvent = new classLCEvent(); // use the same event for both samples LCMethod.
+            var lcEvent = new LCEvent(); // use the same event for both samples LCMethod.
             var pump = new DemoPump();
             lcEvent.Device = pump;
             lcEvent.Duration = new TimeSpan(0, 0, 0, 1);
@@ -212,11 +213,11 @@ namespace LcmsnetUnitTest
             lcEvent.Parameters[0] = 1;
             lcEvent.ParameterNames = new string[1];
             lcEvent.ParameterNames[0] = "rate";
-            lcEvent.MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
 
             sampleA.ColumnData.ID = 0;
-            sampleA.LCMethod = new classLCMethod();
+            sampleA.LCMethod = new LCMethod();
             sampleA.LCMethod.Events.Add(lcEvent);
             sampleA.LCMethod.Column = 0;
             sampleA.Volume = 5;
@@ -225,10 +226,10 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            var lcEvent2 = lcEvent.Clone() as classLCEvent;
+            var lcEvent2 = lcEvent.Clone() as LCEvent;
 
             sampleB.ColumnData.ID = 0;
-            sampleB.LCMethod = new classLCMethod();
+            sampleB.LCMethod = new LCMethod();
             sampleB.LCMethod.Events.Add(lcEvent2);
             sampleB.LCMethod.Column = 0;
             sampleB.Volume = 5;

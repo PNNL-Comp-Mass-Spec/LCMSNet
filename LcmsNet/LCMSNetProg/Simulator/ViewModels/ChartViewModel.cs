@@ -9,10 +9,10 @@ using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Simulator.Views;
 using LcmsNetCommonControls.ViewModels;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
 using LcmsNetSDK;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels
@@ -31,11 +31,11 @@ namespace LcmsNet.Simulator.ViewModels
             selectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
             selectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
-            reporter = new ModelCheckReportsViewModel(FluidicsModeratorWpf.Moderator);
+            reporter = new ModelCheckReportsViewModel(FluidicsModerator.Moderator);
             ganttChartTimelineVm = new LCMethodTimelineViewModel();
-            ganttChartTimelineVm.RenderMode = enumLCMethodRenderMode.Column;
+            ganttChartTimelineVm.RenderMode = LCMethodRenderMode.Column;
             conversationChartTimelineVm = new LCMethodTimelineViewModel();
-            conversationChartTimelineVm.RenderMode = enumLCMethodRenderMode.Conversation;
+            conversationChartTimelineVm.RenderMode = LCMethodRenderMode.Conversation;
 
             reporterPopoutVm = new PopoutViewModel(reporter);
             ganttChartTimelinePopoutVm = new PopoutViewModel(ganttChartTimelineVm);
@@ -70,7 +70,7 @@ namespace LcmsNet.Simulator.ViewModels
             // Align methods - blindly!
             try
             {
-                var optimizer = new classLCMethodOptimizer();
+                var optimizer = new LCMethodOptimizer();
                 var methods = selectedMethods.SelectedMethods;
 
                 if (methods.Count > 0)
@@ -172,7 +172,7 @@ namespace LcmsNet.Simulator.ViewModels
             var methods = selectedMethods.SelectedMethods;
             var index = -1;
             var count = 0;
-            var optimizer = new classLCMethodOptimizer();
+            var optimizer = new LCMethodOptimizer();
             optimizer.AlignMethods(methods);
             var queue = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start);
             foreach (var lst in queue)
@@ -197,7 +197,7 @@ namespace LcmsNet.Simulator.ViewModels
                 var statusMessages = "";
                 foreach (var status in e.StatusList)
                 {
-                    classApplicationLogger.LogError(0, status.Description);
+                    ApplicationLogger.LogError(0, status.Description);
                     statusMessages += status.Description + Environment.NewLine;
                 }
                 MessageBox.Show(statusMessages);
@@ -208,7 +208,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// Renders the throughput timelines.
         /// </summary>
         /// <param name="methods">Methods to render for showing throughput.</param>
-        private void RenderThroughput(List<classLCMethod> methods)
+        private void RenderThroughput(List<LCMethod> methods)
         {
             if (methods == null)
                 return;
@@ -222,7 +222,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         private void PrepSim()
         {
-            var optimizer = new classLCMethodOptimizer();
+            var optimizer = new LCMethodOptimizer();
             var methodsToRun = selectedMethods.SelectedMethods;
             optimizer.AlignMethods(methodsToRun);
             RenderThroughput(methodsToRun);
@@ -238,7 +238,7 @@ namespace LcmsNet.Simulator.ViewModels
             switch (dialog.Result)
             {
                 case MessageBoxResult.Yes:
-                    classLCMSSettings.SetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, "True");
+                    LCMSSettings.SetParameter(LCMSSettings.PARAM_EMULATIONENABLED, "True");
                     return runSimulation;
 
                 case MessageBoxResult.No:
@@ -253,7 +253,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         private bool ConfirmEmulation()
         {
-            if (!classLCMSSettings.GetParameter(classLCMSSettings.PARAM_EMULATIONENABLED, false))
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false))
             {
                 return ConfirmNoEmulation();
             }

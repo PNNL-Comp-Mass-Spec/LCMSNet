@@ -1,15 +1,13 @@
 using System;
-using System.IO.Ports;
-using System.Threading;
-using System.Windows.Forms;
 using System.ComponentModel;
-
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Runtime.CompilerServices;
-using LcmsNetDataClasses.Devices;
+using System.Threading;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
-namespace ASIpump
+namespace LcmsNetPlugins.ASIpump
 {
     public class SerialDevice : INotifyPropertyChangedExt
     {
@@ -17,7 +15,6 @@ namespace ASIpump
 
         public delegate void MessageSentDelegate(string rcvStr);
         public event MessageSentDelegate MessageSent;
-
 
         public delegate void MessageStreamDelegate(string rcvStr);
         public event MessageStreamDelegate MessageStreamed;
@@ -39,7 +36,6 @@ namespace ASIpump
             Timeout = 1;
         }
 
-
         private string mReplyDelimeter = "\r\n";
         public string ReplyDelimeter
         {
@@ -59,7 +55,7 @@ namespace ASIpump
         [Description("Timeout")]
         [Category("Serial")]
         [DisplayName("Timeout")]
-        [classPersistenceAttribute("Timeout")]
+        [PersistenceData("Timeout")]
         public double Timeout
         {
             get { return timeout; }
@@ -69,7 +65,7 @@ namespace ASIpump
         [Description("Port Name")]
         [Category("Serial")]
         [DisplayName("Port Name")]
-        [classPersistenceAttribute("PortName")]
+        [PersistenceData("PortName")]
         public string PortName
         {
             get { return mPort.PortName; }
@@ -101,7 +97,7 @@ namespace ASIpump
         [Description("Handshake")]
         [Category("Serial")]
         [DisplayName("Handshake")]
-        [classPersistenceAttribute("Handshake")]
+        [PersistenceData("Handshake")]
         public Handshake Handshake
         {
             get { return mPort.Handshake; }
@@ -115,7 +111,7 @@ namespace ASIpump
         [Description("DTR Enabled")]
         [Category("Serial")]
         [DisplayName("DTR Enabled")]
-        [classPersistenceAttribute("DTREnable")]
+        [PersistenceData("DTREnable")]
         public bool DtrEnable
         {
             get { return mPort.DtrEnable; }
@@ -129,7 +125,7 @@ namespace ASIpump
         [Description("RTS Enabled")]
         [Category("Serial")]
         [DisplayName("RTS Enabled")]
-        [classPersistenceAttribute("RTSEnable")]
+        [PersistenceData("RTSEnable")]
         public bool RtsEnable
         {
             get { return mPort.RtsEnable; }
@@ -143,7 +139,7 @@ namespace ASIpump
         [Description("Baud Rate")]
         [Category("Serial")]
         [DisplayName("Baud Rate")]
-        [classPersistenceAttribute("BaudRate")]
+        [PersistenceData("BaudRate")]
         public int BaudRate
         {
             get { return mPort.BaudRate; }
@@ -159,7 +155,7 @@ namespace ASIpump
         [Description("Data Bits")]
         [Category("Serial")]
         [DisplayName("Data Bits")]
-        [classPersistenceAttribute("DataBits")]
+        [PersistenceData("DataBits")]
         public int DataBits
         {
             get { return mPort.DataBits; }
@@ -175,7 +171,7 @@ namespace ASIpump
         [Description("Stop Bits")]
         [Category("Serial")]
         [DisplayName("Stop Bits")]
-        [classPersistenceAttribute("StopBits")]
+        [PersistenceData("StopBits")]
         public StopBits StopBits
         {
             get { return mPort.StopBits; }
@@ -191,7 +187,7 @@ namespace ASIpump
         [Description("Parity")]
         [Category("Serial")]
         [DisplayName("Parity")]
-        [classPersistenceAttribute("Parity")]
+        [PersistenceData("Parity")]
         public Parity Parity
         {
             get { return mPort.Parity; }
@@ -268,7 +264,6 @@ namespace ASIpump
             while (mReplyStr == null && timeoutWatch.Elapsed.Seconds < Timeout)
             {
                 Thread.Sleep(10);
-                Application.DoEvents();
             }
 
             return mReplyStr;
@@ -278,14 +273,12 @@ namespace ASIpump
         {
             lock (mConcatStr)
             {
-
                 while (mConcatStr.Contains(mReplyDelimeter))
                 {
                     var pos = mConcatStr.IndexOf(mReplyDelimeter, StringComparison.Ordinal);
                     mReplyStr += mConcatStr.Substring(0, pos);
                     mConcatStr = mConcatStr.Substring(pos + mReplyDelimeter.Length);
                 }
-
 
                 if (MessageStreamed != null && !String.IsNullOrEmpty(mReplyStr))
                 {

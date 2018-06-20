@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {
@@ -57,7 +57,7 @@ namespace LcmsNet.Method.Drawing
             var brushColor = Colors.Black;
             brushColor.A = 128;
             var brush = new SolidColorBrush(brushColor);
-            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, 8.0F * (96.0 / 72.0), brush);
+            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             y += columnNameText.Height;
             graphics.DrawText(columnNameText, new Point(x, y));
         }
@@ -77,7 +77,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<classLCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!
@@ -126,7 +126,7 @@ namespace LcmsNet.Method.Drawing
                 buttonLocations[1] = new Rect((x + widthPer) + 5 - negOffset, (bounds.Height - offset - 5), (bounds.Width - (x + widthPer)) + negOffset, offset);
             }
 
-            var alignedEvents = new List<classLCEvent>();
+            var alignedEvents = new List<LCEvent>();
             if (methods != null && methods.Count > 0)
             {
                 // Find the start and end times of the samples so we can scale everything accordingly.
@@ -152,7 +152,7 @@ namespace LcmsNet.Method.Drawing
 
                 // Draw each method
 
-                var methodMap = new Dictionary<classLCEvent, classLCMethod>();
+                var methodMap = new Dictionary<LCEvent, LCMethod>();
                 foreach (var method in methods)
                 {
                     method.Events.ForEach(u => methodMap.Add(u, method));
@@ -179,8 +179,8 @@ namespace LcmsNet.Method.Drawing
                         var timeSpanSinceStart = simList[0].Start.Subtract(firstEvent);
 
                         graphics.DrawLine(linePen, new Point(0, top), new Point(bounds.Width - CONST_COLUMN_SPACING, top));
-                        var timeSpanSinceStartText = new FormattedText(timeSpanSinceStart.ToString("g"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, 8.0F * (96.0 / 72.0), brush);
-                        var simListStart = new FormattedText(simList[0].Start.ToString("h:mm:ss"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, 8.0F * (96.0 / 72.0), brush);
+                        var timeSpanSinceStartText = new FormattedText(timeSpanSinceStart.ToString("g"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+                        var simListStart = new FormattedText(simList[0].Start.ToString("h:mm:ss"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
                         graphics.DrawText(timeSpanSinceStartText, new Point(0, top));
                         graphics.DrawText(simListStart, new Point(0, top + timeSpanSinceStartText.Height));
                         graphics.DrawLine(linePen, new Point(0, top + eventHeight), new Point(bounds.Width - CONST_COLUMN_SPACING, top + eventHeight));

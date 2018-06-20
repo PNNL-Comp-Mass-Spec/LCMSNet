@@ -1,6 +1,4 @@
-﻿using FluidicsSDK.Devices.Valves;
-
-namespace FluidicsSDK.Devices
+﻿namespace FluidicsSDK.Devices.Valves
 {
     /// <summary>
     /// Interface to control a valve

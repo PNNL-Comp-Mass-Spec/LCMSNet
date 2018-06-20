@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetDataClasses.Devices.Pumps;
+using LcmsNetSDK.Devices;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

@@ -1,11 +1,12 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
-namespace FailureInjector.Drivers
+namespace LcmsNetPlugins.FailureInjector.Drivers
 {
-    public class NotificationDriverViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class NotificationDriverViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         /// <summary>
         /// Notification driver object.
@@ -14,7 +15,7 @@ namespace FailureInjector.Drivers
 
         public NotificationDriverViewModel()
         {
-            InjectFailureCommand = ReactiveCommand.Create(() => InjectFailure());
+            InjectFailureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InjectFailure()));
         }
 
         public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; private set; }
@@ -50,7 +51,6 @@ namespace FailureInjector.Drivers
 
         public void ShowProps()
         {
-
         }
         #endregion
     }

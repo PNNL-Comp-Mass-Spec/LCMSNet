@@ -13,6 +13,8 @@ namespace LcmsNet.SampleQueue.Views
         public ColumnManagerView()
         {
             InitializeComponent();
+            // need to do a visibility update when first loaded.
+            Loaded += ColumnManagerView_OnLoaded;
         }
 
         private void Column_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -57,6 +59,21 @@ namespace LcmsNet.SampleQueue.Views
                 }
                 ccvm.ContainsKeyboardFocus = true;
             }
+        }
+
+        /// <summary>
+        /// Make sure the column visibility is correct once loaded, but only do it once.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ColumnManagerView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= ColumnManagerView_OnLoaded;
+            var args = new DependencyPropertyChangedEventArgs();
+            Column_OnIsVisibleChanged(Column1View, args);
+            Column_OnIsVisibleChanged(Column2View, args);
+            Column_OnIsVisibleChanged(Column3View, args);
+            Column_OnIsVisibleChanged(Column4View, args);
         }
     }
 }

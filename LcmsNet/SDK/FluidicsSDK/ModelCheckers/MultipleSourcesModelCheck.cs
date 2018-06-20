@@ -7,13 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses;
 using LcmsNetSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Managers;
-using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -66,19 +67,19 @@ namespace FluidicsSDK.ModelCheckers
                     // Multiple sources found on a path, color path red.
                     foreach(var connection in pathTaken)
                     {
-                        connection.Color = Color.Red;
+                        connection.Color = Colors.Red;
                     }
                     if (StatusUpdate != null)
                     {
                         const string message = "Multiple Sources";
-                        StatusUpdate(this, new LcmsNetDataClasses.Devices.classDeviceStatusEventArgs(LcmsNetDataClasses.Devices.enumDeviceStatus.Initialized, message, this));
+                        StatusUpdate(this, new DeviceStatusEventArgs(DeviceStatus.Initialized, message, this));
                     }
                     status.Add(new ModelStatus("Multiple Source Path", "More than one source found on path", Category, null,
                         TimeKeeper.Instance.Now.ToString(CultureInfo.InvariantCulture), null, source.ParentDevice.IDevice));
                 }
             }
             watch.Stop();
-            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "MultiSource check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
+            //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "MultiSource check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
             return status;
         }
 
@@ -136,9 +137,9 @@ namespace FluidicsSDK.ModelCheckers
             return new List<string>();
         }
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<LcmsNetDataClasses.Devices.classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }

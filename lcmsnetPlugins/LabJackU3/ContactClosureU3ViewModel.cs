@@ -1,15 +1,15 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 
-namespace LcmsNet.Devices.ContactClosure
+namespace LcmsNetPlugins.LabJackU3
 {
     /// <summary>
     /// Triggers a mass spectrometer or other device using a labjack TTL pulse.
     /// </summary>
-    public class ContactClosureU3ViewModel : ContactClosureViewModelBase<enumLabjackU3OutputPorts>
+    public class ContactClosureU3ViewModel : ContactClosureViewModelBase<LabjackU3OutputPorts>
     {
         #region Constructors
 
@@ -27,13 +27,13 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// The contact closure class used for triggering a pulse.
         /// </summary>
-        private classContactClosureU3 m_contactClosure;
+        private ContactClosureU3 m_contactClosure;
 
         private const int CONST_MINIMUMVOLTAGE = -5;
         private const int CONST_MAXIMUMVOLTAGE = 5;
         private const int CONST_MINIMUMPULSELENGTH = 0;
         private bool m_loading;
-        private enumLabjackU3OutputPorts selectedOutputPort;
+        private LabjackU3OutputPorts selectedOutputPort;
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace LcmsNet.Devices.ContactClosure
         /// <summary>
         /// Gets or sets the output port of the device.
         /// </summary>
-        public override enumLabjackU3OutputPorts Port
+        public override LabjackU3OutputPorts Port
         {
             get { return m_contactClosure.Port; }
             set
@@ -101,9 +101,8 @@ namespace LcmsNet.Devices.ContactClosure
 
         private void RegisterDevice(IDevice device)
         {
-
             m_loading = true;
-            m_contactClosure = device as classContactClosureU3;
+            m_contactClosure = device as ContactClosureU3;
 
             if (m_contactClosure != null)
             {
@@ -133,11 +132,10 @@ namespace LcmsNet.Devices.ContactClosure
                 try
                 {
                     m_contactClosure.Trigger(PulseLength, Port, Voltage);
-
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
+                    ApplicationLogger.LogError(0, "Could not manually send a pulse in the contact closure.", ex);
                 }
             }
         }

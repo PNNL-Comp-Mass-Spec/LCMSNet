@@ -8,13 +8,16 @@ using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Views;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
-using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
 {
+    /// <summary>
+    /// Class that displays sample data as a sequence.
+    /// </summary>
     public class SampleControlViewModel : ReactiveObject
     {
         public virtual IReadOnlyReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
@@ -29,60 +32,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         public ReactiveList<SampleViewModel> SelectedSamples => selectedSamples;
-
-        /// <summary>
-        /// Edits the selected samples in the sample view.
-        /// </summary>
-        private void EditDMSData()
-        {
-            var samples = GetSelectedSamples();
-
-            if (samples.Count < 1)
-            {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
-                    "You must select a sample to edit the DMS information.");
-                return;
-            }
-
-            try
-            {
-                var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
-                var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsDisplay);
-
-                var result = dmsDisplay.ShowDialog();
-                // We don't care what the result is..
-                if (!result.HasValue || !result.Value)
-                {
-                    return;
-                }
-                // If samples are not valid...then what?
-                if (!dmsDisplayVm.AreSamplesValid)
-                {
-                    classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                    "Unable to edit dmsdata:" + ex.Message, ex);
-            }
-
-            // Then update the sample queue...
-            SampleDataManager.UpdateSamples(samples);
-
-            // Re-select the first sample
-            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-        }
-
-        /// <summary>
-        /// Delegate defining when status updates are available in batches.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="messages"></param>
-        public delegate void DelegateStatusUpdates(object sender, List<string> messages);
 
         #region Manipulation Enablement
 
@@ -190,12 +139,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             DMSView = dmsView;
 
-            // Background colors
-            // TODO: Alternating back colors to enhance user visual feedback.
-            // TODO: m_colors = new Color[2];
-            // TODO: m_colors[0] = Color.White;
-            // TODO: m_colors[1] = Color.Gainsboro;
-
             this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
         }
 
@@ -208,7 +151,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="samples">List of samples to add to the manager.</param>
         /// <param name="insertIntoUnused"></param>
-        protected virtual void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
+        protected virtual void AddSamplesToManager(List<SampleData> samples, bool insertIntoUnused)
         {
             SampleDataManager.AddSamplesToManager(samples, insertIntoUnused);
         }
@@ -236,7 +179,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (samples.Count < 1)
                 return;
 
-            SampleDataManager.AddDateCartnameColumnIDToDatasetName(samples);
+            using (SampleDataManager.StartBatchChange())
+            {
+                SampleDataManager.AddDateCartnameColumnIDToDatasetName(samples);
+            }
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -256,7 +202,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var samples = GetSelectedSamples();
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
+            samples.RemoveAll(sample => sample.RunningStatus != SampleRunningStatus.Queued);
 
             if (samples.Count < 1)
             {
@@ -265,17 +211,22 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (SampleDataManager.AutoSamplerTrays.Count < 6)
             {
-                classApplicationLogger.LogError(0, "Not enough PAL Trays are available.");
+                ApplicationLogger.LogError(0, "Not enough PAL Trays are available.");
                 return;
             }
 
             var trayVial = new TrayVialAssignmentViewModel(SampleDataManager.AutoSamplerTrays, samples);
             var trayVialWindow = new TrayVialAssignmentWindow() { DataContext = trayVial };
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(trayVialWindow);
 
-            // We don't care about the dialog result here - everything that matters is handled in the viewModel
-            trayVialWindow.ShowDialog();
+            using (var batchDisp = SampleDataManager.StartBatchChange())
+            {
+                var result = trayVialWindow.ShowDialog();
+
+                if (!result.HasValue || !result.Value)
+                {
+                    batchDisp.Cancelled = true;
+                }
+            }
 
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
@@ -290,7 +241,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var samples = GetSelectedSamples();
 
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            samples.RemoveAll(sample => sample.RunningStatus != enumSampleRunningStatus.Queued);
+            samples.RemoveAll(sample => sample.RunningStatus != SampleRunningStatus.Queued);
 
             if (samples.Count < 1)
             {
@@ -303,10 +254,16 @@ namespace LcmsNet.SampleQueue.ViewModels
             fillDownViewModel.EnsureItemsAreSelected();
             var dialog = new SampleMethodFillDownWindow();
             dialog.DataContext = fillDownViewModel;
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dialog);
 
-            dialog.ShowDialog();
+            using (var batchDisp = SampleDataManager.StartBatchChange())
+            {
+                var result = dialog.ShowDialog();
+
+                if (!result.HasValue || !result.Value)
+                {
+                    batchDisp.Cancelled = true;
+                }
+            }
 
             // Re-select the first sample
             var firstValid = Samples.Select(x => x.Sample).Intersect(samples).FirstOrDefault();
@@ -314,6 +271,53 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 SelectedSample = Samples.First(x => x.Sample.Equals(firstValid));
             }
+        }
+
+        /// <summary>
+        /// Edits the selected samples in the sample view.
+        /// </summary>
+        private void EditDMSData()
+        {
+            var samples = GetSelectedSamples();
+
+            if (samples.Count < 1)
+            {
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
+                    "You must select a sample to edit the DMS information.");
+                return;
+            }
+
+            using (var batchDisp = SampleDataManager.StartBatchChange())
+            {
+                try
+                {
+                    var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
+                    var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
+
+                    var result = dmsDisplay.ShowDialog();
+
+                    if (!result.HasValue || !result.Value)
+                    {
+                        batchDisp.Cancelled = true;
+                        return;
+                    }
+
+                    // If samples are not valid...then what?
+                    if (!dmsDisplayVm.AreSamplesValid)
+                    {
+                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                            "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
+                    }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
+                        "Unable to edit dmsdata:" + ex.Message, ex);
+                }
+            }
+
+            // Re-select the first sample
+            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
         /// <summary>
@@ -325,8 +329,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
 
             var dmsWindow = new DMSDownloadWindow() { DataContext = dmsView };
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsWindow);
             var result = dmsWindow.ShowDialog();
 
             // If the user clicks ok , then add the samples from the
@@ -339,21 +341,24 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var samples = dmsView.GetNewSamplesDMSView();
                 dmsView.ClearForm();
 
-                var insertToUnused = false;
-                if (HasUnusedSamples())
+                using (SampleDataManager.StartBatchChange())
                 {
-                    // Ask the user what to do with these samples?
-                    var dialog = new InsertOntoUnusedWindow();
-                    var insertResult = dialog.ShowDialog();
+                    var insertToUnused = false;
+                    if (HasUnusedSamples())
+                    {
+                        // Ask the user what to do with these samples?
+                        var dialog = new InsertOntoUnusedWindow();
+                        var insertResult = dialog.ShowDialog();
 
-                    insertToUnused = insertResult.HasValue && insertResult.Value;
+                        insertToUnused = insertResult.HasValue && insertResult.Value;
+                    }
+
+                    AddSamplesToManager(samples, insertToUnused);
                 }
-
-                AddSamplesToManager(samples, insertToUnused);
 
                 // Don't add directly to the user interface in case the
                 // sample manager class has something to say about one of the samples
-                classApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
+                ApplicationLogger.LogMessage(0, samples.Count + " samples added to the queue");
             }
         }
 
@@ -361,9 +366,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Returns the list of selected samples.
         /// </summary>
         /// <returns></returns>
-        public virtual List<classSampleData> GetSelectedSamples()
+        public virtual List<SampleData> GetSelectedSamples()
         {
-            var samples = new List<classSampleData>();
+            var samples = new List<SampleData>();
             try
             {
                 foreach (var sample in SelectedSamples)
@@ -375,7 +380,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Error in GetSelectedSamples: " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Error in GetSelectedSamples: " + ex.Message, ex);
             }
 
             return samples;
@@ -397,7 +402,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 foreach (var data in samples)
                 {
-                    data.LCMethod.SetStartTime(TimeKeeper.Instance.Now);
+                    data.ActualLCMethod.SetStartTime(TimeKeeper.Instance.Now);
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)));
                 }
 
@@ -416,7 +421,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        protected virtual classSampleData AddNewSample(bool insertIntoUnused)
+        protected virtual SampleData AddNewSample(bool insertIntoUnused)
         {
             var newData = SampleDataManager.AddNewSample(insertIntoUnused);
 
@@ -456,7 +461,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Moves all the selected samples an offset of their original sequence id.
         /// </summary>
-        protected virtual void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        protected virtual void MoveSelectedSamples(int offset, MoveSampleType moveType)
         {
             var data = SelectedSamples.Select(x => x.Sample).ToList();
 
@@ -474,23 +479,23 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void RandomizeSelectedSamples()
         {
-            var samplesToRandomize = new List<classSampleData>();
+            var samplesToRandomize = new List<SampleData>();
             // Get all the data references that we want to randomize.
             foreach (var row in SelectedSamples)
             {
                 var data = row.Sample;
-                if (data != null && data.RunningStatus == enumSampleRunningStatus.Queued)
+                if (data != null && data.RunningStatus == SampleRunningStatus.Queued)
                 {
-                    var sample = data.Clone() as classSampleData;
+                    var sample = data.Clone() as SampleData;
                     if (sample?.LCMethod?.Name != null)
                     {
-                        if (classLCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                        if (LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
                         {
                             // Because sample clones are deep copies, we cannot trust that
                             // every object in the sample is serializable...so...we are stuck
                             // making sure we re-hash the method using the name which
                             // is copied during the serialization.
-                            sample.LCMethod = classLCMethodManager.Manager.Methods[sample.LCMethod.Name];
+                            sample.LCMethod = LCMethodManager.Manager.Methods[sample.LCMethod.Name];
                         }
                     }
                     samplesToRandomize.Add(sample);
@@ -506,12 +511,10 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
                 catch
                 {
-                    classApplicationLogger.LogError(0, "No randomization plug-ins exist.");
+                    ApplicationLogger.LogError(0, "No randomization plug-ins exist.");
                     return;
                 }
                 var randomizer = new SampleRandomizerWindow() { DataContext = randomizerVm };
-                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(randomizer);
                 var result = randomizer.ShowDialog();
                 if (result.HasValue && result.Value)
                 {
@@ -524,12 +527,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             else if (samplesToRandomize.Count == 1)
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Select more than one sample for randomization.");
             }
             else
             {
-                classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER,
+                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "No samples selected for randomization.");
             }
             if (samplesToRandomize.Count > 0)
@@ -584,7 +587,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Exception in RemoveSelectedSamples: " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Exception in RemoveSelectedSamples: " + ex.Message, ex);
             }
         }
 
@@ -721,15 +724,15 @@ namespace LcmsNet.SampleQueue.ViewModels
                 @"You are about to clear your queued samples.  Select Ok to clear, or Cancel to have no change.", @"Clear Queue Confirmation",
                 MessageBoxButton.OKCancel);
 
-            classApplicationLogger.LogMessage(3, "The user clicked to clear the samples");
+            ApplicationLogger.LogMessage(3, "The user clicked to clear the samples");
             if (result == MessageBoxResult.OK)
             {
-                classApplicationLogger.LogMessage(3, "The user clicked to ok to clear the samples");
+                ApplicationLogger.LogMessage(3, "The user clicked to ok to clear the samples");
                 SampleDataManager.ClearAllSamples();
             }
             else
             {
-                classApplicationLogger.LogMessage(3, "The user clicked to cancel clearing samples");
+                ApplicationLogger.LogMessage(3, "The user clicked to cancel clearing samples");
             }
         }
 
@@ -770,13 +773,13 @@ namespace LcmsNet.SampleQueue.ViewModels
             FillDownCommand = ReactiveCommand.Create(() => this.FillDown(), this.WhenAnyValue(x => x.ItemsSelected));
             TrayVialCommand = ReactiveCommand.Create(() => this.EditTrayAndVial(), this.WhenAnyValue(x => x.ItemsSelected));
             RandomizeCommand = ReactiveCommand.Create(() => this.RandomizeSelectedSamples(), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
             DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData(), this.WhenAnyValue(x => x.ItemsSelected));
-            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
-            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
+            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
+            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
         }

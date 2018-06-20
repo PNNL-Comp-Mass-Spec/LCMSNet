@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNetCommonControls.Devices.ContactClosure
 {
@@ -11,7 +12,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
     /// Base view model for a contact closure
     /// </summary>
     /// <typeparam name="T">Enum, with the output port options</typeparam>
-    public abstract class ContactClosureViewModelBase<T> : BaseDeviceControlViewModel, IDeviceControlWpf where T : struct
+    public abstract class ContactClosureViewModelBase<T> : BaseDeviceControlViewModel, IDeviceControl where T : struct
     {
         #region Constructors
 
@@ -21,7 +22,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         protected ContactClosureViewModelBase()
         {
             outputPortComboBoxOptions = new ReactiveUI.ReactiveList<T>(Enum.GetValues(typeof(T)).Cast<T>());
-            SendPulseCommand = ReactiveUI.ReactiveCommand.Create(() => SendPulse());
+            SendPulseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SendPulse()));
         }
 
         #endregion

@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Notification
 {
@@ -14,7 +14,7 @@ namespace LcmsNet.Notification
         /// </summary>
         protected NotificationSetting()
         {
-            Action = enumDeviceNotificationAction.Ignore;
+            Action = DeviceNotificationAction.Ignore;
         }
 
         /// <summary>
@@ -40,12 +40,12 @@ namespace LcmsNet.Notification
         /// <summary>
         /// Gets or sets the method to run if notification setting is set to run a method.
         /// </summary>
-        public classLCMethod Method { get; set; }
+        public LCMethod Method { get; set; }
 
         /// <summary>
         /// Gets or sets the action to take when an error occurs.
         /// </summary>
-        public enumDeviceNotificationAction Action { get; set; }
+        public DeviceNotificationAction Action { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the setting.

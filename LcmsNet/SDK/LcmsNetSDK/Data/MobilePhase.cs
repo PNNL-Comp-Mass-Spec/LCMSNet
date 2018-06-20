@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace LcmsNetSDK.Data
 {
@@ -21,28 +20,20 @@ namespace LcmsNetSDK.Data
         public string Name
         {
             get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            set { this.RaiseAndSetIfChanged(ref name, value, nameof(Name)); }
         }
 
         public string Comment
         {
             get { return comment; }
-            set { this.RaiseAndSetIfChanged(ref comment, value); }
+            set { this.RaiseAndSetIfChanged(ref comment, value, nameof(Comment)); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-#if DotNET4
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-#else
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-#endif
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace LcmsNetDataClasses.Data
+﻿namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// A bridge between our DLL and our concrete classes for writing LC methods.
     /// </summary>
     public interface IMethodWriter
     {
-        void WriteMethodFiles(classSampleData sample);
+        void WriteMethodFiles(SampleData sample);
 
         /// <summary>
         /// Test for presence of completed sample method folders that need to be moved to DMS

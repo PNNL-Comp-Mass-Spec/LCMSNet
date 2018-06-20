@@ -1,4 +1,4 @@
-﻿using LcmsNetDataClasses.Devices;
+﻿using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices
 {
@@ -7,6 +7,6 @@ namespace LcmsNet.Devices
     /// </summary>
     interface IDeviceConfigurationReader
     {
-        classDeviceConfiguration ReadConfiguration(string path);
+        DeviceConfiguration ReadConfiguration(string path);
     }
 }

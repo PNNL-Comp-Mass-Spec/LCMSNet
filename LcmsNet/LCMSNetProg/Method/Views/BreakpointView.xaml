@@ -12,8 +12,8 @@
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </Grid.Resources>
-        <Image Source="/Images/breakpointDisabled.png" MaxWidth="16" />
-        <Image Source="/Images/breakpoint.png" MaxWidth="16" Visibility="{Binding IsSet, Converter={StaticResource BoolToVis}}" />
+        <Image Source="{StaticResource BreakpointDisabledImage}" MaxWidth="16" />
+        <Image Source="{StaticResource BreakpointImage}" MaxWidth="16" Visibility="{Binding IsSet, Converter={StaticResource BoolToVis}}" />
         <Button Opacity="0" Command="{Binding ClickCommand}" />
     </Grid>
 </UserControl>

@@ -7,13 +7,14 @@
              xmlns:methodViews="clr-namespace:LcmsNet.Method.Views"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
+             xmlns:styles="clr-namespace:LcmsNetCommonControls.Styles;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="528" d:DesignWidth="830"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SimulatorControlsAndChartsViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="8" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0">
@@ -32,7 +33,7 @@
                 </GroupBox>
             </TabItem>
         </TabControl>
-        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" />
+        <GridSplitter Grid.Row="1" Height="8" BorderThickness="0,1" BorderBrush="DimGray" HorizontalAlignment="Stretch" ShowsPreview="False" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyle}" />
         <TabControl Grid.Row="2" Margin="3">
             <TabItem Header="Methods">
                 <methodViews:LCMethodStageView DataContext="{Binding MethodStageVm}" />

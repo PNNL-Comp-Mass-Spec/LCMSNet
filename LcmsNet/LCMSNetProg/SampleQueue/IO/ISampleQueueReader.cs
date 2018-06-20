@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -13,6 +13,6 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="path">Path to read data from.</param>
         /// <returns>List of sample data objects.  Empty list if no data was found.</returns>
-        List<classSampleData> ReadSamples(string path);
+        List<SampleData> ReadSamples(string path);
     }
 }

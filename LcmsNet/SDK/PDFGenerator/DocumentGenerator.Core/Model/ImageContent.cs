@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Media.Imaging;
-using System.Windows;
 
 namespace EMSL.DocumentGenerator.Core.Model
 {
- 
+
     public class ImageContent
         : DocumentContent
     {
-        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
-
         #region Constructors
         public ImageContent()
         {
@@ -25,18 +20,17 @@ namespace EMSL.DocumentGenerator.Core.Model
         public ImageContent(string path, string caption = null)
         {
             CaptionText = caption;
-            Bitmap image = new Bitmap(path);
-            SourceImage = ConvertFromImage(image);
+            var image = new BitmapImage(new Uri(path));
+            SourceImage = image;
             CaptionPlacement = CaptionPlacement.Bottom;
             MaxWidth = image.Width;
             MaxHeight = image.Height;
         }
 
-        public ImageContent(System.Drawing.Bitmap image, string caption = null)
+        public ImageContent(BitmapSource image, string caption = null)
         {
             CaptionText = caption;
-            ImageContent content = new ImageContent();
-            SourceImage = ConvertFromImage(image);
+            SourceImage = image;
             CaptionPlacement = CaptionPlacement.Bottom;
             MaxWidth = image.Width;
             MaxHeight = image.Height;
@@ -52,25 +46,6 @@ namespace EMSL.DocumentGenerator.Core.Model
 
         public override ItemType ItemType { get { return ItemType.ImageItem; } }
 
-        #endregion
-
-        #region Methods
-        private static BitmapSource ConvertFromImage(System.Drawing.Bitmap image)
-        {
-            // Unmanaged object, MUST be deleted manually, done in finally block.
-            IntPtr hBitmap = image.GetHbitmap();
-            BitmapSource source = null;
-            try
-            {
-                source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally
-            {
-                
-                DeleteObject(hBitmap);
-            }
-            return source;
-        }
         #endregion
     }
 }

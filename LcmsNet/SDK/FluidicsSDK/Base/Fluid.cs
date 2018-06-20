@@ -6,7 +6,7 @@
  *
  ********************************************************************************************************/
 
-using System.Drawing;
+using System.Windows.Media;
 
 namespace FluidicsSDK.Base
 {
@@ -19,8 +19,7 @@ namespace FluidicsSDK.Base
 
         protected Fluid()
         {
-            FluidColor = Color.Black;
-            FluidColorWpf = System.Windows.Media.Colors.Black;
+            FluidColor = Colors.Black;
             Name = "someFluid";
             Location = null;
         }
@@ -38,12 +37,6 @@ namespace FluidicsSDK.Base
 
         #region Properties
         public Color FluidColor
-        {
-            get;
-            private set;
-        }
-
-        public System.Windows.Media.Color FluidColorWpf
         {
             get;
             private set;

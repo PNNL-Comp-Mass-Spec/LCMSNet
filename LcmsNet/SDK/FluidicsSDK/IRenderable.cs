@@ -1,9 +1,9 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace FluidicsSDK
 {
     public interface IRenderable
     {
-        void Render(Graphics g, int alpha, float scale);
+        void Render(DrawingContext g, byte alpha, float scale);
     }
 }

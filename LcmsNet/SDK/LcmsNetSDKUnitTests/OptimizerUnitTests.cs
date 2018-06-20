@@ -8,9 +8,8 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using LcmsNetDataClasses.Method;
-using LcmsNet.Method;
 using DemoPluginLibrary;
+using LcmsNetSDK.Method;
 
 namespace LcmsnetUnitTest
 {
@@ -21,26 +20,26 @@ namespace LcmsnetUnitTest
     [TestFixture]
     public class OptimizerUnitTests
     {
-        List<classLCMethod> methods;
-        classLCMethodOptimizer optimizer;
+        List<LCMethod> methods;
+        LCMethodOptimizer optimizer;
         const int SAME_REQUIRED_LC_METHOD_OFFSET = 2000; // this should be the same as CONST_REQUIRED_LC_METHOD_SPACING_SECONDS in classLCMethodOptimizer, if the tests are not passing be sure to check this.
-       
+
         /// <summary>
         /// Setup methods and optimizer for use in tests.
         /// </summary>
         [SetUp]
         public void SetupOptmizerAndMethodsForOptimizerTests()
         {
-            optimizer = new classLCMethodOptimizer();
+            optimizer = new LCMethodOptimizer();
 
-            methods = new List<classLCMethod> {
-                new classLCMethod(),
-                new classLCMethod()};
+            methods = new List<LCMethod> {
+                new LCMethod(),
+                new LCMethod()};
 
             //events for the methods
-            classLCEvent[] events = {
-                new classLCEvent(),
-                new classLCEvent() };
+            LCEvent[] events = {
+                new LCEvent(),
+                new LCEvent() };
 
             var pump = new DemoPump();
             events[0].Device = pump;
@@ -53,7 +52,7 @@ namespace LcmsnetUnitTest
             events[0].Parameters[0] = 1;
             events[0].ParameterNames = new string[1];
             events[0].ParameterNames[0] = "rate";
-            events[0].MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            events[0].MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             events[0].Method = events[0].Device.GetType().GetMethod("SetFlowRate");
             methods[0].Events.Add(events[0]);
 
@@ -65,7 +64,7 @@ namespace LcmsnetUnitTest
             events[1].Parameters[0] = 1;
             events[1].ParameterNames = new string[1];
             events[1].ParameterNames[0] = "rate";
-            events[1].MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            events[1].MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             events[1].Method = events[1].Device.GetType().GetMethod("SetFlowRate");
             events[1].Start = events[0].End;
             methods[1].Events.Add(events[1]);
@@ -87,7 +86,7 @@ namespace LcmsnetUnitTest
         /// </summary>
         [Test]
         public void TwoMethodsOnSameColumnWithOverlapSameDevice()
-        {                      
+        {
             optimizer.AlignMethods(methods);
             var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
@@ -111,7 +110,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
@@ -133,7 +132,7 @@ namespace LcmsnetUnitTest
             var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }
-        
+
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods when they are on the same column, without overlap, and the methods
         /// are using different devices.
@@ -154,14 +153,14 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
             var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
         }
-        
+
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods when they are on the different columns, with overlap allowed, and both
         /// methods using the same device.
@@ -194,14 +193,14 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 1;
             optimizer.AlignMethods(methods);
             double expectedDifference = 0;
             CheckDifferenceInStartTimes(expectedDifference);
         }
-        
+
         /// <summary>
         /// Test the optimizer to ensure that it is properly aligning methods when they are on different columns, with overlap disallowed, and both
         /// methods are using the same device.
@@ -216,7 +215,7 @@ namespace LcmsnetUnitTest
             optimizer.AlignMethods(methods);
             var expectedDifference = methods[0].Events[0].Duration.TotalMilliseconds + SAME_REQUIRED_LC_METHOD_OFFSET;
             CheckDifferenceInStartTimes(expectedDifference);
-        }        
+        }
 
         /// <summary>
         /// Test optimizer to ensure that it is properly aligning methods when they are on different columns, with overlap disallowed, and the methods are using
@@ -226,7 +225,7 @@ namespace LcmsnetUnitTest
         [Test]
         public void TwoMethodsOnDifferentColumnsWithoutOverlapDifferentDevice()
         {
-            
+
             methods[0].AllowPostOverlap = false;
             methods[0].AllowPreOverlap = false;
             //Changing method[1], Event[0] to use a different device.
@@ -239,7 +238,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
@@ -260,7 +259,7 @@ namespace LcmsnetUnitTest
             optimizer.AlignMethods(methods[0], methods[1], true);
             var  expectedDifference = new TimeSpan(1,0,1).TotalMilliseconds;
             CheckDifferenceInStartTimes(expectedDifference);
-        } 
+        }
 
 
         [Test]

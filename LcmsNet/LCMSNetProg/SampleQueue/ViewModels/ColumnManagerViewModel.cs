@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetDataClasses.Configuration;
+using LcmsNetSDK.Configuration;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -22,10 +22,10 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ColumnManagerViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
-            Column1ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[0], false);
-            Column2ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[1], false);
-            Column3ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[2], false);
-            Column4ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, classCartConfiguration.Columns[3], false);
+            Column1ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, CartConfiguration.Columns[0], false);
+            Column2ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, CartConfiguration.Columns[1], false);
+            Column3ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, CartConfiguration.Columns[2], false);
+            Column4ViewModel = new ColumnControlViewModel(dmsView, sampleDataManager, CartConfiguration.Columns[3], false);
 
             this.WhenAnyValue(x => x.Column1ViewModel, x => x.Column1ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedColumn = x.Item2 ? x.Item1 : this.FocusedColumn);
             this.WhenAnyValue(x => x.Column2ViewModel, x => x.Column2ViewModel.ContainsKeyboardFocus).Subscribe(x => this.FocusedColumn = x.Item2 ? x.Item1 : this.FocusedColumn);

@@ -1,14 +1,8 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 8/16/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Graphic;
-using System.Drawing;
 using FluidicsSDK.Managers;
 
 namespace FluidicsSDK.Base
@@ -40,7 +34,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// class constructor
         /// </summary>
-        /// <param name="loc">a System.Drawing.Point representing the location of the port on screen</param>
+        /// <param name="loc">a System.Windows.Point representing the location of the port on screen</param>
         /// <param name="parent">a classFluidicsDevice representing what device the port belongs to</param>
         public Port(Point loc, FluidicsDevice parent)
         {
@@ -56,7 +50,7 @@ namespace FluidicsSDK.Base
             var trueLoc = new Point(loc.X - Radius, loc.Y - Radius);
             ParentDevice = parent;
             m_fluids = new List<Fluid>();
-            m_primitive = new FluidicsCircle(trueLoc, Color.Black, Brushes.White, Radius)
+            m_primitive = new FluidicsCircle(trueLoc, Colors.Black, Brushes.White, Radius)
             {
                 Fill = true
             };
@@ -95,10 +89,10 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// render the port to the screen
         /// </summary>
-        /// <param name="g">a System.Drawing.Graphics object</param>
+        /// <param name="g">a System.Windows.Media.DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the port at</param>
         /// <param name="scale">a float representing how much to scale the port by</param>
-        public void Render(Graphics g, int alpha, float scale)
+        public void Render(DrawingContext g, byte alpha, float scale)
         {
             m_primitive.Render(g, alpha, scale, Selected, false);
         }
@@ -132,7 +126,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         ///  Check to see if the port contains a location within its bounds
         /// </summary>
-        /// <param name="location">a System.Drawing.Point to check</param>
+        /// <param name="location">a System.Windows.Point to check</param>
         /// <returns> true if the port contains that point, false otherwise</returns>
         internal bool Contains(Point location)
         {
@@ -205,6 +199,14 @@ namespace FluidicsSDK.Base
                     connection.MoveWith(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// The boundaries of the primitive
+        /// </summary>
+        public Rect Bounds
+        {
+            get { return m_primitive.Bounds; }
         }
 
         /// <summary>

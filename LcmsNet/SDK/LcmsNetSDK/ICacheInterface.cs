@@ -11,7 +11,7 @@
 
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Interface for data classes that use the cache database

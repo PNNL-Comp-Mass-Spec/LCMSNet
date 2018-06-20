@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Data;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
@@ -20,11 +20,11 @@ namespace LcmsNet.Method.ViewModels
         public LCMethodSelectionViewModel()
         {
             // The stupid designer forces us to check if this guy is null or not.
-            if (classLCMethodManager.Manager != null)
+            if (LCMethodManager.Manager != null)
             {
-                classLCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
-                classLCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
-                classLCMethodManager.Manager.MethodUpdated += Manager_MethodAdded;
+                LCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
+                LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
+                LCMethodManager.Manager.MethodUpdated += Manager_MethodAdded;
             }
             BindingOperations.EnableCollectionSynchronization(ListSelectedLCMethods, listSelectedLcMethodsLock);
             BindingOperations.EnableCollectionSynchronization(MethodsComboBoxOptions, methodsComboBoxOptionsLock);
@@ -36,21 +36,21 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Gets the list of selected methods to render.
         /// </summary>
-        public List<classLCMethod> SelectedMethods
+        public List<LCMethod> SelectedMethods
         {
-            get { return ListSelectedLCMethods.Select(x => x.Clone() as classLCMethod).ToList(); }
+            get { return ListSelectedLCMethods.Select(x => x.Clone() as LCMethod).ToList(); }
         }
 
         private readonly object listSelectedLcMethodsLock = new object();
         private readonly object methodsComboBoxOptionsLock = new object();
         private readonly object selectedLcMethodNamesLock = new object();
 
-        private classLCMethod selectedLCMethod = null;
-        private readonly ReactiveList<classLCMethod> listSelectedLcMethods = new ReactiveList<classLCMethod>();
-        private readonly ReactiveList<classLCMethod> methodsComboBoxOptions = new ReactiveList<classLCMethod>();
-        private readonly ReactiveList<classLCMethod> selectedListLcMethods = new ReactiveList<classLCMethod>();
+        private LCMethod selectedLCMethod = null;
+        private readonly ReactiveList<LCMethod> listSelectedLcMethods = new ReactiveList<LCMethod>();
+        private readonly ReactiveList<LCMethod> methodsComboBoxOptions = new ReactiveList<LCMethod>();
+        private readonly ReactiveList<LCMethod> selectedListLcMethods = new ReactiveList<LCMethod>();
 
-        public classLCMethod SelectedLCMethod
+        public LCMethod SelectedLCMethod
         {
             get { return selectedLCMethod; }
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
@@ -59,13 +59,13 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// LC Methods currently selected for display
         /// </summary>
-        public IReadOnlyReactiveList<classLCMethod> ListSelectedLCMethods => listSelectedLcMethods;
-        public IReadOnlyReactiveList<classLCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public IReadOnlyReactiveList<LCMethod> ListSelectedLCMethods => listSelectedLcMethods;
+        public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         /// <summary>
         /// LC Methods currently selected in the listbox for manipulation
         /// </summary>
-        public ReactiveList<classLCMethod> SelectedListLCMethods => selectedListLcMethods;
+        public ReactiveList<LCMethod> SelectedListLCMethods => selectedListLcMethods;
 
         #region Events and Delegates
 
@@ -100,7 +100,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to remove.</param>
         /// <returns>True always, that the method was removed.</returns>
-        private bool Manager_MethodRemoved(object sender, classLCMethod method)
+        private bool Manager_MethodRemoved(object sender, LCMethod method)
         {
             // Finds and removes the method in the listbox
             foreach (var removeMethod in listSelectedLcMethods.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
@@ -127,7 +127,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to add.</param>
         /// <returns>True if a method was added, false if the method was null.</returns>
-        private bool Manager_MethodAdded(object sender, classLCMethod method)
+        private bool Manager_MethodAdded(object sender, LCMethod method)
         {
             if (method == null)
                 return false;
@@ -150,7 +150,7 @@ namespace LcmsNet.Method.ViewModels
                     if (listSelectedLcMethods[i].Name.Equals(method.Name))
                     {
                         var diff = listSelectedLcMethods[i].CurrentEventNumber;
-                        listSelectedLcMethods[i] = method.Clone() as classLCMethod;
+                        listSelectedLcMethods[i] = method.Clone() as LCMethod;
                         listSelectedLcMethods[i].CurrentEventNumber = diff;
                     }
                 }
@@ -174,7 +174,7 @@ namespace LcmsNet.Method.ViewModels
             var method = SelectedLCMethod;
             if (method != null)
             {
-                var addMethod = method.Clone() as classLCMethod;
+                var addMethod = method.Clone() as LCMethod;
                 // need something likely to be unique.
                 addMethod.CurrentEventNumber = (int)(DateTime.Now.Ticks + listSelectedLcMethods.Count);
                 listSelectedLcMethods.Add(addMethod);

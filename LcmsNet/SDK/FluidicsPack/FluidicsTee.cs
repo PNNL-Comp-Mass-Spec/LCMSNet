@@ -1,36 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Windows;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
-    public sealed class FluidicsTee:FluidicsDevice
+    public sealed class FluidicsTee : FluidicsDevice
     {
+        private const int VerticalLineHeight = 28;
+        private const int AngledLineDiffX = 10;
+        private const int AngledLineDiffY = 18;
+        private const int MainWidth = 70;
+        private const int MainHeight = VerticalLineHeight + AngledLineDiffY;
+        private const int BottomHorizontalWidth = MainWidth - AngledLineDiffX * 2;
+
         public FluidicsTee()
         {
+            var teeOffset = new Point(Port.PORT_DEFAULT_RADIUS * 2 + 2, 2); // Add a top and left side buffer to not crop lines
             var teePolygon = new FluidicsPolygon();
-            teePolygon.AddPoint(new Point(0,0));
-            teePolygon.AddPoint(new Point(0, 29));
 
-            teePolygon.AddPoint(new Point(0, 28));
-            teePolygon.AddPoint(new Point(10, 46));
-
-            teePolygon.AddPoint(new Point(10, 46));
-            teePolygon.AddPoint(new Point(58, 46));
-
-            teePolygon.AddPoint(new Point(57, 46));
-            teePolygon.AddPoint(new Point(70, 26));
-
-            teePolygon.AddPoint(new Point(70, 27));
-            teePolygon.AddPoint(new Point(70, 0));
-
-            teePolygon.AddPoint(new Point(70, 0));
-            teePolygon.AddPoint(new Point(0, 0));
+            teePolygon.AddPoint(teeOffset);                                                                                                 // Top left point
+            teePolygon.AddPoint(new Point(teeOffset.X, teeOffset.Y + VerticalLineHeight));                                                  // Bottom of left vertical
+            teePolygon.AddPoint(new Point(teeOffset.X + AngledLineDiffX, teeOffset.Y + MainHeight));                                        // Bottom of left angle
+            teePolygon.AddPoint(new Point(teeOffset.X + AngledLineDiffX + BottomHorizontalWidth, teeOffset.Y + MainHeight));                // Right end of bottom horizontal
+            teePolygon.AddPoint(new Point(teeOffset.X + MainWidth, teeOffset.Y + VerticalLineHeight));                                      // Top of right angle
+            teePolygon.AddPoint(new Point(teeOffset.X + MainWidth, teeOffset.Y));                                                           // Top right point
             AddPrimitive(teePolygon);
-            foreach (var p in GeneratePortLocs())
+
+            foreach (var p in GeneratePortLocs(teeOffset))
             {
                 AddPort(p);
             }
@@ -50,12 +50,12 @@ namespace FluidicsPack
             return string.Empty;
         }
 
-        private Point[] GeneratePortLocs()
+        private Point[] GeneratePortLocs(Point originOffset)
         {
             var points = new Point[3];
-            points[0] = new Point(0 - Port.PORT_DEFAULT_RADIUS, 29/2);
-            points[1] = new Point( (10 + 58)/ 2, 46 + Port.PORT_DEFAULT_RADIUS);
-            points[2] = new Point(70 + Port.PORT_DEFAULT_RADIUS, (27 + 0) /2);
+            points[0] = new Point(originOffset.X - Port.PORT_DEFAULT_RADIUS, originOffset.Y + VerticalLineHeight / 2);
+            points[1] = new Point(originOffset.X + MainWidth / 2, originOffset.Y + MainHeight + Port.PORT_DEFAULT_RADIUS);
+            points[2] = new Point(originOffset.X + MainWidth + Port.PORT_DEFAULT_RADIUS, originOffset.Y + VerticalLineHeight / 2);
             return points;
         }
 
@@ -76,16 +76,15 @@ namespace FluidicsPack
             //do nothing
         }
 
-        protected override void SetDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void SetDevice(IDevice device)
         {
             //do nothing
         }
 
-        protected override void ClearDevice(LcmsNetDataClasses.Devices.IDevice device)
+        protected override void ClearDevice(IDevice device)
         {
             // do nothing
         }
-
 
         public override void Select(Point mouse_location)
         {
@@ -97,31 +96,28 @@ namespace FluidicsPack
 
         public override bool Contains(Point location)
         {
-
-            return m_primitives[0].Contains(location, 5);
+            var contains = false;
+            var minX = m_primitives.Min(z => z.Loc.X);
+            var maxX = m_primitives.Max(z => z.Loc.X + z.Size.Width);
+            var minY = m_primitives.Min(z => z.Loc.Y);
+            var maxY = m_primitives.Max(z => z.Loc.Y + z.Size.Height);
+            if ((minX - 10 <= location.X && location.X <= maxX + 10) && (minY - 10 <= location.Y && location.Y <= maxY + 10))
+            {
+                contains = true;
+            }
+            return contains;
         }
 
-        protected override Rectangle UpdateControlBoxLocation()
+        protected override Rect UpdateControlBoxLocation()
         {
-            var padding = 5;
+            var padding = 10;
             var left = m_primitives.Min(x => x.Loc.X);
-            var top = m_primitives.Min(x => x.Loc.Y);
-            return new Rectangle(left, top + padding, m_info_controls_box.Width, m_info_controls_box.Height);
+            var maxYDevice = m_primitives.Max(x => x.Loc.Y + x.Size.Height);
+            var maxYPort = m_portList.Max(x => x.Loc.Y + x.Radius);
+            var maxY = Math.Max(maxYDevice, maxYPort);
+            return new Rect(left, maxY + padding, m_info_controls_box.Width, m_info_controls_box.Height);
         }
 
-        /// <summary>
-        /// create location of a string to be drawn in the control box.
-        /// </summary>
-        /// <param name="y"></param>
-        /// <param name="stringWidth"></param>
-        /// <param name="scale"></param>
-        /// <returns></returns>
-        protected override Point CreateStringLocation(int y, float stringWidth, float scale)
-        {
-
-            return new Point((int)((m_info_controls_box.X * scale + (m_info_controls_box.Size.Width * scale / 2)) - (stringWidth / 2)),
-                    (int)(y + 2));
-        }
         //event for when device changes
         public override event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
     }

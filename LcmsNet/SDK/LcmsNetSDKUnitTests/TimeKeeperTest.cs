@@ -2,6 +2,7 @@
 using System.Globalization;
 using NUnit.Framework;
 using LcmsNetSDK;
+using LcmsNetSDK.System;
 
 namespace LcmsnetUnitTest
 {

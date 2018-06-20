@@ -6,6 +6,7 @@
              xmlns:views="clr-namespace:LcmsNet.Configuration.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.Configuration.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="647" d:DesignWidth="887"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SystemConfigurationViewModel}, IsDesignTimeCreatable=True}">
@@ -14,7 +15,7 @@
             <StackPanel>
                 <GroupBox Header="Operator" Margin="5">
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentOperator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding OperatorsComboBoxOptions}" />
+                        <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentOperator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding OperatorsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         <Button Width="80" Margin="3" Command="{Binding SetOperatorCommand}" IsEnabled="{Binding OperatorNotSaved}">Set</Button>
                     </StackPanel>
                 </GroupBox>
@@ -37,9 +38,9 @@
                             <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Content="Cart Name:" />
                             <TextBox Grid.Row="0" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" IsReadOnly="True" Text="{Binding CartName}" />
                             <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Content="Cart Configuration Name:" />
-                            <ComboBox Grid.Row="1" Grid.Column="1" Width="506" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" />
+                            <ComboBox Grid.Row="1" Grid.Column="1" Width="506" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Content="Separation Type:" />
-                            <ComboBox Grid.Row="2" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding SeparationType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SeparationTypeComboBoxOptions}" />
+                            <ComboBox Grid.Row="2" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding SeparationType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SeparationTypeComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </Grid>
                         <Grid Height="170" Margin="0,10">
                             <Grid.RowDefinitions>
@@ -55,14 +56,17 @@
                             <views:ColumnConfigView Grid.Row="1" Grid.Column="0" Margin="3" DataContext="{Binding Column3ViewModel}" />
                             <views:ColumnConfigView Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding Column4ViewModel}" />
                         </Grid>
-                        <Button Width="202" HorizontalAlignment="Left" Command="{Binding ReloadCartDataCommand}" >Reload Column Names</Button>
+                        <DockPanel LastChildFill="False">
+                            <Button DockPanel.Dock="Left" Width="202" Margin="3" HorizontalAlignment="Left" Content="Reload Column Names" Command="{Binding ReloadCartDataCommand}" />
+                            <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" Content="Display Special Column" IsChecked="{Binding SpecialColumnEnabled}" />
+                        </DockPanel>
                     </StackPanel>
                 </GroupBox>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Minimum Sample Volume (uL)" />
                     <xctk:DoubleUpDown Width="109" Increment="0.1" Value="{Binding MinVolume}"></xctk:DoubleUpDown>
                     <Label Content="Time Zone" Margin="10,0,0,0"/>
-                    <ComboBox Width="242" SelectedItem="{Binding TimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding TimeZoneComboBoxOptions}" />
+                    <ComboBox Width="242" SelectedItem="{Binding TimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding TimeZoneComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="Write PDF to:" />
@@ -77,7 +81,7 @@
                     <StackPanel>
                         <Label Content="Available Instruments" />
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding InstrumentComboBoxOptions}" />
+                            <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding InstrumentComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <Button Width="80" Margin="3" Command="{Binding SetInstrumentCommand}" IsEnabled="{Binding InstrumentNameNotSaved}">Set</Button>
                         </StackPanel>
                     </StackPanel>

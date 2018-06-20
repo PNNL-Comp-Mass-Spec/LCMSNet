@@ -8,14 +8,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
+using FluidicsPack;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary
 {
-    [classDeviceControlAttribute(null,
+    [DeviceControl(null,
                                  typeof(FluidicsSprayNeedle),
                                  "Demo Spray Needle",
                                  "Demo")]
@@ -31,8 +33,8 @@ namespace DemoPluginLibrary
 
         public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
-            ErrorType = enumDeviceErrorStatus.NoError;
+            Status = DeviceStatus.Initialized;
+            ErrorType = DeviceErrorStatus.NoError;
             return true;
         }
 
@@ -67,13 +69,13 @@ namespace DemoPluginLibrary
         }
 
         #region Events
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
             remove { }
         }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -97,9 +99,9 @@ namespace DemoPluginLibrary
         #endregion
 
         #region Properties
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -118,7 +120,7 @@ namespace DemoPluginLibrary
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;

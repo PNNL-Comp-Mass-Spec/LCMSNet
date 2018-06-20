@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FluidicsSDK</RootNamespace>
     <AssemblyName>FluidicsSDK</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -22,6 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Debug\FluidicsSDK.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
     <OutputPath>bin\PNNLRelease\</OutputPath>
@@ -32,55 +34,28 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\PNNLRelease\FluidicsSDK.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\Connection.cs" />
-    <Compile Include="Base\ConnectionWpf.cs" />
-    <Compile Include="Base\enumConnectionStyles.cs" />
-    <Compile Include="Base\enumValveErrors.cs" />
+    <Compile Include="Base\ConnectionStyles.cs" />
     <Compile Include="Base\Fluid.cs" />
     <Compile Include="Base\FluidicsDevChangeEventArgs.cs" />
     <Compile Include="Base\FluidicsDevice.cs" />
-    <Compile Include="Base\FluidicsDeviceWpf.cs" />
     <Compile Include="Base\Port.cs" />
-    <Compile Include="Base\PortWpf.cs" />
+    <Compile Include="Base\ValveErrors.cs" />
     <Compile Include="Base\ValveStates.cs" />
-    <Compile Include="Devices\ContactClosure.cs" />
-    <Compile Include="Devices\ContactClosureWpf.cs" />
-    <Compile Include="Devices\FluidicsDetector.cs" />
-    <Compile Include="Devices\FluidicsDetectorWpf.cs" />
-    <Compile Include="Devices\FluidicsDeviceAddedEventArgs.cs" />
-    <Compile Include="Devices\FluidicsDeviceExistsException.cs" />
-    <Compile Include="Devices\FluidicsDeviceTypeFactory.cs" />
-    <Compile Include="Devices\FluidicsPump.cs" />
-    <Compile Include="Devices\FluidicsPumpWpf.cs" />
-    <Compile Include="Devices\FluidicsSampler.cs" />
-    <Compile Include="Devices\FluidicsSamplerWpf.cs" />
-    <Compile Include="Devices\IContactClosure.cs" />
-    <Compile Include="Devices\IFluidicsClosure.cs" />
-    <Compile Include="Devices\IFluidicsDevice.cs" />
-    <Compile Include="Devices\IFluidicsPump.cs" />
-    <Compile Include="Devices\IFluidicsSampler.cs" />
-    <Compile Include="Devices\InvalidCustomFluidicsDeviceException.cs" />
-    <Compile Include="Devices\PumpEventArgs.cs" />
-    <Compile Include="Devices\Valves\ElevenPortValve.cs" />
-    <Compile Include="Devices\Valves\ElevenPortFluidicsValveWpf.cs" />
+    <Compile Include="Devices\Valves\ElevenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\FourPortFluidicsValve.cs" />
-    <Compile Include="Devices\Valves\FourPortFluidicsValveWpf.cs" />
     <Compile Include="Devices\Valves\IElevenPortValve.cs" />
     <Compile Include="Devices\Valves\IFourPortValve.cs" />
     <Compile Include="Devices\Valves\INinePortValve.cs" />
@@ -90,66 +65,52 @@
     <Compile Include="Devices\Valves\ISolidPhaseExtractor.cs" />
     <Compile Include="Devices\Valves\ITenPortValve.cs" />
     <Compile Include="Devices\Valves\ITwoPositionValve.cs" />
-    <Compile Include="Devices\Valves\MultiPositionValveBase.cs" />
-    <Compile Include="Devices\Valves\MultiPositionValveWpf.cs" />
-    <Compile Include="Devices\Valves\NinePortValve.cs" />
-    <Compile Include="Devices\Valves\NinePortFluidicsValveWpf.cs" />
+    <Compile Include="Devices\Valves\MultiPositionValve.cs" />
+    <Compile Include="Devices\Valves\NinePortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SixPortFluidicsValve.cs" />
-    <Compile Include="Devices\Valves\SixPortFluidicsValveWpf.cs" />
     <Compile Include="Devices\Valves\SixPortInjectionFluidicsValve.cs" />
-    <Compile Include="Devices\Valves\SixPortInjectionFluidicsValveWpf.cs" />
-    <Compile Include="Devices\Valves\SixteenPortValve.cs" />
-    <Compile Include="Devices\Valves\SixteenPortFluidicsValveWpf.cs" />
+    <Compile Include="Devices\Valves\SixteenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SolidPhaseExtractor.cs" />
-    <Compile Include="Devices\Valves\SolidPhaseExtractorWpf.cs" />
-    <Compile Include="Devices\Valves\TenPortValve.cs" />
-    <Compile Include="Devices\Valves\TenPortFluidicsValveWpf.cs" />
-    <Compile Include="Devices\Valves\TwoPositionValveBase.cs" />
-    <Compile Include="Devices\Valves\TwoPositionValveWpf.cs" />
+    <Compile Include="Devices\Valves\TenPortFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\TwoPositionValve.cs" />
     <Compile Include="Devices\Valves\ValvePositionEventArgs.cs" />
-    <Compile Include="enumLayer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FluidicsModerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FluidicsModeratorWpf.cs" />
-    <Compile Include="Graphic\enumBrushType.cs" />
-    <Compile Include="Graphic\FluidicsLine.cs" />
-    <Compile Include="Graphic\FluidicsRectangleWpf.cs" />
+    <Compile Include="Devices\ContactClosure.cs" />
+    <Compile Include="Devices\FluidicsDetector.cs" />
+    <Compile Include="Devices\FluidicsDeviceAddedEventArgs.cs" />
+    <Compile Include="Devices\FluidicsDeviceExistsException.cs" />
+    <Compile Include="Devices\FluidicsDeviceTypeFactory.cs" />
+    <Compile Include="Devices\FluidicsPump.cs" />
+    <Compile Include="Devices\FluidicsSampler.cs" />
+    <Compile Include="Devices\IContactClosure.cs" />
+    <Compile Include="Devices\IFluidicsClosure.cs" />
+    <Compile Include="Devices\IFluidicsDevice.cs" />
+    <Compile Include="Devices\IFluidicsPump.cs" />
+    <Compile Include="Devices\IFluidicsSampler.cs" />
+    <Compile Include="Devices\InvalidCustomFluidicsDeviceException.cs" />
+    <Compile Include="Devices\PumpEventArgs.cs" />
+    <Compile Include="Graphic\BrushType.cs" />
+    <Compile Include="Graphic\Extensions.cs" />
     <Compile Include="Graphic\FluidicsCircle.cs" />
-    <Compile Include="Graphic\FluidicsCircleWpf.cs" />
     <Compile Include="Graphic\FluidicsGraphicsError.cs" />
-    <Compile Include="Graphic\FluidicsLineWpf.cs" />
+    <Compile Include="Graphic\FluidicsLine.cs" />
     <Compile Include="Graphic\FluidicsPolygon.cs" />
-    <Compile Include="Graphic\FluidicsPolygonWpf.cs" />
     <Compile Include="Graphic\FluidicsRectangle.cs" />
     <Compile Include="Graphic\FluidicsTriangle.cs" />
-    <Compile Include="Graphic\FluidicsTriangleWpf.cs" />
     <Compile Include="Graphic\GraphicsPrimitive.cs" />
-    <Compile Include="Graphic\GraphicsPrimitiveWpf.cs" />
-    <Compile Include="Graphic\StateControl.cs" />
-    <Compile Include="Graphic\StateControlPrimitiveWpf.cs" />
-    <Compile Include="IRenderable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IRenderableWpf.cs" />
+    <Compile Include="Graphic\StateControlPrimitive.cs" />
     <Compile Include="Managers\ConnectionChangedEventArgs.cs" />
     <Compile Include="Managers\ConnectionManager.cs" />
-    <Compile Include="Managers\ConnectionManagerWpf.cs" />
     <Compile Include="Managers\FluidicsDeviceManager.cs" />
-    <Compile Include="Managers\FluidicsDeviceManagerWpf.cs" />
     <Compile Include="Managers\PortChangedEventArgs.cs" />
     <Compile Include="Managers\PortManager.cs" />
-    <Compile Include="Managers\PortManagerWpf.cs" />
     <Compile Include="ModelCheckers\FluidicsCycleCheck.cs" />
     <Compile Include="ModelCheckers\MultipleSourcesModelCheck.cs" />
     <Compile Include="ModelCheckers\NoSinksModelCheck.cs" />
     <Compile Include="ModelCheckers\TestModelCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Drawing\" />
+    <Compile Include="FluidicsModerator.cs" />
+    <Compile Include="IRenderable.cs" />
+    <Compile Include="RenderLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
@@ -159,9 +120,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib"
-xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib"
-xcopy /y /f /d "$(TargetDir)*.xml" "$(SolutionDir)lib"
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

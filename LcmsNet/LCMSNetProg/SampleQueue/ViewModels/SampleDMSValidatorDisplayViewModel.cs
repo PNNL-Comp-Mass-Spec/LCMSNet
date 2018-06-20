@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetDataClasses;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -17,16 +17,16 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public SampleDMSValidatorDisplayViewModel()
         {
-            samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   UsageType = "Cap_Dev", UserList = "(none1)", Experiment = "TestExp1", ProposalID = "5" } }, true, false, false, true, true, true));
-            samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  UsageType = "Cap_Dev", UserList = "(none2)", Experiment = "TestExp2", ProposalID = "6" } }, false, true, true, false, false, true));
-            samples.Add(new SampleDMSValidationViewModel(new classSampleData(false) { DmsData = new classDMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, UsageType = "Cap_Dev", UserList = "(none3)", Experiment = "TestExp3", ProposalID = "7" } }, true, true, false, true, true, false));
+            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   EMSLUsageType = "CAP_DEV", UserList = "(none1)", Experiment = "TestExp1", EMSLProposalID = "5" } }, true, false, false, true, true, true));
+            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  EMSLUsageType = "CAP_DEV", UserList = "(none2)", Experiment = "TestExp2", EMSLProposalID = "6" } }, false, true, true, false, false, true));
+            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, EMSLUsageType = "CAP_DEV", UserList = "(none3)", Experiment = "TestExp3", EMSLProposalID = "7" } }, true, true, false, true, true, false));
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="samplesList">Sample validation.</param>
-        public SampleDMSValidatorDisplayViewModel(List<classSampleData> samplesList)
+        public SampleDMSValidatorDisplayViewModel(List<SampleData> samplesList)
         {
             // Create a sample validator control for each sample.
             var i = 0;

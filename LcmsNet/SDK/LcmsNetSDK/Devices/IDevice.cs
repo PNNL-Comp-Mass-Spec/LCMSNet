@@ -12,9 +12,9 @@
 
 using System;
 using System.Threading;
-using LcmsNetSDK.Notifications;
+using LcmsNetSDK.System;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     public interface IDevice : INotifier
     {
@@ -55,7 +55,7 @@ namespace LcmsNetDataClasses.Devices
         /// <param name="remoteMethod">Delegate method to call from the device to synch events to.</param>
         void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod);
 
-        /// <summary>        
+        /// <summary>
         /// Write the performance data and other required information associated with this device after a run.
         /// </summary>
         /// <param name="directoryPath">Path to write data to.</param>
@@ -68,14 +68,14 @@ namespace LcmsNetDataClasses.Devices
         #region Properties
 
         /// <summary>
-        /// Gets or sets the version name of the hardware if applicable.
+        /// Gets the version name of the hardware if applicable.
         /// </summary>
-        string Version { get; set; }
+        string Version { get; }
 
         /// <summary>
         /// Gets or sets the status of the device.
         /// </summary>
-        enumDeviceStatus Status { get; set; }
+        DeviceStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -83,14 +83,14 @@ namespace LcmsNetDataClasses.Devices
         ManualResetEvent AbortEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the error type for a given device.
+        /// Gets the error type for a given device.
         /// </summary>
-        enumDeviceErrorStatus ErrorType { get; set; }
+        DeviceErrorStatus ErrorType { get; }
 
         /// <summary>
-        /// Gets or sets the device type.
+        /// Gets the device type.
         /// </summary>
-        enumDeviceType DeviceType { get; }
+        DeviceType DeviceType { get; }
 
         /// <summary>
         /// Gets or sets whether the device is emulation mode or not.

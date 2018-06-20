@@ -5,7 +5,7 @@
  *
  *********************************************************************************************************/
 using System;
-using Newport.ESP300;
+using LcmsNetPlugins.Newport.ESP300;
 
 namespace NewportTestApp
 {
@@ -13,7 +13,7 @@ namespace NewportTestApp
     {
         static void Main(string[] args)
         {
-            var stage = new classNewportStage();
+            var stage = new NewportStage();
             stage.OpenPort();
             PrintMenu();
             while (true)

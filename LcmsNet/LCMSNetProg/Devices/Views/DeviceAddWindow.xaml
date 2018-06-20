@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:devices="clr-namespace:LcmsNetDataClasses.Devices;assembly=LcmsNetSdk"
         xmlns:viewModels="clr-namespace:LcmsNet.Devices.ViewModels"
+        xmlns:devices="clr-namespace:LcmsNetSDK.Devices;assembly=LcmsNetSdk"
         mc:Ignorable="d"
         Title="Add Devices" Height="550" Width="630"
         WindowStartupLocation="CenterOwner"
@@ -33,7 +33,7 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding Plugins}">
                     <TextBlock Text="{Binding Category}" />
                     <HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate DataType="{x:Type devices:classDevicePluginInformation}">
+                        <DataTemplate DataType="{x:Type devices:DevicePluginInformation}">
                             <TextBlock Text="{Binding DeviceAttribute.Name}" />
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>

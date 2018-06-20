@@ -8,10 +8,9 @@
 
 using System;
 using System.Globalization;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 
-namespace LcmsNetSDK
+namespace LcmsNetSDK.System
 {
     public class TimeKeeper
     {
@@ -26,20 +25,20 @@ namespace LcmsNetSDK
 
         private TimeKeeper()
         {
-            var timeZone = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_TIMEZONE);
+            var timeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
             if (string.IsNullOrWhiteSpace(timeZone))
             {
                 m_current_timezone = TimeZoneInfo.Local;
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id);
+                LCMSSettings.SetParameter(LCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id);
             }
             else
             {
                 m_current_timezone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
             }
-            classLCMSSettings.SettingChanged += classLCMSSettings_SettingChanged;
+            LCMSSettings.SettingChanged += LCMSSettings_SettingChanged;
         }
 
-        private void classLCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
+        private void LCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
             if (e.SettingName == "TimeZone")
             {
@@ -54,8 +53,8 @@ namespace LcmsNetSDK
         ~TimeKeeper()
         {
             //Persist the timezone setting
-            classLCMSSettings.SettingChanged -= classLCMSSettings_SettingChanged;
-            classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id);
+            LCMSSettings.SettingChanged -= LCMSSettings_SettingChanged;
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_TIMEZONE, m_current_timezone.Id);
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace LcmsNetSDK
         /// </summary>
         /// <param name="method"></param>
         /// <returns></returns>
-        public bool AfterDSTTransition(classLCMethod method)
+        public bool AfterDSTTransition(LCMethod method)
         {
             var year = method.Start.Year;
             TimeZoneInfo.TransitionTime springTransition;
@@ -202,7 +201,7 @@ namespace LcmsNetSDK
             set
             {
                 m_current_timezone = value;
-                classLCMSSettings.SetParameter(classLCMSSettings.PARAM_TIMEZONE, value.Id);
+                LCMSSettings.SetParameter(LCMSSettings.PARAM_TIMEZONE, value.Id);
             }
         }
 

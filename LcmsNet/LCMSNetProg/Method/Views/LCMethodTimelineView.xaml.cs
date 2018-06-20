@@ -101,7 +101,7 @@ namespace LcmsNet.Method.Views
         private void DrawingContainer_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             leftMouseDown = false;
-            if (lcMethodTimelineDataContext.RenderMode == enumLCMethodRenderMode.Conversation)
+            if (lcMethodTimelineDataContext.RenderMode == LCMethodRenderMode.Conversation)
             {
                 lcMethodTimelineDataContext.MouseUpUpdates(e.GetPosition(DrawingContainer), ref unmoved);
             }
@@ -110,7 +110,7 @@ namespace LcmsNet.Method.Views
         private void DrawingContainer_OnMouseMove(object sender, MouseEventArgs e)
         {
             //if left mouse is held down and render mode is conversation...scroll this way.
-            if (leftMouseDown && lcMethodTimelineDataContext.RenderMode == enumLCMethodRenderMode.Conversation)
+            if (leftMouseDown && lcMethodTimelineDataContext.RenderMode == LCMethodRenderMode.Conversation)
             {
                 lcMethodTimelineDataContext.MouseMovedUpdates(e.GetPosition(DrawingContainer), ref oldMouseLoc);
                 unmoved = false;

@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using DemoPluginLibrary;
 using LcmsNet.Method;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Method;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest
@@ -28,12 +28,12 @@ namespace LcmsnetUnitTest
         [SetUp]
         public void SetupOptmizerAndMethodsForOptimizerTests()
         {
-            optimizer = new classLCMethodOptimizer();
+            optimizer = new LCMethodOptimizer();
 
-            methods = new List<classLCMethod>();
-            methods.Add(new classLCMethod());
-            methods.Add(new classLCMethod());
-            classLCEvent[] events = {new classLCEvent(), new classLCEvent()}; //events for the methods
+            methods = new List<LCMethod>();
+            methods.Add(new LCMethod());
+            methods.Add(new LCMethod());
+            LCEvent[] events = {new LCEvent(), new LCEvent()}; //events for the methods
             var pump = new DemoPump();
             events[0].Device = pump;
             events[1].Device = pump;
@@ -45,7 +45,7 @@ namespace LcmsnetUnitTest
             events[0].Parameters[0] = 1;
             events[0].ParameterNames = new string[1];
             events[0].ParameterNames[0] = "rate";
-            events[0].MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            events[0].MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             events[0].Method = events[0].Device.GetType().GetMethod("SetFlowRate");
             methods[0].Events.Add(events[0]);
 
@@ -57,7 +57,7 @@ namespace LcmsnetUnitTest
             events[1].Parameters[0] = 1;
             events[1].ParameterNames = new string[1];
             events[1].ParameterNames[0] = "rate";
-            events[1].MethodAttribute = new classLCMethodAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            events[1].MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             events[1].Method = events[1].Device.GetType().GetMethod("SetFlowRate");
             events[1].Start = events[0].End;
             methods[1].Events.Add(events[1]);
@@ -72,8 +72,8 @@ namespace LcmsnetUnitTest
             methods[1].AllowPreOverlap = true;
         }
 
-        List<classLCMethod> methods;
-        classLCMethodOptimizer optimizer;
+        List<LCMethod> methods;
+        LCMethodOptimizer optimizer;
 
         const int SAME_REQUIRED_LC_METHOD_OFFSET = 10000;
             // this should be the same as CONST_REQUIRED_LC_METHOD_SPACING_SECONDS in classLCMethodOptimizer, if the tests are not passing be sure to check this.
@@ -125,7 +125,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
@@ -168,7 +168,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 1;
@@ -239,7 +239,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
@@ -266,7 +266,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new classLCMethodAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;

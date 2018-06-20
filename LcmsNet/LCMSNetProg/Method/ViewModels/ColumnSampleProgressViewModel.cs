@@ -4,9 +4,9 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
@@ -78,17 +78,37 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
+        /// Use the given sample to clear out displayed progress and errors for the column
+        /// </summary>
+        /// <param name="sample"></param>
+        public void ResetColumn(SampleData sample)
+        {
+            SampleProgress.ResetColumn(sample);
+            SampleProgressFull.ResetColumn(sample);
+        }
+
+        /// <summary>
+        /// Clears out the existing visuals
+        /// </summary>
+        public void ResetVisuals()
+        {
+            SampleProgress.ClearSamples();
+            SampleProgressFull.ClearSamples();
+        }
+
+        /// <summary>
         /// Updates the progress window with the sample data.
         /// </summary>
         /// <param name="sample"></param>
-        public void UpdateSample(classSampleData sample)
+        public void UpdateSample(SampleData sample)
         {
             SampleProgress.UpdateSample(sample);
             SampleProgressFull.UpdateSample(sample);
         }
 
-        public void UpdateError(classSampleData sample, classLCEvent lcEvent)
+        public void UpdateError(SampleData sample, LCEvent lcEvent)
         {
+            SampleProgress.UpdateError(sample, lcEvent);
             SampleProgressFull.UpdateError(sample, lcEvent);
         }
 
@@ -121,61 +141,29 @@ namespace LcmsNet.Method.ViewModels
                     rtb.Render(drawVisual);
                     rtb.Freeze();
 
-                    PreviewAvailable(this, new SampleProgressPreviewArgs(rtb.ToImage(), rtb.ToBitmapImage()));
+                    PreviewAvailable(this, new SampleProgressPreviewArgs(rtb));
                 }
                 catch
                 {
-                    classApplicationLogger.LogError(0, "Error attempting to update column sample progress.");
+                    ApplicationLogger.LogError(0, "Error attempting to update column sample progress.");
                 }
             }
         }
     }
 
-    public class SampleProgressPreviewArgs : EventArgs, IDisposable
+    public class SampleProgressPreviewArgs : EventArgs
     {
         public bool disposed;
 
-        public SampleProgressPreviewArgs(Image image)
+        public SampleProgressPreviewArgs(BitmapSource image)
         {
             disposed = false;
             PreviewImage = image;
         }
 
-        public SampleProgressPreviewArgs(Image image, BitmapImage bmpImage)
-        {
-            disposed = false;
-            PreviewImage = image;
-            PreviewImageWpf = bmpImage;
-        }
-
         /// <summary>
         /// Gets the preview image for the sample progress
         /// </summary>
-        public Image PreviewImage { get; private set; }
-
-        /// <summary>
-        /// Gets the preview image for the sample progress
-        /// </summary>
-        public BitmapImage PreviewImageWpf { get; private set; }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposeOthers)
-        {
-            if (disposed)
-            {
-                return;
-            }
-            if (disposeOthers)
-            {
-                PreviewImage.Dispose();
-                PreviewImage = null;
-            }
-            disposed = true;
-        }
+        public BitmapSource PreviewImage { get; private set; }
     }
 }

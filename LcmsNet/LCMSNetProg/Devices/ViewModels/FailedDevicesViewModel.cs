@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
@@ -15,9 +15,9 @@ namespace LcmsNet.Devices.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public FailedDevicesViewModel()
         {
-            var list = new List<classDeviceErrorEventArgs>();
-            list.Add(new classDeviceErrorEventArgs("Test Failure message", new Exception("Test exception message"), enumDeviceErrorStatus.ErrorSampleOnly, new classTimerDevice()));
-            list.Add(new classDeviceErrorEventArgs("Test Failure message", null, enumDeviceErrorStatus.ErrorAffectsAllColumns, new classTimerDevice()));
+            var list = new List<DeviceErrorEventArgs>();
+            list.Add(new DeviceErrorEventArgs("Test Failure message", new Exception("Test exception message"), DeviceErrorStatus.ErrorSampleOnly, new TimerDevice()));
+            list.Add(new DeviceErrorEventArgs("Test Failure message", null, DeviceErrorStatus.ErrorAffectsAllColumns, new TimerDevice()));
             UpdateDeviceList(list);
         }
 
@@ -25,7 +25,7 @@ namespace LcmsNet.Devices.ViewModels
         /// Constructor.
         /// </summary>
         /// <param name="deviceErrors"></param>
-        public FailedDevicesViewModel(List<classDeviceErrorEventArgs> deviceErrors)
+        public FailedDevicesViewModel(List<DeviceErrorEventArgs> deviceErrors)
         {
             UpdateDeviceList(deviceErrors);
         }
@@ -38,7 +38,7 @@ namespace LcmsNet.Devices.ViewModels
         /// Updates the listview with the error device messages.
         /// </summary>
         /// <param name="deviceErrors"></param>
-        public void UpdateDeviceList(List<classDeviceErrorEventArgs> deviceErrors)
+        public void UpdateDeviceList(List<DeviceErrorEventArgs> deviceErrors)
         {
             using (deviceErrorList.SuppressChangeNotifications())
             {

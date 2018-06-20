@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
         mc:Ignorable="d"
-        Title="Sample Validator" Height="703" Width="801"
+        Title="Sample Validator" Height="703" Width="801" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidatorDisplayViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.Resources>
@@ -16,15 +17,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding Samples}">
+        <ListView Grid.Row="0" ItemsSource="{Binding Samples}" d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidationViewModel}, IsDesignTimeCreatable=True}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="" Width="30">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Image Source="/Images/AllIsGood.png" MaxWidth="16" Visibility="{Binding IsSampleValid, Converter={StaticResource BoolToVis}}" />
-                                    <Image Source="/Images/ButtonDeleteRed.png" MaxWidth="16" Visibility="{Binding SampleNotValid, Converter={StaticResource BoolToVis}}" />
+                                    <Image Source="{StaticResource AllIsGoodImage}" MaxWidth="16" Visibility="{Binding IsSampleValid, Converter={StaticResource BoolToVis}}" />
+                                    <Image Source="{StaticResource ButtonDeleteRedImage}" MaxWidth="16" Visibility="{Binding SampleNotValid, Converter={StaticResource BoolToVis}}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -40,14 +41,21 @@
                     <GridViewColumn Header="Usage Type" Width="115">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.UsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}">
+                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.EMSLUsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}" cueBannerOverlay:CueBannerService.CueBanner="Select">
                                     <ComboBox.Style>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding UsageTypeValid}" Value="False">
-                                                    <Setter Property="Background" Value="Red" />
-                                                    <Setter Property="Foreground" Value="White" />
-                                                </DataTrigger>
+                                                <MultiDataTrigger>
+                                                    <!-- Color the combo box red with white text when it is not valid, but remove the coloring when the drop down is open, so they can actually read the text. -->
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsDropDownOpen, RelativeSource={RelativeSource Self}}" Value="False" />
+                                                        <Condition Binding="{Binding UsageTypeValid}" Value="False" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="Background" Value="Red" />
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </ComboBox.Style>
@@ -58,7 +66,7 @@
                     <GridViewColumn Header="Proposal ID" Width="85">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="70" Text="{Binding Sample.DmsData.ProposalID}" IsEnabled="{Binding CanChangeEmslData}">
+                                <TextBox Width="70" Text="{Binding Sample.DmsData.EMSLProposalID}" IsEnabled="{Binding CanChangeEmslData}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Style.Triggers>

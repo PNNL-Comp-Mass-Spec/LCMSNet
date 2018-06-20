@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
@@ -16,7 +17,7 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         public AdvancedDeviceGroupControlViewModel()
         {
-            deviceToControlMap = new Dictionary<IDevice, IDeviceControlWpf>();
+            deviceToControlMap = new Dictionary<IDevice, IDeviceControl>();
             deviceToWrapperMap = new Dictionary<IDevice, DeviceControlData>();
 
             SelectedDevice = null;
@@ -25,6 +26,10 @@ namespace LcmsNet.Devices.ViewModels
             NotSelectedColor = Colors.Black;
 
             SetupCommands();
+
+            // Once an item is added to the device controls, automatically make the first one the "Selected device" if one hasn't been previously set.
+            this.WhenAnyValue(x => x.deviceControls, x => x.SelectedDevice, x => x.deviceControls.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
+                .Subscribe(x => SelectedDevice = x.Item1[0]);
         }
 
         public class DeviceControlData : ReactiveObject
@@ -35,7 +40,7 @@ namespace LcmsNet.Devices.ViewModels
             private string nameEdit = "";
 
             public IDevice Device { get; private set; }
-            public IDeviceControlWpf ViewModel { get; private set; }
+            public IDeviceControl ViewModel { get; private set; }
 
             public System.Windows.Controls.UserControl View
             {
@@ -66,7 +71,7 @@ namespace LcmsNet.Devices.ViewModels
                 set { this.RaiseAndSetIfChanged(ref nameEdit, value); }
             }
 
-            public DeviceControlData(IDevice device, IDeviceControlWpf viewModel)
+            public DeviceControlData(IDevice device, IDeviceControl viewModel)
             {
                 Device = device;
                 ViewModel = viewModel;
@@ -81,7 +86,7 @@ namespace LcmsNet.Devices.ViewModels
             }
         }
 
-        private readonly Dictionary<IDevice, IDeviceControlWpf> deviceToControlMap;
+        private readonly Dictionary<IDevice, IDeviceControl> deviceToControlMap;
         private readonly Dictionary<IDevice, DeviceControlData> deviceToWrapperMap;
         private readonly ReactiveList<DeviceControlData> deviceControls = new ReactiveList<DeviceControlData>();
         private DeviceControlData selectedDevice = null;
@@ -112,12 +117,12 @@ namespace LcmsNet.Devices.ViewModels
 
         private void SetupCommands()
         {
-            RenameDeviceCommand = ReactiveCommand.Create(() => RenameSelectedDevice(), this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-            InitializeDeviceCommand = ReactiveCommand.Create(() => InitializeSelectedDevice(), this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-            ClearErrorCommand = ReactiveCommand.Create(() => ClearSelectedDeviceError(), this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            RenameDeviceCommand = ReactiveCommand.Create(RenameSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(InitializeSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            ClearErrorCommand = ReactiveCommand.Create(ClearSelectedDeviceError, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
         }
 
-        private void InitializeSelectedDevice()
+        private async Task InitializeSelectedDevice()
         {
             if (SelectedDevice == null)
                 return;
@@ -126,17 +131,17 @@ namespace LcmsNet.Devices.ViewModels
 
             try
             {
-                classDeviceManager.Manager.InitializeDevice(SelectedDevice.Device);
+                await Task.Run(() => DeviceManager.Manager.InitializeDevice(SelectedDevice.Device));
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, message, ex);
-                classApplicationLogger.LogError(0, ex.Message);
+                ApplicationLogger.LogError(0, message, ex);
+                ApplicationLogger.LogError(0, ex.Message);
             }
             //bool wasOk = SelectedDevice.Initialize(ref message);
             //if (!wasOk)
             //{
-            //    classApplicationLogger.LogError(0, message);
+            //    ApplicationLogger.LogError(0, message);
             //}
         }
 
@@ -154,7 +159,7 @@ namespace LcmsNet.Devices.ViewModels
             if (SelectedDevice.Name == newName)
                 return;
 
-            classDeviceManager.Manager.RenameDevice(device, newName);
+            DeviceManager.Manager.RenameDevice(device, newName);
 
             // Update the user interface with the new name
             SelectedDevice.NameEdit = device.Name;
@@ -163,7 +168,7 @@ namespace LcmsNet.Devices.ViewModels
         private void ClearSelectedDeviceError()
         {
             if (SelectedDevice != null)
-                SelectedDevice.Device.Status = enumDeviceStatus.Initialized;
+                SelectedDevice.Device.Status = DeviceStatus.Initialized;
         }
 
         #region Public Methods For Adding and Removing Devices for the UI
@@ -173,6 +178,9 @@ namespace LcmsNet.Devices.ViewModels
             if (deviceToWrapperMap.ContainsKey(device))
             {
                 // Remove from maps
+                var deviceControl = deviceToWrapperMap[device];
+                deviceControls.Remove(deviceControl);
+
                 deviceToControlMap.Remove(device);
                 deviceToWrapperMap.Remove(device);
             }
@@ -183,12 +191,13 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         /// <param name="device"></param>
         /// <param name="control"></param>
-        public void AddDevice(IDevice device, IDeviceControlWpf control)
+        public void AddDevice(IDevice device, IDeviceControl control)
         {
             var deviceControl = new DeviceControlData(device, control);
             deviceControls.Add(deviceControl);
 
             deviceToControlMap.Add(device, control);
+            deviceToWrapperMap.Add(device, deviceControl);
         }
 
         #endregion

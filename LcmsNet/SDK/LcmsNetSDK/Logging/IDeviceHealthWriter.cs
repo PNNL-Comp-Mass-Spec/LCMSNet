@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
-namespace LcmsNetDataClasses.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Writes data to a stream for health monitoring reasons.

@@ -1,29 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogViewer", "LogViewer.csproj", "{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		ExternalRelease|x86 = ExternalRelease|x86
-		ExternalReleaseInstall|x86 = ExternalReleaseInstall|x86
-		PNNLRelease|x86 = PNNLRelease|x86
-		PNNLReleaseInstall|x86 = PNNLReleaseInstall|x86
+		Debug|Any CPU = Debug|Any CPU
+		ExternalRelease|Any CPU = ExternalRelease|Any CPU
+		PNNLRelease|Any CPU = PNNLRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Debug|x86.ActiveCfg = Debug|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Debug|x86.Build.0 = Debug|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.ExternalRelease|x86.ActiveCfg = ExternalRelease|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.ExternalRelease|x86.Build.0 = ExternalRelease|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.ExternalReleaseInstall|x86.ActiveCfg = ExternalReleaseInstall|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.ExternalReleaseInstall|x86.Build.0 = ExternalReleaseInstall|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.PNNLRelease|x86.ActiveCfg = PNNLRelease|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.PNNLRelease|x86.Build.0 = PNNLRelease|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.PNNLReleaseInstall|x86.ActiveCfg = PNNLReleaseInstall|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.PNNLReleaseInstall|x86.Build.0 = PNNLReleaseInstall|x86
+		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.ExternalRelease|Any CPU.ActiveCfg = ExternalRelease|Any CPU
+		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.ExternalRelease|Any CPU.Build.0 = ExternalRelease|Any CPU
+		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.PNNLRelease|Any CPU.ActiveCfg = PNNLRelease|Any CPU
+		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.PNNLRelease|Any CPU.Build.0 = PNNLRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,17 +1,18 @@
 ﻿using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary
 {
-    public class DemoClosureAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControlWpf
+    public class DemoClosureAdvancedControlViewModel : BaseDeviceControlViewModel, IDeviceControl
     {
         private DemoClosure closure;
 
         public DemoClosureAdvancedControlViewModel()
         {
-            SendCommand = ReactiveUI.ReactiveCommand.Create(() => Send());
+            SendCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Send()));
         }
 
         public void RegisterDevice(IDevice device)

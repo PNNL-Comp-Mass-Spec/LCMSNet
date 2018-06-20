@@ -8,15 +8,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
+using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace DemoPluginLibrary
 {
-    [classDeviceControlAttribute(typeof(DemoValveAdvancedControl),
+    [DeviceControl(typeof(DemoValveAdvancedControlViewModel),
                                  "Demo SPE",
                                  "Demo")]
     public class DemoSPE : IDevice, ISolidPhaseExtractor
@@ -34,8 +35,8 @@ namespace DemoPluginLibrary
 
         public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
-            ErrorType = enumDeviceErrorStatus.NoError;
+            Status = DeviceStatus.Initialized;
+            ErrorType = DeviceErrorStatus.NoError;
             return true;
         }
 
@@ -69,13 +70,13 @@ namespace DemoPluginLibrary
             return new List<string>();
         }
 
-        [classLCMethodAttribute("GetPosition", 1.0, "", -1, false)]
+        [LCMethodEvent("GetPosition", 1.0, "", -1, false)]
         public int GetPosition()
         {
             return Position;
         }
 
-        [classLCMethodAttribute("SetPosition", 1.0, "", -1, false)]
+        [LCMethodEvent("SetPosition", 1.0, "", -1, false)]
         public void SetPosition(TwoPositionState position)
         {
             if ((int)position < 0 || (int)position > 2)
@@ -88,13 +89,13 @@ namespace DemoPluginLibrary
         #endregion
 
         #region Events
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
             remove { }
         }
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -110,9 +111,9 @@ namespace DemoPluginLibrary
         #endregion
 
         #region Properties
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -131,7 +132,7 @@ namespace DemoPluginLibrary
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;

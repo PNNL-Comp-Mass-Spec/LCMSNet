@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
         mc:Ignorable="d"
-        Title="SampleBadBlockDisplayWindow" Height="446" Width="673"
+        Title="Blocked Sample Errors" Height="446" Width="673"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SampleBadBlockDisplayViewModel}, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner">
     <Grid>

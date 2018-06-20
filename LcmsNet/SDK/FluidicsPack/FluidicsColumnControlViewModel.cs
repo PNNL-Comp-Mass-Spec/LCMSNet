@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Windows.Controls;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
-    public class FluidicsColumnControlViewModel : INotifyPropertyChangedExt, IDeviceControlWpf
+    public class FluidicsColumnControlViewModel : INotifyPropertyChangedExt, IDeviceControl
     {
         private FluidicsColumn column;
 

@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 
-namespace FailureInjector.Drivers
+namespace LcmsNetPlugins.FailureInjector.Drivers
 {
-    /*[classDeviceControlAttribute(typeof(controlNotificationDriver),
+    /*[DeviceControlAttribute(typeof(NotificationDriverViewModel),
                                  typeof(controlNotificationDriverGlyph),
                                  "Failure Injector",
                                  "Testing")
     ]*/
     public class NotificationDriver :  IDevice
     {
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceErrorEventArgs> Error;
+#pragma warning disable CS0067
         public event EventHandler DeviceSaveRequired;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Default constructor.
@@ -41,8 +43,8 @@ namespace FailureInjector.Drivers
             get;
             set;
         }
-        private enumDeviceStatus m_status;
-        public enumDeviceStatus Status
+        private DeviceStatus m_status;
+        public DeviceStatus Status
         {
             get
             {
@@ -51,7 +53,7 @@ namespace FailureInjector.Drivers
             set
             {
                 m_status = value;
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(m_status, "Status", this));
+                StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(m_status, "Status", this));
             }
         }
         public System.Threading.ManualResetEvent AbortEvent
@@ -62,7 +64,7 @@ namespace FailureInjector.Drivers
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -70,7 +72,7 @@ namespace FailureInjector.Drivers
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType => enumDeviceType.Component;
+        public DeviceType DeviceType => DeviceType.Component;
 
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -87,8 +89,8 @@ namespace FailureInjector.Drivers
         /// <returns>True if initialized, false if not.</returns>
         public bool Initialize(ref string errorMessage)
         {
-            Status = enumDeviceStatus.Initialized;
-            StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(this.Status, "Initialized", this));
+            Status = DeviceStatus.Initialized;
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(this.Status, "Initialized", this));
             return true;
         }
         public bool Shutdown()
@@ -97,17 +99,14 @@ namespace FailureInjector.Drivers
         }
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-
         }
-        public classMonitoringComponent GetHealthData()
+        public MonitoringComponent GetHealthData()
         {
             return null;
         }
@@ -125,15 +124,15 @@ namespace FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Inject Failure", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Inject Failure", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool MethodFailure(double timeout)
         {
             if (this.Error != null)
             {
-                var args = new classDeviceErrorEventArgs(
+                var args = new DeviceErrorEventArgs(
                     "Method Failure",
                     null,
-                    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                    DeviceErrorStatus.ErrorAffectsAllColumns,
                     this,
                     "Method Failure");
 
@@ -146,16 +145,16 @@ namespace FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Send Number", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Send Number", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool SendNumber(double timeout, double number)
         {
             if (StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(
-                    enumDeviceStatus.InUseByMethod,
+                var args = new DeviceStatusEventArgs(
+                    DeviceStatus.InUseByMethod,
                     "Number Change",
-                    number.ToString(),
-                    this);
+                    this,
+                    number.ToString());
 
                 this.StatusUpdate(this, args);
             }
@@ -169,12 +168,12 @@ namespace FailureInjector.Drivers
         {
             if (this.Error != null)
             {
-                Status = enumDeviceStatus.Error;
+                Status = DeviceStatus.Error;
 
-                var args = new classDeviceErrorEventArgs(
+                var args = new DeviceErrorEventArgs(
                     "Inject Failure",
                     null,
-                    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                    DeviceErrorStatus.ErrorAffectsAllColumns,
                     this,
                     "Inject Failure");
 
@@ -184,7 +183,7 @@ namespace FailureInjector.Drivers
         }
         public bool InjectStatus(string status)
         {
-            classApplicationLogger.LogMessage(1, status);
+            ApplicationLogger.LogMessage(1, status);
             return true;
         }
 
@@ -192,13 +191,13 @@ namespace FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Inject Status", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEvent("Inject Status", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public bool MethodStatus(double timeout)
         {
             if (this.StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(
-                    enumDeviceStatus.InUseByMethod,
+                var args = new DeviceStatusEventArgs(
+                    DeviceStatus.InUseByMethod,
                     "Method Status",
                     this);
 
@@ -214,8 +213,8 @@ namespace FailureInjector.Drivers
         {
             if (this.StatusUpdate != null)
             {
-                var args = new classDeviceStatusEventArgs(
-                    enumDeviceStatus.InUseByMethod,
+                var args = new DeviceStatusEventArgs(
+                    DeviceStatus.InUseByMethod,
                     "Inject Status",
                     this);
 

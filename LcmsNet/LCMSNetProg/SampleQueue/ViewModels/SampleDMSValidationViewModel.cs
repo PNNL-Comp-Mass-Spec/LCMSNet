@@ -1,6 +1,6 @@
-﻿ using System;
-using LcmsNetDataClasses;
+﻿using System;
 using LcmsNetDmsTools;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -8,17 +8,17 @@ namespace LcmsNet.SampleQueue.ViewModels
     public class SampleDMSValidationViewModel : ReactiveObject
     {
         private readonly static ReactiveList<string> usageTypeComboBoxOptions = new ReactiveList<string>(new string[] {
-            "Broken",
-            "Cap_Dev",
-            "Maintenance",
-            "User"});
+            "BROKEN",
+            "CAP_DEV",
+            "MAINTENANCE", // TODO: PULL this information from DMS T_EUS_UsageType and cache in SQLite DB!
+            "USER"});
 
 
         /// <summary>
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public SampleDMSValidationViewModel(classSampleData sample, bool sampleIsValid, bool canEditEmslData, bool usageTypeValid, bool proposalIdValid, bool userListValid, bool experimentValid)
+        public SampleDMSValidationViewModel(SampleData sample, bool sampleIsValid, bool canEditEmslData, bool usageTypeValid, bool proposalIdValid, bool userListValid, bool experimentValid)
         {
             this.sample = sample;
             IsSampleValid = sampleIsValid;
@@ -29,7 +29,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             ExperimentValid = experimentValid;
         }
 
-        public SampleDMSValidationViewModel(classSampleData sample)
+        public SampleDMSValidationViewModel(SampleData sample)
         {
             // Make sure the sample is valid so we dont get an exception later when we try to edit it.
             if (sample == null)
@@ -52,13 +52,13 @@ namespace LcmsNet.SampleQueue.ViewModels
             UpdateUserInterface();
 
             this.WhenAnyValue(x => x.IsSampleValid).Subscribe(x => this.RaisePropertyChanged(nameof(SampleNotValid)));
-            Sample.DmsData.WhenAnyValue(x => x.DatasetName, x => x.UsageType, x => x.ProposalID, x => x.UserList, x => x.Experiment)
+            Sample.DmsData.WhenAnyValue(x => x.DatasetName, x => x.EMSLUsageType, x => x.EMSLProposalID, x => x.UserList, x => x.Experiment)
                 .Subscribe(x => this.UpdateUserInterface());
         }
 
         #region Members
 
-        private readonly classSampleData sample;
+        private readonly SampleData sample;
         private bool canChangeEmslData = true;
         private bool isSampleValid = false;
         private bool usageTypeValid = true;
@@ -68,19 +68,12 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        public event EventHandler<DMSValidatorEventArgs> EnterPressed;
-
-        public virtual void OnEnterPressed(object sender, DMSValidatorEventArgs e)
-        {
-            EnterPressed?.Invoke(sender, e);
-        }
-
         #region Properties
 
         public int ID { get; set; }
 
         public IReadOnlyReactiveList<string> UsageTypeComboBoxOptions => usageTypeComboBoxOptions;
-        public classSampleData Sample => sample;
+        public SampleData Sample => sample;
 
         public bool CanChangeEmslData
         {
@@ -141,7 +134,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         // TODO: OLD:     {
         // TODO: OLD:         case Keys.Enter:
         // TODO: OLD:             Console.WriteLine(@"Enter Pressed!");
-        // TODO: OLD:             LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
+        // TODO: OLD:             LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
         // TODO: OLD:             isEnterType = true;
         // TODO: OLD:             break;
         // TODO: OLD:         case Keys.Up:
@@ -221,18 +214,18 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             else
             {
-                CanChangeEmslData = false;
+                CanChangeEmslData = true;
 
-                ProposalIdValid = classDMSSampleValidator.IsEMSLProposalIDValid(sample);
+                ProposalIdValid = DMSSampleValidator.IsEMSLProposalIDValid(sample);
                 IsSampleValid = IsSampleValid && ProposalIdValid;
 
-                UsageTypeValid = classDMSSampleValidator.IsEMSLUsageTypeValid(sample);
+                UsageTypeValid = DMSSampleValidator.IsEMSLUsageTypeValid(sample);
                 IsSampleValid = IsSampleValid && UsageTypeValid;
 
-                UserListValid = classDMSSampleValidator.IsEMSLUserValid(sample);
+                UserListValid = DMSSampleValidator.IsEMSLUserValid(sample);
                 IsSampleValid = IsSampleValid && UserListValid;
 
-                ExperimentValid = classDMSSampleValidator.IsExperimentNameValid(sample);
+                ExperimentValid = DMSSampleValidator.IsExperimentNameValid(sample);
                 IsSampleValid = IsSampleValid && ExperimentValid;
             }
 

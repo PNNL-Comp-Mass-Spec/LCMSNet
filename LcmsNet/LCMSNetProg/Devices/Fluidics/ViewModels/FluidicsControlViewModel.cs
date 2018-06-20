@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using FluidicsSDK;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.Fluidics.ViewModels
@@ -14,7 +14,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
     {
         public FluidicsControlViewModel()
         {
-            fluidicsModerator = FluidicsModeratorWpf.Moderator;
+            fluidicsModerator = FluidicsModerator.Moderator;
             ZoomPercent = 100;
             PortTransparency = 255;
             DeviceTransparency = 255;
@@ -41,7 +41,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         private static bool staticDevicesLocked;
         private bool dragAndDrop;
-        private readonly FluidicsModeratorWpf fluidicsModerator;
+        private readonly FluidicsModerator fluidicsModerator;
         private bool mouseMoving;
 
         private Point newMouseLocation;
@@ -203,11 +203,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             }
         }
 
-        public void UpdateImage()
-        {
-            Refresh();
-        }
-
         private Size UpdateImage(DrawingContext drawingContext, Size size)
         {
             Debug.WriteLine("Updating Image Wpf");
@@ -235,9 +230,9 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
 
                 //each layer is rendered at the transparency value specified by the UI transparency trackbar for that layer, possible values 0-255.
-                fluidicsModerator.Render(drawingContext, (byte)DeviceTransparency, scale, Layer.Devices);
-                fluidicsModerator.Render(drawingContext, (byte)ConnectionTransparency, scale, Layer.Connections);
-                fluidicsModerator.Render(drawingContext, (byte)PortTransparency, scale, Layer.Ports);
+                fluidicsModerator.Render(drawingContext, (byte)DeviceTransparency, scale, RenderLayer.Devices);
+                fluidicsModerator.Render(drawingContext, (byte)ConnectionTransparency, scale, RenderLayer.Connections);
+                fluidicsModerator.Render(drawingContext, (byte)PortTransparency, scale, RenderLayer.Ports);
 
                 return new Size(Math.Max(size.Width, imageSize.Width), Math.Max(size.Height, imageSize.Height));
             }
@@ -260,7 +255,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <param name="ex">message to show user</param>
         private void ShowError(Exception ex)
         {
-            classApplicationLogger.LogError(classApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
+            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, ex.Message, ex);
         }
 
         /// <summary>

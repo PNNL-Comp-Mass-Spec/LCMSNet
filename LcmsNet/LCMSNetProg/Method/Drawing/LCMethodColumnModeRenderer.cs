@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {
@@ -55,7 +58,7 @@ namespace LcmsNet.Method.Drawing
             var brushColor = Colors.Black;
             brushColor.A = 128;
             var brush = new SolidColorBrush(brushColor);
-            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, 8.0F * (96.0/72.0), brush);
+            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
             graphics.DrawText(columnNameText, new Point(x, y - columnNameText.Height));
         }
 
@@ -69,15 +72,22 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<classLCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!
-            var offset = Convert.ToSingle(bounds.Height) * CONST_HEADER_PADDING;
+            var offset = bounds.Height * CONST_HEADER_PADDING;
             offset = Math.Min(offset, CONST_HEADER_PADDING_MAX);
             // This tells us how much room we get per method or column spacing.
-            var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
-            heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, CONST_MAX_HEIGHT));
+            var columnsEnabled = CartConfiguration.Columns.Count(x => x.Status != ColumnStatus.Disabled);
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
+            {
+                // Also show the "Special" column
+                columnsEnabled += 1;
+            }
+            //var heightPer = (bounds.Height - CONST_COLUMN_SPACING * CONST_NUMBER_OF_COLUMNS - offset) / Convert.ToSingle(CONST_NUMBER_OF_COLUMNS);
+            var heightPer = (bounds.Height - CONST_COLUMN_SPACING * columnsEnabled - offset) / Convert.ToSingle(columnsEnabled);
+            heightPer = Math.Max(CONST_MIN_HEIGHT, Math.Min(heightPer, (int)(CONST_MAX_HEIGHT * 3)));
 
             // Draw the data for the columns
             for (var i = 0; i < ColumnNames.Count; i++)
@@ -93,8 +103,7 @@ namespace LcmsNet.Method.Drawing
                 RenderColumnName(graphics, string.Format("Column {0}: {1}", i + 1, ColumnNames[i]), x, top);
             }
 
-
-            var alignedEvents = new List<classLCEvent>();
+            var alignedEvents = new List<LCEvent>();
             if (methods != null && methods.Count > 0)
             {
                 // Find the start and end times of the samples so we can scale everything accordingly.
@@ -128,7 +137,8 @@ namespace LcmsNet.Method.Drawing
 
                     if (columnID < 0)
                     {
-                        columnID = CONST_NUMBER_OF_COLUMNS;
+                        //columnID = CONST_NUMBER_OF_COLUMNS;
+                        columnID = columnsEnabled;
                     }
 
                     // Calculate the number of pixels the method should start from based on its time value.

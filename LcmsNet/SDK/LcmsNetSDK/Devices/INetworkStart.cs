@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetDataClasses.Devices
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Interface for a network start.
@@ -11,12 +11,12 @@ namespace LcmsNetDataClasses.Devices
         /// <summary>
         /// Fired when new method names are available.
         /// </summary>
-        event EventHandler<classNetworkStartEventArgs> MethodNames;
+        event EventHandler<NetworkStartEventArgs> MethodNames;
     }
 
-    public class classNetworkStartEventArgs : EventArgs
+    public class NetworkStartEventArgs : EventArgs
     {
-        public classNetworkStartEventArgs(List<string> methodList)
+        public NetworkStartEventArgs(List<string> methodList)
         {
             MethodList = methodList;
         }

@@ -1,13 +1,7 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 9/5/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
 
 namespace FluidicsSDK.Managers
@@ -15,14 +9,15 @@ namespace FluidicsSDK.Managers
     public class ConnectionManager
     {
         #region Members
+
         private static ConnectionManager m_instance;
         private readonly List<Connection> m_connections;
         public event EventHandler<ConnectionChangedEventArgs<Connection>> ConnectionChanged;
-  
+
         #endregion
 
-
         #region Methods
+
         /// <summary>
         /// default constructor
         /// </summary>
@@ -67,8 +62,8 @@ namespace FluidicsSDK.Managers
         /// <param name="device"></param>
         /// <exception cref="ArgumentException">tried to remove a connection internal to a device, or a connection the manager doesn't know about</exception>"
         public void Remove(Connection connection, FluidicsDevice device = null)
-        {           
-            
+        {
+
             //if the connection is in the list remove it
             if (m_connections.Contains(connection))
             {
@@ -89,7 +84,7 @@ namespace FluidicsSDK.Managers
             else
             {
                 throw new ArgumentException("The connection is not in manager collection.");
-            }          
+            }
         }
 
 
@@ -118,7 +113,7 @@ namespace FluidicsSDK.Managers
         public void Connect(Port port1, Port port2, FluidicsDevice device = null, ConnectionStyles? style = null)
         {
             //if the connection doesn't already exist, try to create it, or if it's an internal device connection associated with a state, create regardless of if connection exist between them otherwise
-            if (FindConnection(port1, port2) == null || (port1.ParentDevice == device && port2.ParentDevice == device && device != null) )
+            if (FindConnection(port1, port2) == null || (port1.ParentDevice == device && port2.ParentDevice == device && device != null))
             {
                 //but if port1 IS port 2, throw an error, as you cannot connect a port to itself.
                 if (port1 != port2)
@@ -137,15 +132,15 @@ namespace FluidicsSDK.Managers
             {
                 throw new ArgumentException("Connection between those ports already exists");
             }
-        }         
+        }
 
         /// <summary>
         /// Render all connections
         /// </summary>
-        /// <param name="g">a System.Drawing Graphics object</param>
+        /// <param name="g">a System.Windows.Media DrawingContext object</param>
         /// <param name="alpha">an integer representing the requested alpha value to draw the connections with</param>
         /// <param name="scale">a float repsenting how much to scale the connections by</param>
-        public void Render(Graphics g, int alpha, float scale)
+        public void Render(DrawingContext g, byte alpha, float scale)
         {
             foreach (var connection in m_connections)
             {
@@ -156,7 +151,7 @@ namespace FluidicsSDK.Managers
         /// <summary>
         /// Tries to find a classConnection that exists at the specified location
         /// </summary>
-        /// <param name="location"> a System.Drawing.Point representing the location clicked by the user</param>
+        /// <param name="location"> a Point representing the location clicked by the user</param>
         /// <returns>a classConnection object, if one exists at that location, or null</returns>
         internal Connection Select(Point location)
         {
@@ -166,7 +161,7 @@ namespace FluidicsSDK.Managers
             foreach (var connection in tmpList)
             {
                 if (connection.OnPoint(location) && connection.InternalConnectionOf == null)
-                {                   
+                {
                     return connection;
                 }
             }
@@ -196,15 +191,16 @@ namespace FluidicsSDK.Managers
         {
             return m_connections;
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Property to return class instance of classConnectionManager
         /// </summary>
         public static ConnectionManager GetConnectionManager => m_instance ?? (m_instance = new ConnectionManager());
 
         #endregion
-
     }
 }

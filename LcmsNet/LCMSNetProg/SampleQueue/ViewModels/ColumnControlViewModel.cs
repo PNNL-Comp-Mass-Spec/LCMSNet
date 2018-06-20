@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using LcmsNet.SampleQueue.Views;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -20,7 +20,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<classLCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
 
         private readonly ObservableAsPropertyHelper<string> columnHeader;
 
@@ -49,14 +49,14 @@ namespace LcmsNet.SampleQueue.ViewModels
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
                 .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
 
-            Column = new classColumnData() {ID = -2, Name = "DevColumn"};
+            Column = new ColumnData() {ID = -2, Name = "DevColumn"};
             CommandsVisible = commandsAreVisible;
         }
 
         /// <summary>
         /// Constructor that accepts dmsView and sampleDataManager
         /// </summary>
-        public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, classColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
+        public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, ColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
             filteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.Equals(x.Sample.ColumnData));
 
@@ -77,7 +77,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             VolumeColumnVisible = false;
             CartConfigColumnVisible = false;
 
-            m_columnData = new classColumnData
+            m_columnData = new ColumnData
             {
                 ID = -1
             };
@@ -85,7 +85,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             SetupCommands();
 
             this.WhenAnyValue(x => x.ContainsKeyboardFocus).Subscribe(x => this.SetBackground());
-            this.WhenAnyValue(x => x.Column.Status).Subscribe(x => ColumnEnabled = x != enumColumnStatus.Disabled);
+            this.WhenAnyValue(x => x.Column.Status).Select(x => x != ColumnStatus.Disabled).ToProperty(this, x => x.ColumnEnabled, out columnEnabled, true);
 
             Column = columnData;
             CommandsVisible = commandsAreVisible;
@@ -93,7 +93,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private bool containsKeyboardFocus = false;
         private bool commandsVisible = true;
-        private bool columnEnabled = true;
+        private ObservableAsPropertyHelper<bool> columnEnabled;
         private SolidColorBrush normalColor = null;
 
         public bool ContainsKeyboardFocus
@@ -108,11 +108,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
         }
 
-        public bool ColumnEnabled
-        {
-            get { return columnEnabled; }
-            private set { this.RaiseAndSetIfChanged(ref columnEnabled, value); }
-        }
+        public bool ColumnEnabled => columnEnabled != null ? columnEnabled.Value : true;
 
         private void SetBackground()
         {
@@ -121,9 +117,9 @@ namespace LcmsNet.SampleQueue.ViewModels
                 normalColor = BackColor;
                 BackColor = Brushes.DodgerBlue;
                 var columnColor = Column.Color;
-                if (columnColor != System.Drawing.Color.Empty && columnColor != System.Drawing.Color.Transparent)
+                if (columnColor != Color.FromArgb(0,0,0,0) && columnColor != Colors.Transparent)
                 {
-                    BackColor = new SolidColorBrush(Color.FromArgb(columnColor.A, columnColor.R, columnColor.G, columnColor.B));
+                    BackColor = new SolidColorBrush(columnColor);
                 }
             }
             else if (normalColor != null)
@@ -147,7 +143,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Data object reference to synchronize column data with.
         /// </summary>
-        private classColumnData m_columnData;
+        private ColumnData m_columnData;
 
         #endregion
 
@@ -156,7 +152,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Gets or sets the column number id for this control.
         /// </summary>
-        public classColumnData Column
+        public ColumnData Column
         {
             get { return m_columnData; }
             private set { this.RaiseAndSetIfChanged(ref m_columnData, value); }
@@ -176,8 +172,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             AddBlankAppendCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
             RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.CreateUnused), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(Column, enumColumnDataHandling.CreateUnused));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, enumMoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, enumMoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
             MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused), this.WhenAnyValue(x => x.ItemsSelected));
         }
 
@@ -191,7 +187,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void SetColumnStatus()
         {
             // Status updates
-            if (m_columnData.Status == enumColumnStatus.Disabled)
+            if (m_columnData.Status == ColumnStatus.Disabled)
             {
                 IsViewEnabled = false;
                 BackColor = Brushes.DarkGray;
@@ -210,7 +206,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
-        protected override classSampleData AddNewSample(bool insertIntoUnused)
+        protected override SampleData AddNewSample(bool insertIntoUnused)
         {
             var newData = base.AddNewSample(insertIntoUnused);
 
@@ -236,7 +232,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="samples"></param>
         /// <param name="insertIntoUnused"></param>
         /// <returns></returns>
-        protected override void AddSamplesToManager(List<classSampleData> samples, bool insertIntoUnused)
+        protected override void AddSamplesToManager(List<SampleData> samples, bool insertIntoUnused)
         {
             // For every sample, add the column data to it, then add it into the manager.
             // We don't add to our list first so the manager can verify the sample and
@@ -253,13 +249,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="offset">Amount to move the samples (-1 for lower sequence numbers) (1 for higher sequence numbers)</param>
         /// <param name="moveType"></param>
-        protected override void MoveSelectedSamples(int offset, enumMoveSampleType moveType)
+        protected override void MoveSelectedSamples(int offset, MoveSampleType moveType)
         {
-            var numEnabledColumns = classCartConfiguration.NumberOfEnabledColumns;
+            var numEnabledColumns = CartConfiguration.NumberOfEnabledColumns;
 
             // We are moving the sample by N in the queue to offset for the enabled / disabled columns.
             offset *= numEnabledColumns;
-            base.MoveSelectedSamples(offset, enumMoveSampleType.Column);
+            base.MoveSelectedSamples(offset, MoveSampleType.Column);
         }
 
         /// <summary>
@@ -286,8 +282,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var selector = new MoveToColumnSelectorViewModel();
             var selectorWindow = new MoveToColumnSelectorWindow() { DataContext = selector };
-            // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(selectorWindow);
 
             var result = selectorWindow.ShowDialog();
 
@@ -302,17 +296,17 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 // Make sure the samples can actually run, e.g. don't put a sample on column 2 already back onto column 2.
                 // Don't put a column that has been run, at the end of the queue again.
-                var samples = new List<classSampleData>();
+                var samples = new List<SampleData>();
                 foreach (var sample in selectedSamples)
                 {
-                    if (sample.RunningStatus == enumSampleRunningStatus.Queued && column != sample.ColumnData.ID)
+                    if (sample.RunningStatus == SampleRunningStatus.Queued && column != sample.ColumnData.ID)
                     {
                         samples.Add(sample);
                     }
                 }
 
                 // Find the first valid LC Method that uses the specified column?
-                classLCMethod method = null;
+                LCMethod method = null;
                 foreach (var lcMethod in SampleDataManager.LcMethodOptions)
                 {
                     if (lcMethod.Column == column)
@@ -334,7 +328,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     {
                         // ids.Add(sample.UniqueID);
                         sample.LCMethod = method;
-                        sample.ColumnData = classCartConfiguration.Columns[column];
+                        sample.ColumnData = CartConfiguration.Columns[column];
                     }
 
                     // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.
@@ -363,7 +357,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        classApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
+                        ApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
                     }
                     if (samples.Count > 0)
                     {

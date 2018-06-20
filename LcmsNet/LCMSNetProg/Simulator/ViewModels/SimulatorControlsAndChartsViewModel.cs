@@ -3,8 +3,8 @@ using System.IO;
 using FluidicsSDK;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Method;
+using LcmsNetSDK;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels
@@ -28,7 +28,7 @@ namespace LcmsNet.Simulator.ViewModels
         {
             simInstance = FluidicsSimulator.FluidicsSimulator.GetInstance;
 
-            checkList = new ModelCheckListViewModel(FluidicsModeratorWpf.Moderator, FluidicsModeratorWpf.Moderator.GetModelCheckers());
+            checkList = new ModelCheckListViewModel(FluidicsModerator.Moderator, FluidicsModerator.Moderator.GetModelCheckers());
 
             chartsVm = new ChartViewModel();
             methodStageVm = new LCMethodStageViewModel();
@@ -75,24 +75,24 @@ namespace LcmsNet.Simulator.ViewModels
         /// <summary>
         /// Gets or sets the method animation preview options.
         /// </summary>
-        public classMethodPreviewOptions MethodPreviewOptions { get; set; }
+        public MethodPreviewOptions MethodPreviewOptions { get; set; }
 
         /// <summary>
         /// Saves the given method to file.
         /// </summary>
         /// <param name="method"></param>
-        public bool SaveMethod(classLCMethod method)
+        public bool SaveMethod(LCMethod method)
         {
             // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
             if (method == null)
                 return false;
 
             // Create a new writer.
-            var writer = new classLCMethodWriter();
+            var writer = new LCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_APPLICATIONPATH), classLCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = Path.Combine(path, method.Name + classLCMethodFactory.CONST_LC_METHOD_EXTENSION);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
+            path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
             return writer.WriteMethod(path, method);

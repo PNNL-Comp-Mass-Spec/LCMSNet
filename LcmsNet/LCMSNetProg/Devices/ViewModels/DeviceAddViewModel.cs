@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
@@ -15,15 +15,15 @@ namespace LcmsNet.Devices.ViewModels
             // Design-time data
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                var devices = new List<classDevicePluginInformation>();
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Timer1", "Timers")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Timer2", "Timers")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Error1", "Errors")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Error2", "Errors")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Error3", "Errors")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Pump1", "Pumps")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Pump2", "Pumps")));
-                devices.Add(new classDevicePluginInformation(typeof(classTimerDevice), new classDeviceControlAttribute(null, "Pump3", "Pumps")));
+                var devices = new List<DevicePluginInformation>();
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Timer1", "Timers")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Timer2", "Timers")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error1", "Errors")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error2", "Errors")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error3", "Errors")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump1", "Pumps")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump2", "Pumps")));
+                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump3", "Pumps")));
                 AddPluginInformation(devices);
                 SelectedPlugin = devices[3];
                 addedPlugins.Add(devices[2]);
@@ -34,10 +34,10 @@ namespace LcmsNet.Devices.ViewModels
         }
 
         private bool initializeOnAdd = false;
-        private readonly ReactiveList<classDevicePluginInformation> addedPlugins = new ReactiveList<classDevicePluginInformation>();
+        private readonly ReactiveList<DevicePluginInformation> addedPlugins = new ReactiveList<DevicePluginInformation>();
         private readonly ReactiveList<PluginCategoryData> availablePlugins = new ReactiveList<PluginCategoryData>();
-        private readonly ReactiveList<classDevicePluginInformation> selectedPlugins = new ReactiveList<classDevicePluginInformation>();
-        private classDevicePluginInformation selectedPlugin;
+        private readonly ReactiveList<DevicePluginInformation> selectedPlugins = new ReactiveList<DevicePluginInformation>();
+        private DevicePluginInformation selectedPlugin;
 
         /// <summary>
         /// Gets or sets the initialize on add flag.
@@ -48,11 +48,11 @@ namespace LcmsNet.Devices.ViewModels
             set { this.RaiseAndSetIfChanged(ref initializeOnAdd, value); }
         }
 
-        public IReadOnlyReactiveList<classDevicePluginInformation> AddedPlugins => addedPlugins;
+        public IReadOnlyReactiveList<DevicePluginInformation> AddedPlugins => addedPlugins;
         public IReadOnlyReactiveList<PluginCategoryData> AvailablePlugins => availablePlugins;
-        public ReactiveList<classDevicePluginInformation> SelectedPlugins => selectedPlugins;
+        public ReactiveList<DevicePluginInformation> SelectedPlugins => selectedPlugins;
 
-        public classDevicePluginInformation SelectedPlugin
+        public DevicePluginInformation SelectedPlugin
         {
             get { return selectedPlugin; }
             set { this.RaiseAndSetIfChanged(ref selectedPlugin, value); }
@@ -62,7 +62,7 @@ namespace LcmsNet.Devices.ViewModels
         /// Adds the supplied plugins to the check box list.
         /// </summary>
         /// <param name="plugins"></param>
-        public void AddPluginInformation(List<classDevicePluginInformation> plugins)
+        public void AddPluginInformation(List<DevicePluginInformation> plugins)
         {
             var mapping = new Dictionary<string, PluginCategoryData>();
             foreach (var plugin in plugins)
@@ -81,7 +81,7 @@ namespace LcmsNet.Devices.ViewModels
             }
         }
 
-        public List<classDevicePluginInformation> GetSelectedPlugins()
+        public List<DevicePluginInformation> GetSelectedPlugins()
         {
             return addedPlugins.ToList();
         }
@@ -123,9 +123,9 @@ namespace LcmsNet.Devices.ViewModels
     {
         public string Category { get; private set; }
 
-        public ReactiveList<classDevicePluginInformation> Plugins => plugins;
+        public ReactiveList<DevicePluginInformation> Plugins => plugins;
 
-        private readonly ReactiveList<classDevicePluginInformation> plugins = new ReactiveList<classDevicePluginInformation>();
+        private readonly ReactiveList<DevicePluginInformation> plugins = new ReactiveList<DevicePluginInformation>();
 
         public PluginCategoryData(string categoryName)
         {

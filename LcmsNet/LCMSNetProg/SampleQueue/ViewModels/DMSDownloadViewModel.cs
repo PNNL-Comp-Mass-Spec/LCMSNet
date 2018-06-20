@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using LcmsNetDataClasses;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 using LcmsNetSQLiteTools;
 using ReactiveUI;
 
@@ -26,7 +28,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Class variables"
 
-        private List<classSampleData> dmsRequestList;
+        private readonly List<SampleData> dmsRequestList = new List<SampleData>();
         private string matchString;
         private string cartName = string.Empty;
         private string cartConfigName = string.Empty;
@@ -41,11 +43,13 @@ namespace LcmsNet.SampleQueue.ViewModels
         private string block = string.Empty;
         private bool unassignedRequestsOnly;
         private readonly ReactiveList<string> lcCartComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> lcCartSearchComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> lcCartConfigComboBoxOptions = new ReactiveList<string>();
-        private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel();
+        private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel(true);
         private bool loadingData;
         private string requestsFoundString = string.Empty;
-        private DMSDownloadDataViewModel selectedRequestData = new DMSDownloadDataViewModel();
+        private DMSDownloadDataViewModel selectedRequestData = new DMSDownloadDataViewModel(false);
+        private bool blockingEnabled = false;
 
         public string WindowTitle
         {
@@ -118,6 +122,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public IReadOnlyReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
 
+        public IReadOnlyReactiveList<string> LcCartSearchComboBoxOptions => lcCartSearchComboBoxOptions;
+
         public string CartConfigName
         {
             get { return cartConfigName; }
@@ -150,6 +156,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set { this.RaiseAndSetIfChanged(ref selectedRequestData, value); }
         }
 
+        private bool BlockingEnabled
+        {
+            get { return blockingEnabled; }
+            set { this.RaiseAndSetIfChanged(ref blockingEnabled, value); }
+        }
+
         #endregion
 
         #region "Event Handlers"
@@ -157,55 +169,50 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Command for FIND button to load available request list from DMS
         /// </summary>
-        public ReactiveCommand FindCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> FindCommand { get; protected set; }
 
         /// <summary>
         /// Command for MoveDown button to move requests from Available Requests to Requests To Run list
         /// </summary>
-        public ReactiveCommand MoveDownCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; protected set; }
 
         /// <summary>
         /// Command for MoveUp button to move requests from Requests To Run to Available Requests list
         /// </summary>
-        public ReactiveCommand MoveUpCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
 
         /// <summary>
         /// Command for OK button to tell calling form that new DMS data is available
         /// </summary>
-        public ReactiveCommand OkCommand { get; protected set; }
+        public ReactiveCommand<Unit, bool> OkCommand { get; protected set; }
 
         /// <summary>
         /// Command to trigger list of carts in combo boxes to be updated
         /// </summary>
-        public ReactiveCommand UpdateCartInfoCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> RefreshCartInfoCommand { get; protected set; }
+
+        /// <summary>
+        /// Command to sort available requests by batch, block, and run order
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> SortByBatchBlockRunOrderCommand { get; protected set; }
 
         private void SetupCommands()
         {
-            FindCommand = ReactiveCommand.Create(() => FindDmsRequests());
-            MoveDownCommand = ReactiveCommand.Create(() => MoveRequestsToRunList());
-            MoveUpCommand = ReactiveCommand.Create(() => RemoveRequestsFromRunList());
-            OkCommand = ReactiveCommand.Create(() => UpdateDMSCartAssignment());
-            UpdateCartInfoCommand = ReactiveCommand.Create(() => UpdateCartInfo());
-        }
-
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            // Update cart assignments in DMS
-            //TODO: if (UpdateDMSCartAssignment())
-            //TODO: {
-            //TODO:     // Hide the form if update was successful
-            //TODO:     Hide();
-            //TODO:     DialogResult = DialogResult.OK;
-            //TODO: }
+            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
+            MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
+            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
+            OkCommand = ReactiveCommand.Create(UpdateDMSCartAssignment);
+            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
+            SortByBatchBlockRunOrderCommand = ReactiveCommand.CreateFromTask(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
         }
 
         /// <summary>
         /// Causes list of carts in combo boxes to be updated
         /// </summary>
-        private void UpdateCartInfo()
+        private void RefreshCartInfo()
         {
-            UpdateCartList();
-            UpdateCartConfigList();
+            RefreshCartList();
+            RefreshCartConfigList();
         }
 
         #endregion
@@ -237,7 +244,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             string dbInUse;
             try
             {
-                if (LcmsNet.Configuration.clsDMSDataContainer.DBTools.DMSVersion.Contains("_T3"))
+                if (LcmsNet.Configuration.DMSDataContainer.DBTools.DMSVersion.Contains("_T3"))
                 {
                     dbInUse = " (Using Development Database)";
                 }
@@ -254,14 +261,14 @@ namespace LcmsNet.SampleQueue.ViewModels
             WindowTitle = "LcmsNet V" + Assembly.GetEntryAssembly().GetName().Version + dbInUse;
 
             // Load the LC cart lists
-            UpdateCartList();
-            UpdateCartConfigList();
+            RefreshCartList();
+            RefreshCartConfigList();
 
             // Cart name
-            CartName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTNAME);
-            CartConfigName = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CARTCONFIGNAME);
+            CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+            CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
 
-            if (CartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
+            if (CartName.ToLower() == LCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 // No cart name is assigned, user will need to select one
                 CartName = "";
@@ -271,18 +278,19 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Loads the LC cart dropdowns with data from cache
         /// </summary>
-        private void UpdateCartList()
+        private void RefreshCartList()
         {
             List<string> cartList;
 
             lcCartComboBoxOptions.Clear();
+            lcCartSearchComboBoxOptions.Clear();
 
             // Get the list of carts from DMS
             try
             {
-                cartList = classSQLiteTools.GetCartNameList();
+                cartList = SQLiteTools.GetCartNameList();
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart listing.\r\n" +
@@ -290,7 +298,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
                 var innerException = string.Empty;
@@ -309,13 +317,19 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     lcCartComboBoxOptions.AddRange(cartList);
                 }
+                using (lcCartSearchComboBoxOptions.SuppressChangeNotifications())
+                {
+                    // Add a blank for "No cart specified"
+                    lcCartSearchComboBoxOptions.Add("");
+                    lcCartSearchComboBoxOptions.AddRange(cartList);
+                }
             }
         }
 
         /// <summary>
         /// Loads the LC cart config dropdown with data from cache
         /// </summary>
-        private void UpdateCartConfigList()
+        private void RefreshCartConfigList()
         {
             List<string> cartConfigList;
 
@@ -324,9 +338,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of cart configuration names from DMS
             try
             {
-                cartConfigList = classSQLiteTools.GetCartConfigNameList(false);
+                cartConfigList = SQLiteTools.GetCartConfigNameList(false);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The SQLite connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
@@ -334,7 +348,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 // There was a problem getting the list of LC carts from the cache db
                 var innerException = string.Empty;
@@ -355,15 +369,16 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
             }
         }
+
         /// <summary>
         /// Loads listViewAvailableRequests with all requests in DMS matching specified criteria
         /// </summary>
-        private async void FindDmsRequests()
+        private async Task FindDmsRequests()
         {
-            List<classSampleData> tempRequestList;
+            List<SampleData> tempRequestList;
 
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
-            var queryData = new classSampleQueryData {
+            var queryData = new SampleQueryData {
                 RequestName = this.RequestName
             };
 
@@ -415,7 +430,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
                 tempRequestList = dmsTools.GetSamplesFromDMS(queryData);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting request listing\r\n";
@@ -423,7 +438,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
                 return;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 var errMsg = ex.Message;
                 if (ex.InnerException != null)
@@ -457,12 +472,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             RequestsFoundString = tempRequestList.Count + " requests found";
 
             // Add the requests to the listview
-            if (dmsRequestList == null)
-            {
-                dmsRequestList = new List<classSampleData>();
-            }
-
-            var availReqList = new List<classSampleData>();
+            var availReqList = new List<SampleData>();
             foreach (var request in tempRequestList)
             {
                 // Determine if already in list of requests
@@ -494,12 +504,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // Hide the wait message and display the listview again
-//              listviewAvailableRequests.EndUpdate();
             LoadingData = false;
-//              classStatusTools.SendStatusMsg("Found " + listviewAvailableRequests.Items.Count.ToString() + " requests in DMS");
+            //classStatusTools.SendStatusMsg("Found " + listviewAvailableRequests.Items.Count.ToString() + " requests in DMS");
 
             // Check to see if any items have blocking enabled
-            if (IsBlockingEnabled(tempRequestList))
+            BlockingEnabled = IsBlockingEnabled(tempRequestList);
+            if (BlockingEnabled)
             {
                 var msg =
                     "You have downloaded samples that have blocking enabled. Please be sure you have downloaded the " +
@@ -508,17 +518,17 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private List<classSampleData> GetDMSData(classSampleQueryData queryData)
+        private List<SampleData> GetDMSData(SampleQueryData queryData)
         {
-            var tempRequestList = new List<classSampleData>();
+            var tempRequestList = new List<SampleData>();
 
             // Get a list of requests from DMS
             try
             {
-                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting request listing\r\n";
@@ -526,7 +536,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return null;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 var errMsg = ex.Message;
                 if (ex.InnerException != null)
@@ -548,18 +558,26 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="inputData">List containing downloaded samples</param>
         /// <returns>TRUE if any samples have blcoking enabled; otherwise FALSE</returns>
-        private bool IsBlockingEnabled(List<classSampleData> inputData)
+        private bool IsBlockingEnabled(List<SampleData> inputData)
         {
             foreach (var testSample in inputData)
             {
                 if (testSample.DmsData.Block > 0)
                 {
-                    // Blocking is enabled for this sample, no furhter test required
+                    // Blocking is enabled for this sample, no further test required
                     return true;
                 }
             }
             // If we got to here, no samples have blocking enabled
             return false;
+        }
+
+        /// <summary>
+        /// Sorts the available requests by batch, block, and run order
+        /// </summary>
+        private async Task SortByBatchBlockRunOrder()
+        {
+            await Task.Run(() => AvailableRequestData.SortByBatchBlockRunOrder());
         }
 
         /// <summary>
@@ -612,7 +630,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="request">classDMSData object passed in from FindIndex method</param>
         /// <returns>True if match is made; otherwise False</returns>
-        private bool PredContainsRequestName(classSampleData request)
+        private bool PredContainsRequestName(SampleData request)
         {
             if (string.Equals(request.DmsData.RequestName, matchString, StringComparison.CurrentCultureIgnoreCase))
             {
@@ -633,19 +651,19 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         /// <summary>
         /// Transfers the current list of classDMSData objects that have been selected
-        /// for running to the calling program as a list of classSampleData objects
+        /// for running to the calling program as a list of SampleData objects
         /// </summary>
-        /// <returns>List of classSampleData objects</returns>
-        public List<classSampleData> GetNewSamplesDMSView()
+        /// <returns>List of SampleData objects</returns>
+        public List<SampleData> GetNewSamplesDMSView()
         {
-            var retList = new List<classSampleData>();
+            var retList = new List<SampleData>();
 
             foreach (var tempSampleData in SelectedRequestData.Data)
             {
                 tempSampleData.DmsData.CartName = cartName;
                 tempSampleData.DmsData.CartConfigName = cartConfigName;
 
-                //                  classSampleData tempSampleData = CopyDMSDataObj(tempDMSData);
+                //                  SampleData tempSampleData = CopyDMSDataObj(tempDMSData);
                 retList.Add(tempSampleData);
             }
 //              classStatusTools.SendStatusMsg("Adding " + retList.Count.ToString() + " samples from DMS");
@@ -656,13 +674,18 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Updates selected requests in DMS to show new cart assignment
         /// </summary>
         /// <returns></returns>
-        bool UpdateDMSCartAssignment()
+        private bool UpdateDMSCartAssignment()
         {
             // Verify a cart is specified
-            if (cartName.ToLower() == classLCMSSettings.CONST_UNASSIGNED_CART_NAME)
+            if (cartName.ToLower() == LCMSSettings.CONST_UNASSIGNED_CART_NAME)
             {
                 MessageBox.Show("Cart name must be specified", "CART NAME NOT SPECIFIED");
                 return false;
+            }
+
+            if (dmsRequestList.Count == 0)
+            {
+                return true;
             }
 
             // Update the cart assignments in DMS
@@ -687,12 +710,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Call the DMS stored procedure to update the cart assignments
             bool success;
 
-            var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
+            var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
             try
             {
                 success = dmsTools.UpdateDMSCartAssignment(reqIDs, cartName, cartConfigName, true);
             }
-            catch (classDatabaseConnectionStringException ex)
+            catch (DatabaseConnectionStringException ex)
             {
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart listing\r\n";
@@ -700,7 +723,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return false;
             }
-            catch (classDatabaseDataException ex)
+            catch (DatabaseDataException ex)
             {
                 var errMsg = ex.Message;
                 if (ex.InnerException != null)
@@ -710,7 +733,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return true;
             }
-            catch (classDatabaseStoredProcException ex)
+            catch (DatabaseStoredProcException ex)
             {
                 var errMsg = "Error " + ex.ReturnCode + " while executing stored procedure ";
                 errMsg = errMsg + ex.ProcName + ": " + ex.ErrMessage;

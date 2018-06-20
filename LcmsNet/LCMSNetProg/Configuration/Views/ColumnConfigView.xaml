@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Configuration.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              mc:Ignorable="d"
              d:DesignHeight="57" d:DesignWidth="266"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ColumnConfigViewModel}, IsDesignTimeCreatable=True}">
@@ -21,7 +22,7 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Background="{Binding ColumnData.ColorWpf, Converter={StaticResource ColorToSolidColorBrushConverter}}" IsEnabled="{Binding ColumnEnabled}" />
+        <Button Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Background="{Binding ColumnData.Color, Converter={StaticResource ColorToSolidColorBrushConverter}}" IsEnabled="{Binding ColumnEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="8,8,8,25" HorizontalAlignment="Center" VerticalAlignment="Center" >
             <Run Background="White" Text="{Binding ColumnId, Mode=OneWay}" />
         </Label>
@@ -30,7 +31,7 @@
             Getting the Xceed WPF Toolkit ColorPicker to look similar to the button, and still function properly: Hard.
             So, instead putting an invisible ColorPicker over the button for interaction purposes, while making it seem to work like a button.
         -->
-        <xctk:ColorPicker Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Opacity="0" DisplayColorAndName="False" SelectedColor="{Binding ColumnData.ColorWpf}" IsEnabled="{Binding ColumnEnabled}" ShowAvailableColors="True" ShowStandardColors="True" ShowDropDownButton="False" />
+        <xctk:ColorPicker Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Opacity="0" DisplayColorAndName="False" SelectedColor="{Binding ColumnData.Color}" IsEnabled="{Binding ColumnEnabled}" ShowAvailableColors="True" ShowStandardColors="True" ShowDropDownButton="False" />
         <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" SelectedItem="{Binding ColumnData.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnNamesComboBoxOptions}" IsEnabled="{Binding ColumnEnabled}" VerticalAlignment="Center" />
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
             <CheckBox VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding ColumnEnabled}">Enabled</CheckBox>

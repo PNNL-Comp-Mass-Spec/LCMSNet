@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using LcmsNetDataClasses;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -24,9 +25,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public SampleRandomizerViewModel(List<classSampleData> inputList)
+        public SampleRandomizerViewModel(List<SampleData> inputList)
         {
-            inputSampleList = new ReactiveList<classSampleData>(inputList);
+            inputSampleList = new ReactiveList<SampleData>(inputList);
             InitControls();
         }
 
@@ -36,7 +37,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void InitControls()
         {
             // Load list of randomizer types
-            randomizersDict = classRandomizerPluginTools.GetRandomizerPlugins();
+            randomizersDict = RandomizerPluginTools.GetRandomizerPlugins();
 
             if (randomizersDict.Count < 1)
                 return;
@@ -54,8 +55,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Class variables"
 
-        private readonly IReadOnlyReactiveList<classSampleData> inputSampleList = new ReactiveList<classSampleData>();
-        private readonly ReactiveList<classSampleData> outputSampleList = new ReactiveList<classSampleData>();
+        private readonly IReadOnlyReactiveList<SampleData> inputSampleList = new ReactiveList<SampleData>();
+        private readonly ReactiveList<SampleData> outputSampleList = new ReactiveList<SampleData>();
         private Dictionary<string, Type> randomizersDict = new Dictionary<string, Type>();
         private readonly ReactiveList<string> randomizerNameList = new ReactiveList<string>();
         private string currentStatus = "Ready.";
@@ -66,8 +67,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Properties"
 
-        public IReadOnlyReactiveList<classSampleData> InputSampleList => inputSampleList;
-        public IReadOnlyReactiveList<classSampleData> OutputSampleList => outputSampleList;
+        public IReadOnlyReactiveList<SampleData> InputSampleList => inputSampleList;
+        public IReadOnlyReactiveList<SampleData> OutputSampleList => outputSampleList;
         public IReadOnlyReactiveList<string> RandomizerNameList => randomizerNameList;
 
         public string CurrentStatus

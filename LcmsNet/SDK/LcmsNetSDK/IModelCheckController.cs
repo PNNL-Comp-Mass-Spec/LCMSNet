@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetSDK;
 
-namespace LcmsNetDataClasses
+namespace LcmsNetSDK
 {
     public class ModelCheckControllerEventArgs : EventArgs
     {
@@ -18,7 +17,6 @@ namespace LcmsNetDataClasses
 
         public IFluidicsModelChecker ModelChecker { get; set; }
     }
-
 
     public interface IModelCheckController
     {

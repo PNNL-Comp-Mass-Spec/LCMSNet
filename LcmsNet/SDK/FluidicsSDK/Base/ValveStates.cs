@@ -43,7 +43,7 @@ namespace FluidicsSDK.Base
         {
             string customString;
             switch (s)
-            {    
+            {
                 case FifteenPositionState.P1:
                     customString = "1";
                     break;
@@ -59,7 +59,7 @@ namespace FluidicsSDK.Base
                 case FifteenPositionState.P5:
                     customString = "5";
                     break;
-                case FifteenPositionState.P6:                    
+                case FifteenPositionState.P6:
                     customString = "6";
                     break;
                 case FifteenPositionState.P7:
@@ -212,6 +212,6 @@ namespace FluidicsSDK.Base
                     throw new ArgumentException("Error converting state to string");
             }
             return customString;
-        }  
+        }
     }
 }

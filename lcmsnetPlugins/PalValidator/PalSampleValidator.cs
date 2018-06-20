@@ -1,60 +1,102 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetDataClasses.Experiment;
-using LcmsNetDataClasses.Configuration;
-using LcmsNetDataClasses.Data;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Logging;
 
-namespace PALAutoSampler.Validator
+namespace LcmsNetPlugins.PalValidator
 {
+    /// <summary>
+    /// Sample Validator for PAL AutoSampler
+    /// </summary>
     [Export(typeof(ISampleValidator))]
     [ExportMetadata("Name", "PalSampleValidations")]
     [ExportMetadata("Version", "1.0")]
     public class PalSampleValidator:ISampleValidator
     {
-
-        public List<LcmsNetDataClasses.classSampleData> ValidateBlocks(List<LcmsNetDataClasses.classSampleData> samples)
+        /// <summary>
+        /// Validate the sample blocks
+        /// </summary>
+        /// <param name="samples"></param>
+        /// <returns></returns>
+        public List<SampleData> ValidateBlocks(List<SampleData> samples)
         {
             // Blocks don't matter to the PAL.
-            return new List<LcmsNetDataClasses.classSampleData>();
+            return new List<SampleData>();
         }
 
-        public List<classSampleValidationError> ValidateSamples(LcmsNetDataClasses.classSampleData sample)
+        /// <summary>
+        /// Validate the sample PAL settings: PAL method, tray, and vial/well
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <returns></returns>
+        public List<SampleValidationError> ValidateSamples(SampleData sample)
         {
-            var errors = new List<classSampleValidationError>();
+            var errors = new List<SampleValidationError>();
 
             //
             // We've validated the method, and the devices... Now we need to validate the PAL settings.
             //
             if (string.IsNullOrEmpty(sample.PAL.Method))
-                errors.Add(new classSampleValidationError("The PAL Method is not set.", enumSampleValidationError.PalMethodNotSpecified));
+                errors.Add(new SampleValidationError("The PAL Method is not set.", SampleValidationErrorType.PalMethodNotSpecified));
 
             if (string.IsNullOrEmpty(sample.PAL.PALTray))
             {
-                errors.Add(new classSampleValidationError("The PAL Tray is not set.", enumSampleValidationError.PalTrayNotSpecified));
+                errors.Add(new SampleValidationError("The PAL Tray is not set.", SampleValidationErrorType.PalTrayNotSpecified));
             }
             else if (sample.PAL.PALTray == "(select)")
             {
-                errors.Add(new classSampleValidationError("The PAL Tray is not set.", enumSampleValidationError.PalTrayNotSpecified));
+                errors.Add(new SampleValidationError("The PAL Tray is not set.", SampleValidationErrorType.PalTrayNotSpecified));
             }
 
             if (sample.DmsData.DatasetName.ToLower() == "(unused)")
             {
-                errors.Add(new classSampleValidationError("The dataset name is not correct.", enumSampleValidationError.DatasetNameError));
+                errors.Add(new SampleValidationError("The dataset name is not correct.", SampleValidationErrorType.DatasetNameError));
             }
 
             //
             // Make sure the volume is set.
             //
-            if (sample.Volume < classCartConfiguration.MinimumVolume)
+            if (sample.Volume < CartConfiguration.MinimumVolume)
             {
-                errors.Add(new classSampleValidationError("The Sample Volume is lower than the instrument can handle.", enumSampleValidationError.InjectionVolumeOutOfRange));
+                errors.Add(new SampleValidationError("The Sample Volume is lower than the instrument can handle.", SampleValidationErrorType.InjectionVolumeOutOfRange));
             }
 
-            //TODO: Fix this to validate what kind of tray/vial setup is being used.
-            if (sample.PAL.Well <= classPalData.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 1536)
-                errors.Add(new classSampleValidationError("The PAL Well/Vial is not set.", enumSampleValidationError.PalVialNotSpecified));
+            if (AutoSamplers.ConnectedAutoSamplers.Count == 0 || !AutoSamplers.ConnectedAutoSamplers[0].TrayNamesAndMaxVials.TryGetValue(sample.PAL.PALTray, out var maxVial))
+            {
+                LogOnce("NoPAL", "Could not access the PAL for sample validation!");
+                if (sample.PAL.Well <= PalData.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 1536)
+                    errors.Add(new SampleValidationError("The PAL Well/Vial is not set.", SampleValidationErrorType.PalVialNotSpecified));
+            }
+            else
+            {
+                LogOnce("UsingPAL", $"Using PAL data for sample validation, tray {sample.PAL.PALTray}, vial/well {sample.PAL.Well}");
+                if (sample.PAL.Well <= PalData.CONST_DEFAULT_VIAL_NUMBER)
+                {
+                    errors.Add(new SampleValidationError("The PAL Well/Vial is not set.", SampleValidationErrorType.PalVialNotSpecified));
+                }
+                else if (sample.PAL.Well > maxVial)
+                {
+                    errors.Add(new SampleValidationError($"The PAL Well/Vial is out of range for tray {sample.PAL.PALTray}; maximum is {maxVial}, value is {sample.PAL.Well}.", SampleValidationErrorType.PalVialNotSpecified));
+                }
+            }
 
-                return errors;
+            return errors;
         }
+
+        private void LogOnce(string key, string message)
+        {
+            if (LoggedKeys.Contains(key))
+            {
+                return;
+            }
+
+            ApplicationLogger.LogMessage(0, message);
+            LoggedKeys.Add(key);
+        }
+
+        private static readonly List<string> LoggedKeys = new List<string>(2);
     }
 }

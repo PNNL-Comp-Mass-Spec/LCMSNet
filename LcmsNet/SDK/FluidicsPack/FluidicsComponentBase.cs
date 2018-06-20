@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsPack
 {
@@ -25,7 +25,7 @@ namespace FluidicsPack
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -73,20 +73,20 @@ namespace FluidicsPack
         }
 
 #pragma warning disable 0067
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceErrorEventArgs> Error;
 
         public event EventHandler DeviceSaveRequired;
 #pragma warning restore 0067
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
         }
 
-        public enumDeviceType DeviceType => enumDeviceType.Fluidics;
+        public DeviceType DeviceType => DeviceType.Fluidics;
 
         public bool Emulation
         {

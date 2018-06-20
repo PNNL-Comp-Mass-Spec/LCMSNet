@@ -8,11 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Base;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
 using LcmsNetSDK;
-using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.ModelCheckers
 {
@@ -24,9 +23,9 @@ namespace FluidicsSDK.ModelCheckers
         private readonly List<string> m_status;
         private const string NO_PATH_FOUND = "No Sink Found";
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
-        public event EventHandler<classDeviceErrorEventArgs> Error
+        public event EventHandler<DeviceErrorEventArgs> Error
         {
             add { }
             remove { }
@@ -122,15 +121,15 @@ namespace FluidicsSDK.ModelCheckers
                 //No sink was found, so color the path red.
                 foreach(var connection in pathTaken)
                 {
-                    connection.Color = Color.Red;
+                    connection.Color = Colors.Red;
                 }
 
                 //if no sink is found, report to the notifcation system and add to the status list to be returned
-                StatusUpdate?.Invoke(this, new classDeviceStatusEventArgs(enumDeviceStatus.Initialized, NO_PATH_FOUND, message,  this));
+                StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.Initialized, NO_PATH_FOUND,  this, message));
                 status.Add(new ModelStatus("No Sink on Path", "No sink on on path", Category, string.Empty,string.Empty, null, p.ParentDevice.IDevice));
             }
             watch.Stop();
-            //LcmsNetDataClasses.Logging.classApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.classApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "NoSink check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
+            //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "NoSink check time elapsed: " + watch.Elapsed.TotalMilliseconds.ToString() + "ms");
             return status;
         }
 

@@ -21,26 +21,32 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Margin="3" Command="{Binding SaveAsCommand}">
+        <DockPanel Grid.Row="0" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Margin="3" Command="{Binding RefreshCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="/Images/Save.png" MaxHeight="20" />
+                    <!--<Image Source="{StaticResource SaveImage}" MaxHeight="20" />-->
+                    <Label Content="Refresh displayed devices" />
+                </StackPanel>
+            </Button>
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}">
+                <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
+                    <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
                     <Label Content="Export" />
                 </StackPanel>
             </Button>
-            <Button Margin="3" Command="{Binding SaveCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="/Images/Save.png" MaxHeight="20" />
+                    <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
                     <Label Content="Save" />
                 </StackPanel>
             </Button>
-            <Button Margin="3" Command="{Binding LoadCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="/Images/Open.png" MaxHeight="18" />
-                    <Label Content="Save" />
+                    <Image Source="{StaticResource OpenImage}" MaxHeight="18" />
+                    <Label Content="Load" />
                 </StackPanel>
             </Button>
-        </StackPanel>
+        </DockPanel>
         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
             <Button Height="70" Margin="3" Command="{Binding LockUnlockCommand}">
                 <Grid>
@@ -48,27 +54,27 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" Source="/Images/lock.png" MaxHeight="24" Visibility="{Binding DevicesUnlocked, Converter={StaticResource BoolToVis}}" />
+                    <Image Grid.Column="0" Source="{StaticResource LockImage}" MaxHeight="24" Visibility="{Binding DevicesUnlocked, Converter={StaticResource BoolToVis}}" />
                     <Label Grid.Column="1" Content="Lock" Visibility="{Binding DevicesUnlocked, Converter={StaticResource BoolToVis}}" />
-                    <Image Grid.Column="0" Source="/Images/unlock.png" MaxHeight="24" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
+                    <Image Grid.Column="0" Source="{StaticResource UnlockImage}" MaxHeight="24" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
                     <Label Grid.Column="1" Content="Unlock" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
                 </Grid>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding InitializeCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="/Images/Cycle_16_Yellow.png" MaxHeight="16" />
+                    <Image Source="{StaticResource CycleYellowImage16}" MaxHeight="16" />
                     <Label Content="Initialize" />
                 </StackPanel>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding AddCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="/Images/Add.png" MaxHeight="16" />
+                    <Image Source="{StaticResource AddImage}" MaxHeight="16" />
                     <Label Content="Add" />
                 </StackPanel>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding RemoveCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <Image Source="/Images/Button_Delete_16.png" MaxHeight="16" />
+                    <Image Source="{StaticResource ButtonDeleteImage16}" MaxHeight="16" />
                     <Label Content="Remove" />
                 </StackPanel>
             </Button>

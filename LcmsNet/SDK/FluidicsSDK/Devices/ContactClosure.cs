@@ -1,36 +1,32 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche and Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 8/22/2013
- *
- ********************************************************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using LcmsNetDataClasses.Devices;
+using System.Windows;
+using System.Windows.Media;
 using FluidicsSDK.Base;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices
 {
     public sealed class ContactClosure : FluidicsDevice
     {
-
         #region members
+
         /// <summary>
         /// defines minimum distance from the primary primitive of the pump for others to be drawn
         /// </summary>
         const int MIN_DIST_FROM_EDGE = 12;
+
         /// <summary>
         /// defines the length of the pump rectangle primitive
         /// </summary>
         const int LENGTH = 100;
+
         /// <summary>
         /// defines the width of the pump rectangle primitive
         /// </summary>
         const int WIDTH = 50;
-        const int MAX_PIXEL_VARIANCE = 5;
 
+        const int MAX_PIXEL_VARIANCE = 5;
 
         IContactClosure m_pump;
 
@@ -51,7 +47,7 @@ namespace FluidicsSDK.Devices
         /// </summary>
         public ContactClosure()
         {
-            AddRectangle(new Point(0, 0), new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(new Point(2, 2), new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
             MaxVariance = MAX_PIXEL_VARIANCE;
         }
 
@@ -61,9 +57,8 @@ namespace FluidicsSDK.Devices
         /// <param name="loc">Point representing  location on screen to draw the pump(upper left corner)</param>
         public ContactClosure(Point loc)
         {
-            AddRectangle(loc, new Size(LENGTH, WIDTH), Color.Black, Brushes.White);
+            AddRectangle(loc, new Size(LENGTH, WIDTH), Colors.Black, Brushes.White);
         }
-
 
         /// <summary>
         /// setup the states
@@ -83,12 +78,14 @@ namespace FluidicsSDK.Devices
 
         protected override void ClearDevice(IDevice device)
         {
-        
+
         }
+
         public override string StateString()
         {
             return string.Empty;
         }
+
         #endregion
 
         #region Properties
@@ -105,7 +102,7 @@ namespace FluidicsSDK.Devices
                 //do nothing
             }
         }
-        #endregion
 
+        #endregion
     }
 }

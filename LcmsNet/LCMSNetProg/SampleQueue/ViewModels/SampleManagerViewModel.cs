@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using LcmsNet.Method.Forms;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
-using LcmsNetDataClasses;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Experiment;
-using LcmsNetDataClasses.Logging;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Logging;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
@@ -46,7 +48,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Manages adding the samples to the queue.
         /// </summary>
-        private classSampleQueue sampleQueue;
+        private SampleQueue sampleQueue;
 
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
@@ -89,7 +91,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Default constructor that takes cart configuration data.
         /// </summary>
         /// <param name="queue">Sample queue to provide interface to.</param>
-        public SampleManagerViewModel(classSampleQueue queue)
+        public SampleManagerViewModel(SampleQueue queue)
         {
             Initialize(queue);
             synchronizationContext = SynchronizationContext.Current;
@@ -111,7 +113,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Initialization code.
         /// </summary>
         /// <param name="queue"></param>
-        private void Initialize(classSampleQueue queue)
+        private void Initialize(SampleQueue queue)
         {
             dmsView = new DMSDownloadViewModel();
             sampleQueue = queue;
@@ -136,34 +138,24 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // TODO: // This is the text that is appended to the application title bar
-            TitleBarTextAddition = "Sample Queue - " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME);
+            TitleBarTextAddition = "Sample Queue - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
         }
 
-        public void PreviewAvailable(object sender, SampleProgressPreviewArgs e)
+        public void PreviewAvailable(object sender, Method.ViewModels.SampleProgressPreviewArgs e)
         {
             if (e?.PreviewImage == null)
                 return;
 
-            try
-            {
-                SequencePreview = e.PreviewImage.ToBitmapImage();
-            }
-            catch (Exception)
-            {
-                // Ignore exceptions here
-            }
-            e.Dispose();
+            SequencePreview = e.PreviewImage;
         }
 
-        private BitmapImage sequencePreview;
+        private BitmapSource sequencePreview;
 
-        public BitmapImage SequencePreview
+        public BitmapSource SequencePreview
         {
             get { return sequencePreview; }
             private set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
         }
-
-        private delegate void DelegateToggleButtons(classSampleQueueArgs args);
 
         private bool isRunButtonEnabled;
         private bool isStopButtonEnabled;
@@ -228,7 +220,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private void DetermineIfShouldSetButtons(classSampleQueueArgs data)
+        private void DetermineIfShouldSetButtons(SampleQueueArgs data)
         {
             var runningCount = data.RunningSamplePosition;
             var totalSamples = data.RunningQueueTotal;
@@ -252,7 +244,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>
-        private void m_sampleQueue_SamplesWaitingToRun(object sender, classSampleQueueArgs data)
+        private void m_sampleQueue_SamplesWaitingToRun(object sender, SampleQueueArgs data)
         {
             synchronizationContext.Post(d => DetermineIfShouldSetButtons(data), sender);
             //DetermineIfShouldSetButtons(data);
@@ -261,17 +253,17 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Supplies the list of PAL trays to the sample queue and associated objects.
         /// </summary>
-        public void AutoSamplerTrayList(object sender, classAutoSampleEventArgs args)
+        public void AutoSamplerTrayList(object sender, AutoSampleEventArgs args)
         {
             var trays = args.TrayList;
 
-            SampleDataManager.AutoSamplerTrays = trays;
+            RxApp.MainThreadScheduler.Schedule(() => SampleDataManager.AutoSamplerTrays = trays);
         }
 
         /// <summary>
         /// Supplies a list of instrument methods to the sample queue and associated objects.
         /// </summary>
-        public void InstrumentMethodList(object sender, classNetworkStartEventArgs args)
+        public void InstrumentMethodList(object sender, NetworkStartEventArgs args)
         {
             var methods = args.MethodList;
 
@@ -289,17 +281,17 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             if (writer == null)
             {
-                classApplicationLogger.LogError(0, "The file type for exporting was not recognized.");
+                ApplicationLogger.LogError(0, "The file type for exporting was not recognized.");
                 return;
             }
             try
             {
                 sampleQueue.SaveQueue(name, writer, true);
-                classApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
+                ApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Export Failed!  " + ex.Message, ex);
+                ApplicationLogger.LogError(0, "Export Failed!  " + ex.Message, ex);
             }
         }
 
@@ -316,7 +308,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (folderDialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var mrmFilePath = folderDialog.FileName;
-                var mrmWriter = new classMRMFileExporter();
+                var mrmWriter = new MRMFileExporter();
                 sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
             }
         }
@@ -344,21 +336,21 @@ namespace LcmsNet.SampleQueue.ViewModels
                 switch (extension)
                 {
                     case ".xml":
-                        reader = new classQueueImportXML();
+                        reader = new QueueImportXML();
                         break;
                     case CONST_DEFAULT_QUEUE_EXTENSION:
-                        reader = new classQueueImportSQLite();
+                        reader = new QueueImportSQLite();
                         break;
                 }
 
                 try
                 {
                     sampleQueue.LoadQueue(fileDialog.FileName, reader);
-                    classApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
+                    ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }
                 catch (Exception ex)
                 {
-                    classApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
+                    ApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
                 }
             }
         }
@@ -386,14 +378,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             if (sampleQueue.IsRunning)
             {
-                classApplicationLogger.LogMessage(0, "Samples are already running.");
+                ApplicationLogger.LogMessage(0, "Samples are already running.");
                 return;
             }
             var samples = sampleQueue.GetRunningQueue();
 
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
             samples.RemoveAll(
-                delegate (classSampleData data) { return data.RunningStatus != enumSampleRunningStatus.WaitingToRun; });
+                delegate (SampleData data) { return data.RunningStatus != SampleRunningStatus.WaitingToRun; });
 
             if (samples.Count < 1)
                 return;
@@ -403,9 +395,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Seeing if the sample's method has all of the devices present in the method.
             // Later we will add to make sure none of the devices have an error that has
             // been thrown on them.
-            var errors = new Dictionary<classSampleData, List<classSampleValidationError>>();
+            var errors = new Dictionary<SampleData, List<SampleValidationError>>();
 
-            foreach (var reference in classSampleValidatorManager.Instance.Validators)
+            foreach (var reference in SampleValidatorManager.Instance.Validators)
             {
                 var validator = reference.Value;
                 foreach (var sample in samples)
@@ -424,8 +416,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     var displayVm = new SampleValidatorErrorDisplayViewModel(errors);
                     var display = new SampleValidatorErrorDisplayWindow() { DataContext = displayVm };
-                    // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(display);
                     display.ShowDialog();
                     return;
                 }
@@ -437,8 +427,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                     //TODO: Add a notification.
                     var displayVm = new SampleBadBlockDisplayViewModel(badBlocks);
                     var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm };
-                    // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                    System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(display);
                     var result = display.ShowDialog();
                     if (!result.HasValue || !result.Value)
                     {
@@ -450,14 +438,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Then for trigger file checks, we want the sample data for DMS to be complete.
             // So here we validate all of the samples and show the user all samples before running.
             // This way they can validate if they need to all of this information.
-            var validateSamples = classLCMSSettings.GetParameter(classLCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
-                                  !(string.IsNullOrWhiteSpace(classLCMSSettings.GetParameter(classLCMSSettings.PARAM_DMSTOOL)));
+            var validateSamples = LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
+                                  !(string.IsNullOrWhiteSpace(LCMSSettings.GetParameter(LCMSSettings.PARAM_DMSTOOL)));
             if (validateSamples)
             {
                 var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
                 var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-                // Apparently required to allow keyboard input in a WPF Window launched from a WinForms app?
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(dmsDisplay);
 
                 var dmsResult = dmsDisplay.ShowDialog();
 
@@ -492,13 +478,13 @@ namespace LcmsNet.SampleQueue.ViewModels
             try
             {
                 sampleQueue.CacheQueue(false);
-                classApplicationLogger.LogMessage(0,
-                    "Queue saved \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "\".");
+                ApplicationLogger.LogMessage(0,
+                    "Queue saved \"" + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) + "\".");
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0,
-                    "Could not save queue: " + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) + "  " + ex.Message, ex);
+                ApplicationLogger.LogError(0,
+                    "Could not save queue: " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) + "  " + ex.Message, ex);
             }
         }
 
@@ -521,8 +507,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 sampleQueue.CacheQueue(lastSavedFileName);
                 // TODO: // This is the text that is appended to the application title bar
                 TitleBarTextAddition = "Sample Queue - " + saveDialog.FileName;
-                classApplicationLogger.LogMessage(0,
-                    "Queue saved to \"" + classLCMSSettings.GetParameter(classLCMSSettings.PARAM_CACHEFILENAME) +
+                ApplicationLogger.LogMessage(0,
+                    "Queue saved to \"" + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) +
                     "\" and is now the default queue.");
             }
         }
@@ -543,7 +529,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new classQueueExportXML();
+                ISampleQueueWriter writer = new QueueExportXML();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
@@ -564,7 +550,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new classQueueExportCSV();
+                ISampleQueueWriter writer = new QueueExportCSV();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
@@ -585,7 +571,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new classQueueExportExcalCSV();
+                ISampleQueueWriter writer = new QueueExportExcalCSV();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
@@ -615,16 +601,16 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     this.sampleQueue.Undo();
                 }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo));
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
             RedoCommand = ReactiveCommand.Create(() =>
             {
                 using (SampleControlViewModel.Samples.SuppressChangeNotifications())
                 {
                     this.sampleQueue.Redo();
                 }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo));
-            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled));
-            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled));
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
+            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
+            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using LcmsNetDataClasses;
+using LcmsNetSDK;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
