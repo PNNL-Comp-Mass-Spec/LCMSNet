@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 using LcmsNet.Devices;
@@ -313,27 +314,60 @@ namespace LcmsNet.Method
                 foreach (var info in methods)
                 {
                     var parameterInfo = info.GetParameters();
-                    if (info.Name == methodName && parameterInfo.Length == lcEvent.Parameters.Length)
+                    var nonDefaultParamCount = parameterInfo.Count(x => !x.HasDefaultValue);
+                    if (info.Name == methodName && (parameterInfo.Length == lcEvent.Parameters.Length || lcEvent.Parameters.Length == nonDefaultParamCount))
                     {
                         var i = 0;
                         var found = true;
                         foreach (var pinfo in parameterInfo)
                         {
                             //if (pinfo.ParameterType.Equals(typeArray[i]) == false)
-                            if ((pinfo.ParameterType.Name == typeArray[i].Name) == false)
+                            if ((pinfo.ParameterType.Name == typeArray[i].Name) == false && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
                             {
                                 found = false;
                                 break;
                             }
                             i++;
+
+                            if (i >= typeArray.Length)
+                            {
+                                break;
+                            }
                         }
 
                         if (found)
                         {
+                            if (lcEvent.Parameters.Length < parameterInfo.Length)
+                            {
+                                // Add in newer default parameters
+                                var newTypes = new Type[parameterInfo.Length];
+                                var newParamNames = new string[parameterInfo.Length];
+                                var newParams = new object[parameterInfo.Length];
+                                Array.Copy(typeArray, newTypes, typeArray.Length);
+                                Array.Copy(lcEvent.ParameterNames, newParamNames, lcEvent.ParameterNames.Length);
+                                Array.Copy(lcEvent.Parameters, newParams, lcEvent.Parameters.Length);
+
+                                for (var j = typeArray.Length; j < parameterInfo.Length; j++)
+                                {
+                                    newTypes[j] = parameterInfo[j].ParameterType;
+                                    newParamNames[j] = parameterInfo[j].Name;
+                                    newParams[j] = parameterInfo[j].DefaultValue;
+                                }
+
+                                typeArray = newTypes;
+                                lcEvent.ParameterNames = newParamNames;
+                                lcEvent.Parameters = newParams;
+                            }
+
                             method = info;
                             break;
                         }
                     }
+                }
+
+                if (method == null)
+                {
+                    throw new Exception($"Could not find a method with name '{methodName}' and {typeArray.Length} parameters of types '{string.Join(", ", typeArray.Select(x => x.FullName))}' (param names: '{string.Join(", ", lcEvent.ParameterNames)}').");
                 }
             }
             catch (Exception ex)
