@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
+using Xceed.Wpf.Toolkit;
 
 namespace LcmsNetCommonControls.Controls.CueBannerOverlay
 {
@@ -88,7 +89,7 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
             Control control = (Control)d;
             control.Loaded += Control_Loaded;
 
-            if (d is TextBox || d is PasswordBox || d is ComboBox)
+            if (d is TextBox || d is PasswordBox || d is ComboBox || d is CheckComboBox)
             {
                 control.GotKeyboardFocus += Control_GotKeyboardFocus;
                 control.LostKeyboardFocus += Control_Loaded;
@@ -104,6 +105,10 @@ namespace LcmsNetCommonControls.Controls.CueBannerOverlay
                 else if (d is ComboBox cb)
                 {
                     cb.SelectionChanged += Control_ContentChanged;
+                }
+                else if (d is CheckComboBox ccb)
+                {
+                    ccb.ItemSelectionChanged += Control_ContentChanged;
                 }
             }
             else if (d is ItemsControl)
