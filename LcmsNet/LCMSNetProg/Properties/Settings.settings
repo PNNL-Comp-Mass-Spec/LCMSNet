@@ -30,7 +30,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CartName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">No_Cart</Value>
+      <Value Profile="(Default)">(none)</Value>
     </Setting>
     <Setting Name="CartConfigName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Unknown_Cart_Config</Value>
@@ -81,10 +81,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ColumnDisabled2" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ColumnDisabled3" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ColumnDisabledSpecial" Type="System.String" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -135,19 +135,19 @@
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="TriggerFileFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\\proto-5\BionetXfer\TriggerTest</Value>
+      <Value Profile="(Default)">\\proto-5\BionetXfer\run_complete_trigger</Value>
     </Setting>
     <Setting Name="CopyTriggerFiles" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="CopyMethodFolders" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="EmulationEnabled" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="CopyMethodFolders" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="EmulationEnabled" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="PdfPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\</Value>
+      <Value Profile="(Default)">\\proto-5\BionetXfer\PDF_Methods</Value>
     </Setting>
     <Setting Name="AdminMode" Type="System.String" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -157,6 +157,9 @@
     </Setting>
     <Setting Name="DMSTool" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UpgradeSettings" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

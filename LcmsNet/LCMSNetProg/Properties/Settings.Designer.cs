@@ -115,7 +115,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("No_Cart")]
+        [global::System.Configuration.DefaultSettingValueAttribute("(none)")]
         public string CartName {
             get {
                 return ((string)(this["CartName"]));
@@ -292,7 +292,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ColumnDisabled2 {
             get {
                 return ((bool)(this["ColumnDisabled2"]));
@@ -304,7 +304,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ColumnDisabled3 {
             get {
                 return ((bool)(this["ColumnDisabled3"]));
@@ -502,7 +502,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\TriggerTest")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\run_complete_trigger")]
         public string TriggerFileFolder {
             get {
                 return ((string)(this["TriggerFileFolder"]));
@@ -511,7 +511,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CopyTriggerFiles {
             get {
                 return ((bool)(this["CopyTriggerFiles"]));
@@ -520,7 +520,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CopyMethodFolders {
             get {
                 return ((bool)(this["CopyMethodFolders"]));
@@ -529,7 +529,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool EmulationEnabled {
             get {
                 return ((bool)(this["EmulationEnabled"]));
@@ -538,7 +538,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\PDF_Methods")]
         public string PdfPath {
             get {
                 return ((string)(this["PdfPath"]));
@@ -578,6 +578,18 @@ namespace LcmsNet.Properties {
             }
             set {
                 this["DMSTool"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UpgradeSettings {
+            get {
+                return ((bool)(this["UpgradeSettings"]));
+            }
+            set {
+                this["UpgradeSettings"] = value;
             }
         }
     }

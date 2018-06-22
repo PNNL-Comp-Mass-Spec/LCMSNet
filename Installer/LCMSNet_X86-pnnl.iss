@@ -47,6 +47,10 @@ Name: "{app}\x64"
 ; Exe
 Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe;                           DestDir: "{app}";          Flags: ignoreversion
 
+; Application configuration: binding redirects and default settings. ConfirmOverwrite is a reminder that it contains machine-specific settings on older versions, that should be backed up and re-set (using LcmsNet_PersistentSettings.config)
+; The ConfirmOverwrite flag can undoubtedly be removed at some future point, when the older versions of LcmsNet are no longer in use.
+Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet.exe.config;                    DestDir: "{app}";          Flags: ignoreversion confirmoverwrite
+
 ; Nuget DLLs
 Source: LCMSNetProg\bin\x86\PNNLRelease\Microsoft.WindowsAPICodePack*.dll;     DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\PNNLRelease\OxyPlot*.dll;                          DestDir: "{app}";          Flags: ignoreversion
@@ -81,12 +85,9 @@ Source: "..\lcmsnetPlugins\PALAutoSampler\paldriv.exe";                        D
 ;SQLite Database Log Viewer program
 Source: "..\ExternalApplications\LogViewer\bin\PNNLRelease\*.exe";             DestDir: "{app}";          Flags: ignoreversion
 
-; SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
-; **WARNING**: Changing the Settings.settings file in visual studio DOES NOT change the 
-; config.default! If you want to make changes to the deployed defaults, change the 
-; Settings.settings file, compile, and then copy LcmsNet.exe.config into the proper 
-; directory and rename it LcmsNet.exe.config.default before running this script! 
-Source: "..\Installer\LcmsNet.exe.config.default";                             DestName: "LcmsNet.exe.config";    DestDir: "{app}";          Flags: ignoreversion
+; PERSISTED SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
+; Only copy it once, never overwrite the existing file, and don't remove it during an uninstall
+Source: LCMSNetProg\bin\x86\PNNLRelease\LcmsNet_PersistentSettings.config;     DestDir: "{app}";          Flags: ignoreversion onlyifdoesntexist uninsneveruninstall
 ; END SETTINGS FILE---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
