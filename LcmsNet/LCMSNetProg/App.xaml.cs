@@ -96,7 +96,13 @@ namespace LcmsNet
                 message += "\nInner Exception: " + exi.Message;
                 exi = exi.InnerException;
             }
-            MessageBox.Show("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
+
+            Window window = main;
+            if (!splashScreenEnded)
+            {
+                window = splashScreen;
+            }
+            window.ShowMessage("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
                             DbLogger.LogFolderPath + "\\");
 
             Shutdown();
@@ -330,7 +336,13 @@ namespace LcmsNet
                         string.Format(
                             "LCMS could not create missing folder {0} required for operation.  Please run application with higher priveleges.  {1}",
                             localPath, ex.Message);
-                    MessageBox.Show(errorMessage);
+
+                    Window window = main;
+                    if (!splashScreenEnded)
+                    {
+                        window = splashScreen;
+                    }
+                    window.ShowMessage(errorMessage);
                     Shutdown();
                 }
             }
@@ -432,7 +444,13 @@ namespace LcmsNet
             {
                 if (!singleInstanceMutex.WaitOne(0, false))
                 {
-                    MessageBox.Show("A copy of LcmsNet is already running.");
+                    Window window = main;
+                    if (!splashScreenEnded)
+                    {
+                        window = splashScreen;
+                    }
+                    window.ShowMessage("A copy of LcmsNet is already running.");
+
                     ApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
                     return;
                 }
@@ -486,6 +504,8 @@ namespace LcmsNet
 
             main.Show();
             main.Activate();
+
+            mainVm.ShowInitializeFailureWindows();
         }
 
         private void ShowSplashScreen()
@@ -520,7 +540,13 @@ namespace LcmsNet
             catch (UnauthorizedAccessException ex)
             {
                 ApplicationLogger.LogError(0, "Could not create necessary directories.", ex);
-                MessageBox.Show("The application does not have the required privileges to run.  Please run as administrator.");
+
+                Window window = main;
+                if (!splashScreenEnded)
+                {
+                    window = splashScreen;
+                }
+                window.ShowMessage("The application does not have the required privileges to run. Please run as administrator.");
                 return false;
             }
 

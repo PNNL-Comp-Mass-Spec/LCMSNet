@@ -55,23 +55,7 @@ namespace LcmsNet
         public MainWindowViewModel()
         {
             Initialize();
-            SetupCommands();
-        }
 
-        #region Commands
-
-        public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; private set; }
-        public ReactiveCommand<ContentControl[], Unit> ReportErrorCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveQueueCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveQueueAsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToXmlCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToCsvCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToXcaliburCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToMRMCommand { get; private set; }
-
-        private void SetupCommands()
-        {
             ShowAboutCommand = ReactiveCommand.Create(() => this.ShowAboutWindow());
             ReportErrorCommand = ReactiveCommand.Create<ContentControl[]>(param => this.ReportError(param));
             OpenQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
@@ -82,6 +66,18 @@ namespace LcmsNet
             ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToMRMCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportMRMFiles(), this.WhenAnyValue(x => x.QueueTabSelected));
         }
+
+        #region Commands
+
+        public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; }
+        public ReactiveCommand<ContentControl[], Unit> ReportErrorCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveQueueCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveQueueAsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExportQueueToXmlCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExportQueueToCsvCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExportQueueToXcaliburCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExportQueueToMRMCommand { get; }
 
         #endregion
 
@@ -374,7 +370,6 @@ namespace LcmsNet
                 column.StatusChanged += Column_StatusChanged;
             }
 
-
             SystemConfiguration = new SystemConfigurationViewModel();
             SystemConfiguration.ColumnNameChanged += SystemConfiguration_ColumnNameChanged;
             SQLiteTools.GetSepTypeList(false);
@@ -410,9 +405,7 @@ namespace LcmsNet
             m_scheduler.SampleProgress += Scheduler_SampleProgress;
             m_scheduler.Initialize();
 
-            //
             // Logging and messaging
-            //
             MessagesVm = new MessagesViewModel();
             MessagesVm.ErrorCleared += Messages_ErrorCleared;
             MessagesVm.ErrorPresent += Messages_ErrorPresent;
@@ -431,26 +424,11 @@ namespace LcmsNet
             LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
-            var failedDeviceFlag = false;
-            var failedCount = 0;
             DeviceManager.Manager.InitialzingDevice += Manager_InitialzingDevice;
-            FailedDevicesWindow display = null;
             if (LCMSSettings.GetParameter(LCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP, false))
             {
                 ApplicationLogger.LogMessage(0, "Initializing hardware.");
-                var failedDevices = DeviceManager.Manager.InitializeDevices();
-                if (failedDevices != null && failedDevices.Count > 0)
-                {
-                    failedDeviceFlag = true;
-                    failedCount = failedDevices.Count;
-                    var displayVm = new FailedDevicesViewModel(failedDevices);
-                    display = new FailedDevicesWindow()
-                    {
-                        DataContext = displayVm,
-                        ShowActivated = true,
-                    };
-                    display.ShowDialog();
-                }
+                failedDevices = DeviceManager.Manager.InitializeDevices();
             }
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
@@ -458,45 +436,19 @@ namespace LcmsNet
             {
                 //add simulator button to main form and add simulator forms.
                 SimulatorVm = new SimulatorCombinedViewModel();
-                //AddForm(simCombined);
                 CanSimulate = true;
             }
             else
             {
-                //toolStripButtonSimulate.Visible = false;
-                //toolStripSeparatorSimulator.Visible = false;
                 CanSimulate = false;
             }
 
             // Load the methods from the LC-Methods folder.
             ApplicationLogger.LogMessage(0, "Reading User Methods.");
-            var userMethodErrors = LCMethodManager.Manager.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER));
-
-            if (userMethodErrors.Count > 0)
-            {
-                var failedMethods = new FailedMethodLoadWindow
-                {
-                    DataContext = new FailedMethodLoadViewModel(userMethodErrors),
-                    ShowActivated = true,
-                };
-                failedMethods.ShowDialog();
-            }
-
-            //AddForm(fluidicsDesign);
-
-            //AddForm(pumpDisplays);
-            //AddForm(messages);
-            //AddForm(m_notifications);
-            //AddForm(methodEditor);
-            //AddForm(sampleProgress);
-            //AddForm(systemConfiguration);
-            //AddForm(m_sampleManager);
+            userMethodErrors = LCMethodManager.Manager.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER));
 
             ApplicationLogger.LogMessage(0, "Loading Sample Queue...");
-            //Application.DoEvents();
-            //
             // Tell the sample queue to load samples from cache after everything is loaded.
-            //
             try
             {
                 m_sampleQueue.RetrieveQueueFromCache();
@@ -506,10 +458,10 @@ namespace LcmsNet
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message, ex);
             }
 
-            if (failedDeviceFlag)
+            if (failedDevices != null && failedDevices.Count > 0)
             {
                 ApplicationLogger.LogMessage(0,
-                    string.Format("System Unsure.  {0} devices failed to initialize.", failedCount));
+                    string.Format("System Unsure.  {0} devices failed to initialize.", failedDevices.Count));
             }
             else if (userMethodErrors.Count > 0)
             {
@@ -522,6 +474,39 @@ namespace LcmsNet
 
             SampleProgressVm.PreviewAvailable += SampleManagerVm.PreviewAvailable;
             NotificationSystemVm.LoadNotificationFile();
+        }
+
+        private Dictionary<string, List<Exception>> userMethodErrors = null;
+        private List<DeviceErrorEventArgs> failedDevices = null;
+
+        /// <summary>
+        /// Don't show the errors over the splash screen, show them after the main window has been displayed.
+        /// </summary>
+        public void ShowInitializeFailureWindows()
+        {
+            if (failedDevices != null && failedDevices.Count > 0)
+            {
+                var display = new FailedDevicesWindow()
+                {
+                    DataContext = new FailedDevicesViewModel(failedDevices),
+                    ShowActivated = true,
+                    Owner = Application.Current.MainWindow
+                };
+                display.ShowDialog();
+                failedDevices = null;
+            }
+
+            if (userMethodErrors != null && userMethodErrors.Count > 0)
+            {
+                var failedMethods = new FailedMethodLoadWindow
+                {
+                    DataContext = new FailedMethodLoadViewModel(userMethodErrors),
+                    ShowActivated = true,
+                    Owner = Application.Current.MainWindow
+                };
+                failedMethods.ShowDialog();
+                userMethodErrors = null;
+            }
         }
 
         #endregion

@@ -110,6 +110,7 @@
     <Compile Include="Logging\IDeviceHealthWriter.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\MessageLoggerArgs.cs" />
+    <Compile Include="MessageBoxDisplayExtension.cs" />
     <Compile Include="Method\IParameter.cs" />
     <Compile Include="Method\InvalidTimeSpanException.cs" />
     <Compile Include="Method\LCEvent.cs" />
