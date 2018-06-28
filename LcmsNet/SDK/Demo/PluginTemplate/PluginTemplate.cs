@@ -37,7 +37,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// <summary>
     /// Calls a shutdown sequence for the device to stop all acquiring/control.
     /// </summary>
-    /// <returns>True if shutdown successful.  False if failure occured.</returns>
+    /// <returns>True if shutdown successful.  False if failure occurred.</returns>
     bool Shutdown()
     {
         //shutdown code goes here
@@ -61,7 +61,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     {
         // unregister here
     }
-    /// <summary>        
+    /// <summary>
     /// Write the performance data and other required information associated with this device after a run.
     /// </summary>
     /// <param name="filepath">Path to write data to.</param>

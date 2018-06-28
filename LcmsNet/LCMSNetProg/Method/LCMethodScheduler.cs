@@ -349,7 +349,7 @@ namespace LcmsNet.Method
                 }
                 catch (Exception)
                 {
-                    Print("Error occured while shutting down column" + i, CONST_VERBOSE_LEAST);
+                    Print("Error occurred while shutting down column" + i, CONST_VERBOSE_LEAST);
                 }
                 finally
                 {

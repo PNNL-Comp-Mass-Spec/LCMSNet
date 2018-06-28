@@ -780,7 +780,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Exception occured trying to refresh pump data " + ex.StackTrace);
+                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "Exception occurred trying to refresh pump data " + ex.StackTrace);
             }
             //mcontrol_IscoGraphs.UpdateAllPlots(m_Pump.PumpData);
         }

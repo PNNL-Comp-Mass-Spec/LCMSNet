@@ -157,7 +157,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         }
                         else
                         {
-                            statusMessage = "An error occured while running this sample.";
+                            statusMessage = "An error occurred while running this sample.";
                         }
                         break;
                     case SampleRunningStatus.Stopped:

@@ -536,7 +536,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <summary>
         /// Initializes the device connecting to the server to get the instrument methods.
         /// </summary>
-        /// <returns>True if it could connect, false if error occured.</returns>
+        /// <returns>True if it could connect, false if error occurred.</returns>
         public bool Initialize(ref string errorMessage)
         {
             var success = false;

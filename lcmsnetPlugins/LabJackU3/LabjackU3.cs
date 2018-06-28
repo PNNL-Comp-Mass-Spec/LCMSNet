@@ -280,7 +280,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// <summary>
         /// Deals with errors in the above functions
         /// </summary>
-        /// <param name="msg">A message describing where the error occured</param>
+        /// <param name="msg">A message describing where the error occurred</param>
         /// <param name="errorCode">The integer errorcode</param>
         private void ThrowErrorMessage(string msg, LJUD.LJUDERROR errorCode)
         {

@@ -130,7 +130,7 @@ namespace FluidicsSimulator
             CategoriesRequested = WantedStatusChanges.All;
         }
         /// <summary>
-        /// simulate events until either a breakpoint is reached, an error has occured, or all events simulated.
+        /// simulate events until either a breakpoint is reached, an error has occurred, or all events simulated.
         /// </summary>
         public void Simulate()
         {
@@ -288,7 +288,7 @@ namespace FluidicsSimulator
                 IsReady = false;
                 Thread.Sleep(500);
                 m_completedEvents.Peek().MethodData.IsDone();
-                // report simulation complete and pass any and all status changes that occured, that the user hasn't asked not to be notified about
+                // report simulation complete and pass any and all status changes that occurred, that the user hasn't asked not to be notified about
                 SimulationComplete?.Invoke(this, new ModelStatusChangeEventArgs(FilterStatusChanges(m_AllStatusChangesThisRun, CategoriesRequested)));
             }
         }

@@ -216,7 +216,7 @@ namespace LcmsNet.Method
                     errors.Add(filePath, new List<Exception> {exception});
 
                     ApplicationLogger.LogError(0,
-                        "An unhandled exception occured when reading a user method.",
+                        "An unhandled exception occurred when reading a user method.",
                         exception);
                 }
             }

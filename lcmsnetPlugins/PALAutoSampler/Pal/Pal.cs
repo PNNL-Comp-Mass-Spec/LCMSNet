@@ -418,7 +418,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         }
 
         /// <summary>
-        /// Indicates that a change requiring saving in the Fluidics designer has occured.
+        /// Indicates that a change requiring saving in the Fluidics designer has occurred.
         /// </summary>
         protected virtual void OnDeviceSaveRequired()
         {

@@ -665,7 +665,7 @@ namespace LcmsNetSDK.Method
                         aligneeMethod,
                         false);
                     //
-                    // If alignment occured, then we need to re-check all the previously overlapping methods!
+                    // If alignment occurred, then we need to re-check all the previously overlapping methods!
                     //     This way we can never overlap critical sections in i-1, or i-n methods.
                     //
                     if (alignmentOccurred)

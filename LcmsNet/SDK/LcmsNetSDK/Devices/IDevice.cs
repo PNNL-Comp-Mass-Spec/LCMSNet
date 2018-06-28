@@ -38,7 +38,7 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Calls a shutdown sequence for the device to stop all acquiring/control.
         /// </summary>
-        /// <returns>True if shutdown successful.  False if failure occured.</returns>
+        /// <returns>True if shutdown successful.  False if failure occurred.</returns>
         bool Shutdown();
 
         /// <summary>
