@@ -978,7 +978,6 @@ namespace LcmsNetSDK.Devices
         public void LoadPlugins(string assemblyPath, bool forceReload)
         {
             if (m_plugins.ContainsKey(assemblyPath))
-
             {
                 if (!forceReload)
                 {
@@ -1021,6 +1020,7 @@ namespace LcmsNetSDK.Devices
             {
                 LoadPlugins(assemblyPath, forceReload);
             }
+
             m_loadingPlugins = false;
 
             PluginsLoaded?.Invoke(this, null);
@@ -1051,8 +1051,7 @@ namespace LcmsNetSDK.Devices
                             // if we left this thing uncommented...basically trying to transition from this crap anyway...
                             //if (control.GlyphType != null && control.ControlType != null)
                             {
-                                var pluginInfo = new DevicePluginInformation(objectType,
-                                    control);
+                                var pluginInfo = new DevicePluginInformation(objectType, control);
                                 supportedTypes.Add(pluginInfo);
                             }
                         }
@@ -1082,6 +1081,7 @@ namespace LcmsNetSDK.Devices
                 ApplicationLogger.LogError(0, "Could not load the plugin from dll: " + assemblyPath, ex);
                 //TODO: throw exception ! let people know this failed.
             }
+
             return supportedTypes;
         }
 
