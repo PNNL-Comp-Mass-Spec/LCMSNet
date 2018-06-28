@@ -484,14 +484,7 @@ namespace LcmsNet
 
             // Load the main application and run
             LogMessage(-1, "Loading main window");
-            main = new MainWindow();
-            this.MainWindow = main;
             mainVm = new MainWindowViewModel();
-            main.DataContext = mainVm;
-            main.ShowActivated = true;
-
-            Application.Current.MainWindow = main;
-            MainWindow = main;
 
             // Assure that the splash screen has been visible for at least 3 seconds
             while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
@@ -502,6 +495,14 @@ namespace LcmsNet
             splashScreen.LoadComplete();
             splashScreenEnded = true;
 
+            main = new MainWindow
+            {
+                DataContext = mainVm,
+                ShowActivated = true
+            };
+
+            Application.Current.MainWindow = main;
+            MainWindow = main;
             main.Show();
             main.Activate();
 
