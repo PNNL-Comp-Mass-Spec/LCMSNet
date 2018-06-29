@@ -929,7 +929,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="newMode">The new mode</param>
         [LCMethodEvent("Set Mode", 1, "", -1, false)]
-        public void SetMode(enumPumpAgilentModes newMode)
+        public void SetMode(AgilentPumpModes newMode)
         {
             if (m_emulation)
             {
@@ -1260,11 +1260,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// Gets the current pump mode
         /// </summary>
         /// <returns>The current pump mode</returns>
-        public enumPumpAgilentModes GetMode()
+        public AgilentPumpModes GetMode()
         {
             if (m_emulation)
             {
-                return enumPumpAgilentModes.Unknown;
+                return AgilentPumpModes.Unknown;
             }
             var reply = "";
             SendCommand("MODE?", ref reply, "Attempting to query mode.");
@@ -1273,10 +1273,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
             if (start == -1)
             {
                 //TODO: Error!
-                return enumPumpAgilentModes.Unknown;
+                return AgilentPumpModes.Unknown;
             }
             reply = reply.Substring(start + 5, 1);
-            return (enumPumpAgilentModes)(Convert.ToInt32(reply));
+            return (AgilentPumpModes)(Convert.ToInt32(reply));
         }
         #endregion
 

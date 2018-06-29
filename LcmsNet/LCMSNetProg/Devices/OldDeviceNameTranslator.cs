@@ -23,6 +23,8 @@ namespace LcmsNet.Devices
             FullyQualifiedNameMapper.Add("ASUTGen.Devices.Pumps.IDEXPump", "LcmsNetPlugins.IDEX.Pumps.IDEXPump");
             FullyQualifiedNameMapper.Add("ASUTGen.Devices.Valves.IDEXValve", "LcmsNetPlugins.IDEX.Valves.IDEXValve");
             FullyQualifiedNameMapper.Add("Agilent.Devices.Pumps.classPumpAgilent", "LcmsNetPlugins.Agilent.Pumps.AgilentPump");
+            FullyQualifiedNameMapper.Add("Agilent.Devices.Pumps.enumPumpAgilentModes", "LcmsNetPlugins.Agilent.Pumps.AgilentPumpModes");
+            FullyQualifiedNameMapper.Add("Agilent.Devices.Pumps.enumPurgePumpChannel", "LcmsNetPlugins.Agilent.Pumps.PumpPurgeChannel");
             //FullyQualifiedNameMapper.Add("DemoPluginLibrary.DemoClosure", "DemoPluginLibrary.DemoClosure");
             //FullyQualifiedNameMapper.Add("DemoPluginLibrary.DemoPAL", "DemoPluginLibrary.DemoPAL");
             //FullyQualifiedNameMapper.Add("DemoPluginLibrary.DemoPump", "DemoPluginLibrary.DemoPump");
@@ -54,6 +56,8 @@ namespace LcmsNet.Devices
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.NetworkStart.Socket.classNetStartSocket", "LcmsNetPlugins.PNNLDevices.NetworkStart.Socket.NetStartSocket");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pal.classPal", "LcmsNetPlugins.PALAutoSampler.Pal.Pal");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.classPumpIsco", "LcmsNetPlugins.Teledyne.Pumps.IscoPump");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.enumIscoOperationMode", "LcmsNetPlugins.Teledyne.Pumps.IscoOperationMode");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.enumISCOPumpChannels", "LcmsNetPlugins.Teledyne.Pumps.ISCOPumpChannels");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2Pos", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2Pos6Port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos6Port");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2pos10port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos10port");

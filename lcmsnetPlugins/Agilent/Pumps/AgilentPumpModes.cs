@@ -11,7 +11,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
     /// <summary>
     /// The available modes for the Agilent pump
     /// </summary>
-    public enum enumPumpAgilentModes
+    public enum AgilentPumpModes
     {
         Normal,
         Micro,

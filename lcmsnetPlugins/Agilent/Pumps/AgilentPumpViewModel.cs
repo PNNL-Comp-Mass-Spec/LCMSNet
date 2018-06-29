@@ -48,7 +48,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 using (modeComboBoxOptions.SuppressChangeNotifications())
                 {
                     modeComboBoxOptions.Clear();
-                    modeComboBoxOptions.AddRange(Enum.GetValues(typeof(enumPumpAgilentModes)).Cast<enumPumpAgilentModes>());
+                    modeComboBoxOptions.AddRange(Enum.GetValues(typeof(AgilentPumpModes)).Cast<AgilentPumpModes>());
                 }
 
                 PumpDisplay.SetPumpName(m_pump.Name);
@@ -109,8 +109,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private double mixerVolumeRead;
         private double percentB;
         private double percentBRead;
-        private readonly ReactiveUI.ReactiveList<enumPumpAgilentModes> modeComboBoxOptions = new ReactiveUI.ReactiveList<enumPumpAgilentModes>();
-        private enumPumpAgilentModes selectedMode;
+        private readonly ReactiveUI.ReactiveList<AgilentPumpModes> modeComboBoxOptions = new ReactiveUI.ReactiveList<AgilentPumpModes>();
+        private AgilentPumpModes selectedMode;
         private double pressure;
         private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private string selectedMethod = "";
@@ -123,7 +123,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region Properties
 
-        public ReactiveUI.IReadOnlyReactiveList<enumPumpAgilentModes> ModeComboBoxOptions => modeComboBoxOptions;
+        public ReactiveUI.IReadOnlyReactiveList<AgilentPumpModes> ModeComboBoxOptions => modeComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
         public ReactiveUI.IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
 
@@ -163,7 +163,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             private set { this.RaiseAndSetIfChanged(ref percentBRead, value); }
         }
 
-        public enumPumpAgilentModes SelectedMode
+        public AgilentPumpModes SelectedMode
         {
             get { return selectedMode; }
             set { this.RaiseAndSetIfChanged(ref selectedMode, value); }
