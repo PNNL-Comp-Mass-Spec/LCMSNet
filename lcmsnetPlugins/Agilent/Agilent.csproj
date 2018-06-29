@@ -24,15 +24,15 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Debug\Agilent.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
-    <OutputPath>bin\PNNLRelease\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\PNNLRelease\Agilent.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Agilent.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Agilent.Licop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac187d2a8ddbcb3c, processorArchitecture=MSIL">

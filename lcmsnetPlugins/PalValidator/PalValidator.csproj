@@ -23,8 +23,8 @@
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Debug\PalValidator.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
-    <OutputPath>bin\PNNLRelease\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -32,7 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\PNNLRelease\PalValidator.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\PalValidator.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LcmsNetSdk">

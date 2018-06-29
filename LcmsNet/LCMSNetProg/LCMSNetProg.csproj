@@ -27,8 +27,8 @@
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
-    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE;PNNLONLY</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>

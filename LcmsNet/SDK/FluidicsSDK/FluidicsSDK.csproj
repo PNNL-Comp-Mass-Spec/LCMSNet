@@ -25,8 +25,8 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Debug\FluidicsSDK.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
-    <OutputPath>bin\PNNLRelease\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -34,7 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\PNNLRelease\FluidicsSDK.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\FluidicsSDK.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>

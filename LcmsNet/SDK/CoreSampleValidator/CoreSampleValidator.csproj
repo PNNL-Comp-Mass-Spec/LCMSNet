@@ -36,17 +36,6 @@
     <DocumentationFile>bin\Release\CoreSampleValidator.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU'">
-    <OutputPath>bin\PNNLRelease\</OutputPath>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\PNNLRelease\CoreSampleValidator.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

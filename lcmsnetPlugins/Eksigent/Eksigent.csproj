@@ -24,14 +24,14 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\x86\Debug\Eksigent.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|x86' ">
-    <OutputPath>bin\x86\PNNLRelease\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\x86\PNNLRelease\Eksigent.xml</DocumentationFile>
+    <DocumentationFile>bin\x86\Release\Eksigent.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.DirectControl, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">

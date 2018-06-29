@@ -10,24 +10,22 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		PNNLRelease|Any CPU = PNNLRelease|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B164F88D-3799-46B9-8926-20B40707B2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B164F88D-3799-46B9-8926-20B40707B2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B164F88D-3799-46B9-8926-20B40707B2E4}.PNNLRelease|Any CPU.ActiveCfg = PNNLRelease|Any CPU
-		{B164F88D-3799-46B9-8926-20B40707B2E4}.PNNLRelease|Any CPU.Build.0 = PNNLRelease|Any CPU
 		{B164F88D-3799-46B9-8926-20B40707B2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B164F88D-3799-46B9-8926-20B40707B2E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81D6C70B-ADBB-448B-B1AF-D5E046DBBD92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81D6C70B-ADBB-448B-B1AF-D5E046DBBD92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81D6C70B-ADBB-448B-B1AF-D5E046DBBD92}.PNNLRelease|Any CPU.ActiveCfg = Debug|Any CPU
-		{81D6C70B-ADBB-448B-B1AF-D5E046DBBD92}.PNNLRelease|Any CPU.Build.0 = Debug|Any CPU
 		{81D6C70B-ADBB-448B-B1AF-D5E046DBBD92}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{81D6C70B-ADBB-448B-B1AF-D5E046DBBD92}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {812A6BB5-3A9F-4804-A957-E6A6D728F115}
 	EndGlobalSection
 EndGlobal

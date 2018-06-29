@@ -24,14 +24,14 @@
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Debug\LabJack.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PNNLRelease|AnyCPU' ">
-    <OutputPath>bin\PNNLRelease\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\PNNLRelease\LabJack.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\LabJack.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
