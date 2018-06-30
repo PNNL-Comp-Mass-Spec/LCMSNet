@@ -126,36 +126,30 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// Gets or sets the abort event for scheduling.
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         /// <summary>
         /// Gets or sets the emulation state of the device.
         /// </summary>
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get
-            {
-                return m_emulation;
-            }
-            set
-            {
-                m_emulation = value;
-            }
+            get { return m_emulation; }
+            set { m_emulation = value; }
         }
+
         /// <summary>
         /// Gets or sets the current status of the device.
         /// </summary>
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get { return m_status; }
             set
             {
                 if (value != m_status)
                 {
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 }
+
                 m_status = value;
             }
         }
@@ -180,44 +174,35 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// </summary>
         public string Version
         {
-            get
-            {
-                return m_version;
-            }
+            get { return m_version; }
             set
             {
                 m_version = value;
                 OnDeviceSaveRequired();
             }
         }
+
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
         [PersistenceData("Port")]
         public LabjackU12InputPorts Port
         {
-            get
-            {
-                return m_port;
-            }
+            get { return m_port; }
             set
             {
                 m_port = value;
                 OnDeviceSaveRequired();
             }
         }
+
         [PersistenceData("Labjack ID")]
         public int LabJackID
         {
-            get
-            {
-                return m_labjack.LocalID;
-            }
-            set
-            {
-                m_labjack.LocalID = value;
-            }
+            get { return m_labjack.LocalID; }
+            set { m_labjack.LocalID = value; }
         }
+
         #endregion
 
         #region Methods
