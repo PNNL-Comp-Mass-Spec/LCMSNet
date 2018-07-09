@@ -31,7 +31,7 @@ namespace LcmsNetCommonControls.Controls
         {
             SerialPortNamesList = new ReactiveList<string>();
             SerialPortsList = new ReactiveList<SerialPortData>();
-            UpdateSerialPorts();
+            ReadAndStoreSerialPorts();
         }
 
         /// <summary>
@@ -39,20 +39,22 @@ namespace LcmsNetCommonControls.Controls
         /// </summary>
         public static void UpdateSerialPorts()
         {
-            RxApp.MainThreadScheduler.Schedule(() =>
-            {
-                using (SerialPortsList.SuppressChangeNotifications())
-                {
-                    SerialPortsList.Clear();
-                    SerialPortsList.AddRange(GetSerialPortInformation());
-                }
+            RxApp.MainThreadScheduler.Schedule(ReadAndStoreSerialPorts);
+        }
 
-                using (SerialPortNamesList.SuppressChangeNotifications())
-                {
-                    SerialPortNamesList.Clear();
-                    SerialPortNamesList.AddRange(SerialPortsList.Select(x => x.PortName));
-                }
-            });
+        private static void ReadAndStoreSerialPorts()
+        {
+            using (SerialPortsList.SuppressChangeNotifications())
+            {
+                SerialPortsList.Clear();
+                SerialPortsList.AddRange(GetSerialPortInformation());
+            }
+
+            using (SerialPortNamesList.SuppressChangeNotifications())
+            {
+                SerialPortNamesList.Clear();
+                SerialPortNamesList.AddRange(SerialPortsList.Select(x => x.PortName));
+            }
         }
 
         private static List<SerialPortData> GetSerialPortInformation()

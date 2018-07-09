@@ -67,6 +67,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 SelectedComPort = m_pump.PortName;
             }
+            else
+            {
+                var comma = ",";
+                ApplicationLogger.LogError(2, $"{m_pump.Name}: Could not find a serial port matching \"{m_pump.PortName}\" in ports \"{string.Join(comma, ComPortComboBoxOptions.Select(x => x.PortName))}");
+            }
 
             // Reads the pump method directory.
             try
