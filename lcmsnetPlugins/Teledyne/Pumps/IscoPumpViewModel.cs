@@ -250,12 +250,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void InitControl()
         {
-            // Make sure a valid COM port is selected
-            if (ComPortComboBoxOptions.Count > 0)
-            {
-                COMPort = ComPortComboBoxOptions[0].PortName;
-            }
-
             // Add a list of available unit addresses to the unit address combo box
             using (unitAddressComboBoxOptions.SuppressChangeNotifications())
             {
@@ -325,10 +319,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 refillRates.Add(new RefillData("Pump C", 2) { MaxRefillRate = 30D });
             }
 
-            if (ComPortComboBoxOptions.Any(x => x.PortName.Equals(pump.PortName, StringComparison.OrdinalIgnoreCase)))
-            {
-                COMPort = pump.PortName;
-            }
+            COMPort = pump.PortName;
 
             UpdateLimitDisplay();
         }

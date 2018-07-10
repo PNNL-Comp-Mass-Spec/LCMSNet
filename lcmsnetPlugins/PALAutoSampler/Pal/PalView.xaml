@@ -82,7 +82,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Vial Range" />
                 <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Port Name" />
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" ItemsSource="{Binding VialRangeComboBoxOptions}" SelectedItem="{Binding Pal.VialRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ToolTip="{Binding SelectedPortName}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 <Button Grid.Row="1" Grid.Column="2" Margin="3" Width="75" Content="Apply" Command="{Binding ApplyPortNameCommand}" />
             </Grid>
         </TabItem>
