@@ -82,7 +82,17 @@
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Vial Range" />
                 <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Port Name" />
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" ItemsSource="{Binding VialRangeComboBoxOptions}" SelectedItem="{Binding Pal.VialRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ToolTip="{Binding SelectedPortName}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding SelectedPortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ToolTip="{Binding SelectedPortName}" cueBannerOverlay:CueBannerService.CueBanner="Select">
+                    <ComboBox.Style>
+                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                            <Style.Resources>
+                                <Style TargetType="{x:Type ContentPresenter}">
+                                    <Setter Property="Width" Value="{Binding ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
                 <Button Grid.Row="1" Grid.Column="2" Margin="3" Width="75" Content="Apply" Command="{Binding ApplyPortNameCommand}" />
             </Grid>
         </TabItem>
@@ -99,8 +109,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="54"/>
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" Text="Vial Information" />
                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" MaxLines="7" IsReadOnly="True" IsEnabled="False" Text="{Binding TrayNamesAndMaxVialFormatted, Mode=OneWay}" />

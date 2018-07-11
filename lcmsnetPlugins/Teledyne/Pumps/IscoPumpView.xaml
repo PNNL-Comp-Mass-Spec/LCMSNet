@@ -72,7 +72,17 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="Unit Addr:" />
                             <ComboBox Grid.Row="1" Grid.Column="0" Margin="3" ItemsSource="{Binding UnitAddressComboBoxOptions}" SelectedItem="{Binding UnitAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="Serial Port:" />
-                            <ComboBox Grid.Row="3" Grid.Column="0" Margin="3" ItemsSource="{Binding ComPortComboBoxOptions}" SelectedValue="{Binding COMPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ToolTip="{Binding COMPort}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                            <ComboBox Grid.Row="3" Grid.Column="0" Margin="3" ItemsSource="{Binding ComPortComboBoxOptions}" SelectedValue="{Binding COMPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ToolTip="{Binding COMPort}" cueBannerOverlay:CueBannerService.CueBanner="Select">
+                                <ComboBox.Style>
+                                    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                        <Style.Resources>
+                                            <Style TargetType="{x:Type ContentPresenter}">
+                                                <Setter Property="Width" Value="{Binding ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                            </Style>
+                                        </Style.Resources>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
                             <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" VerticalAlignment="Center" Text="Read Timeout (ms):" />
                             <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" VerticalAlignment="Center" Text="Write Timeout (ms):" />
                             <TextBlock Grid.Row="2" Grid.Column="2" Margin="3" VerticalAlignment="Center" Text="Baud Rate" />

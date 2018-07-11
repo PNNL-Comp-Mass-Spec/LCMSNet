@@ -14,7 +14,17 @@
             <xctk:EditorTemplateDefinition TargetProperties="PortName">
                 <xctk:EditorTemplateDefinition.EditingTemplate>
                     <DataTemplate>
-                        <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:SerialPortPropertyGrid}, Path=SerialPorts}" ToolTip="{Binding Value}" />
+                        <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:SerialPortPropertyGrid}, Path=SerialPorts}" ToolTip="{Binding Value}">
+                            <ComboBox.Style>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                    <Style.Resources>
+                                        <Style TargetType="{x:Type ContentPresenter}">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </Style.Resources>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
                     </DataTemplate>
                 </xctk:EditorTemplateDefinition.EditingTemplate>
             </xctk:EditorTemplateDefinition>
