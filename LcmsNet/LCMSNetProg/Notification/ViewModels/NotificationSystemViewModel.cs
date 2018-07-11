@@ -495,7 +495,6 @@ namespace LcmsNet.Notification.ViewModels
                 deviceEventTable.Add(device, linker);
             }
 
-
             var statuses = device.GetStatusNotificationList();
             if (statuses != null)
             {

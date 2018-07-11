@@ -402,7 +402,6 @@ namespace LcmsNet.Method.ViewModels
             if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
-
             if (devicesComboBoxOptions.Count < 1)
             {
                 DevicesComboBoxEnabled = true;
@@ -410,7 +409,14 @@ namespace LcmsNet.Method.ViewModels
             }
 
             if (devicesComboBoxOptions.Contains(device) == false)
-                devicesComboBoxOptions.Add(device);
+            {
+                using (devicesComboBoxOptions.SuppressChangeNotifications())
+                {
+                    devicesComboBoxOptions.Add(device);
+                    devicesComboBoxOptions.Sort((x,y) => x.Name.CompareTo(y.Name));
+                }
+
+            }
 
             if (deviceMappings.ContainsKey(device) == false)
             {
@@ -612,11 +618,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void RegisterDevices()
         {
-            foreach (var device in DeviceManager.Manager.Devices)
+            foreach (var device in DeviceManager.Manager.Devices.Where(x => x.DeviceType != DeviceType.Fluidics).OrderBy(x => x.Name))
             {
-                if (device.DeviceType == DeviceType.Fluidics)
-                    continue;
-
                 var methodPairs = ReflectDevice(device);
                 deviceMappings.Add(device, methodPairs);
                 devicesComboBoxOptions.Add(device);
