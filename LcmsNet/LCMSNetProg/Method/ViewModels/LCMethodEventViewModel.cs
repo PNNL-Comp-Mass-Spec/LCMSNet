@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Media;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -17,18 +18,34 @@ namespace LcmsNet.Method.ViewModels
     /// </summary>
     public class LCMethodEventViewModel : ReactiveObject
     {
+        #region Static Data
+
+        /// <summary>
+        /// List of device methods and parameters to use.
+        /// </summary>
+        private static readonly Dictionary<IDevice, List<LCMethodData>> DeviceMappings = new Dictionary<IDevice, List<LCMethodData>>();
+
+        private static readonly ReactiveList<IDevice> DevicesList = new ReactiveList<IDevice>();
+
+        static LCMethodEventViewModel()
+        {
+            // Add the devices to the method editor
+            RegisterDevices();
+
+            // Register to listen for device additions or deletions.
+            DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
+            DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+        }
+
+        #endregion
+
         /// <summary>
         /// Default constructor for the event view model that takes no arguments
         /// Calling this constructor is only for the IDE designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public LCMethodEventViewModel()
-        {
-            SelectedDevice = null;
-            EventNumber = "1";
-            StoppedHere = false;
-            Initialize();
-        }
+        public LCMethodEventViewModel() : this(1)
+        { }
 
         /// <summary>
         /// Default Constructor
@@ -38,17 +55,32 @@ namespace LcmsNet.Method.ViewModels
             SelectedDevice = null;
             EventNumber = eventNum.ToString();
             StoppedHere = false;
-            Initialize();
+
+            Breakpoint = new BreakpointViewModel();
+
+            // Handle user interface events to display context of method editors
+            this.WhenAnyValue(x => x.SelectedDevice).Subscribe(x => this.SelectedDeviceChanged());
+            this.WhenAnyValue(x => x.SelectedLCMethod).Subscribe(x => this.SelectedMethodChanged());
+            this.WhenAnyValue(x => x.OptimizeWith).Subscribe(x => this.OptimizeForChanged());
+            Breakpoint.BreakpointChanged += Breakpoint_Changed;
+
+            if (DevicesList.Count > 0)
+            {
+                SelectedDevice = DevicesList[0];
+                UpdateSelectedDevice();
+            }
+
+            this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled, out devicesComboBoxEnabled);
+            DevicesList.ItemsAdded.Subscribe(_ => this.DeviceAdded());
         }
 
         /// <summary>
-        /// Constructor for an unlocking event.
+        /// Constructor for a LC event.
         /// </summary>
-        /// <param name="device"></param>
-        public LCMethodEventViewModel(LCMethodData methodData, bool locked)
+        /// <param name="methodData"></param>
+        /// <param name="locked"></param>
+        public LCMethodEventViewModel(LCMethodData methodData, bool locked) : this(1)
         {
-            Initialize();
-
             SelectedDevice = methodData.Device;
             // Every device is a reference held in the device manager...except for the timer
             // object.  This object is created every time as a non-critical object because
@@ -72,7 +104,6 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            DevicesComboBoxEnabled = (locked == false);
             EventUnlocked = (locked == false);
 
             OptimizeWith = methodData.OptimizeWith;
@@ -97,7 +128,7 @@ namespace LcmsNet.Method.ViewModels
                 LoadMethodParameters(methodData);
             }
 
-            isLockingEvent = locked;
+            IsLockingEvent = locked;
             this.methodData = methodData;
         }
 
@@ -120,36 +151,18 @@ namespace LcmsNet.Method.ViewModels
 
         ~LCMethodEventViewModel()
         {
-            methodData.BreakPointEvent -= BreakPointEvent_Handler;
-            methodData.Simulated -= Simulated_Handler;
-            methodData.SimulatingEvent -= Simulating_Handler;
-        }
-
-        /// <summary>
-        /// Initializes the device mappings structures and registers events to listen for data from the device manager.
-        /// </summary>
-        private void Initialize()
-        {
-            // Add the devices to the method editor
-            deviceMappings = new Dictionary<IDevice, List<LCMethodData>>();
-            RegisterDevices();
-            Breakpoint = new BreakpointViewModel();
-
-            // Handle user interface events to display context of method editors
-            this.WhenAnyValue(x => x.SelectedDevice).Subscribe(x => this.SelectedDeviceChanged());
-            this.WhenAnyValue(x => x.SelectedLCMethod).Subscribe(x => this.SelectedMethodChanged());
-            this.WhenAnyValue(x => x.OptimizeWith).Subscribe(x => this.OptimizeForChanged());
-            Breakpoint.BreakpointChanged += Breakpoint_Changed;
-
-            // Register to listen for device additions or deletions.
-            DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
-            DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
-            DeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
+            if (methodData != null)
+            {
+                methodData.BreakPointEvent -= BreakPointEvent_Handler;
+                methodData.Simulated -= Simulated_Handler;
+                methodData.SimulatingEvent -= Simulating_Handler;
+            }
         }
 
         void Breakpoint_Changed(object sender, BreakpointArgs e)
         {
-            methodData.BreakPoint = e.IsSet;
+            if (methodData != null)
+                methodData.BreakPoint = e.IsSet;
         }
 
         private int FindMethodIndex(LCMethodData method)
@@ -167,34 +180,6 @@ namespace LcmsNet.Method.ViewModels
             return -1;
         }
 
-        /// <summary>
-        /// Internal class that provides methods to map types to boolean values for testing.
-        /// </summary>
-        internal static class classParameterTypeFactory
-        {
-            /// <summary>
-            /// Returns true if the type is a double, short, long, int, uint, ushort, ulong, or float.
-            /// </summary>
-            /// <param name="t">Type to interrogate.</param>
-            /// <returns>True if numeric, false if not or null.</returns>
-            public static bool IsNumeric(Type t)
-            {
-                if (t == null)
-                    return false;
-
-                var isNumeric = false;
-                isNumeric = isNumeric || (typeof(int) == t);
-                isNumeric = isNumeric || (typeof(uint) == t);
-                isNumeric = isNumeric || (typeof(ulong) == t);
-                isNumeric = isNumeric || (typeof(long) == t);
-                isNumeric = isNumeric || (typeof(short) == t);
-                isNumeric = isNumeric || (typeof(ushort) == t);
-                isNumeric = isNumeric || (typeof(double) == t);
-                isNumeric = isNumeric || (typeof(float) == t);
-                return isNumeric;
-            }
-        }
-
         #region Members
 
         /// <summary>
@@ -202,27 +187,15 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private LCMethodData methodData;
 
-        /// <summary>
-        /// List of device methods and parameters to use.
-        /// </summary>
-        private Dictionary<IDevice, List<LCMethodData>> deviceMappings;
-
-        /// <summary>
-        /// Flag indicating if this event is a placeholder so that we know it's an unlocking event
-        /// </summary>
-        private readonly bool isLockingEvent;
-
         private BreakpointViewModel breakpoint;
         private string eventNumber = "1";
         private bool optimizeWith = false;
         private IDevice selectedDevice = null;
         private LCMethodData selectedLCMethod = null;
-        private readonly ReactiveList<IDevice> devicesComboBoxOptions = new ReactiveList<IDevice>();
         private readonly ReactiveList<LCMethodData> methodsComboBoxOptions = new ReactiveList<LCMethodData>();
         private readonly ReactiveList<EventParameterViewModel> eventParameterList = new ReactiveList<EventParameterViewModel>();
-        private bool devicesComboBoxEnabled = true;
-        private bool eventUnlocked = true;
         private bool isSelected = false;
+        private readonly ObservableAsPropertyHelper<bool> devicesComboBoxEnabled;
 
         #endregion
 
@@ -258,21 +231,11 @@ namespace LcmsNet.Method.ViewModels
             set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
         }
 
-        public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => devicesComboBoxOptions;
+        public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => DevicesList;
         public IReadOnlyReactiveList<LCMethodData> MethodsComboBoxOptions => methodsComboBoxOptions;
         public IReadOnlyReactiveList<EventParameterViewModel> EventParameterList => eventParameterList;
-
-        public bool DevicesComboBoxEnabled
-        {
-            get { return devicesComboBoxEnabled; }
-            private set { this.RaiseAndSetIfChanged(ref devicesComboBoxEnabled, value); }
-        }
-
-        public bool EventUnlocked
-        {
-            get { return eventUnlocked; }
-            private set { this.RaiseAndSetIfChanged(ref eventUnlocked, value); }
-        }
+        public bool DevicesComboBoxEnabled => devicesComboBoxEnabled.Value && EventUnlocked;
+        public bool EventUnlocked { get; }
 
         public bool IsSelected
         {
@@ -297,10 +260,12 @@ namespace LcmsNet.Method.ViewModels
                     // Make sure that we build the method so that the values are updated
                     // from the control used to interface them....
                     methodData.BuildMethod();
+
+                    methodData.BreakPointEvent += BreakPointEvent_Handler;
+                    methodData.Simulated += Simulated_Handler;
+                    methodData.SimulatingEvent += Simulating_Handler;
                 }
-                methodData.BreakPointEvent += BreakPointEvent_Handler;
-                methodData.Simulated += Simulated_Handler;
-                methodData.SimulatingEvent += Simulating_Handler;
+
                 return methodData;
             }
         }
@@ -322,7 +287,7 @@ namespace LcmsNet.Method.ViewModels
                 {
                     return Brushes.Yellow;
                 }
-                if (methodData.BreakPoint)
+                if (methodData != null && methodData.BreakPoint)
                 {
                     return Brushes.Maroon;
                 }
@@ -340,9 +305,9 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
-        /// Gets flag indicating whether this event editor is a placeholder for a locking event.
+        /// Flag indicating if this event is a placeholder so that we know it's a locking event
         /// </summary>
-        public bool IsLockingEvent => isLockingEvent;
+        public bool IsLockingEvent { get; }
 
         private bool IsCurrent { get; set; }
 
@@ -350,23 +315,23 @@ namespace LcmsNet.Method.ViewModels
 
         #endregion
 
-        #region Device Manager Event Listeners
+        #region Device Manager Event Listeners (static)
 
         /// <summary>
-        /// Handles when a device is renamed, it updates the internal device data.
+        /// Updates the list of available devices.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceRenamed(object sender, IDevice device)
+        private static void Manager_DeviceRemoved(object sender, IDevice device)
         {
             if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
-            if (devicesComboBoxOptions.Contains(device))
-            {
-                var index = devicesComboBoxOptions.IndexOf(device);
-                devicesComboBoxOptions[index] = device;
-            }
+            if (DevicesList.Contains(device))
+                DevicesList.Remove(device);
+
+            if (DeviceMappings.ContainsKey(device))
+                DeviceMappings.Remove(device);
         }
 
         /// <summary>
@@ -374,70 +339,43 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="device"></param>
-        void Manager_DeviceRemoved(object sender, IDevice device)
+        private static void Manager_DeviceAdded(object sender, IDevice device)
         {
             if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
-            if (devicesComboBoxOptions.Contains(device))
-                devicesComboBoxOptions.Remove(device);
-
-            if (deviceMappings.ContainsKey(device))
-                deviceMappings.Remove(device);
-
-            if (devicesComboBoxOptions.Count < 1)
-                DevicesComboBoxEnabled = false;
-        }
-
-        /// <summary>
-        /// Updates the list of available devices.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="device"></param>
-        void Manager_DeviceAdded(object sender, IDevice device)
-        {
-            // If this was the first device added for some odd reason, then make sure we enable the device.
-            var isFirstDevice = false;
-
-            if (device.DeviceType == DeviceType.Fluidics)
-                return;
-
-            if (devicesComboBoxOptions.Count < 1)
+            if (DevicesList.Contains(device) == false)
             {
-                DevicesComboBoxEnabled = true;
-                isFirstDevice = true;
-            }
-
-            if (devicesComboBoxOptions.Contains(device) == false)
-            {
-                using (devicesComboBoxOptions.SuppressChangeNotifications())
+                using (DevicesList.SuppressChangeNotifications())
                 {
-                    devicesComboBoxOptions.Add(device);
-                    devicesComboBoxOptions.Sort((x,y) => x.Name.CompareTo(y.Name));
+                    DevicesList.Add(device);
+                    DevicesList.Sort((x, y) => x.Name.CompareTo(y.Name));
                 }
-
             }
 
-            if (deviceMappings.ContainsKey(device) == false)
+            if (DeviceMappings.ContainsKey(device) == false)
             {
                 var methodPairs = ReflectDevice(device);
-                deviceMappings.Add(device, methodPairs);
-            }
-
-            // Make sure we select a device
-            if (isFirstDevice)
-            {
-                if (devicesComboBoxOptions.Count > 0)
-                {
-                    SelectedDevice = devicesComboBoxOptions[0];
-                }
-                UpdateSelectedDevice();
+                DeviceMappings.Add(device, methodPairs);
             }
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Handles automatically selecting a device when there were no available devices before
+        /// </summary>
+        private void DeviceAdded()
+        {
+            // Make sure we select a device
+            if (DevicesList.Count == 1)
+            {
+                SelectedDevice = DevicesList[0];
+                UpdateSelectedDevice();
+            }
+        }
 
         /// <summary>
         /// Displays the given device method names and selected controls.
@@ -456,7 +394,7 @@ namespace LcmsNet.Method.ViewModels
             if (device is TimerDevice)
             {
                 // Find the timer device.
-                foreach (var tempDevice in deviceMappings.Keys)
+                foreach (var tempDevice in DeviceMappings.Keys)
                 {
                     if (tempDevice is TimerDevice)
                     {
@@ -466,7 +404,7 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
             // Add the method information into the combo-box as deemed by the device.
-            var methods = deviceMappings[device];
+            var methods = DeviceMappings[device];
             using (methodsComboBoxOptions.SuppressChangeNotifications())
             {
                 // Clear out the combo-box
@@ -560,7 +498,7 @@ namespace LcmsNet.Method.ViewModels
             // Update the user interface.
             if (SelectedDevice != null)
             {
-                if (deviceMappings.ContainsKey(SelectedDevice) == false)
+                if (DeviceMappings.ContainsKey(SelectedDevice) == false)
                 {
                     ReflectDevice(SelectedDevice);
                 }
@@ -611,35 +549,25 @@ namespace LcmsNet.Method.ViewModels
 
         #endregion
 
-        #region Registration and Reflection
+        #region Registration and Reflection (static)
 
         /// <summary>
         /// Registers the devices with the user interface from the device manager.
         /// </summary>
-        private void RegisterDevices()
+        private static void RegisterDevices()
         {
             foreach (var device in DeviceManager.Manager.Devices.Where(x => x.DeviceType != DeviceType.Fluidics).OrderBy(x => x.Name))
             {
                 var methodPairs = ReflectDevice(device);
-                deviceMappings.Add(device, methodPairs);
-                devicesComboBoxOptions.Add(device);
-            }
-
-            if (devicesComboBoxOptions.Count > 0)
-            {
-                SelectedDevice = devicesComboBoxOptions[0];
-                UpdateSelectedDevice();
-            }
-            else
-            {
-                DevicesComboBoxEnabled = false;
+                DeviceMappings.Add(device, methodPairs);
+                DevicesList.Add(device);
             }
         }
 
         /// <summary>
         /// Reflects the given device and puts the method and parameter information in the appropiate combo boxes.
         /// </summary>
-        public List<LCMethodData> ReflectDevice(IDevice device)
+        public static List<LCMethodData> ReflectDevice(IDevice device)
         {
             if (device == null)
                 throw new NullReferenceException("Device cannot be null.");
@@ -735,6 +663,21 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
+        /// Hashset to facilitate checking to see if a type is numeric. Use like 'NumericTypes.Contains(testType)'
+        /// </summary>
+        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+        {
+            typeof(int),
+            typeof(uint),
+            typeof(ulong),
+            typeof(long),
+            typeof(short),
+            typeof(ushort),
+            typeof(double),
+            typeof(float),
+        };
+
+        /// <summary>
         /// Given a parameter type, figure out what kind of control is associated with it.
         /// </summary>
         /// <param name="t"></param>
@@ -754,7 +697,7 @@ namespace LcmsNet.Method.ViewModels
                 }
                 control.SelectedOption = control.ComboBoxOptions.FirstOrDefault();
             }
-            else if (classParameterTypeFactory.IsNumeric(t))
+            else if (NumericTypes.Contains(t))
             {
                 control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Numeric);
             }
@@ -816,7 +759,8 @@ namespace LcmsNet.Method.ViewModels
         private void OptimizeForChanged()
         {
             UseForOptimization?.Invoke(this, OptimizeWith);
-            methodData.OptimizeWith = OptimizeWith;
+            if (methodData != null)
+                methodData.OptimizeWith = OptimizeWith;
             OnEventChanged();
         }
 
