@@ -550,7 +550,7 @@ namespace LcmsNet.Method.ViewModels
             {
                 eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodAttribute.Name, deviceEvent.SelectedMethod.Parameters);
             }
-            ApplicationLogger.LogMessage(0, "Control event added - " + eventData);
+            ApplicationLogger.LogMessage(6, "Control event added - " + eventData);
             eventsList.Add(deviceEvent);
             RenderEventList();
         }

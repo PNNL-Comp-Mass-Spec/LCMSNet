@@ -205,7 +205,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         private Size UpdateImage(DrawingContext drawingContext, Size size)
         {
-            Debug.WriteLine("Updating Image Wpf");
+            //Debug.WriteLine("Updating Image Wpf");
             try
             {
                 fluidicsModerator.SetWorldView(new Rect(0, 0, size.Width, size.Height));
