@@ -27,12 +27,11 @@ namespace TestTool
 
         private static void TestDMSDataLoading()
         {
-
             ApplicationLogger.Error += ApplicationLogger_Error;
-            ApplicationLogger.ErrorLevel = 3;
+            logErrorLevel = 3;
 
             ApplicationLogger.Message += ApplicationLogger_Message;
-            ApplicationLogger.MessageLevel = 2;
+            logMessageLevel = 2;
 
             var dbt = new DMSDBTools
             {
@@ -49,8 +48,16 @@ namespace TestTool
             Console.WriteLine("Data loaded");
         }
 
+        private static int logErrorLevel = 3;
+        private static int logMessageLevel = 2;
+
         private static void ApplicationLogger_Error(int errorLevel, ErrorLoggerArgs args)
         {
+            if (errorLevel > logErrorLevel)
+            {
+                return;
+            }
+
             Console.WriteLine(@"=== Exception ===");
             Console.WriteLine(args.Message);
 
@@ -60,6 +67,11 @@ namespace TestTool
 
         private static void ApplicationLogger_Message(int messageLevel, MessageLoggerArgs args)
         {
+            if (messageLevel > logMessageLevel)
+            {
+                return;
+            }
+
             Console.WriteLine(args.Message);
         }
 

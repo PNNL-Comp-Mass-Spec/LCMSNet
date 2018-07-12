@@ -103,7 +103,7 @@ namespace LcmsNet
                 window = splashScreen;
             }
             window.ShowMessage("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
-                            DbLogger.LogFolderPath + "\\");
+                            DbLogger.Instance.LogFolderPath + "\\");
 
             Shutdown();
         }
@@ -425,12 +425,12 @@ namespace LcmsNet
             var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
 
             // Before we do anything, let's initialize the file logging capability.
-            ApplicationLogger.Error += FileLogging.LogError;
-            ApplicationLogger.Message += FileLogging.LogMessage;
+            ApplicationLogger.Error += FileLogger.Instance.LogError;
+            ApplicationLogger.Message += FileLogger.Instance.LogMessage;
 
             // Now lets initialize logging to SQLite database.
-            ApplicationLogger.Error += DbLogger.LogError;
-            ApplicationLogger.Message += DbLogger.LogMessage;
+            ApplicationLogger.Error += DbLogger.Instance.LogError;
+            ApplicationLogger.Message += DbLogger.Instance.LogMessage;
 
             // Note that we used icons from here for the gears on the main form window.
             //     http://labs.chemist2dio.com/free-vector-gears.php/
@@ -485,6 +485,19 @@ namespace LcmsNet
             // Load the main application and run
             LogMessage(-1, "Loading main window");
             mainVm = new MainWindowViewModel();
+
+            // Set the logging levels
+            var logLevelErrors = LCMSSettings.GetParameter(LCMSSettings.PARAM_LOGGINGERRORLEVEL);
+            if (!string.IsNullOrWhiteSpace(logLevelErrors))
+                mainVm.ErrorLevel = int.Parse(logLevelErrors);
+            else
+                mainVm.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
+
+            var logLevelMessages = LCMSSettings.GetParameter(LCMSSettings.PARAM_LOGGINGMSGLEVEL);
+            if (!string.IsNullOrWhiteSpace(logLevelMessages))
+                mainVm.MessageLevel = int.Parse(logLevelMessages);
+            else
+                mainVm.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
 
             // Assure that the splash screen has been visible for at least 3 seconds
             while (DateTime.UtcNow.Subtract(splashLoadTime).TotalMilliseconds < 3000)
@@ -611,19 +624,6 @@ namespace LcmsNet
             // Create the method manager
             //LogMessage(-1, "Creating the Method Manager");
 
-            // Set the logging levels
-            var logLevelErrors = LCMSSettings.GetParameter(LCMSSettings.PARAM_LOGGINGERRORLEVEL);
-            if (!string.IsNullOrWhiteSpace(logLevelErrors))
-                ApplicationLogger.ErrorLevel = int.Parse(logLevelErrors);
-            else
-                ApplicationLogger.ErrorLevel = CONST_DEFAULT_ERROR_LOG_LEVEL;
-
-            var logLevelMessages = LCMSSettings.GetParameter(LCMSSettings.PARAM_LOGGINGMSGLEVEL);
-            if (!string.IsNullOrWhiteSpace(logLevelMessages))
-                ApplicationLogger.MessageLevel = int.Parse(logLevelMessages);
-            else
-                ApplicationLogger.MessageLevel = CONST_DEFAULT_MESSAGE_LOG_LEVEL;
-
             CreateSQLCache();
             LogMessage(-1, "Loading DMS data");
 
@@ -701,7 +701,7 @@ namespace LcmsNet
 
         private void LogMessage(int msgLevel, string message)
         {
-            FileLogging.LogMessage(msgLevel, new MessageLoggerArgs(message));
+            FileLogger.Instance.LogMessage(msgLevel, new MessageLoggerArgs(message));
         }
 
         #endregion

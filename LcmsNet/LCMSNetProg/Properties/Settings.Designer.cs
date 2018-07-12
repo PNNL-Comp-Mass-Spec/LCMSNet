@@ -340,7 +340,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int LoggingErrorLevel {
             get {
                 return ((int)(this["LoggingErrorLevel"]));
@@ -349,7 +349,7 @@ namespace LcmsNet.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int LoggingMsgLevel {
             get {
                 return ((int)(this["LoggingMsgLevel"]));

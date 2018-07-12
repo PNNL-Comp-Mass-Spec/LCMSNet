@@ -375,24 +375,23 @@ namespace LcmsNet.Method
                 Exception exVal = null;
                 var error = ex != null;
                 SampleData sampVal = null;
-                if (Logger != null)
+                if (ex != null)
                 {
-                    if (ex != null)
-                    {
-                        exVal = ex;
-                    }
-                    if (sample != null)
-                    {
-                        sampVal = sample;
-                    }
-                    if (!error)
-                    {
-                        Logger.LogMessage(level, message, sampVal);
-                    }
-                    else
-                    {
-                        Logger.LogError(level, message, exVal, sampVal);
-                    }
+                    exVal = ex;
+                }
+
+                if (sample != null)
+                {
+                    sampVal = sample;
+                }
+
+                if (!error)
+                {
+                    ApplicationLogger.LogMessage(level, message, sampVal);
+                }
+                else
+                {
+                    ApplicationLogger.LogError(level, message, exVal, sampVal);
                 }
             }
         }
@@ -405,11 +404,6 @@ namespace LcmsNet.Method
         /// Gets or sets how verbose to make the debug output.
         /// </summary>
         public int VerboseLevel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the logging object.
-        /// </summary>
-        public ILogger Logger { get; set; }
 
         #endregion
 
@@ -659,6 +653,7 @@ namespace LcmsNet.Method
                                         m_sampleQueue.CancelRunningSample(samples[columnID], true);
                                         samples[columnID] = null;
                                         StopAllOnOverdue();
+                                        // TODO: Use a Task instead of a thread?
                                         ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation,
                                                                      m_columnThreads[columnID].Sample);
                                     }

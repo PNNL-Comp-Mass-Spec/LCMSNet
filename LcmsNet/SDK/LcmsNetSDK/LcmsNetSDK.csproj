@@ -106,9 +106,11 @@
     <Compile Include="Logging\DbLogger.cs" />
     <Compile Include="Logging\DbLoggerException.cs" />
     <Compile Include="Logging\ErrorLoggerArgs.cs" />
-    <Compile Include="Logging\FileLogging.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\IDeviceHealthWriter.cs" />
-    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\IHandlesLogging.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\LogWriterBase.cs" />
     <Compile Include="Logging\MessageLoggerArgs.cs" />
     <Compile Include="MessageBoxDisplayExtension.cs" />
     <Compile Include="Method\IParameter.cs" />

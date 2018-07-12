@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LcmsNetSDK.Data;
 
 namespace LcmsNetSDK.Logging
 {
     /// <summary>
-    /// Class that marshalls messages from different components to different logging and streaming capabilities.
+    /// Class that marshals messages from different components to different logging and streaming capabilities.
     /// </summary>
-    public class ApplicationLogger : ILogger
+    public static class ApplicationLogger
     {
         /// <summary>
         /// Delegate method handler defining how an error event will be called.
@@ -36,21 +37,23 @@ namespace LcmsNetSDK.Logging
         /// <summary>
         /// Less likely to need to be logged.
         /// </summary>
-        public const int CONST_STATUS_LEVEL_USER = 2;
+        public const int CONST_STATUS_LEVEL_USER = 3;
 
-        /// <summary>
-        /// Error message importance level (0 is most important, 5 is least important)
-        /// </summary>
-        public static int ErrorLevel { get; set; }
+        public static LogLevel ConvertIntToLogLevel(int level)
+        {
+            var levels = Enum.GetValues(typeof(LogLevel)).Cast<int>().OrderBy(x => x).ToList();
 
-        /// <summary>
-        /// Status message importance level (0 is most important, 5 is least important)
-        /// </summary>
-        /// <remarks>
-        /// When MessageLevel is 0, only critical errors are logged
-        /// When MessageLevel is 5, all messages are logged
-        /// </remarks>
-        public static int MessageLevel { get; set; }
+            // return the first logLevel that is greater than or equal to the specified level. This means that a
+            foreach (var logLevel in levels)
+            {
+                if (logLevel >= level)
+                {
+                    return (LogLevel) logLevel;
+                }
+            }
+
+            return (LogLevel) levels.Max();
+        }
 
         /// <summary>
         /// Found when the application finds a message.
@@ -62,29 +65,6 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         public static event DelegateErrorHandler Error;
 
-        #region Error Methods
-
-        /// <summary>
-        /// Logs an error to the listening error output streams.
-        /// </summary>
-        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered (0 is most important, 5 is least important)</param>
-        /// <param name="message">Error message</param>
-        public static void LogError(int errorLevel, string message)
-        {
-            LogError(errorLevel, message, null, null);
-        }
-
-        /// <summary>
-        /// Logs an error to the listening error output streams.
-        /// </summary>
-        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered (0 is most important, 5 is least important)</param>
-        /// <param name="message">Error message</param>
-        /// <param name="ex">Exception</param>
-        public static void LogError(int errorLevel, string message, Exception ex)
-        {
-            LogError(errorLevel, message, ex, null);
-        }
-
         /// <summary>
         /// Logs an error to the listening error output streams
         /// </summary>
@@ -92,7 +72,7 @@ namespace LcmsNetSDK.Logging
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception</param>
         /// <param name="sample">Data for a sample</param>
-        public static void LogError(int errorLevel, string message, Exception ex, SampleData sample)
+        public static void LogError(int errorLevel, string message, Exception ex = null, SampleData sample = null)
         {
             ErrorLoggerArgs args;
             if (sample != null)
@@ -109,24 +89,19 @@ namespace LcmsNetSDK.Logging
                 args.Exception = ex;
             }
 
-            if (errorLevel <= ErrorLevel && Error != null)
-            {
-                Task.Run(() => Error?.Invoke(errorLevel, args));
-            }
+            Task.Run(() => Error?.Invoke(errorLevel, args));
         }
 
-        #endregion
-
-        #region Messages
-
         /// <summary>
-        /// Logs a message to the listening message output streams.
+        /// Logs an error to the listening error output streams
         /// </summary>
-        /// <param name="messageLevel">Level of the message so more verbose messages can be filtered (0 is most important, 5 is least important)</param>
-        /// <param name="message">Message to log</param>
-        public static void LogMessage(int messageLevel, string message)
+        /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered</param>
+        /// <param name="message">Error message</param>
+        /// <param name="ex">Exception</param>
+        /// <param name="sample">Data for a sample</param>
+        public static void LogError(LogLevel errorLevel, string message, Exception ex = null, SampleData sample = null)
         {
-            LogMessage(messageLevel, message, null);
+            LogError((int)errorLevel, message, ex, sample);
         }
 
         /// <summary>
@@ -135,7 +110,11 @@ namespace LcmsNetSDK.Logging
         /// <param name="messageLevel">Level of the message so more verbose messages can be filtered (0 is most important, 5 is least important)</param>
         /// <param name="message">Message to log</param>
         /// <param name="sample">Sample data</param>
-        public static void LogMessage(int messageLevel, string message, SampleData sample)
+        /// <remarks>
+        /// When MessageLevel is 0, only critical errors are logged
+        /// When MessageLevel is 5, all messages are logged
+        /// </remarks>
+        public static void LogMessage(int messageLevel, string message, SampleData sample = null)
         {
             MessageLoggerArgs args;
             if (sample != null)
@@ -147,46 +126,22 @@ namespace LcmsNetSDK.Logging
                 args = new MessageLoggerArgs(message);
             }
 
-            if (messageLevel <= ErrorLevel && Message != null)
-            {
-                Task.Run(() => Message?.Invoke(messageLevel, args));
-            }
+            Task.Run(() => Message?.Invoke(messageLevel, args));
         }
 
-        #endregion
-
-        #region ILogger Members
-
-        void ILogger.LogError(int errorLevel, string message, Exception ex, SampleData sample)
+        /// <summary>
+        /// Logs a message to the listening message output streams.
+        /// </summary>
+        /// <param name="messageLevel">Level of the message so more verbose messages can be filtered</param>
+        /// <param name="message">Message to log</param>
+        /// <param name="sample">Sample data</param>
+        /// <remarks>
+        /// When MessageLevel is 0, only critical errors are logged
+        /// When MessageLevel is 5, all messages are logged
+        /// </remarks>
+        public static void LogMessage(LogLevel messageLevel, string message, SampleData sample = null)
         {
-            LogError(errorLevel, message, ex, sample);
+            LogMessage((int)messageLevel, message, sample);
         }
-
-        void ILogger.LogError(int errorLevel, string message, Exception ex)
-        {
-            LogError(errorLevel, message, ex);
-        }
-
-        void ILogger.LogError(int errorLevel, string message, SampleData sample)
-        {
-            LogError(errorLevel, message, null, sample);
-        }
-
-        void ILogger.LogError(int errorLevel, string message)
-        {
-            LogError(errorLevel, message);
-        }
-
-        void ILogger.LogMessage(int messageLevel, string message)
-        {
-            LogMessage(messageLevel, message);
-        }
-
-        void ILogger.LogMessage(int messageLevel, string message, SampleData sample)
-        {
-            LogMessage(messageLevel, message, sample);
-        }
-
-        #endregion
     }
 }

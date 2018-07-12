@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Windows.Data;
-using LcmsNetSDK;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 using ReactiveUI;
@@ -51,7 +50,7 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         /// <param name="level">Filter for displaying messages.</param>
         /// <param name="message">Message to show user.</param>
-        public void ShowMessage(int level, MessageLoggerArgs message)
+        public void LogMessage(int level, MessageLoggerArgs message)
         {
             if (level <= messageLevel && message != null)
             {
@@ -77,7 +76,7 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         /// <param name="level">Level of errors to display.</param>
         /// <param name="error">Error to display.</param>
-        public void ShowErrors(int level, ErrorLoggerArgs error)
+        public void LogError(int level, ErrorLoggerArgs error)
         {
             if (level <= errorLevel && error != null)
             {
@@ -177,6 +176,24 @@ namespace LcmsNet.Logging.ViewModels
         {
             get { return errorLevel; }
             set { this.RaiseAndSetIfChanged(ref errorLevel, value); }
+        }
+
+        /// <summary>
+        /// Error message importance level
+        /// </summary>
+        public LogLevel ErrorLogLevel
+        {
+            get { return ApplicationLogger.ConvertIntToLogLevel(ErrorLevel); }
+            set { ErrorLevel = (int)value; }
+        }
+
+        /// <summary>
+        /// Status message importance level
+        /// </summary>
+        public LogLevel MessageLogLevel
+        {
+            get { return ApplicationLogger.ConvertIntToLogLevel(MessageLevel); }
+            set { MessageLevel = (int)value; }
         }
 
         public IReadOnlyReactiveList<string> MessageList => messageList;

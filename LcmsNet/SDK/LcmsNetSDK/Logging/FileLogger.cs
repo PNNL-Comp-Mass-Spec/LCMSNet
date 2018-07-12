@@ -21,17 +21,23 @@ namespace LcmsNetSDK.Logging
     /// <summary>
     /// Logs errors and messages to a file
     /// </summary>
-    public static class FileLogging
+    public class FileLogger : LogWriterBase
     {
+        public static FileLogger Instance { get; } = new FileLogger();
+
         /// <summary>
         /// Flag indicating whether a log file has been created for this program start.
         /// </summary>
-        private static bool m_logFileCreated;
+        private bool logFileCreated;
+
+        private readonly object fileWriteLock = new object();
+
+        private StreamWriter logWriter = null;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        static FileLogging()
+        private FileLogger()
         {
             AppFolder = "LCMSNet";
         }
@@ -67,8 +73,13 @@ namespace LcmsNetSDK.Logging
 
         #region "Methods"
 
-        public static void LogError(int errorLevel, ErrorLoggerArgs args)
+        public override void LogError(int errorLevel, ErrorLoggerArgs args)
         {
+            if (errorLevel > ErrorLevel)
+            {
+                return;
+            }
+
             try
             {
                 // Build the message string
@@ -90,8 +101,7 @@ namespace LcmsNetSDK.Logging
                 if (args.Exception != null)
                 {
                     // Get all exception messages if exceptions are nested
-                    string exceptionMsg;
-                    GetExceptionMessage(args.Exception, out exceptionMsg);
+                    GetExceptionMessage(args.Exception, out var exceptionMsg);
                     msgStr.Append("Exception message: " + exceptionMsg);
                 }
                 // Write the message to the log file
@@ -104,8 +114,13 @@ namespace LcmsNetSDK.Logging
             }
         }
 
-        public static void LogMessage(int msgLevel, MessageLoggerArgs args)
+        public override void LogMessage(int msgLevel, MessageLoggerArgs args)
         {
+            if (msgLevel > MessageLevel)
+            {
+                return;
+            }
+
             // Build the message string
             //var msgStr = new StringBuilder(DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.fff"));
             var msgStr = new StringBuilder(TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
@@ -125,80 +140,94 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         /// <param name="ex">Input exception</param>
         /// <param name="msg">Message(s) contained in exception</param>
-        private static void GetExceptionMessage(Exception ex, out string msg)
+        private void GetExceptionMessage(Exception ex, out string msg)
         {
             msg = ex.Message + " " + ex.StackTrace;
             if (ex.InnerException != null)
             {
-                string innerMsg;
-                GetExceptionMessage(ex.InnerException, out innerMsg);
+                GetExceptionMessage(ex.InnerException, out var innerMsg);
                 // adding \t prior to \n, so that it is separated from the previous text in notepad.
                 msg += "\t\nInner exception: " + innerMsg;
             }
         }
 
-
-        private static void ReportLogFilePath(string logFilePath)
+        private void ReportLogFilePath(string logFilePath)
         {
             LogFilePathDefined?.Invoke(new MessageLoggerArgs(logFilePath));
         }
 
-        private static readonly object m_lockObject = new object();
+        private bool SetupLogFile()
+        {
+            if (logWriter != null)
+            {
+                return true;
+            }
+
+            try
+            {
+                FileInfo logFile;
+
+                //
+                // We always create a new file every time we run the program.
+                // Here we check to see that the file has been created before
+                // because our file names will be Date_TimeOfDay which
+                // will change.
+                //
+                if (logFileCreated == false || string.IsNullOrWhiteSpace(LogPath))
+                {
+                    var path = CreateLogFilePath();
+                    LogPath = path;
+                    logFile = new FileInfo(path);
+
+                    ReportLogFilePath(LogPath);
+                    logFileCreated = true;
+                }
+                else
+                {
+                    logFile = new FileInfo(LogPath);
+                }
+
+                if (logFile.Directory == null)
+                    return false;
+
+                //
+                // Create the folder if it does not exist
+                //
+                if (!logFile.Directory.Exists)
+                {
+                    logFile.Directory.Create();
+                }
+
+                if (logFile.Directory.Exists)
+                {
+                    logWriter = new StreamWriter(new FileStream(logFile.FullName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite));
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception creating error log file", ex);
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Writes a string to the log file
         /// </summary>
         /// <param name="msgStr">String to write</param>
-        private static void WriteToLogFile(string msgStr)
+        private void WriteToLogFile(string msgStr)
         {
-            lock (m_lockObject)
+            lock (fileWriteLock)
             {
-                //System.Diagnostics.Debug.WriteLine("\tWriteToLogFile: Thread " + System.Threading.Thread.CurrentThread.Name + ": " + msgStr);
+                if (!SetupLogFile())
+                {
+                    return;
+                }
+
                 try
                 {
-                    FileInfo logFile;
-
-                    //
-                    // We always create a new file every time we run the program.
-                    // Here we check to see that the file has been created before
-                    // because our file names will be Date_TimeOfDay which
-                    // will change.
-                    //
-                    if (m_logFileCreated == false || string.IsNullOrWhiteSpace(LogPath))
-                    {
-                        var path = CreateLogFilePath();
-                        LogPath = path;
-                        logFile = new FileInfo(path);
-
-                        ReportLogFilePath(LogPath);
-                        m_logFileCreated = true;
-                    }
-                    else
-                    {
-                        logFile = new FileInfo(LogPath);
-                    }
-
-                    if (logFile.Directory == null)
-                        return;
-
-                    //
-                    // Create the folder if it does not exist
-                    //
-                    if (!logFile.Directory.Exists)
-                    {
-                        logFile.Directory.Create();
-                    }
-
-                    if (logFile.Directory.Exists)
-                    {
-                        using (
-                            var logWriter =
-                                new StreamWriter(new FileStream(logFile.FullName, FileMode.Append, FileAccess.Write,
-                                    FileShare.ReadWrite)))
-                        {
-                            logWriter.WriteLine(msgStr);
-                        }
-                    }
+                    logWriter.WriteLine(msgStr);
                 }
                 catch (IOException)
                 {
@@ -215,7 +244,7 @@ namespace LcmsNetSDK.Logging
         /// Creates a log file name
         /// </summary>
         /// <returns>Name and path of error log file</returns>
-        private static string CreateLogFilePath()
+        private string CreateLogFilePath()
         {
             var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             //string logFileName = "Log_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".txt";

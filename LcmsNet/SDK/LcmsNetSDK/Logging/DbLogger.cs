@@ -23,19 +23,23 @@ namespace LcmsNetSDK.Logging
     /// <summary>
     /// Logs errors and messages to a SQLite database
     /// </summary>
-    public static class DbLogger
+    public class DbLogger : LogWriterBase, IDisposable
     {
+        public static DbLogger Instance { get; } = new DbLogger();
 
-        #region "Constants"
+        /// <summary>
+        /// Private default constructor to prevent external instanciation
+        /// </summary>
+        private DbLogger()
+        {
+        }
 
         private const string INSERT_CMD_BASE = "INSERT INTO T_LogData('Date','Type','Level','Sample',"
                                                + "'Column','Device','Message','Exception') VALUES(";
 
-        #endregion
+        #region "Properties"
 
-        #region "Properies"
-
-        public static string LogFolderPath
+        public string LogFolderPath
         {
             get
             {
@@ -49,11 +53,147 @@ namespace LcmsNetSDK.Logging
 
         #region "Class variables"
 
-        private static readonly object m_lock = "AstringToLockOn";
-        private static readonly object m_writeLock = "AnotherStringToLockOn";
-        private static bool m_LogDbFileCreated;
-        private static string m_DbFileName;
-        private static string m_ConnStr;
+        private readonly object dbWriteLock = new object();
+        private bool logDbFileCreated;
+        private string dbFileName;
+        private string connStr;
+
+        #endregion
+
+        #region Connection Management
+
+        private SQLiteConnection connection = null;
+        private string lastConnectionString = "";
+        private readonly TimeSpan connectionTimeoutTime = TimeSpan.FromSeconds(60);
+        private Timer connectionTimeoutTimer = null;
+
+        private void ConnectionTimeoutActions(object sender)
+        {
+            CloseConnection();
+        }
+
+        /// <summary>
+        /// Close the stored SqlConnection
+        /// </summary>
+        public void CloseConnection()
+        {
+            try
+            {
+                connection?.Close();
+                connection?.Dispose();
+                connection = null;
+            }
+            catch
+            {
+                // Swallow any exceptions that occurred...
+            }
+        }
+
+        ~DbLogger()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            CloseConnection();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Get a SQLiteConnection, but lim
+        /// </summary>
+        /// <param name="connString"></param>
+        /// <returns></returns>
+        private SQLiteConnectionWrapper GetConnection(string connString)
+        {
+            if (connString == connStr)
+            {
+                // Reset out the close timer with every use
+                connectionTimeoutTimer?.Dispose();
+                connectionTimeoutTimer = new Timer(ConnectionTimeoutActions, this, connectionTimeoutTime, TimeSpan.FromMilliseconds(-1));
+
+                if (!lastConnectionString.Equals(connString))
+                {
+                    CloseConnection();
+                }
+
+                if (connection == null)
+                {
+                    lastConnectionString = connString;
+                    try
+                    {
+                        var cn = new SQLiteConnection(connString);
+                        cn.Open();
+                        connection = cn;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Error connecting to logging database", e);
+                    }
+                }
+
+                return new SQLiteConnectionWrapper(connection);
+            }
+
+            return new SQLiteConnectionWrapper(connString);
+        }
+
+        /// <summary>
+        /// A SQLiteConnection wrapper that only disposes in certain circumstances
+        /// </summary>
+        private class SQLiteConnectionWrapper : IDisposable
+        {
+            private readonly SQLiteConnection connection;
+            private readonly bool closeConnectionOnDispose = true;
+
+            /// <summary>
+            /// Open a new connection, which will get closed on Dispose().
+            /// </summary>
+            /// <param name="connString"></param>
+            public SQLiteConnectionWrapper(string connString)
+            {
+                connection = new SQLiteConnection(connString).OpenAndReturn();
+                closeConnectionOnDispose = true;
+            }
+
+            /// <summary>
+            /// Wrap an existing connection, which will stay open on Dispose().
+            /// </summary>
+            /// <param name="existingConnection"></param>
+            public SQLiteConnectionWrapper(SQLiteConnection existingConnection)
+            {
+                connection = existingConnection;
+                closeConnectionOnDispose = false;
+            }
+
+            public SQLiteCommand CreateCommand()
+            {
+                return connection.CreateCommand();
+            }
+
+            public SQLiteTransaction BeginTransaction()
+            {
+                return connection.BeginTransaction();
+            }
+
+            ~SQLiteConnectionWrapper()
+            {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                if (!closeConnectionOnDispose)
+                {
+                    return;
+                }
+
+                connection?.Close();
+                connection?.Dispose();
+                GC.SuppressFinalize(this);
+            }
+        }
 
         #endregion
 
@@ -64,8 +204,13 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         /// <param name="errorLevel">Error level</param>
         /// <param name="args">Message arguments</param>
-        public static void LogError(int errorLevel, ErrorLoggerArgs args)
+        public override void LogError(int errorLevel, ErrorLoggerArgs args)
         {
+            if (errorLevel > ErrorLevel)
+            {
+                return;
+            }
+
             var sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'" + TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
@@ -101,10 +246,7 @@ namespace LcmsNetSDK.Logging
                 UnwrapExceptionMsgs(args.Exception, out exMsg);
             }
             sqlCmdBlder.Append("'" + ReplaceQuotes(exMsg) + "')");
-            lock (m_writeLock)
-            {
-                WriteLogMsgToDb(sqlCmdBlder.ToString(), m_ConnStr);
-            }
+            WriteLogMsgToDb(sqlCmdBlder.ToString());
         }
 
         /// <summary>
@@ -112,8 +254,13 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         /// <param name="msgLevel">Message level</param>
         /// <param name="args">Message arguments</param>
-        public static void LogMessage(int msgLevel, MessageLoggerArgs args)
+        public override void LogMessage(int msgLevel, MessageLoggerArgs args)
         {
+            if (msgLevel > MessageLevel)
+            {
+                return;
+            }
+
             var sqlCmdBlder = new StringBuilder(INSERT_CMD_BASE);
             //sqlCmdBlder.Append("'" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
             sqlCmdBlder.Append("'" + TimeKeeper.Instance.Now.ToString("MM/dd/yyyy HH:mm:ss.f") + "',");
@@ -148,53 +295,37 @@ namespace LcmsNetSDK.Logging
 
             // Create blank field for exception
             sqlCmdBlder.Append("'')");
-            lock (m_writeLock)
-            {
-                WriteLogMsgToDb(sqlCmdBlder.ToString(), m_ConnStr);
-            }
+            WriteLogMsgToDb(sqlCmdBlder.ToString());
         }
 
         /// <summary>
         /// Writes a SQL INSERT command to the log db file
         /// </summary>
         /// <param name="sqlCmd">SQL command string</param>
-        /// <param name="connStr">Connection string</param>
-        private static void WriteLogMsgToDb(string sqlCmd, string connStr)
+        private void WriteLogMsgToDb(string sqlCmd)
         {
             try
             {
-                // Verify logging db is ready
-                while (!m_LogDbFileCreated)
+                lock (dbWriteLock)
                 {
-                    var check = false;
-                    try
+                    // Verify logging db is ready
+                    while (!logDbFileCreated)
                     {
-                        check = Monitor.TryEnter(m_lock);
-                        if (check && !m_LogDbFileCreated)
+                        // Database wasn't ready, so try to create it
+                        if (!InitLogDatabase())
                         {
-                            // Database wasn't ready, so try to create it
-                            if (!InitLogDatabase())
-                            {
-                                return;
-                            }
+                            return;
                         }
                     }
-                    finally
-                    {
-                        if (check)
-                        {
-                            Monitor.Exit(m_lock);
-                        }
-                    }
+
+                    // Insert the log entry into the data table
+                    ExecuteSQLiteCommand(sqlCmd);
                 }
-                // Insert the log entry into the data table
-                ExecuteSQLiteCommand(sqlCmd, m_ConnStr);
             }
             catch (Exception ex)
             {
-                var msg = "Exception logging error message: ";
-                UnwrapExceptionMsgs(ex, out msg);
-                MessageBox.Show(msg, "LOG ERROR", MessageBoxButton.OK,
+                UnwrapExceptionMsgs(ex, out var msg);
+                MessageBox.Show("Exception logging error message: " + msg, "LOG ERROR", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
@@ -202,24 +333,23 @@ namespace LcmsNetSDK.Logging
         /// <summary>
         /// Creates logging database file and initializes it
         /// </summary>
-        private static bool InitLogDatabase()
+        private bool InitLogDatabase()
         {
             try
             {
                 // Create the database file
                 CreateDbFile();
                 // Create the data table
-                CreateLogTable(m_ConnStr);
-                m_LogDbFileCreated = true;
+                CreateLogTable();
+                logDbFileCreated = true;
                 return true;
             }
             catch (Exception ex)
             {
-                m_LogDbFileCreated = false;
-                m_ConnStr = "";
-                var msg = "Exception initializing log database: ";
-                UnwrapExceptionMsgs(ex, out msg);
-                MessageBox.Show(msg, "LOG ERROR", MessageBoxButton.OK,
+                logDbFileCreated = false;
+                connStr = "";
+                UnwrapExceptionMsgs(ex, out var msg);
+                MessageBox.Show("Exception initializing log database: " + msg, "LOG ERROR", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return false;
             }
@@ -228,10 +358,10 @@ namespace LcmsNetSDK.Logging
         /// <summary>
         /// Creates and initializes a SQLite DB file for logging, and sets up the connection string
         /// </summary>
-        private static void CreateDbFile()
+        private void CreateDbFile()
         {
-            m_DbFileName = Path.Combine(LogFolderPath, "LcmsNetDbLog.db3");
-            var logFile = new FileInfo(m_DbFileName);
+            dbFileName = Path.Combine(LogFolderPath, "LcmsNetDbLog.db3");
+            var logFile = new FileInfo(dbFileName);
 
             // Create the file if it doesn't already exist
             if (!logFile.Exists)
@@ -247,37 +377,36 @@ namespace LcmsNetSDK.Logging
                 }
                 catch (Exception ex)
                 {
-                    m_ConnStr = "";
-                    m_LogDbFileCreated = false;
+                    connStr = "";
+                    logDbFileCreated = false;
                     throw new DbLoggerException("Exception creating db log folder", ex);
                 }
 
                 try
                 {
-                    SQLiteConnection.CreateFile(m_DbFileName);
+                    SQLiteConnection.CreateFile(dbFileName);
                 }
                 catch (Exception ex)
                 {
-                    m_ConnStr = "";
-                    m_LogDbFileCreated = false;
+                    connStr = "";
+                    logDbFileCreated = false;
                     throw new DbLoggerException("Exception creating db log file", ex);
                 }
             }
-            m_ConnStr = "data source=" + m_DbFileName;
+            connStr = "data source=" + dbFileName;
         }
 
         /// <summary>
         /// Creates the table for holding log entries
         /// </summary>
-        /// <param name="connStr">DB connection string</param>
-        private static void CreateLogTable(string connStr)
+        private void CreateLogTable()
         {
             // Create the command string
             var sqlStr =
                 "CREATE TABLE IF NOT EXISTS T_LogData('Date','Type','Level','Sample','Column','Device','Message','Exception')";
             try
             {
-                ExecuteSQLiteCommand(sqlStr, connStr);
+                ExecuteSQLiteCommand(sqlStr);
             }
             catch (Exception ex)
             {
@@ -290,27 +419,21 @@ namespace LcmsNetSDK.Logging
         /// Executes specified SQLite command
         /// </summary>
         /// <param name="cmdStr">SQL statement to execute</param>
-        /// <param name="connStr">Connection string for SQL database file</param>
-        private static void ExecuteSQLiteCommand(string cmdStr, string connStr)
+        private void ExecuteSQLiteCommand(string cmdStr)
         {
-            using (var cn = new SQLiteConnection(connStr))
-            using (var myCmd = new SQLiteCommand(cn))
+            using (var cn = GetConnection(connStr))
+            using (var myCmd = cn.CreateCommand())
             {
                 myCmd.CommandType = CommandType.Text;
                 myCmd.CommandText = cmdStr;
                 try
                 {
-                    myCmd.Connection.Open();
                     myCmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
                     var errMsg = "SQLite exception executing command " + cmdStr;
                     throw new DbLoggerException(errMsg, ex);
-                }
-                finally
-                {
-                    myCmd.Connection.Close();
                 }
             }
         }
@@ -319,16 +442,15 @@ namespace LcmsNetSDK.Logging
         /// Determines if a particular table exists in the SQLite database
         /// </summary>
         /// <param name="tableName">Name of the table to search for</param>
-        /// <param name="connStr">Connection string for database</param>
         /// <returns>TRUE if table found; FALSE if not found or error</returns>
-        private static bool VerifyTableExists(string tableName, string connStr)
+        private bool VerifyTableExists(string tableName)
         {
             var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
             DataTable tableList;
             try
             {
                 // Get a list of database tables matching the specified table name
-                tableList = GetSQLiteDataTable(sqlString, connStr);
+                tableList = GetSQLiteDataTable(sqlString);
             }
             catch (Exception ex)
             {
@@ -348,9 +470,8 @@ namespace LcmsNetSDK.Logging
         /// Retrieves a data table from a SQLite database
         /// </summary>
         /// <param name="cmdStr">SQL command to execute</param>
-        /// <param name="connStr">Connection string for SQLite database file</param>
         /// <returns>A DataTable containing data specfied by <paramref name="cmdStr"/></returns>
-        private static DataTable GetSQLiteDataTable(string cmdStr, string connStr)
+        private DataTable GetSQLiteDataTable(string cmdStr)
         {
             var returnTable = new DataTable();
 
@@ -380,13 +501,12 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         /// <param name="ex">Input exception</param>
         /// <param name="msg">Input/Output message</param>
-        private static void UnwrapExceptionMsgs(Exception ex, out string msg)
+        private void UnwrapExceptionMsgs(Exception ex, out string msg)
         {
             msg = ex.Message + " " + ex.StackTrace;
             if (ex.InnerException != null)
             {
-                string innerMsg;
-                UnwrapExceptionMsgs(ex.InnerException, out innerMsg);
+                UnwrapExceptionMsgs(ex.InnerException, out var innerMsg);
                 msg += "\nInner exception: " + innerMsg;
             }
         }
@@ -396,7 +516,7 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         /// <param name="inpStr">String to be tested</param>
         /// <returns>Escaped string</returns>
-        private static string ReplaceQuotes(string inpStr)
+        private string ReplaceQuotes(string inpStr)
         {
             return inpStr.Replace("'", "''");
         }

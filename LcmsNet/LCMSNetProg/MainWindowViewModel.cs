@@ -37,7 +37,7 @@ using ReactiveUI;
 
 namespace LcmsNet
 {
-    public class MainWindowViewModel : ReactiveObject, IDisposable
+    public class MainWindowViewModel : ReactiveObject, IDisposable, IHandlesLogging
     {
 
         #region Constants
@@ -268,6 +268,38 @@ namespace LcmsNet
             set { this.RaiseAndSetIfChanged(ref queueTabSelected, value); }
         }
 
+        /// <summary>
+        /// Error message importance level (0 is most important, 5 is least important)
+        /// </summary>
+        public int ErrorLevel { get; set; }
+
+        /// <summary>
+        /// Status message importance level (0 is most important, 5 is least important)
+        /// </summary>
+        /// <remarks>
+        /// When MessageLevel is 0, only critical errors are logged
+        /// When MessageLevel is 5, all messages are logged
+        /// </remarks>
+        public int MessageLevel { get; set; }
+
+        /// <summary>
+        /// Error message importance level
+        /// </summary>
+        public LogLevel ErrorLogLevel
+        {
+            get { return ApplicationLogger.ConvertIntToLogLevel(ErrorLevel); }
+            set { ErrorLevel = (int)value; }
+        }
+
+        /// <summary>
+        /// Status message importance level
+        /// </summary>
+        public LogLevel MessageLogLevel
+        {
+            get { return ApplicationLogger.ConvertIntToLogLevel(MessageLevel); }
+            set { MessageLevel = (int)value; }
+        }
+
         #endregion
 
         #region Members
@@ -330,11 +362,6 @@ namespace LcmsNet
         private PopoutViewModel pumpDisplaysPopoutVm = null;
 
         /// <summary>
-        /// Class for logging to the log files and other listeners.  Wraps the application logger static methods.
-        /// </summary>
-        private ApplicationLogger m_logger;
-
-        /// <summary>
         /// default PDF generator, used to generate a pdf of information after a sample run.
         /// </summary>
         private readonly IPDF m_pdfGen = new PDFGen();
@@ -351,7 +378,6 @@ namespace LcmsNet
         private void Initialize()
         {
             Thread.CurrentThread.Name = "Main Thread";
-            m_logger = new ApplicationLogger();
             WindowTitle = "LcmsNet Version: " + Assembly.GetEntryAssembly().GetName().Version;
             WindowTitle += " Cart - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
             var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
@@ -400,7 +426,7 @@ namespace LcmsNet
 
 
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
-            m_scheduler = new LCMethodScheduler(m_sampleQueue) { Logger = m_logger };
+            m_scheduler = new LCMethodScheduler(m_sampleQueue);
             m_scheduler.SchedulerError += Scheduler_Error;
             m_scheduler.SampleProgress += Scheduler_SampleProgress;
             m_scheduler.Initialize();
@@ -409,9 +435,9 @@ namespace LcmsNet
             MessagesVm = new MessagesViewModel();
             MessagesVm.ErrorCleared += Messages_ErrorCleared;
             MessagesVm.ErrorPresent += Messages_ErrorPresent;
-            ApplicationLogger.Error += MessagesVm.ShowErrors;
+            ApplicationLogger.Error += MessagesVm.LogError;
             ApplicationLogger.Error += ApplicationLogger_Error;
-            ApplicationLogger.Message += MessagesVm.ShowMessage;
+            ApplicationLogger.Message += MessagesVm.LogMessage;
             ApplicationLogger.Message += ApplicationLogger_Message;
 
             // Method Editor
@@ -721,10 +747,12 @@ namespace LcmsNet
         /// <param name="args">Data associated with messages.</param>
         private void ApplicationLogger_Message(int messageLevel, MessageLoggerArgs args)
         {
-            if (args != null && messageLevel <= ApplicationLogger.CONST_STATUS_LEVEL_USER)
+            if (messageLevel > MessageLevel || messageLevel > ApplicationLogger.CONST_STATUS_LEVEL_USER)
             {
-                StatusMessage = args.Message;
+                return;
             }
+
+            StatusMessage = args.Message;
         }
 
         /// <summary>
@@ -734,7 +762,22 @@ namespace LcmsNet
         /// <param name="args"></param>
         private void ApplicationLogger_Error(int errorLevel, ErrorLoggerArgs args)
         {
+            if (errorLevel > ErrorLevel)
+            {
+                return;
+            }
+
             StatusMessage = args.Message;
+        }
+
+        public void LogError(int errorLevel, ErrorLoggerArgs args)
+        {
+            ApplicationLogger_Error(errorLevel, args);
+        }
+
+        public void LogMessage(int msgLevel, MessageLoggerArgs args)
+        {
+            ApplicationLogger_Message(msgLevel, args);
         }
 
         #endregion
@@ -899,7 +942,7 @@ namespace LcmsNet
         private void ReportError(ContentControl[] controls)
         {
             var manager = LCMethodManager.Manager;
-            var logPath = FileLogging.LogPath;
+            var logPath = FileLogger.LogPath;
 
             var controlList = new List<ContentControl>();
             var about = new AboutWindow();

@@ -853,6 +853,8 @@ namespace LcmsNetSDK.Devices
                 throw new DeviceInitializationException(args);
             }
 
+            InitialzingDevice?.Invoke(this, new DeviceManagerStatusArgs("Finished initializing " + device.Name));
+
             return true;
         }
 
