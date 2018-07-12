@@ -714,25 +714,6 @@ namespace LcmsNet
             ApplicationLogger.LogMessage(-1, e.Message);
         }
 
-        #region Methods
-
-        public void SetStatusMessage(int level, string message)
-        {
-            StatusMessage = message;
-        }
-
-        /// <summary>
-        /// Displays the suggested string on the status bar.
-        /// </summary>
-        /// <param name="message">Message to display to the user.</param>
-        public void SetStatusMessage(string message)
-        {
-            //toolStripStatusLabel.Text = message;
-            StatusMessage = message;
-        }
-
-        #endregion
-
         /// <summary>
         /// Handles displaying a message when an object notifies LCMS at level 0.
         /// </summary>
@@ -742,7 +723,7 @@ namespace LcmsNet
         {
             if (args != null && messageLevel <= ApplicationLogger.CONST_STATUS_LEVEL_USER)
             {
-                SetStatusMessage(args.Message);
+                StatusMessage = args.Message;
             }
         }
 
@@ -753,7 +734,7 @@ namespace LcmsNet
         /// <param name="args"></param>
         private void ApplicationLogger_Error(int errorLevel, ErrorLoggerArgs args)
         {
-            SetStatusMessage(args.Message);
+            StatusMessage = args.Message;
         }
 
         #endregion

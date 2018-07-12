@@ -1,25 +1,9 @@
 ﻿using System;
-using System.Threading;
+using System.Threading.Tasks;
 using LcmsNetSDK.Data;
 
 namespace LcmsNetSDK.Logging
 {
-    public class ThreadPoolStateObject
-    {
-        public ThreadPoolStateObject(int messageLevel, object args)
-        {
-            MessageLevel = messageLevel;
-            EventArgs = args;
-        }
-
-        /// <summary>
-        /// Message importance level (0 is most important, 5 is least important)
-        /// </summary>
-        public int MessageLevel { get; set; }
-
-        public object EventArgs { get; set; }
-    }
-
     /// <summary>
     /// Class that marshalls messages from different components to different logging and streaming capabilities.
     /// </summary>
@@ -57,34 +41,16 @@ namespace LcmsNetSDK.Logging
         /// <summary>
         /// Error message importance level (0 is most important, 5 is least important)
         /// </summary>
-        private static int m_errorLevel;
+        public static int ErrorLevel { get; set; }
 
         /// <summary>
         /// Status message importance level (0 is most important, 5 is least important)
-        /// </summary>
-        private static int m_messageLevel;
-
-        /// <summary>
-        /// Gets or sets the error level to log.
-        /// </summary>
-        public static int ErrorLevel
-        {
-            get { return m_errorLevel; }
-            set { m_errorLevel = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the message level to log (0 is most important, 5 is least important)
         /// </summary>
         /// <remarks>
         /// When MessageLevel is 0, only critical errors are logged
         /// When MessageLevel is 5, all messages are logged
         /// </remarks>
-        public static int MessageLevel
-        {
-            get { return m_messageLevel; }
-            set { m_messageLevel = value; }
-        }
+        public static int MessageLevel { get; set; }
 
         /// <summary>
         /// Found when the application finds a message.
@@ -143,7 +109,10 @@ namespace LcmsNetSDK.Logging
                 args.Exception = ex;
             }
 
-            ThreadPool.QueueUserWorkItem(RaiseErrorEvent, new ThreadPoolStateObject(errorLevel, args));
+            if (errorLevel <= ErrorLevel && Error != null)
+            {
+                Task.Run(() => Error?.Invoke(errorLevel, args));
+            }
         }
 
         #endregion
@@ -177,34 +146,10 @@ namespace LcmsNetSDK.Logging
             {
                 args = new MessageLoggerArgs(message);
             }
-            ThreadPool.QueueUserWorkItem(RaiseMessageEvent, new ThreadPoolStateObject(messageLevel, args));
-        }
 
-        /// <summary>
-        /// Raises the error event in a Threadpool thread to avoid interrupting other functions with I/O.
-        /// </summary>
-        /// <param name="errorInfo"></param>
-        public static void RaiseErrorEvent(object errorInfo)
-        {
-            var info = errorInfo as ThreadPoolStateObject;
-
-            if (info != null && info.MessageLevel <= m_errorLevel)
+            if (messageLevel <= ErrorLevel && Message != null)
             {
-                Error?.Invoke(info.MessageLevel, info.EventArgs as ErrorLoggerArgs);
-            }
-        }
-
-        /// <summary>
-        /// Raises the message event in a Threadpool thread to avoid interrupting other functions with I/O.
-        /// </summary>
-        /// <param name="messageInfo"></param>
-        private static void RaiseMessageEvent(object messageInfo)
-        {
-            var info = messageInfo as ThreadPoolStateObject;
-
-            if (info != null && info.MessageLevel <= m_messageLevel)
-            {
-                Message?.Invoke(info.MessageLevel, info.EventArgs as MessageLoggerArgs);
+                Task.Run(() => Message?.Invoke(messageLevel, args));
             }
         }
 
