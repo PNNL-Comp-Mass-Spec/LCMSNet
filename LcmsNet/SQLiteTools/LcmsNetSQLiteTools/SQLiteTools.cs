@@ -709,7 +709,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentUser);
             }
-            SavePropertiesToCache(dataList, tableName, ConnString, false);
+            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
         }
 
         /// <summary>
@@ -810,9 +810,9 @@ namespace LcmsNetSQLiteTools
             userCacheList.AddRange(users);
             referenceCacheList.AddRange(crossReferenceList);
 
-            SavePropertiesToCache(userCacheList, userTableName, ConnString, false);
+            SavePropertiesToCache(userCacheList, userTableName, ConnString, true); // Force true, or suffer the random consequences...
 
-            SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString, false);
+            SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString, false); // Single column, column names don't matter...
 
             m_proposalUsers = users;
             m_pidIndexedReferenceList = pidIndexedReferenceList;
@@ -870,7 +870,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentInst);
             }
-            SavePropertiesToCache(dataList, tableName, ConnString, false);
+            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
         }
 
         /// <summary>
