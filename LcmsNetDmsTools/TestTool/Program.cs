@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetDmsTools;
-using LcmsNetSDK.Logging;
 
 namespace TestTool
 {
@@ -75,7 +75,7 @@ namespace TestTool
             Console.WriteLine(args.Message);
         }
 
-        private static void Dbt_ProgressEvent(object sender, LcmsNetSDK.ProgressEventArgs e)
+        private static void Dbt_ProgressEvent(object sender, ProgressEventArgs e)
         {
             Console.WriteLine(e.CurrentTask);
         }

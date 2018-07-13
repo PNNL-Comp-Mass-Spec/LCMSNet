@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using LcmsNetCommonControls.Controls;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.PALAutoSampler.Pal

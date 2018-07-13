@@ -7,7 +7,7 @@
 //*********************************************************************************************************
 
 using System;
-using LcmsNetSDK.Data;
+using LcmsNetData.Data;
 
 namespace LcmsNetSDK.Experiment
 {

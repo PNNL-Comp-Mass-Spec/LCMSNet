@@ -12,7 +12,7 @@ using FluidicsPack;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary

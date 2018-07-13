@@ -13,11 +13,11 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Threading;
 using System.Xml;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {

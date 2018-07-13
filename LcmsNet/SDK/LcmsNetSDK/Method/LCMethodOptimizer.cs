@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
-using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Method
 {

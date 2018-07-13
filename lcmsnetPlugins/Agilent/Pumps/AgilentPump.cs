@@ -16,12 +16,12 @@ using System.Globalization;
 using System.IO;
 using Agilent.Licop;
 using FluidicsSDK.Devices;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {

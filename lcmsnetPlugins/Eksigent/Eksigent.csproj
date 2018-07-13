@@ -47,6 +47,9 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>.\Interop.EksigentNanoLC.dll</HintPath>
     </Reference>
+    <Reference Include="LcmsNetData">
+      <HintPath>..\..\lib\LcmsNetData.dll</HintPath>
+    </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>

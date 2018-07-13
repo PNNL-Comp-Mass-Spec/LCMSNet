@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.VICI.Valves

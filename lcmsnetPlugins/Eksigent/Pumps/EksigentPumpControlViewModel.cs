@@ -5,9 +5,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNetPlugins.Eksigent.Pumps
 {

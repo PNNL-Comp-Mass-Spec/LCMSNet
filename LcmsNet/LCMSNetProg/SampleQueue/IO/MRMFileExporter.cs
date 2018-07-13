@@ -15,9 +15,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetDmsTools;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -26,7 +26,6 @@ namespace LcmsNet.SampleQueue.IO
     /// </summary>
     class MRMFileExporter : ISampleQueueWriter
     {
-        
         #region "Methods"
 
         /// <summary>

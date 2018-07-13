@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using LcmsNetSDK.Data;
+using LcmsNetData.Method;
 
 namespace LcmsNetSDK.Method
 {
@@ -11,7 +10,7 @@ namespace LcmsNetSDK.Method
     /// A method is a collection of LC-Events that define physical actions used to pipeline the control in an experiment.
     /// </summary>
     [Serializable]
-    public class LCMethod : LcmsNetDataClassBase, ICloneable, IEquatable<LCMethod>, INotifyPropertyChangedExt
+    public class LCMethod : LCMethodBasic, ICloneable, IEquatable<LCMethod>
     {
         /// <summary>
         /// Sample method key name.
@@ -54,16 +53,6 @@ namespace LcmsNetSDK.Method
         #region Members
 
         /// <summary>
-        /// Start time of the method
-        /// </summary>
-        [NonSerialized] private DateTime mtime_start;
-
-        /// <summary>
-        /// Duration of the method.
-        /// </summary>
-        [NonSerialized] private TimeSpan mspan_duration;
-
-        /// <summary>
         /// List of LC-events.
         /// </summary>
         [NonSerialized] private List<LCEvent> m_events;
@@ -72,21 +61,6 @@ namespace LcmsNetSDK.Method
         /// List of LC-events whose values should reflect the actual start times and durations for an LC-Event.
         /// </summary>
         [NonSerialized] private List<LCEvent> m_actualEvents;
-
-        /// <summary>
-        /// End date only calculated at call of End property to get around serialization issues.
-        /// </summary>
-        private DateTime mdate_end;
-
-        /// <summary>
-        /// Actual start time of the method
-        /// </summary>
-        [NonSerialized] private DateTime actualStart;
-
-        /// <summary>
-        /// Actual end time of the method
-        /// </summary>
-        [NonSerialized] private DateTime actualEnd;
 
         #endregion
 
@@ -101,23 +75,6 @@ namespace LcmsNetSDK.Method
         /// Gets or sets whether this has a deterministic start or not.
         /// </summary>
         public bool HasNonDeterministicStart { get; set; }
-
-        /// <summary>
-        /// Gets or sets the duration for this action.
-        /// </summary>
-        public TimeSpan Duration => mspan_duration;
-
-        /// <summary>
-        /// Gets the end time of the action.
-        /// </summary>
-        public DateTime End
-        {
-            get
-            {
-                mdate_end = Start.Add(mspan_duration);
-                return mdate_end;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the LC-Events to be performed by this method.
@@ -136,39 +93,6 @@ namespace LcmsNetSDK.Method
             get { return m_actualEvents; }
             set { m_actualEvents = value; }
         }
-
-        /// <summary>
-        /// Gets or sets the name of the Method.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets the start time of this action.
-        /// </summary>
-        public DateTime Start => mtime_start;
-
-        /// <summary>
-        /// Gets the actual start of the sample.
-        /// </summary>
-        public DateTime ActualStart
-        {
-            get { return actualStart; }
-            set { this.RaiseAndSetIfChanged(ref actualStart, value, nameof(ActualStart)); }
-        }
-
-        /// <summary>
-        /// Gets the actual end time of the sample.
-        /// </summary>
-        public DateTime ActualEnd
-        {
-            get { return actualEnd; }
-            set { this.RaiseAndSetIfChanged(ref actualEnd, value, nameof(ActualEnd)); }
-        }
-
-        /// <summary>
-        /// Gets the actual duration of the experiment that was run.
-        /// </summary>
-        public TimeSpan ActualDuration => ActualEnd.Subtract(ActualStart);
 
         /// <summary>
         /// Gets or sets the event number being executed.  -1 = not run, 0-N is the current event, where N is the total events defined in LCEvents.
@@ -228,38 +152,34 @@ namespace LcmsNetSDK.Method
         /// Sets the start time for the method and updates the internal event start times.
         /// </summary>
         /// <param name="start">Time to start the method.</param>
-        public void SetStartTime(DateTime start)
+        public override void SetStartTime(DateTime start)
         {
             //
             // Update the start time and cascade the calculation so that
             // the event times are all updated allowing us to calculate
             // the duration and end time of the entire method.
             //
-            mtime_start = start;
-            UpdateEventTimes();
+            UpdateEventTimes(start);
 
             //
             // Calculate the duration of the method.
             //
-            if (Events.Count <= 0)
+            var duration = TimeSpan.Zero;
+            if (Events.Count > 0)
             {
-                mspan_duration = new TimeSpan(0, 0, 0, 0, 0);
+                duration = Events[Events.Count - 1].End.Subtract(start);
             }
-            else
-            {
-                mspan_duration = Events[Events.Count - 1].End.Subtract(mtime_start);
-            }
-            OnPropertyChanged(nameof(Start));
-            OnPropertyChanged(nameof(End));
+
+            SetStartTimeAndDuration(start, duration);
             //System.Diagnostics.Debug.WriteLine(string.Format("Method {0} start time: {1} end time {2}", this.Name, start, this.End));
         }
 
         /// <summary>
         /// Updates the event start times.
         /// </summary>
-        private void UpdateEventTimes()
+        private void UpdateEventTimes(DateTime newStartTime)
         {
-            var adjustedStart = mtime_start;
+            var adjustedStart = newStartTime;
             //
             // Iterate through each event (ultimately) and
             // adjust the start times of the event based on the time span provided.
@@ -342,18 +262,6 @@ namespace LcmsNetSDK.Method
             if (propValues.TryGetValue(CONST_NAME_METHOD_KEY, out nameMatch))
                 Name = nameMatch;
 
-        }
-
-        #endregion
-
-        #region "INotifyPropertyChanged implementation"
-
-        [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

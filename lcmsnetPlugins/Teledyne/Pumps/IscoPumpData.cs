@@ -7,7 +7,7 @@
 //*********************************************************************************************************
 
 using System;
-using LcmsNetSDK.System;
+using LcmsNetData.System;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {

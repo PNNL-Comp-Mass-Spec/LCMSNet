@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetSDK.Configuration;
+using LcmsNetData.Configuration;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNetPlugins.PalValidator
 {

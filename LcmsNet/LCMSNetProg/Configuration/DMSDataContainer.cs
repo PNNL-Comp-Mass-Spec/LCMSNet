@@ -1,7 +1,7 @@
 ﻿using System;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetDmsTools;
-using LcmsNetSDK;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNet.Configuration
 {

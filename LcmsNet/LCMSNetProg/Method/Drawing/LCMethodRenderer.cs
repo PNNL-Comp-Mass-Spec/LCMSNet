@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;

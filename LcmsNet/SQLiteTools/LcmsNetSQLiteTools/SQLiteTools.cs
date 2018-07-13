@@ -25,9 +25,9 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetSDK;
-using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
+using LcmsNetData;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
 
 namespace LcmsNetSQLiteTools
 {
@@ -293,9 +293,9 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <returns>List containing queue data</returns>
-        public static List<SampleData> GetQueueFromCache(DatabaseTableTypes tableType)
+        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : SampleDataBasic, new()
         {
-            return GetQueueFromCache(tableType, ConnString);
+            return GetQueueFromCache<T>(tableType, ConnString);
         }
 
         /// <summary>
@@ -305,9 +305,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <param name="connectionString">Cache connection string</param>
         /// <returns>List containing queue data</returns>
-        public static List<SampleData> GetQueueFromCache(DatabaseTableTypes tableType, string connectionString)
+        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
         {
-            var returnData = new List<SampleData>();
+            var returnData = new List<T>();
 
             // Convert type of queue into a data table name
             var tableName = GetTableName(tableType);
@@ -320,7 +320,7 @@ namespace LcmsNetSQLiteTools
             foreach (var sampleProps in allSampleProps)
             {
                 // Create a SampleData object
-                var sampleData = new SampleData(false);
+                var sampleData = (T)(new T().GetNewNonDummy());
 
                 // Load the sample data object from the string dictionary
                 sampleData.LoadPropertyValues(sampleProps);
@@ -628,11 +628,11 @@ namespace LcmsNetSQLiteTools
         /// Saves the contents of specified sample queue to the SQLite cache file
         /// Connection string and database name are defined by defaults
         /// </summary>
-        /// <param name="QueueData">List of SampleData containing the sample data to save</param>
+        /// <param name="queueData">List of SampleData containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        public static void SaveQueueToCache(List<SampleData> QueueData, DatabaseTableTypes tableType)
+        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType) where T : SampleDataBasic, new()
         {
-            SaveQueueToCache(QueueData, tableType, ConnString);
+            SaveQueueToCache(queueData, tableType, ConnString);
         }
 
         /// <summary>
@@ -642,7 +642,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="queueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache(List<SampleData> queueData, DatabaseTableTypes tableType, string connStr)
+        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
         {
             var dataInList = (queueData.Count > 0);
             var tableName = GetTableName(tableType);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LcmsNet.Method;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue

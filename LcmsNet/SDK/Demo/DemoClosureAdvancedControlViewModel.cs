@@ -1,7 +1,7 @@
 ﻿using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary

@@ -528,6 +528,10 @@
       <Project>{176aacc9-480e-4425-ba4b-40bb7b8a2e04}</Project>
       <Name>LcmsNetCommonControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SDK\LcmsNetData\LcmsNetData.csproj">
+      <Project>{09993d8a-15ca-413e-bc48-ec80d399136a}</Project>
+      <Name>LcmsNetData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SDK\LcmsNetSDK\LcmsNetSDK.csproj">
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
       <Name>LcmsNetSDK</Name>

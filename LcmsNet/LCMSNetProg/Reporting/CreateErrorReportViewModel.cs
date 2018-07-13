@@ -2,7 +2,7 @@
 using System.Reactive;
 using System.Windows.Controls;
 using LcmsNet.Method;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 

@@ -7,8 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LcmsNetSDK;
 using System.Threading;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

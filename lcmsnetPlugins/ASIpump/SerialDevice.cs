@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.ASIpump

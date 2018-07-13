@@ -36,9 +36,6 @@
     <Reference Include="FluidicsSDK">
       <HintPath>..\..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
-    <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\..\lib\LcmsNetSdk.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +56,14 @@
     <ProjectReference Include="..\Demo\DemoPluginLibrary.csproj">
       <Project>{36381f3a-1ca7-4c8b-b99c-035b3c4e84f4}</Project>
       <Name>DemoPluginLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LcmsNetData\LcmsNetData.csproj">
+      <Project>{09993d8a-15ca-413e-bc48-ec80d399136a}</Project>
+      <Name>LcmsNetData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
+      <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
+      <Name>LcmsNetSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -14,10 +14,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Timers;
 using FluidicsSDK.Devices;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.Bruker

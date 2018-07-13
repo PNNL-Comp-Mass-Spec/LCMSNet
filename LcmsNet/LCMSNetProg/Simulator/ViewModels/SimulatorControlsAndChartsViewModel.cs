@@ -3,7 +3,7 @@ using System.IO;
 using FluidicsSDK;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 

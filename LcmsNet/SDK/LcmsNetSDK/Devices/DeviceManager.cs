@@ -10,8 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNetSDK.Devices
 {

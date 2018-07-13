@@ -5,7 +5,8 @@ using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSQLiteTools;
 using ReactiveUI;
@@ -526,7 +527,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             try
             {
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
-                tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData);
+                tempRequestList = dmsTools.GetRequestedRunsFromDMS<SampleData>(queryData);
             }
             catch (DatabaseConnectionStringException ex)
             {

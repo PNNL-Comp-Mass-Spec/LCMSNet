@@ -41,9 +41,9 @@ using LcmsNetSQLiteTools;
 // Deprecated: using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading;
-using LcmsNetSDK;
-using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
+using LcmsNetData;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
 
 namespace LcmsNetDmsTools
 {
@@ -990,18 +990,18 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
         [Obsolete("This method has a misleading name; use GetRequestedRunsFromDMS instead")]
-        public List<SampleData> GetSamplesFromDMS(SampleQueryData queryData)
+        public List<T> GetSamplesFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
         {
-            return GetRequestedRunsFromDMS(queryData);
+            return GetRequestedRunsFromDMS<T>(queryData);
         }
 
         /// <summary>
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
-        public List<SampleData> GetRequestedRunsFromDMS(SampleQueryData queryData)
+        public List<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
         {
-            var tmpReturnVal = new List<SampleData>(); // Temp list for holding samples
+            var tmpReturnVal = new List<T>(); // Temp list for holding samples
             var connStr = GetConnectionString();
 
             DataTable schedRunList;
@@ -1023,7 +1023,7 @@ namespace LcmsNetDmsTools
 
             foreach (DataRow currRow in schedRunList.Rows)
             {
-                var tmpDMSData = new SampleData
+                var tmpDMSData = new T
                 {
                     DmsData =
                     {

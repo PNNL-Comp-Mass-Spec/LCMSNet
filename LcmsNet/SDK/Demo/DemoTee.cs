@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsPack;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary

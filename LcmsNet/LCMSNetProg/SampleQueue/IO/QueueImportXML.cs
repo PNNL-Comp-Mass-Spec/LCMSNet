@@ -12,8 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNet.SampleQueue.IO

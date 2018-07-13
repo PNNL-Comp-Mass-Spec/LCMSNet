@@ -8,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Base;
-using LcmsNetSDK;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.ModelCheckers

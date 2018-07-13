@@ -15,12 +15,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using FluidicsSDK.Devices;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.PALAutoSampler.Pal
 {

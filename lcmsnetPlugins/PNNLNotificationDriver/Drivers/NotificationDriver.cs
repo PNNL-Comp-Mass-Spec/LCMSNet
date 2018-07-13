@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetSDK;
+using LcmsNetData.Logging;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.FailureInjector.Drivers

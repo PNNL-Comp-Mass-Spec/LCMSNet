@@ -13,8 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {

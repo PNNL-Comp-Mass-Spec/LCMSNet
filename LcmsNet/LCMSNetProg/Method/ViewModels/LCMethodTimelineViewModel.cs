@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNet.Method.Drawing;
-using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
+using LcmsNetData.Configuration;
+using LcmsNetData.Data;
+using LcmsNetData.System;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

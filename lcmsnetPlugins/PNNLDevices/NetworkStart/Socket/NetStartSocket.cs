@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Net.Sockets;
 using FluidicsSDK.Devices;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 {

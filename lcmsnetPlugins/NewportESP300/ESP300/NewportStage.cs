@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO.Ports;
 using System.Text;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.Newport.ESP300

@@ -19,7 +19,6 @@ namespace LcmsNetSDK
     /// </summary>
     public interface IRandomizerInterface
     {
-
         #region "Methods"
 
         List<SampleData> RandomizeSamples(List<SampleData> InputSampleList);

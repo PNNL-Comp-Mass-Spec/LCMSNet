@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

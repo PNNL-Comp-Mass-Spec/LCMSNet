@@ -8,9 +8,10 @@ using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Views;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

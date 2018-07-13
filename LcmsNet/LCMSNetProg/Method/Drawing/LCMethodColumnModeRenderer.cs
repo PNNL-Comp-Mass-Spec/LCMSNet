@@ -4,8 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
+using LcmsNetData;
+using LcmsNetData.Configuration;
+using LcmsNetData.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

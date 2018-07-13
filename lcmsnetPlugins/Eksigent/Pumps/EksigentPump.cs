@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.IO;
 using EksigentNanoLC;
 using FluidicsSDK.Devices;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 //using DirectControl;
 

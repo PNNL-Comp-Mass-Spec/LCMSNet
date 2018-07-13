@@ -13,7 +13,9 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using LcmsNetSDK.Logging;
+using LcmsNetData;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
 
 namespace LcmsNetSDK.Data
 {
@@ -84,10 +86,10 @@ namespace LcmsNetSDK.Data
             AddParam(rootElement, "Comment", "");
             AddParam(rootElement, "Interest Rating", "Unreviewed");
 
-            // 
+            //
             // BLL: Added to appease the trigger file gods, so that we don't
             // confuse DMS with EMSL related data when the requests are already fulfilled.
-            // 
+            //
             var usage = "";
             var userList = "";
             var proposal = "";
@@ -207,7 +209,7 @@ namespace LcmsNetSDK.Data
                     // If the file was created locally...copy it
                     if (wasLocalFileCreated)
                     {
-                        MoveLocalFile(localTriggerFilePath, Path.Combine(remoteTriggerFolderPath, outFileName));
+                        TriggerFileUtils.MoveLocalFile(localTriggerFilePath, Path.Combine(remoteTriggerFolderPath, outFileName));
                     }
                     else
                     {
@@ -241,21 +243,7 @@ namespace LcmsNetSDK.Data
         /// <returns>TRUE if trigger files present, FALSE otherwise</returns>
         public static bool CheckLocalTriggerFiles()
         {
-            // Check for presence of local trigger file directory
-            var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), "TriggerFiles");
-
-            // If local folder doen't exist, then there are no local trigger files
-            if (!Directory.Exists(localFolderPath)) return false;
-
-            var triggerFiles = Directory.GetFiles(localFolderPath);
-            if (triggerFiles.Length < 1)
-            {
-                // No files found
-                return false;
-            }
-
-            // At least one file found
-            return true;
+            return TriggerFileUtils.CheckLocalTriggerFiles();
         }
 
         /// <summary>
@@ -263,89 +251,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public static void MoveLocalTriggerFiles()
         {
-            var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), "TriggerFiles");
-
-            // Verify local trigger file directory exists
-            if (!Directory.Exists(localFolderPath))
-            {
-                ApplicationLogger.LogMessage(0, "Local trigger file directory not found");
-                return;
-            }
-
-            // Get a list of local trigger files
-            var triggerFiles = Directory.GetFiles(localFolderPath);
-            if (triggerFiles.Length < 1)
-            {
-                // No files found
-                ApplicationLogger.LogMessage(0, "No files in local trigger file directory");
-                return;
-            }
-
-            // Move the local files to the remote server
-            var remoteFolderPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
-
-            // Verfiy remote folder connection exists
-            if (!Directory.Exists(remoteFolderPath))
-            {
-                var msg = "MoveLocalTriggerFiles: Unable to connect to remote folder " + remoteFolderPath;
-                ApplicationLogger.LogError(0, msg);
-                return;
-            }
-
-            foreach (var localFile in triggerFiles)
-            {
-                var fi = new FileInfo(localFile);
-                var targetFilePath = Path.Combine(remoteFolderPath, fi.Name);
-
-                var success = MoveLocalFile(fi.FullName, targetFilePath);
-                fi.Refresh();
-
-                if (success && fi.Exists)
-                {
-                    // Move the file into a subfolder so that it doesn't get processed the next time the program starts
-                    try
-                    {
-                        var diLocalArchiveFolder =
-                            new DirectoryInfo(Path.Combine(fi.Directory.FullName,
-                                DateTime.Now.Year.ToString(CultureInfo.InvariantCulture)));
-                        if (!diLocalArchiveFolder.Exists)
-                            diLocalArchiveFolder.Create();
-
-                        targetFilePath = Path.Combine(diLocalArchiveFolder.FullName, fi.Name);
-                        success = MoveLocalFile(fi.FullName, targetFilePath);
-
-                        fi.Refresh();
-
-                        if (success && fi.Exists)
-                            fi.Delete();
-                    }
-                    catch (Exception ex)
-                    {
-                        ApplicationLogger.LogError(0, "Exception archiving local trigger file " + fi.FullName, ex);
-                    }
-                }
-            }
-        }
-
-        private static bool MoveLocalFile(string sourceFile, string targetFile)
-        {
-            try
-            {
-                if (!File.Exists(targetFile))
-                {
-                    File.Move(sourceFile, targetFile);
-                    ApplicationLogger.LogMessage(0, "Trigger file " + sourceFile + " moved");
-                    return true;
-                }
-
-                ApplicationLogger.LogMessage(0, "Trigger file " + targetFile + " already exists remotely; not overwriting.");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(0, "Exception moving trigger file " + sourceFile, ex);
-                return false;
-            }
+            TriggerFileUtils.MoveLocalTriggerFiles();
         }
 
         #endregion

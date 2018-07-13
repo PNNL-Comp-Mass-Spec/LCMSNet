@@ -1,9 +1,9 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices.ContactClosureRead;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetPlugins.LabJack;
-using LcmsNetSDK;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
 {

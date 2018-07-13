@@ -46,9 +46,9 @@ namespace LcmsNetSDK.Method
             {
                 var control = Parameters.Controls[i];
 
-                // 
+                //
                 // Grab the controls value to be used later on
-                // 
+                //
                 var parameterControl = control as ILCEventParameter;
                 if (parameterControl != null)
                 {

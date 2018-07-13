@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using LcmsNetData;
 using LcmsNetSDK.Method;
 
 //using LcmsNet.Devices;

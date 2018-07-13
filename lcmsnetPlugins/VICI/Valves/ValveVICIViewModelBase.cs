@@ -5,9 +5,9 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNetPlugins.VICI.Valves
 {

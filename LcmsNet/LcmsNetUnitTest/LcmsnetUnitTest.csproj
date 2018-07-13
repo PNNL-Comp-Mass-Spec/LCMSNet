@@ -32,6 +32,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
+    <Reference Include="LcmsNetData">
+      <HintPath>..\..\lib\LcmsNetData.dll</HintPath>
+    </Reference>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>

@@ -16,7 +16,9 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using LcmsNetSDK.System;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
+using LcmsNetSDK.Method;
 
 namespace LcmsNetSDK.Logging
 {
@@ -222,14 +224,17 @@ namespace LcmsNetSDK.Logging
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',");
-                var eventIndx = args.Sample.ActualLCMethod.CurrentEventNumber;
-                if (eventIndx < 0 || eventIndx >= args.Sample.ActualLCMethod.Events.Count)
+                if (args.Sample.ActualLCMethodBasic is LCMethod method)
                 {
-                    sqlCmdBlder.Append("'',");
-                }
-                else
-                {
-                    sqlCmdBlder.Append("'" + args.Sample.ActualLCMethod.Events[eventIndx].Device.Name + "',");
+                    var eventIndx = method.CurrentEventNumber;
+                    if (eventIndx < 0 || eventIndx >= method.Events.Count)
+                    {
+                        sqlCmdBlder.Append("'',");
+                    }
+                    else
+                    {
+                        sqlCmdBlder.Append("'" + method.Events[eventIndx].Device.Name + "',");
+                    }
                 }
             }
             else
@@ -272,11 +277,11 @@ namespace LcmsNetSDK.Logging
             {
                 sqlCmdBlder.Append("'" + args.Sample.DmsData.DatasetName + "',");
                 sqlCmdBlder.Append("'" + args.Sample.ColumnData.ID + "',"); // Add column here
-                if (args.Sample.ActualLCMethod.CurrentEventNumber >= 0)
+                if (args.Sample.ActualLCMethodBasic is LCMethod method && method.CurrentEventNumber >= 0)
                 {
-                    if (args.Sample.ActualLCMethod.Events.Count > 0)
+                    if (method.Events.Count > 0)
                         sqlCmdBlder.Append("'" +
-                                           args.Sample.ActualLCMethod.Events[args.Sample.ActualLCMethod.CurrentEventNumber].Device
+                                           method.Events[method.CurrentEventNumber].Device
                                                .Name.Replace("'", "''") + "',");
                     else
                         sqlCmdBlder.Append("'No events',");

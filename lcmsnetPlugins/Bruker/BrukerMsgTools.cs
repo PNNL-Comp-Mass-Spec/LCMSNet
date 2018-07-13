@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using LcmsNetSDK.Logging;
+using LcmsNetData.Logging;
 
 namespace LcmsNetPlugins.Bruker
 {

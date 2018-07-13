@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using FluidicsSDK;
-using LcmsNetSDK.Logging;
+using LcmsNetData.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.Fluidics.ViewModels

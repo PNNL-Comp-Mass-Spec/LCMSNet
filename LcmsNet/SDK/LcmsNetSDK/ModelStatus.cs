@@ -8,8 +8,8 @@
 
 using System.Globalization;
 using System.Text;
+using LcmsNetData.System;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.System;
 
 namespace LcmsNetSDK
 {
@@ -77,7 +77,6 @@ namespace LcmsNetSDK
         /// returns The IDevice that triggered this status change, if known.
         /// </summary>
         public IDevice EventDevice { get; set; }
-
 
         public IDevice ProblemDevice { get; set; }
 

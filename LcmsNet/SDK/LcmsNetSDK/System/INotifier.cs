@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetSDK.System

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using LcmsNetData.System;
 using NUnit.Framework;
-using LcmsNetSDK;
-using LcmsNetSDK.System;
 
 namespace LcmsnetUnitTest
 {

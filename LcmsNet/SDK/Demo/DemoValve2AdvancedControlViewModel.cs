@@ -4,7 +4,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
-using LcmsNetSDK;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary

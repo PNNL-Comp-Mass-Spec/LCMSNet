@@ -10,9 +10,9 @@ using System.Windows.Controls;
 using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetCommonControls.ViewModels;
-using LcmsNetSDK;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using Microsoft.Win32;
 
 namespace LcmsNetPlugins.Agilent.Pumps

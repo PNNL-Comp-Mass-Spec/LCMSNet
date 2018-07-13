@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Media;
-using LcmsNetSDK.Configuration;
+using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using ReactiveUI;

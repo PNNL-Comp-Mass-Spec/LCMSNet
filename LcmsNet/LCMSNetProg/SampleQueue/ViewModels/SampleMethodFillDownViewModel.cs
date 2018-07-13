@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using LcmsNetSDK.Configuration;
+using LcmsNetData.Configuration;
+using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using ReactiveUI;
@@ -195,7 +196,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public double VolumeMinimum
         {
-            get { return SampleData.CONST_MIN_SAMPLE_VOLUME; }
+            get { return CartConfiguration.MinimumVolume; }
         }
 
         #endregion

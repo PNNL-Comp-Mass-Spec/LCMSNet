@@ -9,10 +9,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using LcmsNetSDK;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using LcmsNetSDK.Configuration;
+using LcmsNetData;
+using LcmsNetData.Data;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 

@@ -9,10 +9,11 @@ using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Simulator.Views;
 using LcmsNetCommonControls.ViewModels;
+using LcmsNetData;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels

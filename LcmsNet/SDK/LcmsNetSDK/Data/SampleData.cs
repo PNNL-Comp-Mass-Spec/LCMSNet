@@ -37,56 +37,20 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using LcmsNetSDK.Configuration;
+using LcmsNetData;
+using LcmsNetData.Configuration;
+using LcmsNetData.Data;
+using LcmsNetData.Method;
+using LcmsNetData.System;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Data
 {
     /// <summary>
-    /// Enumeration describing the status of a sample.
-    /// </summary>
-    public enum SampleRunningStatus
-    {
-        /// <summary>
-        /// Queued but not told to execute.
-        /// </summary>
-        Queued,
-
-        /// <summary>
-        /// Stopped
-        /// </summary>
-        Stopped,
-
-        /// <summary>
-        /// Waiting to run.
-        /// </summary>
-        WaitingToRun,
-
-        /// <summary>
-        /// Sample is currently running.
-        /// </summary>
-        Running,
-
-        /// <summary>
-        /// Sample successfully finished running.
-        /// </summary>
-        Complete,
-
-        /// <summary>
-        /// Error occurred during the run.
-        /// </summary>
-        Error
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class NotStoredPropertyAttribute : Attribute { }
-
-    /// <summary>
     /// Class to hold data for one sample (more specifically, one instrument dataset)
     /// </summary>
     [Serializable]
-    public class SampleData : LcmsNetDataClassBase, ICloneable, INotifyPropertyChangedExt, IEquatable<SampleData>
+    public class SampleData : SampleDataBasic, ICloneable, IEquatable<SampleData>
     {
         #region Delegate Definitions
 
@@ -99,21 +63,27 @@ namespace LcmsNetSDK.Data
 
         #endregion
 
-        /// <summary>
-        /// The minimum sample volume for this system.
-        /// </summary>
-        public const double CONST_MIN_SAMPLE_VOLUME = 0.1;
-
         #region Constructors
+
+        /// <summary>
+        ///  Default constructor: assumes sample is a dummy or unchecked sample.
+        /// </summary>
+        public SampleData() : this(true)
+        {
+        }
+
+        public override SampleDataBasic GetNewNonDummy()
+        {
+            return new SampleData(false);
+        }
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="isDummySample">If this is possibly a dummy or unchecked sample, and the real sample needs to be found in the queue/list</param>
-        public SampleData(bool isDummySample = true)
+        public SampleData(bool isDummySample)
         {
             IsDummySample = isDummySample;
-            DmsData = new DMSData();
 
             //
             // Set the default column to the first column,
@@ -121,11 +91,8 @@ namespace LcmsNetSDK.Data
             //
             m_sequenceNumber = -1;
 
-            PAL = new PalData();
-            ColumnData = new ColumnData();
-            InstrumentData = new InstrumentInfo();
             LCMethod = null;
-            Volume = CONST_MIN_SAMPLE_VOLUME;
+            Volume = CartConfiguration.MinimumSampleVolume;
             //
             // Default state is always to be queued but not waiting to run.
             //
@@ -149,11 +116,11 @@ namespace LcmsNetSDK.Data
             newSample.PAL = this.PAL?.Clone() as PalData;
             newSample.m_volume = this.m_volume;
             newSample.ColumnData = this.ColumnData?.Clone() as ColumnData;
-            newSample.m_uniqueID = this.m_uniqueID;
+            newSample.UniqueID = this.UniqueID;
             newSample.LCMethod = this.LCMethod;
-            newSample.m_actualMethod = this.m_actualMethod?.Clone() as LCMethod;
+            newSample.actualMethod = this.actualMethod?.Clone() as LCMethod;
             newSample.InstrumentData = this.InstrumentData?.Clone() as InstrumentInfo;
-            newSample.m_Operator = this.m_Operator;
+            newSample.Operator = this.Operator;
             newSample.m_IsDuplicateRequestName = this.m_IsDuplicateRequestName;
             newSample.m_SampleErrors = this.m_SampleErrors;
 
@@ -232,19 +199,9 @@ namespace LcmsNetSDK.Data
         #region "Members"
 
         /// <summary>
-        /// DMS Data structure.
-        /// </summary>
-        DMSData m_DmsData;
-
-        /// <summary>
         /// Sequence order of the sample to run.
         /// </summary>
         private long m_sequenceNumber;
-
-        /// <summary>
-        /// Pal Data reference.
-        /// </summary>
-        private PalData m_palData;
 
         /// <summary>
         /// Volume of sample to inject.
@@ -252,34 +209,14 @@ namespace LcmsNetSDK.Data
         private double m_volume;
 
         /// <summary>
-        /// Information regarding what column the sample is to be, or did run on.
-        /// </summary>
-        private ColumnData m_columnData;
-
-        /// <summary>
-        /// Unique ID for this sample not related to request name or sequence ID.
-        /// </summary>
-        private long m_uniqueID;
-
-        /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface - UI consistent version.
         /// </summary>
-        private LCMethod m_method;
+        private LCMethod method;
 
         /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface.
         /// </summary>
-        private LCMethod m_actualMethod;
-
-        /// <summary>
-        /// Instrument info.
-        /// </summary>
-        private InstrumentInfo m_instrumentData;
-
-        /// <summary>
-        /// Operator performing LC run
-        /// </summary>
-        private string m_Operator = "";
+        private LCMethod actualMethod;
 
         /// <summary>
         /// Status of the sample running on a column thread or waiting in a queue.
@@ -377,28 +314,10 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
-        /// Gets or sets the instrument object data.
+        /// Gets or sets the experiment setup object data.
         /// </summary>
-        public InstrumentInfo InstrumentData
-        {
-            get { return m_instrumentData; }
-            set
-            {
-                var oldValue = m_instrumentData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_instrumentData, value, nameof(InstrumentData)))
-                {
-                    if (oldValue != null)
-                    {
-                        oldValue.PropertyChanged -= InstrumentDataChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += InstrumentDataChanged;
-                    }
-                }
-            }
-        }
+        [NotStoredProperty]
+        public override LCMethodBasic ActualLCMethodBasic => ActualLCMethod;
 
         /// <summary>
         /// Gets the experiment object data.
@@ -406,7 +325,7 @@ namespace LcmsNetSDK.Data
         [NotStoredProperty]
         public LCMethod ActualLCMethod
         {
-            get { return m_actualMethod; }
+            get { return actualMethod; }
             private set
             {
                 // Disallow method changes on queued/running/complete samples
@@ -415,8 +334,25 @@ namespace LcmsNetSDK.Data
                     return;
                 }
 
-                m_actualMethod = value;
+                actualMethod = value;
                 this.RaisePropertyChanged(nameof(ActualLCMethod));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the experiment setup object data.
+        /// </summary>
+        [NotStoredProperty]
+        public override LCMethodBasic LCMethodBasic
+        {
+            get { return LCMethod; }
+            set
+            {
+                if (value is LCMethod newMethod)
+                {
+                    LCMethod = newMethod;
+                }
+                this.RaisePropertyChanged();
             }
         }
 
@@ -425,7 +361,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public LCMethod LCMethod
         {
-            get { return m_method; }
+            get { return method; }
             set
             {
                 // Disallow method changes on queued/running/complete samples
@@ -434,36 +370,12 @@ namespace LcmsNetSDK.Data
                     return;
                 }
 
-                if (this.RaiseAndSetIfChangedRetBool(ref m_method, value, nameof(LCMethod)))
+                if (this.RaiseAndSetIfChangedRetBool(ref method, value, nameof(LCMethod)))
                 {
                     CloneLCMethod();
-                    if (m_method != null && m_method.Column != ColumnData.ID && m_method.Column >= 0)
+                    if (method != null && method.Column != ColumnData.ID && method.Column >= 0)
                     {
-                        ColumnData = CartConfiguration.Columns[m_method.Column];
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the list of data downloaded from DMS for this sample
-        /// </summary>
-        public DMSData DmsData
-        {
-            get { return m_DmsData; }
-            set
-            {
-                var oldValue = m_DmsData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_DmsData, value, nameof(DmsData)))
-                {
-                    if (oldValue != null)
-                    {
-                        oldValue.PropertyChanged -= DmsDataChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += DmsDataChanged;
+                        ColumnData = CartConfiguration.Columns[method.Column];
                     }
                 }
             }
@@ -476,30 +388,6 @@ namespace LcmsNetSDK.Data
         {
             get { return m_sequenceNumber; }
             set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value, nameof(SequenceID)); }
-        }
-
-        /// <summary>
-        /// Gets or sets the pal data associated with this sample.
-        /// </summary>
-        public PalData PAL
-        {
-            get { return m_palData; }
-            set
-            {
-                var oldValue = m_palData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_palData, value, nameof(PAL)))
-                {
-                    if (oldValue != null)
-                    {
-                        oldValue.PropertyChanged -= PalDataChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += PalDataChanged;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -523,22 +411,27 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the column data this sample is/was run on.
         /// </summary>
-        public ColumnData ColumnData
+        public override ColumnData ColumnData
         {
-            get { return m_columnData; }
+            get { return base.ColumnData; }
             set
             {
-                var oldColumn = m_columnData;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_columnData, value, nameof(ColumnData)))
+                var oldColumn = base.ColumnData;
+                if (!EqualityComparer<ColumnData>.Default.Equals(oldColumn, value))
                 {
                     if (oldColumn != null)
                     {
                         oldColumn.NameChanged -= m_columnData_NameChanged;
                     }
-                    if (m_columnData != null)
+
+                    base.ColumnData = value;
+
+                    if (value != null)
                     {
-                        m_columnData.NameChanged += m_columnData_NameChanged;
+                        value.NameChanged += m_columnData_NameChanged;
                     }
+
+                    this.RaisePropertyChanged();
                 }
             }
         }
@@ -551,7 +444,7 @@ namespace LcmsNetSDK.Data
         {
             if (methodToClone == null)
             {
-                methodToClone = m_method;
+                methodToClone = method;
             }
             if (methodToClone == null)
             {
@@ -591,18 +484,9 @@ namespace LcmsNetSDK.Data
 
         /// <summary>
         /// Gets or sets the unique ID for a sample.
+        /// Unique ID for this sample not related to request name or sequence ID.
         /// </summary>
-        public long UniqueID
-        {
-            get { return m_uniqueID; }
-            set { m_uniqueID = value; }
-        }
-
-        public string Operator
-        {
-            get { return m_Operator; }
-            set { m_Operator = value; }
-        }
+        public long UniqueID { get; set; }
 
         #endregion
 
@@ -834,25 +718,13 @@ namespace LcmsNetSDK.Data
 
         #endregion
 
-        #region "INotifyPropertyChanged implementation"
-
-        [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
         #region "IEquatable Implementation"
 
         public bool Equals(SampleData other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return m_uniqueID == other.m_uniqueID;
+            return UniqueID == other.UniqueID;
         }
 
         public override bool Equals(object obj)
@@ -865,7 +737,7 @@ namespace LcmsNetSDK.Data
 
         public override int GetHashCode()
         {
-            return m_uniqueID.GetHashCode();
+            return UniqueID.GetHashCode();
         }
 
         #endregion

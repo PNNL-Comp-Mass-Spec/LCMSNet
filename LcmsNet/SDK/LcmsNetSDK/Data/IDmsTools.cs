@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using LcmsNetData;
+using LcmsNetData.Data;
 
 namespace LcmsNetSDK.Data
 {
@@ -35,7 +37,7 @@ namespace LcmsNetSDK.Data
         void LoadCacheFromDMS(bool shouldLoadExperiment);
         bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode);
 
-        event LcmsNetSDK.ProgressEventHandler ProgressEvent;
+        event ProgressEventHandler ProgressEvent;
 
         void OnProgressUpdate(ProgressEventArgs e);
 

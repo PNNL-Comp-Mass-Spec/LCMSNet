@@ -16,8 +16,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -26,7 +26,6 @@ namespace LcmsNet.SampleQueue.IO
     /// </summary>
     class QueueExportXML : ISampleQueueWriter
     {
-        
         #region "Class variables"
 
         XmlDocument m_ExportDoc;

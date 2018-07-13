@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media.Imaging;
-using LcmsNetSDK.Configuration;
+using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 

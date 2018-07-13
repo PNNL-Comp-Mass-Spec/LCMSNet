@@ -5,9 +5,10 @@ using System.Linq;
 using System.Reactive;
 using System.Windows;
 using System.Windows.Data;
-using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
-using LcmsNetSDK.Logging;
+using LcmsNetData;
+using LcmsNetData.Configuration;
+using LcmsNetData.Data;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 

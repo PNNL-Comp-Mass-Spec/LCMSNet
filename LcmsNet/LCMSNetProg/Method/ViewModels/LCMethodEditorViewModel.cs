@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using LcmsNetSDK;
-using LcmsNetSDK.Logging;
+using LcmsNetData;
+using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
