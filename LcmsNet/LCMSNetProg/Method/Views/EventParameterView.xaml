@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="40" d:DesignWidth="100"
              d:DataContext="{d:DesignInstance {x:Type viewModels:EventParameterViewModel}, IsDesignTimeCreatable=True}">

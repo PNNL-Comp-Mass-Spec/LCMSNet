@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
-        xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+        xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
         mc:Ignorable="d"
         Title="SampleRandomizerWindow" Height="542" Width="789"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SampleRandomizerViewModel}, IsDesignTimeCreatable=True}"

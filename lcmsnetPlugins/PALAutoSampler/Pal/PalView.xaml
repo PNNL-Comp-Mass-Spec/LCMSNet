@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetPlugins.PALAutoSampler.Pal"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="367" d:DesignWidth="303"
              d:DataContext="{d:DesignInstance {x:Type local:PalViewModel}, IsDesignTimeCreatable=True}"

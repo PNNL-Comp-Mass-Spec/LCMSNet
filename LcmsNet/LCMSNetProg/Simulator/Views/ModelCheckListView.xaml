@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.Simulator.ViewModels"
              xmlns:views="clr-namespace:LcmsNet.Simulator.Views"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="245" d:DesignWidth="460"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ModelCheckListViewModel}, IsDesignTimeCreatable=True}">

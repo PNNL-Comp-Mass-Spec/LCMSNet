@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
-        xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+        xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:MoveToMethodSelectorViewModel}, IsDesignTimeCreatable=True}"
         d:DesignHeight="200" d:DesignWidth="400"

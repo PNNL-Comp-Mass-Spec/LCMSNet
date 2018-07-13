@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetCommonControls.Devices.NetworkStart"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="365" d:DesignWidth="262"
              d:DataContext="{d:DesignInstance {x:Type local:NetStartViewModelDummy}, IsDesignTimeCreatable=True}"

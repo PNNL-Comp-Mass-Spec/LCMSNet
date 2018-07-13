@@ -6,8 +6,8 @@
              xmlns:views="clr-namespace:LcmsNet.Method.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
              xmlns:styles="clr-namespace:LcmsNetCommonControls.Styles;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="826"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodEditorViewModel}, IsDesignTimeCreatable=True}">

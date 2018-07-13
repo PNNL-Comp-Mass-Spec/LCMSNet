@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:LcmsNet.Configuration.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.Configuration.ViewModels"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="647" d:DesignWidth="887"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SystemConfigurationViewModel}, IsDesignTimeCreatable=True}">

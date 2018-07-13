@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:LcmsNetPlugins.VICI.Valves"
              xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:LcmsNetCommonControls.Controls.CueBannerOverlay;assembly=LcmsNetCommonControls"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:SixPortInjectionValveViewModel}, IsDesignTimeCreatable=True}"

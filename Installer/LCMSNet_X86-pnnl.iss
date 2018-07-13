@@ -4,6 +4,7 @@
 #define MyAppVersion GetFileVersion('..\LcmsNet\LCMSNetProg\bin\x86\Release\LcmsNet.exe')
 #define MySource "..\LcmsNet\"
 #define MyLib    "..\lib"
+#define MyExtLib  "..\ExtLib"
 #define MyPlugins "..\PluginDlls" 
 #define MyValidators "..\SampleValidators"
 #define MyAppName "LCMSNet"
@@ -71,6 +72,7 @@ Source: "..\LcmsNetDmsTools\LCmsNetDmsTools\PrismDMS.config";                  D
 
 ;DLLs
 Source: "{#MyLib}\*.dll";                                                      DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyExtLib}\*.dll";                                                   DestDir: "{app}";          Flags: ignoreversion
 
 ;Sample Validators
 ;Core sample validator, PAL Validator    

@@ -49,6 +49,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WpfExtras">
+      <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrukerStartViewModel.cs" />
