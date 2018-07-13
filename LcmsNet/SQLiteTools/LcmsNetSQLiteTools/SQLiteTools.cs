@@ -307,6 +307,12 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing queue data</returns>
         public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
         {
+            if (typeof(T) == typeof(SampleDataBasic))
+            {
+                ApplicationLogger.LogError(0, "Cannot populate list of SampleDataBasic objects from database!");
+                return new List<T>();
+            }
+
             var returnData = new List<T>();
 
             // Convert type of queue into a data table name
@@ -644,6 +650,12 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr">Connection string for database file</param>
         public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
         {
+            if (typeof(T) == typeof(SampleDataBasic))
+            {
+                ApplicationLogger.LogError(0, "Cannot write list of SampleDataBasic objects to database!");
+                return;
+            }
+
             var dataInList = (queueData.Count > 0);
             var tableName = GetTableName(tableType);
 

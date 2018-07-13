@@ -535,79 +535,82 @@ namespace LcmsNetSDK.Data
                 {
                     continue;
                 }
-                switch (property.PropertyType.ToString())
+
+                if (property.PropertyType == typeof(DMSData))
                 {
-                    case "LcmsNetSDK.Data.DMSData":
-                        // Special case - get the DMS data for this object and add properties to string dictionary
-                        var dmsDict = DmsData.GetPropertyValues();
-                        foreach (var entry in dmsDict)
+                    // Special case - get the DMS data for this object and add properties to string dictionary
+                    var dmsDict = DmsData.GetPropertyValues();
+                    foreach (var entry in dmsDict)
+                    {
+                        newDictionary.Add("DMS." + entry.Key, entry.Value);
+                    }
+                }
+                else if (property.PropertyType == typeof(PalData))
+                {
+                    // Special case - get the PAL data for this object and add properties to string dictionary
+                    var palDict = PAL.GetPropertyValues();
+                    foreach (var entry in palDict)
+                    {
+                        newDictionary.Add("PAL." + entry.Key, entry.Value);
+                    }
+                }
+                else if (property.PropertyType == typeof(ColumnData))
+                {
+                    if (ColumnData != null)
+                    {
+                        // Special case - get the column data for this object and add properties to string dictionary
+                        var colDict = ColumnData.GetPropertyValues();
+                        foreach (var entry in colDict)
                         {
-                            newDictionary.Add("DMS." + entry.Key, entry.Value);
+                            newDictionary.Add("Col." + entry.Key, entry.Value);
                         }
-                        break;
-                    case "LcmsNetSDK.Data.PalData":
-                        // Special case - get the PAL data for this object and add properties to string dictionary
-                        var palDict = PAL.GetPropertyValues();
-                        foreach (var entry in palDict)
-                        {
-                            newDictionary.Add("PAL." + entry.Key, entry.Value);
-                        }
-                        break;
-                    case "LcmsNetSDK.Configuration.ColumnData":
-                        if (ColumnData != null)
-                        {
-                            // Special case - get the column data for this object and add properties to string dictionary
-                            var colDict = ColumnData.GetPropertyValues();
-                            foreach (var entry in colDict)
-                            {
-                                newDictionary.Add("Col." + entry.Key, entry.Value);
-                            }
-                        }
-                        break;
-                    case "LcmsNetSDK.Method.LCMethod":
-                        if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
-                        {
-                            // Store the actual LCMethod rather than the current version of it
-                            // Special case - get the experiment data for this object and add properties to string dictionary
-                            var expDict = ActualLCMethod.GetPropertyValues();
-                            foreach (var entry in expDict)
-                            {
-                                //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                            }
-                        }
-                        else if (LCMethod != null)
-                        {
-                            // Special case - get the experiment data for this object and add properties to string dictionary
-                            var expDict = LCMethod.GetPropertyValues();
-                            foreach (var entry in expDict)
-                            {
-                                //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                            }
-                        }
-                        else
-                        {
-                            var method = new LCMethod();
-                            var expDict = method.GetPropertyValues();
-                            foreach (var entry in expDict)
-                            {
-                                //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                                newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                            }
-                        }
-                        break;
-                    case "LcmsNetSDK.Data.InstrumentInfo":
+                    }
+                }
+                else if (property.PropertyType == typeof(LCMethod))
+                {
+                    if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
+                    {
+                        // Store the actual LCMethod rather than the current version of it
                         // Special case - get the experiment data for this object and add properties to string dictionary
-                        var instDict = InstrumentData.GetPropertyValues();
-                        foreach (var entry in instDict)
+                        var expDict = ActualLCMethod.GetPropertyValues();
+                        foreach (var entry in expDict)
                         {
-                            newDictionary.Add("Ins." + entry.Key, entry.Value);
+                            //TODO: Do we need to change the name from exp to LCMethod to be consistent.
+                            newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
                         }
-                        break;
-                    default:
-                        newDictionary.Add(property.Name, property.GetValue(this, null).ToString());
-                        break;
+                    }
+                    else if (LCMethod != null)
+                    {
+                        // Special case - get the experiment data for this object and add properties to string dictionary
+                        var expDict = LCMethod.GetPropertyValues();
+                        foreach (var entry in expDict)
+                        {
+                            //TODO: Do we need to change the name from exp to LCMethod to be consistent.
+                            newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
+                        }
+                    }
+                    else
+                    {
+                        var expDict = new LCMethod().GetPropertyValues();
+                        foreach (var entry in expDict)
+                        {
+                            //TODO: Do we need to change the name from exp to LCMethod to be consistent.
+                            newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
+                        }
+                    }
+                }
+                else if (property.PropertyType == typeof(InstrumentInfo))
+                {
+                    // Special case - get the experiment data for this object and add properties to string dictionary
+                    var instDict = InstrumentData.GetPropertyValues();
+                    foreach (var entry in instDict)
+                    {
+                        newDictionary.Add("Ins." + entry.Key, entry.Value);
+                    }
+                }
+                else
+                {
+                    newDictionary.Add(property.Name, property.GetValue(this, null).ToString());
                 }
             }
 

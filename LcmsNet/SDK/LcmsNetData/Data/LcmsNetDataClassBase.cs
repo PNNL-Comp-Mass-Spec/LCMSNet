@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Media;
 using LcmsNetData.Logging;
 
@@ -115,91 +116,7 @@ namespace LcmsNetData.Data
 
                     try
                     {
-
-                        switch (tempProp.PropertyType.ToString())
-                        {
-                            case "System.String":
-                                tempProp.SetValue(this, currentValue, null);
-                                break;
-                            case "System.Int32":
-                                if (!string.IsNullOrWhiteSpace(currentValue))
-                                    tempProp.SetValue(this, int.Parse(currentValue), null);
-                                break;
-                            case "System.Boolean":
-                                if (!string.IsNullOrWhiteSpace(currentValue))
-                                    tempProp.SetValue(this, bool.Parse(currentValue), null);
-                                break;
-                            case "System.Int64":
-                                if (!string.IsNullOrWhiteSpace(currentValue))
-                                    tempProp.SetValue(this, long.Parse(currentValue), null);
-                                break;
-                            case "System.Double":
-                                if (!string.IsNullOrWhiteSpace(currentValue))
-                                    tempProp.SetValue(this, double.Parse(currentValue), null);
-                                break;
-                            case "System.Windows.Media.Color":
-                                var convertFromString = TypeDescriptor.GetConverter(typeof(Color)).ConvertFromString(currentValue);
-                                if (convertFromString != null)
-                                {
-                                    var c = (Color)convertFromString;
-                                    tempProp.SetValue(this, c, null);
-                                }
-                                break;
-                            case "LcmsNetSDK.Configuration.ColumnStatus":
-                                if (!string.IsNullOrWhiteSpace(currentValue))
-                                {
-                                    var tempEnum =
-                                        (ColumnStatus)Enum.Parse(typeof(ColumnStatus), currentValue);
-                                    tempProp.SetValue(this, tempEnum, null);
-                                }
-                                break;
-                            case "LcmsNetSDK.Data.SampleRunningStatus":
-                                if (!string.IsNullOrWhiteSpace(currentValue))
-                                {
-                                    var tempStatus =
-                                        (SampleRunningStatus)Enum.Parse(typeof(SampleRunningStatus), currentValue);
-                                    tempProp.SetValue(this, tempStatus, null);
-                                }
-                                break;
-                            case "System.DateTime":
-                                break;
-                            default:
-                                var tpName = tempProp.PropertyType.ToString();
-                                if (tpName.StartsWith("System.Nullable"))
-                                {
-                                    if (tpName.Contains("System.Int32"))
-                                    {
-                                        // We're dealing with nullable types here, and the default
-                                        // value for those is null, so we shouldn't have to set the
-                                        // value to null if parsing doesn't work.
-                                        int value;
-                                        var worked = int.TryParse(currentValue, out value);
-                                        if (worked)
-                                            tempProp.SetValue(this, value, null);
-                                    }
-                                    else if (tpName.Contains("System.DateTime"))
-                                    {
-                                        DateTime value;
-                                        var worked = DateTime.TryParse(currentValue, out value);
-                                        if (worked)
-                                            tempProp.SetValue(this, value, null);
-                                    }
-                                    else
-                                    {
-                                        throw new Exception(
-                                            "LcmsNetDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
-                                            tempProp.PropertyType);
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception(
-                                        "LcmsNetDataClassBase.LoadPropertyValues(), Invalid property type specified: " +
-                                        tempProp.PropertyType);
-                                }
-                                break;
-                        }
-
+                        tempProp.SetValue(this, ConvertToType(currentValue, tempProp.PropertyType));
                     }
                     catch (Exception ex)
                     {
@@ -210,6 +127,60 @@ namespace LcmsNetData.Data
                     }
                 }
             }
+        }
+
+        private object ConvertToType(string value, Type targetType)
+        {
+            if (targetType.IsEnum && !string.IsNullOrWhiteSpace(value))
+            {
+                return Enum.Parse(targetType, value);
+            }
+            if (targetType == typeof(string))
+            {
+                return value;
+            }
+            if (targetType.IsPrimitive)
+            {
+                return Convert.ChangeType(value, targetType);
+            }
+            if (targetType == typeof(DateTime))
+            {
+                var tempValue = (DateTime)Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
+                return TimeZoneInfo.ConvertTimeToUtc(tempValue);
+            }
+            if (targetType == typeof(Color))
+            {
+                var convertFromString = TypeDescriptor.GetConverter(typeof(Color)).ConvertFromString(value);
+                if (convertFromString != null)
+                {
+                    return (Color)convertFromString;
+                }
+
+                return new Color();
+            }
+            if (targetType.ToString().StartsWith("System.Nullable"))
+            {
+                var wrappedType = targetType.GenericTypeArguments[0];
+                if (value == null || string.IsNullOrWhiteSpace(value))
+                {
+                    return null;
+                }
+
+                // We're dealing with nullable types here, and the default
+                // value for those is null, so we shouldn't have to set the
+                // value to null if parsing doesn't work.
+                try
+                {
+                    return ConvertToType(value, wrappedType);
+                }
+                catch (InvalidCastException) {}
+                catch (FormatException) {}
+                catch (OverflowException) {}
+
+                return null;
+            }
+
+            throw new Exception("LcmsNetDataClassBase.LoadPropertyValues(), Invalid property type specified: " + targetType);
         }
 
         #endregion

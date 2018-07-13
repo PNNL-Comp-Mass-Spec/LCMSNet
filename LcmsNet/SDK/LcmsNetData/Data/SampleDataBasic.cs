@@ -174,12 +174,24 @@ namespace LcmsNetData.Data
         /// <returns>String dictionary containing current values of all properties</returns>
         public override Dictionary<string, string> GetPropertyValues()
         {
-            throw new NotSupportedException("Serialization not supported for SampleDataBasic.");
+            // if this is a SampleDataBasic object (i.e., this was not called via 'base.GetPropertyValues()'), throw an exception
+            if (this.GetType() == typeof(SampleDataBasic))
+            {
+                throw new NotSupportedException("Serialization not supported for SampleDataBasic.");
+            }
+
+            return base.GetPropertyValues();
         }
 
         public override void LoadPropertyValues(Dictionary<string, string> propValues)
         {
-            throw new NotSupportedException("Serialization not supported for SampleDataBasic.");
+            // if this is a SampleDataBasic object (i.e., this was not called via 'base.LoadPropertyValues(Dictionary<string, string>)'), throw an exception
+            if (this.GetType() == typeof(SampleDataBasic))
+            {
+                throw new NotSupportedException("Serialization not supported for SampleDataBasic.");
+            }
+
+            base.LoadPropertyValues(propValues);
         }
 
         #endregion
