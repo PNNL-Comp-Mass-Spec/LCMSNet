@@ -271,10 +271,10 @@ namespace LcmsNet.Method
                                                 span.TotalMilliseconds),
                                   CONST_VERBOSE_EVENTS);
                             var timerStart = TimeKeeper.Instance.Now;
-                            //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "timeout start: " + timerStart.ToString("h"));
+                            //System.Threading.Tasks.Task.Run(() => WriteTimeoutLog("timeout start: " + timerStart.ToString("h")));
                             timer.WaitMilliseconds(totalMilliseconds, m_abortEvent);
                             var timerEnd = TimeKeeper.Instance.Now.Ticks;
-                            //ThreadPool.QueueUserWorkItem(new WaitCallback(WriteTimeoutLog), "waitTimer end: " + timerEnd.ToString("h"));
+                            //System.Threading.Tasks.Task.Run(() => WriteTimeoutLog("waitTimer end: " + timerEnd.ToString("h")));
                             // Calculate the statistics of how long it took to run.
                         }
                         finished = TimeKeeper.Instance.Now;
@@ -323,9 +323,9 @@ namespace LcmsNet.Method
             }
         }
 
-        private void WriteTimeoutLog(object message)
+        private void WriteTimeoutLog(string message)
         {
-            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message as string);
+            ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message);
         }
 
         #endregion

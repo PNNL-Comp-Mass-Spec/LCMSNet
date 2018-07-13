@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using LcmsNet.Notification;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
@@ -410,21 +411,6 @@ namespace LcmsNet.Method
         #region Main Thread and Background worker
 
         /// <summary>
-        /// Writes the method data for a completed sample run.
-        /// </summary>
-        /// <param name="sample">Sample containing data to write.</param>
-        private static void WriteCompletedSampleInformation(object sample)
-        {
-            //Write methods files
-            MethodFileTools.WriteMethodFiles((SampleData)sample);
-        }
-
-        private static void WriteIncompleteSampleInformation(object sample)
-        {
-            MethodFileTools.WriteIncompleteMethodFiles((SampleData)sample);
-        }
-
-        /// <summary>
         /// Alert listeners that an error has occurred.
         /// </summary>
         /// <param name="sample"></param>
@@ -616,8 +602,7 @@ namespace LcmsNet.Method
                                         TimeSpan eventDuration;
                                         if (currentEvent[columnID] < samples[columnID].ActualLCMethod.Events.Count)
                                         {
-                                            var lcEvent =
-                                                samples[columnID].ActualLCMethod.Events[currentEvent[columnID]];
+                                            var lcEvent = samples[columnID].ActualLCMethod.Events[currentEvent[columnID]];
                                             deviceName = lcEvent.Device.Name;
                                             eventName = lcEvent.Name;
                                             eventDuration = lcEvent.Duration;
@@ -642,20 +627,16 @@ namespace LcmsNet.Method
                                         if (currentEvent[columnID] <
                                             m_columnThreads[columnID].Sample.ActualLCMethod.ActualEvents.Count)
                                         {
-                                            var evt =
-                                                m_columnThreads[columnID].Sample.ActualLCMethod.ActualEvents[
-                                                    currentEvent[columnID]];
-                                            evt.Duration =
-                                                evt.Start.Add(eventDuration).Add(overdueSpan).Subtract(evt.Start);
+                                            var evt = m_columnThreads[columnID].Sample.ActualLCMethod.ActualEvents[currentEvent[columnID]];
+                                            evt.Duration = evt.Start.Add(eventDuration).Add(overdueSpan).Subtract(evt.Start);
                                         }
 
                                         currentEvent[columnID] = CONST_CANCELLING_FLAG;
                                         m_sampleQueue.CancelRunningSample(samples[columnID], true);
                                         samples[columnID] = null;
                                         StopAllOnOverdue();
-                                        // TODO: Use a Task instead of a thread?
-                                        ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation,
-                                                                     m_columnThreads[columnID].Sample);
+                                        var setColumnId = columnID;
+                                        Task.Run(() => MethodFileTools.WriteIncompleteMethodFiles(m_columnThreads[setColumnId].Sample));
                                     }
                                 }
                                 //
@@ -862,7 +843,7 @@ namespace LcmsNet.Method
                         sampleEndTime[columnID] = DateTime.MinValue;
                         currentEvent[columnID] = CONST_IDLE_FLAG;
                         //Print("ERROR", CONST_VERBOSE_LEAST);
-                        ThreadPool.QueueUserWorkItem(WriteIncompleteSampleInformation, m_columnThreads[columnID].Sample);
+                        Task.Run(() => MethodFileTools.WriteIncompleteMethodFiles(m_columnThreads[columnID].Sample));
                     }
                 }
                 Stop();
@@ -895,7 +876,7 @@ namespace LcmsNet.Method
                     // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
                     // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
                     //
-                    ThreadPool.QueueUserWorkItem(WriteCompletedSampleInformation, m_columnThreads[columnID].Sample);
+                    Task.Run(() => MethodFileTools.WriteMethodFiles(m_columnThreads[columnID].Sample));
                     samples[columnID] = null;
                 }
             }
