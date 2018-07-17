@@ -17,7 +17,7 @@ using Microsoft.Win32;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {
-    public class AgilentPumpViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class AgilentPumpViewModel : BaseDeviceControlViewModel, IDeviceControl, IDisposable
     {
         private const string CONST_PUMP_METHOD_PATH = "pumpmethods";
 
@@ -32,6 +32,17 @@ namespace LcmsNetPlugins.Agilent.Pumps
             pumpPopoutVm = new PopoutViewModel(pumpDisplay);
             SetupCommands();
             timer = new Timer(TimerTick, this, 1000, 1000);
+        }
+
+        ~AgilentPumpViewModel()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            timer?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         private void RegisterDevice(IDevice device)

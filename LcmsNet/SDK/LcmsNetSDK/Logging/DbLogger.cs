@@ -83,6 +83,7 @@ namespace LcmsNetSDK.Logging
             {
                 connection?.Close();
                 connection?.Dispose();
+                connectionTimeoutTimer?.Dispose();
                 connection = null;
             }
             catch

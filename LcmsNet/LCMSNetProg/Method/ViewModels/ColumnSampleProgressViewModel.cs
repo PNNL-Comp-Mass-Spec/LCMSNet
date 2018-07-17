@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
 {
-    public class ColumnSampleProgressViewModel : ReactiveObject
+    public class ColumnSampleProgressViewModel : ReactiveObject, IDisposable
     {
         /// <summary>
         /// Default constructor.
@@ -32,11 +32,22 @@ namespace LcmsNet.Method.ViewModels
             previewUpdateTimer = new Timer(UpdateDrawings, this, 1000, 1000);
         }
 
+        ~ColumnSampleProgressViewModel()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            previewUpdateTimer?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         private string previewLabelText = "30-minute-preview";
         private int minutes = 30;
         private int seconds = 1;
         private int milliseconds = 1;
-        private Timer previewUpdateTimer;
+        private readonly Timer previewUpdateTimer;
         private SampleProgressViewModel sampleProgress;
         private SampleProgressViewModel sampleProgressFull;
 

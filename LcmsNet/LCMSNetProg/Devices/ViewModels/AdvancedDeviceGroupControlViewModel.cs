@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
 {
-    public class AdvancedDeviceGroupControlViewModel : ReactiveObject
+    public class AdvancedDeviceGroupControlViewModel : ReactiveObject, IDisposable
     {
         /// <summary>
         /// Constructor
@@ -32,7 +32,21 @@ namespace LcmsNet.Devices.ViewModels
                 .Subscribe(x => SelectedDevice = x.Item1[0]);
         }
 
-        public class DeviceControlData : ReactiveObject
+        ~AdvancedDeviceGroupControlViewModel()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            foreach (var deviceControl in DeviceControls)
+            {
+                deviceControl.Dispose();
+            }
+            GC.SuppressFinalize(this);
+        }
+
+        public class DeviceControlData : ReactiveObject, IDisposable
         {
             private System.Windows.Controls.UserControl view = null;
             private ObservableAsPropertyHelper<string> name;
@@ -83,6 +97,20 @@ namespace LcmsNet.Devices.ViewModels
                 {
                     vm.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status, out status);
                 }
+            }
+
+            ~DeviceControlData()
+            {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                if (ViewModel is IDisposable dis)
+                {
+                    dis.Dispose();
+                }
+                GC.SuppressFinalize(this);
             }
         }
 

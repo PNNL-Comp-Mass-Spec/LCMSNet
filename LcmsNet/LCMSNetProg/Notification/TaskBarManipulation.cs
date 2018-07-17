@@ -5,7 +5,7 @@ using System.Windows.Shell;
 
 namespace LcmsNet.Notification
 {
-    public class TaskBarManipulation
+    public class TaskBarManipulation : IDisposable
     {
         private static readonly TaskBarManipulation instance = new TaskBarManipulation();
 
@@ -13,6 +13,18 @@ namespace LcmsNet.Notification
 
         private TaskBarManipulation()
         {
+        }
+
+        ~TaskBarManipulation()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            blinkTimer?.Dispose();
+            blinkTimeout?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         private Timer blinkTimer = null;

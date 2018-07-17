@@ -19,7 +19,7 @@ namespace LcmsNetSDK.Devices
     /// <summary>
     /// Device manager class for maintaining a list of all devices used by the application.
     /// </summary>
-    public class DeviceManager : IDeviceManager
+    public class DeviceManager : IDeviceManager, IDisposable
     {
         private const string CONST_MOBILE_PHASE_NAME = "mobilephase-";
         private const string CONST_MOBILE_PHASE_COMMENT = "mobilephase-comment-";
@@ -205,6 +205,23 @@ namespace LcmsNetSDK.Devices
                 return Assembly.LoadFile(testPath);
             }
             return null;
+        }
+
+        ~DeviceManager()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            foreach (var device in m_devices)
+            {
+                if (device is IDisposable dis)
+                {
+                    dis.Dispose();
+                }
+            }
+            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -794,6 +811,13 @@ namespace LcmsNetSDK.Devices
 
             if (clearDevices)
             {
+                foreach (var device in m_devices)
+                {
+                    if (device is IDisposable dis)
+                    {
+                        dis.Dispose();
+                    }
+                }
                 var tempDevices = new List<IDevice>();
                 tempDevices.AddRange(m_devices);
                 foreach (var device in tempDevices)

@@ -31,6 +31,7 @@ using LcmsNetData.Logging;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSQLiteTools;
 using PDFGenerator;
@@ -880,9 +881,14 @@ namespace LcmsNet
 
         public void Dispose()
         {
+            SampleProgressVm.Dispose();
+            NotificationSystemVm.Dispose();
+            FluidicsDesignVm.Dispose();
             DMSDataContainer.DBTools.CloseConnection();
+            DbLogger.Instance.CloseConnection();
             SQLiteTools.CloseConnection();
             sqlInstance.Dispose();
+            TaskBarManipulation.Instance.Dispose();
         }
     }
 }

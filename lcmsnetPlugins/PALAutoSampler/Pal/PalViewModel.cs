@@ -15,7 +15,7 @@ using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.PALAutoSampler.Pal
 {
-    public class PalViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class PalViewModel : BaseDeviceControlViewModel, IDeviceControl, IDisposable
     {
         #region Constructors
 
@@ -31,6 +31,17 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             SetupCommands();
 
             this.PropertyChanged += PalViewModel_PropertyChanged;
+        }
+
+        ~PalViewModel()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            TimeoutMonitor(this);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>

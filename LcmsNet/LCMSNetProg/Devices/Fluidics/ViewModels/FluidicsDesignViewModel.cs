@@ -38,20 +38,16 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => FluidicsControlVm.Refresh());
         }
 
-        private void ReleaseUnmanagedResources()
-        {
-            DeviceManager.Manager.ShutdownDevices();
-        }
-
         public void Dispose()
         {
-            ReleaseUnmanagedResources();
+            AdvancedDeviceControlPanel.Dispose();
+            DeviceManager.Manager.ShutdownDevices();
             GC.SuppressFinalize(this);
         }
 
         ~FluidicsDesignViewModel()
         {
-            ReleaseUnmanagedResources();
+            Dispose();
         }
 
         #region Members

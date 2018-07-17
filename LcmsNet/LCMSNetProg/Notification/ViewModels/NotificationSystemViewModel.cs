@@ -18,7 +18,7 @@ using ReactiveUI;
 
 namespace LcmsNet.Notification.ViewModels
 {
-    public class NotificationSystemViewModel : ReactiveObject
+    public class NotificationSystemViewModel : ReactiveObject, IDisposable
     {
         public NotificationSystemViewModel()
         {
@@ -103,6 +103,17 @@ namespace LcmsNet.Notification.ViewModels
             this.WhenAnyValue(x => x.SelectedLCMethod).Subscribe(x => this.SetMethod());
 
             SetupCommands();
+        }
+
+        ~NotificationSystemViewModel()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            remoteStatusLogTimer.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         private void Model_ModelCheckAdded(object sender, ModelCheckControllerEventArgs e)

@@ -177,6 +177,7 @@ namespace LcmsNetDmsTools
             {
                 connection?.Close();
                 connection?.Dispose();
+                connectionTimeoutTimer?.Dispose();
                 connection = null;
             }
             catch

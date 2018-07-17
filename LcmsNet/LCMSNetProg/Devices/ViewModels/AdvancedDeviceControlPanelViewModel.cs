@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
 {
-    public class AdvancedDeviceControlPanelViewModel : ReactiveObject
+    public class AdvancedDeviceControlPanelViewModel : ReactiveObject, IDisposable
     {
         public AdvancedDeviceControlPanelViewModel()
         {
@@ -18,7 +18,21 @@ namespace LcmsNet.Devices.ViewModels
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
         }
 
-        public class DeviceGroup : IEquatable<DeviceGroup>
+        ~AdvancedDeviceControlPanelViewModel()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            foreach (var grp in DeviceGroups)
+            {
+                grp.Dispose();
+            }
+            GC.SuppressFinalize(this);
+        }
+
+        public class DeviceGroup : IEquatable<DeviceGroup>, IDisposable
         {
             public string Name { get; private set; }
             public AdvancedDeviceGroupControlViewModel Content { get; private set; }
@@ -27,6 +41,17 @@ namespace LcmsNet.Devices.ViewModels
             {
                 Name = name;
                 Content = new AdvancedDeviceGroupControlViewModel();
+            }
+
+            ~DeviceGroup()
+            {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                Content.Dispose();
+                GC.SuppressFinalize(this);
             }
 
             public bool Equals(DeviceGroup other)

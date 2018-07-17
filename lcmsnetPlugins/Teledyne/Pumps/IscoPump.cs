@@ -27,7 +27,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     [Serializable]
 
     [DeviceControl(typeof(IscoPumpViewModel), typeof(IscoPumpGlyph), "ISCO Pump", "Pumps")]
-    public class IscoPump : IDevice
+    public class IscoPump : IDevice, IDisposable
     {
         #region "Constants"
         const int CONST_MAX_PUMPS = 3;
@@ -247,6 +247,18 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             m_PortProps = new IscoSerPortProps();
             ConfigSerialPort(m_PortProps);
         }
+
+        ~IscoPump()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            m_refresh?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         #endregion
 
         #region "Methods"

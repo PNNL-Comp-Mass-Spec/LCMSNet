@@ -28,7 +28,7 @@ namespace LcmsNetPlugins.Bruker
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [DeviceControl(typeof(BrukerStartViewModel), "Bruker", "Detectors")]
-    public class BrukerStart : IDevice, IFluidicsClosure
+    public class BrukerStart : IDevice, IFluidicsClosure, IDisposable
     {
         #region "Constants"
 
@@ -125,6 +125,11 @@ namespace LcmsNetPlugins.Bruker
             mobject_CmdTimeoutTimer.Interval = COMMAND_TIMEOUT_MSEC;
             mobject_CmdTimeoutTimer.Enabled = false;
             mobject_CmdTimeoutTimer.EndInit();
+        }
+
+        ~BrukerStart()
+        {
+            Dispose();
         }
 
         #endregion
@@ -225,7 +230,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public void Dispose()
         {
-            // Placeholder in case of future need
+            mobject_CmdTimeoutTimer?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
