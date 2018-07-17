@@ -55,6 +55,32 @@ namespace LcmsNet
         /// </summary>
         public MainWindowViewModel()
         {
+            Thread.CurrentThread.Name = "Main Thread";
+            windowTitleBase = "LcmsNet Version: " + Assembly.GetEntryAssembly().GetName().Version;
+            windowTitleBase += " Cart - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+
+            // simulator stuff, don't add the simulator to the system if not in emulation mode.
+            var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false);
+            if (emulation)
+            {
+                windowTitleBase += " [EMULATED] ";
+
+                //add simulator button to main form and add simulator forms.
+                SimulatorVm = new SimulatorCombinedViewModel();
+                CanSimulate = true;
+            }
+            else
+            {
+                CanSimulate = false;
+            }
+
+            // Construct the sample queue object that holds and manages sample data ordering
+            SampleManagerVm = new SampleManagerViewModel(sampleQueue);
+            scheduler = new LCMethodScheduler(sampleQueue);
+
+            // Displays the pump data.
+            PumpDisplaysPopoutVm = new PopoutViewModel(PumpDisplaysVm);
+
             Initialize();
 
             ShowAboutCommand = ReactiveCommand.Create(() => this.ShowAboutWindow());
@@ -131,12 +157,12 @@ namespace LcmsNet
             // Shut off the scheduler...
             try
             {
-                m_scheduler.Shutdown();
+                scheduler.Shutdown();
 
                 // Save queue to the cache
-                m_sampleQueue.StopRunningQueue();
+                sampleQueue.StopRunningQueue();
 
-                if (m_sampleQueue.IsDirty)
+                if (sampleQueue.IsDirty)
                 {
                     var result =
                         MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
@@ -144,7 +170,7 @@ namespace LcmsNet
                         ), "Confirm Queue Save", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        m_sampleQueue.CacheQueue(true);
+                        sampleQueue.CacheQueue(true);
                     }
                 }
             }
@@ -161,75 +187,52 @@ namespace LcmsNet
 
         #region Properties
 
-        public string WindowTitle
-        {
-            get { return windowTitle + " " + SampleManagerVm.TitleBarTextAddition; }
-            private set { this.RaiseAndSetIfChanged(ref windowTitle, value); }
-        }
+        public string WindowTitle => windowTitleBase + " " + SampleManagerVm.TitleBarTextAddition;
 
         /// <summary>
         /// ViewModel that manages views of the sample queue class for handling sample
         /// ordering and running.
         /// </summary>
-        public SampleManagerViewModel SampleManagerVm
-        {
-            get { return sampleManager; }
-            private set { this.RaiseAndSetIfChanged(ref sampleManager, value); }
-        }
+        public SampleManagerViewModel SampleManagerVm { get; }
 
-        public FluidicsDesignViewModel FluidicsDesignVm
-        {
-            get { return fluidicsDesign; }
-            private set { this.RaiseAndSetIfChanged(ref fluidicsDesign, value); }
-        }
+        /// <summary>
+        /// ViewModel for showing/managing the cart hardware configuration and plumbing
+        /// </summary>
+        public FluidicsDesignViewModel FluidicsDesignVm { get; } = new FluidicsDesignViewModel();
 
-        public SimulatorCombinedViewModel SimulatorVm
-        {
-            get { return simCombined; }
-            private set { this.RaiseAndSetIfChanged(ref simCombined, value); }
-        }
+        public SimulatorCombinedViewModel SimulatorVm { get; }
 
-        public ColumnSampleProgressViewModel SampleProgressVm
-        {
-            get { return sampleProgress; }
-            private set { this.RaiseAndSetIfChanged(ref sampleProgress, value); }
-        }
+        /// <summary>
+        /// Displays progress of samples along each column.
+        /// </summary>
+        public ColumnSampleProgressViewModel SampleProgressVm { get; } = new ColumnSampleProgressViewModel();
 
-        public LCMethodEditorViewModel MethodEditorVm
-        {
-            get { return methodEditor; }
-            private set { this.RaiseAndSetIfChanged(ref methodEditor, value); }
-        }
+        /// <summary>
+        /// Method editor viewmodel to construct new LC separations.
+        /// </summary>
+        public LCMethodEditorViewModel MethodEditorVm { get; } = new LCMethodEditorViewModel();
 
-        public PopoutViewModel PumpDisplaysPopoutVm
-        {
-            get { return pumpDisplaysPopoutVm; }
-            private set { this.RaiseAndSetIfChanged(ref pumpDisplaysPopoutVm, value); }
-        }
+        public PopoutViewModel PumpDisplaysPopoutVm { get; }
 
-        public PumpDisplaysViewModel PumpDisplaysVm
-        {
-            get { return pumpDisplays; }
-            private set { this.RaiseAndSetIfChanged(ref pumpDisplays, value); }
-        }
+        /// <summary>
+        /// Pump display ViewModel.
+        /// </summary>
+        public PumpDisplaysViewModel PumpDisplaysVm { get; } = new PumpDisplaysViewModel();
 
-        public NotificationSystemViewModel NotificationSystemVm
-        {
-            get { return notifications; }
-            private set { this.RaiseAndSetIfChanged(ref notifications, value); }
-        }
+        /// <summary>
+        /// Notifications ViewModel.
+        /// </summary>
+        public NotificationSystemViewModel NotificationSystemVm { get; } = new NotificationSystemViewModel();
 
-        public MessagesViewModel MessagesVm
-        {
-            get { return messages; }
-            private set { this.RaiseAndSetIfChanged(ref messages, value); }
-        }
+        /// <summary>
+        /// ViewModel for displaying the messages from the different parts of the program.
+        /// </summary>
+        public MessagesViewModel MessagesVm { get; } = new MessagesViewModel();
 
-        public SystemConfigurationViewModel SystemConfiguration
-        {
-            get { return systemConfiguration; }
-            private set { this.RaiseAndSetIfChanged(ref systemConfiguration, value); }
-        }
+        /// <summary>
+        /// ViewModel for displaying the configuration of the columns and the cart metadata.
+        /// </summary>
+        public SystemConfigurationViewModel SystemConfiguration { get; } = new SystemConfigurationViewModel();
 
         public string StatusMessage
         {
@@ -307,69 +310,27 @@ namespace LcmsNet
 
         #region Members
 
-        private string windowTitle;
+        private readonly string windowTitleBase;
         private string statusMessage = "Status";
         private bool canSimulate = true;
         private bool isMessageError = false;
         private bool queueTabSelected = true;
         private readonly SQLiteTools sqlInstance = SQLiteTools.GetInstance();
 
-        private FluidicsDesignViewModel fluidicsDesign;
-
         /// <summary>
         /// Method Scheduler and execution engine.
         /// </summary>
-        private LCMethodScheduler m_scheduler;
+        private readonly LCMethodScheduler scheduler;
 
         /// <summary>
-        /// Form that manages views of the sample queue class for handling sample
-        /// ordering and running.
+        /// Object that manages operation of the samples - sample queue object that holds and manages sample data ordering
         /// </summary>
-        private SampleManagerViewModel sampleManager;
-
-        /// <summary>
-        /// Object that manages operation of the samples.
-        /// </summary>
-        private SampleQueue.SampleQueue m_sampleQueue;
-
-        /// <summary>
-        /// Form that displays the configuration of the columns.
-        /// </summary>
-        private SystemConfigurationViewModel systemConfiguration;
-
-        /// <summary>
-        /// Form that displays the messages from the different parts of the program.
-        /// </summary>
-        private MessagesViewModel messages;
-
-        /// <summary>
-        /// Method editor form to construct new LC separations.
-        /// </summary>
-        private LCMethodEditorViewModel methodEditor;
-
-        /// <summary>
-        /// Displays progress of samples along each column.
-        /// </summary>
-        private ColumnSampleProgressViewModel sampleProgress;
-
-        /// <summary>
-        /// Notifications form.
-        /// </summary>
-        private NotificationSystemViewModel notifications;
-
-        /// <summary>
-        /// Display form for the pumps.
-        /// </summary>
-        private PumpDisplaysViewModel pumpDisplays;
-
-        private PopoutViewModel pumpDisplaysPopoutVm = null;
+        private readonly SampleQueue.SampleQueue sampleQueue = new SampleQueue.SampleQueue();
 
         /// <summary>
         /// default PDF generator, used to generate a pdf of information after a sample run.
         /// </summary>
-        private readonly IPDF m_pdfGen = new PDFGen();
-
-        private SimulatorCombinedViewModel simCombined;
+        private readonly IPDF pdfGen = new PDFGen();
 
         #endregion
 
@@ -380,62 +341,32 @@ namespace LcmsNet
         /// </summary>
         private void Initialize()
         {
-            Thread.CurrentThread.Name = "Main Thread";
-            WindowTitle = "LcmsNet Version: " + Assembly.GetEntryAssembly().GetName().Version;
-            WindowTitle += " Cart - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
-            var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
-            if (emulation != null)
-            {
-                var isEmulated = Convert.ToBoolean(emulation);
-                if (isEmulated)
-                {
-                    WindowTitle += " [EMULATED] ";
-                }
-            }
-
             foreach (var column in CartConfiguration.Columns)
             {
                 column.NameChanged += Column_NameChanged;
                 column.StatusChanged += Column_StatusChanged;
             }
 
-            SystemConfiguration = new SystemConfigurationViewModel();
             SystemConfiguration.ColumnNameChanged += SystemConfiguration_ColumnNameChanged;
             SQLiteTools.GetSepTypeList(false);
 
-            // Fludics Design display
-            FluidicsDesignVm = new FluidicsDesignViewModel();
-
             // Notification System
-            NotificationSystemVm = new NotificationSystemViewModel();
             NotificationSystemVm.ActionRequired += m_notifications_ActionRequired;
-
-
-            // Construct the sample queue object that holds and manages sample data ordering
-            m_sampleQueue = new SampleQueue.SampleQueue();
-            SampleManagerVm = new SampleManagerViewModel(m_sampleQueue);
 
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             DeviceManager.Manager.DeviceRenamed += Manager_DeviceRenamed;
             DeviceManager.Manager.DevicesInitialized += Manager_DevicesInitialized;
 
-            // Displays the pump data.
-            PumpDisplaysVm = new PumpDisplaysViewModel();
-            PumpDisplaysPopoutVm = new PopoutViewModel(PumpDisplaysVm);
-
             ApplicationLogger.LogMessage(0, "Loading the hardware configuration.");
             FluidicsDesignVm.LoadConfiguration();
 
-
             // Create and initialize the scheduler that handles executing LC-Methods (separations, e.g. experiments)
-            m_scheduler = new LCMethodScheduler(m_sampleQueue);
-            m_scheduler.SchedulerError += Scheduler_Error;
-            m_scheduler.SampleProgress += Scheduler_SampleProgress;
-            m_scheduler.Initialize();
+            scheduler.SchedulerError += Scheduler_Error;
+            scheduler.SampleProgress += Scheduler_SampleProgress;
+            scheduler.Initialize();
 
             // Logging and messaging
-            MessagesVm = new MessagesViewModel();
             MessagesVm.ErrorCleared += Messages_ErrorCleared;
             MessagesVm.ErrorPresent += Messages_ErrorPresent;
             ApplicationLogger.Error += MessagesVm.LogError;
@@ -443,11 +374,7 @@ namespace LcmsNet
             ApplicationLogger.Message += MessagesVm.LogMessage;
             ApplicationLogger.Message += ApplicationLogger_Message;
 
-            // Method Editor
-            MethodEditorVm = new LCMethodEditorViewModel();
-            SampleProgressVm = new ColumnSampleProgressViewModel();
             SampleManagerVm.Stop += SampleManager_Stop;
-
 
             // Get the most recently used separation type
             LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SQLiteTools.GetDefaultSeparationType());
@@ -460,18 +387,6 @@ namespace LcmsNet
                 failedDevices = DeviceManager.Manager.InitializeDevices();
             }
 
-            // simulator stuff, don't add the simulator to the system if not in emulation mode.
-            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false))
-            {
-                //add simulator button to main form and add simulator forms.
-                SimulatorVm = new SimulatorCombinedViewModel();
-                CanSimulate = true;
-            }
-            else
-            {
-                CanSimulate = false;
-            }
-
             // Load the methods from the LC-Methods folder.
             ApplicationLogger.LogMessage(0, "Reading User Methods.");
             userMethodErrors = LCMethodManager.Manager.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER));
@@ -480,7 +395,7 @@ namespace LcmsNet
             // Tell the sample queue to load samples from cache after everything is loaded.
             try
             {
-                m_sampleQueue.RetrieveQueueFromCache();
+                sampleQueue.RetrieveQueueFromCache();
             }
             catch (Exception ex)
             {
@@ -542,7 +457,7 @@ namespace LcmsNet
 
         private void SystemConfiguration_ColumnNameChanged(object sender, EventArgs e)
         {
-            m_sampleQueue.UpdateAllSamples();
+            sampleQueue.UpdateAllSamples();
         }
 
         #region Notification System.
@@ -563,14 +478,14 @@ namespace LcmsNet
             {
                 case DeviceNotificationAction.Stop:
                     ApplicationLogger.LogError(0, "The notification system is shutting down the queue");
-                    m_scheduler.Stop();
+                    scheduler.Stop();
                     //m_sampleQueue.StopRunningQueue();
                     ApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
                 case DeviceNotificationAction.Shutdown:
                     ApplicationLogger.LogError(0, "The notification system is shutting down the queue");
                     //m_sampleQueue.StopRunningQueue();
-                    m_scheduler.Stop();
+                    scheduler.Stop();
                     ApplicationLogger.LogError(0, string.Format("Queue was shutdown by {0} ", e.Name));
                     break;
                 case DeviceNotificationAction.StopAndRunMethodNow:
@@ -584,7 +499,7 @@ namespace LcmsNet
                         var columnID = e.Method.Column;
 
                         //m_sampleQueue.StopRunningQueue();
-                        m_scheduler.Stop();
+                        scheduler.Stop();
                         var dummySample = new SampleData
                         {
                             DmsData = {
@@ -598,7 +513,7 @@ namespace LcmsNet
                         }
 
                         dummySample.LCMethod = e.Method;
-                        m_sampleQueue.RunNext(dummySample);
+                        sampleQueue.RunNext(dummySample);
 
 
                         ApplicationLogger.LogError(0,
@@ -623,7 +538,7 @@ namespace LcmsNet
                             stupidSample.ColumnData = CartConfiguration.Columns[columnID];
                         }
                         stupidSample.LCMethod = e.Method;
-                        m_sampleQueue.RunNext(stupidSample);
+                        sampleQueue.RunNext(stupidSample);
 
                         ApplicationLogger.LogError(0,
                             string.Format(
@@ -632,9 +547,9 @@ namespace LcmsNet
                                 e.Name,
                                 e.Method.Name));
 
-                        if (!m_sampleQueue.IsRunning)
+                        if (!sampleQueue.IsRunning)
                         {
-                            m_sampleQueue.StartSamples();
+                            sampleQueue.StartSamples();
                         }
                     }
                     break;
@@ -795,7 +710,7 @@ namespace LcmsNet
         private void SampleManager_Stop(object sender, EventArgs e)
         {
             // Tell the scheduler to stop running!
-            m_scheduler.Stop();
+            scheduler.Stop();
             SampleProgressVm.ResetVisuals();
         }
 
@@ -887,7 +802,7 @@ namespace LcmsNet
                         }
                         var filePath =
                             FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
-                        m_pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
+                        pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
                             CartConfiguration.NumberOfEnabledColumns.ToString(), CartConfiguration.Columns,
                             DeviceManager.Manager.Devices, configImage);
                     }
