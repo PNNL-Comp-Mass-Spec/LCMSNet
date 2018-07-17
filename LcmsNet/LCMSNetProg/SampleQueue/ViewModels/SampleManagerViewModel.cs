@@ -138,7 +138,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 SampleDataManager.AutoSamplerTrays.Add("defaultTray0" + i);
             }
 
-            // TODO: // This is the text that is appended to the application title bar
+            // This is the text that is appended to the application title bar
             TitleBarTextAddition = "Sample Queue - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
         }
 
@@ -506,7 +506,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 lastSavedFileName = saveDialog.FileName;
                 sampleQueue.CacheQueue(lastSavedFileName);
-                // TODO: // This is the text that is appended to the application title bar
+                // This is the text that is appended to the application title bar
                 TitleBarTextAddition = "Sample Queue - " + saveDialog.FileName;
                 ApplicationLogger.LogMessage(0,
                     "Queue saved to \"" + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) +

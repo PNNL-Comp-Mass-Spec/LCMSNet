@@ -66,6 +66,8 @@ namespace LcmsNet
             ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToMRMCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportMRMFiles(), this.WhenAnyValue(x => x.QueueTabSelected));
+
+            this.WhenAnyValue(x => x.SampleManagerVm.TitleBarTextAddition).Subscribe(x => this.RaisePropertyChanged(nameof(WindowTitle)));
         }
 
         #region Commands
@@ -161,7 +163,7 @@ namespace LcmsNet
 
         public string WindowTitle
         {
-            get { return windowTitle; }
+            get { return windowTitle + " " + SampleManagerVm.TitleBarTextAddition; }
             private set { this.RaiseAndSetIfChanged(ref windowTitle, value); }
         }
 
