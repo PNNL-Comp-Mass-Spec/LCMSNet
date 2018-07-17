@@ -12,36 +12,68 @@
     <Grid>
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <ContextMenu x:Key="BaseContextMenu">
+                <MenuItem Header="FillDown All" Command="{Binding DataContext.FillDownAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown Blank" Command="{Binding DataContext.FillDownBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <Separator />
+                <MenuItem Header="FillDown EMSL Usage All" Command="{Binding DataContext.FillDownUsageAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Usage Blank" Command="{Binding DataContext.FillDownUsageBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Proposal All" Command="{Binding DataContext.FillDownProposalAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Proposal Blank" Command="{Binding DataContext.FillDownProposalBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Users All" Command="{Binding DataContext.FillDownUsersAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Users Blank" Command="{Binding DataContext.FillDownUsersBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown Experiment All" Command="{Binding DataContext.FillDownExperimentAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown Experiment Blank" Command="{Binding DataContext.FillDownExperimentBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+            </ContextMenu>
+            <ContextMenu x:Key="TextboxContextMenu">
+                <MenuItem Header="FillDown All" Command="{Binding DataContext.FillDownAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown Blank" Command="{Binding DataContext.FillDownBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <Separator />
+                <MenuItem Header="FillDown EMSL Usage All" Command="{Binding DataContext.FillDownUsageAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Usage Blank" Command="{Binding DataContext.FillDownUsageBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Proposal All" Command="{Binding DataContext.FillDownProposalAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Proposal Blank" Command="{Binding DataContext.FillDownProposalBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Users All" Command="{Binding DataContext.FillDownUsersAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown EMSL Users Blank" Command="{Binding DataContext.FillDownUsersBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown Experiment All" Command="{Binding DataContext.FillDownExperimentAll, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <MenuItem Header="FillDown Experiment Blank" Command="{Binding DataContext.FillDownExperimentBlank, Source={x:Reference BaseDC}}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                <Separator />
+                <MenuItem Command="ApplicationCommands.Cut" />
+                <MenuItem Command="ApplicationCommands.Copy" />
+                <MenuItem Command="ApplicationCommands.Paste" />
+            </ContextMenu>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" ItemsSource="{Binding Samples}" d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidationViewModel}, IsDesignTimeCreatable=True}">
+        <!-- DataContext for contextMenu commands -->
+        <FrameworkElement x:Name="BaseDC" />
+        <ListView Grid.Row="0" Name="SampleListView" ItemsSource="{Binding Samples}" SelectedItem="{Binding SelectedItem}" SelectionMode="Extended" SelectionChanged="ListView_OnSelectionChanged" d:DataContext="{d:DesignInstance {x:Type viewModels:SampleDMSValidationViewModel}, IsDesignTimeCreatable=True}" ContextMenu="{StaticResource BaseContextMenu}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="" Width="30">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Image Source="{StaticResource AllIsGoodImage}" MaxWidth="16" Visibility="{Binding IsSampleValid, Converter={StaticResource BoolToVis}}" />
-                                    <Image Source="{StaticResource ButtonDeleteRedImage}" MaxWidth="16" Visibility="{Binding SampleNotValid, Converter={StaticResource BoolToVis}}" />
+                                    <Image Source="{StaticResource AllIsGoodImage}" MaxWidth="16" Visibility="{Binding IsSampleValid, Converter={StaticResource BoolToVis}}" IsHitTestVisible="False" />
+                                    <Image Source="{StaticResource ButtonDeleteRedImage}" MaxWidth="16" Visibility="{Binding SampleNotValid, Converter={StaticResource BoolToVis}}" IsHitTestVisible="False" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Dataset Name" Width="200" DisplayMemberBinding="{Binding Sample.DmsData.DatasetName}" />
-                    <GridViewColumn Header="EMSL Request # (ID)" Width="130">
+                    <GridViewColumn Header="DMS Request # (ID)" Width="130">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <xctk:IntegerUpDown Width="115" Minimum="0" Maximum="2147483647" Value="{Binding Sample.DmsData.RequestID}"/>
+                                <xctk:IntegerUpDown Name="EmslRequestId" Width="115" Minimum="0" Maximum="2147483647" Value="{Binding Sample.DmsData.RequestID}" KeyUp="UIElement_OnKeyUp" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Usage Type" Width="115">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox Width="100" SelectedItem="{Binding Sample.DmsData.EMSLUsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}" cueBannerOverlay:CueBannerService.CueBanner="Select">
+                                <ComboBox Width="100" Name="EmslUsage" SelectedItem="{Binding Sample.DmsData.EMSLUsageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding UsageTypeComboBoxOptions}" IsEnabled="{Binding CanChangeEmslData}" KeyUp="UIElement_OnKeyUp" cueBannerOverlay:CueBannerService.CueBanner="Select" ContextMenu="{StaticResource BaseContextMenu}">
                                     <ComboBox.Style>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Style.Triggers>
@@ -66,7 +98,7 @@
                     <GridViewColumn Header="Proposal ID" Width="85">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="70" Text="{Binding Sample.DmsData.EMSLProposalID}" IsEnabled="{Binding CanChangeEmslData}">
+                                <TextBox Width="70" Name="EmslProposalId" Text="{Binding Sample.DmsData.EMSLProposalID}" IsEnabled="{Binding CanChangeEmslData}" KeyUp="UIElement_OnKeyUp" ContextMenu="{StaticResource TextboxContextMenu}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Style.Triggers>
@@ -84,7 +116,7 @@
                     <GridViewColumn Header="EMSL User(s)" Width="95">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="80" Text="{Binding Sample.DmsData.UserList}" IsEnabled="{Binding CanChangeEmslData}">
+                                <TextBox Width="80" Name="EmslUsers" Text="{Binding Sample.DmsData.UserList}" IsEnabled="{Binding CanChangeEmslData}" KeyUp="UIElement_OnKeyUp" ContextMenu="{StaticResource TextboxContextMenu}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Style.Triggers>
@@ -102,7 +134,7 @@
                     <GridViewColumn Header="Experiment Name" Width="115">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="100" Text="{Binding Sample.DmsData.Experiment}" IsEnabled="{Binding CanChangeEmslData}">
+                                <TextBox Width="100" Name="Experiment" Text="{Binding Sample.DmsData.Experiment}" IsEnabled="{Binding CanChangeEmslData}" KeyUp="UIElement_OnKeyUp" ContextMenu="{StaticResource TextboxContextMenu}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Style.Triggers>
@@ -121,8 +153,8 @@
             </ListView.View>
         </ListView>
         <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Margin="3" Height="40" Width="80" IsDefault="True" Content="Cancel" Click="Cancel_OnClick" />
-            <Button Margin="3" Height="40" Width="80" IsCancel="True" Content="OK" Click="Ok_OnClick" />
+            <Button Margin="3" Height="40" Width="80" IsDefault="False" IsCancel="True" Content="Cancel" Click="Cancel_OnClick" />
+            <Button Margin="3" Height="40" Width="80" IsDefault="False" Content="OK" Click="Ok_OnClick" />
         </StackPanel>
     </Grid>
 </Window>

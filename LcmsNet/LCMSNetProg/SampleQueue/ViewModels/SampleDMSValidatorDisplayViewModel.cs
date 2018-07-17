@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
 using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using ReactiveUI;
@@ -9,6 +11,7 @@ namespace LcmsNet.SampleQueue.ViewModels
     public class SampleDMSValidatorDisplayViewModel : ReactiveObject
     {
         private readonly ReactiveList<SampleDMSValidationViewModel> samples = new ReactiveList<SampleDMSValidationViewModel>();
+        private SampleDMSValidationViewModel selectedItem;
 
         public IReadOnlyReactiveList<SampleDMSValidationViewModel> Samples => samples;
 
@@ -16,7 +19,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public SampleDMSValidatorDisplayViewModel()
+        public SampleDMSValidatorDisplayViewModel() : this(new List<SampleData>(1))
         {
             samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   EMSLUsageType = "CAP_DEV", UserList = "(none1)", Experiment = "TestExp1", EMSLProposalID = "5" } }, true, false, false, true, true, true));
             samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  EMSLUsageType = "CAP_DEV", UserList = "(none2)", Experiment = "TestExp2", EMSLProposalID = "6" } }, false, true, true, false, false, true));
@@ -33,48 +36,53 @@ namespace LcmsNet.SampleQueue.ViewModels
             var i = 0;
             foreach (var sample in samplesList)
             {
-                // TODO: OLD: sampleControl.EnterPressed += sampleControl_EnterPressed;
                 samples.Add(new SampleDMSValidationViewModel(sample) { ID = i++ });
             }
+
+            FillDownAll = ReactiveCommand.Create<object>(x => FillDown(x, false, FillDownSelection.All));
+            FillDownBlank = ReactiveCommand.Create<object>(x => FillDown(x, true, FillDownSelection.All));
+            FillDownUsageAll = ReactiveCommand.Create<object>(x => FillDown(x, false, FillDownSelection.EmslUsage));
+            FillDownUsageBlank = ReactiveCommand.Create<object>(x => FillDown(x, true, FillDownSelection.EmslUsage));
+            FillDownProposalAll = ReactiveCommand.Create<object>(x => FillDown(x, false, FillDownSelection.EmslProposal));
+            FillDownProposalBlank = ReactiveCommand.Create<object>(x => FillDown(x, true, FillDownSelection.EmslProposal));
+            FillDownUsersAll = ReactiveCommand.Create<object>(x => FillDown(x, false, FillDownSelection.EmslUsers));
+            FillDownUsersBlank = ReactiveCommand.Create<object>(x => FillDown(x, true, FillDownSelection.EmslUsers));
+            FillDownExperimentAll = ReactiveCommand.Create<object>(x => FillDown(x, false, FillDownSelection.Experiment));
+            FillDownExperimentBlank = ReactiveCommand.Create<object>(x => FillDown(x, true, FillDownSelection.Experiment));
         }
+
+        public SampleDMSValidationViewModel SelectedItem
+        {
+            get => selectedItem;
+            set => this.RaiseAndSetIfChanged(ref selectedItem, value);
+        }
+
+        public ReactiveList<SampleDMSValidationViewModel> SelectedItems { get; } = new ReactiveList<SampleDMSValidationViewModel>();
+
+        public ReactiveCommand<object, Unit> FillDownAll { get; }
+        public ReactiveCommand<object, Unit> FillDownBlank { get; }
+        public ReactiveCommand<object, Unit> FillDownUsageAll { get; }
+        public ReactiveCommand<object, Unit> FillDownUsageBlank { get; }
+        public ReactiveCommand<object, Unit> FillDownProposalAll { get; }
+        public ReactiveCommand<object, Unit> FillDownProposalBlank { get; }
+        public ReactiveCommand<object, Unit> FillDownUsersAll { get; }
+        public ReactiveCommand<object, Unit> FillDownUsersBlank { get; }
+        public ReactiveCommand<object, Unit> FillDownExperimentAll { get; }
+        public ReactiveCommand<object, Unit> FillDownExperimentBlank { get; }
 
         /// <summary>
         /// Gets the flag if the samples are valid or not.
         /// </summary>
         public bool AreSamplesValid => CheckSamples();
 
-        // TODO: OLD: /// <summary>
-        // TODO: OLD: /// Moves the focus to the next control.
-        // TODO: OLD: /// </summary>
-        // TODO: OLD: /// <param name="sender"></param>
-        // TODO: OLD: /// <param name="e"></param>
-        // TODO: OLD: void sampleControl_EnterPressed(object sender, DMSValidatorEventArgs e)
-        // TODO: OLD: {
-        // TODO: OLD:     var validator = sender as classDMSBaseControl;
-        // TODO: OLD:     if (validator != null)
-        // TODO: OLD:     {
-        // TODO: OLD:         var id = validator.ID;
-        // TODO: OLD:
-        // TODO: OLD:         if (id == 0 && e.Modifiers == Keys.Shift)
-        // TODO: OLD:         {
-        // TODO: OLD:             return;
-        // TODO: OLD:         }
-        // TODO: OLD:
-        // TODO: OLD:         if (id >= m_validatorControls.Count - 1 && e.Modifiers != Keys.Shift)
-        // TODO: OLD:         {
-        // TODO: OLD:             return;
-        // TODO: OLD:         }
-        // TODO: OLD:
-        // TODO: OLD:         if (e.Modifiers == Keys.Shift)
-        // TODO: OLD:         {
-        // TODO: OLD:             m_validatorControls[id - 1].SetFocusOn(e);
-        // TODO: OLD:         }
-        // TODO: OLD:         else
-        // TODO: OLD:         {
-        // TODO: OLD:             m_validatorControls[id + 1].SetFocusOn(e);
-        // TODO: OLD:         }
-        // TODO: OLD:     }
-        // TODO: OLD: }
+        private enum FillDownSelection
+        {
+            All,
+            EmslUsage,
+            EmslProposal,
+            EmslUsers,
+            Experiment,
+        }
 
         /// <summary>
         /// Checks the sample controls to see if they are valid or not.
@@ -88,6 +96,87 @@ namespace LcmsNet.SampleQueue.ViewModels
                     return false;
             }
             return true;
+        }
+
+        private void FillDown(object senderVm, bool blankOnly = false, FillDownSelection dataToFill = FillDownSelection.All)
+        {
+            // senderVm is object because we might get SampleDMSValidatorDisplayViewModel or SampleDMSValidationViewModel
+            var sourceItem = senderVm as SampleDMSValidationViewModel;
+            var affectableItems = new List<SampleDMSValidationViewModel>();
+
+            if (sourceItem == null)
+            {
+                sourceItem = SelectedItem ?? Samples.First();
+            }
+
+            if (SelectedItems.Count <= 1)
+            {
+                affectableItems.AddRange(Samples.Where(x => x.ID > sourceItem.ID));
+            }
+            else
+            {
+                sourceItem = SelectedItems.OrderBy(x => x.ID).First();
+                affectableItems.AddRange(SelectedItems.Where(x => x.ID > sourceItem.ID));
+            }
+
+            if (dataToFill == FillDownSelection.All)
+            {
+                IEnumerable<SampleDMSValidationViewModel> changeItems = affectableItems;
+                if (blankOnly)
+                {
+                    changeItems = affectableItems.Where(x => x.IsItemBlank());
+                }
+
+                foreach (var sample in changeItems)
+                {
+                    //sample.Sample.DmsData.RequestID = sourceItem.Sample.DmsData.RequestID; // This number is only valid for a single sample. Do not copy it down.
+                    sample.Sample.DmsData.EMSLUsageType = sourceItem.Sample.DmsData.EMSLUsageType;
+                    sample.Sample.DmsData.EMSLProposalID = sourceItem.Sample.DmsData.EMSLProposalID;
+                    sample.Sample.DmsData.UserList = sourceItem.Sample.DmsData.UserList;
+                    sample.Sample.DmsData.Experiment = sourceItem.Sample.DmsData.Experiment;
+                }
+            }
+            else
+            {
+                IEnumerable<SampleDMSValidationViewModel> changeItems = affectableItems;
+                Func<SampleDMSValidationViewModel, string> selector = null;
+                Action<SampleDMSValidationViewModel, SampleDMSValidationViewModel> assigner = null;
+
+                switch (dataToFill)
+                {
+                    case FillDownSelection.EmslUsage:
+                        selector = x => x.Sample.DmsData.EMSLUsageType;
+                        assigner = (source, target) => target.Sample.DmsData.EMSLUsageType = source.Sample.DmsData.EMSLUsageType;
+                        break;
+                    case FillDownSelection.EmslProposal:
+                        selector = x => x.Sample.DmsData.EMSLProposalID;
+                        assigner = (source, target) => target.Sample.DmsData.EMSLProposalID = source.Sample.DmsData.EMSLProposalID;
+                        break;
+                    case FillDownSelection.EmslUsers:
+                        selector = x => x.Sample.DmsData.UserList;
+                        assigner = (source, target) => target.Sample.DmsData.UserList = source.Sample.DmsData.UserList;
+                        break;
+                    case FillDownSelection.Experiment:
+                        selector = x => x.Sample.DmsData.Experiment;
+                        assigner = (source, target) => target.Sample.DmsData.Experiment = source.Sample.DmsData.Experiment;
+                        break;
+                }
+
+                if (blankOnly)
+                {
+                    changeItems = affectableItems.Where(x => x.IsItemBlank(selector));
+                }
+
+                if (assigner == null)
+                {
+                    return;
+                }
+
+                foreach (var sample in changeItems)
+                {
+                    assigner(sourceItem, sample);
+                }
+            }
         }
     }
 }

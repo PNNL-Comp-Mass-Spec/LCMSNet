@@ -37,17 +37,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             this.sample = sample;
 
-            // TODO: OLD: mcomboBox_usageType.TextChanged += mtextbox_usageType_TextChanged;
-            // TODO: OLD: mtextbox_proposalID.TextChanged += mtextbox_proposalID_TextChanged;
-            // TODO: OLD: mtextbox_user.TextChanged += mtextbox_user_TextChanged;
-            // TODO: OLD: mnum_requestNumber.ValueChanged += mnum_requestNumber_ValueChanged;
-            // TODO: OLD: mtextBox_experimentName.TextChanged += mtextBox_experimentName_TextChanged;
-            // TODO: OLD: mcomboBox_usageType.KeyUp += KeyUpHandler;
-            // TODO: OLD: mtextbox_proposalID.KeyUp += KeyUpHandler;
-            // TODO: OLD: mtextbox_user.KeyUp += KeyUpHandler;
-            // TODO: OLD: mnum_requestNumber.KeyUp += KeyUpHandler;
-            // TODO: OLD: mtextBox_experimentName.KeyUp += KeyUpHandler;
-
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             UpdateUserInterface();
 
@@ -121,79 +110,24 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        // TODO: OLD: void KeyUpHandler(object sender, KeyEventArgs e)
-        // TODO: OLD: {
-        // TODO: OLD:     var c = sender as Control;
-        // TODO: OLD:     var isEnterType = false;
-        // TODO: OLD:     var modifier = e.Modifiers;
-        // TODO: OLD:     ComboBox box;
-        // TODO: OLD:     NumericUpDown updown;
-        // TODO: OLD:     Console.WriteLine(e.KeyCode.ToString());
-        // TODO: OLD:
-        // TODO: OLD:     switch (e.KeyCode)
-        // TODO: OLD:     {
-        // TODO: OLD:         case Keys.Enter:
-        // TODO: OLD:             Console.WriteLine(@"Enter Pressed!");
-        // TODO: OLD:             LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Enter pressed!");
-        // TODO: OLD:             isEnterType = true;
-        // TODO: OLD:             break;
-        // TODO: OLD:         case Keys.Up:
-        // TODO: OLD:         case Keys.VolumeUp:
-        // TODO: OLD:             modifier = Keys.Shift;
-        // TODO: OLD:             isEnterType = true;
-        // TODO: OLD:
-        // TODO: OLD:             box = c as ComboBox;
-        // TODO: OLD:             if (box != null)
-        // TODO: OLD:             {
-        // TODO: OLD:                 isEnterType = false;
-        // TODO: OLD:             }
-        // TODO: OLD:             else
-        // TODO: OLD:             {
-        // TODO: OLD:                 updown = c as NumericUpDown;
-        // TODO: OLD:                 if (updown != null)
-        // TODO: OLD:                 {
-        // TODO: OLD:                     isEnterType = false;
-        // TODO: OLD:                 }
-        // TODO: OLD:             }
-        // TODO: OLD:             break;
-        // TODO: OLD:         case Keys.Down:
-        // TODO: OLD:         case Keys.VolumeDown:
-        // TODO: OLD:             modifier = Keys.None;
-        // TODO: OLD:             isEnterType = true;
-        // TODO: OLD:
-        // TODO: OLD:             box = c as ComboBox;
-        // TODO: OLD:             if (box != null)
-        // TODO: OLD:             {
-        // TODO: OLD:                 isEnterType = false;
-        // TODO: OLD:             }
-        // TODO: OLD:             else
-        // TODO: OLD:             {
-        // TODO: OLD:                 updown = c as NumericUpDown;
-        // TODO: OLD:                 if (updown != null)
-        // TODO: OLD:                 {
-        // TODO: OLD:                     isEnterType = false;
-        // TODO: OLD:                 }
-        // TODO: OLD:             }
-        // TODO: OLD:             break;
-        // TODO: OLD:         case Keys.Right:
-        // TODO: OLD:             if (c != null)
-        // TODO: OLD:                 SelectNextControl(c, true, true, false, false);
-        // TODO: OLD:             break;
-        // TODO: OLD:         case Keys.Left:
-        // TODO: OLD:             if (c != null)
-        // TODO: OLD:                 SelectNextControl(c, false, true, false, false);
-        // TODO: OLD:             break;
-        // TODO: OLD:     }
-        // TODO: OLD:
-        // TODO: OLD:     if (isEnterType && c != null)
-        // TODO: OLD:     {
-        // TODO: OLD:         Console.WriteLine(@"isEnterType: " + c.Name);
-        // TODO: OLD:         Console.WriteLine(EnterPressed != null);
-        // TODO: OLD:         OnEnterPressed(this, new DMSValidatorEventArgs(c.Name, modifier));
-        // TODO: OLD:     }
-        // TODO: OLD: }
-
         #region Methods
+
+        public bool IsItemBlank(Func<SampleDMSValidationViewModel, string> itemSelector = null)
+        {
+            if (Sample.DmsData.RequestID > 0)
+            {
+                return false;
+            }
+
+            if (itemSelector == null)
+            {
+                return string.IsNullOrWhiteSpace(Sample.DmsData.EMSLUsageType) && string.IsNullOrWhiteSpace(Sample.DmsData.EMSLProposalID) &&
+                       string.IsNullOrWhiteSpace(Sample.DmsData.UserList) && string.IsNullOrWhiteSpace(Sample.DmsData.Experiment);
+            }
+
+            return string.IsNullOrWhiteSpace(itemSelector(this));
+        }
+
         /// <summary>
         /// Checks the sample and updates the user interface accordingly.
         /// </summary>
