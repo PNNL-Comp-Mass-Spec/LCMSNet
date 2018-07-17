@@ -196,7 +196,6 @@ namespace LcmsNetCommonControls.Views
             if (this.DataContext is PopoutViewModel pvm && !pvm.Tacked)
             {
                 isClosed = true;
-                // TODO: NOT WORKING: pvm.TackUnTackCommand.Execute();
                 pvm.Tacked = true;
             }
         }

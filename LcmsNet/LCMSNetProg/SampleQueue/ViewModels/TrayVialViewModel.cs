@@ -21,7 +21,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             filteredSamples = new ReactiveList<TrayVialSampleViewModel>();
             FilteredSamples.WhenAnyValue(x => x.Count).Subscribe(x => this.RaisePropertyChanged(nameof(SampleCount)));
-            // TODO: OLD: InitControl();
         }
 
         public TrayVialViewModel(int trayNumber, IReadOnlyReactiveList<TrayVialSampleViewModel> sampleList)

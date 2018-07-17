@@ -244,19 +244,6 @@ namespace LcmsNetCommonControls.Views
             }
             if (this.DataContext is PopoutViewModel pvm && !pvm.Tacked)
             {
-                // TODO: Doesn't work with WinForms base: PopoutWindow existing = null;
-                // TODO: Doesn't work with WinForms base: foreach (var window in Application.Current.Windows)
-                // TODO: Doesn't work with WinForms base: {
-                // TODO: Doesn't work with WinForms base:     if (window is PopoutWindow pw && pw.Title.Equals(this.Title))
-                // TODO: Doesn't work with WinForms base:     {
-                // TODO: Doesn't work with WinForms base:         existing = pw;
-                // TODO: Doesn't work with WinForms base:     }
-                // TODO: Doesn't work with WinForms base: }
-                // TODO: Doesn't work with WinForms base: if (existing != null)
-                // TODO: Doesn't work with WinForms base: {
-                // TODO: Doesn't work with WinForms base:     existing.Activate();
-                // TODO: Doesn't work with WinForms base:     return;
-                // TODO: Doesn't work with WinForms base: }
                 popoutWindow = new PopoutWindow() { DataContext = pvm };
                 // move the content to the new window
                 var child = this.Content;

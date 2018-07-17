@@ -424,37 +424,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Clear the available datasets listview
             AvailableRequestData.Data.Clear();
 
-            // TODO: Async from here
-            /*// Get a list of requests from DMS
-            try
-            {
-                var dmsTools = LcmsNet.Configuration.clsDMSDataContainer.DBTools;
-                tempRequestList = dmsTools.GetSamplesFromDMS(queryData);
-            }
-            catch (DatabaseConnectionStringException ex)
-            {
-                // The DMS connection string wasn't found
-                var errMsg = ex.Message + " while getting request listing\r\n";
-                errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
-                return;
-            }
-            catch (DatabaseDataException ex)
-            {
-                var errMsg = ex.Message;
-                if (ex.InnerException != null)
-                    errMsg += ": " + ex.InnerException.Message;
-
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButtons.OK);
-                return;
-            }
-            finally
-            {
-                LoadingData = false;
-            }
-            */
-            // TODO: Async to here...
-
             tempRequestList = await Task.Run(() => GetDMSData(queryData));
 
             if (tempRequestList == null)

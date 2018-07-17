@@ -347,15 +347,6 @@ namespace LcmsNetPlugins.VICI.Valves
             m_valve.SetPosition(pos);
         }
 
-        // TODO: private void mbutton_GetNumPos_Click(object sender, EventArgs e)
-        // TODO: {
-        // TODO:     mtextBox_GetNumPos.Text = m_valve.GetNumberOfPositions().ToString();
-        // TODO: }
-        // TODO: private void mbutton_SetNumPos_Click(object sender, EventArgs e)
-        // TODO: {
-        // TODO:     m_valve.SetNumberOfPositions(Convert.ToInt32(mtextBox_SetNumPos.Text));
-        // TODO: }
-
         #endregion
     }
 }
