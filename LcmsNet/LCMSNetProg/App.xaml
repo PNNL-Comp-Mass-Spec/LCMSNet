@@ -72,5 +72,10 @@
         <BitmapImage x:Key="UnlockImage" UriSource="Resources\Images\unlock.png" />
         <BitmapImage x:Key="VialRealImage" UriSource="Resources\Images\vialReal.png" />
         <BitmapImage x:Key="WaterImage" UriSource="Resources\Images\water.png" />
+
+        <Style TargetType="MenuItem">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
     </Application.Resources>
 </Application>

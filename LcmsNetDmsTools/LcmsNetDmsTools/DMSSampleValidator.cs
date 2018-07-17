@@ -244,7 +244,7 @@ namespace LcmsNetDmsTools
                 {
                     if (string.IsNullOrEmpty(data.EMSLProposalID.Replace(" ","")))
                     {
-                     return false;
+                        return false;
                     }
                 }
             }
