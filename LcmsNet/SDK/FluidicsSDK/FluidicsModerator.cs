@@ -150,7 +150,7 @@ namespace FluidicsSDK
         {
             if (m_suspendModelUpdates || m_holdModelUpdates)
             {
-                System.Diagnostics.Trace.WriteLine("Ignoring Model Change");
+                //System.Diagnostics.Trace.WriteLine("Ignoring Model Change");
                 return;
             }
             // This foreach loop resets the color of all connections after every change in the model.
