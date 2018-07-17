@@ -405,7 +405,7 @@ namespace LcmsNet
             FluidicsDesignVm = new FluidicsDesignViewModel();
 
             // Notification System
-            NotificationSystemVm = new NotificationSystemViewModel(DeviceManager.Manager);
+            NotificationSystemVm = new NotificationSystemViewModel();
             NotificationSystemVm.ActionRequired += m_notifications_ActionRequired;
 
 

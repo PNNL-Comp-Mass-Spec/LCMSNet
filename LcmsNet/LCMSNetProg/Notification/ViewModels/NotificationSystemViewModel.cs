@@ -20,16 +20,7 @@ namespace LcmsNet.Notification.ViewModels
 {
     public class NotificationSystemViewModel : ReactiveObject
     {
-        /// <summary>
-        /// Default constructor for the notification system view control that takes no arguments
-        /// Calling this constructor is only for the IDE designer.
-        /// </summary>
-        [Obsolete("For WPF Design time use only.", true)]
         public NotificationSystemViewModel()
-        {
-        }
-
-        public NotificationSystemViewModel(DeviceManager manager)
         {
             Disable();
 
@@ -64,6 +55,7 @@ namespace LcmsNet.Notification.ViewModels
             }
 
             // Synch the device manager.
+            var manager = DeviceManager.Manager;
             manager.DeviceRenamed += Manager_DeviceRenamed;
             manager.DeviceRemoved += Manager_DeviceRemoved;
             manager.DeviceAdded += Manager_DeviceAdded;
