@@ -568,35 +568,22 @@ namespace LcmsNetSDK.Data
                 }
                 else if (property.PropertyType == typeof(LCMethod))
                 {
+                    var methodToExport = new LCMethod();
                     if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
                     {
                         // Store the actual LCMethod rather than the current version of it
-                        // Special case - get the experiment data for this object and add properties to string dictionary
-                        var expDict = ActualLCMethod.GetPropertyValues();
-                        foreach (var entry in expDict)
-                        {
-                            //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                            newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                        }
+                        methodToExport = ActualLCMethod;
                     }
                     else if (LCMethod != null)
                     {
-                        // Special case - get the experiment data for this object and add properties to string dictionary
-                        var expDict = LCMethod.GetPropertyValues();
-                        foreach (var entry in expDict)
-                        {
-                            //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                            newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                        }
+                        methodToExport = LCMethod;
                     }
-                    else
+
+                    var expDict = methodToExport.GetPropertyValues();
+                    // Special case - get the experiment data for this object and add properties to string dictionary
+                    foreach (var entry in expDict)
                     {
-                        var expDict = new LCMethod().GetPropertyValues();
-                        foreach (var entry in expDict)
-                        {
-                            //TODO: Do we need to change the name from exp to LCMethod to be consistent.
-                            newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                        }
+                        newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
                     }
                 }
                 else if (property.PropertyType == typeof(InstrumentInfo))
