@@ -81,6 +81,7 @@ namespace FluidicsSDK
             m_suspendModelUpdates = false;
             m_holdModelUpdates = false;
             m_suspendCounter = 0;
+            DrawingScaleFactor = 1;
         }
 
         void m_fluidicsDevManager_DeviceChanged(object sender, EventArgs e)
@@ -663,6 +664,11 @@ namespace FluidicsSDK
         /// Property for determining if a method is currently running on the system
         /// </summary>
         public bool MethodRunning => m_methodRunning;
+
+        /// <summary>
+        /// Scale factor for device drawing. Defaults to '1'. Also know as 'Pixels per DIP', or 'Pixels per Device Independent Pixel', and should later be set using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip
+        /// </summary>
+        public double DrawingScaleFactor { get; set; }
 
         #endregion
 

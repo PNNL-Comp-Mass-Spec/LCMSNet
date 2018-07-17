@@ -227,7 +227,7 @@ namespace FluidicsSDK.Base
             var nameFont = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
             // draw name to screen
             var name = DeviceName;
-            var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, ElevenPoint * stringScale, br, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, ElevenPoint * stringScale, br, FluidicsModerator.Moderator.DrawingScaleFactor);
             m_info_controls_box = UpdateControlBoxLocation();
             var minX = m_info_controls_box.X;
             var minY = m_info_controls_box.Y;
@@ -237,7 +237,7 @@ namespace FluidicsSDK.Base
             var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Width, scale);
             g.DrawText(deviceNameText, nameLocation);
             //place the state below the name, centered as well
-            var stateText = new FormattedText(StateString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, ElevenPoint * stringScale, br, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var stateText = new FormattedText(StateString(), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, ElevenPoint * stringScale, br, FluidicsModerator.Moderator.DrawingScaleFactor);
             var stateLocation = CreateStringLocation((int)(nameLocation.Y + deviceNameText.Height), stateText.Width, scale);
             g.DrawText(stateText, stateLocation);
 

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using FluidicsSDK;
 using LcmsNet.Devices.Pumps.Views;
 using LcmsNetCommonControls.Views;
 
@@ -27,6 +28,14 @@ namespace LcmsNet
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // We only need to do this once.
+            FluidicsModerator.Moderator.DrawingScaleFactor = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+            Loaded -= OnLoaded;
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using FluidicsSDK;
 using LcmsNetData;
 using LcmsNetData.Configuration;
 using LcmsNetData.Data;
@@ -59,7 +60,7 @@ namespace LcmsNet.Method.Drawing
             var brushColor = Colors.Black;
             brushColor.A = 128;
             var brush = new SolidColorBrush(brushColor);
-            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, FluidicsModerator.Moderator.DrawingScaleFactor);
             graphics.DrawText(columnNameText, new Point(x, y - columnNameText.Height));
         }
 

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using FluidicsSDK;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices;
 using FluidicsSDK.Graphic;
@@ -95,7 +96,7 @@ namespace FluidicsPack
             var nameFont = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
             // draw name to screen
             var name = DeviceName;
-            var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, ElevenPoint * stringScale, br, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var deviceNameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, ElevenPoint * stringScale, br, FluidicsModerator.Moderator.DrawingScaleFactor);
             m_info_controls_box = UpdateControlBoxLocation();
             //place the name at the top middle of the box
             var nameLocation = CreateStringLocation((int)(m_info_controls_box.Y * scale), deviceNameText.Width, scale);

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using FluidicsSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
@@ -57,7 +58,7 @@ namespace LcmsNet.Method.Drawing
             var brushColor = Colors.Black;
             brushColor.A = 128;
             var brush = new SolidColorBrush(brushColor);
-            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+            var columnNameText = new FormattedText(columnName, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, font, EightPt, brush, FluidicsModerator.Moderator.DrawingScaleFactor);
             y += columnNameText.Height;
             graphics.DrawText(columnNameText, new Point(x, y));
         }
@@ -179,8 +180,8 @@ namespace LcmsNet.Method.Drawing
                         var timeSpanSinceStart = simList[0].Start.Subtract(firstEvent);
 
                         graphics.DrawLine(linePen, new Point(0, top), new Point(bounds.Width - CONST_COLUMN_SPACING, top));
-                        var timeSpanSinceStartText = new FormattedText(timeSpanSinceStart.ToString("g"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
-                        var simListStart = new FormattedText(simList[0].Start.ToString("h:mm:ss"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, 1); // TODO: Get Scaling Factor / DIP from visual using VisualTreeHelper.GetDpi(Visual visual).PixelsPerDip, rather than using hard-coded 1
+                        var timeSpanSinceStartText = new FormattedText(timeSpanSinceStart.ToString("g"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, FluidicsModerator.Moderator.DrawingScaleFactor);
+                        var simListStart = new FormattedText(simList[0].Start.ToString("h:mm:ss"), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, timeFont, EightPt, brush, FluidicsModerator.Moderator.DrawingScaleFactor);
                         graphics.DrawText(timeSpanSinceStartText, new Point(0, top));
                         graphics.DrawText(simListStart, new Point(0, top + timeSpanSinceStartText.Height));
                         graphics.DrawLine(linePen, new Point(0, top + eventHeight), new Point(bounds.Width - CONST_COLUMN_SPACING, top + eventHeight));
