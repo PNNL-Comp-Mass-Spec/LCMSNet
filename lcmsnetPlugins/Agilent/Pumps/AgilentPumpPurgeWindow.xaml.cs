@@ -12,7 +12,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             InitializeComponent();
         }
 
-        private void Ok_OnClick(object sender, RoutedEventArgs e)
+        private void Close_OnClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

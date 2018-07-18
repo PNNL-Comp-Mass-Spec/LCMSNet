@@ -35,157 +35,185 @@ namespace LcmsNetPlugins.Agilent.Pumps
     public class AgilentPump : IDevice, IPump, IFluidicsPump
     {
         #region Members
+
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers
         /// </summary>
         private Instrument m_pumps;
+
         /// <summary>
         /// A 'module' object for the Agilent pump drivers
         /// </summary>
         private Module m_module;
+
         /// <summary>
         /// Error reporting channel.
         /// </summary>
         private Channel m_evChannel;
+
         /// <summary>
         /// Channel for retrieving methods from the pumps.
         /// </summary>
         private Channel m_listChannel;
+
         /// <summary>
         /// A 'channel' object for the Agilent pump drivers
         /// </summary>
         private Channel m_inChannel;
+
         /// <summary>
         /// Channel when monitoring the instrument.
         /// </summary>
         private Channel m_monitorChannel;
+
         /// <summary>
         /// The device's name.
         /// </summary>
         private string m_name;
-        /// <summary>
-        /// The device's verion.
-        /// </summary>
-        private string m_version;
-        /// <summary>
-        /// Indicates if the device is currently running.
-        /// </summary>
-        private bool m_running;
-        /// <summary>
-        /// Indicates if the device is being emulated.
-        /// </summary>
-        private bool m_emulation;
+
         /// <summary>
         /// The flow rate (used for save/load)
         /// </summary>
         private double m_flowrate = -1.0;
+
         /// <summary>
         /// Filesystem watcher for real-time updating of pump methods.
         /// </summary>
         private static FileSystemWatcher mwatcher_methods;
+
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
         /// </summary>
         private static Dictionary<string, string> mdict_methods;
+
         /// <summary>
         /// Status strings from the pumps.
         /// </summary>
         private static string[] m_notificationStrings;
+
         private static Dictionary<string, string> m_errorCodes;
         private static Dictionary<string, string> m_statusCodes;
+
+        private PumpState pumpState;
+
         #endregion
 
         #region Constants
+
         #region COMConstants
+
         /// <summary>
         /// Status of the device.
         /// </summary>
         private DeviceStatus m_status;
+
         private const string CONST_DEFAULTPORT = "COM1";
         private const int CONST_DEFAULTTIMEOUT = 6000; //milliseconds
         private const int CONST_WRITETIMEOUT = 10000; //milliseconds
         private const int CONST_READTIMEOUT = 10000; //milliseconds
         private const int CONST_MONITORING_MINUTES = 10;
         private const int CONST_MONITORING_SECONDS_ELAPSED = 10;
+
         #endregion
 
         #region Status Constants
+
         /// <summary>
         /// Notification string for flow changes
         /// </summary>
         private const string CONST_FLOW_CHANGE = "Flow % below set point";
+
         /// <summary>
         /// Notification string for pressure values.
         /// </summary>
         private const string CONST_PRESSURE_VALUE = "Pressure Value";
+
         private const string CONST_ERROR_ABOVE_PRESSURE = "Pressure Above Limit";
         private const string CONST_ERROR_BELOW_PRESSURE = "Pressure Below Limit";
         private const string CONST_ERROR_FLOW_EXCEEDS = "Flow Exceeds limit while pressure control";
         private const string CONST_ERROR_FLOW_UNSTABLE = "Column flow is unstable";
+
         #endregion
 
         #region Error Constants
+
         /// <summary>
         /// The error message was not set.
         /// </summary>
         private const string CONST_DEFAULT_ERROR = "None";
+
         private const string CONST_PUMP_ERROR = "Pump Error";
         private const string CONST_INITIALIZE_ERROR = "Failed to Initialize";
         private const string CONST_COMPOSITION_B_SET = "Failed to set composition B";
         private const string CONST_FLOW_SET = "Failed to set flow rate";
         private const string CONST_PRESSURE_SET = "Failed to set pressure";
         private const string CONST_VOLUME_SET = "Failed to set volume";
+
         #endregion
+
         #endregion
 
         #region Events
+
         /// <summary>
         /// Fired when a method is added.
         /// </summary>
         public event EventHandler<classPumpMethodEventArgs> MethodAdded;
+
         /// <summary>
         /// Fired when a method is added.
         /// </summary>
         public event EventHandler<classPumpMethodEventArgs> MethodUpdated;
+
         /// <summary>
         /// Fired when monitoring data is received from the instrument.
         /// </summary>
         public event EventHandler<PumpDataEventArgs> MonitoringDataReceived;
+
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+
         /// <summary>
         /// Fired when the Agilent Pump finds out what method names are available.
         /// </summary>
         public event DelegateDeviceHasData MethodNames;
+
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
+
         /// <summary>
         /// Fired when an error occurs in the device.
         /// </summary>
         public event EventHandler<DeviceErrorEventArgs> Error;
+
         /// <summary>
         /// List of times monitoring data was received.
         /// </summary>
         public List<DateTime> m_times;
+
         /// <summary>
         /// List of pressures used throughout the run.
         /// </summary>
         public List<double> m_pressures;
+
         /// <summary>
         /// List of flowrates used throughout the run.
         /// </summary>
         public List<double> m_flowrates;
+
         /// <summary>
         /// List of %B compositions throughout the run.
         /// </summary>
         public List<double> m_percentB;
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -235,6 +263,25 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 new MobilePhase("B", "This is a test"),
                 new MobilePhase("Aux", "This is a test")
             };
+
+            PurgeA1 = new PumpPurgeData(PumpPurgeChannel.A1);
+            PurgeA2 = new PumpPurgeData(PumpPurgeChannel.A2);
+            PurgeB1 = new PumpPurgeData(PumpPurgeChannel.B1);
+            PurgeB2 = new PumpPurgeData(PumpPurgeChannel.B2);
+        }
+
+        /// <summary>
+        /// Calling this constructor is only for the windows WPF designer.
+        /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
+        public AgilentPump(bool emulated)
+        {
+            Emulation = true;
+
+            PurgeA1 = new PumpPurgeData(PumpPurgeChannel.A1);
+            PurgeA2 = new PumpPurgeData(PumpPurgeChannel.A2);
+            PurgeB1 = new PumpPurgeData(PumpPurgeChannel.B1);
+            PurgeB2 = new PumpPurgeData(PumpPurgeChannel.B2);
         }
 
         void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
@@ -264,41 +311,24 @@ namespace LcmsNetPlugins.Agilent.Pumps
         #endregion
 
         #region Properties
+
         [PersistenceData("TotalMonitoringMinutes")]
-        public int TotalMonitoringMinutesDataToKeep
-        {
-            get;
-            set;
-        }
+        public int TotalMonitoringMinutesDataToKeep { get; set; }
+
         [PersistenceData("TotalMonitoringSecondsElapsed")]
-        public int TotalMonitoringSecondElapsed
-        {
-            get;
-            set;
-        }
+        public int TotalMonitoringSecondElapsed { get; set; }
+
         /// <summary>
         /// Gets or sets the Emulation state.
         /// </summary>
-        public bool Emulation
-        {
-            get
-            {
-                return m_emulation;
-            }
-            set
-            {
-                m_emulation = value;
-            }
-        }
+        public bool Emulation { get; set; }
+
         /// <summary>
         /// Gets the device's status
         /// </summary>
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get => m_status;
             set
             {
                 if (value != m_status)
@@ -306,26 +336,18 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 m_status = value;
             }
         }
+
         /// <summary>
         /// Gets or sets whether the device is running
         /// </summary>
-        public bool Running
-        {
-            get
-            {
-                return m_running;
-            }
-            set
-            {
-                m_running = value;
-            }
-        }
+        public bool Running { get; set; }
+
         /// <summary>
         /// Gets or sets the device's name
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -334,37 +356,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets the device's version
         /// </summary>
-        public string Version
-        {
-            get
-            {
-                return m_version;
-            }
-            set
-            {
-                m_version = value;
-            }
-        }
+        public string Version { get; set; }
+
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
         [PersistenceData("PortName")]
-        public string PortName
-        {
-            get;
-            set;
-        }
+        public string PortName { get; set; }
+
         /// <summary>
         /// Gets or sets the error type of the last error reported.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets the system device type.
         /// </summary>
@@ -373,14 +381,34 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>
-        public System.Threading.ManualResetEvent AbortEvent
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
+        public PumpPurgeData PurgeA1 { get; }
+        public PumpPurgeData PurgeA2 { get; }
+        public PumpPurgeData PurgeB1 { get; }
+        public PumpPurgeData PurgeB2 { get; }
+
+        public PumpState PumpState
         {
-            get;
-            set;
+            get => pumpState;
+            set => this.RaiseAndSetIfChanged(ref pumpState, value);
         }
+
         #endregion
 
         #region Pump Purging
+
+        public bool LoadPurgeData()
+        {
+            return GetPurgeData(PurgeA1) && GetPurgeData(PurgeA2) && GetPurgeData(PurgeB1) && GetPurgeData(PurgeB2);
+        }
+
+        public bool StartPurge()
+        {
+            var reply = "";
+            return SendCommand("PURG 1", out reply, "");
+        }
+
         /// <summary>
         /// Purges the pump for the number of minutes provided.
         /// </summary>
@@ -395,7 +423,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
             var reply = "";
             var error = "";
-            var worked = SendCommand(command, ref reply, error);
+            var worked = SendCommand(command, out reply, error);
 
             if (!worked)
                 return false;
@@ -417,12 +445,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     break;
             }
             command = string.Format("PRGE {0}, 1, 1", bitField);
-            worked = SendCommand(command, ref reply, error);
+            worked = SendCommand(command, out reply, error);
             if (!worked)
                 return false;
 
-            return SendCommand("PURG 1", ref reply, error);
+            return SendCommand("PURG 1", out reply, error);
         }
+
         /// <summary>
         /// Aborts purging of the pumps for the given channel.
         /// </summary>
@@ -433,13 +462,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             var reply = "";
             var error = "";
-            var command = "PRGE 0, 0, 0";
-            var worked = SendCommand(command, ref reply, error);
+            var command = "PURG 0";
+            var worked = SendCommand(command, out reply, error);
             return worked;
         }
+
         #endregion
 
         #region Pump Status Code Converters
+
         private void CreateErrorCodes()
         {
             if (m_errorCodes == null)
@@ -496,9 +527,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 m_statusCodes = map;
             }
         }
+
         #endregion
 
         #region Pump Event Handlers
+
         /// <summary>
         /// Handles events when a pump error occurs
         /// </summary>
@@ -520,9 +553,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 HandleError("Pump " + Name + " failed " + e.Message, CONST_PUMP_ERROR);
             }
         }
+
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Clears all of the listed pump methods.
         /// </summary>
@@ -557,6 +592,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 ListMethods();
             }
         }
+
         /// <summary>
         /// Lists the methods
         /// </summary>
@@ -573,13 +609,14 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 MethodNames(this, data);
             }
         }
+
         /// <summary>
         /// Initializes the device.
         /// </summary>
         /// <returns>True on success</returns>
         public bool Initialize(ref string errorMessage)
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return true;
             }
@@ -651,7 +688,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             var worked = SendCommand(
                 string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondElapsed),
-                ref reply,
+                out reply,
                 errorMessage);
 
             if (worked == false)
@@ -661,8 +698,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
+            GetPumpState();
+
             return true;
         }
+
         /// <summary>
         /// Internal error handler that propogates the error message to listening objects.
         /// </summary>
@@ -670,6 +710,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             HandleError(message, type, null);
         }
+
         /// <summary>
         /// Internal error handler that propogates the error message to listening objects.
         /// </summary>
@@ -689,6 +730,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                                                     type));
             }
         }
+
         private void UpdateNotificationStatus(string message, string type)
         {
             if (StatusUpdate != null)
@@ -699,6 +741,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         #region Pump Events
+
         /// <summary>
         /// Handles errors from the pump.
         /// </summary>
@@ -710,35 +753,19 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             if (data.Contains("EE 2014"))
             {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE,
-    null,
-    DeviceErrorStatus.ErrorAffectsAllColumns,
-    this,
-    CONST_ERROR_ABOVE_PRESSURE));
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_ABOVE_PRESSURE));
             }
             else if (data.Contains("EE 2015"))
             {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE,
-    null,
-    DeviceErrorStatus.ErrorAffectsAllColumns,
-    this,
-    CONST_ERROR_BELOW_PRESSURE));
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_BELOW_PRESSURE));
             }
             else if (data.Contains("EE 2064"))
             {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS,
-    null,
-    DeviceErrorStatus.ErrorAffectsAllColumns,
-    this,
-    CONST_ERROR_FLOW_EXCEEDS));
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_FLOW_EXCEEDS));
             }
             else if (data.Contains("EE 2066"))
             {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE,
-    null,
-    DeviceErrorStatus.ErrorAffectsAllColumns,
-    this,
-    CONST_ERROR_FLOW_UNSTABLE));
+                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_FLOW_UNSTABLE));
             }
             else
             {
@@ -755,8 +782,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
             //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(2, Name + " Agilent Pump Message " + data);
         }
+
         /// <summary>
-        /// Handles m5onitoring data from the pumps.
+        /// Handles monitoring data from the pumps.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -791,10 +819,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 // Leave blank....
             }
         }
+
         public void PushData(double flowrate, double pressure, double compositionB)
         {
             ProcessMonitoringData(flowrate, pressure, compositionB);
         }
+
         private void ProcessMonitoringData(double flowrate, double pressure, double compositionB)
         {
             var time = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -839,18 +869,14 @@ namespace LcmsNetPlugins.Agilent.Pumps
             // Alert the user data is ready
             try
             {
-                MonitoringDataReceived?.Invoke(this,
-        new PumpDataEventArgs(this,
-                                m_times,
-                                m_pressures,
-                                m_flowrates,
-                                m_percentB));
+                MonitoringDataReceived?.Invoke(this, new PumpDataEventArgs(this, m_times, m_pressures, m_flowrates, m_percentB));
             }
             catch
             {
                 // ignored
             }
         }
+
         #endregion
 
         /// <summary>
@@ -859,7 +885,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <returns>True on success</returns>
         public bool Shutdown()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return true;
             }
@@ -880,6 +906,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             return true;
         }
+
         /// <summary>
         /// Sends a command to the pump
         /// </summary>
@@ -887,10 +914,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="reply">The string to fill with the reply</param>
         /// <param name="errorstring">Any error results</param>
         /// <returns></returns>
-        private bool SendCommand(string command, ref string reply, string errorstring)
+        private bool SendCommand(string command, out string reply, string errorstring)
         {
-            return SendCommand(command, ref reply, errorstring, m_inChannel);
+            return SendCommand(command, out reply, errorstring, m_inChannel);
         }
+
         /// <summary>
         ///
         /// </summary>
@@ -899,9 +927,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="errorstring"></param>
         /// <param name="readChannel"></param>
         /// <returns></returns>
-        private bool SendCommand(string command, ref string reply, string errorstring, Channel readChannel)
+        private bool SendCommand(string command, out string reply, string errorstring, Channel readChannel)
         {
-            if (m_emulation)
+            reply = "";
+            if (Emulation)
             {
                 return true;
             }
@@ -921,9 +950,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             return true;
         }
+
         #endregion
 
         #region LC Methods - and method editor visible.
+
         /// <summary>
         /// Sets the pump mode.
         /// </summary>
@@ -931,14 +962,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
         [LCMethodEvent("Set Mode", 1, "", -1, false)]
         public void SetMode(AgilentPumpModes newMode)
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return;
             }
 
             var reply = "";
-            SendCommand("MODE " + (int)newMode, ref reply, "Attempting to set mode to " + newMode.ToString());
+            SendCommand("MODE " + (int)newMode, out reply, "Attempting to set mode to " + newMode.ToString());
         }
+
         /// <summary>
         /// Sets the flow rate.
         /// </summary>
@@ -947,15 +979,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
         [LCMethodEvent("Set Flow Rate", 1, "", -1, false)]
         public void SetFlowRate(double newFlowRate)
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return;
             }
             m_flowrate = newFlowRate;
             var reply = "";
             SendCommand("FLOW " + newFlowRate.ToString(CultureInfo.InvariantCulture),
-                ref reply, "Attempting to set flow rate to " + newFlowRate.ToString(CultureInfo.InvariantCulture));
+                out reply, "Attempting to set flow rate to " + newFlowRate.ToString(CultureInfo.InvariantCulture));
         }
+
         /// <summary>
         /// Sets the mixer volume
         /// </summary>
@@ -963,7 +996,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         [LCMethodEvent("Set Mixer Volume", 1, "", -1, false)]
         public void SetMixerVolume(double newVolumeuL)
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return;
             }
@@ -971,8 +1004,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             if (newVolumeuL >= 0 && newVolumeuL <= 2000)
                 SendCommand("MVOL " + newVolumeuL.ToString(CultureInfo.InvariantCulture),
-                    ref reply, "Attempting to set mixer volume to " + newVolumeuL.ToString(CultureInfo.InvariantCulture));
+                    out reply, "Attempting to set mixer volume to " + newVolumeuL.ToString(CultureInfo.InvariantCulture));
         }
+
         /// <summary>
         /// Sets the percent B concentration.
         /// </summary>
@@ -981,7 +1015,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public void SetPercentB(double percent)
         {
             var reply = "";
-            SendCommand("COMP " + Convert.ToInt32(percent).ToString() + ",-1,-1", ref reply, "Attempting to set percent of solvent B");
+            SendCommand("COMP " + Convert.ToInt32(percent).ToString() + ",-1,-1", out reply, "Attempting to set percent of solvent B");
         }
 
         /// <summary>
@@ -1004,6 +1038,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var timer = new TimerDevice();
             timer.WaitSeconds(span.TotalSeconds);
         }
+
         /// <summary>
         /// Runs the method provided by a string.
         /// </summary>
@@ -1037,10 +1072,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
             // when the time table is done the pumps may resort back to the final
             // entries and set the %B to 40 instead of the 0 we desire.
             //
-            SendCommand("AT:DEL ", ref reply, "Clearing time table.");
-            SendCommand(methodData, ref reply, "Loading method.");
-            SendCommand("STRT", ref reply, "Attempting to start method.");
+            SendCommand("AT:DEL ", out reply, "Clearing time table.");
+            SendCommand(methodData, out reply, "Loading method.");
+            SendCommand("STRT", out reply, "Attempting to start method.");
         }
+
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
@@ -1048,8 +1084,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public void StopMethod()
         {
             var reply = "";
-            SendCommand("STOP", ref reply, "Attempting to stop a method.");
+            SendCommand("STOP", out reply, "Attempting to stop a method.");
         }
+
         /// <summary>
         /// Turns the pumps on.
         /// </summary>
@@ -1057,8 +1094,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public void PumpOn()
         {
             var reply = "";
-            SendCommand("PUMP 1", ref reply, "Attempting to turn pumps on.");
+            SendCommand("PUMP 1", out reply, "Attempting to turn pumps on.");
+            GetPumpState();
         }
+
         /// <summary>
         /// Turns the pumps off
         /// </summary>
@@ -1066,23 +1105,75 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public void PumpOff()
         {
             var reply = "";
-            SendCommand("PUMP 0", ref reply, "Attempting to turn pumps off.");
+            SendCommand("PUMP 0", out reply, "Attempting to turn pumps off.");
+            GetPumpState();
         }
+
         #endregion
 
         #region Pump Interface methods
+
+        public PumpState GetPumpState()
+        {
+            if (Emulation)
+            {
+                return PumpState.Unknown;
+            }
+
+            // TODO: Figure out how this should work.
+            PumpState = PumpState.Unknown;
+            return PumpState.Unknown;
+
+            try
+            {
+                var reply = "";
+                ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PUMP?'");
+                var success = SendCommand($"PUMP?", out reply, $"Attempting to query channel purge states");
+                ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
+
+                //We expect something like:
+                //reply = "RA 0000 PUMP 1";
+                var start = reply.IndexOf($"PUMP", StringComparison.InvariantCultureIgnoreCase);
+                if (!success || start == -1)
+                {
+                    return PumpState.Unknown;
+                }
+
+                var split = reply.Substring(start).Split(new char[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries);
+                if (split.Length < 2)
+                {
+                    return PumpState.Unknown;
+                }
+
+                ApplicationLogger.LogMessage(2, $"{Name}: Sending 'BLAH?'");
+                SendCommand($"BLAH?", out reply, $"Attempting to query channel purge states");
+                ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
+
+                var stateInt = Convert.ToInt32(split[1]);
+                var state = stateInt > 0 ? PumpState.On : PumpState.Off;
+                PumpState = state;
+                return state;
+            }
+            catch (Exception e)
+            {
+                ApplicationLogger.LogError(2, "Error getting pump state ", e);
+            }
+
+            return PumpState.Unknown;
+        }
+
         /// <summary>
         /// Gets the percent B.
         /// </summary>
         /// <returns></returns>
         public double GetPercentB()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return 0.0;
             }
             var reply = "";
-            SendCommand("ACT:COMP?", ref reply, "Attmempting to query composition of solvent B.");
+            SendCommand("ACT:COMP?", out reply, "Attmempting to query composition of solvent B.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("COMP"))
@@ -1098,7 +1189,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             reply = "";
-            SendCommand("ACT:COMP?", ref reply, "Attmempting to query composition of solvent B.");
+            SendCommand("ACT:COMP?", out reply, "Attmempting to query composition of solvent B.");
             if (reply.Contains("COMP"))
             {
                 var replies = reply.Split(' ');
@@ -1114,6 +1205,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             HandleError("Invalid pump response to composition request", CONST_COMPOSITION_B_SET);
             return double.NaN;
         }
+
         /// <summary>
         /// Gets the current loaded method in the pump module.
         /// </summary>
@@ -1121,34 +1213,35 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string RetrieveMethod()
         {
             var methodString = "";
-            if (m_emulation)
+            if (Emulation)
             {
                 methodString = "test;\ntest12";
             }
             else
             {
-                SendCommand("LIST \"TT\"", ref methodString, "Attempting to retrieve method", m_listChannel);
+                SendCommand("LIST \"TT\"", out methodString, "Attempting to retrieve method", m_listChannel);
             }
             return methodString;
         }
+
         /// <summary>
         /// Gets the flow rate. Note that this is the ideal flow rate not the actual flow rate.
         /// </summary>
         /// <returns>The flow rate</returns>
         public double GetFlowRate()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return 0.0;
             }
             var reply = "";
-            SendCommand("FLOW?", ref reply, "Attempting to query flow rate.");
+            SendCommand("FLOW?", out reply, "Attempting to query flow rate.");
             //We expect something like:
             //reply = "RA 0000 FLOW 2.000";
             var start = reply.IndexOf("FLOW", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
-                SendCommand("FLOW?", ref reply, "Attempting to re-query flow rate.");
+                SendCommand("FLOW?", out reply, "Attempting to re-query flow rate.");
                 start = reply.IndexOf("FLOW", StringComparison.InvariantCultureIgnoreCase);
                 if (start == -1)
                 {
@@ -1159,18 +1252,125 @@ namespace LcmsNetPlugins.Agilent.Pumps
             reply = reply.Substring(start + 5, 5);
             return Convert.ToDouble(reply);
         }
+
+        /// <summary>
+        /// Sets the purge parameters and state for the
+        /// </summary>
+        /// <param name="purgeData"></param>
+        /// <returns></returns>
+        public bool SetPurgeData(PumpPurgeData purgeData)
+        {
+            if (Emulation)
+            {
+                return false;
+            }
+
+            if (purgeData.FlowRate < 0 || purgeData.Duration < 0)
+            {
+                return false;
+            }
+
+            var reply = "";
+            var purgeChannelText = purgeData.Channel.ToString();
+            //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PG{purgeChannelText} {purgeData.FlowRate}, {purgeData.Duration}'");
+            var success = SendCommand($"PG{purgeChannelText} {purgeData.FlowRate}, {purgeData.Duration}", out reply, $"Attempting to set purge settings for channel {purgeChannelText}");
+
+            if (!success)
+            {
+                return false;
+            }
+
+            var enabledChannels = GetPurgeState();
+            if (purgeData.Enabled)
+            {
+                enabledChannels |= (int)purgeData.Channel;
+            }
+            else
+            {
+                enabledChannels &= ~((int) purgeData.Channel); // Reverse the bits, so that everything but this bit could possibly be true.
+            }
+
+            //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PRGE {enabledChannels}, 1, 1'");
+            success = SendCommand($"PRGE {enabledChannels}, 1, 1", out reply, $"Attempting to set purge state for channel {purgeChannelText}");
+
+            if (!success)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool GetPurgeData(PumpPurgeData purgeData)
+        {
+            if (Emulation)
+            {
+                return false;
+            }
+
+            var reply = "";
+            var purgeChannelText = purgeData.Channel.ToString();
+            //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PG{purgeChannelText}?'");
+            var success = SendCommand($"PG{purgeChannelText}?", out reply, $"Attempting to query purge settings for channel {purgeChannelText}");
+            //ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
+
+            //We expect something like:
+            //reply = "RA 0000 PGA1 1000, 5";
+            var start = reply.IndexOf($"PG{purgeChannelText}", StringComparison.InvariantCultureIgnoreCase);
+            if (!success || start == -1)
+            {
+                purgeData.FlowRate = -1;
+                purgeData.Duration = -1;
+                return false;
+            }
+
+            var split = reply.Substring(start).Split(new char[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries);
+            purgeData.FlowRate = Convert.ToDouble(split[1]);
+            purgeData.Duration = Convert.ToDouble(split[2]);
+
+            var purgeStates = GetPurgeState();
+            //ApplicationLogger.LogMessage(2, $"{Name}: Got PurgeState: '{purgeStates}', setting {purgeData.Channel.ToString()} ({(int)(purgeData.Channel)}) enabled: '{(purgeStates & (int)purgeData.Channel) == (int)purgeData.Channel}'");
+            purgeData.Enabled = (purgeStates & (int) purgeData.Channel) == (int)purgeData.Channel;
+
+            return true;
+        }
+
+        private int GetPurgeState()
+        {
+            if (Emulation)
+            {
+                return 0;
+            }
+
+            var reply = "";
+            //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PRGE?'");
+            var success = SendCommand($"PRGE?", out reply, $"Attempting to query channel purge states");
+            //ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
+
+            //We expect something like:
+            //reply = "RA 0000 PRGE 1, x, y";
+            var start = reply.IndexOf($"PRGE", StringComparison.InvariantCultureIgnoreCase);
+            if (!success || start == -1)
+            {
+                return 0;
+            }
+
+            var split = reply.Substring(start).Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return Convert.ToInt32(split[1]);
+        }
+
         /// <summary>
         /// Gets the pressure
         /// </summary>
         /// <returns>The pressure</returns>
         public double GetPressure()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return 0.0;
             }
             var reply = "";
-            SendCommand("ACT:PRES?", ref reply, "Attmempting to query pressure.");
+            SendCommand("ACT:PRES?", out reply, "Attmempting to query pressure.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("ACT:PRES"))
@@ -1185,7 +1385,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             reply = "";
-            SendCommand("ACT:PRES?", ref reply, "Attmempting to query pressure.");
+            SendCommand("ACT:PRES?", out reply, "Attmempting to query pressure.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("ACT:PRES"))
@@ -1202,23 +1402,24 @@ namespace LcmsNetPlugins.Agilent.Pumps
             HandleError("Invalid pump response to pressure request", CONST_PRESSURE_SET);
             return double.NaN;
         }
+
         /// <summary>
         /// Gets the current mixer volume.
         /// </summary>
         /// <returns>The current mixer volume</returns>
         public double GetMixerVolume()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return 0.0;
             }
             var reply = "";
-            SendCommand("MVOL?", ref reply, "Attempting to query mixer volume.");
+            SendCommand("MVOL?", out reply, "Attempting to query mixer volume.");
             var start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
                 reply = "";
-                SendCommand("MVOL?", ref reply, "Attempting to query mixer volume.");
+                SendCommand("MVOL?", out reply, "Attempting to query mixer volume.");
                 start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
                 if (start == -1)
                 {
@@ -1229,23 +1430,24 @@ namespace LcmsNetPlugins.Agilent.Pumps
             reply = reply.Substring(start + 5, reply.Length - (start + 5));
             return Convert.ToDouble(reply);
         }
+
         /// <summary>
         /// Gets the actual flow rate
         /// </summary>
         /// <returns>The actual measured current flow rate</returns>
         public double GetActualFlow()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return 0.0;
             }
             var reply = "";
-            SendCommand("ACT:FLOW?", ref reply, "Attempting to query actual flow.");
+            SendCommand("ACT:FLOW?", out reply, "Attempting to query actual flow.");
             var start = reply.IndexOf("ACT:FLOW", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
                 reply = "";
-                SendCommand("ACT:FLOW?", ref reply, "Attempting to query actual flow.");
+                SendCommand("ACT:FLOW?", out reply, "Attempting to query actual flow.");
                 start = reply.IndexOf("ACT:FLOW", StringComparison.InvariantCultureIgnoreCase);
                 if (start == -1)
                 {
@@ -1256,18 +1458,19 @@ namespace LcmsNetPlugins.Agilent.Pumps
             reply = reply.Substring(start + 9, 5);
             return Convert.ToDouble(reply);
         }
+
         /// <summary>
         /// Gets the current pump mode
         /// </summary>
         /// <returns>The current pump mode</returns>
         public AgilentPumpModes GetMode()
         {
-            if (m_emulation)
+            if (Emulation)
             {
                 return AgilentPumpModes.Unknown;
             }
             var reply = "";
-            SendCommand("MODE?", ref reply, "Attempting to query mode.");
+            SendCommand("MODE?", out reply, "Attempting to query mode.");
             //reply = "RA 000 MODE 1
             var start = reply.IndexOf("MODE", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
@@ -1278,9 +1481,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
             reply = reply.Substring(start + 5, 1);
             return (AgilentPumpModes)(Convert.ToInt32(reply));
         }
+
         #endregion
 
         #region Settings and Saving Methods
+
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
@@ -1288,6 +1493,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             DeviceSaveRequired?.Invoke(this, null);
         }
+
         #endregion
 
         #region IDevice Data Provider Methods
@@ -1323,6 +1529,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         #endregion
 
         #region Performance and Error Notifications
+
         /// <summary>
         /// Writes the pump method time-table to the directory provided.
         /// </summary>
@@ -1335,6 +1542,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 var methodData = mdict_methods[methodName];
             }
         }
+
         /// <summary>
         /// Writes the required data to the directory path provided.
         /// </summary>
@@ -1353,6 +1561,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     break;
             }
         }
+
         public List<string> GetStatusNotificationList()
         {
             var notifications = new List<string>() { "Status"
@@ -1366,6 +1575,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
             return notifications;
         }
+
         public List<string> GetErrorNotificationList()
         {
             var notifications = new List<string>() {
@@ -1388,6 +1598,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             return notifications;
         }
+
         #endregion
 
         /// <summary>
@@ -1452,11 +1663,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region IPump Members
 
-        public List<MobilePhase> MobilePhases
-        {
-            get;
-            set;
-        }
+        public List<MobilePhase> MobilePhases { get; set; }
 
         #endregion
 

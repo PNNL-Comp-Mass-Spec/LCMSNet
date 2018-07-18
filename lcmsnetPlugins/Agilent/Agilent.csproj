@@ -79,6 +79,8 @@
     <Compile Include="Pumps\AgilentPumpView.xaml.cs">
       <DependentUpon>AgilentPumpView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pumps\PumpPurgeData.cs" />
+    <Compile Include="Pumps\PumpState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Agilent1200Pump.png" />

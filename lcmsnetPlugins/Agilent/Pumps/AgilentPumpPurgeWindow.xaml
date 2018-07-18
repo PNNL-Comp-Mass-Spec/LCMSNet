@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LcmsNetPlugins.Agilent.Pumps"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Height="332" Width="468"
+        Height="400" Width="468"
         d:DataContext="{d:DesignInstance {x:Type local:AgilentPumpPurgeViewModel}, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner"
         Title="{Binding Title}">
@@ -19,27 +19,43 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="0.5*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Duration (mins)" />
-        <TextBlock Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Flow Rate (uL/min)" />
-        <Button Grid.Row="1" Grid.Column="0" Margin="3" Content="PURGE Channel A1" Command="{Binding PurgeA1Command}" />
-        <xctk:DoubleUpDown Grid.Row="1" Grid.Column="1" Margin="10" Minimum="0" Maximum="99999" FormatString="F2" Value="{Binding A1Duration}" />
-        <xctk:DoubleUpDown Grid.Row="1" Grid.Column="2" Margin="10" Minimum="0" Maximum="2500" FormatString="F3" Value="{Binding A1FlowRate}" />
-        <Button Grid.Row="2" Grid.Column="0" Margin="3" Content="PURGE Channel A2" Command="{Binding PurgeA2Command}" />
-        <xctk:DoubleUpDown Grid.Row="2" Grid.Column="1" Margin="10" Minimum="0" Maximum="99999" FormatString="F2" Value="{Binding A2Duration}" />
-        <xctk:DoubleUpDown Grid.Row="2" Grid.Column="2" Margin="10" Minimum="0" Maximum="2500" FormatString="F3" Value="{Binding A2FlowRate}" />
-        <Button Grid.Row="3" Grid.Column="0" Margin="3" Content="PURGE Channel B1" Command="{Binding PurgeB1Command}" />
-        <xctk:DoubleUpDown Grid.Row="3" Grid.Column="1" Margin="10" Minimum="0" Maximum="99999" FormatString="F2" Value="{Binding B1Duration}" />
-        <xctk:DoubleUpDown Grid.Row="3" Grid.Column="2" Margin="10" Minimum="0" Maximum="2500" FormatString="F3" Value="{Binding B1FlowRate}" />
-        <Button Grid.Row="4" Grid.Column="0" Margin="3" Content="PURGE Channel B2" Command="{Binding PurgeB2Command}" />
-        <xctk:DoubleUpDown Grid.Row="4" Grid.Column="1" Margin="10" Minimum="0" Maximum="99999" FormatString="F2" Value="{Binding B2Duration}" />
-        <xctk:DoubleUpDown Grid.Row="4" Grid.Column="2" Margin="10" Minimum="0" Maximum="2500" FormatString="F3" Value="{Binding B2FlowRate}" />
-        <Button Grid.Row="6" Grid.Column="0" Margin="3" Content="Abort Purges" Command="{Binding AbortPurgesCommand}" />
-        <Button Grid.Row="6" Grid.Column="2" Margin="3" Content="OK" IsDefault="True" IsCancel="True" Click="Ok_OnClick" />
+        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Purge?" />
+        <TextBlock Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Duration (mins)" />
+        <TextBlock Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Flow Rate (uL/min)" />
+        <Button Grid.Row="1" Grid.Column="0" Margin="3" MinWidth="60" Content="Set A1" Command="{Binding SetA1Command}" />
+        <CheckBox Grid.Row="1" Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding ChannelA1.Enabled}" />
+        <xctk:DoubleUpDown Grid.Row="1" Grid.Column="2" Margin="10" Minimum="0" Maximum="{Binding ChannelA1.MaxDuration}" FormatString="F2" Value="{Binding ChannelA1.Duration}" />
+        <xctk:DoubleUpDown Grid.Row="1" Grid.Column="3" Margin="10" Minimum="0" Maximum="{Binding ChannelA1.MaxFlowRate}" FormatString="F3" Value="{Binding ChannelA1.FlowRate}" />
+        <Button Grid.Row="2" Grid.Column="0" Margin="3" MinWidth="60" Content="Set A2" Command="{Binding SetA2Command}" />
+        <CheckBox Grid.Row="2" Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding ChannelA2.Enabled}" />
+        <xctk:DoubleUpDown Grid.Row="2" Grid.Column="2" Margin="10" Minimum="0" Maximum="{Binding ChannelA2.MaxDuration}" FormatString="F2" Value="{Binding ChannelA2.Duration}" />
+        <xctk:DoubleUpDown Grid.Row="2" Grid.Column="3" Margin="10" Minimum="0" Maximum="{Binding ChannelA2.MaxFlowRate}" FormatString="F3" Value="{Binding ChannelA2.FlowRate}" />
+        <Button Grid.Row="3" Grid.Column="0" Margin="3" MinWidth="60" Content="Set B1" Command="{Binding SetB1Command}" />
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding ChannelB1.Enabled}" />
+        <xctk:DoubleUpDown Grid.Row="3" Grid.Column="2" Margin="10" Minimum="0" Maximum="{Binding ChannelB1.MaxDuration}" FormatString="F2" Value="{Binding ChannelB1.Duration}" />
+        <xctk:DoubleUpDown Grid.Row="3" Grid.Column="3" Margin="10" Minimum="0" Maximum="{Binding ChannelB1.MaxFlowRate}" FormatString="F3" Value="{Binding ChannelB1.FlowRate}" />
+        <Button Grid.Row="4" Grid.Column="0" Margin="3" MinWidth="60" Content="Set B2" Command="{Binding SetB2Command}" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding ChannelB2.Enabled}" />
+        <xctk:DoubleUpDown Grid.Row="4" Grid.Column="2" Margin="10" Minimum="0" Maximum="{Binding ChannelB2.MaxDuration}" FormatString="F2" Value="{Binding ChannelB2.Duration}" />
+        <xctk:DoubleUpDown Grid.Row="4" Grid.Column="3" Margin="10" Minimum="0" Maximum="{Binding ChannelB2.MaxFlowRate}" FormatString="F3" Value="{Binding ChannelB2.FlowRate}" />
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal">
+            <TextBlock Margin="3" VerticalAlignment="Center" Text="Pumps:" />
+            <Button Margin="3" Width="38" Content="ON" Background="LightGray" Command="{Binding PumpOnCommand}" />
+            <Button Margin="3" Width="38" Content="OFF" Background="Gray" Foreground="White" Command="{Binding PumpOffCommand}" />
+        </StackPanel>
+        <DockPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Abort Purges" Command="{Binding AbortPurgesCommand}" />
+            <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Start Purges" Command="{Binding PurgeCommand}" />
+            <Button DockPanel.Dock="Right" Margin="3" MinWidth="60" Content="Close" IsDefault="True" IsCancel="True" Click="Close_OnClick" />
+            <Button DockPanel.Dock="Right" Margin="3" MinWidth="60" Content="Refresh" Command="{Binding PurgeCommand}" />
+        </DockPanel>
     </Grid>
 </Window>

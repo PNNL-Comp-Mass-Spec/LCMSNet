@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
 using Microsoft.Win32;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {
@@ -47,30 +49,30 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private void RegisterDevice(IDevice device)
         {
-            m_pump = device as AgilentPump;
+            Pump = device as AgilentPump;
 
             // Initialize the underlying device class
-            if (m_pump != null)
+            if (Pump != null)
             {
-                m_pump.MethodAdded += Pump_MethodAdded;
-                m_pump.MethodUpdated += Pump_MethodUpdated;
-                m_pump.MonitoringDataReceived += Pump_MonitoringDataReceived;
-                m_pump.PropertyChanged += PumpOnPropertyChanged;
+                Pump.MethodAdded += Pump_MethodAdded;
+                Pump.MethodUpdated += Pump_MethodUpdated;
+                Pump.MonitoringDataReceived += Pump_MonitoringDataReceived;
+                Pump.PropertyChanged += PumpOnPropertyChanged;
                 using (modeComboBoxOptions.SuppressChangeNotifications())
                 {
                     modeComboBoxOptions.Clear();
                     modeComboBoxOptions.AddRange(Enum.GetValues(typeof(AgilentPumpModes)).Cast<AgilentPumpModes>());
                 }
 
-                PumpDisplay.SetPumpName(m_pump.Name);
+                PumpDisplay.SetPumpName(Pump.Name);
                 NewMethodAvailable += PumpAgilent_NewMethodAvailable;
             }
 
             // Add to the device manager.
-            SetBaseDevice(m_pump);
+            SetBaseDevice(Pump);
 
             // Make sure to select an option
-            SelectedComPort = m_pump.PortName;
+            SelectedComPort = Pump.PortName;
 
             // Reads the pump method directory.
             try
@@ -87,9 +89,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private void PumpOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(m_pump.Name)))
+            if (e.PropertyName.Equals(nameof(Pump.Name)))
             {
-                PumpDisplay.SetPumpName(m_pump.Name);
+                PumpDisplay.SetPumpName(Pump.Name);
             }
         }
 
@@ -100,7 +102,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// A pump object to use.
         /// </summary>
-        private AgilentPump m_pump;
+        private AgilentPump pump;
 
         /// <summary>
         /// Fired when a new method is available from the pumps.
@@ -134,67 +136,67 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public double FlowRate
         {
             get { return flowRate; }
-            set { this.RaiseAndSetIfChanged(ref flowRate, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref flowRate, value); }
         }
 
         public double FlowRateRead
         {
             get { return flowRateRead; }
-            private set { this.RaiseAndSetIfChanged(ref flowRateRead, value); }
+            private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref flowRateRead, value); }
         }
 
         public double MixerVolume
         {
             get { return mixerVolume; }
-            set { this.RaiseAndSetIfChanged(ref mixerVolume, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref mixerVolume, value); }
         }
 
         public double MixerVolumeRead
         {
             get { return mixerVolumeRead; }
-            private set { this.RaiseAndSetIfChanged(ref mixerVolumeRead, value); }
+            private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref mixerVolumeRead, value); }
         }
 
         public double PercentB
         {
             get { return percentB; }
-            set { this.RaiseAndSetIfChanged(ref percentB, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref percentB, value); }
         }
 
         public double PercentBRead
         {
             get { return percentBRead; }
-            private set { this.RaiseAndSetIfChanged(ref percentBRead, value); }
+            private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref percentBRead, value); }
         }
 
         public AgilentPumpModes SelectedMode
         {
             get { return selectedMode; }
-            set { this.RaiseAndSetIfChanged(ref selectedMode, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref selectedMode, value); }
         }
 
         public double Pressure
         {
             get { return pressure; }
-            private set { this.RaiseAndSetIfChanged(ref pressure, value); }
+            private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pressure, value); }
         }
 
         public string SelectedMethod
         {
             get { return selectedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethod, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref selectedMethod, value); }
         }
 
         public string SelectedComPort
         {
             get { return selectedComPort; }
-            set { this.RaiseAndSetIfChanged(ref selectedComPort, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref selectedComPort, value); }
         }
 
         public string MethodText
         {
             get { return methodText; }
-            set { this.RaiseAndSetIfChanged(ref methodText, value); }
+            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref methodText, value); }
         }
 
         public PumpDisplayViewModel PumpDisplay => pumpDisplay;
@@ -205,8 +207,14 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public IDevice Device
         {
-            get { return m_pump; }
+            get { return Pump; }
             set { RegisterDevice(value); }
+        }
+
+        public AgilentPump Pump
+        {
+            get => pump;
+            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pump, value);
         }
 
         /// <summary>
@@ -214,8 +222,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public bool Emulation
         {
-            get { return m_pump.Emulation; }
-            set { m_pump.Emulation = value; }
+            get { return Pump.Emulation; }
+            set { Pump.Emulation = value; }
         }
 
         #endregion
@@ -242,21 +250,21 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private void SetupCommands()
         {
-            SetFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetFlowRate(FlowRate)));
-            ReadFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => FlowRateRead = m_pump.GetActualFlow()));
-            SetMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetMixerVolume(MixerVolume)));
-            ReadMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MixerVolumeRead = m_pump.GetMixerVolume()));
-            SetPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetPercentB(PercentB)));
-            ReadPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => PercentBRead = m_pump.GetPercentB()));
-            SetModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.SetMode(SelectedMode)));
-            ReadPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pressure = m_pump.GetPressure()));
-            PumpOnCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PumpOn()));
-            PumpOffCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PumpOff()));
+            SetFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetFlowRate(FlowRate)));
+            ReadFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => FlowRateRead = Pump.GetActualFlow()));
+            SetMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMixerVolume(MixerVolume)));
+            ReadMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MixerVolumeRead = Pump.GetMixerVolume()));
+            SetPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPercentB(PercentB)));
+            ReadPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => PercentBRead = Pump.GetPercentB()));
+            SetModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMode(SelectedMode)));
+            ReadPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pressure = Pump.GetPressure()));
+            PumpOnCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
+            PumpOffCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
             PurgePumpCommand = ReactiveUI.ReactiveCommand.Create(() => PurgePump());
-            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()));
-            StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.StopMethod()));
+            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
             SetComPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetComPortName()));
-            ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = m_pump.RetrieveMethod()));
+            ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));
             LoadMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => LoadMethods()));
             SaveMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SaveMethod()));
         }
@@ -374,13 +382,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 // Clear any existing pump methods
                 if (methods.Count > 0)
                 {
-                    m_pump.ClearMethods();
+                    Pump.ClearMethods();
                     using (methodComboBoxOptions.SuppressChangeNotifications())
                     {
                         methodComboBoxOptions.Clear();
                     }
 
-                    m_pump.AddMethods(methods);
+                    Pump.AddMethods(methods);
                 }
             });
 
@@ -401,10 +409,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private void TimerTick(object sender)
         {
             //#if DEBUG
-            if (m_pump != null && Emulation)
+            if (Pump != null && Emulation)
             {
-                timer.Change(m_pump.TotalMonitoringSecondElapsed * 1000, m_pump.TotalMonitoringSecondElapsed * 1000);
-                m_pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());
+                timer.Change(Pump.TotalMonitoringSecondElapsed * 1000, Pump.TotalMonitoringSecondElapsed * 1000);
+                Pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());
             }
             //#endif
         }
@@ -437,7 +445,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             writer.Close();
 
             // Make sure we add it to the list of methods as well.
-            m_pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), MethodText);
+            Pump.AddMethod(System.IO.Path.GetFileNameWithoutExtension(dialog.FileName), MethodText);
 
             NewMethodAvailable?.Invoke(this, null);
         }
@@ -450,7 +458,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             if (string.IsNullOrWhiteSpace(SelectedMethod))
                 return;
 
-            m_pump.StartMethod(SelectedMethod);
+            Pump.StartMethod(SelectedMethod);
         }
 
         private void LoadMethods()
@@ -467,9 +475,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private void PurgePump()
         {
-            var vm = new AgilentPumpPurgeViewModel(m_pump);
+            Pump.LoadPurgeData();
+            var vm = new AgilentPumpPurgeViewModel(Pump);
             var v = new AgilentPumpPurgeWindow() {DataContext = vm};
-            v.ShowDialog();
+            v.Show();
         }
 
         private void SetComPortName()
@@ -479,7 +488,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return;
             }
 
-            m_pump.PortName = SelectedComPort;
+            Pump.PortName = SelectedComPort;
         }
 
         #endregion

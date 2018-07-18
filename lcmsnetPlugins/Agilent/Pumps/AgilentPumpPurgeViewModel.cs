@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
 
@@ -15,6 +16,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             Title = "Purge Pumps Unknown";
             SetupCommands();
+            Pump = new AgilentPump(true);
         }
 
         /// <summary>
@@ -23,26 +25,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="pump"></param>
         public AgilentPumpPurgeViewModel(AgilentPump pump)
         {
-            m_pump = pump;
-            pump.DeviceSaveRequired += pump_DeviceSaveRequired;
-            Title = "Purge Pumps " + m_pump.Name;
+            Pump = pump;
+            Pump.DeviceSaveRequired += Pump_DeviceSaveRequired;
+            Title = "Purge Pumps " + Pump.Name;
             SetupCommands();
         }
 
         /// <summary>
         /// Pump to purge.
         /// </summary>
-        private readonly AgilentPump m_pump;
+        public AgilentPump Pump { get; }
 
         private string title = "";
-        private double a1Duration = 10;
-        private double a1FlowRate = 500;
-        private double a2Duration = 10;
-        private double a2FlowRate = 500;
-        private double b1Duration = 10;
-        private double b1FlowRate = 500;
-        private double b2Duration = 10;
-        private double b2FlowRate = 500;
+
+        public PumpPurgeData ChannelA1 => Pump.PurgeA1;
+        public PumpPurgeData ChannelA2 => Pump.PurgeA2;
+        public PumpPurgeData ChannelB1 => Pump.PurgeB1;
+        public PumpPurgeData ChannelB2 => Pump.PurgeB2;
 
         public string Title
         {
@@ -50,72 +49,33 @@ namespace LcmsNetPlugins.Agilent.Pumps
             set { this.RaiseAndSetIfChanged(ref title, value); }
         }
 
-        public double A1Duration
+        // In case the name was changed, trigger an update of the title bar
+        private void Pump_DeviceSaveRequired(object sender, EventArgs e)
         {
-            get { return a1Duration; }
-            set { this.RaiseAndSetIfChanged(ref a1Duration, value); }
+            Title = "Purge Pumps " + Pump.Name;
         }
 
-        public double A1FlowRate
-        {
-            get { return a1FlowRate; }
-            set { this.RaiseAndSetIfChanged(ref a1FlowRate, value); }
-        }
-
-        public double A2Duration
-        {
-            get { return a2Duration; }
-            set { this.RaiseAndSetIfChanged(ref a2Duration, value); }
-        }
-
-        public double A2FlowRate
-        {
-            get { return a2FlowRate; }
-            set { this.RaiseAndSetIfChanged(ref a2FlowRate, value); }
-        }
-
-        public double B1Duration
-        {
-            get { return b1Duration; }
-            set { this.RaiseAndSetIfChanged(ref b1Duration, value); }
-        }
-
-        public double B1FlowRate
-        {
-            get { return b1FlowRate; }
-            set { this.RaiseAndSetIfChanged(ref b1FlowRate, value); }
-        }
-
-        public double B2Duration
-        {
-            get { return b2Duration; }
-            set { this.RaiseAndSetIfChanged(ref b2Duration, value); }
-        }
-
-        public double B2FlowRate
-        {
-            get { return b2FlowRate; }
-            set { this.RaiseAndSetIfChanged(ref b2FlowRate, value); }
-        }
-
-        void pump_DeviceSaveRequired(object sender, EventArgs e)
-        {
-            Title = "Purge Pumps " + m_pump.Name;
-        }
-
-        public ReactiveCommand<Unit, bool> PurgeA1Command { get; private set; }
-        public ReactiveCommand<Unit, bool> PurgeA2Command { get; private set; }
-        public ReactiveCommand<Unit, bool> PurgeB1Command { get; private set; }
-        public ReactiveCommand<Unit, bool> PurgeB2Command { get; private set; }
+        public ReactiveCommand<Unit, bool> SetA1Command { get; private set; }
+        public ReactiveCommand<Unit, bool> SetA2Command { get; private set; }
+        public ReactiveCommand<Unit, bool> SetB1Command { get; private set; }
+        public ReactiveCommand<Unit, bool> SetB2Command { get; private set; }
         public ReactiveCommand<Unit, bool> AbortPurgesCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
+        public ReactiveCommand<Unit, bool> RefreshPurgeSettingsCommand { get; private set; }
+        public ReactiveCommand<Unit, bool> PurgeCommand { get; private set; }
 
         private void SetupCommands()
         {
-            PurgeA1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.A1, A1FlowRate, A1Duration)));
-            PurgeA2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.A2, A2FlowRate, A2Duration)));
-            PurgeB1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.B1, B1FlowRate, B1Duration)));
-            PurgeB2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.PurgePump(0, PumpPurgeChannel.B2, B2FlowRate, B2Duration)));
-            AbortPurgesCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => m_pump.AbortPurges(0)));
+            SetA1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelA1)));
+            SetA2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelA2)));
+            SetB1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelB1)));
+            SetB2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelB2)));
+            AbortPurgesCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.AbortPurges(0)));
+            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
+            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            RefreshPurgeSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.LoadPurgeData()));
+            PurgeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StartPurge()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
         }
     }
 }
