@@ -23,7 +23,7 @@
                 <DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{Binding Sample.SequenceID}" />
                 <DataGridTextColumn Header="Column #" IsReadOnly="True" Binding="{Binding ColumnId}" />
                 <DataGridTextColumn Header="Tray" IsReadOnly="True" Binding="{Binding Tray}" />
-                <DataGridTextColumn Header="Vial" IsReadOnly="True" Binding="{Binding Vial}" />
+                <DataGridTextColumn Header="Vial" IsReadOnly="False" Binding="{Binding Vial}" />
                 <DataGridTextColumn Header="Batch" IsReadOnly="True" Binding="{Binding Sample.DmsData.Batch}" />
                 <DataGridTextColumn Header="Block" IsReadOnly="True" Binding="{Binding Sample.DmsData.Block}" />
                 <DataGridTextColumn Header="Run Order (DMS)" IsReadOnly="True" Binding="{Binding Sample.DmsData.RunOrder}" />
