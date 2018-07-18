@@ -17,9 +17,13 @@
         <DataGrid.CellStyle>
             <Style TargetType="{x:Type DataGridCell}">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding DmsData.CartName}" Value="unknown">
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding DmsData.CartName}" Value="unknown" />
+                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
+                        </MultiDataTrigger.Conditions>
                         <Setter Property="Background" Value="Yellow"/>
-                    </DataTrigger>
+                    </MultiDataTrigger>
                 </Style.Triggers>
             </Style>
         </DataGrid.CellStyle>
