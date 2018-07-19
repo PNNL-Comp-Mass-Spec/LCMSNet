@@ -373,7 +373,7 @@ namespace LcmsNetSDK.Data
                 if (this.RaiseAndSetIfChangedRetBool(ref method, value, nameof(LCMethod)))
                 {
                     CloneLCMethod();
-                    if (method != null && method.Column != ColumnData.ID && method.Column >= 0)
+                    if (method != null && (method.Column != ColumnData.ID || method.Name != ColumnData.Name) && method.Column >= 0)
                     {
                         ColumnData = CartConfiguration.Columns[method.Column];
                     }
@@ -413,6 +413,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public override ColumnData ColumnData
         {
+            // TODO: Should this just return LCMethod.Column? It would solve a few headaches.
             get { return base.ColumnData; }
             set
             {
