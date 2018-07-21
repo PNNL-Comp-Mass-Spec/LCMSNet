@@ -106,6 +106,7 @@ namespace LcmsNetData.Logging
             private readonly Queue<TU> queue = new Queue<TU>();
             private readonly ManualResetEventSlim trigger = new ManualResetEventSlim(false);
             private bool complete = false;
+            private object addRemoveLock = new object();
 
             /// <summary>
             /// Returns true if there is available output, false if an error or marked complete (with no more output)
@@ -151,7 +152,10 @@ namespace LcmsNetData.Logging
             /// <returns></returns>
             public TU Receive()
             {
-                return queue.Dequeue();
+                lock (addRemoveLock)
+                {
+                    return queue.Dequeue();
+                }
             }
 
             private bool? ItemsAvailable()
@@ -176,7 +180,11 @@ namespace LcmsNetData.Logging
             /// <param name="item"></param>
             public void Post(TU item)
             {
-                queue.Enqueue(item);
+                lock (addRemoveLock)
+                {
+                    queue.Enqueue(item);
+                }
+
                 trigger.Reset();
                 trigger.Set();
             }
