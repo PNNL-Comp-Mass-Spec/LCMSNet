@@ -185,7 +185,6 @@ namespace LcmsNetData.Logging
                     queue.Enqueue(item);
                 }
 
-                trigger.Reset();
                 trigger.Set();
             }
 
