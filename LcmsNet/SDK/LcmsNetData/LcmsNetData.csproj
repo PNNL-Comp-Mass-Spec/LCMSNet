@@ -72,6 +72,7 @@
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\LogWriterBase.cs" />
     <Compile Include="Logging\MessageLoggerArgs.cs" />
+    <Compile Include="Logging\ThreadedLogger.cs" />
     <Compile Include="MessageBoxDisplayExtension.cs" />
     <Compile Include="Method\LCMethodBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

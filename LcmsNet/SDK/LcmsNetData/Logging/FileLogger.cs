@@ -21,7 +21,7 @@ namespace LcmsNetData.Logging
     /// <summary>
     /// Logs errors and messages to a file
     /// </summary>
-    public class FileLogger : LogWriterBase
+    public class FileLogger : LogWriterBase, IDisposable
     {
         public static FileLogger Instance { get; } = new FileLogger();
 
@@ -153,7 +153,7 @@ namespace LcmsNetData.Logging
 
         private void ReportLogFilePath(string logFilePath)
         {
-            LogFilePathDefined?.Invoke(new MessageLoggerArgs(logFilePath));
+            LogFilePathDefined?.Invoke(new MessageLoggerArgs(0, logFilePath));
         }
 
         private bool SetupLogFile()
@@ -254,5 +254,10 @@ namespace LcmsNetData.Logging
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            logWriter?.Dispose();
+        }
     }
 }

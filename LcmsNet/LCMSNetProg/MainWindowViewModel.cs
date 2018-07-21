@@ -885,7 +885,6 @@ namespace LcmsNet
             NotificationSystemVm.Dispose();
             FluidicsDesignVm.Dispose();
             DMSDataContainer.DBTools.CloseConnection();
-            DbLogger.Instance.CloseConnection();
             SQLiteTools.CloseConnection();
             sqlInstance.Dispose();
             TaskBarManipulation.Instance.Dispose();

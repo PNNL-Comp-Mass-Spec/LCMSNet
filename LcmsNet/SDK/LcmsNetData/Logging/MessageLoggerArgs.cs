@@ -12,6 +12,7 @@ namespace LcmsNetData.Logging
         /// Constructor that takes the error message.
         /// </summary>
         /// <param name="message">Error message</param>
+        [Obsolete("Use constructor with logLevel and default parameters", true)]
         public MessageLoggerArgs(string message)
         {
             Message = message;
@@ -23,6 +24,7 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="sample"></param>
+        [Obsolete("Use constructor with logLevel and default parameters", true)]
         public MessageLoggerArgs(string message, SampleDataBasic sample)
         {
             Message = message;
@@ -30,13 +32,28 @@ namespace LcmsNetData.Logging
         }
 
         /// <summary>
-        /// Gets or sets the error message associated with the error.
+        /// Constructor that takes the error message.
         /// </summary>
-        public string Message { get; set; }
+        /// <param name="logLevel">Error logging level</param>
+        /// <param name="message">Error message</param>
+        /// <param name="sample"></param>
+        public MessageLoggerArgs(int logLevel, string message, SampleDataBasic sample = null)
+        {
+            LogLevel = logLevel;
+            Message = message;
+            Sample = sample;
+        }
+
+        public int LogLevel { get; }
 
         /// <summary>
-        /// Gets or sets the sample data associated with this method.
+        /// Gets the error message associated with the error.
         /// </summary>
-        public SampleDataBasic Sample { get; set; }
+        public string Message { get; }
+
+        /// <summary>
+        /// Gets the sample data associated with this method.
+        /// </summary>
+        public SampleDataBasic Sample { get; }
     }
 }

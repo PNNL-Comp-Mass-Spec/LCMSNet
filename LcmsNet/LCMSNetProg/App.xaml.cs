@@ -61,12 +61,24 @@ namespace LcmsNet
 
         private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
-            if (args.ExceptionObject is Exception ex)
+            if (args.ExceptionObject is TaskCanceledException tce)
+            {
+                if (args.IsTerminating)
+                {
+                    UnhandledErrorShutdown(tce);
+                }
+                else
+                {
+                    ApplicationLogger.LogError(0, "Got unhandled TaskCanceledException", tce);
+                }
+            }
+            else if (args.ExceptionObject is Exception ex)
             {
                 UnhandledErrorShutdown(ex);
             }
             else
             {
+                ShutDownLogging();
                 Shutdown();
             }
         }
@@ -74,6 +86,13 @@ namespace LcmsNet
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs args)
         {
             args.Handled = true;
+
+            if (args.Exception is TaskCanceledException tce)
+            {
+                ApplicationLogger.LogError(0, "Got unhandled TaskCanceledException", tce);
+                return;
+            }
+
             UnhandledErrorShutdown(args.Exception);
         }
 
@@ -107,6 +126,8 @@ namespace LcmsNet
             window.ShowMessage("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
                             DbLogger.Instance.LogFolderPath + "\\");
 
+            ShutDownLogging();
+
             Shutdown();
         }
 
@@ -135,6 +156,14 @@ namespace LcmsNet
 
             singleInstanceMutex?.ReleaseMutex();
             singleInstanceMutex?.Dispose();
+            ShutDownLogging();
+        }
+
+        private void ShutDownLogging()
+        {
+            ApplicationLogger.ShutDownLogging();
+            DbLogger.Instance.Dispose();
+            FileLogger.Instance.Dispose();
         }
 
         private bool unhandledError = false;
@@ -426,6 +455,8 @@ namespace LcmsNet
         {
             var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
 
+            ApplicationLogger.StartUpLogging();
+
             // Before we do anything, let's initialize the file logging capability.
             ApplicationLogger.Error += FileLogger.Instance.LogError;
             ApplicationLogger.Message += FileLogger.Instance.LogMessage;
@@ -454,6 +485,7 @@ namespace LcmsNet
                     window.ShowMessage("A copy of LcmsNet is already running.");
 
                     ApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
+                    ShutDownLogging();
                     return;
                 }
             }
@@ -481,6 +513,7 @@ namespace LcmsNet
 
             if (!LoadEverything())
             {
+                ShutDownLogging();
                 return;
             }
 
@@ -703,7 +736,7 @@ namespace LcmsNet
 
         private void LogMessage(int msgLevel, string message)
         {
-            FileLogger.Instance.LogMessage(msgLevel, new MessageLoggerArgs(message));
+            FileLogger.Instance.LogMessage(msgLevel, new MessageLoggerArgs(msgLevel, message));
         }
 
         #endregion

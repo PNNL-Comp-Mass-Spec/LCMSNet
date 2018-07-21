@@ -637,7 +637,7 @@ namespace LcmsNet.Method
                                         samples[columnID] = null;
                                         StopAllOnOverdue();
                                         var setColumnId = columnID;
-                                        Task.Run(() => MethodFileTools.WriteIncompleteMethodFiles(m_columnThreads[setColumnId].Sample));
+                                        MethodFileTools.WriteIncompleteMethodFilesAsync(m_columnThreads[setColumnId].Sample);
                                     }
                                 }
                                 //
@@ -844,7 +844,7 @@ namespace LcmsNet.Method
                         sampleEndTime[columnID] = DateTime.MinValue;
                         currentEvent[columnID] = CONST_IDLE_FLAG;
                         //Print("ERROR", CONST_VERBOSE_LEAST);
-                        Task.Run(() => MethodFileTools.WriteIncompleteMethodFiles(m_columnThreads[columnID].Sample));
+                        MethodFileTools.WriteIncompleteMethodFilesAsync(m_columnThreads[columnID].Sample);
                     }
                 }
                 Stop();
@@ -877,7 +877,7 @@ namespace LcmsNet.Method
                     // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
                     // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
                     //
-                    Task.Run(() => MethodFileTools.WriteMethodFiles(m_columnThreads[columnID].Sample));
+                    MethodFileTools.WriteMethodFilesAsync(m_columnThreads[columnID].Sample);
                     samples[columnID] = null;
                 }
             }

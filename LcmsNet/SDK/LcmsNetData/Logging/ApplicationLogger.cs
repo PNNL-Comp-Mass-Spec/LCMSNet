@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using LcmsNetData.Data;
 
 namespace LcmsNetData.Logging
@@ -74,22 +73,9 @@ namespace LcmsNetData.Logging
         /// <param name="sample">Data for a sample</param>
         public static void LogError(int errorLevel, string message, Exception ex = null, SampleDataBasic sample = null)
         {
-            ErrorLoggerArgs args;
-            if (sample != null)
-            {
-                args = new ErrorLoggerArgs(message, sample);
-            }
-            else
-            {
-                args = new ErrorLoggerArgs(message);
-            }
+            var args = new ErrorLoggerArgs(errorLevel, message, ex, sample);
 
-            if (ex != null)
-            {
-                args.Exception = ex;
-            }
-
-            Task.Run(() => Error?.Invoke(errorLevel, args));
+            loggingRunner.AddItem(args);
         }
 
         /// <summary>
@@ -116,17 +102,9 @@ namespace LcmsNetData.Logging
         /// </remarks>
         public static void LogMessage(int messageLevel, string message, SampleDataBasic sample = null)
         {
-            MessageLoggerArgs args;
-            if (sample != null)
-            {
-                args = new MessageLoggerArgs(message, sample);
-            }
-            else
-            {
-                args = new MessageLoggerArgs(message);
-            }
+            var args = new MessageLoggerArgs(messageLevel, message, sample);
 
-            Task.Run(() => Message?.Invoke(messageLevel, args));
+            loggingRunner.AddItem(args);
         }
 
         /// <summary>
@@ -142,6 +120,58 @@ namespace LcmsNetData.Logging
         public static void LogMessage(LogLevel messageLevel, string message, SampleDataBasic sample = null)
         {
             LogMessage((int)messageLevel, message, sample);
+        }
+
+        private static void FireLogging(MessageLoggerArgs args)
+        {
+            if (args is ErrorLoggerArgs ela)
+            {
+                Error?.Invoke(args.LogLevel, ela);
+            }
+            else
+            {
+                Message?.Invoke(args.LogLevel, args);
+            }
+        }
+
+        private static bool loggingStarted = false;
+        private static bool loggingStopped = false;
+        private static ThreadedLogger<MessageLoggerArgs> loggingRunner = null;
+
+        static ApplicationLogger()
+        {
+            StartUpLogging();
+        }
+
+        /// <summary>
+        /// Start up the separate-thread logging
+        /// </summary>
+        public static void StartUpLogging()
+        {
+            if (loggingStarted)
+            {
+                return;
+            }
+
+            loggingStarted = true;
+
+            loggingRunner = new ThreadedLogger<MessageLoggerArgs>(FireLogging);
+        }
+
+        /// <summary>
+        /// Properly shut down the separate-thread logging
+        /// </summary>
+        public static void ShutDownLogging()
+        {
+            if (loggingStopped)
+            {
+                return;
+            }
+
+            loggingStopped = true;
+
+            loggingRunner.Shutdown();
+            loggingRunner.Dispose();
         }
     }
 }

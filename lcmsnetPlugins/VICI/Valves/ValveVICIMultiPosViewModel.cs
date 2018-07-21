@@ -328,7 +328,7 @@ namespace LcmsNetPlugins.VICI.Valves
             CurrentValveId= m_valve.SoftwareID;
         }
 
-        private void SetValvePosition()
+        private async void SetValvePosition()
         {
             if (string.IsNullOrWhiteSpace(SelectedValvePosition))
             {
@@ -339,7 +339,7 @@ namespace LcmsNetPlugins.VICI.Valves
             var enumValue = Enum.Parse(m_valve.GetStateType(), SelectedValvePosition);
             var pos = (int) enumValue;
 
-            Task.Run(() => SetPosition(pos));
+            await Task.Run(() => SetPosition(pos));
         }
 
         private void SetPosition(int pos)

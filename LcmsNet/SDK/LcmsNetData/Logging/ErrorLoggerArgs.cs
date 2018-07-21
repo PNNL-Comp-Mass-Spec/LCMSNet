@@ -12,6 +12,7 @@ namespace LcmsNetData.Logging
         /// Constructor that takes the error message.
         /// </summary>
         /// <param name="message">Error message</param>
+        [Obsolete("Use constructor with logLevel and default parameters", true)]
         public ErrorLoggerArgs(string message) :
             base(message)
         {
@@ -23,6 +24,7 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="sample"></param>
+        [Obsolete("Use constructor with logLevel and default parameters", true)]
         public ErrorLoggerArgs(string message, SampleDataBasic sample) :
             base(message, sample)
         {
@@ -34,6 +36,7 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
+        [Obsolete("Use constructor with logLevel and default parameters", true)]
         public ErrorLoggerArgs(string message, Exception ex) :
             base(message)
         {
@@ -46,6 +49,7 @@ namespace LcmsNetData.Logging
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
         /// <param name="sample"></param>
+        [Obsolete("Use constructor with logLevel and default parameters", true)]
         public ErrorLoggerArgs(string message, Exception ex, SampleDataBasic sample) :
             base(message, sample)
         {
@@ -53,8 +57,20 @@ namespace LcmsNetData.Logging
         }
 
         /// <summary>
-        /// Gets or sets the exception associated with the error message if any.
+        /// Constructor that takes an error message and an exception.
         /// </summary>
-        public Exception Exception { get; set; }
+        /// <param name="logLevel">Error logging level</param>
+        /// <param name="message">Error message</param>
+        /// <param name="ex">Exception found</param>
+        /// <param name="sample"></param>
+        public ErrorLoggerArgs(int logLevel, string message, Exception ex = null, SampleDataBasic sample = null) : base(logLevel, message, sample)
+        {
+            Exception = ex;
+        }
+
+        /// <summary>
+        /// Gets the exception associated with the error message if any.
+        /// </summary>
+        public Exception Exception { get; }
     }
 }
