@@ -95,6 +95,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private static Dictionary<string, string> m_statusCodes;
 
         private PumpState pumpState;
+        private string pumpModel;
+        private string pumpSerial;
 
         #endregion
 
@@ -369,6 +371,24 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PortName { get; set; }
 
         /// <summary>
+        /// Pump model. Read on initialize
+        /// </summary>
+        public string PumpModel
+        {
+            get => pumpModel;
+            private set => this.RaiseAndSetIfChanged(ref pumpModel, value);
+        }
+
+        /// <summary>
+        /// Pump Serial Number. Read on initialize
+        /// </summary>
+        public string PumpSerial
+        {
+            get => pumpSerial;
+            private set => this.RaiseAndSetIfChanged(ref pumpSerial, value);
+        }
+
+        /// <summary>
         /// Gets or sets the error type of the last error reported.
         /// </summary>
         public DeviceErrorStatus ErrorType { get; set; }
@@ -636,6 +656,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
+            PumpModel = m_module.Type;
+            PumpSerial = m_module.Serial;
 
             //
             // Open a list channel to read time tables.
