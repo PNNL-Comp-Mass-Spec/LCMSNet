@@ -98,52 +98,24 @@ namespace LcmsNetData.Logging
         }
 
         /// <summary>
-        /// Modeled after the idea of a BufferBlock, but not using a BufferBlock because that requires tracking a NuGet package. Uses a ManualResetEvent internally, so not safe for multiple consumers.
+        /// Modeled after the idea of a BufferBlock, but not using a BufferBlock because that requires tracking a NuGet package.
         /// </summary>
         /// <typeparam name="TU"></typeparam>
         private class BufferQueue<TU> : IDisposable
         {
             private readonly Queue<TU> queue = new Queue<TU>();
-            private readonly ManualResetEventSlim trigger = new ManualResetEventSlim(false);
+            private readonly SemaphoreSlim trigger = new SemaphoreSlim(0);
             private bool complete = false;
-            private object addRemoveLock = new object();
+            private readonly object addRemoveLock = new object();
 
             /// <summary>
             /// Returns true if there is available output, false if an error or marked complete (with no more output)
             /// </summary>
             /// <returns></returns>
-            public Task<bool> OutputAvailableAsync()
+            public async Task<bool> OutputAvailableAsync()
             {
-                var tcs = new TaskCompletionSource<bool>();
-
-                // Optimization: check for available items before waiting on the manual reset event
-                var result = ItemsAvailable();
-                if (result.HasValue)
-                {
-                    // safe - the task hasn't returned yet.
-                    tcs.SetResult(result.Value);
-                    trigger.Reset(); // reset to prevent triggering once empty
-                    return tcs.Task;
-                }
-
-                // Run the wait in a new thread, so we can return tcs.Task and the await will work properly
-                Task.Factory.StartNew(() =>
-                {
-                    trigger.Wait();
-                    trigger.Reset(); // reset to be ready for a future trigger
-
-                    var available = ItemsAvailable();
-                    try
-                    {
-                        tcs.SetResult(available ?? false);
-                    }
-                    catch
-                    {
-                        // Silenced
-                    }
-                });
-
-                return tcs.Task;
+                await trigger.WaitAsync().ConfigureAwait(false);
+                return ItemsAvailable() ?? false;
             }
 
             /// <summary>
@@ -185,7 +157,7 @@ namespace LcmsNetData.Logging
                     queue.Enqueue(item);
                 }
 
-                trigger.Set();
+                trigger.Release();
             }
 
             /// <summary>
@@ -194,7 +166,7 @@ namespace LcmsNetData.Logging
             public void Complete()
             {
                 this.complete = true;
-                trigger.Set();
+                trigger.Release();
             }
 
             /// <summary>
