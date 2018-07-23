@@ -165,8 +165,11 @@ namespace LcmsNetData.Logging
             /// </summary>
             public void Complete()
             {
-                this.complete = true;
-                trigger.Release();
+                if (!complete)
+                {
+                    trigger.Release(); // Doesn't matter if we release() extra times after we set complete to true.
+                }
+                complete = true;
             }
 
             /// <summary>
@@ -174,10 +177,7 @@ namespace LcmsNetData.Logging
             /// </summary>
             public void Dispose()
             {
-                if (!complete)
-                {
-                    Complete();
-                }
+                Complete();
                 trigger?.Dispose();
             }
         }
