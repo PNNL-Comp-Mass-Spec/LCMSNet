@@ -105,8 +105,8 @@ namespace LcmsNetData.Logging
         {
             private readonly Queue<TU> queue = new Queue<TU>();
             private readonly SemaphoreSlim trigger = new SemaphoreSlim(0);
-            private bool complete = false;
             private readonly object addRemoveLock = new object();
+            private bool complete = false;
 
             /// <summary>
             /// Returns true if there is available output, false if an error or marked complete (with no more output)
