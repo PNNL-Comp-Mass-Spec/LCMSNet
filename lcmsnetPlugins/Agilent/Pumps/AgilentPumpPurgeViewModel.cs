@@ -62,6 +62,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveCommand<Unit, bool> AbortPurgesCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
         public ReactiveCommand<Unit, bool> RefreshPurgeSettingsCommand { get; private set; }
         public ReactiveCommand<Unit, bool> PurgeCommand { get; private set; }
 
@@ -74,8 +75,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             AbortPurgesCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.AbortPurges(0)));
             PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
             PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
             RefreshPurgeSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.LoadPurgeData()));
-            PurgeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StartPurge()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            PurgeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StartPurge()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off && x != PumpState.Standby));
         }
     }
 }

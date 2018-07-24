@@ -240,6 +240,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveUI.ReactiveCommand<Unit, double> ReadPressureCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> PurgePumpCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> StartPumpCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> StopPumpCommand { get; private set; }
@@ -260,8 +261,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             ReadPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pressure = Pump.GetPressure()));
             PumpOnCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
             PumpOffCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            PumpStandbyCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
             PurgePumpCommand = ReactiveUI.ReactiveCommand.Create(() => PurgePump());
-            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off && x != PumpState.Standby));
             StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
             SetComPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetComPortName()));
             ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));

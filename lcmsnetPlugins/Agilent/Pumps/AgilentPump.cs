@@ -97,6 +97,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private PumpState pumpState;
         private string pumpModel;
         private string pumpSerial;
+        private string pumpFirmware;
 
         #endregion
 
@@ -386,6 +387,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             get => pumpSerial;
             private set => this.RaiseAndSetIfChanged(ref pumpSerial, value);
+        }
+
+        /// <summary>
+        /// Pump Firmware revision. Read on initialize
+        /// </summary>
+        public string PumpFirmware
+        {
+            get => pumpFirmware;
+            private set => this.RaiseAndSetIfChanged(ref pumpFirmware, value);
         }
 
         /// <summary>
@@ -708,6 +718,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             var reply = "";
+            // Get the firmware revision of the running system
+            var gotIdent = SendCommand("IDN?", out reply, errorMessage);
+            if (gotIdent)
+            {
+                var split = reply.Split(',');
+                PumpFirmware = split[3];
+            }
+            // Also can use "REV? 0|1|2" for main|resident|boot firmware revisions
+            // Can also use "BLDN?" to get the firmware build number
+            // "SER?" gets the serial number
+            // "TYPE?" gets the instrument type/model number
+            // "MFGD?" gets the instrument manufacture date as a unix timestamp
+            // "OPT?" gets the option listing
+            // "DATE?" gets the date in yyyy,MM,dd,hh,mm,ss; can set with "DATE yyy,MM,dd,hh,mm,ss"
+            // "TIME?" gets the time as a unix timestamp; can set with "TIME secsSince1970"
+            // "NAME?" gets the symbolic module name; "NAME MyName" sets it
+
             var worked = SendCommand(
                 string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondElapsed),
                 out reply,
@@ -1131,6 +1158,17 @@ namespace LcmsNetPlugins.Agilent.Pumps
             GetPumpState();
         }
 
+        /// <summary>
+        /// Turns the pumps to standby
+        /// </summary>
+        [LCMethodEvent("Turn Pump Standby", 1, "", -1, false)]
+        public void PumpStandby()
+        {
+            var reply = "";
+            SendCommand("PUMP 2", out reply, "Attempting to turn pumps to standby.");
+            GetPumpState();
+        }
+
         #endregion
 
         #region Pump Interface methods
@@ -1142,19 +1180,17 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return PumpState.Unknown;
             }
 
-            // TODO: Figure out how this should work.
             PumpState = PumpState.Unknown;
-            return PumpState.Unknown;
 
             try
             {
                 var reply = "";
                 ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PUMP?'");
-                var success = SendCommand($"PUMP?", out reply, $"Attempting to query channel purge states");
+                var success = SendCommand($"ACT:PUMP?", out reply, $"Attempting to query channel purge states");
                 ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
 
                 //We expect something like:
-                //reply = "RA 0000 PUMP 1";
+                //reply = "RA 0000 ACT:PUMP? 1";
                 var start = reply.IndexOf($"PUMP", StringComparison.InvariantCultureIgnoreCase);
                 if (!success || start == -1)
                 {
@@ -1167,12 +1203,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     return PumpState.Unknown;
                 }
 
-                ApplicationLogger.LogMessage(2, $"{Name}: Sending 'BLAH?'");
-                SendCommand($"BLAH?", out reply, $"Attempting to query channel purge states");
-                ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
-
                 var stateInt = Convert.ToInt32(split[1]);
-                var state = stateInt > 0 ? PumpState.On : PumpState.Off;
+                if (stateInt < 0 || stateInt > 2)
+                {
+                    return PumpState.Unknown;
+                }
+
+                var state = (PumpState) stateInt;
                 PumpState = state;
                 return state;
             }

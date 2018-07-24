@@ -37,11 +37,15 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Margin="3" Text="Model:" />
                         <TextBlock Grid.Column="1" Margin="3" Text="{Binding Pump.PumpModel}" />
                         <TextBlock Grid.Column="2" Margin="3" Text="    Serial #:" />
                         <TextBlock Grid.Column="3" Margin="3" Text="{Binding Pump.PumpSerial}" />
+                        <TextBlock Grid.Column="4" Margin="3" Text="    Firmware:" />
+                        <TextBlock Grid.Column="5" Margin="3" Text="{Binding Pump.PumpFirmware}" />
                     </Grid>
                     <GroupBox Grid.Row="1" Margin="5,3" Header="Flow Rate">
                         <Grid>
@@ -136,13 +140,17 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <GroupBox Grid.Column="0" Margin="5,3" Header="Pumps On/Off">
-                            <Grid Margin="0,0,35,0">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Margin="3" Width="38" Content="ON" Background="LightGray" Command="{Binding PumpOnCommand}" />
                                 <Button Grid.Column="1" Margin="3" Width="38" Content="OFF" Background="Gray" Foreground="White" Command="{Binding PumpOffCommand}" />
+                                <Button Grid.Column="2" Margin="3" Width="54" Content="Standby" Background="DimGray" Foreground="White" Command="{Binding PumpStandbyCommand}" />
+                                <TextBlock Grid.Column="3" Margin="3" VerticalAlignment="Center" Text="{Binding Pump.PumpState}" />
                             </Grid>
                         </GroupBox>
                         <Button Grid.Column="2" Margin="5,3" Width="134" Content="PURGE" Command="{Binding PurgePumpCommand}" />

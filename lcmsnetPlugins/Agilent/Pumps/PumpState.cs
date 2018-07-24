@@ -2,8 +2,9 @@
 {
     public enum PumpState
     {
-        Unknown = 0,
-        Off = 1,
-        On = 2,
+        Unknown = -1,
+        Off = 0,
+        On = 1,
+        Standby = 2,
     }
 }

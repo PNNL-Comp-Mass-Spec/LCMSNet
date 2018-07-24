@@ -50,10 +50,12 @@
             <TextBlock Margin="3" VerticalAlignment="Center" Text="Pumps:" />
             <Button Margin="3" Width="38" Content="ON" Background="LightGray" Command="{Binding PumpOnCommand}" />
             <Button Margin="3" Width="38" Content="OFF" Background="Gray" Foreground="White" Command="{Binding PumpOffCommand}" />
+            <Button Margin="3" Width="54" Content="Standby" Background="DimGray" Foreground="White" Command="{Binding PumpStandbyCommand}" />
+            <TextBlock Margin="3" VerticalAlignment="Center" Text="{Binding Pump.PumpState}" />
         </StackPanel>
         <DockPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" LastChildFill="False">
             <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Abort Purges" Command="{Binding AbortPurgesCommand}" />
-            <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Start Purges" Command="{Binding PurgeCommand}" />
+            <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Start Purges" Command="{Binding PurgeCommand}" /> <!-- TODO: Properly report error states when a purge doesn't start. -->
             <Button DockPanel.Dock="Right" Margin="3" MinWidth="60" Content="Close" IsDefault="True" IsCancel="True" Click="Close_OnClick" />
             <Button DockPanel.Dock="Right" Margin="3" MinWidth="60" Content="Refresh" Command="{Binding PurgeCommand}" />
         </DockPanel>
