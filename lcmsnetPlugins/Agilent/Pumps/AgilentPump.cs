@@ -722,7 +722,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var gotIdent = SendCommand("IDN?", out reply, errorMessage);
             if (gotIdent)
             {
-                var split = reply.Split(',');
+                var split = reply.Replace("\"", "").Split(',');
                 PumpFirmware = split[3];
             }
             // Also can use "REV? 0|1|2" for main|resident|boot firmware revisions
@@ -1185,13 +1185,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
             try
             {
                 var reply = "";
-                ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PUMP?'");
-                var success = SendCommand($"ACT:PUMP?", out reply, $"Attempting to query channel purge states");
-                ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
+                //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PUMP?'");
+                var success = SendCommand($"ACT:PUMP?", out reply, $"Attempting to query pump state");
+                //ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
 
                 //We expect something like:
-                //reply = "RA 0000 ACT:PUMP? 1";
-                var start = reply.IndexOf($"PUMP", StringComparison.InvariantCultureIgnoreCase);
+                //reply = "RA 0000 ACT:PUMP 1";
+                var start = reply.IndexOf($"ACT:PUMP", StringComparison.InvariantCultureIgnoreCase);
                 if (!success || start == -1)
                 {
                     return PumpState.Unknown;
