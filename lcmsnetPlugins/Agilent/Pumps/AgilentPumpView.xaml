@@ -12,7 +12,7 @@
              mc:Ignorable="d"
              d:DesignHeight="577" d:DesignWidth="822"
              d:DataContext="{d:DesignInstance {x:Type local:AgilentPumpViewModel}, IsDesignTimeCreatable=True}"
-             MinHeight="425" MinWidth="500">
+             MinHeight="450" MinWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="422*" MinWidth="400" />
@@ -211,6 +211,86 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="3,10,3,3" Text="Method Editor" />
                     <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" AcceptsReturn="True" AcceptsTab="True" Text="{Binding MethodText}" />
                     <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" MinWidth="100" HorizontalAlignment="Right" Content="Save Method" Command="{Binding SaveMethodCommand}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Pump Info">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" Margin="5,3" Header="Module">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Manufacturer:" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.Manufacturer}" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Model:" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.Model}" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Serial Number:" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.SerialNumber}" />
+                            <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Manufacture Date (UTC):" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.ManufactureDateUtc}" />
+                            <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Options:" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.Options}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" Margin="5,3" Header="Firmware">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Main:" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.MainFirmware}" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Resident:" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.ResidentFirmware}" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Boot:" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.BootFirmware}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="2" Margin="5,3" Header="Modifiable">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Date/Time:" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.ModuleDate}" />
+                            <Button Grid.Row="0" Grid.Column="2" Margin="3" Content="Update" Command="{Binding SetModuleDateCommand}" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Name:" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding PumpInfo.ModuleName}" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Set Name:" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="{Binding NewModuleName}" />
+                            <Button Grid.Row="2" Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetModuleNameCommand}" />
+                        </Grid>
+                    </GroupBox>
+                    <Button Grid.Row="3" Margin="3" MinHeight="30" Content="Refresh" Command="{Binding RefreshInfoCommand}" />
                 </Grid>
             </TabItem>
         </TabControl>

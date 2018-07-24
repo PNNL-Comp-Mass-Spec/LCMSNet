@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pumps\AgilentPump.cs" />
+    <Compile Include="Pumps\AgilentPumpInfo.cs" />
     <Compile Include="Pumps\AgilentPumpModes.cs" />
     <Compile Include="Pumps\AgilentPumpPurgeViewModel.cs" />
     <Compile Include="Pumps\AgilentPumpViewModel.cs" />

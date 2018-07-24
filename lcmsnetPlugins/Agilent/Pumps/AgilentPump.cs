@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Reactive.Concurrency;
 using Agilent.Licop;
 using FluidicsSDK.Devices;
 using LcmsNetData;
@@ -22,6 +24,7 @@ using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {
@@ -324,7 +327,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Gets or sets the Emulation state.
         /// </summary>
-        public bool Emulation { get; set; }
+        public bool Emulation
+        {
+            get { return false;} set{} }
 
         /// <summary>
         /// Gets the device's status
@@ -377,7 +382,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PumpModel
         {
             get => pumpModel;
-            private set => this.RaiseAndSetIfChanged(ref pumpModel, value);
+            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpModel, value);
         }
 
         /// <summary>
@@ -386,7 +391,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PumpSerial
         {
             get => pumpSerial;
-            private set => this.RaiseAndSetIfChanged(ref pumpSerial, value);
+            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpSerial, value);
         }
 
         /// <summary>
@@ -395,7 +400,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PumpFirmware
         {
             get => pumpFirmware;
-            private set => this.RaiseAndSetIfChanged(ref pumpFirmware, value);
+            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpFirmware, value);
         }
 
         /// <summary>
@@ -413,6 +418,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
+        public AgilentPumpInfo PumpInfo { get; } = new AgilentPumpInfo();
+
         public PumpPurgeData PurgeA1 { get; }
         public PumpPurgeData PurgeA2 { get; }
         public PumpPurgeData PurgeB1 { get; }
@@ -421,7 +428,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public PumpState PumpState
         {
             get => pumpState;
-            set => this.RaiseAndSetIfChanged(ref pumpState, value);
+            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpState, value);
         }
 
         #endregion
@@ -719,21 +726,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             var reply = "";
             // Get the firmware revision of the running system
+            // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
             var gotIdent = SendCommand("IDN?", out reply, errorMessage);
+            ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             if (gotIdent)
             {
                 var split = reply.Replace("\"", "").Split(',');
                 PumpFirmware = split[3];
             }
-            // Also can use "REV? 0|1|2" for main|resident|boot firmware revisions
-            // Can also use "BLDN?" to get the firmware build number
-            // "SER?" gets the serial number
-            // "TYPE?" gets the instrument type/model number
-            // "MFGD?" gets the instrument manufacture date as a unix timestamp
-            // "OPT?" gets the option listing
-            // "DATE?" gets the date in yyyy,MM,dd,hh,mm,ss; can set with "DATE yyy,MM,dd,hh,mm,ss"
-            // "TIME?" gets the time as a unix timestamp; can set with "TIME secsSince1970"
-            // "NAME?" gets the symbolic module name; "NAME MyName" sets it
+
+            GetPumpInformation();
 
             var worked = SendCommand(
                 string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondElapsed),
@@ -1539,6 +1541,110 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
             reply = reply.Substring(start + 5, 1);
             return (AgilentPumpModes)(Convert.ToInt32(reply));
+        }
+
+        /// <summary>
+        /// Load pump information into PumpInfo
+        /// </summary>
+        public void GetPumpInformation()
+        {
+            try
+            {
+                var errorMessage = "";
+                var reply = "";
+
+                // Get the firmware revision of the running system
+                // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
+                var gotIdent = SendCommand("IDN?", out reply, errorMessage);
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+                if (gotIdent)
+                {
+                    var data = reply.Substring(12);
+                    var split = data.Replace("\"", "").Split(',');
+                    PumpInfo.Manufacturer = split[0];
+                    PumpInfo.Model = split[1];
+                    PumpInfo.SerialNumber = split[2];
+                }
+
+                // Also can use "REV? 0|1|2" for main|resident|boot firmware revisions
+                SendCommand("REV? 0", out reply, errorMessage);
+                PumpInfo.MainFirmware = reply.Split(',')[1].Trim('"');
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+                SendCommand("REV? 1", out reply, errorMessage);
+                PumpInfo.ResidentFirmware = reply.Split(',')[1].Trim('"');
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+                SendCommand("REV? 2", out reply, errorMessage);
+                PumpInfo.BootFirmware = reply.Split(',')[1].Trim('"');
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // Can also use "BLDN?" to get the firmware build number
+                SendCommand("BLDN?", out reply, errorMessage);
+                PumpInfo.FirmwareBuildNumber = reply.Split(' ').Last().Trim('"');
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "SER?" gets the serial number
+                //SendCommand("SER?", out reply, errorMessage);
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "TYPE?" gets the instrument type/model number
+                //SendCommand("TYPE?", out reply, errorMessage);
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "MFGD?" gets the instrument manufacture date as a unix timestamp
+                SendCommand("MFGD?", out reply, errorMessage);
+                PumpInfo.ManufactureDateUtc = DateTimeOffset.FromUnixTimeSeconds(long.Parse(reply.Split(' ').Last())).DateTime;
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "OPT?" gets the option listing
+                SendCommand("OPT?", out reply, errorMessage);
+                PumpInfo.Options = reply.Split('"')[1];
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "DATE?" gets the date in yyyy,MM,dd,hh,mm,ss; can set with "DATE yyy,MM,dd,hh,mm,ss"
+                //SendCommand("DATE?", out reply, errorMessage);
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "TIME?" gets the time as a unix timestamp; can set with "TIME secsSince1970"
+                SendCommand("TIME?", out reply, errorMessage);
+                PumpInfo.ModuleDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(reply.Split(' ').Last())).DateTime.ToLocalTime();
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // "NAME?" gets the symbolic module name; "NAME MyName" sets it
+                SendCommand("NAME?", out reply, errorMessage);
+                PumpInfo.ModuleName = reply.Split('"')[1];
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            }
+            catch (Exception e)
+            {
+                ApplicationLogger.LogError(0, "Error getting Agilent Pump Information", e);
+            }
+        }
+
+        public void SetModuleDateTime()
+        {
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var reply = "";
+            SendCommand($"TIME {timestamp}", out reply, "");
+            ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
+        }
+
+        public void SetModuleName(string newName)
+        {
+            if (newName == null)
+            {
+                newName = "";
+            }
+
+            if (newName.Length > 30)
+            {
+                newName = newName.Substring(0, 30);
+            }
+
+            var reply = "";
+            SendCommand($"NAME \"{newName}\"", out reply, "");
+            ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
 
         #endregion

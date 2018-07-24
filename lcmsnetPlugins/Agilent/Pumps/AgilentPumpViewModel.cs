@@ -34,6 +34,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             pumpPopoutVm = new PopoutViewModel(pumpDisplay);
             SetupCommands();
             timer = new Timer(TimerTick, this, 1000, 1000);
+            NewModuleName = "";
         }
 
         ~AgilentPumpViewModel()
@@ -50,6 +51,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private void RegisterDevice(IDevice device)
         {
             Pump = device as AgilentPump;
+            NotifyPropertyChangedExtensions.RaisePropertyChanged(this, nameof(PumpInfo));
 
             // Initialize the underlying device class
             if (Pump != null)
@@ -82,6 +84,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
             catch
             {
                 //TODO: Update errors!
+            }
+
+            if (!string.IsNullOrWhiteSpace(PumpInfo.ModuleName))
+            {
+                NewModuleName = PumpInfo.ModuleName;
+            }
+            else
+            {
+                NewModuleName = Pump.Name;
             }
 
             InitializePlots();
@@ -124,6 +135,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private string methodText = "";
         private readonly PumpDisplayViewModel pumpDisplay = null;
         private readonly PopoutViewModel pumpPopoutVm;
+        private string newModuleName;
 
         #endregion
 
@@ -201,6 +213,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public PumpDisplayViewModel PumpDisplay => pumpDisplay;
         public PopoutViewModel PumpPopoutVm => pumpPopoutVm;
+        public AgilentPumpInfo PumpInfo => Pump?.PumpInfo;
 
         /// <summary>
         /// The associated device.
@@ -226,6 +239,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
             set { Pump.Emulation = value; }
         }
 
+        public string NewModuleName
+        {
+            get => newModuleName;
+            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref newModuleName, value);
+        }
+
         #endregion
 
         #region Commands
@@ -248,6 +267,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveUI.ReactiveCommand<Unit, string> ReadMethodFromPumpCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> LoadMethodsCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> SaveMethodCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SetModuleDateCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SetModuleNameCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshInfoCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -269,6 +291,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));
             LoadMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => LoadMethods()));
             SaveMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SaveMethod()));
+            SetModuleDateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleDateTime()));
+            SetModuleNameCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleName(NewModuleName)), this.WhenAnyValue(x => x.PumpInfo.ModuleName, x => x.NewModuleName).Select(x => !string.Equals(x.Item1, x.Item2) && x.Item2.Length <= 30));
+            RefreshInfoCommand = ReactiveUI.ReactiveCommand.Create(() => Pump.GetPumpInformation());
         }
 
         #endregion
