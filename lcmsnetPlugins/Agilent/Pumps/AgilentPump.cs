@@ -347,9 +347,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Gets or sets the Emulation state.
         /// </summary>
-        public bool Emulation
-        {
-            get { return false;} set{} }
+        public bool Emulation { get; set; }
 
         /// <summary>
         /// Gets the device's status
